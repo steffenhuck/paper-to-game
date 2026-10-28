@@ -11,7 +11,7 @@ Someone sends a paper. They get back a game: one HTML file, playable on a phone,
 
 The hard problem is not the code. It is discovering the playable experience latent in a particular paper: what a player could *do* that would let them find for themselves what the paper found. The engineering below exists to serve that discovery, not to dictate its shape. Different papers should produce games in which players do different things, not the same structure in different skins.
 
-The test of a good result: a smart stranger, handed the link on a phone, plays for five to eight minutes without being told to, understands what they are doing the whole time, has to think before acting at least once, finds something out, and could afterwards say in one sentence what the paper discovered. Fidelity is a constraint, not the goal: the game must be honest about what it demonstrates and what it merely illustrates (section 5), but within that honesty the presentation may simplify as far as play requires.
+The test of a good result: a smart stranger, handed the link on a phone, plays, for as long as the game needs and no longer, without being told to, understands what they are doing the whole time, has to think before acting at least once, finds something out, and could afterwards say in one sentence what the paper discovered. Fidelity is a constraint, not the goal: the game must be honest about what it demonstrates and what it merely illustrates (section 5), but within that honesty the presentation may simplify as far as play requires.
 
 ---
 
@@ -25,7 +25,7 @@ What they are hoping for, in order: something to do right away, with an obvious 
 
 ## 2. What makes it a game rather than a demonstration
 
-A slider with an animated response can be an excellent demonstration and not a game. The difference is **deliberation**: the player has a reason to think before acting. Before every design decision, ask: *what is the player thinking about before they press?* If the answer is "nothing, they're seeing what happens," the thing is a demonstration. Demonstrations have their place inside a game (an opening, a reveal), but a game needs at least one stretch where the player holds a conjecture, a plan, or a dilemma in their head and acts on it.
+A slider with an animated response can be an excellent demonstration and not a game. A game requires **meaningful decisions or actions whose consequences the player can learn to anticipate or influence**. The commonest way to meet that is deliberation — the player has a reason to think before acting — and the sharpest test is to ask, before every design decision, *what is the player thinking about before they press?* If the answer is "nothing, they're seeing what happens," the thing is a demonstration. But deliberation is not the only way: timing, perception, pattern recognition, experimentation and acquired skill are also meaningful action, provided consequences follow from what the player does and the player can get better at it. Demonstrations have their place inside a game (an opening, a reveal), but a game needs at least one stretch where the player's actions matter and they know it.
 
 Three formats, each with its own kind of deliberation; a paper usually suits one:
 
@@ -131,6 +131,8 @@ Two traps, named because synthesised mechanisms fall into them easily:
 
 The declared level also bounds the writing inside the game: a structural game may say "in this model"; a statistical game may say "in the data"; an illustrative game says "if the argument is right."
 
+**Robustness of the discovery.** Many data-generating processes reproduce the same reported estimates and imply different counterfactuals; an average treatment effect does not say which subgroup to treat, and a subgroup-optimal strategy generated from invented heterogeneity is not a finding of the paper. So, whenever the game's central discovery depends on an assumption the paper does not identify, the fidelity plan includes a robustness check: re-run the mechanism under one or two plausible alternative assumptions and see whether the discovery survives. If it does, say so in the memo. If it does not, either redesign the game so the discovery rests on what the paper identifies, or make the illustrative status explicit *in the gameplay itself* — the player is told, at the moment of discovery, that this is how it works under the game's assumption, not a result of the paper — not only in the About screen.
+
 ---
 
 ## 6. Finding the game
@@ -158,7 +160,7 @@ Which concept gives the stranger the best five minutes, with real deliberation i
 
 ### The shape
 
-One long round or several short; how many screens; presets or none; score or none. Presets are the paper's own regimes — baseline, comparative statics, the counterintuitive corner, subgroups, experimental conditions — never invented. Order them for the player, not as the paper orders them: the discovery should arrive early, not after rounds that merely confirm what the player already believed. Session length five to eight minutes; longer only if the walkthrough shows the player wanting more.
+One long round or several short; how many screens; presets or none; score or none. Presets are the paper's own regimes — baseline, comparative statics, the counterintuitive corner, subgroups, experimental conditions — never invented. Order them for the player, not as the paper orders them: the discovery should arrive early, not after rounds that merely confirm what the player already believed. Session length: five to eight minutes is the default target, not a minimum. Some discoveries land best in ninety seconds and should be left that short; a short, memorable game is never padded with repetitive decisions to reach a duration. Longer only if the walkthrough shows the player wanting more.
 
 ---
 
@@ -241,15 +243,21 @@ Commit. Push to `main` directly if the environment allows; otherwise push a bran
 
 ---
 
-## 12. Testing the skill itself
+## 12. After publication: real players
 
-The skill is judged on a heterogeneous set, not on one paper: a theoretical model, a randomised experiment, a descriptive empirical study, a biological mechanism, a mathematical result, a conceptual argument. The question is whether players *do different things* across the six, not whether the games look different. If the six converge on one structure — an opening challenge, a twist, a retry, a verdict — the skill is prescribing a formula and section 3 needs loosening, not tightening.
+The walkthrough and the screenshot review are design tools; they do not establish that strangers find the game intelligible or enjoyable. After a game is published, the user asks a handful of real players four questions: did you finish; where did you get confused; what did you learn; would you play another game of this kind. The answers go into `<slug>/feedback.md` in the repository, and the author-note asks the author to pass on what they hear too. Even a few responses reveal failures no automated check can. Over time this file is the empirical record of which kinds of mechanism make compelling games, and it is the input for the next revision of this skill — the skill is revised from played games, not in the abstract.
+
+## 13. Testing the skill itself
+
+The skill is judged on a heterogeneous set, not on one paper: a theoretical model, a randomised experiment, a descriptive empirical study, a biological mechanism, a mathematical result, a conceptual argument. The question is whether players *do different things* across the six, not whether the games look different. Pay particular attention to failures: a technically flawless, scientifically honest, boring game teaches more about the skill's limits than another success. If the six converge on one structure — an opening challenge, a twist, a retry, a verdict — the skill is prescribing a formula and section 3 needs loosening, not tightening.
 
 ---
 
-## 13. Failure modes
+## 14. Failure modes
 
-- A demonstration shipped as a game: nothing to deliberate, a slider moved to see what happens.
+- A demonstration shipped as a game: actions without consequences the player can learn, a slider moved to see what happens.
+- A central discovery resting on an invented assumption, unchecked against alternatives.
+- A short game padded to a target length.
 - A reversal forced onto a paper that offers a different kind of discovery.
 - An unfair failure engineered to manufacture a twist.
 - A fidelity level undeclared, or a correlation played as a cause, or an average effect played as an individual response.
