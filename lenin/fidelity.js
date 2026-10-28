@@ -51,8 +51,11 @@ let s = M.newSession(); M.OBJECTIONS.forEach((o, i) => { M.play(s, o.answer); M.
 check('(j3) perfect run scores 6/6 first tries', M.firstTries(s) === 6, M.verdict(s).you);
 let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
 let tot = 0; const N = 2000;
-for (let k = 0; k < N; k++) { const t = M.newSession(); while (t.obj < M.OBJECTIONS.length) { const left = ids.filter(id => true); const r = M.play(t, left[Math.floor(rnd() * left.length)]); if (r.ok) M.advance(t); } tot += M.firstTries(t); }
-check('(j4) random tapping averages well below 6', tot / N < 1.5, `mean first tries ${(tot / N).toFixed(2)} of 6 over ${N} sessions`);
+let lostTot = 0;
+for (let k = 0; k < N; k++) { const t = M.newSession(); while (t.obj < M.OBJECTIONS.length) { const r = M.play(t, ids[Math.floor(rnd() * ids.length)]); if (r.ok || r.lost) M.advance(t); } tot += M.firstTries(t); lostTot += M.lostCount(t); }
+check('(j4) random tapping averages well below 6', tot / N < 1.5, `mean first tries ${(tot / N).toFixed(2)} of 6, lost ${(lostTot / N).toFixed(2)} of 6, over ${N} sessions`);
+let u = M.newSession(); const r1 = M.play(u, 'ballot'), r2 = M.play(u, 'movers');
+check('(j4b) two misses lose the objection and reveal the paper\'s card', !r1.lost && r1.triesLeft === 1 && r2.lost && r2.answer.id === 'income' && M.advance(u) === 1 && M.verdict(u).you.includes('doubter won 1'), M.verdict(u).you);
 check('(j5) bet: "more" is right, jars show 63 vs 79', M.betResult('more').right && !M.betResult('less').right && M.betResult('more').west === 63 && M.betResult('more').east === 79);
 const fr = M.forecastResult(2020);
 check('(j6) forecast band matches (c2)', fr.inside && fr.lo === Math.round(D.closeLo) && fr.hi === Math.round(D.closeHi), fr.head);

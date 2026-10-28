@@ -44,9 +44,9 @@ Correlation and causation: the player never moves a lever that changes preferenc
 ## 6. The aim and the verdict
 
 - **Aim (start screen and top of play):** "Prove to a doubter that living under communism changed what people want."
-- **Per objection:** "Pick the one piece of evidence that settles this." The yardstick is in the same units: settled at the first try, or after *n* tries.
+- **Per objection:** "Pick the one piece of evidence that settles this." The yardstick is in the same units: settled at the first try, settled at the second, or lost to the doubter.
 - **Verdict (top of end screen):**
-  - *You:* settled all 6 objections, *k* of them at the first try.
+  - *You:* settled *n* of 6 objections, *k* of them at the first try; the doubter won the rest.
   - *The paper:* in the paper's survey, East Germans were about 16 points more likely to want the state in charge. The gap was biggest among those who lived longest under communism, and income, history and migration do not explain it away.
   - *What it means:* a political system can reshape what its citizens want, and the change takes a generation or two to wear off.
 
@@ -105,7 +105,7 @@ The game takes about five minutes (an estimate; not timed by a person), in three
    Poverty comes first because it is everyone's first thought. The dose comes second so the strongest finding arrives early.
 3. **The forecast:** drag a flag to a year, then reveal.
 
-No presets: the objections are the paper's own robustness sections. The score is per objection (first try or not), and the session verdict counts first tries out of 6. There is no running point total.
+No presets: the objections are the paper's own robustness sections. Two tries per objection: a second miss loses the objection to the doubter, and the card the paper plays is shown so the lesson survives the loss. The score is per objection (first try, second try, or lost), and the session verdict counts objections settled and first tries out of 6. There is no running point total.
 
 ## 11. Controls, mechanism, feedback, moment
 
@@ -183,3 +183,4 @@ The paper's imagery is two survey samples on either side of a line. Rules:
 4. Screenshots at 380 px: start, bet, card grid, a settled card, the cohort card, a wrong card, forecast, end. One fix from the screenshots: the end-screen table squeezed the objection column.
 5. Builder's self-review: the aim can be stated from the start screen alone ("prove to a doubter that communism changed what people want"); the discovery can be stated from the top of the end screen alone (East Germans want about 16 points more state; the gap grows with years under communism; it is not money, history or migration). This is the builder's review, not stranger testing.
 6. `session-test.js` drove the final page through a full session at 380 px with two wrong cards, the help page opened and returned from mid-play, a forecast, the verdict, and a retry: no console errors, no horizontal scroll (scrollWidth 380). Session length is an estimate of about five minutes; a person has not timed it.
+7. Revision after the author's first play: the start-screen wall made much bigger (a 260 px cracked wall with WEST and EAST on it), and a two-try rule added in `mechanism.js` (`CONFIG.maxTries`): a second miss loses the objection to the doubter, marked red, and the paper's card is shown beneath the wrong one. Fidelity check (j4b) covers the rule; the session test now loses objection 4 on purpose. All 25 checks pass; the browser session runs clean at 380 px.

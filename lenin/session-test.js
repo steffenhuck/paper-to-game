@@ -15,7 +15,7 @@ const D = (process.argv[2] || require('os').tmpdir()) + '/';
   console.log('BET:', await txt('#bet-head'));
   await p.screenshot({ path: D + 'screenshot-bet.png', fullPage: true });
   await p.click('#b-to-play');
-  const plan = [['income'], ['panel', 'cohort'], ['before'], ['movers', 'panel'], ['ballot'], ['beliefs']];
+  const plan = [['income'], ['panel', 'cohort'], ['before'], ['movers', 'ballot'], ['ballot'], ['beliefs']]; // objection 4 is lost on purpose
   for (let i = 0; i < plan.length; i++) {
     console.log(`\nOBJ ${i + 1}: ${await txt('#say')}`);
     if (i === 1) { await p.click('#s-play button.q'); console.log('  help on:', await on('#s-help')); await p.click('#b-help-back'); console.log('  back to play:', await on('#s-play'), '| cards visible:', await p.$eval('#pick', e => e.style.display !== 'none')); }
@@ -23,8 +23,8 @@ const D = (process.argv[2] || require('os').tmpdir()) + '/';
       await p.click(`[data-card=${c}]`); await p.waitForTimeout(500);
       console.log(`  ${c}: ${await txt('#yard')} — ${await txt('#reply')}`);
       if (i === 1 && c === 'cohort') await p.screenshot({ path: D + 'screenshot-cohort.png', fullPage: true });
-      if (i === 3 && c === 'movers') await p.screenshot({ path: D + 'screenshot-wrong.png', fullPage: true });
-      if (i === 0) await p.screenshot({ path: D + 'screenshot-play.png', fullPage: true });
+      if (i === 3 && c === 'ballot') await p.screenshot({ path: D + 'screenshot-lost.png', fullPage: true });
+      
       await p.click('#b-next');
     }
   }
