@@ -35,6 +35,7 @@
   .about h3 { font-size:13px; letter-spacing:.1em; text-transform:uppercase; color:var(--dim); margin:16px 0 4px; font-weight:400; }
   a { color:var(--accent); }
   .muted { color:var(--dim); }
+  button.q { flex:0 0 auto; min-height:30px; width:30px; padding:0; border-radius:50%; font-size:14px; color:var(--dim); }
 </style>
 </head>
 <body>
@@ -45,7 +46,8 @@
   <h1>THE OLIVE</h1>
   <p class="muted">A sorting game built from one neuroanatomy paper.</p>
   <canvas id="c-hero" width="528" height="300"></canvas>
-  <p>You have a stack of images of neurons from the inferior olive. The textbooks say they come in two kinds. Your job is to sort them, then to find the groups they form. Twenty cells, two rounds, one score.</p>
+  <div class="row" style="justify-content:space-between;margin-top:4px"><span class="ov">← the textbook "curly" kind</span><span class="ov">the textbook "straight" kind →</span></div>
+  <p>You have a stack of microscope images of neurons from a small part of the brainstem that the old anatomists named the inferior olive, because from the outside it looks like one. For a century the textbooks have said these cells come in two kinds: <b>curly</b> ones, whose branches twist and double back in a small ball around the cell body, and <b>straight</b> ones, whose few branches run far out. Round one: sort twenty cells. Round two: find the groups they form. One score at the end.</p>
   <h2>Labeling method</h2>
   <div class="row" id="presets">
     <button data-ds="virus" class="sel">VIRUS</button>
@@ -54,21 +56,22 @@
   </div>
   <div class="row" style="margin-top:14px">
     <button class="primary" id="b-start">START SORTING</button>
+    <button id="b-help">HOW TO PLAY</button>
   </div>
   <p class="muted" style="margin-top:14px;font-size:12px">Built from Vrieler et al. (2019), <i>Brain Structure and Function</i>. <a href="#" id="l-about">About this game</a></p>
 </section>
 
 <!-- ============ ACT ONE ============ -->
 <section id="s-act1" class="screen">
-  <div class="hud"><span class="ov" id="a1-ds">VIRUS</span><span class="ov" id="a1-count">cell 1 / 20</span></div>
+  <div class="hud"><span class="ov" id="a1-ds">VIRUS</span><span class="ov" id="a1-count">cell 1 / 20</span><button class="q" data-help="s-act1">?</button></div>
   <canvas id="c-cell" width="528" height="420"></canvas>
-  <div class="ov" style="margin-top:6px;text-transform:none">SCALE BAR 50 µm · WHICH KIND IS THIS?</div>
+  <p style="margin:8px 0 0;font-size:13px"><b>Curly</b> = twists and branches densely close to the cell body. <b>Straight</b> = sparse, reaching far. If it's neither, say so — that answer counts too.</p>
   <div class="row" style="margin-top:8px">
     <button id="b-curly">CURLY</button>
     <button id="b-unsure">CAN'T TELL</button>
     <button id="b-straight">STRAIGHT</button>
   </div>
-  <div class="ov" style="margin-top:14px">your piles on the straightness ruler</div>
+  <p class="ov" style="margin-top:14px;text-transform:none;letter-spacing:.02em">Each cell you sort drops onto a ruler of <b>straightness</b>: how far the tree reaches from the cell body, divided by the length of its longest branch. 0.1 is a tight ball, 0.9 a nearly straight line.</p>
   <div class="ruler"><canvas id="c-ruler" width="528" height="84" style="border:none"></canvas></div>
   <div class="legend"><span><i style="background:var(--curly)"></i>curly</span><span><i style="background:var(--unsure)"></i>can't tell</span><span><i style="background:var(--straight)"></i>straight</span></div>
 </section>
@@ -89,12 +92,12 @@
 
 <!-- ============ ACT TWO ============ -->
 <section id="s-act2" class="screen">
-  <div class="hud"><span class="ov" id="a2-title">somata · one slab</span><span class="ov" id="a2-seeds">0 / 12 markers</span></div>
+  <div class="hud"><span class="ov" id="a2-title">cell bodies · one slab</span><span class="ov" id="a2-seeds">0 / 12 markers</span><button class="q" data-help="s-act2">?</button></div>
   <canvas id="c-field" width="528" height="308"></canvas>
-  <p id="a2-hint" style="margin-top:8px">These are the cell bodies. The paper says they form tightly coupled groups. Tap to mark where you think each group is. Tap a marker to remove it.</p>
+  <p id="a2-hint" style="margin-top:8px">Every dot is one cell body in a slab of the olive about a third of a millimetre across. The paper says these cells form small groups that are wired tightly to each other — roughly ten to twelve groups in a slab this size, each a dozen or so cells. Tap the slab to drop a marker in the middle of each group you think you see; tap a marker to remove it. Then score.</p>
   <div class="row" style="margin-top:8px">
     <button id="b-score2">SCORE MY GROUPS</button>
-    <button id="b-develop" class="primary" disabled>DEVELOP THE DENDRITES</button>
+    <button id="b-develop" class="primary" disabled>SHOW THE DENDRITES</button>
   </div>
   <div class="box" id="a2-box" style="display:none">
     <div class="stat"><span id="a2-f1">—</span><small> MATCH</small></div>
@@ -124,6 +127,25 @@
   <p class="muted" style="font-size:12px;margin-top:14px">Vrieler N., Loyola S., Yarden-Rabinowitz Y., Hoogendorp J., Medvedev N., Hoogland T.M., De Zeeuw C.I., De Schutter E., Yarom Y., Negrello M., Torben-Nielsen B., Uusisaari M.Y. (2019). Variability and directionality of inferior olive neuron dendrites revealed by detailed 3D characterization of an extensive morphological library. <i>Brain Structure and Function</i> 224:1677–1695. <a href="https://doi.org/10.1007/s00429-019-01859-z">doi:10.1007/s00429-019-01859-z</a>. Game built from this paper; the paper is the authority where the two disagree.</p>
 </section>
 
+
+<!-- ============ HOW TO PLAY ============ -->
+<section id="s-help" class="screen about">
+  <div class="ov">how to play</div>
+  <h1 style="font-size:22px">The Olive, explained</h1>
+  <h3>The setting</h3>
+  <p>The inferior olive is a small structure in the brainstem, named for its olive-shaped bulge, that helps the cerebellum keep movements precisely timed. Its neurons talk to each other through direct electrical contacts on their branches, called dendrites. So the shape of a cell's branches, and where they go, decides who it talks to.</p>
+  <p>For about a hundred years anatomists have described olive neurons as two kinds. <b>Curly</b> cells have branches that twist, loop and double back inside a small ball around the cell body. <b>Straight</b> cells have a few branches that run out a long way. A 2019 paper measured ninety of these cells in 3D to ask whether the two kinds are real, and where the cells' wiring groups actually are. This game lets you repeat both questions with your own eyes and hands.</p>
+  <h3>Round one: sort</h3>
+  <p>You see twenty cells, one at a time, drawn as the microscope would show them. For each, tap <b>Curly</b>, <b>Straight</b>, or <b>Can't tell</b>. There is no right answer per cell; the game is watching how consistent your eye is.</p>
+  <p>After each choice the cell drops onto a ruler of <b>straightness</b>: how far the tree reaches from the cell body divided by the length of its longest branch. A value near 0.1 is a tight ball; near 0.9 is almost a straight line. At the end you see your three piles on that ruler and a consistency score: the share of your curly/straight calls that a single cut on the ruler can reproduce. The question the round answers is whether your "curly" and "straight" piles are two things or two ends of one thing.</p>
+  <h3>Round two: find the groups</h3>
+  <p>Now you see a slab of the olive, about a third of a millimetre wide, with every cell body as a dot. The paper argues the cells form small, tightly wired groups — in a slab this size roughly ten to twelve groups of a dozen or so cells. Tap the slab to drop a marker where you think the middle of each group is; tap a marker to remove it; then <b>Score</b>. The score is the share of cell pairs you grouped the way the olive does.</p>
+  <p>Then <b>Show the dendrites</b>: every cell's branches light up. Cells talk where their branches touch, so a cell belongs with the cells its branches grow towards, not with the bodies lying next to it. Move your markers to where the branches bunch, and score again. The difference between the two scores is the point of the round.</p>
+  <h3>The score</h3>
+  <p>One number out of 1000, built from your consistency in round one and your two scores in round two. There is no winning; there is a better score next time, and a different cell library (the three labeling buttons on the start screen) if you want new cells.</p>
+  <div class="row" style="margin-top:16px"><button class="primary" id="b-help-back">BACK</button></div>
+</section>
+
 <!-- ============ ABOUT ============ -->
 <section id="s-about" class="screen about">
   <div class="ov">about this game</div>
@@ -141,7 +163,8 @@
 // ============================================================
 (function () {
   const $ = id => document.getElementById(id);
-  const screens = ['s-start', 's-act1', 's-reveal1', 's-act2', 's-end', 's-about'];
+  const screens = ['s-start', 's-act1', 's-reveal1', 's-act2', 's-end', 's-help', 's-about'];
+  let helpReturn = 's-start';
   function show(id) { screens.forEach(s => $(s).classList.toggle('on', s === id)); window.scrollTo(0, 0); $(id).classList.add('fade'); }
   const DPR = Math.min(2, window.devicePixelRatio || 1);
   function fit(c) { const w = c.clientWidth || 528; const ratio = c.height / c.width; c.width = Math.round(w * DPR); c.height = Math.round(w * ratio * DPR); return c.getContext('2d'); }
@@ -246,7 +269,7 @@
     const F = state.field; state.trees = F.cells.map(c => {
       const n = makeNeuron(rnd, 'virus', { sT: c.sT, mainAxis: c.axis, target: { x: c.tx, y: c.ty }, directionality: c.isBridge ? CONFIG.bridgeDirectionality : CONFIG.groupDirectionality, lengthScale: c.isBridge ? CONFIG.bridgeTreeScale : CONFIG.groupTreeScale });
       return n; });
-    $('a2-title').textContent = 'somata · one slab'; $('a2-hint').textContent = 'These are the cell bodies. The paper says they form tightly coupled groups. Tap to mark where you think each group is. Tap a marker to remove it.';
+    $('a2-title').textContent = 'somata · one slab'; $('a2-hint').textContent = 'Every dot is one cell body in a slab of the olive about a third of a millimetre across. The paper says these cells form small groups that are wired tightly to each other — roughly ten to twelve groups in a slab this size, each a dozen or so cells. Tap the slab to drop a marker in the middle of each group you think you see; tap a marker to remove it. Then score.';
     $('a2-box').style.display = 'none'; $('a2-final').style.display = 'none'; $('b-develop').disabled = true; $('b-score2').disabled = false; $('b-score2').textContent = 'SCORE MY GROUPS';
     show('s-act2'); drawField(0);
   }
@@ -295,7 +318,7 @@
     if (!state.developed) {
       state.f1a = sc.f1; state.scoredA = true;
       $('a2-box').style.display = ''; $('a2-f1').textContent = Math.round(sc.f1 * 100) + '%';
-      $('a2-text').textContent = `${Math.round(sc.f1 * 100)}% of cell pairs are grouped the way the olive groups them. From the cell bodies alone that is about as good as it gets: at 40 µm this whole slab is one cluster, a near-uniform mesh. The groups are somewhere else. Develop the dendrites.`;
+      $('a2-text').textContent = `${Math.round(sc.f1 * 100)}% of cell pairs are grouped the way the olive groups them. From the cell bodies alone that is about as good as it gets: at 40 µm this whole slab is one cluster, a near-uniform mesh. The groups are somewhere else. Show the dendrites.`;
       $('b-develop').disabled = false; $('b-score2').disabled = true;
     } else {
       state.f1b = sc.f1;
@@ -307,7 +330,7 @@
   }
   function develop() {
     state.developed = true; $('b-develop').disabled = true; $('b-score2').disabled = false; $('b-score2').textContent = 'SCORE AGAIN';
-    $('a2-title').textContent = 'dendrites developing…'; $('a2-hint').textContent = 'The same slab, with every tree lit. Move your markers to where the dendrites bunch — a cell belongs to the field its tree grows into, not to the place its body sits. Then score again.';
+    $('a2-title').textContent = 'dendrites appearing…'; $('a2-hint').textContent = 'The same slab, now with every cell\'s branches (its dendrites) lit. Cells talk to each other where their branches touch, so a cell belongs with the cells its branches grow towards, not with the bodies next to it. Move your markers to where the branches bunch together, then score again.';
     const t0 = performance.now(); if (developAnim) cancelAnimationFrame(developAnim);
     (function frame(now) { const f = Math.min(1, (now - t0) / 2600); drawField(f); if (f < 1) developAnim = requestAnimationFrame(frame); else $('a2-title').textContent = 'dendrites · one slab'; })(t0);
   }
@@ -330,7 +353,10 @@
   $('c-field').addEventListener('click', fieldTap);
   $('b-score2').onclick = scoreAct2; $('b-develop').onclick = develop; $('b-end').onclick = finish;
   $('b-again').onclick = () => show('s-start');
-  $('l-about').onclick = e => { e.preventDefault(); show('s-about'); }; $('b-about2').onclick = () => show('s-about'); $('b-about-back').onclick = () => show('s-start');
+  $('l-about').onclick = e => { e.preventDefault(); show('s-about'); };
+  $('b-help').onclick = () => { helpReturn = 's-start'; show('s-help'); };
+  document.querySelectorAll('button.q').forEach(b => b.onclick = () => { helpReturn = b.dataset.help; show('s-help'); });
+  $('b-help-back').onclick = () => { show(helpReturn); if (helpReturn === 's-act1') showCell(); if (helpReturn === 's-act2') drawField(state.developed ? 1 : 0); }; $('b-about2').onclick = () => show('s-about'); $('b-about-back').onclick = () => show('s-start');
   window.addEventListener('resize', () => { if ($('s-start').classList.contains('on')) drawHero(); });
   drawHero();
 })();

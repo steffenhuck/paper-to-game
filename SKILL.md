@@ -113,7 +113,9 @@ Build from the memo, straight away. If the user interrupts to redirect, revise t
 - One self-contained HTML file. No external dependencies, no CDN, no fonts fetched. Inline SVG or canvas.
 - Playable on a phone: touch targets, no hover-only interactions, no horizontal scroll at 380px.
 - A complete session in ten to fifteen minutes. No winning: a score, and a reason to play again (a different preset, a better score).
-- The player never reads a paragraph of instruction before acting. Teach by the first move.
+- The player never reads a paragraph of instruction before acting, but every screen carries the one or two sentences a smart stranger needs to act on it: what the things on screen are, what the choice means, roughly what a good answer looks like (a number, a range). Define every term the player has to use — if the buttons say "curly" and "straight", the screen says in plain words what each looks like, and where possible shows the two extremes side by side before the first choice. Name a measure before the player sees it move (a ruler that fills in during play is a mystery unless its axis has been explained in one line).
+- A **How to play** page, reachable from a prominent button on the start screen and from a small ? on every play screen, explains the whole game in plain language for a smart person from outside the field: the setting, what each round asks, what the score means, and what the game is trying to show. Written for a general reader, not a specialist; no jargon that isn't defined in the same sentence. Returning from it lands the player back where they were.
+- Button labels say what happens, not a metaphor: "Show the dendrites", not "Develop the dendrites".
 - Feedback is immediate and visible — something happens on screen every time the lever moves.
 - The game must be *fun to watch*: motion, accumulation, reveal. A dashboard of moving numbers is not a game.
 
@@ -153,5 +155,5 @@ When the skill is invoked inside the `paper-to-game` repository, the build also 
 - A personified agent whose payoff is not in the paper, unflagged.
 - Inventing presets the paper never discusses.
 - A session that only shows the result; the player must have been wrong first.
-- Explaining before the surprise.
+- Explaining before the surprise — but also its opposite: leaving the player unable to act because a term was never defined. Orientation is not explanation; give the first, withhold the second.
 - Any number in the code that is not in the config block with its origin.
