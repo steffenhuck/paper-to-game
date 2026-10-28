@@ -1,0 +1,35 @@
+
+[virus] straightness min 0.15 p10 0.26 median 0.41 p90 0.61 max 0.83   (Table 4: 0.129/0.368/0.813)
+  histogram 11 96 171 170 84 36 28 4  peaks: 1
+  rho(s, branches)   -0.53  (Table 5 viral: -0.70)
+  rho(s, stems)      -0.37  (-0.41)
+  rho(s, tips)       -0.54  (-0.63/-0.67)
+  rho(s, hull)       0.68  (+0.50)
+  rho(s, contraction)0.57  (+0.57)
+  rho(s, length)     -0.34  (-0.47)
+
+[alexa] straightness min 0.17 p10 0.32 median 0.51 p90 0.71 max 0.89   (Table 4: 0.19/0.49/0.81)
+  histogram 3 35 110 138 124 116 55 19  peaks: 1
+  rho(s, branches)   -0.51  (Table 5 viral: -0.70)
+  rho(s, stems)      -0.28  (-0.41)
+  rho(s, tips)       -0.52  (-0.63/-0.67)
+  rho(s, hull)       0.60  (+0.50)
+  rho(s, contraction)0.71  (+0.57)
+  rho(s, length)     -0.35  (-0.47)
+
+[biocytin] straightness min 0.12 p10 0.26 median 0.42 p90 0.62 max 0.87   (Table 4: 0.21/0.39/0.79)
+  histogram 21 77 173 156 97 52 20 4  peaks: 1
+  rho(s, branches)   -0.53  (Table 5 viral: -0.70)
+  rho(s, stems)      -0.20  (-0.41)
+  rho(s, tips)       -0.53  (-0.63/-0.67)
+  rho(s, hull)       0.64  (+0.50)
+  rho(s, contraction)0.60  (+0.57)
+  rho(s, length)     -0.40  (-0.47)
+
+field 0: 11 groups, 124 cells, DBSCAN@40 -> 1 cluster(s), F1 at true centres 0.98
+
+field 1: 11 groups, 122 cells, DBSCAN@40 -> 1 cluster(s), F1 at true centres 0.96
+
+field 2: 11 groups, 124 cells, DBSCAN@40 -> 1 cluster(s), F1 at true centres 1.00
+
+DBSCAN@40 gives one cluster in 18/20 fields; planted groups recoverable (F1>0.85) in 20/20
