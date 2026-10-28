@@ -129,7 +129,7 @@ End screen and About screen carry: paper title, authors, journal, year, DOI or U
 
 ### Deliverables
 
-When the skill is invoked inside the `paper-to-game` repository, the build also lands in the repo: a new folder named by slug (`olive/`), holding the game, `memo.md`, `author-note.md`, the headless mechanism and fidelity check, the fidelity result and two screenshots; the PDF moved from `inbox/` into that folder if it was there; a new row in the README's games table with the play link `https://steffenhuck.github.io/paper-to-game/<slug>/<file>.html`; one commit; a push to `main`. The reply ends with the play link and the folder link.
+When the skill is invoked inside the `paper-to-game` repository, the build also lands in the repo: a new folder named by slug (`olive/`), holding the game, `memo.md`, `author-note.md`, the headless mechanism and fidelity check, the fidelity result and two screenshots; the PDF moved from `inbox/` into that folder if it was there; a new row in the README's games table with the play link `https://steffenhuck.github.io/paper-to-game/<slug>/<file>.html`; one commit. Push to `main` directly if the environment allows; if it only allows a branch, push the branch and open a pull request — the repository merges pull requests from `claude/…` branches automatically, so no one has to do anything further. Never leave the work unpushed. The reply ends with the play link and the folder link.
 
 
 - `<slug>.html` — the game.

@@ -1,0 +1,18 @@
+# Merges pull requests that Claude Code opens from its own branches, so a build
+# lands on main (and on GitHub Pages) without anyone tapping "merge".
+name: auto-merge claude branches
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  merge:
+    if: startsWith(github.head_ref, 'claude/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge the pull request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr merge "${{ github.event.pull_request.number }}" --repo "${{ github.repository }}" --merge --delete-branch
