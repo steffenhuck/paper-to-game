@@ -87,7 +87,7 @@
   <div class="story" id="h-story"></div>
   <div class="gameline" id="h-game"></div>
 
-  <div class="plate"><canvas id="c-balance" width="528" height="186"></canvas></div>
+  <div class="plate"><canvas id="c-balance" width="528" height="150"></canvas></div>
   <input type="range" id="lever" min="0" max="1" step="0.05" value="0.5" aria-label="balance">
   <div class="ends"><span class="s">← 0: only their own gain</span><span class="r">1: only the right thing →</span></div>
   <div class="gloss" id="h-gloss"></div>
@@ -440,10 +440,9 @@ function figure(ctx, x, y, s, fill, stroke, alpha = 1) {
 function drawBalance(k) {
   const cv = $('c-balance'), ctx = cv.getContext('2d'), W = cv.width;
   ctx.clearRect(0, 0, W, cv.height);
-  // the side the villagers lean toward rises: right = more weight on the right thing
-  const cx = W / 2, cy = 56, L = 170, ang = (0.5 - k) * 0.5;
+  const cx = W / 2, cy = 46, L = 170, ang = (k - 0.5) * 0.5;
   ctx.strokeStyle = BRASS; ctx.lineWidth = 3;
-  ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx, 132); ctx.moveTo(cx - 34, 132); ctx.lineTo(cx + 34, 132); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx, 118); ctx.moveTo(cx - 34, 118); ctx.lineTo(cx + 34, 118); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(cx - 8, cy + 6); ctx.lineTo(cx, cy - 6); ctx.lineTo(cx + 8, cy + 6); ctx.closePath(); ctx.fillStyle = BRASS; ctx.fill();
   const ex = Math.cos(ang) * L, ey = Math.sin(ang) * L;
   ctx.strokeStyle = INKC; ctx.lineWidth = 2.5;
@@ -452,12 +451,13 @@ function drawBalance(k) {
     ctx.strokeStyle = 'rgba(58,42,26,.6)'; ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px - 30, py + 34); ctx.moveTo(px, py); ctx.lineTo(px + 30, py + 34); ctx.stroke();
     ctx.beginPath(); ctx.ellipse(px, py + 36, 36, 6, 0, 0, Math.PI * 2); ctx.fillStyle = PAPER; ctx.fill(); ctx.strokeStyle = INKC; ctx.stroke();
-    ctx.fillStyle = col; ctx.font = 'bold 15px Georgia'; ctx.textAlign = 'center'; ctx.fillText(`${Math.round(100 * w)}%`, px, py + 30);
+    const r = 4 + 16 * Math.sqrt(w);
+    if (w > 0.001) { ctx.beginPath(); ctx.arc(px, py + 32 - r * 0.7, r, Math.PI, 0); ctx.closePath(); ctx.fillStyle = col; ctx.fill(); }
     ctx.fillStyle = col; ctx.font = '12px Georgia'; ctx.textAlign = 'center'; ctx.fillText(label, px, py + 58);
   };
   pan(cx - ex, cy - ey, 1 - k, mix(0), 'OWN GAIN');
   pan(cx + ex, cy + ey, k, mix(1), 'THE RIGHT THING');
-  ctx.textAlign = 'center'; ctx.fillStyle = INKC; ctx.font = '22px Georgia'; ctx.fillText(`balance ${fmt(k)}`, cx, 178);
+  ctx.textAlign = 'center'; ctx.fillStyle = INKC; ctx.font = '22px Georgia'; ctx.fillText(`balance ${fmt(k)}`, cx, 144);
   ctx.textAlign = 'left';
 }
 
