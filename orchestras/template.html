@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The More the Better?</title>
+<style>
+  :root { --bg:#15110e; --panel:#211b16; --ink:#f3e9d8; --dim:#b8a890; --brass:#d9a441; --blue:#6fb3ff; --line:#3a3027; --good:#8fd18f; --bad:#f08a7a; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html, body { margin:0; background:var(--bg); color:var(--ink); font:17px/1.4 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  body { min-height:100vh; }
+  .screen { display:none; max-width:420px; margin:0 auto; padding:18px 16px 40px; }
+  .screen.on { display:block; }
+  h1 { font-size:34px; line-height:1.1; margin:26px 0 10px; font-weight:700; letter-spacing:-0.01em; }
+  h2 { font-size:21px; margin:18px 0 8px; }
+  h3 { font-size:17px; margin:18px 0 6px; color:var(--brass); }
+  p { margin:8px 0; }
+  .aim { font-size:19px; color:var(--brass); margin:14px 0 20px; font-weight:600; }
+  .dim { color:var(--dim); font-size:15px; }
+  button { display:block; width:100%; border:0; border-radius:12px; padding:16px 18px; margin:10px 0; font:inherit; font-size:18px; font-weight:600; color:var(--bg); background:var(--brass); cursor:pointer; }
+  button.second { background:var(--panel); color:var(--ink); border:1px solid var(--line); }
+  button:disabled { opacity:0.35; cursor:default; }
+  .topbar { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:0 0 6px; }
+  .topbar .aimline { font-size:13px; color:var(--brass); font-weight:600; flex:1; line-height:1.25; }
+  button.q { width:42px; height:42px; padding:0; margin:0; border-radius:21px; background:var(--panel); color:var(--brass); border:1px solid var(--line); font-size:20px; flex:none; }
+  .round { font-size:14px; color:var(--dim); margin-top:10px; }
+  .measure { font-size:22px; font-weight:700; margin:2px 0 6px; line-height:1.2; }
+  svg { width:100%; height:auto; display:block; touch-action:none; user-select:none; -webkit-user-select:none; }
+  .chartbox { background:var(--panel); border-radius:14px; padding:6px 4px 2px; margin:10px 0; }
+  .verdict { font-size:18px; margin:12px 0 6px; }
+  .verdict b.ok { color:var(--good); } .verdict b.no { color:var(--bad); }
+  .explain { background:var(--panel); border-radius:12px; padding:12px 14px; margin:10px 0; }
+  .explain p { margin:6px 0; }
+  .big { font-size:26px; line-height:1.2; font-weight:700; margin:16px 0 10px; }
+  .choice { display:flex; flex-direction:column; gap:4px; }
+  .race { margin:12px 0; }
+  .race .row { display:grid; grid-template-columns:118px 1fr; gap:8px; align-items:center; margin:6px 0; font-size:14px; }
+  .race .bars { display:flex; flex-direction:column; gap:3px; }
+  .race .bar { height:14px; border-radius:3px; position:relative; font-size:11px; line-height:14px; color:var(--bg); padding-left:4px; font-weight:700; }
+  .race .bar.m { background:var(--dim); } .race .bar.r { background:var(--brass); }
+  .legend { font-size:13px; color:var(--dim); display:flex; gap:14px; margin:4px 0 0; }
+  .legend i { display:inline-block; width:12px; height:12px; border-radius:6px; vertical-align:-1px; margin-right:4px; }
+  .attr { font-size:13px; color:var(--dim); margin-top:26px; border-top:1px solid var(--line); padding-top:12px; }
+  a { color:var(--brass); }
+  table.t { border-collapse:collapse; width:100%; font-size:14px; margin:8px 0; }
+  table.t td, table.t th { padding:4px 6px; border-bottom:1px solid var(--line); text-align:left; }
+  table.t td.n { text-align:right; font-variant-numeric:tabular-nums; }
+</style>
+</head>
+<body>
+
+<!-- ============ START ============ -->
+<section id="s-start" class="screen on">
+  <h1>The More the Better?</h1>
+  <p>For most of their history, symphony orchestras were all men. By 1990 some were a tenth women, some half. A study visited 78 of them and asked the players how life there was.</p>
+  <p class="aim">Draw the line the study found: how life in an orchestra changes as women go from a handful to half of it.</p>
+  <button id="b-start">Start</button>
+  <button id="b-help" class="second">How to play</button>
+  <button id="b-about" class="second">About the paper and this game</button>
+</section>
+
+<!-- ============ HELP ============ -->
+<section id="s-help" class="screen">
+  <h2>How to play</h2>
+  <p class="aim">Draw the line the study found: how life in an orchestra changes as women go from a handful to half of it.</p>
+  <p><b>The setting.</b> In 1990–91 a study visited 78 professional orchestras in the United States, the United Kingdom and the two Germanies and surveyed their players. The orchestras ranged from 2% to 59% women. The study sorted them into five groups by share of women and compared what players said.</p>
+  <p><b>The bet.</b> First, one quick question with two answers. Pick one; the card turns.</p>
+  <p><b>The charts.</b> Then four charts, one per measure. Each has five columns, one per group of orchestras, from a few women to about half. The first column already has a dot: that is what players in the orchestras with the fewest women said, on a scale from 1 to 7. Tap or drag in the other four columns to draw where you think the answer was with more women. When all four dots are placed, press <b>Show what the study found</b>, and the study's line is drawn over yours.</p>
+  <p><b>The yardstick.</b> <b>Shape right</b> means your line falls and recovers where the study's line does (or doesn't). The <b>miss</b> is how far your dots were from the study's, on average, in points on the 7-point scale.</p>
+  <p><b>What the game shows.</b> Whether "the more the better", the common view of what happens when women join a men's institution, describes what the study found.</p>
+  <button id="b-help-back">Back</button>
+</section>
+
+<!-- ============ PLAY ============ -->
+<section id="s-play" class="screen">
+  <div class="topbar"><div class="aimline">Draw the line the study found: how life in an orchestra changes as women go from a handful to half of it.</div><button class="q" id="b-q-play" aria-label="How to play">?</button></div>
+
+  <div id="opener">
+    <div class="round">The bet</div>
+    <div class="measure">In 1990, which kind of orchestra had more women?</div>
+    <p class="dim">Major orchestras are the famous, well-paid big-city ensembles. Regional orchestras are smaller, younger and poorer.</p>
+    <div class="choice">
+      <button id="b-major" class="second">The major orchestras</button>
+      <button id="b-regional" class="second">The regional orchestras</button>
+    </div>
+    <div id="opener-reveal" style="display:none">
+      <div class="verdict" id="opener-verdict"></div>
+      <div class="race" id="race"></div>
+      <div class="legend"><span><i style="background:var(--dim)"></i>major</span><span><i style="background:var(--brass)"></i>regional</span><span>share of women, 1990</span></div>
+      <p class="dim">Women entered where the doors were lower. The study notes this is how it usually goes when women enter a profession that was men's: first the lower-status organisations.</p>
+      <button id="b-opener-next">Next: draw the lines</button>
+    </div>
+  </div>
+
+  <div id="draw" style="display:none">
+    <div class="round" id="round-label"></div>
+    <div class="measure" id="measure-name"></div>
+    <p class="dim" id="orient"></p>
+    <div class="chartbox">
+      <svg id="chart" viewBox="0 0 360 318" aria-label="chart"></svg>
+    </div>
+    <button id="b-show">Show what the study found</button>
+    <div id="after" style="display:none">
+      <div class="verdict" id="verdict"></div>
+      <div class="explain" id="explain"></div>
+      <button id="b-next">Next measure</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ END ============ -->
+<section id="s-end" class="screen">
+  <div class="round">The verdict</div>
+  <div class="big" id="end-you"></div>
+  <p id="end-study"></p>
+  <p id="end-means"></p>
+  <div class="explain" id="end-table"></div>
+  <button id="b-more">Two more measures</button>
+  <button id="b-again" class="second">Play again</button>
+  <button id="b-about2" class="second">About the paper and this game</button>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section id="s-about" class="screen">
+  <h2>About</h2>
+  <p class="dim">Jutta Allmendinger, J. Richard Hackman and Erin V. Lehman, "Life and Work in Symphony Orchestras", <i>The Musical Quarterly</i> 80(2), 1996, pp. 194–219. <a href="https://www.jstor.org/stable/742362">jstor.org/stable/742362</a>. Game built from this paper; the paper is the authority where the two disagree.</p>
+  <!--ABOUT-->
+  <button id="b-about-back">Back</button>
+</section>
+
+<script>
+/*MECHANISM-BEGIN*/
+/*__MECHANISM__*/
+/*MECHANISM-END*/
+</script>
+<script>
+(function () {
+  const $ = id => document.getElementById(id);
+  let current = 's-start', returnTo = 's-start';
+  function show(id) { for (const s of document.querySelectorAll('.screen')) s.classList.toggle('on', s.id === id); current = id; window.scrollTo(0, 0); }
+  function openHelp() { returnTo = current; show('s-help'); }
+  function openAbout() { returnTo = current; show('s-about'); }
+  $('b-help').onclick = openHelp; $('b-q-play').onclick = openHelp;
+  $('b-about').onclick = openAbout; $('b-about2').onclick = openAbout;
+  $('b-help-back').onclick = () => show(returnTo);
+  $('b-about-back').onclick = () => show(returnTo);
+
+  // ---------- state ----------
+  let rounds = [], roundIndex = 0, results = [], drawn = [], placed = [], secondSetPlayed = false, revealed = false;
+
+  // ---------- start / opener ----------
+  $('b-start').onclick = () => {
+    results = []; secondSetPlayed = false;
+    $('opener').style.display = 'block'; $('draw').style.display = 'none';
+    $('opener-reveal').style.display = 'none';
+    $('b-major').disabled = false; $('b-regional').disabled = false;
+    $('b-major').style.background = ''; $('b-regional').style.background = '';
+    show('s-play');
+  };
+  function openerPick(pick) {
+    const o = openerAnswer();
+    $('b-major').disabled = true; $('b-regional').disabled = true;
+    const right = pick === o.answer;
+    $('opener-verdict').innerHTML = right
+      ? '<b class="ok">Right.</b> The regional orchestras, in every country.'
+      : '<b class="no">Not the majors.</b> The regional orchestras, in every country.';
+    const race = $('race'); race.innerHTML = '';
+    for (const r of o.rows) {
+      const row = document.createElement('div'); row.className = 'row';
+      row.innerHTML = `<div>${r.country}</div><div class="bars"><div class="bar m" style="width:0%">${r.major}%</div><div class="bar r" style="width:0%">${r.regional}%</div></div>`;
+      race.appendChild(row);
+      requestAnimationFrame(() => setTimeout(() => {
+        row.querySelector('.bar.m').style.transition = 'width 700ms ease'; row.querySelector('.bar.r').style.transition = 'width 700ms ease';
+        row.querySelector('.bar.m').style.width = (r.major / 60 * 100) + '%'; row.querySelector('.bar.r').style.width = (r.regional / 60 * 100) + '%';
+      }, 60));
+    }
+    $('opener-reveal').style.display = 'block';
+  }
+  $('b-major').onclick = () => openerPick('major');
+  $('b-regional').onclick = () => openerPick('regional');
+  $('b-opener-next').onclick = () => { rounds = CONFIG.rounds.slice(); roundIndex = 0; startRound(); };
+
+  // ---------- chart geometry ----------
+  const W = 360, X0 = 44, XSTEP = 72, YTOP = 18, YBOT = 212, [YMIN, YMAX] = CONFIG.yWindow;
+  const colX = i => X0 + i * XSTEP;
+  const yOf = v => YBOT - (v - YMIN) / (YMAX - YMIN) * (YBOT - YTOP);
+  const vOf = y => YMIN + (YBOT - y) / (YBOT - YTOP) * (YMAX - YMIN);
+  const NS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); (parent || svg).appendChild(e); return e; }
+  const svg = $('chart');
+  let gPaper, gYours, gHints;
+
+  function drawFrame() {
+    svg.innerHTML = '';
+    // horizontal guides and axis labels
+    for (let v = YMIN; v <= YMAX; v++) {
+      el('line', { x1: X0 - 22, x2: colX(4) + 22, y1: yOf(v), y2: yOf(v), stroke: '#3a3027', 'stroke-width': 1 });
+      el('text', { x: 4, y: yOf(v) + 4, fill: '#b8a890', 'font-size': 11 }).textContent = v;
+    }
+    el('text', { x: colX(4) + 22, y: YTOP - 8, fill: '#b8a890', 'font-size': 10, 'text-anchor': 'end' }).textContent = 'rating, out of 7';
+    // band icons: ten seats, women filled brass
+    for (let i = 0; i < 5; i++) {
+      const ic = bandIcon(i), cx = colX(i);
+      for (let s = 0; s < ic.seats; s++) {
+        const r = Math.floor(s / 5), c = s % 5;
+        const x = cx - 20 + c * 10, y = YBOT + 22 + r * 11;
+        const isWoman = s < ic.women;
+        el('circle', { cx: x, cy: y, r: 3.6, fill: isWoman ? '#d9a441' : 'none', stroke: isWoman ? '#d9a441' : '#7a6a55', 'stroke-width': 1.2 });
+      }
+      el('text', { x: cx, y: YBOT + 58, fill: '#b8a890', 'font-size': 11, 'text-anchor': 'middle' }).textContent = ic.label;
+    }
+    el('text', { x: W / 2, y: YBOT + 76, fill: '#b8a890', 'font-size': 11, 'text-anchor': 'middle' }).textContent = 'share of women in the orchestra';
+    // column hit zones (visual only; pointer handled on svg)
+    gHints = el('g', {}); gPaper = el('g', {}); gYours = el('g', {});
+  }
+
+  function drawYours() {
+    gYours.innerHTML = ''; gHints.innerHTML = '';
+    for (let i = 1; i < 5; i++) if (!placed[i]) {
+      el('text', { x: colX(i), y: yOf(5) + 7, fill: '#6fb3ff', 'font-size': 22, 'text-anchor': 'middle', opacity: 0.45 }, gHints).textContent = '?';
+      el('line', { x1: colX(i), x2: colX(i), y1: YTOP, y2: YBOT, stroke: '#6fb3ff', 'stroke-width': 1, 'stroke-dasharray': '3 5', opacity: 0.3 }, gHints);
+    }
+    let path = ''; let prev = null;
+    for (let i = 0; i < 5; i++) {
+      if (!placed[i]) { prev = null; continue; }
+      const x = colX(i), y = yOf(drawn[i]);
+      if (prev) el('line', { x1: prev.x, y1: prev.y, x2: x, y2: y, stroke: '#6fb3ff', 'stroke-width': 3, 'stroke-linecap': 'round' }, gYours);
+      prev = { x, y };
+    }
+    for (let i = 0; i < 5; i++) {
+      if (!placed[i]) continue;
+      const x = colX(i), y = yOf(drawn[i]);
+      el('circle', { cx: x, cy: y, r: i === 0 ? 8 : 9, fill: '#6fb3ff', stroke: '#15110e', 'stroke-width': 2 }, gYours);
+      el('text', { x, y: y - 14, fill: '#6fb3ff', 'font-size': 12, 'text-anchor': 'middle', 'font-weight': 700 }, gYours).textContent = drawn[i].toFixed(1);
+    }
+    $('b-show').disabled = !placed.every(Boolean);
+  }
+
+  // pointer: tap or drag places the dot in the nearest column at the touched height
+  let dragging = false;
+  function place(ev) {
+    const pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+    const p = pt.matrixTransform(svg.getScreenCTM().inverse());
+    let best = -1, bd = 1e9;
+    for (let i = 1; i < 5; i++) { const d = Math.abs(p.x - colX(i)); if (d < bd) { bd = d; best = i; } }
+    if (best < 0 || bd > XSTEP * 0.6) return;
+    let v = vOf(Math.max(YTOP, Math.min(YBOT, p.y)));
+    v = Math.max(YMIN, Math.min(YMAX, roundTo(v, CONFIG.snap)));
+    drawn[best] = Math.round(v * 10) / 10; placed[best] = true;
+    drawYours();
+  }
+  svg.addEventListener('pointerdown', ev => { if (revealed) return; dragging = true; svg.setPointerCapture(ev.pointerId); place(ev); ev.preventDefault(); });
+  svg.addEventListener('pointermove', ev => { if (dragging && !revealed) place(ev); });
+  svg.addEventListener('pointerup', () => { dragging = false; });
+  svg.addEventListener('pointercancel', () => { dragging = false; });
+
+  // ---------- rounds ----------
+  function startRound() {
+    const id = rounds[roundIndex], m = CONFIG.measures[id];
+    revealed = false;
+    drawn = [m.values[0], 0, 0, 0, 0]; placed = [true, false, false, false, false];
+    $('opener').style.display = 'none'; $('draw').style.display = 'block';
+    $('after').style.display = 'none'; $('b-show').style.display = 'block';
+    const total = rounds.length, setName = secondSetPlayed || rounds === CONFIG.replayRounds ? 'Second set, ' : '';
+    $('round-label').textContent = `${setName}measure ${roundIndex + 1} of ${total}`;
+    $('measure-name').textContent = m.name.charAt(0).toUpperCase() + m.name.slice(1);
+    $('orient').textContent = `Players in orchestras with only a few women rated this ${m.values[0].toFixed(1)} out of 7. Tap or drag in each of the other four columns to say where you think it was with more women.`;
+    drawFrame(); drawYours();
+    show('s-play');
+  }
+
+  $('b-show').onclick = () => {
+    if (!placed.every(Boolean)) return;
+    revealed = true;
+    const id = rounds[roundIndex], m = CONFIG.measures[id];
+    const res = scoreDrawing(id, drawn.slice()); results.push(res);
+    $('b-show').style.display = 'none';
+    // the reveal: the study's dots land one by one, the line follows
+    let prev = { x: colX(0), y: yOf(m.values[0]) };
+    for (let i = 0; i < 5; i++) {
+      setTimeout(() => {
+        const x = colX(i), y = yOf(m.values[i]);
+        if (i > 0) {
+          const ln = el('line', { x1: prev.x, y1: prev.y, x2: prev.x, y2: prev.y, stroke: '#d9a441', 'stroke-width': 4, 'stroke-linecap': 'round' }, gPaper);
+          ln.style.transition = 'all 260ms ease'; requestAnimationFrame(() => { ln.setAttribute('x2', x); ln.setAttribute('y2', y); });
+        }
+        el('circle', { cx: x, cy: y, r: 8, fill: '#d9a441', stroke: '#15110e', 'stroke-width': 2 }, gPaper);
+        el('text', { x, y: y + 22, fill: '#d9a441', 'font-size': 12, 'text-anchor': 'middle', 'font-weight': 700 }, gPaper).textContent = m.values[i].toFixed(1);
+        prev = { x, y };
+      }, 150 + i * 330);
+    }
+    setTimeout(() => {
+      $('verdict').innerHTML = (res.shapeRight ? '<b class="ok">Shape right.</b> ' : '<b class="no">Shape wrong.</b> ') + res.verdict.replace(/^Shape (right|wrong)\. /, '');
+      $('explain').innerHTML = explanation(id, res);
+      const last = roundIndex === rounds.length - 1;
+      $('b-next').textContent = last ? 'See the verdict' : 'Next measure';
+      $('after').style.display = 'block';
+      $('after').scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }, 150 + 5 * 330 + 200);
+  };
+
+  function explanation(id, res) {
+    const first = results.length === 1;
+    const noRec = CONFIG.paperSaysNoRecovery.includes(id);
+    let s = '';
+    if (first) {
+      s += `<p><b>What the study saw.</b> With a few women, little changed: they kept a low profile and the orchestra ran as before. Once there were enough women to form a group, a tenth to two-fifths, both sides tensed: boundaries hardened, stereotypes grew, support across the line fell, for men and women alike. Only near half, when everyone had plenty of people like themselves, did relations settle again.</p>`;
+      s += `<p>The legend shows the ${CONFIG.orchestras} orchestras sorted into five groups by share of women. Brass is the study; blue is you.</p>`;
+    } else if (noRec) {
+      s += `<p><b>Not everything recovered.</b> Two of the study's six measures, this one and how intact the ensemble feels, kept falling all the way to the most balanced orchestras. The tipping point is real for most of orchestral life, not all of it.</p>`;
+    } else {
+      s += `<p>The same pattern: worst in the transition, better again past about 40%. The study calls the turn a tipping point and found it on most of its measures.</p>`;
+    }
+    return s;
+  }
+
+  $('b-next').onclick = () => {
+    roundIndex++;
+    if (roundIndex < rounds.length) startRound(); else endScreen();
+  };
+
+  // ---------- end ----------
+  function endScreen() {
+    const v = sessionVerdict(results);
+    $('end-you').textContent = v.line;
+    $('end-study').innerHTML = `<b>What the study says.</b> In the orchestras it visited, almost everything got worse as women went from a few to a third of the players, and most of it recovered only once women were more than about 40%. Two measures, how much players throw themselves into the work and how intact the ensemble feels, kept falling.`;
+    $('end-means').innerHTML = `<b>What that means.</b> "The more the better" is too simple. The hard part of becoming a mixed orchestra is the middle, and the orchestras that had got through it, mostly regional orchestras in the United States, were doing better than those that had not started. This is a snapshot of ${CONFIG.orchestras} orchestras in 1990–91, not the story of one orchestra over time.`;
+    let t = '<table class="t"><tr><th>Measure</th><th>Shape</th><th>Miss</th></tr>';
+    for (const r of results) t += `<tr><td>${CONFIG.measures[r.measureId].name}</td><td>${r.shapeRight ? '<b class="ok">right</b>' : '<b class="no">wrong</b>'}</td><td class="n">${r.miss.toFixed(1)}</td></tr>`;
+    t += '</table>';
+    $('end-table').innerHTML = t;
+    $('b-more').style.display = secondSetPlayed ? 'none' : 'block';
+    show('s-end');
+  }
+  $('b-more').onclick = () => { secondSetPlayed = true; rounds = CONFIG.replayRounds.slice(); roundIndex = 0; startRound(); };
+  $('b-again').onclick = () => { show('s-start'); };
+})();
+</script>
+</body>
+</html>
