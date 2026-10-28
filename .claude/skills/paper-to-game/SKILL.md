@@ -114,6 +114,8 @@ Then answer, in writing:
 
 **Where is the moment?** The point in play when the discovery lands: "the player does X, sees Y, and realises Z." If it cannot be written as a moment, the concept is not ready.
 
+**What is the story, for an eight-year-old?** Before any concept is chosen, write the game's core narrative as one short paragraph a child of eight could follow: who wants what, what is in the way, what happens that nobody expected. No field words. This is a test of the narrative, not of the game's difficulty — the story is for a child, the play may be as hard as the paper demands — and it must not push the game toward cute characters: the one who wants something may be a cell, a country, a molecule, or the player. If the paragraph cannot be written, the game has a mechanism and no plot; if it can, every screen serves that paragraph, and it is the first thing checked when a screen feels confusing.
+
 ---
 
 ## 5. Fidelity levels and claim boundaries
@@ -171,18 +173,19 @@ Written in full and shown to the user before the build, as a record, not a quest
 1. **Paper** — citation, DOI, what was available.
 2. **What the paper hands over** — model / estimate / argument, primary and secondary.
 3. **The discovery, and its kind.**
-4. **Fidelity level and claim boundaries** — structural / statistical / illustrative; demonstrates, assumes, establishes.
-5. **The aim and the verdict** — the aim as the sentence the player will read; the verdict as the lines the end screen leads with (what you did; what the paper says; what that means).
-6. **Concepts** — one or three, as scaled above, each with format, controls, deliberation, discovery moment, sources of fun, replayability.
-7. **The first five minutes** for the pick (and the runner-up, if any).
-8. **The pick, and why**; runner-up and switch condition.
-9. **The shape** — rounds, screens, presets and their sources, order and reason, score or none.
-10. **Controls, mechanism, feedback, moment** — named concretely for the pick.
-11. **What is cut.**
-12. **Divergences** — clock, parameters, payoffs, presentation; each with its reason.
-13. **Visual world** — one line from the paper's own imagery; three or four rules; the legibility rule: what the player looks at on the play screen, how big, how many, what question each picture answers.
-14. **Fidelity plan** — what the headless check will verify at the declared level.
-15. **Fidelity result and build log** — appended after the build.
+4. **The story for an eight-year-old** — one paragraph.
+5. **Fidelity level and claim boundaries** — structural / statistical / illustrative; demonstrates, assumes, establishes.
+6. **The aim and the verdict** — the aim as the sentence the player will read; the verdict as the lines the end screen leads with (what you did; what the paper says; what that means).
+7. **Concepts** — one or three, as scaled above, each with format, controls, deliberation, discovery moment, sources of fun, replayability.
+8. **The first five minutes** for the pick (and the runner-up, if any).
+9. **The pick, and why**; runner-up and switch condition.
+10. **The shape** — rounds, screens, presets and their sources, order and reason, score or none.
+11. **Controls, mechanism, feedback, moment** — named concretely for the pick.
+12. **What is cut.**
+13. **Divergences** — clock, parameters, payoffs, presentation; each with its reason.
+14. **Visual world** — one line from the paper's own imagery; three or four rules; the legibility rule: what the player looks at on the play screen, how big, how many, what question each picture answers.
+15. **Fidelity plan** — what the headless check will verify at the declared level.
+16. **Fidelity result and build log** — appended after the build.
 
 ---
 
@@ -258,6 +261,7 @@ The skill is judged on a heterogeneous set, not on one paper: a theoretical mode
 - An unfair failure engineered to manufacture a twist.
 - A fidelity level undeclared, or a correlation played as a cause, or an average effect played as an individual response.
 - A concept that could not survive a written walkthrough, built anyway.
+- A game whose story could not be told to an eight-year-old.
 - The discovery arriving late because presets follow the paper's order instead of the player's.
 - A yardstick in different units from the aim, so that success reads as failure.
 - Pictures that pass the statistics and fail the eye.
