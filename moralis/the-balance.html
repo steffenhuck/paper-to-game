@@ -35,6 +35,9 @@
   input[type=range]::-moz-range-track { height:2px; background:var(--ink); }
   input[type=range]::-moz-range-thumb { width:28px; height:28px; border-radius:50%; background:var(--brass); border:2px solid var(--ink); }
   input[type=range]:disabled { opacity:.4; }
+  button.q { flex:0 0 auto; min-height:32px; width:32px; padding:0; border-radius:50%; font-size:15px; color:var(--dim); border-color:var(--dim); }
+  .orient { font-size:13px; color:var(--dim); margin:4px 0 6px; }
+  .gloss { font-size:14px; text-align:center; margin:2px 0 4px; }
   .ends { display:flex; justify-content:space-between; font-size:12px; margin-top:-6px; }
   .ends .s { color:var(--self); } .ends .r { color:var(--right); }
   .msg { min-height:48px; font-size:14px; margin:8px 0; }
@@ -61,32 +64,38 @@
   <h1>THE BALANCE</h1>
   <p class="center muted"><i>Homo moralis</i> and the people it replaces</p>
   <div class="plate"><canvas id="c-hero" width="528" height="230"></canvas></div>
-  <p>You are evolution's hand. Each society is a village whose people share one temperament: how much they weigh their own gain against <i>doing what would be best if everyone did it</i>. Set the balance. Then newcomers with other temperaments arrive, and either take over or die out.</p>
+  <p>You are evolution's hand. Each society is a village whose people share one temperament: how much they weigh their own gain against <i>doing what would be best if everyone did it</i>. Set the balance. The balance runs from 0 (only their own gain) to 1 (only the right thing). Then newcomers with other balances arrive. A newcomer that earns more than your villagers <i>takes over</i>; one that earns less <i>dies out</i>. Your goal in each society is the balance that no newcomer can beat.</p>
   <h2>Societies</h2>
+  <p class="orient">Five societies that differ in who meets whom. Start at the first, or pick one.</p>
   <div class="row" id="presets"></div>
   <div class="row" style="margin-top:12px">
-    <button class="primary" id="b-start">SET THE FIRST BALANCE</button>
+    <button class="primary" id="b-start">START</button>
+    <button id="b-help">HOW TO PLAY</button>
   </div>
   <p class="muted" style="margin-top:14px;font-size:12px">Built from Alger &amp; Weibull (2013), <i>Econometrica</i>. <a href="#" id="l-about">About this game</a></p>
 </section>
 
 <!-- ============ PLAY ============ -->
 <section id="s-play" class="screen">
-  <div class="hud"><span class="ov" id="h-soc">Society 1 / 5</span><span class="score" id="h-score">score 0</span></div>
+  <div class="hud"><span class="ov" id="h-soc">Society 1 / 5</span><span><span class="score" id="h-score">score 0</span> <button class="q" data-help="s-play" aria-label="How to play">?</button></span></div>
   <div style="font-size:20px" id="h-name">Strangers</div>
   <div class="story" id="h-story"></div>
   <div class="gameline" id="h-game"></div>
 
   <div class="plate"><canvas id="c-balance" width="528" height="170"></canvas></div>
   <input type="range" id="lever" min="0" max="1" step="0.05" value="0.5" aria-label="degree of morality">
-  <div class="ends"><span class="s">← self</span><span class="r">the right thing →</span></div>
+  <div class="ends"><span class="s">← 0: only their own gain</span><span class="r">1: the right thing →</span></div>
+  <div class="gloss" id="h-gloss"></div>
+  <p class="orient">Drag the balance to set your villagers' temperament. <i>The right thing</i> means: what would be best if everyone did it. Then test it against eleven newcomers, from 0 to 1.</p>
 
-  <div class="row" style="margin-top:10px"><button class="primary" id="b-release">RELEASE THE NEWCOMERS</button></div>
+  <div class="row" style="margin-top:10px"><button class="primary" id="b-release">TEST AGAINST NEWCOMERS</button></div>
 
   <div class="ov" style="margin-top:12px" id="h-test">the village · test 1 of 3</div>
   <div class="plate"><canvas id="c-village" width="528" height="250"></canvas></div>
-  <div class="ov">the drawer · each newcomer pinned at its temperament</div>
+  <p class="orient">Each figure is a villager; lines join the pairs who meet. Filled figures are newcomers. They spread if they earn more than your villagers and fade if they earn less.</p>
+  <div class="ov">the drawer · each newcomer pinned at its balance</div>
   <div class="plate"><canvas id="c-drawer" width="528" height="150"></canvas></div>
+  <p class="orient">The ruler runs from 0 (only self) to 1 (only the right thing). One row per test. Brass wedge: your village. ✕: the newcomer took over. Small ring: it died out or blended in.</p>
   <div class="msg" id="msg"></div>
   <div class="reveal fade" id="reveal" style="display:none"></div>
   <div class="row" id="after" style="display:none">
@@ -100,6 +109,7 @@
   <div class="ov center">Plate II · what survived</div>
   <h1 style="font-size:26px">THE RULE</h1>
   <div class="plate"><canvas id="c-plate" width="528" height="360"></canvas></div>
+  <p class="orient">Each figure is one society. Across: the chance a newcomer is paired with one of its own kind. Up: the balance you ended on. The dashed line is where the two are equal.</p>
   <p id="end-text"></p>
   <table id="end-table"></table>
   <div class="row" style="margin-top:14px">
@@ -107,6 +117,24 @@
     <button id="b-about2">ABOUT THIS GAME</button>
   </div>
   <div class="attr" id="attr1"></div>
+</section>
+
+<!-- ============ HOW TO PLAY ============ -->
+<section id="s-help" class="screen about">
+  <div class="ov">how to play</div>
+  <h1 style="font-size:24px;text-align:left">How to play</h1>
+  <h3>The setting</h3>
+  <p>People in a village are paired up to deal with each other — sharing a chore, splitting a resource, doing business. Each villager carries a temperament, a balance between two goals: their own gain, and <i>the right thing</i>, meaning what would be best for them if the other person did exactly the same. A balance of 0 cares only about own gain (economists' <i>homo oeconomicus</i>); 1 cares only about the right thing (<i>homo kantiensis</i>, after Kant); anything between is <i>homo moralis</i>. Nobody can see anyone else's balance.</p>
+  <h3>What each round asks</h3>
+  <p>You set the balance for the whole village. Then a few newcomers arrive with a different balance — eleven kinds in turn, from 0 to 1 in steps of 0.1. Everyone acts on their own balance, and earns what the deal pays. A newcomer kind that earns more on average than your villagers spreads and takes over; one that earns less dies out. One that behaves exactly like your villagers blends in.</p>
+  <p>Each society gives you three tests. After each, look at the drawer: it shows which newcomers took over and where they sit. Move your balance and test again.</p>
+  <h3>The societies</h3>
+  <p>Five of them, which differ in who meets whom: strangers in a city, siblings, half-siblings, and classmates in business. In some, newcomers tend to be paired with their own kind (a newcomer's sibling is likely to share its upbringing); in others, never. Three different deals are played: a shared project (effort), a quarrel over a resource (grab or share), and a dilemma (cooperate or cheat).</p>
+  <h3>The score</h3>
+  <p>One point for every newcomer that fails to take over: up to 11 per test, 33 per society, 165 in all. If you find a balance nobody beats before your third test, the remaining tests are scored at that result.</p>
+  <h3>What the game is trying to show</h3>
+  <p>Which temperaments survive when people can't read each other's minds. Play it before reading the answer; the last screen and the About page explain it.</p>
+  <div class="row" style="margin-top:16px"><button class="primary" id="b-help-back">BACK</button></div>
 </section>
 
 <!-- ============ ABOUT ============ -->
@@ -301,7 +329,7 @@ function buildPresets() {
   CONFIG.societies.forEach((s, i) => {
     const b = document.createElement('button'); b.className = 'soc' + (i === si ? ' sel' : '');
     b.innerHTML = `<span>${i + 1}. ${s.name}</span><span class="muted" style="font-size:12px">${CONFIG.games[s.game].name}</span>`;
-    b.onclick = () => { si = i; buildPresets(); $('b-start').textContent = i === 0 ? 'SET THE FIRST BALANCE' : 'START HERE'; };
+    b.onclick = () => { si = i; buildPresets(); $('b-start').textContent = i === 0 ? 'START' : `START AT SOCIETY ${i + 1}`; };
     box.appendChild(b);
   });
 }
@@ -344,13 +372,15 @@ function drawBalance(cv, k, beh) {
   ctx.textAlign = 'center'; ctx.fillStyle = 'rgb(58,42,26)';
   ctx.font = 'italic 17px Georgia'; ctx.fillText(species(k), cx, 150);
   ctx.font = '12px Georgia'; ctx.fillStyle = '#7d6b52';
-  ctx.fillText(`κ = ${fmtK(k)}${beh ? ' · residents\' ' + beh : ''}`, cx, 166);
+  ctx.fillText(`balance ${fmtK(k)}`, cx, 166);
   ctx.textAlign = 'left';
 }
 function behText(s, k) {
   const g = CONFIG.games[s.game], x = residentBehaviour(s.g, k);
-  return g.m === 1 ? `${g.verb} ${Math.round(100 * x)}%` : `${g.verb} ${x.toFixed(2)} of ${g.m}`;
+  return { publicGood: `put in effort ${x.toFixed(2)} (out of ${g.m})`, hawkDove: `grab ${Math.round(100 * x)}% of the time`,
+           pd: `cooperate ${Math.round(100 * x)}% of the time` }[s.game];
 }
+const speciesGloss = k => k <= 0.001 ? 'cares only about their own gain' : k >= 0.999 ? 'does only what would be best if everyone did it' : `${Math.round(100 * (1 - k))}% own gain, ${Math.round(100 * k)}% the right thing`;
 
 // ---------- the village ----------
 const V = { cols: 12, rows: 8, cells: [], seed: 1 };
@@ -414,7 +444,7 @@ function animateDuel(d, kR, sigma, rnd) {
       } else {
         for (const c of muts) c.a = Math.max(0, 1 - f / F);
       }
-      const banner = f >= F ? (d.invades ? `κ = ${fmtK(d.kM)} took over` : d.clone ? `κ = ${fmtK(d.kM)} blended in — same behaviour` : `κ = ${fmtK(d.kM)} died out`) : `newcomers: κ = ${fmtK(d.kM)}`;
+      const banner = f >= F ? (d.invades ? `balance ${fmtK(d.kM)} took over` : d.clone ? `balance ${fmtK(d.kM)} blended in — same behaviour` : `balance ${fmtK(d.kM)} died out`) : `newcomers with balance ${fmtK(d.kM)}`;
       drawVillage(kR, d.kM, banner);
       if (f < F) requestAnimationFrame(step); else setTimeout(res, CONFIG.pauseMs);
     };
@@ -474,7 +504,7 @@ function startSociety(i) {
     hawkDove: 'They play hawk and dove: grabbing wins against a sharer, but two grabbers fight and both lose.',
     pd: "They play a prisoners' dilemma: cooperation helps the other more than it costs you, but defection always pays you more.",
   }[s.game];
-  $('msg').innerHTML = si === 0 ? 'Move the balance. Then release the newcomers: eleven temperaments, from wholly selfish to wholly Kantian.' : 'New society. Your balance carries over.';
+  $('msg').innerHTML = si === 0 ? 'Set the balance, then test it. Three tests per society; each newcomer that fails to take over is a point.' : 'New society. Your balance carries over from the last one.';
   $('reveal').style.display = 'none'; $('after').style.display = 'none';
   $('lever').disabled = false; $('b-release').disabled = false;
   $('h-test').textContent = `the village · test 1 of ${CONFIG.testsPerSociety}`;
@@ -484,7 +514,8 @@ function startSociety(i) {
 function updateLever() {
   kappa = parseFloat($('lever').value);
   const s = society(si);
-  drawBalance($('c-balance'), kappa, behText(s, kappa));
+  drawBalance($('c-balance'), kappa, null);
+  $('h-gloss').innerHTML = `<i>${species(kappa)}</i> (${speciesGloss(kappa)}). At this balance your villagers ${behText(s, kappa)}.`;
   if (!busy) drawVillage(kappa, 0, null);
 }
 async function release() {
@@ -530,7 +561,7 @@ function reveal() {
   $('reveal').innerHTML = REVEAL[s.id](s) + `<div class="muted" style="font-size:12px;margin-top:4px">${s.source}</div>`;
   $('reveal').style.display = 'block';
   $('b-again').style.display = 'none'; $('b-next').style.display = '';
-  $('b-next').textContent = si < NS - 1 ? 'NEXT SOCIETY' : 'SEE THE PLATE';
+  $('b-next').textContent = si < NS - 1 ? 'NEXT SOCIETY' : 'SEE ALL RESULTS';
   $('after').style.display = 'flex';
 }
 function nextTest() {
@@ -583,7 +614,7 @@ function drawHero() {
     const x = W * (0.18 + 0.32 * i), y = 104;
     figure(ctx, x, y, 34, mix(k, 0.85), 'rgb(58,42,26)');
     ctx.textAlign = 'center'; ctx.fillStyle = 'rgb(58,42,26)'; ctx.font = 'italic 15px Georgia'; ctx.fillText(n, x, y + 58);
-    ctx.font = '11px Georgia'; ctx.fillStyle = '#7d6b52'; ctx.fillText(`κ = ${k === 0.5 ? 'between' : k}`, x, y + 76);
+    ctx.font = '11px Georgia'; ctx.fillStyle = '#7d6b52'; ctx.fillText(`balance ${k === 0.5 ? 'between 0 and 1' : k}`, x, y + 76);
     ctx.fillText(`fig. ${i + 1}`, x, 22);
   });
   ctx.strokeStyle = LINE; ctx.beginPath(); ctx.moveTo(20, H - 22); ctx.lineTo(W - 20, H - 22); ctx.stroke();
@@ -605,6 +636,10 @@ let aboutFrom = 's-start';
 $('l-about').onclick = e => { e.preventDefault(); aboutFrom = 's-start'; show('s-about'); };
 $('b-about2').onclick = () => { aboutFrom = 's-end'; show('s-about'); };
 $('b-back').onclick = () => show(aboutFrom);
+let helpReturn = 's-start';
+$('b-help').onclick = () => { helpReturn = 's-start'; show('s-help'); };
+document.querySelectorAll('button.q').forEach(b => b.onclick = () => { helpReturn = b.dataset.help; show('s-help'); });
+$('b-help-back').onclick = () => show(helpReturn);
 </script>
 </body>
 </html>
