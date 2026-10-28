@@ -114,7 +114,7 @@ Then answer, in writing:
 
 **Where is the moment?** The point in play when the discovery lands: "the player does X, sees Y, and realises Z." If it cannot be written as a moment, the concept is not ready.
 
-**What is the story, for an eight-year-old?** Before any concept is chosen, write the game's core narrative as one short paragraph a child of eight could follow: who wants what, what is in the way, what happens that nobody expected. No field words. This is a test of the narrative, not of the game's difficulty — the story is for a child, the play may be as hard as the paper demands — and it must not push the game toward cute characters: the one who wants something may be a cell, a country, a molecule, or the player. If the paragraph cannot be written, the game has a mechanism and no plot; if it can, every screen serves that paragraph, and it is the first thing checked when a screen feels confusing.
+**Can the story be told to anyone?** Before any concept is chosen, write the game's core narrative as one short paragraph that almost anybody could follow — the test is whether an eight-year-old could, if you tried hard to explain it: who wants what, what is in the way, what happens that nobody expected. No field words. This is a test of the narrative only. The game itself is for well-educated, curious adults and may be as demanding as the paper requires; a child would be overwhelmed by the play, and that is fine. The paragraph is a check that there is a plot underneath the mechanism, and it must not push the game toward characters or cuteness: the one who wants something may be a cell, a country, a molecule, or the player. If the paragraph cannot be written, the game has a mechanism and no plot; if it can, every screen serves that paragraph, and it is the first thing checked when a screen feels confusing.
 
 ---
 
@@ -173,7 +173,7 @@ Written in full and shown to the user before the build, as a record, not a quest
 1. **Paper** — citation, DOI, what was available.
 2. **What the paper hands over** — model / estimate / argument, primary and secondary.
 3. **The discovery, and its kind.**
-4. **The story for an eight-year-old** — one paragraph.
+4. **The core narrative** — one paragraph that almost anybody could follow.
 5. **Fidelity level and claim boundaries** — structural / statistical / illustrative; demonstrates, assumes, establishes.
 6. **The aim and the verdict** — the aim as the sentence the player will read; the verdict as the lines the end screen leads with (what you did; what the paper says; what that means).
 7. **Concepts** — one or three, as scaled above, each with format, controls, deliberation, discovery moment, sources of fun, replayability.
@@ -261,7 +261,7 @@ The skill is judged on a heterogeneous set, not on one paper: a theoretical mode
 - An unfair failure engineered to manufacture a twist.
 - A fidelity level undeclared, or a correlation played as a cause, or an average effect played as an individual response.
 - A concept that could not survive a written walkthrough, built anyway.
-- A game whose story could not be told to an eight-year-old.
+- A game whose core narrative cannot be told in a paragraph anybody could follow.
 - The discovery arriving late because presets follow the paper's order instead of the player's.
 - A yardstick in different units from the aim, so that success reads as failure.
 - Pictures that pass the statistics and fail the eye.
