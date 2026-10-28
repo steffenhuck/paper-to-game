@@ -234,7 +234,7 @@ Plain, concrete, numbers where they help. Match the substance of the paper; neve
 
 - `<slug>/<name>.html` — the game.
 - `<slug>/memo.md` — with fidelity result and build log appended.
-- `<slug>/author-note.md` — three lines: what to look at first; where the config block is; what we were least sure about. Plus one line saying the game has had the builder's review but no stranger testing.
+- `<slug>/author-note.md` — three lines: what to look at first; where the config block is; what we were least sure about. Plus one line saying the game has had the builder's review only.
 - `<slug>/mechanism.js` (or `.py`), the fidelity check, its result, and the screenshots.
 - The PDF moved from `inbox/` into the folder if it was there.
 - A row in the README's games table with the play link `https://steffenhuck.github.io/paper-to-game/<slug>/<name>.html` and the memo link.
@@ -243,17 +243,13 @@ Commit. Push to `main` directly if the environment allows; otherwise push a bran
 
 ---
 
-## 12. After publication: real players
-
-The walkthrough and the screenshot review are design tools; they do not establish that strangers find the game intelligible or enjoyable. After a game is published, the user asks a handful of real players four questions: did you finish; where did you get confused; what did you learn; would you play another game of this kind. The answers go into `<slug>/feedback.md` in the repository, and the author-note asks the author to pass on what they hear too. Even a few responses reveal failures no automated check can. Over time this file is the empirical record of which kinds of mechanism make compelling games, and it is the input for the next revision of this skill — the skill is revised from played games, not in the abstract.
-
-## 13. Testing the skill itself
+## 12. Testing the skill itself
 
 The skill is judged on a heterogeneous set, not on one paper: a theoretical model, a randomised experiment, a descriptive empirical study, a biological mechanism, a mathematical result, a conceptual argument. The question is whether players *do different things* across the six, not whether the games look different. Pay particular attention to failures: a technically flawless, scientifically honest, boring game teaches more about the skill's limits than another success. If the six converge on one structure — an opening challenge, a twist, a retry, a verdict — the skill is prescribing a formula and section 3 needs loosening, not tightening.
 
 ---
 
-## 14. Failure modes
+## 13. Failure modes
 
 - A demonstration shipped as a game: actions without consequences the player can learn, a slider moved to see what happens.
 - A central discovery resting on an invented assumption, unchecked against alternatives.
