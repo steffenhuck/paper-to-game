@@ -12,6 +12,7 @@
   .screen { display:none; max-width:560px; margin:0 auto; padding:0 16px 40px; }
   .screen.on { display:block; }
   .wall { display:block; width:100%; height:44px; margin:0 0 6px; }
+  .bigwall { display:block; width:calc(100% + 32px); margin:0 -16px; height:260px; }
   h1 { font-size:34px; line-height:1.1; margin:22px 0 6px; letter-spacing:-.01em; }
   h2 { font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); margin:18px 0 6px; font-weight:600; }
   p { margin:8px 0; }
@@ -29,6 +30,8 @@
   .pip.now { border-color:var(--ink); }
   .pip.first { background:var(--gold); border-color:var(--gold); }
   .pip.later { background:var(--concrete); border-color:var(--concrete); }
+  .pip.lost { background:var(--east); border-color:var(--east); }
+  .answer { margin-top:12px; padding-top:10px; border-top:2px dashed var(--line); }
   .doubter { display:flex; gap:10px; align-items:flex-start; margin:10px 0 6px; }
   .doubter svg { flex:0 0 52px; }
   .bubble { position:relative; background:var(--card); border:2px solid var(--ink); border-radius:14px; padding:10px 12px; font-size:17px; flex:1; }
@@ -98,7 +101,13 @@
 
 <!-- START -->
 <section class="screen on" id="s-start">
-  <div class="wallslot"></div>
+  <svg class="bigwall" viewBox="0 0 400 230" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <rect x="0" y="12" width="400" height="218" fill="url(#bricks)"/><rect x="0" y="0" width="400" height="16" rx="4" fill="#c4c2b9"/>
+    <path d="M206 0 L196 40 L212 78 L198 118 L214 160 L200 200 L208 230" stroke="#f3f0e8" stroke-width="7" fill="none" stroke-linejoin="round"/>
+    <path d="M206 0 L196 40 L212 78 L198 118 L214 160 L200 200 L208 230" stroke="#6d6a62" stroke-width="2" fill="none" stroke-linejoin="round" stroke-dasharray="6 9"/>
+    <text x="100" y="130" font-size="34" font-weight="800" fill="#f3f0e8" text-anchor="middle" opacity=".9">WEST</text>
+    <text x="300" y="130" font-size="34" font-weight="800" fill="#f3f0e8" text-anchor="middle" opacity=".9">EAST</text>
+  </svg>
   <h1>The Wall in the Head</h1>
   <p class="lede">For 45 years Germany was split in two. The East lived under a communist state that ran everything. In 1990 the Wall came down. What had those years done to what people want?</p>
   <div class="aim" id="aim-start"></div>
@@ -140,7 +149,7 @@
     <div class="bubble"><b>The doubter</b><span id="say"></span></div>
   </div>
   <div id="pick">
-    <p class="orient">Tap the evidence that settles this objection. Each card is a comparison from the study; it turns over to show what the study found.</p>
+    <p class="orient" id="orient">Tap the evidence that settles this objection. Each card is a comparison from the study; it turns over to show what the study found. Two tries per objection.</p>
     <div class="cards" id="cards"></div>
   </div>
   <div id="res" style="display:none">
@@ -185,7 +194,7 @@
   <p><b>The setting.</b> From 1945 to 1990 Germany was split. The split was decided by the armies that won the war, not by the Germans. The East became a communist state that ran jobs, prices, schools and the press. In 1990 the two halves were reunited under the West's system. A 2005 study compared what East and West Germans wanted from the state in 1997 and 2002.</p>
   <p><b>The bet.</b> One survey question, one guess: do East Germans want the state to look after them more or less than West Germans do? Two jars of 100 people show the answer.</p>
   <p><b>The doubter.</b> Six objections, one at a time. Each says the gap is not really caused by communism, or asks something you must answer. You hold seven evidence cards. Each is one comparison the study made. Tap the one that settles the objection. The card turns over and shows the study's numbers. If it doesn't settle the point, the doubter says why and you try another. You keep what you learnt.</p>
-  <p><b>The yardstick.</b> Each objection is settled at the first try (a gold dot) or after more tries (a grey dot). The verdict counts first tries out of six. A "point" on a card means one person in every 100.</p>
+  <p><b>The yardstick.</b> You get two tries per objection. Settled at the first try is a gold dot, at the second a grey dot. Miss twice and the doubter keeps the point (a red dot); you are shown the card the study plays, so you still learn it. The verdict counts objections settled, and first tries, out of six. A "point" on a card means one person in every 100.</p>
   <p><b>The forecast.</b> Drag a flag to the year you think the gap closes. The study's own forecast appears.</p>
   <p><b>What it shows.</b> Why the study believes that living under communism, and not poverty, history or migration, made people want more from the state.</p>
   <div class="row"><button class="primary" id="b-help-back">Back</button></div>
@@ -281,6 +290,7 @@ const CONFIG = {
   forecastMin: 1995,          // our choice: slider range for the closing forecast
   forecastMax: 2070,
   forecastStart: 2045,        // our choice: the flag starts away from the paper's band
+  maxTries: 2,                // our choice: a second chance, then the doubter wins the objection
 };
 
 // ---- Statistics --------------------------------------------------------------------------------
@@ -437,17 +447,24 @@ function judge(objIndex, cardId) {
 }
 
 // ---- Session state ------------------------------------------------------------------------------
-function newSession() { return { bet: null, obj: 0, tries: OBJECTIONS.map(() => 0), settled: OBJECTIONS.map(() => false), seen: {}, forecast: null }; }
+function newSession() { return { bet: null, obj: 0, tries: OBJECTIONS.map(() => 0), settled: OBJECTIONS.map(() => false), lost: OBJECTIONS.map(() => false), seen: {}, forecast: null }; }
 
+// One play of a card. After maxTries misses the objection is lost: the doubter keeps the point and the
+// player is shown the card the paper uses, so the lesson is not lost with it.
 function play(s, cardId) {
-  if (s.obj >= OBJECTIONS.length || s.settled[s.obj]) throw new Error('no open objection');
-  const r = judge(s.obj, cardId);
-  s.tries[s.obj] += 1; s.seen[cardId] = true;
-  if (r.ok) s.settled[s.obj] = true;
-  return Object.assign({ tries: s.tries[s.obj], firstTry: r.ok && s.tries[s.obj] === 1 }, r);
+  const i = s.obj;
+  if (i >= OBJECTIONS.length || s.settled[i] || s.lost[i]) throw new Error('no open objection');
+  const r = judge(i, cardId);
+  s.tries[i] += 1; s.seen[cardId] = true;
+  if (r.ok) s.settled[i] = true;
+  const lost = !r.ok && s.tries[i] >= CONFIG.maxTries;
+  if (lost) { s.lost[i] = true; s.seen[OBJECTIONS[i].answer] = true; }
+  return Object.assign({ tries: s.tries[i], triesLeft: CONFIG.maxTries - s.tries[i], firstTry: r.ok && s.tries[i] === 1, lost,
+    answer: lost ? cardById(OBJECTIONS[i].answer) : null }, r);
 }
-function advance(s) { if (s.settled[s.obj]) s.obj += 1; return s.obj; }
+function advance(s) { if (s.settled[s.obj] || s.lost[s.obj]) s.obj += 1; return s.obj; }
 function firstTries(s) { return s.tries.filter((t, i) => s.settled[i] && t === 1).length; }
+function lostCount(s) { return s.lost.filter(Boolean).length; }
 
 function forecastResult(year) {
   const lo = Math.round(D.closeLo), hi = Math.round(D.closeHi);
@@ -458,15 +475,15 @@ function forecastResult(year) {
 }
 
 function verdict(s) {
-  const n = s.settled.filter(Boolean).length, k = firstTries(s);
+  const n = s.settled.filter(Boolean).length, k = firstTries(s), l = lostCount(s);
   return {
-    you: `You settled ${n} of ${OBJECTIONS.length} objections, ${k} of them at the first try.`,
+    you: `You settled ${n} of ${OBJECTIONS.length} objections, ${k} of them at the first try.` + (l ? ` The doubter won ${l}.` : ''),
     paper: `In the paper's survey, East Germans were about ${pts(mean(D.eastPts))} points more likely than comparable West Germans to want the state in charge. The gap was biggest in those who lived longest under communism, and money, history and migration do not explain it away.`,
     means: 'A political system can reshape what its citizens want, and the change takes a generation or two to wear off.',
   };
 }
 
-const MECH = { CONFIG, Phi, PhiInv, pointsAt, interactionAt, derive, D, CARDS, OBJECTIONS, REBUTTALS, judge, newSession, play, advance, firstTries, betResult, forecastResult, verdict };
+const MECH = { CONFIG, Phi, PhiInv, pointsAt, interactionAt, derive, D, CARDS, OBJECTIONS, REBUTTALS, judge, newSession, play, advance, firstTries, lostCount, betResult, forecastResult, verdict };
 if (typeof module !== 'undefined') module.exports = MECH;
 </script>
 <script>
@@ -545,15 +562,16 @@ if (typeof module !== 'undefined') module.exports = MECH;
   // ---- doubter ----
   function renderPips() {
     $('pips').innerHTML = M.OBJECTIONS.map((o, i) => {
-      const cls = S.settled[i] ? (S.tries[i] === 1 ? 'first' : 'later') : (i === S.obj ? 'now' : '');
-      return `<div class="pip ${cls}">${S.settled[i] ? '✓' : ''}</div>`; }).join('');
+      const cls = S.settled[i] ? (S.tries[i] === 1 ? 'first' : 'later') : S.lost[i] ? 'lost' : (i === S.obj ? 'now' : '');
+      return `<div class="pip ${cls}">${S.settled[i] ? '✓' : S.lost[i] ? '✗' : ''}</div>`; }).join('');
     $('objn').textContent = 'Objection ' + Math.min(S.obj + 1, 6) + ' of 6';
   }
   function renderObjection() {
     const o = M.OBJECTIONS[S.obj];
     $('say').textContent = o.say; $('pick').style.display = 'block'; $('res').style.display = 'none';
     renderPips();
-    const used = new Set(M.OBJECTIONS.filter((x, i) => S.settled[i]).map(x => x.answer));
+    $('orient').textContent = S.tries[S.obj] ? 'Last try. Tap the card that settles this objection.' : 'Tap the evidence that settles this objection. Each card is a comparison from the study; it turns over to show what the study found. Two tries per objection.';
+    const used = new Set(M.OBJECTIONS.filter((x, i) => S.settled[i] || S.lost[i]).map(x => x.answer));
     $('cards').innerHTML = M.CARDS.map(c => `<button class="cardb ${used.has(c.id) ? 'used' : ''}" data-card="${c.id}">${used.has(c.id) ? '<span class="tag">used ✓</span>' : S.seen[c.id] ? '<span class="tag">seen</span>' : ''}<span class="t">${c.title}</span><span class="c">${c.compares}</span></button>`).join('');
     document.querySelectorAll('[data-card]').forEach(b => b.onclick = () => playCard(b.dataset.card));
   }
@@ -561,13 +579,16 @@ if (typeof module !== 'undefined') module.exports = MECH;
     const c = M.CARDS.find(x => x.id === id), r = M.play(S, id);
     $('pick').style.display = 'none'; $('res').style.display = 'block';
     const rc = $('res-card'); rc.classList.remove('flip'); void rc.offsetWidth; rc.classList.add('flip');
-    rc.innerHTML = `<div class="t">${c.title}</div><div class="src">${c.compares} · ${c.source}</div><div class="unit">${c.chart.unit}</div>${legend(c.chart)}${chart(c.chart)}<p class="finding">${r.finding}</p>`;
-    $('reply').className = 'reply ' + (r.ok ? 'ok' : 'no'); $('reply').textContent = 'Doubter: ' + r.line;
+    const cardHtml = (c, f) => `<div class="t">${c.title}</div><div class="src">${c.compares} · ${c.source}</div><div class="unit">${c.chart.unit}</div>${legend(c.chart)}${chart(c.chart)}<p class="finding">${f}</p>`;
+    rc.innerHTML = cardHtml(c, r.finding);
+    if (r.lost) rc.innerHTML += `<div class="answer"><div class="src" style="margin-bottom:6px">The card the study plays here:</div>${cardHtml(r.answer, r.answer.finding)}</div>`;
+    $('reply').className = 'reply ' + (r.ok ? 'ok' : 'no'); $('reply').textContent = 'Doubter: ' + r.line + (r.lost ? ' — I\'ll keep this one.' : '');
     $('yard').className = 'yard ' + (r.ok ? 'ok' : 'no');
-    $('yard').textContent = r.ok ? (r.firstTry ? '✓ Settled at the first try' : `✓ Settled on try ${r.tries}`) : '✗ Not settled. Try another card.';
-    $('b-next').textContent = r.ok ? (S.obj === M.OBJECTIONS.length - 1 ? 'On to the forecast' : 'Next objection') : 'Back to the cards';
+    $('yard').textContent = r.ok ? (r.firstTry ? '✓ Settled at the first try' : `✓ Settled on try ${r.tries}`) : r.lost ? '✗ Lost to the doubter' : `✗ Not settled. One more try.`;
+    const done = r.ok || r.lost;
+    $('b-next').textContent = done ? (S.obj === M.OBJECTIONS.length - 1 ? 'On to the forecast' : 'Next objection') : 'Back to the cards';
     $('b-next').onclick = () => {
-      if (!r.ok) { renderObjection(); window.scrollTo(0, 0); return; }
+      if (!done) { renderObjection(); window.scrollTo(0, 0); return; }
       M.advance(S); if (S.obj >= M.OBJECTIONS.length) startForecast(); else { renderObjection(); window.scrollTo(0, 0); }
     };
     renderPips();
@@ -597,7 +618,7 @@ if (typeof module !== 'undefined') module.exports = MECH;
   $('b-end').onclick = () => {
     const v = M.verdict(S);
     $('verdict').innerHTML = `<div class="you">${v.you}</div><div class="paper">${v.paper}</div><div class="means">${v.means}</div>`;
-    $('tally').innerHTML = M.OBJECTIONS.map((o, i) => `<tr><td>${S.tries[i] === 1 ? '<b style="color:var(--gold)">●</b>' : '<b style="color:var(--concrete)">●</b>'}</td><td>${o.say.split('.')[0]}.</td><td>${M.CARDS.find(c => c.id === o.answer).title}${S.tries[i] > 1 ? ` <span class="muted">(try ${S.tries[i]})</span>` : ''}</td></tr>`).join('')
+    $('tally').innerHTML = M.OBJECTIONS.map((o, i) => `<tr><td>${S.lost[i] ? '<b style="color:var(--east)">●</b>' : S.tries[i] === 1 ? '<b style="color:var(--gold)">●</b>' : '<b style="color:var(--concrete)">●</b>'}</td><td>${o.say.split('.')[0]}.</td><td>${M.CARDS.find(c => c.id === o.answer).title}${S.lost[i] ? ' <span class="muted">(lost)</span>' : S.tries[i] > 1 ? ` <span class="muted">(try ${S.tries[i]})</span>` : ''}</td></tr>`).join('')
       + `<tr><td></td><td colspan="2">Your bet: ${S.bet === 'more' ? 'more' : 'less'} state. Your forecast: ${S.forecast}.</td></tr>`;
     show('s-end');
   };

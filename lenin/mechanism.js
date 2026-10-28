@@ -63,6 +63,7 @@ const CONFIG = {
   forecastMin: 1995,          // our choice: slider range for the closing forecast
   forecastMax: 2070,
   forecastStart: 2045,        // our choice: the flag starts away from the paper's band
+  maxTries: 2,                // our choice: a second chance, then the doubter wins the objection
 };
 
 // ---- Statistics --------------------------------------------------------------------------------
@@ -219,17 +220,24 @@ function judge(objIndex, cardId) {
 }
 
 // ---- Session state ------------------------------------------------------------------------------
-function newSession() { return { bet: null, obj: 0, tries: OBJECTIONS.map(() => 0), settled: OBJECTIONS.map(() => false), seen: {}, forecast: null }; }
+function newSession() { return { bet: null, obj: 0, tries: OBJECTIONS.map(() => 0), settled: OBJECTIONS.map(() => false), lost: OBJECTIONS.map(() => false), seen: {}, forecast: null }; }
 
+// One play of a card. After maxTries misses the objection is lost: the doubter keeps the point and the
+// player is shown the card the paper uses, so the lesson is not lost with it.
 function play(s, cardId) {
-  if (s.obj >= OBJECTIONS.length || s.settled[s.obj]) throw new Error('no open objection');
-  const r = judge(s.obj, cardId);
-  s.tries[s.obj] += 1; s.seen[cardId] = true;
-  if (r.ok) s.settled[s.obj] = true;
-  return Object.assign({ tries: s.tries[s.obj], firstTry: r.ok && s.tries[s.obj] === 1 }, r);
+  const i = s.obj;
+  if (i >= OBJECTIONS.length || s.settled[i] || s.lost[i]) throw new Error('no open objection');
+  const r = judge(i, cardId);
+  s.tries[i] += 1; s.seen[cardId] = true;
+  if (r.ok) s.settled[i] = true;
+  const lost = !r.ok && s.tries[i] >= CONFIG.maxTries;
+  if (lost) { s.lost[i] = true; s.seen[OBJECTIONS[i].answer] = true; }
+  return Object.assign({ tries: s.tries[i], triesLeft: CONFIG.maxTries - s.tries[i], firstTry: r.ok && s.tries[i] === 1, lost,
+    answer: lost ? cardById(OBJECTIONS[i].answer) : null }, r);
 }
-function advance(s) { if (s.settled[s.obj]) s.obj += 1; return s.obj; }
+function advance(s) { if (s.settled[s.obj] || s.lost[s.obj]) s.obj += 1; return s.obj; }
 function firstTries(s) { return s.tries.filter((t, i) => s.settled[i] && t === 1).length; }
+function lostCount(s) { return s.lost.filter(Boolean).length; }
 
 function forecastResult(year) {
   const lo = Math.round(D.closeLo), hi = Math.round(D.closeHi);
@@ -240,13 +248,13 @@ function forecastResult(year) {
 }
 
 function verdict(s) {
-  const n = s.settled.filter(Boolean).length, k = firstTries(s);
+  const n = s.settled.filter(Boolean).length, k = firstTries(s), l = lostCount(s);
   return {
-    you: `You settled ${n} of ${OBJECTIONS.length} objections, ${k} of them at the first try.`,
+    you: `You settled ${n} of ${OBJECTIONS.length} objections, ${k} of them at the first try.` + (l ? ` The doubter won ${l}.` : ''),
     paper: `In the paper's survey, East Germans were about ${pts(mean(D.eastPts))} points more likely than comparable West Germans to want the state in charge. The gap was biggest in those who lived longest under communism, and money, history and migration do not explain it away.`,
     means: 'A political system can reshape what its citizens want, and the change takes a generation or two to wear off.',
   };
 }
 
-const MECH = { CONFIG, Phi, PhiInv, pointsAt, interactionAt, derive, D, CARDS, OBJECTIONS, REBUTTALS, judge, newSession, play, advance, firstTries, betResult, forecastResult, verdict };
+const MECH = { CONFIG, Phi, PhiInv, pointsAt, interactionAt, derive, D, CARDS, OBJECTIONS, REBUTTALS, judge, newSession, play, advance, firstTries, lostCount, betResult, forecastResult, verdict };
 if (typeof module !== 'undefined') module.exports = MECH;
