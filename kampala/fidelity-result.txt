@@ -1,0 +1,52 @@
+-- 1. Displayed gaps equal the paper's estimates
+PASS giver hidden, most givers: -11 USh (Table 2 col. 1 row 1)
+PASS giver hidden, egoists: -11 + 1 = -10 USh (Table 2 rows 1+3)
+PASS giver seen, most givers: -19 USh (Table 6 col. 1 row 1)
+PASS giver seen, egoists: -19 + 55 = 36 USh (Table 6 rows 1+3)
+PASS puzzle: 0.48 - 0.38 = 0.10 (Table 4)
+PASS network: 0.43 - 0.28 = 0.15 (Table 5)
+PASS PD no enforcer: egoists +0.29, nonegoists +0.11 (Table 9 row 2)
+PASS PD enforcer: egoists -0.02, nonegoists 0.00 (Table 9 row 4)
+PASS enforcers punish co-ethnic defectors 0.58 vs 0.35 (p. 723)
+PASS survey: six F-tests, all p > .10 (Table 1)
+-- 2. "clear" flags match the paper's significance and wording
+PASS dgHidden: chance, chance
+PASS dgSeen: weak, clear
+PASS puzzle: chance
+PASS network: clear
+PASS pd: chance, clear
+PASS pdEnf: chance, chance, clear
+-- 3. Derived type averages reproduce the reported overall averages
+PASS hidden: 0.4*170.6 + 0.6*269.6 = 230.0 (reported 230)
+PASS hidden: egoists give 99 less (Tables 2, 6)
+PASS seen: 0.4*162.4 + 0.6*268.4 = 226.0 (reported 226)
+PASS seen: egoists give 106 less (Tables 2, 6)
+-- 4. Bar pairs carry exactly the gap, centred on the base
+PASS dgHidden / Most givers: own - other = gap
+PASS dgHidden / The stingiest 40%: own - other = gap
+PASS dgSeen / Most givers: own - other = gap
+PASS dgSeen / The stingiest 40%: own - other = gap
+PASS puzzle / Pairs solving it: own - other = gap
+PASS network / Targets found: own - other = gap
+PASS pd / Most players: own - other = gap
+PASS pd / The stingiest 40%: own - other = gap
+PASS pdEnf / Most players: own - other = gap
+PASS pdEnf / The stingiest 40%: own - other = gap
+PASS pdEnf / Referees punishing a cheat: own - other = gap
+-- 5. Evidence rules
+PASS paper's route (survey, hidden, seen, puzzle, network) proves 5/5
+PASS seen without hidden backs neither "kind: not" nor "watched: guilty"
+PASS PD route backs "watched" but not "kind": 4/5
+PASS budget: a sixth test is refused
+PASS unknown test refused
+-- 6. Scoring: right but unbacked scores 0; "can't tell" on teamwork accepted when backed
+PASS all five right with only "Giver seen": 0 proven, 5 right
+PASS team "can't tell" + puzzle: proven
+PASS team "can't tell" without puzzle: not proven
+-- 7. All 21 five-test plans, scored with the paper's calls
+PASS 21 plans enumerated
+     proven-calls distribution over plans: {"3":8,"4":12,"5":1}
+PASS exactly one plan proves 5/5 (the paper's own route)
+PASS results do not depend on test order
+
+ALL PASS
