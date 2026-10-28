@@ -12,10 +12,9 @@
   body { min-height:100vh; background-image: radial-gradient(rgba(120,90,40,.06) 1px, transparent 1px); background-size: 5px 5px; }
   .screen { display:none; max-width:560px; margin:0 auto; padding:14px 16px 40px; }
   .screen.on { display:block; }
-  h1 { font-size:32px; letter-spacing:.12em; margin:22px 0 2px; font-weight:400; text-align:center; }
+  h1 { font-size:32px; letter-spacing:.12em; margin:18px 0 2px; font-weight:400; text-align:center; }
   h2 { font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--dim); margin:16px 0 6px; font-weight:400; }
   p { margin:8px 0; }
-  i.lat { font-style:italic; }
   .ov { color:var(--dim); font-size:11px; letter-spacing:.16em; text-transform:uppercase; }
   .center { text-align:center; }
   .row { display:flex; gap:8px; flex-wrap:wrap; }
@@ -24,33 +23,31 @@
   button:disabled { opacity:.35; cursor:default; }
   button.soc { text-align:left; flex:1 1 100%; display:flex; justify-content:space-between; align-items:center; }
   button.soc.sel { outline:2px solid var(--brass); }
+  button.q { flex:0 0 auto; min-height:34px; width:34px; padding:0; border-radius:50%; font-size:16px; color:var(--dim); border-color:var(--dim); }
   canvas { display:block; width:100%; height:auto; touch-action:manipulation; }
   .plate { border:1px solid var(--ink); outline:1px solid var(--ink); outline-offset:3px; margin:10px 4px; background:var(--paper); }
-  .hud { display:flex; justify-content:space-between; align-items:baseline; margin:6px 0 2px; gap:8px; }
+  .hud { display:flex; justify-content:space-between; align-items:center; margin:4px 0 2px; gap:8px; }
+  .aim { font-size:18px; text-align:center; margin:12px 0; padding:8px 4px; border-top:1px solid var(--ink); border-bottom:1px solid var(--ink); }
+  .aimbar { font-size:14px; margin:2px 0 6px; color:var(--brass); }
   .story { font-size:14px; margin:4px 0 2px; }
   .gameline { font-size:13px; color:var(--dim); }
+  .orient { font-size:13px; color:var(--dim); margin:4px 0 6px; }
+  .gloss { font-size:14px; text-align:center; margin:2px 0 4px; }
   input[type=range] { -webkit-appearance:none; appearance:none; width:100%; height:44px; background:transparent; margin:0; }
   input[type=range]::-webkit-slider-runnable-track { height:2px; background:var(--ink); }
   input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:30px; height:30px; margin-top:-14px; border-radius:50%; background:var(--brass); border:2px solid var(--ink); }
   input[type=range]::-moz-range-track { height:2px; background:var(--ink); }
   input[type=range]::-moz-range-thumb { width:28px; height:28px; border-radius:50%; background:var(--brass); border:2px solid var(--ink); }
   input[type=range]:disabled { opacity:.4; }
-  button.q { flex:0 0 auto; min-height:32px; width:32px; padding:0; border-radius:50%; font-size:15px; color:var(--dim); border-color:var(--dim); }
-  .aim { font-size:18px; text-align:center; margin:12px 0; padding:8px 4px; border-top:1px solid var(--ink); border-bottom:1px solid var(--ink); }
-  .aimbar { font-size:13px; margin:2px 0 6px; color:var(--brass); letter-spacing:.02em; }
-  .score.bump { animation: bump .35s ease-out; }
-  @keyframes bump { 0%{color:var(--brass); transform:scale(1.25)} 100%{transform:none} }
-  .score { display:inline-block; font-size:16px; }
-  .verdict { font-size:21px; line-height:1.35; margin:10px 0 14px; }
-  .verdict div { margin:6px 0; }
-  .orient { font-size:13px; color:var(--dim); margin:4px 0 6px; }
-  .gloss { font-size:14px; text-align:center; margin:2px 0 4px; }
   .ends { display:flex; justify-content:space-between; font-size:12px; margin-top:-6px; }
   .ends .s { color:var(--self); } .ends .r { color:var(--right); }
-  .msg { min-height:48px; font-size:14px; margin:8px 0; }
-  .msg b { font-weight:600; }
-  .score { font-size:13px; letter-spacing:.08em; }
+  .yard { font-size:22px; text-align:center; margin:8px 0 2px; min-height:32px; }
+  .yard.ok { color:var(--right); }
+  .msg { font-size:14px; margin:6px 0; }
   .reveal { border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:8px 0; margin:8px 0; }
+  .reveal .rv { font-size:18px; margin-bottom:4px; }
+  .verdict { font-size:21px; line-height:1.35; margin:10px 0 14px; }
+  .verdict div { margin:8px 0; }
   .fade { animation: fade .5s ease-out; }
   @keyframes fade { from{opacity:0; transform:translateY(5px)} to{opacity:1; transform:none} }
   .about p, .about li { font-size:14px; }
@@ -59,7 +56,7 @@
   .muted { color:var(--dim); }
   table { width:100%; border-collapse:collapse; font-size:13px; }
   td, th { padding:5px 4px; border-bottom:1px solid var(--line); text-align:left; font-weight:400; }
-  th { color:var(--dim); font-size:12px; letter-spacing:.06em; font-style:italic; }
+  th { color:var(--dim); font-size:12px; font-style:italic; }
   .attr { font-size:12px; color:var(--dim); margin-top:18px; border-top:1px solid var(--line); padding-top:8px; }
 </style>
 </head>
@@ -67,14 +64,13 @@
 
 <!-- ============ START ============ -->
 <section id="s-start" class="screen on">
-  <div class="ov center">Plate I · preference evolution</div>
+  <div class="ov center">Plate I · how moral should you be?</div>
   <h1>THE BALANCE</h1>
-  <p class="center muted"><i>Homo moralis</i> and the people it replaces</p>
   <div class="aim"><b>Your aim: find the balance no newcomer can beat.</b></div>
-  <div class="plate"><canvas id="c-hero" width="528" height="230"></canvas></div>
-  <p>You are evolution's hand. Each society is a village whose people share one temperament: how much they weigh their own gain against <i>doing what would be best if everyone did it</i>. Set the balance. The balance runs from 0 (only their own gain) to 1 (only the right thing). Then newcomers with other balances arrive. A newcomer that earns more than your villagers <i>takes over</i>; one that earns less <i>dies out</i>. Your goal in each society is the balance that no newcomer can beat.</p>
+  <div class="plate"><canvas id="c-hero" width="528" height="220"></canvas></div>
+  <p>Each village's people share one temperament: a balance between <b>their own gain</b> and <b>the right thing</b> — what would be best if everyone did as they do. You set the balance. Then newcomers with other balances arrive. A newcomer that earns more than your villagers <i>takes over</i>; one that earns less <i>dies out</i>.</p>
   <h2>Societies</h2>
-  <p class="orient">Five societies that differ in who meets whom. Start at the first, or pick one.</p>
+  <p class="orient">Five societies that differ in how often a newcomer meets its own kind. In the first three you find the unbeatable balance; in the last two you predict it in one try.</p>
   <div class="row" id="presets"></div>
   <div class="row" style="margin-top:12px">
     <button class="primary" id="b-start">START</button>
@@ -85,30 +81,31 @@
 
 <!-- ============ PLAY ============ -->
 <section id="s-play" class="screen">
-  <div class="hud"><span class="ov" id="h-soc">Society 1 / 5</span><span style="display:flex;align-items:center;gap:10px;flex:0 0 auto"><span class="score" id="h-score">score 0</span><button class="q" data-help="s-play" aria-label="How to play">?</button></span></div>
-  <div class="aimbar">Aim: find the balance no newcomer can beat.</div>
+  <div class="hud"><span class="ov" id="h-soc">Society 1 / 5 · find it</span><button class="q" data-help="s-play" aria-label="How to play">?</button></div>
+  <div class="aimbar" id="h-aim">Aim: find the balance no newcomer can beat.</div>
   <div style="font-size:20px" id="h-name">Strangers</div>
   <div class="story" id="h-story"></div>
   <div class="gameline" id="h-game"></div>
 
-  <div class="plate"><canvas id="c-balance" width="528" height="170"></canvas></div>
-  <input type="range" id="lever" min="0" max="1" step="0.05" value="0.5" aria-label="degree of morality">
-  <div class="ends"><span class="s">← 0: only their own gain</span><span class="r">1: the right thing →</span></div>
+  <div class="plate"><canvas id="c-balance" width="528" height="150"></canvas></div>
+  <input type="range" id="lever" min="0" max="1" step="0.05" value="0.5" aria-label="balance">
+  <div class="ends"><span class="s">← 0: only their own gain</span><span class="r">1: only the right thing →</span></div>
   <div class="gloss" id="h-gloss"></div>
-  <p class="orient">Drag the balance to set your villagers' temperament. <i>The right thing</i> means: what would be best if everyone did it. Then test it against eleven newcomers, from 0 to 1.</p>
+  <p class="orient">Drag to set your villagers' balance. Then test it: eleven kinds of newcomer arrive in turn, with balances 0, 0.1, … up to 1.</p>
 
-  <div class="row" style="margin-top:10px"><button class="primary" id="b-release">TEST AGAINST NEWCOMERS</button></div>
+  <div class="row" style="margin-top:6px"><button class="primary" id="b-release">TEST AGAINST NEWCOMERS</button></div>
 
-  <div class="ov" style="margin-top:12px" id="h-test">the village · test 1 of 3</div>
-  <div class="plate"><canvas id="c-village" width="528" height="250"></canvas></div>
-  <p class="orient">Each figure is a villager; lines join the pairs who meet. Filled figures are newcomers. They spread if they earn more than your villagers and fade if they earn less.</p>
-  <div class="ov">the drawer · each newcomer pinned at its balance</div>
-  <div class="plate"><canvas id="c-drawer" width="528" height="150"></canvas></div>
-  <p class="orient">The ruler runs from 0 (only self) to 1 (only the right thing). One row per test. Brass wedge: your village. ✕: the newcomer took over. Small ring: it died out or blended in.</p>
+  <div class="yard" id="yard"></div>
+  <div class="plate"><canvas id="c-race" width="528" height="250"></canvas></div>
+  <p class="orient">The bar is the village: your villagers on one side, the newcomers on the other. Newcomers who earn more per meeting grow until they take over; those who earn less shrink to nothing.</p>
+  <div class="ov">the drawer · every newcomer pinned at its balance</div>
+  <div class="plate"><canvas id="c-drawer" width="528" height="160"></canvas></div>
+  <p class="orient">One row per test, ruler from 0 (only own gain) to 1 (only the right thing). Brass wedge: your village. ✕: that newcomer took over. Small ring: it died out or blended in.</p>
   <div class="msg" id="msg"></div>
   <div class="reveal fade" id="reveal" style="display:none"></div>
   <div class="row" id="after" style="display:none">
-    <button id="b-again">ADJUST AND TEST AGAIN</button>
+    <button id="b-again">TEST AGAIN</button>
+    <button id="b-answer">SHOW THE ANSWER</button>
     <button class="primary" id="b-next">NEXT SOCIETY</button>
   </div>
 </section>
@@ -119,11 +116,11 @@
   <h1 style="font-size:26px">THE VERDICT</h1>
   <div class="verdict" id="verdict"></div>
   <div class="plate"><canvas id="c-plate" width="528" height="360"></canvas></div>
-  <p class="orient">Each figure is one society. Across: the chance a newcomer is paired with one of its own kind. Up: the balance you ended on. The dashed line is where the two are equal.</p>
+  <p class="orient">Each figure is one society. Across: how often a newcomer meets its own kind. Up: the balance you ended on (filled if it held). The dashed line is where the two are equal.</p>
   <p id="end-text"></p>
   <table id="end-table"></table>
   <div class="attr" id="attr1"></div>
-  <p style="margin-top:14px">Play again: hold every society on the first test, or start from a different one.</p>
+  <p style="margin-top:14px">Play again: find each balance in fewer tests, or start from a different society.</p>
   <div class="row">
     <button class="primary" id="b-replay">PLAY AGAIN</button>
     <button id="b-about2">ABOUT THIS GAME</button>
@@ -136,16 +133,16 @@
   <h1 style="font-size:24px;text-align:left">How to play</h1>
   <p class="aim" style="text-align:left"><b>Your aim: find the balance no newcomer can beat.</b></p>
   <h3>The setting</h3>
-  <p>People in a village are paired up to deal with each other — sharing a chore, splitting a resource, doing business. Each villager carries a temperament, a balance between two goals: their own gain, and <i>the right thing</i>, meaning what would be best for them if the other person did exactly the same. A balance of 0 cares only about own gain (economists' <i>homo oeconomicus</i>); 1 cares only about the right thing (<i>homo kantiensis</i>, after Kant); anything between is <i>homo moralis</i>. Nobody can see anyone else's balance.</p>
-  <h3>What each round asks</h3>
-  <p>You set the balance for the whole village. Then a few newcomers arrive with a different balance — eleven kinds in turn, from 0 to 1 in steps of 0.1. Everyone acts on their own balance, and earns what the deal pays. A newcomer kind that earns more on average than your villagers spreads and takes over; one that earns less dies out. One that behaves exactly like your villagers blends in.</p>
-  <p>Each society gives you three tests. After each, look at the drawer: it shows which newcomers took over and where they sit. Move your balance and test again.</p>
+  <p>People in a village are paired up to deal with each other — sharing a chore, splitting a resource, doing business. Each villager carries a temperament, a balance between two goals: their own gain, and <i>the right thing</i>, meaning what would be best for them if the other person did exactly the same. Balance 0 cares only about own gain (economists call this creature <i>homo oeconomicus</i>); balance 1 only about the right thing (<i>homo kantiensis</i>, after Kant); anything between is <i>homo moralis</i>. Nobody can see anyone else's balance.</p>
+  <h3>What each screen asks</h3>
+  <p>You set the balance for the whole village and test it. Eleven kinds of newcomer arrive in turn, with balances 0, 0.1, … up to 1. Everyone acts on their own balance and earns what the deal pays. A newcomer kind that earns more per meeting than your villagers spreads and takes over; one that earns less dies out; one that behaves exactly like your villagers blends in.</p>
+  <p>In the first three societies, test as often as you like until nothing beats you; the drawer shows which newcomers won and where they sit. In the last two, you get one test: predict the unbeatable balance from what you found.</p>
   <h3>The societies</h3>
-  <p>Five of them, which differ in who meets whom: strangers in a city, siblings, half-siblings, and classmates in business. In some, newcomers tend to be paired with their own kind (a newcomer's sibling is likely to share its upbringing); in others, never. Three different deals are played: a shared project (effort), a quarrel over a resource (grab or share), and a dilemma (cooperate or cheat).</p>
-  <h3>The score</h3>
-  <p>One point for every newcomer that fails to take over: up to 11 per test, 33 per society, 165 in all. If you find a balance nobody beats before your third test, the remaining tests are scored at that result.</p>
+  <p>They differ in how often a newcomer meets its own kind: strangers in a city (practically never), siblings (half the time), half-siblings (a quarter), classmates in business (about one in five). Three deals are played: a shared chore (how much effort to put in), a quarrel over a resource (grab or share), and a dilemma (cooperate or cheat).</p>
+  <h3>The yardstick</h3>
+  <p>After each test: how many of the eleven newcomers beat your village. Zero means you found it. Each society's verdict says how many tests it took, or whether your prediction held.</p>
   <h3>What the game is trying to show</h3>
-  <p>Which temperaments survive when people can't read each other's minds. Play it before reading the answer; the last screen and the About page explain it.</p>
+  <p>Which temperaments survive when people cannot read each other's minds. Play before reading the answer; the end screen and the About page explain it.</p>
   <div class="row" style="margin-top:16px"><button class="primary" id="b-help-back">BACK</button></div>
 </section>
 
@@ -159,160 +156,132 @@
 </section>
 
 <script>
+/*MECHANISM-BEGIN*/
 /*__MECHANISM__*/
+/*MECHANISM-END*/
 
 // ============================================================
-// UI
+// Interface. No outcome rules here: everything that decides who wins,
+// in what order, and what the verdict says comes from the mechanism above.
 // ============================================================
 const ATTR = '“Homo Moralis — Preference Evolution Under Incomplete Information and Assortative Matching.” Ingela Alger and Jörgen W. Weibull. <i>Econometrica</i> 81(6):2269–2302, 2013. <a href="https://doi.org/10.3982/ECTA10637">doi:10.3982/ECTA10637</a>. Game built from this paper; the paper is the authority where the two disagree.';
-const INK = [58, 42, 26], SELF = [168, 50, 30], RIGHT = [44, 62, 122], BRASS = '#a9822f', PAPER = '#f2e9d4', LINE = '#cbbb98';
+const SELF = [168, 50, 30], RIGHT = [44, 62, 122], INKC = 'rgb(58,42,26)', DIM = '#7d6b52', BRASS = '#a9822f', PAPER = '#f2e9d4', LINE = '#cbbb98';
 const mix = (k, a = 1) => { const c = SELF.map((s, i) => Math.round(s + (RIGHT[i] - s) * k)); return `rgba(${c[0]},${c[1]},${c[2]},${a})`; };
 const $ = id => document.getElementById(id);
-const fmtK = k => (Math.round(k * 100) / 100).toFixed(2);
-const species = k => k <= 0.001 ? 'Homo oeconomicus' : k >= 0.999 ? 'Homo kantiensis' : 'Homo moralis';
+const fmt = k => (Math.round(k * 100) / 100).toFixed(2);
 const NS = CONFIG.societies.length;
-
+const species = k => k <= 0.001 ? 'Homo oeconomicus' : k >= 0.999 ? 'Homo kantiensis' : 'Homo moralis';
+const speciesGloss = k => k <= 0.001 ? 'cares only about their own gain' : k >= 0.999 ? 'does only what would be best if everyone did it' : `${Math.round(100 * (1 - k))}% own gain, ${Math.round(100 * k)}% the right thing`;
+const DEAL = {
+  publicGood: 'The deal: a shared chore. Each puts in effort; both get the benefit; each pays for their own effort.',
+  hawkDove: 'The deal: a resource to split. Grabbing beats sharing, but two grabbers fight and both lose.',
+  pd: "The deal: a partnership. Cooperating helps the partner more than it costs you, but cheating always pays you more.",
+};
+function behText(s, k) {
+  const g = CONFIG.games[s.game], x = residentBehaviour(s.g, k);
+  return { publicGood: `put in effort ${x.toFixed(2)} (out of ${g.m})`, hawkDove: `grab ${Math.round(100 * x)}% of the time`,
+           pd: `cooperate ${Math.round(100 * x)}% of the time` }[s.game];
+}
 const REVEAL = {
-  strangers: s => `<b>σ = 0.</b> Among strangers a newcomer practically never meets its own kind, so nothing pays except your own payoff. Any moral weight is a gift to whoever you meet — and newcomers who give less take over. This is the textbook result: <i>homo oeconomicus</i> holds.`,
-  siblings: s => `<b>σ = ½.</b> A newcomer born into a family meets its own kind half the time. The village no one can beat weighs the right thing by exactly that chance. A selfish village falls to <i>more</i> moral newcomers; a fully Kantian one falls to <i>less</i> moral ones. The survivor is <i>homo hamiltonensis</i>: κ = σ.`,
-  siblingsHD: s => `<b>Still σ = ½.</b> A different game, so your villagers now behave differently — at the balance point they grab ${Math.round(100 * residentBehaviour(s.g, s.sigma))}% of the time. But the point itself did not move. The morality that survives is set by <i>who meets whom</i>, not by what is at stake.`,
-  halfsib: s => `<b>σ = ¼.</b> Half-siblings share a parent, so a newcomer meets its own kind half as often — and the unbeatable morality halves with it.`,
-  classmates: s => `<b>σ ≈ 0.20.</b> In this dilemma every moralist below κ = ¼ defects anyway (the paper's Fig. 1), so a selfish village does exactly what the unbeatable one does and survives. Where the old view is right, it is right for this reason.`,
+  strangers: s => `In this model, among strangers nothing pays but your own gain. A newcomer almost never meets its own kind, so any weight on the right thing is a gift to whoever it meets — and newcomers who give less take over. The economists' textbook creature, <i>homo oeconomicus</i>, holds.`,
+  siblings: s => `Neither end holds. A newcomer meets its own kind half the time, and the one balance no newcomer can beat puts exactly that much, one half, on the right thing. Too little morality loses; so does too much. The paper calls this creature <i>homo hamiltonensis</i>, after the biologist W. D. Hamilton.`,
+  siblingsHD: s => `A different deal, so your villagers behave differently — at the unbeatable balance they grab ${Math.round(100 * residentBehaviour(s.g, s.sigma))}% of the time — but the unbeatable balance itself did not move. In this model, the morality that survives depends on who meets whom, not on what is at stake.`,
+  halfsib: s => `A newcomer meets its own kind a quarter of the time, so the unbeatable balance is one quarter. The rule carries over.`,
+  classmates: s => `The unbeatable balance is about 0.20, the chance of meeting your own kind. In this dilemma every balance up to a quarter does the same thing — cheat — so a more selfish village survives too: here it cannot be told apart from the unbeatable one. Where the textbook's selfish creature survives, it survives for this reason.`,
 };
 
-let si = 0, test = 0, kappa = 0.5, score = 0, busy = false;
-let rows = [];            // per test in this society: { kR, res: [...] }
-let finals = [];          // per society: last tested κ
-let held = [];            // per society: did the last test hold?
-function showScore() {
-  const el = $('h-score'), max = NS * CONFIG.testsPerSociety * CONFIG.mutantKappas.length;
-  el.textContent = `score ${score} / ${max}`; el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump');
-}
-let revealed = false;
+let si = 0, kappa = CONFIG.startBalance, busy = false, asked = false;
+let tests = [];           // tests in the current society (results from runTest)
+let rounds = [];          // round verdicts (from roundVerdict)
 
-// ---------- start screen ----------
+// ---------- start ----------
 function buildPresets() {
   const box = $('presets'); box.innerHTML = '';
   CONFIG.societies.forEach((s, i) => {
     const b = document.createElement('button'); b.className = 'soc' + (i === si ? ' sel' : '');
-    b.innerHTML = `<span>${i + 1}. ${s.name}</span><span class="muted" style="font-size:12px">${CONFIG.games[s.game].name}</span>`;
+    b.innerHTML = `<span>${i + 1}. ${s.name}</span><span class="muted" style="font-size:12px">${s.mode === 'explore' ? 'find it' : 'predict it'}</span>`;
     b.onclick = () => { si = i; buildPresets(); $('b-start').textContent = i === 0 ? 'START' : `START AT SOCIETY ${i + 1}`; };
     box.appendChild(b);
   });
 }
 function show(id) { document.querySelectorAll('.screen').forEach(e => e.classList.remove('on')); $(id).classList.add('on'); window.scrollTo(0, 0); }
 
-// ---------- drawing: figures ----------
+// ---------- figures ----------
 function figure(ctx, x, y, s, fill, stroke, alpha = 1) {
   ctx.save(); ctx.globalAlpha = alpha;
   ctx.beginPath(); ctx.arc(x, y - s * 1.05, s * 0.42, 0, Math.PI * 2);
   ctx.moveTo(x - s * 0.55, y + s * 0.75); ctx.quadraticCurveTo(x - s * 0.5, y - s * 0.45, x, y - s * 0.5);
   ctx.quadraticCurveTo(x + s * 0.5, y - s * 0.45, x + s * 0.55, y + s * 0.75); ctx.closePath();
   if (fill) { ctx.fillStyle = fill; ctx.fill(); }
-  if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 1; ctx.stroke(); }
+  if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 1.2; ctx.stroke(); }
   ctx.restore();
 }
 
 // ---------- the balance ----------
-function drawBalance(cv, k, beh) {
-  const ctx = cv.getContext('2d'), W = cv.width, H = cv.height;
-  ctx.clearRect(0, 0, W, H);
-  const cx = W / 2, cy = 52, L = 170, ang = (k - 0.5) * 0.5;
-  // post
+function drawBalance(k) {
+  const cv = $('c-balance'), ctx = cv.getContext('2d'), W = cv.width;
+  ctx.clearRect(0, 0, W, cv.height);
+  const cx = W / 2, cy = 46, L = 170, ang = (k - 0.5) * 0.5;
   ctx.strokeStyle = BRASS; ctx.lineWidth = 3;
-  ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx, 124); ctx.moveTo(cx - 34, 124); ctx.lineTo(cx + 34, 124); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx, 118); ctx.moveTo(cx - 34, 118); ctx.lineTo(cx + 34, 118); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(cx - 8, cy + 6); ctx.lineTo(cx, cy - 6); ctx.lineTo(cx + 8, cy + 6); ctx.closePath(); ctx.fillStyle = BRASS; ctx.fill();
   const ex = Math.cos(ang) * L, ey = Math.sin(ang) * L;
-  ctx.strokeStyle = 'rgb(58,42,26)'; ctx.lineWidth = 2.5;
+  ctx.strokeStyle = INKC; ctx.lineWidth = 2.5;
   ctx.beginPath(); ctx.moveTo(cx - ex, cy - ey); ctx.lineTo(cx + ex, cy + ey); ctx.stroke();
   const pan = (px, py, w, col, label) => {
     ctx.strokeStyle = 'rgba(58,42,26,.6)'; ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px - 30, py + 34); ctx.moveTo(px, py); ctx.lineTo(px + 30, py + 34); ctx.stroke();
-    ctx.beginPath(); ctx.ellipse(px, py + 36, 36, 6, 0, 0, Math.PI * 2); ctx.fillStyle = PAPER; ctx.fill(); ctx.strokeStyle = 'rgb(58,42,26)'; ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(px, py + 36, 36, 6, 0, 0, Math.PI * 2); ctx.fillStyle = PAPER; ctx.fill(); ctx.strokeStyle = INKC; ctx.stroke();
     const r = 4 + 16 * Math.sqrt(w);
     if (w > 0.001) { ctx.beginPath(); ctx.arc(px, py + 32 - r * 0.7, r, Math.PI, 0); ctx.closePath(); ctx.fillStyle = col; ctx.fill(); }
     ctx.fillStyle = col; ctx.font = '12px Georgia'; ctx.textAlign = 'center'; ctx.fillText(label, px, py + 58);
   };
-  pan(cx - ex, cy - ey, 1 - k, mix(0), 'SELF');
+  pan(cx - ex, cy - ey, 1 - k, mix(0), 'OWN GAIN');
   pan(cx + ex, cy + ey, k, mix(1), 'THE RIGHT THING');
-  // label
-  ctx.textAlign = 'center'; ctx.fillStyle = 'rgb(58,42,26)';
-  ctx.font = 'italic 17px Georgia'; ctx.fillText(species(k), cx, 150);
-  ctx.font = '12px Georgia'; ctx.fillStyle = '#7d6b52';
-  ctx.fillText(`balance ${fmtK(k)}`, cx, 166);
+  ctx.textAlign = 'center'; ctx.fillStyle = INKC; ctx.font = '22px Georgia'; ctx.fillText(`balance ${fmt(k)}`, cx, 144);
   ctx.textAlign = 'left';
 }
-function behText(s, k) {
-  const g = CONFIG.games[s.game], x = residentBehaviour(s.g, k);
-  return { publicGood: `put in effort ${x.toFixed(2)} (out of ${g.m})`, hawkDove: `grab ${Math.round(100 * x)}% of the time`,
-           pd: `cooperate ${Math.round(100 * x)}% of the time` }[s.game];
-}
-const speciesGloss = k => k <= 0.001 ? 'cares only about their own gain' : k >= 0.999 ? 'does only what would be best if everyone did it' : `${Math.round(100 * (1 - k))}% own gain, ${Math.round(100 * k)}% the right thing`;
 
-// ---------- the village ----------
-const V = { cols: 12, rows: 8, cells: [], seed: 1 };
-function initVillage() {
-  V.cells = [];
-  for (let r = 0; r < V.rows; r++) for (let c = 0; c < V.cols; c++) V.cells.push({ r, c, mut: 0, a: 1 });
-}
-function cellXY(cell, W, H) { const dx = W / V.cols, dy = (H - 26) / V.rows; return [dx * (cell.c + 0.5), dy * (cell.r + 0.62)]; }
-function drawVillage(kR, kM, banner) {
-  const cv = $('c-village'), ctx = cv.getContext('2d'), W = cv.width, H = cv.height;
+// ---------- the race ----------
+function drawRace(d, share, banner) {
+  const cv = $('c-race'), ctx = cv.getContext('2d'), W = cv.width, H = cv.height;
   ctx.clearRect(0, 0, W, H);
-  const s = 9;
-  // pairs: neighbours (2j, 2j+1) in each row, joined by a hairline
-  ctx.strokeStyle = LINE; ctx.lineWidth = 1;
-  for (const cell of V.cells) if (cell.c % 2 === 0) {
-    const [x, y] = cellXY(cell, W, H); ctx.beginPath(); ctx.moveTo(x + 8, y + 2); ctx.lineTo(x + W / V.cols - 8, y + 2); ctx.stroke();
+  const bx = 20, bw = W - 40, by = 18, bh = 30;
+  const kM = d ? d.kM : kappa;
+  // the village bar: residents left, newcomers right
+  const split = bx + bw * (1 - share);
+  ctx.fillStyle = mix(kappa, 0.85); ctx.fillRect(bx, by, split - bx, bh);
+  if (share > 0) { ctx.fillStyle = mix(kM, 1); ctx.fillRect(split, by, bx + bw - split, bh); ctx.strokeStyle = PAPER; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(split, by); ctx.lineTo(split, by + bh); ctx.stroke(); }
+  ctx.strokeStyle = INKC; ctx.lineWidth = 1; ctx.strokeRect(bx, by, bw, bh);
+  ctx.font = '12px Georgia'; ctx.fillStyle = DIM; ctx.textAlign = 'left'; ctx.fillText('your villagers', bx, by + bh + 15);
+  ctx.textAlign = 'right'; ctx.fillText(d ? `newcomers ${Math.round(share * 100)}%` : 'newcomers', bx + bw, by + bh + 15);
+  // two large figures with what each earns per meeting
+  const fy = 162;
+  figure(ctx, W * 0.27, fy, 34, mix(kappa, 0.85), INKC);
+  ctx.textAlign = 'center'; ctx.fillStyle = INKC; ctx.font = '14px Georgia';
+  ctx.fillText(`villager · balance ${fmt(kappa)}`, W * 0.27, fy + 44);
+  if (d) {
+    figure(ctx, W * 0.73, fy, 34, mix(kM, 1), INKC, share > 0 || d.invades ? 1 : 0.35);
+    ctx.fillText(`newcomer · balance ${fmt(kM)}`, W * 0.73, fy + 44);
+    const better = d.piM > d.piR + 1e-9, worse = d.piM < d.piR - 1e-9;
+    ctx.font = (worse ? 'bold ' : '') + '15px Georgia'; ctx.fillText(`earns ${d.piR.toFixed(2)} a meeting`, W * 0.27, fy + 64);
+    ctx.font = (better ? 'bold ' : '') + '15px Georgia'; ctx.fillText(`earns ${d.piM.toFixed(2)} a meeting`, W * 0.73, fy + 64);
+  } else {
+    ctx.fillStyle = DIM; ctx.font = 'italic 14px Georgia'; ctx.fillText('newcomers arrive here', W * 0.73, fy - 10);
   }
-  for (const cell of V.cells) {
-    const [x, y] = cellXY(cell, W, H);
-    if (cell.mut > 0) figure(ctx, x, y, s, mix(kM, cell.a), 'rgb(58,42,26)', 1);
-    else figure(ctx, x, y, s, mix(kR, 0.18), mix(kR, 0.9));
-  }
-  if (banner) {
-    ctx.fillStyle = 'rgba(242,233,212,.88)'; ctx.fillRect(0, H - 26, W, 26);
-    ctx.fillStyle = 'rgb(58,42,26)'; ctx.font = '13px Georgia'; ctx.textAlign = 'center'; ctx.fillText(banner, W / 2, H - 9); ctx.textAlign = 'left';
-  }
+  if (banner) { ctx.fillStyle = INKC; ctx.font = 'bold 15px Georgia'; ctx.fillText(banner, W / 2, by + bh + 36); }
+  ctx.textAlign = 'left';
 }
-function neighbours(cell) {
-  return V.cells.filter(o => Math.abs(o.r - cell.r) + Math.abs(o.c - cell.c) === 1);
-}
-function seedMutants(sigma, rnd) {
-  // Assortativity made visible: with probability σ each newcomer lands beside a previous one (kin), otherwise anywhere.
-  initVillage();
-  const first = V.cells[Math.floor(rnd() * V.cells.length)]; first.mut = 1;
-  let placed = 1;
-  while (placed < CONFIG.mutantSeed) {
-    let target;
-    if (rnd() < sigma) { const ms = V.cells.filter(c => c.mut); const nb = neighbours(ms[Math.floor(rnd() * ms.length)]).filter(c => !c.mut); target = nb[Math.floor(rnd() * nb.length)]; }
-    if (!target) { const free = V.cells.filter(c => !c.mut); target = free[Math.floor(rnd() * free.length)]; }
-    target.mut = 1; placed++;
-  }
-}
-function animateDuel(d, kR, sigma, rnd) {
+function animateDuel(d) {
   return new Promise(res => {
-    seedMutants(sigma, rnd);
-    const F = CONFIG.growthFrames, [lo, hi] = CONFIG.spreadShare;
-    const target = d.invades ? Math.round(V.cells.length * (lo + (hi - lo) * Math.min(1, Math.sqrt(d.edge / 0.4)))) : 0;
+    const F = CONFIG.growthFrames, s0 = CONFIG.startShare, s1 = displayShare(d);
     let f = 0;
     const step = () => {
       f++;
-      const muts = V.cells.filter(c => c.mut);
-      if (d.invades) {
-        const want = Math.round(CONFIG.mutantSeed + (target - CONFIG.mutantSeed) * f / F);
-        let guard = 0;
-        while (V.cells.filter(c => c.mut).length < want && guard++ < 200) {
-          const ms = V.cells.filter(c => c.mut), m = ms[Math.floor(rnd() * ms.length)];
-          const nb = neighbours(m).filter(c => !c.mut); if (nb.length) nb[Math.floor(rnd() * nb.length)].mut = 1;
-        }
-      } else if (d.clone) {
-        for (const c of muts) c.a = 1 - 0.75 * f / F;   // blends in: same behaviour, no edge
-      } else {
-        for (const c of muts) c.a = Math.max(0, 1 - f / F);
-      }
-      const banner = f >= F ? (d.invades ? `balance ${fmtK(d.kM)} took over` : d.clone ? `balance ${fmtK(d.kM)} blended in — same behaviour` : `balance ${fmtK(d.kM)} died out`) : `newcomers with balance ${fmtK(d.kM)}`;
-      drawVillage(kR, d.kM, banner);
+      const t = f / F, e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      const share = s0 + (s1 - s0) * e;
+      const banner = f >= F ? (d.invades ? 'took over' : d.clone ? 'blended in — same behaviour, same earnings' : 'died out') : '';
+      drawRace(d, share, banner);
       if (f < F) requestAnimationFrame(step); else setTimeout(res, CONFIG.pauseMs);
     };
     requestAnimationFrame(step);
@@ -320,198 +289,182 @@ function animateDuel(d, kR, sigma, rnd) {
 }
 
 // ---------- the drawer ----------
-function drawDrawer(showSigma) {
+function drawDrawer(showAnswer) {
   const cv = $('c-drawer'), ctx = cv.getContext('2d'), W = cv.width, H = cv.height;
   ctx.clearRect(0, 0, W, H);
-  const x0 = 30, x1 = W - 22, X = k => x0 + (x1 - x0) * k, rowY = i => 30 + i * 36, axisY = H - 18;
-  ctx.strokeStyle = 'rgb(58,42,26)'; ctx.lineWidth = 1;
+  const x0 = 58, x1 = W - 22, X = k => x0 + (x1 - x0) * k, axisY = H - 20, nRows = 3, rowY = i => 30 + i * 36;
+  ctx.strokeStyle = INKC; ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(x0, axisY); ctx.lineTo(x1, axisY); ctx.stroke();
-  ctx.font = '10px Georgia'; ctx.fillStyle = '#7d6b52'; ctx.textAlign = 'center';
-  for (let i = 0; i <= 10; i++) { const x = X(i / 10); ctx.beginPath(); ctx.moveTo(x, axisY); ctx.lineTo(x, axisY + (i % 5 ? 3 : 6)); ctx.stroke(); if (i % 5 === 0) ctx.fillText((i / 10).toFixed(1), x, axisY + 15); }
-  for (let t = 0; t < CONFIG.testsPerSociety; t++) {
-    const y = rowY(t);
-    ctx.textAlign = 'left'; ctx.fillStyle = '#7d6b52'; ctx.fillText(['I', 'II', 'III'][t], 4, y + 4);
+  ctx.font = '11px Georgia'; ctx.fillStyle = DIM; ctx.textAlign = 'center';
+  for (let i = 0; i <= 10; i++) { const x = X(i / 10); ctx.beginPath(); ctx.moveTo(x, axisY); ctx.lineTo(x, axisY + (i % 5 ? 3 : 6)); ctx.stroke(); if (i % 5 === 0) ctx.fillText((i / 10).toFixed(1), x, axisY + 16); }
+  const first = Math.max(0, tests.length - nRows);
+  for (let r = 0; r < nRows; r++) {
+    const t = tests[first + r], y = rowY(r);
     ctx.strokeStyle = LINE; ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke();
-    const row = rows[t]; if (!row) continue;
-    const fade = t === rows.length - 1 ? 1 : 0.45;
-    // resident marker: brass wedge
-    ctx.fillStyle = BRASS; ctx.globalAlpha = fade;
-    ctx.beginPath(); ctx.moveTo(X(row.kR), y - 3); ctx.lineTo(X(row.kR) - 7, y - 15); ctx.lineTo(X(row.kR) + 7, y - 15); ctx.closePath(); ctx.fill();
-    for (const d of row.res) {
+    if (!t) continue;
+    ctx.textAlign = 'left'; ctx.fillStyle = DIM; ctx.font = '11px Georgia'; ctx.fillText(`test ${first + r + 1}`, 4, y + 4);
+    const fade = first + r === tests.length - 1 ? 1 : 0.45;
+    ctx.globalAlpha = fade;
+    ctx.fillStyle = BRASS; ctx.beginPath(); ctx.moveTo(X(t.k), y - 3); ctx.lineTo(X(t.k) - 7, y - 15); ctx.lineTo(X(t.k) + 7, y - 15); ctx.closePath(); ctx.fill();
+    for (const d of t.shown || []) {
       const x = X(d.kM);
       if (d.invades) {
-        ctx.fillStyle = mix(d.kM); ctx.beginPath(); ctx.arc(x, y, 6, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = mix(d.kM); ctx.beginPath(); ctx.arc(x, y, 6.5, 0, Math.PI * 2); ctx.fill();
         ctx.strokeStyle = PAPER; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(x - 3, y - 3); ctx.lineTo(x + 3, y + 3); ctx.moveTo(x + 3, y - 3); ctx.lineTo(x - 3, y + 3); ctx.stroke();
-      } else {
-        ctx.strokeStyle = mix(d.kM); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(x, y, d.clone ? 4 : 3, 0, Math.PI * 2); ctx.stroke();
-      }
+      } else { ctx.strokeStyle = mix(d.kM); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(x, y, 3.5, 0, Math.PI * 2); ctx.stroke(); }
     }
     ctx.globalAlpha = 1; ctx.lineWidth = 1;
   }
-  if (showSigma) {
-    const s = society(si), x = X(s.sigma);
+  if (showAnswer) {
+    const s = CONFIG.societies[si], x = X(s.sigma);
     ctx.strokeStyle = BRASS; ctx.lineWidth = 2; ctx.setLineDash([4, 3]);
     ctx.beginPath(); ctx.moveTo(x, 10); ctx.lineTo(x, axisY); ctx.stroke(); ctx.setLineDash([]);
-    ctx.fillStyle = BRASS; ctx.font = 'bold 12px Georgia'; ctx.textAlign = x > W - 80 ? 'right' : 'left';
-    ctx.fillText(`σ = ${s.sigma.toFixed(2)}`, x + (x > W - 80 ? -5 : 5), 12);
+    ctx.fillStyle = BRASS; ctx.font = 'bold 12px Georgia'; const right = x > W - 120; ctx.textAlign = right ? 'right' : 'left';
+    ctx.fillText(`unbeatable: ${s.sigma.toFixed(2)}`, x + (right ? -5 : 5), 12);
   }
   ctx.textAlign = 'left';
 }
 
 // ---------- flow ----------
 function startSociety(i) {
-  si = i; test = 0; rows = []; revealed = false;
-  const s = society(si);
-  $('h-soc').textContent = `Society ${si + 1} / ${NS} · ${s.latin}`;
+  si = i; tests = []; asked = false;
+  const s = CONFIG.societies[si];
+  $('h-soc').textContent = `Society ${si + 1} / ${NS} · ${s.mode === 'explore' ? 'find it' : 'predict it'}`;
+  $('h-aim').textContent = s.mode === 'explore' ? 'Aim: find the balance no newcomer can beat.' : 'Aim: predict, in one test, the balance no newcomer can beat.';
   $('h-name').textContent = s.name;
   $('h-story').textContent = s.story;
-  const g = CONFIG.games[s.game];
-  $('h-game').textContent = {
-    publicGood: 'They play a public good: each puts in effort; both share the benefit; the effort is yours alone to pay for.',
-    hawkDove: 'They play hawk and dove: grabbing wins against a sharer, but two grabbers fight and both lose.',
-    pd: "They play a prisoners' dilemma: cooperation helps the other more than it costs you, but defection always pays you more.",
-  }[s.game];
-  $('msg').innerHTML = si === 0 ? 'Set the balance, then test it. Three tests per society; each newcomer that fails to take over is a point.' : 'New society. Your balance carries over from the last one.';
+  $('h-game').textContent = DEAL[s.game];
+  $('b-release').textContent = s.mode === 'explore' ? 'TEST AGAINST NEWCOMERS' : 'TEST MY PREDICTION';
+  $('msg').innerHTML = s.id === 'siblingsHD' ? 'Your balance from the siblings carries over. Will it hold in this deal too? Keep it or move it, then test.'
+    : s.mode === 'predict' ? 'One test only. Set the balance you think no newcomer can beat.'
+    : si === 0 ? 'Set the balance where you think it is safest, then test it.' : 'New society. Your balance carries over from the last one.';
+  $('yard').textContent = ''; $('yard').className = 'yard';
   $('reveal').style.display = 'none'; $('after').style.display = 'none';
   $('lever').disabled = false; $('b-release').disabled = false;
-  $('h-test').textContent = `the village · test 1 of ${CONFIG.testsPerSociety}`;
-  initVillage(); updateLever(); drawDrawer(false);
+  updateLever(); drawDrawer(false);
   show('s-play');
 }
 function updateLever() {
   kappa = parseFloat($('lever').value);
   const s = society(si);
-  drawBalance($('c-balance'), kappa, null);
+  drawBalance(kappa);
   $('h-gloss').innerHTML = `<i>${species(kappa)}</i> (${speciesGloss(kappa)}). At this balance your villagers ${behText(s, kappa)}.`;
-  if (!busy) drawVillage(kappa, 0, null);
+  if (!busy) drawRace(null, 0, '');
 }
 async function release() {
   if (busy) return; busy = true;
-  $('lever').disabled = true; $('b-release').disabled = true; $('after').style.display = 'none';
-  const s = society(si), res = gauntlet(si, kappa);
-  rows.push({ kR: kappa, res: [] });
-  const rnd = mulberry32(1000 * si + 100 * test + Math.round(kappa * 20) + 7);
-  // newcomers in a shuffled order, so the pattern builds on the drawer rather than sweeping left to right
-  const order = res.map((_, i) => i).sort(() => rnd() - 0.5);
-  for (const i of order) {
-    await animateDuel(res[i], kappa, s.sigma, rnd);
-    rows[rows.length - 1].res.push(res[i]); drawDrawer(false);
-    if (!res[i].invades) { score++; showScore(); }
+  $('lever').disabled = true; $('b-release').disabled = true; $('after').style.display = 'none'; $('msg').innerHTML = '';
+  const t = runTest(si, kappa, tests.length); t.shown = []; tests.push(t);
+  let beaten = 0;
+  for (const i of t.order) {
+    const d = t.res[i];
+    await animateDuel(d);
+    t.shown.push(d); drawDrawer(false);
+    if (d.invades) beaten++;
+    $('yard').textContent = `beaten by ${beaten} of ${t.shown.length} so far`;
   }
   busy = false;
-  finals[si] = kappa; held[si] = !res.some(d => d.invades);
-  afterTest(res);
+  afterTest(t);
 }
-function afterTest(res) {
-  const inv = res.filter(d => d.invades), clones = res.filter(d => d.clone && d.kM !== kappa);
-  const more = inv.filter(d => d.kM > kappa).length, less = inv.filter(d => d.kM < kappa).length;
-  let m;
-  if (!inv.length) m = `<b>Nothing took hold.</b> Every newcomer died out${clones.length ? ' or, behaving exactly like your villagers, simply blended in' : ''}.`;
-  else m = `<b>${inv.length} of ${res.length} took over</b> — ${more && less ? 'some more moral, some less' : more ? 'every one of them <i>more</i> moral than your village' : 'every one of them <i>less</i> moral than your village'}.`;
-  $('msg').innerHTML = m;
-  const last = test >= CONFIG.testsPerSociety - 1;
-  if (last || !inv.length) {
-    // credit untaken tests at the result already achieved
-    const left = CONFIG.testsPerSociety - 1 - test;
-    if (!last && !inv.length) $('msg').innerHTML += ` <span class="muted">(${left} remaining test${left > 1 ? 's' : ''} credited: +${left * res.length})</span>`;
-    if (!last) { score += left * res.length; showScore(); }
-    reveal();
-  } else {
-    $('b-again').style.display = ''; $('b-next').style.display = 'none';
-    $('after').style.display = 'flex';
-  }
-}
-function reveal() {
-  revealed = true;
-  const s = society(si);
-  drawDrawer(true);
-  $('reveal').innerHTML = REVEAL[s.id](s) + `<div class="muted" style="font-size:12px;margin-top:4px">${s.source}</div>`;
-  $('reveal').style.display = 'block';
-  $('b-again').style.display = 'none'; $('b-next').style.display = '';
-  $('b-next').textContent = si < NS - 1 ? 'NEXT SOCIETY' : 'SEE ALL RESULTS';
+function afterTest(t) {
+  const s = CONFIG.societies[si];
+  $('yard').textContent = t.held ? 'Held: no newcomer beat your village' : `Beaten by ${t.beatenBy} of 11`;
+  $('yard').className = 'yard' + (t.held ? ' ok' : '');
+  if (t.held) $('msg').innerHTML = `Every newcomer died out${t.blended ? ', or behaved exactly like your villagers and blended in' : ''}.`;
+  else $('msg').innerHTML = `The ones that took over were ${t.moreMoral && t.lessMoral ? 'on both sides' : t.moreMoral ? '<b>all more moral</b> than your village' : '<b>all less moral</b> than your village'}.`;
+  if (roundOver(si, tests, asked)) return reveal();
+  $('b-again').style.display = ''; $('b-next').style.display = 'none';
+  $('b-answer').style.display = canAskAnswer(si, tests) ? '' : 'none';
   $('after').style.display = 'flex';
 }
-function nextTest() {
-  test++;
-  $('h-test').textContent = `the village · test ${test + 1} of ${CONFIG.testsPerSociety}`;
-  $('lever').disabled = false; $('b-release').disabled = false; $('after').style.display = 'none';
-  $('msg').innerHTML = 'Adjust the balance and release them again.';
-  drawVillage(kappa, 0, null);
+function reveal() {
+  const s = society(si), v = roundVerdict(si, tests, asked);
+  rounds = rounds.filter(r => r.id !== v.id); rounds.push(v);
+  drawDrawer(true);
+  const head = v.mode === 'explore'
+    ? (v.held ? `Found on test ${v.tests}.` : `Shown, after ${v.tests} tests.`)
+    : (v.held ? 'Your prediction held.' : `Your prediction was beaten — the unbeatable balance was ${s.sigma.toFixed(2)}.`);
+  $('reveal').innerHTML = `<div class="rv"><b>${head}</b></div>` + REVEAL[s.id](s) + `<div class="muted" style="font-size:12px;margin-top:4px">${s.source}</div>`;
+  $('reveal').style.display = 'block';
+  $('b-again').style.display = 'none'; $('b-answer').style.display = 'none'; $('b-next').style.display = '';
+  $('b-next').textContent = si < NS - 1 ? 'NEXT SOCIETY' : 'SEE THE VERDICT';
+  $('after').style.display = 'flex';
 }
+function testAgain() {
+  $('lever').disabled = false; $('b-release').disabled = false; $('after').style.display = 'none';
+  $('msg').innerHTML = 'Move the balance and test again.'; $('yard').textContent = ''; $('yard').className = 'yard';
+  drawRace(null, 0, '');
+}
+function showAnswer() { asked = true; reveal(); }
 function nextSociety() { if (si < NS - 1) startSociety(si + 1); else endGame(); }
 
 // ---------- end ----------
 function endGame() {
+  const v = sessionVerdict(rounds);
+  const lines = [];
+  if (v.explored) lines.push(`<b>You:</b> found the unbeatable balance in ${v.found} of ${v.explored} ${v.explored > 1 ? 'societies' : 'society'}${v.found ? ` (in ${v.testsToFind.filter(x => x).join(', ')} test${v.testsToFind.filter(x => x).join() === '1' ? '' : 's'})` : ''}${v.predicted ? `, and predicted it in ${v.predictedRight} of ${v.predicted}` : ''}.`);
+  else lines.push(`<b>You:</b> predicted the unbeatable balance in ${v.predictedRight} of ${v.predicted}.`);
+  lines.push(`<b>The paper:</b> in this model, the only balance no newcomer can beat puts on the right thing exactly the chance of meeting your own kind — whatever the deal.`);
+  lines.push(`<b>What it means:</b> evolution picks neither the selfish nor the saint, but a person as moral as the odds of meeting their own kind.`);
+  $('verdict').innerHTML = lines.map(l => `<div>${l}</div>`).join('');
+  // plate
   const cv = $('c-plate'), ctx = cv.getContext('2d'), W = cv.width, H = cv.height;
   ctx.clearRect(0, 0, W, H);
-  const x0 = 56, y0 = H - 46, x1 = W - 24, y1 = 20, X = v => x0 + (x1 - x0) * v / 0.6, Y = v => y0 - (y0 - y1) * v;
-  ctx.strokeStyle = 'rgb(58,42,26)'; ctx.lineWidth = 1;
+  const x0 = 56, y0 = H - 50, x1 = W - 24, y1 = 20, X = q => x0 + (x1 - x0) * q / 0.6, Y = q => y0 - (y0 - y1) * q;
+  ctx.strokeStyle = INKC; ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(x0, y1); ctx.lineTo(x0, y0); ctx.lineTo(x1, y0); ctx.stroke();
-  ctx.font = '11px Georgia'; ctx.fillStyle = '#7d6b52'; ctx.textAlign = 'center';
-  for (const v of [0, 0.25, 0.5]) { ctx.fillText(v.toFixed(2), X(v), y0 + 15); }
-  ctx.fillText('σ — chance a newcomer meets its own kind', (x0 + x1) / 2, y0 + 34);
-  ctx.textAlign = 'right'; for (const v of [0.5, 1]) ctx.fillText(v.toFixed(1), x0 - 6, Y(v) + 4);
-  ctx.save(); ctx.translate(14, (y0 + y1) / 2); ctx.rotate(-Math.PI / 2); ctx.textAlign = 'center'; ctx.fillText('κ — your final balance', 0, 0); ctx.restore();
-  // the rule
+  ctx.font = '12px Georgia'; ctx.fillStyle = DIM; ctx.textAlign = 'center';
+  for (const q of [0, 0.25, 0.5]) ctx.fillText(q.toFixed(2), X(q), y0 + 16);
+  ctx.fillText('how often a newcomer meets its own kind', (x0 + x1) / 2, y0 + 36);
+  ctx.textAlign = 'right'; for (const q of [0.5, 1]) ctx.fillText(q.toFixed(1), x0 - 6, Y(q) + 4);
+  ctx.save(); ctx.translate(16, (y0 + y1) / 2); ctx.rotate(-Math.PI / 2); ctx.textAlign = 'center'; ctx.fillText('your final balance', 0, 0); ctx.restore();
   ctx.strokeStyle = BRASS; ctx.lineWidth = 2; ctx.setLineDash([5, 4]);
   ctx.beginPath(); ctx.moveTo(X(0), Y(0)); ctx.lineTo(X(0.6), Y(0.6)); ctx.stroke(); ctx.setLineDash([]);
-  ctx.fillStyle = BRASS; ctx.textAlign = 'left'; ctx.font = 'italic 13px Georgia'; ctx.fillText('homo hamiltonensis: κ = σ', X(0.3), Y(0.6) - 2);
-  CONFIG.societies.forEach((s, i) => {
-    if (finals[i] === undefined) return;
-    const jitter = (i % 2 ? 1 : -1) * 4 * (i > 0);
-    const x = X(s.sigma) + jitter, y = Y(finals[i]);
-    figure(ctx, x, y, 9, mix(finals[i]), 'rgb(58,42,26)');
-    ctx.fillStyle = 'rgb(58,42,26)'; ctx.font = '11px Georgia'; ctx.textAlign = 'left'; ctx.fillText(String(i + 1), x + 9, y - 6);
+  ctx.fillStyle = BRASS; ctx.textAlign = 'left'; ctx.font = 'italic 14px Georgia'; ctx.fillText('balance = chance', X(0.33), Y(0.6) - 4);
+  rounds.forEach(r => {
+    const i = CONFIG.societies.findIndex(s => s.id === r.id), jitter = r.id === 'siblingsHD' ? 10 : 0;
+    const x = X(r.sigma) + jitter, y = Y(r.finalK);
+    figure(ctx, x, y, 10, r.held ? mix(r.finalK) : PAPER, INKC);
+    ctx.fillStyle = INKC; ctx.font = '12px Georgia'; ctx.textAlign = 'left'; ctx.fillText(String(i + 1), x + 10, y - 6);
   });
-  const played = CONFIG.societies.map((s, i) => finals[i] !== undefined ? i : -1).filter(i => i >= 0);
-  const max = played.length * CONFIG.testsPerSociety * CONFIG.mutantKappas.length;
-  const sig = v => ({ 0: '0', 0.5: '½', 0.25: '¼' })[v] ?? v.toFixed(2);
-  const nHeld = played.filter(i => held[i]).length;
-  const off = played.filter(i => !held[i]);
-  const tooMuch = off.filter(i => finals[i] > CONFIG.societies[i].sigma).length, tooLittle = off.length - tooMuch;
-  $('verdict').innerHTML =
-    `<div><b>You:</b> ${played.map(i => fmtK(finals[i])).join(' · ')}</div>` +
-    `<div><b>The paper:</b> ${played.map(i => sig(CONFIG.societies[i].sigma)).join(' · ')} — the chance of meeting your own kind.</div>` +
-    `<div><b>The gap:</b> ${off.length === 0 ? `none. Your final balance held in all ${played.length}${played.length > 1 ? ' societies' : ' society'}: morality equals the chance of meeting your own kind.` : `your final balance held in ${nHeld} of ${played.length}; ${tooMuch ? `too moral in ${tooMuch}` : ''}${tooMuch && tooLittle ? ', ' : ''}${tooLittle ? `too selfish in ${tooLittle}` : ''}.`}</div>`;
-  $('end-text').innerHTML = `<b>Score ${score} of ${max}.</b> Wherever your villagers could meet their own kind, the only balance no newcomer could beat put exactly that chance on the right thing — whatever game they played. Too little morality loses; so does too much.`;
-  $('end-table').innerHTML = '<tr><th>#</th><th>society</th><th>σ</th><th>your balance</th></tr>' + played.map(i => {
-    const s = CONFIG.societies[i]; return `<tr><td>${i + 1}</td><td>${s.name}</td><td>${s.sigma.toFixed(2)}</td><td>${fmtK(finals[i])}</td></tr>`;
+  $('end-text').innerHTML = `Among strangers the selfish hold. Wherever newcomers meet their own kind, too little morality loses — and so does too much. The behaviour changes with the deal; the unbeatable balance does not.`;
+  $('end-table').innerHTML = '<tr><th>#</th><th>society</th><th>meets own kind</th><th>your balance</th><th>result</th></tr>' + rounds.map(r => {
+    const i = CONFIG.societies.findIndex(s => s.id === r.id), s = CONFIG.societies[i];
+    const res = r.mode === 'explore' ? (r.held ? `found, test ${r.tests}` : 'shown') : (r.held ? 'prediction held' : 'beaten');
+    return `<tr><td>${i + 1}</td><td>${s.name}</td><td>${s.sigma.toFixed(2)}</td><td>${fmt(r.finalK)}</td><td>${res}</td></tr>`;
   }).join('');
   show('s-end');
 }
 
-// ---------- hero ----------
+// ---------- hero: the two extremes side by side ----------
 function drawHero() {
   const cv = $('c-hero'), ctx = cv.getContext('2d'), W = cv.width, H = cv.height;
   ctx.clearRect(0, 0, W, H);
-  const names = [['Homo oeconomicus', 0], ['Homo moralis', 0.5], ['Homo kantiensis', 1]];
-  names.forEach(([n, k], i) => {
-    const x = W * (0.18 + 0.32 * i), y = 104;
-    figure(ctx, x, y, 34, mix(k, 0.85), 'rgb(58,42,26)');
-    ctx.textAlign = 'center'; ctx.fillStyle = 'rgb(58,42,26)'; ctx.font = 'italic 15px Georgia'; ctx.fillText(n, x, y + 58);
-    ctx.font = '11px Georgia'; ctx.fillStyle = '#7d6b52'; ctx.fillText(`balance ${k === 0.5 ? 'between 0 and 1' : k}`, x, y + 76);
-    ctx.fillText(`fig. ${i + 1}`, x, 22);
+  [['Homo oeconomicus', 0, 'balance 0', 'only own gain'], ['Homo moralis', 0.5, 'in between', 'some of each'], ['Homo kantiensis', 1, 'balance 1', 'only the right thing']].forEach(([n, k, b, g], i) => {
+    const x = W * (0.18 + 0.32 * i), y = 92;
+    figure(ctx, x, y, 34, mix(k, 0.85), INKC);
+    ctx.textAlign = 'center'; ctx.fillStyle = INKC; ctx.font = 'italic 15px Georgia'; ctx.fillText(n, x, y + 58);
+    ctx.font = '13px Georgia'; ctx.fillStyle = DIM; ctx.fillText(b, x, y + 78); ctx.fillText(g, x, y + 96);
+    ctx.fillText(`fig. ${i + 1}`, x, 18);
   });
-  ctx.strokeStyle = LINE; ctx.beginPath(); ctx.moveTo(20, H - 22); ctx.lineTo(W - 20, H - 22); ctx.stroke();
-  ctx.font = '11px Georgia'; ctx.fillStyle = '#7d6b52'; ctx.textAlign = 'center';
-  ctx.fillText('u(x, y) = (1 − κ) · π(x, y) + κ · π(x, x)', W / 2, H - 6);
   ctx.textAlign = 'left';
 }
 
 // ---------- wiring ----------
 $('attr1').innerHTML = ATTR; $('attr2').innerHTML = ATTR;
+$('lever').step = CONFIG.leverStep; $('lever').value = CONFIG.startBalance;
 buildPresets(); drawHero();
-$('b-start').onclick = () => { score = 0; finals = []; held = []; showScore(); startSociety(si); };
+$('b-start').onclick = () => { rounds = []; startSociety(si); };
 $('lever').oninput = updateLever;
 $('b-release').onclick = release;
-$('b-again').onclick = nextTest;
+$('b-again').onclick = testAgain;
+$('b-answer').onclick = showAnswer;
 $('b-next').onclick = nextSociety;
-$('b-replay').onclick = () => { si = 0; buildPresets(); show('s-start'); };
-let aboutFrom = 's-start';
+$('b-replay').onclick = () => { si = 0; buildPresets(); $('lever').value = CONFIG.startBalance; show('s-start'); };
+let aboutFrom = 's-start', helpReturn = 's-start';
 $('l-about').onclick = e => { e.preventDefault(); aboutFrom = 's-start'; show('s-about'); };
 $('b-about2').onclick = () => { aboutFrom = 's-end'; show('s-about'); };
 $('b-back').onclick = () => show(aboutFrom);
-let helpReturn = 's-start';
 $('b-help').onclick = () => { helpReturn = 's-start'; show('s-help'); };
 document.querySelectorAll('button.q').forEach(b => b.onclick = () => { helpReturn = b.dataset.help; show('s-help'); });
 $('b-help-back').onclick = () => show(helpReturn);
