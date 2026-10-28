@@ -1,0 +1,35 @@
+PASS  (a) East effect 14.5–17 points (Table 1, text p.12)  — 14.7, 16.9, 16.2, 16.8, 14.7
+PASS  (b) 2002 change −2.3 to −6.9 points (Table 1, text p.12)  — -4.2, -6.1, -2.4, -5.8, -6.9
+PASS  (c1) years to close 11–35 (text p.12), min at care, max at family  — 17.6, 13.9, 33.2, 14.6, 10.6
+PASS  (c2) closing years ≈ 2010–2030 ("20 to 40 years")  — 2007.6–2030.2
+PASS  (d) panel reduction ≈ 35% (Table 5 vs Table 1, text p.16)  — reduction 34.8%, so mind change 65%
+PASS  (e) regional controls cut the unemployed coefficient by about a third  — 32.2%; in points 14.7 → 10.4; averaged 15.9 → 11.8
+PASS  (f) Fig. 1 youngest cohort = Table 4 east at West share  — 11.2, 9.4, 5.5, 3.1, 8.1 vs 11.0, 9.5, 5.5, 3.0, 8.0
+PASS  (f2) Fig. 1 read-off matches text: youngest 3–11, born before 1931 21–49
+PASS  (g1) dose holds in Fig. 1 (shown in game)  — 7 → 12 → 24 → 34 → 33
+PASS  (g2) dose holds recomputed from Table 4 at West share  — 7 → 8 → 15 → 23 → 24
+PASS  (g3) dose holds recomputed at East share  — 7 → 8 → 15 → 23 → 23
+      NOTE  Fig. 1 older cohorts exceed the Table 4 recomputation; the game shows Fig. 1 and the About/author note flag it.
+PASS  (g4) age pulls opposite ways: West age effect ≤ 0, East > 0 (Table 3)  — West -0.0026, East 0.0080 per year (probit index)
+PASS  (g5) East effect still at least 10 points when converted at the East share  — 10.3, 16.5, 16.4, 15.8, 13.9
+PASS  (h) pre-war incomes East ≈ West (footnote 6)  — 1928: 1203 vs 1203; 1932: 877 vs 913; 1936: 1169 vs 1200
+PASS  (i) raw East–West gap positive in all areas, 1997 and 2002 (Table A2)  — 1997 16, 18, 16, 18, 16; 2002 11, 12, 14, 12, 9
+PASS  (i2) PDS ≈ 20% East vs 1–2% West in 1998 (text p.25)  — 21.2 vs 1.4
+PASS  (i3) movers less pro-state than stayers, still above West (Table 9)
+PASS  (j1) each objection accepts exactly one card
+PASS  (j2) every accepted card is a different card
+PASS  (j3) perfect run scores 6/6 first tries  — You settled 6 of 6 objections, 6 of them at the first try.
+PASS  (j4) random tapping averages well below 6  — mean first tries 0.86 of 6 over 2000 sessions
+PASS  (j5) bet: "more" is right, jars show 63 vs 79
+PASS  (j6) forecast band matches (c2)  — 2020: inside the paper's range.
+
+Card numbers as displayed:
+  Same pay, same job: Everyone 17 | Same pay, job, family 16 | …and counting aid to the East 12
+  Old and young: born after 1975 7 | born 1961–75 12 | born 1946–60 24 | born 1931–45 34 | born before 1931 33
+  Before the split: 1928 E 1203 / W 1203 | 1932 E 877 / W 913 | 1936 E 1169 / W 1200
+  Same people, five years on: the same people changed their minds 65 | older people replaced by younger 35
+  The ballot box: 1998 E 21 / W 1.4 | 2002 E 16 / W 1.3
+  Luck or society?: "Society decides my chances" E 72 / W 60 | "Life is down to luck" E 31 / W 40
+  Those who moved West: Stayed in the East 17 | Moved to the West 6
+
+ALL CHECKS PASS
