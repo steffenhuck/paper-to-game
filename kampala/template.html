@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Mixed Street</title>
+<style>
+  :root { --paper:#f4efe4; --card:#fffcf5; --ink:#2a2620; --dim:#6e675c; --line:#d9d0bf; --own:#17766f; --other:#c47f12;
+          --earth:#b5653c; --ok:#2f6b3a; --no:#a8392a; --grey:#a39d92; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size:16px; line-height:1.45; }
+  .screen { display:none; max-width:560px; margin:0 auto; padding:24px 16px 40px; }
+  .screen.on { display:block; }
+  h1 { font-size:34px; line-height:1.1; margin:14px 0 6px; letter-spacing:-.01em; }
+  h2 { font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); margin:16px 0 6px; font-weight:600; }
+  h3 { font-size:20px; margin:6px 0; line-height:1.2; }
+  p { margin:8px 0; }
+  .lede { font-size:18px; }
+  .aim { font-size:18px; font-weight:600; margin:14px 0; padding:10px 0; border-top:2px solid var(--ink); border-bottom:2px solid var(--ink); }
+  .aimbar { font-size:13px; color:var(--dim); margin:0 0 6px; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; }
+  button { font:inherit; font-size:16px; background:var(--card); color:var(--ink); border:2px solid var(--ink); border-radius:10px; padding:12px 14px; min-height:48px; cursor:pointer; flex:1; }
+  button.primary { background:var(--ink); color:var(--paper); }
+  button:disabled { opacity:.4; cursor:default; }
+  button.q { flex:0 0 auto; width:40px; min-height:40px; height:40px; padding:0; border-radius:50%; font-weight:700; color:var(--dim); border-color:var(--dim); }
+  .hud { display:flex; justify-content:space-between; align-items:center; gap:8px; margin:2px 0 8px; }
+  .budget { display:flex; gap:6px; align-items:center; font-size:14px; color:var(--dim); }
+  .tok { width:20px; height:20px; border-radius:50%; background:var(--earth); border:2px solid var(--earth); }
+  .tok.spent { background:transparent; border-color:var(--line); }
+  .orient { font-size:14px; color:var(--dim); margin:6px 0 8px; }
+  .sus { display:flex; gap:10px; align-items:flex-start; padding:6px 10px; border:2px solid var(--line); border-radius:10px; background:var(--card); margin:6px 0; }
+  .sus .n { flex:0 0 26px; height:26px; border-radius:50%; background:var(--ink); color:var(--paper); font-weight:700; text-align:center; line-height:26px; font-size:14px; }
+  .sus .t { font-weight:700; }
+  .sus .c { font-size:13px; color:var(--dim); line-height:1.3; }
+  .tests { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .tcard { text-align:left; padding:10px; border-radius:10px; border:2px solid var(--ink); background:var(--card); min-height:84px; display:flex; flex-direction:column; justify-content:flex-start; }
+  .tcard .t { font-weight:700; font-size:15px; line-height:1.2; }
+  .tcard .c { font-size:13px; color:var(--dim); line-height:1.3; margin-top:4px; }
+  .tcard.done { border-color:var(--line); background:#efe8da; }
+  .tcard.done .c { color:var(--ink); }
+  .pib { display:block; margin:6px auto; width:100%; max-width:360px; }
+  .betq { font-size:19px; font-weight:700; margin:12px 0 8px; }
+  .legend { font-size:14px; display:flex; gap:16px; margin:6px 0; flex-wrap:wrap; }
+  .legend i { display:inline-block; width:14px; height:14px; border-radius:3px; margin-right:5px; vertical-align:-2px; }
+  .race { margin:10px 0 4px; }
+  .race .lbl { font-weight:700; font-size:15px; margin:10px 0 4px; display:flex; justify-content:space-between; gap:8px; }
+  .race .tag { font-size:12px; font-weight:700; padding:2px 8px; border-radius:10px; white-space:nowrap; }
+  .tag.clear { background:var(--ink); color:var(--paper); } .tag.weak { background:var(--line); } .tag.chance { background:transparent; border:1px solid var(--dim); color:var(--dim); }
+  .bar { position:relative; height:40px; margin:4px 0; background:#ebe3d3; border-radius:6px; overflow:hidden; }
+  .bar .f { position:absolute; left:0; top:0; bottom:0; width:0; border-radius:6px; transition:width 1.1s cubic-bezier(.2,.8,.2,1); }
+  .bar .v { position:absolute; left:6px; top:6px; line-height:28px; padding:0 8px; border-radius:6px; background:rgba(30,26,20,.55); font-weight:800; color:#fff; font-size:16px; white-space:nowrap; }
+  .bar .v small { font-weight:600; font-size:13px; }
+  .bar.own .f { background:var(--own); } .bar.other .f { background:var(--other); }
+  .note { font-size:13px; color:var(--dim); }
+  .say { font-size:17px; margin:12px 0 6px; padding:10px 12px; background:var(--card); border-left:5px solid var(--ink); border-radius:6px; }
+  .hit { font-weight:700; margin:6px 0; } .hit.ok { color:var(--ok); } .hit.no { color:var(--no); }
+  .fade { animation: fade .4s ease-out; }
+  @keyframes fade { from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
+  .callrow { padding:10px; border:2px solid var(--line); border-radius:10px; background:var(--card); margin:8px 0; }
+  .callrow .t { font-weight:700; margin-bottom:6px; }
+  .seg { display:flex; gap:6px; }
+  .seg button { min-height:44px; padding:8px 4px; font-size:14px; border-width:2px; border-color:var(--line); }
+  .seg button.sel { border-color:var(--ink); background:var(--ink); color:var(--paper); }
+  .nb { font-size:14px; margin:4px 0; padding:6px 10px; background:var(--card); border-radius:8px; border:1px solid var(--line); }
+  .verdict div { margin:10px 0; }
+  .verdict .you { font-size:26px; font-weight:800; line-height:1.2; }
+  .verdict .paper { font-size:18px; }
+  .verdict .means { font-size:18px; font-style:italic; }
+  .judg { padding:10px; border-radius:10px; margin:8px 0; background:var(--card); border-left:6px solid var(--line); font-size:15px; }
+  .judg.proven { border-left-color:var(--ok); } .judg.wrong { border-left-color:var(--no); }
+  .judg .t { font-weight:700; font-size:16px; }
+  .judg .m { color:var(--dim); font-size:13px; }
+  .about p, .about li { font-size:15px; }
+  .about h3 { font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:var(--dim); margin:18px 0 4px; }
+  .attr { font-size:13px; color:var(--dim); margin-top:18px; border-top:1px solid var(--line); padding-top:8px; }
+  .muted { color:var(--dim); font-size:14px; }
+  a { color:var(--own); }
+</style>
+</head>
+<body>
+
+<!-- START -->
+<section class="screen on" id="s-start">
+  <svg viewBox="0 0 360 190" width="100%" aria-hidden="true" id="streets"></svg>
+  <h1>The Mixed Street</h1>
+  <p class="lede">In a poor part of Kampala, streets where neighbours share a background keep their drains clear. Mixed streets often don't. Why?</p>
+  <div class="aim" id="aim-start"></div>
+  <p class="muted">About five minutes. You play the researcher. Every result is from a 2007 study in which 300 neighbours played money games.</p>
+  <div class="row"><button class="primary" id="b-start">Start</button></div>
+  <div class="row" style="margin-top:10px"><button id="b-help1">How to play</button><button id="b-about1">About the paper</button></div>
+</section>
+
+<!-- LAB -->
+<section class="screen" id="s-lab">
+  <div class="aimbar" id="aim-lab"></div>
+  <div class="hud"><div class="budget" id="budget"></div><button class="q" data-help>?</button></div>
+  <h2>The five suspects</h2>
+  <div id="suspects"></div>
+  <h2 id="tests-h">Pick a test</h2>
+  <p class="orient" id="lab-orient">Each test is one of the study's games, played with people from the same group and from different groups. Which tests would tell these suspects apart?</p>
+  <div class="tests" id="tests"></div>
+  <div class="row" style="margin-top:14px"><button class="primary" id="b-tocall">Make your calls</button></div>
+</section>
+
+<!-- TEST -->
+<section class="screen" id="s-test">
+  <div class="hud"><h2 id="t-name" style="margin:0"></h2><button class="q" data-help>?</button></div>
+  <svg class="pib" id="pib" viewBox="0 0 360 130"></svg>
+  <div class="legend" id="t-legend"><span><i style="background:var(--own)"></i>the player's own group</span><span><i style="background:var(--other)"></i>another group</span></div>
+  <p id="t-what"></p>
+  <div id="t-bet">
+    <div class="betq" id="t-betq"></div>
+    <p class="orient">Your hunch first. Then the study's result.</p>
+    <div class="row"><button data-bet="yes">Yes</button><button data-bet="no">No real difference</button></div>
+  </div>
+  <div id="t-out" style="display:none">
+    <div class="hit" id="t-hit"></div>
+    <div class="note" id="t-unit"></div>
+    <div class="race" id="t-race"></div>
+    <div class="say fade" id="t-say"></div>
+    <p class="note" id="t-src"></p>
+    <div class="row"><button class="primary" id="b-back">Back to the lab</button></div>
+  </div>
+</section>
+
+<!-- CALL -->
+<section class="screen" id="s-call">
+  <div class="hud"><h2 style="margin:0">Your calls</h2><button class="q" data-help>?</button></div>
+  <p class="orient">For each suspect: is it part of why mixed streets fail? A call counts as <b>proven</b> only if it matches the study and one of your tests backs it.</p>
+  <div id="notebook"></div>
+  <div id="calls"></div>
+  <div class="row" style="margin-top:12px"><button id="b-morelab">Back to the lab</button><button class="primary" id="b-reveal">Reveal</button></div>
+</section>
+
+<!-- END -->
+<section class="screen" id="s-end">
+  <div class="verdict" id="verdict"></div>
+  <h2>Suspect by suspect</h2>
+  <div id="judged"></div>
+  <div class="row" style="margin-top:14px"><button class="primary" id="b-again">Play again</button><button id="b-about2">About the paper</button></div>
+  <p class="attr" id="attr2"></p>
+</section>
+
+<!-- HELP -->
+<section class="screen" id="s-help">
+  <h2>How to play</h2>
+  <div class="aim" id="aim-help"></div>
+  <p><b>The setting.</b> Mulago-Kyebando is a poor, mixed neighbourhood of Kampala, Uganda. Drains, rubbish collection and night patrols there depend on neighbours chipping in. Streets where most people come from one ethnic group do better than mixed ones. In 2005 a team of researchers set out to find why.</p>
+  <p><b>The suspects.</b> Five possible reasons, each one a serious idea in the research: groups want different things; people are kinder to their own; same-group teams work better; people can find their own group; people are watched by their own group and punished if they don't help.</p>
+  <p><b>The tests.</b> Seven games that the study ran with 300 randomly chosen neighbours. Sometimes the players came from the same group, sometimes not. Teal always means the player's own group, ochre another group. You can afford <b>five</b> tests. Before each result you give your hunch. Hunches don't count towards your score; they just make you commit.</p>
+  <p><b>Reading a result.</b> Two bars: what happened with the player's own group, and with another group. A tag says whether the study found a <b>clear difference</b>, a <b>weak</b> one, or one that <b>could be chance</b>. "The stingiest 40%" are the players who kept everything they could in a separate game. The study looked at them separately because they are the ones a street most needs to win over.</p>
+  <p><b>The calls.</b> When you're done, call each suspect: guilty, not guilty, or can't tell. You can go back to the lab while tests are left.</p>
+  <p><b>The yardstick.</b> Proven calls, out of 5. A call is proven if it matches the study's conclusion <i>and</i> a test you ran backs it. A right guess with no test behind it doesn't count.</p>
+  <p><b>What it shows.</b> How a well-designed comparison separates explanations that all predict the same thing: mixed streets doing worse.</p>
+  <div class="row"><button class="primary" id="b-help-back">Back</button></div>
+</section>
+
+<!-- ABOUT -->
+<section class="screen about" id="s-about">
+  <h2>About the paper</h2>
+  <p><b>Habyarimana, J., Humphreys, M., Posner, D. N. &amp; Weinstein, J. M. (2007).</b> Why Does Ethnic Diversity Undermine Public Goods Provision? <i>American Political Science Review</i> 101(4): 709–725. <a href="https://doi.org/10.1017/S0003055407070499">doi:10.1017/S0003055407070499</a></p>
+  /*__ABOUT__*/
+  <p class="attr">Game built from this paper; the paper is the authority where the two disagree.</p>
+  <div class="row"><button class="primary" id="b-about-back">Back</button></div>
+</section>
+
+<script>
+/*__MECHANISM__*/
+</script>
+<script>
+(function () {
+  const $ = id => document.getElementById(id);
+  const AIM = 'Five reasons are suspected. Run five tests, then call each one — and back every call with a test.';
+  const ATTR = 'Habyarimana, Humphreys, Posner &amp; Weinstein (2007), <i>American Political Science Review</i> 101(4): 709–725. doi:10.1017/S0003055407070499. Game built from this paper; the paper is the authority where the two disagree.';
+  ['aim-start', 'aim-lab', 'aim-help'].forEach(id => $(id).textContent = AIM);
+  $('attr2').innerHTML = ATTR;
+  let g = MECH.newGame(), cur = null, helpFrom = 's-start', aboutFrom = 's-start';
+  const show = id => { document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id)); window.scrollTo(0, 0); };
+  const screenNow = () => document.querySelector('.screen.on').id;
+  const fmtV = (t, v) => t.fmt === 'ush' ? Math.round(v) + ' USh' : Math.round(v * 100) + ' in 100';
+  const first = s => { const m = s.match(/^.*?[.?!](\s|$)/); return m ? m[0].trim() : s; };
+  const TAG = { clear: 'clear difference', weak: 'weak difference', chance: 'could be chance' };
+
+  // ---- pictures ----
+  function person(x, y, s, col, hidden, label) {
+    const k = s / 30;
+    if (hidden) return `<g><rect x="${x - 30 * k}" y="${y - 34 * k}" width="${60 * k}" height="${74 * k}" rx="${6 * k}" fill="#d8d2c6"/>
+      <circle cx="${x}" cy="${y - 8 * k}" r="${12 * k}" fill="#b1aa9d"/><path d="M${x - 22 * k} ${y + 34 * k} Q${x - 20 * k} ${y + 8 * k} ${x} ${y + 7 * k} Q${x + 20 * k} ${y + 8 * k} ${x + 22 * k} ${y + 34 * k}Z" fill="#b1aa9d"/>
+      <text x="${x}" y="${y + 56 * k}" font-size="13" text-anchor="middle" fill="#6e675c">${label}</text></g>`;
+    return `<g><rect x="${x - 30 * k}" y="${y - 34 * k}" width="${60 * k}" height="${74 * k}" rx="${6 * k}" fill="#efe7d6"/>
+      <path d="M${x - 22 * k} ${y + 34 * k} Q${x - 20 * k} ${y + 8 * k} ${x} ${y + 7 * k} Q${x + 20 * k} ${y + 8 * k} ${x + 22 * k} ${y + 34 * k}Z" fill="${col}"/>
+      <circle cx="${x}" cy="${y - 8 * k}" r="${12 * k}" fill="#7a4f33"/>
+      <text x="${x}" y="${y + 56 * k}" font-size="13" text-anchor="middle" fill="#2a2620">${label}</text></g>`;
+  }
+  const OWN = '#17766f', OTH = '#c47f12';
+  function pib(kind) {
+    if (kind === 'hidden' || kind === 'seen') return person(70, 50, 30, OWN, false, 'partner') + person(180, 50, 30, OWN, kind === 'hidden', kind === 'hidden' ? 'giver: hidden' : 'giver: seen') + person(290, 50, 30, OTH, false, 'partner');
+    if (kind === 'pair' || kind === 'ref') return person(50, 50, 26, OWN, false, 'same') + person(115, 50, 26, OWN, false, 'group') + person(245, 50, 26, OWN, false, 'mixed') + person(310, 50, 26, OTH, false, 'pair')
+      + (kind === 'ref' ? `<ellipse cx="180" cy="36" rx="20" ry="11" fill="#fffcf5" stroke="#2a2620" stroke-width="2.5"/><circle cx="180" cy="36" r="6" fill="#2a2620"/><text x="180" y="66" font-size="13" text-anchor="middle" fill="#2a2620">referee</text>` : `<text x="180" y="56" font-size="16" text-anchor="middle" fill="#6e675c">vs</text>`);
+    return `<g>${[0, 1, 2, 3, 4, 5].map(i => `<rect x="${60 + i * 42}" y="22" width="32" height="44" rx="4" fill="#fffcf5" stroke="#2a2620" stroke-width="2"/><path d="M${66 + i * 42} 34h20M${66 + i * 42} 44h20M${66 + i * 42} 54h14" stroke="#a39d92" stroke-width="2"/>`).join('')}
+      <text x="180" y="96" font-size="13" text-anchor="middle" fill="#6e675c">six questions, everyone answers</text></g>`;
+  }
+  function streets() {
+    const house = (x, y, col) => `<rect x="${x}" y="${y}" width="34" height="26" fill="#efe7d6" stroke="#2a2620" stroke-width="1.5"/><path d="M${x - 3} ${y} L${x + 17} ${y - 16} L${x + 37} ${y}Z" fill="${col}" stroke="#2a2620" stroke-width="1.5"/><rect x="${x + 13}" y="${y + 12}" width="8" height="14" fill="#2a2620"/>`;
+    let s = '';
+    [OWN, OWN, OWN, OWN].forEach((c, i) => s += house(10 + i * 40, 52, c));
+    [OWN, OTH, OWN, OTH].forEach((c, i) => s += house(196 + i * 40, 52, c));
+    s += `<rect x="4" y="92" width="164" height="12" rx="3" fill="#7fb3c9"/><rect x="190" y="92" width="164" height="12" rx="3" fill="#8a6a45"/>`;
+    s += [205, 232, 251, 280, 300, 330].map((x, i) => `<circle cx="${x}" cy="${97 + (i % 2) * 2}" r="${4 + (i % 3)}" fill="#5a4630"/>`).join('');
+    s += `<text x="86" y="130" font-size="15" text-anchor="middle" fill="#2a2620" font-weight="700">Same group</text><text x="86" y="148" font-size="13" text-anchor="middle" fill="#6e675c">drain clear</text>`;
+    s += `<text x="272" y="130" font-size="15" text-anchor="middle" fill="#2a2620" font-weight="700">Mixed</text><text x="272" y="148" font-size="13" text-anchor="middle" fill="#6e675c">drain blocked</text>`;
+    $('streets').innerHTML = s;
+  }
+  streets();
+
+  // ---- lab ----
+  function renderLab() {
+    const left = MECH.CONFIG.budget - g.run.length;
+    $('budget').innerHTML = Array.from({ length: MECH.CONFIG.budget }, (_, i) => `<span class="tok ${i < g.run.length ? 'spent' : ''}"></span>`).join('') + `<span>&nbsp;${left} test${left === 1 ? '' : 's'} left</span>`;
+    $('suspects').innerHTML = MECH.SUSPECTS.map((s, i) => `<div class="sus"><div class="n">${i + 1}</div><div><div class="t">${s.name}</div><div class="c">${s.line}</div></div></div>`).join('');
+    $('tests').innerHTML = MECH.TESTS.map(t => {
+      const done = g.run.includes(t.id);
+      return `<button class="tcard ${done ? 'done' : ''}" data-test="${t.id}" ${!done && left === 0 ? 'disabled' : ''}><span class="t">${t.name}</span><span class="c">${done ? '✓ ' + first(t.say) : first(t.what)}</span></button>`;
+    }).join('');
+    $('tests-h').textContent = left ? 'Pick a test' : 'Your tests';
+    $('lab-orient').textContent = left ? 'Each test is one of the study\'s games, played with people from the same group and from different groups. Which tests would tell these suspects apart?' : 'No tests left. Tap a finished test to look at it again, or make your calls.';
+    $('b-tocall').textContent = left ? 'Make your calls now' : 'Make your calls';
+    $('b-tocall').className = left ? '' : 'primary';
+    document.querySelectorAll('[data-test]').forEach(b => b.onclick = () => openTest(b.dataset.test));
+  }
+
+  // ---- test ----
+  function openTest(id) {
+    const t = MECH.testById(id); cur = t;
+    $('t-name').textContent = t.name; $('pib').innerHTML = pib(t.pib); $('t-what').textContent = t.what; $('t-legend').style.display = t.fmt === 'dots' ? 'none' : ''; $('t-betq').textContent = t.bet;
+    const done = g.run.includes(id);
+    $('t-bet').style.display = done ? 'none' : ''; $('t-out').style.display = done ? '' : 'none';
+    if (done) showResult(t, null);
+    show('s-test');
+  }
+  function showResult(t, betRight) {
+    $('t-bet').style.display = 'none'; $('t-out').style.display = '';
+    $('t-hit').textContent = betRight === null ? '' : betRight ? 'Your hunch was right.' : 'Not what you expected.';
+    $('t-hit').className = 'hit ' + (betRight === null ? '' : betRight ? 'ok' : 'no');
+    $('t-unit').textContent = t.fmt === 'dots' ? '' : 'Measured: ' + t.unit + '.';
+    if (t.fmt === 'dots') {
+      const W = 320, x = p => 20 + p * (W - 40);
+      $('t-race').innerHTML = `<svg viewBox="0 0 ${W} 120" width="100%"><rect x="20" y="30" width="${x(0.05) - 20}" height="40" fill="#e9c9bf"/>
+        <line x1="20" y1="70" x2="${W - 20}" y2="70" stroke="#2a2620" stroke-width="2"/>
+        ${t.dots.map((p, i) => `<circle class="dot" cx="${x(p)}" cy="${58 - (i % 2) * 16}" r="9" fill="#2a2620" opacity="0" style="transition:opacity .4s ${0.25 * i}s"/>`).join('')}
+        <text x="20" y="90" font-size="12" fill="#a8392a">groups</text><text x="20" y="104" font-size="12" fill="#a8392a">really differ</text>
+        <text x="${W - 20}" y="90" font-size="12" text-anchor="end" fill="#6e675c">differences no bigger</text><text x="${W - 20}" y="104" font-size="12" text-anchor="end" fill="#6e675c">than chance makes</text>
+        <text x="20" y="20" font-size="12" fill="#6e675c">each dot = one question</text></svg>`;
+      requestAnimationFrame(() => requestAnimationFrame(() => document.querySelectorAll('.dot').forEach(d => d.setAttribute('opacity', 1))));
+    } else {
+      const max = Math.max(...t.rows.flatMap(r => [r.own, r.other])) * 1.08;
+      $('t-race').innerHTML = t.rows.map(r => `<div class="lbl"><span>${r.label}</span><span class="tag ${r.clear}">${TAG[r.clear]}</span></div>
+        <div class="bar own"><div class="f" data-w="${100 * r.own / max}"></div><span class="v">${fmtV(t, r.own)} <small>· own group</small></span></div>
+        <div class="bar other"><div class="f" data-w="${100 * r.other / max}"></div><span class="v">${fmtV(t, r.other)} <small>· other group</small></span></div>
+        ${r.note ? `<div class="note">${r.note}</div>` : ''}`).join('');
+      requestAnimationFrame(() => requestAnimationFrame(() => document.querySelectorAll('#t-race .f').forEach(f => f.style.width = f.dataset.w + '%')));
+    }
+    $('t-say').textContent = t.say;
+    $('t-src').textContent = 'Source: ' + t.src + (t.rows && t.rows.some(r => r.gap !== undefined) && t.fmt === 'ush' ? '. Bars are placed around the reported average; the gap between them is the study\'s.' : '.');
+  }
+  document.querySelectorAll('[data-bet]').forEach(b => b.onclick = () => {
+    const r = MECH.runTest(g, cur.id, b.dataset.bet === 'yes');
+    if (r) showResult(r.test, r.betRight);
+  });
+  $('b-back').onclick = () => { renderLab(); show('s-lab'); };
+
+  // ---- calls ----
+  const CALLS = [['guilty', 'Guilty'], ['not', 'Not guilty'], ['cant', 'Can\'t tell']];
+  function renderCalls() {
+    $('notebook').innerHTML = '<h2>Your notebook</h2>' + (g.run.length ? g.run.map(id => `<div class="nb"><b>${MECH.testById(id).short}:</b> ${first(MECH.testById(id).say)}</div>`).join('') : '<p class="muted">You ran no tests. Every call will be a guess.</p>');
+    $('calls').innerHTML = '<h2>Call each suspect</h2>' + MECH.SUSPECTS.map((s, i) => `<div class="callrow"><div class="t">${i + 1}. ${s.name}</div><div class="seg">${CALLS.map(([v, l]) => `<button data-s="${s.id}" data-v="${v}" class="${g.calls[s.id] === v ? 'sel' : ''}">${l}</button>`).join('')}</div></div>`).join('');
+    document.querySelectorAll('[data-s]').forEach(b => b.onclick = () => { MECH.call(g, b.dataset.s, b.dataset.v); renderCalls(); });
+    $('b-morelab').style.display = g.run.length < MECH.CONFIG.budget ? '' : 'none';
+    const n = Object.keys(g.calls).length;
+    $('b-reveal').disabled = n < 5; $('b-reveal').textContent = n < 5 ? `Call all five (${n}/5)` : 'Reveal';
+  }
+  $('b-tocall').onclick = () => { renderCalls(); show('s-call'); };
+  $('b-morelab').onclick = () => { renderLab(); show('s-lab'); };
+  $('b-reveal').onclick = () => {
+    const sc = MECH.score(g);
+    const word = { guilty: 'Guilty', not: 'Not guilty', cant: 'Can\'t tell' };
+    $('verdict').innerHTML = `<div class="you">You proved ${sc.proven} of 5 calls.</div>
+      <div class="paper">The study's answer: people were <b>not</b> kinder to their own. When nobody could see them, they shared equally. Once they were seen, the stingiest gave their own group much more — and their own group could find them.</div>
+      <div class="means">So mixing need not fail. What holds a street together is believing you are seen — by people who can find you.</div>
+      ${sc.proven < 5 ? `<div class="muted">${sc.proven < 5 && !g.run.includes('dgHidden') ? 'The key test is "Giver hidden": without it, nobody can tell kindness from being watched.' : 'One plan of five tests proves all five calls. Can you find it?'}</div>` : ''}`;
+    $('judged').innerHTML = sc.per.map(p => {
+      const s = MECH.SUSPECTS.find(x => x.id === p.suspect);
+      return `<div class="judg ${p.proven ? 'proven' : p.right ? '' : 'wrong'}"><div class="t">${p.proven ? '✓' : p.right ? '○' : '✗'} ${s.name}</div>
+        <div class="m">You: ${word[p.call]} · Study: ${p.verdict.split('.')[0]}</div><div>${p.why}</div><div class="m">${p.verdict.split('. ').slice(1).join('. ')}</div></div>`;
+    }).join('');
+    show('s-end');
+  };
+  $('b-again').onclick = () => { g = MECH.newGame(); renderLab(); show('s-lab'); };
+
+  // ---- navigation ----
+  $('b-start').onclick = () => { renderLab(); show('s-lab'); };
+  const openHelp = () => { helpFrom = screenNow(); show('s-help'); };
+  $('b-help1').onclick = openHelp; document.querySelectorAll('[data-help]').forEach(b => b.onclick = openHelp);
+  $('b-help-back').onclick = () => show(helpFrom);
+  const openAbout = () => { aboutFrom = screenNow(); show('s-about'); };
+  $('b-about1').onclick = openAbout; $('b-about2').onclick = openAbout;
+  $('b-about-back').onclick = () => show(aboutFrom);
+})();
+</script>
+</body>
+</html>

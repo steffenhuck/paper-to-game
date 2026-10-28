@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Mixed Street</title>
+<style>
+  :root { --paper:#f4efe4; --card:#fffcf5; --ink:#2a2620; --dim:#6e675c; --line:#d9d0bf; --own:#17766f; --other:#c47f12;
+          --earth:#b5653c; --ok:#2f6b3a; --no:#a8392a; --grey:#a39d92; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size:16px; line-height:1.45; }
+  .screen { display:none; max-width:560px; margin:0 auto; padding:24px 16px 40px; }
+  .screen.on { display:block; }
+  h1 { font-size:34px; line-height:1.1; margin:14px 0 6px; letter-spacing:-.01em; }
+  h2 { font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); margin:16px 0 6px; font-weight:600; }
+  h3 { font-size:20px; margin:6px 0; line-height:1.2; }
+  p { margin:8px 0; }
+  .lede { font-size:18px; }
+  .aim { font-size:18px; font-weight:600; margin:14px 0; padding:10px 0; border-top:2px solid var(--ink); border-bottom:2px solid var(--ink); }
+  .aimbar { font-size:13px; color:var(--dim); margin:0 0 6px; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; }
+  button { font:inherit; font-size:16px; background:var(--card); color:var(--ink); border:2px solid var(--ink); border-radius:10px; padding:12px 14px; min-height:48px; cursor:pointer; flex:1; }
+  button.primary { background:var(--ink); color:var(--paper); }
+  button:disabled { opacity:.4; cursor:default; }
+  button.q { flex:0 0 auto; width:40px; min-height:40px; height:40px; padding:0; border-radius:50%; font-weight:700; color:var(--dim); border-color:var(--dim); }
+  .hud { display:flex; justify-content:space-between; align-items:center; gap:8px; margin:2px 0 8px; }
+  .budget { display:flex; gap:6px; align-items:center; font-size:14px; color:var(--dim); }
+  .tok { width:20px; height:20px; border-radius:50%; background:var(--earth); border:2px solid var(--earth); }
+  .tok.spent { background:transparent; border-color:var(--line); }
+  .orient { font-size:14px; color:var(--dim); margin:6px 0 8px; }
+  .sus { display:flex; gap:10px; align-items:flex-start; padding:6px 10px; border:2px solid var(--line); border-radius:10px; background:var(--card); margin:6px 0; }
+  .sus .n { flex:0 0 26px; height:26px; border-radius:50%; background:var(--ink); color:var(--paper); font-weight:700; text-align:center; line-height:26px; font-size:14px; }
+  .sus .t { font-weight:700; }
+  .sus .c { font-size:13px; color:var(--dim); line-height:1.3; }
+  .tests { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .tcard { text-align:left; padding:10px; border-radius:10px; border:2px solid var(--ink); background:var(--card); min-height:84px; display:flex; flex-direction:column; justify-content:flex-start; }
+  .tcard .t { font-weight:700; font-size:15px; line-height:1.2; }
+  .tcard .c { font-size:13px; color:var(--dim); line-height:1.3; margin-top:4px; }
+  .tcard.done { border-color:var(--line); background:#efe8da; }
+  .tcard.done .c { color:var(--ink); }
+  .pib { display:block; margin:6px auto; width:100%; max-width:360px; }
+  .betq { font-size:19px; font-weight:700; margin:12px 0 8px; }
+  .legend { font-size:14px; display:flex; gap:16px; margin:6px 0; flex-wrap:wrap; }
+  .legend i { display:inline-block; width:14px; height:14px; border-radius:3px; margin-right:5px; vertical-align:-2px; }
+  .race { margin:10px 0 4px; }
+  .race .lbl { font-weight:700; font-size:15px; margin:10px 0 4px; display:flex; justify-content:space-between; gap:8px; }
+  .race .tag { font-size:12px; font-weight:700; padding:2px 8px; border-radius:10px; white-space:nowrap; }
+  .tag.clear { background:var(--ink); color:var(--paper); } .tag.weak { background:var(--line); } .tag.chance { background:transparent; border:1px solid var(--dim); color:var(--dim); }
+  .bar { position:relative; height:40px; margin:4px 0; background:#ebe3d3; border-radius:6px; overflow:hidden; }
+  .bar .f { position:absolute; left:0; top:0; bottom:0; width:0; border-radius:6px; transition:width 1.1s cubic-bezier(.2,.8,.2,1); }
+  .bar .v { position:absolute; left:6px; top:6px; line-height:28px; padding:0 8px; border-radius:6px; background:rgba(30,26,20,.55); font-weight:800; color:#fff; font-size:16px; white-space:nowrap; }
+  .bar .v small { font-weight:600; font-size:13px; }
+  .bar.own .f { background:var(--own); } .bar.other .f { background:var(--other); }
+  .note { font-size:13px; color:var(--dim); }
+  .say { font-size:17px; margin:12px 0 6px; padding:10px 12px; background:var(--card); border-left:5px solid var(--ink); border-radius:6px; }
+  .hit { font-weight:700; margin:6px 0; } .hit.ok { color:var(--ok); } .hit.no { color:var(--no); }
+  .fade { animation: fade .4s ease-out; }
+  @keyframes fade { from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
+  .callrow { padding:10px; border:2px solid var(--line); border-radius:10px; background:var(--card); margin:8px 0; }
+  .callrow .t { font-weight:700; margin-bottom:6px; }
+  .seg { display:flex; gap:6px; }
+  .seg button { min-height:44px; padding:8px 4px; font-size:14px; border-width:2px; border-color:var(--line); }
+  .seg button.sel { border-color:var(--ink); background:var(--ink); color:var(--paper); }
+  .nb { font-size:14px; margin:4px 0; padding:6px 10px; background:var(--card); border-radius:8px; border:1px solid var(--line); }
+  .verdict div { margin:10px 0; }
+  .verdict .you { font-size:26px; font-weight:800; line-height:1.2; }
+  .verdict .paper { font-size:18px; }
+  .verdict .means { font-size:18px; font-style:italic; }
+  .judg { padding:10px; border-radius:10px; margin:8px 0; background:var(--card); border-left:6px solid var(--line); font-size:15px; }
+  .judg.proven { border-left-color:var(--ok); } .judg.wrong { border-left-color:var(--no); }
+  .judg .t { font-weight:700; font-size:16px; }
+  .judg .m { color:var(--dim); font-size:13px; }
+  .about p, .about li { font-size:15px; }
+  .about h3 { font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:var(--dim); margin:18px 0 4px; }
+  .attr { font-size:13px; color:var(--dim); margin-top:18px; border-top:1px solid var(--line); padding-top:8px; }
+  .muted { color:var(--dim); font-size:14px; }
+  a { color:var(--own); }
+</style>
+</head>
+<body>
+
+<!-- START -->
+<section class="screen on" id="s-start">
+  <svg viewBox="0 0 360 190" width="100%" aria-hidden="true" id="streets"></svg>
+  <h1>The Mixed Street</h1>
+  <p class="lede">In a poor part of Kampala, streets where neighbours share a background keep their drains clear. Mixed streets often don't. Why?</p>
+  <div class="aim" id="aim-start"></div>
+  <p class="muted">About five minutes. You play the researcher. Every result is from a 2007 study in which 300 neighbours played money games.</p>
+  <div class="row"><button class="primary" id="b-start">Start</button></div>
+  <div class="row" style="margin-top:10px"><button id="b-help1">How to play</button><button id="b-about1">About the paper</button></div>
+</section>
+
+<!-- LAB -->
+<section class="screen" id="s-lab">
+  <div class="aimbar" id="aim-lab"></div>
+  <div class="hud"><div class="budget" id="budget"></div><button class="q" data-help>?</button></div>
+  <h2>The five suspects</h2>
+  <div id="suspects"></div>
+  <h2 id="tests-h">Pick a test</h2>
+  <p class="orient" id="lab-orient">Each test is one of the study's games, played with people from the same group and from different groups. Which tests would tell these suspects apart?</p>
+  <div class="tests" id="tests"></div>
+  <div class="row" style="margin-top:14px"><button class="primary" id="b-tocall">Make your calls</button></div>
+</section>
+
+<!-- TEST -->
+<section class="screen" id="s-test">
+  <div class="hud"><h2 id="t-name" style="margin:0"></h2><button class="q" data-help>?</button></div>
+  <svg class="pib" id="pib" viewBox="0 0 360 130"></svg>
+  <div class="legend" id="t-legend"><span><i style="background:var(--own)"></i>the player's own group</span><span><i style="background:var(--other)"></i>another group</span></div>
+  <p id="t-what"></p>
+  <div id="t-bet">
+    <div class="betq" id="t-betq"></div>
+    <p class="orient">Your hunch first. Then the study's result.</p>
+    <div class="row"><button data-bet="yes">Yes</button><button data-bet="no">No real difference</button></div>
+  </div>
+  <div id="t-out" style="display:none">
+    <div class="hit" id="t-hit"></div>
+    <div class="note" id="t-unit"></div>
+    <div class="race" id="t-race"></div>
+    <div class="say fade" id="t-say"></div>
+    <p class="note" id="t-src"></p>
+    <div class="row"><button class="primary" id="b-back">Back to the lab</button></div>
+  </div>
+</section>
+
+<!-- CALL -->
+<section class="screen" id="s-call">
+  <div class="hud"><h2 style="margin:0">Your calls</h2><button class="q" data-help>?</button></div>
+  <p class="orient">For each suspect: is it part of why mixed streets fail? A call counts as <b>proven</b> only if it matches the study and one of your tests backs it.</p>
+  <div id="notebook"></div>
+  <div id="calls"></div>
+  <div class="row" style="margin-top:12px"><button id="b-morelab">Back to the lab</button><button class="primary" id="b-reveal">Reveal</button></div>
+</section>
+
+<!-- END -->
+<section class="screen" id="s-end">
+  <div class="verdict" id="verdict"></div>
+  <h2>Suspect by suspect</h2>
+  <div id="judged"></div>
+  <div class="row" style="margin-top:14px"><button class="primary" id="b-again">Play again</button><button id="b-about2">About the paper</button></div>
+  <p class="attr" id="attr2"></p>
+</section>
+
+<!-- HELP -->
+<section class="screen" id="s-help">
+  <h2>How to play</h2>
+  <div class="aim" id="aim-help"></div>
+  <p><b>The setting.</b> Mulago-Kyebando is a poor, mixed neighbourhood of Kampala, Uganda. Drains, rubbish collection and night patrols there depend on neighbours chipping in. Streets where most people come from one ethnic group do better than mixed ones. In 2005 a team of researchers set out to find why.</p>
+  <p><b>The suspects.</b> Five possible reasons, each one a serious idea in the research: groups want different things; people are kinder to their own; same-group teams work better; people can find their own group; people are watched by their own group and punished if they don't help.</p>
+  <p><b>The tests.</b> Seven games that the study ran with 300 randomly chosen neighbours. Sometimes the players came from the same group, sometimes not. Teal always means the player's own group, ochre another group. You can afford <b>five</b> tests. Before each result you give your hunch. Hunches don't count towards your score; they just make you commit.</p>
+  <p><b>Reading a result.</b> Two bars: what happened with the player's own group, and with another group. A tag says whether the study found a <b>clear difference</b>, a <b>weak</b> one, or one that <b>could be chance</b>. "The stingiest 40%" are the players who kept everything they could in a separate game. The study looked at them separately because they are the ones a street most needs to win over.</p>
+  <p><b>The calls.</b> When you're done, call each suspect: guilty, not guilty, or can't tell. You can go back to the lab while tests are left.</p>
+  <p><b>The yardstick.</b> Proven calls, out of 5. A call is proven if it matches the study's conclusion <i>and</i> a test you ran backs it. A right guess with no test behind it doesn't count.</p>
+  <p><b>What it shows.</b> How a well-designed comparison separates explanations that all predict the same thing: mixed streets doing worse.</p>
+  <div class="row"><button class="primary" id="b-help-back">Back</button></div>
+</section>
+
+<!-- ABOUT -->
+<section class="screen about" id="s-about">
+  <h2>About the paper</h2>
+  <p><b>Habyarimana, J., Humphreys, M., Posner, D. N. &amp; Weinstein, J. M. (2007).</b> Why Does Ethnic Diversity Undermine Public Goods Provision? <i>American Political Science Review</i> 101(4): 709–725. <a href="https://doi.org/10.1017/S0003055407070499">doi:10.1017/S0003055407070499</a></p>
+  
+<h3>Fidelity: statistical, from reported estimates only</h3>
+<p>Nothing in this game is simulated and nothing is random. Every bar shows a number the paper reports, or one computed directly from its tables. Where the paper reports only the gap between same-group and mixed play (the dictator and prisoners'-dilemma games), the two bars are placed symmetrically around the reported average; the gap is the paper's, the exact heights are ours.</p>
+<p><b>It demonstrates</b> the paper's pattern of results and the logic of its design: which game separates which explanation from which. <b>It assumes</b> our plain-words versions of the five mechanisms, our five-test budget and our rule for which tests "back" which verdict (taken from the paper's own use of each game). <b>The paper establishes</b> how 300 randomly sampled residents of Mulago-Kyebando played these games with co-ethnics and non-co-ethnics, and argues from that to why diverse communities provide fewer public goods. The games do not measure drains or patrols; that link is the paper's argument.</p>
+<h3>What the paper hands over</h3>
+<p>Estimates from a field lab in Kampala, and a taxonomy. Three families of mechanisms, five in all: <b>preferences</b> (commonality of tastes; other-regarding preferences, i.e. altruism towards one's own), <b>technology</b> (efficacy, i.e. working well together; findability, i.e. being reachable through social networks) and <b>strategy selection</b> (a norm of reciprocity among co-ethnics, enforced by sanctioning). Each game isolates one of them. Players were told only their partners' photos; co-ethnicity here is the paper's "benchmark" coding, from self-reported group.</p>
+<h3>The discovery</h3>
+<p>Identification. All five mechanisms predict the same thing: mixed communities do worse. The paper's design tells them apart. When the giver in a dictator game is anonymous, co-ethnics get no more (Tables 2–3): no in-group altruism. When the giver is seen, the "egoists" (the 40% who kept the larger share in every round of a separate game) give co-ethnics 36 USh more of a 1,000 USh pot (Table 6); a third-party enforcer erases the co-ethnic edge in cooperation and punishes co-ethnic defectors more often (Table 9). Co-ethnics find each other more often (Table 5). Tastes do not differ by group (Table 1), and co-ethnic teams are not clearly more productive (Table 4).</p>
+<h3>The game</h3>
+<p>You are the researcher with a budget of five of the paper's seven games. Each result is the paper's. At the end you call each mechanism; a call counts as proven only if it matches the paper's conclusion and you ran a game that backs it. The scoring is ours. One plan proves all five; it is the paper's own set of tests. The prisoners'-dilemma pair is a second route to the sanctioning verdict, but it cannot clear altruism on its own, because the paper uses the anonymous dictator game for that.</p>
+<h3>What is cut</h3>
+<p>Region-based and subjective (perceived) co-ethnicity, which give similar or stronger results (for example, with perceived co-ethnicity seen egoists give 52 USh more instead of 36); the 500 USh "discrimination" variant of the dictator game (anonymous: no favouritism; seen: the co-ethnic is favoured 12 points more often); the lockbox game (mentioned in the puzzle result); group-by-group survey estimates; all regression controls and fixed effects.</p>
+<h3>Divergences</h3>
+<p>Per-type averages in the coin games are derived from the reported overall average and the egoist coefficient. The prisoners'-dilemma gaps use the paper's subjective co-ethnicity, the only coding it reports for that game. The paper's verdict on teamwork is "only weak evidence", so "not guilty" and "can't tell" both count as right. "Watched by their own" and "Easier to find" are both called guilty: the paper names the first as the main mechanism and reads the second as what makes sanctioning possible.</p>
+<h3>For the author</h3>
+<p>See the author note in the repository. This game has had the builder's review only; it has not been tested with real players.</p>
+
+  <p class="attr">Game built from this paper; the paper is the authority where the two disagree.</p>
+  <div class="row"><button class="primary" id="b-about-back">Back</button></div>
+</section>
+
+<script>
+// The Mixed Street — mechanism. Single source of truth: every number the game shows and every rule
+// that decides an outcome lives here. Runs unchanged in Node (fidelity.js) and in the page.
+// Source: Habyarimana, Humphreys, Posner & Weinstein (2007), APSR 101(4): 709–725.
+// Co-ethnicity is the paper's "benchmark, ethnicity" coding unless a line says otherwise.
+// No random draws: every result is a reported estimate.
+
+const CONFIG = {
+  // ---- Gameplay -----------------------------------------------------------------------------
+  budget: 5,                       // our choice: five of seven tests, so the plan matters
+  egoistShare: 0.40,               // p. 715: 124 egoists of 306 classified (40%)
+
+  // ---- Dictator game, 1,000 USh in 100 USh coins, giver hidden (Table 2; text p. 717) ---------
+  dgHiddenAvg: 230,                // p. 717: average allocated to each partner, 100 USh game
+  dgHiddenEgoist: -99,             // Table 2, col. 1, "Egoist": egoists give ~100 USh less
+  dgHiddenGap: -11,                // Table 2, col. 1, "In-group member" (SE 11.20, n.s.)
+  dgHiddenGapEgoistX: 1,           // Table 2, col. 1, "Egoist & In-group member" (SE 16.41, n.s.)
+  dgHiddenDiscrim: -0.03,          // Table 3, col. 1: 500 USh game, favouring the co-ethnic (n.s.)
+
+  // ---- Dictator game, giver seen (Table 6; text p. 720) ----------------------------------------
+  dgSeenAvg: 226,                  // p. 720: average allocated to each partner, 100 USh game
+  dgSeenEgoist: -106,              // Table 6, col. 1, "Egoist"
+  dgSeenGap: -19,                  // Table 6, col. 1, "In-group member" (SE 11.03, *; paper: "small and statistically weak")
+  dgSeenGapEgoistX: 55,            // Table 6, col. 1, "Egoist & In-group member" (SE 16.99, ***)
+  dgSeenGapEgoistXSubj: 88,        // Table 6, col. 3: same, subjective coding
+  dgSeenDiscrim: 0.12,             // Table 7, col. 1: 500 USh game, favouring the co-ethnic (*); subjective 0.29 (**)
+
+  // ---- Puzzle game (Table 4; text p. 718–719) -----------------------------------------------
+  puzzleCo: 0.48,                  // Table 4, ethnicity, co-ethnic pairs (n = 73)
+  puzzleNon: 0.38,                 // Table 4, ethnicity, non-co-ethnic pairs (n = 271); diff 0.10 (SE 0.07, n.s.)
+  lockboxRate: 0.60,               // p. 719: lockbox game "around 60%", no co-ethnic difference
+
+  // ---- Network game: find a stranger in the parish (Table 5) --------------------------------
+  networkCo: 0.43,                 // Table 5, ethnicity, co-ethnic target (n = 51)
+  networkNon: 0.28,                // Table 5, ethnicity, other target (n = 97); diff 0.15 (SE 0.08, *; text: "significantly higher")
+
+  // ---- Prisoners' dilemma, no enforcer (Table 9) --------------------------------------------
+  pdNonegoist: 0.61, pdEgoist: 0.50,       // Table 9 row 1, cols. 1–2: cooperation rate
+  pdGapNonegoist: 0.11, pdGapEgoist: 0.29, // Table 9 row 2: marginal effect of subjective co-ethnicity (n.s.; ***)
+  // ---- Prisoners' dilemma with a third-party enforcer (Table 9; text p. 723) ----------------
+  pdEnfNonegoist: 0.64, pdEnfEgoist: 0.60,      // Table 9 row 3
+  pdEnfGapNonegoist: -0.00, pdEnfGapEgoist: -0.02, // Table 9 row 4 (both n.s.)
+  punishHomog: 0.58, punishMixed: 0.35,         // p. 723: nonegoist enforcers punish a defector in an all-co-ethnic vs mixed trio (p = .01)
+
+  // ---- Taste survey (Table 1) ---------------------------------------------------------------
+  tasteP: [0.25, 0.70, 0.67, 0.88, 0.35, 0.41], // Table 1, F-test p-values, six questions
+  tasteR2Max: 0.01,                             // Table 1, largest adjusted R-squared
+};
+
+// The five suspects: the paper's five mechanisms (pp. 710–711), in plain words.
+const SUSPECTS = [
+  { id: 'tastes', name: 'Different tastes', line: 'Each group wants different things fixed, so they can\'t agree.', paper: 'Preferences: commonality of tastes' },
+  { id: 'kind', name: 'Kinder to their own', line: 'People care more about their own group, so they give more when their own benefit.', paper: 'Preferences: other-regarding preferences' },
+  { id: 'team', name: 'Better teamwork', line: 'Same language and habits make it easier to work together.', paper: 'Technology: efficacy' },
+  { id: 'find', name: 'Easier to find', line: 'People know where their own group lives, so a shirker can be tracked down.', paper: 'Technology: findability' },
+  { id: 'watched', name: 'Watched by their own', line: 'With their own group, people stick to a rule — help out, or be punished — because they will be seen.', paper: 'Strategy selection: social sanctioning' },
+];
+
+// One bar pair: centred on the reported average, split by the reported gap (paper reports gaps, not levels).
+function pair(avg, gap) { return { own: avg + gap / 2, other: avg - gap / 2, gap }; }
+
+// Per-type averages from the overall average and the egoist coefficient: share*(N+ego) + (1-share)*N = avg.
+function typeAverages(avg, egoCoef) {
+  const nonego = avg - CONFIG.egoistShare * egoCoef;
+  return { nonego, ego: nonego + egoCoef };
+}
+
+// The seven tests. Each result row is a bar pair; `clear` is the paper's reading of that row
+// ('clear' = paper treats it as a real difference, 'weak' = paper calls it weak, 'chance' = not distinguishable from zero).
+function buildTests() {
+  const C = CONFIG;
+  const h = typeAverages(C.dgHiddenAvg, C.dgHiddenEgoist), s = typeAverages(C.dgSeenAvg, C.dgSeenEgoist);
+  return [
+    { id: 'dgHidden', name: 'Share the coins — giver hidden', short: 'Giver hidden',
+      what: 'A giver splits 1,000 shillings between themself and two people whose photos they see — one from their own group, one not. Nobody can see who the giver is.',
+      pib: 'hidden', unit: 'shillings given', fmt: 'ush', src: 'Table 2',
+      rows: [
+        { label: 'Most givers', ...pair(h.nonego, C.dgHiddenGap), clear: 'chance' },
+        { label: 'The stingiest 40%', ...pair(h.ego, C.dgHiddenGap + C.dgHiddenGapEgoistX), clear: 'chance' }],
+      headline: 1, betYes: false, bet: 'Will givers hand their own group more?',
+      say: 'No favouritism. Hidden givers treat both partners the same — the stingy ones too.' },
+    { id: 'dgSeen', name: 'Share the coins — giver seen', short: 'Giver seen',
+      what: 'The same game, but now the giver\'s photo is shown to both partners. They know who gave what.',
+      pib: 'seen', unit: 'shillings given', fmt: 'ush', src: 'Table 6',
+      rows: [
+        { label: 'Most givers', ...pair(s.nonego, C.dgSeenGap), clear: 'weak' },
+        { label: 'The stingiest 40%', ...pair(s.ego, C.dgSeenGap + C.dgSeenGapEgoistX), clear: 'clear' }],
+      headline: 1, betYes: true, bet: 'Will givers hand their own group more?',
+      say: 'Once they are seen, the stingiest givers favour their own group — by 36 shillings. Most givers don\'t.' },
+    { id: 'survey', name: 'Ask what to fix first', short: 'Survey',
+      what: 'Everyone is asked six questions: drains, rubbish or security first? Pay fees or volunteer? Do answers differ by group?',
+      pib: 'none', unit: 'how surprising each group difference is', fmt: 'dots', src: 'Table 1',
+      dots: C.tasteP, headline: null, betYes: false, bet: 'Will the groups want different things?',
+      say: 'All six questions: group differences no bigger than chance would make. Groups want the same things.' },
+    { id: 'puzzle', name: 'Solve a puzzle in pairs', short: 'Puzzle',
+      what: 'Two people each hold two pieces of a four-piece puzzle behind a low wall. They must talk it through to fit it together.',
+      pib: 'pair', unit: 'pairs that solved it', fmt: 'pct', src: 'Table 4',
+      rows: [{ label: 'Pairs solving it', own: C.puzzleCo, other: C.puzzleNon, gap: C.puzzleCo - C.puzzleNon, clear: 'chance' }],
+      headline: 0, betYes: false, bet: 'Will same-group pairs clearly do better?',
+      say: 'Same-group pairs did a little better, but a gap this size could be chance. A second test (talking a partner through a lock) showed no difference at all.' },
+    { id: 'network', name: 'Find a stranger', short: 'Find someone',
+      what: 'A runner gets a photo and a name and has a day to find that person somewhere in the neighbourhood.',
+      pib: 'pair', unit: 'runners who found their target', fmt: 'pct', src: 'Table 5',
+      rows: [{ label: 'Targets found', own: C.networkCo, other: C.networkNon, gap: C.networkCo - C.networkNon, clear: 'clear' }],
+      headline: 0, betYes: true, bet: 'Will runners find their own group more often?',
+      say: 'Runners found people from their own group far more often: 43 in 100 against 28 in 100.' },
+    { id: 'pd', name: 'Pool money or keep it', short: 'Pool or keep',
+      what: 'Two players each choose: keep 1,000 shillings, or put it in a pot that grows by half and is split between them. Each sees the other\'s photo.',
+      pib: 'pair', unit: 'players who pooled', fmt: 'pct', src: 'Table 9',
+      rows: [
+        { label: 'Most players', ...pair(C.pdNonegoist, C.pdGapNonegoist), clear: 'chance' },
+        { label: 'The stingiest 40%', ...pair(C.pdEgoist, C.pdGapEgoist), clear: 'clear' }],
+      headline: 1, betYes: true, bet: 'Will players pool more often with their own group?',
+      say: 'With their own group, the stingy pool far more often: 29 more in 100. Kindness, or fear of being punished? This test alone can\'t say.' },
+    { id: 'pdEnf', name: 'Pool or keep — with a referee', short: 'With a referee',
+      what: 'The same game, plus a referee who watches and can pay to wipe out a cheat\'s earnings.',
+      pib: 'ref', unit: 'players who pooled · referees who punished', fmt: 'pct', src: 'Table 9; p. 723',
+      rows: [
+        { label: 'Most players', ...pair(C.pdEnfNonegoist, C.pdEnfGapNonegoist), clear: 'chance' },
+        { label: 'The stingiest 40%', ...pair(C.pdEnfEgoist, C.pdEnfGapEgoist), clear: 'chance' },
+        { label: 'Referees punishing a cheat', own: C.punishHomog, other: C.punishMixed, gap: C.punishHomog - C.punishMixed, clear: 'clear', note: 'own group = all three from one group' }],
+      headline: 1, betYes: false, bet: 'With a referee watching, will players still pool more with their own group?',
+      say: 'With a referee, everyone pools about equally — the own-group edge vanishes. And referees punish a cheat from their own group far more often.' },
+  ];
+}
+const TESTS = buildTests();
+const testById = id => TESTS.find(t => t.id === id);
+
+// What the paper concludes about each suspect, which calls it accepts, and which tests back them.
+// A call is proven only if it is accepted AND one of the `backedBy` sets was run in full.
+const RULES = {
+  tastes: { paper: 'not', accept: ['not'], backedBy: [['survey']], src: 'Table 1',
+    verdict: 'Not guilty. Groups ranked drains, rubbish and security the same way.' },
+  kind: { paper: 'not', accept: ['not'], backedBy: [['dgHidden']], src: 'Tables 2–3',
+    verdict: 'Not guilty. Hidden givers gave their own group no more than anyone else.' },
+  team: { paper: 'not', accept: ['not', 'cant'], backedBy: [['puzzle']], src: 'Table 4; p. 719',
+    verdict: 'Not shown. Same-group pairs did a little better at the puzzle, but no more than chance could explain. "Can\'t tell" counts too.' },
+  find: { paper: 'guilty', accept: ['guilty'], backedBy: [['network']], src: 'Table 5',
+    verdict: 'Guilty. People found strangers from their own group far more often — so a shirker from your own group can be tracked down.' },
+  watched: { paper: 'guilty', accept: ['guilty'], backedBy: [['dgHidden', 'dgSeen'], ['pd', 'pdEnf']], src: 'Tables 6–9',
+    verdict: 'Guilty — the main culprit. The stingy favour their own only when seen; a referee erases the own-group edge; referees punish their own group\'s cheats more.' },
+};
+
+const NAMES = { dgHidden: '"Giver hidden"', dgSeen: '"Giver seen"', survey: 'the survey', puzzle: 'the puzzle', network: '"Find a stranger"', pd: '"Pool or keep"', pdEnf: '"With a referee"' };
+const setName = set => set.map(id => NAMES[id]).join(' and ');
+
+// Game state.
+function newGame() { return { run: [], bets: {}, calls: {} }; }
+function canRun(g, id) { return g.run.length < CONFIG.budget && !g.run.includes(id) && !!testById(id); }
+// Run a test: spends one of the budget, records the bet, returns the reported result and whether the bet was right.
+function runTest(g, id, betYes) {
+  if (!canRun(g, id)) return null;
+  g.run.push(id);
+  const t = testById(id);
+  g.bets[id] = betYes;
+  return { test: t, betRight: betYes === t.betYes, left: CONFIG.budget - g.run.length };
+}
+function call(g, suspect, verdict) { if (RULES[suspect] && ['guilty', 'not', 'cant'].includes(verdict)) g.calls[suspect] = verdict; }
+
+// Judge one suspect: right? backed? and the line that explains it.
+function judge(g, sid) {
+  const r = RULES[sid], c = g.calls[sid] || 'cant';
+  const right = r.accept.includes(c);
+  const backed = r.backedBy.some(set => set.every(id => g.run.includes(id)));
+  const proven = right && backed;
+  let why;
+  if (proven) why = 'Proven: right, and backed by ' + setName(r.backedBy.find(set => set.every(id => g.run.includes(id)))) + '.';
+  else if (right) why = 'Right, but not proven: you needed ' + r.backedBy.map(setName).join(', or ') + '.';
+  else if (c === 'cant') why = 'The study could tell. The test that settles it: ' + r.backedBy.map(setName).join(', or ') + '.';
+  else why = 'Wrong call. ' + r.backedBy.map(setName).join(', or ') + ' settles it.';
+  // The paper's identification point: seeing alone cannot separate kindness from being watched.
+  if (sid === 'kind' && c === 'guilty' && g.run.includes('dgSeen') && !g.run.includes('dgHidden'))
+    why = 'Wrong call. "Giver seen" alone can\'t tell kindness from being watched. With the giver hidden, the favouritism disappears — so it isn\'t kindness.';
+  if (sid === 'watched' && right && !backed && (g.run.includes('dgSeen') || g.run.includes('pd')))
+    why = 'Right, but not proven. Favouritism when seen could still be kindness — you needed the hidden version too (' + r.backedBy.map(setName).join(', or ') + ').';
+  return { suspect: sid, call: c, paper: r.paper, right, backed, proven, why, verdict: r.verdict };
+}
+function score(g) {
+  const per = SUSPECTS.map(s => judge(g, s.id));
+  return { per, proven: per.filter(p => p.proven).length, right: per.filter(p => p.right).length,
+    hunches: g.run.filter(id => g.bets[id] === testById(id).betYes).length, of: SUSPECTS.length };
+}
+
+const MECH = { CONFIG, SUSPECTS, TESTS, RULES, typeAverages, pair, newGame, canRun, runTest, call, judge, score, testById };
+if (typeof module !== 'undefined') module.exports = MECH;
+
+</script>
+<script>
+(function () {
+  const $ = id => document.getElementById(id);
+  const AIM = 'Five reasons are suspected. Run five tests, then call each one — and back every call with a test.';
+  const ATTR = 'Habyarimana, Humphreys, Posner &amp; Weinstein (2007), <i>American Political Science Review</i> 101(4): 709–725. doi:10.1017/S0003055407070499. Game built from this paper; the paper is the authority where the two disagree.';
+  ['aim-start', 'aim-lab', 'aim-help'].forEach(id => $(id).textContent = AIM);
+  $('attr2').innerHTML = ATTR;
+  let g = MECH.newGame(), cur = null, helpFrom = 's-start', aboutFrom = 's-start';
+  const show = id => { document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id)); window.scrollTo(0, 0); };
+  const screenNow = () => document.querySelector('.screen.on').id;
+  const fmtV = (t, v) => t.fmt === 'ush' ? Math.round(v) + ' USh' : Math.round(v * 100) + ' in 100';
+  const first = s => { const m = s.match(/^.*?[.?!](\s|$)/); return m ? m[0].trim() : s; };
+  const TAG = { clear: 'clear difference', weak: 'weak difference', chance: 'could be chance' };
+
+  // ---- pictures ----
+  function person(x, y, s, col, hidden, label) {
+    const k = s / 30;
+    if (hidden) return `<g><rect x="${x - 30 * k}" y="${y - 34 * k}" width="${60 * k}" height="${74 * k}" rx="${6 * k}" fill="#d8d2c6"/>
+      <circle cx="${x}" cy="${y - 8 * k}" r="${12 * k}" fill="#b1aa9d"/><path d="M${x - 22 * k} ${y + 34 * k} Q${x - 20 * k} ${y + 8 * k} ${x} ${y + 7 * k} Q${x + 20 * k} ${y + 8 * k} ${x + 22 * k} ${y + 34 * k}Z" fill="#b1aa9d"/>
+      <text x="${x}" y="${y + 56 * k}" font-size="13" text-anchor="middle" fill="#6e675c">${label}</text></g>`;
+    return `<g><rect x="${x - 30 * k}" y="${y - 34 * k}" width="${60 * k}" height="${74 * k}" rx="${6 * k}" fill="#efe7d6"/>
+      <path d="M${x - 22 * k} ${y + 34 * k} Q${x - 20 * k} ${y + 8 * k} ${x} ${y + 7 * k} Q${x + 20 * k} ${y + 8 * k} ${x + 22 * k} ${y + 34 * k}Z" fill="${col}"/>
+      <circle cx="${x}" cy="${y - 8 * k}" r="${12 * k}" fill="#7a4f33"/>
+      <text x="${x}" y="${y + 56 * k}" font-size="13" text-anchor="middle" fill="#2a2620">${label}</text></g>`;
+  }
+  const OWN = '#17766f', OTH = '#c47f12';
+  function pib(kind) {
+    if (kind === 'hidden' || kind === 'seen') return person(70, 50, 30, OWN, false, 'partner') + person(180, 50, 30, OWN, kind === 'hidden', kind === 'hidden' ? 'giver: hidden' : 'giver: seen') + person(290, 50, 30, OTH, false, 'partner');
+    if (kind === 'pair' || kind === 'ref') return person(50, 50, 26, OWN, false, 'same') + person(115, 50, 26, OWN, false, 'group') + person(245, 50, 26, OWN, false, 'mixed') + person(310, 50, 26, OTH, false, 'pair')
+      + (kind === 'ref' ? `<ellipse cx="180" cy="36" rx="20" ry="11" fill="#fffcf5" stroke="#2a2620" stroke-width="2.5"/><circle cx="180" cy="36" r="6" fill="#2a2620"/><text x="180" y="66" font-size="13" text-anchor="middle" fill="#2a2620">referee</text>` : `<text x="180" y="56" font-size="16" text-anchor="middle" fill="#6e675c">vs</text>`);
+    return `<g>${[0, 1, 2, 3, 4, 5].map(i => `<rect x="${60 + i * 42}" y="22" width="32" height="44" rx="4" fill="#fffcf5" stroke="#2a2620" stroke-width="2"/><path d="M${66 + i * 42} 34h20M${66 + i * 42} 44h20M${66 + i * 42} 54h14" stroke="#a39d92" stroke-width="2"/>`).join('')}
+      <text x="180" y="96" font-size="13" text-anchor="middle" fill="#6e675c">six questions, everyone answers</text></g>`;
+  }
+  function streets() {
+    const house = (x, y, col) => `<rect x="${x}" y="${y}" width="34" height="26" fill="#efe7d6" stroke="#2a2620" stroke-width="1.5"/><path d="M${x - 3} ${y} L${x + 17} ${y - 16} L${x + 37} ${y}Z" fill="${col}" stroke="#2a2620" stroke-width="1.5"/><rect x="${x + 13}" y="${y + 12}" width="8" height="14" fill="#2a2620"/>`;
+    let s = '';
+    [OWN, OWN, OWN, OWN].forEach((c, i) => s += house(10 + i * 40, 52, c));
+    [OWN, OTH, OWN, OTH].forEach((c, i) => s += house(196 + i * 40, 52, c));
+    s += `<rect x="4" y="92" width="164" height="12" rx="3" fill="#7fb3c9"/><rect x="190" y="92" width="164" height="12" rx="3" fill="#8a6a45"/>`;
+    s += [205, 232, 251, 280, 300, 330].map((x, i) => `<circle cx="${x}" cy="${97 + (i % 2) * 2}" r="${4 + (i % 3)}" fill="#5a4630"/>`).join('');
+    s += `<text x="86" y="130" font-size="15" text-anchor="middle" fill="#2a2620" font-weight="700">Same group</text><text x="86" y="148" font-size="13" text-anchor="middle" fill="#6e675c">drain clear</text>`;
+    s += `<text x="272" y="130" font-size="15" text-anchor="middle" fill="#2a2620" font-weight="700">Mixed</text><text x="272" y="148" font-size="13" text-anchor="middle" fill="#6e675c">drain blocked</text>`;
+    $('streets').innerHTML = s;
+  }
+  streets();
+
+  // ---- lab ----
+  function renderLab() {
+    const left = MECH.CONFIG.budget - g.run.length;
+    $('budget').innerHTML = Array.from({ length: MECH.CONFIG.budget }, (_, i) => `<span class="tok ${i < g.run.length ? 'spent' : ''}"></span>`).join('') + `<span>&nbsp;${left} test${left === 1 ? '' : 's'} left</span>`;
+    $('suspects').innerHTML = MECH.SUSPECTS.map((s, i) => `<div class="sus"><div class="n">${i + 1}</div><div><div class="t">${s.name}</div><div class="c">${s.line}</div></div></div>`).join('');
+    $('tests').innerHTML = MECH.TESTS.map(t => {
+      const done = g.run.includes(t.id);
+      return `<button class="tcard ${done ? 'done' : ''}" data-test="${t.id}" ${!done && left === 0 ? 'disabled' : ''}><span class="t">${t.name}</span><span class="c">${done ? '✓ ' + first(t.say) : first(t.what)}</span></button>`;
+    }).join('');
+    $('tests-h').textContent = left ? 'Pick a test' : 'Your tests';
+    $('lab-orient').textContent = left ? 'Each test is one of the study\'s games, played with people from the same group and from different groups. Which tests would tell these suspects apart?' : 'No tests left. Tap a finished test to look at it again, or make your calls.';
+    $('b-tocall').textContent = left ? 'Make your calls now' : 'Make your calls';
+    $('b-tocall').className = left ? '' : 'primary';
+    document.querySelectorAll('[data-test]').forEach(b => b.onclick = () => openTest(b.dataset.test));
+  }
+
+  // ---- test ----
+  function openTest(id) {
+    const t = MECH.testById(id); cur = t;
+    $('t-name').textContent = t.name; $('pib').innerHTML = pib(t.pib); $('t-what').textContent = t.what; $('t-legend').style.display = t.fmt === 'dots' ? 'none' : ''; $('t-betq').textContent = t.bet;
+    const done = g.run.includes(id);
+    $('t-bet').style.display = done ? 'none' : ''; $('t-out').style.display = done ? '' : 'none';
+    if (done) showResult(t, null);
+    show('s-test');
+  }
+  function showResult(t, betRight) {
+    $('t-bet').style.display = 'none'; $('t-out').style.display = '';
+    $('t-hit').textContent = betRight === null ? '' : betRight ? 'Your hunch was right.' : 'Not what you expected.';
+    $('t-hit').className = 'hit ' + (betRight === null ? '' : betRight ? 'ok' : 'no');
+    $('t-unit').textContent = t.fmt === 'dots' ? '' : 'Measured: ' + t.unit + '.';
+    if (t.fmt === 'dots') {
+      const W = 320, x = p => 20 + p * (W - 40);
+      $('t-race').innerHTML = `<svg viewBox="0 0 ${W} 120" width="100%"><rect x="20" y="30" width="${x(0.05) - 20}" height="40" fill="#e9c9bf"/>
+        <line x1="20" y1="70" x2="${W - 20}" y2="70" stroke="#2a2620" stroke-width="2"/>
+        ${t.dots.map((p, i) => `<circle class="dot" cx="${x(p)}" cy="${58 - (i % 2) * 16}" r="9" fill="#2a2620" opacity="0" style="transition:opacity .4s ${0.25 * i}s"/>`).join('')}
+        <text x="20" y="90" font-size="12" fill="#a8392a">groups</text><text x="20" y="104" font-size="12" fill="#a8392a">really differ</text>
+        <text x="${W - 20}" y="90" font-size="12" text-anchor="end" fill="#6e675c">differences no bigger</text><text x="${W - 20}" y="104" font-size="12" text-anchor="end" fill="#6e675c">than chance makes</text>
+        <text x="20" y="20" font-size="12" fill="#6e675c">each dot = one question</text></svg>`;
+      requestAnimationFrame(() => requestAnimationFrame(() => document.querySelectorAll('.dot').forEach(d => d.setAttribute('opacity', 1))));
+    } else {
+      const max = Math.max(...t.rows.flatMap(r => [r.own, r.other])) * 1.08;
+      $('t-race').innerHTML = t.rows.map(r => `<div class="lbl"><span>${r.label}</span><span class="tag ${r.clear}">${TAG[r.clear]}</span></div>
+        <div class="bar own"><div class="f" data-w="${100 * r.own / max}"></div><span class="v">${fmtV(t, r.own)} <small>· own group</small></span></div>
+        <div class="bar other"><div class="f" data-w="${100 * r.other / max}"></div><span class="v">${fmtV(t, r.other)} <small>· other group</small></span></div>
+        ${r.note ? `<div class="note">${r.note}</div>` : ''}`).join('');
+      requestAnimationFrame(() => requestAnimationFrame(() => document.querySelectorAll('#t-race .f').forEach(f => f.style.width = f.dataset.w + '%')));
+    }
+    $('t-say').textContent = t.say;
+    $('t-src').textContent = 'Source: ' + t.src + (t.rows && t.rows.some(r => r.gap !== undefined) && t.fmt === 'ush' ? '. Bars are placed around the reported average; the gap between them is the study\'s.' : '.');
+  }
+  document.querySelectorAll('[data-bet]').forEach(b => b.onclick = () => {
+    const r = MECH.runTest(g, cur.id, b.dataset.bet === 'yes');
+    if (r) showResult(r.test, r.betRight);
+  });
+  $('b-back').onclick = () => { renderLab(); show('s-lab'); };
+
+  // ---- calls ----
+  const CALLS = [['guilty', 'Guilty'], ['not', 'Not guilty'], ['cant', 'Can\'t tell']];
+  function renderCalls() {
+    $('notebook').innerHTML = '<h2>Your notebook</h2>' + (g.run.length ? g.run.map(id => `<div class="nb"><b>${MECH.testById(id).short}:</b> ${first(MECH.testById(id).say)}</div>`).join('') : '<p class="muted">You ran no tests. Every call will be a guess.</p>');
+    $('calls').innerHTML = '<h2>Call each suspect</h2>' + MECH.SUSPECTS.map((s, i) => `<div class="callrow"><div class="t">${i + 1}. ${s.name}</div><div class="seg">${CALLS.map(([v, l]) => `<button data-s="${s.id}" data-v="${v}" class="${g.calls[s.id] === v ? 'sel' : ''}">${l}</button>`).join('')}</div></div>`).join('');
+    document.querySelectorAll('[data-s]').forEach(b => b.onclick = () => { MECH.call(g, b.dataset.s, b.dataset.v); renderCalls(); });
+    $('b-morelab').style.display = g.run.length < MECH.CONFIG.budget ? '' : 'none';
+    const n = Object.keys(g.calls).length;
+    $('b-reveal').disabled = n < 5; $('b-reveal').textContent = n < 5 ? `Call all five (${n}/5)` : 'Reveal';
+  }
+  $('b-tocall').onclick = () => { renderCalls(); show('s-call'); };
+  $('b-morelab').onclick = () => { renderLab(); show('s-lab'); };
+  $('b-reveal').onclick = () => {
+    const sc = MECH.score(g);
+    const word = { guilty: 'Guilty', not: 'Not guilty', cant: 'Can\'t tell' };
+    $('verdict').innerHTML = `<div class="you">You proved ${sc.proven} of 5 calls.</div>
+      <div class="paper">The study's answer: people were <b>not</b> kinder to their own. When nobody could see them, they shared equally. Once they were seen, the stingiest gave their own group much more — and their own group could find them.</div>
+      <div class="means">So mixing need not fail. What holds a street together is believing you are seen — by people who can find you.</div>
+      ${sc.proven < 5 ? `<div class="muted">${sc.proven < 5 && !g.run.includes('dgHidden') ? 'The key test is "Giver hidden": without it, nobody can tell kindness from being watched.' : 'One plan of five tests proves all five calls. Can you find it?'}</div>` : ''}`;
+    $('judged').innerHTML = sc.per.map(p => {
+      const s = MECH.SUSPECTS.find(x => x.id === p.suspect);
+      return `<div class="judg ${p.proven ? 'proven' : p.right ? '' : 'wrong'}"><div class="t">${p.proven ? '✓' : p.right ? '○' : '✗'} ${s.name}</div>
+        <div class="m">You: ${word[p.call]} · Study: ${p.verdict.split('.')[0]}</div><div>${p.why}</div><div class="m">${p.verdict.split('. ').slice(1).join('. ')}</div></div>`;
+    }).join('');
+    show('s-end');
+  };
+  $('b-again').onclick = () => { g = MECH.newGame(); renderLab(); show('s-lab'); };
+
+  // ---- navigation ----
+  $('b-start').onclick = () => { renderLab(); show('s-lab'); };
+  const openHelp = () => { helpFrom = screenNow(); show('s-help'); };
+  $('b-help1').onclick = openHelp; document.querySelectorAll('[data-help]').forEach(b => b.onclick = openHelp);
+  $('b-help-back').onclick = () => show(helpFrom);
+  const openAbout = () => { aboutFrom = screenNow(); show('s-about'); };
+  $('b-about1').onclick = openAbout; $('b-about2').onclick = openAbout;
+  $('b-about-back').onclick = () => show(aboutFrom);
+})();
+</script>
+</body>
+</html>
