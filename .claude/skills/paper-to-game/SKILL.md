@@ -10,6 +10,7 @@ description: "Turn a scientific paper (any field) into a playable single-file HT
 Someone sends a paper. They get back a game: one HTML file, playable on a phone, built from the paper's own mechanism, with every number tagged to its source so the author can tweak it. The game is a beta; the author finishes it.
 
 The test of a good result is not whether the game is faithful. It is whether a smart stranger, handed the link on a phone, plays for five to eight minutes without being told to, understands what they are doing the whole time, is surprised somewhere in the middle, and could afterwards say in one sentence what the paper found. Fidelity is the second-order constraint: the mechanism must not lie about the paper. Everything else — how much of the paper appears, how the mechanism is dressed, how many rounds, how many screens — is decided by what makes those minutes good.
+
 ---
 
 ## 1. The player, and what a good few minutes feel like
@@ -52,33 +53,33 @@ The mechanism — what turns the player's lever into outcomes — is ported from
 
 ### One lever, one loop; the engine decides the shape
 
-The player moves one thing. The game has one loop: lever → mechanism → feedback → score. What the engine decides, per paper: whether the loop runs once over a long arc or many times in short rounds; how many screens; whether there are presets. A model with regimes wants several short societies; an argument with a single build-up may want one long round of twelve screens; an experiment may want twenty trials. There is no required round structure. There is a required aim, a required visible yardstick, and a required verdict (next principle).
+The player moves one thing. The game has one loop: lever → mechanism → feedback → score. What the engine decides, per paper: whether the loop runs once over a long arc or many times in short rounds; how many screens; whether there are presets. A model with regimes wants several short rounds; an argument with a single build-up may want one long round of twelve screens; an experiment may want twenty trials. There is no required round structure. There is a required aim, a required visible yardstick, and a required verdict (next principle).
 
 ### The aim is a sentence; the score is its yardstick
 
-Before any concept is chosen, write the aim in the words the player will read: "Find the setting no rival can beat." "Sort the specimens, then find the groups." It appears on its own line on the start screen, at the top of the play screen, and as the first line of How to play.
+Before any concept is chosen, write the aim in the words the player will read. It appears on its own line on the start screen, at the top of the play screen, and as the first line of How to play.
 
 The score is the aim measured, in the aim's units, for the stretch of play the aim refers to. If the aim is per round, the score is per round, and a round in which the aim is met reads as complete success at that moment. Never a running point total whose maximum lies in rounds not yet played.
 
-The failure to avoid: a game that awards a point per success across five rounds, so that a player who has just held the first round perfectly sees 33 of 165 — success reading as failure because the score and the aim are in different units. Score the round as the round: "held off: 11 of 11"; keep any cross-round tally in the same units ("rounds held: 1 of 5"), smaller and separate.
+Score the round as the round, in its own units ("held off: 11 of 11"); keep any cross-round tally in the same units ("rounds held: 1 of 5"), smaller and separate. A player who has just done exactly what the aim asked must never see a low number.
 
 No bookkeeping mechanics: no fixed number of attempts that rewards repeating a correct answer, no points for re-testing, no maximum the player learns only from the help page.
 
 ### Pictures explain; motion is the feedback; fewer, bigger things
 
-Every picture on screen answers one question the player has at that moment: what is this? did it work? which way? If a picture needs its caption to be understood, simplify the picture. Motion is not ornament: the thing that moves *is* the feedback — the panel filling, the bar growing, the marker dropping onto the ruler, the lights coming on. On a phone, three large figures beat eighty small ones; one bar beats a drawer of pinned specimens.
+Every picture on screen answers one question the player has at that moment: what is this? did it work? which way? If a picture needs its caption to be understood, simplify the picture. Motion is not ornament: the thing that moves *is* the feedback — the panel filling, the bar growing, the marker dropping onto the ruler, the lights coming on. On a phone, a few large figures beat a crowd of small ones; one bar beats a tableau.
 
-A grid of eighty tiny figures, some filling in and some fading, can be beautiful and illegible: the player cannot see what is spreading or why. A field of generated structure can pass every statistical check and still look like uniform noise until the drawing is simplified. Mechanism fidelity and visual legibility are separate checks; every picture must be *looked at* by the builder, at phone width, with the question "what would a stranger see here?"
+A picture can be beautiful and illegible, and a generated scene can pass every statistical check and still look like noise on a phone. Mechanism fidelity and visual legibility are separate checks; every picture must be *looked at* by the builder, at phone width, with the question "what would a stranger see here?"
 
 ### Orientation before acting; explanation after the surprise
 
-The player never reads a paragraph before they may act. But every screen carries the one or two sentences a stranger needs to act on it: what the things on screen are, what the choice means, roughly what a good answer looks like (a number, a range). Every word on a button is defined on that screen, in plain words, before the first press — if the buttons say "curly" and "straight", the screen says what each looks like. A measure is named in one line before the player sees it move. Where two extremes exist, show them side by side before the first choice.
+The player never reads a paragraph before they may act. But every screen carries the one or two sentences a stranger needs to act on it: what the things on screen are, what the choice means, roughly what a good answer looks like (a number, a range). Every word on a button is defined on that screen, in plain words, before the first press. A measure is named in one line before the player sees it move. Where two extremes exist, show them side by side before the first choice.
 
 Explanation — why the paper's answer is what it is — comes *after* the surprise, never before. Orientation is not explanation; give the first, withhold the second.
 
 A **How to play** page explains the whole game in plain language: the setting, the aim, what each screen asks, what the score means, what the game is trying to show. Reachable from a prominent button on the start screen and from a small ? on every play screen; returning lands the player where they were.
 
-Button labels say what happens, not a metaphor: "Show the hidden layer", not "Develop the plate".
+Button labels say what happens, not a metaphor.
 
 ### The player must have been wrong first
 
@@ -125,7 +126,7 @@ Then answer four questions in writing, in this order.
 
 Generate three concepts placing the player at different positions. At least one casts something non-obvious as the agent. Each gets: position, lever, what the player sees after moving it, the moment of surprise, and the four sources of fun it has or lacks (anticipation, agency, surprise, mastery).
 
-Then, for the two strongest, write **the first five minutes** — the stranger's experience in the present tense, minute by minute: what they see, what they are wondering, what they want to press, what happens when they press it, where they grin, where they frown. This is the test that kills a concept on paper rather than after a build. If the walkthrough reads "I set the lever, I press test, eighty tiny figures appear and some fade — what am I supposed to feel?", the concept has failed. If it cannot be written at all, there is no game there.
+Then, for the two strongest, write **the first five minutes** — the stranger's experience in the present tense, minute by minute: what they see, what they are wondering, what they want to press, what happens when they press it, where they grin, where they frown. This is the test that kills a concept on paper rather than after a build. If the walkthrough reaches a moment where the honest line is "and I don't know what I'm supposed to feel", the concept has failed. If it cannot be written at all, there is no game there.
 
 ### The pick
 
@@ -154,7 +155,7 @@ Written in full and shown to the user before the build starts, as a record, not 
 9. **The lever, the mechanism, the feedback, the surprise** — the four invariants, named concretely for the picked concept.
 10. **What is cut** — everything in the paper the game leaves out, so the author sees it was a decision.
 11. **Divergences** — clock compression, exaggerated parameters, stylised payoffs, simplified presentation; each named with the reason, and the mechanism's honesty asserted or qualified.
-12. **Visual world** — one line naming the world drawn from the paper's own imagery (a confocal stack, a specimen plate, a furniture catalogue, a trading floor), then three or four visual rules; then the **legibility rule** for this game: what the player will be looking at on the play screen, how big, how many, and what question each picture answers. No house style: each game looks like its paper.
+12. **Visual world** — one line naming the world drawn from the paper's own imagery (a microscope field, a trading floor, a weather map, a catalogue page), then three or four visual rules; then the **legibility rule** for this game: what the player will be looking at on the play screen, how big, how many, and what question each picture answers. No house style: each game looks like its paper.
 13. **Fidelity plan** — what the headless check will verify (model: the key figure reproduced qualitatively; estimate: the reported table recovered, signs and rough magnitudes; argument: the toy model produces the claimed outcomes, assumptions listed).
 14. **Fidelity result and build log** — appended after the build: the numbers, and what took more than one pass.
 
@@ -188,12 +189,12 @@ A short library. Pick one or two per game; do not stack.
 - **The drop.** Each decision drops a marker onto a ruler or histogram, coloured by what the player said, so a pattern accumulates in front of them. Good for sorting, judgement, estimation tasks.
 - **The reveal.** The screen the player acted on is redrawn with the hidden layer on: lights come on, true colours appear, the structure the player guessed at is overlaid on their guess. Good for inference tasks; it is the natural home of the surprise.
 - **The before/after.** Two states side by side or on a slider: what the player set, what the paper's answer would have given.
-- **The race.** Two or three large figures or bars whose relative size changes with the player's choice — the resident against the newcomer, treated against control. Good for invasion, competition, selection. Three figures, not eighty.
+- **The race.** Two or three large figures or bars whose relative size changes with the player's choice — incumbent against challenger, treated against control. Good for invasion, competition, selection.
 - **The counter.** A single number that counts up or down visibly after each action, in the aim's units.
 - **The bet and the card.** The player commits to a prediction, then the card turns. The forecaster's device; also a good opening for any game before the first lever.
 - **The trajectory.** One line drawn over time as the player's rounds accumulate, with the paper's line appearing at the end.
 
-Anti-patterns: a running point total; a grid of tiny sprites; a dashboard of moving numbers; a specimen drawer; a metaphor on a button; a measure that moves before it is named; a picture that is beautiful and answers no question.
+Anti-patterns: a running point total; a grid of tiny sprites; a dashboard of moving numbers; a metaphor on a button; a measure that moves before it is named; a picture that is beautiful and answers no question.
 
 ---
 
@@ -202,7 +203,6 @@ Anti-patterns: a running point total; a grid of tiny sprites; a dashboard of mov
 Plain, concrete, numbers where they help. Match the substance of the paper; never quote it. Field terms only where the player must use them to act, defined in the same sentence. Greek letters stay in the paper. Explanations arrive after the surprise. The About screen carries the memo, lightly edited for a reader, including the divergences and the runner-up concept.
 
 ---
-
 
 ## 9. Deliverables and repository
 
