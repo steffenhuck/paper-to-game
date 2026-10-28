@@ -1,0 +1,36 @@
+(a) Values on the 1–7 scale, inside each Fig. 5 panel's own axis window, first band highest
+  [PASS] Quality of interpersonal relationships       5.30 4.75 4.46 4.66 4.81  axis 4–6
+  [PASS] Satisfaction with job security               5.40 4.80 4.48 4.30 4.95  axis 4–6
+  [PASS] Stability                                    6.55 6.00 5.62 5.28 5.98  axis 4–7
+  [PASS] Job involvement                              5.85 5.32 4.22 4.18 3.40  axis 3–6
+  [PASS] Orchestra structure: task and composition    5.45 4.93 4.60 4.49 4.82  axis 4–6
+  [PASS] Integrity as an ensemble                     5.62 5.30 4.90 4.62 4.40  axis 4–6
+
+(b) The text's classification (pp. 210–11): integrity and job involvement fall uninterrupted; the other four have a tipping point past 40%
+  [PASS] relationships  minimum in band 3 (24–35%), rises into band 5
+  [PASS] security       minimum in band 4 (36–48%), rises into band 5
+  [PASS] stability      minimum in band 4 (36–48%), rises into band 5
+  [PASS] involvement    monotone non-increasing
+  [PASS] structure      minimum in band 4 (36–48%), rises into band 5
+  [PASS] integrity      monotone non-increasing
+
+(c) The classifier agrees with the text for every dead zone 0.1–0.3, and under the segment-sign rule with no dead zone
+  [PASS] dead zones 0.10, 0.15, 0.20, 0.25, 0.30: all six fall at first; exactly integrity and involvement do not recover
+  [PASS] segment-sign rule: same four recover, same two do not
+
+(d) Scoring: the discovery comes from the curves, not from the rule
+  [PASS] drawing the paper's own line: miss 0.0 and shape right on all six
+  [PASS] a flat line ("nothing changes"): shape wrong on all six
+  [PASS] a straight rise ("the more the better"): shape wrong on all six
+  [PASS] a straight fall ("the more the worse"): shape right only on integrity and involvement
+  [PASS] walkthrough example (gentle rise on relationships): miss 1.0, Shape wrong. You drew a line that rises; in the study it falls, then recovers. Your dots missed by 1.0 points on average.
+  [PASS] a wobble within the dead zone reads as level (5.5 − 5.3 is exactly the dead zone, not over it)
+  [PASS] session verdict counts shapes right
+
+(e) The opener, from the table on p. 209 and the medians on p. 207
+  [PASS] regional share exceeds major share in all four countries: United States 24/52; United Kingdom 26/38; East Germany 13/22; West Germany 13/20
+  [PASS] medians: US 36, UK 30, Germany 16
+  [PASS] sample: 78 orchestras, median 21%, range 2–59%
+  [PASS] the six measures are played exactly once across the two sets
+
+ALL CHECKS PASSED
