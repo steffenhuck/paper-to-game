@@ -1,0 +1,26 @@
+(a) Behaviour of homo moralis residents vs the paper's closed forms
+  max |engine - closed form| over κ grid, three games: 3.33e-13
+  PD (Fig. 1): x̂ = κ=0:0.000  κ=0.25:0.000  κ=0.3:0.154  κ=0.5:0.667  κ=0.667:1.000  κ=1:1.000
+
+(b) Theorem 1: resident κ = σ against 201 mutant κ in [0,1]
+  Strangers in a city          σ=0.000  invaders 0/201  best mutant edge 0.00e+0
+  Siblings                     σ=0.500  invaders 0/201  best mutant edge 0.00e+0
+  Siblings, a different game   σ=0.500  invaders 0/201  best mutant edge 0.00e+0
+  Half-siblings                σ=0.250  invaders 0/201  best mutant edge 0.00e+0
+  Classmates                   σ=0.197  invaders 0/201  best mutant edge 0.00e+0
+
+(c) Every resident κ on the lever grid: invaded by at least one of the 11 gauntlet mutants unless a behavioural clone of homo hamiltonensis
+  Strangers in a city          invaders by κ=0..1 step .05: 0 1 1 2 2 3 3 4 4 5 5 6 6 7 7 8 8 9 9 10 10   OK
+  Siblings                     invaders by κ=0..1 step .05: 10 10 9 9 7 6 4 3 2 1 0 1 1 3 3 5 5 6 7 8 8   OK
+  Siblings, a different game   invaders by κ=0..1 step .05: 10 10 9 9 8 8 7 6 3 1 0 1 2 3 3 5 5 6 6 7 7   OK
+  Half-siblings                invaders by κ=0..1 step .05: 10 10 9 7 1 0 1 2 2 3 5 6 6 7 7 8 8 9 9 10 10   OK
+  Classmates                   invaders by κ=0..1 step .05: 0 0 0 0 0 0 3 4 4 5 5 6 6 7 7 7 7 7 7 7 7   OK
+
+(d) Direction: invaders always lie on the σ side of the resident κ
+  Siblings                     resident κ=0, σ=0.500: invaders at κ = 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1
+  Siblings                     resident κ=1, σ=0.500: invaders at κ = 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9
+  Half-siblings                resident κ=0.8, σ=0.250: invaders at κ = 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7
+  Strangers in a city          resident κ=0.6, σ=0.000: invaders at κ = 0, 0.1, 0.2, 0.3, 0.4, 0.5
+
+(e) Finite ε check (eqs. 11–12 with φ=σ): sign of the edge at ε = 0.01 agrees with the limit
+  530/530 non-marginal duels agree (behaviour held at its ε=0 value)

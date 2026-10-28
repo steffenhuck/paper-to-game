@@ -11,6 +11,7 @@ How it works is in [`SKILL.md`](SKILL.md): a design memo first (what the paper h
 | Game | Paper | Play |
 |---|---|---|
 | **The Olive** | Vrieler et al. (2019), *Brain Structure and Function* 224:1677–1695. Inferior olive neuron morphology. | [play](https://steffenhuck.github.io/paper-to-game/olive/the-olive.html) · [memo](olive/memo.md) |
+| **The Balance** | Alger & Weibull (2013), *Econometrica* 81:2269–2302. Homo moralis: preference evolution under assortative matching. | [play](https://steffenhuck.github.io/paper-to-game/moralis/the-balance.html) · [memo](moralis/memo.md) |
 
 ## Folder convention
 
