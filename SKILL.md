@@ -10,9 +10,6 @@ description: "Turn a scientific paper (any field) into a playable single-file HT
 Someone sends a paper. They get back a game: one HTML file, playable on a phone, built from the paper's own mechanism, with every number tagged to its source so the author can tweak it. The game is a beta; the author finishes it.
 
 The test of a good result is not whether the game is faithful. It is whether a smart stranger, handed the link on a phone, plays for five to eight minutes without being told to, understands what they are doing the whole time, is surprised somewhere in the middle, and could afterwards say in one sentence what the paper found. Fidelity is the second-order constraint: the mechanism must not lie about the paper. Everything else — how much of the paper appears, how the mechanism is dressed, how many rounds, how many screens — is decided by what makes those minutes good.
-
-This file was rewritten after three builds. The first versions were a method; builds satisfied the method to the letter and still produced games that were pretty and confusing. What follows is a method wrapped in a description of the player, because the player is what the rules were for.
-
 ---
 
 ## 1. The player, and what a good few minutes feel like
@@ -32,7 +29,7 @@ What they are not hoping for: decoration, a tutorial, a dashboard, points, a tab
 
 Fun, in these games, has four sources, and a concept that lacks all four is not a game yet:
 
-1. **Anticipation.** The player makes a choice and *waits to see* — the panel fills, the newcomers arrive, the dendrites light up. Suspense between lever and outcome.
+1. **Anticipation.** The player makes a choice and *waits to see* — a panel fills, a rival arrives, a hidden layer lights up. Suspense between lever and outcome.
 2. **Agency.** The outcome follows from the choice in a way the player can feel and learn. If two different settings produce the same picture, there is no agency.
 3. **Surprise.** The reversal. The player did the sensible thing and it was wrong, and the game shows why.
 4. **Mastery.** The second attempt goes better than the first, visibly, for a reason the player understands.
@@ -41,13 +38,13 @@ Fun, in these games, has four sources, and a concept that lacks all four is not 
 
 ## 2. Principles
 
-Each principle below comes with the reason and with the moment in one of the three built games where it was learned.
+Each principle comes with its reason.
 
 ### The reversal is the twist
 
 Every paper worth a game overturns something the field, or the public, believed. That reversal is the game's plot: the player should start out believing the old thing, act on it, and be shown. If the paper has two reversals, the game may have two acts. If it has none, say so in the memo: the game will be thin, and the engine should look harder for the surprising corner of the results before settling.
 
-*The Olive*: two reversals — two cell types are one continuum; the wiring groups are in the dendrites, not where the cell bodies sit — gave two rounds, each ending in the player's own wrong answer corrected. *The Balance*: the stable morality equals the chance of meeting your own kind, and *more* moral is invaded as surely as less — but the game opened with the one society where the old belief (selfishness wins) is right, so the first minutes confirmed the textbook instead of overturning it. Open on the reversal, or one step before it.
+Open on the reversal, or one step before it: order the rounds so that the player meets the overturned belief early, not after rounds in which the old belief happens to be right.
 
 ### Fun first, mechanism honest
 
@@ -59,11 +56,11 @@ The player moves one thing. The game has one loop: lever → mechanism → feedb
 
 ### The aim is a sentence; the score is its yardstick
 
-Before any concept is chosen, write the aim in the words the player will read: "Find the balance no newcomer can beat." "Sort the cells, then find the groups." It appears on its own line on the start screen, at the top of the play screen, and as the first line of How to play.
+Before any concept is chosen, write the aim in the words the player will read: "Find the setting no rival can beat." "Sort the specimens, then find the groups." It appears on its own line on the start screen, at the top of the play screen, and as the first line of How to play.
 
 The score is the aim measured, in the aim's units, for the stretch of play the aim refers to. If the aim is per round, the score is per round, and a round in which the aim is met reads as complete success at that moment. Never a running point total whose maximum lies in rounds not yet played.
 
-*The Balance* scored one point per newcomer held off, three tests per society, five societies: 165 points. A player who held society 1 perfectly saw 33 of 165 — twenty percent — at the exact moment they had done what the aim asked. The score and the aim were in different units, and success read as failure. Fixed by making the score "newcomers held off: 11 of 11, society held", and the cross-round tally, if any, "societies held: 1 of 5", smaller and separate.
+The failure to avoid: a game that awards a point per success across five rounds, so that a player who has just held the first round perfectly sees 33 of 165 — success reading as failure because the score and the aim are in different units. Score the round as the round: "held off: 11 of 11"; keep any cross-round tally in the same units ("rounds held: 1 of 5"), smaller and separate.
 
 No bookkeeping mechanics: no fixed number of attempts that rewards repeating a correct answer, no points for re-testing, no maximum the player learns only from the help page.
 
@@ -71,17 +68,17 @@ No bookkeeping mechanics: no fixed number of attempts that rewards repeating a c
 
 Every picture on screen answers one question the player has at that moment: what is this? did it work? which way? If a picture needs its caption to be understood, simplify the picture. Motion is not ornament: the thing that moves *is* the feedback — the panel filling, the bar growing, the marker dropping onto the ruler, the lights coming on. On a phone, three large figures beat eighty small ones; one bar beats a drawer of pinned specimens.
 
-*The Balance*'s village — eighty tiny figures in a grid, some filling in, some fading — was beautiful and illegible: the player could not see what was spreading or why. *The Olive*'s round two passed every statistical check from pass two and looked like uniform green noise until pass five, when the trees were made short, pulled toward a point, and stopped at the centre. Mechanism fidelity and visual legibility are separate checks; a picture must be *looked at* by the builder, at phone width, with the question "what would a stranger see here?"
+A grid of eighty tiny figures, some filling in and some fading, can be beautiful and illegible: the player cannot see what is spreading or why. A field of generated structure can pass every statistical check and still look like uniform noise until the drawing is simplified. Mechanism fidelity and visual legibility are separate checks; every picture must be *looked at* by the builder, at phone width, with the question "what would a stranger see here?"
 
 ### Orientation before acting; explanation after the surprise
 
-The player never reads a paragraph before they may act. But every screen carries the one or two sentences a stranger needs to act on it: what the things on screen are, what the choice means, roughly what a good answer looks like (a number, a range). Every word on a button is defined on that screen, in plain words, before the first press — "Curly = twists and branches densely near the cell body. Straight = sparse, reaching far." A measure is named in one line before the player sees it move. Where two extremes exist, show them side by side before the first choice.
+The player never reads a paragraph before they may act. But every screen carries the one or two sentences a stranger needs to act on it: what the things on screen are, what the choice means, roughly what a good answer looks like (a number, a range). Every word on a button is defined on that screen, in plain words, before the first press — if the buttons say "curly" and "straight", the screen says what each looks like. A measure is named in one line before the player sees it move. Where two extremes exist, show them side by side before the first choice.
 
 Explanation — why the paper's answer is what it is — comes *after* the surprise, never before. Orientation is not explanation; give the first, withhold the second.
 
 A **How to play** page explains the whole game in plain language: the setting, the aim, what each screen asks, what the score means, what the game is trying to show. Reachable from a prominent button on the start screen and from a small ? on every play screen; returning lands the player where they were.
 
-Button labels say what happens, not a metaphor: "Show the dendrites", not "Develop the dendrites".
+Button labels say what happens, not a metaphor: "Show the hidden layer", not "Develop the plate".
 
 ### The player must have been wrong first
 
@@ -187,16 +184,16 @@ Hard constraints throughout: one self-contained HTML file, no external dependenc
 
 A short library. Pick one or two per game; do not stack.
 
-- **The fill.** A panel, jar, bar or grid of a dozen large cells fills as the player's choice takes effect. (*The Screen*: a panel of little TVs filling with the chosen programming.) Good for shares, budgets, allocations.
-- **The drop.** Each decision drops a marker onto a ruler or histogram, coloured by what the player said, so a pattern accumulates in front of them. (*The Olive*, round one.) Good for sorting, judgement, estimation tasks.
-- **The reveal.** The screen the player acted on is redrawn with the hidden layer on: lights come on, true colours appear, the structure the player guessed at is overlaid on their guess. (*The Olive*, round two.) Good for inference tasks; it is the natural home of the surprise.
+- **The fill.** A panel, jar, bar or grid of a dozen large cells fills as the player's choice takes effect. Good for shares, budgets, allocations.
+- **The drop.** Each decision drops a marker onto a ruler or histogram, coloured by what the player said, so a pattern accumulates in front of them. Good for sorting, judgement, estimation tasks.
+- **The reveal.** The screen the player acted on is redrawn with the hidden layer on: lights come on, true colours appear, the structure the player guessed at is overlaid on their guess. Good for inference tasks; it is the natural home of the surprise.
 - **The before/after.** Two states side by side or on a slider: what the player set, what the paper's answer would have given.
 - **The race.** Two or three large figures or bars whose relative size changes with the player's choice — the resident against the newcomer, treated against control. Good for invasion, competition, selection. Three figures, not eighty.
 - **The counter.** A single number that counts up or down visibly after each action, in the aim's units.
 - **The bet and the card.** The player commits to a prediction, then the card turns. The forecaster's device; also a good opening for any game before the first lever.
 - **The trajectory.** One line drawn over time as the player's rounds accumulate, with the paper's line appearing at the end.
 
-Anti-patterns, all seen: a running point total; a grid of tiny sprites; a dashboard of moving numbers; a specimen drawer; a metaphor on a button; a measure that moves before it is named; a picture that is beautiful and answers no question.
+Anti-patterns: a running point total; a grid of tiny sprites; a dashboard of moving numbers; a specimen drawer; a metaphor on a button; a measure that moves before it is named; a picture that is beautiful and answers no question.
 
 ---
 
@@ -206,17 +203,8 @@ Plain, concrete, numbers where they help. Match the substance of the paper; neve
 
 ---
 
-## 9. Worked examples
 
-**The Screen** (from Huck, "Closed Codes"; agent, from a model). The player runs national television and picks the shares of two cultural codes each round; the mechanism is ported exactly from the paper's simulation; one milieu cut entirely; six presets from the paper's most interesting parameter configurations, with Latinate country names; score, no win; furniture as the visual world — brown Schrankwand for the common code, pink shell chair for the own code; payoffs burst in comic bubbles. Divergences: faster clock, stronger habit. The fill is the device.
-
-**The Olive** (Vrieler et al. 2019, *Brain Structure and Function*; experimenter, from an estimate plus an argument). Round one: the player sorts twenty generated neurons into curly, straight or can't tell, and each drops onto a straightness ruler; the result shows the piles overlapping and a consistency score — the two kinds are one line. Round two: a slab of cell bodies, the player marks groups, scores poorly, then the dendrites light up and the groups appear where the branches converge. Synthetic neurons from Table 4 ranges with Table 5 correlations, checked headlessly. What went wrong: the first version never defined curly or straight on screen, never named the ruler before it filled, and used "Develop the dendrites" as a button; round two's picture took five passes to become legible after the statistics were right on pass two. The drop and the reveal are the devices.
-
-**The Balance** (Alger & Weibull 2013, *Econometrica*, *Homo moralis*; controller, from a model). The player sets a population's degree of morality on a brass balance and tests it against newcomers; the stable setting equals the chance of meeting one's own kind, σ, in every game. Mechanism ported exactly; Theorem 1 verified on a 201-point grid; five societies lifted from the paper's examples. Specimen-plate visual world, well chosen. What went wrong: the score was a 165-point running total so that a perfectly held first society read as twenty percent; the village of eighty tiny figures was illegible; the first society was the one where selfishness wins, so the reversal arrived late; the per-society bookkeeping (three tests each) rewarded re-testing. The runner-up — the player as a preference competing for carriers across family, market and classmates — was the more original game and is the second pass to build. The race, with three large figures, is the device that should have been used.
-
----
-
-## 10. Deliverables and repository
+## 9. Deliverables and repository
 
 - `<slug>/<name>.html` — the game.
 - `<slug>/memo.md` — the memo with the fidelity result and build log appended.
@@ -229,7 +217,7 @@ Commit. Push to `main` directly if the environment allows; if it only allows a b
 
 ---
 
-## 11. Failure modes, all observed
+## 10. Failure modes
 
 - Opening the skin before the mechanism exists: a polished page with thin content.
 - A concept that could not survive a written first five minutes, built anyway.
