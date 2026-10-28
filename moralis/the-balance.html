@@ -36,6 +36,13 @@
   input[type=range]::-moz-range-thumb { width:28px; height:28px; border-radius:50%; background:var(--brass); border:2px solid var(--ink); }
   input[type=range]:disabled { opacity:.4; }
   button.q { flex:0 0 auto; min-height:32px; width:32px; padding:0; border-radius:50%; font-size:15px; color:var(--dim); border-color:var(--dim); }
+  .aim { font-size:18px; text-align:center; margin:12px 0; padding:8px 4px; border-top:1px solid var(--ink); border-bottom:1px solid var(--ink); }
+  .aimbar { font-size:13px; margin:2px 0 6px; color:var(--brass); letter-spacing:.02em; }
+  .score.bump { animation: bump .35s ease-out; }
+  @keyframes bump { 0%{color:var(--brass); transform:scale(1.25)} 100%{transform:none} }
+  .score { display:inline-block; font-size:16px; }
+  .verdict { font-size:21px; line-height:1.35; margin:10px 0 14px; }
+  .verdict div { margin:6px 0; }
   .orient { font-size:13px; color:var(--dim); margin:4px 0 6px; }
   .gloss { font-size:14px; text-align:center; margin:2px 0 4px; }
   .ends { display:flex; justify-content:space-between; font-size:12px; margin-top:-6px; }
@@ -63,6 +70,7 @@
   <div class="ov center">Plate I · preference evolution</div>
   <h1>THE BALANCE</h1>
   <p class="center muted"><i>Homo moralis</i> and the people it replaces</p>
+  <div class="aim"><b>Your aim: find the balance no newcomer can beat.</b></div>
   <div class="plate"><canvas id="c-hero" width="528" height="230"></canvas></div>
   <p>You are evolution's hand. Each society is a village whose people share one temperament: how much they weigh their own gain against <i>doing what would be best if everyone did it</i>. Set the balance. The balance runs from 0 (only their own gain) to 1 (only the right thing). Then newcomers with other balances arrive. A newcomer that earns more than your villagers <i>takes over</i>; one that earns less <i>dies out</i>. Your goal in each society is the balance that no newcomer can beat.</p>
   <h2>Societies</h2>
@@ -77,7 +85,8 @@
 
 <!-- ============ PLAY ============ -->
 <section id="s-play" class="screen">
-  <div class="hud"><span class="ov" id="h-soc">Society 1 / 5</span><span><span class="score" id="h-score">score 0</span> <button class="q" data-help="s-play" aria-label="How to play">?</button></span></div>
+  <div class="hud"><span class="ov" id="h-soc">Society 1 / 5</span><span style="display:flex;align-items:center;gap:10px;flex:0 0 auto"><span class="score" id="h-score">score 0</span><button class="q" data-help="s-play" aria-label="How to play">?</button></span></div>
+  <div class="aimbar">Aim: find the balance no newcomer can beat.</div>
   <div style="font-size:20px" id="h-name">Strangers</div>
   <div class="story" id="h-story"></div>
   <div class="gameline" id="h-game"></div>
@@ -107,22 +116,25 @@
 <!-- ============ END ============ -->
 <section id="s-end" class="screen">
   <div class="ov center">Plate II · what survived</div>
-  <h1 style="font-size:26px">THE RULE</h1>
+  <h1 style="font-size:26px">THE VERDICT</h1>
+  <div class="verdict" id="verdict"></div>
   <div class="plate"><canvas id="c-plate" width="528" height="360"></canvas></div>
   <p class="orient">Each figure is one society. Across: the chance a newcomer is paired with one of its own kind. Up: the balance you ended on. The dashed line is where the two are equal.</p>
   <p id="end-text"></p>
   <table id="end-table"></table>
-  <div class="row" style="margin-top:14px">
+  <div class="attr" id="attr1"></div>
+  <p style="margin-top:14px">Play again: hold every society on the first test, or start from a different one.</p>
+  <div class="row">
     <button class="primary" id="b-replay">PLAY AGAIN</button>
     <button id="b-about2">ABOUT THIS GAME</button>
   </div>
-  <div class="attr" id="attr1"></div>
 </section>
 
 <!-- ============ HOW TO PLAY ============ -->
 <section id="s-help" class="screen about">
   <div class="ov">how to play</div>
   <h1 style="font-size:24px;text-align:left">How to play</h1>
+  <p class="aim" style="text-align:left"><b>Your aim: find the balance no newcomer can beat.</b></p>
   <h3>The setting</h3>
   <p>People in a village are paired up to deal with each other — sharing a chore, splitting a resource, doing business. Each villager carries a temperament, a balance between two goals: their own gain, and <i>the right thing</i>, meaning what would be best for them if the other person did exactly the same. A balance of 0 cares only about own gain (economists' <i>homo oeconomicus</i>); 1 cares only about the right thing (<i>homo kantiensis</i>, after Kant); anything between is <i>homo moralis</i>. Nobody can see anyone else's balance.</p>
   <h3>What each round asks</h3>
@@ -321,6 +333,11 @@ const REVEAL = {
 let si = 0, test = 0, kappa = 0.5, score = 0, busy = false;
 let rows = [];            // per test in this society: { kR, res: [...] }
 let finals = [];          // per society: last tested κ
+let held = [];            // per society: did the last test hold?
+function showScore() {
+  const el = $('h-score'), max = NS * CONFIG.testsPerSociety * CONFIG.mutantKappas.length;
+  el.textContent = `score ${score} / ${max}`; el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump');
+}
 let revealed = false;
 
 // ---------- start screen ----------
@@ -529,10 +546,10 @@ async function release() {
   for (const i of order) {
     await animateDuel(res[i], kappa, s.sigma, rnd);
     rows[rows.length - 1].res.push(res[i]); drawDrawer(false);
-    if (!res[i].invades) { score++; $('h-score').textContent = `score ${score}`; }
+    if (!res[i].invades) { score++; showScore(); }
   }
   busy = false;
-  finals[si] = kappa;
+  finals[si] = kappa; held[si] = !res.some(d => d.invades);
   afterTest(res);
 }
 function afterTest(res) {
@@ -547,7 +564,7 @@ function afterTest(res) {
     // credit untaken tests at the result already achieved
     const left = CONFIG.testsPerSociety - 1 - test;
     if (!last && !inv.length) $('msg').innerHTML += ` <span class="muted">(${left} remaining test${left > 1 ? 's' : ''} credited: +${left * res.length})</span>`;
-    if (!last) { score += left * res.length; $('h-score').textContent = `score ${score}`; }
+    if (!last) { score += left * res.length; showScore(); }
     reveal();
   } else {
     $('b-again').style.display = ''; $('b-next').style.display = 'none';
@@ -598,8 +615,16 @@ function endGame() {
   });
   const played = CONFIG.societies.map((s, i) => finals[i] !== undefined ? i : -1).filter(i => i >= 0);
   const max = played.length * CONFIG.testsPerSociety * CONFIG.mutantKappas.length;
+  const sig = v => ({ 0: '0', 0.5: '½', 0.25: '¼' })[v] ?? v.toFixed(2);
+  const nHeld = played.filter(i => held[i]).length;
+  const off = played.filter(i => !held[i]);
+  const tooMuch = off.filter(i => finals[i] > CONFIG.societies[i].sigma).length, tooLittle = off.length - tooMuch;
+  $('verdict').innerHTML =
+    `<div><b>You:</b> ${played.map(i => fmtK(finals[i])).join(' · ')}</div>` +
+    `<div><b>The paper:</b> ${played.map(i => sig(CONFIG.societies[i].sigma)).join(' · ')} — the chance of meeting your own kind.</div>` +
+    `<div><b>The gap:</b> ${off.length === 0 ? `none. Your final balance held in all ${played.length}${played.length > 1 ? ' societies' : ' society'}: morality equals the chance of meeting your own kind.` : `your final balance held in ${nHeld} of ${played.length}; ${tooMuch ? `too moral in ${tooMuch}` : ''}${tooMuch && tooLittle ? ', ' : ''}${tooLittle ? `too selfish in ${tooLittle}` : ''}.`}</div>`;
   $('end-text').innerHTML = `<b>Score ${score} of ${max}.</b> Wherever your villagers could meet their own kind, the only balance no newcomer could beat put exactly that chance on the right thing — whatever game they played. Too little morality loses; so does too much.`;
-  $('end-table').innerHTML = '<tr><th>#</th><th>society</th><th>σ</th><th>your κ</th></tr>' + played.map(i => {
+  $('end-table').innerHTML = '<tr><th>#</th><th>society</th><th>σ</th><th>your balance</th></tr>' + played.map(i => {
     const s = CONFIG.societies[i]; return `<tr><td>${i + 1}</td><td>${s.name}</td><td>${s.sigma.toFixed(2)}</td><td>${fmtK(finals[i])}</td></tr>`;
   }).join('');
   show('s-end');
@@ -626,7 +651,7 @@ function drawHero() {
 // ---------- wiring ----------
 $('attr1').innerHTML = ATTR; $('attr2').innerHTML = ATTR;
 buildPresets(); drawHero();
-$('b-start').onclick = () => { score = 0; finals = []; $('h-score').textContent = 'score 0'; startSociety(si); };
+$('b-start').onclick = () => { score = 0; finals = []; held = []; showScore(); startSociety(si); };
 $('lever').oninput = updateLever;
 $('b-release').onclick = release;
 $('b-again').onclick = nextTest;
