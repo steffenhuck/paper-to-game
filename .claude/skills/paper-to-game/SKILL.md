@@ -248,6 +248,7 @@ Plain, concrete, numbers where they help. Match the substance of the paper; neve
 - `<slug>/author-note.md` — three lines: what to look at first; where the config block is; what we were least sure about. Plus one line saying the game has had the builder's review only.
 - `<slug>/mechanism.js` (or `.py`) — the single source of truth — with the build script that generates the HTML from it, the fidelity check, its result, and the screenshots.
 - The PDF moved from `inbox/` into the folder if it was there.
+- If a folder for the same paper already exists, this is a rebuild: the previous game and memo move into `<slug>/previous/` and the new build replaces the folder's contents and the README row; no second folder for the same paper.
 - A row in the README's games table with the play link `https://steffenhuck.github.io/paper-to-game/<slug>/<name>.html` and the memo link.
 
 Commit. Push through whatever the repository's workflow allows: to `main` directly if the environment permits, otherwise a branch and a pull request — the repository merges pull requests from `claude/…` branches automatically. If access or deployment fails, deliver the files in the reply, record the blocker, and mark publication incomplete. Verify the live page before reporting its link as playable; where that is not possible, label the URL as intended and not yet confirmed live. The reply ends with the play link, so labelled, and the folder link.
