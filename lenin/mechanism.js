@@ -220,7 +220,7 @@ function judge(objIndex, cardId) {
 }
 
 // ---- Session state ------------------------------------------------------------------------------
-function newSession() { return { bet: null, obj: 0, tries: OBJECTIONS.map(() => 0), settled: OBJECTIONS.map(() => false), lost: OBJECTIONS.map(() => false), seen: {}, forecast: null }; }
+function newSession() { return { bet: null, obj: 0, tries: OBJECTIONS.map(() => 0), settled: OBJECTIONS.map(() => false), lost: OBJECTIONS.map(() => false), tried: OBJECTIONS.map(() => []), forecast: null }; }
 
 // One play of a card. After maxTries misses the objection is lost: the doubter keeps the point and the
 // player is shown the card the paper uses, so the lesson is not lost with it.
@@ -228,10 +228,10 @@ function play(s, cardId) {
   const i = s.obj;
   if (i >= OBJECTIONS.length || s.settled[i] || s.lost[i]) throw new Error('no open objection');
   const r = judge(i, cardId);
-  s.tries[i] += 1; s.seen[cardId] = true;
+  s.tries[i] += 1; s.tried[i].push(cardId);
   if (r.ok) s.settled[i] = true;
   const lost = !r.ok && s.tries[i] >= CONFIG.maxTries;
-  if (lost) { s.lost[i] = true; s.seen[OBJECTIONS[i].answer] = true; }
+  if (lost) s.lost[i] = true;
   return Object.assign({ tries: s.tries[i], triesLeft: CONFIG.maxTries - s.tries[i], firstTry: r.ok && s.tries[i] === 1, lost,
     answer: lost ? cardById(OBJECTIONS[i].answer) : null }, r);
 }

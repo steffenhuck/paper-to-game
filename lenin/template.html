@@ -194,7 +194,7 @@
   <div class="aim" id="aim-help"></div>
   <p><b>The setting.</b> From 1945 to 1990 Germany was split. The split was decided by the armies that won the war, not by the Germans. The East became a communist state that ran jobs, prices, schools and the press. In 1990 the two halves were reunited under the West's system. A 2005 study compared what East and West Germans wanted from the state in 1997 and 2002.</p>
   <p><b>The bet.</b> One survey question, one guess: do East Germans want the state to look after them more or less than West Germans do? Two jars of 100 people show the answer.</p>
-  <p><b>The doubter.</b> Six objections, one at a time. Each says the gap is not really caused by communism, or asks something you must answer. You hold seven evidence cards. Each is one comparison the study made. Tap the one that settles the objection. The card turns over and shows the study's numbers. If it doesn't settle the point, the doubter says why and you try another. You keep what you learnt.</p>
+  <p><b>The doubter.</b> Six objections, one at a time. Each says the gap is not really caused by communism, or asks something you must answer. You hold seven evidence cards. Each is one comparison the study made. Tap the one that settles the objection. The card turns over and shows the study's numbers. If it doesn't settle the point, the doubter says why, that card is set aside for this objection, and you try another. Every card is back in play for the next objection: a card that was wrong here may be right there.</p>
   <p><b>The yardstick.</b> You get two tries per objection. Settled at the first try is a gold dot, at the second a grey dot. Miss twice and the doubter keeps the point (a red dot); you are shown the card the study plays, so you still learn it. The verdict counts objections settled, and first tries, out of six. A "point" on a card means one person in every 100.</p>
   <p><b>The forecast.</b> Drag a flag to the year you think the gap closes. The study's own forecast appears.</p>
   <p><b>What it shows.</b> Why the study believes that living under communism, and not poverty, history or migration, made people want more from the state.</p>
@@ -296,9 +296,9 @@
     $('say').textContent = o.say; $('pick').style.display = 'block'; $('res').style.display = 'none';
     renderPips();
     $('orient').textContent = S.tries[S.obj] ? 'Last try. Tap the card that settles this objection.' : 'Tap the evidence that settles this objection. Each card is a comparison from the study; it turns over to show what the study found. Two tries per objection.';
-    const used = new Set(M.OBJECTIONS.filter((x, i) => S.settled[i] || S.lost[i]).map(x => x.answer));
-    $('cards').innerHTML = M.CARDS.map(c => `<button class="cardb ${used.has(c.id) ? 'used' : ''}" data-card="${c.id}">${used.has(c.id) ? '<span class="tag">used ✓</span>' : S.seen[c.id] ? '<span class="tag">seen</span>' : ''}<span class="t">${c.title}</span><span class="c">${c.compares}</span></button>`).join('');
-    document.querySelectorAll('[data-card]').forEach(b => b.onclick = () => playCard(b.dataset.card));
+    const tried = new Set(S.tried[S.obj]); // only cards tried on this objection are greyed; all are live again on the next
+    $('cards').innerHTML = M.CARDS.map(c => `<button class="cardb ${tried.has(c.id) ? 'used' : ''}" data-card="${c.id}" ${tried.has(c.id) ? 'disabled' : ''}>${tried.has(c.id) ? '<span class="tag">tried ✗</span>' : ''}<span class="t">${c.title}</span><span class="c">${c.compares}</span></button>`).join('');
+    document.querySelectorAll('[data-card]:not([disabled])').forEach(b => b.onclick = () => playCard(b.dataset.card));
   }
   function playCard(id) {
     const c = M.CARDS.find(x => x.id === id), r = M.play(S, id);
