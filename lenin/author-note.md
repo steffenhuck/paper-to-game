@@ -1,0 +1,7 @@
+# The Wall in the Head — note for the author
+
+1. Look first at objection 2 ("the shock of 1990") and the *Old and young* card: is the climb from 7 to 34 points, with the note that age pulls West Germans the other way, enough for a stranger to see the dose–response argument? And at objection 4, where *Those who moved West* is the tempting wrong card and the doubter turns it against the player.
+2. Every number is in the `CONFIG` block at the top of `mechanism.js`, the only copy of the mechanism, each line tagged with its table, figure, section or design reason; the cards and the doubter's lines sit just below it. Edit, run `node fidelity.js`, then `python3 build.py`, which regenerates the page and refuses to build if the embedded mechanism differs from the file.
+3. We were least sure about the *Old and young* bars, which are read off Figure 1. Recomputing them from Table 4 with our probit-to-points conversion gives 7 → 8 → 15 → 23 → 24 rather than the figure's 7 → 12 → 24 → 34 → 33; the rise and the reversal with age survive either way, but the figure's older cohorts are larger than we can reproduce. The whole judging of which card "settles" which objection is our reading of the paper's robustness sections; the sources are named on each objection in `mechanism.js`.
+
+This game has had the builder's review only: screenshots and a scripted browser session at 380 px. It has not been played by real strangers, and the five-minute length is an estimate.

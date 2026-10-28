@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Wall in the Head</title>
+<style>
+  :root { --paper:#f3f0e8; --card:#fffdf7; --ink:#26241f; --dim:#6d6a62; --line:#d6d1c4; --concrete:#9a9890; --concrete2:#b9b7ae;
+          --east:#b23a26; --west:#355c86; --gold:#b88a1b; --ok:#2f6b3a; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size:16px; line-height:1.45; }
+  .screen { display:none; max-width:560px; margin:0 auto; padding:0 16px 40px; }
+  .screen.on { display:block; }
+  .wall { display:block; width:100%; height:44px; margin:0 0 6px; }
+  h1 { font-size:34px; line-height:1.1; margin:22px 0 6px; letter-spacing:-.01em; }
+  h2 { font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); margin:18px 0 6px; font-weight:600; }
+  p { margin:8px 0; }
+  .lede { font-size:18px; }
+  .aim { font-size:19px; font-weight:600; margin:16px 0; padding:10px 0; border-top:2px solid var(--ink); border-bottom:2px solid var(--ink); }
+  .aimbar { font-size:13px; color:var(--dim); margin:0 0 6px; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; }
+  button { font:inherit; font-size:16px; background:var(--card); color:var(--ink); border:2px solid var(--ink); border-radius:10px; padding:12px 14px; min-height:48px; cursor:pointer; flex:1; }
+  button.primary { background:var(--ink); color:var(--paper); }
+  button.east { border-color:var(--east); color:var(--east); font-weight:600; }
+  button.q { flex:0 0 auto; width:40px; min-height:40px; height:40px; padding:0; border-radius:50%; font-weight:700; color:var(--dim); border-color:var(--dim); }
+  .hud { display:flex; justify-content:space-between; align-items:center; gap:8px; margin:2px 0; }
+  .pips { display:flex; gap:6px; }
+  .pip { width:22px; height:22px; border-radius:50%; border:2px solid var(--line); font-size:13px; line-height:18px; text-align:center; color:#fff; font-weight:700; }
+  .pip.now { border-color:var(--ink); }
+  .pip.first { background:var(--gold); border-color:var(--gold); }
+  .pip.later { background:var(--concrete); border-color:var(--concrete); }
+  .doubter { display:flex; gap:10px; align-items:flex-start; margin:10px 0 6px; }
+  .doubter svg { flex:0 0 52px; }
+  .bubble { position:relative; background:var(--card); border:2px solid var(--ink); border-radius:14px; padding:10px 12px; font-size:17px; flex:1; }
+  .bubble b { display:block; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--dim); margin-bottom:2px; }
+  .orient { font-size:14px; color:var(--dim); margin:6px 0 8px; }
+  .cards { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .cardb { text-align:left; padding:10px; border-radius:10px; border:2px solid var(--line); background:var(--card); min-height:96px; display:flex; flex-direction:column; justify-content:flex-start; position:relative; }
+  .cardb .t { font-weight:700; font-size:16px; line-height:1.2; margin-bottom:4px; }
+  .cardb .c { font-size:13px; color:var(--dim); line-height:1.3; }
+  .cardb .tag { position:absolute; top:6px; right:8px; font-size:11px; color:var(--dim); }
+  .cardb.used { opacity:.55; }
+  .result { background:var(--card); border:2px solid var(--ink); border-radius:12px; padding:12px; margin:8px 0; }
+  .result .t { font-weight:700; font-size:18px; }
+  .result .src { font-size:12px; color:var(--dim); }
+  .result .unit { font-size:13px; color:var(--dim); margin:6px 0 2px; }
+  .finding { font-size:15px; margin:6px 0 0; }
+  .reply { margin:10px 0 6px; padding:10px 12px; border-radius:10px; font-size:16px; }
+  .reply.ok { background:#e5efe2; border-left:5px solid var(--ok); }
+  .reply.no { background:#f4e4df; border-left:5px solid var(--east); }
+  .yard { font-size:20px; font-weight:700; margin:8px 0 4px; }
+  .yard.ok { color:var(--ok); } .yard.no { color:var(--east); }
+  .legend { font-size:13px; display:flex; gap:14px; margin:2px 0; }
+  .legend i { display:inline-block; width:12px; height:12px; border-radius:2px; margin-right:4px; vertical-align:-1px; }
+  .flip { animation: flip .45s ease-out; transform-origin:top; }
+  @keyframes flip { from { transform:rotateX(70deg); opacity:0; } to { transform:none; opacity:1; } }
+  .fade { animation: fade .4s ease-out; }
+  @keyframes fade { from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
+  .qcard { background:var(--card); border:2px solid var(--ink); border-radius:12px; padding:12px 14px; font-size:17px; margin:10px 0; }
+  .qcard .opt { display:flex; justify-content:space-between; font-size:14px; color:var(--dim); margin-top:6px; gap:8px; }
+  .jars { display:flex; gap:14px; justify-content:center; margin:10px 0 2px; }
+  .jar { flex:1; max-width:180px; text-align:center; }
+  .jar .n { font-size:34px; font-weight:800; line-height:1; }
+  .jar .l { font-size:14px; font-weight:600; }
+  .big { font-size:22px; font-weight:700; margin:10px 0 4px; }
+  input[type=range] { -webkit-appearance:none; appearance:none; width:100%; height:48px; background:transparent; margin:0; }
+  input[type=range]::-webkit-slider-runnable-track { height:4px; background:var(--ink); border-radius:2px; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:34px; height:34px; margin-top:-15px; border-radius:50%; background:var(--gold); border:3px solid var(--ink); }
+  input[type=range]::-moz-range-track { height:4px; background:var(--ink); }
+  input[type=range]::-moz-range-thumb { width:30px; height:30px; border-radius:50%; background:var(--gold); border:3px solid var(--ink); }
+  .verdict div { margin:10px 0; }
+  .verdict .you { font-size:24px; font-weight:800; line-height:1.25; }
+  .verdict .paper { font-size:18px; }
+  .verdict .means { font-size:18px; font-style:italic; }
+  table { width:100%; border-collapse:collapse; font-size:14px; margin-top:6px; }
+  td { padding:6px 4px; border-bottom:1px solid var(--line); vertical-align:top; }
+  td:first-child { width:18px; } td:last-child { width:38%; color:var(--dim); }
+  .about p, .about li { font-size:15px; }
+  .about h3 { font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:var(--dim); margin:18px 0 4px; }
+  .attr { font-size:13px; color:var(--dim); margin-top:18px; border-top:1px solid var(--line); padding-top:8px; }
+  .muted { color:var(--dim); font-size:14px; }
+  a { color:var(--west); }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <pattern id="bricks" width="40" height="20" patternUnits="userSpaceOnUse">
+      <rect width="40" height="20" fill="#a9a79e"/>
+      <path d="M0 0H40M0 10H40M0 20H40M10 0V10M30 10V20" stroke="#8c8a82" stroke-width="1.4" fill="none"/>
+    </pattern>
+  </defs>
+</svg>
+<template id="wallT"><svg class="wall" viewBox="0 0 400 44" preserveAspectRatio="none" aria-hidden="true">
+  <rect x="0" y="4" width="400" height="36" fill="url(#bricks)"/><rect x="0" y="0" width="400" height="7" rx="3" fill="#c4c2b9"/>
+  <path d="M206 4 L198 14 L208 22 L200 31 L206 40" stroke="#f3f0e8" stroke-width="3" fill="none"/>
+</svg></template>
+
+<!-- START -->
+<section class="screen on" id="s-start">
+  <div class="wallslot"></div>
+  <h1>The Wall in the Head</h1>
+  <p class="lede">For 45 years Germany was split in two. The East lived under a communist state that ran everything. In 1990 the Wall came down. What had those years done to what people want?</p>
+  <div class="aim" id="aim-start"></div>
+  <p class="muted">About five minutes. One bet, six arguments with a doubter, one forecast. Every number comes from a 2005 study of German survey data.</p>
+  <div class="row"><button class="primary" id="b-start">Start</button></div>
+  <div class="row" style="margin-top:10px"><button id="b-help1">How to play</button><button id="b-about1">About the paper</button></div>
+</section>
+
+<!-- BET -->
+<section class="screen" id="s-bet">
+  <div class="wallslot"></div>
+  <div class="hud"><h2>First, a bet</h2><button class="q" data-help>?</button></div>
+  <div class="qcard">In 1997 a big survey asks Germans: <b>if you lose your job, who should make sure you have money to live on?</b>
+    <div class="opt"><span><b style="color:var(--ink)">The state</b> — mostly or only</span><span><b style="color:var(--ink)">Private forces</b> — you, family, insurers, charities</span></div></div>
+  <p id="bet-ask">East Germans had lived 45 years under a state that ran everything, and many hated it. Compared with West Germans, will they answer <b>"the state"</b>…</p>
+  <div class="row" id="bet-btns"><button class="east" data-bet="more">More often</button><button class="east" data-bet="less">Less often</button></div>
+  <div id="bet-out" style="display:none" class="fade">
+    <div class="big" id="bet-head"></div>
+    <div class="jars">
+      <div class="jar"><svg viewBox="0 0 110 110" id="jar-w" width="100%"></svg><div class="n" style="color:var(--west)" id="jn-w">0</div><div class="l" style="color:var(--west)">West Germans</div></div>
+      <div class="jar"><svg viewBox="0 0 110 110" id="jar-e" width="100%"></svg><div class="n" style="color:var(--east)" id="jn-e">0</div><div class="l" style="color:var(--east)">East Germans</div></div>
+    </div>
+    <p class="muted" style="text-align:center">Each jar holds 100 people. Filled dots answered "the state".</p>
+    <p id="bet-line"></p>
+    <p>Not everyone is convinced the gap comes from communism. Next, a doubter will argue with you.</p>
+    <div class="row"><button class="primary" id="b-to-play">Meet the doubter</button></div>
+  </div>
+</section>
+
+<!-- PLAY -->
+<section class="screen" id="s-play">
+  <div class="wallslot"></div>
+  <div class="aimbar" id="aim-play"></div>
+  <div class="hud"><div class="pips" id="pips"></div><span class="muted" id="objn"></span><button class="q" data-help>?</button></div>
+  <div class="doubter">
+    <svg width="52" height="60" viewBox="0 0 52 60" aria-hidden="true"><circle cx="26" cy="18" r="13" fill="#e9dcc8" stroke="#26241f" stroke-width="2"/>
+      <path d="M17 13 L23 11 M29 10 L36 14" stroke="#26241f" stroke-width="2.4" stroke-linecap="round"/><circle cx="21" cy="18" r="1.8" fill="#26241f"/><circle cx="31" cy="18" r="1.8" fill="#26241f"/>
+      <path d="M21 25 Q26 23 31 25" stroke="#26241f" stroke-width="2" fill="none"/><path d="M6 60 Q8 36 26 34 Q44 36 46 60Z" fill="#6d6a62"/></svg>
+    <div class="bubble"><b>The doubter</b><span id="say"></span></div>
+  </div>
+  <div id="pick">
+    <p class="orient">Tap the evidence that settles this objection. Each card is a comparison from the study; it turns over to show what the study found.</p>
+    <div class="cards" id="cards"></div>
+  </div>
+  <div id="res" style="display:none">
+    <div class="result flip" id="res-card"></div>
+    <div class="reply" id="reply"></div>
+    <div class="yard" id="yard"></div>
+    <div class="row"><button class="primary" id="b-next">Next</button></div>
+  </div>
+</section>
+
+<!-- FORECAST -->
+<section class="screen" id="s-fore">
+  <div class="wallslot"></div>
+  <div class="hud"><h2>Last: a forecast</h2><button class="q" data-help>?</button></div>
+  <p class="lede">The gap is closing: between 1997 and 2002 East Germans moved towards West Germans. <b>In which year will East and West want the same from the state?</b></p>
+  <p class="orient">Drag the flag to a year, then lock it in.</p>
+  <svg viewBox="0 0 340 90" width="100%" id="tl"></svg>
+  <input type="range" id="year" step="1">
+  <div class="row"><button class="primary" id="b-lock">Lock in <span id="yr"></span></button></div>
+  <div id="fore-out" style="display:none" class="fade">
+    <div class="big" id="fore-head"></div>
+    <p id="fore-line"></p>
+    <div class="row"><button class="primary" id="b-end">See the verdict</button></div>
+  </div>
+</section>
+
+<!-- END -->
+<section class="screen" id="s-end">
+  <div class="wallslot"></div>
+  <div class="verdict" id="verdict"></div>
+  <h2>Your six arguments</h2>
+  <table id="tally"></table>
+  <div class="row" style="margin-top:14px"><button class="primary" id="b-again">Play again</button><button id="b-about2">About the paper</button></div>
+  <p class="attr" id="attr2"></p>
+</section>
+
+<!-- HELP -->
+<section class="screen" id="s-help">
+  <div class="wallslot"></div>
+  <h2>How to play</h2>
+  <div class="aim" id="aim-help"></div>
+  <p><b>The setting.</b> From 1945 to 1990 Germany was split. The split was decided by the armies that won the war, not by the Germans. The East became a communist state that ran jobs, prices, schools and the press. In 1990 the two halves were reunited under the West's system. A 2005 study compared what East and West Germans wanted from the state in 1997 and 2002.</p>
+  <p><b>The bet.</b> One survey question, one guess: do East Germans want the state to look after them more or less than West Germans do? Two jars of 100 people show the answer.</p>
+  <p><b>The doubter.</b> Six objections, one at a time. Each says the gap is not really caused by communism, or asks something you must answer. You hold seven evidence cards. Each is one comparison the study made. Tap the one that settles the objection. The card turns over and shows the study's numbers. If it doesn't settle the point, the doubter says why and you try another. You keep what you learnt.</p>
+  <p><b>The yardstick.</b> Each objection is settled at the first try (a gold dot) or after more tries (a grey dot). The verdict counts first tries out of six. A "point" on a card means one person in every 100.</p>
+  <p><b>The forecast.</b> Drag a flag to the year you think the gap closes. The study's own forecast appears.</p>
+  <p><b>What it shows.</b> Why the study believes that living under communism, and not poverty, history or migration, made people want more from the state.</p>
+  <div class="row"><button class="primary" id="b-help-back">Back</button></div>
+</section>
+
+<!-- ABOUT -->
+<section class="screen about" id="s-about">
+  <div class="wallslot"></div>
+  <h2>About</h2>
+  <div id="about-body">
+<h3>Fidelity: statistical, from reported estimates only</h3>
+<p>Nothing in this game is simulated. Every number is one of three things: reported in the paper; computed from a reported regression coefficient (converted into "people in every 100" at the West German share, a conversion that reproduces the paper's own 14.5–17 point figures); or read off the paper's Figure 1. The jars of 100 people display shares; they are not individuals.</p>
+<p><b>It demonstrates</b> the paper's reported pattern and the logic of its argument: which comparison answers which alternative explanation. <b>It assumes</b> our conversion of coefficients into points, our averaging across the five survey questions, and our editing of the paper's argument into six objections, each with the one card the paper itself uses against it (sections are named on the cards). <b>The paper establishes</b> the associations in the German Socio-Economic Panel, with controls for income, education, job and family. The causal reading rests on the paper's natural-experiment case: the split was imposed from outside, the two halves were alike before 1945, and migration does not drive the result. The paper argues these points; it cannot prove them, and the game says "in the paper's survey", never "this proves".</p>
+<h3>What the paper hands over</h3>
+<p>Estimates. In 1997 and 2002 the survey asked who should provide financial security in five areas (unemployment, sickness, family, old age, care): the state or private forces. The paper runs probit regressions of "the state" on an East indicator, a 2002 indicator, their interaction and many controls (Table 1), then by age and birth cohort (Tables 3–4, Figure 1), for the same individuals in both years (Table 5), with regional economic controls (Table 8), for East Germans who moved West (Table 9), and for beliefs about luck and social conditions (Tables 11 and 13). An argument: why the gap should be read as an effect of communism (Section 2.1, Section 3.5, Section 5).</p>
+<h3>The discovery</h3>
+<p>Two kinds. A counterintuitive result: 45 years under an all-intrusive state did not turn East Germans against the state; they want more of it. And an identification result: the gap grows with years lived under communism, while in the West age pushes the other way; it survives controls for income, region and history; and it is closing, mostly because the same people are changing their minds.</p>
+<h3>The game</h3>
+<p>You bet on the opening question, then settle six objections by choosing the comparison that answers each. The judging is the paper's own: each objection accepts the card the paper uses against that alternative. The doubter's words are ours. The forecast shows the paper's straight-line projection from the 1997–2002 pace, 11 to 35 years after 1997 depending on the question, which the paper itself calls rough.</p>
+<h3>What is cut</h3>
+<p>The five policy areas separately (the cards average them; the bet uses the unemployment question); ordered-probit estimates; wealth, income-source and future-income controls; each eastern state separately; all individual control coefficients.</p>
+<h3>Divergences</h3>
+<p>The "Old and young" bars are read off Figure 1. Recomputing them from Table 4 with our conversion gives a flatter rise (7 to 24 points instead of 7 to 34); the rise and the reversal with age survive either way. "Two thirds changed their minds" is the paper's own rounding of a 35% average fall in the convergence coefficient among the same individuals. Years lived under communism are counted from 1945.</p>
+<h3>For the author</h3>
+<p>See the author note in the repository. This game has had the builder's review only; it has not been tested with real players.</p>
+</div>
+  <p class="attr" id="attr1"></p>
+  <div class="row"><button class="primary" id="b-about-back">Back</button></div>
+</section>
+
+<script>// The Wall in the Head — mechanism. Single source of truth: every number the game shows and every
+// rule that decides an outcome lives here. Runs unchanged in Node (fidelity.js) and in the page.
+// Source: Alesina & Fuchs-Schündeln (2005), "Good Bye Lenin (or Not?)", NBER WP 11700.
+// Areas, in the paper's column order: unemployed, sick, family, old, care.
+
+const CONFIG = {
+  // ---- Raw shares saying "only/mostly the state" (Table A2) ----------------------------------
+  westShare97: [0.6324, 0.3450, 0.3278, 0.3846, 0.4077],   // Table A2, West, 1997
+  eastShare97: [0.7885, 0.5276, 0.4906, 0.5609, 0.5644],   // Table A2, East, 1997
+  westShare02: [0.6533, 0.4001, 0.3210, 0.3670, 0.4427],   // Table A2, West, 2002
+  eastShare02: [0.7664, 0.5181, 0.4565, 0.4851, 0.5304],   // Table A2, East, 2002
+  socialCond: { west: 0.6044, east: 0.7241 },               // Table A2: "social conditions define possibilities", 1999
+  luck: { west: 0.4023, east: 0.3140 },                     // Table A2: "life achievements determined by luck"
+
+  // ---- Probit coefficients ------------------------------------------------------------------
+  t1East: [0.432, 0.434, 0.420, 0.426, 0.371],              // Table 1, east
+  t1Year02: [0.064, 0.165, -0.012, -0.033, 0.103],          // Table 1, year02
+  t1EastX02: [-0.123, -0.161, -0.060, -0.143, -0.176],      // Table 1, east*year02
+  t5EastX02: [-0.124, -0.109, -0.022, -0.067, -0.130],      // Table 5 (same individuals both years), east*year02
+  t8East: [0.293, 0.330, 0.367, 0.313, 0.235],              // Table 8 (with state income, unemployment, transfers), east
+  t9East: [0.076, 0.204, 0.221, 0.202, 0.130],              // Table 9, east (East Germans now living in the West)
+  t9EastInEast: [0.383, 0.246, 0.212, 0.239, 0.258],        // Table 9, east living in East (added on top)
+  t3Age: [-0.000, -0.002, -0.003, -0.003, -0.005],          // Table 3, age (West)
+  t3EastXAge: [0.009, 0.011, 0.010, 0.015, 0.008],          // Table 3, east*age
+  t4East: [0.318, 0.246, 0.147, 0.081, 0.205],              // Table 4, east (born after 1975, the omitted cohort)
+  t4Cohort: [                                               // Table 4, cohort main effects (West), rows = cohorts below
+    [0, 0, 0, 0, 0],
+    [0.014, 0.018, -0.204, -0.215, -0.027],
+    [-0.092, -0.061, -0.431, -0.391, -0.086],
+    [-0.064, -0.105, -0.488, -0.517, -0.092],
+    [-0.008, -0.104, -0.420, -0.467, -0.006]],
+  t4CohortXEast: [                                          // Table 4, cohort*east
+    [0, 0, 0, 0, 0],
+    [-0.106, -0.007, 0.120, 0.128, 0.012],
+    [0.169, 0.180, 0.286, 0.314, 0.152],
+    [0.356, 0.392, 0.501, 0.643, 0.365],
+    [0.303, 0.458, 0.454, 0.754, 0.391]],
+  fig1: [                                                   // read off Fig. 1 (East minus West, share), rows = cohorts
+    [0.110, 0.095, 0.055, 0.030, 0.080],
+    [0.065, 0.095, 0.180, 0.170, 0.100],
+    [0.195, 0.190, 0.325, 0.310, 0.180],
+    [0.245, 0.295, 0.430, 0.475, 0.265],
+    [0.210, 0.320, 0.385, 0.495, 0.240]],
+  cohorts: [                                                // Section 3.1 cohort groups; years under communism: ours, counting 1945–1990 as the paper does
+    { label: 'after 1975', years: 'under 15 years, as a child' },
+    { label: '1961–75', years: '15–29 years' },
+    { label: '1946–60', years: '30–44 years' },
+    { label: '1931–45', years: 'all 45 years' },
+    { label: 'before 1931', years: 'all 45, after a youth before it' }],
+
+  // ---- History and votes --------------------------------------------------------------------
+  income1928to36: { east: [1203, 877, 1169], west: [1203, 913, 1200], years: [1928, 1932, 1936] }, // footnote 6, Mark
+  pds1998: { east: [20.3, 23.6, 20.0, 20.7, 21.2], west: [1.0, 0.7, 2.4, 2.3, 1.5, 1.0, 1.2, 1.0, 1.0, 1.5] }, // Table A6
+  pds2002: { east: [17.2, 16.3, 16.2, 14.4, 17.0], west: [0.9, 0.7, 2.2, 2.1, 1.3, 1.0, 1.2, 1.0, 1.4, 1.3] }, // Table A6
+  eastIncomeRatio: 0.8,       // Section 2.2: East income per capita ~80% of West
+  unemploymentRatio: 2,       // Section 2.2: unemployment roughly twice as large
+  surveyGapYears: 5,          // 1997 to 2002
+  firstSurveyAfterUnification: 7, // 1990 to 1997
+  unificationYear: 1990,
+
+  // ---- Gameplay -----------------------------------------------------------------------------
+  betQuestion: 0,             // our choice: the opening jar uses the unemployment question, the most concrete
+  forecastMin: 1995,          // our choice: slider range for the closing forecast
+  forecastMax: 2070,
+  forecastStart: 2045,        // our choice: the flag starts away from the paper's band
+};
+
+// ---- Statistics --------------------------------------------------------------------------------
+function erf(x) { // Abramowitz–Stegun 7.1.26, |error| < 1.5e-7
+  const t = 1 / (1 + 0.3275911 * Math.abs(x));
+  const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x);
+  return x >= 0 ? y : -y;
+}
+function Phi(x) { return 0.5 * (1 + erf(x / Math.SQRT2)); }
+function PhiInv(p) { let lo = -8, hi = 8; for (let i = 0; i < 80; i++) { const m = (lo + hi) / 2; if (Phi(m) < p) lo = m; else hi = m; } return (lo + hi) / 2; }
+const mean = a => a.reduce((s, v) => s + v, 0) / a.length;
+
+// Convert a probit coefficient into a difference in share, evaluated at a base share (our approximation).
+function pointsAt(coef, base) { const z = PhiInv(base); return Phi(z + coef) - Phi(z); }
+// Cross-partial for the east*year02 interaction (Ai & Norton 2003, as the paper's footnote 15).
+function interactionAt(e, y, ey, base) { const z = PhiInv(base); return Phi(z + e + y + ey) - Phi(z + y) - Phi(z + e) + Phi(z); }
+
+// ---- Derived numbers (all the game displays) -------------------------------------------------
+function derive(baseKey) {
+  const C = CONFIG, base = C[baseKey || 'westShare97'], A = [0, 1, 2, 3, 4];
+  const rawGap97 = A.map(q => C.eastShare97[q] - C.westShare97[q]);
+  const rawGap02 = A.map(q => C.eastShare02[q] - C.westShare02[q]);
+  const eastPts = A.map(q => pointsAt(C.t1East[q], base[q]));
+  const change02 = A.map(q => interactionAt(C.t1East[q], C.t1Year02[q], C.t1EastX02[q], base[q]));
+  const yearsToClose = A.map(q => eastPts[q] / -change02[q] * C.surveyGapYears);
+  const closeYear = yearsToClose.map(y => C.unificationYear + C.firstSurveyAfterUnification + y);
+  const panelRatio = A.map(q => C.t5EastX02[q] / C.t1EastX02[q]);
+  const regionalPts = A.map(q => pointsAt(C.t8East[q], base[q]));
+  const moverPts = A.map(q => pointsAt(C.t9East[q], base[q]));
+  const stayerPts = A.map(q => pointsAt(C.t9East[q] + C.t9EastInEast[q], base[q]));
+  const cohortFig = C.fig1.map(r => mean(r));
+  const cohortCalc = C.t4CohortXEast.map((r, c) => mean(A.map(q => {
+    const z = PhiInv(base[q]) + C.t4Cohort[c][q];
+    return Phi(z + C.t4East[q] + r[q]) - Phi(z);
+  })));
+  const ageWest = mean(C.t3Age), ageEast = mean(A.map(q => C.t3Age[q] + C.t3EastXAge[q]));
+  return {
+    rawGap97, rawGap02, eastPts, change02, yearsToClose, closeYear, panelRatio, regionalPts, moverPts, stayerPts,
+    cohortFig, cohortCalc, ageWest, ageEast,
+    mindShare: mean(panelRatio),                       // share of the narrowing still present among the same individuals = minds changing
+    closeLo: Math.min(...closeYear), closeHi: Math.max(...closeYear),
+    pds98: { east: mean(C.pds1998.east), west: mean(C.pds1998.west) },
+    pds02: { east: mean(C.pds2002.east), west: mean(C.pds2002.west) },
+  };
+}
+const D = derive();
+const pts = x => Math.round(100 * x);
+
+// ---- The bet ----------------------------------------------------------------------------------
+function betResult(choice) { // choice: 'more' | 'less'
+  const q = CONFIG.betQuestion, w = pts(CONFIG.westShare97[q]), e = pts(CONFIG.eastShare97[q]);
+  const right = choice === 'more';
+  return { west: w, east: e, right,
+    head: right ? 'More. You called it.' : 'More, not less.',
+    line: right
+      ? `${e} in every 100 East Germans said "the state", against ${w} in every 100 West Germans.`
+      : `${e} in every 100 East Germans said "the state", against ${w} in every 100 West Germans. "They'll be sick of the state" is a natural guess, and it is the first idea the paper rejects.` };
+}
+
+// ---- The evidence cards -----------------------------------------------------------------------
+// chart: { kind: 'pairs' | 'bars' | 'split', rows } — numbers only; the page draws them.
+const CARDS = [
+  { id: 'income', title: 'Same pay, same job', compares: 'East vs West Germans with the same income, schooling, job and family.',
+    shows: 'the gap stays when you compare people with the same income and job',
+    source: 'Tables A2, 1 and 8',
+    chart: { kind: 'bars', unit: 'points more East Germans say "the state"', rows: [
+      { label: 'Everyone', v: pts(mean(D.rawGap97)) },
+      { label: 'Same pay, job, family', v: pts(mean(D.eastPts)) },
+      { label: '…and counting aid to the East', v: pts(mean(D.regionalPts)) }] },
+    finding: `Comparing like with like barely moves the gap. Counting the money the eastern states receive explains up to a third of it; most of it remains.` },
+  { id: 'cohort', title: 'Old and young', compares: 'The East–West gap in each generation, by year of birth.',
+    shows: 'the gap is small in the young and large in the old',
+    source: 'Fig. 1 (read off), Tables 3 and 4',
+    chart: { kind: 'bars', unit: 'points more East Germans say "the state", by year of birth', rows:
+      CONFIG.cohorts.map((c, i) => ({ label: 'born ' + c.label, sub: c.years, v: pts(D.cohortFig[i]) })) },
+    finding: `The longer someone lived under communism, the bigger the gap. And age pulls the two sides opposite ways: older West Germans want less state, older East Germans more.` },
+  { id: 'before', title: 'Before the split', compares: 'The later East and West regions before 1945.',
+    shows: 'before 1945 the two halves had the same incomes, and the West voted, if anything, more for state intervention',
+    source: 'Table A1, footnote 6, Section 2.1.2',
+    chart: { kind: 'pairs', unit: 'income per head, Mark', rows: CONFIG.income1928to36.years.map((y, i) =>
+      ({ label: String(y), east: CONFIG.income1928to36.east[i], west: CONFIG.income1928to36.west[i] })) },
+    finding: 'Before the split the two halves were equally rich. In the 1898 elections the West, if anything, leaned more towards state intervention. Places that were Prussian show no extra love of the state.' },
+  { id: 'panel', title: 'Same people, five years on', compares: 'The same East Germans asked in 1997 and again in 2002.',
+    shows: 'the same individuals became less keen on the state between 1997 and 2002',
+    source: 'Tables 1 and 5, Section 3.2',
+    chart: { kind: 'split', unit: 'why the gap narrowed, 1997 to 2002', rows: [
+      { label: 'the same people changed their minds', v: pts(D.mindShare) },
+      { label: 'older people replaced by younger', v: 100 - pts(D.mindShare) }] },
+    finding: 'East Germans are converging on the West, and mostly because the same people are changing their minds. Preferences that move are not a fixed trait that migration sorted.' },
+  { id: 'ballot', title: 'The ballot box', compares: 'Votes for the ex-communist party (PDS) in the 1998 federal election.',
+    shows: 'people in the East voted for the ex-communist party far more',
+    source: 'Table A6, Section 5',
+    chart: { kind: 'pairs', unit: '% of votes for the PDS', rows: [
+      { label: '1998', east: Math.round(D.pds98.east), west: Math.round(D.pds98.west * 10) / 10 },
+      { label: '2002', east: Math.round(D.pds02.east), west: Math.round(D.pds02.west * 10) / 10 }] },
+    finding: 'Votes cost effort and the survey answers cost nothing, yet they tell the same story, including the drift towards the centre by 2002.' },
+  { id: 'beliefs', title: 'Luck or society?', compares: 'What East and West Germans think decides how a life turns out.',
+    shows: 'East Germans believe more that society, not luck or effort, decides your fate',
+    source: 'Tables A2, 11 and 13, Section 4',
+    chart: { kind: 'pairs', unit: '% who agree', rows: [
+      { label: '"Society decides my chances"', east: pts(CONFIG.socialCond.east), west: pts(CONFIG.socialCond.west) },
+      { label: '"Life is down to luck"', east: pts(CONFIG.luck.east), west: pts(CONFIG.luck.west) }] },
+    finding: 'If society decides who ends up poor, society should fix it. A tenet of the regime\'s ideology, it is held more by the old who lived longest under it. The paper also suggests people simply got used to an all-providing state.' },
+  { id: 'movers', title: 'Those who moved West', compares: 'East Germans who now live in the West vs those who stayed.',
+    shows: 'East Germans who moved West are much less keen on the state than those who stayed',
+    source: 'Table 9, Section 3.4',
+    chart: { kind: 'bars', unit: 'points more than West Germans say "the state"', rows: [
+      { label: 'Stayed in the East', v: pts(mean(D.stayerPts)) },
+      { label: 'Moved to the West', v: pts(mean(D.moverPts)) }] },
+    finding: 'Movers are closer to West Germans. The paper cannot say whether living in the West changed them or whether they were different to begin with.' },
+];
+
+// ---- The doubter's objections, in the order played -------------------------------------------
+// answer: the card the paper itself uses against this alternative (section in source).
+const OBJECTIONS = [
+  { id: 'poverty', say: `Of course they want help. They're poorer: the East earns about ${pts(1 - CONFIG.eastIncomeRatio)}% less and has twice the unemployment.`,
+    crux: 'whether it is just money', answer: 'income', source: 'Sections 3, 3.3',
+    yield: 'Fair. Some of it is money. Most of it isn\'t.' },
+  { id: 'shock', say: 'Then it\'s the shock of 1990. Factories closed overnight, and everyone in the East clung to the state.',
+    crux: 'whether it was 45 years of communism, or just the upheaval after it', answer: 'cohort', source: 'Sections 3.1, 3.5',
+    yield: 'Hm. The shock of 1990 hit every generation, but the gap grows with the years each one lived under communism.' },
+  { id: 'always', say: 'Easterners were always like this. Different region, different history, long before communism.',
+    crux: 'what the two halves were like before 1945', answer: 'before', source: 'Section 2.1.2, Table A1',
+    yield: 'All right. Before the war you couldn\'t tell them apart.' },
+  { id: 'selection', say: 'Three million fled West before the Wall went up in 1961. The ones who liked markets left; the ones who liked the state stayed.',
+    crux: 'whether the gap is just who left and who stayed', answer: 'panel', source: 'Sections 2.1.3, 3.2',
+    yield: 'If it were only who left, the gap would sit still. Instead the very same people are shifting. Point taken.' },
+  { id: 'talk', say: 'People tell a survey taker anything. Talk is cheap.',
+    crux: 'whether people act on these answers', answer: 'ballot', source: 'Section 5, Table A6',
+    yield: 'Votes, then. That\'s more than talk.' },
+  { id: 'why', say: 'Fine, the regime did it. But how can a government change what people want?',
+    crux: 'what changed inside people\'s heads', answer: 'beliefs', source: 'Section 4',
+    yield: 'So it changed what they believe about how lives turn out. That I can follow.' },
+];
+
+// Specific rebuttals for tempting wrong cards; otherwise a generic one is built from the card and objection.
+const REBUTTALS = {
+  'selection:movers': 'That helps me! The ones who left are less keen on the state, exactly what you\'d see if they were different all along. The paper itself says it can\'t tell.',
+  'always:cohort': 'Suggestive. But an old regional culture could also be strongest in the old. Show me what the regions were like before 1945.',
+  'shock:panel': 'That shows minds are moving now. It doesn\'t say what put the difference there in the first place.',
+  'shock:income': 'You showed me that already. It rules out income, not the upheaval of 1990.',
+  'poverty:movers': 'Movers also moved to the richer West. That mixes money and place together; it isn\'t a clean test.',
+  'why:panel': 'That shows minds can change. My question is what is in them.',
+};
+
+const cardById = id => CARDS.find(c => c.id === id);
+
+function judge(objIndex, cardId) {
+  const o = OBJECTIONS[objIndex], c = cardById(cardId);
+  if (!o || !c) throw new Error('bad play');
+  if (o.answer === cardId) return { ok: true, line: o.yield, finding: c.finding };
+  const key = o.id + ':' + cardId;
+  return { ok: false, line: REBUTTALS[key] || `True: ${c.shows}. But that doesn't settle my point, which is ${o.crux}.`, finding: c.finding };
+}
+
+// ---- Session state ------------------------------------------------------------------------------
+function newSession() { return { bet: null, obj: 0, tries: OBJECTIONS.map(() => 0), settled: OBJECTIONS.map(() => false), seen: {}, forecast: null }; }
+
+function play(s, cardId) {
+  if (s.obj >= OBJECTIONS.length || s.settled[s.obj]) throw new Error('no open objection');
+  const r = judge(s.obj, cardId);
+  s.tries[s.obj] += 1; s.seen[cardId] = true;
+  if (r.ok) s.settled[s.obj] = true;
+  return Object.assign({ tries: s.tries[s.obj], firstTry: r.ok && s.tries[s.obj] === 1 }, r);
+}
+function advance(s) { if (s.settled[s.obj]) s.obj += 1; return s.obj; }
+function firstTries(s) { return s.tries.filter((t, i) => s.settled[i] && t === 1).length; }
+
+function forecastResult(year) {
+  const lo = Math.round(D.closeLo), hi = Math.round(D.closeHi);
+  const inside = year >= lo && year <= hi;
+  return { year, lo, hi, inside, mind: pts(D.mindShare),
+    head: inside ? `${year}: inside the paper's range.` : year < lo ? `${year}: sooner than the paper expects.` : `${year}: later than the paper expects.`,
+    line: `If the 1997–2002 pace held, the gap would close between about ${lo} and ${hi}, depending on the question: one to two generations. That is the paper's straight-line forecast from 2005, and it says so. About ${pts(D.mindShare)}% of the narrowing came from people changing their minds, the rest from older East Germans being replaced by younger ones.` };
+}
+
+function verdict(s) {
+  const n = s.settled.filter(Boolean).length, k = firstTries(s);
+  return {
+    you: `You settled ${n} of ${OBJECTIONS.length} objections, ${k} of them at the first try.`,
+    paper: `In the paper's survey, East Germans were about ${pts(mean(D.eastPts))} points more likely than comparable West Germans to want the state in charge. The gap was biggest in those who lived longest under communism, and money, history and migration do not explain it away.`,
+    means: 'A political system can reshape what its citizens want, and the change takes a generation or two to wear off.',
+  };
+}
+
+const MECH = { CONFIG, Phi, PhiInv, pointsAt, interactionAt, derive, D, CARDS, OBJECTIONS, REBUTTALS, judge, newSession, play, advance, firstTries, betResult, forecastResult, verdict };
+if (typeof module !== 'undefined') module.exports = MECH;
+</script>
+<script>
+(function () {
+  const M = MECH, $ = id => document.getElementById(id);
+  const AIM = 'Your aim: prove to a doubter that living under communism changed what people want.';
+  const ATTR = 'Alberto Alesina and Nicola Fuchs-Schündeln, "Good Bye Lenin (or Not?): The Effect of Communism on People’s Preferences," NBER Working Paper 11700, 2005 (published in the American Economic Review 97(4), 2007, doi:10.1257/aer.97.4.1507). Game built from this paper; the paper is the authority where the two disagree.';
+  ['aim-start', 'aim-help'].forEach(id => $(id).textContent = AIM); $('aim-play').textContent = AIM.replace('Your aim: p', 'P');
+  $('attr1').textContent = ATTR; $('attr2').textContent = ATTR;
+  document.querySelectorAll('.wallslot').forEach(s => s.appendChild($('wallT').content.cloneNode(true)));
+
+  let S, current = 's-start', helpFrom = 's-start';
+  function show(id) { document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id)); current = id; window.scrollTo(0, 0); }
+  function help() { helpFrom = current; show('s-help'); }
+  document.querySelectorAll('[data-help]').forEach(b => b.onclick = help);
+  $('b-help1').onclick = help;
+  $('b-help-back').onclick = () => show(helpFrom);
+  let aboutFrom = 's-start';
+  $('b-about1').onclick = () => { aboutFrom = 's-start'; show('s-about'); };
+  $('b-about2').onclick = () => { aboutFrom = 's-end'; show('s-about'); };
+  $('b-about-back').onclick = () => show(aboutFrom);
+
+  // ---- bet ----
+  function jar(svg, n, color) {
+    svg.innerHTML = ''; const ns = 'http://www.w3.org/2000/svg';
+    const r = document.createElementNS(ns, 'rect'); Object.assign(r, {}); r.setAttribute('x', 1); r.setAttribute('y', 1); r.setAttribute('width', 108); r.setAttribute('height', 108); r.setAttribute('rx', 10); r.setAttribute('fill', '#fffdf7'); r.setAttribute('stroke', color); r.setAttribute('stroke-width', 2); svg.appendChild(r);
+    const dots = [];
+    for (let i = 0; i < 100; i++) { const c = document.createElementNS(ns, 'circle'); const row = 9 - Math.floor(i / 10), col = i % 10; c.setAttribute('cx', 10 + col * 10); c.setAttribute('cy', 10 + row * 10); c.setAttribute('r', 4); c.setAttribute('fill', 'none'); c.setAttribute('stroke', '#cfcabd'); c.setAttribute('stroke-width', 1.2); svg.appendChild(c); dots.push(c); }
+    return dots;
+  }
+  function startBet() {
+    $('bet-btns').style.display = 'flex'; $('bet-out').style.display = 'none'; $('bet-ask').style.display = 'block'; show('s-bet');
+  }
+  document.querySelectorAll('[data-bet]').forEach(b => b.onclick = () => {
+    const r = M.betResult(b.dataset.bet); S.bet = b.dataset.bet;
+    $('bet-btns').style.display = 'none'; $('bet-out').style.display = 'block';
+    $('bet-head').textContent = 'You said: ' + (S.bet === 'more' ? 'more often' : 'less often') + '. ' + r.head;
+    $('bet-line').textContent = r.line;
+    const dw = jar($('jar-w'), r.west, 'var(--west)'), de = jar($('jar-e'), r.east, 'var(--east)');
+    let k = 0; const t = setInterval(() => {
+      k++; if (k <= r.west) { dw[k - 1].setAttribute('fill', '#355c86'); dw[k - 1].setAttribute('stroke', '#355c86'); $('jn-w').textContent = k; }
+      if (k <= r.east) { de[k - 1].setAttribute('fill', '#b23a26'); de[k - 1].setAttribute('stroke', '#b23a26'); $('jn-e').textContent = k; }
+      if (k >= 100) clearInterval(t);
+    }, 18);
+  });
+  $('b-to-play').onclick = () => { renderObjection(); show('s-play'); };
+
+  // ---- charts ----
+  function chart(c) {
+    const W = 320, ns = 'http://www.w3.org/2000/svg'; let h = 0, body = '';
+    const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+    if (c.kind === 'bars') {
+      const max = Math.max(...c.rows.map(r => r.v)) * 1.15;
+      c.rows.forEach((r, i) => { const y = h; const w = Math.max(2, (W - 50) * r.v / max);
+        body += `<text x="0" y="${y + 13}" font-size="13" fill="#26241f">${esc(r.label)}${r.sub ? ` <tspan fill="#6d6a62" font-size="12">· ${esc(r.sub)}</tspan>` : ''}</text>`;
+        body += `<rect x="0" y="${y + 18}" width="${w}" height="16" rx="3" fill="#b23a26"/><text x="${w + 6}" y="${y + 31}" font-size="15" font-weight="700" fill="#b23a26">${r.v}</text>`;
+        h += 42; });
+    } else if (c.kind === 'pairs') {
+      const max = Math.max(...c.rows.map(r => Math.max(r.east, r.west))) * 1.12;
+      c.rows.forEach(r => { const y = h;
+        body += `<text x="0" y="${y + 13}" font-size="13" fill="#26241f">${esc(r.label)}</text>`;
+        [['east', '#b23a26', 18], ['west', '#355c86', 38]].forEach(([k, col, dy]) => { const w = Math.max(2, (W - 60) * r[k] / max);
+          body += `<rect x="0" y="${y + dy}" width="${w}" height="16" rx="3" fill="${col}"/><text x="${w + 6}" y="${y + dy + 13}" font-size="15" font-weight="700" fill="${col}">${r[k].toLocaleString('en')}</text>`; });
+        h += 62; });
+    } else if (c.kind === 'split') {
+      const a = c.rows[0].v; const wa = W * a / 100;
+      body += `<rect x="0" y="0" width="${wa}" height="30" fill="#b88a1b"/><rect x="${wa}" y="0" width="${W - wa}" height="30" fill="#9a9890"/>`;
+      body += `<text x="8" y="21" font-size="16" font-weight="700" fill="#fff">${a}%</text><text x="${W - 8}" y="21" font-size="16" font-weight="700" fill="#fff" text-anchor="end">${c.rows[1].v}%</text>`;
+      body += `<text x="0" y="50" font-size="13" fill="#26241f">■ ${esc(c.rows[0].label)}</text><text x="0" y="68" font-size="13" fill="#6d6a62">■ ${esc(c.rows[1].label)}</text>`;
+      h = 74;
+    }
+    return `<svg viewBox="0 0 ${W} ${h}" width="100%">${body}</svg>`;
+  }
+  const legend = c => c.kind === 'pairs' ? '<div class="legend"><span><i style="background:var(--east)"></i>East</span><span><i style="background:var(--west)"></i>West</span></div>' : '';
+
+  // ---- doubter ----
+  function renderPips() {
+    $('pips').innerHTML = M.OBJECTIONS.map((o, i) => {
+      const cls = S.settled[i] ? (S.tries[i] === 1 ? 'first' : 'later') : (i === S.obj ? 'now' : '');
+      return `<div class="pip ${cls}">${S.settled[i] ? '✓' : ''}</div>`; }).join('');
+    $('objn').textContent = 'Objection ' + Math.min(S.obj + 1, 6) + ' of 6';
+  }
+  function renderObjection() {
+    const o = M.OBJECTIONS[S.obj];
+    $('say').textContent = o.say; $('pick').style.display = 'block'; $('res').style.display = 'none';
+    renderPips();
+    const used = new Set(M.OBJECTIONS.filter((x, i) => S.settled[i]).map(x => x.answer));
+    $('cards').innerHTML = M.CARDS.map(c => `<button class="cardb ${used.has(c.id) ? 'used' : ''}" data-card="${c.id}">${used.has(c.id) ? '<span class="tag">used ✓</span>' : S.seen[c.id] ? '<span class="tag">seen</span>' : ''}<span class="t">${c.title}</span><span class="c">${c.compares}</span></button>`).join('');
+    document.querySelectorAll('[data-card]').forEach(b => b.onclick = () => playCard(b.dataset.card));
+  }
+  function playCard(id) {
+    const c = M.CARDS.find(x => x.id === id), r = M.play(S, id);
+    $('pick').style.display = 'none'; $('res').style.display = 'block';
+    const rc = $('res-card'); rc.classList.remove('flip'); void rc.offsetWidth; rc.classList.add('flip');
+    rc.innerHTML = `<div class="t">${c.title}</div><div class="src">${c.compares} · ${c.source}</div><div class="unit">${c.chart.unit}</div>${legend(c.chart)}${chart(c.chart)}<p class="finding">${r.finding}</p>`;
+    $('reply').className = 'reply ' + (r.ok ? 'ok' : 'no'); $('reply').textContent = 'Doubter: ' + r.line;
+    $('yard').className = 'yard ' + (r.ok ? 'ok' : 'no');
+    $('yard').textContent = r.ok ? (r.firstTry ? '✓ Settled at the first try' : `✓ Settled on try ${r.tries}`) : '✗ Not settled. Try another card.';
+    $('b-next').textContent = r.ok ? (S.obj === M.OBJECTIONS.length - 1 ? 'On to the forecast' : 'Next objection') : 'Back to the cards';
+    $('b-next').onclick = () => {
+      if (!r.ok) { renderObjection(); window.scrollTo(0, 0); return; }
+      M.advance(S); if (S.obj >= M.OBJECTIONS.length) startForecast(); else { renderObjection(); window.scrollTo(0, 0); }
+    };
+    renderPips();
+  }
+
+  // ---- forecast ----
+  const C = M.CONFIG, X0 = 1990, X1 = C.forecastMax, xs = y => 10 + 320 * (y - X0) / (X1 - X0);
+  function drawTimeline(y, band) {
+    let s = `<line x1="10" y1="60" x2="330" y2="60" stroke="#26241f" stroke-width="2"/>`;
+    if (band) s += `<rect x="${xs(band.lo)}" y="44" width="${xs(band.hi) - xs(band.lo)}" height="32" fill="#b88a1b" opacity=".35"/><text x="${(xs(band.lo) + xs(band.hi)) / 2}" y="40" font-size="12" text-anchor="middle" fill="#7a5a10">the study's range</text>`;
+    for (let t = 1990; t <= X1; t += 10) s += `<line x1="${xs(t)}" y1="56" x2="${xs(t)}" y2="64" stroke="#26241f"/><text x="${xs(t)}" y="82" font-size="11" text-anchor="middle" fill="#6d6a62">${t}</text>`;
+    s += `<text x="${xs(1997)}" y="52" font-size="10" text-anchor="middle" fill="#6d6a62">survey</text><circle cx="${xs(1997)}" cy="60" r="3" fill="#26241f"/>`;
+    s += `<line x1="${xs(y)}" y1="60" x2="${xs(y)}" y2="14" stroke="#26241f" stroke-width="2"/><path d="M${xs(y)} 14 L${xs(y) + 22} 20 L${xs(y)} 27Z" fill="#b23a26"/><text x="${xs(y)}" y="10" font-size="12" text-anchor="${y > 2055 ? 'end' : 'start'}" font-weight="700">${y}</text>`;
+    $('tl').innerHTML = s;
+  }
+  function startForecast() {
+    const yr = $('year'); yr.min = C.forecastMin; yr.max = C.forecastMax; yr.value = C.forecastStart;
+    yr.disabled = false; $('b-lock').disabled = false; $('b-lock').style.display = ''; $('fore-out').style.display = 'none';
+    const upd = () => { $('yr').textContent = yr.value; drawTimeline(+yr.value); }; yr.oninput = upd; upd();
+    show('s-fore');
+  }
+  $('b-lock').onclick = () => {
+    const y = +$('year').value, r = M.forecastResult(y); S.forecast = y;
+    $('year').disabled = true; $('b-lock').style.display = 'none';
+    drawTimeline(y, r); $('fore-head').textContent = r.head; $('fore-line').textContent = r.line; $('fore-out').style.display = 'block';
+  };
+  $('b-end').onclick = () => {
+    const v = M.verdict(S);
+    $('verdict').innerHTML = `<div class="you">${v.you}</div><div class="paper">${v.paper}</div><div class="means">${v.means}</div>`;
+    $('tally').innerHTML = M.OBJECTIONS.map((o, i) => `<tr><td>${S.tries[i] === 1 ? '<b style="color:var(--gold)">●</b>' : '<b style="color:var(--concrete)">●</b>'}</td><td>${o.say.split('.')[0]}.</td><td>${M.CARDS.find(c => c.id === o.answer).title}${S.tries[i] > 1 ? ` <span class="muted">(try ${S.tries[i]})</span>` : ''}</td></tr>`).join('')
+      + `<tr><td></td><td colspan="2">Your bet: ${S.bet === 'more' ? 'more' : 'less'} state. Your forecast: ${S.forecast}.</td></tr>`;
+    show('s-end');
+  };
+
+  function newGame() { S = M.newSession(); startBet(); }
+  $('b-start').onclick = newGame;
+  $('b-again').onclick = newGame;
+})();
+</script>
+</body>
+</html>
