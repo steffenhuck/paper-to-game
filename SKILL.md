@@ -9,7 +9,7 @@ This skill turns someone else's paper into a beta game. The author will tweak it
 
 The method was reverse-engineered from *The Screen* (built from Huck's "Closed Codes"): a paper becomes a game not by itself but through a short sequence of design calls made **before any code exists**. This skill forces those calls, in order, and records them.
 
-Two stages, one invocation. Stage one writes the design memo and shows it to the user. Stage two builds the game from the memo, not from the paper. Do not skip to code.
+Two stages, one invocation, no pause between them. Stage one writes the design memo and shows it to the user. Stage two builds the game from the memo, not from the paper, and starts immediately: the memo is a record the user can read while the build runs, not a question. Stop only if the user interrupts. Do not skip the memo and go straight to code; do not wait for approval of it either.
 
 ---
 
@@ -98,7 +98,7 @@ If the check fails, say so in the memo and do not build on a wrong mechanism.
 
 ## Stage two: the build
 
-Build from the memo. If the user has said nothing after seeing the memo, proceed; if they redirected, revise the memo first.
+Build from the memo, straight away. If the user interrupts to redirect, revise the memo first.
 
 ### Procedure
 
@@ -126,6 +126,9 @@ Match the substance of the paper; do not quote it. Technical terms only where th
 End screen and About screen carry: paper title, authors, journal, year, DOI or URL. "Game built from this paper; the paper is the authority where the two disagree."
 
 ### Deliverables
+
+When the skill is invoked inside the `paper-to-game` repository, the build also lands in the repo: a new folder named by slug (`olive/`), holding the game, `memo.md`, `author-note.md`, the headless mechanism and fidelity check, the fidelity result and two screenshots; the PDF moved from `inbox/` into that folder if it was there; a new row in the README's games table with the play link `https://steffenhuck.github.io/paper-to-game/<slug>/<file>.html`; one commit; a push to `main`. The reply ends with the play link and the folder link.
+
 
 - `<slug>.html` — the game.
 - The memo, as shown in stage one, also embedded in the About screen.
