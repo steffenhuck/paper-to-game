@@ -62,6 +62,10 @@ Name the kind in the memo. If the paper offers none of these, say so: the game w
 
 The player commits before the outcome is shown: a prediction, a setting, a sorting, a bet. That commitment is what makes the outcome mean something. It does *not* follow that the player must be wrong. An intuition that turns out right is rewarding; an intuition that turns out wrong is instructive; both work if the commitment was real. Never engineer an unfair failure to manufacture a twist — the sensible choice should fail only where the paper says it fails.
 
+### The discovery comes from the paper, not from the rules
+
+A game's objectives, payoffs, scoring rules and constraints are the designer's, and they can produce "findings" of their own: a strategy that wins because of how the game scores, a trade-off that exists only because of a budget the designer invented, an optimum created by a constraint the paper never imposed. The engine keeps the two apart. For every discovery the game stages, the memo says whether it follows from the paper's mechanism or from a design choice, and the fidelity plan includes a check that the central discovery survives plausible changes to the designer's choices — a different scoring rule, a different objective, a loosened constraint. A discovery that depends on the rules is a game mechanic, not a scientific finding, and the game must not present it as what the paper found.
+
 ### Fun first, mechanism honest
 
 The mechanism — what turns the player's actions into outcomes — is ported from the paper's model, synthesised from its estimates, or constructed to illustrate its argument, and it never claims more than its fidelity level allows (section 5). But the *presentation* may simplify without limit: fewer agents, bigger ones, a compressed clock, exaggerated parameters, a stylised payoff, one regime instead of twelve. When the only fully faithful game would be dull, the engine picks the playable concept, keeps the mechanism honest where it is used, and declares what was dropped. The author can put it back.
@@ -193,7 +197,9 @@ Written in full and shown to the user before the build, as a record, not a quest
 
 In this order; do not skip to the skin.
 
-1. **Mechanism, headless.** Plain functions, no DOM. Every chosen number in one `CONFIG` block at the top, each line tagged with its origin (`// Table 4, median`, `// eq. 7`, `// read off Fig. 2b`, `// our choice: clock compression`). Run the fidelity plan in Node or Python; record the result. If it fails, fix the mechanism or revise the memo; never build on a mechanism that misstates the paper at its declared level.
+1. **Mechanism, headless, and the only copy.** Plain functions, no DOM, in one file (`mechanism.js` or `.py`). Every chosen number in one `CONFIG` block at the top of that file, each line tagged with its origin (`// Table 4, median`, `// eq. 7`, `// read off Fig. 2b`, `// our choice: clock compression`). Run the fidelity plan against this file in Node or Python; record the result. If it fails, fix the mechanism or revise the memo; never build on a mechanism that misstates the paper at its declared level.
+
+   This file is the single source of truth. The HTML is *generated* from it by a build script that inlines the mechanism verbatim; the game's own code never re-implements, copies by hand, or adjusts any part of the mechanism. The build script also verifies, byte for byte, that the mechanism embedded in the published HTML is identical to the file the fidelity check ran against, and fails the build otherwise. A change to the mechanism is made in the file, re-checked, and rebuilt — never patched into the HTML.
 
 2. **Loop on placeholder graphics.** The play loop with boxes and numbers. Play it headlessly with a script that prints, after each action, what changed and where the player now stands. Read the printout as the stranger: did something visible change, did it say whether the action worked, was there a reason to think before it? Fix the loop before any skin exists.
 
@@ -238,7 +244,7 @@ Plain, concrete, numbers where they help. Match the substance of the paper; neve
 - `<slug>/<name>.html` — the game.
 - `<slug>/memo.md` — with fidelity result and build log appended.
 - `<slug>/author-note.md` — three lines: what to look at first; where the config block is; what we were least sure about. Plus one line saying the game has had the builder's review only.
-- `<slug>/mechanism.js` (or `.py`), the fidelity check, its result, and the screenshots.
+- `<slug>/mechanism.js` (or `.py`) — the single source of truth — with the build script that generates the HTML from it, the fidelity check, its result, and the screenshots.
 - The PDF moved from `inbox/` into the folder if it was there.
 - A row in the README's games table with the play link `https://steffenhuck.github.io/paper-to-game/<slug>/<name>.html` and the memo link.
 
@@ -256,6 +262,8 @@ The skill is judged on a heterogeneous set, not on one paper: a theoretical mode
 
 - A demonstration shipped as a game: actions without consequences the player can learn, a slider moved to see what happens.
 - A central discovery resting on an invented assumption, unchecked against alternatives.
+- A discovery that follows from the designer's scoring, objective or constraint, presented as the paper's finding.
+- A mechanism in the HTML that differs from the mechanism the fidelity check ran against.
 - A short game padded to a target length.
 - A reversal forced onto a paper that offers a different kind of discovery.
 - An unfair failure engineered to manufacture a twist.
