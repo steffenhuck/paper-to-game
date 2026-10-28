@@ -19,37 +19,47 @@ const CONFIG = {
   },
 
   // ---- Societies (presets), played in order -------------------------
+  // mode 'explore': test as often as needed until no newcomer beats you (our choice: no fixed attempts)
+  // mode 'predict': one test; the player applies what they found (our choice: the prediction round)
+  // chance: the paper's index of assortativity, stated to the player in words, never as a symbol
   societies: [
-    { id: 'strangers', name: 'Strangers in a city', latin: 'Civitas', sigma: 0, game: 'publicGood',
-      story: 'Everyone is matched with a stranger. Newcomers are scattered at random.',
-      source: 'Section 2.1: uniform random matching, σ = 0' },
-    { id: 'siblings', name: 'Siblings', latin: 'Familia', sigma: 0.5, game: 'publicGood',
-      story: 'Children inherit their values from one parent, at random, and deal with their brothers and sisters.',
-      source: 'Section 5.1: siblings, σ = 1/2' },
-    { id: 'siblingsHD', name: 'Siblings, a different game', latin: 'Familia altera', sigma: 0.5, game: 'hawkDove',
-      story: 'Same families. Now they quarrel over a resource: grab (hawk) or share (dove).',
-      source: 'Sections 4 and 5.1: hawk–dove, σ = 1/2' },
-    { id: 'halfsib', name: 'Half-siblings', latin: 'Familia dimidia', sigma: 0.25, game: 'hawkDove',
-      story: 'Same mother, different fathers. Brothers and sisters share less.',
-      source: 'Footnote 24: half-siblings, σ = 1/4' },
-    { id: 'classmates', name: 'Classmates', latin: 'Schola', sigma: 39 / 99 * 0.5, game: 'pd',
-      story: 'Graduates set up partnerships; half the time with a classmate. A new teacher changed the ethics of some forty in a class of a hundred.',
-      source: 'Section 5.2: σ = (μ−1)/(n−1)·p* with n = 100, μ = 40, p* = 1/2 ≈ 0.20' },
+    { id: 'strangers', name: 'Strangers in a city', sigma: 0, game: 'publicGood', mode: 'explore',
+      chance: 'practically never',
+      story: 'Everyone deals with a stranger. A newcomer practically never meets another of its own kind.',
+      source: 'Section 2.1: uniform random matching; chance zero' },
+    { id: 'siblings', name: 'Siblings', sigma: 0.5, game: 'publicGood', mode: 'explore',
+      chance: 'half the time',
+      story: 'Children take their values from one parent, at random, and deal with their brothers and sisters. A newcomer\'s sibling shares its values half the time.',
+      source: 'Section 5.1: siblings; chance one half' },
+    { id: 'siblingsHD', name: 'Siblings, a different deal', sigma: 0.5, game: 'hawkDove', mode: 'explore',
+      chance: 'half the time',
+      story: 'The same families, so a newcomer\'s sibling still shares its values half the time. But now they quarrel over a resource instead of sharing a chore.',
+      source: 'Sections 4 and 5.1: hawk–dove among siblings; chance one half' },
+    { id: 'halfsib', name: 'Half-siblings', sigma: 0.25, game: 'hawkDove', mode: 'predict',
+      chance: 'a quarter of the time',
+      story: 'Same mother, different fathers. A newcomer\'s half-sibling shares its values a quarter of the time.',
+      source: 'Footnote 24: half-siblings; chance one quarter' },
+    { id: 'classmates', name: 'Classmates', sigma: 39 / 99 * 0.5, game: 'pd', mode: 'predict',
+      chance: 'about one time in five',
+      story: 'A new teacher changed the business ethics of some forty in a class of a hundred. Graduates go into business, half the time with a classmate, so a newcomer\'s partner shares its ethics about one time in five.',
+      source: 'Section 5.2: (40 − 1)/(100 − 1) × 1/2 ≈ 0.20' },
   ],
 
   // ---- The gauntlet -------------------------------------------------
   mutantKappas: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1], // our choice: homo moralis mutants on a grid
-  testsPerSociety: 3,      // our choice: three tries to hold each society
   leverStep: 0.05,         // our choice: resolution of the balance
+  startBalance: 0.5,       // our choice: the balance starts in the middle, favouring neither end
+  showAnswerAfter: 3,      // our choice: after this many failed tests in an explore round, offer to show the answer
+  orderSeed: 1302269,      // our choice: seed for the order newcomers arrive in (outcomes do not depend on it)
   cloneTol: 1e-6,          // behaviour within this of the residents' counts as a behavioural clone (Section 3)
   winTol: 1e-9,            // a mutant invades if it out-earns residents by more than this (Definition 2)
 
-  // ---- Village animation (divergence: stylised speed) ---------------
-  villageSize: 96,         // our choice: figures drawn
-  mutantSeed: 6,           // our choice: initial mutants dropped in (ε small)
-  growthFrames: 30,        // our choice: frames over which a winning clan spreads or dies out
-  pauseMs: 260,            // our choice: pause between mutants
-  spreadShare: [0.35, 0.8],// our choice: share a winning clan reaches on screen, scaled by its edge (stylised)
+  // ---- The race (divergence: stylised speed) -------------------------
+  startShare: 0.06,        // our choice: newcomers' share when they arrive (rare, as in Definition 2)
+  growthFrames: 34,        // our choice: frames over which a winning group spreads or dies out
+  pauseMs: 240,            // our choice: pause between newcomers
+  spreadShare: [0.45, 0.9],// our choice: share a winning group reaches on screen, scaled by its edge (stylised)
+  edgeScale: 0.4,          // our choice: edge at which the on-screen spread saturates
 };
 
 // ---------- games ----------------------------------------------------
@@ -122,6 +132,62 @@ function payoffsAtEps(g, x, y, sigma, eps) {
   return { PR, PM };
 }
 
+// ---------- tests, scoring and the verdict (all outcome rules live here) ----------
+
+// The order newcomers arrive in: a seeded shuffle. Only the order varies; outcomes do not.
+function arrivalOrder(si, testNo) {
+  const rnd = mulberry32(CONFIG.orderSeed + 1000 * si + testNo);
+  const idx = CONFIG.mutantKappas.map((_, i) => i);
+  for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; }
+  return idx;
+}
+
+// One test of a resident balance against the whole gauntlet: the yardstick is how many newcomers beat it.
+function runTest(si, k, testNo) {
+  const res = gauntlet(si, k), order = arrivalOrder(si, testNo);
+  const beaten = res.filter(d => d.invades);
+  return {
+    k, testNo, order, res,
+    beatenBy: beaten.length,
+    moreMoral: beaten.filter(d => d.kM > k).length,
+    lessMoral: beaten.filter(d => d.kM < k).length,
+    blended: res.filter(d => d.clone && Math.abs(d.kM - k) > 1e-9).length,
+    held: beaten.length === 0,
+  };
+}
+
+// The share a newcomer group reaches on screen (stylised; only the direction is the model's).
+function displayShare(d) {
+  if (!d.invades) return d.clone ? CONFIG.startShare : 0;
+  const [lo, hi] = CONFIG.spreadShare;
+  return lo + (hi - lo) * Math.min(1, Math.sqrt(d.edge / CONFIG.edgeScale));
+}
+
+// A society's round: explore rounds end when a test holds (or the player asks for the answer);
+// predict rounds end after one test.
+function roundOver(si, tests, askedAnswer) {
+  const s = CONFIG.societies[si], last = tests[tests.length - 1];
+  if (!last) return false;
+  return s.mode === 'predict' || last.held || !!askedAnswer;
+}
+function canAskAnswer(si, tests) {
+  return CONFIG.societies[si].mode === 'explore' && tests.length >= CONFIG.showAnswerAfter && !tests[tests.length - 1].held;
+}
+function roundVerdict(si, tests, askedAnswer) {
+  const s = CONFIG.societies[si], last = tests[tests.length - 1];
+  return { id: s.id, mode: s.mode, sigma: s.sigma, finalK: last.k, held: last.held, tests: tests.length, askedAnswer: !!askedAnswer,
+           foundOn: last.held ? tests.length : null };
+}
+function sessionVerdict(rounds) {
+  const ex = rounds.filter(r => r.mode === 'explore'), pr = rounds.filter(r => r.mode === 'predict');
+  return {
+    explored: ex.length, found: ex.filter(r => r.held && !r.askedAnswer).length, testsToFind: ex.map(r => r.held ? r.tests : null),
+    predicted: pr.length, predictedRight: pr.filter(r => r.held).length,
+    tooMoral: rounds.filter(r => !r.held && r.finalK > r.sigma).length,
+    tooSelfish: rounds.filter(r => !r.held && r.finalK < r.sigma).length,
+  };
+}
+
 function mulberry32(a) {
   return function () {
     a |= 0; a = a + 0x6D2B79F5 | 0;
@@ -131,4 +197,4 @@ function mulberry32(a) {
   };
 }
 
-if (typeof module !== 'undefined') module.exports = { CONFIG, gameCoefs, pi, bestReply, residentBehaviour, mutantBehaviour, duel, society, gauntlet, payoffsAtEps, mulberry32 };
+if (typeof module !== 'undefined') module.exports = { CONFIG, gameCoefs, pi, bestReply, residentBehaviour, mutantBehaviour, duel, society, gauntlet, payoffsAtEps, mulberry32, arrivalOrder, runTest, displayShare, roundOver, canAskAnswer, roundVerdict, sessionVerdict };

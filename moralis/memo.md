@@ -1,78 +1,171 @@
 # Design memo — *The Balance*
 
-Paper: Ingela Alger and Jörgen W. Weibull (2013), "Homo Moralis — Preference Evolution Under Incomplete Information and Assortative Matching." *Econometrica* 81(6):2269–2302. doi:10.3982/ECTA10637. Only the PDF was available; no code. Everything is derived from the paper's equations.
+## 1. Paper
 
-## 1. What the paper hands over
+Ingela Alger and Jörgen W. Weibull (2013), "Homo Moralis — Preference Evolution Under Incomplete Information and Assortative Matching." *Econometrica* 81(6):2269–2302. doi:10.3982/ECTA10637. Only the PDF was available; there was no code. Everything is derived from the paper's equations.
 
-Primary: **model**. A population matched in pairs to play a symmetric game; each individual's preferences are private; matching may be assortative, summarised by one number, the index of assortativity σ (eq. 4–6). Homo moralis has utility u_κ(x,y) = (1−κ)·π(x,y) + κ·π(x,x) (eq. 7). Fitness of residents and rare mutants: eqs. 11–12. Theorem 1: homo moralis with κ = σ ("homo hamiltonensis") cannot be invaded; any type that behaves differently can be. The mechanism is *ported*: the Bayesian Nash equilibrium of eq. 3 and the payoffs of eqs. 11–12, computed exactly for quadratic fitness games.
+## 2. What the paper hands over
 
-Secondary: worked examples that hand over concrete games and concrete σ — the public-goods game (Example 1), the prisoners' dilemma with (T,R,P,S) = (7,5,3,2) (Fig. 1), hawk–dove (Section 4), siblings σ = 1/2 and half-siblings σ = 1/4 (Section 5.1, fn. 24), classmates σ ≈ 0.2 (Section 5.2).
+Primary: a **model**, ported. People are matched in pairs to play a symmetric game, and each person's preferences are private. Matching may be assortative, which the paper summarises in one number: the index of assortativity σ, the limiting chance that a rare mutant meets its own kind (eqs. 4–6). Homo moralis has utility u_κ(x,y) = (1−κ)π(x,y) + κπ(x,x) (eq. 7). The fitness of residents and mutants is given by eqs. 11–12, and equilibrium by eq. 3. **Theorem 1:** homo moralis with κ = σ ("homo hamiltonensis") resists every mutant that behaves differently, and any type that behaves differently from it is invaded when the type space is rich.
 
-## 2. The reversal
+Secondary: the paper's own worked examples, which hand over concrete games and concrete σ:
+- the public-goods game (Example 1);
+- the prisoners' dilemma (7,5,3,2) of Fig. 1;
+- hawk–dove (Section 4);
+- siblings σ = ½ and half-siblings σ = ¼ (Section 5.1, fn. 24);
+- classmates σ ≈ 0.20 (Section 5.2).
 
-Two.
+## 3. The discovery, and its kind
 
-- *Believed:* when preferences are private, evolution selects pure self-interest (Ok and Vega-Redondo 2001; Dekel, Ely and Yilankaya 2007); or, from biology, if anything it selects *altruism* toward relatives, and more goodness is better. *Paper:* evolution selects a mixture — part selfish, part Kantian ("do what would be best if everyone did it") — and the Kantian weight is pinned down exactly: κ = σ. A society *more* moral than that is invaded just as surely as a selfish one.
-- *Believed:* how moral people should be depends on what is at stake. *Paper:* the stable degree of morality depends only on *who meets whom*. Change the game and behaviour changes; the morality that survives does not.
+**A counterintuitive result.**
+- *Believed:* when preferences are private, evolution selects pure self-interest (Ok & Vega-Redondo 2001; Dekel, Ely & Yilankaya 2007). The lay intuition is the opposite: more goodness is always safer.
+- *In the model:* the survivor is a precise blend, exactly as moral as the chance of meeting your own kind. Too little loses, and so does too much.
+- *Second part:* the blend is independent of the game. The stakes change the behaviour but not the balance.
 
-## 3. The four invariants
+Both parts follow from the model, not from our rules. The game's yardstick, the number of newcomers that out-earn the residents, is the paper's own invasion criterion (Definition 2) applied to a grid of mutants. Section 15(f) checks that the result does not depend on our payoff numbers.
 
-- **Lever.** A balance with "self" on one pan and "the right thing" on the other: the degree of morality κ of the resident population, 0 to 1.
-- **Hidden mechanism.** For the society's game and matching index σ, the residents' equilibrium behaviour x* (fixed point of eq. 13, first line), each mutant's equilibrium behaviour y* (eq. 13, second line), and the fitness comparison Π_θ vs Π_τ (eqs. 11–12, ε → 0). Ported exactly.
-- **Feedback.** Moving the balance immediately changes what the residents do (effort, hawkishness, cooperation), shown on the figures. Releasing the mutants: eleven mutant types (κ = 0, 0.1, …, 1) arrive one by one; each either spreads or dies out in the village, and lands on a ruler as *invaded* or *repelled*.
-- **Surprise.** Siblings, second society: the player who learned "selfish is safe" among strangers is overrun by *more* moral mutants; the player who swings to pure Kant is overrun by *less* moral ones. The invaders always sit between the player's κ and a hidden point — and that point is the chance of meeting your own kind. Then the game changes, and the point does not move.
+## 4. The core narrative
 
-## 3b. The aim and the verdict
+> A village of people who all think alike has to decide how much to care about others. People who only look after themselves do well when they deal with strangers, because nobody pays them back for being kind. But when people mostly deal with family, who think like they do, being kind comes back to you. Newcomers keep arriving who care a little more or a little less. The surprise: the village that no newcomer can push out is not the selfish one, and not the saintly one, but the one that cares exactly as much as the chance of dealing with its own kind — and that stays true whatever they are dealing over.
 
-- **The aim:** "Find the balance no newcomer can beat." On its own line on the start screen, at the top of every round, and at the head of the How to play page.
-- **The verdict** (the end screen opens with it, large): *You:* your final balance in each society. *The paper:* 0 · ½ · ½ · ¼ · 0.20, the chance of meeting your own kind. *The gap:* in how many societies your final balance held, and where it was too moral or too selfish.
+## 5. Fidelity level and claim boundaries
 
-## 4. Three candidate concepts
+**Structural.**
+- **Demonstrates:** how the paper's model behaves, meaning which homo moralis residents resist invasion in five matching environments and three games.
+- **Assumes:** the paper's setup (pairwise matching, private types, vanishingly rare mutants, a unique equilibrium); a mutant set restricted to homo moralis on an 11-point grid; and payoff numbers we chose within the paper's conditions.
+- **The paper establishes:** a theorem about this model, not a fact about people. The paper proposes laboratory tests (Section 6.3); the game shows none.
 
-**A. Evolution's hand (Controller).** Position: the player sets the morality of a resident population and defends it against a gauntlet of mutants. Lever: κ. Feedback: who invades, plotted on a κ-ruler. Surprise: invaders point toward a hidden κ that turns out to equal σ, in every game.
+In-game prose says "in this model".
 
-**B. The mutant (Agent).** Position: a single new type dropped into a resident village; the player picks their own morality to out-earn the residents. Lever: κ of the mutant. Feedback: the mutant clan grows or shrinks. Surprise: against a homo hamiltonensis village, nothing works. Weakness: the best mutant κ against a non-Hamiltonian resident is not a clean number, so the lesson blurs.
+## 6. The aim and the verdict
 
-**C. The preference itself (Agent, non-obvious).** Position: the player *is* a preference — a utility function competing in the genome/culture for carriers. Lever: how much weight to put on the Kantian term in each environment (family, market, classmates — Section 5.3). Feedback: share of carriers across environments. Surprise: the winning preference carries a *different* morality in each matching environment. Payoff (carrier share) is the paper's fitness; the multi-environment framing stretches Section 5.3.
+- **Aim:** "Find the balance no newcomer can beat." In the two prediction rounds it becomes "Predict, in one test, the balance no newcomer can beat."
+- **Verdict** (the opening lines of the end screen):
+  - *You:* found it in n of 3 societies (in a, b, c tests), and predicted it in m of 2.
+  - *The paper:* in this model, the only balance no newcomer can beat puts on the right thing exactly the chance of meeting your own kind, whatever the deal.
+  - *What it means:* evolution picks neither the selfish nor the saint, but a person as moral as the odds of meeting their own kind.
 
-## 5. The pick, and why
+## 7. Concepts
 
-**A.** The theorem is a statement about a resident type and the mutants that try to invade it; A replays exactly that, and the reversal arrives in the second society through the player's own failed defence. Runner-up: **C**, a good second pass on "conditional morality" (Section 5.3: high κ with family, low with strangers, κ_ij by group). Switch to C if the author wants the game to be about *one person being moral in some places and not others* rather than about the population.
+The playable experience was not obvious, so there are three concepts.
 
-## 6. Presets (the five societies, played in order)
+**A. Evolution's hand (strategic; Controller).**
+- Controls: one balance, the residents' κ.
+- What the player is thinking before they press: "Where is it safe? Last time the winners were all more moral than me, so how far should I move?"
+- What they see: eleven newcomers race the village one by one; the winners are pinned on a ruler.
+- Discovery: among siblings, both ends fail and the winners point toward one value. That value is the chance of meeting your own kind, and it stays put when the deal changes.
+- Sources of fun: anticipation (each race), agency (the winners move with the balance), discovery, and mastery (the prediction rounds).
+- Second playthrough: find each balance in fewer tests, or play the prediction rounds cold.
 
-1. **Strangers in a city** — uniform random matching, σ = 0 (Section 2.1; Corollary 2). Public-goods game (Example 1).
-2. **Siblings** — σ = 1/2 (Section 5.1). Same public-goods game.
-3. **Siblings, a different game** — σ = 1/2, hawk–dove (Section 4, x_κ = (1−κ)/(1+κ)·v/c). Payoff independence.
-4. **Half-siblings** — σ = 1/4 (fn. 24). Hawk–dove.
-5. **Classmates** — business partnerships among graduates of the same class, σ = (μ−1)/(n−1)·p* with n = 100, μ = 40, p* = 1/2, so σ ≈ 0.197 (Section 5.2). Prisoners' dilemma (7,5,3,2) (Fig. 1). The corner: below κ = 1/4 every moralist defects, so the selfish are *behavioural clones* of homo hamiltonensis and survive (discussion after Fig. 1).
+**B. The mutant (strategic; Agent).**
+- Controls: the player's own balance, as a newcomer.
+- Thinking: "How do I out-earn these residents?"
+- Discovery: against a village at κ = σ, nothing works.
+- Weakness: the best mutant κ against a non-Hamiltonian resident is not a clean number, so the lesson blurs.
 
-## 7. What is cut
+**C. The preference itself (discovery; non-obvious agent).**
+- The player is a preference carried into family, market and classroom at once (Section 5.3) and sets a different weight for each.
+- Discovery: the winning preference is moral at home and selfish in the market.
+- Weakness: it stretches Section 5.3 and has three controls whose interaction is not the paper's main finding.
 
-Asymmetric games and role assignment (6.1, Remark 2); helping others and ultimatum bargaining (6.1.1–6.1.2); repeated play (6.1.3); morality versus altruism (6.2) beyond one line in the About screen; empirical testing (6.3); conditional morality by group (5.3, kept for concept C); general non-moralis mutant types (the "rich" type set) except as the theorem's backdrop; equilibrium multiplicity and the upper-hemicontinuity machinery.
+## 8. The first five minutes (pick A)
 
-## 8. Divergences
+- **0:00.** Start screen. The aim is in bold; three figures run from "only own gain" to "only the right thing". I tap START.
+- **0:20.** *Strangers.* The balance sits in the middle. "A newcomer practically never meets another of its own kind." I think being a bit good is safe and press TEST. Newcomers race my village; the more selfish ones grow and take over. "Beaten by 5 of 11 — all less moral." So go more selfish: 0.2 is beaten by 2, and 0 holds. I'm mildly smug: selfish is safe.
+- **1:30.** *Siblings.* "A newcomer's sibling shares its values half the time." My balance is still 0. I test it and get "Beaten by 10 of 11 — all more moral." I frown: selfish was safe a minute ago. I swing to 1 and get "Beaten by 8 — all less moral." Now I'm weighing it: the winners came from above when I was low and from below when I was high, so it's somewhere in the middle. I try 0.5 and it holds. The reveal says the balance equals the chance of meeting your own kind, and I grin, because that number was in the story the whole time.
+- **3:00.** *Siblings, a different deal.* "Will it hold in this deal too?" The deal is now a quarrel over a resource, and the gloss shows my villagers' behaviour changed. Do I trust the rule? I keep 0.5 and it holds.
+- **3:40.** *Half-siblings, predict it.* "A quarter of the time." One test, so I think before pressing. I set 0.25 and it holds. This time I knew before seeing it.
+- **4:20.** *Classmates, predict it.* "About one in five." I set 0.20 and it holds. The reveal explains why a selfish village would also have held here.
+- **5:00.** The verdict.
 
-- Mutants are homo moralis types on a grid of eleven κ values, not the paper's arbitrary type space. The theorem's instability proof uses *committed* mutants; we check headlessly that moralis mutants alone already invade every non-Hamiltonian resident in our games.
-- Invasion is judged in the limit ε → 0 (Definition 2); the village animation then shows the mutant share rising or falling at a stylised speed so that a tiny but positive edge is still visible. The animation is not a replicator dynamic the paper studies.
-- The lever moves in steps of 0.05; σ ≈ 0.197 for classmates is therefore approached, not hit, and the score treats the PD corner's clone region honestly (anything in [0, 1/4] is unbeatable there).
-- Public-goods functional forms are our choice within Example 1's conditions: B(s) = 3s − s²/4, C(x) = x², m = 2. Hawk–dove v = 4, c = 6 (our choice; v < c as required).
-- Score: one point per mutant held off, three tests per society. Our construction.
+## 9. The pick, and why
 
-## 9. Visual world
+**A.** It replays Theorem 1's own structure, a resident against mutants. The discovery lands in society 2 through the player's own failed tests, and the player then uses it twice in prediction rounds.
 
-A natural-history specimen plate. The paper names species — *homo oeconomicus*, *homo kantiensis*, *homo moralis*, *homo hamiltonensis* — so the game is a naturalist's catalogue: cream laid paper, sepia ink, engraved hairlines, Latin binomials in italic serif, specimen numbers. Rules: (1) two inks only, iron-red for self and indigo for the right thing; every figure is tinted by its κ between them; (2) the lever is a brass balance beam that tilts; (3) the village is a field of small figures paired by fine lines, mutants drawn as filled specimens among outlined residents; (4) the ruler under the village is a specimen drawer: each tested mutant pinned at its κ with a label, ✕ for invaded, · for repelled.
+Runner-up: **C**, a second pass on conditional morality. Switch to C if the author wants the game to be about one person being moral in some places and not others.
 
-## 10. Fidelity check
+## 10. The shape
 
-*Planned, before UI:* (a) reproduce Fig. 1 (x̂(κ) for the PD: 0 up to κ = 1/4, 1 from κ = 2/3) and the hawk–dove closed form x_κ = (1−κ)/(1+κ)·v/c and Example 1's FOC C′(x) = (1+κ)B′(2x); (b) Theorem 1: for each of the five societies, a resident with κ = σ is not invaded by any mutant on a fine κ grid; (c) every resident whose behaviour differs from homo hamiltonensis's is invaded by at least one mutant on the game's 11-mutant grid; (d) Corollary 2/PD corner: for σ < 1/4, residents with κ ≤ 1/4 are not invaded.
+Five societies, about five to six minutes (an estimate; not timed by a person).
 
-*Result (`fidelity-result.txt`):* (a) the engine's resident behaviour matches Fig. 1's x̂(κ), the hawk–dove closed form and Example 1's FOC to 3·10⁻¹³; PD gives x̂ = 0 up to κ = 0.25, 0.667 at κ = 0.5, 1 from κ = 2/3, as in Fig. 1. (b) In all five societies, a resident with κ = σ is invaded by 0 of 201 mutant types; the best mutant edge is exactly 0. (c) At every lever position (step 0.05), the resident is invaded by at least one of the 11 gauntlet mutants if and only if its behaviour differs from homo hamiltonensis's: 21/21 positions in all five societies. The number of invaders falls monotonically toward σ (siblings: 10 10 9 9 7 6 4 3 2 1 **0** 1 1 3 …). (d) Invaders always sit on the σ side of the resident. (e) At ε = 0.01 (eqs. 11–12, φ = σ), the sign of the edge agrees with the limit in 530 of 530 non-marginal duels. Classmates: every κ ≤ 0.25 holds (behavioural clones in the PD), as the paper notes after Fig. 1.
+| Mode | Societies | Rule |
+|---|---|---|
+| **Find it** | Strangers (σ 0, public good, Section 2.1 / Example 1), Siblings (σ ½, public good, Section 5.1), Siblings with a different deal (σ ½, hawk–dove, Section 4) | Test as often as needed. After three failed tests the player may ask to see the answer. |
+| **Predict it** | Half-siblings (σ ¼, hawk–dove, fn. 24), Classmates (σ ≈ 0.20, PD (7,5,3,2), Section 5.2 and Fig. 1) | One test. |
 
-## 11. Build log
+Order: strangers come first because the lay intuition is "goodness is safe", so strangers is a discovery in its own right. It also sets up the siblings reversal, which arrives within two minutes.
 
-- The mechanism worked in one pass. All three games are quadratic in own strategy, so homo moralis's best reply depends only on the opponents' mean strategy and has a closed form; equilibria are fixed points found by scan plus bisection.
-- First fidelity wording claimed invaders lie *between* the resident and σ. They don't: from κ = 0 among siblings, newcomers up to κ = 1 invade. Corrected to "on σ's side."
-- Visual pass two: the village's bottom row sat under the banner, and the end table's uppercase header turned κ into K. Both fixed. A full headless session at 380 px (one strategy per society) ran with no errors, no horizontal scroll and score 131/165.
-- Pass three, after the skill gained its section on orienting the player: every screen now carries one or two orienting lines (what the balance's 0 and 1 mean, what the village figures and pair lines are, how to read the drawer's ruler and marks, what the end plot's axes are). The player-facing "κ" became "balance", and each balance setting gets a plain gloss with what the villagers then do ("grab 40% of the time"). A How to play page is reachable from the start screen and from a ? on the play screen, and returns the player to where they were. Button labels are plain: START, TEST AGAINST NEWCOMERS, SEE ALL RESULTS.
-- Pass four, after the skill gained 3b and the visible-score rule: the aim sits on the start screen, at the top of the play screen and at the head of How to play. The score reads "score n / 165" and pulses each time a newcomer fails. The end screen opens with the three-line verdict before the plot, explanation, table and attribution, and closes with a reason to play again. Stranger tests: the start screen alone gives the aim in one sentence, and the verdict alone says what the paper found (morality equals the chance of meeting your own kind).
+There is no running score. The yardstick is per test ("beaten by n of 11"; 0 = held), the verdict is per round (found on test k / prediction held), and the session verdict comes at the end.
+
+## 11. Controls, mechanism, feedback, moment
+
+- **Control:** one slider, the balance from 0 to 1 in steps of 0.05, shown as a tilting brass scale.
+- **Mechanism:** the residents' equilibrium x* and each mutant's y* (eq. 13), and fitness from eqs. 11–12 at ε → 0.
+- **Feedback:**
+  - the race: the village bar, the newcomers' share growing or shrinking, and the two figures with their earnings per meeting;
+  - the drop: each newcomer pinned on the drawer's ruler, one row per test.
+- **Moment:** siblings, test 2. The ✕ marks flip from the right side of the wedge to the left.
+
+## 12. What is cut
+
+- asymmetric games and role assignment (6.1, Remark 2);
+- helping others and ultimatum bargaining (6.1.1–2);
+- repeated play (6.1.3);
+- morality versus altruism (6.2);
+- empirical testing (6.3);
+- conditional morality (5.3; kept for concept C);
+- non-moralis mutants (the "rich" type space);
+- multiple equilibria;
+- the visible assortative village grid from the previous build, removed as a grid of tiny sprites.
+
+## 13. Divergences
+
+- Mutants are homo moralis on an 11-point grid. Theorem 1's instability proof uses committed types; check (c) confirms the moralis grid already invades every non-Hamiltonian resident in these games.
+- The race's speed and final share are stylised; only the direction (out-earns or not) is the model's.
+- Public good: B(s) = 3s − s²/4, C(x) = x², m = 2. Hawk–dove: v = 4, c = 6. Both are our choices within the paper's conditions; check (f) shows the result does not depend on them.
+- The lever moves in steps of 0.05, so classmates' σ ≈ 0.197 is approached at 0.20, which holds (any balance ≤ ¼ holds there).
+- The test count, the prediction rounds and the show-the-answer offer are the game's.
+
+## 14. Visual world
+
+A natural-history specimen plate, because the paper names species (oeconomicus, kantiensis, moralis, hamiltonensis). The look: cream paper, sepia ink, italic Latin binomials.
+
+Rules:
+1. Two inks only, iron-red for own gain and indigo for the right thing; every figure is tinted by its balance.
+2. The control is a brass scale that tilts.
+3. Few, big things. The play screen shows one scale, one village bar, two large figures with their earnings, and one ruler.
+4. Legibility. The scale answers "what did I set?". The bar answers "is the newcomer winning?". The earnings answer "why?". The drawer answers "which way should I move?".
+
+## 15. Fidelity plan
+
+Run `node fidelity.js` against `mechanism.js`, the only copy:
+
+- **(a)** The engine's resident behaviour against the closed forms of Fig. 1 / eq. 19, Section 4 and Example 1, with tolerance 1e-9; and Fig. 1's kinks at ¼ and ⅔.
+- **(b)** Theorem 1, first claim: a resident at κ = σ is invaded by none of 201 mutants, in every society.
+- **(c)** Second claim, on the game's own lever and gauntlet: at every lever position, the resident is invaded if and only if its behaviour differs from homo hamiltonensis's.
+- **(d)** Every invader sits on σ's side of the resident.
+- **(e)** Finite ε = 0.01 agrees in sign with the limit.
+- **(f)** Robustness against our choices: 60 random alternative games (public goods with other curves, hawk–dove with other stakes, other PDs) and random σ, on a 101 × 101 grid. The unbeatable set must be exactly the behaviour of κ = σ.
+- **(g)** Arrival-order seeds change only the order, never the count. Boundary balances 0 and 1. The paper's named corners (strangers: selfish holds, Corollary 2; classmates: κ ≤ ¼ holds, after Fig. 1).
+
+## 16. Fidelity result and build log
+
+**Result** (`fidelity-result.txt`): ALL CHECKS PASS.
+- (a) max error 3·10⁻¹³.
+- (b) best mutant edge exactly 0 in all five societies.
+- (c) 21/21 lever positions correct in each society. The invader counts fall toward σ, e.g. siblings: 10 10 9 9 7 6 4 3 2 1 **0** 1 1 3 3 5 5 6 7 8 8.
+- (d) holds.
+- (e) 530/530.
+- (f) 60/60 alternative games and σ.
+- (g) holds.
+
+**Build log:**
+- Passes one to four (before the skill's rewrite) built a 96-figure village grid, a running point total out of 165, and three fixed tests per society with untaken tests credited. All three are now anti-patterns and were removed.
+- κ and σ appeared on play screens and are now "balance" and "the chance of meeting your own kind".
+- Scoring, the newcomer order (a seeded shuffle) and the round and session verdicts moved from the interface into `mechanism.js`. The interface now only passes the balance in and draws what comes back.
+- `build.py` used to strip the module-export line from the mechanism. It now inlines the file verbatim and fails unless the embedded bytes equal `mechanism.js`.
+- The order changed: the discovery now arrives in society 2, and societies 4–5 became prediction rounds.
+- The race panel's result banner overlapped the figures; the figures moved down.
+- The loop was printed headlessly (`loop.js`) before the skin.
+- Browser session at 380 px (`play2.js`): a full session with a retry in society 2, How to play opened and returned from mid-play, and the show-the-answer path. No console errors, no horizontal scroll, and no Greek letters on any player-facing screen. Machine run time was 83 s without thinking time; the real session length is unmeasured.
+- Self-review from the screenshots: the start screen alone gives the aim; the top of the end screen alone gives the discovery. This is the builder's review only, not stranger testing.
