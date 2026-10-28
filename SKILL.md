@@ -1,233 +1,265 @@
 ---
 name: "paper-to-game"
-description: "Turn a scientific paper (any field) into a playable single-file HTML browser game that gives a stranger a good few minutes and leaves them with the paper's central claim. Trigger when the user attaches or links a paper and asks for a game, a playable version, or invokes /paper-to-game. Writes a design memo, builds the game, checks it, commits it. Not for Steffen's own house-style teaching games (those are built by hand in their own threads)."
+description: "Turn a scientific paper (any field) into a playable single-file HTML browser game that gives a stranger a good few minutes and leaves them with something the paper discovered. Trigger when the user attaches or links a paper and asks for a game, a playable version, or invokes /paper-to-game. Writes a design memo, builds the game, checks it, commits it. Not for Steffen's own house-style teaching games (those are built by hand in their own threads)."
 ---
 
 # Paper to Game
 
 ## 0. What this is for
 
-Someone sends a paper. They get back a game: one HTML file, playable on a phone, built from the paper's own mechanism, with every number tagged to its source so the author can tweak it. The game is a beta; the author finishes it.
+Someone sends a paper. They get back a game: one HTML file, playable on a phone, built on the paper's own mechanism, with every number tagged to its source so the author can tweak it. The game is a beta; the author finishes it.
 
-The test of a good result is not whether the game is faithful. It is whether a smart stranger, handed the link on a phone, plays for five to eight minutes without being told to, understands what they are doing the whole time, is surprised somewhere in the middle, and could afterwards say in one sentence what the paper found. Fidelity is the second-order constraint: the mechanism must not lie about the paper. Everything else — how much of the paper appears, how the mechanism is dressed, how many rounds, how many screens — is decided by what makes those minutes good.
+The hard problem is not the code. It is discovering the playable experience latent in a particular paper: what a player could *do* that would let them find for themselves what the paper found. The engineering below exists to serve that discovery, not to dictate its shape. Different papers should produce games in which players do different things, not the same structure in different skins.
 
----
-
-## 1. The player, and what a good few minutes feel like
-
-The player is a smart person from outside the field, on a phone, who did not ask for homework. They tapped a link because someone they like sent it. They will give it thirty seconds before deciding whether to give it five minutes. They read nothing longer than two lines before they are allowed to do something. They do not know the field's words and will not look them up. They can follow a number if told what it measures. They enjoy being wrong when the game is kind about it.
-
-What they are hoping for, in order:
-
-- **Something to do right away**, with an obvious thing to press and an obvious thing that happens.
-- **A reason to care** that fits in a sentence: an aim they can repeat.
-- **Feedback they can see** — the thing on screen changes because of what they did, and the change says whether they are getting closer.
-- **A surprise** about a third of the way in: what they assumed was wrong, and the game shows them so with their own hands.
-- **A sense of getting better**, and a moment where they get it.
-- **A verdict**: how they did, what the paper says, the gap between the two, in three lines.
-
-What they are not hoping for: decoration, a tutorial, a dashboard, points, a table, the paper's abstract, anything in Greek.
-
-Fun, in these games, has four sources, and a concept that lacks all four is not a game yet:
-
-1. **Anticipation.** The player makes a choice and *waits to see* — a panel fills, a rival arrives, a hidden layer lights up. Suspense between lever and outcome.
-2. **Agency.** The outcome follows from the choice in a way the player can feel and learn. If two different settings produce the same picture, there is no agency.
-3. **Surprise.** The reversal. The player did the sensible thing and it was wrong, and the game shows why.
-4. **Mastery.** The second attempt goes better than the first, visibly, for a reason the player understands.
+The test of a good result: a smart stranger, handed the link on a phone, plays for five to eight minutes without being told to, understands what they are doing the whole time, has to think before acting at least once, finds something out, and could afterwards say in one sentence what the paper discovered. Fidelity is a constraint, not the goal: the game must be honest about what it demonstrates and what it merely illustrates (section 5), but within that honesty the presentation may simplify as far as play requires.
 
 ---
 
-## 2. Principles
+## 1. The player
 
-Each principle comes with its reason.
+A smart person from outside the field, on a phone, who did not ask for homework. They tapped a link because someone they like sent it. They will give it thirty seconds before deciding whether to give it five minutes. They read nothing longer than two lines before they are allowed to do something. They do not know the field's words and will not look them up. They can follow a number if told what it measures. They like being surprised, they like being right, and they like being wrong when the game is kind about it.
 
-### The reversal is the twist
+What they are hoping for, in order: something to do right away, with an obvious thing to press and an obvious thing that happens; a reason to care that fits in a sentence; feedback they can see, that says whether what they did worked; a moment of discovery; a sense of getting better, or of understanding; a verdict in a few lines. What they are not hoping for: decoration, a tutorial, a dashboard, points for their own sake, a table, the abstract, anything in Greek.
 
-Every paper worth a game overturns something the field, or the public, believed. That reversal is the game's plot: the player should start out believing the old thing, act on it, and be shown. If the paper has two reversals, the game may have two acts. If it has none, say so in the memo: the game will be thin, and the engine should look harder for the surprising corner of the results before settling.
+---
 
-Open on the reversal, or one step before it: order the rounds so that the player meets the overturned belief early, not after rounds in which the old belief happens to be right.
+## 2. What makes it a game rather than a demonstration
+
+A slider with an animated response can be an excellent demonstration and not a game. The difference is **deliberation**: the player has a reason to think before acting. Before every design decision, ask: *what is the player thinking about before they press?* If the answer is "nothing, they're seeing what happens," the thing is a demonstration. Demonstrations have their place inside a game (an opening, a reveal), but a game needs at least one stretch where the player holds a conjecture, a plan, or a dilemma in their head and acts on it.
+
+Three formats, each with its own kind of deliberation; a paper usually suits one:
+
+- **Challenge.** An objective under constraints: reach a target, hold a position, allocate a budget. The player plans. Suits models with a controllable parameter and a clear optimum or trade-off.
+- **Discovery.** Experiment and learn to predict: the player probes a hidden system, forms a conjecture, tests it, and is finally asked to predict. Suits empirical papers, mechanisms, identification. The score, if any, is prediction accuracy at the end, not points for probing.
+- **Strategic.** Respond to agents or an evolving system that reacts to the player: rivals, a population, a market. The player anticipates. Suits game theory, evolution, competition.
+
+Fun has four sources; a concept should have at least two, and know which:
+
+1. **Anticipation** — a choice is made and the player waits to see. Suspense between action and outcome.
+2. **Agency** — the outcome follows from the choice in a way the player can feel and learn. If two settings give the same picture, there is no agency there.
+3. **Discovery** — the moment something becomes clear: a surprise, a mechanism seen working, a pattern recognised, a trade-off felt.
+4. **Mastery** — the second attempt goes better than the first, visibly, for a reason the player understands.
+
+Replayability is real only if a second playthrough offers something new: a different strategy, a different conjecture to test, a different regime of the model. Cosmetic variation (a new random seed with the same lesson) is not replayability and should not be claimed as such.
+
+---
+
+## 3. Principles
+
+### The discovery is the plot
+
+Every game built here lets the player find something out that the paper found out. Papers offer discoveries of different kinds, and the kind shapes the game:
+
+- **A counterintuitive result** — the field or the public believed X, the paper shows Y. The game lets the player act on X and meet Y. The strongest plot when available; not every paper has one, and the skill does not invent one.
+- **A mechanism made intelligible** — the paper explains *how* something works. The game lets the player operate the mechanism and see the parts move.
+- **Emergence** — simple rules at the micro level produce a pattern at the macro level. The game lets the player set the rules and watch the pattern form.
+- **Identification** — the paper shows how a causal effect can be told apart from a confound. The game lets the player feel why the naive comparison misleads and what the design fixes.
+- **A trade-off** — the paper maps what must be given up for what. The game puts the player on the frontier.
+
+Name the kind in the memo. If the paper offers none of these, say so: the game will be thin, and the engine looks harder at the results before settling for a forecaster's reveal.
+
+### Conjecture before seeing
+
+The player commits before the outcome is shown: a prediction, a setting, a sorting, a bet. That commitment is what makes the outcome mean something. It does *not* follow that the player must be wrong. An intuition that turns out right is rewarding; an intuition that turns out wrong is instructive; both work if the commitment was real. Never engineer an unfair failure to manufacture a twist — the sensible choice should fail only where the paper says it fails.
 
 ### Fun first, mechanism honest
 
-The mechanism — what turns the player's lever into outcomes — is ported from the paper's model, synthesised from its estimates, or formalised from its argument, and it never says something the paper does not. But the *presentation* may simplify without limit: fewer agents, bigger ones, a compressed clock, exaggerated parameters, a stylised payoff, one regime instead of twelve. When the only faithful game would be a dull one, the engine picks the fun concept, keeps the mechanism honest where it is used, and declares in the memo and the About screen what was dropped. The author can put it back.
+The mechanism — what turns the player's actions into outcomes — is ported from the paper's model, synthesised from its estimates, or constructed to illustrate its argument, and it never claims more than its fidelity level allows (section 5). But the *presentation* may simplify without limit: fewer agents, bigger ones, a compressed clock, exaggerated parameters, a stylised payoff, one regime instead of twelve. When the only fully faithful game would be dull, the engine picks the playable concept, keeps the mechanism honest where it is used, and declares what was dropped. The author can put it back.
 
-### One lever, one loop; the engine decides the shape
+### Minimal controls, simple loop
 
-The player moves one thing. The game has one loop: lever → mechanism → feedback → score. What the engine decides, per paper: whether the loop runs once over a long arc or many times in short rounds; how many screens; whether there are presets. A model with regimes wants several short rounds; an argument with a single build-up may want one long round of twelve screens; an experiment may want twenty trials. There is no required round structure. There is a required aim, a required visible yardstick, and a required verdict (next principle).
+Use the fewest controls that preserve the paper's central mechanism. One is the default. Two or more are right when their *interaction* is the finding — severity and probability of punishment, price and quality, effort and luck — and wrong when they merely add realism. Whatever the number, the loop stays simple: act → mechanism → visible result → where you stand.
 
-### The aim is a sentence; the score is its yardstick
+The engine decides the shape: one long round or many short; how many screens; presets or none; whether there is a score at all. A challenge game has a target and a distance from it; a discovery game may have no score until the final prediction; a strategic game has an outcome against the rivals. What every format has is an **aim** the player can repeat and a **verdict** at the end.
 
-Before any concept is chosen, write the aim in the words the player will read. It appears on its own line on the start screen, at the top of the play screen, and as the first line of How to play.
+### The aim is a sentence; the yardstick is in its units
 
-The score is the aim measured, in the aim's units, for the stretch of play the aim refers to. If the aim is per round, the score is per round, and a round in which the aim is met reads as complete success at that moment. Never a running point total whose maximum lies in rounds not yet played.
+Before any concept is chosen, write the aim in the words the player will read. It sits on its own line on the start screen, at the top of the play screen, and as the first line of How to play.
 
-Score the round as the round, in its own units ("held off: 11 of 11"); keep any cross-round tally in the same units ("rounds held: 1 of 5"), smaller and separate. A player who has just done exactly what the aim asked must never see a low number.
+Whatever tells the player how they are doing is measured in the aim's units, for the stretch of play the aim refers to. If the aim is per round, the measure is per round, and meeting it reads as complete success at that moment. Never a running point total whose maximum lies in rounds not yet played; never a number the player has to look up the maximum of. A player who has just done what was asked must not see a low number.
 
-No bookkeeping mechanics: no fixed number of attempts that rewards repeating a correct answer, no points for re-testing, no maximum the player learns only from the help page.
+No bookkeeping mechanics: no fixed number of attempts that rewards repeating a correct answer, no points for re-testing.
 
 ### Pictures explain; motion is the feedback; fewer, bigger things
 
-Every picture on screen answers one question the player has at that moment: what is this? did it work? which way? If a picture needs its caption to be understood, simplify the picture. Motion is not ornament: the thing that moves *is* the feedback — the panel filling, the bar growing, the marker dropping onto the ruler, the lights coming on. On a phone, a few large figures beat a crowd of small ones; one bar beats a tableau.
+Every picture answers a question the player has at that moment: what is this? did it work? which way? If a picture needs its caption, simplify the picture. Motion is not ornament: the thing that moves *is* the feedback. On a phone, a few large things beat a crowd of small ones.
 
-A picture can be beautiful and illegible, and a generated scene can pass every statistical check and still look like noise on a phone. Mechanism fidelity and visual legibility are separate checks; every picture must be *looked at* by the builder, at phone width, with the question "what would a stranger see here?"
+A picture can be beautiful and illegible, and a generated scene can pass every statistical check and still look like noise. Mechanism fidelity and visual legibility are separate checks; every screen is looked at by the builder at phone width with the question "what would a stranger see here?"
 
-### Orientation before acting; explanation after the surprise
+### Orientation before acting; explanation after the discovery
 
-The player never reads a paragraph before they may act. But every screen carries the one or two sentences a stranger needs to act on it: what the things on screen are, what the choice means, roughly what a good answer looks like (a number, a range). Every word on a button is defined on that screen, in plain words, before the first press. A measure is named in one line before the player sees it move. Where two extremes exist, show them side by side before the first choice.
+The player never reads a paragraph before they may act, but every screen carries the one or two sentences a stranger needs to act on it: what the things on screen are, what the choice means, roughly what a good answer looks like. Every word on a button is defined on that screen before the first press. A measure is named before the player sees it move. Where two extremes exist, show them side by side before the first choice.
 
-Explanation — why the paper's answer is what it is — comes *after* the surprise, never before. Orientation is not explanation; give the first, withhold the second.
+Explanation — why the paper's answer is what it is — comes after the discovery, not before.
 
-A **How to play** page explains the whole game in plain language: the setting, the aim, what each screen asks, what the score means, what the game is trying to show. Reachable from a prominent button on the start screen and from a small ? on every play screen; returning lands the player where they were.
-
-Button labels say what happens, not a metaphor.
-
-### The player must have been wrong first
-
-A game that only shows the result is a figure with a scroll bar. The player acts on the old belief, sees it fail, and is then handed the paper's answer. Design the first choice so that the sensible, textbook answer is the one the paper overturns.
+A **How to play** page explains the whole game in plain language: the setting, the aim, what each screen asks, what the yardstick means, what the game is trying to show. Reachable from a prominent button on the start screen and from a small ? on every play screen; returning lands the player where they were. Button labels say what happens, not a metaphor.
 
 ### Personification sits on the mechanism
 
-A neuron, a molecule, a voxel, an institution may be the agent the player plays — this is one of the best moves available, with a long tradition — but only if its "choice" maps onto a real variable in the paper and its payoff onto a real quantity. Where the paper supplies no payoff, the memo says the payoff is ours, and the About screen says so too.
+A neuron, a molecule, a voxel, an institution may be the agent the player plays — one of the best moves available — but only if its "choice" maps onto a real variable in the paper and its payoff onto a real quantity. Where the paper supplies no payoff, the memo and the About screen say the payoff is ours.
 
 ---
 
-## 3. Reading the paper
+## 4. Reading the paper
 
-Read all of it: text, tables, figure captions (captions often state the mechanism more plainly than the text), supplementary material if attached. If code or data are attached, the mechanism is ported from the code and calibrated from the data. If only the PDF is available, say so in the memo; numbers read off a figure are marked as read off a figure.
+Read all of it: text, tables, figure captions (captions often state the mechanism more plainly than the text), supplementary material if attached. If code or data are attached, the mechanism is ported from the code and calibrated from the data. If only the PDF is available, say so; numbers read off a figure are marked as such.
 
-Then answer four questions in writing, in this order.
+Then answer, in writing:
 
-**What does the paper hand over?** One of three materials, often with a secondary one:
+**What does the paper hand over?** A **model** (equations, a simulation, a game-theoretic structure — ported); an **estimate** (data, coefficients, distributions, an experimental result — synthesised into a data-generating process that reproduces the reported numbers); an **argument** (a verbal mechanism, a conceptual claim — formalised into an explicit toy model, with the places where the formalisation chose something the paper did not, listed). Often one primary and one secondary.
 
-- **Model** — equations, a simulation, a game-theoretic structure. The mechanism is *ported*.
-- **Estimate** — data, coefficients, distributions, correlations, a PCA, an experimental result. The mechanism is *synthesised*: a data-generating process that reproduces the paper's reported numbers.
-- **Argument** — a verbal mechanism, a conceptual claim, a qualitative story. The mechanism is *formalised*: the implicit toy model made explicit, with the two or three places where the formalisation chose something the paper did not, listed.
+**What did it discover, and of which kind?** From the list in section 3.
 
-**What does it overturn?** The reversal(s): what was believed before, what the paper says instead. The thing a naive player gets wrong in the first minutes and understands by the end.
+**What could a player control, and what could they predict?** Candidates for the controls (a choice an agent makes, a parameter, a measurement, a bet) and for the conjectures (what the player could be asked to predict before seeing).
 
-**Where is the lever?** Something a player could hold: a choice an agent in the model makes; a parameter of a system; a measurement; a bet. And what the paper claims happens when it moves.
-
-**Where is the surprise, exactly?** The moment, in play, when the reversal lands. If it cannot be located as a moment — "the player presses X and sees Y and realises Z" — the concept is not ready.
+**Where is the moment?** The point in play when the discovery lands: "the player does X, sees Y, and realises Z." If it cannot be written as a moment, the concept is not ready.
 
 ---
 
-## 4. Finding the game
+## 5. Fidelity levels and claim boundaries
+
+Every game declares its fidelity level, and the About screen states three things in plain words: what the game **demonstrates**, what it **assumes**, and what the paper itself **establishes**. The three are not the same, and conflating them is the most serious failure this skill can produce.
+
+- **Structural.** The game runs the paper's own model or algorithm. It demonstrates the model's behaviour; it assumes the paper's functional forms and whatever parameters were chosen for play; the paper establishes the theorems or simulation results, not that the world is like the model.
+- **Statistical.** The game runs a constructed data-generating process that reproduces the paper's reported patterns — distributions, correlations, effect sizes. It demonstrates those patterns; it assumes everything the construction had to invent (the shape of the joint distribution, the individual-level process behind an average); the paper establishes the reported estimates and nothing finer.
+- **Illustrative.** The game runs a toy model built to illustrate the paper's argument. It demonstrates that the argument *can* work as described; it assumes the toy model; the paper establishes the argument's claims only to the extent it does, which the memo states.
+
+Two traps, named because synthesised mechanisms fall into them easily:
+
+- **Correlation is not causation.** A paper that reports a correlation does not license a game in which the player moves one variable and the other responds. If the player must have a lever, the game is illustrative and says so, or the lever is a selection the player makes (an experimenter choosing what to measure), not an intervention.
+- **An average effect is not an individual response.** A treatment effect of 0.3 does not mean each person responds by 0.3. A game that shows individuals responding must draw them from a distribution the paper constrains, and the About screen must say that individual responses are constructed.
+
+The declared level also bounds the writing inside the game: a structural game may say "in this model"; a statistical game may say "in the data"; an illustrative game says "if the argument is right."
+
+---
+
+## 6. Finding the game
 
 ### Player positions
 
-- **Agent** — the player is a role inside the model; the lever is a choice. Human or not (see the personification principle).
-- **Controller** — the player sets conditions on a system and tries to hit a target: reaction conditions, dosing, design parameters, policy, a population's temperament.
-- **Experimenter** — the player probes a hidden truth with noisy instruments and must infer it. Often the paper's own method, replayed. For causal papers: the player feels why the naive comparison lies and what the identification fixes.
-- **Subject** — the player is the thing being studied: a participant, a perceiving brain, an organism under selection.
-- **Forecaster** — the player bets on what the system will do; the finding is the reveal. The fallback when nothing can be manipulated. Thin, never impossible.
-- **Dilemma** — for conceptual or normative papers that resist even a toy model: the player walks through the situations the paper describes, chooses, and sees the point unfold. A scripted argument with branches.
+- **Agent** — a role inside the model; the control is a choice. Human or not (see personification).
+- **Controller** — sets conditions on a system and aims at a target.
+- **Experimenter** — probes a hidden truth with noisy instruments and must infer or predict. Often the paper's own method replayed; for identification papers, the player feels why the naive comparison misleads.
+- **Subject** — the thing being studied: a participant, a perceiving brain, an organism under selection.
+- **Forecaster** — bets on what the system will do; the finding is the reveal. The fallback; thin but never impossible.
+- **Dilemma** — for conceptual or normative papers: the player walks through the situations the paper describes, chooses, and sees the point unfold.
 
-### Three concepts, then the first five minutes
+### Concepts, scaled to the paper
 
-Generate three concepts placing the player at different positions. At least one casts something non-obvious as the agent. Each gets: position, lever, what the player sees after moving it, the moment of surprise, and the four sources of fun it has or lacks (anticipation, agency, surprise, mastery).
+When the playable experience is obvious — the paper hands over a model with one natural control and one natural discovery — one concept and its walkthrough suffice, and the memo says why alternatives were not needed. When it is not obvious, generate three concepts at different player positions, at least one casting something non-obvious as the agent, and write the walkthrough for the two strongest. Each concept names: position, format (challenge / discovery / strategic), controls, what the player is thinking about before they act, what they see after, the moment of discovery, the sources of fun it has, and what a second playthrough offers.
 
-Then, for the two strongest, write **the first five minutes** — the stranger's experience in the present tense, minute by minute: what they see, what they are wondering, what they want to press, what happens when they press it, where they grin, where they frown. This is the test that kills a concept on paper rather than after a build. If the walkthrough reaches a moment where the honest line is "and I don't know what I'm supposed to feel", the concept has failed. If it cannot be written at all, there is no game there.
+### The first five minutes
+
+For the picked concept always, and for the runner-up when there is one: the stranger's experience in the present tense, minute by minute — what they see, what they are wondering, what they want to press, what they are weighing before they press it, what happens, where they grin, where they frown. This is the test that kills a concept on paper rather than after a build. If the walkthrough reaches a line like "and I don't know what I'm supposed to feel" or "I press it to see what happens," the concept has a demonstration where it needs a game. If the walkthrough cannot be written, there is no game there.
 
 ### The pick
 
-The criterion is the walkthrough: **which concept gives the stranger the best five minutes, with the reversal landing inside them.** Originality is the tie-breaker. Fidelity is not a criterion beyond honesty: a faithful concept with a dull walkthrough loses to a bolder one that declares its divergences. Record the runner-up and what would make you switch, so a second pass can build it without redesign.
+Which concept gives the stranger the best five minutes, with real deliberation in them and the discovery landing inside them. Originality breaks ties. Fidelity is a constraint through section 5, not a criterion: a structural concept with a dull walkthrough loses to an illustrative one that declares itself. Record the runner-up and what would make you switch.
 
 ### The shape
 
-Having picked, decide the shape and say why: one long round or several short; how many screens; whether presets exist and what they are. Presets are the paper's own regimes — its baseline, comparative statics, counterintuitive corner, subgroups, experimental conditions — never invented. Order them so that the reversal arrives early: open on it or one step before it, not on the case where the old belief holds.
-
-Session length: five to eight minutes for a stranger. Longer only if the walkthrough shows the player wanting more.
+One long round or several short; how many screens; presets or none; score or none. Presets are the paper's own regimes — baseline, comparative statics, the counterintuitive corner, subgroups, experimental conditions — never invented. Order them for the player, not as the paper orders them: the discovery should arrive early, not after rounds that merely confirm what the player already believed. Session length five to eight minutes; longer only if the walkthrough shows the player wanting more.
 
 ---
 
-## 5. The design memo
+## 7. The design memo
 
-Written in full and shown to the user before the build starts, as a record, not a question; the build follows immediately. Stop only if the user interrupts. Sections, in order:
+Written in full and shown to the user before the build, as a record, not a question; the build follows immediately. Stop only if the user interrupts. Length scales with the paper's difficulty; an obvious game gets a short memo. Sections:
 
-1. **Paper** — citation, DOI, what was available (PDF only, code, data).
-2. **What the paper hands over** — material, primary and secondary; for an argument, the formalisation's choices.
-3. **The reversal(s).**
-4. **The aim and the verdict** — the aim as one sentence the player will read; the verdict as the three lines the end screen will lead with (what you did, with its number; what the paper says, with its number; the gap, in words).
-5. **Three concepts**, each with position, lever, feedback, surprise, sources of fun.
-6. **The first five minutes** for the two strongest concepts.
-7. **The pick, and why**; the runner-up and the switch condition.
-8. **The shape** — rounds, screens, presets with their sources, the order and the reason for it.
-9. **The lever, the mechanism, the feedback, the surprise** — the four invariants, named concretely for the picked concept.
-10. **What is cut** — everything in the paper the game leaves out, so the author sees it was a decision.
-11. **Divergences** — clock compression, exaggerated parameters, stylised payoffs, simplified presentation; each named with the reason, and the mechanism's honesty asserted or qualified.
-12. **Visual world** — one line naming the world drawn from the paper's own imagery (a microscope field, a trading floor, a weather map, a catalogue page), then three or four visual rules; then the **legibility rule** for this game: what the player will be looking at on the play screen, how big, how many, and what question each picture answers. No house style: each game looks like its paper.
-13. **Fidelity plan** — what the headless check will verify (model: the key figure reproduced qualitatively; estimate: the reported table recovered, signs and rough magnitudes; argument: the toy model produces the claimed outcomes, assumptions listed).
-14. **Fidelity result and build log** — appended after the build: the numbers, and what took more than one pass.
+1. **Paper** — citation, DOI, what was available.
+2. **What the paper hands over** — model / estimate / argument, primary and secondary.
+3. **The discovery, and its kind.**
+4. **Fidelity level and claim boundaries** — structural / statistical / illustrative; demonstrates, assumes, establishes.
+5. **The aim and the verdict** — the aim as the sentence the player will read; the verdict as the lines the end screen leads with (what you did; what the paper says; what that means).
+6. **Concepts** — one or three, as scaled above, each with format, controls, deliberation, discovery moment, sources of fun, replayability.
+7. **The first five minutes** for the pick (and the runner-up, if any).
+8. **The pick, and why**; runner-up and switch condition.
+9. **The shape** — rounds, screens, presets and their sources, order and reason, score or none.
+10. **Controls, mechanism, feedback, moment** — named concretely for the pick.
+11. **What is cut.**
+12. **Divergences** — clock, parameters, payoffs, presentation; each with its reason.
+13. **Visual world** — one line from the paper's own imagery; three or four rules; the legibility rule: what the player looks at on the play screen, how big, how many, what question each picture answers.
+14. **Fidelity plan** — what the headless check will verify at the declared level.
+15. **Fidelity result and build log** — appended after the build.
 
 ---
 
-## 6. The build
+## 8. The build
 
 In this order; do not skip to the skin.
 
-1. **Mechanism, headless.** Plain functions, no DOM. Every number the engine chose in one `CONFIG` block at the top, each line tagged with its origin (`// Table 4, viral-labeled median`, `// eq. 7`, `// read off Fig. 2b`, `// our choice: game-clock compression`). Run the fidelity plan in Node or Python; record the result. If the check fails, fix the mechanism or revise the memo; never build on a mechanism that is wrong about the paper.
+1. **Mechanism, headless.** Plain functions, no DOM. Every chosen number in one `CONFIG` block at the top, each line tagged with its origin (`// Table 4, median`, `// eq. 7`, `// read off Fig. 2b`, `// our choice: clock compression`). Run the fidelity plan in Node or Python; record the result. If it fails, fix the mechanism or revise the memo; never build on a mechanism that misstates the paper at its declared level.
 
-2. **Loop on placeholder graphics.** Build the play loop with boxes and numbers, no styling. Then play it headlessly: a script that takes the player's actions and prints, after each one, what changed on screen and what the score now says. Read the printout as the stranger: after every action, did something visible change, and did it tell them whether they were closer to the aim? If any action produces no visible change, or a change the player could not interpret, fix the loop before any skin exists.
+2. **Loop on placeholder graphics.** The play loop with boxes and numbers. Play it headlessly with a script that prints, after each action, what changed and where the player now stands. Read the printout as the stranger: did something visible change, did it say whether the action worked, was there a reason to think before it? Fix the loop before any skin exists.
 
-3. **Skin.** Apply the visual world. Then screenshot every screen at phone width (≈380 px) and look at each with one question: what would a stranger see here? Pictures that need their caption are simplified. Things too small to read are made fewer and bigger.
+3. **Skin.** Apply the visual world. Screenshot every screen at phone width (≈380 px) and look at each with the question "what would a stranger see here?" Simplify pictures that need their captions; make small things fewer and bigger.
 
-4. **Text.** Aim on the start screen, its own line. Orientation lines on every screen. Button words defined where they appear. Help page. Per-round verdict where rounds exist; final verdict first on the end screen, three lines, large, before any table. Attribution: title, authors, journal, year, DOI, and the sentence "Game built from this paper; the paper is the authority where the two disagree."
+4. **Text.** Aim on the start screen, its own line. Orientation on every screen. Button words defined where they appear. How to play. Per-round verdict where rounds exist; the final verdict first on the end screen, large, before any table. About screen with the memo lightly edited, the fidelity level, and the three claim-boundary lines. Attribution: title, authors, journal, year, DOI, and "Game built from this paper; the paper is the authority where the two disagree."
 
-5. **Stranger tests.** Two, from the screenshots alone: someone who has read only the start screen can say the aim in one sentence; someone who has read only the top of the end screen can say what the paper found. If either fails, fix the text first.
+5. **Self-review from screenshots.** Two questions the builder answers honestly from the screenshots alone: can the aim be stated in one sentence after reading only the start screen? can the discovery be stated after reading only the top of the end screen? This is the builder's review, not stranger testing; real stranger testing is the user's to do, and the author-note says so.
 
-6. **Full session.** Play one complete session headlessly with a plausible strategy, with screenshots; confirm no errors, no horizontal scroll at 380 px, a session within the target length, and that the surprise is reachable by the sensible-wrong strategy.
+6. **Full session.** One complete session headlessly with a plausible strategy, screenshots along the way; no errors, no horizontal scroll at 380 px, within the target length, the discovery reachable.
 
-Hard constraints throughout: one self-contained HTML file, no external dependencies, no CDN, no fonts fetched; touch targets, no hover-only interactions; the player never reads a paragraph before acting; something happens on screen every time the lever moves.
-
----
-
-## 7. Feedback devices that work on a phone
-
-A short library. Pick one or two per game; do not stack.
-
-- **The fill.** A panel, jar, bar or grid of a dozen large cells fills as the player's choice takes effect. Good for shares, budgets, allocations.
-- **The drop.** Each decision drops a marker onto a ruler or histogram, coloured by what the player said, so a pattern accumulates in front of them. Good for sorting, judgement, estimation tasks.
-- **The reveal.** The screen the player acted on is redrawn with the hidden layer on: lights come on, true colours appear, the structure the player guessed at is overlaid on their guess. Good for inference tasks; it is the natural home of the surprise.
-- **The before/after.** Two states side by side or on a slider: what the player set, what the paper's answer would have given.
-- **The race.** Two or three large figures or bars whose relative size changes with the player's choice — incumbent against challenger, treated against control. Good for invasion, competition, selection.
-- **The counter.** A single number that counts up or down visibly after each action, in the aim's units.
-- **The bet and the card.** The player commits to a prediction, then the card turns. The forecaster's device; also a good opening for any game before the first lever.
-- **The trajectory.** One line drawn over time as the player's rounds accumulate, with the paper's line appearing at the end.
-
-Anti-patterns: a running point total; a grid of tiny sprites; a dashboard of moving numbers; a metaphor on a button; a measure that moves before it is named; a picture that is beautiful and answers no question.
+Hard constraints throughout: one self-contained HTML file; no external dependencies, no CDN, no fonts fetched; touch targets, no hover-only interaction; the player never reads a paragraph before acting; something visible happens on every action.
 
 ---
 
-## 8. Writing inside the game
+## 9. Feedback devices that work on a phone
 
-Plain, concrete, numbers where they help. Match the substance of the paper; never quote it. Field terms only where the player must use them to act, defined in the same sentence. Greek letters stay in the paper. Explanations arrive after the surprise. The About screen carries the memo, lightly edited for a reader, including the divergences and the runner-up concept.
+Pick one or two; do not stack.
+
+- **The fill** — a panel, jar, bar or grid of large cells fills as the choice takes effect. Shares, budgets, allocations.
+- **The drop** — each decision drops a marker onto a ruler or histogram, coloured by what the player said; a pattern accumulates. Sorting, judgement, estimation.
+- **The reveal** — the screen the player acted on is redrawn with the hidden layer on. Inference; the natural home of discovery.
+- **The before/after** — two states side by side or on a slider: what the player set, what the paper's answer gives.
+- **The race** — two or three large figures or bars whose relative size follows the player's choice. Competition, selection, treated against control.
+- **The counter** — one number counting up or down after each action, in the aim's units.
+- **The bet and the card** — the player commits to a prediction, then the card turns. The forecaster's device, and a good opening for any format.
+- **The trajectory** — one line drawn over the rounds, with the paper's line appearing at the end.
+- **The prediction round** — after exploring, the player is asked to predict a new case; accuracy is the yardstick. The natural close of a discovery game.
+
+Anti-patterns: a running point total; a grid of tiny sprites; a dashboard of moving numbers; a metaphor on a button; a measure that moves before it is named; a picture that is beautiful and answers no question; a slider the player moves "to see what happens" with nothing at stake.
 
 ---
 
-## 9. Deliverables and repository
+## 10. Writing inside the game
+
+Plain, concrete, numbers where they help. Match the substance of the paper; never quote it. Field terms only where the player must use them to act, defined in the same sentence. Greek letters stay in the paper. Explanation after discovery. Claims bounded by the declared fidelity level ("in this model", "in the data", "if the argument is right").
+
+---
+
+## 11. Deliverables and repository
 
 - `<slug>/<name>.html` — the game.
-- `<slug>/memo.md` — the memo with the fidelity result and build log appended.
-- `<slug>/author-note.md` — three lines for the author: what to look at first, where the config block is, what we were least sure about.
-- `<slug>/mechanism.js` (or `.py`) and the fidelity check, the fidelity result, and the screenshots.
+- `<slug>/memo.md` — with fidelity result and build log appended.
+- `<slug>/author-note.md` — three lines: what to look at first; where the config block is; what we were least sure about. Plus one line saying the game has had the builder's review but no stranger testing.
+- `<slug>/mechanism.js` (or `.py`), the fidelity check, its result, and the screenshots.
 - The PDF moved from `inbox/` into the folder if it was there.
 - A row in the README's games table with the play link `https://steffenhuck.github.io/paper-to-game/<slug>/<name>.html` and the memo link.
 
-Commit. Push to `main` directly if the environment allows; if it only allows a branch, push the branch and open a pull request — the repository merges pull requests from `claude/…` branches automatically. Never leave the work unpushed. The reply ends with the play link and the folder link.
+Commit. Push to `main` directly if the environment allows; otherwise push a branch and open a pull request — the repository merges pull requests from `claude/…` branches automatically. Never leave the work unpushed. The reply ends with the play link and the folder link.
 
 ---
 
-## 10. Failure modes
+## 12. Testing the skill itself
 
-- Opening the skin before the mechanism exists: a polished page with thin content.
-- A concept that could not survive a written first five minutes, built anyway.
-- The reversal arriving late because the presets follow the paper's order instead of the player's needs.
-- A score denominated differently from the aim, so that success reads as failure.
-- Pictures that pass the statistics and fail the eye: too many, too small, a caption doing the picture's job.
-- A term on a button that was never defined; a measure that moved before it was named; a metaphor where a verb was needed.
-- Explaining before the surprise; or its opposite, leaving the player unable to act because nothing was oriented.
-- Bookkeeping dressed as mechanics: fixed attempts, points for repetition.
-- A personified agent whose payoff is not in the paper, unflagged.
-- Presets the paper never discusses.
-- Any number in the code outside the config block, or in it without its origin.
+The skill is judged on a heterogeneous set, not on one paper: a theoretical model, a randomised experiment, a descriptive empirical study, a biological mechanism, a mathematical result, a conceptual argument. The question is whether players *do different things* across the six, not whether the games look different. If the six converge on one structure — an opening challenge, a twist, a retry, a verdict — the skill is prescribing a formula and section 3 needs loosening, not tightening.
+
+---
+
+## 13. Failure modes
+
+- A demonstration shipped as a game: nothing to deliberate, a slider moved to see what happens.
+- A reversal forced onto a paper that offers a different kind of discovery.
+- An unfair failure engineered to manufacture a twist.
+- A fidelity level undeclared, or a correlation played as a cause, or an average effect played as an individual response.
+- A concept that could not survive a written walkthrough, built anyway.
+- The discovery arriving late because presets follow the paper's order instead of the player's.
+- A yardstick in different units from the aim, so that success reads as failure.
+- Pictures that pass the statistics and fail the eye.
+- A term on a button never defined; a measure moved before it was named; a metaphor where a verb was needed.
+- Explaining before the discovery; or leaving the player unable to act because nothing was oriented.
+- Replayability claimed for a new random seed.
+- Builder's screenshot review reported as stranger testing.
+- Any number outside the config block, or inside it without its origin.
 - Work finished and not pushed.
