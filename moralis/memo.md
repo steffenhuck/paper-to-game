@@ -22,6 +22,11 @@ Two.
 - **Feedback.** Moving the balance immediately changes what the residents do (effort, hawkishness, cooperation), shown on the figures. Releasing the mutants: eleven mutant types (κ = 0, 0.1, …, 1) arrive one by one; each either spreads or dies out in the village, and lands on a ruler as *invaded* or *repelled*.
 - **Surprise.** Siblings, second society: the player who learned "selfish is safe" among strangers is overrun by *more* moral mutants; the player who swings to pure Kant is overrun by *less* moral ones. The invaders always sit between the player's κ and a hidden point — and that point is the chance of meeting your own kind. Then the game changes, and the point does not move.
 
+## 3b. The aim and the verdict
+
+- **The aim:** "Find the balance no newcomer can beat." On its own line on the start screen, at the top of every round, and at the head of the How to play page.
+- **The verdict** (the end screen opens with it, large): *You:* your final balance in each society. *The paper:* 0 · ½ · ½ · ¼ · 0.20, the chance of meeting your own kind. *The gap:* in how many societies your final balance held, and where it was too moral or too selfish.
+
 ## 4. Three candidate concepts
 
 **A. Evolution's hand (Controller).** Position: the player sets the morality of a resident population and defends it against a gauntlet of mutants. Lever: κ. Feedback: who invades, plotted on a κ-ruler. Surprise: invaders point toward a hidden κ that turns out to equal σ, in every game.
@@ -70,3 +75,4 @@ A natural-history specimen plate. The paper names species — *homo oeconomicus*
 - First fidelity wording claimed invaders lie *between* the resident and σ. They don't: from κ = 0 among siblings, newcomers up to κ = 1 invade. Corrected to "on σ's side."
 - Visual pass two: the village's bottom row sat under the banner, and the end table's uppercase header turned κ into K. Both fixed. A full headless session at 380 px (one strategy per society) ran with no errors, no horizontal scroll and score 131/165.
 - Pass three, after the skill gained its section on orienting the player: every screen now carries one or two orienting lines (what the balance's 0 and 1 mean, what the village figures and pair lines are, how to read the drawer's ruler and marks, what the end plot's axes are). The player-facing "κ" became "balance", and each balance setting gets a plain gloss with what the villagers then do ("grab 40% of the time"). A How to play page is reachable from the start screen and from a ? on the play screen, and returns the player to where they were. Button labels are plain: START, TEST AGAINST NEWCOMERS, SEE ALL RESULTS.
+- Pass four, after the skill gained 3b and the visible-score rule: the aim sits on the start screen, at the top of the play screen and at the head of How to play. The score reads "score n / 165" and pulses each time a newcomer fails. The end screen opens with the three-line verdict before the plot, explanation, table and attribution, and closes with a reason to play again. Stranger tests: the start screen alone gives the aim in one sentence, and the verdict alone says what the paper found (morality equals the chance of meeting your own kind).
