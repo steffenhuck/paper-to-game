@@ -50,6 +50,13 @@ Regardless of field, name:
 - **The feedback.** What the player sees after moving the lever, and how quickly.
 - **The surprise.** The moment the reversal lands on the player.
 
+### 3b. The aim and the verdict
+
+Write both here, before any concept is chosen, in the words the player will see.
+
+- **The aim**: one sentence the player could repeat after reading the start screen. "Find the balance no newcomer can beat." "Sort the cells, then find the groups." A game with no win condition still has an aim; "no winning" rules out a win screen, never a goal.
+- **The verdict**: the three lines the end screen leads with, large, before any table or explanation. What you did (your number). What the paper says (its number). The gap, in words. "Your eye was 67% consistent. The ruler is 100%. The two kinds are one line."
+
 ### 4. Three candidate concepts
 
 Generate three concepts that place the player at *different* positions. The positions:
@@ -106,13 +113,15 @@ Build from the memo, straight away. If the user interrupts to redirect, revise t
 2. **Config block.** Every number the engine chose sits in one commented block at the top of the script, each line tagged with its origin (`// Table 4, viral-labeled median`, `// eq. 7`, `// read off Fig. 2b`, `// our choice: game-clock compression`). The author edits numbers here and nowhere else.
 3. **Loop, then skin.** Build the play loop with placeholder visuals, confirm a full session works end to end, then apply the visual world.
 4. **Screens.** Start screen (title, one-paragraph premise, preset choice), play, end screen with score, "About this game" (the memo, lightly edited for a reader), and attribution.
-5. **Check by opening it.** Render the page at phone width, play one full session with screenshots, read the config block as the author would. Mechanism fidelity and visual legibility are separate checks: a slab can pass every statistical test and still look like uniform noise. If the hidden structure is not visible on screen at the moment of the reveal, iterate on the rendering (lengths, directions, density) until it is, and keep the mechanism's numbers where they were.
+5. **Check by opening it.** Two stranger tests first: someone who has read only the start screen can say the aim in one sentence; someone who has read only the top of the end screen can say what the paper found. If either fails, fix the text before anything else. Then render the page at phone width, play one full session with screenshots, read the config block as the author would. Mechanism fidelity and visual legibility are separate checks: a slab can pass every statistical test and still look like uniform noise. If the hidden structure is not visible on screen at the moment of the reveal, iterate on the rendering (lengths, directions, density) until it is, and keep the mechanism's numbers where they were.
 
 ### Hard constraints
 
 - One self-contained HTML file. No external dependencies, no CDN, no fonts fetched. Inline SVG or canvas.
 - Playable on a phone: touch targets, no hover-only interactions, no horizontal scroll at 380px.
-- A complete session in ten to fifteen minutes. No winning: a score, and a reason to play again (a different preset, a better score).
+- A complete session in ten to fifteen minutes. No win screen, but a clear aim: the one sentence from memo 3b sits on its own line on the start screen, repeats at the top of every round, and opens the How to play page.
+- A score the player can see moving while they play. It changes when the lever moves, or at least after every decision. A score that appears only at the end is not feedback.
+- The end screen leads with the verdict from memo 3b — three lines, large: what you did, what the paper says, the gap. Only then the explanation, the table, the attribution. A reason to play again (a different preset, a better score) closes it.
 - The player never reads a paragraph of instruction before acting, but every screen carries the one or two sentences a smart stranger needs to act on it: what the things on screen are, what the choice means, roughly what a good answer looks like (a number, a range). Define every term the player has to use — if the buttons say "curly" and "straight", the screen says in plain words what each looks like, and where possible shows the two extremes side by side before the first choice. Name a measure before the player sees it move (a ruler that fills in during play is a mystery unless its axis has been explained in one line).
 - A **How to play** page, reachable from a prominent button on the start screen and from a small ? on every play screen, explains the whole game in plain language for a smart person from outside the field: the setting, what each round asks, what the score means, and what the game is trying to show. Written for a general reader, not a specialist; no jargon that isn't defined in the same sentence. Returning from it lands the player back where they were.
 - Button labels say what happens, not a metaphor: "Show the dendrites", not "Develop the dendrites".
@@ -155,5 +164,6 @@ When the skill is invoked inside the `paper-to-game` repository, the build also 
 - A personified agent whose payoff is not in the paper, unflagged.
 - Inventing presets the paper never discusses.
 - A session that only shows the result; the player must have been wrong first.
+- No stated aim, or a score the player only meets at the end, or an end screen that is a table rather than a verdict.
 - Explaining before the surprise — but also its opposite: leaving the player unable to act because a term was never defined. Orientation is not explanation; give the first, withhold the second.
 - Any number in the code that is not in the config block with its origin.
