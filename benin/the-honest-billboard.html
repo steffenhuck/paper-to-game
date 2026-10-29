@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Honest Billboard</title>
+<style>
+  :root { --sand:#f4ead9; --card:#fffdf8; --ink:#25211c; --dim:#6e665c; --line:#ddd1bd; --earth:#b4532a; --earth2:#8e3f1f;
+          --warn:#2e7d4b; --knew:#a59d92; --back:#c23b2a; --warnbg:#e3f0e6; --backbg:#f7e1dc; --knewbg:#ece8e1; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body { margin:0; background:var(--sand); color:var(--ink); font-family:-apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size:16px; line-height:1.45; }
+  .screen { display:none; max-width:560px; margin:0 auto; padding:24px 16px 40px; }
+  .screen.on { display:block; }
+  h1 { font-size:34px; line-height:1.1; margin:18px 0 6px; letter-spacing:-.01em; }
+  h2 { font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); margin:16px 0 6px; font-weight:600; }
+  p { margin:8px 0; }
+  .lede { font-size:18px; }
+  .aim { font-size:19px; font-weight:600; margin:16px 0; padding:10px 0; border-top:2px solid var(--ink); border-bottom:2px solid var(--ink); }
+  .hud { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin:0 0 6px; }
+  .aimbar { font-size:13px; color:var(--dim); flex:1; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; }
+  button { font:inherit; font-size:16px; background:var(--card); color:var(--ink); border:2px solid var(--ink); border-radius:10px; padding:12px 14px; min-height:48px; cursor:pointer; flex:1; }
+  button.primary { background:var(--ink); color:var(--sand); }
+  button:disabled { opacity:.35; cursor:default; }
+  button.q { flex:0 0 auto; width:40px; min-height:40px; height:40px; padding:0; border-radius:50%; font-weight:700; color:var(--dim); border-color:var(--dim); }
+  .hero { display:block; width:calc(100% + 32px); margin:-24px -16px 0; height:230px; }
+  .muted { color:var(--dim); font-size:14px; }
+  .orient { font-size:15px; color:var(--dim); margin:4px 0 10px; }
+  .chip { display:inline-block; padding:1px 8px; border-radius:6px; font-weight:700; font-size:14px; color:#fff; }
+  .chip.warn { background:var(--warn); } .chip.knew { background:var(--knew); } .chip.back { background:var(--back); }
+  .defs { background:var(--card); border:2px solid var(--line); border-radius:12px; padding:10px 12px; margin:10px 0; }
+  .defs div { margin:6px 0; font-size:15px; }
+  .ex { border-left:4px solid var(--earth); padding:4px 10px; margin:8px 0; font-size:15px; }
+  .ex b { display:block; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--dim); }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .board { position:relative; text-align:left; background:#fff; border:3px solid var(--ink); border-radius:6px; padding:9px 10px 30px; min-height:132px; display:flex; flex-direction:column; box-shadow:0 5px 0 var(--earth2); }
+  .board .tag { font-size:11px; font-weight:800; letter-spacing:.14em; color:var(--earth); margin-bottom:4px; }
+  .board .f { font-size:15px; font-weight:700; line-height:1.25; }
+  .board .badge { position:absolute; left:8px; bottom:6px; font-size:13px; font-weight:800; padding:1px 7px; border-radius:6px; color:#fff; }
+  .board .tick { position:absolute; right:6px; bottom:5px; width:24px; height:24px; border-radius:50%; border:2px solid var(--line); }
+  .board.sel { background:#fff6d6; border-color:var(--earth); }
+  .board.sel .tick { background:var(--earth); border-color:var(--earth); }
+  .board.sel .tick::after { content:'✓'; color:#fff; font-weight:800; display:block; text-align:center; line-height:20px; font-size:15px; }
+  .count { text-align:center; font-weight:700; margin:12px 0 8px; }
+  .bigboard { background:#fff; border:4px solid var(--ink); border-radius:6px; padding:14px; margin:6px 0 4px; box-shadow:0 6px 0 var(--earth2); }
+  .bigboard .tag { font-size:12px; font-weight:800; letter-spacing:.16em; color:var(--earth); }
+  .bigboard .f { font-size:22px; font-weight:800; line-height:1.2; margin-top:4px; }
+  .legs { display:flex; justify-content:space-between; padding:0 30px; height:26px; }
+  .legs i { width:8px; background:var(--earth2); display:block; }
+  .asked { font-size:14px; color:var(--dim); margin:6px 0; }
+  .asked b { color:var(--ink); }
+  .chart { width:100%; display:block; }
+  .counts { display:flex; gap:8px; margin:8px 0; }
+  .counts div { flex:1; text-align:center; border-radius:10px; padding:6px 2px; }
+  .counts .n { font-size:28px; font-weight:800; line-height:1.05; }
+  .counts .l { font-size:13px; }
+  .counts .warn { background:var(--warnbg); color:var(--warn); } .counts .knew { background:var(--knewbg); color:#5c564e; } .counts .back { background:var(--backbg); color:var(--back); }
+  .dots { display:grid; grid-template-columns:repeat(20, 1fr); gap:3px; margin:8px 0; }
+  .dots i { aspect-ratio:1; border-radius:50%; background:var(--line); transition:background .25s; }
+  .net { font-size:20px; font-weight:800; margin:6px 0 2px; }
+  .net.pos { color:var(--warn); } .net.neg { color:var(--back); } .net.zero { color:var(--dim); }
+  .after { background:var(--card); border-left:5px solid var(--earth); padding:8px 12px; border-radius:8px; font-size:15px; margin:8px 0; }
+  .src { font-size:12px; color:var(--dim); }
+  .score { background:var(--card); border:3px solid var(--ink); border-radius:12px; padding:12px; margin:12px 0; }
+  .score .big { font-size:30px; font-weight:800; line-height:1.1; }
+  .flip { animation: flip .45s ease-out; transform-origin:top; }
+  @keyframes flip { from { transform:rotateX(70deg); opacity:0; } to { transform:none; opacity:1; } }
+  .verdict div { margin:10px 0; }
+  .verdict .you { font-size:23px; font-weight:800; line-height:1.25; }
+  .verdict .paper { font-size:18px; }
+  .verdict .means { font-size:18px; font-style:italic; }
+  .rank { display:flex; align-items:center; gap:8px; margin:6px 0; font-size:14px; }
+  .rank .t { flex:0 0 86px; font-weight:800; font-size:12px; letter-spacing:.08em; color:var(--earth); }
+  .rank .bar { flex:1; height:22px; position:relative; background:var(--knewbg); border-radius:4px; }
+  .rank .bar i { position:absolute; top:0; bottom:0; border-radius:4px; }
+  .rank .bar .mid { position:absolute; left:50%; top:-3px; bottom:-3px; width:2px; background:var(--ink); }
+  .rank .v { flex:0 0 40px; text-align:right; font-weight:800; }
+  ul.also { padding-left:20px; } ul.also li { margin:6px 0; font-size:15px; }
+  .about p, .about li { font-size:15px; }
+  .about h3 { font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:var(--dim); margin:18px 0 4px; }
+  .attr { font-size:13px; color:var(--dim); margin-top:18px; border-top:1px solid var(--line); padding-top:8px; }
+</style>
+</head>
+<body>
+
+<!-- START -->
+<section class="screen on" id="s-start">
+  <svg class="hero" viewBox="0 0 400 230" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <rect width="400" height="230" fill="#f2d39d"/><circle cx="330" cy="58" r="26" fill="#f7e7c4"/>
+    <path d="M0 175 Q100 160 200 172 T400 168 V230 H0Z" fill="#b4532a"/><path d="M0 196 Q120 186 230 198 T400 192 V230 H0Z" fill="#8e3f1f"/>
+    <path d="M200 230 C205 205 218 190 240 176 S300 150 330 140" stroke="#f4ead9" stroke-width="3" stroke-dasharray="6 7" fill="none"/>
+    <rect x="70" y="48" width="200" height="104" fill="#fff" stroke="#25211c" stroke-width="4"/>
+    <rect x="98" y="152" width="8" height="34" fill="#25211c"/><rect x="234" y="152" width="8" height="34" fill="#25211c"/>
+    <text x="170" y="86" font-size="17" font-weight="800" text-anchor="middle" fill="#25211c">EVERY WORD</text>
+    <text x="170" y="108" font-size="17" font-weight="800" text-anchor="middle" fill="#25211c">ON THIS SIGN</text>
+    <text x="170" y="130" font-size="17" font-weight="800" text-anchor="middle" fill="#b4532a">IS TRUE</text>
+  </svg>
+  <h1>The Honest Billboard</h1>
+  <p class="lede">Benin City, Nigeria. In 2017 almost <b>1 in 4</b> households saw someone leave for Europe by the road across the desert and the sea. Europe pays for posters here, telling people not to go.</p>
+  <div class="aim" id="aim-start"></div>
+  <p class="muted">About four minutes. Two campaigns of three billboards. Every number comes from a 2018 survey of 555 households in Benin City.</p>
+  <div class="row"><button class="primary" id="b-start">Start</button></div>
+  <div class="row" style="margin-top:10px"><button id="b-help1">How to play</button><button id="b-about1">About the paper</button></div>
+</section>
+
+<!-- BRIEF -->
+<section class="screen" id="s-brief">
+  <div class="hud"><div class="aimbar" data-aim></div><button class="q" data-help>?</button></div>
+  <h2>Your job</h2>
+  <p class="lede">You run Europe's next poster campaign in Benin City. Campaigns like it already exist:</p>
+  <div class="ex"><b>Denmark, newspaper ads</b>Benefits for newcomers are low and have just been cut.</div>
+  <div class="ex"><b>Germany, billboards</b>"You're leaving? Are you sure?"</div>
+  <div class="ex"><b>EU and UNHCR, online</b>"Telling the Real Story" of the dangers on the way.</div>
+  <p class="lede" style="margin-top:14px"><b>Your rule: every word must be true.</b> Whether a true fact helps depends on what the reader already believed:</p>
+  <div class="defs">
+    <div><span class="chip warn">warns</span> the truth is <b>worse</b> than they thought. This is what you want.</div>
+    <div><span class="chip knew">knew it</span> they already had it about right. A wasted billboard.</div>
+    <div><span class="chip back">backfires</span> the truth is <b>better</b> than they thought, so Europe or the trip now looks better.</div>
+  </div>
+  <p class="orient">Your score for a billboard: how many of 100 people it warns, minus how many it backfires on.</p>
+  <div class="row"><button class="primary" id="b-to-pick">Choose billboards</button></div>
+</section>
+
+<!-- PICK -->
+<section class="screen" id="s-pick">
+  <div class="hud"><div class="aimbar" data-aim></div><button class="q" data-help>?</button></div>
+  <h2 id="pick-head">Campaign 1 of 2</h2>
+  <p class="orient" id="pick-orient">Tap 3 billboards. For each, ask: <b>what do people in Benin City already believe about this?</b></p>
+  <div class="grid" id="boards"></div>
+  <div class="count" id="pick-count"></div>
+  <div class="row"><button class="primary" id="b-put" disabled>Put them up</button></div>
+</section>
+
+<!-- REVEAL -->
+<section class="screen" id="s-reveal">
+  <div class="hud"><div class="aimbar" data-aim></div><button class="q" data-help>?</button></div>
+  <h2 id="rev-head"></h2>
+  <div class="bigboard"><div class="tag" id="rev-tag"></div><div class="f" id="rev-fact"></div></div>
+  <div class="legs"><i></i><i></i></div>
+  <p class="asked">The survey asked: <b id="rev-q"></b></p>
+  <div class="row" id="rev-flip-row"><button class="primary" id="b-flip">Show what Benin City answered</button></div>
+  <div id="rev-res" style="display:none">
+    <div class="flip" id="rev-chart"></div>
+    <div class="counts">
+      <div class="warn"><div class="n" id="n-warn"></div><div class="l">warned</div></div>
+      <div class="knew"><div class="n" id="n-knew"></div><div class="l">knew it</div></div>
+      <div class="back"><div class="n" id="n-back"></div><div class="l">backfired</div></div>
+    </div>
+    <div class="dots" id="dots"></div>
+    <div class="net" id="rev-net"></div>
+    <div class="after" id="rev-after"></div>
+    <div class="src" id="rev-src"></div>
+    <div class="score" id="rev-score" style="display:none"></div>
+    <div class="row" style="margin-top:10px"><button class="primary" id="b-next"></button></div>
+  </div>
+</section>
+
+<!-- END -->
+<section class="screen" id="s-end">
+  <div class="verdict" id="verdict"></div>
+  <h2>All six billboards</h2>
+  <p class="orient">Score per billboard: warned minus backfired, out of 100 people. Green to the right of the line is good; red to the left backfires.</p>
+  <div id="ranking"></div>
+  <h2>The survey also found</h2>
+  <ul class="also" id="also"></ul>
+  <div class="row" style="margin-top:14px"><button class="primary" id="b-again">Play again</button><button id="b-about2">About the paper</button></div>
+  <div class="attr" id="attr2"></div>
+</section>
+
+<!-- HELP -->
+<section class="screen" id="s-help">
+  <h2>How to play</h2>
+  <div class="aim" data-aim></div>
+  <p><b>The setting.</b> Benin City in Nigeria is where more people leave for Europe by the dangerous road across the Sahara and the Mediterranean than almost anywhere else. European governments pay for poster campaigns there, mostly saying that Europe is not as good as people think.</p>
+  <p><b>What you do.</b> You choose 3 billboards out of 6. Every one states a true fact. Then each one turns over to show how people in Benin City answered the same question in a real 2018 survey.</p>
+  <p><b>The yardstick.</b> Of 100 people, a billboard <span class="chip warn">warns</span> those who believed something rosier than the truth, is old news to those who <span class="chip knew">knew it</span>, and <span class="chip back">backfires</span> on those who believed something gloomier, because for them the truth makes Europe or the trip look better. A billboard's score is warned minus backfired. A campaign's score adds up its three billboards, and you see the best score possible next to yours.</p>
+  <p><b>Two campaigns.</b> After the first campaign you get a second. The billboards you have seen keep their scores, and the rest you must judge from what you learned. If your first campaign is already the best possible, the game ends there.</p>
+  <p><b>What the game is trying to show.</b> Whether the people these campaigns target are really as misinformed as the campaigns assume, and about what.</p>
+  <p class="muted">A billboard's score is about beliefs: whether the fact is better or worse than what someone thought. The survey cannot say whether anyone would then stay or go, and neither does the game.</p>
+  <div class="row"><button class="primary" id="b-help-back">Back</button></div>
+</section>
+
+<!-- ABOUT -->
+<section class="screen about" id="s-about">
+  <h2>About the paper</h2>
+  <p><b>Bernd Beber and Alexandra Scacco (2022).</b> "The Myth of the Misinformed Migrant? Survey Insights from Nigeria's Irregular Migration Epicenter." <i>Ruhr Economic Papers</i> No. 957, RWI Essen. doi:10.4419/96973121.</p>
+  
+<h3>Fidelity: statistical, from reported distributions only</h3>
+<p>Nothing in this game is simulated or random. Every share comes from a histogram or stacked bar in the paper, read off the figure, or from a number in its text. The 100 dots show shares; they are not individual people.</p>
+<p><b>It demonstrates</b> where Benin City's survey answers sat relative to the true values, item by item. <b>It assumes</b> three things of ours: where "about right" ends (within a factor of 1.5 for money, 7.5 points for the asylum rate; the conclusions hold from 1.25 to 2 and from 5 to 10 points); that guesses are spread evenly within each histogram bar; and that a fact worse than your guess makes the option look worse to you. That is a statement about beliefs, not behaviour. <b>The paper establishes</b> the distribution of beliefs in a representative 2018 sample of one city. It does not test any campaign, and nothing here says anyone would stay or go.</p>
+<h3>What the paper hands over</h3>
+<p>A survey of 555 households in Benin City (October–November 2018), with incentivised best guesses about Europe (Fig. 8), the journey (Figs. 11, 14, 15), asylum (Fig. 17) and the respondent's own chances (Fig. 16), plus interviews with ten returnees. The true values are the paper's: GNI per capita in the EU in 2017; the maximum Italian (NASpI) and British (Jobseeker's Allowance) benefits; 28,130 of 122,040 Nigerian asylum claims accepted in 2011–2017.</p>
+<h3>The discovery</h3>
+<p>Campaigns assume would-be migrants overrate Europe. In the survey they did not: their guesses about Europe were about right or too gloomy (the typical guess of European income was €660 a month, against about €2,500). What they got wrong was the journey and their own odds: four in five thought they personally would make it to Europe, and most overestimated the asylum rate. So an honest message about Europe backfires; an honest message about the road lands.</p>
+<h3>The "making it" billboard</h3>
+<p>The fact ("most who set out never get past Libya") is the paper's footnote 34; the paper does not know the exact share. The comparison is between a person's view of their own chances and a fact about everyone who tries. Any one person might be right to be confident; on average, the paper says, respondents vastly overestimate their odds.</p>
+<h3>What is cut</h3>
+<p>Life expectancy (not a campaign message); the risk histograms for injury, death, abuse and slavery (no true value exists to compare with); the splits by interest in migrating, by family migration and by gender (the paper reports the key patterns hold in each); community norms; self-reported uncertainty.</p>
+<h3>Divergences</h3>
+<p>Benefits are shown monthly, as the paper plots them (it asked weekly). The paper's € axis comes from naira; we place its ticks at about ₦415 per euro, which reproduces every label and the €660 median. "Don't know" answers count as "knew it / no change", never as warned.</p>
+<h3>For the author</h3>
+<p>See the author note in the repository. This game has had the builder's review only; it has not been tested with real players.</p>
+
+  <p class="attr">Game built from this paper; the paper is the authority where the two disagree.</p>
+  <div class="row"><button class="primary" id="b-about-back">Back</button></div>
+</section>
+
+<script>
+// The Honest Billboard: mechanism (single source of truth; runs unchanged in Node and in the browser).
+// Beber & Scacco (2022), "The Myth of the Misinformed Migrant?", Ruhr Economic Papers 957, doi:10.4419/96973121.
+// Nothing here is simulated and nothing is random: every share comes from a histogram or stacked bar in the paper.
+
+const CONFIG = {
+  sampleHouseholds: 555,                    // p. 5, p. 12
+  leftLastYear: 23,                         // p. 14: 23% of households had someone "follow land" in the previous year
+  nairaPerEuro: 415,                        // our fit: ticks at ln(₦)=9..15 give the figure labels .02 .05 .14 .39 1.1 2.9 7.8 (k€); fn. 37 implies ≈409
+  bandFactor: 1.5,                          // our choice: a money guess within ×1.5 of the truth counts as "about right" (varied 1.25–2 in fidelity.js)
+  bandPoints: 7.5,                          // our choice: an asylum guess within ±7.5 points counts as "about right" (varied 5–10)
+
+  // Histograms of best guesses: bin edges on the paper's x-axis, counts read off at 200 dpi, truth = dashed line.
+  income: {                                 // Fig. 8, top left: monthly income per capita, EU; bins are 0.5 wide in ln(₦)
+    edges: [8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5, 13, 13.5, 14, 14.5, 15, 15.5],
+    counts: [1, 1, 6, 12, 39, 18, 91, 65, 91, 87, 43, 4, 7, 2],   // read off Fig. 8
+    truth: 13.83,                           // dashed line read off Fig. 8 (≈€2,450; GNI p.c. EU 2017, fn. 17)
+    log: true },
+  italy: {                                  // Fig. 8, bottom right: maximum monthly unemployment benefit, Italy (NASpI); bins 1 wide in ln(₦)
+    edges: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+    counts: [1, 3, 0, 0, 0, 58, 97, 145, 111, 16, 12, 1],        // read off Fig. 8
+    truth: 13.20,                           // dashed line read off Fig. 8 (≈€1,300; fn. 19)
+    showFrom: 8,                            // display only: 4 near-zero guesses (<1%) are left off the chart but counted in the shares
+    log: true },
+  uk: {                                     // Fig. 8, bottom left: monthly Jobseeker's Allowance, UK
+    edges: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+    counts: [1, 5, 0, 0, 0, 32, 80, 140, 143, 32, 16, 2],        // read off Fig. 8
+    truth: 11.90,                           // dashed line read off Fig. 8 (≈€350; fn. 19)
+    showFrom: 8,                            // display only: 6 near-zero guesses (1.3%) are left off the chart but counted in the shares
+    log: true },
+  asylum: {                                 // Fig. 17: "Out of 100 Nigerians that apply for asylum in Europe, how many are allowed to stay?"
+    edges: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+    counts: [55, 72, 78, 52, 116, 45, 34, 32, 15, 5],            // read off Fig. 17
+    truth: 100 * 28130 / 122040,            // fn. 34: 28,130 of 122,040 Nigerian claims accepted 2011–2017 (Eurostat)
+    log: false },
+
+  // Stacked bars, shares in % read off the figures (top-to-bottom segment boundaries).
+  reachEurope: { veryLikely: 52, somewhatLikely: 28, somewhatUnlikely: 7, veryUnlikely: 10, dontKnow: 3 },   // Fig. 16 left, read off to ±1, whole numbers
+  ownAsylum:   { veryLikely: 47, somewhatLikely: 32, somewhatUnlikely: 11.5, veryUnlikely: 5.5, dontKnow: 3 },         // Fig. 16 right
+  pirates:  { definitely: 36, probably: 21, probablyNot: 20, definitelyNot: 15, dontKnow: 8 },   // Fig. 15 right, read off to ±1, whole numbers
+  vampires: { definitely: 27, probably: 18.5, probablyNot: 19.5, definitelyNot: 25.5, dontKnow: 8.5 },                   // Fig. 15 left
+  motorbikeCorrect: 1,                      // p. 21: "only about 1% giving the correct response"
+  boatAnswer: 15,                           // p. 21: "about 15% said boat or ship"
+  agadezCorrect: 32.5,                      // Fig. 14 right, read off ("only a third", p. 22)
+  medianIncomeGuessEUR: 660,                // fn. 37: ₦270,000
+  medianWageEuropeEUR: 490,                 // p. 25: median expected own wage in Europe ₦200,000
+  medianStayWageEUR: 490,                   // p. 25: median wage needed to stay in Nigeria, same; modal difference zero
+
+  picks: 3,                                 // our choice: three billboards per campaign
+  campaigns: 2,                             // our choice: a second campaign lets the player use what the first revealed
+};
+
+const BILLBOARDS = [
+  { id: 'income', tag: 'EUROPE', fact: 'The average European lives on about €2,500 a month.', src: 'Fig. 8 · fn. 17',
+    q: 'What do you think is the average personal income in Europe per month?',
+    rosier: 'guessed more', gloomier: 'guessed less',
+    after: 'Most guessed far less. The typical guess was €660. The truth makes Europe look better.' },
+  { id: 'italy', tag: 'ITALY', fact: 'Lose your job in Italy and the state pays up to €1,300 a month.', src: 'Fig. 8 · fn. 19',
+    q: 'If someone in Italy loses their job, how much does the state pay them?',
+    rosier: 'guessed more', gloomier: 'guessed less',
+    after: 'Almost everyone guessed less. In Italy the honest number is good news.' },
+  { id: 'uk', tag: 'BRITAIN', fact: 'Lose your job in Britain and the state pays about €350 a month.', src: 'Fig. 8 · fn. 19',
+    q: 'If someone in Britain loses their job, how much does the state pay them?',
+    rosier: 'guessed more', gloomier: 'guessed less',
+    after: 'The typical guess was right on. The rest split both ways, slightly more of them too low.' },
+  { id: 'asylum', tag: 'ASYLUM', fact: 'Fewer than 1 in 4 Nigerians who ask for asylum in Europe may stay.', src: 'Fig. 17 · fn. 34',
+    q: 'Out of 100 Nigerians who ask for asylum in Europe, how many may stay?',
+    rosier: 'guessed more', gloomier: 'guessed fewer',
+    after: 'Most guessed higher, and "half" was the favourite answer. Asked about their own claim, 79 in 100 thought it would likely succeed.' },
+  { id: 'reach', tag: 'THE ROAD', fact: 'Most people who set out from here never get past Libya.', src: 'Fig. 16 · fn. 34',
+    q: 'How likely is it that you would make it all the way to Europe, if you wanted to?',
+    rosier: 'said "likely" for themselves', gloomier: '',
+    after: 'Four in five said they themselves would likely make it. The paper calls this optimism bias: people are hopeful about Nigerians in general, and even more hopeful about themselves.' },
+  { id: 'pirates', tag: 'THE SEA', fact: 'At sea, pirates steal the engines of migrant boats.', src: 'Fig. 15',
+    q: 'Do you think this is true: there are sea pirates that steal the engines of boats trying to cross to Europe?',
+    rosier: 'thought it false', gloomier: '',
+    after: 'A third thought this real danger was made up. And when asked about vampires in the sea, half of those with an opinion said they were real.' },
+];
+
+// ---------- the mechanism ----------
+
+const toEUR = x => Math.exp(x) / CONFIG.nairaPerEuro;
+const fromEUR = e => Math.log(e * CONFIG.nairaPerEuro);
+
+// Share of guesses below, inside and above an interval, spreading each bar's guesses evenly across the bar (on the plotted scale).
+function histShares(h, lo, hi) {
+  const n = h.counts.reduce((a, b) => a + b, 0); let below = 0, inside = 0, above = 0;
+  h.counts.forEach((c, i) => {
+    const a = h.edges[i], b = h.edges[i + 1], part = (x, y) => Math.max(0, Math.min(b, y) - Math.max(a, x)) / (b - a);
+    below += c * part(-Infinity, lo); inside += c * part(lo, hi); above += c * part(hi, Infinity);
+  });
+  return { below: 100 * below / n, inside: 100 * inside / n, above: 100 * above / n, n };
+}
+
+function band(id, opt = {}) {
+  const h = CONFIG[id], f = opt.bandFactor || CONFIG.bandFactor, d = opt.bandPoints || CONFIG.bandPoints;
+  return h.log ? [h.truth - Math.log(f), h.truth + Math.log(f)] : [h.truth - d, h.truth + d];
+}
+
+// For each billboard: of 100 people, how many it warns (fact worse than their guess), tells nothing new, or backfires on (fact better).
+function outcome(id, opt = {}) {
+  if (CONFIG[id] && CONFIG[id].edges) {
+    const [lo, hi] = band(id, opt), s = histShares(CONFIG[id], lo, hi);
+    return { warn: s.above, knew: s.inside, back: s.below };     // higher income / benefit / acceptance = rosier than the fact
+  }
+  if (id === 'reach') { const r = CONFIG.reachEurope;
+    return { warn: r.veryLikely + r.somewhatLikely, knew: r.somewhatUnlikely + r.veryUnlikely + r.dontKnow, back: 0 }; }
+  if (id === 'pirates') { const p = CONFIG.pirates;
+    return { warn: p.probablyNot + p.definitelyNot, knew: p.definitely + p.probably + p.dontKnow, back: 0 }; }
+  throw new Error('unknown billboard ' + id);
+}
+
+// Whole people out of 100 (largest remainder), so the three counts on screen always add to 100.
+function counts(id, opt) {
+  const o = outcome(id, opt), keys = ['warn', 'knew', 'back'], raw = keys.map(k => o[k] * 100 / (o.warn + o.knew + o.back));
+  const fl = raw.map(Math.floor); let left = 100 - fl.reduce((a, b) => a + b, 0);
+  raw.map((v, i) => [v - fl[i], i]).sort((a, b) => b[0] - a[0]).forEach(([, i]) => { if (left > 0) { fl[i]++; left--; } });
+  return { warn: fl[0], knew: fl[1], back: fl[2], net: fl[0] - fl[2] };
+}
+
+const ids = BILLBOARDS.map(b => b.id);
+function combos(arr, k) { if (k === 0) return [[]]; if (arr.length < k) return [];
+  const [x, ...rest] = arr; return combos(rest, k - 1).map(c => [x, ...c]).concat(combos(rest, k)); }
+function campaignScore(pick, opt, scorer = c => c.net) { return pick.reduce((s, id) => s + scorer(counts(id, opt)), 0); }
+function bestCampaign(opt, scorer) {
+  let best = null; combos(ids, CONFIG.picks).forEach(c => { const s = campaignScore(c, opt, scorer); if (!best || s > best.score) best = { pick: c, score: s }; });
+  return best;
+}
+
+// Display data for the reveal: histogram bars, band and truth on the plotted scale, axis ticks in plain € or numbers.
+function chart(id) {
+  const h = CONFIG[id];
+  if (!h || !h.edges) {
+    const src = id === 'reach' ? CONFIG.reachEurope : CONFIG.pirates;
+    const segs = id === 'reach'
+      ? [['Very likely', src.veryLikely, 'warn'], ['Somewhat likely', src.somewhatLikely, 'warn'], ['Somewhat unlikely', src.somewhatUnlikely, 'knew'], ['Very unlikely', src.veryUnlikely, 'knew'], ["Don't know", src.dontKnow, 'knew']]
+      : [['Definitely true', src.definitely, 'knew'], ['Probably true', src.probably, 'knew'], ['Probably not', src.probablyNot, 'warn'], ['Definitely not', src.definitelyNot, 'warn'], ["Don't know", src.dontKnow, 'knew']];
+    return { kind: 'stack', segs: segs.map(([label, v, cat]) => ({ label, v, cat })) };
+  }
+  const [lo, hi] = band(id);
+  const lo0 = h.showFrom !== undefined ? h.showFrom : h.edges[0];
+  const ticks = h.log ? [30, 100, 300, 1000, 3000, 10000].map(e => ({ x: fromEUR(e), label: e >= 1000 ? '€' + e / 1000 + 'k' : '€' + e }))
+                      : [0, 20, 40, 60, 80, 100].map(v => ({ x: v, label: String(v) }));
+  const n = h.counts.reduce((a, b) => a + b, 0);
+  return { kind: 'hist', bars: h.counts.map((c, i) => ({ a: h.edges[i], b: h.edges[i + 1], share: 100 * c / n })).filter(r => r.a >= lo0),
+    lo, hi, truth: h.truth, min: lo0, max: h.edges[h.edges.length - 1], ticks,
+    truthLabel: h.log ? '€' + (Math.round(toEUR(h.truth) / 50) * 50).toLocaleString('en') : Math.round(h.truth) + ' in 100' };
+}
+
+// ---------- the game ----------
+
+function newGame() { return { campaign: 0, known: {}, history: [] }; }
+function validPick(pick) { return Array.isArray(pick) && pick.length === CONFIG.picks && new Set(pick).size === CONFIG.picks && pick.every(id => ids.includes(id)); }
+const BEST = bestCampaign();
+
+function runCampaign(g, pick) {
+  if (!validPick(pick)) throw new Error('pick exactly ' + CONFIG.picks + ' different billboards');
+  const results = pick.map(id => { const c = counts(id); const fresh = !g.known[id]; g.known[id] = c; return { id, fresh, ...c }; });
+  const r = { pick, results, warn: results.reduce((s, x) => s + x.warn, 0), back: results.reduce((s, x) => s + x.back, 0) };
+  r.score = r.warn - r.back; r.best = BEST.score; r.perfect = r.score >= BEST.score;
+  g.history.push(r); g.campaign++;
+  return r;
+}
+function anotherCampaign(g) { const last = g.history[g.history.length - 1]; return g.campaign < CONFIG.campaigns && !(last && last.perfect); }
+const sgn = v => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v);
+
+function campaignLine(r) {
+  if (r.perfect) return 'The best campaign there is.';
+  const tag = x => BILLBOARDS.find(b => b.id === x.id).tag, out = [];
+  const backs = r.results.filter(x => x.net <= -20).map(tag), wash = r.results.filter(x => x.net > -20 && x.net < 20).map(tag);
+  if (backs.length) out.push(`${backs.join(' and ')} backfired: most people already thought ${backs.length > 1 ? 'those numbers were' : 'that number was'} lower than the truth.`);
+  if (wash.length) out.push(`${wash.join(' and ')} was close to a wash.`);
+  if (!out.length) out.push('No backfires, but a better set of three exists.');
+  return out.join(' ');
+}
+
+function verdict(g) {
+  const best = g.history.reduce((a, b) => (b.score > a.score ? b : a));
+  const you = `Your best campaign warned ${best.warn} and backfired on ${best.back}: a score of ${sgn(best.score)} out of a possible ${sgn(BEST.score)}.`;
+  const paper = 'In the survey, Benin City guessed Europe’s wealth about right or too low. The facts they got wrong were the asylum odds, the road, and their own chances.';
+  const means = 'A campaign that says "Europe is worse than you think" is either useless or untrue. The honest message is about the journey.';
+  return { you, paper, means };
+}
+
+function ranking() { return ids.map(id => ({ id, ...counts(id), b: BILLBOARDS.find(x => x.id === id) })).sort((a, b) => b.net - a.net); }
+
+const vampireShare = () => { const v = CONFIG.vampires; return Math.round(100 * (v.definitely + v.probably) / (v.definitely + v.probably + v.probablyNot + v.definitelyNot)); };
+
+const ALSO = [
+  `Only about ${CONFIG.motorbikeCorrect} in 100 knew that most people cross into Niger on the back of motorbikes. ${CONFIG.boatAnswer} in 100 said by boat, though the route crosses dry land.`,
+  `Only ${Math.round(CONFIG.agadezCorrect)} in 100 knew that the trucks across the Sahara leave from Agadez.`,
+  `${vampireShare()} in 100 of those with an opinion thought vampires roam the sea to Europe. It is hard to tell real dangers from rumours.`,
+  `The typical person expected to earn about €${CONFIG.medianWageEuropeEUR} a month in Europe. They said they would need the same €${CONFIG.medianStayWageEUR} at home to stop thinking of leaving. As if the journey cost nothing, or leaving were worth something in itself.`,
+];
+
+const M = { vampireShare, CONFIG, BILLBOARDS, ALSO, toEUR, fromEUR, histShares, band, outcome, counts, combos, campaignScore, bestCampaign, BEST, chart,
+  newGame, validPick, runCampaign, anotherCampaign, campaignLine, verdict, ranking, sgn };
+if (typeof module !== 'undefined') module.exports = M;
+
+</script>
+<script>
+(function () {
+  const $ = id => document.getElementById(id);
+  const AIM = 'Aim: pick 3 true billboards that warn the most people and backfire on the fewest.';
+  document.querySelectorAll('[data-aim]').forEach(e => e.textContent = AIM); $('aim-start').textContent = AIM;
+  $('attr2').textContent = 'Beber & Scacco (2022), Ruhr Economic Papers 957, doi:10.4419/96973121. Game built from this paper; the paper is the authority where the two disagree.';
+
+  let G, picked, current, revIdx, here = 's-start';
+  const show = id => { document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id)); here = id; window.scrollTo(0, 0); };
+  let back = 's-start';
+  const toHelp = () => { back = here; show('s-help'); };
+  document.querySelectorAll('[data-help]').forEach(b => b.onclick = toHelp);
+  $('b-help1').onclick = toHelp; $('b-help-back').onclick = () => show(back);
+  const toAbout = () => { back = here; show('s-about'); };
+  $('b-about1').onclick = toAbout; $('b-about2').onclick = toAbout; $('b-about-back').onclick = () => show(back);
+  const bb = id => M.BILLBOARDS.find(b => b.id === id);
+  const color = v => v > 0 ? 'var(--warn)' : v < 0 ? 'var(--back)' : 'var(--knew)';
+
+  function start() { G = M.newGame(); show('s-brief'); }
+  $('b-start').onclick = start;
+  $('b-to-pick').onclick = () => openPick();
+  $('b-again').onclick = start;
+
+  function openPick() {
+    picked = [];
+    const n = G.campaign + 1;
+    $('pick-head').textContent = `Campaign ${n} of ${M.CONFIG.campaigns}`;
+    $('pick-orient').innerHTML = n === 1
+      ? 'Tap 3 billboards. For each, ask: <b>what do people in Benin City already believe about this?</b>'
+      : 'Next year’s campaign. Billboards you have seen show their score. For the rest, use what you learned. Tap 3.';
+    drawBoards(); show('s-pick');
+  }
+  function drawBoards() {
+    $('boards').innerHTML = '';
+    M.BILLBOARDS.forEach(b => {
+      const el = document.createElement('button'); el.className = 'board' + (picked.includes(b.id) ? ' sel' : ''); el.dataset.board = b.id;
+      const k = G.known[b.id];
+      el.innerHTML = `<div class="tag">${b.tag}</div><div class="f">${b.fact}</div>` +
+        (k ? `<span class="badge" style="background:${color(k.net)}">${M.sgn(k.net)}</span>` : '') + '<span class="tick"></span>';
+      el.onclick = () => { const i = picked.indexOf(b.id);
+        if (i >= 0) picked.splice(i, 1); else if (picked.length < M.CONFIG.picks) picked.push(b.id); drawBoards(); };
+      $('boards').appendChild(el);
+    });
+    const left = M.CONFIG.picks - picked.length;
+    $('pick-count').textContent = left ? `${picked.length} of 3 chosen. Pick ${left} more.` : '3 of 3 chosen. Ready.';
+    $('b-put').disabled = !M.validPick(picked);
+  }
+  $('b-put').onclick = () => { current = M.runCampaign(G, picked.slice()); revIdx = 0; openReveal(); };
+
+  function openReveal() {
+    const x = current.results[revIdx], b = bb(x.id);
+    $('rev-head').textContent = `Campaign ${G.campaign} · billboard ${revIdx + 1} of 3`;
+    $('rev-tag').textContent = b.tag; $('rev-fact').textContent = b.fact; $('rev-q').textContent = '“' + b.q + '”';
+    $('rev-res').style.display = 'none'; $('rev-flip-row').style.display = ''; $('rev-score').style.display = 'none';
+    $('b-flip').textContent = x.fresh ? 'Show what Benin City answered' : 'Show it again (you saw this one)';
+    show('s-reveal');
+  }
+  $('b-flip').onclick = () => {
+    const x = current.results[revIdx], b = bb(x.id);
+    $('rev-flip-row').style.display = 'none'; $('rev-res').style.display = '';
+    $('rev-chart').innerHTML = drawChart(x.id, b); $('rev-chart').classList.remove('flip'); void $('rev-chart').offsetWidth; $('rev-chart').classList.add('flip');
+    $('n-warn').textContent = x.warn; $('n-knew').textContent = x.knew; $('n-back').textContent = x.back;
+    const d = $('dots'); d.innerHTML = ''; const cols = [];
+    for (let i = 0; i < 100; i++) { cols.push(i < x.warn ? 'var(--warn)' : i < x.warn + x.knew ? 'var(--knew)' : 'var(--back)'); d.appendChild(document.createElement('i')); }
+    [...d.children].forEach((e, i) => setTimeout(() => e.style.background = cols[i], 200 + i * 8));
+    $('rev-net').className = 'net ' + (x.net > 0 ? 'pos' : x.net < 0 ? 'neg' : 'zero');
+    $('rev-net').textContent = `Billboard score ${M.sgn(x.net)}` + (x.net <= -20 ? ': it backfired' : x.net < 20 ? ': close to a wash' : ': it warned');
+    $('rev-after').textContent = b.after; $('rev-src').textContent = 'Source: ' + b.src + ' of the paper.';
+    const last = revIdx === current.results.length - 1;
+    if (last) {
+      const s = $('rev-score'); s.style.display = '';
+      s.innerHTML = `<div class="muted">Campaign ${G.campaign} score</div><div class="big" style="color:${color(current.score)}">${M.sgn(current.score)} <span style="font-size:17px;color:var(--dim)">of a possible ${M.sgn(current.best)}</span></div>` +
+        `<div>Warned ${current.warn}, backfired on ${current.back}. ${M.campaignLine(current)}</div>`;
+      $('b-next').textContent = M.anotherCampaign(G) ? 'Plan campaign 2' : 'See the verdict';
+    } else $('b-next').textContent = 'Next billboard';
+  };
+  $('b-next').onclick = () => {
+    if (revIdx < current.results.length - 1) { revIdx++; openReveal(); return; }
+    if (M.anotherCampaign(G)) openPick(); else openEnd();
+  };
+
+  function drawChart(id, b) {
+    const c = M.chart(id), W = 360;
+    if (c.kind === 'stack') {
+      let x = 0, rects = '', rows = '';
+      const fill = { warn: '#2e7d4b', knew: '#a59d92', back: '#c23b2a' };
+      c.segs.forEach((s, i) => { const w = s.v / 100 * W; rects += `<rect x="${x}" y="0" width="${w}" height="44" fill="${fill[s.cat]}" stroke="#fff" stroke-width="2"/>`; x += w;
+        rows += `<div style="display:flex;justify-content:space-between;font-size:14px;margin:2px 0"><span><i style="display:inline-block;width:11px;height:11px;border-radius:2px;background:${fill[s.cat]};margin-right:6px"></i>${s.label}</span><b>${Math.round(s.v)} in 100</b></div>`; });
+      return `<svg class="chart" viewBox="0 0 ${W} 46" role="img" aria-label="answers">${rects}</svg>${rows}`;
+    }
+    const H = 150, top = 22, base = top + H, sx = v => (v - c.min) / (c.max - c.min) * W;
+    const maxS = Math.max(...c.bars.map(r => r.share)), sy = s => H * s / maxS;
+    const zones = [[c.min, c.lo, '#c23b2a', '#f7e1dc'], [c.lo, c.hi, '#a59d92', '#ece8e1'], [c.hi, c.max, '#2e7d4b', '#e3f0e6']];
+    let out = '';
+    zones.forEach(([a, z, , bg]) => { const x0 = sx(Math.max(a, c.min)), x1 = sx(Math.min(z, c.max)); if (x1 > x0) out += `<rect x="${x0}" y="${top}" width="${x1 - x0}" height="${H}" fill="${bg}"/>`; });
+    c.bars.forEach(r => zones.forEach(([a, z, fg]) => { const x0 = sx(Math.max(a, r.a)), x1 = sx(Math.min(z, r.b)); if (x1 > x0 && r.share > 0) out += `<rect x="${x0}" y="${base - sy(r.share)}" width="${x1 - x0}" height="${sy(r.share)}" fill="${fg}"/>`; }));
+    c.bars.forEach(r => { if (r.share > 0) out += `<rect x="${sx(r.a)}" y="${base - sy(r.share)}" width="${sx(r.b) - sx(r.a)}" height="${sy(r.share)}" fill="none" stroke="#fff" stroke-width="1.5"/>`; });
+    const tx = sx(c.truth);
+    out += `<line x1="${tx}" y1="${top - 4}" x2="${tx}" y2="${base}" stroke="#25211c" stroke-width="2.5" stroke-dasharray="6 4"/>`;
+    out += `<text x="${Math.min(Math.max(tx, 60), W - 60)}" y="14" font-size="14" font-weight="800" text-anchor="middle" fill="#25211c">Truth: ${c.truthLabel}</text>`;
+    out += `<line x1="0" y1="${base}" x2="${W}" y2="${base}" stroke="#25211c" stroke-width="1.5"/>`;
+    c.ticks.forEach(t => { const x = sx(t.x); if (x < 8 || x > W - 8) return; out += `<line x1="${x}" y1="${base}" x2="${x}" y2="${base + 5}" stroke="#25211c"/><text x="${x}" y="${base + 19}" font-size="12" text-anchor="middle" fill="#6e665c">${t.label}</text>`; });
+    out += `<text x="2" y="${base + 38}" font-size="13" fill="#c23b2a" font-weight="700">← ${b.gloomier}</text><text x="${W - 2}" y="${base + 38}" font-size="13" fill="#2e7d4b" font-weight="700" text-anchor="end">${b.rosier} →</text>`;
+    return `<div class="muted" style="margin-top:6px">Each bar: how many people gave that answer.</div><svg class="chart" viewBox="0 0 ${W} ${base + 44}" role="img" aria-label="histogram of answers">${out}</svg>`;
+  }
+
+  function openEnd() {
+    const v = M.verdict(G);
+    $('verdict').innerHTML = `<div class="you">${v.you}</div><div class="paper">${v.paper}</div><div class="means">${v.means}</div>`;
+    $('ranking').innerHTML = M.ranking().map(r => { const w = Math.abs(r.net) / 100 * 50;
+      const st = r.net >= 0 ? `left:50%;width:${w}%` : `left:${50 - w}%;width:${w}%`;
+      return `<div class="rank"><div class="t">${r.b.tag}</div><div class="bar"><i style="${st};background:${color(r.net)}"></i><span class="mid"></span></div><div class="v" style="color:${color(r.net)}">${M.sgn(r.net)}</div></div>`; }).join('');
+    $('also').innerHTML = M.ALSO.map(a => `<li>${a}</li>`).join('');
+    show('s-end');
+  }
+})();
+</script>
+</body>
+</html>

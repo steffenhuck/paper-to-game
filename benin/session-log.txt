@@ -1,0 +1,30 @@
+put disabled with 0: true
+count: 3 of 3 chosen. Ready. | put enabled: true
+help on: true
+back on pick: true | selection kept: 3
+
+REVEAL CAMPAIGN 1 · BILLBOARD 1 OF 3: Lose your job in Italy and the state pays up to €1,300 a month.
+   Billboard score −83: it backfired | 5 7 88
+
+REVEAL CAMPAIGN 1 · BILLBOARD 2 OF 3: Lose your job in Britain and the state pays about €350 a month.
+   Billboard score −9: close to a wash | 33 25 42
+
+REVEAL CAMPAIGN 1 · BILLBOARD 3 OF 3: Most people who set out from here never get past Libya.
+   Billboard score +80: it warned | 80 20 0
+  SCORE: Campaign 1 score −12 of a possible +155 Warned 118, backfired on 130. ITALY backfired: most people already thought that number was lower than the truth. BRITAIN was close to a wash.
+
+campaign 2 on pick: true | head: CAMPAIGN 2 OF 2 | badges: −83 −9 +80
+REVEAL2 THE ROAD: Billboard score +80: it warned
+REVEAL2 ASYLUM: Billboard score +40: it warned
+REVEAL2 THE SEA: Billboard score +35: it warned
+  SCORE: Campaign 2 score +155 of a possible +155 Warned 174, backfired on 19. The best campaign there is. | next: See the verdict
+
+VERDICT:
+Your best campaign warned 174 and backfired on 19: a score of +155 out of a possible +155.
+In the survey, Benin City guessed Europe’s wealth about right or too low. The facts they got wrong were the asylum odds, the road, and their own chances.
+A campaign that says "Europe is worse than you think" is either useless or untrue. The honest message is about the journey.
+back on end: true
+retry: no badges true
+perfect first campaign → button: See the verdict
+end on: true | Your best campaign warned 174 and backfired on 19: a score of +155 out of a possible +155.
+errors []
