@@ -208,3 +208,15 @@ The score is deliveries made out of 4, with a correctly refused impossible order
    - the end-screen headline was changed from a tally ("One of four right") to words.
 4. **Self-review from screenshots.** Aim from the start screen alone: "send flowers to stars with boosters, on time and fresh." Discovery from the top of the end screen alone: "speeds don't add, nothing catches light, and travelling clocks run slow." Does it look like an earlier game? No. It is the first light, Swiss-poster game, with clock dials; the earlier ones are a dark studio, a yellow comic, a dark board game and cream paper charts.
 5. **Browser session** (`session-test.js`, `session-log.txt`, `screenshot-*.png`) at 380 px. The test range is played at 2, then help is opened mid-range and returned from (stamp kept), then 3, 5 and 4. Order book A is spread evenly 3-3-3-2, with the crate refusing the 12th booster, and the log is opened from the book. Flights follow, then the verdict ("You chased an order not even light could make"). Book B is played perfectly. The long haul is played at 5 (wilted), then 6 (fresh), then About. No console errors, no decimals on screen, no horizontal scroll. Session length is an estimate (5–7 minutes); no person has timed it.
+
+
+## 20. Revision after the first review (same day)
+
+The first play screen read as a slider that did nothing: two grey lanes with a knob-shaped rocket, +/− keys that changed only a number, and the only pressable things below the fold under two empty clocks. Rebuilt the test range around Steffen's suggestion that the control should move the clocks:
+
+- The booster control is a slider, 1–6, in the register (ink rail, red square thumb).
+- Dragging it previews the race frozen at the moment the light reaches the star: beam full, star lit, the rocket as far as it got (at two boosters, four-fifths of the way), with one flame chevron per booster. Both clocks sweep to the arrival readings, shown in grey until a launch confirms them. The §5 discovery is therefore under the thumb before the first launch; the launch and the stamp confirm it.
+- Order on screen: order slip (one line, no cells), track with the lanes labelled LIGHT and YOUR ROCKET and a start line, clocks, slider, LAUNCH — all within one phone screen. Stamp, sentence and log below.
+- The order book is unchanged: +/− keys, committed blind, judged on landing. The stakes live there, as the memo intended; the test range is now the instrument it was meant to be.
+
+Mechanism untouched; `template.html` only; rebuilt and replayed at 380 px, no errors, no horizontal scroll.

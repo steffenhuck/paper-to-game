@@ -1,3 +1,5 @@
+**Revised after first review:** the test range now has a booster slider that previews the race and moves both clocks live; the order book is unchanged. See memo §20.
+
 # The Light Post — note for the author
 
 1. Look first at `screenshot-range-2.png` (the "two halves" test shot: the beam lands at 4 years, the rocket at 5, the flowers' clock at 3), then `screenshot-end-first.png` and `screenshot-haul-end.png` for the verdicts.
