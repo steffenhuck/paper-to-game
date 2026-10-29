@@ -1,0 +1,67 @@
+A. The read-off data against the paper's text
+
+PASS  A1 ln(₦)=9..15 at ₦415/€ reproduces Fig. 8 tick labels (±12%)  — 0.020 0.053 0.14 0.39 1.1 2.9 7.9
+PASS  A2 median EU-income guess ≈ €660 (fn. 37), ±15%  — €648; n read off = 467
+PASS  A3 true EU income on the € axis ≈ €2,500 (GNI p.c. 2017, fn. 17)  — €2445
+PASS  A4 most underestimate EU income (p. 15)  — 94.1% below truth
+PASS  A5 most underestimate the Italian benefit (p. 16)  — 94.2% below truth
+PASS  A6 UK benefit: typical guess close to the truth (p. 16)  — median €311 vs truth €355; 54.1% below, 45.9% above
+PASS  A7 Italy truth ≈ €1,300, UK ≈ €350 (fn. 19, as plotted)  — €1302, €355
+PASS  A8 asylum truth = 28,130/122,040 ≈ 23% (fn. 34)  — 23.0
+PASS  A9 mean asylum guess above the truth; mode in the 40–50 bar (p. 24)  — mean 38.1, n = 504
+PASS  A10 four in five think they would likely reach Europe (p. 23)  — 80%
+PASS  A11 "nearly the same share" think their own asylum claim would succeed (p. 23)  — 79%
+PASS  A12 stacked bars add to ≈100  — 100, 99, 100, 99
+PASS  A13 pirates believed more than vampires (p. 23)  — 57% vs 45.5%
+PASS  A14 about half or more of those with an opinion believe in sea vampires ("more than half", p. 23)  — 50 in 100
+PASS  A15 motorbike ≈1%, Agadez ≈ one third (pp. 21–22)
+
+B. The people at the doors reproduce the paper's distributions
+
+PASS  B1 income: note shares from 200k doors match the survey's shares (≤1.5 points, after rounding answers)  — doors 2.4/12.6/85.1 vs survey 2.4/12.4/85.2 (green/white/red)
+PASS  B1 italy: note shares from 200k doors match the survey's shares (≤1.5 points, after rounding answers)  — doors 4.4/7.0/88.6 vs survey 4.3/7.3/88.3 (green/white/red)
+PASS  B1 uk: note shares from 200k doors match the survey's shares (≤1.5 points, after rounding answers)  — doors 32.5/26.1/41.4 vs survey 33.1/25.4/41.5 (green/white/red)
+PASS  B1 asylum: note shares from 200k doors match the survey's shares (≤1.5 points, after rounding answers)  — doors 58.7/22.5/18.7 vs survey 58.8/22.4/18.8 (green/white/red)
+PASS  B1 reach: note shares from 200k doors match the survey's shares (≤1.5 points, after rounding answers)  — doors 80.0/20.0/0.0 vs survey 80.0/20.0/0.0 (green/white/red)
+PASS  B1 pirates: note shares from 200k doors match the survey's shares (≤1.5 points, after rounding answers)  — doors 34.9/65.1/0.0 vs survey 35.0/65.0/0.0 (green/white/red)
+PASS  B2 the note colour always matches the number the person says (classified after rounding)
+PASS  B3 median income answer at the doors ≈ €660 (fn. 37), ±15%  — €651
+PASS  B4 a street replays exactly from its seed
+
+C. The central discovery survives the designer's choices
+
+PASS  C1 band ×1.25 / ±5: both Europe-wealth posters backfire on more than 70 in 100; asylum and road warn more than they backfire  — income 3/7/90, italy 5/2/93, uk 39/14/47, asylum 62/15/23, reach 80/20/0, pirates 35/65/0
+PASS  C2 band ×1.25 / ±5: the right stamps are print ASYLUM, THE ROAD, THE SEA; scrap the rest  — asylum, reach, pirates
+PASS  C1 band ×1.5 / ±7.5: both Europe-wealth posters backfire on more than 70 in 100; asylum and road warn more than they backfire  — income 2/13/85, italy 5/7/88, uk 33/25/42, asylum 59/22/19, reach 80/20/0, pirates 35/65/0
+PASS  C2 band ×1.5 / ±7.5: the right stamps are print ASYLUM, THE ROAD, THE SEA; scrap the rest  — asylum, reach, pirates
+PASS  C1 band ×2 / ±10: both Europe-wealth posters backfire on more than 70 in 100; asylum and road warn more than they backfire  — income 2/24/74, italy 3/16/81, uk 24/43/33, asylum 56/29/15, reach 80/20/0, pirates 35/65/0
+PASS  C2 band ×2 / ±10: the right stamps are print ASYLUM, THE ROAD, THE SEA; scrap the rest  — asylum, reach, pirates
+PASS  C3 BRITAIN is a near-wash under every band (|warned − backfired| < 20)  — -8, -9, -9
+PASS  C4 an alternative rule (judge posters by warned alone): the two Europe-wealth posters are still the worst  — income 2, italy 5, uk 33, pirates 35, asylum 59, reach 80
+
+D. Game logic
+
+PASS  D1 displayed counts add to 100 for every poster
+PASS  D2 exactly 12 knocks, then no more
+PASS  D3 every knock leaves one note on the poster asked about
+PASS  D4 Europe's draft (print all six, ask no one) is judged: 3 of 6 stamps right, and it backfires  — warns 214, backfires on 234; You asked no one and took Europe’s word for it. You printed EUROPE and ITALY, which would each have backfired on most readers. You printed all three posters about the journey, which warn. BRITAIN was close to a wash.
+PASS  D5 the right stamps are judged all right; the best campaign is computed, not typed  — warns 174, backfires on 19; You asked no one and took Europe’s word for it. You scrapped both Europe posters that would have backfired. You printed all three posters about the journey, which warn.
+PASS  D6 stamps lock once sent; scrapping everything is judged  — You asked no one and took Europe’s word for it. You scrapped both Europe posters that would have backfired. You scrapped all three posters about the journey, the ones that warn.
+
+E. Is twelve knocks enough? (a plain strategy: ask each poster twice; print if green notes outnumber red)
+
+PASS  E1 the first EUROPE answer is red for most players (the discovery lands at the first door)  — 85.4%
+      share of streets where this strategy stamps each poster right: income 99.3%, italy 99.2%, uk 73.1%, asylum 61.9%, reach 95.8%, pirates 56.9%
+      all four Europe-wealth notes red: 56.8%
+PASS  E2 the evidence is noisy where the paper's data are mixed (BRITAIN and ASYLUM are stamped right less often than EUROPE and ITALY)
+
+Posters as judged on the whole survey (of 100 readers: warned / nothing new / backfired → right stamp):
+  EUROPE    2 / 13 / 85 → SCRAP   "The average European lives on about €2,500 a month."
+  ITALY     5 / 7 / 88 → SCRAP   "Lose your job in Italy and the state pays up to €1,300 a month."
+  BRITAIN   33 / 25 / 42 → SCRAP   "Lose your job in Britain and the state pays about €350 a month."
+  ASYLUM    59 / 22 / 19 → PRINT   "Fewer than 1 in 4 Nigerians who ask for asylum in Europe may stay."
+  THE ROAD  80 / 20 / 0 → PRINT   "Most who set out from here never get past Libya."
+  THE SEA   35 / 65 / 0 → PRINT   "At sea, pirates steal the engines of migrant boats."
+  Best campaign: asylum, reach, pirates: warns 174, backfires on 19
+
+ALL CHECKS PASS
