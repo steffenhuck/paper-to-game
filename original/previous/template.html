@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Original or the Copy</title>
+<style>
+  :root { --paper:#f3f0e8; --card:#fdfbf6; --ink:#1d1c1a; --dim:#67635b; --line:#d6d0c3; --rr:#b0391f; --cr:#1f4f8f;
+          --ok:#2f6b3a; --no:#b0391f; --bar:#e6e1d5; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size:16px; line-height:1.45; }
+  .screen { display:none; max-width:560px; margin:0 auto; padding:20px 16px 40px; }
+  .screen.on { display:block; }
+  h1 { font-size:34px; line-height:1.08; margin:14px 0 6px; letter-spacing:-.01em; }
+  h2 { font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); margin:14px 0 6px; font-weight:600; }
+  p { margin:8px 0; }
+  .lede { font-size:18px; }
+  .aim { font-size:18px; font-weight:600; margin:14px 0; padding:10px 0; border-top:2px solid var(--ink); border-bottom:2px solid var(--ink); }
+  .aimbar { font-size:13px; color:var(--dim); margin:0 0 4px; flex:1; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; }
+  button { font:inherit; font-size:16px; background:var(--card); color:var(--ink); border:2px solid var(--ink); border-radius:10px; padding:12px 14px; min-height:48px; cursor:pointer; flex:1; }
+  button.primary { background:var(--ink); color:var(--paper); }
+  button:disabled { opacity:.35; cursor:default; }
+  button.q { flex:0 0 auto; width:40px; min-height:40px; height:40px; padding:0; border-radius:50%; font-weight:700; color:var(--dim); border-color:var(--dim); }
+  .hud { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+  .orient { font-size:15px; color:var(--dim); margin:6px 0 10px; }
+  /* front page */
+  .front { background:var(--card); border:2px solid var(--ink); padding:10px 12px 12px; border-radius:4px; }
+  .front .mast { font-family:Georgia, "Times New Roman", serif; font-weight:700; font-size:22px; text-align:center; border-bottom:3px double var(--ink); padding-bottom:4px; }
+  .front .date { font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--dim); text-align:center; margin:3px 0 8px; }
+  .front .head { font-weight:900; font-size:30px; line-height:1.02; text-transform:uppercase; letter-spacing:-.01em; }
+  .front .sub { font-size:14px; color:var(--dim); margin-top:6px; }
+  /* act 1 */
+  .ccard { background:var(--card); border:2px solid var(--line); border-radius:10px; padding:10px 12px; margin:10px 0; }
+  .ccard .top { display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+  .ccard .nm { font-weight:800; font-size:18px; }
+  .ccard .yr { color:var(--dim); font-size:14px; }
+  .tag { font-size:12px; font-weight:700; padding:2px 8px; border-radius:10px; white-space:nowrap; }
+  .tag.hard { background:var(--ink); color:var(--paper); } .tag.low { border:1px solid var(--dim); color:var(--dim); }
+  .ccard .hl { font-size:14px; margin:4px 0 8px; }
+  .seg { display:flex; gap:8px; }
+  .seg button { min-height:44px; padding:8px 6px; font-size:15px; border-color:var(--line); }
+  .seg button.sel { border-color:var(--ink); background:var(--ink); color:var(--paper); }
+  .pbar { position:relative; height:34px; background:var(--bar); border-radius:6px; margin:8px 0 4px; overflow:visible; }
+  .pbar .f { position:absolute; left:0; top:0; bottom:0; width:0; background:var(--ink); border-radius:6px; transition:width 1.1s cubic-bezier(.2,.8,.2,1); }
+  .pbar.fight .f { background:var(--rr); }
+  .pbar .line { position:absolute; top:-5px; bottom:-5px; width:0; border-left:2px dashed var(--ink); }
+  .pbar .v { position:absolute; right:8px; top:0; line-height:34px; font-weight:800; font-size:15px; }
+  .res { font-weight:700; font-size:15px; }
+  .res.ok { color:var(--ok); } .res.no { color:var(--no); }
+  .why { font-size:14px; margin-top:2px; }
+  .score { font-size:44px; font-weight:900; line-height:1; margin:6px 0; }
+  .say { font-size:17px; margin:12px 0 6px; padding:10px 12px; background:var(--card); border-left:5px solid var(--ink); border-radius:6px; }
+  .say.rr { border-left-color:var(--rr); }
+  .note { font-size:13px; color:var(--dim); }
+  /* act 2 */
+  .dial { margin:12px 0; }
+  .dial .t { font-weight:800; font-size:16px; }
+  .dial .c { font-size:14px; color:var(--dim); margin:2px 0 6px; }
+  .dial .seg button { flex-direction:column; line-height:1.15; }
+  .dial .seg button small { display:block; font-size:12px; opacity:.8; font-weight:400; }
+  .rule { font-size:16px; font-weight:700; padding:8px 12px; border:2px dashed var(--ink); border-radius:8px; margin:8px 0; }
+  .headline { background:var(--card); border:2px solid var(--ink); border-radius:4px; padding:8px 12px; min-height:70px; }
+  .headline .k { font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--dim); }
+  .headline .h { font-weight:900; text-transform:uppercase; line-height:1.05; letter-spacing:-.01em; font-size:22px; }
+  .race .lbl { display:flex; justify-content:space-between; font-weight:700; font-size:15px; margin:10px 0 3px; }
+  .rbar { position:relative; height:44px; background:var(--bar); border-radius:6px; overflow:hidden; }
+  .rbar .f { position:absolute; left:0; top:0; bottom:0; width:0; background:var(--rr); border-radius:6px; transition:width 1.3s cubic-bezier(.2,.8,.2,1); }
+  .rbar.before .f { opacity:.45; }
+  .rbar .v { position:absolute; left:8px; top:8px; line-height:28px; padding:0 8px; border-radius:6px; background:rgba(20,18,16,.6); color:#fff; font-weight:800; }
+  .verdictline { font-size:24px; font-weight:900; margin:8px 0; }
+  .verdictline.ok { color:var(--ok); } .verdictline.no { color:var(--no); }
+  .grid { display:grid; grid-template-columns:auto 1fr 1fr 1fr; gap:4px; font-size:13px; align-items:stretch; }
+  .grid div { padding:8px 4px; text-align:center; border-radius:6px; }
+  .grid .h { font-weight:700; color:var(--dim); background:none; }
+  .grid .cell { font-weight:800; font-size:16px; color:#fff; }
+  .grid .mine { outline:3px solid var(--ink); outline-offset:-3px; }
+  .verdict div { margin:10px 0; }
+  .verdict .you { font-size:24px; font-weight:800; line-height:1.2; }
+  .verdict .paper { font-size:18px; }
+  .verdict .means { font-size:20px; font-style:italic; font-weight:600; }
+  .about p, .about li { font-size:15px; }
+  .about h3 { font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:var(--dim); margin:18px 0 4px; }
+  .attr { font-size:13px; color:var(--dim); margin-top:18px; border-top:1px solid var(--line); padding-top:8px; }
+  .muted { color:var(--dim); font-size:14px; }
+  a { color:var(--cr); }
+  .fade { animation: fade .45s ease-out; }
+  @keyframes fade { from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
+</style>
+</head>
+<body>
+
+<!-- START -->
+<section class="screen on" id="s-start">
+  <div class="front">
+    <div class="mast">The European Daily</div>
+    <div class="date">Autumn 2015</div>
+    <div class="head">Refugee crisis: Europe's elections loom</div>
+    <div class="sub">In 2015 Europe faced what came to be called the migration crisis. Elections followed across Europe over the next three years.</div>
+  </div>
+  <h1>The Original or the Copy</h1>
+  <div class="aim" id="aim-start"></div>
+  <p class="muted">About four minutes, two parts. Everything you see comes from a 2022 study of newspaper coverage of 61 election campaigns in 15 European countries.</p>
+  <div class="row"><button class="primary" id="b-start">Start</button></div>
+  <div class="row" style="margin-top:10px"><button id="b-help1">How to play</button><button id="b-about1">About the paper</button></div>
+</section>
+
+<!-- ACT 1 -->
+<section class="screen" id="s-act1">
+  <div class="hud"><div class="aimbar">Part 1 of 2 · Bet where the crisis set off a fight over immigration.</div><button class="q" data-help>?</button></div>
+  <h2>Part 1 · Where did it become the fight?</h2>
+  <p class="orient" id="a1-orient">After the 2015 crisis, each country held an election. In some, immigration became <b>a fight</b>: one of the top issues of the campaign, with parties loudly on opposite sides. In others it hardly came up. For each country, bet: <b>Fight</b> or <b>No fight</b>?</p>
+  <div id="cards"></div>
+  <div id="a1-sum" style="display:none" class="fade"></div>
+  <div class="row" style="margin-top:12px"><button class="primary" id="b-reveal" disabled>Reveal</button></div>
+</section>
+
+<!-- ACT 2: campaign -->
+<section class="screen" id="s-camp">
+  <div class="hud"><div class="aimbar">Part 2 of 2 · Keep the radical right from gaining more than 1 point.</div><button class="q" data-help>?</button></div>
+  <h2 id="c-title"></h2>
+  <p class="orient" id="c-orient"></p>
+  <div class="rule" id="c-rule"></div>
+  <div class="dial">
+    <div class="t">1 · How much do you talk about immigration?</div>
+    <div class="c">The share of your campaign about it, compared with last time.</div>
+    <div class="seg" id="d-talk"></div>
+  </div>
+  <div class="dial">
+    <div class="t">2 · Which way do you move on it?</div>
+    <div class="c">Tougher = a big step towards the radical right's line. More open = a big step away from it.</div>
+    <div class="seg" id="d-lean"></div>
+  </div>
+  <div class="headline"><div class="k">Tomorrow's headline</div><div class="h" id="c-head"></div></div>
+  <div class="row" style="margin-top:12px"><button class="primary" id="b-run">Run the campaign</button></div>
+</section>
+
+<!-- ACT 2: result -->
+<section class="screen" id="s-res">
+  <div class="hud"><div class="aimbar">Part 2 of 2 · Keep the radical right from gaining more than 1 point.</div><button class="q" data-help>?</button></div>
+  <h2 id="r-title"></h2>
+  <div class="headline"><div class="k">Your campaign</div><div class="h" id="r-head"></div></div>
+  <div class="race">
+    <div class="lbl"><span>Radical right, before</span></div>
+    <div class="rbar before"><div class="f" id="r-b"></div><div class="v" id="r-bv"></div></div>
+    <div class="lbl"><span>Radical right, after your campaign</span></div>
+    <div class="rbar"><div class="f" id="r-a"></div><div class="v" id="r-av"></div></div>
+  </div>
+  <div id="r-out" style="visibility:hidden">
+    <div class="verdictline" id="r-verdict"></div>
+    <div class="say rr" id="r-say"></div>
+    <p class="note" id="r-note"></p>
+  </div>
+  <div class="row" style="margin-top:12px"><button class="primary" id="b-next">Next campaign</button></div>
+</section>
+
+<!-- END -->
+<section class="screen" id="s-end">
+  <div class="verdict" id="verdict"></div>
+  <h2>All nine campaigns, in the paper's estimate</h2>
+  <p class="orient">The change in the radical right's vote, in points, for every combination. Your choices are outlined.</p>
+  <div class="grid" id="grid"></div>
+  <p class="note">From Table 3 (Model 3) of the paper: what went with what across 37 elections. It is a pattern, not an experiment, and the uncertainty is wide, especially on the right-hand column.</p>
+  <h2>Part 1, again</h2>
+  <p id="end-a1"></p>
+  <div class="row" style="margin-top:14px"><button class="primary" id="b-again">Play again</button></div>
+  <div class="row" style="margin-top:10px"><button id="b-help3">How to play</button><button id="b-about2">About the paper</button></div>
+  <div class="attr">Swen Hutter &amp; Hanspeter Kriesi (2022), "Politicising immigration in times of crisis", <i>Journal of Ethnic and Migration Studies</i> 48(2): 341–365. <a href="https://doi.org/10.1080/1369183X.2020.1853902">doi:10.1080/1369183X.2020.1853902</a>. Game built from this paper; the paper is the authority where the two disagree.</div>
+</section>
+
+<!-- HELP -->
+<section class="screen" id="s-help">
+  <h1 style="font-size:28px">How to play</h1>
+  <div class="aim" id="aim-help"></div>
+  <p><b>The setting.</b> In 2015 Europe faced what came to be called the migration crisis. Elections followed across Europe over the next three years. A study read the newspapers' campaign coverage in 15 countries and measured how much parties fought about immigration.</p>
+  <p><b>Part 1.</b> Eight countries, each with a line on how hard the crisis hit it. Bet whether its next election turned into <b>a fight</b> over immigration: one of the top issues, with parties loudly on opposite sides. The study's yardstick is how much parties talked about it, times how far apart they stood. A dashed line marks the point where an issue is usually among a campaign's top three. Reveal shows the study's measurement. You score how many of the eight you called right.</p>
+  <p><b>Part 2.</b> You run the big centre-right party (think Christian democrats or conservatives). A radical-right party is campaigning against immigration. For each of three campaigns you set two dials:</p>
+  <ul>
+    <li><b>Talk</b>: how much of your campaign is about immigration: the same as last time, 10 points more, or 20 points more.</li>
+    <li><b>Move</b>: tougher (a big step towards the radical right's line), hold, or more open (a big step away from it).</li>
+  </ul>
+  <p>The radical right's vote then changes as the study's estimate says it goes with your choice. Your aim in each campaign is to keep its gain to 1 point or less. Campaigns 2 and 3 fix one of the dials, so you have to get the other one right. There is no "talk less" option. In the crisis campaigns, ignoring the issue was hardly an option for a big party.</p>
+  <p><b>What the game is trying to show.</b> What decided where immigration became the fight, and what a mainstream party's campaign does to the radical right.</p>
+  <div class="row" style="margin-top:14px"><button class="primary" id="b-help-back">Back</button></div>
+</section>
+
+<!-- ABOUT -->
+<section class="screen about" id="s-about">
+  <h1 style="font-size:28px">About the paper</h1>
+  /*__ABOUT__*/
+  <div class="attr">Swen Hutter &amp; Hanspeter Kriesi (2022), "Politicising immigration in times of crisis", <i>Journal of Ethnic and Migration Studies</i> 48(2): 341–365. <a href="https://doi.org/10.1080/1369183X.2020.1853902">doi:10.1080/1369183X.2020.1853902</a>. Open access (CC BY). Game built from this paper; the paper is the authority where the two disagree.</div>
+  <div class="row" style="margin-top:14px"><button class="primary" id="b-about-back">Back</button></div>
+</section>
+
+<script>
+/*__MECHANISM__*/
+</script>
+<script>
+(function () {
+  const C = MECH.CONFIG;
+  const $ = id => document.getElementById(id);
+  const AIM = 'First, bet where the 2015 refugee crisis set off a fight over immigration. Then run three campaigns against a rising radical right, and keep it from gaining more than 1 point each time.';
+  $('aim-start').textContent = AIM; $('aim-help').textContent = AIM;
+  const TALK = [['Same', 'as last time'], ['More', '+10 points'], ['Much more', '+20 points']];
+  const LEAN = [['Tougher', 'like them'], ['Hold', 'no change'], ['More open', 'away from them']];
+
+  let S;
+  function fresh() { S = { calls: {}, act1: null, camp: 0, talk: null, lean: null, results: [], from: 's-start' }; }
+  fresh();
+
+  function show(id) { document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id)); window.scrollTo(0, 0); }
+  function current() { return document.querySelector('.screen.on').id; }
+  function pts(d) { return (d >= 0 ? '+' : '−') + Math.abs(d).toFixed(1); }
+
+  // ---- help / about navigation ----
+  document.querySelectorAll('[data-help]').forEach(b => b.onclick = () => { S.from = current(); show('s-help'); });
+  $('b-help1').onclick = () => { S.from = 's-start'; show('s-help'); };
+  $('b-help3').onclick = () => { S.from = 's-end'; show('s-help'); };
+  $('b-help-back').onclick = () => show(S.from);
+  $('b-about1').onclick = () => { S.aboutFrom = 's-start'; show('s-about'); };
+  $('b-about2').onclick = () => { S.aboutFrom = 's-end'; show('s-about'); };
+  $('b-about-back').onclick = () => show(S.aboutFrom || 's-start');
+
+  // ---- Act 1 ----
+  function drawCards() {
+    $('cards').innerHTML = C.countries.map(c => `
+      <div class="ccard" id="cc-${c.id}">
+        <div class="top"><span><span class="nm">${c.name}</span> <span class="yr">${c.year} election</span></span>
+          <span class="tag ${c.hit}">${c.hit === 'hard' ? 'Hit hard' : 'Hit lightly'}</span></div>
+        <div class="hl">${c.hitLine}</div>
+        <div class="seg" data-c="${c.id}"><button data-v="1">Fight</button><button data-v="0">No fight</button></div>
+        <div class="out" style="display:none"></div>
+      </div>`).join('');
+    document.querySelectorAll('#cards .seg button').forEach(b => b.onclick = () => {
+      if (S.act1) return;
+      const id = b.parentNode.dataset.c; S.calls[id] = b.dataset.v === '1';
+      b.parentNode.querySelectorAll('button').forEach(x => x.classList.toggle('sel', x === b));
+      $('b-reveal').disabled = Object.keys(S.calls).length < C.countries.length;
+      $('b-reveal').textContent = $('b-reveal').disabled ? `Reveal (${Object.keys(S.calls).length} of ${C.countries.length} bet)` : 'Reveal';
+    });
+    $('b-reveal').disabled = true; $('b-reveal').textContent = `Reveal (0 of ${C.countries.length} bet)`;
+    $('a1-sum').style.display = 'none';
+  }
+  $('b-reveal').onclick = () => {
+    if (S.act1) { startCampaign(); return; }
+    S.act1 = MECH.scoreAct1(S.calls);
+    S.act1.rows.forEach(r => {
+      const c = C.countries.find(x => x.id === r.id); const card = $('cc-' + r.id); const out = card.querySelector('.out');
+      card.querySelectorAll('.seg button').forEach(b => b.disabled = !b.classList.contains('sel'));
+      out.style.display = 'block';
+      out.innerHTML = `<div class="pbar ${r.fight ? 'fight' : ''}"><div class="f"></div><div class="line" style="left:${C.fightLine / C.scaleMax * 100}%"></div><div class="v">${c.value.toFixed(1)}</div></div>
+        <div class="res ${r.right ? 'ok' : 'no'}">${r.fight ? 'A fight' : 'No fight'} · you ${r.right ? 'called it' : 'missed it'}</div><div class="why">${c.why}</div>`;
+      setTimeout(() => { out.querySelector('.f').style.width = Math.min(100, c.value / C.scaleMax * 100) + '%'; }, 60);
+    });
+    const naive = MECH.scoreAct1(MECH.naiveCalls()).right;
+    $('a1-sum').innerHTML = `<h2>Your bets</h2><div class="score">${S.act1.right} of ${S.act1.of}</div>
+      <p class="note">Bars: the study's measure of how hard parties fought over immigration in that campaign (how much they talked about it × how far apart they stood). Dashed line: where an issue is usually among the campaign's top three. Red = above it.</p>
+      <div class="say">Being hit hard didn't decide it. Betting "hit hard = fight" scores just ${naive} of 8, a coin toss. Greece, the hardest-hit port of entry, barely argued about it; Switzerland, the Netherlands and Poland were hit lightly and fought hard. What the fighters had was <b>a party that made it the campaign</b>: in the study, above all the radical right.</div>`;
+    $('a1-sum').style.display = 'block';
+    $('b-reveal').textContent = 'Next: your campaign'; $('b-reveal').disabled = false;
+    $('cards').insertAdjacentElement('afterend', $('a1-sum'));
+    $('a1-sum').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  // ---- Act 2 ----
+  function headline(t, l) {
+    if (t === null || l === null) return '…set both dials';
+    const H = [
+      ['Centre-right signals tougher stance on asylum', 'Centre-right keeps its course', 'Centre-right edges towards openness'],
+      ['Centre-right vows to get tough on migration', 'Centre-right puts migration centre stage', 'Centre-right defends refugees in heated debate'],
+      ['Centre-right: "We will stop the influx"', 'Migration dominates centre-right campaign', 'Centre-right takes on radical right over refugees'],
+    ];
+    return H[t][l];
+  }
+  function drawDials() {
+    const camp = C.campaigns[S.camp];
+    const mk = (el, opts, key) => {
+      $(el).innerHTML = opts.map((o, i) => {
+        const ok = key === 'talk' ? i >= camp.minTalk : (camp.fixLean === null || C.lean[i] === camp.fixLean);
+        return `<button data-i="${i}" ${ok ? '' : 'disabled'} class="${S[key] === i ? 'sel' : ''}">${o[0]}<small>${o[1]}</small></button>`;
+      }).join('');
+      $(el).querySelectorAll('button').forEach(b => b.onclick = () => { S[key] = +b.dataset.i; drawDials(); });
+    };
+    mk('d-talk', TALK, 'talk'); mk('d-lean', LEAN, 'lean');
+    $('c-head').textContent = headline(S.talk, S.lean);
+    $('b-run').disabled = S.talk === null || S.lean === null;
+  }
+  function startCampaign() {
+    const camp = C.campaigns[S.camp];
+    S.talk = null; S.lean = null;
+    if (camp.fixLean !== null) S.lean = C.lean.indexOf(camp.fixLean);
+    $('c-title').textContent = `Campaign ${S.camp + 1} of ${C.campaigns.length}`;
+    $('c-orient').innerHTML = S.camp === 0
+      ? `You run the big centre-right party. A radical-right party, now at <b>${C.rrStart}%</b>, is campaigning against immigration. Set your two dials. Then the radical right's vote moves the way the study found it moves with campaigns like yours.`
+      : `New election, same rivals: the radical right starts at <b>${C.rrStart}%</b> again.`;
+    $('c-rule').textContent = camp.rule;
+    drawDials(); show('s-camp');
+  }
+  $('b-run').onclick = () => {
+    const r = MECH.runCampaign(S.camp, S.talk, S.lean); S.results.push(r);
+    $('r-title').textContent = `Campaign ${S.camp + 1} of ${C.campaigns.length} · result`;
+    $('r-head').textContent = headline(S.talk, S.lean);
+    const w = v => Math.min(100, v / 30 * 100) + '%';
+    $('r-b').style.width = w(r.before); $('r-bv').textContent = r.before.toFixed(1) + '%';
+    $('r-a').style.transition = 'none'; $('r-a').style.width = w(r.before); $('r-av').textContent = r.before.toFixed(1) + '%';
+    $('r-out').style.visibility = 'hidden'; $('b-next').disabled = true;
+    show('s-res');
+    setTimeout(() => {
+      $('r-a').style.transition = ''; $('r-a').style.width = w(r.after);
+      let k = 0; const steps = 26; const tick = setInterval(() => { k++; $('r-av').textContent = (r.before + r.delta * k / steps).toFixed(1) + '%'; if (k >= steps) clearInterval(tick); }, 50);
+    }, 120);
+    setTimeout(() => {
+      $('r-verdict').className = 'verdictline ' + (r.held ? 'ok' : 'no');
+      $('r-verdict').textContent = `${pts(r.delta)} points · ${r.held ? 'Held' : 'Not held'}`;
+      $('r-say').innerHTML = sayFor(r);
+      const n = r.options.filter(o => o.held).length;
+      $('r-note').textContent = `${n} of the ${r.options.length} choices open to you here would have held them. Numbers: the study's estimate across ${C.nElections} elections, a pattern, not an experiment.`;
+      $('r-out').style.visibility = 'visible'; $('r-out').classList.add('fade');
+      $('b-next').disabled = false;
+      $('b-next').textContent = S.camp + 1 < C.campaigns.length ? 'Next campaign' : 'See the verdict';
+    }, 1600);
+  };
+  function sayFor(r) {
+    const t = C.talk[r.talkIdx], l = C.lean[r.leanIdx];
+    if (t > 0 && l < 0) return '<b>Voters chose the original, not the copy.</b> You made immigration your campaign, in their terms, and that is the issue they own.';
+    if (t > 0 && l === 0) return 'You made immigration the campaign without changing your line. In the study, more attention alone already helps the party that owns the issue.';
+    if (t > 0 && l > 0) return 'You talked about it more, but against them. In the study\'s estimate that doesn\'t feed them. <span class="note">This half of the finding rests on a single interaction term in 37 elections; a simpler model without it would show a gain of about 2 points.</span>';
+    if (l < 0) return 'A tougher line nobody hears does little. Without more attention, your move barely changed their vote.';
+    if (l > 0) return 'A quiet move away from them barely changed their vote.';
+    return 'You changed nothing; neither did they.';
+  }
+  $('b-next').onclick = () => { S.camp++; if (S.camp < C.campaigns.length) startCampaign(); else end(); };
+
+  // ---- End ----
+  function end() {
+    const v = MECH.verdict(S.act1, S.results);
+    const copyLine = v.copiedCount ? `When you talked it up while sounding like them, they grew, by up to ${v.worst.toFixed(1)} points.` : 'You never copied them, so you never saw them surge: talking it up while sounding like them would have added up to 13.8 points.';
+    $('verdict').innerHTML = `
+      <div class="you">You called ${v.act1Right} of ${v.act1Of} countries, and held the radical right in ${v.held} of ${v.of} campaigns.</div>
+      <div class="paper">The refugees didn't decide where immigration became the fight; parties did. And when the big centre-right party talks it up while sounding like the radical right, the radical right grows. ${copyLine}</div>
+      <div class="means">Voters choose the original, not the copy.</div>`;
+    const grid = MECH.effectGrid(); const mine = new Set(S.results.map(r => r.talkIdx + ',' + r.leanIdx));
+    let h = '<div class="h"></div>' + LEAN.map(x => `<div class="h">${x[0]}</div>`).join('');
+    grid.forEach((row, t) => {
+      h += `<div class="h" style="text-align:left">${TALK[t][0]}<br><small>${TALK[t][1]}</small></div>`;
+      row.forEach((d, l) => { const a = Math.min(1, Math.abs(d) / 12);
+        const bg = Math.abs(d) < 0.05 ? 'var(--bar)' : d > 0 ? `rgba(176,57,31,${0.2 + 0.8 * a})` : `rgba(31,79,143,${0.2 + 0.8 * a})`;
+        h += `<div class="cell ${mine.has(t + ',' + l) ? 'mine' : ''}" style="background:${bg};color:${a > 0.45 ? '#fff' : 'var(--ink)'}">${pts(d)}</div>`; });
+    });
+    $('grid').innerHTML = h;
+    $('end-a1').textContent = 'Greece, the hardest-hit port of entry, barely argued about immigration; Switzerland and Poland, hit lightly, fought hard. In the study, the radical right is what turns the issue into a fight. It also pushes every other party to talk about it more, though not to move their positions.';
+    show('s-end');
+  }
+  $('b-again').onclick = () => { fresh(); drawCards(); show('s-start'); };
+  $('b-start').onclick = () => { show('s-act1'); };
+  drawCards();
+})();
+</script>
+</body>
+</html>
