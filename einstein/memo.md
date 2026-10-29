@@ -238,3 +238,16 @@ Steffen's second note after playing: on the test range you would always set the 
 **Claim boundaries, restated.** Demonstrates: what the three equations imply for boosted rockets, the clocks they carry, and the cost of boosting; and that under any sensible prices the speed-buyer stops early and the freshness-buyer far away spends late. Assumes: instant boosts, half-light boosters, flowers that age by their own clock, and the market. The paper establishes the three relations; it establishes no market and no price, and where exactly an order's best booster count sits is ours.
 
 **Build.** `mechanism.js` rewritten (CONFIG tagged line by line); `calibration.js` new, 29 passed; `loop.js` and `session-test.js` rewritten for the slider and the till; `template.html` and the About text rewritten; full browser session at 380 px: range (2, preview 4, 3, 5, 4), help mid-range, order book A spread evenly (145 of 219 francs; verdict names the two mistakes), order book B played well (152, every franc), the long haul at five (a loss) and six (+81), About; no errors, no horizontal scroll, no decimals on any screen.
+
+
+## 22. Revision three: choose whom you fly for (same day)
+
+Steffen: the idea that the player chooses their own objective had been folded into the customers and lost. Restored on top of profit, as a choice of valuation at the start of the order book. The same four stars (Thun 2, Olten 10, Sion 15, Brig 20 light-years) under three contracts:
+
+- **The florists' guild** — every order pays for freshness (300 francs, flowers keep 3½ years). Best boosters: 4, 5, 6, 6. The far stars want the late boosters.
+- **The hospital service** — every order pays for speed (150 francs, patience 3 years past light's arrival). Best: 3, 4, 4, 4. The far stars stop at four: past light-time the wait barely shrinks and the fuel bill does not care.
+- **A mixed book** — four customers, four rules, one order nobody can make pay. Best: 3, 4, 5, refuse.
+
+The verdict now closes with what the other two contracts would have paid for the same rockets and what their best books are worth, so a player who flies the florists' plan (4, 5, 6, 6) for the hospitals sees 234 francs against a possible 412, with the reason named star by star. "New order book" returns to the choice. The calibration check (now 35) confirms, star by star, that the florists never want fewer boosters than the hospitals and want more at the far stars, which is the paper's asymmetry between the wait (shrinks like 1 − v) and the ageing (shrinks like √(1 − v)).
+
+Browser session rerun at 380 px: range, the choice screen, the mixed book spread evenly (145 of 219), the florists' book played well (474, every franc), the hospitals flown with the florists' plan (234 of 412), the long haul at five and six, About; no errors, no horizontal scroll, no decimals.

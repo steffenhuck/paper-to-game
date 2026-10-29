@@ -140,6 +140,12 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
 .log .sb em { position: absolute; right: -2px; top: -4px; bottom: -4px; width: 4px; background: var(--light); }
 .log .empty { font-size: 13px; color: #555; padding: 6px 0; }
 
+/* who are you flying for */
+.who { border-top: 3px solid var(--ink); padding: 10px 0 12px; }
+.who h3 { font-size: 22px; line-height: 1; margin-bottom: 4px; }
+.who p { font-size: 14px; margin: 0 0 8px; }
+.who .btn { font-size: 15px; padding: 13px 14px; }
+
 /* order book cards */
 .crate { display: flex; align-items: center; gap: 10px; margin: 6px 0 10px; }
 .crate .t { font-family: var(--disp); font-size: 13px; letter-spacing: 0.06em; flex: none; }
@@ -236,11 +242,19 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
   </div>
 </section>
 
+<!-- WHO ARE YOU FLYING FOR -->
+<section class="screen" id="s-who">
+  <div class="bar"><div class="aim">Deliver flowers to the stars at a profit.</div><button class="q" data-help aria-label="How to play">?</button></div>
+  <h2 class="disp" style="font-size:30px;line-height:.95">Who are you flying for?</h2>
+  <p class="orient">Four stars: Thun, Olten, Sion, Brig. The same four under every contract. What changes is who pays, and for what.</p>
+  <div id="whos"></div>
+</section>
+
 <!-- ORDER BOOK -->
 <section class="screen" id="s-book">
   <div class="bar"><div class="aim">Deliver flowers to the stars at a profit.</div><button class="q" data-help aria-label="How to play">?</button></div>
   <h2 class="disp" style="font-size:30px;line-height:.95" id="bk-title">The order book</h2>
-  <p class="orient" id="bk-orient">Four orders. Set every rocket, then launch them all. Leave a rocket at <b>0</b> to refuse its order.</p>
+  <p class="orient" id="bk-orient"></p>
   <div id="cards"></div>
   <button class="btn" id="b-launchall">Launch all</button>
   <button class="btn ghost" id="b-log">Look at your log</button>
@@ -286,7 +300,7 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
   <p><b>Home clock</b>: the star's station clock, set to agree with home; how long the customer waited. <b>Flowers' clock</b>: a clock riding in the rocket with the flowers; how much they aged. The bar at the bottom of each dial is where that customer stops paying. Hand in the white half: still worth something.</p>
   <h3>Rounds</h3>
   <ul><li><b>Test range</b>: one florist, as many launches as you like. Slide the boosters and watch the race, the clocks and the till before you launch.</li>
-  <li><b>Order book</b>: four orders, set blind, launched together, judged on landing. One of them can't be made to pay: refusing it is right.</li>
+  <li><b>Order book</b>: first choose whom you fly for: the florists' guild (every order pays for freshness), the hospital service (every order pays for speed), or a mixed book. Then four orders, set blind, launched together, judged on landing. In the mixed book one order can't be made to pay: refusing it is right.</li>
   <li><b>The long haul</b>: a museum, a hundred light-years away.</li></ul>
   <button class="btn" id="b-help-back">Back to the game</button>
 </section>
@@ -304,7 +318,7 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
 </script>
 <script>
 (function () {
-  const { CONFIG, fly, best, runBook, fmtYears, fmtLimit, fmtSpeed, fmtRate, fmtFrancs, fmtShare, speedAfter, clockRate, fuelCost } = MECH;
+  const { CONFIG, fly, best, bookFor, runBook, fmtYears, fmtLimit, fmtSpeed, fmtRate, fmtFrancs, fmtShare, speedAfter, clockRate, fuelCost } = MECH;
   const $ = s => document.querySelector(s);
   const NS = 'http://www.w3.org/2000/svg';
   const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
@@ -314,7 +328,7 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
   const cap = s => s[0].toUpperCase() + s.slice(1);
 
   // ---------- state ----------
-  const S = { screen: 's-start', back: 's-start', rangeN: 2, log: {}, launches: 0, bookKey: 'A', alloc: [], book: null, fi: 0, mode: 'range', busy: false, plays: 0 };
+  const S = { screen: 's-start', back: 's-start', rangeN: 2, log: {}, launches: 0, bookKey: 'MIXED', alloc: [], book: null, fi: 0, mode: 'range', busy: false, plays: 0 };
 
   function show(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id));
@@ -517,15 +531,24 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
       return `<div class="row"><div class="k">${n}</div><div><div class="sb"><i style="width:${(f.v * 100).toFixed(1)}%"></i><em></em></div>
       <b>${fmtSpeed(f.v)}</b> · flowers age <b class="red">${fmtRate(f.rate)}</b><br>paid ${fmtFrancs(f.revenue)}, fuel ${fmtFrancs(f.cost)}: <b>${f.profit >= 0.5 ? '+' : ''}${fmtFrancs(f.profit)}</b></div></div>`; }).join('');
   }
-  $('#b-tobook').onclick = () => openBook(S.bookKey);
+  $('#b-tobook').onclick = chooseWho;
+
+  // ---------- who are you flying for ----------
+  function chooseWho() {
+    const ks = Object.keys(CONFIG.employers);
+    $('#whos').innerHTML = ks.map(k => { const e = CONFIG.employers[k]; return `<div class="who"><h3>${e.title}</h3><p>${e.say}</p><button class="btn" data-who="${k}">Fly for them</button></div>`; }).join('');
+    $('#whos').querySelectorAll('[data-who]').forEach(b => b.onclick = () => openBook(b.dataset.who));
+    show('s-who');
+  }
 
   // ---------- order book ----------
   function openBook(key) {
-    S.bookKey = key; if (key !== 'haul') S.lastBook = key; S.book = key === 'haul' ? CONFIG.haul : CONFIG.books[key]; S.alloc = S.book.orders.map(() => 0);
+    S.bookKey = key; if (key !== 'haul') S.lastBook = key;
     const haul = key === 'haul';
-    $('#bk-title').textContent = haul ? 'The long haul' : 'The order book';
+    S.book = haul ? { key: 'haul', orders: CONFIG.haul.orders } : bookFor(key); S.alloc = S.book.orders.map(() => 0);
+    $('#bk-title').textContent = haul ? 'The long haul' : S.book.title;
     $('#bk-orient').innerHTML = haul ? `One order, a hundred light-years away. Light takes a century. A museum pays ${fmtFrancs(CONFIG.haul.orders[0].fee)} for flowers that arrive young.`
-      : `Four orders. Set every rocket, then launch them all. Leave a rocket at <b>0</b> to refuse its order.`;
+      : `${S.book.say} Set every rocket, then launch them all. Leave a rocket at <b>0</b> to refuse its order.`;
     $('#b-launchall').textContent = haul ? 'Launch' : 'Launch all';
     renderBook(); show('s-book');
   }
@@ -580,10 +603,12 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
       else if (!f.refused && f.n > b.n) notes.push(`${cap(who)} at ${cap(o.name.toLowerCase())} didn’t pay for your ${f.n > b.n + 1 ? 'last boosters' : 'last booster'}: ` + (c.wf === 0 ? 'past light-time the wait barely shrinks, and the fuel bill doesn’t care.' : 'the flowers were already fresh enough for the price.'));
       else if (!f.refused && f.n < b.n) notes.push(`${cap(who)} at ${cap(o.name.toLowerCase())} would have paid for ${b.n - f.n > 1 ? 'more boosters' : 'one more booster'}: ` + (c.wf > 0 ? 'the speed hardly changes, but the flowers’ clock does, and that is what they pay for.' : 'it still arrives sooner, and they pay for every month.'));
     });
-    const did = notes.length ? notes.join(' ') : 'Every rocket carried exactly the boosters its customer would pay for, and you refused the order nobody could make pay.';
-    $('#verdict').innerHTML = `<h1>${head}</h1><p class="p">${did}</p>
+    const did = notes.length ? notes.join(' ') : (S.bookKey === 'MIXED' ? 'Every rocket carried exactly the boosters its customer would pay for, and you refused the order nobody could make pay.' : 'Every rocket carried exactly the boosters its customer would pay for.');
+    const others = Object.keys(CONFIG.employers).filter(k => k !== S.bookKey).map(k => { const rr = runBook(bookFor(k), S.alloc); return `${cap(CONFIG.employers[k].them)} would have paid ${fmtFrancs(rr.profit)} for these same rockets; their best book is ${fmtFrancs(rr.bestProfit)}.`; });
+    const cross = `<p class="p">Flown for ${S.book.them}. ${others.join(' ')}</p>`;
+    $('#verdict').innerHTML = `<h1>${head}</h1><p class="p">${did}</p>${cross}
       <p class="p paper"><b>Einstein, 1905:</b> speeds don’t simply add; half of light on top of half of light is four-fifths, and no pile of boosters ever reaches light. A clock that travels runs slow, and the closer to light it goes, the slower it runs. And the energy a body needs grows without limit as it nears the speed of light.</p>
-      <p class="p means"><b>What that means for the Light Post:</b> the light limit binds the customers who wait: past a point, no booster brings the rocket sooner. It doesn’t bind the flowers: every booster slows their clock. And the fuel bill binds you, which is why the florist far away is the only one worth the late boosters.</p>`;
+      <p class="p means"><b>What that means for the Light Post:</b> the light limit binds the customers who wait: past a point, no booster brings the rocket sooner. It doesn’t bind the flowers: every booster slows their clock. And the fuel bill binds you, which is why the florists far away are the only ones worth the late boosters, and why the hospitals stop at four.</p>`;
     $('#tally').innerHTML = os.map((o, i) => { const f = fl[i], b = bs[i];
       return `<div class="r"><div><b>${o.name}</b> · ${WHO[o.who].toLowerCase()} · ${f.refused ? 'refused' : f.n + ' booster' + (f.n === 1 ? '' : 's')}${b.n !== f.n ? ` (best: ${b.n ? b.n : 'refuse'})` : ''}</div><span class="${f.profit < -0.5 || (b.n === 0 && !f.refused) ? 'bad' : ''}">${f.refused ? '0' : (f.profit >= 0.5 ? '+' : '') + Math.round(f.profit)}</span></div>`; }).join('');
     S.plays++; show('s-end');
@@ -600,8 +625,7 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
   }
   $('#b-haul').onclick = () => openBook('haul');
   $('#b-haulagain').onclick = () => openBook('haul');
-  const again = () => openBook(S.lastBook === 'A' ? 'B' : 'A');
-  $('#b-again').onclick = again; $('#b-again2').onclick = again;
+  $('#b-again').onclick = chooseWho; $('#b-again2').onclick = chooseWho;
 })();
 </script>
 </body>

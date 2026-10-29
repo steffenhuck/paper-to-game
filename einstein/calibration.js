@@ -30,15 +30,19 @@ check('§10: W at 0.999c > 20 mc²', energy(0.999) > 20, energy(0.999));
 check('§10: W is ½ m v² at low v, to first order', near(energy(0.01), 0.5 * 1e-4, 1e-8), energy(0.01));
 check('fuel: cost rises with every booster', [1, 2, 3, 4, 5, 6].every((n, i, a) => i === 0 || fuelCost(n) > fuelCost(a[i - 1])));
 
-// The orders: every book's best booster counts are distinct, and the "refuse" order never pays.
-for (const key of Object.keys(CONFIG.books)) {
-  const b = CONFIG.books[key], bests = b.orders.map(o => best(o).n);
-  check(`book ${key}: best counts all different (${bests.join(',')})`, new Set(bests).size === bests.length);
-  check(`book ${key}: exactly one order to refuse`, bests.filter(n => n === 0).length === 1);
+// The orders. The mixed book: best counts all different, exactly one to refuse. The florists and hospitals: the same four stars,
+// and star by star the florists want at least as many boosters as the hospitals, more at the far stars.
+const { bookFor } = M;
+for (const key of Object.keys(CONFIG.employers)) {
+  const b = bookFor(key), bests = b.orders.map(o => best(o).n);
+  if (key === 'MIXED') { check(`mixed book: best counts all different (${bests.join(',')})`, new Set(bests).size === bests.length); check('mixed book: exactly one order to refuse', bests.filter(n => n === 0).length === 1); }
+  else check(`${key}: every order pays at its best (${bests.join(',')})`, bests.every(n => n > 0));
   for (const o of b.orders) { const bn = best(o).n; if (bn) {
     const p = [...Array(7).keys()].map(n => fly(o, n).profit); const s = [...p].sort((x, y) => y - x);
-    check(`book ${key} ${o.name}: best is unique by ≥ 4 francs`, s[0] - s[1] >= 4, (s[0] - s[1]).toFixed(1)); } }
+    check(`${key} ${o.name}: best is unique by ≥ 4 francs`, s[0] - s[1] >= 4, (s[0] - s[1]).toFixed(1)); } }
 }
+{ const F = bookFor('FLORISTS').orders.map(o => best(o).n), H = bookFor('HOSPITALS').orders.map(o => best(o).n);
+  check(`florists vs hospitals, star by star: ${F.join(',')} vs ${H.join(',')} — florists never fewer, more at the far stars`, F.every((n, i) => n >= H[i]) && F[3] > H[3] && F[2] > H[2]); }
 check('range: best count is 4', best(CONFIG.range).n === 4);
 check('range: two boosters lose money (the natural first try)', fly(CONFIG.range, 2).profit < 0);
 

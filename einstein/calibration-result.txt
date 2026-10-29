@@ -13,18 +13,24 @@ ok   §10: W at 0.8c = 2/3 mc²
 ok   §10: W at 0.999c > 20 mc²  [21.36627204212937]
 ok   §10: W is ½ m v² at low v, to first order  [0.000050003750312610507]
 ok   fuel: cost rises with every booster
-ok   book A: best counts all different (3,4,0,5)
-ok   book A: exactly one order to refuse
-ok   book A THUN: best is unique by ≥ 4 francs  [7.0]
-ok   book A OLTEN: best is unique by ≥ 4 francs  [13.5]
-ok   book A SION: best is unique by ≥ 4 francs  [10.6]
-ok   book B: best counts all different (4,3,0,6)
-ok   book B: exactly one order to refuse
-ok   book B AARAU: best is unique by ≥ 4 francs  [15.4]
-ok   book B CHUR: best is unique by ≥ 4 francs  [10.5]
-ok   book B ZUG: best is unique by ≥ 4 francs  [41.3]
+ok   FLORISTS: every order pays at its best (4,5,6,6)
+ok   FLORISTS THUN: best is unique by ≥ 4 francs  [11.3]
+ok   FLORISTS OLTEN: best is unique by ≥ 4 francs  [10.1]
+ok   FLORISTS SION: best is unique by ≥ 4 francs  [13.3]
+ok   FLORISTS BRIG: best is unique by ≥ 4 francs  [36.8]
+ok   HOSPITALS: every order pays at its best (3,4,4,4)
+ok   HOSPITALS THUN: best is unique by ≥ 4 francs  [7.0]
+ok   HOSPITALS OLTEN: best is unique by ≥ 4 francs  [7.3]
+ok   HOSPITALS SION: best is unique by ≥ 4 francs  [20.2]
+ok   HOSPITALS BRIG: best is unique by ≥ 4 francs  [16.0]
+ok   mixed book: best counts all different (3,4,5,0)
+ok   mixed book: exactly one order to refuse
+ok   MIXED THUN: best is unique by ≥ 4 francs  [7.0]
+ok   MIXED OLTEN: best is unique by ≥ 4 francs  [13.5]
+ok   MIXED SION: best is unique by ≥ 4 francs  [10.6]
+ok   florists vs hospitals, star by star: 4,5,6,6 vs 3,4,4,4 — florists never fewer, more at the far stars
 ok   range: best count is 4
 ok   range: two boosters lose money (the natural first try)
 ok   pattern: freshness-buyer never wants fewer boosters than speed-buyer (320 price/fee/distance cases)
 ok   pattern: for a freshness-buyer, farther stars want at least as many boosters (keep scaled with distance)
-29 passed, 0 failed
+35 passed, 0 failed

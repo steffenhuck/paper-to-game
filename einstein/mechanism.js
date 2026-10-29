@@ -25,20 +25,22 @@ const CONFIG = {
   },
   // Test range: one florist, unlimited tries. Best: 4 boosters.
   range: { name: 'NEW BERN', who: 'FLORIST', d: 4, fee: 150, keep: 3, patience: 1 },   // our choice
-  // Order books: four orders each, best booster counts all different, one order that no rocket can make money on (refuse it).
-  books: {
-    A: { orders: [
-      { name: 'THUN',   who: 'HOSPITAL', d: 2,  fee: 100, keep: 1,   patience: 2   },  // best 3
-      { name: 'OLTEN',  who: 'FLORIST',  d: 10, fee: 200, keep: 10,  patience: 1   },  // best 4
-      { name: 'BRIG',   who: 'FLORIST',  d: 20, fee: 150, keep: 2,   patience: 1   },  // no booster count pays: refuse
-      { name: 'SION',   who: 'FLORIST',  d: 15, fee: 150, keep: 5,   patience: 1   },  // best 5
-    ] },
-    B: { orders: [
-      { name: 'AARAU',  who: 'GALLERY',  d: 2,  fee: 150, keep: 1,   patience: 1   },  // best 4
-      { name: 'CHUR',   who: 'HOSPITAL', d: 8,  fee: 60,  keep: 1,   patience: 4   },  // best 3
-      { name: 'BIEL',   who: 'HOSPITAL', d: 30, fee: 100, keep: 1,   patience: 0.5 },  // no booster count pays: refuse
-      { name: 'ZUG',    who: 'FLORIST',  d: 30, fee: 300, keep: 5,   patience: 1   },  // best 6
-    ] },
+  // Order books. The player chooses whom to fly for; the four stars are the same under every valuation.
+  //   Florists' guild: every order pays for freshness. Hospital service: every order pays for speed. A mixed book: four customers, four rules.
+  // Under the florists the far stars want the late boosters (bests 4,5,6,6); under the hospitals they stop at four (3,4,4,4). The mixed book has one order to refuse.
+  stars: [
+    { name: 'THUN',  d: 2  },
+    { name: 'OLTEN', d: 10 },
+    { name: 'SION',  d: 15 },
+    { name: 'BRIG',  d: 20 },
+  ],
+  employers: {
+    FLORISTS:  { title: 'The florists’ guild', them: 'the florists’ guild', say: 'Every order pays for freshness: 300 francs for flowers that have not aged, nothing once they are 3½ years old.',
+      orders: [ { who: 'FLORIST', fee: 300, keep: 3.5, patience: 1 }, { who: 'FLORIST', fee: 300, keep: 3.5, patience: 1 }, { who: 'FLORIST', fee: 300, keep: 3.5, patience: 1 }, { who: 'FLORIST', fee: 300, keep: 3.5, patience: 1 } ] }, // our choice; bests 4, 5, 6, 6
+    HOSPITALS: { title: 'The hospital service', them: 'the hospital service', say: 'Every order pays for speed: 150 francs if the rocket arrives when light could, nothing if it is 3 years later than that.',
+      orders: [ { who: 'HOSPITAL', fee: 150, keep: 1, patience: 3 }, { who: 'HOSPITAL', fee: 150, keep: 1, patience: 3 }, { who: 'HOSPITAL', fee: 150, keep: 1, patience: 3 }, { who: 'HOSPITAL', fee: 150, keep: 1, patience: 3 } ] }, // our choice; bests 3, 4, 4, 4
+    MIXED:     { title: 'A mixed book', them: 'the mixed book', say: 'Four customers, four rules, and one order that no rocket can make pay.',
+      orders: [ { who: 'HOSPITAL', fee: 100, keep: 1, patience: 2 }, { who: 'FLORIST', fee: 200, keep: 10, patience: 1 }, { who: 'FLORIST', fee: 150, keep: 5, patience: 1 }, { who: 'FLORIST', fee: 150, keep: 2, patience: 1 } ] }, // our choice; bests 3, 4, 5, refuse
   },
   // The long haul (encore): a museum a century away pays for freshness only.
   haul: { orders: [{ name: 'LOCARNO', who: 'MUSEUM', d: 100, fee: 800, keep: 10, patience: 1 }] }, // our choice; best 6
@@ -70,6 +72,11 @@ function best(order) {
   let b = fly(order, 0);
   for (let n = 1; n <= CONFIG.maxBoost; n++) { const f = fly(order, n); if (f.profit > b.profit + 1e-9) b = f; }
   return b;
+}
+// The order book for an employer: the shared stars with that employer's customers on them.
+function bookFor(key) {
+  const e = CONFIG.employers[key];
+  return { key, title: e.title, them: e.them, say: e.say, orders: CONFIG.stars.map((s, i) => Object.assign({ name: s.name, d: s.d }, e.orders[i])) };
 }
 // A whole order book: every order flown with its allocated boosters; the profit, and the best profit, summed.
 function runBook(book, alloc) {
@@ -113,5 +120,5 @@ function fmtShare(x) { // 0..1 as words
   if (x >= 0.97) return 'all of it'; if (x >= 0.8) return 'most of it'; if (x >= 0.55) return 'over half'; if (x >= 0.3) return 'a third'; if (x > 0.05) return 'a little'; return 'nothing';
 }
 
-const MECH = { CONFIG, compose, speedAfter, clockRate, energy, fuelCost, fly, best, runBook, fmtYears, fmtLimit, fmtSpeed, fmtRate, fmtFrancs, fmtShare };
+const MECH = { CONFIG, compose, speedAfter, clockRate, energy, fuelCost, fly, best, bookFor, runBook, fmtYears, fmtLimit, fmtSpeed, fmtRate, fmtFrancs, fmtShare };
 if (typeof module !== 'undefined') module.exports = MECH;
