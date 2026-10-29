@@ -1,37 +1,46 @@
-lock enabled: true
-BET1: Close. You said 35; the real average is 26.7 — you were a little too kind. The Commission writes harder than both governments: closer to political scientists writing for each other than to any newspaper.
-scrollWidth bet1 380
-BET2: No. It stayed flat: 27.6 in 1985, 25.6 in 2020. No crisis moved it, and in no year did it reach the Irish government's average. Only the choice of words got slightly more common over time.
-start ease 21.1
-help on: true
-back on edit: true | para still open: 1
-after edit 1: 26.0 +4.8 | 14.0 points to go, one edit left. Which paragraph still hurts most?
-after edit 2: 39.5 +13.5 | Out of edits, 0.5 short of the UK line. Send it, then try again.
-opts disabled when out of edits: [ true, true ]
-VERDICT 1:
-Your release scores 39.5 — 0.5 short of the UK government line.
-The Commission's real releases average 26.7: closer to academic abstracts than to any government, on topic after topic, and flat from 1985 to 2020.
-Every rewrite you could pick kept every fact. Plain was within reach; the study asks why the Commission doesn't write it.
-Paragraph 1, shorter sentences: +4.8
-The quote, say who does what: +13.5
-Best possible with two edits: 46.7, with the quote as "say who does what" and paragraph 5 as "everyday words".
-
-On this score long words weigh heavily. In this release, cutting a paragraph into shorter sentences gains 5.4 points on average; swapping long official words for everyday ones gains 9.1; saying who does what gains 8.9. The worst offender is the Commissioner's quote: almost all nouns, like "contribution" and "empowerment".
-scrollWidth end 380
-retry ease 21.1
-VERDICT 2:
-Your release scores 46.7 — easier than the average UK government release.
-The Commission's real releases average 26.7: closer to academic abstracts than to any government, on topic after topic, and flat from 1985 to 2020.
-Every rewrite you could pick kept every fact. Plain was within reach; the study asks why the Commission doesn't write it.
-The quote, say who does what: +14.9
-Paragraph 5, everyday words: +10.6
-That is the best two-edit plan there is (46.7).
-
-On this score long words weigh heavily. In this release, cutting a paragraph into shorter sentences gains 5.4 points on average; swapping long official words for everyday ones gains 9.1; saying who does what gains 8.9. The worst offender is the Commissioner's quote: almost all nouns, like "contribution" and "empowerment".
-about on true
-back on end true
-restart on start true
-s-help scrollWidth 380
-s-about scrollWidth 380
-s-edit scrollWidth 380
-errors []
+screenshot start
+ok   no horizontal scroll on start (0)
+screenshot rundown
+ok   no horizontal scroll on rundown (0)
+screenshot card-tabloid
+ok   no horizontal scroll on card (0)
+item 1: tabloid
+screenshot play-tabloid
+  result: "About one word in five came out as mush." — 16 windows lit. It asked for about 3 taps a second. Hardly any long words, and sentences run about 14 words between breathers.That was the warm-up. Remember how it felt.
+screenshot result-tabloid
+ok   no horizontal scroll on result (0)
+item 2: UK
+  result: "About one word in five came out as mush." — 16 windows lit. It made you drum a few more taps a second than the tabloid. About one word in 14 has four syllables or more, and sentences run about 21 words between breathers.That is how hard an average UK government press release is to read: about high-school level.
+screenshot play-comm-help-before
+screenshot help
+ok   no horizontal scroll on help (0)
+help opened mid-reading; note: The take was stopped. The item starts again from the top.
+returned to card: true (A European Commission press release)
+item 3: Brussels
+screenshot play-comm
+  result: "Well over a third of it came out as mush." — 13 windows lit. It made you drum about a third more taps a second than the tabloid. About one word in ten has four syllables or more, and sentences run about 24 words between breathers.That is how hard an average Commission press release is to read: university-graduate level. The study measured 44,978 of them.
+screenshot result-comm
+item 4: professor
+  result: "Well over a third of it came out as mush." — 13 windows lit. It made you drum about half again as many taps a second as the tabloid. About one word in six has four syllables or more, and sentences run about 21 words between breathers.Professors writing for other professors: the only group in the study harder to read than Brussels. On familiar words, Brussels did even worse than them.
+screenshot result-polsci
+screenshot archive
+ok   no horizontal scroll on archive (0)
+archive: picked 2020
+  result: "About a third of it came out as mush." — 14 windows lit. It asked for about as many taps a second as the Brussels script you read earlier. About one word in ten has four syllables or more, and sentences run about 21 words between breathers.2020: after the euro crisis, the refugee crisis and Brexit.
+screenshot result-archive
+ok   no horizontal scroll on archive result (0)
+screenshot result-archive-line
+screenshot end
+ok   no horizontal scroll on end (0)
+END verdict: The Brussels script tied your thumbs in knots, nearly as badly as the professor’s.The 2020 script you picked was no easier.Rauh measured 44,978 real Commission press releases, 1985–2020. They are harder to read than the UK and Irish governments’ releases, far harder than any newspaper, nearer to professors writing for professors — and they never got easier.Brussels kept promising to explain itself better. On the page, it didn’t.
+screenshot end-bars
+encore
+  result: "You got almost every word out." — 18 windows lit. It asked for fewer taps a second than the tabloid. Hardly any long words, and sentences run about 12 words between breathers.Same news, same facts. We wrote this one; the paper argues it can be done, but does not test it.
+screenshot result-encore
+back at end: true
+screenshot about
+ok   no horizontal scroll on about (0)
+about closed, back at end: true
+play again → rundown: true
+retry item 1 card: A tabloid’s politics page
+no page errors

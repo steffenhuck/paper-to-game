@@ -1,0 +1,37 @@
+lock enabled: true
+BET1: Close. You said 35; the real average is 26.7 — you were a little too kind. The Commission writes harder than both governments: closer to political scientists writing for each other than to any newspaper.
+scrollWidth bet1 380
+BET2: No. It stayed flat: 27.6 in 1985, 25.6 in 2020. No crisis moved it, and in no year did it reach the Irish government's average. Only the choice of words got slightly more common over time.
+start ease 21.1
+help on: true
+back on edit: true | para still open: 1
+after edit 1: 26.0 +4.8 | 14.0 points to go, one edit left. Which paragraph still hurts most?
+after edit 2: 39.5 +13.5 | Out of edits, 0.5 short of the UK line. Send it, then try again.
+opts disabled when out of edits: [ true, true ]
+VERDICT 1:
+Your release scores 39.5 — 0.5 short of the UK government line.
+The Commission's real releases average 26.7: closer to academic abstracts than to any government, on topic after topic, and flat from 1985 to 2020.
+Every rewrite you could pick kept every fact. Plain was within reach; the study asks why the Commission doesn't write it.
+Paragraph 1, shorter sentences: +4.8
+The quote, say who does what: +13.5
+Best possible with two edits: 46.7, with the quote as "say who does what" and paragraph 5 as "everyday words".
+
+On this score long words weigh heavily. In this release, cutting a paragraph into shorter sentences gains 5.4 points on average; swapping long official words for everyday ones gains 9.1; saying who does what gains 8.9. The worst offender is the Commissioner's quote: almost all nouns, like "contribution" and "empowerment".
+scrollWidth end 380
+retry ease 21.1
+VERDICT 2:
+Your release scores 46.7 — easier than the average UK government release.
+The Commission's real releases average 26.7: closer to academic abstracts than to any government, on topic after topic, and flat from 1985 to 2020.
+Every rewrite you could pick kept every fact. Plain was within reach; the study asks why the Commission doesn't write it.
+The quote, say who does what: +14.9
+Paragraph 5, everyday words: +10.6
+That is the best two-edit plan there is (46.7).
+
+On this score long words weigh heavily. In this release, cutting a paragraph into shorter sentences gains 5.4 points on average; swapping long official words for everyday ones gains 9.1; saying who does what gains 8.9. The worst offender is the Commissioner's quote: almost all nouns, like "contribution" and "empowerment".
+about on true
+back on end true
+restart on start true
+s-help scrollWidth 380
+s-about scrollWidth 380
+s-edit scrollWidth 380
+errors []

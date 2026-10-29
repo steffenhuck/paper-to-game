@@ -1,58 +1,74 @@
-// Browser session test (build step 6): drives say-it-plainly.html at 380 px through a full session and a retry.
-// Run: node session-test.js [outdir]  (needs playwright)
+// Full session in headless Chromium at phone width: plays every item with a scripted tapper,
+// opens How to play mid-reading and returns, picks an archive year, reads the encore, replays.
+// node session-test.js > session-log.txt
+'use strict';
 const { chromium } = require('playwright');
-const D = (process.argv[2] || __dirname) + '/';
+const path = require('path');
 (async () => {
-  const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 380, height: 760 }, deviceScaleFactor: 2 });
-  const errs = []; p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
-  await p.goto('file://' + __dirname + '/say-it-plainly.html');
-  const txt = id => p.$eval(id, e => e.innerText);
-  const on = id => p.$eval(id, e => e.classList.contains('on'));
-  const sw = () => p.evaluate(() => document.documentElement.scrollWidth);
-  await p.screenshot({ path: D + 'screenshot-start.png', fullPage: true });
-  await p.click('#b-start');
-  // guess 1: tap the ruler around 35
-  const box = await p.$eval('#r1', e => { const r = e.getBoundingClientRect(); return { x: r.x, y: r.y, w: r.width, h: r.height }; });
-  await p.mouse.click(box.x + box.w * (22 + 35 / 70 * 316) / 360, box.y + box.h * 0.33);
-  console.log('lock enabled:', !(await p.$eval('#b-lock1', e => e.disabled)));
-  await p.screenshot({ path: D + 'screenshot-bet1.png', fullPage: true });
-  await p.click('#b-lock1'); await p.waitForTimeout(500);
-  console.log('BET1:', await txt('#bet1-say'));
-  await p.screenshot({ path: D + 'screenshot-bet1-reveal.png', fullPage: true });
-  console.log('scrollWidth bet1', await sw());
-  await p.click('#b-to2');
-  await p.screenshot({ path: D + 'screenshot-bet2.png', fullPage: true });
-  await p.click('[data-tr=easier]'); await p.waitForTimeout(3400);
-  console.log('BET2:', await txt('#bet2-say'));
-  await p.screenshot({ path: D + 'screenshot-bet2-reveal.png', fullPage: true });
-  await p.click('#b-to-edit'); await p.waitForTimeout(300);
-  console.log('start ease', await txt('#ease'));
-  await p.screenshot({ path: D + 'screenshot-edit.png', fullPage: true });
-  // first-timer: split the first paragraph, help mid-play, then the quote
-  await p.click('.para[data-p="0"]'); await p.waitForTimeout(300);
-  await p.screenshot({ path: D + 'screenshot-edit-open.png', fullPage: false });
-  await p.click('#s-edit button.q'); console.log('help on:', await on('#s-help')); await p.click('#b-help-back'); console.log('back on edit:', await on('#s-edit'), '| para still open:', await p.$$eval('.opts', x => x.length));
-  await p.click('.opt[data-k="0"]'); await p.waitForTimeout(1000);
-  console.log('after edit 1:', await txt('#ease'), await txt('#delta'), '|', await txt('#edit-orient'));
-  await p.screenshot({ path: D + 'screenshot-edit-after1.png', fullPage: false });
-  await p.click('.para[data-p="3"]'); await p.waitForTimeout(300); await p.click('.opt[data-k="1"]'); await p.waitForTimeout(1000);
-  console.log('after edit 2:', await txt('#ease'), await txt('#delta'), '|', await txt('#edit-orient'));
-  await p.click('.para[data-p="1"]'); console.log('opts disabled when out of edits:', await p.$$eval('.opt[data-k="0"], .opt[data-k="1"]', x => x.map(e => e.disabled)));
-  await p.click('.opt[data-k="close"]');
-  await p.click('#b-send');
-  console.log('VERDICT 1:\n' + await txt('#verdict')); console.log(await txt('#elog'));
-  await p.screenshot({ path: D + 'screenshot-end-first.png', fullPage: true });
-  console.log('scrollWidth end', await sw());
-  // retry: the best route
-  await p.click('#b-again'); console.log('retry ease', await txt('#ease'));
-  await p.click('.para[data-p="3"]'); await p.click('.opt[data-k="1"]'); await p.waitForTimeout(300);
-  await p.click('.para[data-p="4"]'); await p.click('.opt[data-k="0"]'); await p.waitForTimeout(1000);
-  await p.screenshot({ path: D + 'screenshot-edit-best.png', fullPage: false });
-  await p.click('#b-send');
-  console.log('VERDICT 2:\n' + await txt('#verdict')); console.log(await txt('#elog'));
-  await p.screenshot({ path: D + 'screenshot-end.png', fullPage: true });
-  await p.click('#b-about2'); console.log('about on', await on('#s-about')); await p.screenshot({ path: D + 'screenshot-about.png', fullPage: true }); await p.click('#b-about-back'); console.log('back on end', await on('#s-end'));
-  await p.click('#b-restart'); console.log('restart on start', await on('#s-start'));
-  for (const id of ['s-help', 's-about', 's-edit']) { await p.evaluate(i => { document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === i)); }, id); console.log(id, 'scrollWidth', await sw()); }
-  console.log('errors', errs); await b.close();
+  const browser = await chromium.launch();
+  const page = await browser.newPage({ viewport: { width: 380, height: 760 }, deviceScaleFactor: 2, hasTouch: true });
+  const errors = [];
+  page.on('pageerror', e => errors.push(e.message));
+  page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+  await page.goto('file://' + path.resolve('live-from-brussels.html'));
+  const shot = async n => { await page.screenshot({ path: 'screenshot-' + n + '.png' }); console.log('screenshot ' + n); };
+  const noHScroll = async where => { const o = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth); console.log((o > 0 ? 'FAIL' : 'ok  ') + ' no horizontal scroll on ' + where + ' (' + o + ')'); };
+  const visible = async id => page.evaluate(i => document.getElementById(i).classList.contains('on'), id);
+  // a tapper: clicks Go live and schedules pointer taps from the mechanism's own timeline.
+  // The taps come from the mechanism's model player (a careful one-thumb tapper); `miss` only varies the seed.
+  async function read(miss, midShot) {
+    await page.evaluate(miss => {
+      const btn = document.getElementById('goLive'), pad = document.getElementById('pad');
+      const words = window.__words = null;
+      btn.click();
+      const id = document.getElementById('playSlot').textContent;
+      const t0 = performance.now();
+      window.__readDone = false;
+      // find the script by its slot label
+      const M = window.MECH; let sid = Object.keys(M.SCRIPTS).find(k => M.SCRIPTS[k].slot === id || ('Archive · ' + M.SCRIPTS[k].year) === id);
+      const ws = M.scriptWords(sid), tl = M.timeline(ws);
+      // a careful one-thumb human, as modelled for the calibration check; `miss` picks the seed
+      const taps = M.modelTaps(ws, M.SKILLS.steady, 11 + Math.round(miss * 10));
+      for (const at of taps) setTimeout(() => pad.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, cancelable: true })), at * 1000 - (performance.now() - t0));
+    }, miss);
+    if (midShot) { await page.waitForTimeout(9000); await shot(midShot); }
+    await page.waitForFunction(() => document.getElementById('result').classList.contains('on'), null, { timeout: 60000 });
+    const head = await page.textContent('#resHead');
+    const lit = await page.evaluate(() => document.querySelectorAll('#resBlock rect[fill="#FFB020"]').length);
+    const facts = await page.textContent('#resFacts');
+    console.log('  result: "' + head + '" — ' + lit + ' windows lit. ' + facts.replace(/\s+/g, ' ').trim());
+  }
+
+  await shot('start'); await noHScroll('start');
+  await page.click('#goStudio'); await shot('rundown'); await noHScroll('rundown');
+  await page.click('#toCard'); await shot('card-tabloid'); await noHScroll('card');
+  console.log('item 1: tabloid'); await read(0, 'play-tabloid'); await shot('result-tabloid'); await noHScroll('result');
+  await page.click('#resNext');
+  console.log('item 2: UK'); await read(0.3); await page.click('#resNext');
+  // Brussels: open help mid-reading, come back, read again
+  await page.evaluate(() => document.getElementById('goLive').click());
+  await page.waitForTimeout(4500);
+  await shot('play-comm-help-before');
+  await page.click('#play .help'); await page.waitForTimeout(300); await shot('help'); await noHScroll('help');
+  console.log('help opened mid-reading; note: ' + await page.textContent('#helpNote'));
+  await page.click('#howto [data-close]'); await page.waitForTimeout(200);
+  console.log('returned to card: ' + await visible('card') + ' (' + await page.textContent('#cardTitle') + ')');
+  console.log('item 3: Brussels'); await read(0.5, 'play-comm'); await shot('result-comm');
+  await page.click('#resNext');
+  console.log('item 4: professor'); await read(0.6); await shot('result-polsci');
+  await page.click('#resNext'); await shot('archive'); await noHScroll('archive');
+  await page.click('.tape-btn[data-a="y2020"]');
+  console.log('archive: picked 2020'); await read(0.5); await shot('result-archive'); await noHScroll('archive result');
+  await page.evaluate(() => document.getElementById('resYear').scrollIntoView()); await shot('result-archive-line');
+  await page.click('#resNext'); await shot('end'); await noHScroll('end');
+  console.log('END verdict: ' + (await page.textContent('#verdict')).replace(/\s+/g, ' ').trim());
+  await page.evaluate(() => document.getElementById('bars').scrollIntoView()); await shot('end-bars');
+  await page.click('#encore'); console.log('encore'); await read(0); await shot('result-encore');
+  await page.click('#resNext'); console.log('back at end: ' + await visible('end'));
+  await page.click('#end [data-open="about"]'); await shot('about'); await noHScroll('about');
+  await page.click('#about [data-close]'); console.log('about closed, back at end: ' + await visible('end'));
+  await page.click('#again'); console.log('play again → rundown: ' + await visible('rundown'));
+  await page.click('#toCard'); console.log('retry item 1 card: ' + await page.textContent('#cardTitle'));
+  console.log(errors.length ? 'ERRORS: ' + errors.join(' | ') : 'no page errors');
+  await browser.close();
 })();

@@ -1,172 +1,246 @@
-// Say It Plainly — mechanism (the single source of truth).
-// Everything that decides an outcome lives here: the paper's benchmark values, the reading-ease formula,
-// the press release and its rewrites, the edit budget, the scoring of both bets and of the draft.
-// Runs unchanged in Node (require) and in the browser (window.MECH). No DOM, no randomness.
+// Live from Brussels — mechanism (the single source of truth).
+// Everything that decides an outcome lives here: the paper's values, the scripts and their syllables,
+// the beat, the judging of taps, the per-item and final verdicts, and the model player used by the
+// calibration check. The page only passes tap times in and shows what comes back.
+// Runs unchanged in Node (require) and in the browser (window.MECH). No DOM.
 (function (root) {
 'use strict';
 
 const CONFIG = {
-  // --- The paper's numbers (Rauh 2023, Fig. 2; values read off the figure at 400 dpi, about ±1 point / ±0.00003 / ±0.01) ---
-  sources: [
-    // reading: average Flesch reading ease; familiar: average Google Books frequency relative to 'the'; verbs: verbs/(verbs+nouns)
-    { id: 'polsci',  name: 'Political science abstracts', short: 'Academics',      reading: 14.3, familiar: 0.00256, verbs: 0.415 }, // Fig. 2 upper panel, green
-    { id: 'comm',    name: 'European Commission press releases', short: 'Commission', reading: 26.7, familiar: 0.00249, verbs: 0.475 }, // Fig. 2 upper panel, blue
-    { id: 'ire',     name: 'Irish government press releases', short: 'Irish gov.',  reading: 33.2, familiar: 0.00285, verbs: 0.557 }, // Fig. 2 upper panel, yellow
-    { id: 'uk',      name: 'UK government press releases', short: 'UK gov.',        reading: 40.0, familiar: 0.00289, verbs: 0.596 }, // Fig. 2 upper panel, yellow
-    { id: 'broad',   name: 'Broadsheet newspapers (politics)', short: 'Broadsheets', reading: 48.1, familiar: 0.00277, verbs: 0.680 }, // Fig. 2 upper panel, green
-    { id: 'tabloid', name: 'Tabloid newspapers (politics)', short: 'Tabloids',     reading: 64.5, familiar: 0.00283, verbs: 0.865 }, // Fig. 2 upper panel, green
-  ],
-  // Annual mean reading ease of Commission releases, read off Fig. 2 lower-left panel (±1 point).
-  trend: [[1985, 27.6], [1987, 28.6], [1989, 28.4], [1990, 27.2], [1992, 26.8], [1994, 26.4], [1996, 26.0], [1998, 25.8],
-          [2000, 26.6], [2002, 27.0], [2004, 27.0], [2006, 26.8], [2008, 26.6], [2010, 27.0], [2012, 27.6], [2014, 28.0],
-          [2016, 27.2], [2018, 26.8], [2020, 25.6]],
-  // Moments of politicisation named in the paper (pp. 687-690), placed on the trend for the player.
-  events: [[1992, 'Maastricht No'], [1999, 'Santer quits'], [2005, 'Constitution No'], [2010, 'Euro crisis'], [2016, 'Brexit']],
-  // "Hardly changed": the paper's reading of the trend (p. 693). Our threshold for "about the same": first-to-last change under this many points.
-  sameBand: 5,                       // our choice: the series moves within ±2 points; anything under 5 reads as flat
+  // --- The paper's numbers (Rauh 2023, Fig. 2 upper panel; dot centres read off at 600 dpi against the gridlines) ---
+  // reading: mean Flesch reading ease (±0.5); familiar: mean Google Books frequency of the words, relative to 'the' (±0.00001);
+  // verbs: verbs / (verbs + nouns) (±0.005)
+  sources: {
+    polsci:  { name: 'Political science abstracts',          short: 'Professors',     reading: 14.3, familiar: 0.00256, verbs: 0.415 }, // Fig. 2, green
+    comm:    { name: 'European Commission press releases',   short: 'Brussels',       reading: 26.7, familiar: 0.00250, verbs: 0.476 }, // Fig. 2, blue
+    ire:     { name: 'Irish government press releases',      short: 'Irish gov.',     reading: 33.1, familiar: 0.00286, verbs: 0.559 }, // Fig. 2, yellow
+    uk:      { name: 'UK government press releases',         short: 'UK gov.',        reading: 40.0, familiar: 0.00289, verbs: 0.596 }, // Fig. 2, yellow
+    broad:   { name: 'Broadsheet newspapers, politics pages', short: 'Broadsheets',   reading: 48.0, familiar: 0.00277, verbs: 0.680 }, // Fig. 2, green
+    tabloid: { name: 'Tabloid newspapers, politics pages',   short: 'Tabloids',       reading: 64.4, familiar: 0.00283, verbs: 0.867 }, // Fig. 2, green
+  },
+  // Yearly mean reading ease of Commission releases: Fig. 2 lower-left panel, the dark line traced at 600 dpi (±0.7).
+  trend: { 1985: 27.2, 1986: 27.8, 1987: 28.0, 1988: 28.4, 1989: 28.1, 1990: 26.0, 1991: 26.0, 1992: 26.0, 1993: 26.2,
+           1994: 25.9, 1995: 25.6, 1996: 24.9, 1997: 25.2, 1998: 25.9, 1999: 26.2, 2000: 26.9, 2001: 26.6, 2002: 27.0,
+           2003: 26.9, 2004: 27.3, 2005: 26.9, 2006: 26.8, 2007: 26.8, 2008: 26.4, 2009: 26.7, 2010: 27.1, 2011: 27.3,
+           2012: 28.0, 2013: 28.0, 2014: 27.9, 2015: 26.7, 2016: 26.2, 2017: 26.7, 2018: 25.8, 2019: 26.5, 2020: 25.5 },
+  // Moments of contestation the paper names (pp. 687-690), marked on the yearly line.
+  events: [[1992, 'Danish No'], [1999, 'Santer quits'], [2005, 'Treaty No'], [2010, 'Euro crisis'], [2016, 'Brexit']],
+  // Flesch (1948) reading ease, as the paper uses it (p. 691, note 3): 206.835 - 1.015*(words/sentence) - 84.6*(syllables/word)
+  flesch: { a: 206.835, b: 1.015, c: 84.6 },
+  scriptTolerance: 1.5,       // our choice: each script's hand-counted score must sit within this of its sender's average
 
-  // --- Flesch (1948) reading ease, as used in the paper (p. 691, note 3) ---
-  flesch: { a: 206.835, b: 1.015, c: 84.6 },  // FRE = a - b*(words/sentence) - c*(syllables/word)
-
-  // --- Gameplay (ours) ---
-  ruler: { min: 0, max: 70 },        // our choice: the reading-ease axis shown to the player; Fig. 2 spans ~10-70
-  betClose: 4,                       // our choice: a placement within 4 points of the Commission's 26.7 counts as spot on
-  betNear: 9,                        // our choice: within 9 points counts as close
-  budget: 2,                         // our choice: edits allowed before the midday briefing; with 2, reaching the UK line takes picking the right ones (fidelity.js: 1 in 4 plans)
-  target: 'uk',                      // our choice: the aim is the UK government's average (40.0), the paper's clearest national benchmark
+  // --- The drum (ours; see calibration.js for why these values) ---
+  beat: 0.55,                  // our choice: seconds per word at the start of a sentence (~67 words a minute, a slow on-air pace)
+  rush: 0.012,                // our choice: the beat shrinks by this share for every word since the last full stop (breath running low);
+                              //   sets the game's trade-off between sentence length and word length near the formula's (calibration.js, check 5)
+  beatFloor: 0.6,             // our choice: the beat never falls below this share of the starting beat
+  restBeats: 1,               // our choice: a full stop adds one rest beat and restores the breath
+  lag: 0,                     // our choice: taps count for the word on screen when they land (what you see is what counts)
+  extraTaps: 1,               // our choice: a word is got out with exactly its syllables in taps, or one more
+  countIn: 3,                 // our choice: beats of count-in before the first word
+  windows: 20,                // our choice: lit windows in the result picture
+  // Per-item words, by share of words got out (ours).
+  bands: [[1, 'You got every word out.'], [0.88, 'You got almost every word out.'], [0.0, null]],
 };
 
-// The press release. Written by us in the Commission's typical register; NOT a real release.
-// Each paragraph has the original and two rewrites, each tagged by the kind of change it makes.
-// Every version says the same thing: who proposes what, for how long, why, and what happens next.
-const RELEASE = {
-  headline: 'Commission proposes new rules on the repair of goods',
-  paras: [
-    { id: 'p1', orig: 'The European Commission has today adopted a proposal for a Directive on the promotion of the repair of goods, with a view to the reduction of waste and the reinforcement of consumer rights within the internal market.',
-      alts: [
-        { kind: 'split', text: 'The European Commission has today adopted a proposal for a Directive on the repair of goods. Its objective is the reduction of waste. A further objective is the reinforcement of consumer rights within the internal market.' },
-        { kind: 'verbs', text: 'Today the European Commission proposed new rules so that people can repair the things they buy, throw less away, and have stronger rights wherever they shop in the EU.' },
-      ] },
-    { id: 'p2', orig: 'Under the proposed measures, producers would be subject to an obligation to ensure the availability of spare parts and repair information for a period of up to ten years following the placing on the market of the last unit of a product model.',
-      alts: [
-        { kind: 'split', text: 'Producers would have an obligation to ensure the availability of spare parts and repair information. This obligation would apply for a period of up to ten years. It would start with the placing on the market of the last unit of a model.' },
-        { kind: 'words', text: 'Firms that make goods would have to keep spare parts and repair guides on offer for up to ten years after they sell the last one of a model.' },
-      ] },
-    { id: 'p3', orig: 'The facilitation of repair as an alternative to replacement is an essential element of the European Green Deal and the transition to a circular economy.',
-      alts: [
-        { kind: 'words', text: 'Making repair an easy choice instead of buying new is a key part of the European Green Deal and of the move to an economy that wastes less.' },
-        { kind: 'verbs', text: 'When people fix things instead of buying new ones, they help Europe reach its climate goals and waste less.' },
-      ] },
-    { id: 'p4', orig: 'The Commissioner responsible stated: "This proposal is a significant contribution to the empowerment of consumers and to sustainable consumption."',
-      alts: [
-        { kind: 'split', text: 'The Commissioner responsible stated: "This proposal is a significant contribution to the empowerment of consumers. It also contributes to sustainable consumption."' },
-        { kind: 'verbs', text: 'The Commissioner in charge said: "With this law, people can fix what they own. That saves them money, and it saves the planet."' },
-      ] },
-    { id: 'p5', orig: 'The proposal will now be subject to negotiation and adoption by the European Parliament and the Council under the ordinary legislative procedure. Implementation by the Member States is foreseen within twenty-four months following entry into force.',
-      alts: [
-        { kind: 'words', text: 'The European Parliament and the Council will now negotiate the proposal and must both agree to it. Member States will then have two years to apply the new rules.' },
-        { kind: 'verbs', text: 'Next, the European Parliament and the national governments will debate the proposal and decide whether it becomes law. Each EU country then has two years to put it into practice.' },
-      ] },
-  ],
+// ---------------- the scripts ----------------
+// All ours, all on one topic (trains and passengers' money), each written in its sender's register so that its
+// Flesch score, with the syllables marked here by hand, matches the paper's average for that sender.
+// Syllables are separated by '·'. These marks are what the player sees and taps.
+const SCRIPTS = {
+  tabloid: { source: 'tabloid', target: 64.4, slot: 'Tabloid', kicker: 'A tabloid’s politics page',
+    text: 'Rail pas·sen·gers could soon get half their mon·ey back when trains run an hour late, un·der plans un·veiled by Eu·ro·pe·an Un·ion of·fi·cials yes·ter·day. Com·pa·nies would have to pay up with·in two weeks. Fu·ri·ous rail bos·ses say the plan will cost the in·dus·try mil·lions.',
+    paper: 'Tabloid politics pages are the easiest reading in the study.' },
+  uk: { source: 'uk', target: 40.0, slot: 'UK gov.', kicker: 'A UK government press release',
+    text: 'The Trans·port Sec·re·tar·y has to·day an·nounced new rules to make it eas·i·er for pas·sen·gers to claim com·pen·sa·tion when their train is de·layed. From Ap·ril, op·er·a·tors will be re·quired to pay re·funds di·rect·ly in·to pas·sen·gers’ ac·counts for de·lays of fif·teen min·utes or long·er.',
+    paper: 'That is how hard an average UK government press release is to read: about high-school level.' },
+  comm: { source: 'comm', target: 26.7, slot: 'Brussels', kicker: 'A European Commission press release',
+    text: 'The Eu·ro·pe·an Com·mis·sion has to·day a·dopt·ed a pro·pos·al for the re·vi·sion of the reg·u·la·tion on rail pas·sen·gers’ rights, with a view to the strength·en·ing of pro·tec·tion in the case of de·lays. The pro·pos·al pro·vides for the re·in·force·ment of com·pen·sa·tion en·ti·tle·ments and for more ef·fec·tive en·force·ment by na·tion·al bod·ies.',
+    paper: 'That is how hard an average Commission press release is to read: university-graduate level. The study measured 44,978 of them.' },
+  polsci: { source: 'polsci', target: 14.3, slot: 'Professor', kicker: 'A political-science journal abstract',
+    text: 'This ar·ti·cle ex·am·ines how na·tion·al au·thor·i·ties en·force Eu·ro·pe·an pas·sen·ger rights. Draw·ing on an o·rig·i·nal da·ta·set of com·plaints, it shows that the ef·fec·tive·ness of su·pra·na·tion·al reg·u·la·tion de·pends on the ca·pac·i·ty of do·mes·tic bod·ies and on the le·gal cul·tures of the mem·ber states.',
+    paper: 'Professors writing for other professors: the only group in the study harder to read than Brussels. On familiar words, Brussels did even worse than them.' },
+  y1987: { source: 'comm', year: 1987, target: 28.0, slot: '1987', kicker: 'Brussels, 1987',
+    text: 'The Com·mis·sion has to·day wel·comed the a·gree·ment of the Coun·cil on a first pack·age of meas·ures for the re·struc·tur·ing of air trans·port with·in the Com·mu·ni·ty. The meas·ures pro·vide for great·er flex·i·bil·i·ty in the reg·u·la·tion of fares and in the al·lo·ca·tion of ca·pac·i·ty be·tween na·tion·al car·ri·ers.',
+    paper: '1987: before Maastricht, before anyone much argued about Brussels.' },
+  y2004: { source: 'comm', year: 2004, target: 27.3, slot: '2004', kicker: 'Brussels, 2004',
+    text: 'The Eu·ro·pe·an Com·mis·sion has to·day a·dopt·ed a fur·ther pack·age of pro·pos·als for the re·form of the rail·ways. The pack·age pro·vides for the o·pen·ing of in·ter·na·tion·al pas·sen·ger ser·vic·es to com·pe·ti·tion and for the es·tab·lish·ment of min·i·mum rights for pas·sen·gers in the case of de·lays.',
+    paper: '2004: a Commissioner for communication, and a plan for “democracy, dialogue and debate”.' },
+  y2020: { source: 'comm', year: 2020, target: 25.5, slot: '2020', kicker: 'Brussels, 2020',
+    text: 'The Eu·ro·pe·an Com·mis·sion has to·day pub·lished guide·lines on the use of pas·sen·ger rights in the con·text of the de·vel·op·ing sit·u·a·tion with the cor·o·na·vi·rus. The guide·lines are in·tend·ed to en·sure le·gal cer·tain·ty for trav·el·lers and com·pa·nies with re·gard to re·pay·ment and re·book·ing.',
+    paper: '2020: after the euro crisis, the refugee crisis and Brexit.' },
+  // Ours, not the paper's: the Brussels news said plainly. The paper argues clarity is possible without "dumbing down" (pp. 686-7).
+  plain: { source: null, target: null, slot: 'Encore', kicker: 'The same news, said plainly (our rewrite)',
+    text: 'Good news if your train is late. The Eu·ro·pe·an Com·mis·sion wants you to get more of your mon·ey back, and to get it fast·er. It also wants each na·tion·al gov·ern·ment to check that rail com·pa·nies real·ly pay.',
+    paper: 'Same news, same facts. We wrote this one; the paper argues it can be done, but does not test it.' },
 };
-const KINDS = {
-  split: 'Shorter sentences',      // the sentence-length half of the Flesch formula
-  words: 'Everyday words',         // the word-length half (and the paper's 'familiar words')
-  verbs: 'Say who does what',      // the paper's verbal style: verbs instead of nominalisations
-};
+const ORDER = ['tabloid', 'uk', 'comm', 'polsci'];          // our choice: the warm-up first, the government before Brussels, the professor after
+const ARCHIVE = ['y1987', 'y2004', 'y2020'];                // our choice: three years spread over the 35 (Fig. 2 lower panel values in `target`)
 
-// ---------------- reading ease ----------------
-// Syllables: a standard vowel-group heuristic, with hand-checked exceptions for words in this game
-// (fidelity.js checks every word the release can contain against a hand count).
-const SYL_EXCEPT = { the: 1, european: 4, every: 3, being: 2, area: 3, idea: 3, people: 2, parliament: 3, business: 2,
-  creature: 2, platypus: 3, reptilian: 4, seemingly: 3, goods: 1, guides: 1, makes: 1, saves: 1, uses: 2,
-  'twenty-four': 3, ensure: 2, agree: 2, eu: 2, commissioner: 4, directive: 3, availability: 6, facilitation: 5,
-  acceleration: 5, consumption: 3, patterns: 2, sustainable: 4, obligation: 4, negotiation: 5, legislative: 4, negotiate: 4, australian: 4, hybrid: 2, mammal: 2, framework: 2, rules: 1,
-  responsible: 4, procedure: 3, unit: 2, model: 2, ordinary: 4, reinforcement: 4, period: 3, therefore: 2,
-  science: 2, sat: 1, foreseen: 2, alternative: 4, ones: 1, once: 1, done: 1, gone: 1, some: 1, came: 1,
-  whether: 2, practice: 2, empowerment: 4, achievement: 3, replacement: 3, implementation: 5, measures: 2,
-  promotion: 3, reduction: 3, information: 4, producers: 3, proposed: 2, adopted: 3, stated: 2, placing: 2, wastes: 1,
-  debate: 2, decide: 2, becomes: 2, cheaper: 2, cycle: 2, able: 2 };
-function syllables(word) {
-  let w = word.toLowerCase().replace(/[^a-z-]/g, '');
-  if (!w) return 0;
-  if (SYL_EXCEPT[w] != null) return SYL_EXCEPT[w];
-  if (w.includes('-')) return w.split('-').reduce((s, p) => s + syllables(p), 0);
-  if (w.length <= 3) return 1;
-  w = w.replace(/(?:[^laeiouy]es|[^laeiouytd]ed|[^laeiouy]e)$/, m => m[0]).replace(/^y/, '');
-  const groups = w.match(/[aeiouy]{1,2}/g);
-  return Math.max(1, groups ? groups.length : 1);
+// ---------------- text ----------------
+function parse(text) {
+  return text.split(/\s+/).filter(Boolean).map(tok => {
+    const parts = tok.split('·');
+    const stop = /[.!?]["”’]?$/.test(tok);
+    return { word: parts.join(''), parts, syl: parts.length, stop };
+  });
 }
-function words(text) { return text.split(/\s+/).map(t => t.replace(/^[^A-Za-z0-9]+|[^A-Za-z0-9]+$/g, '')).filter(t => /[A-Za-z0-9]/.test(t)); }
-function sentences(text) { return Math.max(1, (text.match(/[.!?]+(?=["'”’)]*(\s|$))/g) || []).length); }
-function textStats(text) {
-  const w = words(text), s = sentences(text), syl = w.reduce((a, x) => a + syllables(x), 0);
-  return { words: w.length, sentences: s, syllables: syl };
-}
-function readingEase(st) {
+function scriptWords(id) { return parse(SCRIPTS[id].text); }
+
+function fleschOf(words, sylFn) {
   const f = CONFIG.flesch;
-  return f.a - f.b * (st.words / st.sentences) - f.c * (st.syllables / st.words);
+  const n = words.length, sents = words.filter(w => w.stop).length || 1;
+  const syl = words.reduce((s, w) => s + (sylFn ? sylFn(w.word) : w.syl), 0);
+  return { score: f.a - f.b * n / sents - f.c * syl / n, words: n, sentences: sents, wps: n / sents, spw: syl / n };
+}
+function flesch(text) { return fleschOf(parse(text)); }
+
+// An independent, plain syllable heuristic (vowel groups, silent final e), for the calibration check only.
+function heuristicSyllables(word) {
+  let w = word.toLowerCase().replace(/[^a-z]/g, '');
+  if (!w) return 0;
+  if (w.length <= 3) return 1;
+  w = w.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, '').replace(/^y/, '');
+  const m = w.match(/[aeiouy]{1,2}/g);
+  return Math.max(1, m ? m.length : 1);
 }
 
-// ---------------- the opening bets ----------------
-const src = id => CONFIG.sources.find(s => s.id === id);
-function placeBet(guess) {
-  const truth = src('comm').reading, err = Math.abs(guess - truth);
-  const grade = err <= CONFIG.betClose ? 'spot' : err <= CONFIG.betNear ? 'close' : 'off';
-  return { guess, truth, err, grade, dir: guess > truth ? 'too clear' : 'too hard' };
+// ---------------- the beat ----------------
+// Each word gets one beat; the beat shrinks with every word since the last full stop; a full stop adds a rest.
+function timeline(words, opt) {
+  const o = Object.assign({}, CONFIG, opt || {});
+  let t = o.countIn * o.beat, k = 0;
+  const slots = words.map(w => {
+    const dur = o.beat * Math.max(o.beatFloor, 1 - o.rush * k);
+    const s = { start: t, dur, breath: Math.max(0, 1 - k / ((1 - o.beatFloor) / o.rush)) };
+    t += dur; k++;
+    if (w.stop) { t += o.restBeats * o.beat; k = 0; }
+    return s;
+  });
+  return { slots, end: t + 0.3, countIn: o.countIn * o.beat };
 }
-function trendTruth() {
-  const t = CONFIG.trend, d = t[t.length - 1][1] - t[0][1];
-  return Math.abs(d) < CONFIG.sameBand ? 'same' : d > 0 ? 'easier' : 'harder';
-}
-function trendBet(choice) { return { choice, truth: trendTruth(), right: choice === trendTruth(), first: CONFIG.trend[0], last: CONFIG.trend[CONFIG.trend.length - 1] }; }
 
-// ---------------- the draft ----------------
-function newDraft() { return { pick: RELEASE.paras.map(() => -1), used: 0, log: [] }; }  // -1 = original wording
-function paraText(i, pick) { return pick < 0 ? RELEASE.paras[i].orig : RELEASE.paras[i].alts[pick].text; }
-function draftText(d) { return RELEASE.paras.map((p, i) => paraText(i, d.pick[i])).join(' '); }
-function draftScore(d) { const st = textStats(draftText(d)); return Object.assign(st, { ease: readingEase(st) }); }
-function left(d) { return CONFIG.budget - d.used; }
-function canEdit(d, i, k) { return left(d) > 0 && d.pick[i] !== k; }
-function edit(d, i, k) {
-  if (!canEdit(d, i, k)) return null;
-  const before = draftScore(d).ease;
-  d.pick[i] = k; d.used++;
-  const after = draftScore(d).ease;
-  const r = { para: i, kind: k < 0 ? 'orig' : RELEASE.paras[i].alts[k].kind, before, after, delta: after - before, left: left(d) };
-  d.log.push(r); return r;
+// Which word a tap at time t belongs to (or -1 for a rest or the count-in).
+function slotAt(tl, t, opt) {
+  const lag = (opt && opt.lag != null) ? opt.lag : CONFIG.lag;
+  const u = t - lag;
+  for (let i = 0; i < tl.slots.length; i++) {
+    const s = tl.slots[i];
+    if (u >= s.start && u < s.start + s.dur) return i;
+  }
+  return -1;
 }
-// where a reading-ease value sits among the paper's benchmarks
-function standing(ease) {
-  const passed = CONFIG.sources.filter(s => s.id !== 'comm' && ease >= s.reading).sort((a, b) => b.reading - a.reading);
-  return passed.length ? passed[0] : null;
+
+// Judge a reading: taps are times in seconds from the start of the count-in.
+function judge(id, taps, opt) { return Object.assign({ id }, judgeWords(scriptWords(id), taps, opt)); }
+function judgeWords(words, taps, opt) {
+  const o = Object.assign({}, CONFIG, opt || {});
+  const tl = timeline(words, o);
+  const counts = words.map(() => 0);
+  for (const t of taps) { const i = slotAt(tl, t, o); if (i >= 0) counts[i]++; }
+  const results = words.map((w, i) => ({ word: w.word, syl: w.syl, taps: counts[i], ok: counts[i] >= w.syl && counts[i] <= w.syl + o.extraTaps }));
+  const got = results.filter(r => r.ok).length;
+  const share = got / words.length;
+  return { results, got, total: words.length, share, lit: Math.round(share * o.windows) };
 }
-function verdict(d) {
-  const ease = draftScore(d).ease, t = src(CONFIG.target);
-  return { ease, start: draftScore(newDraft()).ease, hit: ease >= t.reading, gap: t.reading - ease,
-           beat: standing(ease), kinds: d.log.map(r => r.kind) };
+
+// ---------------- words for the player ----------------
+function oneIn(x) { // "one in four" from a share
+  const n = Math.max(2, Math.round(1 / x));
+  const names = ['', '', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+  return n <= 10 ? 'one word in ' + names[n] : 'one word in ' + n;
 }
-// every plan of `budget` edits (one per paragraph): used by the fidelity check and by the end screen's "best possible"
-function allPlans(budget) {
-  const n = RELEASE.paras.length, out = [];
-  (function rec(i, pick, used) {
-    if (i === n) { if (used === budget) out.push(pick.slice()); return; }
-    for (let k = -1; k < RELEASE.paras[i].alts.length; k++) {
-      const u = used + (k >= 0 ? 1 : 0); if (u > budget) continue;
-      pick[i] = k; rec(i + 1, pick, u);
+function itemLine(share) {
+  for (const [min, txt] of CONFIG.bands) if (share >= min && txt) return txt;
+  const miss = 1 - share;
+  if (miss >= 0.55) return 'More than half of it came out as mush.';
+  if (miss >= 0.42) return 'About half of it came out as mush.';
+  if (miss >= 0.36) return 'Well over a third of it came out as mush.';
+  if (miss >= 0.28) return 'About a third of it came out as mush.';
+  return 'About ' + oneIn(miss) + ' came out as mush.';
+}
+function whyLine(id) {
+  const ws = scriptWords(id), f = fleschOf(ws);
+  const long = ws.filter(w => w.syl >= 4).length / ws.length;
+  const longTxt = long < 0.04 ? 'Hardly any long words' : 'About ' + oneIn(long) + ' has four syllables or more';
+  return longTxt + ', and sentences run about ' + Math.round(f.wps) + ' words between breathers.';
+}
+// How fast a script makes you drum: all its syllables over all its spoken beats (rests excluded). Skill plays no part.
+function demand(id) {
+  const ws = scriptWords(id), tl = timeline(ws);
+  const syl = ws.reduce((s, w) => s + w.syl, 0), t = tl.slots.reduce((s, x) => s + x.dur, 0);
+  return syl / t;
+}
+function demandLine(id, base) {
+  if (!base || id === base) return 'It asked for about ' + Math.round(demand(id)) + ' taps a second.';
+  const r = demand(id) / demand(base) - 1;
+  const name = { tabloid: 'the tabloid', comm: 'the Brussels script you read earlier' }[base] || SCRIPTS[base].slot;
+  if (r < -0.07) return 'It asked for fewer taps a second than ' + name + '.';
+  if (r < 0.07) return 'It asked for about as many taps a second as ' + name + '.';
+  if (r >= 0.37 && r < 0.6) return 'It made you drum about half again as many taps a second as ' + name + '.';
+  const amt = r < 0.2 ? 'a few more taps' : r < 0.37 ? 'about a third more taps' : 'far more taps';
+  return 'It made you drum ' + amt + ' a second than ' + name + '.';
+}
+function itemReport(id, j) {
+  const s = SCRIPTS[id];
+  return { headline: itemLine(j.share), why: whyLine(id), speed: demandLine(id, s.year ? 'comm' : 'tabloid'), paper: s.paper, lit: j.lit, share: j.share };
+}
+
+// Final verdict, from the shares the player got out: { tabloid, uk, comm, polsci, archive: {year, share} }.
+function verdict(r) {
+  const lines = [];
+  const knots = r.comm < r.tabloid - 0.08;
+  const nearProf = Math.abs(r.comm - r.polsci) <= Math.abs(r.comm - r.tabloid);
+  if (knots) lines.push(nearProf
+    ? 'The Brussels script tied your thumbs in knots, nearly as badly as the professor’s.'
+    : 'The Brussels script tied your thumbs in knots, far worse than the tabloid’s.');
+  else lines.push('You drummed your way through Brussels — but you had to tap much faster than for the tabloid.');
+  if (r.archive) {
+    const y = r.archive.year, d = r.archive.share - r.comm;
+    lines.push(d > 0.1 ? 'Your ' + y + ' script went better than today’s — but on paper it is just as hard: the yearly average hardly moved.'
+      : 'The ' + y + ' script you picked was no easier.');
+  }
+  lines.push('Rauh measured 44,978 real Commission press releases, 1985–2020. They are harder to read than the UK and Irish governments’ releases, far harder than any newspaper, nearer to professors writing for professors — and they never got easier.');
+  lines.push('Brussels kept promising to explain itself better. On the page, it didn’t.');
+  return lines;
+}
+
+// ---------------- model player (calibration only; never used in play) ----------------
+function rng(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+function gauss(r) { return Math.sqrt(-2 * Math.log(1 - r())) * Math.cos(2 * Math.PI * r()); }
+// A tapper who sees each word as its beat starts, reacts, then taps its syllables evenly over the time left,
+// never faster than `rate` taps a second, with timing jitter. Spill-over taps land in the next window.
+function modelTaps(words, skill, seed, opt) {
+  const o = Object.assign({}, CONFIG, opt || {});
+  const r = rng(seed), tl = timeline(words, o), taps = [];
+  let busyUntil = 0;
+  words.forEach((w, i) => {
+    const s = tl.slots[i];
+    let t = Math.max(busyUntil, s.start + skill.react + 0.03 * gauss(r));
+    const room = s.dur + o.lag - (t - s.start) - 0.05;
+    const iti = Math.max(1 / skill.rate, room / w.syl);
+    const slip = skill.slip0 + skill.slip1 * Math.pow(1 / (iti * skill.rate), 2); // per tap: the faster you must go, the likelier a miss
+    for (let k = 0; k < w.syl; k++) {
+      const u = r();
+      if (u < slip / 2) { t += iti; continue; }                                   // a tap missed
+      taps.push(t + skill.jitter * gauss(r));
+      if (u > 1 - slip / 2) taps.push(t + iti / 2 + skill.jitter * gauss(r));     // a tap doubled
+      t += iti;
     }
-  })(0, [], 0);
-  return out.map(pick => ({ pick, ease: draftScore({ pick }).ease }));
+    busyUntil = t - iti + 1 / skill.rate;
+  });
+  return taps;
 }
-
-// mean gain in reading ease from a single rewrite of each kind, starting from the original release (shown on the end screen)
-function oneEditGains() {
-  const s0 = draftScore(newDraft()).ease, acc = {};
-  RELEASE.paras.forEach((p, i) => p.alts.forEach((a, k) => { const d = newDraft(); d.pick[i] = k; (acc[a.kind] = acc[a.kind] || []).push(draftScore(d).ease - s0); }));
-  const out = {}; for (const k in acc) out[k] = acc[k].reduce((x, y) => x + y, 0) / acc[k].length; return out;
+function modelShare(words, skill, seed, opt) {
+  return judgeWords(words, modelTaps(words, skill, seed, opt), opt).share;
 }
+const SKILLS = {                                       // our choice: plausible phone tappers
+  steady: { rate: 5.5, react: 0.20, jitter: 0.025, slip0: 0.01, slip1: 0.12 },   // one thumb, careful
+  good:   { rate: 7,   react: 0.15, jitter: 0.02,  slip0: 0.01, slip1: 0.10 },   // one thumb, practised
+  drummer:{ rate: 9,   react: 0.12, jitter: 0.015, slip0: 0.01, slip1: 0.08 },   // two thumbs
+};
 
-const MECH = { CONFIG, RELEASE, KINDS, syllables, words, sentences, textStats, readingEase, src, placeBet, trendBet, trendTruth,
-  newDraft, paraText, draftText, draftScore, left, canEdit, edit, standing, verdict, allPlans, oneEditGains };
+const MECH = { CONFIG, SCRIPTS, ORDER, ARCHIVE, SKILLS, parse, scriptWords, flesch, fleschOf, heuristicSyllables,
+  timeline, slotAt, judge, judgeWords, itemLine, whyLine, demand, demandLine, itemReport, verdict, rng, gauss, modelTaps, modelShare };
 if (typeof module !== 'undefined' && module.exports) module.exports = MECH; else root.MECH = MECH;
 })(typeof window !== 'undefined' ? window : globalThis);
