@@ -1,53 +1,52 @@
-// Browser session test (build step 6): drives one-of-us.html at 380 px through a full session, the help page mid-play, and a retry.
-// Run: node session-test.js [outdir]  (needs playwright)
+// Browser session test (build step 6): drives home-judges.html at 380 px through a full session:
+// round 1 seated as a first-timer would, help opened mid-round and returned from, a naive round 2 attempt, RESET, a solve,
+// the verdict, About, and a replay. Run: node session-test.js [outdir] > session-log.txt   (needs playwright)
 const { chromium } = require('playwright');
 const D = (process.argv[2] || __dirname) + '/';
 (async () => {
   const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 380, height: 760 }, deviceScaleFactor: 2 });
   const errs = []; p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
-  await p.goto('file://' + __dirname + '/one-of-us.html');
-  const txt = sel => p.$eval(sel, e => e.innerText);
+  await p.goto('file://' + __dirname + '/home-judges.html'); await p.waitForTimeout(300);
+  const txt = sel => p.$eval(sel, e => e.innerText.replace(/\n+/g, ' / '));
   const on = id => p.$eval(id, e => e.classList.contains('on'));
-  const sw = () => p.evaluate(() => document.documentElement.scrollWidth);
-  await p.screenshot({ path: D + 'screenshot-start.png', fullPage: true });
-  await p.click('#b-start'); await p.waitForTimeout(300);
-  await p.screenshot({ path: D + 'screenshot-case.png', fullPage: true });
-  for (let k = 0; k < 4; k++) {
-    await p.waitForSelector('#tests .tbtn'); await p.waitForTimeout(150);
-    console.log(`\n${await txt('#case-t')} | ${(await txt('#case-head')).replace(/\n+/g, ' / ')}`);
-    const alive = new Set(['quality', 'lenient', 'info', 'favour']);
-    for (const t of ['proposal', 'judge', 'spread']) {
-      await p.click(`.tbtn[data-t=${t}]`); await p.waitForTimeout(250);
-      const r = await txt('#res-' + t); console.log('  ' + r.replace(/\n+/g, ' | '));
-      const gone = /^.*\n?Gone/m.test(r) || r.includes('Gone:');
-      if (t === 'proposal') { if (gone) { alive.clear(); alive.add('quality'); } else alive.delete('quality'); }
-      if (t === 'judge') { if (gone) { alive.clear(); alive.add('lenient'); } else alive.delete('lenient'); }
-      if (t === 'spread') { if (r.includes('Both ends')) { alive.clear(); alive.add('info'); } else if (r.includes('No difference')) { alive.clear(); alive.add('quality'); } else alive.delete('info'); }
-      if (k === 0 && t === 'proposal') { await p.click(`[data-x=quality]`); await p.screenshot({ path: D + 'screenshot-case-test.png', fullPage: true });
-        await p.click('#b-q'); console.log('  help on:', await on('#s-help')); await p.click('#b-help-back'); console.log('  back on case:', await on('#s-case'), '| results kept:', await p.$$eval('.res', x => x.length)); }
-      if (k === 3) await p.screenshot({ path: D + `screenshot-erc-${t}.png`, fullPage: true });
-      if (alive.size === 1) break;
-    }
-    if (k === 0) { const guess = 'favour'; await p.click(`[data-a=${guess}]`); }   // first-timer accuses too early on case 1
-    else await p.click(`[data-a=${[...alive][0]}]`);
-    await p.waitForTimeout(250);
-    console.log('  VERDICT: ' + (await txt('#case-verdict')).replace(/\n+/g, ' | '));
-    await p.screenshot({ path: D + `screenshot-verdict-${k + 1}.png`, fullPage: true });
-    console.log('  scrollWidth', await sw());
-    await p.click('#b-next'); await p.waitForTimeout(300);
+  const sw = async () => { const w = await p.evaluate(() => document.documentElement.scrollWidth); if (w > 380) errs.push('horizontal scroll ' + w); return w; };
+  const shot = async (n, full = true) => { await p.screenshot({ path: D + 'screenshot-' + n + '.png', fullPage: full }); console.log(`  [screenshot-${n}.png] scrollWidth ${await sw()}`); };
+  console.log('START: ' + await txt('#aim-start')); await shot('start');
+  await p.click('#b-play'); await p.waitForTimeout(200); console.log('rules on:', await on('#s-rules')); await shot('rules');
+  await p.click('#b-r1'); await p.waitForTimeout(200); console.log('round 1 on:', await on('#s-r1')); await shot('r1-empty');
+  // a first-timer mirrors who applies
+  const order = ['DE/DE', 'DE/DE', 'UK/UK', 'UK/UK', 'FR/FR', 'IT/IT', 'ES/ES', 'IT/UK', 'NL/NL', 'PL/PL', 'SE/SE', 'PT/PT', 'GR/GR', 'IL/IL', 'DE/CH'];
+  for (let k = 0; k < order.length; k++) {
+    const [pp, ww] = order[k].split('/');
+    const ids = await p.$$eval('#pool .tok:not(.ghost)', (els, a) => els.filter(e => e.querySelector('.mid').textContent === a[1] &&
+      (a[0] === a[1] ? (!e.querySelector('.pp') || e.querySelector('.pp').textContent === a[0]) : (e.querySelector('.pp') || {}).textContent === a[0])).map(e => e.dataset.id), [pp, ww]);
+    await p.click(`#pool .tok[data-id="${ids[0]}"]`); await p.waitForTimeout(60);
+    if (k === 0) console.log('  info after first tap: ' + await txt('#info1'));
+    if (k === 6) { await shot('r1-half'); await p.click('#s-r1 [data-help]'); console.log('  help on:', await on('#s-help')); await shot('help');
+      await p.click('#b-help-back'); console.log('  back on round 1:', await on('#s-r1'), '| seated kept:', await txt('#table1 .cnt')); }
+    if (k === 7) console.log('  info for IT/UK: ' + await txt('#info1'));
   }
-  console.log('bet on:', await on('#s-bet')); await p.screenshot({ path: D + 'screenshot-bet.png', fullPage: true });
-  await p.click('[data-o=five]'); await p.waitForTimeout(400);
-  console.log('BET: ' + (await txt('#bet-res')).replace(/\n+/g, ' | '));
-  await p.screenshot({ path: D + 'screenshot-bet-reveal.png', fullPage: true });
-  await p.click('#b-end'); console.log('VERDICT:\n' + await txt('#verdict') + '\n' + await txt('#elog'));
-  await p.screenshot({ path: D + 'screenshot-end.png', fullPage: true }); console.log('scrollWidth end', await sw());
-  await p.click('#b-about2'); console.log('about on', await on('#s-about')); await p.screenshot({ path: D + 'screenshot-about.png', fullPage: true }); await p.click('#b-about-back'); console.log('back on end', await on('#s-end'));
-  // retry
-  await p.click('#b-again'); await p.waitForTimeout(300); console.log('retry:', await txt('#case-t'), '|', (await txt('#case-head')).split('\n')[0]);
-  await p.click('.tbtn[data-t=spread]'); await p.waitForTimeout(200); console.log('retry spread: ' + (await txt('#res-spread')).split('\n')[1]);
-  await p.click('#b-q'); await p.click('#b-help-back');
-  await p.screenshot({ path: D + 'screenshot-help-return.png', fullPage: false });
-  for (const id of ['s-help', 's-about', 's-start']) { await p.evaluate(i => { document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === i)); }, id); console.log(id, 'scrollWidth', await sw()); if (id === 's-help') await p.screenshot({ path: D + 'screenshot-help.png', fullPage: true }); }
-  console.log('errors', errs); await b.close();
+  await p.waitForTimeout(900);
+  console.log('REVEAL: ' + await txt('#r1-reveal')); console.log('  jars: ' + await txt('#jars1'));
+  await p.evaluate(() => window.scrollTo(0, 0)); await shot('r1-reveal');
+  await p.click('#b-r2'); await p.waitForTimeout(300); console.log('round 2 on:', await on('#s-r2'), '|', await txt('#r2-gap')); await shot('r2-start');
+  const seatOf = code => p.$$eval('#table2 .tok', (els, c) => { const [a, w] = c.split('/'); const e = els.find(e => e.querySelector('.mid').textContent === w && (a === w ? (!e.querySelector('.pp') || e.querySelector('.pp').textContent === a) : (e.querySelector('.pp') || {}).textContent === a)); return e ? e.dataset.seat : null; }, code);
+  const benchOf = code => p.$$eval('#bench .tok', (els, c) => { const [a, w] = c.split('/'); const e = els.find(e => e.querySelector('.mid').textContent === w && (a === w ? (!e.querySelector('.pp') || e.querySelector('.pp').textContent === a) : (e.querySelector('.pp') || {}).textContent === a)); return e ? e.dataset.bench : null; }, code);
+  const doSwap = async (o, i) => { await p.click(`#table2 .tok[data-seat="${await seatOf(o)}"]`); await p.waitForTimeout(80); await p.click(`#bench .tok[data-bench="${await benchOf(i)}"]`); await p.waitForTimeout(500);
+    console.log(`  swap ${o} -> ${i}: ${await txt('#info2')} | ${await txt('#r2-gap')}`); };
+  await doSwap('GR/GR', 'PT/PT'); await shot('r2-naive');
+  await p.click('#b-reset'); await p.waitForTimeout(200); console.log('  RESET:', await txt('#r2-gap'), '| pips used', await p.$$eval('.pip.used', x => x.length));
+  await doSwap('DE/DE', 'PT/PT'); await doSwap('IT/UK', 'FI/FI'); await doSwap('UK/UK', 'NO/NO');
+  await p.waitForTimeout(500); console.log('RESULT: ' + await txt('#r2-result')); await shot('r2-level');
+  await p.click('#b-end'); await p.waitForTimeout(300); console.log('VERDICT: ' + await txt('#verdict')); await p.evaluate(() => window.scrollTo(0, 0)); await shot('end');
+  await p.click('#b-about-end'); console.log('about on', await on('#s-about')); await shot('about'); await p.click('#b-about-back'); console.log('back on end', await on('#s-end'));
+  // replay: a diverse first panel, then DONE in round 2 without levelling
+  await p.click('#b-again'); await p.click('#b-r1'); await p.waitForTimeout(200);
+  const pool = await p.$$eval('#pool .tok', els => els.map(e => e.dataset.id));
+  for (const id of pool.slice(9)) { await p.click(`#pool .tok[data-id="${id}"]`); await p.waitForTimeout(30); }
+  await p.waitForTimeout(800); console.log('REPLAY REVEAL: ' + await txt('#r1-reveal'));
+  await p.click('#b-r2'); await p.waitForTimeout(200); await doSwap('ES/ES', 'US/US'); await p.click('#b-done'); await p.waitForTimeout(400);
+  console.log('REPLAY RESULT: ' + await txt('#r2-result')); await shot('r2-notyet');
+  await p.click('#b-end'); await p.waitForTimeout(200); console.log('REPLAY VERDICT: ' + (await txt('#verdict')).split(' / ')[0]);
+  console.log('errors', errs); await b.close(); process.exitCode = errs.length ? 1 : 0;
 })();

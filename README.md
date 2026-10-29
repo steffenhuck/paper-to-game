@@ -18,7 +18,7 @@ How it works is in two documents. [`SKILL.md`](SKILL.md) finds the game: a desig
 | **On the Record** | Hutter & Kriesi (2022), *Journal of Ethnic and Migration Studies* 48:341–365. Politicising immigration in times of crisis: what happens to the radical right when the big centre-right party starts sounding like it. | [play](https://steffenhuck.github.io/paper-to-game/original/on-the-record.html) · [memo](original/memo.md) |
 | **Say It Plainly** | Rauh (2023), *Journal of European Integration* 45:683–701. How readable are the European Commission's press releases, and did they get clearer as the EU became contested? | [play](https://steffenhuck.github.io/paper-to-game/rauh/say-it-plainly.html) · [memo](rauh/memo.md) |
 | **The Honest Billboard** | Beber & Scacco (2022), *Ruhr Economic Papers* 957. The myth of the misinformed migrant: what would-be migrants in Benin City, Nigeria, actually believe. | [play](https://steffenhuck.github.io/paper-to-game/benin/the-honest-billboard.html) · [memo](benin/memo.md) |
-| **One of Us** | Fuchs-Schündeln & Holub, *Homophily in Grant Evaluations*, manuscript. Do ERC reviewers favour applicants who share their gender or country, and how do you tell favour from quality? | [play](https://steffenhuck.github.io/paper-to-game/homophily/one-of-us.html) · [memo](homophily/memo.md) |
+| **Home Judges** | Fuchs-Schündeln & Holub, *Homophily in Grant Evaluations* (WZB / Goethe University Frankfurt, manuscript). ERC reviewers give the same proposal a better mark when they share the applicant's country and citizenship; seat the panel and see who collects the bonus. | [play](https://steffenhuck.github.io/paper-to-game/homophily/home-judges.html) · [memo](homophily/memo.md) |
 
 ## Folder convention
 
