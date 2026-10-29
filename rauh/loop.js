@@ -1,18 +1,23 @@
-// Loop check (build step 2): plays the mechanism headlessly and prints what the player would see after each action.
-// Run: node loop.js
+// Headless play of the whole loop with a model player, printed as the stranger would meet it.
+// node loop.js > loop-log.txt
+'use strict';
 const M = require('./mechanism.js');
-const b1 = M.placeBet(35); console.log(`BET 1: placed 35 -> Commission at ${b1.truth} (${b1.grade}, ${b1.dir}, off by ${b1.err.toFixed(1)})`);
-const b2 = M.trendBet('easier'); console.log(`BET 2: "easier" -> ${b2.truth} (${b2.right ? 'right' : 'wrong'}) ${b2.first} -> ${b2.last}`);
-function session(label, plan) {
-  console.log(`\n=== ${label} ===`);
-  const d = M.newDraft(); console.log(`start: ${M.draftScore(d).ease.toFixed(1)}  | edits left ${M.left(d)}`);
-  for (const [i, k] of plan) {
-    const r = M.edit(d, i, k);
-    const s = M.standing(r.after);
-    console.log(`edit ${M.RELEASE.paras[i].id} -> ${M.KINDS[r.kind]}: ${r.before.toFixed(1)} -> ${r.after.toFixed(1)} (${r.delta >= 0 ? '+' : ''}${r.delta.toFixed(1)}) | now past: ${s ? s.short : 'nobody'} | left ${r.left}`);
-  }
-  const v = M.verdict(d); console.log(`VERDICT: ${v.ease.toFixed(1)} ${v.hit ? 'HIT the UK line' : 'missed by ' + v.gap.toFixed(1)}`);
+const sk = M.SKILLS[process.argv[2] || 'good'];
+const res = {};
+let seed = 7;
+function read(id) {
+  const w = M.scriptWords(id), j = M.judgeWords(w, M.modelTaps(w, sk, seed++));
+  const r = M.itemReport(id, j);
+  console.log('\n[' + M.SCRIPTS[id].kicker + '] ' + w.length + ' words, ' + M.timeline(w).end.toFixed(0) + ' s on air');
+  console.log('  as read: ' + j.results.map(x => x.ok ? x.word : '~' + x.word.toLowerCase() + '~').join(' '));
+  console.log('  windows lit: ' + '#'.repeat(r.lit) + '.'.repeat(M.CONFIG.windows - r.lit));
+  console.log('  ' + r.headline + ' ' + r.why);
+  console.log('  paper: ' + r.paper);
+  return j.share;
 }
-session('first-timer: split the long first sentence, then the quote', [[0, 0], [3, 1]]);
-session('second try: the quote, then the procedure paragraph in everyday words', [[3, 1], [4, 0]]);
-session('splitter: shorter sentences everywhere', [[0, 0], [1, 0]]);
+for (const id of M.ORDER) res[id] = read(id);
+const pick = process.argv[3] || 'y2020';
+console.log('\n[archive] player picks ' + M.SCRIPTS[pick].year + ' hoping it is plainer');
+res.archive = { year: M.SCRIPTS[pick].year, share: read(pick) };
+console.log('  the paper\'s line: ' + M.ARCHIVE.map(y => M.SCRIPTS[y].year + ' ' + M.CONFIG.trend[M.SCRIPTS[y].year]).join(', '));
+console.log('\n[END]\n  ' + M.verdict(res).join('\n  '));

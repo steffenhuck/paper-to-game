@@ -1,0 +1,114 @@
+== 1. The formula ==
+PASS "The cat sat on the mat." = 116.15 (published 116.1)
+PASS platypus sentence = 24.44 (published 24.4, Wikipedia "Flesch–Kincaid readability tests")
+
+== 2. The paper's values reproduce its verbal claims (pp. 692-3) ==
+PASS Commission below both governments on all three measures
+PASS Commission below broadsheets and tabloids on all three
+PASS Commission below political scientists on familiar words ("performs even worse")
+PASS Commission closer to political scientists than to broadsheets on reading ease and verbs
+PASS Commission in Flesch's graduate band (<30), UK above it ("university graduates" vs "high school") — 26.7 vs 40
+PASS yearly series flat: range 3.5 points, 1985 27.2, 2020 25.5 ("hardly changed", "stagnate")
+PASS in no year does the Commission reach the Irish government average (28.4 < 33.1)
+
+== 3. The scripts score what the paper measured ==
+PASS tabloid: hand-counted 64.4 vs paper 64.4 (43 words, 14.3 per sentence, 1.51 syllables per word)
+INFO tabloid: a plain vowel-group counter gives 68.3; it disagrees on Eu·ro·pe·an (3), bos·ses (1)
+PASS uk: hand-counted 40.5 vs paper 40 (42 words, 21.0 per sentence, 1.71 syllables per word)
+INFO uk: a plain vowel-group counter gives 40.5; it disagrees on rules (2), eas·i·er (2)
+PASS comm: hand-counted 25.6 vs paper 26.7 (48 words, 24.0 per sentence, 1.85 syllables per word)
+INFO comm: a plain vowel-group counter gives 27.4; it disagrees on Eu·ro·pe·an (3), a·dopt·ed (2), en·force·ment (4)
+PASS polsci: hand-counted 14.8 vs paper 14.3 (41 words, 20.5 per sentence, 2.02 syllables per word)
+INFO polsci: a plain vowel-group counter gives 14.8; it disagrees on Eu·ro·pe·an (3), ef·fec·tive·ness (5)
+PASS y1987: hand-counted 28.0 vs paper 28 (45 words, 22.5 per sentence, 1.84 syllables per word)
+INFO y1987: a plain vowel-group counter gives 29.8; it disagrees on car·ri·ers. (2)
+PASS y2004: hand-counted 27.6 vs paper 27.3 (43 words, 21.5 per sentence, 1.86 syllables per word)
+INFO y2004: a plain vowel-group counter gives 33.5; it disagrees on Eu·ro·pe·an (3), a·dopt·ed (2), ser·vic·es (2)
+PASS y2020: hand-counted 25.1 vs paper 25.5 (41 words, 20.5 per sentence, 1.90 syllables per word)
+INFO y2020: a plain vowel-group counter gives 27.1; it disagrees on Eu·ro·pe·an (3), guide·lines (3), sit·u·a·tion (3), guide·lines (3), in·tend·ed (2)
+PASS with the plain counter instead of the hand count, scripts stay on average within 2.2 points of the paper (< 4)
+PASS paper order tabloid > UK > Brussels > professor kept by the hand count
+PASS paper order tabloid > UK > Brussels > professor kept by the heuristic count
+INFO encore (ours): 77.7
+
+== 4. Game difficulty on the scripts follows the paper ==
+INFO steady: tabloid 0.83  uk 0.74  comm 0.59  polsci 0.60  y1987 0.70  y2004 0.67  y2020 0.66  plain 0.85
+INFO good: tabloid 0.92  uk 0.86  comm 0.79  polsci 0.74  y1987 0.77  y2004 0.82  y2020 0.82  plain 0.94
+INFO drummer: tabloid 0.95  uk 0.94  comm 0.93  polsci 0.89  y1987 0.89  y2004 0.92  y2020 0.91  plain 0.97
+PASS steady: tabloid > UK > Brussels (0.83 > 0.74 > 0.59)
+PASS steady: professor no easier than Brussels, within noise (0.60 vs 0.59)
+PASS steady: Brussels closer to the professor than to the tabloid
+PASS steady: archive y1987 closer to Brussels than the UK is (0.70 vs 0.59; UK-Brussels gap 0.15)
+PASS steady: archive y2004 closer to Brussels than the UK is (0.67 vs 0.59; UK-Brussels gap 0.15)
+PASS steady: archive y2020 closer to Brussels than the UK is (0.66 vs 0.59; UK-Brussels gap 0.15)
+PASS steady, seeds 1-100: tabloid > UK > Brussels (0.83 > 0.74 > 0.59)
+PASS steady, seeds 101-200: tabloid > UK > Brussels (0.84 > 0.74 > 0.59)
+PASS steady, seeds 201-300: tabloid > UK > Brussels (0.83 > 0.74 > 0.58)
+PASS good: tabloid > UK > Brussels (0.92 > 0.86 > 0.79)
+PASS good: professor no easier than Brussels, within noise (0.74 vs 0.79)
+PASS good: Brussels closer to the professor than to the tabloid
+PASS good: archive y1987 closer to Brussels than the UK is (0.77 vs 0.79; UK-Brussels gap 0.07)
+PASS good: archive y2004 closer to Brussels than the UK is (0.82 vs 0.79; UK-Brussels gap 0.07)
+PASS good: archive y2020 closer to Brussels than the UK is (0.82 vs 0.79; UK-Brussels gap 0.07)
+PASS good, seeds 1-100: tabloid > UK > Brussels (0.92 > 0.86 > 0.79)
+PASS good, seeds 101-200: tabloid > UK > Brussels (0.92 > 0.86 > 0.78)
+PASS good, seeds 201-300: tabloid > UK > Brussels (0.92 > 0.86 > 0.79)
+INFO taps a second each script asks for (skill plays no part): tabloid 3.04  uk 3.54  comm 3.97  polsci 4.33  y1987 3.86  y2004 3.88  y2020 3.93  plain 2.71
+PASS drum speed asked: tabloid < UK < Brussels < professor
+PASS drum speed asked: every archive year within 7% of Brussels (the yearly line is flat)
+PASS drummer (two thumbs, near the ceiling): tabloid still easiest (0.95 vs Brussels 0.93, professor 0.89)
+INFO drummer: UK 0.94 vs Brussels 0.93 — at two-thumb speed the government and Brussels scripts are about level; only the slower tappers feel that gap.
+
+== 5. Robustness to the split between long words and long sentences (synthetic texts) ==
+PASS steady: longer sentences and longer words both cost words got out (per word of sentence -0.003, per syllable per word -0.302)
+PASS steady: one word of sentence length weighs 0.010 syllables per word in the game; in the formula 1.015/84.6 = 0.012 (accept within a factor of two)
+PASS steady: tabloid easier than uk at every split (smallest margin 0.073, W 14 vs 17)
+PASS steady: uk easier than comm at every split (smallest margin 0.028, W 20 vs 23)
+PASS steady: tabloid easier than comm at every split (smallest margin 0.121, W 23 vs 23)
+PASS steady: comm easier than polsci at every split (smallest margin 0.018, W 20 vs 23)
+INFO steady along the iso-score lines (W 14..32): tabloid 0.85/0.86/0.87/0.86/0.87/0.86/0.87  uk 0.77/0.78/0.77/0.78/0.77/0.77/0.78  comm 0.71/0.73/0.72/0.74/0.72/0.73/0.73  polsci 0.67/0.68/0.67/0.70/0.68/0.68/0.70
+PASS good: longer sentences and longer words both cost words got out (per word of sentence -0.003, per syllable per word -0.201)
+PASS good: one word of sentence length weighs 0.014 syllables per word in the game; in the formula 1.015/84.6 = 0.012 (accept within a factor of two)
+PASS good: tabloid easier than uk at every split (smallest margin 0.045, W 26 vs 32)
+PASS good: uk easier than comm at every split (smallest margin 0.018, W 20 vs 17)
+PASS good: tabloid easier than comm at every split (smallest margin 0.079, W 26 vs 23)
+PASS good: comm easier than polsci at every split (smallest margin 0.022, W 20 vs 17)
+INFO good along the iso-score lines (W 14..32): tabloid 0.93/0.93/0.94/0.93/0.93/0.93/0.94  uk 0.88/0.88/0.87/0.88/0.87/0.87/0.88  comm 0.85/0.85/0.84/0.85/0.84/0.84/0.84  polsci 0.81/0.82/0.80/0.81/0.80/0.81/0.80
+
+== 6. Robustness to our design choices ==
+PASS beat -15%, steady: tabloid > UK > Brussels, professor not easier (0.75 / 0.68 / 0.59 / 0.59)
+PASS beat -15%, good: tabloid > UK > Brussels, professor not easier (0.87 / 0.78 / 0.66 / 0.65)
+PASS beat +15%, steady: tabloid > UK > Brussels, professor not easier (0.89 / 0.79 / 0.69 / 0.68)
+PASS beat +15%, good: tabloid > UK > Brussels, professor not easier (0.93 / 0.92 / 0.88 / 0.83)
+PASS no rush, steady: tabloid > UK > Brussels, professor not easier (0.86 / 0.78 / 0.69 / 0.66)
+PASS no rush, good: tabloid > UK > Brussels, professor not easier (0.94 / 0.90 / 0.88 / 0.82)
+PASS exact taps only, steady: tabloid > UK > Brussels, professor not easier (0.73 / 0.58 / 0.40 / 0.40)
+PASS exact taps only, good: tabloid > UK > Brussels, professor not easier (0.87 / 0.75 / 0.65 / 0.58)
+PASS lag 0.1 s, steady: tabloid > UK > Brussels, professor not easier (0.88 / 0.82 / 0.72 / 0.70)
+PASS lag 0.1 s, good: tabloid > UK > Brussels, professor not easier (0.88 / 0.87 / 0.84 / 0.80)
+
+== 7. Balance ==
+PASS a practised one-thumb player gets ≥90% of the tabloid out (0.92)
+PASS a careful one-thumb player loses ≥15 points more on Brussels than on the tabloid (0.25)
+PASS a practised one-thumb player loses ≥10 points more on Brussels (0.13)
+PASS nothing is impossible: two thumbs get ≥60% of the professor out (0.89)
+PASS the encore is as easy as the tabloid (0.85)
+INFO item length 22.2–25.5 s; five readings ≈ 2.0 min
+
+== 8. Judge and words ==
+PASS evenly spaced taps inside every beat get every word out
+PASS no taps, no words
+PASS mashing ten taps a second gets almost nothing out (0.17)
+INFO share 1: "You got every word out."
+INFO share 0.9: "You got almost every word out."
+INFO share 0.8: "About one word in five came out as mush."
+INFO share 0.7: "About a third of it came out as mush."
+INFO share 0.6: "Well over a third of it came out as mush."
+INFO share 0.45: "More than half of it came out as mush."
+INFO tabloid why: "Hardly any long words, and sentences run about 14 words between breathers."
+INFO uk why: "About one word in 14 has four syllables or more, and sentences run about 21 words between breathers."
+INFO comm why: "About one word in ten has four syllables or more, and sentences run about 24 words between breathers."
+INFO polsci why: "About one word in six has four syllables or more, and sentences run about 21 words between breathers."
+INFO verdict (typical): The Brussels script tied your thumbs in knots, nearly as badly as the professor’s. | The 2020 script you picked was no easier. | Rauh measured 44,978 real Commission press releases, 1985–2020. They are harder to read than the UK and Irish governments’ releases, far harder than any newspaper, nearer to professors writing for professors — and they never got easier. | Brussels kept promising to explain itself better. On the page, it didn’t.
+
+ALL PASS
