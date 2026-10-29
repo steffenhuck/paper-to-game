@@ -1,23 +1,33 @@
+DAY 1 OF 6 | BIG PARTY: “WE WILL SHUT THEM” | The balloon grew 3.0 points. Your campaign so far hands them +3.0 points: over the line. Sounding like them made the radical right bigger, not smaller. Voters who want that line already have a party that says it.
 help on: true
-back on act1: true
-ACT1: YOUR BETS | 5 of 8 | 
-scrollWidth act1 380
-camp1: +13.8 points · Not held | 25.8% | Voters chose the original, not the copy. You made immigration your campaign, in 
-camp2 lean "Hold" disabled: true
-camp2: +0.8 points · Held | 12.8% | A tougher line nobody hears does little. Without more attention, your move barel
-camp3 "Same" disabled: true
-camp3: −0.9 points · Held | 11.1% | You talked about it more, but against them. In the study's estimate that doesn't
+back on day: true | DAY 2 OF 6
+back to questions: true
+DAY 2 OF 6 | BIG PARTY STICKS TO ITS LINE | The balloon grew 0.7 points. Your campaign so far hands them +3.8 points: over the line. Even your usual line helps them: every answer about immigration puts their topic in the papers.
+DAY 3 OF 6 | BIG PARTY ON ROADS | The balloon didn't move. Your campaign so far hands them +3.8 points: over the line.
+DAY 4 OF 6 | BIG PARTY TAKES ON THE RADICAL RIGHT | The balloon shrank 0.4 points. Your campaign so far hands them +3.4 points: over the line. Taking them on gives them nothing. (In the paper’s estimate this line is flat; whether it costs them anything, the data can’t say, and this half rests on one term estimated from 37 elections.)
+DAY 5 OF 6 | BIG PARTY ON CRIME | The balloon didn't move. Your campaign so far hands them +3.4 points: over the line.
+DAY 6 OF 6 | BIG PARTY ON PENSIONS | The balloon didn't move. Your campaign so far hands them +3.4 points: over the line.
+NIGHT 1: NOT HELD | Your campaign handed the radical right 3.4 points: 12% → 15.4%. | You sounded like them, and they grew. Voters chose the original, not the copy.
+crisis brief: FOUR YEARS LATER: THE REFUGEE CRISIS. Boats every night. The radical right is louder than ever, and the news is full of it. Some days every reporter asks about immigration. You can't dodge those. A new campaign, the same aim. It starts from where they ended: 15.4%.
+crisis day 1 forced: Every reporter is asking about immigration today. Answer one. | other-question hidden after pick:
+   true
+DAY 1 OF 6 | BIG PARTY TAKES ON THE RADICAL RIGHT | The balloon didn't move. Your campaign so far hands them less than a point: under the line.
+DAY 2 OF 6 | BIG PARTY ON SCHOOLS | The balloon didn't move. Your campaign so far hands them less than a point: under the line.
+DAY 3 OF 6 | BIG PARTY ON JOBS | The balloon didn't move. Your campaign so far hands them less than a point: under the line.
+DAY 4 OF 6 | BIG PARTY TAKES ON THE RADICAL RIGHT | The balloon didn't move. Your campaign so far hands them less than a point: under the line.
+DAY 5 OF 6 | BIG PARTY ON BANKS | The balloon didn't move. Your campaign so far hands them less than a point: under the line.
+DAY 6 OF 6 | BIG PARTY ON CHILDCARE | The balloon didn't move. Your campaign so far hands them less than a point: under the line.
+NIGHT 2: HELD | Your campaign handed the radical right less than a point. | You talked about it, and every time you took them on. That gave them nothing.
+
 VERDICT:
-You called 5 of 8 countries, and held the radical right in 2 of 3 campaigns.
-The refugees didn't decide where immigration became the fight; parties did. And when the big centre-right party talks it up while sounding like the radical right, the radical right grows. When you talked it up while sounding like them, they grew, by up to 13.8 points.
-Voters choose the original, not the copy.
-scrollWidth end 380
-about on true
-scrollWidth about 380
-back on end true
-retry act1: 8 of 8
-VERDICT 2: You called 8 of 8 countries, and held the radical right in 3 of 3 campaigns.
-s-help scrollWidth 380
-s-camp scrollWidth 380
-s-res scrollWidth 380
+In the quiet year you sounded like them once, gave your usual line once and took them on once, and they gained 3.4 points. In the crisis you took them on twice, and they didn’t move. Across 37 real elections, when the big centre-right party talked more about immigration and sounded like the radical right, the radical right grew. Talking more on its old line helped them a little. Talking more against them didn’t. Voters choose the original, not the copy.
+WHAT IF: +5.3 LIKE THEM +2.2 YOUR USUAL LINE 0 AGAINST THEM
+back on end: true
+DAY 1 OF 6 | BIG PARTY: “WE WILL SHUT THEM” | The balloon grew 3.0 points. Your campaign so far hands them +3.0 points: over the line. Sounding like them made the radical right bigger, not smaller. Voters who want that line already have a party that says it.
+DAY 2 OF 6 | BIG PARTY: “OURS COME FIRST” | The balloon grew 2.3 points. Your campaign so far hands them +5.3 points: over the line.
+DAY 3 OF 6 | BIG PARTY: “THIS IS NOT WHO WE ARE” | The balloon grew 2.3 points. Your campaign so far hands them +7.6 points: over the line.
+DAY 4 OF 6 | BIG PARTY: “TOO MANY, TOO FAST” | The balloon grew 2.3 points. Your campaign so far hands them +9.9 points: over the line.
+DAY 5 OF 6 | BIG PARTY: “EVERY SINGLE ONE” | The balloon grew 2.3 points. Your campaign so far hands them +12.1 points: over the line.
+DAY 6 OF 6 | BIG PARTY: “NOT ONE MORE VISA” | The balloon grew 2.3 points. Your campaign so far hands them +14.4 points: over the line.
+RETRY NIGHT 1 (copy every day): NOT HELD | Your campaign handed the radical right 14.4 points: 12% → 26.4%.
 errors []
