@@ -1,0 +1,51 @@
+START: DELIVER THE FLOWERS ON TIME AND STILL FRESH.
+  [screenshot-start.png] scrollWidth 380
+range on: true | Two boosters: half light speed, then half again. Pick a number and launch.
+  [screenshot-range-empty.png] scrollWidth 380
+  [screenshot-range-midflight.png] scrollWidth 380
+LAUNCH 2: LATE AND WILTED | Two boosters: 80% of light speed. The light got there first. While 5 years passed at home, the flowers aged 3 years. Two halves made four-fifths of light speed, not all of it. | home 5 years | flowers 3 years
+  [screenshot-range-2.png] scrollWidth 380
+  help on: true
+  [screenshot-help.png] scrollWidth 380
+  back on range: true | stamp kept: LATE AND WILTED
+LAUNCH 3: WILTED | Three boosters: 93% of light speed. The light got there first. While 4 years 3 months passed at home, the flowers aged 1 year 7 months.
+LAUNCH 5: DELIVERED | Five boosters: 99% of light speed. The light got there first. While 4 years 12 days passed at home, the flowers aged 6 months 6 days. Speed barely moved; the flowers’ clock slowed a lot.
+LAUNCH 4: DELIVERED | Four boosters: 98% of light speed. The light got there first. While 4 years 1 month passed at home, the flowers aged 10 months 24 days.
+  [screenshot-range-log.png] scrollWidth 380
+LOG: 2 / 80% of light speed · flowers age three-fifths as fast / to NEW BERN: home 5 years, flowers 3 years / 3 / 93% of light speed · flowers age a third as fast / to NEW BERN: home 4 years 3 months, flowers 1 year 7 months / 4 / 98% of light speed · flowers age a fifth as fast / to NEW BERN: home 4 years 1 month, flowers 10 months 24 days / 5 / 99% of light speed · flowers age an eighth as fast / to NEW BERN: home 4 years 12 days, flowers 6 months 6 days
+book on: true
+  [screenshot-book-empty.png] scrollWidth 380
+  crate after 13 taps: CRATE EMPTY
+  [screenshot-book-set.png] scrollWidth 380
+  log page on: true
+  back on book: true
+  rocket 1: THUN | DELIVERED | Three boosters: 93% of light speed. The light got there first. While 1 year 28 days passed at home, the flowers aged 4 months 24 days.
+  rocket 2: OLTEN | WILTED | Three boosters: 93% of light speed. The light got there first. While 10 years 9 months passed at home, the flowers aged 3 years 11 months.
+  [screenshot-flight-olten.png] scrollWidth 380
+  rocket 3: BRIG | LATE | Three boosters: 93% of light speed. The light got there first. While 6 years 5 months passed at home, the flowers aged 2 years 4 months.
+  rocket 4: SION | LATE AND WILTED | Two boosters: 80% of light speed. The light got there first. While 25 years passed at home, the flowers aged 15 years.
+END on: true
+VERDICT: YOU CHASED AN ORDER NOT EVEN LIGHT COULD MAKE. / You spent boosters on an order that not even light could deliver in time. Some flowers wilted: far orders need boosters even after the speed has almost stopped growing, because each one still slows the flowers’ clock more than the last. Not one of your rockets beat the light. One of four orders right. / Einstein, 1905: speeds don’t simply add. Half the speed of light on top of half the speed of light is four-fifths, and no pile of boosts ever reaches light. A clock that travels runs slow, and the closer to light speed it goes, the slower it runs. / What that means: the light limit binds the people waiting at home. It doesn’t bind the traveller. With enough boosters, a crossing of any length can be short on the clock that goes.
+TALLY: THUN · 3 boosters · home 1 year 28 days, flowers 4 months 24 days / DELIVERED / OLTEN · 3 boosters · home 10 years 9 months, flowers 3 years 11 months / WILTED / BRIG · 3 boosters · home 6 years 5 months, flowers 2 years 4 months / LATE / SION · 2 boosters · home 25 years, flowers 15 years / LATE AND WILTED
+  [screenshot-end-first.png] scrollWidth 380
+book B: AARAU / 2 LIGHT-YEARS / LIGHT TAKES 2 YEARS / Arrive by, home clock / 3 years / Flowers keep / 1 year / − / 0 / boosters / + / REFUSE THIS ORDER / CHUR / 3 LIGHT-YEARS / LIGHT TAKES 3 YEARS / Arrive by, home clock / 3 years / Flowers keep / 2 years / − / 0 / boosters / + / REFUSE THIS ORDER / BIEL / 8 LIGHT-YEARS / LIGHT TAKES 8 YEARS / Arrive by, home clock / 12 years / Flowers keep / 7 years / − / 0 / boosters / + / REFUSE THIS ORDER / ZUG / 50 LIGHT-YEARS / LIGHT TAKES 50 YEARS / Arrive by, home clock / 52 years / Flowers keep / 5 years / − / 0 / boosters / + / REFUSE THIS ORDER
+  [screenshot-book-b-set.png] scrollWidth 380
+  rocket 1: AARAU | DELIVERED | Three boosters: 93% of light speed. The light got there first. While 2 years 1 month passed at home, the flowers aged 9 months 18 days.
+  rocket 2: CHUR | REFUSED · RIGHT | Even light takes 3 years to get there, and the deadline is 3 years. No rocket can beat light, so no rocket could make it.
+  [screenshot-flight-refused.png] scrollWidth 380
+  rocket 3: BIEL | DELIVERED | Two boosters: 80% of light speed. The light got there first. While 10 years passed at home, the flowers aged 6 years.
+  rocket 4: ZUG | DELIVERED | Six boosters: nearly all of light speed. The light got there first. While 50 years 1 month passed at home, the flowers aged 3 years 8 months.
+  [screenshot-flight-zug.png] scrollWidth 380
+VERDICT B: EVERY ORDER THAT COULD BE MADE, MADE. / You refused the order that not even light could deliver in time. Not one of your rockets beat the light. All four orders right. / Einstein, 1905: speeds don’t simply add. Half the speed of light on top of half the speed of light is four-fifths, and no pile of boosts ever reaches light. A clock that travels runs slow, and the closer to light speed it goes, the slower it runs. / What that means: the light limit binds the people waiting at home. It doesn’t bind the traveller. With enough boosters, a crossing of any length can be short on the clock that goes.
+  [screenshot-end.png] scrollWidth 380
+  [screenshot-haul-set.png] scrollWidth 380
+HAUL 5: WILTED | Five boosters: 99% of light speed. The light got there first. While 100 years 9 months passed at home, the flowers aged 12 years 10 months.
+HAUL END: ON TIME, BUT WILTED. / A century passed at home: 100 years 9 months. The flowers aged 12 years 10 months. Every booster you add barely changes the century, but it slows the flowers’ clock a lot. / Einstein, 1905: a clock carried away at high speed falls behind the clock that stayed. The paper speaks of clocks; this game lets the flowers keep time the same way. / Nothing outruns light, so the century at home is unavoidable. The ten years in the box are not.
+HAUL 6: DELIVERED | Six boosters: nearly all of light speed. The light got there first. While 100 years 3 months passed at home, the flowers aged 7 years 5 months.
+  [screenshot-haul-flight.png] scrollWidth 380
+HAUL END: FRESH FLOWERS, A HUNDRED YEARS ON. / A century passed at home: 100 years 3 months. The flowers aged 7 years 5 months. Everyone who placed this order is long gone. The flowers are fresh. / Einstein, 1905: a clock carried away at high speed falls behind the clock that stayed. The paper speaks of clocks; this game lets the flowers keep time the same way. / Nothing outruns light, so the century at home is unavoidable. The ten years in the box are not.
+  [screenshot-haul-end.png] scrollWidth 380
+about on true
+  [screenshot-about.png] scrollWidth 380
+back on haul end true
+errors []

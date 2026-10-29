@@ -19,6 +19,7 @@ How it works is in two documents. [`SKILL.md`](SKILL.md) finds the game: a desig
 | **Live from Brussels** | Rauh (2023), *Journal of European Integration* 45:683–701. How readable are the European Commission's press releases, and did they get clearer as the EU became contested? Read them on air, one tap per syllable. | [play](https://steffenhuck.github.io/paper-to-game/rauh/live-from-brussels.html) · [memo](rauh/memo.md) · [previous version](rauh/previous/memo.md) |
 | **Ask First** | Beber & Scacco (2022), Ruhr Economic Papers 957. The myth of the misinformed migrant: what young people in Benin City, Nigeria, actually believe about Europe and the road there. | [play](https://steffenhuck.github.io/paper-to-game/benin/ask-first.html) · [memo](benin/memo.md) |
 | **Home Judges** | Fuchs-Schündeln & Holub, *Homophily in Grant Evaluations* (WZB / Goethe University Frankfurt, manuscript). ERC reviewers give the same proposal a better mark when they share the applicant's country and citizenship; seat the panel and see who collects the bonus. | [play](https://steffenhuck.github.io/paper-to-game/homophily/home-judges.html) · [memo](homophily/memo.md) |
+| **The Light Post** | Einstein (1905), *Annalen der Physik* 17:891–921. On the electrodynamics of moving bodies: send flowers to the stars with half-light-speed boosters. Two halves make four-fifths, nothing catches light, and the flowers age slower than the people waiting. | [play](https://steffenhuck.github.io/paper-to-game/einstein/the-light-post.html) · [memo](einstein/memo.md) |
 
 ## Folder convention
 
