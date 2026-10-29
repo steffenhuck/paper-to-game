@@ -1,0 +1,60 @@
+== Table 3 Model 3 against Fig. 5 (read off the figure at 110 dpi; the figure sits ~1.2 pt above the bare coefficients, so slopes and gaps are compared, not levels) ==
+PASS  Fig. 5, position change -1: slope, points per unit salience (line from ~-11 to ~+15): got 64.970, paper 65 (tol 8)
+PASS  Fig. 5, position change +1: slope (flat line, ~+0.7 to ~+0.3): got -1.130, paper -0.9999999999999999 (tol 3)
+PASS  Fig. 5: gap between the lines at salience +0.2: got 14.734, paper 14.7 (tol 2)
+PASS  Fig. 5: gap between the lines at salience -0.2: got 11.706, paper 11.7 (tol 2)
+PASS  Table 3 M3: gap at zero salience change = 2 x 0.757: got 1.514, paper 1.514 (tol 0.01)
+PASS  game salience range 0..0.210 sits inside Fig. 5's axis (-0.2..0.2, +0.01 allowed)
+== The paper's sentences (p. 355) ==
+PASS  "if the main competitor ... does not pay increasing attention ... its publicly visible position shifts, whether accommodating or adversarial, tend to have no effect": |effect| < 1 pt at zero salience change
+PASS  "pays a lot of attention to immigration and takes a stance similar to the radical right": loudest + like them is the largest gain in the grid
+PASS  "the more attention the mainstream centre-right party pays to immigration ... the greater the success" (Model 2/3 salience term): more talk on the old line helps them
+PASS  adversarial + more attention: the +1 line is flat (no extra gain from talking more against them)
+== The measurement (Appendix A): salience = share of statements, position = mean direction ==
+PASS  two immigration answers (one each way) + two others: ds = 2 steps, dp = mean = 0
+PASS  no immigration answers: nothing changes
+  Table 2 M1 average directions: radical right -0.61, centre-right -0.08, centre-left 0.52
+PASS  Table 2: the centre-right sits between the radical right and the centre-left
+== The decks ==
+PASS  quiet: 6 days of 3 questions
+PASS  crisis: 6 days of 3 questions
+PASS  quiet year: exactly one immigration question a day (dodging always possible)
+PASS  crisis: two days on which every question is about immigration
+PASS  crisis: forced minimum salience change vs Table 2 M5 crisis x centre-right salience term: got 0.070, paper 0.056 (tol 0.02)
+PASS  no question repeats across the two campaigns
+== Strategies, as a player would play them ==
+  quiet year, take every immigration question, like them         k=6 ds=0.210 dp=-1.00  gain +14.4  NOT held
+  quiet year, take every immigration question, usual line        k=6 ds=0.210 dp=0.00  gain  +6.7  NOT held
+  quiet year, take every immigration question, against them      k=6 ds=0.210 dp=1.00  gain  −1.0  held
+  quiet year, never touch immigration                            k=0 ds=0.000 dp=0.00  gain   0.0  held
+  crisis, dodge when possible, forced answers like them          k=2 ds=0.070 dp=-1.00  gain  +5.3  NOT held
+  crisis, dodge when possible, forced answers usual line         k=2 ds=0.070 dp=0.00  gain  +2.2  NOT held
+  crisis, dodge when possible, forced answers against them       k=2 ds=0.070 dp=1.00  gain  −0.8  held
+  crisis, every immigration question, against them               k=6 ds=0.210 dp=1.00  gain  −1.0  held
+PASS  the instinctive strategies (copy; talk on the usual line) fail the aim
+PASS  the paper-consistent strategies (keep off it; when you can't, take them on) pass
+PASS  in the crisis, copying or the usual line on the forced days alone fails
+== Robustness: does the discovery depend on our design choices? ==
+  alternative leans from Table 2: like them -0.53, against them +0.60
+  k=2: like them +3.9, usual +2.2, against +0.4
+PASS  Table 2 leans, 2 answers: like them > usual line > against them
+  k=6: like them +10.8, usual +6.7, against +2.1
+PASS  Table 2 leans, 6 answers: like them > usual line > against them
+PASS  Table 2 leans: forced crisis answers against them still held
+PASS  NOTE (expected): with Table 2 leans, taking them on six times of six is NOT held (+2.1); the "against them is always safe" reading rests on Fig. 5's +1 line, so the game never claims it
+PASS  Model 2 (no interaction): like them > usual > against at full talk
+  NOT robust: under Model 2, against them at 2 forced answers gives +1.2, at 6 gives +5.9: that "talking against them is harmless" rests on Model 3's interaction (t = -2.18); the game says so at the first "against them" answer and on About.
+  held/not-held identical for every strategy above for any limit in (0.00, 1.12]; we use 1
+PASS  hold limit inside the range that gives the same outcomes
+PASS  salience step 0.025: same ordering, forced "against" still harmless, usual line still helps them
+PASS  salience step 0.033: same ordering, forced "against" still harmless, usual line still helps them
+== Display ==
+PASS  a lone "against them" answer: estimate −0.8, balloon unchanged (floored at zero)
+== Headlines and determinism ==
+  day 1 copy headline: BIG PARTY: “WE WILL SHUT THEM” | reaction: Why vote for the copy? | change +3.0
+PASS  headline fits
+PASS  no randomness: two runs identical
+
+What-if (end screen, crisis forced days): LIKE THEM +5.3 | YOUR USUAL LINE +2.2 | AGAINST THEM −0.8
+
+ALL PASS
