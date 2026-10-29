@@ -5,7 +5,7 @@ description: "Turn a scientific paper (any field) into a playable single-file HT
 
 # Paper to Game
 
-This skill is two documents. This one is for finding the game: who the player is, what they do, where the discovery lands, what the game looks like. The second, `build.md` in the repository root, is for building it: the mechanism file, the calibration check, the claim boundaries, the deliverables. Read `build.md` after the design memo's pick is written, not before. Its rules are right, but an engine that reads them while choosing a concept chooses the one they cannot object to, which is the dullest one.
+This skill is two documents. This one is for finding the game: who the player is, what they do, where the discovery lands, what the game looks like. The second, `build.md` (in the repository root, and beside this file where the skill is installed), is for building it: the mechanism file, the calibration check, the claim boundaries, the deliverables. Read `build.md` after the design memo's pick is written, not before. Its rules are right, but an engine that reads them while choosing a concept chooses the one they cannot object to, which is the dullest one.
 
 ---
 
