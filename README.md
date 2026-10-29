@@ -18,6 +18,7 @@ How it works is in two documents. [`SKILL.md`](SKILL.md) finds the game: a desig
 | **The Original or the Copy** | Hutter & Kriesi (2022), *Journal of Ethnic and Migration Studies* 48:341–365. Politicising immigration in times of crisis: who turns it into a fight, and what copying the radical right does. | [play](https://steffenhuck.github.io/paper-to-game/original/the-original-or-the-copy.html) · [memo](original/memo.md) |
 | **Say It Plainly** | Rauh (2023), *Journal of European Integration* 45:683–701. How readable are the European Commission's press releases, and did they get clearer as the EU became contested? | [play](https://steffenhuck.github.io/paper-to-game/rauh/say-it-plainly.html) · [memo](rauh/memo.md) |
 | **The Honest Billboard** | Beber & Scacco (2022), *Ruhr Economic Papers* 957. The myth of the misinformed migrant: what would-be migrants in Benin City, Nigeria, actually believe. | [play](https://steffenhuck.github.io/paper-to-game/benin/the-honest-billboard.html) · [memo](benin/memo.md) |
+| **One of Us** | Fuchs-Schündeln & Holub, *Homophily in Grant Evaluations*, manuscript. Do ERC reviewers favour applicants who share their gender or country, and how do you tell favour from quality? | [play](https://steffenhuck.github.io/paper-to-game/homophily/one-of-us.html) · [memo](homophily/memo.md) |
 
 ## Folder convention
 
