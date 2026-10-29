@@ -1,0 +1,33 @@
+
+CASE 1: Ostrava  headline: compatriot judges' marks +0.34 vs other marks
+  test proposal: still there 0.40 [0.35, 0.45]
+    player now suspects: Generous judges, Knows them better, Favours their own
+  test judge: GONE 0.05 [-0.04, 0.14]
+    player now suspects: Generous judges
+  ACCUSE Generous judges → SOLVED in 2 test(s).  Running: 1 of 1 solved
+
+CASE 2: Sundby  headline: compatriot judges' marks +0.33 vs other marks
+  test proposal: still there 0.31 [0.27, 0.35]
+    player now suspects: Generous judges, Knows them better, Favours their own
+  test judge: still there 0.30 [0.24, 0.37]
+    player now suspects: Knows them better, Favours their own
+  test spread: ramp  [-2.9 -8.1 -3.2 8.3 5.9]
+    player now suspects: Favours their own
+  ACCUSE Favours their own → SOLVED in 3 test(s).  Running: 2 of 2 solved
+
+CASE 3: Belmont  headline: compatriot judges' marks +0.30 vs other marks
+  test proposal: GONE 0.05 [-0.00, 0.10]
+    player now suspects: Better proposals
+  ACCUSE Better proposals → SOLVED in 1 test(s).  Running: 3 of 3 solved
+
+CASE 4: ERC  headline: compatriot judges' marks +0.16 vs other marks
+  test proposal: still there 0.16 [0.13, 0.19]
+    player now suspects: Generous judges, Knows them better, Favours their own
+  test judge: still there 0.16 [0.13, 0.20]
+    player now suspects: Knows them better, Favours their own
+  test spread: ramp  [-1.4 -3.2 -2.2 4.7 2.1]
+    player now suspects: Favours their own
+  ACCUSE Favours their own → SOLVED in 3 test(s).  Running: 4 of 4 solved
+
+BET "About 5 points": {"right":false,"picked":"About 5 points","gap":0.9}
+END: solved 4 of 4

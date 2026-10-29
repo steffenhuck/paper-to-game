@@ -1,0 +1,43 @@
+PASS  (c) ln(₦)=9..15 at ₦415/€ reproduces Fig. 8 tick labels  — 0.020 0.053 0.14 0.39 1.1 2.9 7.9
+PASS  (a) median EU-income guess ≈ €660 (fn. 37), ±15%  — €648; n read off = 467
+PASS  (a2) true EU income on the € axis ≈ €2,500 (GNI p.c. 2017, fn. 17)  — €2445
+PASS  (b1) most underestimate EU income  — 94.1% below truth
+PASS  (b2) most underestimate the Italian benefit  — 94.2% below truth
+PASS  (b3) UK benefit: typical guess close to truth ("close to the correct figure")  — median €311 vs truth €355; 54.1% below, 45.9% above
+PASS  (b4) Italy truth ≈ €1,300, UK ≈ €350 (fn. 19, as plotted)  — €1302, €355
+PASS  (d1) asylum truth = 28,130/122,040 ≈ 23%  — 23.0
+PASS  (d2) mean asylum guess above the truth; mode in 40–50 ("spike at the focal point of 50")  — mean 38.1, n = 504
+PASS  (e1) four in five think they would likely reach Europe  — 80.0%
+PASS  (e2) "nearly the same share" think own asylum claim would succeed  — 79.0%
+PASS  (e3) stacked bars add to ≈100 (≤1.5 missing segment)  — 100, 99, 100, 99
+PASS  (e4) optimism: own-claim "likely" share far above the true acceptance rate and above the median guess for Nigerians  — own 79% vs median guess 39.0 vs truth 23.0
+PASS  (f1) pirates believed more than vampires  — 57% vs 45.5%
+PASS  (f2) about half or more of those with an opinion believe in sea vampires ("more than half")  — 50 in 100
+PASS  (f3) motorbike ≈1%, Agadez ≈ one third
+PASS  (g1) band ×1.25 / ±5: Europe-wealth billboards net < −50, asylum and road > +20  — income −87, italy −88, uk −8, asylum +39, reach +80, pirates +35
+PASS  (g2) band ×1.25 / ±5: best three = asylum, road, sea  — asylum, reach, pirates = 154
+PASS  (g3) band ×1.25: scoring by "warned" alone still puts income and Italy last  — income 3, italy 5, pirates 35, uk 39, asylum 62, reach 80
+PASS  (g1) band ×1.5 / ±7.5: Europe-wealth billboards net < −50, asylum and road > +20  — income −83, italy −83, uk −9, asylum +40, reach +80, pirates +35
+PASS  (g2) band ×1.5 / ±7.5: best three = asylum, road, sea  — asylum, reach, pirates = 155
+PASS  (g3) band ×1.5: scoring by "warned" alone still puts income and Italy last  — income 2, italy 5, uk 33, pirates 35, asylum 59, reach 80
+PASS  (g1) band ×2 / ±10: Europe-wealth billboards net < −50, asylum and road > +20  — income −72, italy −78, uk −9, asylum +41, reach +80, pirates +35
+PASS  (g2) band ×2 / ±10: best three = asylum, road, sea  — asylum, reach, pirates = 156
+PASS  (g3) band ×2: scoring by "warned" alone still puts income and Italy last  — income 2, italy 3, uk 24, pirates 35, asylum 56, reach 80
+PASS  (g4) UK billboard is a near-wash under every band (|net| < 20)  — −8, −9, −9
+PASS  (h1) displayed counts add to 100 for every billboard
+PASS  (h2) a pick must be exactly 3 different billboards
+PASS  (h3) best score is the max over all 20 campaigns, computed not typed  — best 155 = asylum, reach, pirates
+PASS  (h4) perfect first campaign ends the game (no second campaign to repeat)
+PASS  (h5) campaign score = warned − backfired, summed  — score -12: ITALY backfired: most people already thought that number was lower than the truth. BRITAIN was close to a wash.
+PASS  (h6) second campaign marks repeats as already seen; verdict uses the best campaign  — Your best campaign warned 174 and backfired on 19: a score of +155 out of a possible +155.
+PASS  (h7) a random campaign scores far below the best  — mean over all 20: -10.0
+
+Billboards as displayed (of 100 people: warned / knew / backfired = score):
+  THE ROAD  80 / 20 / 0 = +80   "Most people who set out from here never get past Libya."
+  ASYLUM    59 / 22 / 19 = +40   "Fewer than 1 in 4 Nigerians who ask for asylum in Europe may stay."
+  THE SEA   35 / 65 / 0 = +35   "At sea, pirates steal the engines of migrant boats."
+  BRITAIN   33 / 25 / 42 = −9   "Lose your job in Britain and the state pays about €350 a month."
+  EUROPE    2 / 13 / 85 = −83   "The average European lives on about €2,500 a month."
+  ITALY     5 / 7 / 88 = −83   "Lose your job in Italy and the state pays up to €1,300 a month."
+
+ALL CHECKS PASS

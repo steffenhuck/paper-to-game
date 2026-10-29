@@ -1,11 +1,23 @@
-// Headless loop (build step 2): plays a plausible first-timer through the mechanism and prints what the player would see.
-const M = require('./mechanism.js'); const C = M.CONFIG;
-const calls = M.naiveCalls(); calls.CH = true;   // a first-timer: "hit hard = fight", but suspects Switzerland
-const a1 = M.scoreAct1(calls);
-a1.rows.forEach(r => console.log(`${r.name.padEnd(12)} you: ${r.call ? 'fight' : 'quiet'}  paper: ${r.fight ? 'fight' : 'quiet'}  ${r.right ? 'RIGHT' : 'wrong'}`));
-console.log(`ACT 1: ${a1.right} of ${a1.of}\n`);
-const plays = [[2, 0], [0, 0], [1, 2]];   // copy loudly; then tough-but-quiet; then loud-but-open
-const res = plays.map(([t, l], i) => { const r = M.runCampaign(i, t, l);
-  console.log(`${C.campaigns[i].title} (${C.campaigns[i].rule}) talk +${C.talk[t] * 100} pts, lean ${['tougher', 'hold', 'open'][l]}: RR ${r.before}% -> ${r.after.toFixed(1)}% (${r.delta >= 0 ? '+' : ''}${r.delta.toFixed(1)}) ${r.held ? 'HELD' : 'NOT HELD'}  | options held: ${r.options.filter(o => o.held).length}/${r.options.length}`);
-  return r; });
-console.log('\nVERDICT', M.verdict(a1, res));
+// Placeholder loop (build step 2): plays a plausible first-timer session headlessly and prints what the player would see.
+const M = require('./mechanism.js');
+const g = M.newGame();
+// A first-timer: steals their issue on day 1, tries the usual line, then pensions, then takes them on; dodges after.
+const plan = [['imm', 'copy'], ['imm', 'usual'], ['other'], ['imm', 'oppose'], ['other'], ['other'],
+              // crisis: has learnt; dodges when possible, takes them on when forced
+              ['imm', 'oppose'], ['other'], ['other'], ['imm', 'oppose'], ['other'], ['other']];
+let step = 0;
+for (let c = 0; c < 2; c++) {
+  console.log(`\n=== ${M.current(g).name} (they start at ${g.start}%) ===`);
+  while (!M.campaignOver(g)) {
+    const qs = M.today(g), [want, kind] = plan[step++];
+    console.log(`DAY ${g.day + 1}${M.forced(g) ? ' (every question is about immigration)' : ''}: ` + qs.map(q => `[${q.topic}] ${q.text}`).join(' | '));
+    let i = qs.findIndex(q => (want === 'imm') === q.imm); if (i < 0) i = 0;
+    const r = M.answer(g, i, kind || 'oppose');
+    console.log(`  YOU (${r.kind}): "${r.said}"  -> ${r.headline}\n  RIVAL: "${r.reaction}"  balloon ${M.fmt(r.change)} -> ${r.share.toFixed(1)}% (from your campaign ${M.fmt(r.after)}; ${r.held ? 'under' : 'OVER'} the 1-point line)`);
+  }
+  const n = M.electionNight(g);
+  console.log(`ELECTION NIGHT: ${n.held ? 'HELD' : 'NOT HELD'} ${M.fmt(n.gain)} points -> ${n.end.toFixed(1)}%. ${n.line}`);
+  if (c === 0) M.nextCampaign(g);
+}
+console.log('\nVERDICT', M.verdict(g));
+console.log('WHAT IF', M.whatIf().map(w => `${w.label} ${M.fmt(w.gain)}`).join(' | '));

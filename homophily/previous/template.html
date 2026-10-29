@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One of Us</title>
+<style>
+  :root { --bg:#f4f1ea; --card:#fffdf8; --ink:#1f2430; --dim:#646a76; --line:#d9d3c7; --us:#e0701b; --us-soft:#fbe6d4; --oth:#5b7a99; --oth-soft:#e1e8ef;
+          --ok:#2f7a3c; --no:#b23a2a; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body { margin:0; background:var(--bg); color:var(--ink); font-family:-apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size:16px; line-height:1.45; }
+  .screen { display:none; max-width:560px; margin:0 auto; padding:18px 16px 44px; }
+  .screen.on { display:block; }
+  h1 { font-size:40px; line-height:1.02; margin:8px 0 8px; letter-spacing:-.02em; }
+  h2 { font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); margin:18px 0 6px; font-weight:650; }
+  p { margin:8px 0; }
+  .lede { font-size:18px; }
+  .aim { font-size:18px; font-weight:650; margin:14px 0; padding:10px 0; border-top:2px solid var(--ink); border-bottom:2px solid var(--ink); }
+  .aimbar { font-size:12.5px; color:var(--dim); margin:2px 0 6px; line-height:1.3; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; }
+  button { font:inherit; font-size:16px; background:var(--card); color:var(--ink); border:2px solid var(--ink); border-radius:10px; padding:12px 14px; min-height:48px; cursor:pointer; flex:1; }
+  button.primary { background:var(--ink); color:#fff; }
+  button:disabled { opacity:.4; cursor:default; }
+  button.q { flex:0 0 auto; width:40px; min-height:40px; height:40px; padding:0; border-radius:50%; font-weight:700; color:var(--dim); border-color:var(--dim); }
+  .hud { display:flex; justify-content:space-between; align-items:center; gap:8px; }
+  .hud .t { font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:var(--dim); font-weight:650; }
+  .hud .solved { font-size:14px; font-weight:650; }
+  .orient { font-size:15px; color:var(--dim); margin:6px 0 8px; }
+  .us { color:var(--us); font-weight:700; }
+  .oth { color:var(--oth); font-weight:700; }
+  svg { display:block; width:100%; height:auto; }
+  .fade { animation: fade .45s ease-out; }
+  @keyframes fade { from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
+  /* score cards on start */
+  .cards { display:flex; gap:8px; margin:14px 0 6px; }
+  .sc { flex:1; background:var(--card); border:2px solid var(--line); border-radius:8px; padding:8px 4px 6px; text-align:center; }
+  .sc .n { font-size:28px; font-weight:800; font-variant-numeric:tabular-nums; }
+  .sc .w { font-size:11px; color:var(--dim); line-height:1.2; }
+  .sc.us { border-color:var(--us); background:var(--us-soft); }
+  .sc.us .n { color:var(--us); }
+  /* case */
+  .head { background:var(--card); border:1px solid var(--line); border-left:6px solid var(--us); border-radius:8px; padding:12px; margin:8px 0; }
+  .head .big { font-size:34px; font-weight:800; color:var(--us); line-height:1; font-variant-numeric:tabular-nums; }
+  .head .say { font-size:16px; margin-top:6px; }
+  .head .small { font-size:13px; color:var(--dim); margin-top:4px; }
+  .tests { display:flex; flex-direction:column; gap:8px; }
+  .tbtn { text-align:left; padding:10px 12px; border-width:2px; }
+  .tbtn b { display:block; font-size:16px; }
+  .tbtn span { display:block; font-size:13.5px; color:var(--dim); line-height:1.3; margin-top:2px; }
+  .tbtn.done { border-color:var(--line); background:#efebe3; }
+  .tbtn.done b::after { content:"  ✓ run"; font-size:12px; color:var(--dim); font-weight:600; }
+  .res { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:10px 12px; margin:8px 0; }
+  .res .rt { font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--dim); font-weight:700; }
+  .res .rv { font-size:20px; font-weight:800; margin:2px 0 2px; }
+  .res .rv.still { color:var(--us); } .res .rv.gone { color:var(--oth); }
+  .res .rs { font-size:14.5px; margin-top:4px; }
+  .sus { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .scard { background:var(--card); border:2px solid var(--line); border-radius:10px; padding:10px; display:flex; flex-direction:column; justify-content:space-between; min-height:136px; }
+  .scard .sn { font-weight:800; font-size:16px; line-height:1.2; }
+  .scard .sl { font-size:13px; color:var(--dim); line-height:1.3; margin:4px 0 8px; }
+  .scard button { flex:0 0 auto; width:100%; min-height:42px; padding:8px; font-size:15px; }
+  .scard.out { opacity:.45; }
+  .scard.out .sn { text-decoration:line-through; }
+  .xbtn { border-style:dashed; border-color:var(--dim); color:var(--dim); font-size:13px !important; min-height:36px !important; margin-top:6px; }
+  /* verdict */
+  .verd { border-radius:10px; padding:14px 12px; margin:12px 0; border:2px solid var(--ink); background:var(--card); }
+  .verd .vh { font-size:24px; font-weight:800; line-height:1.15; }
+  .verd .vh.ok { color:var(--ok); } .verd .vh.no { color:var(--no); }
+  .verd p { font-size:16px; }
+  .reveal .bar { display:flex; align-items:center; gap:8px; margin:6px 0; font-size:14px; }
+  .note { font-size:14px; color:var(--dim); }
+  /* bet */
+  .opts { display:flex; flex-direction:column; gap:8px; margin:10px 0; }
+  .opt.picked { background:var(--ink); color:#fff; }
+  /* end */
+  .verdict div { margin:10px 0; }
+  .verdict .you { font-size:28px; font-weight:800; line-height:1.15; }
+  .verdict .paper { font-size:18px; }
+  .verdict .means { font-size:18px; font-style:italic; }
+  .log { font-size:15px; padding:8px 10px; border-left:5px solid var(--line); background:var(--card); border-radius:6px; margin:6px 0; }
+  .log.ok { border-left-color:var(--ok); } .log.no { border-left-color:var(--no); }
+  .about p, .about li { font-size:15px; }
+  .about h3 { font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:var(--dim); margin:18px 0 4px; }
+  .attr { font-size:13px; color:var(--dim); margin-top:18px; border-top:1px solid var(--line); padding-top:8px; }
+  .busy { font-size:15px; color:var(--dim); padding:10px 0; }
+</style>
+</head>
+<body>
+
+<!-- START -->
+<section class="screen on" id="s-start">
+  <h2>A detective game about grant reviews</h2>
+  <h1>One of Us</h1>
+  <p class="lede">Europe's biggest science prize is decided by judges from many countries. Each proposal gets marks from 1 to 5 from about four of them.</p>
+  <div class="cards" aria-hidden="true">
+    <div class="sc"><div class="n">3.5</div><div class="w">judge from Spain</div></div>
+    <div class="sc us"><div class="n">4.5</div><div class="w">judge from home</div></div>
+    <div class="sc"><div class="n">3.5</div><div class="w">judge from Sweden</div></div>
+    <div class="sc"><div class="n">4</div><div class="w">judge from Poland</div></div>
+  </div>
+  <p>Judges from the applicant's own country — <span class="us">compatriots</span> — give higher marks. Unfair? There are innocent explanations too.</p>
+  <div class="aim" id="aim-start"></div>
+  <div class="row"><button class="primary" id="b-start">Start case 1</button></div>
+  <div class="row" style="margin-top:10px"><button id="b-help1">How to play</button><button id="b-about1">About the paper</button></div>
+</section>
+
+<!-- CASE -->
+<section class="screen" id="s-case">
+  <div class="hud"><span class="t" id="case-t">Case 1 of 4</span><span class="solved" id="case-solved"></span><button class="q" id="b-q" aria-label="How to play">?</button></div>
+  <div class="aimbar" id="aim-case"></div>
+  <div class="head" id="case-head"></div>
+  <div id="case-play">
+    <h2>1 · Run a test</h2>
+    <p class="orient" id="test-orient">Each test compares marks while holding one thing fixed. Run as many as you need.</p>
+    <div class="tests" id="tests"></div>
+    <div id="results"></div>
+    <h2>2 · Accuse one explanation</h2>
+    <p class="orient">Tap <b>Rule out</b> to cross off what a test has excluded. Tap <b>Accuse</b> when you're sure.</p>
+    <div class="sus" id="sus"></div>
+  </div>
+  <div id="case-verdict"></div>
+</section>
+
+<!-- BET -->
+<section class="screen" id="s-bet">
+  <div class="hud"><span class="t">Last question</span><button class="q" id="b-q2" aria-label="How to play">?</button></div>
+  <p class="lede" style="margin-top:12px"><b>Does a sixth of a point matter?</b></p>
+  <p>Only about 1 in 3 proposals passes the first round, so a nudge can tip a proposal over the line. Applicants from the five biggest countries — Germany, the UK, France, Italy, Spain — find a compatriot on their panel about <b>3 times</b> as often as everybody else.</p>
+  <p>Across both rounds, about 14 in 100 proposals are funded. How much bigger is the big countries' predicted funding edge from compatriots than everybody else's?</p>
+  <div class="opts" id="bet-opts"></div>
+  <div id="bet-res"></div>
+</section>
+
+<!-- END -->
+<section class="screen" id="s-end">
+  <h2>Verdict</h2>
+  <div class="verdict" id="verdict"></div>
+  <h2>Your cases</h2>
+  <div id="elog"></div>
+  <div class="row" style="margin-top:14px"><button class="primary" id="b-again">Play again (new practice cases)</button></div>
+  <div class="row" style="margin-top:10px"><button id="b-about2">About the paper</button><button id="b-restart">Start screen</button></div>
+</section>
+
+<!-- HELP -->
+<section class="screen" id="s-help">
+  <h2>How to play</h2>
+  <div class="aim" id="aim-help"></div>
+  <p><b>The setting.</b> The European Research Council gives grants of up to €2.5 million. Panels of judges from many countries mark each proposal from 1 to 5, in half points. In every case, the <span class="us">compatriot</span> judges (same country as the applicant) give higher marks on average than other judges.</p>
+  <p><b>The four explanations.</b> <i>Better proposals</i>: those applicants really sent better work. <i>Generous judges</i>: those judges mark everybody high. <i>Knows them better</i>: a compatriot can judge the work more precisely. <i>Favours their own</i>: the same work simply gets a higher mark from a compatriot.</p>
+  <p><b>The three tests.</b></p>
+  <ul>
+    <li><b>Same proposal</b> — compares a compatriot judge's mark with the other judges' marks on the very same proposal. The work is identical, so its quality cannot explain a gap that survives.</li>
+    <li><b>Same judge</b> — compares how one judge marks compatriots with how that same judge marks everybody else. The judge is identical, so generosity cannot explain a gap that survives.</li>
+    <li><b>Whole spread</b> — on the same proposals, how often compatriot and other judges give each mark. Bars above the line: compatriots give that mark more often.</li>
+  </ul>
+  <p><b>Reading a test.</b> The dot is the gap that remains; the bar around it is the range it could plausibly be in. <b>Still there</b>: the range stays above zero. <b>Gone</b>: the range reaches zero.</p>
+  <p><b>Winning.</b> A case is solved when you accuse the true explanation. Using fewer tests is neat but not required. There are three practice panels (invented countries, exaggerated effects) and then the real one, the ERC itself.</p>
+  <p><b>What the game shows.</b> How researchers can tell bias from innocent explanations without ever seeing how good a proposal really is, and what they found when they did it for 37,073 real proposals.</p>
+  <div class="row"><button class="primary" id="b-help-back">Back</button></div>
+</section>
+
+<!-- ABOUT -->
+<section class="screen about" id="s-about">
+  <h2>About</h2>
+  <h1 style="font-size:28px">One of Us</h1>
+  <p>Built from <b>Nicola Fuchs-Schündeln and Felix Holub, <i>Homophily in Grant Evaluations</i></b> (manuscript, WZB Berlin Social Science Center and Goethe University Frankfurt). The data are all 37,073 applications to the European Research Council, 2019–2023. Code: doi:10.6084/m9.figshare.30789395.</p>
+  /*__ABOUT__*/
+  <p class="attr">Game built from this paper; the paper is the authority where the two disagree. Game by Steffen Huck with Claude, 2026.</p>
+  <div class="row"><button class="primary" id="b-about-back">Back</button></div>
+</section>
+
+<script>
+/*__MECHANISM__*/
+</script>
+<script>
+(function () {
+'use strict';
+const M = window.MECH, C = M.CONFIG;
+const $ = id => document.getElementById(id);
+const AIM = 'Judges give higher marks to applicants from their own country. In each case, find the real reason.';
+['aim-start', 'aim-help'].forEach(id => $(id).textContent = AIM);
+$('aim-case').textContent = AIM;
+
+let game = null, cur = null, ruled = {}, back = 's-start', betDone = false, seedBase = (Date.now() % 100000) | 0;
+const SUS = Object.fromEntries(C.suspects.map(s => [s.id, s]));
+const TESTS = [
+  { id: 'proposal', name: 'Same proposal', line: "The very same proposal: the compatriot judge's mark vs the other judges' marks." },
+  { id: 'judge', name: 'Same judge', line: "The very same judge: their marks for compatriots vs their marks for everybody else." },
+  { id: 'spread', name: 'Whole spread', line: 'On the same proposals: how often compatriot and other judges give each mark, 1 to 5.' },
+];
+function show(id) { document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id)); window.scrollTo(0, 0); }
+function openHelp() { back = document.querySelector('.screen.on').id; const y = window.scrollY; show('s-help'); $('b-help-back').onclick = () => { show(back); window.scrollTo(0, y); }; }
+function openAbout() { back = document.querySelector('.screen.on').id; show('s-about'); $('b-about-back').onclick = () => show(back); }
+$('b-help1').onclick = openHelp; $('b-q').onclick = openHelp; $('b-q2').onclick = openHelp;
+$('b-about1').onclick = openAbout; $('b-about2').onclick = openAbout;
+$('b-start').onclick = () => startGame(false);
+$('b-again').onclick = () => startGame(true);
+$('b-restart').onclick = () => show('s-start');
+
+function startGame(again) {
+  seedBase = (seedBase + 1 + (again ? 17 : 0)) >>> 0;
+  game = M.newGame(seedBase); betDone = false;
+  openNext();
+}
+const fmt = v => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(2);
+const niceCountry = c => c.country === 'ERC' ? 'the ERC' : c.country;
+const adj = { Norland: 'Norlandic', Vestria: 'Vestrian', Ostrava: 'Ostravan', Kalmar: 'Kalmarian', Belmont: 'Belmontese', Sundby: 'Sundbyan' };
+
+function openNext() {
+  ruled = {};
+  show('s-case');
+  $('case-verdict').innerHTML = ''; $('case-play').style.display = '';
+  $('results').innerHTML = '';
+  const k = game.at;
+  $('case-t').textContent = k < 3 ? `Practice case ${k + 1} of 3` : 'Case 4 · the real one';
+  $('case-solved').textContent = k ? `Solved ${M.solved(game)} of ${k}` : '';
+  const isErc = game.cases[k].kind === 'erc';
+  if (isErc) { $('case-head').innerHTML = '<div class="busy">Loading 155,000 marks…</div>'; $('tests').innerHTML = ''; $('sus').innerHTML = ''; setTimeout(() => { cur = M.openCase(game); drawCase(); }, 30); }
+  else { cur = M.openCase(game); drawCase(); }
+}
+function drawCase() {
+  const c = cur, isErc = c.kind === 'erc';
+  if (isErc) {
+    $('case-head').innerHTML = `<div class="small">THE EUROPEAN RESEARCH COUNCIL · 37,073 proposals, 2019–2023 · a reconstruction calibrated to the paper</div>
+      <div class="big" style="margin-top:6px">${fmt(c.head.gap)}</div>
+      <div class="say">Marks from judges who share the applicant's country of work <i>and</i> citizenship, compared with all other marks.</div>
+      <div class="small">Smaller than in practice: a sixth of a point on the 1–5 scale. Same three tests.</div>`;
+  } else {
+    const a = adj[c.country] || c.country;
+    $('case-head').innerHTML = `<div class="small">PRACTICE PANEL · ${c.country} (an invented country) · ${C.train.proposals.toLocaleString('en')} proposals, ${C.train.reviewsPer} judges each</div>
+      <div class="big" style="margin-top:6px">${fmt(c.head.gap)}</div>
+      <div class="say">Marks from <span class="us">${a} judges</span> to ${a} applicants, compared with all other marks (1–5 scale).</div>`;
+  }
+  $('tests').innerHTML = TESTS.map(t => `<button class="tbtn${c.tests[t.id] ? ' done' : ''}" data-t="${t.id}"><b>${t.name}</b><span>${t.line}</span></button>`).join('');
+  $('tests').querySelectorAll('.tbtn').forEach(b => b.onclick = () => runTest(b.dataset.t, b));
+  drawSus();
+}
+function drawSus() {
+  $('sus').innerHTML = C.suspects.map(s => `<div class="scard${ruled[s.id] ? ' out' : ''}"><div><div class="sn">${s.name}</div><div class="sl">${s.line}</div></div>
+    <div><button class="primary" data-a="${s.id}">Accuse</button><button class="xbtn" data-x="${s.id}" style="width:100%">${ruled[s.id] ? 'Bring back' : 'Rule out'}</button></div></div>`).join('');
+  $('sus').querySelectorAll('[data-a]').forEach(b => b.onclick = () => accuse(b.dataset.a));
+  $('sus').querySelectorAll('[data-x]').forEach(b => b.onclick = () => { ruled[b.dataset.x] = !ruled[b.dataset.x]; drawSus(); });
+}
+function runTest(id, btn) {
+  if (cur.tests[id]) { const el = document.getElementById('res-' + id); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+  const r = M.test(game, id);
+  btn.classList.add('done');
+  const div = document.createElement('div'); div.className = 'res fade'; div.id = 'res-' + id;
+  const t = TESTS.find(x => x.id === id);
+  if (id === 'spread') {
+    const words = { ramp: 'Top marks up, low marks down', smile: 'Both ends up', flat: 'No difference' }[r.pattern];
+    const say = { ramp: '<span class="us">Compatriots</span> give more 4s and 5s, and fewer low marks.',
+                  smile: '<span class="us">Compatriots</span> give more marks at <b>both</b> ends: more 4s and 5s, and more 1s and 2s. The other judges bunch in the middle.',
+                  flat: '<span class="us">Compatriot</span> and other judges hand out the same mix of marks on the same proposals.' }[r.pattern];
+    div.innerHTML = `<div class="rt">${t.name}</div><div class="rv">${words}</div>${spreadSvg(r)}<div class="rs">${say}</div>`;
+  } else {
+    const what = id === 'proposal' ? 'on the very same proposals' : 'from the very same judges';
+    div.innerHTML = `<div class="rt">${t.name}</div><div class="rv ${r.gone ? 'gone' : 'still'}">${r.gone ? 'Gone' : 'Still there'}: ${fmt(r.gap)}</div>${meterSvg(r, cur.head.gap)}
+      <div class="rs">${r.gone ? `The gap ${what} is about zero — the range reaches the line.` : `The gap ${what} stays clearly above zero.`}</div>`;
+  }
+  $('results').appendChild(div);
+  div.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+function meterSvg(r, head) {
+  const W = 340, H = 74, x0 = 16, x1 = W - 16, lo = -0.2, hi = 0.6, X = v => x0 + (Math.max(lo, Math.min(hi, v)) - lo) / (hi - lo) * (x1 - x0);
+  let ticks = ''; for (let v = -0.2; v <= 0.61; v += 0.2) ticks += `<line x1="${X(v)}" y1="40" x2="${X(v)}" y2="46" stroke="#9aa0aa"/><text x="${X(v)}" y="60" font-size="11" text-anchor="middle" fill="#646a76">${v > 0.001 ? '+' : ''}${v.toFixed(1)}</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="gap ${r.gap.toFixed(2)}">
+    <line x1="${x0}" y1="40" x2="${x1}" y2="40" stroke="#9aa0aa" stroke-width="1.5"/>${ticks}
+    <line x1="${X(0)}" y1="6" x2="${X(0)}" y2="46" stroke="#1f2430" stroke-width="2" stroke-dasharray="4 3"/>
+    <text x="${X(0) - 4}" y="12" font-size="11" text-anchor="end" fill="#1f2430">no gap</text>
+    <line x1="${X(head)}" y1="16" x2="${X(head)}" y2="40" stroke="#e0701b" stroke-width="1.5" stroke-dasharray="2 2" opacity=".6"/>
+    <text x="${X(head) + 4}" y="20" font-size="10.5" fill="#e0701b" opacity=".85">headline</text>
+    <line x1="${X(r.lo)}" y1="32" x2="${X(r.hi)}" y2="32" stroke="${r.gone ? '#5b7a99' : '#e0701b'}" stroke-width="6" stroke-linecap="round" opacity=".45"/>
+    <circle cx="${X(r.gap)}" cy="32" r="8" fill="${r.gone ? '#5b7a99' : '#e0701b'}"/>
+    <text x="${W / 2}" y="${H - 2}" font-size="10.5" text-anchor="middle" fill="#646a76">extra marks from compatriots (points, 1–5 scale)</text></svg>`;
+}
+function spreadSvg(r) {
+  const W = 340, H = 188, mid = 90, half = 50, bw = 44, gap = (W - 40 - 5 * bw) / 4;
+  const mx = Math.max(0.02, ...r.diff.map(Math.abs)), sc = half / mx;
+  let s = `<line x1="20" y1="${mid}" x2="${W - 20}" y2="${mid}" stroke="#1f2430" stroke-width="1.5"/>`;
+  r.diff.forEach((d, i) => {
+    const x = 20 + i * (bw + gap), h = Math.abs(d) * sc, y = d >= 0 ? mid - h : mid;
+    s += `<rect x="${x}" y="${y}" width="${bw}" height="${Math.max(1.5, h)}" fill="${d >= 0 ? '#e0701b' : '#5b7a99'}" rx="3"/>`;
+    s += `<text x="${x + bw / 2}" y="${d >= 0 ? y - 4 : y + h + 12}" font-size="11" text-anchor="middle" fill="#1f2430">${d >= 0 ? '+' : '−'}${Math.abs(d * 100).toFixed(1)}</text>`;
+    s += `<text x="${x + bw / 2}" y="${H - 22}" font-size="13" font-weight="700" text-anchor="middle" fill="#1f2430">${C.binLabels[i]}</text>`;
+  });
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="spread ${r.pattern}">
+    <text x="20" y="13" font-size="10.5" fill="#e0701b">▲ compatriots give this mark more often</text>
+    <text x="${W - 20}" y="13" font-size="10.5" text-anchor="end" fill="#5b7a99">▼ less often</text>${s}
+    <text x="${W / 2}" y="${H - 1}" font-size="10.5" text-anchor="middle" fill="#646a76">mark (half points merged) · difference in % of marks</text></svg>`;
+}
+const PROOF = {
+  quality: 'On the very same proposal, the compatriot judge gave no more than the others (Same proposal: gone). The gap came from <i>what</i> was being marked, not <i>who</i> marked it.',
+  lenient: 'Those judges mark everybody about that high. Compared with their own marks for other applicants, compatriots get nothing extra (Same judge: gone).',
+  info: 'Compatriot judges give more marks at <b>both</b> ends (Whole spread). They are surer of their verdict, in both directions; unsure judges bunch in the middle. Better knowledge, not favour.',
+  favour: 'All three tests: the same proposal gets more from a compatriot, the same judge gives compatriots more than others, and the extra marks are top marks only — not the both-ends pattern of better knowledge.',
+};
+function accuse(s) {
+  const res = M.accuse(game, s);
+  $('case-play').style.display = 'none';
+  const truth = SUS[res.truth].name;
+  let html = `<div class="verd fade"><div class="vh ${res.correct ? 'ok' : 'no'}">${res.correct ? `Solved — in ${res.tests} test${res.tests === 1 ? '' : 's'}.` : 'Not this time.'}</div>
+    <p>${res.correct ? '' : `You accused <b>${SUS[s].name}</b>. `}It was <b>${truth}</b>. ${PROOF[res.truth]}</p>`;
+  if (!res.correct && res.tests < 3) html += `<p class="note">The explanations look alike in the headline. Only the tests that hold something fixed tell them apart.</p>`;
+  if (res.erc) {
+    html += `<p><b>This is what the paper found.</b> On the same proposal, and holding each judge's generosity fixed, a judge who shares the applicant's country and citizenship gives <b>0.16</b> more points (Step 1 project score). Extra 5s and 4.5s, no extra 1s: not better knowledge. The researchers also checked shared taste — judges whose own papers are close to the proposal, coauthors, same topic — and the gap did not move.</p>
+      <div class="reveal">${C.erc.otherBonuses.map(b => `<div class="bar"><div style="flex:0 0 46%">${b.label}</div><div style="flex:1"><div style="height:16px;width:${(b.v / 0.2 * 100).toFixed(0)}%;background:${b.label.includes('gender') ? '#5b7a99' : '#e0701b'};border-radius:3px"></div></div><b style="flex:0 0 44px;text-align:right">+${b.v.toFixed(3)}</b></div>`).join('')}</div>
+      <p class="note">Paper's estimates, points on the 1–5 scale. Sharing gender matters far less.</p>`;
+  }
+  html += `<div class="row" style="margin-top:12px"><button class="primary" id="b-next">${res.erc ? 'Next: does it matter?' : game.at === 3 ? 'Next: the real case' : 'Next case'}</button></div></div>`;
+  $('case-verdict').innerHTML = html;
+  $('case-solved').textContent = `Solved ${M.solved(game)} of ${game.results.length}`;
+  window.scrollTo(0, 0);
+  $('b-next').onclick = () => res.erc ? openBet() : openNext();
+}
+function openBet() {
+  show('s-bet'); $('bet-res').innerHTML = '';
+  $('bet-opts').innerHTML = C.bet.options.map(o => `<button class="opt" data-o="${o.id}">${o.label}</button>`).join('');
+  $('bet-opts').querySelectorAll('.opt').forEach(b => b.onclick = () => {
+    if (betDone) return; betDone = b.dataset.o; b.classList.add('picked');
+    $('bet-opts').querySelectorAll('.opt').forEach(x => x.disabled = x !== b);
+    const j = M.judgeBet(b.dataset.o), B = C.bet, sc = 100 / 2;
+    $('bet-res').innerHTML = `<div class="verd fade"><div class="vh ${j.right ? 'ok' : 'no'}">${j.right ? 'Right: about 1 point' : 'The answer: about 1 point'} (${B.gap}).</div>
+      <div class="reveal">
+        <div class="bar"><div style="flex:0 0 40%">Five biggest countries</div><div style="flex:1"><div style="height:18px;width:${B.topFive * sc}%;background:#e0701b;border-radius:3px"></div></div><b style="flex:0 0 52px;text-align:right">+${B.topFive}</b></div>
+        <div class="bar"><div style="flex:0 0 40%">All other countries</div><div style="flex:1"><div style="height:18px;width:${B.others * sc}%;background:#5b7a99;border-radius:3px"></div></div><b style="flex:0 0 52px;text-align:right">+${B.others}</b></div>
+      </div>
+      <p>Predicted boost to the chance of funding from compatriots on the panel, in percentage points, against a base of ${B.baseline}%. The gap of ${B.gap} points is about 6% of an applicant's odds: small for any one person, systematic across thousands.</p>
+      <p class="note">This part is a correlation: each proposal gets only one panel decision, so the paper cannot hold its quality fixed here.</p>
+      <div class="row" style="margin-top:12px"><button class="primary" id="b-end">See your verdict</button></div></div>`;
+    $('b-end').onclick = openEnd;
+    $('bet-res').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
+function openEnd() {
+  const n = M.solved(game);
+  $('verdict').innerHTML = `<div class="you">You solved ${n} of 4 cases.</div>
+    <div class="paper">At the real ERC, the same proposal gets about 0.16 more points from a judge who shares the applicant's country and citizenship. It isn't better proposals, generous judges, inside knowledge or shared taste.</div>
+    <div class="means">A sixth of a point is small. But applicants from big countries meet compatriots more often, and their predicted funding edge is about twice everybody else's.</div>`;
+  $('elog').innerHTML = game.results.map((r, i) => `<div class="log ${r.correct ? 'ok' : 'no'}"><b>${r.erc ? 'The ERC' : r.country}</b>: ${SUS[r.truth].name} — ${r.correct ? `solved in ${r.tests} test${r.tests === 1 ? '' : 's'}` : `you said ${SUS[r.suspect].name}`}</div>`).join('');
+  show('s-end');
+}
+})();
+</script>
+</body>
+</html>

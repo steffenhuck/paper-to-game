@@ -1,0 +1,7 @@
+# One of Us — note for the author
+
+1. Look first at practice case screenshots `screenshot-case-test.png` and `screenshot-erc-spread.png`. Can a stranger see why "Same proposal: gone" rules out better proposals, and why "both ends up" means knowing better rather than favouring? The game turns on those two readings. Then look at the ERC reveal (`screenshot-verdict-4.png`), which carries the paper's numbers.
+2. Every number is in the `CONFIG` block at the top of `mechanism.js`, the only copy of the mechanism, tagged with its source (Supp. Table 2, Table 2, p. 9…) or "our choice". The ERC reconstruction is `CONFIG.erc`; the practice panels are `CONFIG.train`. Edit, run `node fidelity.js` (30 checks against the paper's estimates), then `python3 build.py`, which refuses to finish if the embedded mechanism differs from the file.
+3. What we were least sure about: (a) the reconstruction puts about twice the paper's weight on extra 5.0s (+0.023 vs +0.010): an additive bonus can't reproduce the paper's finding that the extra marks land on 4–4.5; (b) the "knows them better" practice panel is our Bayesian toy, tuned so its both-ends pattern shows, and its headline gap runs a little smaller than the others'; (c) the closing bet uses Table 2, which is correlational, and the game says so on the spot.
+
+This game has had the builder's review only: screenshots and a scripted browser session at 380 px. It has not been played by real strangers, and the five-minute length is an estimate.

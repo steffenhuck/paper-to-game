@@ -1,0 +1,49 @@
+
+=== THE QUIET YEAR (they start at 12%) ===
+DAY 1: [PENSIONS] Will you raise the retirement age? | [TAXES] Who pays for the new railway? | [IMMIGRATION] They say the borders are wide open. Are they?
+  YOU (copy): "They are. We will shut them. Enough is enough."  -> BIG PARTY: “WE WILL SHUT THEM”
+  RIVAL: "Why vote for the copy?"  balloon +3.0 -> 15.0% (from your campaign +3.0; OVER the 1-point line)
+DAY 2: [IMMIGRATION] Should newcomers lose benefits for five years? | [SCHOOLS] Classes have 32 pupils. Will you fix that? | [HOSPITALS] Waiting lists are at a record. Your plan?
+  YOU (usual): "Everyone pays in, everyone follows the rules."  -> BIG PARTY STICKS TO ITS LINE
+  RIVAL: "Everyone’s talking about it now."  balloon +0.7 -> 15.8% (from your campaign +3.8; OVER the 1-point line)
+DAY 3: [ROADS] Potholes everywhere. Who is to blame? | [IMMIGRATION] A mosque is planned in the old town. For or against? | [JOBS] The car plant is closing. What now?
+  YOU (other): "Whoever governs next will fix them. That is us."  -> BIG PARTY ON ROADS
+  RIVAL: "Not talking about it, eh?"  balloon 0.0 -> 15.8% (from your campaign +3.8; OVER the 1-point line)
+DAY 4: [FARMS] Milk prices have collapsed. Will you help? | [ENERGY] Heating bills doubled. What will you do? | [IMMIGRATION] Is immigration why the rents are so high?
+  YOU (oppose): "No. We stopped building homes. That is on us."  -> BIG PARTY TAKES ON THE RADICAL RIGHT
+  RIVAL: "…"  balloon −0.4 -> 15.4% (from your campaign +3.4; OVER the 1-point line)
+DAY 5: [IMMIGRATION] Would you deport families whose asylum claims fail? | [CRIME] Burglaries are up. Are you soft on crime? | [HOUSING] Young people can’t afford a flat. Your answer?
+  YOU (other): "Two thousand more police on the streets."  -> BIG PARTY ON CRIME
+  RIVAL: "Not talking about it, eh?"  balloon 0.0 -> 15.4% (from your campaign +3.4; OVER the 1-point line)
+DAY 6: [PENSIONS] Will pensions keep up with prices? | [IMMIGRATION] Hospitals say they need nurses from abroad. Do they? | [TAXES] Will you cut income tax?
+  YOU (other): "Yes. Indexed to prices, every year."  -> BIG PARTY ON PENSIONS
+  RIVAL: "Scared of the question?"  balloon 0.0 -> 15.4% (from your campaign +3.4; OVER the 1-point line)
+ELECTION NIGHT: NOT HELD +3.4 points -> 15.4%. You sounded like them, and they grew. Voters chose the original, not the copy.
+
+=== THE CRISIS (they start at 15.4%) ===
+DAY 1 (every question is about immigration): [IMMIGRATION] Would you build a fence on the border? | [IMMIGRATION] Should the army guard the border? | [IMMIGRATION] Boats are arriving every night. What would you do?
+  YOU (oppose): "No. Fences move people, they do not stop them."  -> BIG PARTY TAKES ON THE RADICAL RIGHT
+  RIVAL: "They sound nothing like us."  balloon −0.8 -> 14.6% (from your campaign −0.8; under the 1-point line)
+DAY 2: [IMMIGRATION] Do you accept your share of refugees under the EU plan? | [IMMIGRATION] A town hall has 400 refugees in it. Is that too many? | [SCHOOLS] Will you build new schools in the suburbs?
+  YOU (other): "Twelve new schools by the end of the term."  -> BIG PARTY ON SCHOOLS
+  RIVAL: "Not talking about it, eh?"  balloon 0.0 -> 14.6% (from your campaign −0.8; under the 1-point line)
+DAY 3: [JOBS] Young people can’t find work. What will you do? | [IMMIGRATION] Should refugees be allowed to work while they wait? | [TRAINS] The trains are always late. Your plan?
+  YOU (other): "An apprenticeship for every school-leaver who wants one."  -> BIG PARTY ON JOBS
+  RIVAL: "Scared of the question?"  balloon 0.0 -> 14.6% (from your campaign −0.8; under the 1-point line)
+DAY 4 (every question is about immigration): [IMMIGRATION] Are there terrorists among the refugees? | [IMMIGRATION] Should schools teach in the newcomers’ languages? | [IMMIGRATION] Will you cut the number of asylum seekers in half?
+  YOU (oppose): "Most of them are fleeing the terrorists."  -> BIG PARTY TAKES ON THE RADICAL RIGHT
+  RIVAL: "They sound nothing like us."  balloon 0.0 -> 14.6% (from your campaign −0.8; under the 1-point line)
+DAY 5: [IMMIGRATION] A refugee shelter was set on fire last night. Your reaction? | [IMMIGRATION] Should citizenship take ten years instead of five? | [BANKS] Should the state rescue the banks again?
+  YOU (other): "Never again with your money."  -> BIG PARTY ON BANKS
+  RIVAL: "Scared of the question?"  balloon 0.0 -> 14.6% (from your campaign −0.8; under the 1-point line)
+DAY 6: [CHILDCARE] Nurseries cost more than rent. Will you help? | [IMMIGRATION] Thousands are walking along the motorway. Will you stop them? | [INTERNET] Half the villages have no fast internet. When?
+  YOU (other): "Free mornings for every child over two."  -> BIG PARTY ON CHILDCARE
+  RIVAL: "Not talking about it, eh?"  balloon 0.0 -> 14.6% (from your campaign −0.8; under the 1-point line)
+ELECTION NIGHT: HELD −0.8 points -> 14.6%. You talked about it, and every time you took them on. That gave them nothing.
+
+VERDICT {
+  you: 'In the quiet year you sounded like them once, gave your usual line once and took them on once, and they gained 3.4 points. In the crisis you took them on twice, and they barely moved.',
+  paper: 'Across 37 real elections, when the big centre-right party talked more about immigration and sounded like the radical right, the radical right grew. Talking more on its old line helped them a little. Talking more against them didn’t.',
+  means: 'Voters choose the original, not the copy.'
+}
+WHAT IF LIKE THEM +5.3 | YOUR USUAL LINE +2.2 | AGAINST THEM −0.8
