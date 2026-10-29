@@ -1,0 +1,42 @@
+start: aim = "Find out which of Europe's posters would backfire — before they're printed."
+  screenshot-start.png
+brief shown
+  screenshot-brief.png
+  screenshot-street-empty.png
+knock 1: income → Itohan, 29: "₦110,000 a month.(≈ €270)" | EUROPE: Guessed less than €2,500. This poster makes Europe look better to them.
+  screenshot-street-first.png
+knock 2: income → Victor, 26: "₦140,000 a month.(≈ €340)" | EUROPE: Guessed less than €2,500. This poster makes Europe look better to them.
+knock 3: italy → Blessing, 28: "₦30,000 a month.(≈ €72)" | ITALY: Guessed less than €1,300. This poster makes Italy look better to them.
+knock 4: asylum → Esosa, 29: "About 8 out of 100." | ASYLUM: Guessed fewer than 1 in 4. The real number is better news to them.
+knock 5: reach → Obehi, 27: "Me? Very likely. I would make it." | THE ROAD: Thinks they would make it. This poster warns them.
+  screenshot-help.png
+help opened and closed mid-street: back on street = true, notes kept = 5
+knock 6: uk → Edosa, 21: "₦660,000 a month.(≈ €1,590)" | BRITAIN: Guessed more than €350. This poster warns them.
+knock 7: uk → Ehis, 22: "₦44,000 a month.(≈ €110)" | BRITAIN: Guessed less than €350. This poster makes Britain look better to them.
+knock 8: pirates → Aisosa, 33: "No. Definitely made up." | THE SEA: Thinks it is made up. This poster warns them.
+knock 9: uk → Joy, 21: "₦270,000 a month.(≈ €650)" | BRITAIN: Guessed more than €350. This poster warns them.
+knock 10: asylum → Favour, 19: "About 80 out of 100." | ASYLUM: Guessed more than 1 in 4. This poster warns them.
+knock 11: asylum → Osas, 28: "About 11 out of 100." | ASYLUM: Guessed fewer than 1 in 4. The real number is better news to them.
+knock 12: pirates → Ewaen, 34: "Probably true." | THE SEA: Already believes it. Nothing new.
+  screenshot-street-full.png
+after 12 knocks all posters disabled: true
+stamps: rr→SCRAP, r→SCRAP, grg→PRINT, rgr→SCRAP, g→PRINT, gw→PRINT
+  screenshot-stamp.png
+  screenshot-reveal.png
+  EUROPE: Backfires on about 85 in 100. It warns only 2. Scrapped: right.
+  ITALY: Backfires on about 88 in 100. It warns only 5. Scrapped: right.
+  BRITAIN: Close to a wash: warns about 33 in 100, backfires on about 42. Printed: a narrow miss.
+  ASYLUM: Warns about 59 in 100 and backfires on about 19. Scrapped: wrong.
+  THE ROAD: Warns about 80 in 100 and backfires on no one. Any one person might be right about themselves; on average, the paper says, people overrate their odds. Printed: right.
+  THE SEA: Warns about 35 in 100 and backfires on no one. Printed: right.
+  screenshot-end.png
+verdict: You asked 12 people. You scrapped both Europe posters that would have backfired. You scrapped ASYLUM, which warns more people than it backfires on. BRITAIN was close to a wash.
+  screenshot-about.png
+about → back to end: true
+horizontal scroll at 380px: false
+retry: knocks reset = true
+  screenshot-end-trusting.png
+trusting verdict: You asked no one and took Europe’s word for it. You printed EUROPE and ITALY, which would each have backfired on most readers. You printed all three posters about the journey, which warn. BRITAIN was close to a wash.
+horizontal scroll at 380px: false
+errors: none
+scripted session wall time: 30 s (not a human session length)

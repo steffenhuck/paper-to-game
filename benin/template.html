@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ask First</title>
+<meta name="description" content="A game from Beber & Scacco (2022): before Europe prints its posters, knock on doors in Benin City and find out what people actually believe.">
+<style>
+/*__FONTS__*/
+:root {
+  --sun: #FFCE3A; --ink: #161616; --teal: #137C7A; --green: #1F9D57; --red: #E5432F; --paper: #FFFDF4;
+  --display: 'Bangers', 'Impact', 'Arial Black', sans-serif;
+  --body: 'Comic Neue', 'Comic Sans MS', 'Chalkboard SE', system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; padding: 0; }
+body {
+  background-color: var(--sun);
+  background-image: radial-gradient(rgba(22,22,22,.13) 1.2px, transparent 1.4px);
+  background-size: 9px 9px;
+  color: var(--ink); font-family: var(--body); font-weight: 700; font-size: 16px; line-height: 1.32;
+  -webkit-text-size-adjust: 100%; overflow-x: hidden;
+}
+.wrap { max-width: 440px; margin: 0 auto; padding: 10px 12px 28px; min-height: 100vh; }
+.screen { display: none; }
+.screen.on { display: block; animation: pop .25s ease-out; }
+@keyframes pop { from { transform: scale(.98); opacity: .4; } to { transform: none; opacity: 1; } }
+h1, h2, h3, .disp { font-family: var(--display); font-weight: 400; letter-spacing: .04em; margin: 0; }
+p { margin: .4em 0; }
+.panel { background: var(--paper); border: 3px solid var(--ink); border-radius: 4px; padding: 12px; margin: 10px 0; position: relative; box-shadow: 4px 4px 0 var(--ink); }
+.btn {
+  display: block; width: 100%; font-family: var(--display); font-size: 24px; letter-spacing: .06em; color: var(--paper);
+  background: var(--teal); border: 3px solid var(--ink); border-radius: 4px; padding: 10px 14px 8px; margin: 12px 0 0;
+  box-shadow: 4px 4px 0 var(--ink); cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+.btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--ink); }
+.btn.light { background: var(--paper); color: var(--ink); font-size: 20px; }
+.btn.small { font-size: 18px; padding: 7px 10px 5px; }
+.btn[disabled] { opacity: .45; }
+.row { display: flex; gap: 10px; }
+.row > * { flex: 1; }
+.topbar { display: flex; align-items: center; gap: 8px; }
+.qbtn { flex: none; width: 40px; height: 40px; border-radius: 50%; border: 3px solid var(--ink); background: var(--paper); font-family: var(--display); font-size: 24px; line-height: 1; box-shadow: 2px 2px 0 var(--ink); cursor: pointer; padding: 0; }
+.qbtn:active { transform: translate(2px, 2px); box-shadow: none; }
+.aim { flex: 1; font-family: var(--display); font-size: 19px; letter-spacing: .03em; line-height: 1.05; }
+
+/* start */
+.title { font-size: 84px; line-height: .9; text-align: center; color: var(--ink); text-shadow: 4px 4px 0 var(--teal); margin-top: 18px; transform: rotate(-3deg); }
+.title small { display: block; font-size: 26px; text-shadow: none; transform: rotate(2deg); margin-top: 6px; }
+.aimline { font-family: var(--display); font-size: 26px; line-height: 1.05; text-align: center; background: var(--paper); border: 3px solid var(--ink); padding: 10px 10px 6px; transform: rotate(1deg); box-shadow: 4px 4px 0 var(--ink); margin: 16px 4px 4px; }
+
+/* gates */
+.street { display: flex; gap: 6px; justify-content: center; margin: 14px 0 4px; }
+.gate { width: 58px; height: 74px; border: 3px solid var(--ink); border-radius: 26px 26px 0 0; background: var(--teal);
+  background-image: repeating-linear-gradient(90deg, transparent 0 7px, var(--ink) 7px 10px); position: relative; }
+.gate::after { content: ''; position: absolute; left: 50%; top: 8px; bottom: 0; width: 3px; margin-left: -1.5px; background: var(--ink); }
+.gate.alt { background-color: var(--green); }
+.gate.alt2 { background-color: var(--red); }
+
+/* the scene: gate + person + balloons */
+.scene { height: 196px; padding: 0; overflow: hidden; background: #FFF3C4; }
+.wall { position: absolute; left: 0; right: 0; bottom: 0; height: 42px; background: #E9B84B; border-top: 3px solid var(--ink); }
+.gateframe { position: absolute; left: 12px; bottom: 30px; width: 112px; height: 150px; border: 3px solid var(--ink); border-bottom: none; border-radius: 52px 52px 0 0; background: #3a2a1c; overflow: hidden; }
+.leaf { position: absolute; top: 0; bottom: 0; width: 50%; background: var(--teal);
+  background-image: repeating-linear-gradient(90deg, transparent 0 8px, var(--ink) 8px 11px); transition: transform .45s cubic-bezier(.5,1.6,.6,1); border-right: 3px solid var(--ink); }
+.leaf.l { left: 0; transform-origin: left center; }
+.leaf.r { right: 0; transform-origin: right center; border-right: none; border-left: 3px solid var(--ink); }
+.open .leaf.l { transform: scaleX(.12); }
+.open .leaf.r { transform: scaleX(.12); }
+.who { position: absolute; left: 22px; bottom: -6px; width: 92px; transition: transform .35s .15s; transform: translateY(110%); }
+.open .who { transform: none; }
+.nameplate { position: absolute; left: 12px; bottom: 6px; z-index: 3; font-family: var(--display); font-size: 17px; letter-spacing: .05em; background: var(--paper); border: 2px solid var(--ink); padding: 1px 6px 0; }
+.balloon { position: absolute; background: var(--paper); border: 3px solid var(--ink); border-radius: 18px; padding: 8px 10px; font-size: 15px; line-height: 1.22; }
+.balloon.you { right: 10px; top: 10px; left: 140px; font-size: 13px; background: #fff; border-style: dashed; }
+.balloon.they { right: 10px; top: 84px; left: 136px; font-size: 18px; transform: scale(0); transform-origin: left bottom; transition: transform .25s .5s cubic-bezier(.5,1.6,.6,1); }
+.open .balloon.they { transform: none; }
+.balloon.they::before { content: ''; position: absolute; left: -16px; bottom: 14px; border: 8px solid transparent; border-right: 12px solid var(--ink); }
+.balloon .aside { display: block; font-size: 14px; color: #555; }
+.boss { position: absolute; left: 10px; right: 10px; top: 10px; }
+.notecap { display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: 15px; line-height: 1.2; }
+
+/* notes */
+.note { display: inline-block; width: 22px; height: 22px; border: 2px solid var(--ink); border-radius: 2px; vertical-align: middle; position: relative; box-shadow: 1px 1px 0 var(--ink); }
+.note::after { content: ''; position: absolute; right: -2px; bottom: -2px; border: 5px solid transparent; border-right-color: rgba(0,0,0,.25); border-bottom-color: rgba(0,0,0,.25); }
+.note.green { background: var(--green); } .note.red { background: var(--red); } .note.white { background: #fff; }
+.note.big { width: 34px; height: 34px; flex: none; }
+.note.fresh { animation: slap .45s cubic-bezier(.5,1.8,.6,1); }
+@keyframes slap { from { transform: scale(2.4) rotate(-20deg); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* poster cards */
+.knocks { display: flex; gap: 3px; flex-wrap: wrap; margin: 4px 0 0; align-items: center; font-family: var(--display); font-size: 16px; }
+.k { width: 18px; height: 22px; border: 2px solid var(--ink); border-radius: 9px 9px 0 0; background: var(--teal); background-image: repeating-linear-gradient(90deg, transparent 0 4px, var(--ink) 4px 5.5px); }
+.k.used { background: transparent; opacity: .35; }
+.posters { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+.poster { text-align: left; font: inherit; color: inherit; background: var(--paper); border: 3px solid var(--ink); border-radius: 3px; padding: 8px 8px 7px; box-shadow: 3px 3px 0 var(--ink); cursor: pointer; min-height: 118px; display: flex; flex-direction: column; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+.poster:active { transform: translate(3px, 3px); box-shadow: none; }
+.poster[disabled] { cursor: default; }
+.poster[disabled]:active { transform: none; box-shadow: 3px 3px 0 var(--ink); }
+.poster .tag { font-family: var(--display); font-size: 22px; letter-spacing: .05em; line-height: 1; }
+.poster .fact { font-size: 13.5px; line-height: 1.2; margin: 4px 0 6px; flex: 1; }
+.poster .notes { display: flex; gap: 3px; flex-wrap: wrap; min-height: 22px; }
+.poster.hl { background: #FFF3C4; }
+.empty { font-size: 12px; color: #777; }
+
+/* stamp list */
+.slist .poster { min-height: 0; flex-direction: row; gap: 8px; align-items: center; cursor: default; }
+.slist .poster:active { transform: none; box-shadow: 3px 3px 0 var(--ink); }
+.slist .poster > div { flex: 1; }
+.slist { display: grid; gap: 10px; margin-top: 10px; }
+.stamp { flex: none; width: 96px; height: 54px; font-family: var(--display); font-size: 25px; letter-spacing: .06em; border: 4px solid; border-radius: 6px; background: transparent; cursor: pointer; transform: rotate(-6deg); touch-action: manipulation; }
+.stamp.print { color: var(--green); border-color: var(--green); }
+.stamp.scrap { color: var(--red); border-color: var(--red); transform: rotate(5deg); }
+.stamp:active { transform: scale(.94); }
+
+/* reveal */
+.cityrow { margin: 8px 0 2px; }
+.strip { display: flex; height: 30px; border: 3px solid var(--ink); border-radius: 3px; overflow: hidden; background: #fff; }
+.strip > div { height: 100%; transition: width .9s ease-out; width: 0; border-right: 2px solid var(--ink); }
+.strip > div:last-child { border-right: none; }
+.strip .g { background: var(--green); } .strip .w { background: #fff; } .strip .r { background: var(--red); }
+.res .line { font-size: 15px; margin: 8px 0 0; background: #fff; border: 2px solid var(--ink); padding: 6px 8px; box-shadow: 2px 2px 0 var(--ink); }
+.res .call { font-family: var(--display); font-size: 20px; letter-spacing: .04em; margin-top: 4px; }
+.res .call.ok { color: var(--green); } .res .call.no { color: var(--red); } .res .call.meh { color: #8a6d00; }
+.res .yours { font-size: 13px; color: #444; display: flex; align-items: center; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
+.res .yours .note { width: 16px; height: 16px; }
+.res { opacity: 0; transform: translateY(8px); transition: opacity .3s, transform .3s; }
+.res.in { opacity: 1; transform: none; }
+.mini { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; margin-right: 10px; }
+
+/* end */
+.verdict h2 { font-size: 30px; line-height: 1; }
+.verdict .you { font-size: 20px; line-height: 1.22; }
+.label { font-family: var(--display); font-size: 18px; letter-spacing: .06em; background: var(--ink); color: var(--sun); display: inline-block; padding: 2px 8px 0; margin-bottom: 4px; }
+.facts { display: grid; gap: 10px; }
+.fact-note { background: #fff; border: 2px solid var(--ink); padding: 8px 10px; font-size: 14.5px; box-shadow: 2px 2px 0 var(--ink); }
+.fact-note:nth-child(odd) { transform: rotate(-.8deg); } .fact-note:nth-child(even) { transform: rotate(.8deg); }
+
+/* help / about */
+.prose h3 { font-size: 22px; margin-top: 14px; }
+.prose p, .prose li { font-size: 15px; }
+.prose ul { padding-left: 20px; margin: .4em 0; }
+.legend { display: grid; gap: 8px; margin: 8px 0; }
+.legend div { display: flex; gap: 10px; align-items: center; font-size: 15px; line-height: 1.2; }
+.fax { font-family: 'Courier New', monospace; font-weight: 700; font-size: 14px; background: #fff; transform: rotate(-1.2deg); }
+.fax b { font-family: var(--display); font-size: 18px; letter-spacing: .05em; font-weight: 400; }
+.boss-panel { display: flex; gap: 10px; align-items: flex-start; }
+.boss-panel svg { flex: none; }
+.small { font-size: 13px; color: #444; }
+.center { text-align: center; }
+.pulse { animation: pulse 1.1s ease-in-out infinite; }
+@keyframes pulse { 50% { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- START -->
+<section class="screen on" id="s-start">
+  <h1 class="title">ASK FIRST<small>a game about posters in Benin City</small></h1>
+  <div class="street" aria-hidden="true"><div class="gate"></div><div class="gate alt"></div><div class="gate"></div><div class="gate alt2"></div><div class="gate"></div></div>
+  <div class="panel"><p>Benin City, Nigeria, 2018. Almost <b>1 in 4</b> households here had seen someone leave for Europe by the desert road the year before.</p>
+  <p>Europe has printed posters to talk young people out of it.</p></div>
+  <div class="aimline">Find out which of Europe's posters would backfire &mdash; before they're printed.</div>
+  <button class="btn pulse" id="b-start">Start</button>
+  <div class="row"><button class="btn light" data-help>How to play</button><button class="btn light" data-about>About</button></div>
+</section>
+
+<!-- BRIEF -->
+<section class="screen" id="s-brief">
+  <div class="topbar"><div class="aim">Find out which of Europe's posters would backfire &mdash; before they're printed.</div><button class="qbtn" data-help aria-label="How to play">?</button></div>
+  <div class="panel fax"><b>FAX &middot; FROM THE CAMPAIGN OFFICE, EUROPE</b><br>Young people in Benin City think Europe is paradise. Six posters attached. Every fact on them is true. <u>Print all six.</u></div>
+  <div class="panel boss-panel"><span id="boss-face"></span><div><span class="disp" style="font-size:19px">MRS OMOREGIE, YOUR SUPERVISOR</span><br>Before anyone prints anything, we ask. You have <b>12 knocks</b>. Each person answers one question: <b>you pick which poster to ask about.</b></div></div>
+  <div class="panel"><span class="disp" style="font-size:19px">EACH ANSWER BECOMES A NOTE ON THAT POSTER</span>
+    <div class="legend">
+      <div><span class="note big green"></span><span><b>Green:</b> the poster tells them something <b>worse</b> than they believed. It <b>warns</b> them.</span></div>
+      <div><span class="note big red"></span><span><b>Red:</b> the poster tells them something <b>better</b> than they believed. It <b>backfires</b>.</span></div>
+      <div><span class="note big white"></span><span><b>White:</b> they already knew. Nothing new.</span></div>
+    </div></div>
+  <button class="btn" id="b-street">Hit the street</button>
+</section>
+
+<!-- STREET -->
+<section class="screen" id="s-street">
+  <div class="topbar"><div class="aim">Find out which of Europe's posters would backfire &mdash; before they're printed.</div><button class="qbtn" data-help aria-label="How to play">?</button></div>
+  <div class="knocks" id="knocks"></div>
+  <div class="panel scene" id="scene">
+    <div class="wall"></div>
+    <div class="gateframe"><div class="who" id="who"></div><div class="leaf l"></div><div class="leaf r"></div></div>
+    <div class="nameplate" id="nameplate" hidden></div>
+    <div class="balloon you" id="you"></div>
+    <div class="balloon they" id="they"></div>
+  </div>
+  <div class="notecap" id="notecap"></div>
+  <div class="posters" id="posters"></div>
+  <button class="btn" id="b-tostamp">Done asking: stamp the posters</button>
+</section>
+
+<!-- STAMP -->
+<section class="screen" id="s-stamp">
+  <div class="topbar"><div class="aim">Find out which of Europe's posters would backfire &mdash; before they're printed.</div><button class="qbtn" data-help aria-label="How to play">?</button></div>
+  <div class="panel"><p>Europe stamped all six <b style="color:var(--green)">PRINT</b>: they go up on the walls. Tap a stamp to change it to <b style="color:var(--red)">SCRAP</b>: that poster never goes up.</p>
+  <p class="small">Your notes: <span class="note green" style="width:14px;height:14px"></span> warns &nbsp; <span class="note red" style="width:14px;height:14px"></span> backfires &nbsp; <span class="note white" style="width:14px;height:14px"></span> nothing new</p></div>
+  <div class="slist" id="slist"></div>
+  <button class="btn" id="b-send">Send to Europe</button>
+  <button class="btn light small" id="b-back">Back to the street</button>
+</section>
+
+<!-- REVEAL -->
+<section class="screen" id="s-reveal">
+  <div class="topbar"><div class="aim">The whole survey: 555 homes. What every poster would have done.</div><button class="qbtn" data-help aria-label="How to play">?</button></div>
+  <p class="small" style="margin-top:8px">Each strip is the city's notes, out of 100 readers: <span class="mini"><span class="note green" style="width:14px;height:14px"></span>warns</span><span class="mini"><span class="note white" style="width:14px;height:14px"></span>nothing new</span><span class="mini"><span class="note red" style="width:14px;height:14px"></span>backfires</span></p>
+  <div id="results"></div>
+  <button class="btn" id="b-end" hidden>The verdict</button>
+</section>
+
+<!-- END -->
+<section class="screen" id="s-end">
+  <div class="panel verdict"><span class="label">WHAT YOU DID</span><p class="you" id="v-you"></p></div>
+  <div class="panel verdict"><span class="label">WHAT THE PAPER FOUND</span><p class="you" id="v-paper"></p></div>
+  <div class="panel verdict"><span class="label">WHAT IT MEANS</span><p class="you" id="v-means"></p></div>
+  <button class="btn" id="b-again">Walk another street</button>
+  <h2 style="font-size:24px;margin:20px 0 8px">What else the survey found</h2>
+  <div class="facts" id="facts"></div>
+  <div class="row"><button class="btn light" data-help>How to play</button><button class="btn light" data-about>About</button></div>
+  <p class="small center" style="margin-top:14px">Beber &amp; Scacco (2022), <i>The Myth of the Misinformed Migrant?</i> Ruhr Economic Papers 957. doi:10.4419/96973121</p>
+</section>
+
+<!-- HELP -->
+<section class="screen prose" id="s-help">
+  <h2 style="font-size:34px">How to play</h2>
+  <div class="panel">
+    <p><b>Find out which of Europe's posters would backfire &mdash; before they're printed.</b></p>
+    <p>Europe has six posters for Benin City. Every fact on them is true. Europe assumes young people here think Europe is richer, and the trip easier, than it really is.</p>
+    <h3>1 &middot; Knock</h3>
+    <p>You have 12 knocks. Tap a poster and the next person on the street answers that poster's question. You choose where to spend your knocks: ask about every poster, or ask more where the answers disagree.</p>
+    <h3>2 &middot; Read the notes</h3>
+    <div class="legend">
+      <div><span class="note big green"></span><span>The truth is <b>worse</b> than they believed: the poster <b>warns</b> them.</span></div>
+      <div><span class="note big red"></span><span>The truth is <b>better</b> than they believed: the poster <b>backfires</b> and makes leaving look better.</span></div>
+      <div><span class="note big white"></span><span>They knew already, or don't know. Nothing new.</span></div>
+    </div>
+    <h3>3 &middot; Stamp</h3>
+    <p><b>PRINT</b> puts a poster on the walls. <b>SCRAP</b> keeps it off. You can stamp at any time, even without asking anyone.</p>
+    <h3>4 &middot; The whole survey</h3>
+    <p>Then the real survey of 555 homes comes in, and every poster is judged: does it warn more people than it backfires on?</p>
+    <p class="small">The people at the doors are made up. Their answers are drawn from what the real survey found.</p>
+  </div>
+  <button class="btn" id="b-helpback">Back</button>
+</section>
+
+<!-- ABOUT -->
+<section class="screen prose" id="s-about">
+  <h2 style="font-size:34px">About this game</h2>
+  <div class="panel">
+    <p><b>Beber, B. &amp; Scacco, A. (2022).</b> <i>The Myth of the Misinformed Migrant? Survey Insights from Nigeria's Irregular Migration Epicenter.</i> Ruhr Economic Papers No. 957, RWI Essen. <a href="https://doi.org/10.4419/96973121">doi:10.4419/96973121</a></p>
+    <p>Game built from this paper; the paper is the authority where the two disagree.</p>
+    /*__ABOUT__*/
+  </div>
+  <button class="btn" id="b-aboutback">Back</button>
+</section>
+
+</div>
+<script>
+/*__MECHANISM__*/
+</script>
+<script>
+(function () {
+  const $ = s => document.querySelector(s);
+  let g = null, current = 's-start', helpReturn = 's-start', busy = false;
+  const skins = ['#4A2E1F', '#5A3825', '#6B4226', '#3E271A'];
+  const shirts = ['#137C7A', '#1F9D57', '#E5432F', '#161616', '#FFFDF4'];
+
+  function show(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id));
+    if (!['s-help', 's-about'].includes(id)) current = id;
+    window.scrollTo(0, 0);
+  }
+  document.querySelectorAll('[data-help]').forEach(b => b.addEventListener('click', () => { helpReturn = current; show('s-help'); }));
+  document.querySelectorAll('[data-about]').forEach(b => b.addEventListener('click', () => { helpReturn = current; show('s-about'); }));
+  $('#b-helpback').addEventListener('click', () => show(helpReturn));
+  $('#b-aboutback').addEventListener('click', () => show(helpReturn));
+
+  // A person, drawn plainly: head, hair or headwrap, shirt.
+  function personSVG(sex, k, w) {
+    const skin = skins[k % skins.length], shirt = shirts[(k * 3 + 1) % shirts.length];
+    const hair = sex === 'f'
+      ? `<path d="M22 34 Q46 2 70 34 Q72 20 60 14 Q46 4 32 14 Q20 20 22 34Z" fill="${shirts[(k + 2) % 3]}" stroke="#161616" stroke-width="3"/><path d="M60 14 Q74 6 72 20" fill="none" stroke="#161616" stroke-width="3"/>`
+      : `<path d="M25 36 Q26 14 46 13 Q66 14 67 36 Q60 24 46 24 Q32 24 25 36Z" fill="#161616"/>`;
+    return `<svg viewBox="0 0 92 130" width="${w || 92}" aria-hidden="true">
+      <path d="M8 130 Q10 88 46 86 Q82 88 84 130Z" fill="${shirt}" stroke="#161616" stroke-width="3"/>
+      <rect x="38" y="66" width="16" height="22" fill="${skin}" stroke="#161616" stroke-width="3"/>
+      <ellipse cx="46" cy="44" rx="23" ry="27" fill="${skin}" stroke="#161616" stroke-width="3"/>
+      ${hair}
+      <circle cx="38" cy="45" r="2.6" fill="#161616"/><circle cx="54" cy="45" r="2.6" fill="#161616"/>
+      <path d="M38 57 Q46 63 54 57" fill="none" stroke="#161616" stroke-width="2.6" stroke-linecap="round"/>
+    </svg>`;
+  }
+  $('#boss-face').innerHTML = personSVG('f', 5, 64);
+
+  function noteEl(c, fresh) { const s = document.createElement('span'); s.className = 'note ' + c + (fresh ? ' fresh' : ''); return s; }
+
+  // ---------- street ----------
+  function drawKnocks() {
+    const k = $('#knocks'); k.innerHTML = '';
+    for (let i = 0; i < M.CONFIG.knocks; i++) { const d = document.createElement('span'); d.className = 'k' + (i < g.people.length ? ' used' : ''); k.appendChild(d); }
+    const t = document.createElement('span'); t.style.marginLeft = '6px';
+    t.textContent = g.knocksLeft === 1 ? '1 knock left' : g.knocksLeft + ' knocks left'; k.appendChild(t);
+  }
+  function drawPosters(freshId) {
+    const box = $('#posters'); box.innerHTML = '';
+    M.POSTERS.forEach(p => {
+      const b = document.createElement('button'); b.className = 'poster'; b.dataset.id = p.id;
+      b.disabled = g.knocksLeft <= 0;
+      b.setAttribute('aria-label', 'Ask the next person about the ' + p.tag + ' poster');
+      b.innerHTML = `<span class="tag">${p.tag}</span><span class="fact">${p.fact}</span>`;
+      const n = document.createElement('span'); n.className = 'notes';
+      if (!g.notes[p.id].length) n.innerHTML = '<span class="empty">no answers yet</span>';
+      g.notes[p.id].forEach((c, i) => n.appendChild(noteEl(c, p.id === freshId && i === g.notes[p.id].length - 1)));
+      b.appendChild(n);
+      b.addEventListener('click', () => ask(p.id));
+      box.appendChild(b);
+    });
+  }
+  function idleScene() {
+    $('#scene').classList.remove('open'); $('#nameplate').hidden = true;
+    $('#you').innerHTML = g.knocksLeft > 0
+      ? (g.people.length ? '<b>Next gate.</b> Tap a poster to ask about it.' : '<b>Tap a poster below</b> to ask the person at this gate about it.')
+      : '<b>That was your last knock.</b> Time to stamp the posters.';
+    $('#they').textContent = '';
+  }
+  function ask(id) {
+    if (busy || g.knocksLeft <= 0) return;
+    busy = true;
+    const person = M.knock(g, id), p = M.poster(id);
+    const sc = $('#scene'); sc.classList.remove('open'); void sc.offsetWidth;
+    $('#who').innerHTML = personSVG(person.sex, person.n + person.name.length);
+    $('#nameplate').textContent = person.name + ', ' + person.age; $('#nameplate').hidden = false;
+    $('#you').innerHTML = '<b>You:</b> ' + p.q;
+    $('#they').innerHTML = person.say + (person.aside ? `<span class="aside">(${person.aside})</span>` : '');
+    requestAnimationFrame(() => sc.classList.add('open'));
+    $('#notecap').innerHTML = '';
+    setTimeout(() => {
+      const cap = $('#notecap'); cap.innerHTML = '';
+      const n = noteEl(person.colour, true); n.classList.add('big'); cap.appendChild(n);
+      const t = document.createElement('span'); t.innerHTML = `<b>${p.tag}:</b> ${person.note}`; cap.appendChild(t);
+      drawPosters(id); drawKnocks();
+      if (g.knocksLeft <= 0) { $('#b-tostamp').classList.add('pulse'); $('#b-tostamp').textContent = 'Stamp the posters'; }
+      busy = false;
+    }, 900);
+  }
+  function startStreet() {
+    g = M.newGame(); busy = false;
+    $('#b-tostamp').classList.remove('pulse'); $('#b-tostamp').textContent = 'Done asking: stamp the posters';
+    $('#notecap').innerHTML = '<span class="small">Each answer sticks a note on the poster you asked about.</span>';
+    drawKnocks(); drawPosters(); idleScene(); show('s-street');
+  }
+  $('#b-start').addEventListener('click', () => show('s-brief'));
+  $('#b-street').addEventListener('click', startStreet);
+  $('#b-tostamp').addEventListener('click', () => { if (!busy) { drawStamps(); show('s-stamp'); } });
+
+  // ---------- stamp ----------
+  function drawStamps() {
+    const box = $('#slist'); box.innerHTML = '';
+    M.POSTERS.forEach(p => {
+      const card = document.createElement('div'); card.className = 'poster';
+      const left = document.createElement('div');
+      left.innerHTML = `<span class="tag">${p.tag}</span><span class="fact" style="display:block">${p.fact}</span>`;
+      const n = document.createElement('span'); n.className = 'notes';
+      if (!g.notes[p.id].length) n.innerHTML = '<span class="empty">nobody asked</span>';
+      g.notes[p.id].forEach(c => n.appendChild(noteEl(c)));
+      left.appendChild(n);
+      const st = document.createElement('button'); st.className = 'stamp ' + g.stamps[p.id]; st.textContent = g.stamps[p.id].toUpperCase();
+      st.setAttribute('aria-label', p.tag + ': ' + g.stamps[p.id] + '. Tap to change.');
+      st.addEventListener('click', () => {
+        const next = g.stamps[p.id] === 'print' ? 'scrap' : 'print'; M.setStamp(g, p.id, next);
+        st.className = 'stamp ' + next; st.textContent = next.toUpperCase(); st.setAttribute('aria-label', p.tag + ': ' + next + '. Tap to change.');
+      });
+      card.appendChild(left); card.appendChild(st); box.appendChild(card);
+    });
+    $('#b-back').hidden = g.knocksLeft <= 0;
+    $('#b-back').textContent = `Back to the street (${g.knocksLeft} ${g.knocksLeft === 1 ? 'knock' : 'knocks'} left)`;
+  }
+  $('#b-back').addEventListener('click', () => { drawKnocks(); drawPosters(); idleScene(); show('s-street'); });
+
+  // ---------- reveal ----------
+  $('#b-send').addEventListener('click', () => {
+    const s = M.send(g), box = $('#results'); box.innerHTML = ''; $('#b-end').hidden = true;
+    show('s-reveal');
+    s.results.forEach((r, i) => {
+      const p = M.poster(r.id), mine = g.notes[r.id];
+      const el = document.createElement('div'); el.className = 'panel res';
+      const cls = r.right ? 'ok' : r.wash ? 'meh' : 'no';
+      el.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+          <span class="tag disp" style="font-size:22px">${p.tag}</span>
+          <span class="stamp ${r.stamp}" style="width:84px;height:40px;font-size:20px;display:inline-flex;align-items:center;justify-content:center;cursor:default">${r.stamp.toUpperCase()}</span></div>
+        <div class="cityrow strip"><div class="g"></div><div class="w"></div><div class="r"></div></div>
+        <p class="line">${r.line}</p>
+        <div class="call ${cls}">${r.call}</div>
+        <div class="yours"></div>`;
+      const y = el.querySelector('.yours');
+      if (mine.length) { y.append('Your street: '); mine.forEach(c => y.appendChild(noteEl(c))); }
+      else y.textContent = 'Nobody on your street was asked about this one.';
+      box.appendChild(el);
+      setTimeout(() => {
+        el.classList.add('in');
+        const [gg, ww, rr] = el.querySelectorAll('.strip > div');
+        setTimeout(() => { gg.style.width = r.warn + '%'; ww.style.width = r.knew + '%'; rr.style.width = r.back + '%';
+          if (!r.back) rr.style.display = 'none'; if (!r.warn) gg.style.display = 'none'; }, 60);
+        if (i === s.results.length - 1) setTimeout(() => { $('#b-end').hidden = false; }, 700);
+      }, 350 + i * 650);
+    });
+  });
+
+  // ---------- end ----------
+  $('#b-end').addEventListener('click', () => {
+    const v = M.verdict(g);
+    $('#v-you').textContent = v.you; $('#v-paper').textContent = v.paper; $('#v-means').textContent = v.means;
+    const f = $('#facts'); f.innerHTML = ''; M.ALSO.forEach(t => { const d = document.createElement('div'); d.className = 'fact-note'; d.textContent = t; f.appendChild(d); });
+    show('s-end');
+  });
+  $('#b-again').addEventListener('click', startStreet);
+})();
+</script>
+</body>
+</html>

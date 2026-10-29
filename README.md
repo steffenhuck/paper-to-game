@@ -17,6 +17,7 @@ How it works is in two documents. [`SKILL.md`](SKILL.md) finds the game: a desig
 | **The Mixed Street** | Habyarimana, Humphreys, Posner & Weinstein (2007), *American Political Science Review* 101:709–725. Why does ethnic diversity undermine public goods? Experimental games in Kampala. | [play](https://steffenhuck.github.io/paper-to-game/kampala/the-mixed-street.html) · [memo](kampala/memo.md) |
 | **The Original or the Copy** | Hutter & Kriesi (2022), *Journal of Ethnic and Migration Studies* 48:341–365. Politicising immigration in times of crisis: who turns it into a fight, and what copying the radical right does. | [play](https://steffenhuck.github.io/paper-to-game/original/the-original-or-the-copy.html) · [memo](original/memo.md) |
 | **Say It Plainly** | Rauh (2023), *Journal of European Integration* 45:683–701. How readable are the European Commission's press releases, and did they get clearer as the EU became contested? | [play](https://steffenhuck.github.io/paper-to-game/rauh/say-it-plainly.html) · [memo](rauh/memo.md) |
+| **Ask First** | Beber & Scacco (2022), Ruhr Economic Papers 957. The myth of the misinformed migrant: what young people in Benin City, Nigeria, actually believe about Europe and the road there. | [play](https://steffenhuck.github.io/paper-to-game/benin/ask-first.html) · [memo](benin/memo.md) |
 
 ## Folder convention
 
