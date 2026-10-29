@@ -33,6 +33,8 @@ Calibration is for the author, not the player. The player sees the story (SKILL.
 
 Every tunable scientific parameter and every gameplay parameter sits in one `CONFIG` block at the top of `mechanism.js`, each line tagged with its source or its design rationale (`// Table 4, median`, `// eq. 7`, `// read off Fig. 2b`, `// our choice: clock compression`); mathematical constants, array indices and layout dimensions need not.
 
+Numbers read off a figure, and numbers taken from a scanned or OCR'd PDF rather than typeset text, are tagged as such in the config block, and the author-note says so; for a paper older than about 1990, look for a transcription before trusting a scan, because OCR misreads digits and the calibration check would then test the mechanism against the wrong numbers.
+
 The calibration plan says what the headless check will verify: against the paper's cited equations, known solutions or reported estimates, with explicit tolerances. Tests of our own construction alone establish nothing. Exercise several random seeds and the boundary actions where they matter. If the check fails, fix the mechanism or revise the memo; never build on a mechanism that misstates the paper at its declared kind.
 
 Rounded, qualitative numbers on screen are not a calibration failure. The mechanism carries 26.7; the screen says "about the same as an academic abstract". The config block is where the author finds the 26.7.
