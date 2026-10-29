@@ -1,28 +1,29 @@
-# Generates the-original-or-the-copy.html from template.html and mechanism.js (the single source of truth),
-# then verifies byte for byte that the embedded mechanism is the file the fidelity check ran against.
-import sys
+# Generates on-the-record.html from template.html, mechanism.js (the single source of truth) and the Bangers font,
+# then verifies byte for byte that the embedded mechanism is the file calibration.js ran against.
+import base64, sys
 mech = open('mechanism.js', encoding='utf-8').read()
+font = base64.b64encode(open('bangers-latin.woff2', 'rb').read()).decode('ascii')
 about = """
-<h3>The paper in one paragraph</h3>
-<p>Hutter and Kriesi coded about 100,000 statements by parties in newspaper coverage of 61 national election campaigns in 15 European countries, from the early 2000s to 2018. They ask three questions. Did the 2015 migration crisis make immigration a bigger fight? Is the radical right still the party driving it? And when does the radical right profit at the ballot box?</p>
-<h3>What it found</h3>
-<p><b>The crisis raised the fight everywhere, but did not decide where.</b> After 2015 immigration became one of the most fought-over issues across Europe. Yet the crisis was "neither a necessary nor a sufficient condition". Greece, the hardest-hit port of entry, hardly argued about it, because the bailout crowded out everything else. Switzerland, the Netherlands and Poland, which were hit less or not at all, fought hard. Partisan mobilisation decided.</p>
-<p><b>The radical right drives it.</b> It is the main party putting immigration into the debate, against immigration. When it does, every other party talks about immigration more, especially during the crisis, but other parties do not shift their positions towards it.</p>
-<p><b>The centre-right's strategy matters, through an interaction.</b> When the main centre-right party gave immigration more attention <i>and</i> moved towards the radical right's position, the radical right gained. Moving without more attention made no difference, and neither did more attention combined with a move the other way. The paper quotes Jean-Marie Le Pen: "the French choose the original, not the copy." The paper also finds that a rise in refugee numbers helped new radical-right parties much more than established ones. That result is not in the game.</p>
-<h3>Fidelity</h3>
-<p><b>Part 1 is statistical, and shows observations.</b> Each bar is the paper's own measure for that country's first election after the crisis, read off its Figure 3 (to about ±0.3). The measure is salience × polarisation of immigration in campaign coverage. The dashed line is the paper's benchmark: the mean plus one standard deviation over all 17 issues. The hit levels and the reasons are paraphrased from the paper's discussion (p. 350). The paper counts Fidesz and PiS as radical right, and says this is a contested choice. <b>It demonstrates</b> where immigration was and was not fought over. <b>It assumes</b> our read-offs. The split between fight and no fight is the same for any line from 0.6 to 5.7. <b>The paper establishes</b> these measurements from two newspapers per country.</p>
-<p><b>Part 2 is illustrative, built on the paper's estimate.</b> The radical right's change in vote is Table 3, Model 3, exactly: 31.92 × (change in centre-right attention) − 0.757 × (change in its position) − 33.05 × (the two multiplied). Attention is the share of the party's campaign statements on immigration. Position runs from −1 (fully against) to +1 (fully for). <b>It demonstrates</b> what that estimate implies if each choice were a lever. <b>It assumes</b> that the pattern is causal, that the straight-line model holds for the steps offered, and a starting vote of 12%, which is ours and for display only. <b>The paper establishes</b> an association across 37 elections with country fixed effects, not an experiment, and its uncertainty is wide. The "move more open" result rests on the interaction term alone (t = −2.18). A simpler model without it (Model 2) would show talking more always helping the radical right, by about 2 points with a move away from them. The "copy" result holds in both models.</p>
-<h3>Our choices</h3>
-<p>The 1-point aim is ours. Any limit from 0.8 to 3.1 gives the same wins and losses. There is no "talk less" option. The paper notes that in the crisis ignoring immigration "was hardly an option" for mainstream parties, and its claim concerns a centre-right that does or does not pay <i>increasing</i> attention. Stretching the straight line to big cuts in attention would claim more than the paper does. The tougher and more-open steps (±1) are the two lines the paper plots in its Figure 5. Campaigns 2 and 3 each fix one dial. These are our scenarios, not findings. We show eight of the 15 countries: the ones whose crisis "hit" the paper describes.</p>
-<h3>What is cut</h3>
-<p>Salience and polarisation shown separately; regional trends; the before-and-after comparison by country; the party-level regressions (Tables 1–2), which are summarised above; refugee inflows and the upstart-versus-established result (Table 3, Model 1).</p>
+<h3>What kind of game this is</h3>
+<p><b>A toy built on the paper's estimate.</b> The rule that moves the balloon is the paper's Table 3 (Model 3): across 37 elections in 15 European countries, the change in the radical right's vote, set against how much more the main centre-right party talked about immigration and which way its position moved. The game treats that pattern as if it were a lever you pull. The paper's data are not an experiment.</p>
+<p><b>It demonstrates</b> what that estimate implies, answer by answer: talking more about immigration while sounding like the radical right goes with a bigger radical right; talking more on your old line goes with a somewhat bigger one; talking more against them goes with no change; moving position without talking more goes with no change.</p>
+<p><b>It assumes</b>, under this game's own rules: that each answer is worth 3.5 points of your campaign's attention to immigration (six of six reaches the edge of the paper's range); that "like them" and "against them" are the full one-point position shifts drawn in the paper's Figure 5; that the estimate can be read after each answer as if the campaign ended there; that the 1-point line, the questions and the crisis deck are ours. With smaller position shifts (the distances between the party groups' average positions in the paper's Table 2), "like them" is still worst and the forced crisis answers "against them" still stay under the line, but taking them on every single day would hand them about two points. That "against them" is harmless rests on the paper's interaction term, estimated from 37 elections (t = &minus;2.18); without it, talking about immigration on any line helps them.</p>
+<p><b>The paper establishes</b> the association with country fixed effects, and reads it as the centre-right's accommodating strategy "contributing" to the radical right's success, provided the centre-right gives immigration increasing attention. It also shows that the radical right's own campaigning raises how much every other party talks about immigration, more so during the crisis, without moving their positions. That is why some days in the crisis every question is about immigration.</p>
+<h3>How the paper measured it</h3>
+<p>Two newspapers per country, two months before each national election, 2003&ndash;2018. Every sentence in which a party says something about an issue was coded as <i>who</i>, <i>which issue</i>, <i>which way</i>, about 100,000 in all. A party's attention to immigration is the share of its statements on it; its position is their average direction. Your answers are scored the same way.</p>
+<h3>Also in the paper, not in the game</h3>
+<p>The refugee crisis was neither necessary nor sufficient for a fight over immigration: Greece, the hardest-hit port of entry, barely argued about it in 2015, while Switzerland and Poland, hit less or not at all, did. Refugee arrivals helped radical-right upstarts much more than parties already established. The radical right is the main force putting immigration into campaigns everywhere.</p>
+<h3>What is cut or changed</h3>
+<p>Countries and real parties (yours is unnamed); talking <i>less</i> about immigration than last time (each campaign starts from zero immigration headlines); the previous-vote and country terms of the model (the balloon shows only the part of their gain the estimate attributes to your campaign; the 12% start is for display). The questions, answers, headlines and the radical right's lines are ours.</p>
 <h3>For the author</h3>
-<p>See the author note and memo in the repository. This game has had the builder's review only. It has not been tested with real players.</p>
+<p>Every number is in the <code>CONFIG</code> block at the top of the mechanism, tagged with its source. This game has had the builder's review only; it has not been tested with real players.</p>
+<p class="cite">Headline font: Bangers by Vernon Adams, SIL Open Font License.</p>
 """
 t = open('template.html', encoding='utf-8').read()
-assert t.count('/*__MECHANISM__*/') == 1 and t.count('/*__ABOUT__*/') == 1
-out = t.replace('/*__MECHANISM__*/', mech).replace('/*__ABOUT__*/', about)
-name = 'the-original-or-the-copy.html'
+for k in ('/*__MECHANISM__*/', '/*__ABOUT__*/', '/*__FONT__*/'):
+    assert t.count(k) == 1, k
+out = t.replace('/*__FONT__*/', font).replace('/*__ABOUT__*/', about).replace('/*__MECHANISM__*/', mech)
+name = 'on-the-record.html'
 open(name, 'w', encoding='utf-8').write(out)
 built = open(name, encoding='utf-8').read()
 if mech not in built:
