@@ -1,0 +1,62 @@
+== 1. ERC reconstruction against Supp. Table 2 col. 1 and p. 9 (Step 1 project score) ==
+  seed 11: reviews 155723, mean 3.305, SD 0.984, P(5.0) 0.042
+  seed 22: reviews 155725, mean 3.321, SD 0.986, P(5.0) 0.043
+  seed 33: reviews 155833, mean 3.304, SD 0.989, P(5.0) 0.043
+  seed 44: reviews 155625, mean 3.318, SD 0.986, P(5.0) 0.043
+  seed 55: reviews 155772, mean 3.321, SD 0.985, P(5.0) 0.042
+PASS reviews ≈ 155,000 (paper: 153,736)  — 155736
+PASS mean score 3.29 ± 0.05  — 3.314
+PASS SD of score 0.99 ± 0.05  — 0.986
+PASS P(5.0) 0.047 ± 0.015  — 0.042
+  two-way FE (eq. 1) estimates: 0.185, 0.145, 0.179, 0.165, 0.159
+PASS eq. 1 recovers 0.164 within the paper CI [0.135, 0.193] on every seed
+PASS mean eq. 1 estimate within ±0.01 of 0.164  — 0.167
+  same-proposal test: 0.196 [0.170, 0.222]; 0.147 [0.119, 0.175]; 0.174 [0.154, 0.194]; 0.168 [0.130, 0.206]; 0.160 [0.138, 0.181]
+  same-judge test:    0.183 [0.134, 0.232]; 0.159 [0.113, 0.204]; 0.168 [0.132, 0.204]; 0.177 [0.144, 0.210]; 0.151 [0.117, 0.186]
+PASS same-proposal test: still there on every seed; its 99% range covers 0.164 on ≥ 4 of 5
+PASS same-judge test: still there on every seed; its 99% range covers 0.164 on ≥ 4 of 5
+  the game's ERC case (seed 12): eq. 1 0.166, headline 0.157, same proposal 0.162 [0.134, 0.190], same judge 0.163 [0.127, 0.199], spread ramp
+PASS the game's ERC case: eq. 1 within ±0.005 of 0.164, both tests still there and covering 0.164, spread a ramp
+
+== 2. ERC tails against Fig. 3 / pp. 9-10 ==
+  ΔP(5.0): 0.021, 0.017, 0.022, 0.032, 0.023   (paper +0.010, CI [0.002, 0.017])
+  ΔP(1.0): -0.006, -0.008, -0.010, -0.011, -0.006   (paper −0.006, CI [−0.011, −0.001])
+PASS mean ΔP(5.0) positive and within 0.015 of the paper (+0.010; known miss: the paper CI ends at 0.017)  — 0.023  — OUTSIDE the paper CI: the reconstruction puts more of the bonus on 5.0 than the data do
+PASS mean ΔP(1.0) inside the paper CI  — -0.008
+  spread seed 11: ramp  [-1.9 -4.6 -2.3 6.4 2.4] p.p.
+  spread seed 22: ramp  [-1.5 -2.2 -3.7 5.7 1.8] p.p.
+  spread seed 33: ramp  [-1.9 -2.6 -3.6 5.9 2.1] p.p.
+  spread seed 44: ramp  [-1.7 -3.0 -2.8 4.3 3.2] p.p.
+  spread seed 55: ramp  [-1.7 -2.9 -3.1 5.6 2.1] p.p.
+PASS ERC spread reads as a ramp (top marks up, low marks not) on every seed
+
+== 3. Training worlds: each test gives its designed answer, every seed ==
+PASS quality: [same proposal, same judge, spread] = [gone, still, flat] on ≥ 28 of 30 raw draws (the game re-draws the rest)  — 30/30
+PASS lenient: [same proposal, same judge, spread] = [still, gone, ramp] on ≥ 28 of 30 raw draws (the game re-draws the rest)  — 30/30
+PASS info: [same proposal, same judge, spread] = [still, still, smile] on ≥ 28 of 30 raw draws (the game re-draws the rest)  — 30/30
+PASS favour: [same proposal, same judge, spread] = [still, still, ramp] on ≥ 28 of 30 raw draws (the game re-draws the rest)  — 30/30
+  headline gaps by world: quality 0.220–0.328; lenient 0.227–0.331; info 0.188–0.283; favour 0.229–0.327
+PASS all training headlines in 0.15–0.5 (the headline does not reveal the truth on its own)
+
+== 4. Robustness of the central discovery ==
+PASS info with {"infoSigmaHome":0.15}: smile on ≥ 8 of 10 seeds  — 10/10
+PASS info with {"infoSigmaOther":1.5}: smile on ≥ 8 of 10 seeds  — 10/10
+PASS info with {"infoHomeQuality":0.15}: smile on ≥ 8 of 10 seeds  — 10/10
+PASS info with {"infoNoise":0.3}: smile on ≥ 8 of 10 seeds  — 10/10
+PASS favour with {"favour":0.45}: no smile on ≥ 8 of 10 seeds  — 10/10
+PASS favour with {"favour":0.2}: no smile on ≥ 8 of 10 seeds  — 10/10
+PASS lenient with {"effect":0.6}: no smile on ≥ 8 of 10 seeds  — 10/10
+PASS lenient with {"effect":0.25}: no smile on ≥ 8 of 10 seeds  — 10/10
+PASS quality with {"effect":0.6}: no smile on ≥ 8 of 10 seeds  — 10/10
+  with sorting: naive gap 0.573, eq. 1 estimate 0.184
+PASS eq. 1 stays within the paper CI under sorting while the naive gap moves well above it  — naive 0.573 vs eq. 1 0.184
+
+== 5. Gate cross-check (memo only, not displayed) ==
+  top 32% by average mark: with a matched reviewer 32.7%, without 29.8%: +2.9 p.p. for one matched reviewer among ~4.
+  Paper (correlational, Table 1): +1.7 p.p. chance of an A per extra same-country/citizenship panel member (of 15.1), assigned or not.
+
+== 6. The bet ==
+PASS bet key: the 0.9 p.p. gap falls in "About 1 point"
+PASS a game has 3 training cases drawn without repeats, then the ERC
+
+ALL PASS
