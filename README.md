@@ -4,7 +4,7 @@ Send me a paper; you get back a playable browser game built from it.
 
 The game is a beta: one self-contained HTML file, playable on a phone, with every number it uses sitting in a commented config block at the top of the source, tagged with the table, figure or equation it came from. You tweak it from there. The paper stays the authority wherever the two disagree.
 
-How it works is in [`SKILL.md`](SKILL.md): a design memo first (what the paper hands over, what it overturns, where the player sits, what is cut, what diverged), then the build, then a headless check that the game's hidden mechanism reproduces the paper's reported numbers.
+How it works is in two documents. [`SKILL.md`](SKILL.md) finds the game: a design memo first (what the paper hands over, who lives in it, where the player sits, what the last games did and how this one differs, what it looks like). [`build.md`](build.md) builds it: the mechanism in one file, a headless check that it is calibrated to the paper's reported numbers, the claim boundaries, and the commit.
 
 ## Games
 
@@ -17,7 +17,6 @@ How it works is in [`SKILL.md`](SKILL.md): a design memo first (what the paper h
 | **The Mixed Street** | Habyarimana, Humphreys, Posner & Weinstein (2007), *American Political Science Review* 101:709–725. Why does ethnic diversity undermine public goods? Experimental games in Kampala. | [play](https://steffenhuck.github.io/paper-to-game/kampala/the-mixed-street.html) · [memo](kampala/memo.md) |
 | **The Original or the Copy** | Hutter & Kriesi (2022), *Journal of Ethnic and Migration Studies* 48:341–365. Politicising immigration in times of crisis: who turns it into a fight, and what copying the radical right does. | [play](https://steffenhuck.github.io/paper-to-game/original/the-original-or-the-copy.html) · [memo](original/memo.md) |
 | **Say It Plainly** | Rauh (2023), *Journal of European Integration* 45:683–701. How readable are the European Commission's press releases, and did they get clearer as the EU became contested? | [play](https://steffenhuck.github.io/paper-to-game/rauh/say-it-plainly.html) · [memo](rauh/memo.md) |
-| **One of Us** | Fuchs-Schündeln & Holub, *Homophily in Grant Evaluations* (manuscript, WZB / Goethe University Frankfurt). Do ERC judges mark up applicants from their own country, and how can you tell bias from better proposals, generous judges or inside knowledge? | [play](https://steffenhuck.github.io/paper-to-game/homophily/one-of-us.html) · [memo](homophily/memo.md) |
 
 ## Folder convention
 
