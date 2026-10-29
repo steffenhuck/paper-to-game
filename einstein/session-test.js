@@ -1,5 +1,5 @@
 // Browser session test (build step 6): drives the-light-post.html at 380 px through a full session:
-// the test range (two boosters first, then three, five, four), help opened mid-range and returned from, a first-timer's order
+// the test range (two boosters first, a slide to four previewed, then three, five, four launched), help opened mid-range and returned from, a first-timer's order
 // book (spread evenly), the verdict, a new order book played well, the long haul, About.
 // Run: node session-test.js [outdir] > session-log.txt   (needs playwright)
 const { chromium } = require('playwright');
@@ -20,20 +20,22 @@ const D = (process.argv[2] || __dirname) + '/';
   await p.click('#b-launch'); await p.waitForTimeout(700); await shot('range-midflight', false); await idle();
   console.log('LAUNCH 2: ' + await txt('#f-stamp') + ' | ' + await txt('#f-say') + ' | home ' + await txt('#rd-home') + ' | flowers ' + await txt('#rd-fl')); await decimals(); await shot('range-2');
   await p.click('#s-fly [data-help]'); console.log('  help on:', await on('#s-help')); await shot('help'); await p.click('#b-help-back'); console.log('  back on range:', await on('#s-fly'), '| stamp kept:', await txt('#f-stamp'));
-  for (const n of [3, 5, 4]) { while (+(await txt('#k-n')) < n) await p.click('#k-plus'); while (+(await txt('#k-n')) > n) await p.click('#k-minus');
+  const slide = async n => { await p.$eval('#k-range', (e, v) => { e.value = v; e.dispatchEvent(new Event('input', { bubbles: true })); }, String(n)); await p.waitForTimeout(150); };
+  await slide(4); console.log('  preview at 4: till ' + await txt('#till') + ' | home ' + await txt('#rd-home') + ' | flowers ' + await txt('#rd-fl')); await decimals(); await shot('range-preview-4'); await slide(2);
+  for (const n of [3, 5, 4]) { await slide(n);
     await p.click('#b-launch'); await p.waitForTimeout(300); await idle(); console.log(`LAUNCH ${n}: ` + await txt('#f-stamp') + ' | ' + await txt('#f-say')); await decimals(); }
   await shot('range-log');
   console.log('LOG: ' + await txt('#log'));
   await p.click('#b-tobook'); console.log('book on:', await on('#s-book')); await shot('book-empty');
   // a first-timer spreads boosters fairly evenly: 3 each, two left over
   const set = async alloc => { for (let i = 0; i < alloc.length; i++) for (let k = 0; k < alloc[i]; k++) await p.click(`#cards .key[data-i="${i}"][data-d="1"]`); };
-  await set([3, 3, 3, 3]); await p.click('#cards .key[data-i="0"][data-d="1"]'); console.log('  crate after 13 taps: ' + await txt('#crate .t')); await decimals(); await shot('book-set');
+  await set([3, 3, 3, 3]); await decimals(); await shot('book-set');
   await p.click('#b-log'); console.log('  log page on:', await on('#s-log')); await p.click('#b-log-back'); console.log('  back on book:', await on('#s-book'));
   await p.click('#b-launchall');
   for (let i = 0; i < 4; i++) { await idle(); console.log(`  rocket ${i + 1}: ` + await txt('#f-name') + ' | ' + await txt('#f-stamp') + ' | ' + await txt('#f-say')); if (i === 1) await shot('flight-olten'); await p.click('#b-nextrocket'); await p.waitForTimeout(200); }
   console.log('END on:', await on('#s-end')); console.log('VERDICT: ' + await txt('#verdict')); console.log('TALLY: ' + await txt('#tally')); await decimals(); await shot('end-first');
   // new order book (B), played well: 3-0-2-6
-  await p.click('#b-again'); console.log('book B:', await txt('#cards')); await set([3, 0, 2, 6]); await shot('book-b-set');
+  await p.click('#b-again'); console.log('book B:', await txt('#cards')); await set([4, 3, 0, 6]); await shot('book-b-set');
   await p.click('#b-launchall');
   for (let i = 0; i < 4; i++) { await idle(); console.log(`  rocket ${i + 1}: ` + await txt('#f-name') + ' | ' + await txt('#f-stamp') + ' | ' + await txt('#f-say')); if (i === 1) await shot('flight-refused'); if (i === 3) await shot('flight-zug'); await p.click('#b-nextrocket'); await p.waitForTimeout(200); }
   console.log('VERDICT B: ' + await txt('#verdict')); await shot('end');

@@ -1,47 +1,30 @@
---- 1. §5 composition of velocities (p. 12) ---
-PASS half on half = 4/5 c: 0.8
-PASS "the velocity of light c cannot be altered by composition with a velocity less than that of light"
-PASS two sub-light velocities always compose below c, and match the paper's κ, λ form (10,000 random pairs; max 0.999996)
-PASS v and w "enter ... in a symmetrical manner"
-PASS the boosts "form a group": a then b boosters = a+b boosters (max deviation 1.1e-16)
-PASS speedAfter(n) = tanh(n artanh w), independent closed form
-    boosters → speed: 0:0.00000  1:0.50000  2:0.80000  3:0.92857  4:0.97561  5:0.99180  6:0.99726
-PASS each booster adds speed, none reaches c
-PASS each booster adds less speed than the one before
---- 2. §4 the moving clock (p. 10) ---
-PASS τ = t√(1−v²/c²) agrees with the §3 transformation τ = β(t − vx/c²) at x = vt (max deviation 5.1e-15)
-PASS slow speeds: lag ≈ ½ t v²/c² ("neglecting magnitudes of fourth and higher order"): 0.050001 vs 0.050000
-    boosters → clock slowing factor: 0:1.000  1:1.155  2:1.667  3:2.694  4:4.556  5:7.826  6:13.519
-PASS each booster slows the cargo clock MORE than the one before (the discovery: speed gains shrink, clock gains grow)
---- 3. fly(): arrivals and the light limit ---
-PASS two boosters to 4 ly: 5 years at home, 3 on the flowers (exact)
-PASS no rocket ever arrives as early as light (5,000 random flights)
-PASS BRIG: impossible for every booster count; refusing it scores
-PASS CHUR: impossible for every booster count; refusing it scores
-PASS 1,000 ly with flowers fresh for 1 year: possible with 14 boosters (cargo clock 0.914 y, home 1000.0 y)
---- 4. display words agree with judgement ---
-PASS fmtYears never shows more than the truth (beyond a rounded day) and is within a month below it, no decimals, no "30 days"/"12 months" (20,000 values)
-PASS for every order and booster count, the shown times sit on the same side of the limit as the judged ones
---- 5. balance (designer's choices) ---
-    test range needs 4 — two boosters: LATE_WILTED
-PASS test range: the "two halves" launch is late and wilted; four boosters deliver
-PASS book A: minimum boosters 2+4+0+5 = budget 11
-    book A: 1085 legal allocations; perfect: 2-4-0-5; mean score 1.16
-PASS book A: few perfect plans (1)
-    book A: Newtonian plan 2-0-4-0 → playable 2-0-4-0 scores 1/4 (DELIVERED, REFUSED, LATE, REFUSED)
-PASS book A: a player who believes speeds add scores at most 2 of 4
-PASS book A: all boosters on the farthest order scores ≤ 2
-PASS book B: minimum boosters 3+0+2+6 = budget 11
-    book B: 1085 legal allocations; perfect: 3-0-2-6; mean score 1.22
-PASS book B: few perfect plans (1)
-    book B: Newtonian plan 4-3-3-0 → playable 4-3-3-0 scores 2/4 (DELIVERED, LATE, DELIVERED, REFUSED)
-PASS book B: a player who believes speeds add scores at most 2 of 4
-PASS book B: all boosters on the farthest order scores ≤ 2
-PASS long haul needs all six boosters
---- 6. robustness: the discoveries do not depend on the booster size w ---
-PASS w = 0.3c: never reaches c; speed gains shrink; clock-slowing gains grow; two boosters < 2w
-PASS w = 0.4c: never reaches c; speed gains shrink; clock-slowing gains grow; two boosters < 2w
-PASS w = 0.6c: never reaches c; speed gains shrink; clock-slowing gains grow; two boosters < 2w
-PASS w = 0.7c: never reaches c; speed gains shrink; clock-slowing gains grow; two boosters < 2w
-
-ALL PASS, 32 checks.
+ok   §5: half + half = 0.8c  [0.8]
+ok   §5: 0.8c + 0.5c = 13/14 c  [0.9285714285714287]
+ok   §5: c + w = c (light is light)  [1]
+ok   §5: symmetric in v, w
+ok   §5: twelve boosters still below c  [0.9999962366542351]
+ok   §5 group: (a∘b)∘c = a∘(b∘c)
+ok   §4: rate at 0.6c = 0.8
+ok   §4: rate at 0.8c = 0.6
+ok   §4: rate at 0 = 1
+ok   §4: first-order lag ½ t v²  [0.00005000125006249245]
+ok   §10: W at 0.6c = 0.25 mc²
+ok   §10: W at 0.8c = 2/3 mc²
+ok   §10: W at 0.999c > 20 mc²  [21.36627204212937]
+ok   §10: W is ½ m v² at low v, to first order  [0.000050003750312610507]
+ok   fuel: cost rises with every booster
+ok   book A: best counts all different (3,4,0,5)
+ok   book A: exactly one order to refuse
+ok   book A THUN: best is unique by ≥ 4 francs  [7.0]
+ok   book A OLTEN: best is unique by ≥ 4 francs  [13.5]
+ok   book A SION: best is unique by ≥ 4 francs  [10.6]
+ok   book B: best counts all different (4,3,0,6)
+ok   book B: exactly one order to refuse
+ok   book B AARAU: best is unique by ≥ 4 francs  [15.4]
+ok   book B CHUR: best is unique by ≥ 4 francs  [10.5]
+ok   book B ZUG: best is unique by ≥ 4 francs  [41.3]
+ok   range: best count is 4
+ok   range: two boosters lose money (the natural first try)
+ok   pattern: freshness-buyer never wants fewer boosters than speed-buyer (320 price/fee/distance cases)
+ok   pattern: for a freshness-buyer, farther stars want at least as many boosters (keep scaled with distance)
+29 passed, 0 failed

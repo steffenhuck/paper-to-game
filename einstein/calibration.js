@@ -1,85 +1,64 @@
-// The Light Post — calibration check (build step 1). Runs against mechanism.js, the only copy of the mechanism.
-// Checks the game's arithmetic against the paper's own equations and limiting cases, then the designer's choices.
-// Run: node calibration.js > calibration-result.txt
+// Calibration check for The Light Post: the mechanism against Einstein (1905), §4, §5 and §10, with explicit tolerances;
+// then the robustness of the game's pattern to the game's own prices. Run: node calibration.js
 const M = require('./mechanism.js');
-const { CONFIG, compose, speedAfter, clockRate, fly, minBoosts, runBook, fmtYears } = M;
-let pass = 0, fail = 0;
-const ok = (cond, msg) => { console.log((cond ? 'PASS ' : 'FAIL ') + msg); cond ? pass++ : fail++; };
+const { CONFIG, compose, speedAfter, clockRate, energy, fuelCost, fly, best } = M;
+let pass = 0, fail = 0; const out = [];
+function check(name, ok, detail) { (ok ? pass++ : fail++); out.push((ok ? 'ok   ' : 'FAIL ') + name + (detail ? '  [' + detail + ']' : '')); }
 const near = (a, b, tol) => Math.abs(a - b) <= tol;
-const rnd = (seed => () => (seed = (seed * 16807) % 2147483647) / 2147483647);
 
-console.log('--- 1. §5 composition of velocities (p. 12) ---');
-ok(near(compose(0.5, 0.5), 0.8, 1e-12), 'half on half = 4/5 c: ' + compose(0.5, 0.5));
-ok(near(compose(1, 0.3), 1, 1e-12) && near(compose(0.7, 1), 1, 1e-12), '"the velocity of light c cannot be altered by composition with a velocity less than that of light"');
-{ const r = rnd(7); let worst = 0, sym = 0;
-  for (let i = 0; i < 10000; i++) { const v = r() * 0.999, w = r() * 0.999; const V = compose(v, w); worst = Math.max(worst, V); sym = Math.max(sym, Math.abs(V - compose(w, v)));
-    // the paper's κ, λ form: v = c − κ, w = c − λ  →  V = c (2c − κ − λ)/(2c − κ − λ + κλ/c)
-    const k = 1 - v, l = 1 - w; if (!near(V, (2 - k - l) / (2 - k - l + k * l), 1e-12)) { worst = 9; break; } }
-  ok(worst < 1, 'two sub-light velocities always compose below c, and match the paper\'s κ, λ form (10,000 random pairs; max ' + worst.toFixed(6) + ')');
-  ok(sym < 1e-12, 'v and w "enter ... in a symmetrical manner"'); }
-{ // group property: n boosters of w equal one boost of speedAfter(n) — composing in any grouping gives the same speed
-  let dev = 0; for (let a = 0; a <= 6; a++) for (let b = 0; a + b <= 6; b++) dev = Math.max(dev, Math.abs(compose(speedAfter(a), speedAfter(b)) - speedAfter(a + b)));
-  ok(dev < 1e-12, 'the boosts "form a group": a then b boosters = a+b boosters (max deviation ' + dev.toExponential(1) + ')');
-  // rapidity check: n boosts of w = tanh(n artanh w)
-  let d2 = 0; for (let n = 0; n <= 6; n++) d2 = Math.max(d2, Math.abs(speedAfter(n) - Math.tanh(n * Math.atanh(CONFIG.w)))); ok(d2 < 1e-12, 'speedAfter(n) = tanh(n artanh w), independent closed form'); }
-const table = []; for (let n = 0; n <= 6; n++) { const v = speedAfter(n); table.push(v); }
-console.log('    boosters → speed:', table.map((v, n) => n + ':' + v.toFixed(5)).join('  '));
-ok(table.every((v, i) => i === 0 || (v > table[i - 1] && v < 1)), 'each booster adds speed, none reaches c');
-ok(table.slice(2).every((v, i) => v - table[i + 1] < table[i + 1] - table[i]), 'each booster adds less speed than the one before');
+// §5, p. 12: V = (v + w) / (1 + v w / c^2). Worked values, and the paper's own remark that V < c for v, w < c.
+check('§5: half + half = 0.8c', near(compose(0.5, 0.5), 0.8, 1e-12), compose(0.5, 0.5));
+check('§5: 0.8c + 0.5c = 13/14 c', near(compose(0.8, 0.5), 13 / 14, 1e-12), compose(0.8, 0.5));
+check('§5: c + w = c (light is light)', near(compose(1, 0.5), 1, 1e-12), compose(1, 0.5));
+check('§5: symmetric in v, w', near(compose(0.3, 0.7), compose(0.7, 0.3), 1e-12));
+let below = true; for (let n = 1; n <= 12; n++) if (speedAfter(n) >= 1) below = false;
+check('§5: twelve boosters still below c', below, speedAfter(12));
+// §5, p. 12: parallel transformations form a group — composing boosts is associative.
+check('§5 group: (a∘b)∘c = a∘(b∘c)', near(compose(compose(0.3, 0.5), 0.6), compose(0.3, compose(0.5, 0.6)), 1e-12));
 
-console.log('--- 2. §4 the moving clock (p. 10) ---');
-{ let dev = 0; for (const v of [0.1, 0.5, 0.8, 0.9286, 0.99]) { const t = 7.3, x = v * t, b = 1 / Math.sqrt(1 - v * v);
-    const tauLorentz = b * (t - v * x); dev = Math.max(dev, Math.abs(tauLorentz - t * clockRate(v))); }
-  ok(dev < 1e-12, 'τ = t√(1−v²/c²) agrees with the §3 transformation τ = β(t − vx/c²) at x = vt (max deviation ' + dev.toExponential(1) + ')'); }
-{ const v = 0.01, t = 1000; const lag = t - t * clockRate(v); ok(near(lag, 0.5 * t * v * v, 1e-6 * t), 'slow speeds: lag ≈ ½ t v²/c² ("neglecting magnitudes of fourth and higher order"): ' + lag.toFixed(6) + ' vs ' + (0.5 * t * v * v).toFixed(6)); }
-{ const g = table.map(v => 1 / clockRate(v)); console.log('    boosters → clock slowing factor:', g.map((x, n) => n + ':' + x.toFixed(3)).join('  '));
-  ok(g.slice(2).every((x, i) => x - g[i + 1] > g[i + 1] - g[i]), 'each booster slows the cargo clock MORE than the one before (the discovery: speed gains shrink, clock gains grow)'); }
+// §4, p. 10: the moving clock runs slow by sqrt(1 - v^2/c^2). At v = 0.6c the rate is 0.8; at 0.8c it is 0.6.
+check('§4: rate at 0.6c = 0.8', near(clockRate(0.6), 0.8, 1e-12));
+check('§4: rate at 0.8c = 0.6', near(clockRate(0.8), 0.6, 1e-12));
+check('§4: rate at 0 = 1', near(clockRate(0), 1, 1e-12));
+// §4, p. 11: a clock sent round a closed curve at v comes back behind by ½ t v²/c² seconds, to first order.
+const vs = 0.01; check('§4: first-order lag ½ t v²', near(1 - clockRate(vs), 0.5 * vs * vs, 1e-7), 1 - clockRate(vs));
 
-console.log('--- 3. fly(): arrivals and the light limit ---');
-{ const f = fly({ d: 4, deadline: 99, fresh: 99 }, 2); ok(near(f.tHome, 5, 1e-12) && near(f.tCargo, 3, 1e-12), 'two boosters to 4 ly: 5 years at home, 3 on the flowers (exact)'); }
-{ const r = rnd(11); let beaten = 0; for (let i = 0; i < 5000; i++) { const d = 0.1 + r() * 200, n = 1 + Math.floor(r() * 6); if (fly({ d, deadline: 1e9, fresh: 1e9 }, n).tHome <= d) beaten++; }
-  ok(beaten === 0, 'no rocket ever arrives as early as light (5,000 random flights)'); }
-for (const k of ['A', 'B']) for (const o of CONFIG.books[k].orders) if (o.d >= o.deadline) {
-  const all = [1, 2, 3, 4, 5, 6].map(n => fly(o, n)); ok(all.every(f => !f.onTime) && fly(o, 0).ok, `${o.name}: impossible for every booster count; refusing it scores`); }
-{ // the traveller is not bound by c: enough boosts deliver fresh flowers over any distance (with more boosters allowed)
-  const far = { d: 1000, deadline: 1e9, fresh: 1 }; let n = 1; while (fly(far, n).tCargo > 1 && n < 40) n++; ok(n < 40, `1,000 ly with flowers fresh for 1 year: possible with ${n} boosters (cargo clock ${fly(far, n).tCargo.toFixed(3)} y, home ${fly(far, n).tHome.toFixed(1)} y)`); }
+// §10, p. 22: W = m c^2 (1/sqrt(1 - v^2/c^2) - 1). At 0.6c, W/mc² = 0.25; at 0.8c, 2/3. Grows without limit.
+check('§10: W at 0.6c = 0.25 mc²', near(energy(0.6), 0.25, 1e-12));
+check('§10: W at 0.8c = 2/3 mc²', near(energy(0.8), 2 / 3, 1e-12));
+check('§10: W at 0.999c > 20 mc²', energy(0.999) > 20, energy(0.999));
+check('§10: W is ½ m v² at low v, to first order', near(energy(0.01), 0.5 * 1e-4, 1e-8), energy(0.01));
+check('fuel: cost rises with every booster', [1, 2, 3, 4, 5, 6].every((n, i, a) => i === 0 || fuelCost(n) > fuelCost(a[i - 1])));
 
-console.log('--- 4. display words agree with judgement ---');
-{ let bad = 0; const toY = s => { let y = 0; const m = s.match(/(\d+) year/); if (m) y += +m[1]; const mo = s.match(/(\d+) month/); if (mo) y += mo[1] / 12; const dd = s.match(/(\d+) day/); if (dd) y += dd[1] / 365.25; return y; };
-  const r = rnd(5); for (let i = 0; i < 20000; i++) { const y = r() * 120; const s = fmtYears(y); const e = y - toY(s); if (e < -1 / 365 || e > 1 / 12 + 1e-6 || /\./.test(s) || /30 day|12 month/.test(s)) { bad++; if (bad < 4) console.log('    ', y, s); } }
-  ok(bad === 0, 'fmtYears never shows more than the truth (beyond a rounded day) and is within a month below it, no decimals, no "30 days"/"12 months" (20,000 values)'); }
-{ let bad = 0; const toY = s => { let y = 0; const m = s.match(/(\d+) year/); if (m) y += +m[1]; const mo = s.match(/(\d+) month/); if (mo) y += mo[1] / 12; const dd = s.match(/(\d+) day/); if (dd) y += dd[1] / 365.25; return y; };
-  for (const b of [CONFIG.range].map(o => ({ orders: [o] })).concat([CONFIG.books.A, CONFIG.books.B, CONFIG.haul])) for (const o of b.orders) for (let n = 1; n <= 6; n++) {
-    const f = fly(o, n); if ((toY(fmtYears(f.tHome)) <= o.deadline) !== f.onTime || (toY(fmtYears(f.tCargo)) <= o.fresh) !== f.fresh) { bad++; console.log('    mismatch', o.name, n); } }
-  ok(bad === 0, 'for every order and booster count, the shown times sit on the same side of the limit as the judged ones'); }
-
-console.log('--- 5. balance (designer\'s choices) ---');
-const range = CONFIG.range; console.log('    test range needs', minBoosts(range), '— two boosters:', fly(range, 2).outcome);
-ok(minBoosts(range) === 4 && fly(range, 2).outcome === 'LATE_WILTED', 'test range: the "two halves" launch is late and wilted; four boosters deliver');
-const allAllocs = (k, cap) => { const out = []; const rec = (a) => { if (a.length === k) { out.push(a.slice()); return; } for (let n = 0; n <= CONFIG.maxBoost; n++) { a.push(n); if (a.reduce((x, y) => x + y, 0) <= cap) rec(a); a.pop(); } }; rec([]); return out; };
-for (const k of ['A', 'B']) {
-  const book = CONFIG.books[k], mins = book.orders.map(o => minBoosts(o));
-  ok(mins.reduce((a, b) => a + b, 0) === book.budget && mins.every(m => m !== null), `book ${k}: minimum boosters ${mins.join('+')} = budget ${book.budget}`);
-  const all = allAllocs(4, book.budget), scores = all.map(a => runBook(book, a).score);
-  const perfect = all.filter((a, i) => scores[i] === 4);
-  console.log(`    book ${k}: ${all.length} legal allocations; perfect: ${perfect.map(a => a.join('-')).join(', ')}; mean score ${(scores.reduce((a, b) => a + b, 0) / all.length).toFixed(2)}`);
-  ok(perfect.length >= 1 && perfect.length <= 3, `book ${k}: few perfect plans (${perfect.length})`);
-  // Newtonian intuition: speeds add (0.5 n), clocks agree. Boosters the player would think each order needs.
-  const newton = book.orders.map(o => { for (let n = 0; n <= 6; n++) { if (n === 0) continue; const v = 0.5 * n, t = o.d / v; if (t <= o.deadline && t <= o.fresh) return n; } return 0; });
-  const nb = newton.slice(); let s = nb.reduce((a, b) => a + b, 0); for (let i = nb.length - 1; s > book.budget; i = (i + nb.length - 1) % nb.length) if (nb[i] > 0) { nb[i]--; s--; }
-  const rn = runBook(book, nb); console.log(`    book ${k}: Newtonian plan ${newton.join('-')} → playable ${nb.join('-')} scores ${rn.score}/4 (${rn.flights.map(f => f.outcome).join(', ')})`);
-  ok(rn.score <= 2, `book ${k}: a player who believes speeds add scores at most 2 of 4`);
-  // no single-order "all eggs" plan wins: spending everything on the farthest order
-  const greedy = book.orders.map(() => 0); greedy[book.orders.reduce((bi, o, i, a) => o.d > a[bi].d ? i : bi, 0)] = Math.min(6, book.budget); ok(runBook(book, greedy).score <= 2, `book ${k}: all boosters on the farthest order scores ≤ 2`);
+// The orders: every book's best booster counts are distinct, and the "refuse" order never pays.
+for (const key of Object.keys(CONFIG.books)) {
+  const b = CONFIG.books[key], bests = b.orders.map(o => best(o).n);
+  check(`book ${key}: best counts all different (${bests.join(',')})`, new Set(bests).size === bests.length);
+  check(`book ${key}: exactly one order to refuse`, bests.filter(n => n === 0).length === 1);
+  for (const o of b.orders) { const bn = best(o).n; if (bn) {
+    const p = [...Array(7).keys()].map(n => fly(o, n).profit); const s = [...p].sort((x, y) => y - x);
+    check(`book ${key} ${o.name}: best is unique by ≥ 4 francs`, s[0] - s[1] >= 4, (s[0] - s[1]).toFixed(1)); } }
 }
-ok(minBoosts(CONFIG.haul.orders[0]) === 6, 'long haul needs all six boosters');
+check('range: best count is 4', best(CONFIG.range).n === 4);
+check('range: two boosters lose money (the natural first try)', fly(CONFIG.range, 2).profit < 0);
 
-console.log('--- 6. robustness: the discoveries do not depend on the booster size w ---');
-for (const w of [0.3, 0.4, 0.6, 0.7]) {
-  const vs = [], gs = []; for (let n = 0; n <= 12; n++) { const v = speedAfter(n, w); vs.push(v); gs.push(1 / clockRate(v)); }
-  const sub = vs.every(v => v < 1), shrink = vs.slice(2).every((v, i) => v - vs[i + 1] < vs[i + 1] - vs[i]), grow = gs.slice(2).every((g, i) => g - gs[i + 1] > gs[i + 1] - gs[i]);
-  const twoBelowNewton = speedAfter(2, w) < Math.min(1, 2 * w);
-  ok(sub && shrink && grow && twoBelowNewton, `w = ${w}c: never reaches c; speed gains shrink; clock-slowing gains grow; two boosters < 2w`);
+// The pattern the game stages, and whether it comes from the paper or from our prices:
+//   a customer who pays for speed stops early; a customer who pays for freshness, far away, pays for late boosters.
+// Reason in the paper: near c, the wait beyond light-time shrinks like (1 - v) while the flowers' ageing shrinks like sqrt(1 - v):
+// promptness saturates first. Check it survives any sensible fuel price and fee, with equal keep and patience.
+let holds = true, tried = 0;
+for (const price of [3, 5, 10, 20, 40]) for (const fee of [60, 100, 200, 400]) for (const d of [2, 5, 10, 20]) for (const span of [0.5, 1, 2, 4]) {
+  const saved = CONFIG.fuelPrice; CONFIG.fuelPrice = price;
+  const nF = best({ who: 'FLORIST', d, fee, keep: span, patience: span }).n, nH = best({ who: 'HOSPITAL', d, fee, keep: span, patience: span }).n;
+  CONFIG.fuelPrice = saved; tried++;
+  if (nF && nH && nF < nH) holds = false;
 }
-console.log(`\n${fail ? 'FAILURES: ' + fail : 'ALL PASS'}, ${pass + fail} checks.`);
-process.exitCode = fail ? 1 : 0;
+check(`pattern: freshness-buyer never wants fewer boosters than speed-buyer (${tried} price/fee/distance cases)`, holds);
+let farther = true;
+for (const fee of [150, 300, 600]) { let last = 0; for (const d of [2, 5, 10, 20, 40]) { const n = best({ who: 'FLORIST', d, fee, keep: d / 3, patience: 1 }).n; if (n && n < last) farther = false; if (n) last = n; } }
+check('pattern: for a freshness-buyer, farther stars want at least as many boosters (keep scaled with distance)', farther);
+
+const summary = `${pass} passed, ${fail} failed`;
+console.log(out.join('\n') + '\n' + summary);
+require('fs').writeFileSync('calibration-result.txt', out.join('\n') + '\n' + summary + '\n');
+if (fail) process.exit(1);

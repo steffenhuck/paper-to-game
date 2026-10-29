@@ -69,24 +69,39 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
 .track { display: block; width: 100%; height: auto; margin: 4px 0 0; }
 
 /* the two clocks */
-.clocks { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 8px 0 4px; }
+.clocks { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 6px 0 0; }
 .clock { text-align: center; }
-.clock svg { width: 100%; max-width: 128px; height: auto; display: block; margin: 0 auto; }
+.clock svg { width: 100%; max-width: 118px; height: auto; display: block; margin: 0 auto; }
 .clock .read.pre { color: var(--fog); }
 .clock.fl .read.pre { color: var(--fog); }
 .clock .lab { font-family: var(--disp); font-size: 12px; letter-spacing: 0.08em; margin-top: 2px; }
 .clock .read { font-family: var(--disp); font-size: 16px; line-height: 1.1; min-height: 36px; margin-top: 2px; }
 .clock.fl .read { color: var(--red); }
-.clock .lim { font-size: 12px; color: #555; }
+.clock .lim { font-size: 12px; color: #555; min-height: 16px; }
 
 /* stamp */
 .stamp { min-height: 28px; margin: 6px 0 4px; }
 .stamp span { display: inline-block; font-family: var(--disp); font-size: 20px; letter-spacing: 0.06em; padding: 4px 10px 3px; background: var(--ink); color: var(--paper); }
 .stamp span.bad { background: var(--red); }
+.stamp span.flat { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 3px var(--ink); }
 .stamp span.pop { animation: pop .28s ease-out; }
 @keyframes pop { 0% { transform: scale(1.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 .say { font-size: 15px; min-height: 20px; }
 .say b { font-size: 15px; }
+
+/* the till: what the customer paid, what the fuel cost, the profit */
+.till { border-top: 3px solid var(--ink); margin: 8px 0 2px; padding-top: 6px; }
+.till .row { display: grid; grid-template-columns: 74px 1fr 92px; gap: 8px; align-items: center; font-size: 12px; font-family: var(--disp); letter-spacing: 0.04em; padding: 2px 0; }
+.till .sb { position: relative; height: 12px; background: var(--fog2); }
+.till .sb i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--ink); }
+.till .sb i.fuel { background: var(--red); }
+.till .v { text-align: right; font-family: var(--text); font-size: 13px; }
+.till .profit { display: flex; justify-content: space-between; align-items: baseline; margin-top: 4px; }
+.till .profit .n { font-family: var(--disp); font-size: 28px; line-height: 1; }
+.till .profit .n.loss { color: var(--red); }
+.till.pre .profit .n { color: var(--fog); }
+.cust { font-size: 14px; line-height: 1.3; margin: 6px 0 4px; }
+.cust b { font-size: 15px; }
 
 /* booster slider (test range) */
 .slide { margin: 8px 0 4px; }
@@ -177,11 +192,10 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
       <rect x="0" y="16" width="360" height="12" fill="#FFC800"/>
       <rect x="0" y="46" width="250" height="3" fill="#E2231A"/>
       <polygon points="250,38 284,38 298,47.5 284,57 250,57" fill="#E2231A"/>
-      <circle cx="352" cy="22" r="0" fill="#111"/>
     </svg>
     <div class="legend"><span class="l">light</span><span class="r">your rocket</span></div>
-    <div class="aimline" id="aim-start">Deliver the flowers on time and still fresh.</div>
-    <p class="lede">You send flowers to faraway stars. Each booster makes your rocket go <b>half as fast as light</b>, faster than it was already going. How many will you fire?</p>
+    <div class="aimline" id="aim-start">Deliver flowers to the stars at a profit.</div>
+    <p class="lede">You run the Light Post, Bern's flower rockets. Customers pay for fresh flowers, or for speed, or both. Each booster makes your rocket go <b>half as fast as light</b>, faster than it already was. Each one burns fuel, and fuel gets dear near the speed of light. How many will you fire?</p>
     <button class="btn" id="b-start">Go to the test range</button>
     <div class="row2"><button class="btn ghost" data-help>How to play</button><button class="btn ghost" data-about>About</button></div>
   </div>
@@ -189,14 +203,19 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
 
 <!-- TEST RANGE + FLIGHTS share this layout -->
 <section class="screen" id="s-fly">
-  <div class="bar"><div class="aim">Deliver the flowers on time and still fresh.</div><button class="q" data-help aria-label="How to play">?</button></div>
+  <div class="bar"><div class="aim">Deliver flowers to the stars at a profit.</div><button class="q" data-help aria-label="How to play">?</button></div>
   <div class="order"><h2 id="f-name">New Bern</h2><div class="dist" id="f-dist"></div></div>
-  <p class="need">Arrive by <b id="f-dead"></b> on the home clock<span class="sep">·</span>flowers keep <b id="f-fresh"></b></p>
+  <p class="cust" id="f-cust"></p>
   <p class="orient" id="f-orient"></p>
   <svg class="track" id="track" viewBox="0 0 360 104"></svg>
   <div class="clocks">
-    <div class="clock"><svg id="ck-home" viewBox="0 0 160 160"></svg><div class="lab">HOME CLOCK</div><div class="read num" id="rd-home">—</div></div>
-    <div class="clock fl"><svg id="ck-fl" viewBox="0 0 160 160"></svg><div class="lab">FLOWERS' CLOCK</div><div class="read num" id="rd-fl">—</div></div>
+    <div class="clock"><svg id="ck-home" viewBox="0 0 160 160"></svg><div class="lab">HOME CLOCK</div><div class="read num" id="rd-home">—</div><div class="lim" id="lm-home"></div></div>
+    <div class="clock fl"><svg id="ck-fl" viewBox="0 0 160 160"></svg><div class="lab">FLOWERS' CLOCK</div><div class="read num" id="rd-fl">—</div><div class="lim" id="lm-fl"></div></div>
+  </div>
+  <div class="till" id="till">
+    <div class="row"><span>PAID</span><div class="sb"><i id="t-rev"></i></div><span class="v num" id="t-rev-v">—</span></div>
+    <div class="row"><span>FUEL</span><div class="sb"><i class="fuel" id="t-fuel"></i></div><span class="v num" id="t-fuel-v">—</span></div>
+    <div class="profit"><span style="font-family:var(--disp);font-size:12px;letter-spacing:.04em">PROFIT</span><span class="n num" id="t-profit">—</span></div>
   </div>
   <div id="range-ctl">
     <div class="slide">
@@ -219,10 +238,9 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
 
 <!-- ORDER BOOK -->
 <section class="screen" id="s-book">
-  <div class="bar"><div class="aim">Deliver the flowers on time and still fresh.</div><button class="q" data-help aria-label="How to play">?</button></div>
+  <div class="bar"><div class="aim">Deliver flowers to the stars at a profit.</div><button class="q" data-help aria-label="How to play">?</button></div>
   <h2 class="disp" style="font-size:30px;line-height:.95" id="bk-title">The order book</h2>
-  <p class="orient" id="bk-orient">Four orders, one crate of boosters. Set every rocket, then launch them all at once. Leave a rocket at <b>0</b> to refuse its order.</p>
-  <div class="crate" id="crate"><div class="t">CRATE</div><div class="tok" id="crate-tok"></div></div>
+  <p class="orient" id="bk-orient">Four orders. Set every rocket, then launch them all. Leave a rocket at <b>0</b> to refuse its order.</p>
   <div id="cards"></div>
   <button class="btn" id="b-launchall">Launch all</button>
   <button class="btn ghost" id="b-log">Look at your log</button>
@@ -230,7 +248,7 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
 
 <!-- END -->
 <section class="screen" id="s-end">
-  <div class="bar"><div class="aim">Deliver the flowers on time and still fresh.</div><button class="q" data-help aria-label="How to play">?</button></div>
+  <div class="bar"><div class="aim">Deliver flowers to the stars at a profit.</div><button class="q" data-help aria-label="How to play">?</button></div>
   <div class="verdict" id="verdict"></div>
   <div class="tally" id="tally"></div>
   <button class="btn" id="b-haul">The long haul</button>
@@ -239,7 +257,7 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
 
 <!-- LONG HAUL END -->
 <section class="screen" id="s-haulend">
-  <div class="bar"><div class="aim">Deliver the flowers on time and still fresh.</div><button class="q" data-help aria-label="How to play">?</button></div>
+  <div class="bar"><div class="aim">Deliver flowers to the stars at a profit.</div><button class="q" data-help aria-label="How to play">?</button></div>
   <div class="verdict" id="haulverdict"></div>
   <button class="btn" id="b-haulagain">Try the long haul again</button>
   <div class="row2"><button class="btn ghost" id="b-again2">New order book</button><button class="btn ghost" data-about>About</button></div>
@@ -248,7 +266,7 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
 <!-- LOG (from the order book) -->
 <section class="screen page" id="s-log">
   <div class="bar"><div class="aim">Your log from the test range</div><button class="q" id="b-log-x" aria-label="Back">×</button></div>
-  <div class="aimline">Deliver the flowers on time and still fresh.</div>
+  <div class="aimline">Deliver flowers to the stars at a profit.</div>
   <div class="log" style="margin-top:0"><div id="log2"></div></div>
   <button class="btn" id="b-log-back" style="margin-top:12px">Back to the order book</button>
 </section>
@@ -256,18 +274,20 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
 <!-- HOW TO PLAY -->
 <section class="screen page" id="s-help">
   <div class="bar"><div class="aim">How to play</div><button class="q" id="b-help-x" aria-label="Back">×</button></div>
-  <div class="aimline">Deliver the flowers on time and still fresh.</div>
-  <p>Every order is a star with a <b>deadline</b> on the home clock and flowers that keep for a while on their own clock.</p>
-  <h3>Boosters</h3>
-  <p>Each booster makes the rocket go half as fast as light, faster than it was already going. You choose 0 to 6 per rocket. <b>0</b> means you refuse the order.</p>
+  <div class="aimline">Deliver flowers to the stars at a profit.</div>
+  <p>Every order is a star and a customer. The customer names a fee, the most they will pay. What they actually pay depends on what they care about.</p>
+  <h3>Customers</h3>
+  <p><b>A florist</b> pays for freshness: the full fee for flowers that haven't aged at all, less as they age, nothing once they are older than the flowers keep. <b>A hospital</b> pays for speed: the full fee if the rocket arrives as soon as light could, less for every year it arrives later than that, nothing once its patience runs out. <b>A gallery</b> pays half for each.</p>
+  <h3>Boosters and fuel</h3>
+  <p>Each booster makes the rocket go half as fast as light, faster than it already was. You choose 0 to 6 per rocket; <b>0</b> refuses the order. Every booster burns fuel, and the bill climbs steeply the closer the rocket gets to light speed. Profit is what the customer paid minus the fuel.</p>
   <h3>The race</h3>
   <p>Every rocket races a beam of light launched at the same moment. <span class="sw" style="background:#FFC800"></span>Yellow is always light. <span class="sw" style="background:#E2231A"></span>Red is always your rocket.</p>
   <h3>The two clocks</h3>
-  <p>When the rocket lands, two clocks stop. <b>Home clock</b>: the star's station clock, set to agree with home. <b>Flowers' clock</b>: a clock riding in the rocket with the flowers. The line at the bottom of each dial is the limit. Hand still in the white half: in time, or still fresh. In the grey half: late, or wilted. The yellow tick on the home clock is when the light arrived.</p>
+  <p><b>Home clock</b>: the star's station clock, set to agree with home; how long the customer waited. <b>Flowers' clock</b>: a clock riding in the rocket with the flowers; how much they aged. The bar at the bottom of each dial is where that customer stops paying. Hand in the white half: still worth something.</p>
   <h3>Rounds</h3>
-  <ul><li><b>Test range</b>: one star, as many launches as you like. Each launch adds a row to your log.</li>
-  <li><b>Order book</b>: four orders, one crate of boosters, all launched together. One order may be impossible: refusing it counts as right.</li>
-  <li><b>The long haul</b>: one star, 100 light-years away.</li></ul>
+  <ul><li><b>Test range</b>: one florist, as many launches as you like. Slide the boosters and watch the race, the clocks and the till before you launch.</li>
+  <li><b>Order book</b>: four orders, set blind, launched together, judged on landing. One of them can't be made to pay: refusing it is right.</li>
+  <li><b>The long haul</b>: a museum, a hundred light-years away.</li></ul>
   <button class="btn" id="b-help-back">Back to the game</button>
 </section>
 
@@ -284,16 +304,17 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
 </script>
 <script>
 (function () {
-  const { CONFIG, fly, runBook, fmtYears, fmtLimit, fmtSpeed, fmtRate, speedAfter, clockRate } = MECH;
+  const { CONFIG, fly, best, runBook, fmtYears, fmtLimit, fmtSpeed, fmtRate, fmtFrancs, fmtShare, speedAfter, clockRate, fuelCost } = MECH;
   const $ = s => document.querySelector(s);
   const NS = 'http://www.w3.org/2000/svg';
   const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
   const ly = d => d + (d === 1 ? ' light-year' : ' light-years');
   const words = ['none', 'one', 'two', 'three', 'four', 'five', 'six'];
-  const NAMES = { DELIVERED: 'DELIVERED', LATE: 'LATE', WILTED: 'WILTED', LATE_WILTED: 'LATE AND WILTED', REFUSED: 'REFUSED', REFUSED_RIGHT: 'REFUSED · RIGHT' };
+  const WHO = { FLORIST: 'The florist', HOSPITAL: 'The hospital', GALLERY: 'The gallery', MUSEUM: 'The museum' };
+  const cap = s => s[0].toUpperCase() + s.slice(1);
 
   // ---------- state ----------
-  const S = { screen: 's-start', back: 's-start', rangeN: 2, log: {}, launches: 0, bookKey: 'A', alloc: [], book: null, flights: [], fi: 0, mode: 'range', busy: false, plays: 0 };
+  const S = { screen: 's-start', back: 's-start', rangeN: 2, log: {}, launches: 0, bookKey: 'A', alloc: [], book: null, fi: 0, mode: 'range', busy: false, plays: 0 };
 
   function show(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id));
@@ -305,6 +326,14 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
   $('#b-help-back').onclick = $('#b-help-x').onclick = () => show(S.back);
   $('#b-about-back').onclick = $('#b-about-x').onclick = () => show(S.back);
 
+  // ---------- the customer line ----------
+  function custLine(o) {
+    const c = CONFIG.customers[o.who], fee = fmtFrancs(o.fee);
+    if (c.wf === 1) return `<b>${WHO[o.who]}</b> pays up to ${fee}, for freshness. The flowers keep ${fmtLimit(o.keep)}.`;
+    if (c.wf === 0) return `<b>${WHO[o.who]}</b> pays up to ${fee}, for speed. Patience: ${fmtLimit(o.patience)} past the moment light could arrive.`;
+    return `<b>${WHO[o.who]}</b> pays up to ${fee}: half for freshness (flowers keep ${fmtLimit(o.keep)}), half for speed (patience ${fmtLimit(o.patience)} past light's arrival).`;
+  }
+
   // ---------- the track ----------
   const TRK = { x0: 22, x1: 336, yL: 34, yR: 62 };
   let trk = {};
@@ -312,12 +341,10 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
     const s = $('#track'); s.innerHTML = '';
     el('text', { x: 0, y: 12, 'font-family': 'LP Display', 'font-size': 10, fill: '#111', 'letter-spacing': '1' }, s).textContent = 'HOME';
     const st = el('text', { x: 360, y: 12, 'text-anchor': 'end', 'font-family': 'LP Display', 'font-size': 10, fill: '#111', 'letter-spacing': '1' }, s); st.textContent = order.name;
-    // light-year ticks
     const step = order.d <= 12 ? 1 : order.d <= 30 ? 5 : order.d <= 60 ? 10 : 20;
     el('line', { x1: TRK.x0, y1: 86, x2: TRK.x1, y2: 86, stroke: '#111', 'stroke-width': 2 }, s);
     for (let k = 0; k <= order.d + 1e-9; k += step) { const x = TRK.x0 + (TRK.x1 - TRK.x0) * k / order.d; el('line', { x1: x, y1: 81, x2: x, y2: 91, stroke: '#111', 'stroke-width': 1.5 }, s); }
     el('text', { x: 180, y: 101, 'text-anchor': 'middle', 'font-family': 'LP Text', 'font-size': 10, fill: '#555' }, s).textContent = 'one tick = ' + ly(step);
-    // lanes: a start line and a finish star; the lanes themselves are dotted so they read as a course, not a slider
     el('line', { x1: TRK.x0, y1: TRK.yL, x2: TRK.x1, y2: TRK.yL, stroke: '#DAD5CA', 'stroke-width': 2, 'stroke-dasharray': '2 5' }, s);
     el('line', { x1: TRK.x0, y1: TRK.yR, x2: TRK.x1, y2: TRK.yR, stroke: '#DAD5CA', 'stroke-width': 2, 'stroke-dasharray': '2 5' }, s);
     el('line', { x1: TRK.x0, y1: TRK.yL - 8, x2: TRK.x0, y2: TRK.yR + 8, stroke: '#111', 'stroke-width': 2 }, s);
@@ -332,29 +359,18 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
     trk.n = 0;
     placeRocket(0);
   }
-  function setFlames(n) { trk.n = n; }
   function star(s, cx, cy, r) {
     const p = []; for (let i = 0; i < 8; i++) { const a = Math.PI / 4 * i - Math.PI / 2, rr = i % 2 ? r * 0.38 : r; p.push((cx + rr * Math.cos(a)).toFixed(1) + ',' + (cy + rr * Math.sin(a)).toFixed(1)); }
     trk.star = el('polygon', { points: p.join(' '), fill: '#111' }, s);
   }
+  function setFlames(n) { trk.n = n; }
   function placeRocket(f) {
     const x = TRK.x0 + (TRK.x1 - TRK.x0) * f, y = TRK.yR;
     trk.rocket.setAttribute('points', `${x - 22},${y - 7} ${x - 6},${y - 7} ${x + 2},${y} ${x - 6},${y + 7} ${x - 22},${y + 7}`);
     trk.trail.setAttribute('width', Math.max(0, x - 22 - TRK.x0));
-    // one flame chevron per booster, trailing the rocket
     trk.flames.innerHTML = '';
     for (let i = 0; i < trk.n; i++) { const fx = x - 22 - 7 * (i + 1);
       el('polygon', { points: `${fx},${y - 6} ${fx + 5},${y} ${fx},${y + 6} ${fx - 3},${y}`, fill: i % 2 ? '#E2231A' : '#FFC800' }, trk.flames); }
-  }
-  // the race frozen at the moment the light reaches the star: beam full, star lit, rocket as far as it got
-  function previewRace(order, n) {
-    const f = fly(order, n); trk.n = n;
-    trk.beam.setAttribute('width', TRK.x1 - TRK.x0); trk.star.setAttribute('fill', '#FFC800');
-    placeRocket(f.v);
-    setHand('ck-home', f.tHome); setHand('ck-fl', f.tCargo); lightTick('ck-home', f.tLight);
-    const h = $('#rd-home'), c = $('#rd-fl');
-    h.textContent = fmtYears(f.tHome); c.textContent = fmtYears(f.tCargo); h.classList.add('pre'); c.classList.add('pre');
-    return f;
   }
 
   // ---------- the clocks: one full turn = twice the limit, so the limit sits at the bottom ----------
@@ -362,11 +378,9 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
   function drawClock(id, limit, isFl) {
     const s = $('#' + id); s.innerHTML = ''; const c = 80, R = 74;
     el('circle', { cx: c, cy: c, r: R, fill: '#fff', stroke: '#111', 'stroke-width': 4 }, s);
-    // the past-the-limit half (6 o'clock round to 12), grey
     el('path', { d: `M ${c} ${c + R - 2} A ${R - 2} ${R - 2} 0 0 1 ${c} ${c - R + 2} L ${c} ${c} Z`, fill: '#DAD5CA' }, s);
     for (let i = 0; i < 60; i++) { const a = i * 6 * Math.PI / 180, big = i % 5 === 0, r1 = big ? R - 16 : R - 9, r2 = R - 4;
       el('line', { x1: c + r1 * Math.sin(a), y1: c - r1 * Math.cos(a), x2: c + r2 * Math.sin(a), y2: c - r2 * Math.cos(a), stroke: '#111', 'stroke-width': big ? 4.5 : 1.6 }, s); }
-    // the limit line at 6 o'clock, red-black bar across the rim
     el('rect', { x: c - 3, y: c + R - 30, width: 6, height: 28, fill: isFl ? '#E2231A' : '#111' }, s);
     const z = el('text', { x: c, y: c - R + 30, 'text-anchor': 'middle', 'font-family': 'LP Display', 'font-size': 10, fill: '#111' }, s); z.textContent = '0';
     const yl = el('line', { x1: c, y1: c - R + 2, x2: c, y2: c - R + 22, stroke: '#FFC800', 'stroke-width': 7, opacity: 0 }, s);
@@ -388,46 +402,82 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
     k.yl.setAttribute('transform', `rotate(${frac * 360} ${k.c} ${k.c})`); k.yl.setAttribute('opacity', 1);
   }
 
-  // ---------- one flight, animated ----------
-  const TL = 1700; // ms for the light to cross, whatever the distance
-  function setOrder(order, mode) {
+  // ---------- the till ----------
+  function setTill(order, f, pre) {
+    const t = $('#till'); t.classList.toggle('pre', !!pre);
+    const rev = f ? f.revenue : 0, cost = f ? f.cost : 0, span = order.fee;
+    $('#t-rev').style.width = (100 * Math.min(1, rev / span)).toFixed(1) + '%';
+    $('#t-fuel').style.width = (100 * Math.min(1, cost / span)).toFixed(1) + '%';
+    $('#t-rev-v').textContent = f ? fmtFrancs(rev) + ' of ' + Math.round(span) : '—';
+    $('#t-fuel-v').textContent = f ? fmtFrancs(cost) : '—';
+    const p = $('#t-profit'); p.textContent = f ? (f.profit >= 0.5 ? '+' : '') + fmtFrancs(f.profit) : '—';
+    p.classList.toggle('loss', !!f && f.profit < -0.5);
+  }
+  // what each clock is worth to this customer, in words under the dial
+  function setWorth(order, f) {
+    const c = CONFIG.customers[order.who];
+    $('#lm-home').textContent = c.wf < 1 ? (f ? 'worth ' + fmtShare(f.prompt) + ' to them' : 'the wait: what they pay for') : 'the wait';
+    $('#lm-fl').textContent = c.wf > 0 ? (f ? 'worth ' + fmtShare(f.fresh) + ' to them' : 'the flowers: what they pay for') : 'the flowers';
+  }
+
+  // ---------- one order on screen ----------
+  function setOrder(order) {
     $('#f-name').textContent = order.name;
     $('#f-dist').innerHTML = ly(order.d).toUpperCase() + '<br>LIGHT TAKES ' + fmtLimit(order.d).toUpperCase();
-    $('#f-dead').textContent = fmtLimit(order.deadline); $('#f-fresh').textContent = fmtLimit(order.fresh);
-    drawTrack(order); drawClock('ck-home', order.deadline, false); drawClock('ck-fl', order.fresh, true);
+    $('#f-cust').innerHTML = custLine(order);
+    drawTrack(order); drawClock('ck-home', order.d + order.patience, false); drawClock('ck-fl', order.keep, true);
     $('#rd-home').textContent = '—'; $('#rd-fl').textContent = '—'; $('#f-stamp').innerHTML = '';
     $('#rd-home').classList.remove('pre'); $('#rd-fl').classList.remove('pre');
+    setTill(order, null); setWorth(order, null);
   }
+  // the race frozen at the moment the light reaches the star: beam full, star lit, rocket as far as it got
+  function previewRace(order, n) {
+    const f = fly(order, n); trk.n = n;
+    trk.beam.setAttribute('width', TRK.x1 - TRK.x0); trk.star.setAttribute('fill', '#FFC800');
+    placeRocket(f.v);
+    setHand('ck-home', f.tHome); setHand('ck-fl', f.tCargo); lightTick('ck-home', f.tLight);
+    const h = $('#rd-home'), c = $('#rd-fl');
+    h.textContent = fmtYears(f.tHome); c.textContent = fmtYears(f.tCargo); h.classList.add('pre'); c.classList.add('pre');
+    setTill(order, f, true); setWorth(order, f);
+    return f;
+  }
+
+  // ---------- one flight, animated ----------
+  const TL = 1700; // ms for the light to cross, whatever the distance
   function animate(order, n, done) {
     const f = fly(order, n);
     S.busy = true; $('#f-stamp').innerHTML = '';
-    if (f.refused) { // no rocket, but the light still runs: when would even light have arrived?
+    if (f.refused) {
       const st = performance.now();
       const lstep = now => { const ms = now - st, y = Math.min(ms, TL) / TL * order.d;
         trk.beam.setAttribute('width', (TRK.x1 - TRK.x0) * Math.min(1, ms / TL)); setHand('ck-home', y); $('#rd-home').textContent = 'light: ' + fmtYears(y);
-        if (ms < TL) requestAnimationFrame(lstep); else { trk.star.setAttribute('fill', '#FFC800'); lightTick('ck-home', f.tLight); S.busy = false; done(f); } };
+        if (ms < TL) requestAnimationFrame(lstep); else { trk.star.setAttribute('fill', '#FFC800'); lightTick('ck-home', f.tLight); setTill(order, f); S.busy = false; done(f); } };
       requestAnimationFrame(lstep); return; }
     const T = TL / f.v, start = performance.now(); let lightIn = false;
     const step = now => {
-      const ms = now - start, tYears = Math.min(ms, T) / TL * order.d; // home-clock years elapsed
+      const ms = now - start, tYears = Math.min(ms, T) / TL * order.d;
       trk.beam.setAttribute('width', (TRK.x1 - TRK.x0) * Math.min(1, ms / TL));
       placeRocket(Math.min(1, ms / T));
       setHand('ck-home', tYears); setHand('ck-fl', tYears * f.rate);
       $('#rd-home').textContent = fmtYears(tYears); $('#rd-fl').textContent = fmtYears(tYears * f.rate);
       if (!lightIn && ms >= TL) { lightIn = true; trk.star.setAttribute('fill', '#FFC800'); lightTick('ck-home', f.tLight); }
       if (ms < T) requestAnimationFrame(step);
-      else { $('#rd-home').textContent = fmtYears(f.tHome); $('#rd-fl').textContent = fmtYears(f.tCargo); trk.star.setAttribute('fill', '#E2231A'); S.busy = false; done(f); }
+      else { $('#rd-home').textContent = fmtYears(f.tHome); $('#rd-fl').textContent = fmtYears(f.tCargo); trk.star.setAttribute('fill', '#E2231A'); setTill(order, f); setWorth(order, f); S.busy = false; done(f); }
     };
     requestAnimationFrame(step);
   }
   function stamp(f) {
-    const bad = !f.ok; $('#f-stamp').innerHTML = `<span class="pop${bad ? ' bad' : ''}">${NAMES[f.outcome]}</span>`;
+    const txt = f.refused ? 'REFUSED' : (f.profit >= 0.5 ? '+' : '') + fmtFrancs(f.profit).toUpperCase();
+    $('#f-stamp').innerHTML = `<span class="pop${f.refused ? ' flat' : f.profit < -0.5 ? ' bad' : ''}">${txt}</span>`;
   }
   function flightWords(order, f) {
-    if (f.refused) return f.possible ? `You refused it, but it could have been done.` : `Even light takes ${fmtLimit(order.d)} to get there, and the deadline is ${fmtLimit(order.deadline)}. No rocket can beat light, so no rocket could make it.`;
-    const a = `<b>${words[f.n][0].toUpperCase() + words[f.n].slice(1)} booster${f.n > 1 ? 's' : ''}: ${fmtSpeed(f.v)}.</b> The light got there first. `;
-    const b = `While ${fmtYears(f.tHome)} passed at home, the flowers aged ${fmtYears(f.tCargo)}.`;
-    return a + b;
+    const who = WHO[order.who], c = CONFIG.customers[order.who];
+    if (f.refused) { const b = best(order); return b.n ? `You refused it. With ${words[b.n]} boosters it would have made ${fmtFrancs(b.profit)}.` : `You refused it. No booster count would have made a franc on this one: ${c.wf ? 'the flowers age too much on the way, and the fuel to stop that costs more than the fee' : 'even light takes ' + fmtLimit(order.d) + ', and the fuel to get close to that costs more than the fee'}.`; }
+    const a = `<b>${cap(words[f.n])} booster${f.n > 1 ? 's' : ''}: ${fmtSpeed(f.v)}.</b> The light got there first. `;
+    const b = `While ${fmtYears(f.tHome)} passed at home, the flowers aged ${fmtYears(f.tCargo)}. `;
+    const paid = f.revenue < 0.5 ? `${who} paid nothing: ` + (c.wf ? 'the flowers were past keeping.' : 'their patience had run out.')
+      : `${who} paid ${fmtFrancs(f.revenue)} of ${Math.round(order.fee)}` + (c.wf === 1 ? ', for freshness' : c.wf === 0 ? ', for speed' : '') + `; the fuel cost ${fmtFrancs(f.cost)}.`;
+    return a + b + paid;
   }
 
   // ---------- test range ----------
@@ -439,7 +489,7 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
   function enterRange() {
     S.mode = 'range'; $('#range-ctl').style.display = ''; $('#range-log').style.display = ''; $('#fly-ctl').style.display = 'none';
     renderSlider();
-    $('#f-orient').innerHTML = S.launches ? 'Slide to try other booster counts, or move on.' : 'Slide to set the boosters. The track shows how far your rocket gets while the light arrives; the clocks show what it costs. Then launch.';
+    $('#f-orient').innerHTML = S.launches ? 'Slide to try other booster counts, or move on.' : 'Slide to set the boosters. The track shows how far your rocket gets while the light arrives; the clocks and the till show what it costs. Then launch.';
     $('#f-say').innerHTML = ''; show('s-fly');
   }
   $('#b-start').onclick = enterRange;
@@ -452,12 +502,12 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
       $('#b-launch').classList.remove('hot'); range.disabled = false; stamp(f); S.launches++;
       let extra = '';
       if (n === 2 && !S.saw2) { S.saw2 = true; extra = ' Two halves made four-fifths of light speed, not all of it.'; }
-      else if (n >= 5) extra = ' Speed barely moved; the flowers’ clock slowed a lot.';
+      else if (n >= 5) extra = ' The speed barely moved, the flowers’ clock slowed, and the fuel bill jumped.';
       $('#f-say').innerHTML = flightWords(o, f) + extra;
       S.log[n] = f; renderLog('#log');
       $('#f-orient').textContent = '';
       $('#b-tobook').style.display = '';
-      $('#b-launch').textContent = f.ok ? 'Launch again' : 'Try again';
+      $('#b-launch').textContent = 'Launch again';
     });
   };
   function renderLog(sel) {
@@ -465,7 +515,7 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
     if (!ks.length) { box.innerHTML = '<div class="empty">You have no test launches yet.</div>'; return; }
     box.innerHTML = ks.map(n => { const f = S.log[n];
       return `<div class="row"><div class="k">${n}</div><div><div class="sb"><i style="width:${(f.v * 100).toFixed(1)}%"></i><em></em></div>
-      <b>${fmtSpeed(f.v)}</b> · flowers age <b class="red">${fmtRate(f.rate)}</b><br>to ${CONFIG.range.name}: home ${fmtYears(f.tHome)}, flowers ${fmtYears(f.tCargo)}</div></div>`; }).join('');
+      <b>${fmtSpeed(f.v)}</b> · flowers age <b class="red">${fmtRate(f.rate)}</b><br>paid ${fmtFrancs(f.revenue)}, fuel ${fmtFrancs(f.cost)}: <b>${f.profit >= 0.5 ? '+' : ''}${fmtFrancs(f.profit)}</b></div></div>`; }).join('');
   }
   $('#b-tobook').onclick = () => openBook(S.bookKey);
 
@@ -474,28 +524,23 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
     S.bookKey = key; if (key !== 'haul') S.lastBook = key; S.book = key === 'haul' ? CONFIG.haul : CONFIG.books[key]; S.alloc = S.book.orders.map(() => 0);
     const haul = key === 'haul';
     $('#bk-title').textContent = haul ? 'The long haul' : 'The order book';
-    $('#bk-orient').innerHTML = haul ? `One order, a hundred light-years away. Light takes a century. The flowers keep for ten years. ${CONFIG.haul.budget} boosters in the crate.`
-      : `Four orders, one crate of ${S.book.budget} boosters. Set every rocket, then launch them all at once. Leave a rocket at <b>0</b> to refuse its order.`;
+    $('#bk-orient').innerHTML = haul ? `One order, a hundred light-years away. Light takes a century. A museum pays ${fmtFrancs(CONFIG.haul.orders[0].fee)} for flowers that arrive young.`
+      : `Four orders. Set every rocket, then launch them all. Leave a rocket at <b>0</b> to refuse its order.`;
     $('#b-launchall').textContent = haul ? 'Launch' : 'Launch all';
     renderBook(); show('s-book');
   }
   function renderBook() {
-    const used = S.alloc.reduce((a, b) => a + b, 0), left = S.book.budget - used;
-    const tok = $('#crate-tok'); tok.innerHTML = '';
-    for (let i = 0; i < S.book.budget; i++) { const e = document.createElement('i'); if (i >= left) e.className = 'used'; tok.appendChild(e); }
-    $('#crate .t').textContent = 'CRATE · ' + left + ' LEFT';
     $('#cards').innerHTML = S.book.orders.map((o, i) => {
       const n = S.alloc[i], v = speedAfter(n);
       const pre = n === 0 ? '<div class="pre refuse">Refuse this order</div>'
-        : `<div class="pre"><b>${fmtSpeed(v)}</b>. Flowers age <b class="red">${fmtRate(clockRate(v))}</b>.</div>`;
+        : `<div class="pre"><b>${fmtSpeed(v)}</b>. Flowers age <b class="red">${fmtRate(clockRate(v))}</b>. Fuel: <b>${fmtFrancs(fuelCost(n))}</b>.</div>`;
       return `<div class="card"><div class="top"><h3>${o.name}</h3><div class="dist">${ly(o.d).toUpperCase()}<br>LIGHT TAKES ${fmtLimit(o.d).toUpperCase()}</div></div>
-      <div class="need"><div>Arrive by, home clock<b>${fmtLimit(o.deadline)}</b></div><div>Flowers keep<b>${fmtLimit(o.fresh)}</b></div></div>
+      <p class="cust">${custLine(o)}</p>
       <div class="keys"><button class="key" data-i="${i}" data-d="-1" ${n <= 0 ? 'disabled' : ''} aria-label="fewer">−</button>
       <div class="count"><div class="n num">${n}</div><div class="w">booster${n === 1 ? '' : 's'}</div></div>
       <button class="key" data-i="${i}" data-d="1" ${n >= CONFIG.maxBoost ? 'disabled' : ''} aria-label="more">+</button></div>${pre}</div>`; }).join('');
     $('#cards').querySelectorAll('.key').forEach(b => b.onclick = () => {
-      const i = +b.dataset.i, d = +b.dataset.d, usedNow = S.alloc.reduce((a, c) => a + c, 0);
-      if (d > 0 && usedNow >= S.book.budget) { const c = $('#crate'); c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake'); $('#crate .t').textContent = 'CRATE EMPTY'; return; }
+      const i = +b.dataset.i, d = +b.dataset.d;
       S.alloc[i] = Math.max(0, Math.min(CONFIG.maxBoost, S.alloc[i] + d)); renderBook();
     });
     $('#b-log').style.display = Object.keys(S.log).length && S.bookKey !== 'haul' ? '' : 'none';
@@ -524,33 +569,33 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
   };
 
   // ---------- verdicts ----------
-  const COUNT = ['None', 'One', 'Two', 'Three', 'All four'];
   function endBook() {
-    const r = S.result, sc = r.score, fl = r.flights, refusedRight = fl.some(f => f.outcome === 'REFUSED_RIGHT'), triedImpossible = fl.some(f => !f.refused && !f.possible);
-    const wilted = fl.some(f => f.outcome === 'WILTED' || f.outcome === 'LATE_WILTED');
-    const late = fl.some(f => !f.refused && f.possible && !f.onTime);
-    const head = sc === 4 ? 'Every order that could be made, made.' : triedImpossible ? 'You chased an order not even light could make.'
-      : wilted ? 'Your flowers wilted on the way.' : late ? 'Some rockets were too slow.' : 'You turned away orders you could have made.';
-    let did = [];
-    if (refusedRight) did.push('You refused the order that not even light could deliver in time.');
-    if (triedImpossible) did.push('You spent boosters on an order that not even light could deliver in time.');
-    if (wilted) did.push('Some flowers wilted: far orders need boosters even after the speed has almost stopped growing, because each one still slows the flowers’ clock more than the last.');
-    did.push('Not one of your rockets beat the light. ' + (sc === 4 ? 'All four orders right.' : `${COUNT[sc]} of four orders right.`));
-    $('#verdict').innerHTML = `<h1>${head}</h1><p class="p">${did.join(' ')}</p>
-      <p class="p paper"><b>Einstein, 1905:</b> speeds don’t simply add. Half the speed of light on top of half the speed of light is four-fifths, and no pile of boosts ever reaches light. A clock that travels runs slow, and the closer to light speed it goes, the slower it runs.</p>
-      <p class="p means"><b>What that means:</b> the light limit binds the people waiting at home. It doesn’t bind the traveller. With enough boosters, a crossing of any length can be short on the clock that goes.</p>`;
-    $('#tally').innerHTML = S.book.orders.map((o, i) => { const f = fl[i];
-      return `<div class="r"><div><b>${o.name}</b> · ${S.alloc[i]} booster${S.alloc[i] === 1 ? '' : 's'}${f.refused ? '' : ` · home ${fmtYears(f.tHome)}, flowers ${fmtYears(f.tCargo)}`}</div><span class="${f.ok ? '' : 'bad'}">${NAMES[f.outcome]}</span></div>`; }).join('');
+    const r = S.result, fl = r.flights, bs = r.bests, os = S.book.orders;
+    const share = r.bestProfit > 0 ? r.profit / r.bestProfit : 0;
+    const head = r.profit < -0.5 ? `You lost ${fmtFrancs(-r.profit)}.` : share >= 0.97 ? `${fmtFrancs(r.profit)}: every franc there was.` : share >= 0.75 ? `${fmtFrancs(r.profit)}, of a possible ${fmtFrancs(r.bestProfit)}.` : `${fmtFrancs(r.profit)}. There was ${fmtFrancs(r.bestProfit)} to be made.`;
+    const notes = [];
+    os.forEach((o, i) => { const f = fl[i], b = bs[i], c = CONFIG.customers[o.who], who = WHO[o.who].toLowerCase();
+      if (b.n === 0 && !f.refused) notes.push(`You flew to ${cap(o.name.toLowerCase())}, where no rocket can make a franc; refusing it was the money move.`);
+      else if (b.n > 0 && f.refused) notes.push(`You refused ${cap(o.name.toLowerCase())}; ${words[b.n]} boosters would have made ${fmtFrancs(b.profit)} there.`);
+      else if (!f.refused && f.n > b.n) notes.push(`${cap(who)} at ${cap(o.name.toLowerCase())} didn’t pay for your ${f.n > b.n + 1 ? 'last boosters' : 'last booster'}: ` + (c.wf === 0 ? 'past light-time the wait barely shrinks, and the fuel bill doesn’t care.' : 'the flowers were already fresh enough for the price.'));
+      else if (!f.refused && f.n < b.n) notes.push(`${cap(who)} at ${cap(o.name.toLowerCase())} would have paid for ${b.n - f.n > 1 ? 'more boosters' : 'one more booster'}: ` + (c.wf > 0 ? 'the speed hardly changes, but the flowers’ clock does, and that is what they pay for.' : 'it still arrives sooner, and they pay for every month.'));
+    });
+    const did = notes.length ? notes.join(' ') : 'Every rocket carried exactly the boosters its customer would pay for, and you refused the order nobody could make pay.';
+    $('#verdict').innerHTML = `<h1>${head}</h1><p class="p">${did}</p>
+      <p class="p paper"><b>Einstein, 1905:</b> speeds don’t simply add; half of light on top of half of light is four-fifths, and no pile of boosters ever reaches light. A clock that travels runs slow, and the closer to light it goes, the slower it runs. And the energy a body needs grows without limit as it nears the speed of light.</p>
+      <p class="p means"><b>What that means for the Light Post:</b> the light limit binds the customers who wait: past a point, no booster brings the rocket sooner. It doesn’t bind the flowers: every booster slows their clock. And the fuel bill binds you, which is why the florist far away is the only one worth the late boosters.</p>`;
+    $('#tally').innerHTML = os.map((o, i) => { const f = fl[i], b = bs[i];
+      return `<div class="r"><div><b>${o.name}</b> · ${WHO[o.who].toLowerCase()} · ${f.refused ? 'refused' : f.n + ' booster' + (f.n === 1 ? '' : 's')}${b.n !== f.n ? ` (best: ${b.n ? b.n : 'refuse'})` : ''}</div><span class="${f.profit < -0.5 || (b.n === 0 && !f.refused) ? 'bad' : ''}">${f.refused ? '0' : (f.profit >= 0.5 ? '+' : '') + Math.round(f.profit)}</span></div>`; }).join('');
     S.plays++; show('s-end');
   }
   function endHaul() {
-    const f = S.result.flights[0];
-    const head = f.ok ? 'Fresh flowers, a hundred years on.' : f.refused ? 'Refused. It was possible.' : f.outcome === 'WILTED' ? 'On time, but wilted.' : 'Too late.';
-    const body = f.refused ? 'With six boosters the flowers would have aged only about seven years while a century passed at home.'
-      : `A century passed at home: ${fmtYears(f.tHome)}. The flowers aged ${fmtYears(f.tCargo)}.` + (f.ok ? ' Everyone who placed this order is long gone. The flowers are fresh.' : ' Every booster you add barely changes the century, but it slows the flowers’ clock a lot.');
+    const f = S.result.flights[0], o = CONFIG.haul.orders[0], b = best(o);
+    const head = f.refused ? 'Refused. There was money in it.' : f.profit >= 0.5 ? `${fmtFrancs(f.profit)}, a century from now.` : 'A century on, and a loss.';
+    const body = f.refused ? `With six boosters the flowers would have aged about ${fmtYears(b.tCargo)} while a century passed at home, and the museum would have paid ${fmtFrancs(b.revenue)} against ${fmtFrancs(b.cost)} of fuel.`
+      : `A century passed at home: ${fmtYears(f.tHome)}. The flowers aged ${fmtYears(f.tCargo)}. The museum paid ${fmtFrancs(f.revenue)}; the fuel cost ${fmtFrancs(f.cost)}.` + (f.profit >= 0.5 ? ' Everyone who placed this order is long gone. The flowers are young.' : ' Every booster you add barely changes the century, but it slows the flowers’ clock a lot, and only the sixth slows it enough to be worth the fuel.');
     $('#haulverdict').innerHTML = `<h1>${head}</h1><p class="p">${body}</p>
       <p class="p paper"><b>Einstein, 1905:</b> a clock carried away at high speed falls behind the clock that stayed. The paper speaks of clocks; this game lets the flowers keep time the same way.</p>
-      <p class="p means">Nothing outruns light, so the century at home is unavoidable. The ten years in the box are not.</p>`;
+      <p class="p means">Nothing outruns light, so the century at home is unavoidable. The years in the box are not, and the fuel to buy them back grows without limit.</p>`;
     show('s-haulend');
   }
   $('#b-haul').onclick = () => openBook('haul');

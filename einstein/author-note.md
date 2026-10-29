@@ -1,3 +1,5 @@
+**Revised twice after first review.** The score is now profit: customers (florist, hospital, gallery, museum) pay continuously for freshness or for speed, and fuel costs Einstein's §10 energy at a price. The test range has a slider that previews the race, both clocks and the till. See memo §20–21; the config block in `mechanism.js` has every price and fee tagged.
+
 **Revised after first review:** the test range now has a booster slider that previews the race and moves both clocks live; the order book is unchanged. See memo §20.
 
 # The Light Post — note for the author

@@ -1,55 +1,53 @@
-AIM: Deliver the flowers on time and still fresh.
+AIM: Deliver flowers to the stars at a profit.
 
-TEST RANGE: NEW BERN, 4 light-years; light takes 4 years
-> launch with 2 boosters
-  NEW BERN with 2: rocket at 80% of light speed; light lands at 4 years; rocket lands at 5 years (deadline 4½ years) LATE; flowers aged 3 years (keep 1 year) WILTED → LATE_WILTED
-  log row: 2 boosters = 80% of light speed, flowers age three-fifths as fast
-> launch with 3 boosters
-  NEW BERN with 3: rocket at 93% of light speed; light lands at 4 years; rocket lands at 4 years 3 months (deadline 4½ years) ON TIME; flowers aged 1 year 7 months (keep 1 year) WILTED → WILTED
-  log row: 3 boosters = 93% of light speed, flowers age a third as fast
-> launch with 5 boosters
-  NEW BERN with 5: rocket at 99% of light speed; light lands at 4 years; rocket lands at 4 years 12 days (deadline 4½ years) ON TIME; flowers aged 6 months 6 days (keep 1 year) FRESH → DELIVERED
-  log row: 5 boosters = 99% of light speed, flowers age an eighth as fast
-> launch with 4 boosters
-  NEW BERN with 4: rocket at 98% of light speed; light lands at 4 years; rocket lands at 4 years 1 month (deadline 4½ years) ON TIME; flowers aged 10 months 24 days (keep 1 year) FRESH → DELIVERED
-  log row: 4 boosters = 98% of light speed, flowers age a fifth as fast
+TEST RANGE: NEW BERN, 4 light-years; the florist pays up to 150
+> slide to 2, launch
+  NEW BERN with 2: about 80% of light speed; light lands at 4 years, rocket at 5 years; flowers aged 3 years (keep 3 years); the florist paid 0 francs of 150 (freshness worth nothing, speed worth nothing); fuel 7 francs → PROFIT −7 francs
+> slide to 3, launch
+  NEW BERN with 3: about 95% of light speed; light lands at 4 years, rocket at 4 years 4 months; flowers aged 19 months (keep 3 years); the florist paid 70 francs of 150 (freshness worth a third, speed worth over half); fuel 17 francs → PROFIT 53 francs
+> slide to 5, launch
+  NEW BERN with 5: about 99% of light speed; light lands at 4 years, rocket at 4 years; flowers aged 6 months (keep 3 years); the florist paid 124 francs of 150 (freshness worth most of it, speed worth most of it); fuel 68 francs → PROFIT 56 francs
+> slide to 4, launch
+  NEW BERN with 4: about 98% of light speed; light lands at 4 years, rocket at 4 years 1 month; flowers aged 11 months (keep 3 years); the florist paid 105 francs of 150 (freshness worth over half, speed worth most of it); fuel 36 francs → PROFIT 69 francs
+> slide to 6, launch
+  NEW BERN with 6: all but light speed; light lands at 4 years, rocket at 4 years; flowers aged 4 months (keep 3 years); the florist paid 135 francs of 150 (freshness worth most of it, speed worth all of it); fuel 125 francs → PROFIT 10 francs
 
-ORDER BOOK A: 11 boosters in the crate
-  card THUN: 1 light-years (light takes 1 year); arrive within 2½ years; flowers keep 1 year
-  card OLTEN: 10 light-years (light takes 10 years); arrive within 11 years; flowers keep 2½ years
-  card BRIG: 6 light-years (light takes 6 years); arrive within 5 years; flowers keep 3 years
-  card SION: 20 light-years (light takes 20 years); arrive within 21 years; flowers keep 3 years
-> LAUNCH ALL 2-3-2-4 (0 left over)
-  THUN with 2: rocket at 80% of light speed; light lands at 1 year; rocket lands at 1 year 3 months (deadline 2½ years) ON TIME; flowers aged 9 months (keep 1 year) FRESH → DELIVERED
-  OLTEN with 3: rocket at 93% of light speed; light lands at 10 years; rocket lands at 10 years 9 months (deadline 11 years) ON TIME; flowers aged 3 years 11 months (keep 2½ years) WILTED → WILTED
-  BRIG with 2: rocket at 80% of light speed; light lands at 6 years; rocket lands at 7 years 6 months (deadline 5 years) LATE; flowers aged 4 years 6 months (keep 3 years) WILTED → LATE_WILTED
-  SION with 4: rocket at 98% of light speed; light lands at 20 years; rocket lands at 20 years 6 months (deadline 21 years) ON TIME; flowers aged 4 years 6 months (keep 3 years) WILTED → WILTED
-  score 1 of 4
-> LAUNCH ALL 2-4-0-5 (0 left over)
-  THUN with 2: rocket at 80% of light speed; light lands at 1 year; rocket lands at 1 year 3 months (deadline 2½ years) ON TIME; flowers aged 9 months (keep 1 year) FRESH → DELIVERED
-  OLTEN with 4: rocket at 98% of light speed; light lands at 10 years; rocket lands at 10 years 3 months (deadline 11 years) ON TIME; flowers aged 2 years 3 months (keep 2½ years) FRESH → DELIVERED
-  BRIG: refused (right: light itself would be late)
-  SION with 5: rocket at 99% of light speed; light lands at 20 years; rocket lands at 20 years 2 months (deadline 21 years) ON TIME; flowers aged 2 years 6 months (keep 3 years) FRESH → DELIVERED
-  score 4 of 4
+ORDER BOOK A
+  card THUN: 2 light-years; the hospital pays up to 100, keep 1 year, patience 2 years; best = 3
+  card OLTEN: 10 light-years; the florist pays up to 200, keep 10 years, patience 1 year; best = 4
+  card BRIG: 20 light-years; the florist pays up to 150, keep 2 years, patience 1 year; best = 0
+  card SION: 15 light-years; the florist pays up to 150, keep 5 years, patience 1 year; best = 5
+> LAUNCH ALL 3-3-3-3
+  THUN with 3: about 95% of light speed; light lands at 2 years, rocket at 2 years 2 months; flowers aged 10 months (keep 1 year); the hospital paid 92 francs of 100 (freshness worth a little, speed worth most of it); fuel 17 francs → PROFIT 75 francs
+  OLTEN with 3: about 95% of light speed; light lands at 10 years, rocket at 10 years 9 months; flowers aged 4 years (keep 10 years); the florist paid 120 francs of 200 (freshness worth over half, speed worth a little); fuel 17 francs → PROFIT 103 francs
+  BRIG with 3: about 95% of light speed; light lands at 20 years, rocket at 21 years 6 months; flowers aged 8 years (keep 2 years); the florist paid 0 francs of 150 (freshness worth nothing, speed worth nothing); fuel 17 francs → PROFIT −17 francs
+  SION with 3: about 95% of light speed; light lands at 15 years, rocket at 16 years 2 months; flowers aged 6 years (keep 5 years); the florist paid 0 francs of 150 (freshness worth nothing, speed worth nothing); fuel 17 francs → PROFIT −17 francs
+  profit 145 francs of a possible 219 francs
+> LAUNCH ALL 3-4-0-5
+  THUN with 3: about 95% of light speed; light lands at 2 years, rocket at 2 years 2 months; flowers aged 10 months (keep 1 year); the hospital paid 92 francs of 100 (freshness worth a little, speed worth most of it); fuel 17 francs → PROFIT 75 francs
+  OLTEN with 4: about 98% of light speed; light lands at 10 years, rocket at 10 years 3 months; flowers aged 2 years 3 months (keep 10 years); the florist paid 155 francs of 200 (freshness worth over half, speed worth over half); fuel 36 francs → PROFIT 119 francs
+  BRIG: refused (right: nothing pays here)
+  SION with 5: about 99% of light speed; light lands at 15 years, rocket at 15 years 1 month; flowers aged 23 months (keep 5 years); the florist paid 92 francs of 150 (freshness worth over half, speed worth most of it); fuel 68 francs → PROFIT 24 francs
+  profit 219 francs of a possible 219 francs
 
-ORDER BOOK B: 11 boosters in the crate
-  card AARAU: 2 light-years (light takes 2 years); arrive within 3 years; flowers keep 1 year
-  card CHUR: 3 light-years (light takes 3 years); arrive within 3 years; flowers keep 2 years
-  card BIEL: 8 light-years (light takes 8 years); arrive within 12 years; flowers keep 7 years
-  card ZUG: 50 light-years (light takes 50 years); arrive within 52 years; flowers keep 5 years
-> LAUNCH ALL 2-3-2-4 (0 left over)
-  AARAU with 2: rocket at 80% of light speed; light lands at 2 years; rocket lands at 2 years 6 months (deadline 3 years) ON TIME; flowers aged 1 year 6 months (keep 1 year) WILTED → WILTED
-  CHUR with 3: rocket at 93% of light speed; light lands at 3 years; rocket lands at 3 years 2 months (deadline 3 years) LATE; flowers aged 1 year 2 months (keep 2 years) FRESH → LATE
-  BIEL with 2: rocket at 80% of light speed; light lands at 8 years; rocket lands at 10 years (deadline 12 years) ON TIME; flowers aged 6 years (keep 7 years) FRESH → DELIVERED
-  ZUG with 4: rocket at 98% of light speed; light lands at 50 years; rocket lands at 51 years 3 months (deadline 52 years) ON TIME; flowers aged 11 years 3 months (keep 5 years) WILTED → WILTED
-  score 1 of 4
-> LAUNCH ALL 3-0-2-6 (0 left over)
-  AARAU with 3: rocket at 93% of light speed; light lands at 2 years; rocket lands at 2 years 1 month (deadline 3 years) ON TIME; flowers aged 9 months 18 days (keep 1 year) FRESH → DELIVERED
-  CHUR: refused (right: light itself would be late)
-  BIEL with 2: rocket at 80% of light speed; light lands at 8 years; rocket lands at 10 years (deadline 12 years) ON TIME; flowers aged 6 years (keep 7 years) FRESH → DELIVERED
-  ZUG with 6: rocket at nearly all of light speed; light lands at 50 years; rocket lands at 50 years 1 month (deadline 52 years) ON TIME; flowers aged 3 years 8 months (keep 5 years) FRESH → DELIVERED
-  score 4 of 4
+ORDER BOOK B
+  card AARAU: 2 light-years; the gallery pays up to 150, keep 1 year, patience 1 year; best = 4
+  card CHUR: 8 light-years; the hospital pays up to 60, keep 1 year, patience 4 years; best = 3
+  card BIEL: 30 light-years; the hospital pays up to 100, keep 1 year, patience ½ years; best = 0
+  card ZUG: 30 light-years; the florist pays up to 300, keep 5 years, patience 1 year; best = 6
+> LAUNCH ALL 3-3-3-3
+  AARAU with 3: about 95% of light speed; light lands at 2 years, rocket at 2 years 2 months; flowers aged 10 months (keep 1 year); the gallery paid 79 francs of 150 (freshness worth a little, speed worth most of it); fuel 17 francs → PROFIT 62 francs
+  CHUR with 3: about 95% of light speed; light lands at 8 years, rocket at 8 years 7 months; flowers aged 3 years 2 months (keep 1 year); the hospital paid 51 francs of 60 (freshness worth nothing, speed worth most of it); fuel 17 francs → PROFIT 34 francs
+  BIEL with 3: about 95% of light speed; light lands at 30 years, rocket at 32 years 4 months; flowers aged 12 years (keep 1 year); the hospital paid 0 francs of 100 (freshness worth nothing, speed worth nothing); fuel 17 francs → PROFIT −17 francs
+  ZUG with 3: about 95% of light speed; light lands at 30 years, rocket at 32 years 4 months; flowers aged 12 years (keep 5 years); the florist paid 0 francs of 300 (freshness worth nothing, speed worth nothing); fuel 17 francs → PROFIT −17 francs
+  profit 62 francs of a possible 152 francs
+> LAUNCH ALL 4-3-0-6
+  AARAU with 4: about 98% of light speed; light lands at 2 years, rocket at 2 years 1 month; flowers aged 5 months (keep 1 year); the gallery paid 113 francs of 150 (freshness worth over half, speed worth most of it); fuel 36 francs → PROFIT 77 francs
+  CHUR with 3: about 95% of light speed; light lands at 8 years, rocket at 8 years 7 months; flowers aged 3 years 2 months (keep 1 year); the hospital paid 51 francs of 60 (freshness worth nothing, speed worth most of it); fuel 17 francs → PROFIT 34 francs
+  BIEL: refused (right: nothing pays here)
+  ZUG with 6: all but light speed; light lands at 30 years, rocket at 30 years 1 month; flowers aged 2 years 3 months (keep 5 years); the florist paid 166 francs of 300 (freshness worth over half, speed worth most of it); fuel 125 francs → PROFIT 41 francs
+  profit 152 francs of a possible 152 francs
 
 THE LONG HAUL
-  LOCARNO with 5: rocket at 99% of light speed; light lands at 100 years; rocket lands at 100 years 9 months (deadline 101 years) ON TIME; flowers aged 12 years 10 months (keep 10 years) WILTED → WILTED
-  LOCARNO with 6: rocket at nearly all of light speed; light lands at 100 years; rocket lands at 100 years 3 months (deadline 101 years) ON TIME; flowers aged 7 years 5 months (keep 10 years) FRESH → DELIVERED
+  LOCARNO with 5: about 99% of light speed; light lands at 100 years, rocket at 100 years 10 months; flowers aged 12 years 11 months (keep 10 years); the museum paid 0 francs of 800 (freshness worth nothing, speed worth a little); fuel 68 francs → PROFIT −68 francs
+  LOCARNO with 6: all but light speed; light lands at 100 years, rocket at 100 years 3 months; flowers aged 7 years 5 months (keep 10 years); the museum paid 207 francs of 800 (freshness worth a little, speed worth over half); fuel 125 francs → PROFIT 81 francs
