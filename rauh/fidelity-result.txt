@@ -1,0 +1,31 @@
+PASS platypus sentence = 24.44 (published 24.4, Wikipedia 'Flesch–Kincaid readability tests')
+PASS "The cat sat on the mat." = 116.15 (published 116.1)
+PASS every release word has a hand count (169 words)
+PASS syllables() matches the hand count for all of them
+PASS Commission below both governments on all three indicators (p. 692)
+PASS Commission below broadsheets and tabloids on all three (p. 692)
+PASS Commission closer to political-science abstracts than to broadsheets on reading ease and verbs (p. 692)
+PASS Commission below political scientists on familiar words (p. 692: "performs even worse")
+PASS Commission in Flesch's graduate band (<30), UK above it (p. 692: university graduates vs high school) — 26.7 vs 40
+PASS annual reading ease flat: range 3.0 points, first 27.6 last 25.6 (p. 693: "hardly changed")
+PASS in no year does the Commission reach the Irish government average (Fig. 2 lower panel)
+PASS original release scores 21.1: inside the Commission spread (Fig. 2 lower panel, ~10–45) and below the Irish average
+PASS original within 7 points of the Commission average 26.7
+PASS with 2 edits, 9 of 40 plans reach 40 (best 46.7: -1,-1,-1,1,0)
+PASS a random plan succeeds 23% of the time (< 50%: the choice matters)
+PASS no two-edit plan reaches the broadsheet line 48.1 (the aim is the UK line, not beyond)
+PASS a player who always picks the single biggest improvement reaches 46.7 (sensible play succeeds)
+PASS plain syllable heuristic: plan ranking correlates with the game's (Spearman 0.983)
+PASS plain syllable heuristic: its best plan (-1,-1,-1,1,0) also reaches the UK line in the game (46.7)
+INFO Flesch–Kincaid grade formula: plan ranking correlation with the game's Spearman 0.584 — this formula weighs sentence length more, so the order of middling plans shifts; the claim the game makes is checked below
+PASS Flesch–Kincaid grade formula: its best plan (-1,0,-1,1,-1) also reaches the UK line in the game (42.9)
+PASS hand-checked counter: mean one-edit gain — shorter sentences 5.4, everyday words 9.1, who-does-what 8.9
+PASS plain heuristic: mean one-edit gain — shorter sentences 5.4, everyday words 9.2, who-does-what 8.8
+PASS every rewrite improves the score under both formulas (no edit is a trap)
+PASS single best edit under both formulas: p4 verbs (Flesch +14.9; FK grade −2.9) / FK best p4 verbs
+INFO one-edit gains (Flesch points / FK grades): p1-split 4.8/2.36  p1-verbs 4.1/0.91  p2-split 8.4/2.82  p2-words 9.2/1.86  p3-words 7.6/0.94  p3-verbs 8.6/1.44  p4-split 2.9/1.28  p4-verbs 14.9/2.88  p5-words 10.5/1.76  p5-verbs 8.0/1.37
+PASS split rewrite of p1 adds sentences (1→3) and keeps word length (1.70→1.81 syll/word)
+PASS split rewrite of p2 adds sentences (1→3) and keeps word length (1.65→1.58 syll/word)
+PASS split rewrite of p4 adds sentences (1→2) and keeps word length (2.32→2.33 syll/word)
+
+ALL PASS

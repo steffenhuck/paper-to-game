@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Say It Plainly</title>
+<style>
+  :root { --bg:#f3f1ec; --card:#fffefa; --ink:#1d2433; --dim:#656b78; --line:#d8d4ca; --comm:#2b3f99; --gov:#d9a714; --oth:#4f9a5c;
+          --ok:#2f7a3c; --no:#b23a2a; --you:#1d2433; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body { margin:0; background:var(--bg); color:var(--ink); font-family:-apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size:16px; line-height:1.45; }
+  .screen { display:none; max-width:560px; margin:0 auto; padding:20px 16px 40px; }
+  .screen.on { display:block; }
+  h1 { font-size:36px; line-height:1.05; margin:10px 0 8px; letter-spacing:-.015em; }
+  h2 { font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); margin:14px 0 6px; font-weight:600; }
+  p { margin:8px 0; }
+  .lede { font-size:18px; }
+  .aim { font-size:18px; font-weight:650; margin:14px 0; padding:10px 0; border-top:2px solid var(--ink); border-bottom:2px solid var(--ink); }
+  .aimbar { font-size:12px; color:var(--dim); margin:0 0 4px; line-height:1.3; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; }
+  button { font:inherit; font-size:16px; background:var(--card); color:var(--ink); border:2px solid var(--ink); border-radius:10px; padding:12px 14px; min-height:48px; cursor:pointer; flex:1; }
+  button.primary { background:var(--ink); color:#fff; }
+  button:disabled { opacity:.35; cursor:default; }
+  button.q { flex:0 0 auto; width:40px; min-height:40px; height:40px; padding:0; border-radius:50%; font-weight:700; color:var(--dim); border-color:var(--dim); }
+  .hud { display:flex; justify-content:space-between; align-items:center; gap:8px; }
+  .orient { font-size:15px; color:var(--dim); margin:6px 0 8px; }
+  .q-big { font-size:20px; font-weight:700; line-height:1.25; margin:10px 0 6px; }
+  svg { display:block; width:100%; height:auto; touch-action:none; }
+  .say { font-size:17px; margin:12px 0 6px; padding:10px 12px; background:var(--card); border-left:5px solid var(--comm); border-radius:6px; }
+  .say b { color:var(--comm); }
+  .fade { animation: fade .45s ease-out; }
+  @keyframes fade { from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
+  .strip { margin:8px 0; }
+  .strip .lbl { font-size:14px; font-weight:650; margin:8px 0 4px; }
+  .strip .chips { display:flex; gap:4px; flex-wrap:wrap; align-items:center; }
+  .chip { font-size:12px; padding:3px 7px; border-radius:12px; border:1.5px solid var(--line); background:var(--card); white-space:nowrap; }
+  .chip.comm { background:var(--comm); color:#fff; border-color:var(--comm); font-weight:700; }
+  .chip.gov { border-color:var(--gov); } .chip.oth { border-color:var(--oth); }
+  .ends { display:flex; justify-content:space-between; font-size:11px; color:var(--dim); }
+  /* editor */
+  .gauge { position:sticky; top:0; z-index:5; background:var(--bg); padding:8px 0 4px; border-bottom:1px solid var(--line); }
+  .score { display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
+  .score .num { font-size:26px; font-weight:800; font-variant-numeric:tabular-nums; }
+  .score .num small { font-size:14px; font-weight:600; color:var(--dim); }
+  .tok { display:inline-block; width:22px; height:22px; border-radius:50%; background:var(--ink); margin-left:5px; vertical-align:-4px; }
+  .tok.spent { background:transparent; border:2px solid var(--line); }
+  .toks { font-size:14px; color:var(--dim); white-space:nowrap; }
+  .delta { font-weight:800; font-size:16px; color:var(--ok); }
+  .release { background:var(--card); border:1px solid var(--line); border-radius:6px; padding:14px 12px; margin:12px 0; font-family:Georgia, "Times New Roman", serif; }
+  .release .kick { font-family:-apple-system, "Segoe UI", Roboto, Arial, sans-serif; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--comm); font-weight:700; }
+  .release .hl { font-size:20px; font-weight:700; line-height:1.2; margin:4px 0 8px; }
+  .release .dl { font-size:13px; color:var(--dim); font-style:italic; margin-bottom:6px; }
+  .para { display:block; width:100%; text-align:left; font-family:inherit; font-size:15.5px; line-height:1.45; padding:8px 10px; margin:6px 0; border:2px dashed var(--line); border-radius:8px; background:transparent; min-height:0; }
+  .para.open { border-style:solid; border-color:var(--ink); }
+  .para.done { border-style:solid; border-color:var(--ok); background:#f1f7f0; }
+  .para .tag { display:inline-block; font-family:-apple-system, Arial, sans-serif; font-size:11px; font-weight:700; color:var(--ok); text-transform:uppercase; letter-spacing:.08em; margin-bottom:2px; }
+  .opts { margin:2px 0 12px; padding:8px; border-radius:8px; background:#e9e6de; font-family:-apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+  .opts .h { font-size:13px; color:var(--dim); margin:0 2px 6px; }
+  .opt { display:block; width:100%; text-align:left; margin:6px 0; padding:10px; font-size:15px; line-height:1.4; border-width:2px; }
+  .opt b { display:block; font-size:13px; text-transform:uppercase; letter-spacing:.06em; margin-bottom:3px; }
+  .opt span { font-family:Georgia, "Times New Roman", serif; }
+  .opt.x { text-align:center; min-height:44px; padding:8px; font-size:14px; border-color:var(--dim); color:var(--dim); }
+  /* end */
+  .verdict div { margin:10px 0; }
+  .verdict .you { font-size:26px; font-weight:800; line-height:1.2; }
+  .verdict .you.ok { color:var(--ok); }
+  .verdict .paper { font-size:18px; }
+  .verdict .means { font-size:18px; font-style:italic; }
+  .elog { font-size:15px; padding:8px 10px; border-left:5px solid var(--line); background:var(--card); border-radius:6px; margin:6px 0; }
+  .elog.best { border-left-color:var(--comm); }
+  .about p, .about li { font-size:15px; }
+  .about h3 { font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:var(--dim); margin:18px 0 4px; }
+  .attr { font-size:13px; color:var(--dim); margin-top:18px; border-top:1px solid var(--line); padding-top:8px; }
+  .muted { color:var(--dim); font-size:14px; }
+  a { color:var(--comm); }
+</style>
+</head>
+<body>
+
+<!-- START -->
+<section class="screen on" id="s-start">
+  <div class="release" style="margin-top:4px">
+    <div class="kick">European Commission · Press release</div>
+    <div class="hl" style="font-size:16px; font-weight:400">"…constitutes an essential element in the achievement of the objectives of…"</div>
+  </div>
+  <h1>Say It Plainly</h1>
+  <p class="lede">The EU's executive, the European Commission, sends out thousands of press releases. They are meant for you. How easy are they to read — and could they be easier?</p>
+  <div class="aim" id="aim-start"></div>
+  <p class="muted">About four minutes. Two quick guesses, then you edit. The numbers come from a 2023 study of 44,978 Commission press releases.</p>
+  <div class="row"><button class="primary" id="b-start">Start</button></div>
+  <div class="row" style="margin-top:10px"><button id="b-help1">How to play</button><button id="b-about1">About the paper</button></div>
+</section>
+
+<!-- BET 1 -->
+<section class="screen" id="s-bet1">
+  <div class="hud"><h2 style="margin:0">Guess 1 of 2</h2><button class="q" data-help>?</button></div>
+  <p class="orient"><b>Reading ease</b> is a standard score built from sentence length and word length. <b>Higher is easier.</b> Above 60 is plain everyday English; below 30 is text for university graduates.</p>
+  <p class="orient">The dots are averages from thousands of real texts: <span style="color:var(--oth);font-weight:700">academics and newspapers</span>, and <span style="color:var(--gov);font-weight:700">two national governments</span>.</p>
+  <svg id="r1" viewBox="0 0 360 140"></svg>
+  <div id="bet1-ask">
+    <div class="q-big">Where do the European Commission's press releases sit? Tap the line.</div>
+    <div class="row"><button class="primary" id="b-lock1" disabled>Lock in my guess</button></div>
+  </div>
+  <div id="bet1-out" style="display:none">
+    <div class="say fade" id="bet1-say"></div>
+    <div class="fade" id="strips"></div>
+    <div class="row" style="margin-top:12px"><button class="primary" id="b-to2">Next guess</button></div>
+  </div>
+</section>
+
+<!-- BET 2 -->
+<section class="screen" id="s-bet2">
+  <div class="hud"><h2 style="margin:0">Guess 2 of 2</h2><button class="q" data-help>?</button></div>
+  <p class="orient">From 1985 to 2020 the EU took on far more power, and Europeans started arguing about it: referendums lost, a Commission forced out, the euro crisis, Brexit. The Commission said, more than once, that it would explain itself better.</p>
+  <svg id="tr" viewBox="0 0 360 216"></svg>
+  <div id="bet2-ask">
+    <div class="q-big">Over those 35 years, did its press releases get easier to read?</div>
+    <div class="row"><button data-tr="easier">Easier</button><button data-tr="same">About the same</button><button data-tr="harder">Harder</button></div>
+  </div>
+  <div id="bet2-out" style="display:none">
+    <div class="say fade" id="bet2-say"></div>
+    <div class="row" style="margin-top:12px"><button class="primary" id="b-to-edit">Your turn: edit one</button></div>
+  </div>
+</section>
+
+<!-- EDITOR -->
+<section class="screen" id="s-edit">
+  <div class="gauge">
+    <div class="hud"><div class="aimbar" id="aim-edit"></div><button class="q" data-help>?</button></div>
+    <div class="score"><div class="num"><span id="ease">0</span> <small>reading ease</small> <span class="delta" id="delta"></span></div><div class="toks">edits left<span id="toks"></span></div></div>
+    <svg id="r2" viewBox="0 0 360 94"></svg>
+  </div>
+  <p class="orient" id="edit-orient">This release is ours, written the way the Commission writes. Tap a paragraph to see two rewrites that say the same thing. Each change uses one edit, so pick the paragraphs that hurt most.</p>
+  <div class="release">
+    <div class="kick">European Commission · Press release</div>
+    <div class="hl" id="hl"></div>
+    <div class="dl">Brussels, today</div>
+    <div id="paras"></div>
+  </div>
+  <div class="row"><button class="primary" id="b-send">Send it to the press</button></div>
+</section>
+
+<!-- END -->
+<section class="screen" id="s-end">
+  <div class="verdict" id="verdict"></div>
+  <svg id="r3" viewBox="0 0 360 94"></svg>
+  <h2>What your edits did</h2>
+  <div id="elog"></div>
+  <h2>Why it matters, and why it might be</h2>
+  <p style="font-size:15px">The study cites evidence that clear releases get picked up by journalists more often, that people remember clear messages better, and that people read complicated language as a sign of distance. It found the gap on topic after topic, migration and the pandemic included. Why the Commission writes this way is open: habit and identity, compromise between many departments, or deliberate caution on touchy subjects. The study leaves that for future research.</p>
+  <div class="row" style="margin-top:14px"><button class="primary" id="b-again">Try the edits again</button><button id="b-about2">About the paper</button></div>
+  <div class="row" style="margin-top:10px"><button id="b-restart">Start over</button></div>
+  <p class="attr" id="attr2"></p>
+</section>
+
+<!-- HELP -->
+<section class="screen" id="s-help">
+  <h2>How to play</h2>
+  <div class="aim" id="aim-help"></div>
+  <p><b>The setting.</b> The European Commission proposes the EU's laws and runs much of its day-to-day business. Every day it issues press releases, written for journalists but meant to reach ordinary citizens. A 2023 study measured how easy 44,978 of them (1985–2020) are to read, and compared them with UK and Irish government press releases, political-science abstracts, and political news in broadsheet and tabloid papers.</p>
+  <p><b>Reading ease.</b> A standard score (Flesch, 1948) worked out from two things only: how many words a sentence has on average, and how many syllables a word has. Long sentences and long words lower it. Higher is easier: everyday English scores 60 or more; text for university graduates scores under 30. It is the study's main measure.</p>
+  <p><b>Guess 1.</b> Tap the line where you think the Commission's releases sit, then lock it in. No points; it just makes you commit.</p>
+  <p><b>Guess 2.</b> Say whether the releases got easier, harder or stayed the same between 1985 and 2020. The study's yearly averages are then drawn in.</p>
+  <p><b>The edit.</b> A press release we wrote in the Commission's usual style (it is not a real one). Tap a paragraph: you get two rewrites that keep every fact. "Shorter sentences" cuts it into pieces but keeps the long words. "Everyday words" swaps long official words for short common ones. "Say who does what" turns nouns like "implementation" back into people doing things. You have <b>two edits</b>. The score above the release is the reading ease of the whole release, worked out live with the same formula the study used.</p>
+  <p><b>The yardstick.</b> The UK government's average, 40. Reach it and you've done what was asked.</p>
+  <p><b>What it shows.</b> Where the Commission's language sits, that it has not moved in 35 years, and that plain versions of the same message are within reach.</p>
+  <div class="row"><button class="primary" id="b-help-back">Back</button></div>
+</section>
+
+<!-- ABOUT -->
+<section class="screen about" id="s-about">
+  <h2>About the paper</h2>
+  <p><b>Rauh, C. (2023).</b> Clear messages to the European public? The language of European Commission press releases 1985–2020. <i>Journal of European Integration</i> 45(4): 683–701. <a href="https://doi.org/10.1080/07036337.2022.2134860">doi:10.1080/07036337.2022.2134860</a></p>
+  
+<h3>Fidelity: two parts, labelled</h3>
+<p><b>The two guesses are the study's data.</b> Every dot and the yearly line are averages the paper reports in its Figure 2, read off the figure (to about ±1 reading-ease point; the paper gives no table). <b>The edit is a working model of the study's measure.</b> The score is the Flesch reading-ease formula, exactly as the study uses it: 206.835 − 1.015 × (words per sentence) − 84.6 × (syllables per word). The press release and its rewrites are ours, written in the Commission's usual style. It is not a real release.</p>
+<p><b>It demonstrates</b> where Commission press releases sit against national governments, academics and newspapers; that they did not get easier from 1985 to 2020; and how the study's main measure responds to shorter sentences, shorter words and verbs. <b>It assumes</b> our invented release, our rewrites, our two-edit budget and our syllable counter (checked by hand for every word in the game). <b>The paper establishes</b> the averages across 44,978 Commission releases, 92,070 UK and Irish government releases, 2,332 political-science abstracts and about 80,000 newspaper paragraphs, and that the gap holds within topics (56 of 60 topic-by-measure comparisons, Figure 3) and after matching on topics. It does not test rewrites of any release, and it does not claim that clearer releases would change what Europeans think.</p>
+<h3>The three measures</h3>
+<p><b>Reading ease</b> (Flesch 1948): sentence length and word length. <b>Familiar words</b>: how often the words appear in the Google Books corpus for that decade, relative to "the". <b>Verbs, not nouns</b>: the share of verbs among all verbs and nouns; noun-heavy "nominal style" hides who does what. The game computes only the first live; the other two appear as the study's values, because we cannot reproduce the study's Google Books data or its part-of-speech tagging on the same scale.</p>
+<h3>The discovery</h3>
+<p>The Commission's political power and public controversy both grew over these 35 years, and it repeatedly promised better communication. Its press releases stayed about as hard to read as academic prose, harder than two national governments and far harder than newspapers — and the yearly average did not move. Only word choice became slightly more familiar.</p>
+<h3>What is cut</h3>
+<p>Figure 1 (the number of releases per month: about 100 a month by the 1990s, around 150 under Prodi and Barroso, slightly more than 50 under Juncker, as social media took over); the topic-by-topic detail of Figure 3; the topic-matching check (Appendix B); the study's discussion of the Commission's history of public communication.</p>
+<h3>Divergences</h3>
+<p>Benchmark values are read off a figure. Our release starts at 21, a little below the Commission's 26.7 average and well inside the spread of individual releases. The UK government line as the aim and the two-edit budget are ours: with two edits, about one plan in four reaches the line. The lesson the end screen draws (long words weigh heavily) holds on the study's formula; on a related formula that weighs sentence length more (Flesch–Kincaid grade), splitting sentences counts for more, though the single best edit — rewriting the quote — is the same.</p>
+<h3>For the author</h3>
+<p>See the author note in the repository. This game has had the builder's review only; it has not been tested with real players.</p>
+
+  <p class="attr">Game built from this paper; the paper is the authority where the two disagree.</p>
+  <div class="row"><button class="primary" id="b-about-back">Back</button></div>
+</section>
+
+<script>
+// Say It Plainly — mechanism (the single source of truth).
+// Everything that decides an outcome lives here: the paper's benchmark values, the reading-ease formula,
+// the press release and its rewrites, the edit budget, the scoring of both bets and of the draft.
+// Runs unchanged in Node (require) and in the browser (window.MECH). No DOM, no randomness.
+(function (root) {
+'use strict';
+
+const CONFIG = {
+  // --- The paper's numbers (Rauh 2023, Fig. 2; values read off the figure at 400 dpi, about ±1 point / ±0.00003 / ±0.01) ---
+  sources: [
+    // reading: average Flesch reading ease; familiar: average Google Books frequency relative to 'the'; verbs: verbs/(verbs+nouns)
+    { id: 'polsci',  name: 'Political science abstracts', short: 'Academics',      reading: 14.3, familiar: 0.00256, verbs: 0.415 }, // Fig. 2 upper panel, green
+    { id: 'comm',    name: 'European Commission press releases', short: 'Commission', reading: 26.7, familiar: 0.00249, verbs: 0.475 }, // Fig. 2 upper panel, blue
+    { id: 'ire',     name: 'Irish government press releases', short: 'Irish gov.',  reading: 33.2, familiar: 0.00285, verbs: 0.557 }, // Fig. 2 upper panel, yellow
+    { id: 'uk',      name: 'UK government press releases', short: 'UK gov.',        reading: 40.0, familiar: 0.00289, verbs: 0.596 }, // Fig. 2 upper panel, yellow
+    { id: 'broad',   name: 'Broadsheet newspapers (politics)', short: 'Broadsheets', reading: 48.1, familiar: 0.00277, verbs: 0.680 }, // Fig. 2 upper panel, green
+    { id: 'tabloid', name: 'Tabloid newspapers (politics)', short: 'Tabloids',     reading: 64.5, familiar: 0.00283, verbs: 0.865 }, // Fig. 2 upper panel, green
+  ],
+  // Annual mean reading ease of Commission releases, read off Fig. 2 lower-left panel (±1 point).
+  trend: [[1985, 27.6], [1987, 28.6], [1989, 28.4], [1990, 27.2], [1992, 26.8], [1994, 26.4], [1996, 26.0], [1998, 25.8],
+          [2000, 26.6], [2002, 27.0], [2004, 27.0], [2006, 26.8], [2008, 26.6], [2010, 27.0], [2012, 27.6], [2014, 28.0],
+          [2016, 27.2], [2018, 26.8], [2020, 25.6]],
+  // Moments of politicisation named in the paper (pp. 687-690), placed on the trend for the player.
+  events: [[1992, 'Maastricht No'], [1999, 'Santer quits'], [2005, 'Constitution No'], [2010, 'Euro crisis'], [2016, 'Brexit']],
+  // "Hardly changed": the paper's reading of the trend (p. 693). Our threshold for "about the same": first-to-last change under this many points.
+  sameBand: 5,                       // our choice: the series moves within ±2 points; anything under 5 reads as flat
+
+  // --- Flesch (1948) reading ease, as used in the paper (p. 691, note 3) ---
+  flesch: { a: 206.835, b: 1.015, c: 84.6 },  // FRE = a - b*(words/sentence) - c*(syllables/word)
+
+  // --- Gameplay (ours) ---
+  ruler: { min: 0, max: 70 },        // our choice: the reading-ease axis shown to the player; Fig. 2 spans ~10-70
+  betClose: 4,                       // our choice: a placement within 4 points of the Commission's 26.7 counts as spot on
+  betNear: 9,                        // our choice: within 9 points counts as close
+  budget: 2,                         // our choice: edits allowed before the midday briefing; with 2, reaching the UK line takes picking the right ones (fidelity.js: 1 in 4 plans)
+  target: 'uk',                      // our choice: the aim is the UK government's average (40.0), the paper's clearest national benchmark
+};
+
+// The press release. Written by us in the Commission's typical register; NOT a real release.
+// Each paragraph has the original and two rewrites, each tagged by the kind of change it makes.
+// Every version says the same thing: who proposes what, for how long, why, and what happens next.
+const RELEASE = {
+  headline: 'Commission proposes new rules on the repair of goods',
+  paras: [
+    { id: 'p1', orig: 'The European Commission has today adopted a proposal for a Directive on the promotion of the repair of goods, with a view to the reduction of waste and the reinforcement of consumer rights within the internal market.',
+      alts: [
+        { kind: 'split', text: 'The European Commission has today adopted a proposal for a Directive on the repair of goods. Its objective is the reduction of waste. A further objective is the reinforcement of consumer rights within the internal market.' },
+        { kind: 'verbs', text: 'Today the European Commission proposed new rules so that people can repair the things they buy, throw less away, and have stronger rights wherever they shop in the EU.' },
+      ] },
+    { id: 'p2', orig: 'Under the proposed measures, producers would be subject to an obligation to ensure the availability of spare parts and repair information for a period of up to ten years following the placing on the market of the last unit of a product model.',
+      alts: [
+        { kind: 'split', text: 'Producers would have an obligation to ensure the availability of spare parts and repair information. This obligation would apply for a period of up to ten years. It would start with the placing on the market of the last unit of a model.' },
+        { kind: 'words', text: 'Firms that make goods would have to keep spare parts and repair guides on offer for up to ten years after they sell the last one of a model.' },
+      ] },
+    { id: 'p3', orig: 'The facilitation of repair as an alternative to replacement is an essential element of the European Green Deal and the transition to a circular economy.',
+      alts: [
+        { kind: 'words', text: 'Making repair an easy choice instead of buying new is a key part of the European Green Deal and of the move to an economy that wastes less.' },
+        { kind: 'verbs', text: 'When people fix things instead of buying new ones, they help Europe reach its climate goals and waste less.' },
+      ] },
+    { id: 'p4', orig: 'The Commissioner responsible stated: "This proposal is a significant contribution to the empowerment of consumers and to sustainable consumption."',
+      alts: [
+        { kind: 'split', text: 'The Commissioner responsible stated: "This proposal is a significant contribution to the empowerment of consumers. It also contributes to sustainable consumption."' },
+        { kind: 'verbs', text: 'The Commissioner in charge said: "With this law, people can fix what they own. That saves them money, and it saves the planet."' },
+      ] },
+    { id: 'p5', orig: 'The proposal will now be subject to negotiation and adoption by the European Parliament and the Council under the ordinary legislative procedure. Implementation by the Member States is foreseen within twenty-four months following entry into force.',
+      alts: [
+        { kind: 'words', text: 'The European Parliament and the Council will now negotiate the proposal and must both agree to it. Member States will then have two years to apply the new rules.' },
+        { kind: 'verbs', text: 'Next, the European Parliament and the national governments will debate the proposal and decide whether it becomes law. Each EU country then has two years to put it into practice.' },
+      ] },
+  ],
+};
+const KINDS = {
+  split: 'Shorter sentences',      // the sentence-length half of the Flesch formula
+  words: 'Everyday words',         // the word-length half (and the paper's 'familiar words')
+  verbs: 'Say who does what',      // the paper's verbal style: verbs instead of nominalisations
+};
+
+// ---------------- reading ease ----------------
+// Syllables: a standard vowel-group heuristic, with hand-checked exceptions for words in this game
+// (fidelity.js checks every word the release can contain against a hand count).
+const SYL_EXCEPT = { the: 1, european: 4, every: 3, being: 2, area: 3, idea: 3, people: 2, parliament: 3, business: 2,
+  creature: 2, platypus: 3, reptilian: 4, seemingly: 3, goods: 1, guides: 1, makes: 1, saves: 1, uses: 2,
+  'twenty-four': 3, ensure: 2, agree: 2, eu: 2, commissioner: 4, directive: 3, availability: 6, facilitation: 5,
+  acceleration: 5, consumption: 3, patterns: 2, sustainable: 4, obligation: 4, negotiation: 5, legislative: 4, negotiate: 4, australian: 4, hybrid: 2, mammal: 2, framework: 2, rules: 1,
+  responsible: 4, procedure: 3, unit: 2, model: 2, ordinary: 4, reinforcement: 4, period: 3, therefore: 2,
+  science: 2, sat: 1, foreseen: 2, alternative: 4, ones: 1, once: 1, done: 1, gone: 1, some: 1, came: 1,
+  whether: 2, practice: 2, empowerment: 4, achievement: 3, replacement: 3, implementation: 5, measures: 2,
+  promotion: 3, reduction: 3, information: 4, producers: 3, proposed: 2, adopted: 3, stated: 2, placing: 2, wastes: 1,
+  debate: 2, decide: 2, becomes: 2, cheaper: 2, cycle: 2, able: 2 };
+function syllables(word) {
+  let w = word.toLowerCase().replace(/[^a-z-]/g, '');
+  if (!w) return 0;
+  if (SYL_EXCEPT[w] != null) return SYL_EXCEPT[w];
+  if (w.includes('-')) return w.split('-').reduce((s, p) => s + syllables(p), 0);
+  if (w.length <= 3) return 1;
+  w = w.replace(/(?:[^laeiouy]es|[^laeiouytd]ed|[^laeiouy]e)$/, m => m[0]).replace(/^y/, '');
+  const groups = w.match(/[aeiouy]{1,2}/g);
+  return Math.max(1, groups ? groups.length : 1);
+}
+function words(text) { return text.split(/\s+/).map(t => t.replace(/^[^A-Za-z0-9]+|[^A-Za-z0-9]+$/g, '')).filter(t => /[A-Za-z0-9]/.test(t)); }
+function sentences(text) { return Math.max(1, (text.match(/[.!?]+(?=["'”’)]*(\s|$))/g) || []).length); }
+function textStats(text) {
+  const w = words(text), s = sentences(text), syl = w.reduce((a, x) => a + syllables(x), 0);
+  return { words: w.length, sentences: s, syllables: syl };
+}
+function readingEase(st) {
+  const f = CONFIG.flesch;
+  return f.a - f.b * (st.words / st.sentences) - f.c * (st.syllables / st.words);
+}
+
+// ---------------- the opening bets ----------------
+const src = id => CONFIG.sources.find(s => s.id === id);
+function placeBet(guess) {
+  const truth = src('comm').reading, err = Math.abs(guess - truth);
+  const grade = err <= CONFIG.betClose ? 'spot' : err <= CONFIG.betNear ? 'close' : 'off';
+  return { guess, truth, err, grade, dir: guess > truth ? 'too clear' : 'too hard' };
+}
+function trendTruth() {
+  const t = CONFIG.trend, d = t[t.length - 1][1] - t[0][1];
+  return Math.abs(d) < CONFIG.sameBand ? 'same' : d > 0 ? 'easier' : 'harder';
+}
+function trendBet(choice) { return { choice, truth: trendTruth(), right: choice === trendTruth(), first: CONFIG.trend[0], last: CONFIG.trend[CONFIG.trend.length - 1] }; }
+
+// ---------------- the draft ----------------
+function newDraft() { return { pick: RELEASE.paras.map(() => -1), used: 0, log: [] }; }  // -1 = original wording
+function paraText(i, pick) { return pick < 0 ? RELEASE.paras[i].orig : RELEASE.paras[i].alts[pick].text; }
+function draftText(d) { return RELEASE.paras.map((p, i) => paraText(i, d.pick[i])).join(' '); }
+function draftScore(d) { const st = textStats(draftText(d)); return Object.assign(st, { ease: readingEase(st) }); }
+function left(d) { return CONFIG.budget - d.used; }
+function canEdit(d, i, k) { return left(d) > 0 && d.pick[i] !== k; }
+function edit(d, i, k) {
+  if (!canEdit(d, i, k)) return null;
+  const before = draftScore(d).ease;
+  d.pick[i] = k; d.used++;
+  const after = draftScore(d).ease;
+  const r = { para: i, kind: k < 0 ? 'orig' : RELEASE.paras[i].alts[k].kind, before, after, delta: after - before, left: left(d) };
+  d.log.push(r); return r;
+}
+// where a reading-ease value sits among the paper's benchmarks
+function standing(ease) {
+  const passed = CONFIG.sources.filter(s => s.id !== 'comm' && ease >= s.reading).sort((a, b) => b.reading - a.reading);
+  return passed.length ? passed[0] : null;
+}
+function verdict(d) {
+  const ease = draftScore(d).ease, t = src(CONFIG.target);
+  return { ease, start: draftScore(newDraft()).ease, hit: ease >= t.reading, gap: t.reading - ease,
+           beat: standing(ease), kinds: d.log.map(r => r.kind) };
+}
+// every plan of `budget` edits (one per paragraph): used by the fidelity check and by the end screen's "best possible"
+function allPlans(budget) {
+  const n = RELEASE.paras.length, out = [];
+  (function rec(i, pick, used) {
+    if (i === n) { if (used === budget) out.push(pick.slice()); return; }
+    for (let k = -1; k < RELEASE.paras[i].alts.length; k++) {
+      const u = used + (k >= 0 ? 1 : 0); if (u > budget) continue;
+      pick[i] = k; rec(i + 1, pick, u);
+    }
+  })(0, [], 0);
+  return out.map(pick => ({ pick, ease: draftScore({ pick }).ease }));
+}
+
+// mean gain in reading ease from a single rewrite of each kind, starting from the original release (shown on the end screen)
+function oneEditGains() {
+  const s0 = draftScore(newDraft()).ease, acc = {};
+  RELEASE.paras.forEach((p, i) => p.alts.forEach((a, k) => { const d = newDraft(); d.pick[i] = k; (acc[a.kind] = acc[a.kind] || []).push(draftScore(d).ease - s0); }));
+  const out = {}; for (const k in acc) out[k] = acc[k].reduce((x, y) => x + y, 0) / acc[k].length; return out;
+}
+
+const MECH = { CONFIG, RELEASE, KINDS, syllables, words, sentences, textStats, readingEase, src, placeBet, trendBet, trendTruth,
+  newDraft, paraText, draftText, draftScore, left, canEdit, edit, standing, verdict, allPlans, oneEditGains };
+if (typeof module !== 'undefined' && module.exports) module.exports = MECH; else root.MECH = MECH;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+(function () {
+  const $ = id => document.getElementById(id);
+  const C = MECH.CONFIG, R = MECH.RELEASE;
+  const AIM = 'Make a Commission press release as easy to read as a UK government one — with just two edits.';
+  const ATTR = 'Rauh (2023), <i>Journal of European Integration</i> 45(4): 683–701. doi:10.1080/07036337.2022.2134860. Game built from this paper; the paper is the authority where the two disagree.';
+  ['aim-start', 'aim-edit', 'aim-help'].forEach(id => $(id).textContent = AIM);
+  $('attr2').innerHTML = ATTR;
+  const COL = { comm: '#2b3f99', gov: '#d9a714', oth: '#4f9a5c', ink: '#1d2433', dim: '#656b78', line: '#d8d4ca' };
+  const fam = s => s.id === 'comm' ? 'comm' : (s.id === 'uk' || s.id === 'ire') ? 'gov' : 'oth';
+  const f1 = x => (Math.round(x * 10) / 10).toFixed(1);
+  let helpFrom = 's-start', aboutFrom = 's-start';
+  const show = id => { document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id)); window.scrollTo(0, 0); };
+  const screenNow = () => document.querySelector('.screen.on').id;
+
+  // ---- the ruler ----
+  const X0 = 22, X1 = 338, xOf = v => X0 + (Math.max(C.ruler.min, Math.min(C.ruler.max, v)) - C.ruler.min) / (C.ruler.max - C.ruler.min) * (X1 - X0);
+  const vOf = x => C.ruler.min + (x - X0) / (X1 - X0) * (C.ruler.max - C.ruler.min);
+  // label lanes below the line, chosen so neighbouring labels never collide at 360 px
+  const LANE = { polsci: 0, ire: 1, uk: 0, broad: 1, tabloid: 0, comm: 2 };
+  function ruler(svg, o) {
+    const y = o.y, H = [];
+    H.push(`<line x1="${X0}" y1="${y}" x2="${X1}" y2="${y}" stroke="${COL.ink}" stroke-width="2"/>`);
+    for (let v = 0; v <= C.ruler.max; v += 10) H.push(`<line x1="${xOf(v)}" y1="${y - 4}" x2="${xOf(v)}" y2="${y + 4}" stroke="${COL.ink}" stroke-width="1.5"/><text x="${xOf(v)}" y="${y - 8}" font-size="10" text-anchor="middle" fill="${COL.dim}">${v}</text>`);
+    if (!o.noEnds) H.push(`<text x="${X0}" y="${y + (o.endsY || 58)}" font-size="11" fill="${COL.dim}">◂ harder</text><text x="${X1}" y="${y + (o.endsY || 58)}" font-size="11" text-anchor="end" fill="${COL.dim}">easier ▸</text>`);
+    C.sources.forEach(s => {
+      if (s.id === 'comm' && !o.comm) return;
+      const x = xOf(s.reading), c = COL[fam(s)], lane = LANE[s.id];
+      if (s.id === 'comm') { const ly = y + 22 + lane * 16; H.push(`<g class="${o.animComm ? 'fade' : ''}"><circle cx="${x}" cy="${y}" r="9" fill="${c}" stroke="#fff" stroke-width="2"/><line x1="${x}" y1="${y + 10}" x2="${x}" y2="${ly - 11}" stroke="${c}" stroke-width="1.5"/><text x="${x}" y="${ly}" font-size="12.5" font-weight="800" text-anchor="middle" fill="${c}">Commission ${f1(s.reading)}</text></g>`); return; }
+      const ly = y + 22 + lane * 16;
+      H.push(`<circle cx="${x}" cy="${y}" r="7" fill="${c}" stroke="#fff" stroke-width="1.5"/><line x1="${x}" y1="${y + 8}" x2="${x}" y2="${ly - 10}" stroke="${c}" stroke-width="1"/><text x="${x}" y="${ly}" font-size="11" text-anchor="middle" fill="${COL.ink}">${s.short}</text>`);
+    });
+    if (o.you != null) {
+      const x = xOf(o.you);
+      H.push(`<g style="transition:transform .9s cubic-bezier(.2,.8,.2,1)" transform="translate(${x},0)" id="${svg.id}-you"><path d="M0 ${y - 4} l-9 -16 h18 z" fill="${COL.ink}"/><text x="0" y="${y - 26}" font-size="12" font-weight="800" text-anchor="middle" fill="${COL.ink}">${o.youLabel || 'you'}</text></g>`);
+    }
+    svg.innerHTML = H.join('');
+  }
+
+  // ---- BET 1 ----
+  let guess = null, bet1Done = false;
+  function drawBet1() { ruler($('r1'), { y: 46, comm: bet1Done, animComm: true, you: guess, youLabel: 'your guess', endsY: 82 }); }
+  function placeAt(ev) {
+    if (bet1Done) return;
+    const svg = $('r1'), pt = svg.createSVGPoint(), e = ev.touches ? ev.touches[0] : ev;
+    pt.x = e.clientX; pt.y = e.clientY; const p = pt.matrixTransform(svg.getScreenCTM().inverse());
+    guess = Math.round(Math.max(C.ruler.min, Math.min(C.ruler.max, vOf(p.x)))); drawBet1(); $('b-lock1').disabled = false;
+  }
+  let dragging = false;
+  $('r1').addEventListener('pointerdown', e => { dragging = true; placeAt(e); });
+  $('r1').addEventListener('pointermove', e => { if (dragging) placeAt(e); });
+  window.addEventListener('pointerup', () => dragging = false);
+  $('b-lock1').onclick = () => {
+    const b = MECH.placeBet(guess); bet1Done = true; drawBet1();
+    const lead = b.grade === 'spot' ? `Spot on. You said ${guess}; the real average is <b>${f1(b.truth)}</b>.`
+      : b.grade === 'close' ? `Close. You said ${guess}; the real average is <b>${f1(b.truth)}</b> — you were ${b.dir === 'too clear' ? 'a little too kind' : 'a little too harsh'}.`
+      : `You said ${guess}; the real average is <b>${f1(b.truth)}</b>. ${b.dir === 'too clear' ? 'Much harder than you expected.' : 'Not quite that bad.'}`;
+    $('bet1-say').innerHTML = `${lead} The Commission writes harder than both governments: closer to political scientists writing for each other than to any newspaper.`;
+    const order = m => C.sources.slice().sort((a, b) => a[m] - b[m]);
+    const strip = (m, lbl) => `<div class="strip"><div class="lbl">${lbl}</div><div class="chips">${order(m).map(s => `<span class="chip ${fam(s)}">${s.short}</span>`).join('')}</div><div class="ends"><span>◂ harder</span><span>easier ▸</span></div></div>`;
+    $('strips').innerHTML = `<p class="orient" style="margin-top:12px">The study used two more measures. Same story:</p>`
+      + strip('familiar', 'Familiar words (how common the words are)') + strip('verbs', 'Verbs, not nouns (says who does what)')
+      + `<p class="orient">On familiar words the Commission comes last of all, below the academics.</p>`;
+    $('bet1-ask').style.display = 'none'; $('bet1-out').style.display = '';
+  };
+  $('b-to2').onclick = () => { show('s-bet2'); drawTrend(false); };
+
+  // ---- BET 2 ----
+  const TY0 = 1985, TY1 = 2020, TX0 = 34, TX1 = 340, TYtop = 52, TYbot = 196, TV0 = 0, TV1 = 50;
+  const tx = yr => TX0 + (yr - TY0) / (TY1 - TY0) * (TX1 - TX0), ty = v => TYbot - (v - TV0) / (TV1 - TV0) * (TYbot - TYtop);
+  function drawTrend(reveal) {
+    const H = [];
+    for (let v = 0; v <= 50; v += 10) H.push(`<line x1="${TX0}" y1="${ty(v)}" x2="${TX1}" y2="${ty(v)}" stroke="${COL.line}"/><text x="${TX0 - 6}" y="${ty(v) + 4}" font-size="10" text-anchor="end" fill="${COL.dim}">${v}</text>`);
+    [['uk', 'UK gov.'], ['ire', 'Irish gov.'], ['polsci', 'Academics']].forEach(([id, l]) => { const s = MECH.src(id), c = COL[fam(s)];
+      H.push(`<line x1="${TX0}" y1="${ty(s.reading)}" x2="${TX1}" y2="${ty(s.reading)}" stroke="${c}" stroke-width="2.5" opacity=".8"/><text x="${TX1}" y="${ty(s.reading) - 4}" font-size="11" text-anchor="end" fill="${COL.ink}">${l} ${f1(s.reading)}</text>`); });
+    [1985, 1995, 2005, 2015, 2020].forEach(yr => H.push(`<text x="${tx(yr)}" y="${TYbot + 14}" font-size="10" text-anchor="middle" fill="${COL.dim}">${yr}</text>`));
+    C.events.forEach(([yr, l], i) => {
+      const yy = 14 + (i % 2) * 14;
+      H.push(`<g class="ev" style="opacity:${reveal ? 0 : 1}; transition:opacity .4s" data-yr="${yr}"><line x1="${tx(yr)}" y1="${yy + 4}" x2="${tx(yr)}" y2="${TYbot}" stroke="${COL.dim}" stroke-dasharray="2 3"/><text x="${Math.min(tx(yr), 330)}" y="${yy}" font-size="10.5" font-weight="600" text-anchor="${tx(yr) > 320 ? 'end' : 'middle'}" fill="${COL.ink}">${l}</text></g>`);
+    });
+    H.push(`<text x="${TX0 - 28}" y="${TYtop - 6}" font-size="10" fill="${COL.dim}">reading ease ▴ easier</text>`);
+    if (reveal) {
+      const d = C.trend.map(([yr, v], i) => `${i ? 'L' : 'M'}${tx(yr).toFixed(1)} ${ty(v).toFixed(1)}`).join(' ');
+      H.push(`<path id="trline" d="${d}" fill="none" stroke="${COL.comm}" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>`);
+      const l = C.trend[C.trend.length - 1];
+      H.push(`<text id="trlab" x="${tx(C.trend[0][0]) + 4}" y="${ty(C.trend[0][1]) - 8}" font-size="12" font-weight="700" fill="${COL.comm}" style="opacity:0; transition:opacity .4s">Commission</text>`);
+    }
+    $('tr').innerHTML = H.join('');
+    if (reveal) {
+      const p = $('trline'), L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L;
+      p.getBoundingClientRect(); p.style.transition = 'stroke-dashoffset 3s linear'; p.style.strokeDashoffset = 0;
+      document.querySelectorAll('#tr .ev').forEach(g => setTimeout(() => g.style.opacity = 1, 3000 * (+g.dataset.yr - TY0) / (TY1 - TY0)));
+      setTimeout(() => { const t = $('trlab'); if (t) t.style.opacity = 1; }, 3000);
+    }
+  }
+  document.querySelectorAll('[data-tr]').forEach(b => b.onclick = () => {
+    const r = MECH.trendBet(b.dataset.tr); drawTrend(true); $('bet2-ask').style.display = 'none';
+    setTimeout(() => {
+      $('bet2-say').innerHTML = `${r.right ? 'Right.' : 'No.'} <b>It stayed flat:</b> ${f1(r.first[1])} in ${r.first[0]}, ${f1(r.last[1])} in ${r.last[0]}. No crisis moved it, and in no year did it reach the Irish government's average. Only the choice of words got slightly more common over time.`;
+      $('bet2-out').style.display = '';
+    }, 3100);
+  });
+
+  // ---- EDITOR ----
+  let d = MECH.newDraft(), open = -1, lastEase = null;
+  $('hl').textContent = R.headline;
+  function drawEditor(anim) {
+    const sc = MECH.draftScore(d);
+    $('ease').textContent = f1(sc.ease);
+    const left = MECH.left(d); $('toks').innerHTML = Array.from({ length: C.budget }, (_, i) => `<span class="tok ${i < left ? '' : 'spent'}"></span>`).join('');
+    const prev = lastEase == null ? sc.ease : lastEase;
+    ruler($('r2'), { y: 34, comm: true, you: prev, youLabel: 'your release', noEnds: true });
+    if (anim) requestAnimationFrame(() => requestAnimationFrame(() => { const g = $('r2-you'); if (g) g.setAttribute('transform', `translate(${xOf(sc.ease)},0)`); }));
+    lastEase = sc.ease;
+    const H = [];
+    R.paras.forEach((p, i) => {
+      const done = d.pick[i] >= 0, txt = MECH.paraText(i, d.pick[i]);
+      H.push(`<button class="para ${done ? 'done' : ''} ${open === i ? 'open' : ''}" data-p="${i}">${done ? `<span class="tag">✓ ${MECH.KINDS[p.alts[d.pick[i]].kind]}</span><br>` : ''}${txt}</button>`);
+      if (open === i) {
+        const opts = p.alts.map((a, k) => k === d.pick[i] ? '' : `<button class="opt" data-k="${k}" ${left ? '' : 'disabled'}><b>${MECH.KINDS[a.kind]}</b><span>${a.text}</span></button>`).join('');
+        H.push(`<div class="opts fade"><div class="h">${left ? 'Rewrite this paragraph as… (uses one edit)' : 'No edits left.'}</div>${opts}<button class="opt x" data-k="close">Keep it as it is</button></div>`);
+      }
+    });
+    $('paras').innerHTML = H.join('');
+    $('b-send').textContent = left ? `Send it now (${left} edit${left > 1 ? 's' : ''} unused)` : 'Send it to the press';
+    $('b-send').classList.toggle('primary', !left);
+  }
+  $('paras').addEventListener('click', e => {
+    const opt = e.target.closest('.opt'), para = e.target.closest('.para');
+    if (opt) {
+      if (opt.dataset.k === 'close') { open = -1; drawEditor(false); return; }
+      const i = open, r = MECH.edit(d, i, +opt.dataset.k); if (!r) return;
+      open = -1; drawEditor(true);
+      $('delta').textContent = (r.delta >= 0 ? '+' : '') + f1(r.delta); $('delta').style.color = r.delta >= 0 ? 'var(--ok)' : 'var(--no)';
+      $('delta').classList.remove('fade'); void $('delta').offsetWidth; $('delta').classList.add('fade');
+      const target = MECH.src(C.target).reading, now = r.after;
+      $('edit-orient').innerHTML = now >= target ? `<b style="color:var(--ok)">Past the UK government line.</b> ${r.left ? 'One edit left — use it, or send it now.' : 'Send it to the press.'}`
+        : r.left ? `${f1(target - now)} points to go, one edit left. Which paragraph still hurts most?` : `Out of edits, ${f1(target - now)} short of the UK line. Send it, then try again.`;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    if (para) { const i = +para.dataset.p; open = open === i ? -1 : i; drawEditor(false); const el = document.querySelector(`.para[data-p="${i}"]`); if (el && open === i) el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+  });
+  function startEditor() {
+    d = MECH.newDraft(); open = -1; lastEase = null; $('delta').textContent = '';
+    $('edit-orient').textContent = 'This release is ours, written the way the Commission writes. Tap a paragraph to see two rewrites that say the same thing. Each change uses one edit, so pick the paragraphs that hurt most.';
+    show('s-edit'); drawEditor(false);
+  }
+  $('b-to-edit').onclick = startEditor;
+
+  // ---- END ----
+  $('b-send').onclick = () => {
+    const v = MECH.verdict(d), uk = MECH.src(C.target).reading;
+    const best = MECH.allPlans(C.budget).reduce((a, b) => b.ease > a.ease ? b : a);
+    const passed = v.beat ? v.beat.name.replace(/ \(politics\)/, '').toLowerCase() : null;
+    $('verdict').innerHTML = `<div class="you ${v.hit ? 'ok' : ''}">${v.hit ? `Your release scores ${f1(v.ease)} — easier than the average UK government release.` : `Your release scores ${f1(v.ease)} — ${f1(v.gap)} short of the UK government line.`}</div>`
+      + `<div class="paper">The Commission's real releases average ${f1(MECH.src('comm').reading)}: closer to academic abstracts than to any government, on topic after topic, and flat from 1985 to 2020.</div>`
+      + `<div class="means">Every rewrite you could pick kept every fact. Plain was within reach; the study asks why the Commission doesn't write it.</div>`;
+    ruler($('r3'), { y: 34, comm: true, you: v.ease, youLabel: 'your release', noEnds: true });
+    const H = d.log.map(r => `<div class="elog"><b>${R.paras[r.para].id === 'p4' ? 'The quote' : 'Paragraph ' + (r.para + 1)}</b>, ${MECH.KINDS[r.kind].toLowerCase()}: ${r.delta >= 0 ? '+' : ''}${f1(r.delta)}</div>`);
+    if (!d.log.length) H.push('<div class="elog">No edits: the release went out as the Commission wrote it.</div>');
+    const bestDesc = best.pick.map((k, i) => k < 0 ? null : `${R.paras[i].id === 'p4' ? 'the quote' : 'paragraph ' + (i + 1)} as "${MECH.KINDS[R.paras[i].alts[k].kind].toLowerCase()}"`).filter(Boolean).join(' and ');
+    const same = best.pick.every((k, i) => k === d.pick[i]);
+    H.push(`<div class="elog best">${same ? `That is the best two-edit plan there is (${f1(best.ease)}).` : `Best possible with two edits: <b>${f1(best.ease)}</b>, with ${bestDesc}.`}</div>`);
+    const g = MECH.oneEditGains();
+    H.push(`<p class="muted">On this score long words weigh heavily. In this release, cutting a paragraph into shorter sentences gains ${f1(g.split)} points on average; swapping long official words for everyday ones gains ${f1(g.words)}; saying who does what gains ${f1(g.verbs)}. The worst offender is the Commissioner's quote: almost all nouns, like "contribution" and "empowerment".</p>`);
+    $('elog').innerHTML = H.join('');
+    show('s-end');
+  };
+  $('b-again').onclick = startEditor;
+  $('b-restart').onclick = () => { guess = null; bet1Done = false; $('b-lock1').disabled = true; $('bet1-ask').style.display = ''; $('bet1-out').style.display = 'none'; $('bet2-ask').style.display = ''; $('bet2-out').style.display = 'none'; show('s-start'); };
+
+  // ---- navigation ----
+  $('b-start').onclick = () => { show('s-bet1'); drawBet1(); };
+  const toHelp = () => { helpFrom = screenNow(); show('s-help'); };
+  $('b-help1').onclick = toHelp; document.querySelectorAll('[data-help]').forEach(b => b.onclick = toHelp);
+  $('b-help-back').onclick = () => show(helpFrom);
+  $('b-about1').onclick = () => { aboutFrom = 's-start'; show('s-about'); };
+  $('b-about2').onclick = () => { aboutFrom = 's-end'; show('s-about'); };
+  $('b-about-back').onclick = () => show(aboutFrom);
+})();
+</script>
+</body>
+</html>
