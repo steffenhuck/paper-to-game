@@ -123,7 +123,7 @@ Then answer, in writing:
 
 ## 5. Precedent
 
-Before any concept is chosen, read the games table in the repository README and the "pick" and "look" sections of the three most recent memos. Write down, in the memo, for each of those three games: the player position, the format, the feedback device, and the chassis (palette, type, register).
+Before any concept is chosen, read the games table in the repository README and the "pick" and "look" sections of the three most recent memos. Write down, in the memo, for each of those three games: the player position, the format, the feedback device, and the chassis (register and its family, palette, type).
 
 The new game shares none of these four with any of the three. Precedent is something to move away from. If the paper plainly wants a position one of the last three used, say so and make the other three dimensions differ instead; the look always differs.
 
@@ -164,13 +164,21 @@ One long round or several short; how many screens; presets or none; score or non
 
 ## 7. The look
 
-The game does not look like the paper, nor like a journal, a website, a slide, a dashboard or a form. It looks like something a stranger would be happy to find on their phone: a comic strip, a poster, an arcade cabinet, a board-game box, a toy, a children's science book, a hand-drawn notebook, a broadsheet, a blueprint, a tapestry, a TV quiz, a pinball table — one of those, or one of your own. Pick a register and commit to it. Loud is fine. Comic is fine, and means the register, not jokes and not a mascot.
+The game does not look like the paper, nor like a journal, a website, a slide, a dashboard or a form. It looks like something a stranger would be happy to find on their phone, and that can be loud or austere: a pop-art comic is one register, and the Olive's green phosphor on black, as austere as a lab monitor, is another, and both are the paper's day off. Pick one register and commit to it; the whole surface — palette, type, buttons, motion, the way numbers are drawn — comes from that register and nowhere else. The register list, to choose from or to add to:
 
-Where the register comes from: first the paper's subject, if it has a picture in it (a neuron, a balance, an orchestra pit); if not, the setting of the data (a Kampala street, a Brussels press room, a 1990 concert hall, a kitchen table in 1997); if even that is thin, pick a register from the list that fits the kind of play and let the paper's world live inside it.
+- **Austere.** Green phosphor on black; a blueprint, white on navy; an engineer's drawing; a scientific plate from an old atlas; a Swiss grid poster; a museum label.
+- **Retro.** A 1980s arcade cabinet; a four-green handheld console; a teletext page; VHS tracking lines; 1970s airport signage; a board-game box from the 1960s; a punched card.
+- **Loud.** A pop-art comic; a circus poster; a fairground; a pinball table; a film poster from Bombay; a wrestling bill.
+- **Drawn.** Manga; a woodcut; a children's picture book; chalk on a blackboard; a hand-drawn notebook; a tapestry; a newspaper cartoon; a tattoo flash sheet.
+- **Techno.** A cockpit; a mixing desk; a TV studio at night; a stock ticker; a synthwave grid; a subway map.
+- **Clean.** A Bauhaus poster; Japanese minimal; a broadsheet front page; a letterpress card; a seed packet.
+- **Worldly.** A West African wax print; a Soviet constructivist poster; Mexican papel picado; a Victorian playbill; a medieval manuscript; Art Deco; Delft tiles.
 
-The memo declares the chassis before the build: the palette (three to five colours, named), the type family (an embedded font is allowed, inlined as data so the file stays self-contained), the shape of the buttons, and the one visual rule that makes this game recognisably itself. All four differ from the last three games in the table.
+Where the register comes from: first the paper's subject, if it has a picture in it (a neuron, a balance, an orchestra pit); if not, the setting of the data (a Kampala street, a Brussels press room, a 1990 concert hall, a kitchen table in 1997); if even that is thin, pick a register from the list that fits the kind of play and let the paper's world live inside it. Comic means the register, not jokes and not a mascot; austere means the register, not the journal.
 
-What stays: every screen is looked at at phone width with the question "what would a stranger see here?"; pictures that need their captions are simplified; a few big things beat many small ones. A loud game that cannot be read on a phone has failed.
+The memo declares the chassis before the build: the register and its family from the list; the palette (three to five colours, named); the type family (an embedded font is allowed, inlined as data so the file stays self-contained); the shape of the buttons; and the one visual rule that makes this game recognisably itself. All of these differ from the last three games in the table (section 5), and the register family differs from the last three as well: after a comic, not another comic; after a dark screen, a light one. A chunky outline with a hard offset shadow is one button style among many, not the house button.
+
+What stays: every screen is looked at at phone width with the question "what would a stranger see here?"; pictures that need their captions are simplified; a few big things beat many small ones. A loud game that cannot be read on a phone has failed, and so has an austere one.
 
 ---
 
