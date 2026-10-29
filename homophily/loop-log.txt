@@ -1,33 +1,30 @@
+ROUND 1: seat the panel you think is fair (jars covered)
+  seat DE/DE: full ★ for 11.5% of applicants, ½ for 3.3%, ⅓ for 3.5%  -> 1/15
+  seat DE/DE: full ★ for 11.5% of applicants, ½ for 3.3%, ⅓ for 3.5%  -> 2/15
+  seat UK/UK: full ★ for 6.5% of applicants, ½ for 0.0%, ⅓ for 6.5%  -> 3/15
+  seat UK/UK: full ★ for 6.5% of applicants, ½ for 0.0%, ⅓ for 6.5%  -> 4/15
+  seat FR/FR: full ★ for 7.0% of applicants, ½ for 0.9%, ⅓ for 2.0%  -> 5/15
+  seat IT/IT: full ★ for 8.0% of applicants, ½ for 3.5%, ⅓ for 0.5%  -> 6/15
+  seat ES/ES: full ★ for 7.6% of applicants, ½ for 0.9%, ⅓ for 0.7%  -> 7/15
+  seat IT/UK: full ★ for 1.2% of applicants, ½ for 10.3%, ⅓ for 11.8%  -> 8/15
+  seat NL/NL: full ★ for 3.0% of applicants, ½ for 0.0%, ⅓ for 3.0%  -> 9/15
+  seat PL/PL: full ★ for 2.1% of applicants, ½ for 0.0%, ⅓ for 0.1%  -> 10/15
+  seat SE/SE: full ★ for 2.0% of applicants, ½ for 0.0%, ⅓ for 1.0%  -> 11/15
+  seat PT/PT: full ★ for 2.3% of applicants, ½ for 0.0%, ⅓ for 0.2%  -> 12/15
+  seat GR/GR: full ★ for 1.7% of applicants, ½ for 0.5%, ⅓ for 0.1%  -> 13/15
+  seat IL/IL: full ★ for 3.3% of applicants, ½ for 0.0%, ⅓ for 0.2%  -> 14/15
+  seat DE/CH: full ★ for 1.2% of applicants, ½ for 13.6%, ⅓ for 3.3%  -> 15/15  COVERS OFF
+  jars: BIG FIVE 4.4 ★  |  EVERYONE ELSE 1.4 ★  (gap 3.0)
+  "Your panel gives big-five applicants 3.3x the home advantage of everyone else. Real ERC panels: about 2.4x."
+  tapping after reveal does nothing: true
 
-CASE 1: Ostrava  headline: compatriot judges' marks +0.34 vs other marks
-  test proposal: still there 0.40 [0.35, 0.45]
-    player now suspects: Generous judges, Knows them better, Favours their own
-  test judge: GONE 0.05 [-0.04, 0.14]
-    player now suspects: Generous judges
-  ACCUSE Generous judges → SOLVED in 2 test(s).  Running: 1 of 1 solved
-
-CASE 2: Sundby  headline: compatriot judges' marks +0.33 vs other marks
-  test proposal: still there 0.31 [0.27, 0.35]
-    player now suspects: Generous judges, Knows them better, Favours their own
-  test judge: still there 0.30 [0.24, 0.37]
-    player now suspects: Knows them better, Favours their own
-  test spread: ramp  [-2.9 -8.1 -3.2 8.3 5.9]
-    player now suspects: Favours their own
-  ACCUSE Favours their own → SOLVED in 3 test(s).  Running: 2 of 2 solved
-
-CASE 3: Belmont  headline: compatriot judges' marks +0.30 vs other marks
-  test proposal: GONE 0.05 [-0.00, 0.10]
-    player now suspects: Better proposals
-  ACCUSE Better proposals → SOLVED in 1 test(s).  Running: 3 of 3 solved
-
-CASE 4: ERC  headline: compatriot judges' marks +0.16 vs other marks
-  test proposal: still there 0.16 [0.13, 0.19]
-    player now suspects: Generous judges, Knows them better, Favours their own
-  test judge: still there 0.16 [0.13, 0.20]
-    player now suspects: Knows them better, Favours their own
-  test spread: ramp  [-1.4 -3.2 -2.2 4.7 2.1]
-    player now suspects: Favours their own
-  ACCUSE Favours their own → SOLVED in 3 test(s).  Running: 4 of 4 solved
-
-BET "About 5 points": {"right":false,"picked":"About 5 points","gap":0.9}
-END: solved 4 of 4
+ROUND 2: level the jars on a panel built like the ERC's, 4 swaps
+  jars: BIG FIVE 3.5 ★  |  EVERYONE ELSE 1.2 ★  (gap 2.3)
+  swap GR/GR -> PT/PT: big -0.01, other +0.04  | jars: BIG FIVE 3.5 ★  |  EVERYONE ELSE 1.2 ★  (gap 2.3) | swaps left 3
+  swap BE/BE -> HU/HU: big +0.00, other -0.07  | jars: BIG FIVE 3.5 ★  |  EVERYONE ELSE 1.2 ★  (gap 2.3) | swaps left 2
+  (the teal jar barely moves: each small country sends few applicants) -> RESET
+  swap DE/DE -> PT/PT: big -0.68, other +0.07  | jars: BIG FIVE 2.8 ★  |  EVERYONE ELSE 1.3 ★  (gap 1.5) | swaps left 3
+  swap IT/UK -> FI/FI: big -0.49, other +0.07  | jars: BIG FIVE 2.3 ★  |  EVERYONE ELSE 1.3 ★  (gap 1.0) | swaps left 2
+  swap UK/UK -> NO/NO: big -0.45, other +0.09  | jars: BIG FIVE 1.9 ★  |  EVERYONE ELSE 1.4 ★  (gap 0.4, LEVEL) | swaps left 1 DONE
+  result: LEVEL in 3 swaps; history [["DE/DE","PT/PT"],["IT/UK","FI/FI"],["UK/UK","NO/NO"]]
+  swap after done is ignored: true
