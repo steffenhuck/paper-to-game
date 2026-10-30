@@ -63,11 +63,13 @@ Name the kind in the memo. If the paper offers none of these, say so, and look h
 
 The player's action is a variable in the paper: a choice one of its agents makes, a parameter of its model, a setting of its experiment, the measurement its authors took, the thing its data describe. The player is in the mechanism, not outside it watching the result come in. The test: the player can say what they did without the word "guess." *I grew my dendrites. I set the balance. I ran the test. I wrote the press release.* If the only sentence available is "I guessed what the study found," the player is outside the paper.
 
+Where the paper hands over two quantities it keeps apart (two clocks, two margins, a cost and a benefit measured in different units), look for the price that would trade one against the other. A payoff that merges them is often where the game is, and it is the designer's, declared as such; the quantities stay the paper's.
+
 A bet on the paper's result can open a game or close it, where it supplies anticipation. It is not the spine. A game whose main loop is guessing the paper's numbers is built only when the memo shows that the agent, controller and experimenter concepts were each written out and each failed the walkthrough.
 
 ### Commitment before the outcome
 
-The player commits before the outcome is shown. The strong form is a consequential action — a setting, a sorting, an allocation, a move — whose consequences the player then lives with. Free exploration counts when it builds knowledge the player later uses. A bare prediction is the weak form, used sparingly. The player need not be wrong: an intuition that turns out right is rewarding, one that turns out wrong is instructive, and both work if the commitment was real. The sensible choice fails only where the paper says it fails.
+The player commits before the outcome is shown. The strong form is a consequential action — a setting, a sorting, an allocation, a move — whose consequences the player then lives with. The screen where the player commits does not preview the payoff: the paper's instruments may be read before acting, the score may not, or the decision becomes reading. And a control that keeps the previous round's setting looks like advice; every round starts from the same place. Free exploration counts when it builds knowledge the player later uses. A bare prediction is the weak form, used sparingly. The player need not be wrong: an intuition that turns out right is rewarding, one that turns out wrong is instructive, and both work if the commitment was real. The sensible choice fails only where the paper says it fails.
 
 ### True to the story; numbers under the hood
 
@@ -82,6 +84,10 @@ Direction first, then rough size: about half, roughly double, a few points, almo
 ### Minimal controls, simple loop
 
 The fewest controls that preserve the paper's central mechanism. One is the default. Two or more are right when their *interaction* is the finding — severity and probability of punishment, price and quality, effort and luck. A choice offered to the player has at least three live options or a continuous control, unless binary is the paper's own variable. The loop stays simple: act → mechanism → visible result → where you stand. Every format has an **aim** the player can repeat and a **verdict** at the end.
+
+### The ending
+
+A game ends. Where there are rounds, there is a last one, and no retry past it; the verdict is a screen the player reaches once. What the verdict says depends on the game: where the paper gives a quantity to score against, a number against the best possible and a fate in words ("you die a comfortable man"); where it does not, something qualitative, what the player found and what the paper says. A tally is never the verdict.
 
 ### The aim is a sentence; the yardstick is in its units
 
@@ -166,6 +172,7 @@ One long round or several short; how many screens; presets or none; score or non
 
 The game does not look like the paper, nor like a journal, a website, a slide, a dashboard or a form. It looks like something a stranger would be happy to find on their phone, and that can be loud or austere: a pop-art comic is one register, and the Olive's green phosphor on black, as austere as a lab monitor, is another, and both are the paper's day off. Pick one register and commit to it; the whole surface — palette, type, buttons, motion, the way numbers are drawn — comes from that register and nowhere else. The register list, to choose from or to add to:
 
+- **Instrument.** The paper's own apparatus and data, drawn live: a confocal stack glowing on black, a field of agents moving, a spectrogram, a heat map that breathes, a phase portrait, a star chart, a seismograph trace. Contemporary, technical, striking, animated. Not a page with pictures on it; a picture you can act on. When the paper's object has a visual form (cells, networks, fields, flows, maps, waves), consider this one first; it is never required.
 - **Austere.** Green phosphor on black; a blueprint, white on navy; an engineer's drawing; a scientific plate from an old atlas; a Swiss grid poster; a museum label.
 - **Retro.** A 1980s arcade cabinet; a four-green handheld console; a teletext page; VHS tracking lines; 1970s airport signage; a board-game box from the 1960s; a punched card.
 - **Loud.** A pop-art comic; a circus poster; a fairground; a pinball table; a film poster from Bombay; a wrestling bill.
@@ -174,7 +181,7 @@ The game does not look like the paper, nor like a journal, a website, a slide, a
 - **Clean.** A Bauhaus poster; Japanese minimal; a broadsheet front page; a letterpress card; a seed packet.
 - **Worldly.** A West African wax print; a Soviet constructivist poster; Mexican papel picado; a Victorian playbill; a medieval manuscript; Art Deco; Delft tiles.
 
-Where the register comes from: first the paper's subject, if it has a picture in it (a neuron, a balance, an orchestra pit); if not, the setting of the data (a Kampala street, a Brussels press room, a 1990 concert hall, a kitchen table in 1997); if even that is thin, pick a register from the list that fits the kind of play and let the paper's world live inside it. Comic means the register, not jokes and not a mascot; austere means the register, not the journal.
+Where the register comes from: first the paper's subject, if it has a picture in it (a neuron, a balance, an orchestra pit); if not, the setting of the data (a Kampala street, a Brussels press room, a 1990 concert hall, a kitchen table in 1997); if even that is thin, pick a register from the list that fits the kind of play and let the paper's world live inside it. When the paper's object can be drawn from the mechanism itself, drawing it is an option worth writing out: the drawing becomes the play screen, and the data are drawn, not illustrated. Comic means the register, not jokes and not a mascot; austere means the register, not the journal.
 
 The memo declares the chassis before the build: the register and its family from the list; the palette (three to five colours, named); the type family (an embedded font is allowed, inlined as data so the file stays self-contained); the shape of the buttons; and the one visual rule that makes this game recognisably itself. All of these differ from the last three games in the table (section 5), and the register family differs from the last three as well: after a comic, not another comic; after a dark screen, a light one. A chunky outline with a hard offset shadow is one button style among many, not the house button.
 

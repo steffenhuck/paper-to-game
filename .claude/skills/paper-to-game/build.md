@@ -41,7 +41,13 @@ Rounded, qualitative numbers on screen are not a calibration failure. The mechan
 
 ---
 
-## 3. The build
+## 3. Before the build: play it in numbers
+
+Where the game has a score, run the obvious ways of playing it against the mechanism before any screen exists: the maximiser, the spreader, the player who follows the physics and ignores the economics, the player who does the reverse, the optimum. A few lines of code. Look at the spread: if every heuristic lands in the same place, the decisions do not matter and the design is not ready; if one simple rule wins everywhere, that rule is the sentence the player should leave with, and the game should let them find it. Record the table in the memo; tune the parameters from it, not from taste.
+
+Where the game draws its rounds from a seed: the seed is visible and replayable; constraints on the draw only where an early failure would be unfair or a lesson could fail to appear, and no more (a floor, not a ramp); and the calibration check tests the draw's shape over hundreds of seeds, separately from the mechanism's patterns, which it tests on random parameters.
+
+## 4. The build
 
 In this order; do not skip to the skin.
 
@@ -63,7 +69,7 @@ Hard constraints throughout: one self-contained HTML file; no external dependenc
 
 ---
 
-## 4. Feedback devices that work on a phone
+## 5. Feedback devices that work on a phone
 
 Pick one or two; do not stack; and do not pick the one the last three games used (SKILL.md, section 5).
 
@@ -82,13 +88,13 @@ Anti-patterns: a running point total; a tally as a verdict; a grid of tiny sprit
 
 ---
 
-## 5. Writing inside the game
+## 6. Writing inside the game
 
 Plain, concrete, numbers only where they help and rounded to what the lesson needs. Match the substance of the paper; never quote it. Field terms only where the player must use them to act, defined in the same sentence. Greek letters stay in the paper. Explanation after discovery. Claims bounded by the mechanism kind (section 1). The register of the writing matches the look: a comic strip does not talk like a journal.
 
 ---
 
-## 6. Deliverables and repository
+## 7. Deliverables and repository
 
 - `<slug>/<name>.html` — the game.
 - `<slug>/memo.md` — with the mechanism kind, claim boundaries, calibration plan, calibration result and build log appended.
@@ -102,10 +108,12 @@ Commit and publish. The run is not finished until the game is on `main`, and the
 
 ---
 
-## 7. Failure modes
+## 8. Failure modes
 
 - A demonstration shipped as a game: actions without consequences the player can learn.
 - A guessing game shipped because the other positions were never written out.
+- The payoff previewed on the screen where the player commits; a control carried over from the last round.
+- A game with a score built without first running the obvious heuristics against the mechanism.
 - A game that looks like the last one.
 - A central discovery resting on an invented assumption, unchecked against alternatives; or following from the designer's scoring, objective or constraint, presented as the paper's finding.
 - A mechanism in the HTML that differs from the mechanism the calibration check ran against.
