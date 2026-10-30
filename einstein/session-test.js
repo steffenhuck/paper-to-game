@@ -26,7 +26,7 @@ const D = (process.argv[2] || __dirname) + '/';
     await p.click('#b-launch'); await p.waitForTimeout(300); await idle(); console.log(`LAUNCH ${n}: ` + await txt('#f-stamp') + ' | ' + await txt('#f-say')); await decimals(); }
   await shot('range-log');
   console.log('LOG: ' + await txt('#log'));
-  await p.click('#b-tobook'); console.log('who on:', await on('#s-who')); await shot('who'); await p.click('[data-who="MIXED"]'); console.log('book on:', await on('#s-book'), '|', await txt('#bk-title')); await shot('book-empty');
+  await p.click('#b-tobook'); console.log('who on:', await on('#s-who')); await shot('who'); await p.click('[data-who="ORDINARY"]'); console.log('book on:', await on('#s-book'), '|', await txt('#bk-title')); await shot('book-empty');
   // a first-timer spreads boosters fairly evenly: 3 each, two left over
   const set = async alloc => { for (let i = 0; i < alloc.length; i++) for (let k = 0; k < alloc[i]; k++) await p.click(`#cards .key[data-i="${i}"][data-d="1"]`); };
   await set([3, 3, 3, 3]); await decimals(); await shot('book-set');
@@ -34,15 +34,15 @@ const D = (process.argv[2] || __dirname) + '/';
   await p.click('#b-launchall');
   for (let i = 0; i < 4; i++) { await idle(); console.log(`  rocket ${i + 1}: ` + await txt('#f-name') + ' | ' + await txt('#f-stamp') + ' | ' + await txt('#f-say')); if (i === 1) await shot('flight-olten'); await p.click('#b-nextrocket'); await p.waitForTimeout(200); }
   console.log('END on:', await on('#s-end')); console.log('VERDICT: ' + await txt('#verdict')); console.log('TALLY: ' + await txt('#tally')); await decimals(); await shot('end-first');
-  // new order book (B), played well: 3-0-2-6
-  await p.click('#b-again'); await p.click('[data-who="FLORISTS"]'); console.log('florists book:', await txt('#bk-orient')); await set([4, 5, 6, 6]); await shot('book-florists-set');
+  // the patient merchant, played well: 2-4-5-6
+  await p.click('#b-again'); await p.click('[data-who="PATIENT"]'); console.log('patient book:', await txt('#bk-orient')); await set([2, 4, 5, 6]); await shot('book-patient-set');
   await p.click('#b-launchall');
   for (let i = 0; i < 4; i++) { await idle(); console.log(`  rocket ${i + 1}: ` + await txt('#f-name') + ' | ' + await txt('#f-stamp') + ' | ' + await txt('#f-say')); if (i === 1) await shot('flight-refused'); if (i === 3) await shot('flight-zug'); await p.click('#b-nextrocket'); await p.waitForTimeout(200); }
-  console.log('VERDICT FLORISTS: ' + await txt('#verdict')); await shot('end');
-  // the hospitals, with the florists' allocation: the far boosters don't pay
-  await p.click('#b-again'); await p.click('[data-who="HOSPITALS"]'); await set([4, 5, 6, 6]); await p.click('#b-launchall');
+  console.log('VERDICT PATIENT: ' + await txt('#verdict')); await shot('end');
+  // the merchant with a loan, flying the patient merchant's plan: the far fees are worth nothing today
+  await p.click('#b-again'); await p.click('[data-who="BORROWER"]'); await set([2, 4, 5, 6]); await p.click('#b-launchall');
   for (let i = 0; i < 4; i++) { await idle(); await p.click('#b-nextrocket'); await p.waitForTimeout(200); }
-  console.log('VERDICT HOSPITALS (florists\' plan): ' + await txt('#verdict')); await decimals(); await shot('end-hospitals');
+  console.log('VERDICT BORROWER (patient\'s plan): ' + await txt('#verdict')); await decimals(); await shot('end-borrower');
   // the long haul: five first, then six
   await p.click('#b-haul'); await set([5]); await shot('haul-set'); await p.click('#b-launchall'); await idle(); console.log('HAUL 5: ' + await txt('#f-stamp') + ' | ' + await txt('#f-say'));
   await p.click('#b-nextrocket'); console.log('HAUL END: ' + await txt('#haulverdict'));

@@ -1,6 +1,6 @@
-**Revised four times after first review.** REFUSE is a button; the till is on every order card; the test range is marked as not the game; see memo §23. The order book opens with a choice of contract (florists / hospitals / mixed) over the same four stars; see memo §22. The score is now profit: customers (florist, hospital, gallery, museum) pay continuously for freshness or for speed, and fuel costs Einstein's §10 energy at a price. The test range has a slider that previews the race, both clocks and the till. See memo §20–21; the config block in `mechanism.js` has every price and fee tagged.
+**Revised five times after first review.** The game now marries the paper to a merchant's balance sheet: paid on the station clock (synchronised by §1), flowers alive or dead by the rocket's clock (§4), fuel by §10, and a discount rate chosen at the start. See memo §24; every price and rate is tagged in `mechanism.js`.
 
-**Revised after first review:** the test range now has a booster slider that previews the race and moves both clocks live; the order book is unchanged. See memo §20.
+
 
 # The Light Post — note for the author
 

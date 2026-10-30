@@ -1,71 +1,72 @@
-AIM: Deliver flowers to the stars at a profit.
+AIM: Sell flowers to the stars. Make money today.
 
-TEST RANGE: NEW BERN, 4 light-years; the florist pays up to 150
+TEST RANGE (ordinary merchant, 4%): NEW BERN, 4 light-years; fee 300, keep 1 year
 > slide to 2, launch
-  NEW BERN with 2: about 80% of light speed; light lands at 4 years, rocket at 5 years; flowers aged 3 years (keep 3 years); the florist paid 0 francs of 150 (freshness worth nothing, speed worth nothing); fuel 7 francs → PROFIT −7 francs
+  NEW BERN with 2: about 80% of light speed; station clock 5 years (light 4 years), rocket clock 3 years (keep 1 year) DEAD; fee 0 francs worth 0 francs today (most of it); fuel 7 francs → PROFIT TODAY −7 francs
 > slide to 3, launch
-  NEW BERN with 3: about 95% of light speed; light lands at 4 years, rocket at 4 years 4 months; flowers aged 19 months (keep 3 years); the florist paid 70 francs of 150 (freshness worth a third, speed worth over half); fuel 17 francs → PROFIT 53 francs
-> slide to 5, launch
-  NEW BERN with 5: about 99% of light speed; light lands at 4 years, rocket at 4 years; flowers aged 6 months (keep 3 years); the florist paid 124 francs of 150 (freshness worth most of it, speed worth most of it); fuel 68 francs → PROFIT 56 francs
+  NEW BERN with 3: about 95% of light speed; station clock 4 years 4 months (light 4 years), rocket clock 19 months (keep 1 year) DEAD; fee 0 francs worth 0 francs today (most of it); fuel 17 francs → PROFIT TODAY −17 francs
 > slide to 4, launch
-  NEW BERN with 4: about 98% of light speed; light lands at 4 years, rocket at 4 years 1 month; flowers aged 11 months (keep 3 years); the florist paid 105 francs of 150 (freshness worth over half, speed worth most of it); fuel 36 francs → PROFIT 69 francs
+  NEW BERN with 4: about 98% of light speed; station clock 4 years 1 month (light 4 years), rocket clock 11 months (keep 1 year) ALIVE; fee 300 francs worth 254 francs today (most of it); fuel 36 francs → PROFIT TODAY 218 francs
+> slide to 5, launch
+  NEW BERN with 5: about 99% of light speed; station clock 4 years (light 4 years), rocket clock 6 months (keep 1 year) ALIVE; fee 300 francs worth 254 francs today (most of it); fuel 68 francs → PROFIT TODAY 186 francs
 > slide to 6, launch
-  NEW BERN with 6: all but light speed; light lands at 4 years, rocket at 4 years; flowers aged 4 months (keep 3 years); the florist paid 135 francs of 150 (freshness worth most of it, speed worth all of it); fuel 125 francs → PROFIT 10 francs
+  NEW BERN with 6: all but light speed; station clock 4 years (light 4 years), rocket clock 4 months (keep 1 year) ALIVE; fee 300 francs worth 255 francs today (most of it); fuel 125 francs → PROFIT TODAY 130 francs
 
-ORDER BOOK: The florists’ guild
-  card THUN: 2 light-years; the florist pays up to 300, keep 3½ years, patience 1 year; best = 4
-  card OLTEN: 10 light-years; the florist pays up to 300, keep 3½ years, patience 1 year; best = 5
-  card SION: 15 light-years; the florist pays up to 300, keep 3½ years, patience 1 year; best = 6
-  card BRIG: 20 light-years; the florist pays up to 250, keep 8 years, patience 1 year; best = 5
+ORDER BOOK as The patient merchant (rate 0)
+  card THUN: 2 light-years; fee 500, keep 2 years; best = 2
+  card OLTEN: 3 light-years; fee 500, keep 1 year; best = 4
+  card SION: 15 light-years; fee 300, keep 3 years; best = 5
+  card BRIG: 25 light-years; fee 300, keep 2 years; best = 6
 > LAUNCH ALL 3-3-3-3
-  THUN with 3: about 95% of light speed; light lands at 2 years, rocket at 2 years 2 months; flowers aged 10 months (keep 3½ years); the florist paid 231 francs of 300 (freshness worth over half, speed worth most of it); fuel 17 francs → PROFIT 215 francs
-  OLTEN with 3: about 95% of light speed; light lands at 10 years, rocket at 10 years 9 months; flowers aged 4 years (keep 3½ years); the florist paid 0 francs of 300 (freshness worth nothing, speed worth a little); fuel 17 francs → PROFIT −17 francs
-  SION with 3: about 95% of light speed; light lands at 15 years, rocket at 16 years 2 months; flowers aged 6 years (keep 3½ years); the florist paid 0 francs of 300 (freshness worth nothing, speed worth nothing); fuel 17 francs → PROFIT −17 francs
-  BRIG with 3: about 95% of light speed; light lands at 20 years, rocket at 21 years 6 months; flowers aged 8 years (keep 8 years); the florist paid 0 francs of 250 (freshness worth nothing, speed worth nothing); fuel 17 francs → PROFIT −17 francs
-  profit 164 francs of a possible 528 francs
-> LAUNCH ALL 4-5-6-5
-  THUN with 4: about 98% of light speed; light lands at 2 years, rocket at 2 years 1 month; flowers aged 5 months (keep 3½ years); the florist paid 261 francs of 300 (freshness worth most of it, speed worth most of it); fuel 36 francs → PROFIT 226 francs
-  OLTEN with 5: about 99% of light speed; light lands at 10 years, rocket at 10 years 1 month; flowers aged 15 months (keep 3½ years); the florist paid 190 francs of 300 (freshness worth over half, speed worth most of it); fuel 68 francs → PROFIT 121 francs
-  SION with 6: all but light speed; light lands at 15 years, rocket at 15 years; flowers aged 13 months (keep 3½ years); the florist paid 205 francs of 300 (freshness worth over half, speed worth most of it); fuel 125 francs → PROFIT 79 francs
-  BRIG with 5: about 99% of light speed; light lands at 20 years, rocket at 20 years 2 months; flowers aged 2 years 7 months (keep 8 years); the florist paid 169 francs of 250 (freshness worth over half, speed worth most of it); fuel 68 francs → PROFIT 101 francs
-  profit 528 francs of a possible 528 francs
+  THUN with 3: about 95% of light speed; station clock 2 years 2 months (light 2 years), rocket clock 10 months (keep 2 years) ALIVE; fee 500 francs worth 500 francs today (all of it); fuel 17 francs → PROFIT TODAY 483 francs
+  OLTEN with 3: about 95% of light speed; station clock 3 years 3 months (light 3 years), rocket clock 14 months (keep 1 year) DEAD; fee 0 francs worth 0 francs today (all of it); fuel 17 francs → PROFIT TODAY −17 francs
+  SION with 3: about 95% of light speed; station clock 16 years 2 months (light 15 years), rocket clock 6 years (keep 3 years) DEAD; fee 0 francs worth 0 francs today (all of it); fuel 17 francs → PROFIT TODAY −17 francs
+  BRIG with 3: about 95% of light speed; station clock 26 years 11 months (light 25 years), rocket clock 10 years (keep 2 years) DEAD; fee 0 francs worth 0 francs today (all of it); fuel 17 francs → PROFIT TODAY −17 francs
+  profit today 432 francs of a possible 1364 francs
+> LAUNCH ALL 2-4-5-6
+  THUN with 2: about 80% of light speed; station clock 2 years 6 months (light 2 years), rocket clock 18 months (keep 2 years) ALIVE; fee 500 francs worth 500 francs today (all of it); fuel 7 francs → PROFIT TODAY 493 francs
+  OLTEN with 4: about 98% of light speed; station clock 3 years 1 month (light 3 years), rocket clock 8 months (keep 1 year) ALIVE; fee 500 francs worth 500 francs today (all of it); fuel 36 francs → PROFIT TODAY 464 francs
+  SION with 5: about 99% of light speed; station clock 15 years 1 month (light 15 years), rocket clock 23 months (keep 3 years) ALIVE; fee 300 francs worth 300 francs today (all of it); fuel 68 francs → PROFIT TODAY 232 francs
+  BRIG with 6: all but light speed; station clock 25 years 1 month (light 25 years), rocket clock 22 months (keep 2 years) ALIVE; fee 300 francs worth 300 francs today (all of it); fuel 125 francs → PROFIT TODAY 175 francs
+  profit today 1364 francs of a possible 1364 francs
 
-ORDER BOOK: The hospital service
-  card THUN: 2 light-years; the hospital pays up to 150, keep 1 year, patience 3 years; best = 3
-  card OLTEN: 10 light-years; the hospital pays up to 150, keep 1 year, patience 3 years; best = 4
-  card SION: 15 light-years; the hospital pays up to 150, keep 1 year, patience 3 years; best = 4
-  card BRIG: 20 light-years; the hospital pays up to 150, keep 1 year, patience 3 years; best = 4
+ORDER BOOK as The ordinary merchant (rate 0.04)
+  card THUN: 2 light-years; fee 500, keep 2 years; best = 2
+  card OLTEN: 3 light-years; fee 500, keep 1 year; best = 4
+  card SION: 15 light-years; fee 300, keep 3 years; best = 5
+  card BRIG: 25 light-years; fee 300, keep 2 years; best = refuse
 > LAUNCH ALL 3-3-3-3
-  THUN with 3: about 95% of light speed; light lands at 2 years, rocket at 2 years 2 months; flowers aged 10 months (keep 1 year); the hospital paid 142 francs of 150 (freshness worth a little, speed worth most of it); fuel 17 francs → PROFIT 125 francs
-  OLTEN with 3: about 95% of light speed; light lands at 10 years, rocket at 10 years 9 months; flowers aged 4 years (keep 1 year); the hospital paid 112 francs of 150 (freshness worth nothing, speed worth over half); fuel 17 francs → PROFIT 95 francs
-  SION with 3: about 95% of light speed; light lands at 15 years, rocket at 16 years 2 months; flowers aged 6 years (keep 1 year); the hospital paid 92 francs of 150 (freshness worth nothing, speed worth over half); fuel 17 francs → PROFIT 75 francs
-  BRIG with 3: about 95% of light speed; light lands at 20 years, rocket at 21 years 6 months; flowers aged 8 years (keep 1 year); the hospital paid 73 francs of 150 (freshness worth nothing, speed worth a third); fuel 17 francs → PROFIT 56 francs
-  profit 351 francs of a possible 412 francs
-> LAUNCH ALL 3-4-4-4
-  THUN with 3: about 95% of light speed; light lands at 2 years, rocket at 2 years 2 months; flowers aged 10 months (keep 1 year); the hospital paid 142 francs of 150 (freshness worth a little, speed worth most of it); fuel 17 francs → PROFIT 125 francs
-  OLTEN with 4: about 98% of light speed; light lands at 10 years, rocket at 10 years 3 months; flowers aged 2 years 3 months (keep 1 year); the hospital paid 138 francs of 150 (freshness worth nothing, speed worth most of it); fuel 36 francs → PROFIT 102 francs
-  SION with 4: about 98% of light speed; light lands at 15 years, rocket at 15 years 4 months; flowers aged 3 years 4 months (keep 1 year); the hospital paid 131 francs of 150 (freshness worth nothing, speed worth most of it); fuel 36 francs → PROFIT 96 francs
-  BRIG with 4: about 98% of light speed; light lands at 20 years, rocket at 20 years 6 months; flowers aged 4 years 6 months (keep 1 year); the hospital paid 125 francs of 150 (freshness worth nothing, speed worth most of it); fuel 36 francs → PROFIT 89 francs
-  profit 412 francs of a possible 412 francs
-
-ORDER BOOK: A mixed book
-  card THUN: 2 light-years; the hospital pays up to 100, keep 1 year, patience 2 years; best = 3
-  card OLTEN: 10 light-years; the florist pays up to 200, keep 10 years, patience 1 year; best = 4
-  card SION: 15 light-years; the florist pays up to 150, keep 5 years, patience 1 year; best = 5
-  card BRIG: 20 light-years; the florist pays up to 150, keep 2 years, patience 1 year; best = 0
-> LAUNCH ALL 3-3-3-3
-  THUN with 3: about 95% of light speed; light lands at 2 years, rocket at 2 years 2 months; flowers aged 10 months (keep 1 year); the hospital paid 92 francs of 100 (freshness worth a little, speed worth most of it); fuel 17 francs → PROFIT 75 francs
-  OLTEN with 3: about 95% of light speed; light lands at 10 years, rocket at 10 years 9 months; flowers aged 4 years (keep 10 years); the florist paid 120 francs of 200 (freshness worth over half, speed worth a little); fuel 17 francs → PROFIT 103 francs
-  SION with 3: about 95% of light speed; light lands at 15 years, rocket at 16 years 2 months; flowers aged 6 years (keep 5 years); the florist paid 0 francs of 150 (freshness worth nothing, speed worth nothing); fuel 17 francs → PROFIT −17 francs
-  BRIG with 3: about 95% of light speed; light lands at 20 years, rocket at 21 years 6 months; flowers aged 8 years (keep 2 years); the florist paid 0 francs of 150 (freshness worth nothing, speed worth nothing); fuel 17 francs → PROFIT −17 francs
-  profit 145 francs of a possible 219 francs
-> LAUNCH ALL 3-4-5-0
-  THUN with 3: about 95% of light speed; light lands at 2 years, rocket at 2 years 2 months; flowers aged 10 months (keep 1 year); the hospital paid 92 francs of 100 (freshness worth a little, speed worth most of it); fuel 17 francs → PROFIT 75 francs
-  OLTEN with 4: about 98% of light speed; light lands at 10 years, rocket at 10 years 3 months; flowers aged 2 years 3 months (keep 10 years); the florist paid 155 francs of 200 (freshness worth over half, speed worth over half); fuel 36 francs → PROFIT 119 francs
-  SION with 5: about 99% of light speed; light lands at 15 years, rocket at 15 years 1 month; flowers aged 23 months (keep 5 years); the florist paid 92 francs of 150 (freshness worth over half, speed worth most of it); fuel 68 francs → PROFIT 24 francs
+  THUN with 3: about 95% of light speed; station clock 2 years 2 months (light 2 years), rocket clock 10 months (keep 2 years) ALIVE; fee 500 francs worth 458 francs today (most of it); fuel 17 francs → PROFIT TODAY 441 francs
+  OLTEN with 3: about 95% of light speed; station clock 3 years 3 months (light 3 years), rocket clock 14 months (keep 1 year) DEAD; fee 0 francs worth 0 francs today (most of it); fuel 17 francs → PROFIT TODAY −17 francs
+  SION with 3: about 95% of light speed; station clock 16 years 2 months (light 15 years), rocket clock 6 years (keep 3 years) DEAD; fee 0 francs worth 0 francs today (a third); fuel 17 francs → PROFIT TODAY −17 francs
+  BRIG with 3: about 95% of light speed; station clock 26 years 11 months (light 25 years), rocket clock 10 years (keep 2 years) DEAD; fee 0 francs worth 0 francs today (a third); fuel 17 francs → PROFIT TODAY −17 francs
+  profit today 390 francs of a possible 944 francs
+> LAUNCH ALL 2-4-5-0
+  THUN with 2: about 80% of light speed; station clock 2 years 6 months (light 2 years), rocket clock 18 months (keep 2 years) ALIVE; fee 500 francs worth 451 francs today (most of it); fuel 7 francs → PROFIT TODAY 445 francs
+  OLTEN with 4: about 98% of light speed; station clock 3 years 1 month (light 3 years), rocket clock 8 months (keep 1 year) ALIVE; fee 500 francs worth 441 francs today (most of it); fuel 36 francs → PROFIT TODAY 405 francs
+  SION with 5: about 99% of light speed; station clock 15 years 1 month (light 15 years), rocket clock 23 months (keep 3 years) ALIVE; fee 300 francs worth 162 francs today (a third); fuel 68 francs → PROFIT TODAY 94 francs
   BRIG: refused (right: nothing pays here)
-  profit 219 francs of a possible 219 francs
+  profit today 944 francs of a possible 944 francs
+
+ORDER BOOK as The merchant with a loan (rate 0.1)
+  card THUN: 2 light-years; fee 500, keep 2 years; best = 3
+  card OLTEN: 3 light-years; fee 500, keep 1 year; best = 4
+  card SION: 15 light-years; fee 300, keep 3 years; best = refuse
+  card BRIG: 25 light-years; fee 300, keep 2 years; best = refuse
+> LAUNCH ALL 3-3-3-3
+  THUN with 3: about 95% of light speed; station clock 2 years 2 months (light 2 years), rocket clock 10 months (keep 2 years) ALIVE; fee 500 francs worth 398 francs today (over half); fuel 17 francs → PROFIT TODAY 382 francs
+  OLTEN with 3: about 95% of light speed; station clock 3 years 3 months (light 3 years), rocket clock 14 months (keep 1 year) DEAD; fee 0 francs worth 0 francs today (over half); fuel 17 francs → PROFIT TODAY −17 francs
+  SION with 3: about 95% of light speed; station clock 16 years 2 months (light 15 years), rocket clock 6 years (keep 3 years) DEAD; fee 0 francs worth 0 francs today (a little); fuel 17 francs → PROFIT TODAY −17 francs
+  BRIG with 3: about 95% of light speed; station clock 26 years 11 months (light 25 years), rocket clock 10 years (keep 2 years) DEAD; fee 0 francs worth 0 francs today (a little); fuel 17 francs → PROFIT TODAY −17 francs
+  profit today 331 francs of a possible 708 francs
+> LAUNCH ALL 3-4-0-0
+  THUN with 3: about 95% of light speed; station clock 2 years 2 months (light 2 years), rocket clock 10 months (keep 2 years) ALIVE; fee 500 francs worth 398 francs today (over half); fuel 17 francs → PROFIT TODAY 382 francs
+  OLTEN with 4: about 98% of light speed; station clock 3 years 1 month (light 3 years), rocket clock 8 months (keep 1 year) ALIVE; fee 500 francs worth 362 francs today (over half); fuel 36 francs → PROFIT TODAY 326 francs
+  SION: refused (right: nothing pays here)
+  BRIG: refused (right: nothing pays here)
+  profit today 708 francs of a possible 708 francs
 
 THE LONG HAUL
-  LOCARNO with 5: about 99% of light speed; light lands at 100 years, rocket at 100 years 10 months; flowers aged 12 years 11 months (keep 10 years); the museum paid 0 francs of 800 (freshness worth nothing, speed worth a little); fuel 68 francs → PROFIT −68 francs
-  LOCARNO with 6: all but light speed; light lands at 100 years, rocket at 100 years 3 months; flowers aged 7 years 5 months (keep 10 years); the museum paid 207 francs of 800 (freshness worth a little, speed worth over half); fuel 125 francs → PROFIT 81 francs
+  as The patient merchant:  LOCARNO with 6: all but light speed; station clock 100 years 3 months (light 100 years), rocket clock 7 years 5 months (keep 10 years) ALIVE; fee 800 francs worth 800 francs today (all of it); fuel 125 francs → PROFIT TODAY 675 francs
+  as The ordinary merchant:  LOCARNO with 6: all but light speed; station clock 100 years 3 months (light 100 years), rocket clock 7 years 5 months (keep 10 years) ALIVE; fee 800 francs worth 13 francs today (next to nothing); fuel 125 francs → PROFIT TODAY −112 francs
+  as The merchant with a loan:  LOCARNO with 6: all but light speed; station clock 100 years 3 months (light 100 years), rocket clock 7 years 5 months (keep 10 years) ALIVE; fee 800 francs worth 0 francs today (next to nothing); fuel 125 francs → PROFIT TODAY −125 francs

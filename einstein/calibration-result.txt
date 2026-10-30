@@ -8,29 +8,33 @@ ok   §4: rate at 0.6c = 0.8
 ok   §4: rate at 0.8c = 0.6
 ok   §4: rate at 0 = 1
 ok   §4: first-order lag ½ t v²  [0.00005000125006249245]
+ok   §1+§4: 4 ly at 0.8c arrives at station time 5 y, rocket clock 3 y  [5, 2.999999999999999]
 ok   §10: W at 0.6c = 0.25 mc²
 ok   §10: W at 0.8c = 2/3 mc²
 ok   §10: W at 0.999c > 20 mc²  [21.36627204212937]
 ok   §10: W is ½ m v² at low v, to first order  [0.000050003750312610507]
 ok   fuel: cost rises with every booster
-ok   FLORISTS: every order pays at its best (4,5,6,5)
-ok   FLORISTS THUN: best is unique by ≥ 4 francs  [11.3]
-ok   FLORISTS OLTEN: best is unique by ≥ 4 francs  [10.1]
-ok   FLORISTS SION: best is unique by ≥ 4 francs  [13.3]
-ok   FLORISTS BRIG: best is unique by ≥ 4 francs  [22.8]
-ok   HOSPITALS: every order pays at its best (3,4,4,4)
-ok   HOSPITALS THUN: best is unique by ≥ 4 francs  [7.0]
-ok   HOSPITALS OLTEN: best is unique by ≥ 4 francs  [7.3]
-ok   HOSPITALS SION: best is unique by ≥ 4 francs  [20.2]
-ok   HOSPITALS BRIG: best is unique by ≥ 4 francs  [16.0]
-ok   mixed book: best counts all different (3,4,5,0)
-ok   mixed book: exactly one order to refuse
-ok   MIXED THUN: best is unique by ≥ 4 francs  [7.0]
-ok   MIXED OLTEN: best is unique by ≥ 4 francs  [13.5]
-ok   MIXED SION: best is unique by ≥ 4 francs  [10.6]
-ok   florists vs hospitals, star by star: 4,5,6,5 vs 3,4,4,4 — florists never fewer, more at the far stars
-ok   range: best count is 4
-ok   range: two boosters lose money (the natural first try)
-ok   pattern: freshness-buyer never wants fewer boosters than speed-buyer (320 price/fee/distance cases)
-ok   pattern: for a freshness-buyer, farther stars want at least as many boosters (keep scaled with distance)
-35 passed, 0 failed
+ok   discount: 4% over 10 years ≈ 0.665  [0.6648326359915009]
+ok   discount: rate 0 is no discount
+ok   patient merchant sends to every star (2,4,5,6)
+ok   ordinary merchant refuses exactly one star (2,4,5,0)
+ok   merchant with a loan refuses exactly two stars (3,4,0,0)
+ok   the borrower adds a booster at the near star, to be paid sooner
+ok   every star the patient sends to is sent with at least the fewest alive boosters
+ok   at the far stars the sender uses exactly the fewest alive boosters (fuel, not speed, decides)
+ok   PATIENT THUN: best is unique by ≥ 3 francs  [10.3]
+ok   PATIENT OLTEN: best is unique by ≥ 4 francs  [32.7]
+ok   PATIENT SION: best is unique by ≥ 4 francs  [56.9]
+ok   PATIENT BRIG: best is unique by ≥ 4 francs  [174.8]
+ok   ORDINARY THUN: best is unique by ≥ 3 francs  [3.9]
+ok   ORDINARY OLTEN: best is unique by ≥ 4 francs  [31.8]
+ok   ORDINARY SION: best is unique by ≥ 4 francs  [56.4]
+ok   BORROWER THUN: best is unique by ≥ 3 francs  [4.0]
+ok   BORROWER OLTEN: best is unique by ≥ 4 francs  [30.8]
+ok   range: four boosters is the fewest that arrive alive
+ok   range: two boosters arrive dead (the natural first try)
+ok   long haul: only the patient merchant can make it pay
+ok   pattern (a): the fee never arrives before light would
+ok   pattern (b): every booster makes the flowers younger on arrival
+ok   pattern (c): as the rate rises merchants drop the far stars first, never the near (90 cases)
+39 passed, 0 failed
