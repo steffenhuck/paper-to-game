@@ -1,5 +1,5 @@
 // Browser session test (build step 6): drives watsons-cardboard.html at 380 px through a whole game: game number 1,
-// ladder 1 built one try at a time by a reasoner (A G T C in order, remembering what fit; a width fault rules out the ring class),
+// ladder 1 built from Chargaff's jars with one slip (G opposite G), zipped once,
 // ladder 2 as the model on the desk: zipped as found, then mended with the rule, help opened mid-copy and returned from, the copy with
 // one missed rung and one slip, the copies copied again, the verdict,
 // About; then a new game. Run: node session-test.js [outdir] > session-log.txt   (needs playwright)
@@ -18,21 +18,14 @@ const D = (process.argv[2] || __dirname) + '/';
   await p.click('#b-start'); console.log('ladder on:', await on('#s-lad'), '|', await txt('#l-kick'));
   await shot('l1-empty');
   const g = M.drawGame(1);
-  // ladder one, one try at a time: a reasoner who tries A G T C in order against each new letter, remembering what fit
-  const known = {}, ruled = {};
+  // ladder one from the jars: a reader who sees A with T and G with C, but slips once (G for C on the second rung it meets a G), to show a fault
+  let slipped = false;
   for (let i = 0; i < g.ladder1.length; i++) {
-    const gv = g.ladder1[i].given;
-    if (known[gv]) { await p.click(`#tray [data-p="${known[gv]}"]`); await p.waitForTimeout(250); continue; }
-    for (const y of ['A', 'G', 'T', 'C']) {
-      if ((ruled[gv] || {})[y]) continue;
-      const dis = await p.$eval(`#tray [data-p="${y}"]`, e => e.disabled); if (dis) continue;
-      await p.click(`#tray [data-p="${y}"]`);
-      if (M.fit(gv, y).held) { known[gv] = y; known[y] = gv; await p.waitForTimeout(250); break; }
-      if (i === 0) { await p.waitForTimeout(300); await shot('l1-fail', false); }
-      await p.waitForTimeout(1300); (ruled[gv] = ruled[gv] || {})[y] = true;
-    }
+    const gv = g.ladder1[i].given; let y = M.partnerOf(gv);
+    if (gv === 'G' && !slipped) { y = 'G'; slipped = true; }
+    await p.click(`#tray [data-p="${y}"]`); await p.waitForTimeout(120);
   }
-  console.log('  ladder 1 built:', await txt('#l-count'), '| zip enabled:', !(await p.$eval('#b-zip', e => e.disabled)));
+  console.log('  jars:', await txt('#jars'), '| ladder 1 pinned:', await txt('#l-count'), '| zip enabled:', !(await p.$eval('#b-zip', e => e.disabled)));
   await shot('l1-built');
   await p.click('#b-zip'); await p.waitForTimeout(1400); await shot('l1-zipping', false); await p.waitForTimeout(2600);
   console.log('  ' + await txt('#r-big') + ' | ' + await txt('#r-why') + ' | ' + await txt('#r-chg')); await decimals(); await shot('l1-zipped');

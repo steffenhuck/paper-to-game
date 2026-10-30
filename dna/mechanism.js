@@ -31,8 +31,20 @@ const CONFIG = {
   LEN: { purine: 3, pyrimidine: 2 },   // our choice: a purine (two rings) is the longer piece
   RAIL_GAP: 5,                         // our choice: the fixed rail distance = one purine + one pyrimidine
 
+  // --- Chargaff's measurements: the evidence on the desk for ladder one. The letter cites them (p. 737, refs 3 and 4: "the ratio of the
+  // amounts of adenine to thymine, and the ratio of guanine to cytosine, are always very close to unity") but prints no numbers.
+  // Percent of the four letters, as commonly tabulated from Chargaff's laboratory (e.g. Stanford Stats 366 notes; Pierce, Genetics,
+  // table 10.1). Sources differ by a point or two (Pierce's 1955 table: human 30.3/30.3/19.5/19.9); some values postdate 1953. Check. ---
+  JARS: [
+    { name: 'human',          A: 30.9, T: 29.4, G: 19.9, C: 19.8 },
+    { name: 'gut bacterium',  A: 24.7, T: 23.6, G: 26.0, C: 25.7 },   // E. coli: all four near a quarter, so it fits any pairing (the decoy)
+    { name: 'yeast',          A: 31.3, T: 32.9, G: 18.7, C: 17.1 },
+    { name: 'TB bacterium',   A: 15.1, T: 14.6, G: 34.9, C: 35.4 },   // Mycobacterium tuberculosis
+  ],
+  JAR_CLOSE: 3,           // our choice: two letters "match" in a jar when within 3 points (the largest true-pair gap is 1.6)
+
   // --- the game ---
-  LADDER1_RUNGS: 6,       // our choice: a short first ladder, the free look; the pieces' shapes are hidden until the first zip
+  LADDER1_RUNGS: 6,       // our choice: a short first ladder; pieces face down, built from the jars' evidence, tested only by the zip
   LADDER2_RUNGS: 10,      // one full turn of the paper's helix (REPEAT_RESIDUES)
   LADDER2_MIN_EACH_SIDE: 3, // our choice: the given pieces sit on both rails (the paper's dyad), at least 3 on each
   // Ladder 2 arrives already built, wrongly: a model on the desk. Most rungs pair like with like, which is the model Watson built
@@ -163,29 +175,16 @@ function copyAgain(copies, full) {
   }));
 }
 
-// Ladder one is built one try at a time: a piece against the next given piece is tested at once. The fewest tries a perfect
-// reasoner needs: for each rung, if the partner is already known, one try; otherwise one try per candidate not yet ruled out,
-// where a failed try rules out that piece for that given letter and, by width, its ring class where the fault was width.
-// Expected over the order in which candidates are tried, assuming the reasoner tries unknown candidates in a fixed order (A G T C);
-// this is a benchmark of ours, reported as "the fewest a careful player needed", not a theorem.
-function fewestTries(ladder) {
-  const known = {}, ruled = {};  // known[g] = partner; ruled[g] = set of pieces ruled out
-  let tries = 0;
-  ladder.forEach(sp => {
-    const g = sp.given;
-    if (known[g]) { tries++; return; }
-    const out = ruled[g] || (ruled[g] = {});
-    for (const y of KEYS) {
-      if (out[y]) continue;
-      tries++;
-      const f = fit(g, y);
-      if (f.held) { known[g] = y; known[y] = g; break; }
-      out[y] = true;
-      // a width fault rules out the whole ring class of the tried piece for this given piece
-      if (f.width !== 'ok') KEYS.forEach(z => { if (piece(z).ring === piece(y).ring) out[z] = true; });
-    }
+// Chargaff's jars: the three ways to split the four letters into two couples, and what each jar says about each.
+const PAIRINGS = [['AT', 'GC'], ['AG', 'TC'], ['AC', 'GT']];
+function jarGap(jar, couple) { return Math.abs(jar[couple[0]] - jar[couple[1]]); }
+// for each pairing: the jars it fits (both couples within JAR_CLOSE) and the largest gap anywhere
+function readJars(jars) {
+  jars = jars || CONFIG.JARS;
+  return PAIRINGS.map(p => {
+    const fits = jars.map(j => p.every(c => jarGap(j, c) <= CONFIG.JAR_CLOSE));
+    return { pairing: p, fits, all: fits.every(Boolean), worst: Math.max(...jars.map(j => Math.max(...p.map(c => jarGap(j, c))))) };
   });
-  return tries;
 }
 
 // the closing twist: residue i turned TWIST_DEG further round the axis and RISE_A further along it
@@ -209,10 +208,10 @@ function verdict(s) {
   const lines = [];
   const f2 = s.l2.held === s.l2.n;
   const rule = 'a long piece needs a short one, and the ends must grip: a bump needs a dent. Only A with T and G with C.';
-  const t = s.tries, best = s.fewest, n1 = s.l1.n;
-  if (t <= best) lines.push('You built the first ladder in ' + t + ' tries, as few as anyone could: every failure told you what to try next. ' + (f2 ? 'The model on the desk gave you no trouble either. ' : '') + 'The rule: ' + rule);
-  else if (t <= best + 3) lines.push('You built the first ladder in ' + t + ' tries; a careful player needs ' + best + '. You were reading the failures. ' + (f2 ? 'Then you mended the model on the desk until every rung held. ' : '') + 'The rule: ' + rule);
-  else lines.push('You built the first ladder in ' + t + ' tries, where ' + best + ' would do: each failure says something about the next try. ' + (f2 ? 'Then you mended the model on the desk until every rung held. ' : 'The model on the desk still has rungs that fail. ') + 'The rule: ' + rule);
+  const h1 = s.l1.held, n1 = s.l1.n;
+  if (h1 === n1) lines.push('You read Chargaff\'s jars: A always comes with as much T, and G with as much C. Your first ladder held on every rung, and the cardboard showed why: ' + rule + (f2 ? ' Then you mended the model on the desk.' : ''));
+  else if (h1 >= n1 - 2) lines.push('Your first ladder held ' + howMany(h1, n1) + ' rung' + (n1 - h1 === 1 ? '' : 's') + '. The jars said it all along: A always comes with as much T, and G with as much C. The cardboard shows why: ' + rule + (f2 ? ' Then you mended the model on the desk.' : ''));
+  else lines.push('Your first ladder held ' + howMany(h1, n1) + ' of its rungs. The jars said it all along: A always comes with as much T, and G with as much C. The cardboard shows why: ' + rule + (f2 ? ' Then you mended the model on the desk.' : ''));
   const c = s.copy, both = c.same[0] && c.same[1], g = s.grand;
   if (both) lines.push('Then you pulled the ladder apart and each half rebuilt the other: two ladders, letter for letter the same as the first. Copied again, without you, they stayed the same.');
   else { const ch = g ? g.reduce((n, cp) => n + cp.filter(x => x.changed).length, 0) : 0;
@@ -223,6 +222,6 @@ function verdict(s) {
 }
 
 const api = { CONFIG, KEYS, rng, fit, contact, partnersOf, partnerOf, clashPartner, drawGame, rungOf, zip, complete, counts, chargaff,
-  copySpots, copyMs, scoreCopy, copyAgain, fewestTries, helixPoint, howMany, verdict };
+  copySpots, copyMs, scoreCopy, copyAgain, PAIRINGS, jarGap, readJars, helixPoint, howMany, verdict };
 if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.MECH = api;
 })(typeof window !== 'undefined' ? window : this);
