@@ -96,6 +96,7 @@ ok(Math.abs(res['random piece'].mean - C.BENCH_RANDOM) < 0.3, 'BENCH_RANDOM matc
 ok(Math.abs(res['reads lengths only'].mean - C.BENCH_ONE_CLUE) < 0.4 && Math.abs(res['reads ends only'].mean - C.BENCH_ONE_CLUE) < 0.4, 'BENCH_ONE_CLUE matches both one-clue players');
 ok(res['reads lengths only'].kinds.lengths / 2000 > 0.99 && res['reads ends only'].kinds.ends / 2000 > 0.99, 'the verdict reads a lengths-only player as "lengths" and an ends-only player as "ends" (over 99%)');
 ok(res['like with like (Watson\'s first idea)'].kinds.like === 2000, 'the verdict reads like-with-like as Watson\'s first idea, every time');
+ok(M.score({ held: 10, n: 10 }) === 100 && M.score({ held: 7, n: 10 }) === 70 && M.score({ held: 0, n: 10 }) === 0, 'the score is ten points a rung that holds, out of 100');
 ok(res['random piece'].kinds.guess / 2000 > 0.9, 'the verdict reads a random player as guessing in over 90% of games (' + Math.round(res['random piece'].kinds.guess / 20) + '%)');
 
 console.log(`\n${pass} passed, ${fail} failed`);

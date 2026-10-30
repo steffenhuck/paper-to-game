@@ -248,3 +248,10 @@ Steffen, after the simplified second ladder: the second stage felt like time pre
 - The calibration check tests the benchmarks against the simulated players, and checks that the classifier reads each pure strategy correctly (over 99%; random as guessing 94%).
 
 Mechanism: one ladder (`LADDER_RUNGS: 10`), `copyByRule`, `reading`, the benchmarks in CONFIG; the timed copy (`copyMs`, the fork) and the second ladder are gone. Calibration 30/30. Browser session at 380 px: three whole games (guesser, lengths-only, optimal) with the verdict each predicts; help and About opened and returned from; no errors, no horizontal scroll, no decimals.
+
+**Sparest version (30 Oct, night).** Steffen: the watched copy was a stage without decisions; make the game short and sweet like the paper, with the choices, then straight to the final feedback with a prominent score, then play again. Now: welcome → desk → the ladder (choices, one zip) → a single "See your score" button under the zipped ladder → the end screen. No intermediate screen.
+- The score is out of 100, ten points a rung that holds, written large in red marker and counted up.
+- Under it, a pencil yardstick with the player's red marker against the simulated players: at random about 25, one clue about 50, both clues 100 (`BENCH_*` × 10).
+- Then the verdict line from the fault pattern, Chargaff's bars for the player's ladder, the copying line with the ladder's two copies twisted into helices, the paper's line, and "Play again: a new chain", which deals the next game number straight onto the ladder.
+
+The copy screen and its code are gone. Calibration 31/31 (the score added). Browser session: three games, scoring 70, 0 and 100, with the expected verdicts; play again, help and About all work; no errors.

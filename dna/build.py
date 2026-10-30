@@ -6,7 +6,7 @@ font = lambda f: base64.b64encode(open('fonts/' + f, 'rb').read()).decode()
 about = """
 <h2>What's real here</h2>
 <h3>The game in one line</h3>
-<p>You build the second chain of a DNA ladder from cut-out pieces, zip it to see which rungs hold, then pull it apart and watch it copy itself. The rule that decides which rungs hold is Watson and Crick's; the pieces, their lengths and the ladder are this game's.</p>
+<p>You build the second chain of a DNA ladder from cut-out pieces, zip it to see which rungs hold, and get a score out of 100: ten points a rung. The end screen shows your ladder copied and twisted into the helix. The rule that decides which rungs hold is Watson and Crick's; the pieces, their lengths and the ladder are this game's.</p>
 <h3>The cardboard</h3>
 <p>The pieces are cardboard because that is how the pairs were found: in February 1953 Watson cut the four bases out of stiff card, to scale, and pushed them around his desk until an adenine–thymine pair and a guanine–cytosine pair turned out to be the same shape (Watson, <i>The Double Helix</i>, 1968, ch. 26). The cardboard is history, not the letter, which says only that the structure rests on "published experimental data and stereochemical arguments". The aim, to build the other chain, is the letter's own consequence: "if the sequence of bases on one chain is given, then the sequence on the other chain is automatically determined."</p>
 <h3>What the paper found</h3>
