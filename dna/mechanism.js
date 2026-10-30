@@ -163,6 +163,31 @@ function copyAgain(copies, full) {
   }));
 }
 
+// Ladder one is built one try at a time: a piece against the next given piece is tested at once. The fewest tries a perfect
+// reasoner needs: for each rung, if the partner is already known, one try; otherwise one try per candidate not yet ruled out,
+// where a failed try rules out that piece for that given letter and, by width, its ring class where the fault was width.
+// Expected over the order in which candidates are tried, assuming the reasoner tries unknown candidates in a fixed order (A G T C);
+// this is a benchmark of ours, reported as "the fewest a careful player needed", not a theorem.
+function fewestTries(ladder) {
+  const known = {}, ruled = {};  // known[g] = partner; ruled[g] = set of pieces ruled out
+  let tries = 0;
+  ladder.forEach(sp => {
+    const g = sp.given;
+    if (known[g]) { tries++; return; }
+    const out = ruled[g] || (ruled[g] = {});
+    for (const y of KEYS) {
+      if (out[y]) continue;
+      tries++;
+      const f = fit(g, y);
+      if (f.held) { known[g] = y; known[y] = g; break; }
+      out[y] = true;
+      // a width fault rules out the whole ring class of the tried piece for this given piece
+      if (f.width !== 'ok') KEYS.forEach(z => { if (piece(z).ring === piece(y).ring) out[z] = true; });
+    }
+  });
+  return tries;
+}
+
 // the closing twist: residue i turned TWIST_DEG further round the axis and RISE_A further along it
 function helixPoint(i) {
   return { angleDeg: (i * CONFIG.TWIST_DEG) % 360, zA: i * CONFIG.RISE_A, radiusA: CONFIG.P_RADIUS_A };
@@ -182,12 +207,12 @@ function howMany(k, n) {
 // the verdict, in words. s = { l1: zip result, l2: zip result, copy: scoreCopy result }
 function verdict(s) {
   const lines = [];
-  const f2 = s.l2.held === s.l2.n, f1 = s.l1.held === s.l1.n;
+  const f2 = s.l2.held === s.l2.n;
   const rule = 'a long piece needs a short one, and the ends must grip: a bump needs a dent. Only A with T and G with C.';
-  if (f1 && f2) lines.push('You knew the rule before the first zip, and the model on the desk gave you no trouble: ' + rule);
-  else if (f2) lines.push('Your first ladder failed in places. Then you mended the model on the desk until every rung held. You found the rule: ' + rule);
-  else if (s.l2.held >= s.l2.n - 2) lines.push('You mended the model on the desk to ' + howMany(s.l2.held, s.l2.n) + ' rung' + (s.l2.n - s.l2.held === 1 ? '' : 's') + '. Nearly there. The rule: ' + rule);
-  else lines.push('The model on the desk kept failing. The rule: ' + rule);
+  const t = s.tries, best = s.fewest, n1 = s.l1.n;
+  if (t <= best) lines.push('You built the first ladder in ' + t + ' tries, as few as anyone could: every failure told you what to try next. ' + (f2 ? 'The model on the desk gave you no trouble either. ' : '') + 'The rule: ' + rule);
+  else if (t <= best + 3) lines.push('You built the first ladder in ' + t + ' tries; a careful player needs ' + best + '. You were reading the failures. ' + (f2 ? 'Then you mended the model on the desk until every rung held. ' : '') + 'The rule: ' + rule);
+  else lines.push('You built the first ladder in ' + t + ' tries, where ' + best + ' would do: each failure says something about the next try. ' + (f2 ? 'Then you mended the model on the desk until every rung held. ' : 'The model on the desk still has rungs that fail. ') + 'The rule: ' + rule);
   const c = s.copy, both = c.same[0] && c.same[1], g = s.grand;
   if (both) lines.push('Then you pulled the ladder apart and each half rebuilt the other: two ladders, letter for letter the same as the first. Copied again, without you, they stayed the same.');
   else { const ch = g ? g.reduce((n, cp) => n + cp.filter(x => x.changed).length, 0) : 0;
@@ -198,6 +223,6 @@ function verdict(s) {
 }
 
 const api = { CONFIG, KEYS, rng, fit, contact, partnersOf, partnerOf, clashPartner, drawGame, rungOf, zip, complete, counts, chargaff,
-  copySpots, copyMs, scoreCopy, copyAgain, helixPoint, howMany, verdict };
+  copySpots, copyMs, scoreCopy, copyAgain, fewestTries, helixPoint, howMany, verdict };
 if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.MECH = api;
 })(typeof window !== 'undefined' ? window : this);

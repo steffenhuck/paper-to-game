@@ -216,7 +216,7 @@ svg.lad { display: block; width: 100%; height: auto; touch-action: manipulation;
     <p><b>A rung holds</b> when the two pieces exactly span the gap between the rails and every bump meets a dent. Too long and the rails bow out. Too short and they pinch in. A bump against a bump pushes the piece away.</p>
   </div>
   <h3>Ladders</h3>
-  <p><b>Ladder one.</b> The left rail has its pieces. Tap a piece in the tray to pin it in the next empty spot (marked in red); tap a pinned piece to take it back. Nothing is tested until you press <b>Zip it</b>. Then every rung is tested, top to bottom, and the pieces turn face up.</p>
+  <p><b>Ladder one.</b> The left rail has its pieces. Tap a piece in the tray to try it against the next one (marked in red). It is tested the moment it lands: the rails bow or pinch, or the ends clash and it springs back, or it holds and locks. A piece that fails goes back to the tray, face up now. Fewer tries is better; every failure says something about what to try next. When every rung holds, zip it.</p>
   <p><b>Ladder two.</b> A model is already on the desk, built the way Watson first built it, mostly wrong. Zip it to see where it fails, then tap a rung to swap its loose piece, and zip again.</p>
   <h3>The copy</h3>
   <p>Your mended ladder is pulled apart into two halves. A red fork runs down them; on each rung it lights one spot on each half. Tap the piece that belongs there before the fork moves on. It moves on as soon as both spots are filled, and gets a little faster; a spot it passes stays empty. Then the two copies are copied again without you, and you see what your slips did.</p>
@@ -306,7 +306,8 @@ function seedVal() { const v = parseInt($('#seed').value, 10); return isFinite(v
 
 function newGame() {
   const g = M.drawGame(seedVal());
-  S = { game: g, li: 0, ladders: [g.ladder1, g.ladder2], placed: null, zips: [], copy: null, seen: {}, zipsOnL2: 0 };
+  S = { game: g, li: 0, ladders: [g.ladder1, g.ladder2], placed: null, zips: [], copy: null, seen: {}, zipsOnL2: 0, tries: 0, tried: {}, last: null };
+  S.fewest = M.fewestTries(g.ladder1);
   startLadder(0);
 }
 
@@ -316,9 +317,9 @@ function startLadder(li) {
   S.placed = li === 0 ? L.map(() => null) : S.game.prefill.slice(); S.off = L.map(() => 0); S.result = null; S.repairing = false; S.swapAt = -1;
   $('#l-kick').textContent = li === 0 ? 'Ladder 1 of 2 · ' + L.length + ' rungs' : 'Ladder 2 of 2 · the model on the desk';
   $('#l-orient').innerHTML = li === 0
-    ? 'The left rail has its pieces. Pin one from the tray opposite each. Nothing is tested until you zip.'
+    ? 'The left rail has its pieces. Try a piece from the tray against the top one: it is tested the moment it lands. If it fails, try another.'
     : 'Someone has already built this one, pairing like with like. Zip it and see.';
-  $('#l-hint').textContent = li === 0 ? 'The pieces are face down. You will see what they are when the zip reaches them.' : '';
+  $('#l-hint').textContent = li === 0 ? 'The pieces are face down until you try them. Fewer tries is better; every failure tells you something.' : '';
   $('#l-build').style.display = ''; $('#l-done').style.display = 'none'; $('#b-mend').style.display = 'none';
   $('#l-svg').setAttribute('viewBox', `0 0 360 ${G0.TOP * 2 + (L.length - 1) * G0.PITCH + 8}`);
   drawLadder(); drawTray(); show('s-lad');
@@ -329,7 +330,8 @@ function drawLadder() {
   let s = rails(L.length, S.off, g, g.LX, g.RX, g.TOP);
   L.forEach((sp, i) => {
     const y = g.TOP + i * g.PITCH, lx = g.LX - S.off[i], rx = g.RX + S.off[i];
-    const r = res && i < S.zipTo && !(S.swapped && S.swapped[i]) ? res.rungs[i] : null;
+    const live = S.li === 0 && !res && S.placed[i] ? { left: sp.given, right: S.placed[i], fit: M.fit(sp.given, S.placed[i]) } : null;
+    const r = (res && i < S.zipTo && !(S.swapped && S.swapped[i])) ? res.rungs[i] : live;
     const givenL = sp.side === 'L';
     const pl = S.placed[i];
     const bad = r && !r.fit.held;
@@ -385,11 +387,27 @@ function drawTray() {
   $$('#tray .pbtn').forEach(el => el.addEventListener('click', () => {
     if (zipping) return;
     if (rep) { if (S.swapAt < 0) return; S.placed[S.swapAt] = el.dataset.p; S.swapped = S.swapped || {}; S.swapped[S.swapAt] = true; S.off[S.swapAt] = 0; S.swapAt = -1; drawLadder(); drawTray(); return; }
-    const i = nextEmpty(); if (i < 0 || S.result) return; S.placed[i] = el.dataset.p; drawLadder(); drawTray();
+    const i = nextEmpty(); if (i < 0 || S.result) return;
+    if (S.li === 0) { tryPiece(i, el.dataset.p); return; }
+    S.placed[i] = el.dataset.p; drawLadder(); drawTray();
   }));
   $('#b-zip').disabled = rep ? false : ne >= 0;
-  $('#b-zip').querySelector('span').textContent = rep ? 'Zip it again' : 'Zip it';
-  const filled = S.placed.filter(Boolean).length; $('#l-count').textContent = rep ? '' : filled + ' of ' + L.length + ' filled';
+  $('#b-zip').querySelector('span').textContent = rep ? 'Zip it again' : S.li === 0 ? 'Every rung holds: zip it' : 'Zip it';
+  const filled = S.placed.filter(Boolean).length;
+  $('#l-count').textContent = rep ? '' : S.li === 0 ? (S.tries + (S.tries === 1 ? ' try' : ' tries') + ' · ' + filled + ' of ' + L.length + ' hold') : filled + ' of ' + L.length + ' filled';
+  if (S.li === 0 && !rep) $$('#tray .pbtn').forEach(b => { const i = nextEmpty(); if (i >= 0 && S.tried[L[i].given] && S.tried[L[i].given][b.dataset.p]) b.disabled = true; });
+}
+let trying = false;
+function tryPiece(i, b) {
+  if (trying || zipping) return;
+  const L = S.ladders[S.li], g = L[i].given, f = M.fit(g, b);
+  S.tries++; S.seen[g] = true; S.seen[b] = true;
+  S.placed[i] = b;
+  if (f.held) { S.off[i] = 0; drawLadder(); drawTray(); return; }
+  (S.tried[g] = S.tried[g] || {})[b] = true;   // a piece that failed against this letter is greyed out for it
+  // it fails: the rails react at this rung, the fault is named, then the piece comes back out
+  trying = true; S.off[i] = f.width === 'ok' ? 0 : f.bulge * G0.U / 2; drawLadder(); drawTray();
+  setTimeout(() => { S.placed[i] = null; S.off[i] = 0; trying = false; drawLadder(); drawTray(); }, 1100);
 }
 function doZip() {
   if (zipping || nextEmpty() >= 0) return;
@@ -415,20 +433,18 @@ function zipDone() {
   $('#l-hint').textContent = '';
   const mendable = S.li === 1 && z.held < z.n;
   $('#b-mend').style.display = mendable ? '' : 'none'; $('#b-next').style.display = mendable ? 'none' : '';
-  $('#r-big').textContent = z.held === z.n ? 'Every rung held.' : z.held + ' of ' + z.n + ' rungs held.';
+  $('#r-big').textContent = S.li === 0 ? (S.tries <= S.fewest ? 'Built in ' + S.tries + ' tries. As few as anyone could.' : 'Built in ' + S.tries + ' tries. A careful player needs ' + S.fewest + '.') : z.held === z.n ? 'Every rung held.' : z.held + ' of ' + z.n + ' rungs held.';
   const f = { wide: 0, narrow: 0, clash: 0, loose: 0 }; z.rungs.forEach(r => { if (r.fit.fault) f[r.fit.fault]++; });
   const why = [];
   if (f.wide) why.push(f.wide + ' too wide: two long pieces');
   if (f.narrow) why.push(f.narrow + ' too narrow: two short pieces');
   if (f.clash + f.loose) why.push((f.clash + f.loose) + ' with the right width, but a bump hit a bump');
-  $('#r-why').textContent = why.length ? why.join('; ') + '.' : 'The blue rails run straight all the way down, and every end grips.';
+  $('#r-why').textContent = S.li === 0 ? 'Every rung holds, and the rails run straight. Each piece you tried told you something about the next.' : why.length ? why.join('; ') + '.' : 'The blue rails run straight all the way down, and every end grips.';
   // Chargaff's bars: the letters in this ladder
   const c = z.counts, col = (b, n) => `<div class="col"><span class="l">${b}</span>${'<i></i>'.repeat(n)}</div>`;
   const eq = (a, b) => `<span class="eq ${a === b ? '' : 'red'}">${a === b ? '=' : '≠'}</span>`;
   $('#r-bars').innerHTML = `<div class="pair">${col('A', c.A)}${eq(c.A, c.T)}${col('T', c.T)}</div><div class="pair">${col('G', c.G)}${eq(c.G, c.C)}${col('C', c.C)}</div>`;
-  if (S.li === 0) $('#r-chg').innerHTML = z.chargaff.both
-    ? 'Those are the letters in your ladder. In real DNA, from any creature, there is always as much A as T and as much G as C. Nobody knew why. Yours does it too.'
-    : 'Those are the letters in your ladder. In real DNA, from any creature, there is always as much A as T and as much G as C. Nobody knew why. Yours doesn\'t, yet.';
+  if (S.li === 0) $('#r-chg').innerHTML = 'Those are the letters in your ladder: as much A as T, as much G as C. In real DNA, from any creature, it is always so. Nobody knew why. You have just built the reason.';
   else if (z.held < z.n) $('#r-chg').innerHTML = S.zipsOnL2 === 1
     ? 'This is the model Watson built first, in February 1953: like paired with like. The rails bulge where two long pieces meet and pinch where two short ones do. Tap a rung to swap its loose piece.'
     : 'Closer. Tap a rung to swap its loose piece, and zip again.';
@@ -567,10 +583,10 @@ function twistAnim(svg, full, done) {
 
 // ---------- end ----------
 function endScreen() {
-  const v = M.verdict({ l1: S.zips[0], l2: S.zips[1], copy: S.copy.result, grand: S.copy.grand });
+  const v = M.verdict({ l1: S.zips[0], l2: S.zips[1], copy: S.copy.result, grand: S.copy.grand, tries: S.tries, fewest: S.fewest });
   $('#verdict').innerHTML = v.map((l, i) => `<p class="${i === v.length - 1 ? 'paper' : ''}">${l}</p>`).join('');
   const z1 = S.zips[0], z2 = S.zips[1], r = S.copy.result;
-  $('#tally').innerHTML = `Game ${S.game.seed}. Ladder 1: ${z1.held} of ${z1.n} rungs held. The model on the desk: mended in ${S.zipsOnL2} zip${S.zipsOnL2 === 1 ? '' : 's'} to ${z2.held} of ${z2.n}. Copy: ${r.right} of ${r.n} new pieces right. Below: your two copies, twisted the way the paper says, a tenth of a turn per rung.`;
+  $('#tally').innerHTML = `Game ${S.game.seed}. Ladder 1: built in ${S.tries} tries (a careful player: ${S.fewest}). The model on the desk: mended in ${S.zipsOnL2} zip${S.zipsOnL2 === 1 ? '' : 's'} to ${z2.held} of ${z2.n}. Copy: ${r.right} of ${r.n} new pieces right. Below: your two copies, twisted the way the paper says, a tenth of a turn per rung.`;
   show('s-end');
   const svg = $('#e-svg'); svg.setAttribute('viewBox', '0 0 360 250');
   twistAnim(svg, S.copy.full);

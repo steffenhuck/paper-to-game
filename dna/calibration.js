@@ -116,5 +116,7 @@ process.exitCode = fail ? 1 : 0;
   ok(changed === 1 && gr.every(cp => cp.every(x => x.held)), 'grandchildren: one clashing slip in the copy gives exactly one changed rung in the next generation, and every grandchild rung holds');
   const sc2 = M.scoreCopy(full, spots.map(s => M.partnerOf(s.template))), gr2 = M.copyAgain(sc2.copies, full);
   ok(gr2.every(cp => cp.every(x => x.held && !x.changed)), 'grandchildren: a perfect copy breeds a perfect copy'); }
+{ let good = true, lo = 99, hi = 0; for (let seed = 1; seed <= 300; seed++) { const g = M.drawGame(seed), f = M.fewestTries(g.ladder1); lo = Math.min(lo, f); hi = Math.max(hi, f); if (f < g.ladder1.length || f > g.ladder1.length + 4) good = false; }
+  ok(good, `fewest tries: on 300 seeds a perfect reasoner needs between ${lo} and ${hi} tries for six rungs (never fewer than six, never more than ten)`); }
 console.log(`\n(appended) ${pass} passed, ${fail} failed`);
 if (fail) process.exitCode = 1;

@@ -210,3 +210,12 @@ Steffen, playing: in the first ladder it was obvious which pieces would not fit,
 - **Title**: Watson's Cardboard; the file `watsons-cardboard.html`, with `the-other-chain.html` redirecting.
 
 Simulation before building, on ladder one: same-letter pairing fails every rung by width; alphabetical pairing (A–C, G–T) fails every rung by clash; random holds a quarter; the school rule holds all. Each failure kind teaches a different thing, which is why the model on the desk carries all three. Calibration now 30 checks, including: on 200 seeds the desk model has exactly five width faults and two clashes and holds throughout once mended by the rule; one clashing slip in the copy gives exactly one changed rung in the grandchildren, every grandchild rung holding; a perfect copy breeds a perfect copy. Browser session at 380 px: game 1 with a first-timer's ladder one (3 of 6), the desk model as found (3 of 10), mended in one pass (10 of 10), the copy with a miss and a slip (17 of 20), one changed grandchild rung, the verdict; no errors, no horizontal scroll, no decimals.
+
+
+## Revision (30 Oct, later): try it
+
+Steffen, playing the face-down version: the first ladder was pure guessing. With shapes shown it had been a giveaway; with shapes hidden it was a lottery; neither put a decision in front of the player. The cause was shared by every version: pin everything blind, then one zip reveals everything, so the first ladder was a single bet.
+
+**Ladder one is now built one try at a time.** A piece is tested the moment it lands against the given one: the rails bow or pinch, or the ends clash and it springs back, or it holds and locks. A piece that fails goes back to the tray face up, greyed out for that letter. The yardstick is tries against the fewest a careful reasoner needs (`fewestTries` in the mechanism: try unknown candidates in a fixed order, remember what held, let a width fault rule out the ring class; a benchmark of ours, 7–9 for six rungs across seeds). A stranger with no chemistry can reason well: A was too wide against A, so A needs a short one; this short one clashed, so it is the other. The zip survives as the ceremony when every rung holds, with the Chargaff bars, which now always balance, and the line "you have just built the reason".
+
+Ladder two (the model on the desk), the copy and the grandchildren are unchanged. Calibration 31 checks; the session on game 1: a reasoner builds ladder one in 9 tries against a benchmark of 8.
