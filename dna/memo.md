@@ -215,3 +215,36 @@ The welcome card made personal: the puzzle is a jigsaw with four kinds of piece 
 The welcome card got three pencil-and-card pictures, drawn by the game's own piece and rail functions: the helix with empty, question-marked rungs beside four loose pieces (the jigsaw); like with like bulging next to A–T and G–C at one width (the cardboard); one chain given and the other side empty (your desk).
 
 Ladder two simplified after play: the given chain stays on the left rail, as in ladder one (`LADDER2_BOTH_RAILS: false`; setting it true restores the paper's dyad, given pieces on both rails). Pieces jumping between rails made the tray flip direction and the ladder hard to read. Its job is now stated plainly: a new chain, one full turn, build its partner, watch the letter count. The tray and Zip are pinned to the bottom of the screen on both ladders, and the ladder scrolls so the next empty spot stays in view: ten rungs and the tray fit one phone screen. Calibration 27/27.
+
+## Final version (30 Oct, night): one ladder, then watch it copy
+
+Steffen, after the simplified second ladder: the second stage felt like time pressure, and was hard to understand. He asked for one final go, after first comparing random and heuristic players with the optimal one, and for the final feedback to follow from that comparison.
+
+**What the second stage was for, and why it went.** The second ladder repeated the first with the rule already known. The copy round asked for the same matching again, against a clock, on two half-ladders. Neither asked a new question. The copying idea (the letter's last sentence) is kept, but it is now watched, not played.
+
+**The game now:** welcome card → the desk → one ladder of ten rungs (one full turn), shapes shown, pin every piece, one zip, no clock → "Pull it apart": the ladder (its loose rungs fixed by the rule) unzips, each gap fills itself with the only piece that fits, and one ladder becomes two → the twist → the verdict.
+
+**Simulation before the build** (calibration.js; 2000 games each on the game's own draws; rungs held of 10):
+
+| player | mean held | all ten | fault pattern the verdict sees |
+|---|---|---|---|
+| random | 2.5 | 0.0% | both kinds 94% |
+| like with like (Watson's first idea) | 0 | 0% | like with like 100% |
+| reads lengths only | 5.0 | 0.2% | only bump on bump 100% |
+| reads ends only | 5.0 | 0.1% | only too wide/narrow 100% |
+| remembers A–T, guesses the rest | 6.2 | 0.8% | both kinds 71% |
+| reads both (optimal) | 10 | 100% | none |
+
+**What the feedback does with it.**
+- Ten of ten is a real signal: no heuristic short of reading both clues gets there more than about once in a hundred games. The score is shown, as "N of 10 rungs held", with the benchmarks next to it in words: "pinning at random about 2 or 3, reading only the lengths or only the ends about 5".
+- The verdict's first line is not the score. It says what the ladder shows, from the fault pattern:
+  - all held: "you saw what Watson saw";
+  - like with like: "Watson's first idea too";
+  - only bump on bump: "every rung had the right width… the ends are the other half of the clue";
+  - only too wide or too narrow: "every end gripped… the lengths are the other half";
+  - both kinds: "that is what pinning without a rule looks like".
+
+  The words describe the ladder, not the player's mind: a school-memory player can produce "only width faults" without having read the ends.
+- The calibration check tests the benchmarks against the simulated players, and checks that the classifier reads each pure strategy correctly (over 99%; random as guessing 94%).
+
+Mechanism: one ladder (`LADDER_RUNGS: 10`), `copyByRule`, `reading`, the benchmarks in CONFIG; the timed copy (`copyMs`, the fork) and the second ladder are gone. Calibration 30/30. Browser session at 380 px: three whole games (guesser, lengths-only, optimal) with the verdict each predicts; help and About opened and returned from; no errors, no horizontal scroll, no decimals.

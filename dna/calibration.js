@@ -1,4 +1,4 @@
-// Calibration check for The Other Chain (build step 1). Tests mechanism.js against the claims of Watson & Crick (1953).
+// Calibration check for Watson's Cardboard (build step 1). Tests mechanism.js against the claims of Watson & Crick (1953).
 // Run: node calibration.js > calibration-result.txt
 const M = require('./mechanism.js'), C = M.CONFIG, K = M.KEYS;
 let pass = 0, fail = 0;
@@ -33,7 +33,7 @@ console.log('== One chain fixes the other; the sequence is unrestricted; Chargaf
 let unique = true, chargaffAll = true; const aShare = []; let atgc = 0;
 for (let s = 1; s <= 1000; s++) {
   const g = M.drawGame(s);
-  [g.ladder1, g.ladder2].forEach(L => {
+  [g.ladder].forEach(L => {
     L.forEach(sp => { if (M.partnersOf(sp.given).length !== 1) unique = false; });
     const full = M.complete(L), z = M.zip(L, L.map(sp => M.partnerOf(sp.given)));
     if (z.held !== z.n || !z.chargaff.both) chargaffAll = false;
@@ -50,53 +50,53 @@ ok(!z1.chargaff.AT, 'a ladder with a wrong rung (A-C) need not satisfy A = T');
 
 console.log('== Copying ==');
 let copyOk = true;
-for (let s = 1; s <= 500; s++) {
-  const full = M.complete(M.drawGame(s).ladder2);
-  const entries = M.copySpots(full).map(sp => M.partnerOf(sp.template));
-  const r = M.scoreCopy(full, entries);
-  if (!(r.same[0] && r.same[1] && r.right === r.n)) copyOk = false;
-}
-ok(copyOk, 'for 500 sequences, each half templating its partner gives two copies identical to the parent');
-{ const full = M.complete(M.drawGame(3).ladder2); const e = M.copySpots(full).map(sp => M.partnerOf(sp.template)); e[4] = null; e[7] = e[7] === 'A' ? 'G' : 'A';
-  const r = M.scoreCopy(full, e); ok(r.missed === 1 && r.right === r.n - 2 && !(r.same[0] && r.same[1]), 'a missed spot and a wrong piece are counted and break the copy'); }
-ok(M.copyMs(0) === C.COPY_MS_FIRST && M.copyMs(C.LADDER2_RUNGS - 1) === C.COPY_MS_LAST, 'the fork speeds up from first to last rung');
+for (let s = 1; s <= 500; s++) { const r = M.copyByRule(M.complete(M.drawGame(s).ladder)); if (!(r.same[0] && r.same[1] && r.right === r.n)) copyOk = false; }
+ok(copyOk, 'for 500 sequences, each half filled by the rule gives two copies identical to the parent');
+{ const full = M.complete(M.drawGame(3).ladder); const e = M.copySpots(full).map(sp => M.partnerOf(sp.template)); e[7] = e[7] === 'A' ? 'G' : 'A';
+  const r = M.scoreCopy(full, e); ok(r.right === r.n - 1 && !(r.same[0] && r.same[1]), 'a wrong piece in a copy is counted and breaks it (scoreCopy is a real check)'); }
 
 console.log('== Helix numbers (p. 737) ==');
 ok(Math.abs(360 / C.TWIST_DEG - C.REPEAT_RESIDUES) < 1e-9, '360 / 36 = 10 residues per turn');
 ok(Math.abs(C.REPEAT_RESIDUES * C.RISE_A - C.REPEAT_A) < 1e-9, '10 x 3.4 A = 34 A repeat');
 ok(M.helixPoint(10).angleDeg === 0 && Math.abs(M.helixPoint(10).zA - 34) < 1e-9, 'the drawing repeats after 10 rungs, 34 A up');
-ok(C.LADDER2_RUNGS === C.REPEAT_RESIDUES, 'ladder 2 is one full turn');
+ok(C.LADDER_RUNGS === C.REPEAT_RESIDUES, 'the ladder is one full turn');
 
 console.log('== The draw over 300 seeds ==');
-let all4 = true, sides = true, ag = true, distinct = new Set();
+let all4 = true, ag = true, distinct = new Set();
 for (let s = 1; s <= 300; s++) {
-  const g = M.drawGame(s); distinct.add(g.ladder1.map(x => x.given).join('') + g.ladder2.map(x => x.given + x.side).join(''));
-  if (!K.every(k => g.ladder1.some(x => x.given === k))) all4 = false;
-  const nL = g.ladder2.filter(x => x.side === 'L').length; if (C.LADDER2_BOTH_RAILS ? (nL < 3 || g.ladder2.length - nL < 3) : nL !== g.ladder2.length) sides = false;
-  const c = M.counts(M.complete(g.ladder2)); if (c.A === c.G) ag = false;
+  const g = M.drawGame(s); distinct.add(g.ladder.map(x => x.given).join(''));
+  if (!K.every(k => g.ladder.some(x => x.given === k))) all4 = false;
+  const c = M.counts(M.complete(g.ladder)); if (c.A === c.G) ag = false;
 }
-ok(all4, 'ladder 1 always shows all four letters');
-ok(sides, C.LADDER2_BOTH_RAILS ? 'ladder 2 always has at least 3 given pieces on each rail' : 'ladder 2 has its given chain on the left rail, as ladder 1');
-ok(ag, 'ladder 2 always ends with unequal A and G');
+ok(all4, 'the ladder always shows all four letters');
+ok(ag, 'the finished ladder always has unequal A and G');
 ok(distinct.size === 300, '300 seeds give 300 different games');
 
-console.log('== Heuristic players, 300 games each (share of ladder rungs that hold) ==');
+console.log('== Heuristic players, 2000 games each on the game\'s own draws (rungs held of 10) ==');
+const pickOf = (o, r) => o[Math.floor(r() * o.length)];
 const strategies = {
-  'random piece': (b, r) => K[Math.floor(r() * 4)],
-  'like with like': b => b,
-  'width only (any opposite length)': (b, r) => { const o = K.filter(y => M.fit(b, y).width === 'ok'); return o[Math.floor(r() * o.length)]; },
-  'grip only (any matching ends)': (b, r) => { const o = K.filter(y => { const f = M.fit(b, y); return f.p6 === 'grip' && f.p1 === 'grip'; }); return o[Math.floor(r() * o.length)]; },
-  'the rule': b => M.partnerOf(b),
+  'random piece': (b, r) => pickOf(K, r),
+  'like with like (Watson\'s first idea)': b => b,
+  'reads lengths only': (b, r) => pickOf(K.filter(y => M.fit(b, y).width === 'ok'), r),
+  'reads ends only': (b, r) => pickOf(K.filter(y => { const f = M.fit(b, y); return f.p6 === 'grip' && f.p1 === 'grip'; }), r),
+  'remembers A-T from school, guesses the rest': (b, r) => (b === 'A' ? 'T' : b === 'T' ? 'A' : pickOf(K, r)),
+  'reads both (optimal)': b => M.partnerOf(b),
 };
-const table = [];
+const res = {};
 Object.entries(strategies).forEach(([name, f]) => {
-  const r = M.rng(99); let h = 0, n = 0, perfect2 = 0;
-  for (let s = 1; s <= 300; s++) { const g = M.drawGame(s);
-    [g.ladder1, g.ladder2].forEach((L, li) => { const z = M.zip(L, L.map(sp => f(sp.given, r))); h += z.held; n += z.n; if (li === 1 && z.held === z.n) perfect2++; }); }
-  table.push([name, Math.round(100 * h / n) + '%', Math.round(100 * perfect2 / 300) + '%']);
+  const r = M.rng(99); let h = 0, all = 0; const kinds = {};
+  for (let s = 1; s <= 2000; s++) { const L = M.drawGame(s).ladder, z = M.zip(L, L.map(sp => f(sp.given, r)));
+    h += z.held; if (z.held === z.n) all++; const k = M.reading(z); kinds[k] = (kinds[k] || 0) + 1; }
+  res[name] = { mean: h / 2000, all: all / 2000, kinds };
+  console.log(`${name} | mean ${(h / 2000).toFixed(1)} | all ten ${(100 * all / 2000).toFixed(1)}% | read as: ` + Object.entries(kinds).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k} ${Math.round(v / 20)}%`).join(', '));
 });
-console.log('strategy | rungs held | ladder 2 fully held'); table.forEach(t => console.log(t.join(' | ')));
-ok(table[4][1] === '100%' && table.slice(0, 4).every(t => parseInt(t[1]) <= 55), 'only the rule holds everywhere; each half-rule holds about half the rungs');
+const R = Object.values(res);
+ok(R[5].all === 1 && R.slice(0, 5).every(x => x.all < 0.01), 'all ten held: always for the optimal player, under 1% for every other heuristic');
+ok(Math.abs(res['random piece'].mean - C.BENCH_RANDOM) < 0.3, 'BENCH_RANDOM matches the simulated random player (' + res['random piece'].mean.toFixed(2) + ')');
+ok(Math.abs(res['reads lengths only'].mean - C.BENCH_ONE_CLUE) < 0.4 && Math.abs(res['reads ends only'].mean - C.BENCH_ONE_CLUE) < 0.4, 'BENCH_ONE_CLUE matches both one-clue players');
+ok(res['reads lengths only'].kinds.lengths / 2000 > 0.99 && res['reads ends only'].kinds.ends / 2000 > 0.99, 'the verdict reads a lengths-only player as "lengths" and an ends-only player as "ends" (over 99%)');
+ok(res['like with like (Watson\'s first idea)'].kinds.like === 2000, 'the verdict reads like-with-like as Watson\'s first idea, every time');
+ok(res['random piece'].kinds.guess / 2000 > 0.9, 'the verdict reads a random player as guessing in over 90% of games (' + Math.round(res['random piece'].kinds.guess / 20) + '%)');
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exitCode = fail ? 1 : 0;
