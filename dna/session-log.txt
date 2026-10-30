@@ -1,0 +1,34 @@
+START aim: Build the other chain so every rung holds when you zip it.
+  [screenshot-start.png] scrollWidth 380
+ladder on: true | LADDER 1 OF 2 · 8 RUNGS
+  [screenshot-l1-empty.png] scrollWidth 380
+  took back rung 2; filled: 2 OF 8 FILLED
+  ladder 1 pinned: G G G T T C C C | zip enabled: true
+  [screenshot-l1-pinned.png] scrollWidth 380
+  [screenshot-l1-zipping.png] scrollWidth 380
+  3 of 8 rungs held. | 2 too wide: two long pieces; 3 too narrow: two short pieces. | Those are the letters in your ladder. In real DNA, from any creature, there is always as much A as T and as much G as C. Nobody knew why. Yours doesn't, yet.
+  [screenshot-l1-zipped.png] scrollWidth 380
+ladder 2: LADDER 2 OF 2 · 10 RUNGS | Now the given pieces are on both rails. Fill every empty spot, left or right. Same rule.
+  [screenshot-l2-pinned.png] scrollWidth 380
+  9 of 10 rungs held. | 1 with the right width, but a bump hit a bump. | Where every rung holds, A always matches T and G matches C, whatever the order of pieces on one rail. That is why real DNA does.
+  [screenshot-l2-zipped.png] scrollWidth 380
+copy on: true
+  [screenshot-copy-ready.png] scrollWidth 380
+  help on: true
+  back on copy: true
+  [screenshot-copy-mid.png] scrollWidth 380
+  waiting out rung 7
+  17 of 20 new pieces right. | Where you were right, the copy matches the first ladder letter for letter; where you missed or slipped, it doesn't. Each half told you what was needed.
+  [screenshot-copy-done.png] scrollWidth 380
+  [screenshot-end-twisting.png] scrollWidth 380
+END on: true
+VERDICT: Your second ladder held all but one rung. Nearly there. The rule: a long piece needs a short one, and a bump needs a dent. Only A with T and G with C. / Then you pulled the ladder apart and each half rebuilt the other. Your two copies got most new pieces right, and the fork passed 2 empty spots. You never had to be told what went where: each half said it. / Watson and Crick, 1953: one chain fixes the other. That is why DNA always holds as much A as T and as much G as C, and it "immediately suggests a possible copying mechanism".
+TALLY: Game 1. Ladder 1: 3 of 8 rungs held. Ladder 2: 9 of 10. Copy: 17 of 20 new pieces right. Below: your two copies, twisted the way the paper says, a tenth of a turn per rung.
+  [screenshot-end.png] scrollWidth 380
+about on true
+  [screenshot-about.png] scrollWidth 380
+back on end true
+  [screenshot-help.png] scrollWidth 380
+new game: start on true game number now 2
+  new ladder 1 given: G C G A G C C T
+errors []

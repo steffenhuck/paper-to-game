@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Other Chain</title>
+<meta name="description" content="A game from Watson and Crick's 1953 DNA letter: build the other chain from cut-out pieces, find the only two pairs that fit, then pull the ladder apart and copy it.">
+<style>
+@font-face { font-family: 'OC Marker'; src: url(data:font/woff2;base64,/*__FONT_MARKER__*/) format('woff2'); font-weight: 400; }
+@font-face { font-family: 'OC Type'; src: url(data:font/woff2;base64,/*__FONT_TYPE__*/) format('woff2'); font-weight: 400; }
+@font-face { font-family: 'OC Type'; src: url(data:font/woff2;base64,/*__FONT_TYPE_BOLD__*/) format('woff2'); font-weight: 700; }
+:root {
+  --kraft: #CFAE7C; --kraft2: #BF9C68; --pencil: #2A2621; --card: #F5EDDB; --blue: #2350C8; --red: #D23B25;
+  --mark: 'OC Marker', 'Comic Sans MS', cursive; --type: 'OC Type', 'Courier New', monospace;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; background: var(--kraft); color: var(--pencil); font-family: var(--type); font-size: 15px; line-height: 1.4; }
+body { min-height: 100vh; overflow-x: hidden;
+  background-image: radial-gradient(rgba(42,38,33,0.07) 1px, transparent 1.3px), radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1.4px);
+  background-size: 7px 7px, 11px 11px; background-position: 0 0, 3px 5px; }
+.wrap { max-width: 460px; margin: 0 auto; padding: 0 16px 28px; }
+.screen { display: none; }
+.screen.on { display: block; }
+h1, h2, h3, .mk { font-family: var(--mark); font-weight: 400; margin: 0; letter-spacing: 0.01em; }
+p { margin: 0 0 10px; }
+b { font-weight: 700; }
+.red { color: var(--red); }
+
+/* the strip on every play screen: the aim and ? */
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 0 8px; border-bottom: 2px dashed var(--pencil); margin-bottom: 10px; }
+.bar .aim { font-family: var(--mark); font-size: 15px; line-height: 1.15; color: var(--red); }
+.q { flex: none; width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--pencil); background: var(--card); color: var(--pencil); font-family: var(--mark); font-size: 20px; cursor: pointer; }
+.q:active { background: var(--kraft2); }
+.kick { display: flex; justify-content: space-between; font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 4px; }
+.orient { font-size: 14px; margin: 0 0 6px; min-height: 40px; }
+
+/* buttons: luggage tags */
+.tag { position: relative; display: block; width: 100%; border: 0; background: var(--pencil); color: var(--pencil); cursor: pointer; padding: 2px; font-family: var(--type); font-weight: 700;
+  font-size: 16px; letter-spacing: 0.08em; text-transform: uppercase; text-align: left;
+  clip-path: polygon(18px 0, 100% 0, 100% 100%, 18px 100%, 0 calc(100% - 18px), 0 18px); transform: rotate(-0.6deg); }
+.tag > span { display: block; background: var(--card); padding: 15px 14px 15px 42px; clip-path: polygon(17px 0, 100% 0, 100% 100%, 17px 100%, 0 calc(100% - 17px), 0 17px); position: relative; }
+.tag > span::before { content: ''; position: absolute; left: 16px; top: 50%; width: 12px; height: 12px; margin-top: -6px; border-radius: 50%; background: var(--kraft); box-shadow: inset 0 0 0 2px var(--pencil); }
+.tag:nth-of-type(2n) { transform: rotate(0.5deg); }
+.tag:active > span, .tag.hot > span { background: var(--kraft2); }
+.tag:active { transform: translateY(2px) rotate(-0.6deg); }
+.tag[disabled] { background: rgba(42,38,33,0.35); cursor: default; }
+.tag[disabled] > span { background: #E4D7BC; color: rgba(42,38,33,0.45); }
+.tag + .tag { margin-top: 10px; }
+.tag.red > span { color: var(--red); }
+
+/* start */
+.poster { padding-top: 18px; }
+.poster .kicker { font-weight: 700; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; display: flex; justify-content: space-between; }
+.poster h1 { font-size: 54px; line-height: 0.95; margin: 10px 0 2px; transform: rotate(-1.5deg); }
+.poster svg { display: block; width: 100%; height: auto; margin: 2px 0 6px; }
+.poster .aimline { font-family: var(--mark); font-size: 22px; line-height: 1.15; color: var(--red); margin: 4px 0 10px; }
+.poster .lede { font-size: 15px; margin-bottom: 14px; }
+.gameno { display: flex; align-items: center; gap: 8px; font-size: 13px; margin: 12px 0 0; }
+.gameno input { width: 84px; font-family: var(--type); font-weight: 700; font-size: 16px; padding: 6px 8px; border: 2px solid var(--pencil); background: var(--card); color: var(--pencil); border-radius: 0; }
+
+/* the ladder */
+svg.lad { display: block; width: 100%; height: auto; touch-action: manipulation; }
+.ribbon { fill: none; stroke: var(--blue); stroke-width: 9; stroke-linecap: round; }
+.ribbon-edge { fill: none; stroke: #173793; stroke-width: 1.4; stroke-dasharray: 2 5; }
+.pc { fill: var(--card); stroke: var(--pencil); stroke-width: 2; stroke-linejoin: round; }
+.pc.bad { stroke: var(--red); stroke-width: 2.6; }
+.ring { fill: none; stroke: var(--pencil); stroke-width: 1.1; opacity: 0.55; }
+.lt { font-family: var(--mark); font-size: 19px; fill: var(--pencil); text-anchor: middle; dominant-baseline: central; }
+.slot { fill: none; stroke: var(--pencil); stroke-width: 1.5; stroke-dasharray: 4 4; opacity: 0.55; }
+.slot.next { stroke: var(--red); opacity: 1; stroke-width: 2.2; }
+.stub { fill: var(--card); stroke: var(--pencil); stroke-width: 2; }
+.bond { stroke: var(--pencil); stroke-width: 2.4; stroke-linecap: round; }
+.flt { font-family: var(--mark); font-size: 13px; fill: var(--red); text-anchor: middle; dominant-baseline: central; }
+.fltbg { fill: var(--card); stroke: var(--red); stroke-width: 1.6; }
+.zz { fill: none; stroke: var(--red); stroke-width: 2.4; stroke-linejoin: round; }
+.mv { transition: transform 0.38s cubic-bezier(.2,.9,.3,1.2); }
+.shake { animation: shake 0.45s 2; }
+@keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(5px); } 75% { transform: translateX(-4px); } }
+
+/* the tray */
+.tray { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 6px 0 10px; }
+.pbtn { border: 2px solid var(--pencil); background: rgba(245,237,219,0.45); padding: 4px 2px; cursor: pointer; border-radius: 4px; min-height: 52px; }
+.pbtn svg { display: block; width: 100%; height: auto; pointer-events: none; }
+.pbtn:active { background: var(--kraft2); }
+.pbtn[disabled] { opacity: 0.4; }
+.trayhead { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-top: 4px; }
+
+/* results */
+.res { margin: 6px 0 10px; }
+.res .big { font-family: var(--mark); font-size: 26px; line-height: 1.1; }
+.res .why { font-size: 14px; margin: 4px 0 8px; }
+.bars { display: flex; justify-content: center; gap: 26px; margin: 4px 0 6px; }
+.pair { display: flex; align-items: flex-end; gap: 6px; position: relative; }
+.col { display: flex; flex-direction: column-reverse; align-items: center; gap: 2px; width: 30px; }
+.col i { display: block; width: 26px; height: 9px; background: var(--card); border: 1.6px solid var(--pencil); border-radius: 2px; }
+.col .l { font-family: var(--mark); font-size: 18px; margin-top: 2px; }
+.pair .eq { font-family: var(--mark); font-size: 22px; align-self: center; width: 16px; text-align: center; }
+.chg { font-size: 14px; }
+
+/* copy */
+.fuse { height: 6px; background: rgba(42,38,33,0.15); margin: 0 0 4px; }
+.fuse i { display: block; height: 100%; width: 100%; background: var(--red); transform-origin: left; }
+.keys { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 8px 0 10px; }
+.key { height: 66px; border: 2px solid var(--pencil); background: var(--card); font-family: var(--mark); font-size: 30px; color: var(--pencil); cursor: pointer; border-radius: 4px; padding: 0; }
+.key small { display: block; font-family: var(--type); font-size: 10px; letter-spacing: 0.05em; margin-top: -4px; }
+.key:active { background: var(--kraft2); }
+
+/* end */
+.verdict p { font-size: 16px; }
+.verdict p:first-child { font-family: var(--mark); font-size: 22px; line-height: 1.2; }
+.verdict p.paper { border-left: 4px solid var(--blue); padding-left: 10px; }
+.counts { font-size: 13px; border-top: 2px dashed var(--pencil); padding-top: 8px; margin-top: 10px; }
+
+/* help / about */
+.page h2 { font-size: 30px; margin: 16px 0 8px; }
+.page h3 { font-size: 19px; margin: 16px 0 4px; }
+.page p, .page li { font-size: 14.5px; }
+.page ul { padding-left: 18px; margin: 0 0 10px; }
+.card { background: var(--card); border: 2px solid var(--pencil); padding: 10px 12px; margin: 8px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- START -->
+<section class="screen on" id="s-start">
+  <div class="poster">
+    <div class="kicker"><span>Watson &amp; Crick, 1953</span><span>a cardboard game</span></div>
+    <h1>The Other Chain</h1>
+    <svg id="art" viewBox="0 0 360 170" aria-hidden="true"></svg>
+    <div class="aimline" id="aim-start">Build the other chain so every rung holds when you zip it.</div>
+    <p class="lede">Two blue rails, cut-out pieces between them. Some fit, some don't. Then pull the ladder apart and copy it.</p>
+    <button class="tag" id="b-start"><span>Start: first ladder</span></button>
+    <button class="tag" data-help><span>How to play</span></button>
+    <button class="tag" data-about><span>What's real here</span></button>
+    <div class="gameno"><label for="seed">Game number</label><input id="seed" inputmode="numeric" value="1"><span>(same number, same chains)</span></div>
+  </div>
+</section>
+
+<!-- LADDER -->
+<section class="screen" id="s-lad">
+  <div class="bar"><div class="aim">Build the other chain so every rung holds when you zip it.</div><button class="q" data-help aria-label="How to play">?</button></div>
+  <div class="kick"><span id="l-kick">Ladder 1 of 2</span><span id="l-count"></span></div>
+  <p class="orient" id="l-orient"></p>
+  <svg class="lad" id="l-svg" viewBox="0 0 360 400"></svg>
+  <div id="l-build">
+    <div class="trayhead"><span id="t-head">Pieces</span><span>tap one to pin it</span></div>
+    <div class="tray" id="tray"></div>
+    <button class="tag red" id="b-zip" disabled><span>Zip it</span></button>
+  </div>
+  <div id="l-done" style="display:none">
+    <div class="res"><div class="big" id="r-big"></div><p class="why" id="r-why"></p>
+      <div class="bars" id="r-bars"></div><p class="chg" id="r-chg"></p></div>
+    <button class="tag" id="b-next"><span>Next ladder</span></button>
+  </div>
+</section>
+
+<!-- COPY -->
+<section class="screen" id="s-copy">
+  <div class="bar"><div class="aim">Copy it: put the right piece in every lit spot before the fork passes.</div><button class="q" data-help aria-label="How to play">?</button></div>
+  <div class="kick"><span>The copy</span><span id="c-count"></span></div>
+  <p class="orient" id="c-orient">Your second ladder, every rung fixed, pulled apart. Each half needs a new partner on every rung. The red fork moves down; fill the lit spot.</p>
+  <div class="fuse"><i id="fuse"></i></div>
+  <svg class="lad" id="c-svg" viewBox="0 0 360 380"></svg>
+  <div id="c-play">
+    <div class="keys" id="keys"></div>
+    <button class="tag red" id="b-go"><span>Start the fork</span></button>
+  </div>
+  <div id="c-done" style="display:none">
+    <div class="res"><div class="big" id="c-big"></div><p class="why" id="c-why"></p></div>
+    <button class="tag" id="b-end"><span>What did you find?</span></button>
+  </div>
+</section>
+
+<!-- END -->
+<section class="screen" id="s-end">
+  <div class="bar"><div class="aim">Build the other chain so every rung holds when you zip it.</div><button class="q" data-help aria-label="How to play">?</button></div>
+  <div class="verdict" id="verdict"></div>
+  <svg class="lad" id="e-svg" viewBox="0 0 360 250" aria-hidden="true"></svg>
+  <p class="counts" id="tally"></p>
+  <button class="tag" id="b-new"><span>New game: new chains</span></button>
+  <button class="tag" data-about><span>What's real here</span></button>
+</section>
+
+<!-- HELP -->
+<section class="screen page" id="s-help">
+  <h2>How to play</h2>
+  <p class="red mk" style="font-size:18px">Build the other chain so every rung holds when you zip it.</p>
+  <div class="card">
+    <p><b>The ladder.</b> Two blue rails (the backbones of DNA) with rungs between them. Each rung is two pieces, one pinned to each rail, meeting in the middle.</p>
+    <p><b>The pieces.</b> Four kinds: A and G are long, T and C are short. Each has an end with two contact points, top and bottom; each point is a <b>bump</b> or a <b>dent</b>.</p>
+    <p><b>A rung holds</b> when the two pieces exactly span the gap between the rails and every bump meets a dent. Too long and the rails bow out. Too short and they pinch in. A bump against a bump pushes the piece away.</p>
+  </div>
+  <h3>Ladders</h3>
+  <p>One rail already has its pieces. Tap a piece in the tray to pin it in the next empty spot (marked in red); tap a pinned piece to take it back. Nothing is tested until you press <b>Zip it</b>. Then every rung is tested, top to bottom. Two ladders.</p>
+  <h3>The copy</h3>
+  <p>Your second ladder is pulled apart into two halves. A red fork runs down them; on each rung it lights one spot on each half. Tap the piece that belongs there before the fork moves on. It moves on as soon as both spots are filled, and gets faster.</p>
+  <h3>The end</h3>
+  <p>The two copies twist up into the real shape, and you see what you found. One game, no do-overs; a new game number gives new chains.</p>
+  <button class="tag" id="b-help-back"><span>Back to where I was</span></button>
+</section>
+
+<!-- ABOUT -->
+<section class="screen page" id="s-about">
+  /*__ABOUT__*/
+  <button class="tag" id="b-about-back"><span>Back</span></button>
+</section>
+
+</div>
+<script>
+/*__MECHANISM__*/
+</script>
+<script>
+(function () {
+'use strict';
+const M = window.MECH, K = M.KEYS, B = M.CONFIG.BASES;
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const NS = 'http://www.w3.org/2000/svg';
+
+// ---------- drawing (layout only; every outcome comes from MECH) ----------
+const G0 = { U: 46, LX: 65, RX: 295, CX: 180, PITCH: 37, TOP: 26, H: 28, CP: 7, R: 5.5 };
+function lenPx(b, U) { return M.CONFIG.LEN[B[b].ring] * U; }
+// a piece pinned at rail x = xs, end at xs + dir*len; returns svg markup. y = rung centre.
+function pieceSVG(b, xs, dir, y, g, cls) {
+  const L = lenPx(b, g.U), xe = xs + dir * L, h = g.H / 2, cp = g.CP * (g.H / 28), r = g.R * (g.H / 28);
+  const feat = (cy, f) => { const sweep = ((f === 'bump') === (dir === 1)) ? 1 : 0; return `L${xe},${cy - r} A${r},${r} 0 0 ${sweep} ${xe},${cy + r} `; };
+  let d = `M${xs},${y - h} L${xe},${y - h} ` + feat(y - cp, B[b].p6) + feat(y + cp, B[b].p1) + `L${xe},${y + h} L${xs},${y + h} Z`;
+  let s = `<path class="pc ${cls || ''}" d="${d}"/>`;
+  // rings: pencil hexagon (and pentagon for the two-ring pieces) near the end
+  const hx = (cx, cy, rr, n, a0) => { let p = ''; for (let k = 0; k < n; k++) { const a = (a0 + k * 360 / n) * Math.PI / 180; p += (k ? 'L' : 'M') + (cx + rr * Math.cos(a)).toFixed(1) + ',' + (cy + rr * Math.sin(a)).toFixed(1); } return `<path class="ring" d="${p}Z"/>`; };
+  const rr = Math.min(8, h - 4);
+  if (L > 50) {
+    const hc = xe - dir * (rr + 9);
+    s += hx(hc, y, rr, 6, 90);
+    // the second ring of a purine: a pentagon sharing the hexagon's far edge
+    if (B[b].ring === 'purine') s += hx(hc - dir * 1.554 * rr, y, 0.851 * rr, 5, dir === 1 ? 36 : 216);
+  }
+  s += `<text class="lt" x="${xs + dir * Math.min(17, L / 2 - 2)}" y="${y + 1}" style="font-size:${Math.round(19 * g.H / 28)}px">${b}</text>`;
+  return s;
+}
+// a smooth ribbon through points
+function ribbonPath(pts) {
+  let d = `M${pts[0][0]},${pts[0][1]}`;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(pts.length - 1, i + 2)];
+    const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6], c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+    d += ` C${c1[0].toFixed(1)},${c1[1].toFixed(1)} ${c2[0].toFixed(1)},${c2[1].toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`;
+  }
+  return d;
+}
+function rails(n, off, g, lx, rx, top) {
+  const ys = i => top + i * g.PITCH;
+  const L = [[lx, ys(0) - g.PITCH * 0.7]], R = [[rx, ys(0) - g.PITCH * 0.7]];
+  for (let i = 0; i < n; i++) { L.push([lx - off[i], ys(i)]); R.push([rx + off[i], ys(i)]); }
+  L.push([lx, ys(n - 1) + g.PITCH * 0.7]); R.push([rx, ys(n - 1) + g.PITCH * 0.7]);
+  const yt = L[0][1], yb = L[L.length - 1][1];
+  // arrows: the two chains run in opposite directions
+  const arr = (x, y, up) => `<path d="M${x - 7},${y + (up ? 6 : -6)} L${x},${y} L${x + 7},${y + (up ? 6 : -6)}" fill="none" stroke="#2350C8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`;
+  return `<path class="ribbon" d="${ribbonPath(L)}"/><path class="ribbon" d="${ribbonPath(R)}"/>` +
+    `<path class="ribbon-edge" d="${ribbonPath(L)}"/><path class="ribbon-edge" d="${ribbonPath(R)}"/>` +
+    arr(lx, yb + 4, false) + arr(rx, yt - 4, true);
+}
+function faultLabel(x, y, word) {
+  const w = word.length * 7.4 + 14;
+  return `<rect class="fltbg" x="${x - w / 2}" y="${y - 9}" width="${w}" height="18" rx="3"/><text class="flt" x="${x}" y="${y + 1}">${word}</text>`;
+}
+const WORD = { wide: 'TOO WIDE', narrow: 'TOO NARROW', clash: 'BUMP HITS BUMP', loose: 'NO GRIP', missed: 'MISSED' };
+
+// ---------- state ----------
+let S = null, back = 's-start', zipping = false;
+function show(id) { $$('.screen').forEach(s => s.classList.toggle('on', s.id === id)); window.scrollTo(0, 0); }
+function seedVal() { const v = parseInt($('#seed').value, 10); return isFinite(v) && v > 0 ? v : 1; }
+
+function newGame() {
+  const g = M.drawGame(seedVal());
+  S = { game: g, li: 0, ladders: [g.ladder1, g.ladder2], placed: null, zips: [], copy: null };
+  startLadder(0);
+}
+
+// ---------- ladders ----------
+function startLadder(li) {
+  S.li = li; const L = S.ladders[li];
+  S.placed = L.map(() => null); S.off = L.map(() => 0); S.result = null;
+  $('#l-kick').textContent = 'Ladder ' + (li + 1) + ' of 2 · ' + L.length + ' rungs';
+  $('#l-orient').innerHTML = li === 0
+    ? 'The left rail has its pieces. Pick one for each empty spot on the right: the two must span the gap, and their ends (bumps, dents) must grip. Nothing is tested until you zip.'
+    : 'Now the given pieces are on <b>both</b> rails. Fill every empty spot, left or right. Same rule.';
+  $('#l-build').style.display = ''; $('#l-done').style.display = 'none';
+  $('#l-svg').setAttribute('viewBox', `0 0 360 ${G0.TOP * 2 + (L.length - 1) * G0.PITCH + 8}`);
+  drawLadder(); drawTray(); show('s-lad');
+}
+function nextEmpty() { return S.placed.findIndex(p => p === null); }
+function drawLadder() {
+  const L = S.ladders[S.li], g = G0, svg = $('#l-svg'), res = S.result, ne = nextEmpty();
+  let s = rails(L.length, S.off, g, g.LX, g.RX, g.TOP);
+  L.forEach((sp, i) => {
+    const y = g.TOP + i * g.PITCH, lx = g.LX - S.off[i], rx = g.RX + S.off[i];
+    const r = res && i < S.zipTo ? res.rungs[i] : null;
+    const givenL = sp.side === 'L';
+    const pl = S.placed[i];
+    // given piece, at full length
+    const bad = r && !r.fit.held;
+    let shift = 0;
+    if (r && (r.fit.fault === 'clash' || r.fit.fault === 'loose')) shift = 14;
+    if (givenL) s += pieceSVG(sp.given, lx, 1, y, g, bad ? 'bad' : '');
+    else s += pieceSVG(sp.given, rx, -1, y, g, bad ? 'bad' : '');
+    // the player's piece
+    if (pl && r) {
+      if (givenL) s += `<g class="${shift ? 'shake' : ''}" style="transform:translateX(${shift}px)">` + pieceSVG(pl, rx, -1, y, g, bad ? 'bad' : '') + '</g>';
+      else s += `<g class="${shift ? 'shake' : ''}" style="transform:translateX(${-shift}px)">` + pieceSVG(pl, lx, 1, y, g, bad ? 'bad' : '') + '</g>';
+    } else if (pl) {
+      // pinned, not yet pushed in: a stub at the rail with its letter
+      const x = givenL ? rx - 38 : lx; s += `<g data-un="${i}" style="cursor:pointer"><rect class="stub" x="${x}" y="${y - 13}" width="38" height="26" rx="3"/><text class="lt" x="${x + 19}" y="${y + 1}">${pl}</text></g>`;
+    } else {
+      const x = givenL ? rx - 40 : lx; s += `<rect class="slot ${i === ne && !res ? 'next' : ''}" x="${x}" y="${y - 13}" width="40" height="26" rx="3"/>`;
+      if (i === ne && !res) s += `<text class="flt" x="${givenL ? rx - 54 : lx + 54}" y="${y + 1}" style="font-size:16px">${givenL ? '→' : '←'}</text>`;
+    }
+    if (r) {
+      if (r.fit.held) { const mx = lx + lenPx(r.left, g.U); s += `<line class="bond" x1="${mx - 7}" y1="${y - 7}" x2="${mx + 7}" y2="${y - 7}"/><line class="bond" x1="${mx - 7}" y1="${y + 7}" x2="${mx + 7}" y2="${y + 7}"/>`; }
+      else {
+        if (shift) s += `<path class="zz" d="M${g.CX - 6},${y - 12} l6,6 l-6,6 l6,6 l-6,6"/>`;
+        s += faultLabel(g.CX, y + (r.fit.fault === 'wide' ? 0 : 0), WORD[r.fit.fault]);
+      }
+    }
+  });
+  if (S.zipTo != null && S.zipTo < L.length && zipping) {
+    const y = g.TOP + S.zipTo * g.PITCH - g.PITCH / 2;
+    s += `<g><rect x="${g.CX - 13}" y="${y - 9}" width="26" height="18" rx="4" fill="#BF9C68" stroke="#2A2621" stroke-width="2"/><circle cx="${g.CX}" cy="${y + 2}" r="3" fill="#2A2621"/></g>`;
+  }
+  svg.innerHTML = s;
+  svg.querySelectorAll('[data-un]').forEach(el => el.addEventListener('click', () => { if (S.result || zipping) return; S.placed[+el.dataset.un] = null; drawLadder(); drawTray(); }));
+}
+function drawTray() {
+  const ne = nextEmpty(), L = S.ladders[S.li];
+  const side = ne < 0 ? null : (L[ne].side === 'L' ? 'R' : 'L');
+  $('#t-head').textContent = ne < 0 ? 'All spots filled' : 'For the ' + (side === 'R' ? 'right' : 'left') + ' rail';
+  const order = ['A', 'G', 'T', 'C'];
+  $('#tray').innerHTML = order.map(b => {
+    const g = { U: G0.U, H: 28, CP: 7, R: 5.5 }, L2 = lenPx(b, g.U);
+    const W = 170, y = 22;
+    const inner = side === 'L' ? pieceSVG(b, W / 2 - (3 * g.U) / 2 + 6, 1, y, g) : pieceSVG(b, W / 2 + (3 * g.U) / 2 - 6, -1, y, g);
+    return `<button class="pbtn" data-p="${b}" ${ne < 0 ? 'disabled' : ''} aria-label="${b}, ${B[b].ring === 'purine' ? 'long' : 'short'} piece"><svg viewBox="0 0 ${W} 44">${inner}</svg></button>`;
+  }).join('');
+  $$('#tray .pbtn').forEach(el => el.addEventListener('click', () => {
+    const i = nextEmpty(); if (i < 0 || S.result || zipping) return; S.placed[i] = el.dataset.p; drawLadder(); drawTray();
+  }));
+  $('#b-zip').disabled = ne >= 0;
+  const filled = S.placed.filter(Boolean).length; $('#l-count').textContent = filled + ' of ' + L.length + ' filled';
+}
+function doZip() {
+  if (zipping || nextEmpty() >= 0) return;
+  zipping = true; $('#b-zip').disabled = true;
+  const L = S.ladders[S.li];
+  S.result = M.zip(L, S.placed); S.zipTo = 0;
+  const target = S.result.rungs.map(r => r.fit.width === 'ok' ? 0 : r.fit.bulge * G0.U / 2);
+  const step = () => {
+    S.zipTo++;
+    // rails ease towards their new shape at the zipped rungs
+    const from = S.off.slice(), t0 = performance.now();
+    const anim = now => { const t = Math.min(1, (now - t0) / 260), e = 1 - Math.pow(1 - t, 3);
+      for (let i = 0; i < S.zipTo; i++) S.off[i] = from[i] + (target[i] - from[i]) * e; drawLadder(); if (t < 1) requestAnimationFrame(anim); };
+    requestAnimationFrame(anim);
+    if (S.zipTo < L.length) setTimeout(step, 340); else setTimeout(zipDone, 700);
+  };
+  setTimeout(step, 120);
+}
+function zipDone() {
+  zipping = false; const z = S.result; S.zips[S.li] = z; S.off = z.rungs.map(r => r.fit.width === 'ok' ? 0 : r.fit.bulge * G0.U / 2); drawLadder();
+  $('#l-build').style.display = 'none'; $('#l-done').style.display = '';
+  $('#r-big').textContent = z.held === z.n ? 'Every rung held.' : z.held + ' of ' + z.n + ' rungs held.';
+  const f = { wide: 0, narrow: 0, clash: 0, loose: 0 }; z.rungs.forEach(r => { if (r.fit.fault) f[r.fit.fault]++; });
+  const why = [];
+  if (f.wide) why.push(f.wide + ' too wide: two long pieces');
+  if (f.narrow) why.push(f.narrow + ' too narrow: two short pieces');
+  if (f.clash + f.loose) why.push((f.clash + f.loose) + ' with the right width, but a bump hit a bump');
+  $('#r-why').textContent = why.length ? why.join('; ') + '.' : 'The blue rails run straight all the way down, and every end grips.';
+  // Chargaff's bars: the letters in this ladder
+  const c = z.counts, col = (b, n) => `<div class="col"><span class="l">${b}</span>${'<i></i>'.repeat(n)}</div>`;
+  const eq = (a, b) => `<span class="eq ${a === b ? '' : 'red'}">${a === b ? '=' : '≠'}</span>`;
+  $('#r-bars').innerHTML = `<div class="pair">${col('A', c.A)}${eq(c.A, c.T)}${col('T', c.T)}</div><div class="pair">${col('G', c.G)}${eq(c.G, c.C)}${col('C', c.C)}</div>`;
+  if (S.li === 0) $('#r-chg').innerHTML = z.chargaff.both
+    ? 'Those are the letters in your ladder. In real DNA, from any creature, there is always as much A as T and as much G as C. Nobody knew why. Yours does it too.'
+    : 'Those are the letters in your ladder. In real DNA, from any creature, there is always as much A as T and as much G as C. Nobody knew why. Yours doesn\'t, yet.';
+  else $('#r-chg').innerHTML = z.chargaff.both
+    ? 'A matches T and G matches C again, though the amounts of A and G differ: <b>any</b> order of pieces on one rail is allowed, and the other rail is then forced.'
+    : 'Where every rung holds, A always matches T and G matches C, whatever the order of pieces on one rail. That is why real DNA does.';
+  $('#b-next').querySelector('span').textContent = S.li === 0 ? 'Next ladder' : 'Pull it apart and copy it';
+}
+
+// ---------- the copy ----------
+const GC = { U: 26, H: 22, CP: 5.5, R: 4.2, PITCH: 33, TOP: 40 };
+const C1 = { lx: 22, rx: 152 }, C2 = { lx: 208, rx: 338 };
+function startCopy() {
+  const full = M.complete(S.ladders[1]);
+  S.copy = { full, spots: M.copySpots(full), entries: [], k: 0, running: false, done: false, paused: false };
+  $('#c-play').style.display = ''; $('#c-done').style.display = 'none'; $('#b-go').style.display = '';
+  $('#keys').innerHTML = ['A', 'G', 'T', 'C'].map(b => `<button class="key" data-k="${b}">${b}<small>${B[b].ring === 'purine' ? 'long' : 'short'}</small></button>`).join('');
+  $$('#keys .key').forEach(el => el.addEventListener('click', () => copyTap(el.dataset.k)));
+  $('#fuse').style.transform = 'scaleX(1)'; $('#c-count').textContent = '';
+  drawCopy(); show('s-copy');
+}
+function drawCopy(twist) {
+  const c = S.copy, n = c.full.length, g = Object.assign({}, GC), svg = $('#c-svg');
+  svg.setAttribute('viewBox', `0 0 360 ${g.TOP * 2 + (n - 1) * g.PITCH + 10}`);
+  let s = '';
+  const cur = c.spots[c.k];
+  [C1, C2].forEach((cl, ci) => {
+    const off = c.full.map((_, i) => { const k = 2 * i + ci, e = c.entries[k]; if (e == null) return 0; const sp = c.spots[k]; const f = sp.side === 'R' ? M.fit(sp.template, e) : M.fit(e, sp.template); return f.width === 'ok' ? 0 : f.bulge * g.U / 2; });
+    s += rails(n, off, g, cl.lx, cl.rx, g.TOP);
+    c.full.forEach((rg, i) => {
+      const y = g.TOP + i * g.PITCH, k = 2 * i + ci, sp = c.spots[k], e = c.entries[k];
+      const lx = cl.lx - off[i], rx = cl.rx + off[i];
+      // the old half
+      if (ci === 0) s += pieceSVG(rg.left, lx, 1, y, g); else s += pieceSVG(rg.right, rx, -1, y, g);
+      if (k < c.entries.length) {
+        if (e == null) s += faultLabel((cl.lx + cl.rx) / 2, y, 'MISSED');
+        else {
+          const f = sp.side === 'R' ? M.fit(sp.template, e) : M.fit(e, sp.template), bad = !f.held;
+          s += sp.side === 'R' ? pieceSVG(e, rx, -1, y, g, bad ? 'bad' : '') : pieceSVG(e, lx, 1, y, g, bad ? 'bad' : '');
+          if (bad) s += faultLabel((cl.lx + cl.rx) / 2, y, f.fault === 'wide' ? 'WIDE' : f.fault === 'narrow' ? 'NARROW' : 'BUMP');
+        }
+      } else {
+        const lit = cur && k === c.k && c.running;
+        const x = sp.side === 'R' ? rx - 30 : lx;
+        s += `<rect class="slot ${lit ? 'next' : ''}" x="${x}" y="${y - 11}" width="30" height="22" rx="3" ${lit ? 'style="fill:rgba(210,59,37,0.12)"' : ''}/>`;
+      }
+    });
+  });
+  // the fork
+  if (c.running && cur) {
+    const y = g.TOP + cur.rung * g.PITCH;
+    s += `<path d="M4,${y - 10} L16,${y} L4,${y + 10} Z" fill="#D23B25"/><path d="M356,${y - 10} L344,${y} L356,${y + 10} Z" fill="#D23B25"/><line x1="16" y1="${y}" x2="344" y2="${y}" stroke="#D23B25" stroke-width="1.2" stroke-dasharray="3 5"/>`;
+  }
+  s += `<text x="${(C1.lx + C1.rx) / 2}" y="10" text-anchor="middle" style="font-family:var(--type);font-size:11px;font-weight:700;letter-spacing:1px;fill:#2A2621">COPY 1</text><text x="${(C2.lx + C2.rx) / 2}" y="10" text-anchor="middle" style="font-family:var(--type);font-size:11px;font-weight:700;letter-spacing:1px;fill:#2A2621">COPY 2</text>`;
+  svg.innerHTML = s;
+}
+let rungTimer = null, rungT0 = 0, rungLeft = 0, fuseRaf = null;
+function startRung() {
+  const c = S.copy; if (c.k >= c.spots.length) return copyDone();
+  const rung = c.spots[c.k].rung; rungLeft = M.copyMs(rung); armTimer();
+  $('#c-count').textContent = 'rung ' + (rung + 1) + ' of ' + c.full.length;
+  drawCopy();
+}
+function armTimer() {
+  const c = S.copy; clearTimeout(rungTimer); rungT0 = performance.now();
+  const total = M.copyMs(c.spots[c.k].rung);
+  rungTimer = setTimeout(rungTimeout, rungLeft);
+  cancelAnimationFrame(fuseRaf);
+  const tick = () => { if (!c.running || c.paused) return; const left = rungLeft - (performance.now() - rungT0); $('#fuse').style.transform = `scaleX(${Math.max(0, left / total)})`; fuseRaf = requestAnimationFrame(tick); };
+  fuseRaf = requestAnimationFrame(tick);
+}
+function rungTimeout() {
+  const c = S.copy; const rung = c.spots[c.k].rung;
+  while (c.k < c.spots.length && c.spots[c.k].rung === rung) { c.entries.push(null); c.k++; }
+  startRung();
+}
+function copyTap(b) {
+  const c = S.copy; if (!c.running || c.paused || c.k >= c.spots.length) return;
+  const rung = c.spots[c.k].rung; c.entries.push(b); c.k++;
+  if (c.k >= c.spots.length || c.spots[c.k].rung !== rung) { clearTimeout(rungTimer); startRung(); } else drawCopy();
+}
+function copyDone() {
+  const c = S.copy; c.running = false; clearTimeout(rungTimer); cancelAnimationFrame(fuseRaf); $('#fuse').style.transform = 'scaleX(0)';
+  c.result = M.scoreCopy(c.full, c.entries); drawCopy();
+  $('#c-play').style.display = 'none'; $('#c-count').textContent = '';
+  const r = c.result, both = r.same[0] && r.same[1];
+  $('#c-big').textContent = both ? 'Two copies, both the same as the first.' : r.right + ' of ' + r.n + ' new pieces right.';
+  $('#c-why').textContent = both ? 'Nobody told you what went where. Each half said it.' : 'Where you were right, the copy matches the first ladder letter for letter; where you missed or slipped, it doesn\'t. Each half told you what was needed.';
+  setTimeout(() => { $('#c-done').style.display = ''; }, 200);
+}
+
+// ---------- the twist (closing picture): the paper's 36 degrees per rung, one turn per 10 rungs ----------
+function helixSVG(full, t, x0, w, top, pitch) {
+  const n = full.length, R = w / 2, cx = x0 + R;
+  const pt = (i, strand) => { const h = M.helixPoint(i), a = (h.angleDeg * t + (strand ? 180 : 0)) * Math.PI / 180; return [cx - R * Math.cos(a), top + i * pitch, Math.sin(a)]; };
+  let s = `<line x1="${cx}" y1="${top - pitch}" x2="${cx}" y2="${top + n * pitch}" stroke="#2A2621" stroke-width="1.2"/>`;
+  // rods behind first, then ribbons, then rods in front
+  const rods = [];
+  full.forEach((g, i) => { const a = pt(i, 0), b = pt(i, 1); rods.push(`<line x1="${a[0].toFixed(1)}" y1="${a[1]}" x2="${b[0].toFixed(1)}" y2="${b[1]}" stroke="#2A2621" stroke-width="3.2" stroke-linecap="round"/>`); });
+  s += rods.join('');
+  [0, 1].forEach(st => {
+    const pts = []; for (let k = -0.5; k <= n - 0.5 + 1e-9; k += 0.25) { const i = k, h = M.CONFIG.TWIST_DEG * i * t, a = (h + (st ? 180 : 0)) * Math.PI / 180; pts.push([cx - R * Math.cos(a), top + i * pitch]); }
+    s += `<path class="ribbon" style="stroke-width:7" d="${ribbonPath(pts)}"/>`;
+  });
+  return s;
+}
+function twistAnim(svg, full, done) {
+  const t0 = performance.now(), D = 2600;
+  const f = now => { const t = Math.min(1, (now - t0) / D), e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    svg.innerHTML = helixSVG(full, e, 60, 110, 30, 19) + helixSVG(full, e, 190, 110, 30, 19);
+    if (t < 1) requestAnimationFrame(f); else if (done) done(); };
+  requestAnimationFrame(f);
+}
+
+// ---------- end ----------
+function endScreen() {
+  const v = M.verdict({ l1: S.zips[0], l2: S.zips[1], copy: S.copy.result });
+  $('#verdict').innerHTML = v.map((l, i) => `<p class="${i === v.length - 1 ? 'paper' : ''}">${l}</p>`).join('');
+  const z1 = S.zips[0], z2 = S.zips[1], r = S.copy.result;
+  $('#tally').innerHTML = `Game ${S.game.seed}. Ladder 1: ${z1.held} of ${z1.n} rungs held. Ladder 2: ${z2.held} of ${z2.n}. Copy: ${r.right} of ${r.n} new pieces right. Below: your two copies, twisted the way the paper says, a tenth of a turn per rung.`;
+  show('s-end');
+  const svg = $('#e-svg'); svg.setAttribute('viewBox', '0 0 360 250');
+  twistAnim(svg, S.copy.full);
+}
+
+// ---------- the start picture ----------
+function drawArt() {
+  const g = { U: 30, H: 20, CP: 5, R: 4, PITCH: 26 }, lx = 105, rx = 255, top = 22;
+  const seq = [['A', 'T'], ['G', 'C'], ['T', 'A'], ['C', 'G'], ['A', 'T']];
+  let s = rails(seq.length, seq.map(() => 0), g, lx, rx, top);
+  seq.forEach((p, i) => { const y = top + i * g.PITCH; s += pieceSVG(p[0], lx, 1, y, g); s += pieceSVG(p[1], rx, -1, y, g);
+    const mx = lx + lenPx(p[0], g.U); s += `<line class="bond" x1="${mx - 6}" y1="${y - 5}" x2="${mx + 6}" y2="${y - 5}"/><line class="bond" x1="${mx - 6}" y1="${y + 5}" x2="${mx + 6}" y2="${y + 5}"/>`; });
+  // a loose G and a loose T waiting on the desk
+  s += `<g transform="rotate(-14 40 140)">${pieceSVG('G', 4, 1, 140, g)}</g><g transform="rotate(11 320 136)">${pieceSVG('T', 352, -1, 136, g)}</g>`;
+  $('#art').innerHTML = s;
+}
+
+// ---------- wiring ----------
+$('#b-start').addEventListener('click', newGame);
+$('#b-zip').addEventListener('click', doZip);
+$('#b-next').addEventListener('click', () => { if (S.li === 0) startLadder(1); else startCopy(); });
+$('#b-go').addEventListener('click', () => { S.copy.running = true; $('#b-go').style.display = 'none'; startRung(); });
+$('#b-end').addEventListener('click', endScreen);
+$('#b-new').addEventListener('click', () => { $('#seed').value = String(seedVal() + 1); show('s-start'); });
+$$('[data-help]').forEach(el => el.addEventListener('click', () => {
+  back = $$('.screen').find(s => s.classList.contains('on')).id;
+  if (S && S.copy && S.copy.running && !S.copy.paused) { S.copy.paused = true; clearTimeout(rungTimer); rungLeft -= performance.now() - rungT0; }
+  show('s-help');
+}));
+$('#b-help-back').addEventListener('click', () => {
+  show(back);
+  if (back === 's-copy' && S.copy && S.copy.paused) { S.copy.paused = false; armTimer(); }
+});
+$$('[data-about]').forEach(el => el.addEventListener('click', () => { back = $$('.screen').find(s => s.classList.contains('on')).id; show('s-about'); }));
+$('#b-about-back').addEventListener('click', () => show(back));
+drawArt();
+window.__OC = { state: () => S };
+})();
+</script>
+</body>
+</html>
