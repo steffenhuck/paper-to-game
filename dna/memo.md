@@ -211,3 +211,5 @@ Renamed Watson's Cardboard (the name of the detour, now on the first build's pla
 The welcome card rewritten around what they were after: The puzzle (a helix of one width, four bases in any order inside: how do they fit across without the width changing, and how could it copy itself?), The cardboard (cut to scale and tried on the desk; like with like bulged; 28 February, two pairs, one width), What you do here. The metal kit and Donohue are gone from the card.
 
 The welcome card made personal: the puzzle is a jigsaw with four kinds of piece and no picture on the box; the last section, Now it's your desk, says the game lets you be Watson with nothing but some cardboard.
+
+The welcome card got three pencil-and-card pictures, drawn by the game's own piece and rail functions: the helix with empty, question-marked rungs beside four loose pieces (the jigsaw); like with like bulging next to A–T and G–C at one width (the cardboard); one chain given and the other side empty (your desk).
