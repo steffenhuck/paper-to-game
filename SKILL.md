@@ -69,7 +69,7 @@ A bet on the paper's result can open a game or close it, where it supplies antic
 
 ### Commitment before the outcome
 
-The player commits before the outcome is shown. The strong form is a consequential action — a setting, a sorting, an allocation, a move — whose consequences the player then lives with. The screen where the player commits does not preview the payoff: the paper's instruments may be read before acting, the score may not, or the decision becomes reading. And a control that keeps the previous round's setting looks like advice; every round starts from the same place. Free exploration counts when it builds knowledge the player later uses. A bare prediction is the weak form, used sparingly. The player need not be wrong: an intuition that turns out right is rewarding, one that turns out wrong is instructive, and both work if the commitment was real. The sensible choice fails only where the paper says it fails.
+The player commits before the outcome is shown. The strong form is a consequential action — a setting, a sorting, an allocation, a move — whose consequences the player then lives with. The screen where the player commits does not preview the payoff: the paper's instruments may be read before acting, the score may not, or the decision becomes reading. And a control that keeps the previous round's setting looks like advice; every round starts from the same place. Free exploration counts when it builds knowledge the player later uses. A bare prediction is the weak form, used sparingly. The player need not be wrong: an intuition that turns out right is rewarding, one that turns out wrong is instructive, and both work if the commitment was real. The sensible choice fails only where the paper says it fails. Where the paper proves that every attempt must fail (a diagonal argument, an impossibility result), the game may let every attempt fail, and then the failing is shown as the result, named as such at the moment it happens, not disguised as a puzzle with an answer the player has not found.
 
 ### True to the story; numbers under the hood
 
@@ -111,7 +111,7 @@ A neuron, a molecule, a voxel, an institution, a text may be the agent the playe
 
 ## 4. Reading the paper
 
-Read all of it: text, tables, figure captions (captions often state the mechanism more plainly than the text), supplementary material if attached. The paper is read from `inbox/` and never committed; note where it can be read online, for the memo. If code or data are attached, the mechanism is ported from the code and calibrated from the data. If only the PDF is available, say so; numbers read off a figure are marked as such.
+Read all of it: text, tables, figure captions (captions often state the mechanism more plainly than the text), supplementary material if attached. The paper may be in any language; the game, the memo and everything on screen are in English, and a quoted term is translated. The paper is read from `inbox/` and never committed; note where it can be read online, for the memo. If code or data are attached, the mechanism is ported from the code and calibrated from the data. If only the PDF is available, say so; numbers read off a figure are marked as such.
 
 Then answer, in writing:
 
