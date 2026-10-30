@@ -72,11 +72,11 @@ let all4 = true, sides = true, ag = true, distinct = new Set();
 for (let s = 1; s <= 300; s++) {
   const g = M.drawGame(s); distinct.add(g.ladder1.map(x => x.given).join('') + g.ladder2.map(x => x.given + x.side).join(''));
   if (!K.every(k => g.ladder1.some(x => x.given === k))) all4 = false;
-  const nL = g.ladder2.filter(x => x.side === 'L').length; if (nL < 3 || g.ladder2.length - nL < 3) sides = false;
+  const nL = g.ladder2.filter(x => x.side === 'L').length; if (C.LADDER2_BOTH_RAILS ? (nL < 3 || g.ladder2.length - nL < 3) : nL !== g.ladder2.length) sides = false;
   const c = M.counts(M.complete(g.ladder2)); if (c.A === c.G) ag = false;
 }
 ok(all4, 'ladder 1 always shows all four letters');
-ok(sides, 'ladder 2 always has at least 3 given pieces on each rail');
+ok(sides, C.LADDER2_BOTH_RAILS ? 'ladder 2 always has at least 3 given pieces on each rail' : 'ladder 2 has its given chain on the left rail, as ladder 1');
 ok(ag, 'ladder 2 always ends with unequal A and G');
 ok(distinct.size === 300, '300 seeds give 300 different games');
 

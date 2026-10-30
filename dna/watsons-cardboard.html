@@ -100,6 +100,12 @@ svg.lad { display: block; width: 100%; height: auto; touch-action: manipulation;
 @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(5px); } 75% { transform: translateX(-4px); } }
 
 /* the tray */
+#l-build { position: sticky; bottom: 0; z-index: 2; margin: 0 -16px; padding: 6px 16px 10px; background: var(--kraft);
+  background-image: radial-gradient(rgba(42,38,33,0.07) 1px, transparent 1.3px); background-size: 7px 7px;
+  border-top: 2px dashed var(--pencil); box-shadow: 0 -6px 12px rgba(42,38,33,0.18); }
+#l-build .tray { margin: 4px 0 8px; }
+#l-build .pbtn { min-height: 44px; padding: 2px; }
+#l-build .tag > span { padding-top: 11px; padding-bottom: 11px; }
 .tray { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 6px 0 10px; padding: 8px; background: rgba(42,38,33,0.08); border: 2px solid var(--pencil); border-radius: 3px; box-shadow: inset 0 3px 6px rgba(42,38,33,0.25); }
 .pbtn { border: 2px solid var(--pencil); background: rgba(245,237,219,0.45); padding: 4px 2px; cursor: pointer; border-radius: 4px; min-height: 52px; }
 .pbtn svg { display: block; width: 100%; height: auto; pointer-events: none; }
@@ -305,7 +311,8 @@ const CONFIG = {
   // --- the game ---
   LADDER1_RUNGS: 8,       // our choice: short first ladder
   LADDER2_RUNGS: 10,      // one full turn of the paper's helix (REPEAT_RESIDUES)
-  LADDER2_MIN_EACH_SIDE: 3, // our choice: the given pieces sit on both rails (the paper's dyad), at least 3 on each
+  LADDER2_BOTH_RAILS: false, // our choice after play-testing: the given chain on the left rail, as in ladder 1 (true: given pieces on both rails, the paper's dyad)
+  LADDER2_MIN_EACH_SIDE: 3, // used only when LADDER2_BOTH_RAILS: at least 3 given pieces on each rail
   COPY_MS_FIRST: 3400,    // our choice: most time the fork waits at the first rung (two spots); it moves on as soon as both are filled
   COPY_MS_LAST: 2000,     // our choice: and at the last; linear in between
 };
@@ -356,10 +363,11 @@ function drawGame(seed) {
     if (KEYS.every(k => l1.some(x => x.given === k))) break;
   }
   for (let tries = 0; ; tries++) {   // floor: pieces on both rails; finished ladder has unequal A and G (so the bars can show A=T without A=G)
-    l2 = Array.from({ length: CONFIG.LADDER2_RUNGS }, () => ({ given: pick(), side: r() < 0.5 ? 'L' : 'R' }));
+    l2 = Array.from({ length: CONFIG.LADDER2_RUNGS }, () => ({ given: pick(), side: (r() < 0.5 || !CONFIG.LADDER2_BOTH_RAILS) ? 'L' : 'R' }));
     const nL = l2.filter(x => x.side === 'L').length, nR = l2.length - nL;
     const c = counts(complete(l2));
-    if (nL >= CONFIG.LADDER2_MIN_EACH_SIDE && nR >= CONFIG.LADDER2_MIN_EACH_SIDE && c.A !== c.G) break;
+    const sidesOk = !CONFIG.LADDER2_BOTH_RAILS || (nL >= CONFIG.LADDER2_MIN_EACH_SIDE && nR >= CONFIG.LADDER2_MIN_EACH_SIDE);
+    if (sidesOk && c.A !== c.G) break;
   }
   return { seed, ladder1: l1, ladder2: l2 };
 }
@@ -523,7 +531,7 @@ function startLadder(li) {
   $('#l-kick').textContent = 'Ladder ' + (li + 1) + ' of 2 · ' + L.length + ' rungs';
   $('#l-orient').innerHTML = li === 0
     ? 'The left rail has its pieces. Pick one for each empty spot on the right: the two must span the gap, and their ends (bumps, dents) must grip. Nothing is tested until you zip.'
-    : 'Now the given pieces are on <b>both</b> rails. Fill every empty spot, left or right. Same rule.';
+    : 'A new chain, ten rungs: one full turn of the helix. Build its partner. Then watch the letter count.';
   $('#l-build').style.display = ''; $('#l-done').style.display = 'none';
   $('#l-svg').setAttribute('viewBox', `0 0 360 ${G0.TOP * 2 + (L.length - 1) * G0.PITCH + 8}`);
   drawLadder(); drawTray(); show('s-lad');
@@ -569,6 +577,12 @@ function drawLadder() {
   svg.innerHTML = s;
   svg.querySelectorAll('[data-un]').forEach(el => el.addEventListener('click', () => { if (S.result || zipping) return; S.placed[+el.dataset.un] = null; drawLadder(); drawTray(); }));
 }
+function keepInView() {
+  const i = nextEmpty(); if (i < 0) return;
+  const svg = $('#l-svg'), r = svg.getBoundingClientRect(), vb = svg.viewBox.baseVal, k = r.height / vb.height;
+  const y = r.top + (G0.TOP + i * G0.PITCH) * k, trayTop = $('#l-build').getBoundingClientRect().top;
+  if (y > trayTop - 50) window.scrollBy({ top: y - trayTop + 90, behavior: 'smooth' });
+}
 function drawTray() {
   const ne = nextEmpty(), L = S.ladders[S.li];
   const side = ne < 0 ? null : (L[ne].side === 'L' ? 'R' : 'L');
@@ -581,7 +595,7 @@ function drawTray() {
     return `<button class="pbtn" data-p="${b}" ${ne < 0 ? 'disabled' : ''} aria-label="${b}, ${B[b].ring === 'purine' ? 'long' : 'short'} piece"><svg viewBox="0 0 ${W} 44">${inner}</svg></button>`;
   }).join('');
   $$('#tray .pbtn').forEach(el => el.addEventListener('click', () => {
-    const i = nextEmpty(); if (i < 0 || S.result || zipping) return; S.placed[i] = el.dataset.p; drawLadder(); drawTray();
+    const i = nextEmpty(); if (i < 0 || S.result || zipping) return; S.placed[i] = el.dataset.p; drawLadder(); drawTray(); keepInView();
   }));
   $('#b-zip').disabled = ne >= 0;
   const filled = S.placed.filter(Boolean).length; $('#l-count').textContent = filled + ' of ' + L.length + ' filled';

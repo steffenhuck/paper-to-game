@@ -34,7 +34,8 @@ const CONFIG = {
   // --- the game ---
   LADDER1_RUNGS: 8,       // our choice: short first ladder
   LADDER2_RUNGS: 10,      // one full turn of the paper's helix (REPEAT_RESIDUES)
-  LADDER2_MIN_EACH_SIDE: 3, // our choice: the given pieces sit on both rails (the paper's dyad), at least 3 on each
+  LADDER2_BOTH_RAILS: false, // our choice after play-testing: the given chain on the left rail, as in ladder 1 (true: given pieces on both rails, the paper's dyad)
+  LADDER2_MIN_EACH_SIDE: 3, // used only when LADDER2_BOTH_RAILS: at least 3 given pieces on each rail
   COPY_MS_FIRST: 3400,    // our choice: most time the fork waits at the first rung (two spots); it moves on as soon as both are filled
   COPY_MS_LAST: 2000,     // our choice: and at the last; linear in between
 };
@@ -85,10 +86,11 @@ function drawGame(seed) {
     if (KEYS.every(k => l1.some(x => x.given === k))) break;
   }
   for (let tries = 0; ; tries++) {   // floor: pieces on both rails; finished ladder has unequal A and G (so the bars can show A=T without A=G)
-    l2 = Array.from({ length: CONFIG.LADDER2_RUNGS }, () => ({ given: pick(), side: r() < 0.5 ? 'L' : 'R' }));
+    l2 = Array.from({ length: CONFIG.LADDER2_RUNGS }, () => ({ given: pick(), side: (r() < 0.5 || !CONFIG.LADDER2_BOTH_RAILS) ? 'L' : 'R' }));
     const nL = l2.filter(x => x.side === 'L').length, nR = l2.length - nL;
     const c = counts(complete(l2));
-    if (nL >= CONFIG.LADDER2_MIN_EACH_SIDE && nR >= CONFIG.LADDER2_MIN_EACH_SIDE && c.A !== c.G) break;
+    const sidesOk = !CONFIG.LADDER2_BOTH_RAILS || (nL >= CONFIG.LADDER2_MIN_EACH_SIDE && nR >= CONFIG.LADDER2_MIN_EACH_SIDE);
+    if (sidesOk && c.A !== c.G) break;
   }
   return { seed, ladder1: l1, ladder2: l2 };
 }
