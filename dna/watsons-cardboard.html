@@ -94,6 +94,9 @@ svg.lad { display: block; width: 100%; height: auto; touch-action: manipulation;
 .tray { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 6px 0 10px; padding: 8px; background: rgba(42,38,33,0.08); border: 2px solid var(--pencil); border-radius: 3px; box-shadow: inset 0 3px 6px rgba(42,38,33,0.25); }
 .tray .pbtn.back svg { opacity: 0.95; }
 .repair .slot.next { stroke: var(--red); }
+.jars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin: 2px 0 6px; }
+.jars svg { display: block; width: 100%; height: auto; }
+.jars .jl { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; text-align: center; line-height: 1.1; margin-top: 2px; }
 .hint { font-size: 13px; margin: -2px 0 8px; color: rgba(42,38,33,0.8); }
 .pbtn { border: 2px solid var(--pencil); background: rgba(245,237,219,0.45); padding: 4px 2px; cursor: pointer; border-radius: 4px; min-height: 52px; }
 .pbtn svg { display: block; width: 100%; height: auto; pointer-events: none; }
@@ -145,7 +148,7 @@ svg.lad { display: block; width: 100%; height: auto; touch-action: manipulation;
     <h1>Watson's Cardboard</h1>
     <svg id="art" viewBox="0 0 360 170" aria-hidden="true"></svg>
     <div class="aimline" id="aim-start">Build the other chain so every rung holds when you zip it.</div>
-    <p class="lede">Two blue rails, four kinds of cardboard piece, face down. Pin them, zip, and see what fits. Then mend the model on the desk, pull it apart, and copy it.</p>
+    <p class="lede">Two blue rails, four kinds of cardboard piece, face down, and Chargaff's jars of DNA as your only clue. Pin, zip, see what fits. Then mend the model on the desk, pull it apart, and copy it.</p>
     <button class="tag" id="b-start"><span>Start: first ladder</span></button>
     <button class="tag" data-help><span>How to play</span></button>
     <button class="tag" data-about><span>What's real here</span></button>
@@ -158,6 +161,7 @@ svg.lad { display: block; width: 100%; height: auto; touch-action: manipulation;
   <div class="bar"><div class="aim">Build the other chain so every rung holds when you zip it.</div><button class="q" data-help aria-label="How to play">?</button></div>
   <div class="kick"><span id="l-kick">Ladder 1 of 2</span><span id="l-count"></span></div>
   <p class="orient" id="l-orient"></p>
+  <div id="jars" class="jars"></div>
   <svg class="lad" id="l-svg" viewBox="0 0 360 400"></svg>
   <div id="l-build">
     <div class="trayhead"><span id="t-head">Pieces</span><span id="t-sub">tap one to pin it</span></div>
@@ -216,7 +220,7 @@ svg.lad { display: block; width: 100%; height: auto; touch-action: manipulation;
     <p><b>A rung holds</b> when the two pieces exactly span the gap between the rails and every bump meets a dent. Too long and the rails bow out. Too short and they pinch in. A bump against a bump pushes the piece away.</p>
   </div>
   <h3>Ladders</h3>
-  <p><b>Ladder one.</b> The left rail has its pieces. Tap a piece in the tray to try it against the next one (marked in red). It is tested the moment it lands: the rails bow or pinch, or the ends clash and it springs back, or it holds and locks. A piece that fails goes back to the tray, face up now. Fewer tries is better; every failure says something about what to try next. When every rung holds, zip it.</p>
+  <p><b>Ladder one.</b> Above the ladder are Erwin Chargaff's jars: DNA from four creatures, its four letters stacked by how much of each there is. They are your evidence. The left rail has its pieces; tap a piece in the tray to pin it opposite the next one (marked in red), and tap a pinned piece to take it back. The pieces are face down, so nothing is tested until you press <b>Zip it</b>. Then every rung is tested, top to bottom, and the pieces turn face up.</p>
   <p><b>Ladder two.</b> A model is already on the desk, built the way Watson first built it, mostly wrong. Zip it to see where it fails, then tap a rung to swap its loose piece, and zip again.</p>
   <h3>The copy</h3>
   <p>Your mended ladder is pulled apart into two halves. A red fork runs down them; on each rung it lights one spot on each half. Tap the piece that belongs there before the fork moves on. It moves on as soon as both spots are filled, and gets a little faster; a spot it passes stays empty. Then the two copies are copied again without you, and you see what your slips did.</p>
@@ -231,9 +235,11 @@ svg.lad { display: block; width: 100%; height: auto; touch-action: manipulation;
   
 <h2>What's real here</h2>
 <h3>The game in one line</h3>
-<p>You build the second chain of a DNA ladder from cut-out pieces that lie face down until you zip, mend a model that was built wrongly, then pull the ladder apart and copy it, and copy the copies. The rule that decides which rungs hold is Watson and Crick's; the pieces, their lengths, the ladders and the fork are this game's.</p>
+<p>You build the second chain of a DNA ladder from cut-out pieces that lie face down until you zip, with Chargaff's measurements as your only clue; mend a model that was built wrongly, then pull the ladder apart and copy it, and copy the copies. The rule that decides which rungs hold is Watson and Crick's; the pieces, their lengths, the ladders and the fork are this game's.</p>
 <h3>What the paper found</h3>
 <p>In a one-page letter to <i>Nature</i> in April 1953, James Watson and Francis Crick proposed the structure of DNA. Two chains wind round the same axis, right-handed, running in opposite directions. The sugar-phosphate backbones are on the outside (Linus Pauling's model of a month earlier had three chains with the phosphates in the middle). The bases are inside, flat, and joined across in pairs by hydrogen bonds. One base of each pair must be a purine (adenine or guanine, two rings) and the other a pyrimidine (thymine or cytosine, one ring). Assuming the bases take their most plausible (keto) forms, only adenine with thymine and guanine with cytosine can bond. So the order of bases along one chain is unrestricted, but it fixes the order on the other. That explains why, as Erwin Chargaff had measured, DNA holds as much adenine as thymine and as much guanine as cytosine. And, in the letter's most famous sentence, "It has not escaped our notice that the specific pairing we have postulated immediately suggests a possible copying mechanism for the genetic material." The helix has a base pair every 3.4 Å along the axis, each turned 36° from the last, so it repeats every 10 pairs (34 Å); the phosphates sit 10 Å from the axis. The authors say the model is "roughly compatible" with the X-ray data then published and "must be regarded as unproved" until checked.</p>
+<h3>Chargaff's jars</h3>
+<p>The first ladder's only clue is four jars: the share of each letter in DNA from humans, yeast, a gut bacterium (<i>E. coli</i>) and the tuberculosis bacterium, as commonly tabulated from Erwin Chargaff's laboratory (human A 30.9, T 29.4, G 19.9, C 19.8; yeast 31.3, 32.9, 18.7, 17.1; <i>E. coli</i> 24.7, 23.6, 26.0, 25.7; <i>M. tuberculosis</i> 15.1, 14.6, 34.9, 35.4, in percent). Published tables differ by a point or two, and some of these values were measured after 1953. The letter cites Chargaff's finding that A:T and G:C are "always very close to unity" but prints no numbers; it argues from the shapes and offers the ratios as agreement. The game hands you the ratios first, as Watson and Crick had them, and lets the cardboard explain them. The gut bacterium is a decoy: its four letters are all near a quarter, so it fits any pairing.</p>
 <h3>The model on the desk, and the grandchildren</h3>
 <p>Ladder two arrives already built, with most rungs pairing like with like. That is the model Watson built first, in February 1953, before Jerry Donohue told him the textbooks had the shapes of the bases wrong (Watson, <i>The Double Helix</i>, 1968). The letter itself says only that like-with-like pairs do not fit; the story is history, not the paper, and the particular mixture of wrong rungs is this game's. The copying of the copies is the letter's last sentence taken one step further: a chain rebuilds its partner by the rule, so a slip in one generation is inherited by the next. The letter says nothing about errors; that consequence is ours to show.</p>
 <h3>Mechanism: a toy</h3>
@@ -284,8 +290,20 @@ const CONFIG = {
   LEN: { purine: 3, pyrimidine: 2 },   // our choice: a purine (two rings) is the longer piece
   RAIL_GAP: 5,                         // our choice: the fixed rail distance = one purine + one pyrimidine
 
+  // --- Chargaff's measurements: the evidence on the desk for ladder one. The letter cites them (p. 737, refs 3 and 4: "the ratio of the
+  // amounts of adenine to thymine, and the ratio of guanine to cytosine, are always very close to unity") but prints no numbers.
+  // Percent of the four letters, as commonly tabulated from Chargaff's laboratory (e.g. Stanford Stats 366 notes; Pierce, Genetics,
+  // table 10.1). Sources differ by a point or two (Pierce's 1955 table: human 30.3/30.3/19.5/19.9); some values postdate 1953. Check. ---
+  JARS: [
+    { name: 'human',          A: 30.9, T: 29.4, G: 19.9, C: 19.8 },
+    { name: 'gut bacterium',  A: 24.7, T: 23.6, G: 26.0, C: 25.7 },   // E. coli: all four near a quarter, so it fits any pairing (the decoy)
+    { name: 'yeast',          A: 31.3, T: 32.9, G: 18.7, C: 17.1 },
+    { name: 'TB bacterium',   A: 15.1, T: 14.6, G: 34.9, C: 35.4 },   // Mycobacterium tuberculosis
+  ],
+  JAR_CLOSE: 3,           // our choice: two letters "match" in a jar when within 3 points (the largest true-pair gap is 1.6)
+
   // --- the game ---
-  LADDER1_RUNGS: 6,       // our choice: a short first ladder, the free look; the pieces' shapes are hidden until the first zip
+  LADDER1_RUNGS: 6,       // our choice: a short first ladder; pieces face down, built from the jars' evidence, tested only by the zip
   LADDER2_RUNGS: 10,      // one full turn of the paper's helix (REPEAT_RESIDUES)
   LADDER2_MIN_EACH_SIDE: 3, // our choice: the given pieces sit on both rails (the paper's dyad), at least 3 on each
   // Ladder 2 arrives already built, wrongly: a model on the desk. Most rungs pair like with like, which is the model Watson built
@@ -416,29 +434,16 @@ function copyAgain(copies, full) {
   }));
 }
 
-// Ladder one is built one try at a time: a piece against the next given piece is tested at once. The fewest tries a perfect
-// reasoner needs: for each rung, if the partner is already known, one try; otherwise one try per candidate not yet ruled out,
-// where a failed try rules out that piece for that given letter and, by width, its ring class where the fault was width.
-// Expected over the order in which candidates are tried, assuming the reasoner tries unknown candidates in a fixed order (A G T C);
-// this is a benchmark of ours, reported as "the fewest a careful player needed", not a theorem.
-function fewestTries(ladder) {
-  const known = {}, ruled = {};  // known[g] = partner; ruled[g] = set of pieces ruled out
-  let tries = 0;
-  ladder.forEach(sp => {
-    const g = sp.given;
-    if (known[g]) { tries++; return; }
-    const out = ruled[g] || (ruled[g] = {});
-    for (const y of KEYS) {
-      if (out[y]) continue;
-      tries++;
-      const f = fit(g, y);
-      if (f.held) { known[g] = y; known[y] = g; break; }
-      out[y] = true;
-      // a width fault rules out the whole ring class of the tried piece for this given piece
-      if (f.width !== 'ok') KEYS.forEach(z => { if (piece(z).ring === piece(y).ring) out[z] = true; });
-    }
+// Chargaff's jars: the three ways to split the four letters into two couples, and what each jar says about each.
+const PAIRINGS = [['AT', 'GC'], ['AG', 'TC'], ['AC', 'GT']];
+function jarGap(jar, couple) { return Math.abs(jar[couple[0]] - jar[couple[1]]); }
+// for each pairing: the jars it fits (both couples within JAR_CLOSE) and the largest gap anywhere
+function readJars(jars) {
+  jars = jars || CONFIG.JARS;
+  return PAIRINGS.map(p => {
+    const fits = jars.map(j => p.every(c => jarGap(j, c) <= CONFIG.JAR_CLOSE));
+    return { pairing: p, fits, all: fits.every(Boolean), worst: Math.max(...jars.map(j => Math.max(...p.map(c => jarGap(j, c))))) };
   });
-  return tries;
 }
 
 // the closing twist: residue i turned TWIST_DEG further round the axis and RISE_A further along it
@@ -462,10 +467,10 @@ function verdict(s) {
   const lines = [];
   const f2 = s.l2.held === s.l2.n;
   const rule = 'a long piece needs a short one, and the ends must grip: a bump needs a dent. Only A with T and G with C.';
-  const t = s.tries, best = s.fewest, n1 = s.l1.n;
-  if (t <= best) lines.push('You built the first ladder in ' + t + ' tries, as few as anyone could: every failure told you what to try next. ' + (f2 ? 'The model on the desk gave you no trouble either. ' : '') + 'The rule: ' + rule);
-  else if (t <= best + 3) lines.push('You built the first ladder in ' + t + ' tries; a careful player needs ' + best + '. You were reading the failures. ' + (f2 ? 'Then you mended the model on the desk until every rung held. ' : '') + 'The rule: ' + rule);
-  else lines.push('You built the first ladder in ' + t + ' tries, where ' + best + ' would do: each failure says something about the next try. ' + (f2 ? 'Then you mended the model on the desk until every rung held. ' : 'The model on the desk still has rungs that fail. ') + 'The rule: ' + rule);
+  const h1 = s.l1.held, n1 = s.l1.n;
+  if (h1 === n1) lines.push('You read Chargaff\'s jars: A always comes with as much T, and G with as much C. Your first ladder held on every rung, and the cardboard showed why: ' + rule + (f2 ? ' Then you mended the model on the desk.' : ''));
+  else if (h1 >= n1 - 2) lines.push('Your first ladder held ' + howMany(h1, n1) + ' rung' + (n1 - h1 === 1 ? '' : 's') + '. The jars said it all along: A always comes with as much T, and G with as much C. The cardboard shows why: ' + rule + (f2 ? ' Then you mended the model on the desk.' : ''));
+  else lines.push('Your first ladder held ' + howMany(h1, n1) + ' of its rungs. The jars said it all along: A always comes with as much T, and G with as much C. The cardboard shows why: ' + rule + (f2 ? ' Then you mended the model on the desk.' : ''));
   const c = s.copy, both = c.same[0] && c.same[1], g = s.grand;
   if (both) lines.push('Then you pulled the ladder apart and each half rebuilt the other: two ladders, letter for letter the same as the first. Copied again, without you, they stayed the same.');
   else { const ch = g ? g.reduce((n, cp) => n + cp.filter(x => x.changed).length, 0) : 0;
@@ -476,7 +481,7 @@ function verdict(s) {
 }
 
 const api = { CONFIG, KEYS, rng, fit, contact, partnersOf, partnerOf, clashPartner, drawGame, rungOf, zip, complete, counts, chargaff,
-  copySpots, copyMs, scoreCopy, copyAgain, fewestTries, helixPoint, howMany, verdict };
+  copySpots, copyMs, scoreCopy, copyAgain, PAIRINGS, jarGap, readJars, helixPoint, howMany, verdict };
 if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.MECH = api;
 })(typeof window !== 'undefined' ? window : this);
 
@@ -551,8 +556,7 @@ function seedVal() { const v = parseInt($('#seed').value, 10); return isFinite(v
 
 function newGame() {
   const g = M.drawGame(seedVal());
-  S = { game: g, li: 0, ladders: [g.ladder1, g.ladder2], placed: null, zips: [], copy: null, seen: {}, zipsOnL2: 0, tries: 0, tried: {}, last: null };
-  S.fewest = M.fewestTries(g.ladder1);
+  S = { game: g, li: 0, ladders: [g.ladder1, g.ladder2], placed: null, zips: [], copy: null, seen: {}, zipsOnL2: 0 };
   startLadder(0);
 }
 
@@ -562,12 +566,30 @@ function startLadder(li) {
   S.placed = li === 0 ? L.map(() => null) : S.game.prefill.slice(); S.off = L.map(() => 0); S.result = null; S.repairing = false; S.swapAt = -1;
   $('#l-kick').textContent = li === 0 ? 'Ladder 1 of 2 · ' + L.length + ' rungs' : 'Ladder 2 of 2 · the model on the desk';
   $('#l-orient').innerHTML = li === 0
-    ? 'The left rail has its pieces. Try a piece from the tray against the top one: it is tested the moment it lands. If it fails, try another.'
+    ? 'Chargaff ground up DNA from four creatures and weighed its four letters. Read his jars, then give every piece on the left a partner. The pieces are face down; nothing is tested until you zip.'
     : 'Someone has already built this one, pairing like with like. Zip it and see.';
-  $('#l-hint').textContent = li === 0 ? 'The pieces are face down until you try them. Fewer tries is better; every failure tells you something.' : '';
+  $('#l-hint').textContent = li === 0 ? 'Each jar is one creature\'s DNA, the letters stacked by how much of each there is.' : '';
+  $('#jars').style.display = li === 0 ? '' : 'none'; if (li === 0) drawJars();
   $('#l-build').style.display = ''; $('#l-done').style.display = 'none'; $('#b-mend').style.display = 'none';
   $('#l-svg').setAttribute('viewBox', `0 0 360 ${G0.TOP * 2 + (L.length - 1) * G0.PITCH + 8}`);
   drawLadder(); drawTray(); show('s-lad');
+}
+// Chargaff's jars: each creature's four letters stacked as sand, height by share; alphabetical order, so partners are not neighbours
+function drawJars() {
+  const order = ['A', 'C', 'G', 'T'], H = 118, top = 14, x0 = 14, w = 52;
+  const hatch = { A: '', C: 'url(#hC)', G: 'url(#hG)', T: 'url(#hT)' };
+  $('#jars').innerHTML = M.CONFIG.JARS.map(j => {
+    let y = top + H, s = `<defs><pattern id="hC" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M0,5 L5,0" stroke="#2A2621" stroke-width="0.7" opacity="0.5"/></pattern>
+      <pattern id="hG" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="2.5" cy="2.5" r="0.9" fill="#2A2621" opacity="0.5"/></pattern>
+      <pattern id="hT" width="6" height="4" patternUnits="userSpaceOnUse"><path d="M0,2 H6" stroke="#2A2621" stroke-width="0.7" opacity="0.5"/></pattern></defs>`;
+    order.forEach(b => { const h = H * j[b] / 100; y -= h;
+      s += `<rect x="${x0}" y="${y.toFixed(1)}" width="${w}" height="${h.toFixed(1)}" fill="#F5EDDB"/><rect x="${x0}" y="${y.toFixed(1)}" width="${w}" height="${h.toFixed(1)}" fill="${hatch[b] || 'none'}" stroke="#2A2621" stroke-width="1.2"/>`;
+      s += `<text class="lt" x="${x0 + w / 2}" y="${(y + h / 2 + 1).toFixed(1)}" style="font-size:${h > 22 ? 18 : 14}px">${b}</text>`; });
+    // the jar: pencil glass with a lid
+    s += `<path d="M${x0 - 4},${top - 2} V${top + H + 2} Q${x0 - 4},${top + H + 6} ${x0},${top + H + 6} H${x0 + w} Q${x0 + w + 4},${top + H + 6} ${x0 + w + 4},${top + H + 2} V${top - 2}" fill="none" stroke="#2A2621" stroke-width="2"/>
+      <rect x="${x0 - 7}" y="${top - 10}" width="${w + 14}" height="8" rx="2" fill="#BF9C68" stroke="#2A2621" stroke-width="1.6"/>`;
+    return `<div><svg viewBox="0 0 80 ${top + H + 10}">${s}</svg><div class="jl">${j.name}</div></div>`;
+  }).join('');
 }
 function nextEmpty() { return S.placed.findIndex(p => p === null); }
 function drawLadder() {
@@ -575,7 +597,7 @@ function drawLadder() {
   let s = rails(L.length, S.off, g, g.LX, g.RX, g.TOP);
   L.forEach((sp, i) => {
     const y = g.TOP + i * g.PITCH, lx = g.LX - S.off[i], rx = g.RX + S.off[i];
-    const live = S.li === 0 && !res && S.placed[i] ? { left: sp.given, right: S.placed[i], fit: M.fit(sp.given, S.placed[i]) } : null;
+    const live = null;
     const r = (res && i < S.zipTo && !(S.swapped && S.swapped[i])) ? res.rungs[i] : live;
     const givenL = sp.side === 'L';
     const pl = S.placed[i];
@@ -633,26 +655,12 @@ function drawTray() {
     if (zipping) return;
     if (rep) { if (S.swapAt < 0) return; S.placed[S.swapAt] = el.dataset.p; S.swapped = S.swapped || {}; S.swapped[S.swapAt] = true; S.off[S.swapAt] = 0; S.swapAt = -1; drawLadder(); drawTray(); return; }
     const i = nextEmpty(); if (i < 0 || S.result) return;
-    if (S.li === 0) { tryPiece(i, el.dataset.p); return; }
     S.placed[i] = el.dataset.p; drawLadder(); drawTray();
   }));
   $('#b-zip').disabled = rep ? false : ne >= 0;
-  $('#b-zip').querySelector('span').textContent = rep ? 'Zip it again' : S.li === 0 ? 'Every rung holds: zip it' : 'Zip it';
+  $('#b-zip').querySelector('span').textContent = rep ? 'Zip it again' : 'Zip it';
   const filled = S.placed.filter(Boolean).length;
-  $('#l-count').textContent = rep ? '' : S.li === 0 ? (S.tries + (S.tries === 1 ? ' try' : ' tries') + ' · ' + filled + ' of ' + L.length + ' hold') : filled + ' of ' + L.length + ' filled';
-  if (S.li === 0 && !rep) $$('#tray .pbtn').forEach(b => { const i = nextEmpty(); if (i >= 0 && S.tried[L[i].given] && S.tried[L[i].given][b.dataset.p]) b.disabled = true; });
-}
-let trying = false;
-function tryPiece(i, b) {
-  if (trying || zipping) return;
-  const L = S.ladders[S.li], g = L[i].given, f = M.fit(g, b);
-  S.tries++; S.seen[g] = true; S.seen[b] = true;
-  S.placed[i] = b;
-  if (f.held) { S.off[i] = 0; drawLadder(); drawTray(); return; }
-  (S.tried[g] = S.tried[g] || {})[b] = true;   // a piece that failed against this letter is greyed out for it
-  // it fails: the rails react at this rung, the fault is named, then the piece comes back out
-  trying = true; S.off[i] = f.width === 'ok' ? 0 : f.bulge * G0.U / 2; drawLadder(); drawTray();
-  setTimeout(() => { S.placed[i] = null; S.off[i] = 0; trying = false; drawLadder(); drawTray(); }, 1100);
+  $('#l-count').textContent = rep ? '' : filled + ' of ' + L.length + ' filled';
 }
 function doZip() {
   if (zipping || nextEmpty() >= 0) return;
@@ -678,18 +686,20 @@ function zipDone() {
   $('#l-hint').textContent = '';
   const mendable = S.li === 1 && z.held < z.n;
   $('#b-mend').style.display = mendable ? '' : 'none'; $('#b-next').style.display = mendable ? 'none' : '';
-  $('#r-big').textContent = S.li === 0 ? (S.tries <= S.fewest ? 'Built in ' + S.tries + ' tries. As few as anyone could.' : 'Built in ' + S.tries + ' tries. A careful player needs ' + S.fewest + '.') : z.held === z.n ? 'Every rung held.' : z.held + ' of ' + z.n + ' rungs held.';
+  $('#r-big').textContent = z.held === z.n ? 'Every rung held.' : z.held + ' of ' + z.n + ' rungs held.';
   const f = { wide: 0, narrow: 0, clash: 0, loose: 0 }; z.rungs.forEach(r => { if (r.fit.fault) f[r.fit.fault]++; });
   const why = [];
   if (f.wide) why.push(f.wide + ' too wide: two long pieces');
   if (f.narrow) why.push(f.narrow + ' too narrow: two short pieces');
   if (f.clash + f.loose) why.push((f.clash + f.loose) + ' with the right width, but a bump hit a bump');
-  $('#r-why').textContent = S.li === 0 ? 'Every rung holds, and the rails run straight. Each piece you tried told you something about the next.' : why.length ? why.join('; ') + '.' : 'The blue rails run straight all the way down, and every end grips.';
+  $('#r-why').textContent = (why.length ? why.join('; ') + '.' : 'The blue rails run straight all the way down, and every end grips.') + (S.li === 0 ? ' The pieces are face up now: look at their lengths and their ends.' : '');
   // Chargaff's bars: the letters in this ladder
   const c = z.counts, col = (b, n) => `<div class="col"><span class="l">${b}</span>${'<i></i>'.repeat(n)}</div>`;
   const eq = (a, b) => `<span class="eq ${a === b ? '' : 'red'}">${a === b ? '=' : '≠'}</span>`;
   $('#r-bars').innerHTML = `<div class="pair">${col('A', c.A)}${eq(c.A, c.T)}${col('T', c.T)}</div><div class="pair">${col('G', c.G)}${eq(c.G, c.C)}${col('C', c.C)}</div>`;
-  if (S.li === 0) $('#r-chg').innerHTML = 'Those are the letters in your ladder: as much A as T, as much G as C. In real DNA, from any creature, it is always so. Nobody knew why. You have just built the reason.';
+  if (S.li === 0) $('#r-chg').innerHTML = z.held === z.n
+    ? 'You paired the letters the jars pair, and the cardboard agrees: a long piece needs a short one, a bump needs a dent, and that leaves only A with T and G with C. Chargaff measured it; nobody knew why. You have just built the reason.'
+    : 'The jars pair A with T and G with C: in every creature there is as much of one as of the other. The cardboard says why: a long piece needs a short one, and a bump needs a dent. Only those two pairs do both.';
   else if (z.held < z.n) $('#r-chg').innerHTML = S.zipsOnL2 === 1
     ? 'This is the model Watson built first, in February 1953: like paired with like. The rails bulge where two long pieces meet and pinch where two short ones do. Tap a rung to swap its loose piece.'
     : 'Closer. Tap a rung to swap its loose piece, and zip again.';
@@ -828,10 +838,10 @@ function twistAnim(svg, full, done) {
 
 // ---------- end ----------
 function endScreen() {
-  const v = M.verdict({ l1: S.zips[0], l2: S.zips[1], copy: S.copy.result, grand: S.copy.grand, tries: S.tries, fewest: S.fewest });
+  const v = M.verdict({ l1: S.zips[0], l2: S.zips[1], copy: S.copy.result, grand: S.copy.grand });
   $('#verdict').innerHTML = v.map((l, i) => `<p class="${i === v.length - 1 ? 'paper' : ''}">${l}</p>`).join('');
   const z1 = S.zips[0], z2 = S.zips[1], r = S.copy.result;
-  $('#tally').innerHTML = `Game ${S.game.seed}. Ladder 1: built in ${S.tries} tries (a careful player: ${S.fewest}). The model on the desk: mended in ${S.zipsOnL2} zip${S.zipsOnL2 === 1 ? '' : 's'} to ${z2.held} of ${z2.n}. Copy: ${r.right} of ${r.n} new pieces right. Below: your two copies, twisted the way the paper says, a tenth of a turn per rung.`;
+  $('#tally').innerHTML = `Game ${S.game.seed}. Ladder 1, from the jars: ${S.zips[0].held} of ${S.zips[0].n} rungs held. The model on the desk: mended in ${S.zipsOnL2} zip${S.zipsOnL2 === 1 ? '' : 's'} to ${z2.held} of ${z2.n}. Copy: ${r.right} of ${r.n} new pieces right. Below: your two copies, twisted the way the paper says, a tenth of a turn per rung.`;
   show('s-end');
   const svg = $('#e-svg'); svg.setAttribute('viewBox', '0 0 360 250');
   twistAnim(svg, S.copy.full);

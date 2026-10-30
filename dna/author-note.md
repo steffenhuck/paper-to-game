@@ -1,4 +1,4 @@
-**Revised after first review (30 Oct).** Now Watson's Cardboard: pieces face down until zipped; ladder two is Watson's wrong model to mend; the copies are copied again. See the memo's last section.
+**Revised three times after first review (30 Oct).** Now Watson's Cardboard. Ladder one is built from Chargaff's jars (the evidence), face down, with one zip; ladder two is Watson's wrong model to mend; the copies are copied again. See the memo's last sections. The jar values are textbook tabulations of Chargaff's data and differ between sources by a point or two: check them in `CONFIG.JARS`.
 
 # The Other Chain — note for the author
 

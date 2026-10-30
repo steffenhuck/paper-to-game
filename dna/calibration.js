@@ -116,7 +116,12 @@ process.exitCode = fail ? 1 : 0;
   ok(changed === 1 && gr.every(cp => cp.every(x => x.held)), 'grandchildren: one clashing slip in the copy gives exactly one changed rung in the next generation, and every grandchild rung holds');
   const sc2 = M.scoreCopy(full, spots.map(s => M.partnerOf(s.template))), gr2 = M.copyAgain(sc2.copies, full);
   ok(gr2.every(cp => cp.every(x => x.held && !x.changed)), 'grandchildren: a perfect copy breeds a perfect copy'); }
-{ let good = true, lo = 99, hi = 0; for (let seed = 1; seed <= 300; seed++) { const g = M.drawGame(seed), f = M.fewestTries(g.ladder1); lo = Math.min(lo, f); hi = Math.max(hi, f); if (f < g.ladder1.length || f > g.ladder1.length + 4) good = false; }
-  ok(good, `fewest tries: on 300 seeds a perfect reasoner needs between ${lo} and ${hi} tries for six rungs (never fewer than six, never more than ten)`); }
+{ const r = M.readJars(), j = C.JARS;
+  ok(r.filter(x => x.all).length === 1 && r[0].all, 'of the three ways to pair the letters, only A-T with G-C fits every jar (worst gap ' + r[0].worst.toFixed(1) + ' points)');
+  ok(r.slice(1).every(x => x.worst >= 10), 'the other two pairings miss by at least 10 points somewhere (' + r.slice(1).map(x => x.pairing.join('/') + ' ' + x.worst.toFixed(1)).join(', ') + ')');
+  ok(r.every(x => x.fits[1]), 'the gut bacterium alone fits every pairing: one jar is not enough (the decoy)');
+  ok([0, 2, 3].every(k => r.slice(1).every(x => !x.fits[k])), 'each of the other three jars alone rules out both wrong pairings');
+  ok(j.every(x => Math.abs(x.A / x.T - 1) < 0.1 && Math.abs(x.G / x.C - 1) < 0.1), 'in every jar A/T and G/C are within 10% of one ("very close to unity", p. 737)');
+  ok(j.every(x => Math.abs(x.A + x.T + x.G + x.C - 100) < 0.6), 'each jar sums to 100% within rounding'); }
 console.log(`\n(appended) ${pass} passed, ${fail} failed`);
 if (fail) process.exitCode = 1;
