@@ -14,29 +14,32 @@ PASS with G and T in enol forms the pairing changes (nothing holds): the result 
 == One chain fixes the other; the sequence is unrestricted; Chargaff (p. 737) ==
 PASS for every given piece in 1000 games, exactly one piece completes the rung
 PASS every fully held ladder in 1000 games has exactly A = T and G = C ("very close to unity" in real DNA)
-PASS yet the share of A among purines varies freely across ladders (0.00 to 1.00): the sequence is not restricted
+PASS yet the share of A among purines varies freely across ladders (0.20 to 0.80): the sequence is not restricted
 PASS a ladder with a wrong rung (A-C) need not satisfy A = T
 == Copying ==
-PASS for 500 sequences, each half templating its partner gives two copies identical to the parent
-PASS a missed spot and a wrong piece are counted and break the copy
-PASS the fork speeds up from first to last rung
+PASS for 500 sequences, each half filled by the rule gives two copies identical to the parent
+PASS a wrong piece in a copy is counted and breaks it (scoreCopy is a real check)
 == Helix numbers (p. 737) ==
 PASS 360 / 36 = 10 residues per turn
 PASS 10 x 3.4 A = 34 A repeat
 PASS the drawing repeats after 10 rungs, 34 A up
-PASS ladder 2 is one full turn
+PASS the ladder is one full turn
 == The draw over 300 seeds ==
-PASS ladder 1 always shows all four letters
-PASS ladder 2 has its given chain on the left rail, as ladder 1
-PASS ladder 2 always ends with unequal A and G
+PASS the ladder always shows all four letters
+PASS the finished ladder always has unequal A and G
 PASS 300 seeds give 300 different games
-== Heuristic players, 300 games each (share of ladder rungs that hold) ==
-strategy | rungs held | ladder 2 fully held
-random piece | 25% | 0%
-like with like | 0% | 0%
-width only (any opposite length) | 50% | 0%
-grip only (any matching ends) | 51% | 0%
-the rule | 100% | 100%
-PASS only the rule holds everywhere; each half-rule holds about half the rungs
+== Heuristic players, 2000 games each on the game's own draws (rungs held of 10) ==
+random piece | mean 2.5 | all ten 0.0% | read as: guess 94%, ends 6%, lengths 0%
+like with like (Watson's first idea) | mean 0.0 | all ten 0.0% | read as: like 100%
+reads lengths only | mean 5.0 | all ten 0.2% | read as: lengths 100%, both 0%
+reads ends only | mean 5.0 | all ten 0.1% | read as: ends 100%, both 0%
+remembers A-T from school, guesses the rest | mean 6.2 | all ten 0.8% | read as: guess 71%, ends 23%, lengths 5%, both 1%
+reads both (optimal) | mean 10.0 | all ten 100.0% | read as: both 100%
+PASS all ten held: always for the optimal player, under 1% for every other heuristic
+PASS BENCH_RANDOM matches the simulated random player (2.49)
+PASS BENCH_ONE_CLUE matches both one-clue players
+PASS the verdict reads a lengths-only player as "lengths" and an ends-only player as "ends" (over 99%)
+PASS the verdict reads like-with-like as Watson's first idea, every time
+PASS the verdict reads a random player as guessing in over 90% of games (94%)
 
-27 passed, 0 failed
+30 passed, 0 failed

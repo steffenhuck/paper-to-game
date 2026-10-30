@@ -179,7 +179,7 @@ svg.lad { display: block; width: 100%; height: auto; touch-action: manipulation;
     <div class="kicker"><span>Watson's Cardboard</span><span>the desk</span></div>
     <svg id="art" viewBox="0 0 360 170" aria-hidden="true"></svg>
     <div class="aimline" id="aim-start">Build the other chain so every rung holds when you zip it.</div>
-    <p class="lede">Two blue rails, his cut-out pieces between them. Some fit, some don't. Then pull the ladder apart and copy it.</p>
+    <p class="lede">Two blue rails, his cut-out pieces between them. Some fit, some don't. No clock. Then pull the ladder apart and watch.</p>
     <button class="tag" id="b-start"><span>Start: first ladder</span></button>
     <button class="tag" data-help><span>How to play</span></button>
     <button class="tag" data-about><span>What's real here</span></button>
@@ -205,17 +205,12 @@ svg.lad { display: block; width: 100%; height: auto; touch-action: manipulation;
   </div>
 </section>
 
-<!-- COPY -->
+<!-- COPY: watched, not played -->
 <section class="screen" id="s-copy">
-  <div class="bar"><div class="aim">Copy it: put the right piece in every lit spot before the fork passes.</div><button class="q" data-help aria-label="How to play">?</button></div>
-  <div class="kick"><span>The copy</span><span id="c-count"></span></div>
-  <p class="orient" id="c-orient">Your second ladder, every rung fixed, pulled apart. Each half needs a new partner on every rung. The red fork moves down; fill the lit spot.</p>
-  <div class="fuse"><i id="fuse"></i></div>
+  <div class="bar"><div class="aim">Pull it apart and watch.</div><button class="q" data-help aria-label="How to play">?</button></div>
+  <div class="kick"><span>Pulled apart</span><span id="c-count"></span></div>
+  <p class="orient" id="c-orient">Your ladder, unzipped down the middle. Each half keeps one row of pieces. Only one piece fits each gap, so watch what happens.</p>
   <svg class="lad" id="c-svg" viewBox="0 0 360 380"></svg>
-  <div id="c-play">
-    <div class="keys" id="keys"></div>
-    <button class="tag red" id="b-go"><span>Start the fork</span></button>
-  </div>
   <div id="c-done" style="display:none">
     <div class="res"><div class="big" id="c-big"></div><p class="why" id="c-why"></p></div>
     <button class="tag" id="b-end"><span>What did you find?</span></button>
@@ -241,12 +236,12 @@ svg.lad { display: block; width: 100%; height: auto; touch-action: manipulation;
     <p><b>The pieces.</b> Four kinds: A and G are long, T and C are short. Each has an end with two contact points, top and bottom; each point is a <b>bump</b> or a <b>dent</b>.</p>
     <p><b>A rung holds</b> when the two pieces exactly span the gap between the rails and every bump meets a dent. Too long and the rails bow out. Too short and they pinch in. A bump against a bump pushes the piece away.</p>
   </div>
-  <h3>Ladders</h3>
-  <p>One rail already has its pieces. Tap a piece in the tray to pin it in the next empty spot (marked in red); tap a pinned piece to take it back. Nothing is tested until you press <b>Zip it</b>. Then every rung is tested, top to bottom. Two ladders.</p>
-  <h3>The copy</h3>
-  <p>Your second ladder is pulled apart into two halves. A red fork runs down them; on each rung it lights one spot on each half. Tap the piece that belongs there before the fork moves on. It moves on as soon as both spots are filled, and gets faster.</p>
+  <h3>The ladder</h3>
+  <p>One rail already has its pieces. Tap a piece in the tray to pin it in the next empty spot (marked in red); tap a pinned piece to take it back. Nothing is tested until you press <b>Zip it</b>. Then every rung is tested, top to bottom. There is no clock: take as long as you like.</p>
+  <h3>Pulled apart</h3>
+  <p>Then you pull your ladder apart and watch. Each half keeps one row of pieces, and each gap can take only one piece. You don't need to do anything.</p>
   <h3>The end</h3>
-  <p>The two copies twist up into the real shape, and you see what you found. One game, no do-overs; a new game number gives new chains.</p>
+  <p>The two new ladders twist up into the real shape, and you see what you found and how it compares with someone pinning at random. One game, no do-overs; a new game number gives a new chain.</p>
   <button class="tag" id="b-help-back"><span>Back to where I was</span></button>
 </section>
 
@@ -324,7 +319,7 @@ function seedVal() { const v = parseInt($('#seed').value, 10); return isFinite(v
 
 function newGame() {
   const g = M.drawGame(seedVal());
-  S = { game: g, li: 0, ladders: [g.ladder1, g.ladder2], placed: null, zips: [], copy: null };
+  S = { game: g, li: 0, ladders: [g.ladder], placed: null, zips: [], copy: null };
   startLadder(0);
 }
 
@@ -332,10 +327,8 @@ function newGame() {
 function startLadder(li) {
   S.li = li; const L = S.ladders[li];
   S.placed = L.map(() => null); S.off = L.map(() => 0); S.result = null;
-  $('#l-kick').textContent = 'Ladder ' + (li + 1) + ' of 2 · ' + L.length + ' rungs';
-  $('#l-orient').innerHTML = li === 0
-    ? 'The left rail has its pieces. Pick one for each empty spot on the right: the two must span the gap, and their ends (bumps, dents) must grip. Nothing is tested until you zip.'
-    : 'A new chain, ten rungs: one full turn of the helix. Build its partner. Then watch the letter count.';
+  $('#l-kick').textContent = 'Your ladder · ' + L.length + ' rungs';
+  $('#l-orient').innerHTML = 'The left rail has its pieces. Pick one for each empty spot on the right: the two must span the gap, and their ends (bumps, dents) must grip. Nothing is tested until you zip.';
   $('#l-build').style.display = ''; $('#l-done').style.display = 'none';
   $('#l-svg').setAttribute('viewBox', `0 0 360 ${G0.TOP * 2 + (L.length - 1) * G0.PITCH + 8}`);
   drawLadder(); drawTray(); show('s-lad');
@@ -430,31 +423,35 @@ function zipDone() {
   if (f.wide) why.push(f.wide + ' too wide: two long pieces');
   if (f.narrow) why.push(f.narrow + ' too narrow: two short pieces');
   if (f.clash + f.loose) why.push((f.clash + f.loose) + ' with the right width, but a bump hit a bump');
-  $('#r-why').textContent = why.length ? why.join('; ') + '.' : 'The blue rails run straight all the way down, and every end grips.';
+  const bench = ' Someone pinning at random holds about ' + (M.CONFIG.BENCH_RANDOM < 3 ? '2 or 3' : 'a quarter') + '; reading only the lengths or only the ends, about ' + M.CONFIG.BENCH_ONE_CLUE + '.';
+  $('#r-why').textContent = (why.length ? why.join('; ') + '.' : 'The blue rails run straight all the way down, and every end grips.') + bench;
   // Chargaff's bars: the letters in this ladder
   const c = z.counts, col = (b, n) => `<div class="col"><span class="l">${b}</span>${'<i></i>'.repeat(n)}</div>`;
   const eq = (a, b) => `<span class="eq ${a === b ? '' : 'red'}">${a === b ? '=' : '≠'}</span>`;
   $('#r-bars').innerHTML = `<div class="pair">${col('A', c.A)}${eq(c.A, c.T)}${col('T', c.T)}</div><div class="pair">${col('G', c.G)}${eq(c.G, c.C)}${col('C', c.C)}</div>`;
-  if (S.li === 0) $('#r-chg').innerHTML = z.chargaff.both
-    ? 'Those are the letters in your ladder. In real DNA, from any creature, there is always as much A as T and as much G as C. Nobody knew why. Yours does it too.'
-    : 'Those are the letters in your ladder. In real DNA, from any creature, there is always as much A as T and as much G as C. Nobody knew why. Yours doesn\'t, yet.';
-  else $('#r-chg').innerHTML = z.chargaff.both
-    ? 'A matches T and G matches C again, though the amounts of A and G differ: <b>any</b> order of pieces on one rail is allowed, and the other rail is then forced.'
-    : 'Where every rung holds, A always matches T and G matches C, whatever the order of pieces on one rail. That is why real DNA does.';
-  $('#b-next').querySelector('span').textContent = S.li === 0 ? 'Next ladder' : 'Pull it apart and copy it';
+  $('#r-chg').innerHTML = z.chargaff.both
+    ? 'Those are the letters in your ladder. In real DNA, from any creature, there is always as much A as T and as much G as C. Nobody knew why. Yours does it too, though it has more of one pair than the other: any order on one rail is allowed, and the other rail is then forced.'
+    : 'Those are the letters in your ladder. In real DNA, from any creature, there is always as much A as T and as much G as C. Nobody knew why. Yours doesn\'t: only rungs that hold keep the count even.';
+  $('#b-next').querySelector('span').textContent = z.held === z.n ? 'Pull it apart' : 'Fix the loose rungs and pull it apart';
 }
 
 // ---------- the copy ----------
 const GC = { U: 26, H: 22, CP: 5.5, R: 4.2, PITCH: 33, TOP: 40 };
 const C1 = { lx: 22, rx: 152 }, C2 = { lx: 208, rx: 338 };
 function startCopy() {
-  const full = M.complete(S.ladders[1]);
-  S.copy = { full, spots: M.copySpots(full), entries: [], k: 0, running: false, done: false, paused: false };
-  $('#c-play').style.display = ''; $('#c-done').style.display = 'none'; $('#b-go').style.display = '';
-  $('#keys').innerHTML = ['A', 'G', 'T', 'C'].map(b => `<button class="key" data-k="${b}">${b}<small>${B[b].ring === 'purine' ? 'long' : 'short'}</small></button>`).join('');
-  $$('#keys .key').forEach(el => el.addEventListener('click', () => copyTap(el.dataset.k)));
-  $('#fuse').style.transform = 'scaleX(1)'; $('#c-count').textContent = '';
+  // the ladder as the rule completes it (loose rungs fixed), pulled apart; the halves fill themselves, by the rule, while you watch
+  const full = M.complete(S.ladders[0]);
+  S.copy = { full, spots: M.copySpots(full), entries: [], k: 0, running: false };
+  S.copy.result = M.copyByRule(full);
+  $('#c-done').style.display = 'none'; $('#c-count').textContent = '';
+  $('#c-orient').textContent = S.zips[0].held === S.zips[0].n
+    ? 'Your ladder, unzipped down the middle. Each half keeps one row of pieces. Only one piece fits each gap. Watch.'
+    : 'Your ladder with its loose rungs fixed, unzipped down the middle. Each half keeps one row of pieces. Only one piece fits each gap. Watch.';
   drawCopy(); show('s-copy');
+  const step = () => { const c = S.copy; if (c.k >= c.spots.length) return copyDone();
+    c.entries.push(c.result.res[c.k].entry); c.k++; $('#c-count').textContent = 'rung ' + Math.min(c.full.length, Math.ceil(c.k / 2)) + ' of ' + c.full.length; drawCopy();
+    c.timer = setTimeout(step, M.CONFIG.COPY_STEP_MS); };
+  S.copy.timer = setTimeout(step, 700);
 }
 function drawCopy(twist) {
   const c = S.copy, n = c.full.length, g = Object.assign({}, GC), svg = $('#c-svg');
@@ -491,39 +488,11 @@ function drawCopy(twist) {
   s += `<text x="${(C1.lx + C1.rx) / 2}" y="10" text-anchor="middle" style="font-family:var(--type);font-size:11px;font-weight:700;letter-spacing:1px;fill:#2A2621">COPY 1</text><text x="${(C2.lx + C2.rx) / 2}" y="10" text-anchor="middle" style="font-family:var(--type);font-size:11px;font-weight:700;letter-spacing:1px;fill:#2A2621">COPY 2</text>`;
   svg.innerHTML = s;
 }
-let rungTimer = null, rungT0 = 0, rungLeft = 0, fuseRaf = null;
-function startRung() {
-  const c = S.copy; if (c.k >= c.spots.length) return copyDone();
-  const rung = c.spots[c.k].rung; rungLeft = M.copyMs(rung); armTimer();
-  $('#c-count').textContent = 'rung ' + (rung + 1) + ' of ' + c.full.length;
-  drawCopy();
-}
-function armTimer() {
-  const c = S.copy; clearTimeout(rungTimer); rungT0 = performance.now();
-  const total = M.copyMs(c.spots[c.k].rung);
-  rungTimer = setTimeout(rungTimeout, rungLeft);
-  cancelAnimationFrame(fuseRaf);
-  const tick = () => { if (!c.running || c.paused) return; const left = rungLeft - (performance.now() - rungT0); $('#fuse').style.transform = `scaleX(${Math.max(0, left / total)})`; fuseRaf = requestAnimationFrame(tick); };
-  fuseRaf = requestAnimationFrame(tick);
-}
-function rungTimeout() {
-  const c = S.copy; const rung = c.spots[c.k].rung;
-  while (c.k < c.spots.length && c.spots[c.k].rung === rung) { c.entries.push(null); c.k++; }
-  startRung();
-}
-function copyTap(b) {
-  const c = S.copy; if (!c.running || c.paused || c.k >= c.spots.length) return;
-  const rung = c.spots[c.k].rung; c.entries.push(b); c.k++;
-  if (c.k >= c.spots.length || c.spots[c.k].rung !== rung) { clearTimeout(rungTimer); startRung(); } else drawCopy();
-}
 function copyDone() {
-  const c = S.copy; c.running = false; clearTimeout(rungTimer); cancelAnimationFrame(fuseRaf); $('#fuse').style.transform = 'scaleX(0)';
-  c.result = M.scoreCopy(c.full, c.entries); drawCopy();
-  $('#c-play').style.display = 'none'; $('#c-count').textContent = '';
-  const r = c.result, both = r.same[0] && r.same[1];
-  $('#c-big').textContent = both ? 'Two copies, both the same as the first.' : r.right + ' of ' + r.n + ' new pieces right.';
-  $('#c-why').textContent = both ? 'Nobody told you what went where. Each half said it.' : 'Where you were right, the copy matches the first ladder letter for letter; where you missed or slipped, it doesn\'t. Each half told you what was needed.';
-  setTimeout(() => { $('#c-done').style.display = ''; }, 200);
+  const r = S.copy.result; $('#c-count').textContent = '';
+  $('#c-big').textContent = r.same[0] && r.same[1] ? 'One ladder became two, the same as the first.' : 'Two ladders.';
+  $('#c-why').textContent = 'Nobody chose a single piece: in each gap only one fits. That is what Watson and Crick saw next.';
+  setTimeout(() => { $('#c-done').style.display = ''; }, 250);
 }
 
 // ---------- the twist (closing picture): the paper's 36 degrees per rung, one turn per 10 rungs ----------
@@ -551,10 +520,10 @@ function twistAnim(svg, full, done) {
 
 // ---------- end ----------
 function endScreen() {
-  const v = M.verdict({ l1: S.zips[0], l2: S.zips[1], copy: S.copy.result });
+  const v = M.verdict({ z: S.zips[0], copy: S.copy.result });
   $('#verdict').innerHTML = v.map((l, i) => `<p class="${i === v.length - 1 ? 'paper' : ''}">${l}</p>`).join('');
-  const z1 = S.zips[0], z2 = S.zips[1], r = S.copy.result;
-  $('#tally').innerHTML = `Game ${S.game.seed}. Ladder 1: ${z1.held} of ${z1.n} rungs held. Ladder 2: ${z2.held} of ${z2.n}. Copy: ${r.right} of ${r.n} new pieces right. Below: your two copies, twisted the way the paper says, a tenth of a turn per rung.`;
+  const z = S.zips[0];
+  $('#tally').innerHTML = `Game ${S.game.seed}. Your ladder: ${z.held} of ${z.n} rungs held. Pinning at random: about 2 or 3. Reading one clue: about ${M.CONFIG.BENCH_ONE_CLUE}. Reading both: all ${z.n}. Below: your two copies, twisted the way the paper says, a tenth of a turn per rung.`;
   show('s-end');
   const svg = $('#e-svg'); svg.setAttribute('viewBox', '0 0 360 250');
   twistAnim(svg, S.copy.full);
@@ -576,18 +545,15 @@ function drawArt() {
 $('#b-start').addEventListener('click', newGame);
 $('#b-desk').addEventListener('click', () => show('s-start'));
 $('#b-zip').addEventListener('click', doZip);
-$('#b-next').addEventListener('click', () => { if (S.li === 0) startLadder(1); else startCopy(); });
-$('#b-go').addEventListener('click', () => { S.copy.running = true; $('#b-go').style.display = 'none'; startRung(); });
+$('#b-next').addEventListener('click', startCopy);
 $('#b-end').addEventListener('click', endScreen);
 $('#b-new').addEventListener('click', () => { $('#seed').value = String(seedVal() + 1); show('s-start'); });
 $$('[data-help]').forEach(el => el.addEventListener('click', () => {
   back = $$('.screen').find(s => s.classList.contains('on')).id;
-  if (S && S.copy && S.copy.running && !S.copy.paused) { S.copy.paused = true; clearTimeout(rungTimer); rungLeft -= performance.now() - rungT0; }
   show('s-help');
 }));
 $('#b-help-back').addEventListener('click', () => {
   show(back);
-  if (back === 's-copy' && S.copy && S.copy.paused) { S.copy.paused = false; armTimer(); }
 });
 $$('[data-about]').forEach(el => el.addEventListener('click', () => { back = $$('.screen').find(s => s.classList.contains('on')).id; show('s-about'); }));
 $('#b-about-back').addEventListener('click', () => show(back));

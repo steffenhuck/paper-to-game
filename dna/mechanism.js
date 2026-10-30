@@ -1,4 +1,4 @@
-// The Other Chain — mechanism. The single source of truth: build.py inlines this file verbatim into the game,
+// Watson's Cardboard — mechanism. The single source of truth: build.py inlines this file verbatim into the game,
 // and calibration.js tests this file. No DOM. Runs unchanged in Node and in the browser.
 // Kind: TOY. It formalises the argument of Watson & Crick (1953), Nature 171:737, as cut-out pieces on a ladder.
 (function (root) {
@@ -32,12 +32,13 @@ const CONFIG = {
   RAIL_GAP: 5,                         // our choice: the fixed rail distance = one purine + one pyrimidine
 
   // --- the game ---
-  LADDER1_RUNGS: 8,       // our choice: short first ladder
-  LADDER2_RUNGS: 10,      // one full turn of the paper's helix (REPEAT_RESIDUES)
-  LADDER2_BOTH_RAILS: false, // our choice after play-testing: the given chain on the left rail, as in ladder 1 (true: given pieces on both rails, the paper's dyad)
-  LADDER2_MIN_EACH_SIDE: 3, // used only when LADDER2_BOTH_RAILS: at least 3 given pieces on each rail
-  COPY_MS_FIRST: 3400,    // our choice: most time the fork waits at the first rung (two spots); it moves on as soon as both are filled
-  COPY_MS_LAST: 2000,     // our choice: and at the last; linear in between
+  LADDER_RUNGS: 10,       // one ladder, one full turn of the paper's helix (REPEAT_RESIDUES)
+  // What other ways of playing score on a ladder of ten, from the heuristic simulation in calibration.js (2000 games each):
+  // random about 2.5, reading one clue (lengths or ends) about 5, remembering A-T from school and guessing the rest about 6;
+  // all ten held: under 1% for every one of them, 100% for a player who reads both. Shown to the player in words.
+  BENCH_RANDOM: 2.5,      // calibration.js: mean rungs held by a random player
+  BENCH_ONE_CLUE: 5,      // calibration.js: mean rungs held by a player who reads lengths only or ends only
+  COPY_STEP_MS: 260,      // our choice: the pace at which the pulled-apart halves fill themselves, for watching
 };
 
 const KEYS = ['A', 'G', 'T', 'C'];
@@ -80,19 +81,13 @@ function partnerOf(b) { const p = partnersOf(b); if (p.length !== 1) throw new E
 function drawGame(seed) {
   const r = rng(seed * 7919 + 13);
   const pick = () => KEYS[Math.floor(r() * 4)];
-  let l1, l2;
-  for (let tries = 0; ; tries++) {   // floor: ladder 1 shows all four letters
-    l1 = Array.from({ length: CONFIG.LADDER1_RUNGS }, () => ({ given: pick(), side: 'L' }));
-    if (KEYS.every(k => l1.some(x => x.given === k))) break;
+  let lad;
+  for (let tries = 0; ; tries++) {   // floor: all four letters, and unequal A and G when finished (so the bars show A = T without A = G)
+    lad = Array.from({ length: CONFIG.LADDER_RUNGS }, () => ({ given: pick(), side: 'L' }));
+    const c = counts(complete(lad));
+    if (KEYS.every(k => lad.some(x => x.given === k)) && c.A !== c.G) break;
   }
-  for (let tries = 0; ; tries++) {   // floor: pieces on both rails; finished ladder has unequal A and G (so the bars can show A=T without A=G)
-    l2 = Array.from({ length: CONFIG.LADDER2_RUNGS }, () => ({ given: pick(), side: (r() < 0.5 || !CONFIG.LADDER2_BOTH_RAILS) ? 'L' : 'R' }));
-    const nL = l2.filter(x => x.side === 'L').length, nR = l2.length - nL;
-    const c = counts(complete(l2));
-    const sidesOk = !CONFIG.LADDER2_BOTH_RAILS || (nL >= CONFIG.LADDER2_MIN_EACH_SIDE && nR >= CONFIG.LADDER2_MIN_EACH_SIDE);
-    if (sidesOk && c.A !== c.G) break;
-  }
-  return { seed, ladder1: l1, ladder2: l2 };
+  return { seed, ladder: lad };
 }
 
 // a rung as left/right letters, given the player's piece for the empty side (null = empty)
@@ -121,9 +116,8 @@ function copySpots(full) {
   });
   return spots;
 }
-function copyMs(rung) {
-  const n = CONFIG.LADDER2_RUNGS; return Math.round(CONFIG.COPY_MS_FIRST + (CONFIG.COPY_MS_LAST - CONFIG.COPY_MS_FIRST) * rung / Math.max(1, n - 1));
-}
+// the halves fill themselves: each gap takes the one piece that fits its old partner
+function copyByRule(full) { return scoreCopy(full, copySpots(full).map(s => partnerOf(s.template))); }
 // entries[k] is the letter the player put in spot k, or null if the fork passed first
 function scoreCopy(full, entries) {
   const spots = copySpots(full);
@@ -157,23 +151,31 @@ function howMany(k, n) {
   return 'only a few';
 }
 
-// the verdict, in words. s = { l1: zip result, l2: zip result, copy: scoreCopy result }
+// what the player's zipped ladder says about how they chose: the fault pattern tells which clue they read.
+// In the simulation (calibration.js) each pattern identifies its kind of player in every game: only bump-on-bump faults = read the
+// lengths; only width faults = read the ends (or paired like with like, which holds nothing); both kinds = no clue, i.e. guessing.
+function reading(z) {
+  if (z.held === z.n) return 'both';
+  if (z.rungs.every(g => g.left === g.right)) return 'like';
+  const w = z.rungs.some(g => g.fit.width !== 'ok'), e = z.rungs.some(g => g.fit.width === 'ok' && !g.fit.held);
+  return w && e ? 'guess' : w ? 'ends' : 'lengths';
+}
+
+// the verdict, in words. s = { z: the zipped ladder, copy: copyByRule result }
 function verdict(s) {
-  const lines = [];
-  const f2 = s.l2.held === s.l2.n, f1 = s.l1.held === s.l1.n;
-  const rule = 'a long piece needs a short one, and a bump needs a dent. Only A with T and G with C.';
-  if (f1 && f2) lines.push('You had the rule from the first ladder: ' + rule);
-  else if (f2) lines.push('Your first ladder failed in places; your second held all the way down. You found the rule: ' + rule);
-  else if (s.l2.held >= s.l2.n - 2) lines.push('Your second ladder held ' + howMany(s.l2.held, s.l2.n) + ' rung' + (s.l2.n - s.l2.held === 1 ? '' : 's') + '. Nearly there. The rule: ' + rule);
-  else lines.push('Your rungs kept failing to the end. The rule: ' + rule);
-  const c = s.copy, both = c.same[0] && c.same[1];
-  if (both) lines.push('Then you pulled the ladder apart and each half rebuilt the other: two ladders, letter for letter the same as the first.');
-  else lines.push('Then you pulled the ladder apart and each half rebuilt the other. Your two copies got ' + howMany(c.right, c.n) + ' new piece' + (c.right === 1 ? '' : 's') + ' right' + (c.missed ? ', and the fork passed ' + c.missed + ' empty spot' + (c.missed === 1 ? '' : 's') : '') + '. You never had to be told what went where: each half said it.');
+  const z = s.z, k = reading(z), lines = [];
+  const rule = 'a long piece needs a short one, and a bump needs a dent. That leaves only A with T and G with C.';
+  if (k === 'both') lines.push('You saw what Watson saw on the morning of 28 February: ' + rule + ' Every rung held. Someone pinning pieces at random almost never manages that.');
+  else if (k === 'like') lines.push('You paired like with like, which was Watson\'s first idea too. It bulged for him as well. The answer: ' + rule);
+  else if (k === 'lengths') lines.push('Every rung on your ladder had the right width: one long piece, one short. But some ends met bump on bump. The ends are the other half of the clue: ' + rule);
+  else if (k === 'ends') lines.push('Every end on your ladder gripped. But some rungs were two long pieces or two short ones, and the rails bulged or pinched. The lengths are the other half of the clue: ' + rule);
+  else lines.push('Your rungs failed both ways: too wide or too narrow, and bump on bump. That is what pinning without a rule looks like. The clue is in the pieces: ' + rule);
+  lines.push('Then the ladder copied itself. Pulled apart, each half could take only one piece in each gap, so one ladder became two, letter for letter the same. Nobody had to choose anything: the pairing did it.');
   lines.push('Watson and Crick, 1953: one chain fixes the other. That is why DNA always holds as much A as T and as much G as C, and it "immediately suggests a possible copying mechanism".');
   return lines;
 }
 
 const api = { CONFIG, KEYS, rng, fit, contact, partnersOf, partnerOf, drawGame, rungOf, zip, complete, counts, chargaff,
-  copySpots, copyMs, scoreCopy, helixPoint, howMany, verdict };
+  copySpots, copyByRule, scoreCopy, reading, helixPoint, howMany, verdict };
 if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.MECH = api;
 })(typeof window !== 'undefined' ? window : this);
