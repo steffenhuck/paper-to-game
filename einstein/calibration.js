@@ -55,7 +55,7 @@ check('draw: the cheapest alive count spans 2 to 6 across seeds', [2, 3, 4, 5, 6
 const spread = a => new Set(a).size; check('draw: the first refusal lands in different rounds on different seeds, for both discounting merchants', spread(firstRef.ORDINARY) >= 4 && spread(firstRef.BORROWER) >= 4, 'ordinary ' + spread(firstRef.ORDINARY) + ' rounds, borrower ' + spread(firstRef.BORROWER));
 check('draw: the same seed draws the same game', JSON.stringify(drawGame(99)) === JSON.stringify(drawGame(99)));
 check('draw: different seeds draw different games', JSON.stringify(drawGame(1)) !== JSON.stringify(drawGame(2)));
-check('fate: every franc there was is the richest merchant; nothing is a poor man; a loss is a pauper', M.fate(100, 100) === 'the richest merchant in Bern' && M.fate(0, 100) === 'a poor man' && M.fate(-5, 100) === 'a pauper');
+check('fate: every franc is the richest merchant; a small share is a pauper; a loss is broke; the score is the share out of 100, floored at 0', M.fate(100, 100) === 'the richest merchant in Bern' && M.fate(10, 100) === 'a pauper' && M.fate(-5, 100) === 'broke' && M.score(79, 100) === 79 && M.score(-5, 100) === 0);
 // The pattern the game stages, and whether it comes from the paper or from our prices:
 //   (a) the money is bound by the light limit: no booster count brings the fee sooner than d years, so a far star's fee is discounted
 //       to nothing whatever the merchant does; (b) the flowers are not bound: boosters can make the rocket's clock as short as you like.

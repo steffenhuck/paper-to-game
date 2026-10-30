@@ -317,3 +317,14 @@ Steffen found that the cards gave the answer away (the till on the decision scre
 **Simulation before building** (1,000 seeds, eight heuristics, three merchants; mean share of the optimum): max-out 81/53/9%; four-everywhere 36/52/50%; physics-only (cheapest alive, send all) 100/91/69%; near-only 49/81/95%; cheapest-alive-and-refuse-if-fee-today-below-fuel 100/100/100%. The game discriminates between ways of thinking in the right direction: the physicist dies richest as the patient merchant and solvent as the borrower; the local trader is the mirror image. The rule that wins everywhere is one sentence, and it is the sentence a player should leave with. The cheapest-alive count spans 2 to 6; the first refusal lands in nine different rounds across seeds for both discounting merchants.
 
 **Calibration** (27 checks): §1, §4, §5, §10 against the paper's values; the draw's shape on 300 seeds; determinism of the seed; the three patterns on random parameters. **Browser session** at 380 px: seed 7 as the ordinary merchant with a first-timer's plan (two, then four everywhere, refusing the two farthest: a comfortable man, 2056 of 2585), help mid-round, then the same seed as the patient merchant with the optimal plan (the richest merchant, 4272), About, new stars; no errors, no horizontal scroll, no decimals.
+
+
+## 27. Revision seven: the score card (30 Oct)
+
+Steffen's last three: the booster count carried over between rounds, which looked like history dependence; the verdict wanted a number; and a loss deserved its own name.
+
+- Every round starts at **one booster**, the smallest rocket that flies. Zero would have collapsed the count into the refusal again; REFUSE stays the only way to refuse.
+- The verdict leads with a **score out of 100**: the share of the best possible profit for the merchant you chose, floored at 0, with the merchant and the game number beside it, so a screenshot of the card is enough to play the same game.
+- The ladder is five rungs: 97 and above, the richest merchant in Bern; 75, a comfortable man; 40, solvent, just; anything above a loss, a pauper; a loss, **broke**, with the debt in the headline ("You die broke, owing 140 francs"). "Exactly nothing" was dropped as too small a category. The other merchants' line now gives their score and their death with the same rockets.
+
+Session rerun on game 7: the first-timer scores 80 and dies a comfortable man as the ordinary merchant; the optimal patient merchant 100; a max-out borrower 48, solvent, just. No errors, no horizontal scroll, no decimals.

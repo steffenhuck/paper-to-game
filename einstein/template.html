@@ -117,6 +117,12 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
 .till .row.sub { font-size: 11px; color: #555; font-family: var(--text); letter-spacing: 0; }
 .dead { color: var(--red); font-family: var(--disp); }
 
+/* the score card */
+.scorecard { border-top: 3px solid var(--ink); border-bottom: 3px solid var(--ink); padding: 10px 0 8px; margin: 10px 0 14px; display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: center; }
+.scorecard .big { font-family: var(--disp); font-size: 64px; line-height: 0.9; letter-spacing: -0.03em; }
+.scorecard .big .of { font-size: 22px; letter-spacing: 0; color: var(--fog); }
+.scorecard .lab { font-family: var(--disp); font-size: 11px; letter-spacing: 0.08em; line-height: 1.35; }
+
 /* round header and the running wealth */
 .roundbar { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--disp); font-size: 12px; letter-spacing: 0.08em; margin: 2px 0 6px; }
 .roundbar .wealth { font-size: 18px; }
@@ -314,7 +320,7 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
   <h3>Money today</h3>
   <p>The fee is paid on arrival. A fee paid years from now is worth less to you today; how much less depends on which merchant you are: the patient merchant doesn't mind waiting at all, the ordinary merchant loses 4% a year, the merchant with a loan 10% a year. Your wealth is the sum of what every order made you, in today's francs.</p>
   <h3>How it ends</h3>
-  <p>After ten orders you die, as merchants do. How rich depends on how much of the money there was to be made, for the merchant you chose, you made: the richest merchant in Bern, a comfortable man, solvent, a poor man, or a pauper.</p>
+  <p>After ten orders you die, as merchants do. Your score is how much of the money there was to be made, for the merchant you chose, you made, out of 100. It decides how you die: the richest merchant in Bern, a comfortable man, solvent, or a pauper; and if you burned more fuel than you were ever paid, you die broke, owing the difference.</p>
   <h3>The game number</h3>
   <p>Every game is drawn from a number, shown on the start screen. The same number gives the same ten stars, so you can play the same game as another merchant, or hand the number to a friend.</p>
   <button class="btn" id="b-help-back">Back to the game</button>
@@ -333,7 +339,7 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
 </script>
 <script>
 (function () {
-  const { CONFIG, fly, best, minAlive, fate, drawGame, fmtYears, fmtLimit, fmtSpeed, fmtRate, fmtFrancs, fmtShare, speedAfter, clockRate, fuelCost } = MECH;
+  const { CONFIG, fly, best, minAlive, fate, score, drawGame, fmtYears, fmtLimit, fmtSpeed, fmtRate, fmtFrancs, fmtShare, speedAfter, clockRate, fuelCost } = MECH;
   const $ = s => document.querySelector(s);
   const NS = 'http://www.w3.org/2000/svg';
   const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
@@ -437,7 +443,7 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
 
   // ---------- a round ----------
   function startGame(who) {
-    S.who = who; S.orders = drawGame(S.seed); S.i = 0; S.flights = []; S.n = 2; round();
+    S.who = who; S.orders = drawGame(S.seed); S.i = 0; S.flights = []; round();
   }
   function round() {
     const o = S.orders[S.i];
@@ -447,7 +453,7 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
     $('#f-cust').innerHTML = custLine(o) + ' ' + rateLine(rate());
     $('#f-orient').innerHTML = S.i === 0 ? 'Your first order. Set the boosters and launch; you will see the rocket race the light, and the two clocks run.' : S.i === 9 ? 'A museum, a century away. The last order of your life.' : '';
     $('#decide').style.display = ''; $('#flight').style.display = 'none'; $('#f-stamp').innerHTML = ''; $('#f-say').innerHTML = '';
-    S.off = false; S.n = Math.min(Math.max(S.n, 1), CONFIG.maxBoost); renderKeys();
+    S.off = false; S.n = 1; renderKeys();
     show('s-fly');
   }
   function renderKeys() {
@@ -523,8 +529,9 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
   function end() {
     const os = S.orders, fl = S.flights, rt = rate(), bs = os.map(o => best(o, rt));
     const profit = wealth(), bestProfit = bs.reduce((s, b) => s + b.profit, 0), share = bestProfit > 0 ? profit / bestProfit : 0;
-    const head = `You die ${fate(profit, bestProfit)}.`;
-    const sub = profit < -0.5 ? `You lost ${fmtFrancs(-profit)} today.` : share >= 0.97 ? `${fmtFrancs(profit)} today: every franc there was.` : `${fmtFrancs(profit)} today, of a possible ${fmtFrancs(bestProfit)}.`;
+    const ft = fate(profit, bestProfit), sc = score(profit, bestProfit);
+    const head = ft === CONFIG.broke ? `You die broke, owing ${fmtFrancs(-profit)}.` : `You die ${ft}.`;
+    const sub = profit < -0.5 ? `You burned more fuel than you were ever paid.` : share >= 0.97 ? `${fmtFrancs(profit)} today: every franc there was.` : `${fmtFrancs(profit)} today, of a possible ${fmtFrancs(bestProfit)}.`;
     // group the rounds by what went wrong, so the verdict reads as a few sentences, not ten
     const G = { late: [], dead: [], over: [], under: [], refusedWrong: [], flewDead: [] };
     os.forEach((o, i) => { const f = fl[i], b = bs[i], nm = cap(o.name.toLowerCase());
@@ -543,13 +550,13 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
     if (G.over.length) notes.push(`At ${list(G.over)} the last booster bought nothing you were paid for: once the flowers are alive, more speed is just fuel.`);
     if (G.under.length) notes.push(`At ${list(G.under)} one more booster would have brought the fee a little sooner, worth more than its fuel at your rate.`);
     const did = notes.length ? notes.join(' ') : 'Every rocket carried exactly the boosters that paid, and you refused what could not pay.';
-    const others = Object.keys(M0).filter(k => k !== S.who).map(k => { const r2 = M0[k].rate; const p2 = os.reduce((s, o, i) => s + fly(o, fl[i].n, r2).profit, 0), b2 = os.reduce((s, o) => s + best(o, r2).profit, 0); return `${M0[k].title} would have died ${fate(p2, b2)} with these same rockets (${fmtFrancs(p2)} of a possible ${fmtFrancs(b2)}).`; });
-    $('#verdict').innerHTML = `<h1>${head}</h1><p class="p"><b>${sub}</b> ${did}</p><p class="p">You were ${M0[S.who].title.toLowerCase()}. ${others.join(' ')}</p>
+    const others = Object.keys(M0).filter(k => k !== S.who).map(k => { const r2 = M0[k].rate; const p2 = os.reduce((s, o, i) => s + fly(o, fl[i].n, r2).profit, 0), b2 = os.reduce((s, o) => s + best(o, r2).profit, 0); const f2 = fate(p2, b2); return `${M0[k].title} would have scored ${score(p2, b2)} with these same rockets and died ${f2 === CONFIG.broke ? 'broke' : f2}.`; });
+    $('#verdict').innerHTML = `<div class="scorecard"><div class="big num">${sc}<span class="of">/100</span></div><div class="lab">OF THE MONEY THERE WAS TO BE MADE<br>${M0[S.who].title.toUpperCase()} · GAME NO. ${S.seed}</div></div><h1>${head}</h1><p class="p"><b>${sub}</b> ${did}</p><p class="p">${others.join(' ')}</p>
       <p class="p paper"><b>Einstein, 1905:</b> speeds don’t simply add, and no pile of boosters ever reaches light. A clock that travels runs slow, and the closer to light it goes, the slower it runs. And the energy a body needs grows without limit as it nears the speed of light.</p>
       <p class="p means"><b>What that means for the Light Post:</b> the light limit binds the money. However many boosters you fire, the fee cannot arrive before light would, so a far star's fee is discounted to almost nothing whatever you do, and a merchant who discounts refuses the far stars first. It does not bind the flowers: every booster slows the rocket's clock, so they can arrive as young as you like, at a fuel price that grows without limit.</p>`;
     $('#tally').innerHTML = os.map((o, i) => { const f = fl[i], b = bs[i];
       return `<div class="r"><div><b>${o.name}</b> · ${ly(o.d)} · ${f.refused ? 'refused' : f.n + ' booster' + (f.n === 1 ? '' : 's') + (f.alive ? '' : ' · dead')}${b.n !== f.n ? ` (best: ${b.n ? b.n : 'refuse'})` : ''}</div><span class="${f.profit < -0.5 || (b.n === 0 && !f.refused) ? 'bad' : ''}">${f.refused ? '0' : (f.profit >= 0.5 ? '+' : '') + Math.round(f.profit)}</span></div>`; }).join('')
-      + `<div class="r"><div><b>GAME NO. ${S.seed}</b></div><span>${Math.round(profit)}</span></div>`;
+      + `<div class="r"><div><b>WEALTH TODAY</b></div><span>${(profit < -0.5 ? '−' : '') + Math.abs(Math.round(profit))}</span></div>`;
     show('s-end');
   }
   $('#b-again').onclick = chooseWho;
