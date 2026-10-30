@@ -66,6 +66,14 @@ b { font-weight: 700; }
 .poster .aimline { font-family: var(--mark); font-size: 22px; line-height: 1.15; color: var(--red); margin: 4px 0 10px; }
 .poster .lede { font-size: 15px; margin-bottom: 14px; }
 .gameno { display: flex; align-items: center; gap: 8px; font-size: 13px; margin: 12px 0 0; }
+/* the index card pinned to the desk: the story of the cut-outs */
+.story { position: relative; margin: 26px 2px 6px; padding: 16px 16px 10px; background: var(--card); transform: rotate(0.8deg);
+  background-image: linear-gradient(transparent 0 25px, rgba(35,80,200,0.18) 25px 26px); background-size: 100% 26px; background-position: 0 30px;
+  box-shadow: 1px 2px 0 rgba(42,38,33,0.3), 0 6px 14px rgba(0,0,0,0.18); border: 1px solid rgba(42,38,33,0.3); }
+.story::before { content: ''; position: absolute; top: -10px; left: 24px; width: 70px; height: 20px; background: rgba(245,237,219,0.8); border: 1px solid rgba(42,38,33,0.2); transform: rotate(-4deg); }
+.story h3 { font-size: 20px; margin: 4px 0 6px; color: var(--red); }
+.story p { font-size: 14.5px; line-height: 26px; margin: 0 0 8px; }
+.story .src { font-size: 12px; line-height: 1.4; opacity: 0.75; }
 .gameno input { width: 84px; font-family: var(--type); font-weight: 700; font-size: 16px; padding: 6px 8px; border: 2px solid var(--pencil); background: var(--card); color: var(--pencil); border-radius: 0; }
 
 /* the ladder */
@@ -141,11 +149,20 @@ svg.lad { display: block; width: 100%; height: auto; touch-action: manipulation;
     <h1>The Other Chain</h1>
     <svg id="art" viewBox="0 0 360 170" aria-hidden="true"></svg>
     <div class="aimline" id="aim-start">Build the other chain so every rung holds when you zip it.</div>
-    <p class="lede">In February 1953 Watson cut the four bases of DNA out of cardboard and pushed them around his desk until they fitted. Here are his pieces. One chain is given; build the other. Then pull the ladder apart and copy it.</p>
+    <p class="lede">Watson's cardboard bases are on your desk (the story is pinned below). One chain is given; build the other. Then pull the ladder apart and copy it.</p>
     <button class="tag" id="b-start"><span>Start: first ladder</span></button>
     <button class="tag" data-help><span>How to play</span></button>
     <button class="tag" data-about><span>What's real here</span></button>
     <div class="gameno"><label for="seed">Game number</label><input id="seed" inputmode="numeric" value="1"><span>(same number, same chains)</span></div>
+    <div class="story">
+      <h3>How the pairs were found</h3>
+      <p>Cambridge, February 1953. The workshop had not yet made the metal bases for the model kit, so James Watson cut the four bases out of stiff card.</p>
+      <p>He tried pairing like with like, A with A, G with G. It bulged. A colleague, Jerry Donohue, told him the textbooks drew the bases in the wrong form. Watson cut new ones.</p>
+      <p>On the morning of Saturday 28 February he pushed them around his desk and saw it: A with T has exactly the shape of G with C. Two pairs, one width. Five weeks later he and Francis Crick sent their letter to <i>Nature</i>.</p>
+      <h3>What you do here</h3>
+      <p>The pieces in this game are his cut-outs, drawn in the right form. The first ladder is that morning: put pieces together and watch whether the rails stay straight. The rest follows the letter's last line: one chain fixes the other, so a ladder pulled apart can copy itself.</p>
+      <p class="src">Story: Watson, <i>The Double Helix</i> (1968), ch. 26. The letter itself does not mention cardboard.</p>
+    </div>
   </div>
 </section>
 
