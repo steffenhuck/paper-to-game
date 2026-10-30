@@ -90,6 +90,7 @@ h1.title{font-size:48px;line-height:.98;text-align:center;margin:8px 0 4px;text-
 .count{color:var(--cream);text-align:center;font-size:17px;margin:12px 2px 2px;min-height:24px;line-height:1.3}
 .count b{color:var(--gold)}
 .lister{background:var(--ink);color:var(--cream);border:3px solid var(--gold);border-radius:4px;padding:14px 16px;margin:14px 0 4px;font-size:17px}
+.why{background:var(--cream);color:#2a1a0e;border-radius:6px;padding:10px 12px;margin:8px 0;font-size:15px;line-height:1.4}
 .lister .who{font-family:var(--display);color:var(--gold);text-transform:uppercase;font-size:14px;letter-spacing:.06em;margin-bottom:4px}
 /* text screens */
 .textcard{background:var(--cream);border:3px solid var(--ink);border-radius:4px;padding:16px;margin:12px 0}
@@ -113,9 +114,9 @@ h1.title{font-size:48px;line-height:.98;text-align:center;margin:8px 0 4px;text-
   <div class="bill">
     <div class="banner">The Great Lister's challenge</div>
     <h1 class="title">Not in<br>the Book</h1>
-    <p>The Great Lister keeps an <b>endless book</b>. On every line, an endless row of two letters, <b>m</b> and <b>w</b>. He says every row you could ever write is in his book, somewhere.</p>
-    <p class="aimline">Write a row of m's and w's that is not in the Lister's book.</p>
-    <p class="small">Three rounds, about three minutes. Built from Georg Cantor's paper of 1891.</p>
+    <p>The Great Lister has a book that never ends. Every line of it is a row of two letters, <b>m</b> and <b>w</b>, and the rows never end either. He says: <i>whatever row you write, I already have it in my book. Somewhere.</i></p>
+    <p class="aimline">Write a row of m's and w's that is not in his book.</p>
+    <p class="small">Three short rounds. Built from Georg Cantor's paper of 1891.</p>
     <button class="ticket" id="btn-start">Start</button>
     <button class="ticket quiet" data-go="help">How to play</button>
     <button class="ticket quiet" data-go="about">About the paper</button>
@@ -144,11 +145,12 @@ h1.title{font-size:48px;line-height:.98;text-align:center;margin:8px 0 4px;text-
   <div class="stripes"></div>
   <div class="bill">
     <div class="banner">Cantor's bargain, 1891</div>
-    <p>You do not have to strike them all at once.</p>
-    <p><b>Deal with row 1 using your 1st letter. Row 2 using your 2nd. Row 3 using your 3rd.</b> And so on. Every row is struck by the time you pass its number, and the book being endless no longer matters.</p>
-    <p>The Lister agrees, on one condition: he writes each row only when you reach it, so he can copy what you have written so far.</p>
+    <p>You cannot strike out all the rows at once. So stop trying.</p>
+    <p>Take them one at a time. <b>Your 1st letter deals with row 1. Your 2nd letter deals with row 2. Your 3rd with row 3.</b> And so on. Then every row is struck out by the time you reach its number, and it no longer matters how many rows there are: you never have to be finished.</p>
+    <p>How? Look at row 1's 1st letter and write the other one. Row 1 is struck out. Look at row 2's 2nd letter and write the other one. Row 2 is struck out. The letters you have to look at run in a line from corner to corner. We colour that line teal.</p>
+    <p>The Lister agrees, on one condition: he writes each row only when you get to it, so he can copy what you have written so far. He thinks that will save him.</p>
     <div class="rule"><div class="cell">m</div><div class="arrow">→</div><div class="cell w">w</div><div style="width:18px"></div><div class="cell w">w</div><div class="arrow">→</div><div class="cell">m</div></div>
-    <p class="small" style="text-align:center">On the teal line, the letter in row u at position u. Your letter u decides whether row u is struck.</p>
+    <p class="small" style="text-align:center">The letter on the teal line → you write the other one.</p>
     <button class="ticket" id="btn-r3">Try it</button>
   </div>
   <div class="stripes"></div>
@@ -166,7 +168,7 @@ h1.title{font-size:48px;line-height:.98;text-align:center;margin:8px 0 4px;text-
   </div>
   <div class="bill">
     <div class="banner">The Lister's last try</div>
-    <p id="lasttry-text">He puts your row into the book as row 1 and moves every other row down one. Watch the rule run on its own.</p>
+    <p id="lasttry-text">The Lister tries once more. He puts your row into his book as row 1 and moves every other row down one. "Now it is in the book," he says. Watch the rule run on its own.</p>
     <div class="endbook" id="endbook" style="position:relative"></div>
     <div class="band wide" id="endband"></div>
     <p id="lasttry-result" style="min-height:24px;font-weight:700"></p>
@@ -185,15 +187,15 @@ h1.title{font-size:48px;line-height:.98;text-align:center;margin:8px 0 4px;text-
   <div class="textcard">
     <h2>How to play</h2>
     <p class="aimline" style="margin-top:6px">Write a row of m's and w's that is not in the Lister's book.</p>
-    <p>The Lister's book is a list of rows. Each row is an endless string of two letters, <b>m</b> and <b>w</b>; the page shows the first six or ten letters of each. You write your own row underneath, one letter at a time, by tapping the <b>m</b> ticket or the <b>w</b> ticket. Each tap fills the next empty cell of your row.</p>
-    <h3>Striking a row</h3>
-    <p>A row in the book <b>agrees</b> with you while every letter you have written matches its letter in the same place. The moment one of your letters differs from a row's letter in that place, the row is <b>struck</b>: it greys out, a line runs through it, and the letter that did it is ringed. A struck row cannot be your row. Your row is "not in the book" when every row is struck.</p>
+    <p>The Lister's book is a list of rows. Every row is made of two letters, <b>m</b> and <b>w</b>, and goes on for ever; the page shows the first six or ten letters of each. Your own row is the gold band underneath. Tap the <b>m</b> ticket or the <b>w</b> ticket to write your next letter.</p>
+    <h3>Striking out a row</h3>
+    <p>A row <b>matches you</b> while every letter you have written is the same as its letter in the same place. The moment one of your letters is different from the row's letter in that place, the row is <b>struck out</b>: it greys out, a line runs through it, and the letter that did it gets a ring. A struck-out row cannot be your row. Your row is "not in the book" once every row is struck out.</p>
     <h3>Round 1: the small book</h3>
-    <p>Five rows, six letters each. Strike all five before your six letters run out. Think about which letter strikes more of the rows still agreeing with you.</p>
+    <p>Five rows, six letters each. Strike out all five before your six letters run out. Tip: look at the rows that still match you, and pick the letter that strikes out more of them.</p>
     <h3>Round 2: the endless book</h3>
-    <p>Same game, but the book has no end. Whenever you strike rows, the Lister turns to rows further down that still agree with you. You write all six letters of your row; then he has a word.</p>
+    <p>The same game, but the book never ends. Every time you strike out rows, the Lister turns to rows further down that still match you. Write all six letters; then he has a word. Nobody wins this round. That is the point.</p>
     <h3>Round 3: Cantor's bargain</h3>
-    <p>Ten rows, ten letters, a teal line down the diagonal. Strike row 1 with your 1st letter, row 2 with your 2nd, and so on. The Lister writes each row only when you reach it, copying what you have written so far, so the only letter that can strike row u on time is the one on the line. A row you fail to strike on its number <b>slips</b>; it stays in the book until a later letter strikes it, if one does.</p>
+    <p>Ten rows, ten letters, a teal line from corner to corner. Your 1st letter deals with row 1, your 2nd with row 2, and so on: look at the letter on the teal line and write the other one. The Lister writes each row only when you reach it, copying what you have written so far, so the letter on the line is the only one that can strike the row out in time. If you write the same letter instead, the row <b>slips</b>: it stays in the book, still matching you, unless a later letter happens to strike it out.</p>
     <h3>The end</h3>
     <p>You see what your row proves, and the Lister gets one last try.</p>
     <button class="ticket" id="btn-help-back">Back</button>
@@ -278,13 +280,13 @@ const plural = (n, w) => n + ' ' + w + (n === 1 ? '' : 's');
 function startRound1(){
   G.round = 1; G.r1.yours = [];
   $('#roundname').textContent = 'Round 1: the small book';
-  $('#orient').innerHTML = 'Five rows, six letters each. Tap <b>m</b> or <b>w</b> to write your row. Each letter <b>strikes</b> every row that disagrees with it in that place. Strike all five within six letters.';
+  $('#orient').innerHTML = 'His small book: five rows, six letters each. Tap <b>m</b> or <b>w</b> to write your row, one letter at a time. Every letter you write <b>strikes out</b> every row that has a different letter in that place. Strike out all five.';
   $('#page').className = 'page'; $('#torn').style.display = 'none';
   setCellSize(C.R1_WIDTH, C.R1_ROWS);
   const page = $('#page'); page.innerHTML = '';
   G.r1.rows.forEach((r, i) => page.appendChild(rowEl(i+1, r, {dots:true})));
   renderBand(C.R1_WIDTH, []);
-  count('5 rows. None struck yet.');
+  count('5 rows. None struck out yet.');
   after(''); setControls(true);
   show('play');
 }
@@ -295,14 +297,14 @@ function tapRound1(c){
   const rows = $('#page').querySelectorAll('.row');
   st.struck.forEach((s, i) => { if (s >= 0) markStruck(rows[i], s); });
   const struckN = st.struck.filter(s => s >= 0).length;
-  if (!st.done) { count(`<b>${plural(struckN,'row')} struck</b> · ${st.alive} still agree${st.alive===1?'s':''} with you`); return; }
+  if (!st.done) { count(`<b>${plural(struckN,'row')} struck out</b> · ${st.alive} still match${st.alive===1?'es':''} you`); return; }
   setControls(false);
   if (st.won) {
-    count(`<b>All five struck</b> in ${plural(st.letters,'letter')}. Your row is not in the small book.`);
-    after(`<div class="lister"><div class="who">The Great Lister</div>Five rows? Child's play. My real book has no end. Whatever you write, I have it further down.</div><button class="ticket" id="btn-r2">Next: the endless book</button>`);
+    count(`<b>All five struck out</b>, in ${plural(st.letters,'letter')}. Your row is not in the small book.`);
+    after(`<div class="lister"><div class="who">The Great Lister</div>Five rows? Child's play. My real book never ends. Whatever you write, I have it further down.</div><button class="ticket" id="btn-r2">Next: the endless book</button>`);
   } else {
-    count(`<b>Row ${st.caughtBy+1} is your row.</b> Six letters, and it agrees with you in every one. The Lister has it.`);
-    after(`<div class="lister"><div class="who">The Great Lister</div>You see? And that was my small book. My real book has no end. Whatever you write, I have it.</div><button class="ticket" id="btn-r2">Next: the endless book</button>`);
+    count(`<b>Row ${st.caughtBy+1} is your row.</b> All six letters the same. The Lister has it.`);
+    after(`<div class="lister"><div class="who">The Great Lister</div>You see? And that was only my small book. My real book never ends. Whatever you write, I have it.</div><button class="ticket" id="btn-r2">Next: the endless book</button>`);
   }
   $('#btn-r2').addEventListener('click', startRound2);
 }
@@ -312,13 +314,13 @@ function startRound2(){
   G.round = 2; G.r2 = { book: Mechanism.makeEndlessBook(seed), st: null };
   G.r2.st = Mechanism.round2Start(G.r2.book);
   $('#roundname').textContent = 'Round 2: the endless book';
-  $('#orient').innerHTML = 'The same game on the endless book: <b>strike them all</b>. Rows run on past the bottom of the page, for ever.';
+  $('#orient').innerHTML = 'Now his real book. Same game: <b>strike them all out</b>. But the rows go on below the page, for ever.';
   $('#page').className = 'page torn'; $('#torn').style.display = '';
   setCellSize(C.R2_WIDTH, C.R2_WINDOW);
   const page = $('#page'); page.innerHTML = '';
   G.r2.st.page.forEach(p => page.appendChild(rowEl(p.n, p.row, {dots:true})));
   renderBand(C.R2_WIDTH, []);
-  count('Rows 1 to 9 of endlessly many. None struck yet.');
+  count('Rows 1 to 9. Below them, rows without end. None struck out yet.');
   after(''); setControls(true);
   show('play');
 }
@@ -331,7 +333,7 @@ function tapRound2(c){
   prev.page.forEach((p, i) => { if (st.struckAt[i] >= 0) markStruck(els[i], st.struckAt[i]); });
   G.busy = true; setControls(false);
   const arrivedFrom = st.arrived[0], arrivedTo = st.arrived[st.arrived.length-1];
-  count(`<b>${plural(st.struckNow.length,'row')} struck</b> · the Lister turns to rows ${arrivedFrom} to ${arrivedTo}, which agree with you`);
+  count(`<b>${plural(st.struckNow.length,'row')} struck out</b> · the Lister turns to rows ${arrivedFrom} to ${arrivedTo}, which still match you`);
   setTimeout(() => {
     els.forEach((el, i) => { if (st.struckAt[i] >= 0) el.classList.add('leaving'); });
     setTimeout(() => {
@@ -339,11 +341,11 @@ function tapRound2(c){
       st.page.forEach(p => { if (st.arrived.indexOf(p.n) >= 0) { const r = rowEl(p.n, p.row, {dots:true}); r.classList.add('arriving'); page.appendChild(r); } });
       G.busy = false;
       if (!st.done) {
-        count(`<b>${st.struckTotal} struck so far</b> · still agreeing with you: all of these, and endlessly more`);
+        count(`<b>${st.struckTotal} struck out so far</b> · but every row on this page still matches you, and endlessly more below`);
         setControls(true);
       } else {
-        count(`<b>${st.struckTotal} rows struck</b>, and your row is complete. Still agreeing with you in all six letters: the nine on this page, and endlessly more.`);
-        after(`<div class="lister"><div class="who">The Great Lister</div>Strike as many as you like. For every row you strike I have a thousand further down that agree with you. You will never strike them all.</div><button class="ticket" id="btn-bargain">Hear Cantor's bargain</button>`);
+        count(`<b>You cannot win this round. Nobody can.</b> ${st.struckTotal} rows struck out, your row complete, and nine rows on this page still match it letter for letter.`);
+        after(`<div class="why"><b>Why not?</b> Your row has six letters. Whatever six letters you write, the Lister has rows with exactly those letters: not one, but endlessly many, because his book never runs out of pages. Striking out the rows you can see only brings up the ones you couldn't. No seventh letter, or seventieth, would ever finish the job.</div><div class="lister"><div class="who">The Great Lister</div>Strike out as many as you like. For every row you strike, I have a thousand further down that match you. You will never strike them all.</div><button class="ticket" id="btn-bargain">There is a trick: Cantor's bargain</button>`);
         $('#btn-bargain').addEventListener('click', () => show('bargain'));
       }
     }, 480);
@@ -355,7 +357,7 @@ function startRound3(){
   G.round = 3; G.r3 = { lister: Mechanism.makeLister3(seed), st: null };
   G.r3.st = Mechanism.round3Start(G.r3.lister);
   $('#roundname').textContent = "Round 3: Cantor's bargain";
-  $('#orient').innerHTML = 'Ten rows, ten letters. <b>Strike each row on the teal line</b>: row 1 with your 1st letter, row 2 with your 2nd, and so on. The Lister writes each row only when you reach it.';
+  $('#orient').innerHTML = 'Ten rows, ten letters. Your 1st letter deals with row 1, your 2nd with row 2, and so on. <b>Look at the letter on the teal line and write the other one.</b> The Lister writes each row only when you reach it.';
   $('#page').className = 'page lined'; $('#torn').style.display = 'none';
   setCellSize(C.R3_ROWS, C.R3_ROWS);
   const page = $('#page'); page.innerHTML = '';
@@ -365,7 +367,7 @@ function startRound3(){
     page.appendChild(r);
   }
   renderBand(C.R3_ROWS, []);
-  count('Row 1 is written. Its letter on the line is <b>' + G.r3.st.rows[0][0] + '</b>. Strike it with your 1st letter.');
+  count('Row 1 is written. Its letter on the teal line is <b>' + G.r3.st.rows[0][0] + '</b>. Write the other one.');
   after(''); setControls(true);
   show('play');
 }
@@ -388,14 +390,15 @@ function tapRound3(c){
   }
   const slippedN = st.slipped.length;
   if (!st.done) {
-    const line = st.slippedNow ? `<b>Row ${u+1} slipped past its number</b>, still agreeing with you.` : `<b>Row ${u+1} struck on its number.</b>`;
-    count(`${line} The Lister writes row ${u+2}, copying your ${plural(u+1,'letter')}${u+1 < 3 ? '' : '…'}`);
+    const line = st.slippedNow ? `<b>Row ${u+1} slipped past its number.</b> It still matches you.` : `<b>Row ${u+1} struck out, right on its number.</b>`;
+    const hint = u+1 < 3 ? ` Its letter on the teal line is <b>${st.rows[u+1][u+1]}</b>.` : ' Look at the teal line.';
+    count(`${line} The Lister writes row ${u+2}, copying your ${plural(u+1,'letter')} first.${hint}`);
     return;
   }
   setControls(false);
   const alive = st.struck.filter(s => s < 0).length;
-  if (slippedN === 0) count('<b>Ten rows, each struck on its own number.</b> None slipped.');
-  else count(`<b>${plural(slippedN,'row')} slipped past ${slippedN===1?'its':'their'} number</b> (row${slippedN>1?'s':''} ${st.slipped.map(i=>i+1).join(', ')}).${alive ? ` ${plural(alive,'row')} still agree${alive===1?'s':''} with you.` : ' Later letters struck them anyway.'}`);
+  if (slippedN === 0) count('<b>Ten rows, each struck out on its own number.</b> None slipped.');
+  else count(`<b>${plural(slippedN,'row')} slipped past ${slippedN===1?'its':'their'} number</b> (row${slippedN>1?'s':''} ${st.slipped.map(i=>i+1).join(', ')}).${alive ? ` ${plural(alive,'row')} still match${alive===1?'es':''} you.` : ' Later letters struck them out anyway.'}`);
   after(`<button class="ticket" id="btn-end">See the verdict</button>`);
   $('#btn-end').addEventListener('click', showEnd);
 }
@@ -413,13 +416,13 @@ function showEnd(){
   const r1 = G.r1.st, r3 = G.r3.st;
   const key = Mechanism.verdictKey(r1, r3);
   const n = C.R3_ROWS;
-  let v1 = `You wrote a row the Lister's book does not contain, and you can prove it: row 1 differs from yours at letter 1, row 2 at letter 2, row 3 at letter 3, and so on for ever.`;
+  let v1 = `You wrote a row that is not in the Lister's book, and you can prove it. Row 1 is different from yours at letter 1. Row 2 at letter 2. Row 3 at letter 3. And so on, for ever. No row in the book can be yours.`;
   if (key === 'few_slipped' || key === 'many_slipped') {
     const k = r3.slipped.length;
-    v1 = `${k === 1 ? 'One row' : plural(k,'row')} slipped past ${k===1?'its':'their'} own number still agreeing with you, so your row is not yet a proof. Cantor's rule lets none slip: at letter u, look at row u's letter u and write the other one. Every row then differs from yours by the time you pass it.`;
+    v1 = `${k === 1 ? 'One row' : plural(k,'row')} slipped past ${k===1?'its':'their'} own number and still matched you, so your row does not prove it yet. Cantor's rule never lets a row slip: at every letter, look at the teal line and write the other one. Then every row is different from yours by the time you pass it.`;
   }
   $('#verdict-1').textContent = v1;
-  $('#verdict-2').innerHTML = `That is <b>Cantor's argument of 1891</b>. However the endless book is written, this one rule writes a row it misses. So no endless list of such rows is ever complete: there are <b>more rows than there are whole numbers</b> to number them with. Some infinities are bigger than others.`;
+  $('#verdict-2').innerHTML = `That is <b>Cantor's argument of 1891</b>. However the endless book is written, and however long it is, this one rule writes a row that is missing from it. So the book can never be complete. Its lines are numbered 1, 2, 3 and on for ever, and still there are <b>more rows than there are numbers</b>. Some infinities are bigger than others.`;
   $('#verdict-3').innerHTML = key === 'clean_after_r1_loss' ? `<span class="small">In round 1 a row of the small book caught you; in round 3 none did. The rule is what changed.</span>` : '';
   $('#end-banner').textContent = (key === 'clean' || key === 'clean_after_r1_loss') ? 'The verdict' : 'The verdict, with a note';
   // last try
@@ -446,7 +449,7 @@ $('#btn-rerun').addEventListener('click', () => {
     yours.push(added.e0[v]);
     renderBand(n, yours, $('#endband'), 'New row');
     markStruck(rows[v], v);
-    $('#lasttry-result').textContent = `Row ${v+1}: ${added.rows[v][v]} on the line, so you write ${added.e0[v]}.`;
+    $('#lasttry-result').textContent = `Row ${v+1}: ${added.rows[v][v]} on the line, so the rule writes ${added.e0[v]}.`;
     v++; setTimeout(step, 420);
   })();
 });
