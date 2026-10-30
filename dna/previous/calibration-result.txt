@@ -1,0 +1,53 @@
+== The pairing (p. 737) ==
+PASS of 16 ordered pairs exactly A-T, T-A, G-C, C-G hold: AT CG GC TA
+PASS every pair that holds is one purine and one pyrimidine
+PASS the partner, found by trying all four, is unique: A-T, G-C
+PASS two purines are too wide
+PASS two pyrimidines are too narrow
+PASS A-C has the right width but its ends do not grip (clash)
+PASS G-T has the right width but its ends do not grip (clash)
+== Both constraints are needed (robustness of the discovery to the toy) ==
+PASS width alone allows 8 ordered pairs (any purine with any pyrimidine): AT AC GT GC TA TG CA CG
+PASS grip alone allows 8 ordered pairs: AG AT GA GC TA TC CG CT
+PASS the same two pairs, for every choice of lengths with purine longer than pyrimidine and the gap = their sum (P 2..9)
+PASS with G and T in enol forms the pairing changes (nothing holds): the result rests on the keto assumption, as the paper states
+== One chain fixes the other; the sequence is unrestricted; Chargaff (p. 737) ==
+PASS for every given piece in 1000 games, exactly one piece completes the rung
+PASS every fully held ladder in 1000 games has exactly A = T and G = C ("very close to unity" in real DNA)
+PASS yet the share of A among purines varies freely across ladders (0.00 to 0.90): the sequence is not restricted
+PASS a ladder with a wrong rung (A-C) need not satisfy A = T
+== Copying ==
+PASS for 500 sequences, each half templating its partner gives two copies identical to the parent
+PASS a missed spot and a wrong piece are counted and break the copy
+PASS the fork speeds up from first to last rung
+== Helix numbers (p. 737) ==
+PASS 360 / 36 = 10 residues per turn
+PASS 10 x 3.4 A = 34 A repeat
+PASS the drawing repeats after 10 rungs, 34 A up
+PASS ladder 2 is one full turn
+== The draw over 300 seeds ==
+PASS ladder 1 always shows all four letters
+PASS ladder 2 always has at least 3 given pieces on each rail
+PASS ladder 2 always ends with unequal A and G
+PASS 300 seeds give 300 different games
+== Heuristic players, 300 games each (share of ladder rungs that hold) ==
+strategy | rungs held | ladder 2 fully held
+random piece | 25% | 0%
+like with like | 0% | 0%
+width only (any opposite length) | 50% | 0%
+grip only (any matching ends) | 51% | 0%
+the rule | 100% | 100%
+PASS only the rule holds everywhere; each half-rule holds about half the rungs
+
+27 passed, 0 failed
+PASS the model on the desk: on 200 seeds exactly 5 like-with-like faults and 2 clashes, the rest held; mended by the rule it holds throughout
+PASS grandchildren: one clashing slip in the copy gives exactly one changed rung in the next generation, and every grandchild rung holds
+PASS grandchildren: a perfect copy breeds a perfect copy
+PASS of the three ways to pair the letters, only A-T with G-C fits every jar (worst gap 1.6 points)
+PASS the other two pairings miss by at least 10 points somewhere (AG/TC 20.8, AC/GT 20.3)
+PASS the gut bacterium alone fits every pairing: one jar is not enough (the decoy)
+PASS each of the other three jars alone rules out both wrong pairings
+PASS in every jar A/T and G/C are within 10% of one ("very close to unity", p. 737)
+PASS each jar sums to 100% within rounding
+
+(appended) 36 passed, 0 failed

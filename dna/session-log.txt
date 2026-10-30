@@ -1,19 +1,16 @@
 START aim: Build the other chain so every rung holds when you zip it.
   [screenshot-start.png] scrollWidth 380
-ladder on: true | LADDER 1 OF 2 · 6 RUNGS
+ladder on: true | LADDER 1 OF 2 · 8 RUNGS
   [screenshot-l1-empty.png] scrollWidth 380
-  jars: A / C / G / T / HUMAN / A / C / G / T / GUT BACTERIUM / A / C / G / T / YEAST / A / C / G / T / TB BACTERIUM | ladder 1 pinned: 6 OF 6 FILLED | zip enabled: true
-  [screenshot-l1-built.png] scrollWidth 380
+  took back rung 2; filled: 2 OF 8 FILLED
+  ladder 1 pinned: G G G T T C C C | zip enabled: true
+  [screenshot-l1-pinned.png] scrollWidth 380
   [screenshot-l1-zipping.png] scrollWidth 380
-  5 of 6 rungs held. | 1 too wide: two long pieces. The pieces are face up now: look at their lengths and their ends. | The jars pair A with T and G with C: in every creature there is as much of one as of the other. The cardboard says why: a long piece needs a short one, and a bump needs a dent. Only those two pairs do both.
+  3 of 8 rungs held. | 2 too wide: two long pieces; 3 too narrow: two short pieces. | Those are the letters in your ladder. In real DNA, from any creature, there is always as much A as T and as much G as C. Nobody knew why. Yours doesn't, yet.
   [screenshot-l1-zipped.png] scrollWidth 380
-ladder 2: LADDER 2 OF 2 · THE MODEL ON THE DESK | Someone has already built this one, pairing like with like. Zip it and see.
-  [screenshot-l2-desk.png] scrollWidth 380
-  as found: 3 of 10 rungs held. | 3 too wide: two long pieces; 2 too narrow: two short pieces; 2 with the right width, but a bump hit a bump. | This is the model Watson built first, in February 1953: like paired with like. The rails bulge where two long pieces meet and pinch where two short ones do. Tap a rung to swap its loose piece.
-  [screenshot-l2-asfound.png] scrollWidth 380
-  mending: Tap a rung that failed, then pick its new piece from the tray. Zip again when you are ready.
-  [screenshot-l2-mended-pinned.png] scrollWidth 380
-  mended: Every rung held. | The blue rails run straight all the way down, and every end grips. | Every rung holds, and A matches T, G matches C, though the amounts of A and G differ: any order of pieces on one rail is allowed, and the other rail is then forced.
+ladder 2: LADDER 2 OF 2 · 10 RUNGS | Now the given pieces are on both rails. Fill every empty spot, left or right. Same rule.
+  [screenshot-l2-pinned.png] scrollWidth 380
+  9 of 10 rungs held. | 1 with the right width, but a bump hit a bump. | Where every rung holds, A always matches T and G matches C, whatever the order of pieces on one rail. That is why real DNA does.
   [screenshot-l2-zipped.png] scrollWidth 380
 copy on: true
   [screenshot-copy-ready.png] scrollWidth 380
@@ -21,19 +18,17 @@ copy on: true
   back on copy: true
   [screenshot-copy-mid.png] scrollWidth 380
   waiting out rung 7
-  Most of the new pieces right. | Where you were right, the copy matches the first ladder letter for letter; where you missed or slipped, it doesn't. Each half told you what was needed.
+  17 of 20 new pieces right. | Where you were right, the copy matches the first ladder letter for letter; where you missed or slipped, it doesn't. Each half told you what was needed.
   [screenshot-copy-done.png] scrollWidth 380
-  grandchildren: 1 rung changed for good. | Every rung holds. The chains rebuilt their partners by the rule, and the rule does not know which letter was supposed to be there: a slip, once copied, breeds true. In red, the rungs that differ from the ladder you built.
-  [screenshot-grandchildren.png] scrollWidth 380
   [screenshot-end-twisting.png] scrollWidth 380
 END on: true
-VERDICT: Your first ladder held all but one rung. The jars said it all along: A always comes with as much T, and G with as much C. The cardboard shows why: a long piece needs a short one, and the ends must grip: a bump needs a dent. Only A with T and G with C. Then you mended the model on the desk. / Then you pulled the ladder apart and each half rebuilt the other. Your copies got most new pieces right; the fork passed 2 empty spots. Copied again, without you, the grandchildren hold on every rung, and 1 rung of them differ from the ladder you built: a slip, once copied, breeds true. / Watson built his first model with like paired to like. Most of it was wrong; a colleague told him the textbooks had drawn the shapes of the pieces wrongly, and he rebuilt it in a morning. / Watson and Crick, 1953: one chain fixes the other. That is why DNA always holds as much A as T and as much G as C, and it "immediately suggests a possible copying mechanism".
-TALLY: Game 1. Ladder 1, from the jars: 5 of 6 rungs held. The model on the desk: mended in 2 zips to 10 of 10. Copy: 17 of 20 new pieces right. Below: your two copies, twisted the way the paper says, a tenth of a turn per rung.
+VERDICT: Your second ladder held all but one rung. Nearly there. The rule: a long piece needs a short one, and a bump needs a dent. Only A with T and G with C. / Then you pulled the ladder apart and each half rebuilt the other. Your two copies got most new pieces right, and the fork passed 2 empty spots. You never had to be told what went where: each half said it. / Watson and Crick, 1953: one chain fixes the other. That is why DNA always holds as much A as T and as much G as C, and it "immediately suggests a possible copying mechanism".
+TALLY: Game 1. Ladder 1: 3 of 8 rungs held. Ladder 2: 9 of 10. Copy: 17 of 20 new pieces right. Below: your two copies, twisted the way the paper says, a tenth of a turn per rung.
   [screenshot-end.png] scrollWidth 380
 about on true
   [screenshot-about.png] scrollWidth 380
 back on end true
   [screenshot-help.png] scrollWidth 380
 new game: start on true game number now 2
-  new ladder 1 given: A A T C G T
+  new ladder 1 given: G C G A G C C T
 errors []

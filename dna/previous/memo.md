@@ -1,0 +1,234 @@
+# Watson's Cardboard (formerly The Other Chain) — design memo
+
+Paper-to-game run of 30 October 2026. One run, no editing in between.
+
+## 1. Paper
+
+J. D. Watson and F. H. C. Crick, "Molecular Structure of Nucleic Acids: A Structure for Deoxyribose Nucleic Acid", *Nature* 171:737–738 (25 April 1953). doi:10.1038/171737a0. Readable at https://www.nature.com/articles/171737a0.
+
+What was available: a scan of the two printed pages (with the figure), read through OCR and by eye. No code, no data; the letter has neither. The few numbers in it (3.4 Å, 36°, 10 residues, 34 Å, 10 Å) were checked against the many published transcriptions of the letter, because the OCR renders 3.4 as "3-4".
+
+## 2. What the paper hands over
+
+**An argument**, primary: a structural model defended by stereochemical reasoning. Two right-handed helical chains about one axis, running in opposite directions; sugar-phosphate backbones outside, bases inside, flat, stacked, joined across in pairs by hydrogen bonds (purine position 1 to pyrimidine position 1, position 6 to position 6). One member of each pair must be a purine and the other a pyrimidine. In the keto forms only adenine–thymine and guanine–cytosine can bond. The sequence along one chain is unrestricted; the other chain is then determined. This explains Chargaff's ratios (A:T and G:C close to one), and "immediately suggests a possible copying mechanism".
+
+**A handful of numbers**, secondary: a residue every 3.4 Å along the axis, 36° between neighbours, so a repeat every 10 residues or 34 Å; phosphorus 10 Å from the axis.
+
+There is no model to port and no estimate to reconstruct. The mechanism will be a **toy** that formalises the argument: card widths and bonding edges.
+
+## 3. The discovery, and its kind
+
+**A mechanism made intelligible**, with a counterintuitive edge. The world's best structural chemist (Pauling) had three chains with the phosphates in the middle; this letter turns the molecule inside out and shows why the inside must be pairs, why only two pairs fit, and why that makes the molecule a copy of itself. The deepest consequence is a single sentence of the paper: once the pairing is fixed, "if the sequence of bases on one chain is given, then the sequence on the other chain is automatically determined". Chargaff's puzzle (equal A and T, equal G and C, in every DNA measured) falls out of it for free.
+
+## 4. The core narrative
+
+A long ladder is made of two rails with rungs between them. Every rung is two pieces, one stuck to each rail, that meet in the middle. There are four kinds of piece: two long and two short, each with bumps and dents on the end. The rails must stay the same distance apart all the way down, and the pieces must grip. So a long piece needs a short piece, and a bump needs a dent. It turns out only two partnerships work. That means if you know the pieces on one rail, you know the other rail without being told. Pull the ladder apart and each half can rebuild the missing half: one ladder becomes two identical ladders. That is how a living thing copies its instructions.
+
+## 5. Who lives in the paper
+
+- **The model builders** (Watson and Crick themselves): control which structure to build, how many chains, what goes inside, which base faces which. Could anticipate: will it hold?
+- **A base** (adenine, say): controls nothing in the cell, but in a toy it "chooses" whom to bond to; payoff is a held bond.
+- **The second chain**: is fully determined by the first, which is the point; as an agent it has no choice once the rule is known.
+- **The rival model** (Pauling's three chains, phosphates inside): can be built and seen to fly apart.
+- **The copying machinery** the last paragraph hints at: given one strand, supply the other. Controls speed and accuracy.
+- **The X-ray experimenters** (Wilkins, Franklin): appear in the acknowledgements and the companion letters, not in this one.
+
+## 6. Precedent
+
+| Game | Position | Format | Feedback device | Chassis |
+|---|---|---|---|---|
+| Einstein's Flower Merchant | agent (dispatcher choosing boosters) | discovery, then a committed order book | two clocks, the race of the light beam | Swiss grid poster (Austere): paper, ink, signal red, light yellow; Archivo; flat square ink buttons |
+| Home Judges | controller (seats a panel) | blind build, then challenge | the fill (two jars of stars) | board game on indigo (Retro): Bungee + Rubik; sticker buttons with hard offset shadow |
+| Ask First | experimenter (the enumerator) | challenge driven by discovery | the note wall | comic strip on sun yellow (Loud): Bangers + Comic Neue; slabs with hard offset shadow |
+
+**What this game does differently.**
+
+- **Position: experimenter as model builder.** The player does what the paper did: builds the structure from cut-out pieces under stereochemical constraints and finds which pairs hold. That is the paper's own method with the paper's own instrument (the model), so the position repeats Ask First's seat; the paper plainly wants it. The other dimensions differ from Ask First and from the other two.
+- **Format: discovery, closed by a real-time copy.** All three formats appear among the last three games, so some overlap is unavoidable; this one shares Einstein's label. Its structure does not: build blind, zip, read the failures, build again, then a timed run in which the learned rule is used as a skill (the copying machine). Neither earlier game had a real-time act.
+- **Device: the rails (one of our own).** The two blue backbone ribbons are the meter. When the zip runs down the ladder they stay straight at a good rung, bow outward at a pair that is too wide, pinch inward at one that is too narrow, and a rung whose ends do not grip shakes loose. Then the letter count (Chargaff's bars) and, at the end, the ladder twisting into the helix. No clocks, jars, notes.
+- **Chassis: a cardboard model kit on a workbench** (Drawn family; the last three were Austere, Retro, Loud). Kraft card, pencil, cut-out cream bases, two blue ribbons. Permanent Marker for display, Courier Prime (typewriter) for text. Buttons are luggage tags. Mid-tone ground after a light, a dark and a yellow one.
+
+## 7. The aim and the verdict
+
+**Aim (the player reads):** *Build the other chain so every rung holds when you zip it.*
+
+The yardstick, per ladder: rungs that held, out of this ladder's rungs, shown on the ladder itself (a held rung is drawn in pencil; a failed one in red) and as one line after the zip. In the copy round: "every new rung right before the fork passes", counted as rungs right out of this copy.
+
+**Verdict, lines the end screen leads with:**
+
+1. What you did, in words: "You found the rule: a long piece needs a short one, and a bump needs a dent. Only A with T and G with C." Or, if they never got there: "The rungs kept failing until the end; the rule is: …"
+2. What you did next: "Then you pulled your ladder apart and each half rebuilt the other: two ladders, the same as the first" (with how close they came, in words: "letter for letter", "all but one rung", "about half").
+3. What the paper says: "Watson and Crick, 1953: one chain fixes the other, which explains why DNA always holds as much A as T and as much G as C, and 'immediately suggests a possible copying mechanism'."
+
+## 8. Three concepts
+
+**A. The Model Kit** (experimenter as model builder; discovery; the pick).
+Controls: tap a cut-out piece from a tray of four to pin it opposite each base of a given chain; ZIP. Before pressing, the player is looking at the ends of the pieces: is this long or short, does this end have a bump where that one has a dent? After: the zip runs, the ribbons bow, pinch or stay straight, ends grip or spring apart, and a count of letters appears. Moment: after the first zip, the player sees exactly which rungs failed and why; the second ladder holds everywhere; the bars show A = T and G = C; then the ladder is pulled apart and the player rebuilds both halves at speed, realising they no longer think at all: each half dictates its partner. Fun: discovery (the rule), anticipation (the zip), mastery (ladder 2 and the copy run), agency (every piece is the player's). Second playthrough: a different chain, and a player who now tries to beat the fork at full speed; honest replay is limited, as for any puzzle whose answer is known.
+
+**B. Three Manuscripts** (dilemma / referee; strategic-flavoured; runner-up).
+The player is the referee at *Nature* in spring 1953 with three models on the desk: Pauling's three chains with phosphates in, Fraser's three chains with phosphates out, and the two-chain model. Each turn the player plays a fact card (the phosphates are charged and repel; the material is a salt; Chargaff's ratios; van der Waals distances; ribose would not fit) against a model; the model either survives or a piece falls off. Deliberation: which fact kills which model, in how few cards. Moment: the two-chain model survives everything, and the Chargaff card, which wounds the others, actually supports it. Fun: anticipation, discovery. Weakness: the paper declines to comment on Fraser's model, so a third of the deck would be invented; the player handles facts, not the molecule.
+
+**C. The Fork** (reckless: subject / agent as the copying machine; no words on the play screen; real time).
+The double helix spins down the screen and unzips; loose bases float in from the sides; the player swipes each one onto the half it belongs to. No instructions beyond the first: "keep up". Errors stay in the copy and are inherited when the copy is copied again; after four generations the player sees their lineage. Thinking before pressing: which of the four belongs here, fast. Moment: the realisation that one half is enough to make the whole. Fun: mastery, agency, real-time tension. Risk: the pairing rule must be known before the first swipe, so it is given, and the discovery that only two pairs fit, the heart of the letter, is gone; the inherited mutations are not in the paper.
+
+## 9. The first five minutes
+
+**Pick, A.**
+
+- 0:00. Kraft card with a pencil-drawn ladder and a blue ribbon on each side. Title in marker: THE OTHER CHAIN. One red line: *Build the other chain so every rung holds when you zip it.* One line under it: "Watson and Crick's 1953 model, in cardboard." I press START.
+- 0:10. Ladder 1. Down the left rail hang eight cut-out pieces with letters: A, G, G, T, A, C… Each sticks halfway to the middle and its end has bumps and dents. The right rail is empty. At the bottom a tray of four pieces: two long (A, G), two short (T, C), ends facing left. One line: "Pick a piece for each empty spot. Long or short, bumps or dents: the ends have to meet in the middle and grip. Nothing is tested until you zip." I wonder whether I already know this (A with T? school?). I press T for the first A, then reach the G and hesitate: G with C, or G with G? The pieces pin to the rail as small tags; they do not slide in yet.
+- 0:50. Full. ZIP is now dark. I press it. A zipper pull runs down the ladder; each new piece slides into the middle. Rung 1 holds: the two ends lock with two pencil strokes, the ribbons stay straight. Rung 3, where I tried G with A: the ribbons bow outward around it, red "TOO WIDE". Rung 5, T with C: they pinch, "TOO NARROW". Rung 6, A with C: width fine, but the bumps hit each other and the piece springs back, red "BUMP ON BUMP". I frown, then grin: there are two separate reasons a rung can fail.
+- 1:20. The line under the ladder: "5 of 8 rungs held." Below, four bars for the letters in my ladder; A and T are not equal. One sentence: "Real DNA always has as much A as T, and as much G as C. Nobody knew why. Yours doesn't, yet." NEXT LADDER.
+- 1:40. Ladder 2, ten rungs, and this time some given pieces are on the right rail, so I fill both sides. I now look at each end before I tap: long needs short; the bump at the top needs a dent at the top. I find myself saying "A goes with T, G goes with C", and check one C to make sure it is not T (both short; the bumps are swapped). I zip: 10 of 10. The ribbons run straight all the way down. The bars: A equals T, G equals C, though there are more Gs than As. "Now it does. Any chain you like on one side; the other side is forced."
+- 2:40. "Now copy it." My own ladder splits down the middle like a zip run backwards. Two half-ladders, each with empty spots. The four pieces become four big tags at the bottom. A fork (a red wedge) starts moving down; each rung it reaches lights up two empty spots, one on each half. I have about two seconds per rung. First rung: I hesitate, then tap. By the fourth I am not thinking; the half tells me what goes there. It speeds up. I miss one.
+- 3:30. Two finished ladders stand side by side, with my original as a ghost behind them: they match it, but for one red rung. They twist, slowly, into two right-handed helices, rungs turning a tenth of a circle each, one full turn every ten rungs. The ribbons are the paper's figure.
+- 3:50. The verdict: what I found, what my copy did, what Watson and Crick wrote, the line that "it has not escaped our notice". I could say the sentence: only two pairs fit, so each chain spells out the other, which is how DNA can copy itself.
+
+**Runner-up, B.**
+
+- 0:00. A desk with three folders; aim "Find the model that survives every fact." Five fact cards in hand.
+- 0:20. I play CHARGED PHOSPHATES on Pauling's model; the phosphates in its middle repel and the model cracks. I grin.
+- 1:00. I play CHARGAFF on the two-chain model, expecting it to hurt; it lights up instead. Interesting.
+- 2:00. Fraser's model: none of my cards obviously kills it, because the paper says almost nothing about it. I frown; the game would have to invent the blow.
+- 3:00. I have chosen among arguments, but never touched the molecule, and I could not say why only A–T and G–C. The discovery is the referee's, not the builder's.
+
+## 10. The pick, and why
+
+**A, The Model Kit.** The player does the thing that made the paper: fits the pieces together until the rungs are all the same width and every end grips, and discovers that the constraint leaves exactly two pairs. Their sentence afterwards contains no "guess": *I built the other chain; only A–T and G–C held; then each half rebuilt the other.* Deliberation is real (two independent tests per piece, read off the ends), commitment is real (nothing is tested until the zip), and the copying act turns the discovery into a skill.
+
+**Author test.** Watson would recognise his cardboard bases on the desk in February 1953 and the moment the A–T and G–C pairs turned out to be the same shape; Crick would recognise the dyad (ladder 2 has given pieces on both rails) and the copying sentence. The colleague who knows the answer still has to read the ends, and still has to beat the fork.
+
+**Runner-up: B, Three Manuscripts.** Switch if the author wants the game to be about the paper's argument against its rivals (Pauling) rather than the structure itself; it would need a version of Fraser's model the paper does not supply.
+
+**What the reckless concept would have given.** C, The Fork, would have put the copying mechanism under the player's thumb with no words at all. Its real-time copying is kept, as the pick's third act; what was given up is the wordless play screen and the inherited-mutation lineage, which the paper does not discuss.
+
+## 11. The shape
+
+Three acts, about four minutes, one session, no retry past the end (a NEW GAME button deals a new chain from a new game number):
+
+1. **Ladder 1** — 8 rungs, the given chain on the left rail. Zip. Rung-by-rung failures named. Letter bars.
+2. **Ladder 2** — 10 rungs (one full turn of the paper's helix), given pieces on both rails. Zip. Letter bars.
+3. **Copy** — ladder 2, as the paper's pairing completes it, is pulled apart; the player rebuilds both halves against a moving fork, 10 rungs, two spots per rung. Then both copies twist into helices.
+4. **Verdict.**
+
+No presets: the paper has one structure. Ladders are drawn from a game number (visible on the start screen). Score: none overall; each act has its count in its own units (rungs held of this ladder; spots right of this copy). The verdict is in words.
+
+## 12. Controls, mechanism, feedback, moment
+
+- **Controls.** Ladders: four piece-tags in a tray; tap one to pin it to the next empty spot (top to bottom); tap a pinned tag to take it back; ZIP when full. Copy: the same four tags, bigger; tap to fill the lit spot.
+- **Mechanism (toy).** Each base is a card of length long (purines A, G) or short (pyrimidines T, C), with a bonding end carrying two contact points, at the paper's position 6 (upper) and position 1 (lower); each point is a bump (hydrogen donor) or a dent (acceptor), in the keto forms. A rung holds when long + short spans the fixed rail gap and both contact points are bump-into-dent. Long + long is too wide, short + short too narrow, bump-on-bump pushes apart, dent-on-dent does not grip.
+- **Feedback.** The rails: straight, bowed, pinched; a rung that clashes shakes and springs back; held contacts drawn as two pencil strokes. After each zip, Chargaff's bars. At the end, the twist into the helix.
+- **Moment.** The second zip: straight ribbons all the way down and equal bars that the player did not aim at. Then the copy: two identical ladders out of one.
+
+## 13. The look
+
+**Register: a cardboard model kit** (Drawn family). It comes from the paper's subject and its making: the structure was found by fitting cut-out models (Watson's cardboard bases, the Cavendish metal kit), and the letter's only figure is a hand drawing of two ribbons and horizontal rods. The game is that desk.
+
+- **Palette:** kraft `#CFAE7C` (the ground); pencil `#2A2621` (all lines and text); card `#F5EDDB` (the cut-out pieces, panels, tags); ribbon blue `#2350C8` (the two backbones, nothing else); fault red `#D23B25` (a failed rung, the aim line, the fork).
+- **Type:** Permanent Marker (Apache 2.0) for titles, letters on the pieces and big counts, as if written with a marker on card; Courier Prime (SIL OFL) regular and bold for text, as if typed on a label. Both embedded.
+- **Buttons:** luggage tags: card-coloured, a 2 px pencil outline, the left end cut at both corners with a punched hole, typewriter capitals, a slight tilt; pressed, they drop 2 px and turn kraft. No offset shadow.
+- **The one visual rule:** blue is the backbone and only the backbone, and the backbone is the meter: whether a rung fits is shown by the two ribbons, never by a tick or a number.
+- **Play screen (ladder), at 380 px:** aim line in red with ? (36 px); the ladder, two ribbons ~230 px apart, 8–10 rungs of 38 px, the pieces drawn at size (long ~125 px, short ~85 px) with their bumps and dents at 10 px; it answers "does this rung fit, and why not?". The tray: four pieces at full size, ends facing the empty side, in a row of two by two; it answers "which piece has the end I need?". ZIP tag. Nothing else on the screen.
+- **Copy screen:** two half-ladders side by side (narrower), the red fork, four big tags (80 × 64 px). It answers "what goes here, now?".
+
+## 14. What is cut
+
+- Pauling's and Fraser's rival models (mentioned in a line and in About; not played).
+- The salt vs free acid argument, cations' access to the phosphates, water content.
+- The ribose argument (an extra oxygen would make too close a contact).
+- The 3D geometry beyond the closing twist: the helix's 36° step and 10-per-turn repeat are drawn there, the 10 Å radius sets the drawing's proportions; antiparallel direction is shown only by the arrows on the ribbons.
+- Tautomers as a choice: the pieces are drawn in the keto forms the paper assumes; the enol alternative is in About.
+- The third hydrogen bond of G–C (found later by Pauling); the game uses the paper's two contacts per pair.
+
+## 15. Divergences
+
+- **Pieces instead of molecules.** Lengths and bump/dent patterns stand for ring size and hydrogen donors/acceptors. The pattern assignments (A: bump at 6, dent at 1; T: dent at 6, bump at 1; G: dent at 6, bump at 1; C: bump at 6, dent at 1) are standard chemistry for the keto forms, not printed in the letter. The lengths are our units; the paper says only that one purine and one pyrimidine are needed.
+- **A flat ladder until the end.** The helix is unrolled so the player can see each rung; it is twisted at the close using the paper's numbers.
+- **The copying.** The letter suggests a copying mechanism and describes none. The game's copy (each half templates a new partner) is the version the paper's sentence most obviously implies and the one Watson and Crick spelled out a month later in *Nature* 171:964; it is flagged in About as beyond this letter.
+- **Clock.** The fork's pace is ours.
+- **Chargaff's ratios.** The paper cites them as "very close to unity"; in the game a perfectly built ladder gives exactly one, because the toy has no measurement error.
+
+## 16. Mechanism kind and claim boundaries
+
+**Toy.** The game runs a model built to illustrate the letter's pairing argument: pieces whose length stands for ring size and whose bumps and dents stand for hydrogen donors and acceptors at the letter's positions 6 and 1.
+
+- **Demonstrates:** that the letter's two conditions together (one purine with one pyrimidine; contacts that match in the keto forms) leave exactly A–T and G–C, so one chain fixes the other, any sequence is allowed on one chain, Chargaff's equalities follow, and each half of a ladder can rebuild the whole.
+- **Assumes:** the pieces (lengths in our units; the donor/acceptor pattern from standard chemistry, not printed in the letter; two contacts per pair as in the letter, though G–C has a third); the ladders, their sequences and the fork.
+- **The paper establishes:** a proposed structure and its pairing argument, "unproved" by the authors' own word; it describes no copying mechanism, only that the pairing suggests one. The game's copy follows Watson and Crick's second 1953 letter (*Nature* 171:964) and is flagged as such on the About screen.
+
+**Which discoveries come from the paper, and which from the rules.** "Only A–T and G–C", "one chain fixes the other", "A = T and G = C whatever the sequence", and "each half rebuilds the whole" follow from the paper's two conditions. The calibration check confirms they do not depend on our length units (every choice with purine longer than pyrimidine gives the same two pairs) and that each condition alone would leave eight ordered pairs, so the discovery rests on the conjunction the paper states. It does depend on the keto assumption, which the paper states too: under a crude enol variant the pairing changes. The fork's speed, the score in the copy, and the ladders' sizes are game mechanics and are not presented as findings.
+
+## 17. Calibration plan
+
+`calibration.js` checks mechanism.js against the letter:
+
+1. Of 16 ordered pairs exactly A–T, T–A, G–C, C–G hold; each is purine + pyrimidine; the partner found by search is unique.
+2. Purine + purine too wide, pyrimidine + pyrimidine too narrow, A–C and G–T fail on contacts.
+3. Robustness: width alone and contacts alone each allow 8; any lengths with P > Y (P = 2..9) give the same two pairs; the enol variant changes the pairing.
+4. Over 1000 drawn games: every given piece has exactly one partner; every fully held ladder has A = T, G = C exactly; the share of A among purines ranges over 0 to 1 (sequence unrestricted); a wrong rung can break A = T.
+5. Copying over 500 sequences: both copies equal the parent; misses and slips are counted.
+6. Helix numbers: 360/36 = 10, 10 × 3.4 = 34, the drawing repeats after 10 rungs; ladder 2 is one turn.
+7. The draw over 300 seeds: all four letters in ladder 1; at least 3 given pieces on each rail in ladder 2; unequal A and G in ladder 2; 300 distinct games.
+8. Heuristic players (build.md §3).
+
+## 18. Calibration result
+
+27 of 27 checks pass (`calibration-result.txt`). The heuristic players, 300 games each:
+
+| strategy | rungs held | ladder 2 fully held |
+|---|---|---|
+| random piece | 25% | 0% |
+| like with like (Watson's first idea) | 0% | 0% |
+| width only (any opposite length) | 50% | 0% |
+| contacts only (any matching ends) | 51% | 0% |
+| the rule | 100% | 100% |
+
+The spread is wide and one simple rule wins everywhere; that rule is the sentence the player should leave with, and the zip's two kinds of failure (rails bowing or pinching; bump on bump) are the two halves of it. A player who knows only one half holds about half the rungs, which is what makes ladder 1 instructive even for someone who remembers "A with T" from school but not why.
+
+The numbers in the config block come from a scan; 3.4 Å is read as "3-4" by the OCR and was checked against the published transcriptions.
+
+## 19. Build log
+
+- Mechanism first (`mechanism.js`, one CONFIG block, each line tagged to p. 737 or "our choice"); calibration 27/27.
+- Loop on placeholders (`loop.js`, `loop-log.txt`): a first-timer pins A–T from memory, G opposite G, C opposite T; the zip names each failure; the second ladder holds; the copy counts misses and slips. Every action changes something visible; nothing is tested before the zip.
+- Skin: kraft ground, pencil, cream card pieces with rings, two blue ribbons, red only for faults, the aim and the fork; Permanent Marker and Courier Prime embedded; luggage-tag buttons.
+- Screenshot review at 380 px. Fixed: hydrogen-bond strokes drawn at the true meeting point (not the centre); purine rings drawn as a fused hexagon and pentagon; Chargaff bars' letters moved below the bars; copy labels clear of the rails; tray heading shortened; a verdict tier for "all but one rung".
+- Self-review. Aim after the start screen alone: "build the other chain so every rung holds". Discovery from the top of the end screen alone: "only A–T and G–C fit, so one chain spells the other, which is how DNA copies". Looks like no earlier game in the table: the only kraft ground, the only marker/typewriter pair, the only tag buttons.
+- Browser session (`session-test.js`, `session-log.txt`): game 1 at 380 × 760, ladder 1 with a first-timer's choices and a piece taken back, ladder 2 with one slip, help opened mid-copy (the fork pauses) and returned from, a missed rung and a slip in the copy, the verdict, About, a new game. No errors, no horizontal scroll, no decimals on play screens. Session length estimated at 3–5 minutes; not measured with a person.
+
+
+## Revision (30 Oct): Watson's Cardboard
+
+Steffen, playing: in the first ladder it was obvious which pieces would not fit, so the game was trivial; and the screens after the first were one flat sepia background. Decided in discussion, in this order:
+
+- **The pieces lie face down.** In the tray and on the ladder they are plain cards with a letter; their length and ends are shown only as the zip reaches them. The first ladder is therefore a real experiment with nothing known, and the first zip is the discovery the memo described. Once a piece has been seen it stays face up everywhere, so the tray's knowledge grows ladder by ladder.
+- **Ladder one is six rungs**, the free look.
+- **Ladder two is the model on the desk**: it arrives already built, five rungs like with like (too wide or too narrow), two with the right width and clashing ends, three right by accident. The player zips it as found, sees three kinds of failure, then mends it, tapping a rung and swapping its loose piece, and zips again. Diagnosing beats replacing: that is where the edges start to matter. The story (Watson's like-with-like model; Donohue and the textbooks) is told in one sentence after the first zip and in About, declared as history rather than the letter.
+- **No second control.** A form switch (keto/enol) was discussed and rejected as homework: the paper's result is the pairs, the tautomers are why it took a month.
+- **The copy, then the copies copied.** The fork starts slower (3 s a rung) and a passed spot stays empty rather than blocking. Afterwards the two copies are copied again without the player; a slip (a mispaired rung) is rebuilt correctly by the rule and so is inherited, in red, in the grandchildren: "a slip, once copied, breeds true." The letter says nothing about errors; this consequence of its last sentence is ours, and About says so.
+- **The desk.** A sheet of kraft card with a pencil margin and a corner of tape, lying on a darker desk; tape over the top of each rail; the pieces with a cut-out's shadow; the tray as a card box. The start screen shows the ladder face down with a question mark, nothing about the pairs.
+- **Title**: Watson's Cardboard; the file `watsons-cardboard.html`, with `the-other-chain.html` redirecting.
+
+Simulation before building, on ladder one: same-letter pairing fails every rung by width; alphabetical pairing (A–C, G–T) fails every rung by clash; random holds a quarter; the school rule holds all. Each failure kind teaches a different thing, which is why the model on the desk carries all three. Calibration now 30 checks, including: on 200 seeds the desk model has exactly five width faults and two clashes and holds throughout once mended by the rule; one clashing slip in the copy gives exactly one changed rung in the grandchildren, every grandchild rung holding; a perfect copy breeds a perfect copy. Browser session at 380 px: game 1 with a first-timer's ladder one (3 of 6), the desk model as found (3 of 10), mended in one pass (10 of 10), the copy with a miss and a slip (17 of 20), one changed grandchild rung, the verdict; no errors, no horizontal scroll, no decimals.
+
+
+## Revision (30 Oct, later): try it
+
+Steffen, playing the face-down version: the first ladder was pure guessing. With shapes shown it had been a giveaway; with shapes hidden it was a lottery; neither put a decision in front of the player. The cause was shared by every version: pin everything blind, then one zip reveals everything, so the first ladder was a single bet.
+
+**Ladder one is now built one try at a time.** A piece is tested the moment it lands against the given one: the rails bow or pinch, or the ends clash and it springs back, or it holds and locks. A piece that fails goes back to the tray face up, greyed out for that letter. The yardstick is tries against the fewest a careful reasoner needs (`fewestTries` in the mechanism: try unknown candidates in a fixed order, remember what held, let a width fault rule out the ring class; a benchmark of ours, 7–9 for six rungs across seeds). A stranger with no chemistry can reason well: A was too wide against A, so A needs a short one; this short one clashed, so it is the other. The zip survives as the ceremony when every rung holds, with the Chargaff bars, which now always balance, and the line "you have just built the reason".
+
+Ladder two (the model on the desk), the copy and the grandchildren are unchanged. Calibration 31 checks; the session on game 1: a reasoner builds ladder one in 9 tries against a benchmark of 8.
+
+
+## Revision (30 Oct, evening): Chargaff's jars
+
+Steffen, playing the try-it version: ladder one was still too much like pure guessing. The diagnosis behind all three versions (shapes shown, face down, one try at a time) is the same: the player got four unknowns and no evidence, which is not the position Watson and Crick were in. They had three pieces of evidence: a regular helix of fixed width (the X-ray), the hydrogen positions in the keto forms (Donohue), and Chargaff's ratios. The letter cites the last as agreement. The game now hands the player the ratios first and lets the cardboard explain them.
+
+- **Ladder one: read the jars, then commit.** Four jars of DNA sit above the ladder: human, yeast, a gut bacterium (*E. coli*), the TB bacterium. Each is drawn as four bands of sand, one per letter, its height equal to that letter's share, as commonly tabulated from Chargaff's lab (sources and the spread between tables are in the config block and in About). The bands are stacked alphabetically (A, C, G, T), so partners are never neighbours and the player has to compare heights. The pieces stay face down and are pinned without any test; one zip at the end turns them up. So the first zip tests an inference, not a guess, and the moment is that the shapes explain the numbers: "Chargaff measured it; nobody knew why. You have just built the reason."
+- **The decoy.** The gut bacterium has all four letters near a quarter, so it fits any pairing. Each of the other three jars alone rules out both wrong pairings (calibration). A player who looks only at the decoy is back to guessing; a player who reads one more jar is not.
+- **Why not a stated rule instead.** A rule stated up front (an H must face an O or N) would have made ladder one a lookup, which is the "shapes shown" version again.
+- **Removed:** one try at a time, `fewestTries` and the tries benchmark. The yardstick of ladder one is again rungs held out of six.
+- **Claim boundary.** The letter argues from stereochemistry and calls Chargaff's ratios agreement. The game reverses the order, evidence first and explanation after, which is how the history went. About says so.
+
+Calibration: 36 checks. New ones: of the three ways to pair the letters, only A–T with G–C fits every jar (worst gap 1.6 points); the other two miss by about 20; the gut bacterium alone fits all three; every jar has A/T and G/C within 10% of one. The browser session on game 1: a reader of the jars who slips once (G opposite G) gets 5 of 6, sees TOO WIDE, and gets the explanation; the rest of the game is unchanged. No errors, no horizontal scroll, no decimals.

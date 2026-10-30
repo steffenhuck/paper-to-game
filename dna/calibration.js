@@ -1,4 +1,4 @@
-// Calibration check for Watson's Cardboard (formerly The Other Chain) (build step 1). Tests mechanism.js against the claims of Watson & Crick (1953).
+// Calibration check for The Other Chain (build step 1). Tests mechanism.js against the claims of Watson & Crick (1953).
 // Run: node calibration.js > calibration-result.txt
 const M = require('./mechanism.js'), C = M.CONFIG, K = M.KEYS;
 let pass = 0, fail = 0;
@@ -100,28 +100,3 @@ ok(table[4][1] === '100%' && table.slice(0, 4).every(t => parseInt(t[1]) <= 55),
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exitCode = fail ? 1 : 0;
-
-// ---- the model on the desk (ladder 2 arrives built wrongly) and the grandchildren (the copies copied again) ----
-{ let good = true, tries = 0;
-  for (let seed = 1; seed <= 200; seed++) { const g = M.drawGame(seed); const z = M.zip(g.ladder2, g.prefill); tries++;
-    const f = { wide: 0, narrow: 0, clash: 0 }; z.rungs.forEach(r => { if (r.fit.fault) f[r.fit.fault] = (f[r.fit.fault] || 0) + 1; });
-    if (z.held !== z.n - C.LADDER2_LIKE - C.LADDER2_CLASH) good = false;
-    if (f.wide + f.narrow !== C.LADDER2_LIKE || f.clash !== C.LADDER2_CLASH) good = false;
-    if (M.zip(g.ladder2, g.ladder2.map(s => M.partnerOf(s.given))).held !== z.n) good = false; }
-  ok(good, `the model on the desk: on ${tries} seeds exactly ${C.LADDER2_LIKE} like-with-like faults and ${C.LADDER2_CLASH} clashes, the rest held; mended by the rule it holds throughout`); }
-{ const g = M.drawGame(3), full = M.complete(g.ladder2), spots = M.copySpots(full);
-  const entries = spots.map((s, k) => k === 2 ? M.clashPartner(s.template) : M.partnerOf(s.template));
-  const sc = M.scoreCopy(full, entries), gr = M.copyAgain(sc.copies, full);
-  const changed = gr.reduce((n, cp) => n + cp.filter(x => x.changed).length, 0);
-  ok(changed === 1 && gr.every(cp => cp.every(x => x.held)), 'grandchildren: one clashing slip in the copy gives exactly one changed rung in the next generation, and every grandchild rung holds');
-  const sc2 = M.scoreCopy(full, spots.map(s => M.partnerOf(s.template))), gr2 = M.copyAgain(sc2.copies, full);
-  ok(gr2.every(cp => cp.every(x => x.held && !x.changed)), 'grandchildren: a perfect copy breeds a perfect copy'); }
-{ const r = M.readJars(), j = C.JARS;
-  ok(r.filter(x => x.all).length === 1 && r[0].all, 'of the three ways to pair the letters, only A-T with G-C fits every jar (worst gap ' + r[0].worst.toFixed(1) + ' points)');
-  ok(r.slice(1).every(x => x.worst >= 10), 'the other two pairings miss by at least 10 points somewhere (' + r.slice(1).map(x => x.pairing.join('/') + ' ' + x.worst.toFixed(1)).join(', ') + ')');
-  ok(r.every(x => x.fits[1]), 'the gut bacterium alone fits every pairing: one jar is not enough (the decoy)');
-  ok([0, 2, 3].every(k => r.slice(1).every(x => !x.fits[k])), 'each of the other three jars alone rules out both wrong pairings');
-  ok(j.every(x => Math.abs(x.A / x.T - 1) < 0.1 && Math.abs(x.G / x.C - 1) < 0.1), 'in every jar A/T and G/C are within 10% of one ("very close to unity", p. 737)');
-  ok(j.every(x => Math.abs(x.A + x.T + x.G + x.C - 100) < 0.6), 'each jar sums to 100% within rounding'); }
-console.log(`\n(appended) ${pass} passed, ${fail} failed`);
-if (fail) process.exitCode = 1;

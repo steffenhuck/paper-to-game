@@ -1,4 +1,4 @@
-# Watson's Cardboard (formerly The Other Chain) — design memo
+# The Other Chain — design memo
 
 Paper-to-game run of 30 October 2026. One run, no editing in between.
 
@@ -196,39 +196,6 @@ The numbers in the config block come from a scan; 3.4 Å is read as "3-4" by the
 - Self-review. Aim after the start screen alone: "build the other chain so every rung holds". Discovery from the top of the end screen alone: "only A–T and G–C fit, so one chain spells the other, which is how DNA copies". Looks like no earlier game in the table: the only kraft ground, the only marker/typewriter pair, the only tag buttons.
 - Browser session (`session-test.js`, `session-log.txt`): game 1 at 380 × 760, ladder 1 with a first-timer's choices and a piece taken back, ladder 2 with one slip, help opened mid-copy (the fork pauses) and returned from, a missed rung and a slip in the copy, the verdict, About, a new game. No errors, no horizontal scroll, no decimals on play screens. Session length estimated at 3–5 minutes; not measured with a person.
 
+## Revert (30 Oct, evening): back to the first build
 
-## Revision (30 Oct): Watson's Cardboard
-
-Steffen, playing: in the first ladder it was obvious which pieces would not fit, so the game was trivial; and the screens after the first were one flat sepia background. Decided in discussion, in this order:
-
-- **The pieces lie face down.** In the tray and on the ladder they are plain cards with a letter; their length and ends are shown only as the zip reaches them. The first ladder is therefore a real experiment with nothing known, and the first zip is the discovery the memo described. Once a piece has been seen it stays face up everywhere, so the tray's knowledge grows ladder by ladder.
-- **Ladder one is six rungs**, the free look.
-- **Ladder two is the model on the desk**: it arrives already built, five rungs like with like (too wide or too narrow), two with the right width and clashing ends, three right by accident. The player zips it as found, sees three kinds of failure, then mends it, tapping a rung and swapping its loose piece, and zips again. Diagnosing beats replacing: that is where the edges start to matter. The story (Watson's like-with-like model; Donohue and the textbooks) is told in one sentence after the first zip and in About, declared as history rather than the letter.
-- **No second control.** A form switch (keto/enol) was discussed and rejected as homework: the paper's result is the pairs, the tautomers are why it took a month.
-- **The copy, then the copies copied.** The fork starts slower (3 s a rung) and a passed spot stays empty rather than blocking. Afterwards the two copies are copied again without the player; a slip (a mispaired rung) is rebuilt correctly by the rule and so is inherited, in red, in the grandchildren: "a slip, once copied, breeds true." The letter says nothing about errors; this consequence of its last sentence is ours, and About says so.
-- **The desk.** A sheet of kraft card with a pencil margin and a corner of tape, lying on a darker desk; tape over the top of each rail; the pieces with a cut-out's shadow; the tray as a card box. The start screen shows the ladder face down with a question mark, nothing about the pairs.
-- **Title**: Watson's Cardboard; the file `watsons-cardboard.html`, with `the-other-chain.html` redirecting.
-
-Simulation before building, on ladder one: same-letter pairing fails every rung by width; alphabetical pairing (A–C, G–T) fails every rung by clash; random holds a quarter; the school rule holds all. Each failure kind teaches a different thing, which is why the model on the desk carries all three. Calibration now 30 checks, including: on 200 seeds the desk model has exactly five width faults and two clashes and holds throughout once mended by the rule; one clashing slip in the copy gives exactly one changed rung in the grandchildren, every grandchild rung holding; a perfect copy breeds a perfect copy. Browser session at 380 px: game 1 with a first-timer's ladder one (3 of 6), the desk model as found (3 of 10), mended in one pass (10 of 10), the copy with a miss and a slip (17 of 20), one changed grandchild rung, the verdict; no errors, no horizontal scroll, no decimals.
-
-
-## Revision (30 Oct, later): try it
-
-Steffen, playing the face-down version: the first ladder was pure guessing. With shapes shown it had been a giveaway; with shapes hidden it was a lottery; neither put a decision in front of the player. The cause was shared by every version: pin everything blind, then one zip reveals everything, so the first ladder was a single bet.
-
-**Ladder one is now built one try at a time.** A piece is tested the moment it lands against the given one: the rails bow or pinch, or the ends clash and it springs back, or it holds and locks. A piece that fails goes back to the tray face up, greyed out for that letter. The yardstick is tries against the fewest a careful reasoner needs (`fewestTries` in the mechanism: try unknown candidates in a fixed order, remember what held, let a width fault rule out the ring class; a benchmark of ours, 7–9 for six rungs across seeds). A stranger with no chemistry can reason well: A was too wide against A, so A needs a short one; this short one clashed, so it is the other. The zip survives as the ceremony when every rung holds, with the Chargaff bars, which now always balance, and the line "you have just built the reason".
-
-Ladder two (the model on the desk), the copy and the grandchildren are unchanged. Calibration 31 checks; the session on game 1: a reasoner builds ladder one in 9 tries against a benchmark of 8.
-
-
-## Revision (30 Oct, evening): Chargaff's jars
-
-Steffen, playing the try-it version: ladder one was still too much like pure guessing. The diagnosis behind all three versions (shapes shown, face down, one try at a time) is the same: the player got four unknowns and no evidence, which is not the position Watson and Crick were in. They had three pieces of evidence: a regular helix of fixed width (the X-ray), the hydrogen positions in the keto forms (Donohue), and Chargaff's ratios. The letter cites the last as agreement. The game now hands the player the ratios first and lets the cardboard explain them.
-
-- **Ladder one: read the jars, then commit.** Four jars of DNA sit above the ladder: human, yeast, a gut bacterium (*E. coli*), the TB bacterium. Each is drawn as four bands of sand, one per letter, its height equal to that letter's share, as commonly tabulated from Chargaff's lab (sources and the spread between tables are in the config block and in About). The bands are stacked alphabetically (A, C, G, T), so partners are never neighbours and the player has to compare heights. The pieces stay face down and are pinned without any test; one zip at the end turns them up. So the first zip tests an inference, not a guess, and the moment is that the shapes explain the numbers: "Chargaff measured it; nobody knew why. You have just built the reason."
-- **The decoy.** The gut bacterium has all four letters near a quarter, so it fits any pairing. Each of the other three jars alone rules out both wrong pairings (calibration). A player who looks only at the decoy is back to guessing; a player who reads one more jar is not.
-- **Why not a stated rule instead.** A rule stated up front (an H must face an O or N) would have made ladder one a lookup, which is the "shapes shown" version again.
-- **Removed:** one try at a time, `fewestTries` and the tries benchmark. The yardstick of ladder one is again rungs held out of six.
-- **Claim boundary.** The letter argues from stereochemistry and calls Chargaff's ratios agreement. The game reverses the order, evidence first and explanation after, which is how the history went. About says so.
-
-Calibration: 36 checks. New ones: of the three ways to pair the letters, only A–T with G–C fits every jar (worst gap 1.6 points); the other two miss by about 20; the gut bacterium alone fits all three; every jar has A/T and G/C within 10% of one. The browser session on game 1: a reader of the jars who slips once (G opposite G) gets 5 of 6, sees TOO WIDE, and gets the explanation; the rest of the game is unchanged. No errors, no horizontal scroll, no decimals.
+Steffen played all four versions of ladder one: shapes shown with one zip (this build); face down; one try at a time; Chargaff's jars. His verdict: for a player with no background, every later version of the first stage still felt like guessing, and this first version, as built with no further changes, is the best. The game is restored to it byte for byte (rebuilt from this folder's `mechanism.js` and `template.html`; calibration 27/27). The Watson's Cardboard line (the model on the desk, the grandchildren, the jars) lives in `previous/`, its memo with the full revision history in `previous/memo.md`; `watsons-cardboard.html` redirects here. What the detour taught: hiding the shapes does not make the first ladder a decision, and evidence a stranger cannot read is no better than none. Shown shapes give the stranger something to reason with, even if it is easy.

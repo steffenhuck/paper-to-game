@@ -1,0 +1,62 @@
+GAME 1. Aim: Build the other chain so every rung holds when you zip it.
+Ladder 1, given (left rail): C G G A A T T T
+  tap G -> pinned opposite C at rung 1 (as a tag; not tested)
+  tap G -> pinned opposite G at rung 2 (as a tag; not tested)
+  tap G -> pinned opposite G at rung 3 (as a tag; not tested)
+  tap T -> pinned opposite A at rung 4 (as a tag; not tested)
+  tap T -> pinned opposite A at rung 5 (as a tag; not tested)
+  tap C -> pinned opposite T at rung 6 (as a tag; not tested)
+  tap C -> pinned opposite T at rung 7 (as a tag; not tested)
+  tap C -> pinned opposite T at rung 8 (as a tag; not tested)
+ZIP
+  rung 1: C | G  -> HOLDS, ribbons straight
+  rung 2: G | G  -> TOO WIDE, ribbons bow out
+  rung 3: G | G  -> TOO WIDE, ribbons bow out
+  rung 4: A | T  -> HOLDS, ribbons straight
+  rung 5: A | T  -> HOLDS, ribbons straight
+  rung 6: T | C  -> TOO NARROW, ribbons pinch
+  rung 7: T | C  -> TOO NARROW, ribbons pinch
+  rung 8: T | C  -> TOO NARROW, ribbons pinch
+  => 3 of 8 rungs held. Letters A 2 T 5 G 5 C 4; A=T? false, G=C? false
+
+Ladder 2, given: G(L) A(R) T(R) C(L) A(L) T(L) T(L) A(L) C(R) C(L)
+ZIP
+  rung 1: G | C  -> HOLDS, ribbons straight
+  rung 2: T | A  -> HOLDS, ribbons straight
+  rung 3: A | T  -> HOLDS, ribbons straight
+  rung 4: C | G  -> HOLDS, ribbons straight
+  rung 5: A | T  -> HOLDS, ribbons straight
+  rung 6: T | A  -> HOLDS, ribbons straight
+  rung 7: T | A  -> HOLDS, ribbons straight
+  rung 8: A | T  -> HOLDS, ribbons straight
+  rung 9: G | C  -> HOLDS, ribbons straight
+  rung 10: C | G  -> HOLDS, ribbons straight
+  => 10 of 10 rungs held. Letters A 6 T 6 G 4 C 4; A=T? true, G=C? true
+
+COPY: ladder pulled apart; fork reaches 20 spots
+  rung 1 copy 1 (3400 ms): template G -> C
+  rung 1 copy 2 (3400 ms): template C -> G
+  rung 2 copy 1 (3244 ms): template T -> A
+  rung 2 copy 2 (3244 ms): template A -> T
+  rung 3 copy 1 (3089 ms): template A -> T
+  rung 3 copy 2 (3089 ms): template T -> A
+  rung 4 copy 1 (2933 ms): template C -> G
+  rung 4 copy 2 (2933 ms): template G -> C
+  rung 5 copy 1 (2778 ms): template A -> T
+  rung 5 copy 2 (2778 ms): template T -> A
+  rung 6 copy 1 (2622 ms): template T -> A
+  rung 6 copy 2 (2622 ms): template A -> T
+  rung 7 copy 1 (2467 ms): template T -> A
+  rung 7 copy 2 (2467 ms): template A -> MISSED
+  rung 8 copy 1 (2311 ms): template A -> T
+  rung 8 copy 2 (2311 ms): template T -> A
+  rung 9 copy 1 (2156 ms): template G -> C
+  rung 9 copy 2 (2156 ms): template C -> A
+  rung 10 copy 1 (2000 ms): template C -> G
+  rung 10 copy 2 (2000 ms): template G -> C
+  => 18 of 20 right, missed 1; copy 1 same as parent: true, copy 2: false
+
+VERDICT:
+Your first ladder failed in places; your second held all the way down. You found the rule: a long piece needs a short one, and a bump needs a dent. Only A with T and G with C.
+Then you pulled the ladder apart and each half rebuilt the other. Your two copies got all but two new pieces right, and the fork passed 1 empty spot. You never had to be told what went where: each half said it.
+Watson and Crick, 1953: one chain fixes the other. That is why DNA always holds as much A as T and as much G as C, and it "immediately suggests a possible copying mechanism".
