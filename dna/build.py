@@ -1,4 +1,4 @@
-# Generates the-other-chain.html from template.html, mechanism.js (the single source of truth) and the embedded fonts,
+# Generates watsons-cardboard.html (the-other-chain.html redirects to it) from template.html, mechanism.js (the single source of truth) and the embedded fonts,
 # then verifies byte for byte that the embedded mechanism is the file calibration.js ran against.
 import base64, sys
 mech = open('mechanism.js', encoding='utf-8').read()
@@ -7,8 +7,8 @@ about = """
 <h2>What's real here</h2>
 <h3>The game in one line</h3>
 <p>You build the second chain of a DNA ladder from cut-out pieces, zip it to see which rungs hold, then pull it apart and copy it. The rule that decides which rungs hold is Watson and Crick's; the pieces, their lengths, the ladders and the fork are this game's.</p>
-<h3>The title and the cardboard</h3>
-<p>The title is the letter's own consequence: "if the sequence of bases on one chain is given, then the sequence on the other chain is automatically determined." You are given one chain and build the other. The pieces are cardboard because that is how the pairs were found: in February 1953 Watson, short of the metal parts for the Cavendish model kit, cut the four bases out of stiff card and pushed them around his desk until an adenine–thymine pair and a guanine–cytosine pair turned out to be the same shape (Watson, <i>The Double Helix</i>, 1968, ch. 26). The cardboard is history, not the letter, which says only that the structure rests on "published experimental data and stereochemical arguments".</p>
+<h3>The cardboard</h3>
+<p>The pieces are cardboard because that is how the pairs were found: in February 1953 Watson, still waiting for the metal parts of the Cavendish model kit, cut the four bases out of stiff card and pushed them around his desk until an adenine–thymine pair and a guanine–cytosine pair turned out to be the same shape (Watson, <i>The Double Helix</i>, 1968, ch. 26). The cardboard is history, not the letter, which says only that the structure rests on "published experimental data and stereochemical arguments". The aim, to build the other chain, is the letter's own consequence: "if the sequence of bases on one chain is given, then the sequence on the other chain is automatically determined."</p>
 <h3>What the paper found</h3>
 <p>In a one-page letter to <i>Nature</i> in April 1953, James Watson and Francis Crick proposed the structure of DNA. Two chains wind round the same axis, right-handed, running in opposite directions. The sugar-phosphate backbones are on the outside (Linus Pauling's model of a month earlier had three chains with the phosphates in the middle). The bases are inside, flat, and joined across in pairs by hydrogen bonds. One base of each pair must be a purine (adenine or guanine, two rings) and the other a pyrimidine (thymine or cytosine, one ring). Assuming the bases take their most plausible (keto) forms, only adenine with thymine and guanine with cytosine can bond. So the order of bases along one chain is unrestricted, but it fixes the order on the other. That explains why, as Erwin Chargaff had measured, DNA holds as much adenine as thymine and as much guanine as cytosine. And, in the letter's most famous sentence, "It has not escaped our notice that the specific pairing we have postulated immediately suggests a possible copying mechanism for the genetic material." The helix has a base pair every 3.4 Å along the axis, each turned 36° from the last, so it repeats every 10 pairs (34 Å); the phosphates sit 10 Å from the axis. The authors say the model is "roughly compatible" with the X-ray data then published and "must be regarded as unproved" until checked.</p>
 <h3>Mechanism: a toy</h3>
@@ -26,9 +26,10 @@ for k in ['/*__MECHANISM__*/', '/*__ABOUT__*/', '/*__FONT_MARKER__*/', '/*__FONT
     assert t.count(k) == 1, k
 out = (t.replace('/*__FONT_MARKER__*/', font('marker.woff2')).replace('/*__FONT_TYPE_BOLD__*/', font('prime-700.woff2'))
         .replace('/*__FONT_TYPE__*/', font('prime-400.woff2')).replace('/*__ABOUT__*/', about).replace('/*__MECHANISM__*/', mech))
-name = 'the-other-chain.html'
+name = 'watsons-cardboard.html'
 open(name, 'w', encoding='utf-8').write(out)
 built = open(name, encoding='utf-8').read()
 if mech not in built:
     sys.exit('BUILD FAILED: embedded mechanism differs from mechanism.js')
 print(f'built {name}: {len(built)} bytes; mechanism embedded verbatim ({len(mech)} bytes)')
+open('the-other-chain.html', 'w', encoding='utf-8').write('<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=watsons-cardboard.html"><title>Watson\'s Cardboard</title><p>This game is now <a href="watsons-cardboard.html">Watson\'s Cardboard</a>.</p>')

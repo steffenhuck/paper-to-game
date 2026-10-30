@@ -1,4 +1,4 @@
-// Browser session test (build step 6): drives the-other-chain.html at 380 px through a whole game: game number 1,
+// Browser session test (build step 6): drives watsons-cardboard.html at 380 px through a whole game: game number 1,
 // ladder 1 with a first-timer's choices (A-T from school, like-with-like for G, any short piece for T), one piece taken back,
 // ladder 2 with the rule, help opened mid-copy and returned from, the copy with one missed rung and one slip, the verdict,
 // About; then a new game. Run: node session-test.js [outdir] > session-log.txt   (needs playwright)
@@ -7,12 +7,13 @@ const D = (process.argv[2] || __dirname) + '/';
 (async () => {
   const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 380, height: 760 }, deviceScaleFactor: 2 });
   const errs = []; p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
-  await p.goto('file://' + __dirname + '/the-other-chain.html'); await p.waitForTimeout(300);
+  await p.goto('file://' + __dirname + '/watsons-cardboard.html'); await p.waitForTimeout(300);
   const txt = sel => p.$eval(sel, e => e.innerText.replace(/\n+/g, ' / '));
   const on = id => p.$eval(id, e => e.classList.contains('on'));
   const sw = async () => { const w = await p.evaluate(() => document.documentElement.scrollWidth); if (w > 380) errs.push('horizontal scroll ' + w); return w; };
   const shot = async (n, full = true) => { await p.screenshot({ path: D + 'screenshot-' + n + '.png', fullPage: full }); console.log(`  [screenshot-${n}.png] scrollWidth ${await sw()}`); };
   const decimals = async () => { const t = await p.evaluate(() => [...document.querySelectorAll('.screen.on')].filter(s => s.id !== 's-about').map(s => s.innerText).join(' ')); const m = t.match(/\d\.\d/); if (m) errs.push('decimal on screen: ' + m[0]); };
+  console.log('WELCOME: ' + await txt('#s-welcome h1')); await shot('welcome'); await p.click('#b-desk');
   console.log('START aim: ' + await txt('#aim-start')); await shot('start');
   await p.click('#b-start'); console.log('ladder on:', await on('#s-lad'), '|', await txt('#l-kick'));
   await shot('l1-empty');

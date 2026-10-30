@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>The Other Chain</title>
+<title>Watson's Cardboard</title>
 <meta name="description" content="A game from Watson and Crick's 1953 DNA letter: build the other chain from cut-out pieces, find the only two pairs that fit, then pull the ladder apart and copy it.">
 <style>
 @font-face { font-family: 'OC Marker'; src: url(data:font/woff2;base64,/*__FONT_MARKER__*/) format('woff2'); font-weight: 400; }
@@ -62,6 +62,7 @@ b { font-weight: 700; }
 .poster { padding-top: 18px; }
 .poster .kicker { font-weight: 700; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; display: flex; justify-content: space-between; }
 .poster h1 { font-size: 54px; line-height: 0.95; margin: 10px 0 2px; transform: rotate(-1.5deg); }
+.story + .tag { margin-top: 18px; }
 .poster svg { display: block; width: 100%; height: auto; margin: 2px 0 6px; }
 .poster .aimline { font-family: var(--mark); font-size: 22px; line-height: 1.15; color: var(--red); margin: 4px 0 10px; }
 .poster .lede { font-size: 15px; margin-bottom: 14px; }
@@ -142,27 +143,35 @@ svg.lad { display: block; width: 100%; height: auto; touch-action: manipulation;
 <div class="wrap">
 <div class="pencil"></div>
 
-<!-- START -->
-<section class="screen on" id="s-start">
+<!-- WELCOME: the story of the cut-outs -->
+<section class="screen on" id="s-welcome">
   <div class="poster">
     <div class="kicker"><span>Watson &amp; Crick</span><span>Cambridge, 1953</span></div>
-    <h1>The Other Chain</h1>
+    <h1>Watson's Cardboard</h1>
+    <div class="story">
+      <h3>How the pairs were found</h3>
+      <p>Cambridge, February 1953. The workshop had not yet made the metal bases for the model kit, so James Watson cut the four bases of DNA out of stiff card.</p>
+      <p>He tried pairing like with like, A with A, G with G. It bulged. A colleague, Jerry Donohue, told him the textbooks drew the bases in the wrong form. Watson cut new ones.</p>
+      <p>On the morning of Saturday 28 February he pushed them around his desk and saw it: A with T has exactly the shape of G with C. Two pairs, one width. Five weeks later he and Francis Crick sent their letter to <i>Nature</i>.</p>
+      <h3>What you do here</h3>
+      <p>The pieces in this game are his cut-outs, drawn in the right form. One chain is given; you build the other, and watch whether the rails stay straight. That is his morning. Then the letter's last line: one chain fixes the other, so a ladder pulled apart can copy itself.</p>
+      <p class="src">Story: Watson, <i>The Double Helix</i> (1968), ch. 26. The letter itself does not mention cardboard.</p>
+    </div>
+    <button class="tag" id="b-desk"><span>To the desk</span></button>
+  </div>
+</section>
+
+<!-- START: the desk -->
+<section class="screen" id="s-start">
+  <div class="poster">
+    <div class="kicker"><span>Watson's Cardboard</span><span>the desk</span></div>
     <svg id="art" viewBox="0 0 360 170" aria-hidden="true"></svg>
     <div class="aimline" id="aim-start">Build the other chain so every rung holds when you zip it.</div>
-    <p class="lede">Watson's cardboard bases are on your desk (the story is pinned below). One chain is given; build the other. Then pull the ladder apart and copy it.</p>
+    <p class="lede">Two blue rails, his cut-out pieces between them. Some fit, some don't. Then pull the ladder apart and copy it.</p>
     <button class="tag" id="b-start"><span>Start: first ladder</span></button>
     <button class="tag" data-help><span>How to play</span></button>
     <button class="tag" data-about><span>What's real here</span></button>
     <div class="gameno"><label for="seed">Game number</label><input id="seed" inputmode="numeric" value="1"><span>(same number, same chains)</span></div>
-    <div class="story">
-      <h3>How the pairs were found</h3>
-      <p>Cambridge, February 1953. The workshop had not yet made the metal bases for the model kit, so James Watson cut the four bases out of stiff card.</p>
-      <p>He tried pairing like with like, A with A, G with G. It bulged. A colleague, Jerry Donohue, told him the textbooks drew the bases in the wrong form. Watson cut new ones.</p>
-      <p>On the morning of Saturday 28 February he pushed them around his desk and saw it: A with T has exactly the shape of G with C. Two pairs, one width. Five weeks later he and Francis Crick sent their letter to <i>Nature</i>.</p>
-      <h3>What you do here</h3>
-      <p>The pieces in this game are his cut-outs, drawn in the right form. The first ladder is that morning: put pieces together and watch whether the rails stay straight. The rest follows the letter's last line: one chain fixes the other, so a ladder pulled apart can copy itself.</p>
-      <p class="src">Story: Watson, <i>The Double Helix</i> (1968), ch. 26. The letter itself does not mention cardboard.</p>
-    </div>
   </div>
 </section>
 
@@ -547,6 +556,7 @@ function drawArt() {
 
 // ---------- wiring ----------
 $('#b-start').addEventListener('click', newGame);
+$('#b-desk').addEventListener('click', () => show('s-start'));
 $('#b-zip').addEventListener('click', doZip);
 $('#b-next').addEventListener('click', () => { if (S.li === 0) startLadder(1); else startCopy(); });
 $('#b-go').addEventListener('click', () => { S.copy.running = true; $('#b-go').style.display = 'none'; startRung(); });
