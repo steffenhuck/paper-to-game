@@ -1,13 +1,14 @@
-// Browser session test (build step 6): drives the-other-chain.html at 380 px through a whole game: game number 1,
-// ladder 1 with a first-timer's choices (A-T from school, like-with-like for G, any short piece for T), one piece taken back,
-// ladder 2 with the rule, help opened mid-copy and returned from, the copy with one missed rung and one slip, the verdict,
+// Browser session test (build step 6): drives watsons-cardboard.html at 380 px through a whole game: game number 1,
+// ladder 1 with a first-timer's choices (pieces face down: A-T from school, like-with-like for G, any short piece for T), one piece taken back,
+// ladder 2 as the model on the desk: zipped as found, then mended with the rule, help opened mid-copy and returned from, the copy with
+// one missed rung and one slip, the copies copied again, the verdict,
 // About; then a new game. Run: node session-test.js [outdir] > session-log.txt   (needs playwright)
 const { chromium } = require('playwright'); const M = require('./mechanism.js');
 const D = (process.argv[2] || __dirname) + '/';
 (async () => {
   const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 380, height: 760 }, deviceScaleFactor: 2 });
   const errs = []; p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
-  await p.goto('file://' + __dirname + '/the-other-chain.html'); await p.waitForTimeout(300);
+  await p.goto('file://' + __dirname + '/watsons-cardboard.html'); await p.waitForTimeout(300);
   const txt = sel => p.$eval(sel, e => e.innerText.replace(/\n+/g, ' / '));
   const on = id => p.$eval(id, e => e.classList.contains('on'));
   const sw = async () => { const w = await p.evaluate(() => document.documentElement.scrollWidth); if (w > 380) errs.push('horizontal scroll ' + w); return w; };
@@ -23,12 +24,15 @@ const D = (process.argv[2] || __dirname) + '/';
   await shot('l1-pinned');
   await p.click('#b-zip'); await p.waitForTimeout(1400); await shot('l1-zipping', false); await p.waitForTimeout(3000);
   console.log('  ' + await txt('#r-big') + ' | ' + await txt('#r-why') + ' | ' + await txt('#r-chg')); await decimals(); await shot('l1-zipped');
-  await p.click('#b-next'); console.log('ladder 2:', await txt('#l-kick'), '|', await txt('#l-orient'));
-  // ladder 2: a near-perfect player who slips once (T for C) to show the bump
-  const l2 = g.ladder2.map(s => M.partnerOf(s.given)); l2[3] = l2[3] === 'G' ? 'A' : l2[3] === 'C' ? 'T' : l2[3];
-  for (const k of l2) await p.click(`#tray [data-p="${k}"]`);
-  await shot('l2-pinned'); await p.click('#b-zip'); await p.waitForTimeout(4600);
-  console.log('  ' + await txt('#r-big') + ' | ' + await txt('#r-why') + ' | ' + await txt('#r-chg')); await decimals(); await shot('l2-zipped');
+  await p.click('#b-next'); console.log('ladder 2:', await txt('#l-kick'), '|', await txt('#l-orient')); await shot('l2-desk');
+  // the model on the desk: zip it as found
+  await p.click('#b-zip'); await p.waitForTimeout(5200);
+  console.log('  as found: ' + await txt('#r-big') + ' | ' + await txt('#r-why') + ' | ' + await txt('#r-chg')); await decimals(); await shot('l2-asfound');
+  await p.click('#b-mend'); console.log('  mending:', await txt('#l-orient'));
+  const z0 = M.zip(g.ladder2, g.prefill);
+  for (let i = 0; i < z0.rungs.length; i++) { if (z0.rungs[i].fit.held) continue; await p.click(`[data-swap="${i}"]`); await p.click(`#tray [data-p="${M.partnerOf(g.ladder2[i].given)}"]`); }
+  await shot('l2-mended-pinned'); await p.click('#b-zip'); await p.waitForTimeout(5200);
+  console.log('  mended: ' + await txt('#r-big') + ' | ' + await txt('#r-why') + ' | ' + await txt('#r-chg')); await decimals(); await shot('l2-zipped');
   await p.click('#b-next'); console.log('copy on:', await on('#s-copy')); await shot('copy-ready');
   await p.click('#b-go');
   const full = M.complete(g.ladder2), spots = M.copySpots(full);
@@ -40,6 +44,7 @@ const D = (process.argv[2] || __dirname) + '/';
     await p.click(`#keys [data-k="${key}"]`); await p.waitForTimeout(250);
   }
   await p.waitForTimeout(600); console.log('  ' + await txt('#c-big') + ' | ' + await txt('#c-why')); await decimals(); await shot('copy-done');
+  await p.click('#b-again'); await p.waitForTimeout(300); console.log('  grandchildren: ' + await txt('#g-big') + ' | ' + await txt('#g-why')); await decimals(); await shot('grandchildren');
   await p.click('#b-end'); await p.waitForTimeout(1300); await shot('end-twisting', false); await p.waitForTimeout(2000);
   console.log('END on:', await on('#s-end')); console.log('VERDICT: ' + await txt('#verdict')); console.log('TALLY: ' + await txt('#tally')); await decimals(); await shot('end');
   await p.click('#s-end [data-about]'); console.log('about on', await on('#s-about')); await shot('about'); await p.click('#b-about-back'); console.log('back on end', await on('#s-end'));

@@ -1,4 +1,4 @@
-# The Other Chain — design memo
+# Watson's Cardboard (formerly The Other Chain) — design memo
 
 Paper-to-game run of 30 October 2026. One run, no editing in between.
 
@@ -195,3 +195,18 @@ The numbers in the config block come from a scan; 3.4 Å is read as "3-4" by the
 - Screenshot review at 380 px. Fixed: hydrogen-bond strokes drawn at the true meeting point (not the centre); purine rings drawn as a fused hexagon and pentagon; Chargaff bars' letters moved below the bars; copy labels clear of the rails; tray heading shortened; a verdict tier for "all but one rung".
 - Self-review. Aim after the start screen alone: "build the other chain so every rung holds". Discovery from the top of the end screen alone: "only A–T and G–C fit, so one chain spells the other, which is how DNA copies". Looks like no earlier game in the table: the only kraft ground, the only marker/typewriter pair, the only tag buttons.
 - Browser session (`session-test.js`, `session-log.txt`): game 1 at 380 × 760, ladder 1 with a first-timer's choices and a piece taken back, ladder 2 with one slip, help opened mid-copy (the fork pauses) and returned from, a missed rung and a slip in the copy, the verdict, About, a new game. No errors, no horizontal scroll, no decimals on play screens. Session length estimated at 3–5 minutes; not measured with a person.
+
+
+## Revision (30 Oct): Watson's Cardboard
+
+Steffen, playing: in the first ladder it was obvious which pieces would not fit, so the game was trivial; and the screens after the first were one flat sepia background. Decided in discussion, in this order:
+
+- **The pieces lie face down.** In the tray and on the ladder they are plain cards with a letter; their length and ends are shown only as the zip reaches them. The first ladder is therefore a real experiment with nothing known, and the first zip is the discovery the memo described. Once a piece has been seen it stays face up everywhere, so the tray's knowledge grows ladder by ladder.
+- **Ladder one is six rungs**, the free look.
+- **Ladder two is the model on the desk**: it arrives already built, five rungs like with like (too wide or too narrow), two with the right width and clashing ends, three right by accident. The player zips it as found, sees three kinds of failure, then mends it, tapping a rung and swapping its loose piece, and zips again. Diagnosing beats replacing: that is where the edges start to matter. The story (Watson's like-with-like model; Donohue and the textbooks) is told in one sentence after the first zip and in About, declared as history rather than the letter.
+- **No second control.** A form switch (keto/enol) was discussed and rejected as homework: the paper's result is the pairs, the tautomers are why it took a month.
+- **The copy, then the copies copied.** The fork starts slower (3 s a rung) and a passed spot stays empty rather than blocking. Afterwards the two copies are copied again without the player; a slip (a mispaired rung) is rebuilt correctly by the rule and so is inherited, in red, in the grandchildren: "a slip, once copied, breeds true." The letter says nothing about errors; this consequence of its last sentence is ours, and About says so.
+- **The desk.** A sheet of kraft card with a pencil margin and a corner of tape, lying on a darker desk; tape over the top of each rail; the pieces with a cut-out's shadow; the tray as a card box. The start screen shows the ladder face down with a question mark, nothing about the pairs.
+- **Title**: Watson's Cardboard; the file `watsons-cardboard.html`, with `the-other-chain.html` redirecting.
+
+Simulation before building, on ladder one: same-letter pairing fails every rung by width; alphabetical pairing (A–C, G–T) fails every rung by clash; random holds a quarter; the school rule holds all. Each failure kind teaches a different thing, which is why the model on the desk carries all three. Calibration now 30 checks, including: on 200 seeds the desk model has exactly five width faults and two clashes and holds throughout once mended by the rule; one clashing slip in the copy gives exactly one changed rung in the grandchildren, every grandchild rung holding; a perfect copy breeds a perfect copy. Browser session at 380 px: game 1 with a first-timer's ladder one (3 of 6), the desk model as found (3 of 10), mended in one pass (10 of 10), the copy with a miss and a slip (17 of 20), one changed grandchild rung, the verdict; no errors, no horizontal scroll, no decimals.

@@ -1,3 +1,5 @@
+**Revised after first review (30 Oct).** Now Watson's Cardboard: pieces face down until zipped; ladder two is Watson's wrong model to mend; the copies are copied again. See the memo's last section.
+
 # The Other Chain — note for the author
 
 1. Look first at `screenshot-l1-zipped.png` (a first-timer's ladder: the rails bow at G–G, pinch at T–C), then `screenshot-copy-done.png` and `screenshot-end.png`.
