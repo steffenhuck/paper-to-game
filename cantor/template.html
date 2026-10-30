@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Not in the Book</title>
+<meta name="description" content="Cantor's diagonal argument (1891) as a fairground challenge: the Great Lister says his endless book has every row of m's and w's. Write one it does not.">
+<style>
+@font-face{font-family:'Rye';src:url(data:font/woff2;base64,/*__FONT_RYE__*/) format('woff2');font-display:block}
+@font-face{font-family:'Alfa';src:url(data:font/woff2;base64,/*__FONT_ALFA__*/) format('woff2');font-display:block}
+@font-face{font-family:'Work';font-weight:400;src:url(data:font/woff2;base64,/*__FONT_WORK__*/) format('woff2');font-display:block}
+@font-face{font-family:'Work';font-weight:700;src:url(data:font/woff2;base64,/*__FONT_WORK_BOLD__*/) format('woff2');font-display:block}
+:root{
+  --red:#D7263D; --red-deep:#A8162A; --cream:#FBEFD5; --cream-2:#F3E3C0; --ink:#1A1412; --gold:#F2B33D; --gold-2:#D99A22; --teal:#1C8E86; --grey:#B9AFA0;
+  --display:'Rye',Georgia,serif; --letters:'Alfa','Rockwell',Georgia,serif; --text:'Work',system-ui,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{background:var(--red);color:var(--ink);font-family:var(--text);font-size:17px;line-height:1.4;min-height:100vh;
+  background-image:repeating-linear-gradient(90deg,transparent 0 28px,rgba(0,0,0,.06) 28px 56px)}
+.screen{display:none;max-width:460px;margin:0 auto;padding:0 12px 28px;min-height:100vh}
+.screen.on{display:block}
+h1,h2,.ticket,.rownum,.roundname{font-family:var(--display);font-weight:400;letter-spacing:.01em}
+p{margin:.5em 0}
+a{color:inherit}
+/* bill: the cream poster card */
+.bill{background:var(--cream);border:3px solid var(--ink);border-radius:4px;padding:16px 16px 18px;margin:12px 0;box-shadow:0 6px 0 var(--red-deep);position:relative}
+.bill:before,.bill:after{content:"";position:absolute;left:6px;right:6px;height:0;border-top:2px dashed var(--ink);opacity:.35}
+.bill:before{top:6px}.bill:after{bottom:6px}
+.stripes{height:18px;margin:14px -12px 0;background:repeating-linear-gradient(90deg,var(--cream) 0 22px,var(--ink) 22px 26px,var(--cream) 26px 30px,var(--red) 30px 52px)}
+h1.title{font-size:48px;line-height:.98;text-align:center;margin:8px 0 4px;text-transform:uppercase;color:var(--ink);text-shadow:3px 3px 0 var(--gold)}
+.banner{background:var(--ink);color:var(--gold);font-family:var(--display);text-align:center;padding:8px 10px;font-size:15px;text-transform:uppercase;letter-spacing:.06em;margin:10px -16px 12px;transform:rotate(-1deg)}
+.aimline{font-weight:700;font-size:19px;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:10px 4px;margin:14px 0;text-align:center}
+.small{font-size:14px;opacity:.85}
+.bookno{text-align:center;font-family:var(--display);font-size:15px;color:var(--cream);margin-top:10px;letter-spacing:.05em}
+/* tickets */
+.ticket{display:block;width:100%;min-height:58px;padding:14px 30px;background:var(--gold);color:var(--ink);border:2px solid var(--ink);border-radius:7px;font-size:19px;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;position:relative;text-align:center;margin:10px 0;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.ticket:before,.ticket:after{content:"";position:absolute;top:6px;bottom:6px;width:0;border-left:2px dotted var(--ink);opacity:.8}
+.ticket:before{left:11px}.ticket:after{right:11px}
+.ticket:active,.ticket.down{background:var(--ink);color:var(--gold)}
+.ticket.quiet{background:var(--cream);font-size:16px;min-height:48px;padding:10px 30px}
+.ticket[disabled]{opacity:.45;cursor:default}
+.tickets2{display:flex;gap:10px}
+.tickets2 .ticket{flex:1;font-family:var(--letters);font-size:46px;line-height:1;min-height:76px;padding:10px 30px 14px;text-transform:none}
+.tickets2 .ticket.w{color:var(--red)}
+.tickets2 .ticket.w.down,.tickets2 .ticket.w:active{color:var(--gold);background:var(--red)}
+/* play screen */
+.aimbar{display:flex;align-items:center;gap:8px;color:var(--cream);padding:12px 2px 6px;font-weight:700;font-size:16px;line-height:1.25}
+.aimbar .aimtext{flex:1}
+.qbtn{flex:none;width:40px;height:40px;border-radius:50%;border:2px solid var(--cream);background:transparent;color:var(--cream);font-family:var(--display);font-size:22px;cursor:pointer}
+.roundname{color:var(--gold);font-size:20px;text-transform:uppercase;letter-spacing:.04em;text-align:center;margin:4px 0 6px;text-shadow:2px 2px 0 var(--ink)}
+.orient{color:var(--cream);font-size:15px;line-height:1.35;margin:0 2px 10px;min-height:20px}
+.page{background:var(--cream);border:3px solid var(--ink);border-radius:3px;padding:10px 8px 10px 6px;position:relative;box-shadow:0 6px 0 var(--red-deep)}
+.page.torn{border-bottom:none;border-radius:3px 3px 0 0;padding-bottom:4px;box-shadow:none}
+.torn-edge{height:16px;background:var(--cream);clip-path:polygon(0 0,100% 0,100% 30%,96% 100%,92% 40%,88% 90%,84% 35%,79% 100%,74% 45%,70% 95%,65% 30%,60% 100%,55% 50%,50% 100%,45% 35%,40% 90%,35% 40%,30% 100%,25% 45%,20% 95%,15% 30%,10% 100%,5% 40%,0 90%);margin:0 3px 0 3px}
+.forever{color:var(--cream);font-family:var(--display);text-align:center;font-size:15px;margin:4px 0 8px;letter-spacing:.04em}
+.row{display:flex;align-items:center;gap:0;height:var(--cell);position:relative;transition:opacity .4s}
+.row .rownum{width:38px;flex:none;text-align:right;padding-right:6px;font-size:15px;color:var(--ink);opacity:.8}
+.row.wide .rownum{width:46px;font-size:13px}
+.cell{width:var(--cell);height:var(--cell);flex:none;display:flex;align-items:center;justify-content:center;font-family:var(--letters);font-size:calc(var(--cell) * .68);line-height:1;color:var(--ink);position:relative;transition:color .35s}
+.cell.w{color:var(--red)}
+.cell.empty{color:transparent}
+.cell.line{box-shadow:inset 0 0 0 2px var(--teal);border-radius:3px}
+.cell.line.empty:after{content:"";position:absolute;inset:8px;border-radius:50%;background:var(--teal);opacity:.18}
+.cell.ring:before{content:"";position:absolute;inset:3px;border:3px solid var(--teal);border-radius:50%}
+.dots{flex:none;width:18px;font-family:var(--letters);font-size:14px;color:var(--ink);opacity:.6;text-align:center;padding-top:6px}
+.row.struck .cell{color:var(--grey)}
+.row.struck .rownum{color:var(--grey)}
+.row.struck .cells:after{content:"";position:absolute;left:0;right:0;top:50%;height:3px;background:var(--ink);transform-origin:left center;animation:strike .35s ease-out forwards}
+.cells{display:flex;position:relative}
+@keyframes strike{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.row.leaving{animation:leave .45s ease-in forwards}
+@keyframes leave{to{opacity:0;transform:translateX(40px);height:0;margin:0}}
+.row.arriving{animation:arrive .45s ease-out}
+@keyframes arrive{from{opacity:0;transform:translateY(24px)}}
+.row.slip{animation:slip .9s ease-out}
+@keyframes slip{0%{background:var(--gold)}100%{background:transparent}}
+.row .tag{position:absolute;right:4px;font-family:var(--display);font-size:11px;color:var(--ink);background:var(--gold);padding:1px 5px;border:1.5px solid var(--ink);border-radius:3px;letter-spacing:.04em}
+.row.struck .tag{display:none}
+.page.lined:before{content:"";position:absolute;left:calc(6px + var(--numw));top:10px;width:calc(var(--cell) * var(--n));height:calc(var(--cell) * var(--n));pointer-events:none;
+  background:linear-gradient(to bottom left,transparent calc(50% - 2px),var(--teal) calc(50% - 2px),var(--teal) calc(50% + 2px),transparent calc(50% + 2px));opacity:.35}
+/* your row band */
+.band{background:var(--gold);border:3px solid var(--ink);border-radius:3px;margin-top:12px;padding:6px 8px 6px 6px;display:flex;align-items:center;box-shadow:0 5px 0 var(--gold-2)}
+.band .rownum{width:38px;flex:none;font-size:11px;line-height:1.05;text-align:right;padding-right:6px;text-transform:uppercase}
+.band.wide .rownum{width:46px}
+.band .cell{border:2px dashed rgba(26,20,18,.35);border-radius:3px;margin:0}
+.band .cell.filled{border-style:solid;border-color:var(--ink);background:var(--cream)}
+.band .cell.next{border-color:var(--ink);animation:blink 1s infinite}
+@keyframes blink{50%{background:rgba(255,255,255,.55)}}
+.count{color:var(--cream);text-align:center;font-size:17px;margin:12px 2px 2px;min-height:24px;line-height:1.3}
+.count b{color:var(--gold)}
+.lister{background:var(--ink);color:var(--cream);border:3px solid var(--gold);border-radius:4px;padding:14px 16px;margin:14px 0 4px;font-size:17px}
+.lister .who{font-family:var(--display);color:var(--gold);text-transform:uppercase;font-size:14px;letter-spacing:.06em;margin-bottom:4px}
+/* text screens */
+.textcard{background:var(--cream);border:3px solid var(--ink);border-radius:4px;padding:16px;margin:12px 0}
+.textcard h2{font-size:26px;margin:0 0 8px;text-transform:uppercase}
+.textcard h3{font-family:var(--text);font-size:17px;margin:16px 0 4px}
+.textcard p,.textcard li{font-size:16px}
+.verdict{font-size:20px;line-height:1.35;font-weight:700}
+.rule{display:flex;gap:10px;align-items:center;justify-content:center;margin:10px 0}
+.rule .cell{width:44px;height:44px;font-size:30px;border:2px solid var(--ink);border-radius:4px;background:var(--cream)}
+.rule .arrow{font-family:var(--display);font-size:22px}
+.endbook{background:var(--cream);border:3px solid var(--ink);border-radius:3px;padding:8px 6px;margin:10px 0}
+.hand{position:absolute;pointer-events:none;font-size:22px;transition:transform .25s}
+.goldrow{background:var(--gold)}
+</style>
+</head>
+<body>
+
+<!-- START -->
+<section id="start" class="screen on">
+  <div class="stripes"></div>
+  <div class="bill">
+    <div class="banner">The Great Lister's challenge</div>
+    <h1 class="title">Not in<br>the Book</h1>
+    <p>The Great Lister keeps an <b>endless book</b>. On every line, an endless row of two letters, <b>m</b> and <b>w</b>. He says every row you could ever write is in his book, somewhere.</p>
+    <p class="aimline">Write a row of m's and w's that is not in the Lister's book.</p>
+    <p class="small">Three rounds, about three minutes. Built from Georg Cantor's paper of 1891.</p>
+    <button class="ticket" id="btn-start">Start</button>
+    <button class="ticket quiet" data-go="help">How to play</button>
+    <button class="ticket quiet" data-go="about">About the paper</button>
+  </div>
+  <div class="bookno">Book No. <span class="seed"></span></div>
+  <div class="stripes"></div>
+</section>
+
+<!-- PLAY -->
+<section id="play" class="screen">
+  <div class="aimbar"><div class="aimtext">Write a row of m's and w's that is not in the Lister's book.</div><button class="qbtn" data-go="help" aria-label="How to play">?</button></div>
+  <div class="roundname" id="roundname"></div>
+  <div class="orient" id="orient"></div>
+  <div class="page" id="page"></div>
+  <div id="torn" style="display:none"><div class="torn-edge"></div><div class="forever">… and on, for ever</div></div>
+  <div class="band" id="band"></div>
+  <div class="count" id="count"></div>
+  <div id="controls">
+    <div class="tickets2"><button class="ticket m" id="tap-m">m</button><button class="ticket w" id="tap-w">w</button></div>
+  </div>
+  <div id="after"></div>
+</section>
+
+<!-- BARGAIN -->
+<section id="bargain" class="screen">
+  <div class="stripes"></div>
+  <div class="bill">
+    <div class="banner">Cantor's bargain, 1891</div>
+    <p>You do not have to strike them all at once.</p>
+    <p><b>Deal with row 1 using your 1st letter. Row 2 using your 2nd. Row 3 using your 3rd.</b> And so on. Every row is struck by the time you pass its number, and the book being endless no longer matters.</p>
+    <p>The Lister agrees, on one condition: he writes each row only when you reach it, so he can copy what you have written so far.</p>
+    <div class="rule"><div class="cell">m</div><div class="arrow">→</div><div class="cell w">w</div><div style="width:18px"></div><div class="cell w">w</div><div class="arrow">→</div><div class="cell">m</div></div>
+    <p class="small" style="text-align:center">On the teal line, the letter in row u at position u. Your letter u decides whether row u is struck.</p>
+    <button class="ticket" id="btn-r3">Try it</button>
+  </div>
+  <div class="stripes"></div>
+</section>
+
+<!-- END -->
+<section id="end" class="screen">
+  <div class="stripes"></div>
+  <div class="bill">
+    <div class="banner" id="end-banner">The verdict</div>
+    <h1 class="title" style="font-size:40px" id="end-title">Not in the Book</h1>
+    <p class="verdict" id="verdict-1"></p>
+    <p id="verdict-2"></p>
+    <p id="verdict-3"></p>
+  </div>
+  <div class="bill">
+    <div class="banner">The Lister's last try</div>
+    <p id="lasttry-text">He puts your row into the book as row 1 and moves every other row down one. Watch the rule run on its own.</p>
+    <div class="endbook" id="endbook" style="position:relative"></div>
+    <div class="band wide" id="endband"></div>
+    <p id="lasttry-result" style="min-height:24px;font-weight:700"></p>
+    <button class="ticket quiet" id="btn-rerun">Run the rule</button>
+  </div>
+  <div class="bill">
+    <p class="small" id="paperline">Georg Cantor, <i>Über eine elementare Frage der Mannigfaltigkeitslehre</i> (On an elementary question of the theory of manifolds), 1891. The two letters m and w, and the first three rows of the first book, are his. He went on, in the half of the paper this game leaves out, to show that the same trick works for any collection at all: there is no biggest infinity.</p>
+    <button class="ticket" id="btn-again">Play again: a new book</button>
+    <button class="ticket quiet" data-go="about">About the paper</button>
+  </div>
+  <div class="stripes"></div>
+</section>
+
+<!-- HELP -->
+<section id="help" class="screen">
+  <div class="textcard">
+    <h2>How to play</h2>
+    <p class="aimline" style="margin-top:6px">Write a row of m's and w's that is not in the Lister's book.</p>
+    <p>The Lister's book is a list of rows. Each row is an endless string of two letters, <b>m</b> and <b>w</b>; the page shows the first six or ten letters of each. You write your own row underneath, one letter at a time, by tapping the <b>m</b> ticket or the <b>w</b> ticket. Each tap fills the next empty cell of your row.</p>
+    <h3>Striking a row</h3>
+    <p>A row in the book <b>agrees</b> with you while every letter you have written matches its letter in the same place. The moment one of your letters differs from a row's letter in that place, the row is <b>struck</b>: it greys out, a line runs through it, and the letter that did it is ringed. A struck row cannot be your row. Your row is "not in the book" when every row is struck.</p>
+    <h3>Round 1: the small book</h3>
+    <p>Five rows, six letters each. Strike all five before your six letters run out. Think about which letter strikes more of the rows still agreeing with you.</p>
+    <h3>Round 2: the endless book</h3>
+    <p>Same game, but the book has no end. Whenever you strike rows, the Lister turns to rows further down that still agree with you. You write five letters, then he has a word.</p>
+    <h3>Round 3: Cantor's bargain</h3>
+    <p>Ten rows, ten letters, a teal line down the diagonal. Strike row 1 with your 1st letter, row 2 with your 2nd, and so on. The Lister writes each row only when you reach it, copying what you have written so far, so the only letter that can strike row u on time is the one on the line. A row you fail to strike on its number <b>slips</b>; it stays in the book until a later letter strikes it, if one does.</p>
+    <h3>The end</h3>
+    <p>You see what your row proves, and the Lister gets one last try.</p>
+    <button class="ticket" id="btn-help-back">Back</button>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="screen">
+  <div class="textcard" id="about-card">
+    <h2>About the paper</h2>
+    /*__ABOUT__*/
+    <button class="ticket" id="btn-about-back">Back</button>
+  </div>
+</section>
+
+<script>
+/*__MECHANISM__*/
+</script>
+<script>
+(function(){
+const C = Mechanism.CONFIG;
+const $ = s => document.querySelector(s);
+const screens = ['start','play','bargain','end','help','about'];
+let current = 'start', before = 'start';
+function show(id){ screens.forEach(s => $('#'+s).classList.toggle('on', s===id)); if (id!=='help' && id!=='about') before = id; current = id; window.scrollTo(0,0); }
+document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => show(b.dataset.go)));
+$('#btn-help-back').addEventListener('click', () => show(before));
+$('#btn-about-back').addEventListener('click', () => show(before));
+
+// ---- seed
+function newSeed(){ return 1000 + Math.floor(Math.random()*C.SEED_MAX); }
+let seed = parseInt((location.hash||'').replace('#',''),10);
+if (!(seed >= 1000 && seed < 1000 + C.SEED_MAX)) { seed = newSeed(); history.replaceState(null,'','#'+seed); }
+document.querySelectorAll('.seed').forEach(e => e.textContent = seed);
+
+// ---- state
+let G = null;
+function reset(){
+  G = { round:0, r1:{rows:Mechanism.round1Book(seed), yours:[], st:null}, r2:null, r3:null, busy:false };
+}
+
+// ---- rendering helpers
+function cellEl(c, extra){ const d = document.createElement('div'); d.className = 'cell' + (c==='w' ? ' w' : '') + (c ? '' : ' empty') + (extra ? ' '+extra : ''); d.textContent = c || 'm'; return d; }
+function rowEl(num, letters, opts){
+  opts = opts || {};
+  const r = document.createElement('div'); r.className = 'row' + (opts.wide ? ' wide' : ''); r.dataset.n = num;
+  const n = document.createElement('div'); n.className = 'rownum'; n.textContent = num; r.appendChild(n);
+  const cells = document.createElement('div'); cells.className = 'cells';
+  letters.forEach((c, v) => { const e = cellEl(c, opts.lineAt === v ? 'line' : ''); cells.appendChild(e); });
+  r.appendChild(cells);
+  if (opts.dots) { const d = document.createElement('div'); d.className='dots'; d.textContent='…'; r.appendChild(d); }
+  return r;
+}
+function setCellSize(width, rows){
+  const page = $('#page');
+  const numw = width > 6 ? 46 : 38;
+  const avail = Math.min(window.innerWidth, 460) - 24 - 6 - 14 - numw - (width > 6 ? 0 : 18);
+  const cell = Math.max(26, Math.min(width > 6 ? 34 : 46, Math.floor(avail / width)));
+  page.style.setProperty('--cell', cell + 'px'); page.style.setProperty('--numw', numw + 'px'); page.style.setProperty('--n', rows);
+  $('#band').style.setProperty('--cell', cell + 'px');
+}
+function renderBand(width, yours, el, label){
+  el = el || $('#band'); el.innerHTML = '';
+  el.classList.toggle('wide', width > 6);
+  const n = document.createElement('div'); n.className = 'rownum'; n.textContent = label || 'Your row'; el.appendChild(n);
+  const cells = document.createElement('div'); cells.className='cells';
+  for (let v = 0; v < width; v++) { const e = cellEl(yours[v] || '', yours[v] ? 'filled' : (v === yours.length ? 'next' : '')); cells.appendChild(e); }
+  el.appendChild(cells);
+}
+function markStruck(rowEl_, at){
+  if (rowEl_.classList.contains('struck')) return;
+  rowEl_.classList.add('struck');
+  const cells = rowEl_.querySelectorAll('.cells .cell');
+  if (cells[at]) cells[at].classList.add('ring');
+}
+function setControls(on){ $('#tap-m').disabled = !on; $('#tap-w').disabled = !on; $('#controls').style.display = on ? '' : 'none'; }
+function after(html){ $('#after').innerHTML = html; }
+function count(html){ $('#count').innerHTML = html; }
+const plural = (n, w) => n + ' ' + w + (n === 1 ? '' : 's');
+
+// ---- ROUND 1
+function startRound1(){
+  G.round = 1; G.r1.yours = [];
+  $('#roundname').textContent = 'Round 1: the small book';
+  $('#orient').innerHTML = 'Five rows, six letters each. Tap <b>m</b> or <b>w</b> to write your row. Each letter <b>strikes</b> every row that disagrees with it in that place. Strike all five within six letters.';
+  $('#page').className = 'page'; $('#torn').style.display = 'none';
+  setCellSize(C.R1_WIDTH, C.R1_ROWS);
+  const page = $('#page'); page.innerHTML = '';
+  G.r1.rows.forEach((r, i) => page.appendChild(rowEl(i+1, r, {dots:true})));
+  renderBand(C.R1_WIDTH, []);
+  count('5 rows. None struck yet.');
+  after(''); setControls(true);
+  show('play');
+}
+function tapRound1(c){
+  G.r1.yours.push(c);
+  const st = Mechanism.round1Status(G.r1.rows, G.r1.yours); G.r1.st = st;
+  renderBand(C.R1_WIDTH, G.r1.yours);
+  const rows = $('#page').querySelectorAll('.row');
+  st.struck.forEach((s, i) => { if (s >= 0) markStruck(rows[i], s); });
+  const struckN = st.struck.filter(s => s >= 0).length;
+  if (!st.done) { count(`<b>${plural(struckN,'row')} struck</b> · ${st.alive} still agree${st.alive===1?'s':''} with you`); return; }
+  setControls(false);
+  if (st.won) {
+    count(`<b>All five struck</b> in ${plural(st.letters,'letter')}. Your row is not in the small book.`);
+    after(`<div class="lister"><div class="who">The Great Lister</div>Five rows? Child's play. My real book has no end. Whatever you write, I have it further down.</div><button class="ticket" id="btn-r2">Next: the endless book</button>`);
+  } else {
+    count(`<b>Row ${st.caughtBy+1} is your row.</b> Six letters, and it agrees with you in every one. The Lister has it.`);
+    after(`<div class="lister"><div class="who">The Great Lister</div>You see? And that was my small book. My real book has no end. Whatever you write, I have it.</div><button class="ticket" id="btn-r2">Next: the endless book</button>`);
+  }
+  $('#btn-r2').addEventListener('click', startRound2);
+}
+
+// ---- ROUND 2
+function startRound2(){
+  G.round = 2; G.r2 = { book: Mechanism.makeEndlessBook(seed), st: null };
+  G.r2.st = Mechanism.round2Start(G.r2.book);
+  $('#roundname').textContent = 'Round 2: the endless book';
+  $('#orient').innerHTML = 'The same game on the endless book: <b>strike them all</b>. Rows run on past the bottom of the page, for ever.';
+  $('#page').className = 'page torn'; $('#torn').style.display = '';
+  setCellSize(C.R2_WIDTH, C.R2_WINDOW);
+  const page = $('#page'); page.innerHTML = '';
+  G.r2.st.page.forEach(p => page.appendChild(rowEl(p.n, p.row, {dots:true})));
+  renderBand(C.R2_WIDTH, []);
+  count('Rows 1 to 9 of endlessly many. None struck yet.');
+  after(''); setControls(true);
+  show('play');
+}
+function tapRound2(c){
+  const prev = G.r2.st;
+  const st = Mechanism.round2Write(G.r2.book, prev, c); G.r2.st = st;
+  renderBand(C.R2_WIDTH, st.yours);
+  const page = $('#page');
+  const els = Array.from(page.querySelectorAll('.row'));
+  prev.page.forEach((p, i) => { if (st.struckAt[i] >= 0) markStruck(els[i], st.struckAt[i]); });
+  G.busy = true; setControls(false);
+  const arrivedFrom = st.arrived[0], arrivedTo = st.arrived[st.arrived.length-1];
+  count(`<b>${plural(st.struckNow.length,'row')} struck</b> · the Lister turns to rows ${arrivedFrom} to ${arrivedTo}, which agree with you`);
+  setTimeout(() => {
+    els.forEach((el, i) => { if (st.struckAt[i] >= 0) el.classList.add('leaving'); });
+    setTimeout(() => {
+      els.forEach((el, i) => { if (st.struckAt[i] >= 0) el.remove(); });
+      st.page.forEach(p => { if (st.arrived.indexOf(p.n) >= 0) { const r = rowEl(p.n, p.row, {dots:true}); r.classList.add('arriving'); page.appendChild(r); } });
+      G.busy = false;
+      if (!st.done) {
+        count(`<b>${st.struckTotal} struck so far</b> · still agreeing with you: all of these, and endlessly more`);
+        setControls(true);
+      } else {
+        count(`<b>${st.struckTotal} rows struck</b> in five letters. Still agreeing with you: the nine on this page, and endlessly more.`);
+        after(`<div class="lister"><div class="who">The Great Lister</div>Strike as many as you like. For every row you strike I have a thousand further down that agree with you. You will never strike them all.</div><button class="ticket" id="btn-bargain">Hear Cantor's bargain</button>`);
+        $('#btn-bargain').addEventListener('click', () => show('bargain'));
+      }
+    }, 480);
+  }, 650);
+}
+
+// ---- ROUND 3
+function startRound3(){
+  G.round = 3; G.r3 = { lister: Mechanism.makeLister3(seed), st: null };
+  G.r3.st = Mechanism.round3Start(G.r3.lister);
+  $('#roundname').textContent = "Round 3: Cantor's bargain";
+  $('#orient').innerHTML = 'Ten rows, ten letters. <b>Strike each row on the teal line</b>: row 1 with your 1st letter, row 2 with your 2nd, and so on. The Lister writes each row only when you reach it.';
+  $('#page').className = 'page lined'; $('#torn').style.display = 'none';
+  setCellSize(C.R3_ROWS, C.R3_ROWS);
+  const page = $('#page'); page.innerHTML = '';
+  for (let u = 0; u < C.R3_ROWS; u++) {
+    const r = rowEl(u+1, u === 0 ? G.r3.st.rows[0] : Array(C.R3_ROWS).fill(''), {wide:true, lineAt:u});
+    if (u > 0) r.style.opacity = '.55';
+    page.appendChild(r);
+  }
+  renderBand(C.R3_ROWS, []);
+  count('Row 1 is written. Its letter on the line is <b>' + G.r3.st.rows[0][0] + '</b>. Strike it with your 1st letter.');
+  after(''); setControls(true);
+  show('play');
+}
+function tapRound3(c){
+  const prev = G.r3.st; const u = prev.yours.length;
+  const st = Mechanism.round3Write(G.r3.lister, prev, c); G.r3.st = st;
+  renderBand(C.R3_ROWS, st.yours);
+  const page = $('#page'); const els = Array.from(page.querySelectorAll('.row'));
+  // strikes on all written rows
+  st.struck.forEach((s, i) => { if (s >= 0 && i < st.rows.length) markStruck(els[i], s); });
+  if (st.slippedNow) {
+    els[u].classList.add('slip');
+    const t = document.createElement('div'); t.className='tag'; t.textContent='slipped'; els[u].appendChild(t);
+  }
+  // reveal the next row
+  if (!st.done) {
+    const next = st.rows[u+1];
+    const fresh = rowEl(u+2, next, {wide:true, lineAt:u+1}); fresh.classList.add('arriving');
+    page.replaceChild(fresh, els[u+1]);
+  }
+  const slippedN = st.slipped.length;
+  if (!st.done) {
+    const line = st.slippedNow ? `<b>Row ${u+1} slipped past its number</b>, still agreeing with you.` : `<b>Row ${u+1} struck on its number.</b>`;
+    count(`${line} The Lister writes row ${u+2}, copying your ${plural(u+1,'letter')}${u+1 < 3 ? '' : '…'}`);
+    return;
+  }
+  setControls(false);
+  const alive = st.struck.filter(s => s < 0).length;
+  if (slippedN === 0) count('<b>Ten rows, each struck on its own number.</b> None slipped.');
+  else count(`<b>${plural(slippedN,'row')} slipped past ${slippedN===1?'its':'their'} number</b> (row${slippedN>1?'s':''} ${st.slipped.map(i=>i+1).join(', ')}).${alive ? ` ${plural(alive,'row')} still agree${alive===1?'s':''} with you.` : ' Later letters struck them anyway.'}`);
+  after(`<button class="ticket" id="btn-end">See the verdict</button>`);
+  $('#btn-end').addEventListener('click', showEnd);
+}
+
+// ---- taps
+function tap(c){
+  if (G.busy) return;
+  if (G.round === 1) tapRound1(c); else if (G.round === 2) tapRound2(c); else if (G.round === 3) tapRound3(c);
+}
+$('#tap-m').addEventListener('click', () => tap('m'));
+$('#tap-w').addEventListener('click', () => tap('w'));
+
+// ---- END
+function showEnd(){
+  const r1 = G.r1.st, r3 = G.r3.st;
+  const key = Mechanism.verdictKey(r1, r3);
+  const n = C.R3_ROWS;
+  let v1 = `You wrote a row the Lister's book does not contain, and you can prove it: row 1 differs from yours at letter 1, row 2 at letter 2, row 3 at letter 3, and so on for ever.`;
+  if (key === 'few_slipped' || key === 'many_slipped') {
+    const k = r3.slipped.length;
+    v1 = `${k === 1 ? 'One row' : plural(k,'row')} slipped past ${k===1?'its':'their'} own number still agreeing with you, so your row is not yet a proof. Cantor's rule lets none slip: at letter u, look at row u's letter u and write the other one. Every row then differs from yours by the time you pass it.`;
+  }
+  $('#verdict-1').textContent = v1;
+  $('#verdict-2').innerHTML = `That is <b>Cantor's argument of 1891</b>. However the endless book is written, this one rule writes a row it misses. So no endless list of such rows is ever complete: there are <b>more rows than there are whole numbers</b> to number them with. Some infinities are bigger than others.`;
+  $('#verdict-3').innerHTML = key === 'clean_after_r1_loss' ? `<span class="small">In round 1 a row of the small book caught you; in round 3 none did. The rule is what changed.</span>` : '';
+  $('#end-banner').textContent = (key === 'clean' || key === 'clean_after_r1_loss') ? 'The verdict' : 'The verdict, with a note';
+  // last try
+  const yours = r3.yours.slice(0, n);
+  const added = Mechanism.addToBookAndRerun(r3.rows, yours);
+  G.end = { added, step: -1 };
+  const eb = $('#endbook'); eb.innerHTML = '';
+  const cell = Math.max(22, Math.min(30, Math.floor((Math.min(window.innerWidth,460) - 24 - 32 - 12 - 46) / n)));
+  eb.style.setProperty('--cell', cell + 'px');
+  added.rows.forEach((r, i) => { const el = rowEl(i+1, r, {wide:true, lineAt:i}); if (i === 0) el.classList.add('goldrow'); eb.appendChild(el); });
+  $('#endband').style.setProperty('--cell', cell + 'px');
+  renderBand(n, [], $('#endband'), 'New row');
+  $('#lasttry-result').textContent = '';
+  $('#btn-rerun').textContent = 'Run the rule'; $('#btn-rerun').disabled = false;
+  show('end');
+}
+$('#btn-rerun').addEventListener('click', () => {
+  const b = $('#btn-rerun'); if (b.disabled) return; b.disabled = true;
+  const { added } = G.end; const n = added.rows.length; const yours = [];
+  const rows = Array.from($('#endbook').querySelectorAll('.row'));
+  let v = 0;
+  (function step(){
+    if (v >= n) { $('#lasttry-result').textContent = 'Not in the book. Again. And it would be again, for ever.'; b.textContent = 'The rule ran'; return; }
+    yours.push(added.e0[v]);
+    renderBand(n, yours, $('#endband'), 'New row');
+    markStruck(rows[v], v);
+    $('#lasttry-result').textContent = `Row ${v+1}: ${added.rows[v][v]} on the line, so you write ${added.e0[v]}.`;
+    v++; setTimeout(step, 420);
+  })();
+});
+$('#btn-again').addEventListener('click', () => { seed = newSeed(); history.replaceState(null,'','#'+seed); document.querySelectorAll('.seed').forEach(e => e.textContent = seed); reset(); startRound1(); });
+$('#btn-start').addEventListener('click', () => { reset(); startRound1(); });
+$('#btn-r3').addEventListener('click', startRound3);
+reset();
+window.__game = { get G(){ return G; }, show, startRound1, startRound2, startRound3, tap, showEnd, get seed(){ return seed; } };
+})();
+</script>
+</body>
+</html>

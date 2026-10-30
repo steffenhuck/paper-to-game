@@ -1,0 +1,68 @@
+START: Write a row of m's and w's that is not in the Lister's book.
+shot start
+shot help
+HELP first line: Write a row of m's and w's that is not in the Lister's book.
+back to start
+
+ROUND 1: Round 1: the small book | Five rows, six letters each. Tap m or w to write your row. Each letter strikes every row that disagrees with it in that place. Strike all five within six letters.
+shot round1-start
+  tap w -> 3 rows struck · 2 still agree with you
+shot round1-first-tap
+  tap m -> 4 rows struck · 1 still agrees with you
+  tap m -> All five struck in 3 letters. Your row is not in the small book.
+shot round1-done
+  after: The Great ListerFive rows? Child's play. My real book has no end. Whatever you write, I have it further down.Next: the endless book
+
+ROUND 2: Round 2: the endless book | The same game on the endless book: strike them all. Rows run on past the bottom of the page, for ever.
+shot round2-start
+  tap w -> 6 rows struck · the Lister turns to rows 11 to 22, which agree with you
+shot round2-first-tap-striking
+         -> 6 struck so far · still agreeing with you: all of these, and endlessly more
+  tap m -> 5 rows struck · the Lister turns to rows 26 to 37, which agree with you
+         -> 11 struck so far · still agreeing with you: all of these, and endlessly more
+  tap w -> 5 rows struck · the Lister turns to rows 40 to 60, which agree with you
+         -> 16 struck so far · still agreeing with you: all of these, and endlessly more
+  help opened mid-play: help
+  back to: play | page rows [7,19,26,34,40,47,53,57,60]
+  tap m -> 3 rows struck · the Lister turns to rows 62 to 85, which agree with you
+         -> 19 struck so far · still agreeing with you: all of these, and endlessly more
+  tap w -> 3 rows struck · the Lister turns to rows 97 to 131, which agree with you
+         -> 22 rows struck in five letters. Still agreeing with you: the nine on this page, and endlessly more.
+shot round2-done
+  after: The Great ListerStrike as many as you like. For every row you strike I have a thousand further down that agree with you. You will never strike them all.Hear Cantor's bargain
+shot bargain
+
+ROUND 3: Round 3: Cantor's bargain | Ten rows, ten letters. Strike each row on the teal line: row 1 with your 1st letter, row 2 with your 2nd, and so on. The Lister writes each row only when you reach it.
+  count: Row 1 is written. Its letter on the line is m. Strike it with your 1st letter.
+shot round3-start
+  row 1: line m, tap w -> Row 1 struck on its number. The Lister writes row 2, copying your 1 letter
+  row 2: line w, tap w -> Row 2 slipped past its number, still agreeing with you. The Lister writes row 3, copying your 2 letters
+shot round3-slipped
+  row 3: line w, tap m -> Row 3 struck on its number. The Lister writes row 4, copying your 3 letters…
+  row 4: line m, tap w -> Row 4 struck on its number. The Lister writes row 5, copying your 4 letters…
+  row 5: line m, tap w -> Row 5 struck on its number. The Lister writes row 6, copying your 5 letters…
+shot round3-midway
+  row 6: line m, tap w -> Row 6 struck on its number. The Lister writes row 7, copying your 6 letters…
+  row 7: line m, tap w -> Row 7 struck on its number. The Lister writes row 8, copying your 7 letters…
+  row 8: line w, tap m -> Row 8 struck on its number. The Lister writes row 9, copying your 8 letters…
+  row 9: line w, tap m -> Row 9 struck on its number. The Lister writes row 10, copying your 9 letters…
+  row 10: line w, tap m -> 1 row slipped past its number (row 2). Later letters struck them anyway.
+shot round3-done
+  state: [1]
+
+END: One row slipped past its own number still agreeing with you, so your row is not yet a proof. Cantor's rule lets none slip: at letter u, look at row u's letter u and write the other one. Every row then differs from yours by the time you pass it.
+      That is Cantor's argument of 1891. However the endless book is written, this one rule writes a row it misses. So no endless list of such rows is ever complete: there are more rows than there are whole numbers to number them with. Some infinities are bigger than others.
+shot end-top
+  last try: Not in the book. Again. And it would be again, for ever.
+shot end-rerun
+shot about
+
+PLAY AGAIN: seed 4821 -> 4363; screen play; round 1
+  round 1 by all-m: Row 1 is your row. Six letters, and it agrees with you in every one. The Lister has it.
+shot round1-caught
+  round 3 clean: Ten rows, each struck on its own number. None slipped.
+  END: You wrote a row the Lister's book does not contain, and you can prove it: row 1 differs from yours at letter 1, row 2 at letter 2, row 3 at letter 3, and so on for ever.
+  note: In round 1 a row of the small book caught you; in round 3 none did. The rule is what changed.
+shot end-clean-after-r1-loss
+
+errors: none
