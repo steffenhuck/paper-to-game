@@ -31,13 +31,16 @@ const CONFIG = {
   // The order book: four stars, the same under every merchant. Fee and keep-time are the customer's; d is the star's.
   //   Thun:  everyone sends with two; the borrower adds a third, to be paid sooner (a few francs: the near star is nearly indifferent).
   //   Olten: everyone sends, and exactly four boosters keep the flowers alive.
-  //   Sion:  the patient and the ordinary merchant send; the borrower refuses.  Brig:  only the patient merchant sends, and only with six.
+  //   Sion:  the patient and the ordinary merchant send; the borrower refuses (250 francs in 15 years is 50 to him).
+  //   Brig:  only the patient merchant sends, and only with six; to the ordinary merchant 300 francs in 30 years is 88, less than the fuel.
   stars: [
     { name: 'THUN',  d: 2,  fee: 500, keep: 2 },   // our choice
     { name: 'OLTEN', d: 3,  fee: 500, keep: 1 },   // our choice
-    { name: 'SION',  d: 15, fee: 300, keep: 3 },   // our choice
-    { name: 'BRIG',  d: 25, fee: 300, keep: 2 },   // our choice
+    { name: 'SION',  d: 15, fee: 250, keep: 3 },   // our choice
+    { name: 'BRIG',  d: 30, fee: 300, keep: 3 },   // our choice
   ],
+  // The ending: how you die, by the share of the best possible profit you made. Our choice of words; the shares are arbitrary.
+  fates: [ [0.97, 'the richest merchant in Bern'], [0.75, 'a comfortable man'], [0.4, 'solvent, just'], [0, 'a poor man'], [-Infinity, 'a pauper'] ],
   // The long haul (encore): a museum a century away. Only a merchant who does not discount at all can take it.
   haul: { name: 'LOCARNO', d: 100, fee: 800, keep: 10 }, // our choice
 };
@@ -73,6 +76,8 @@ function best(order, rate) {
 }
 // The fewest boosters that get the flowers there alive (0 if none does).
 function minAlive(order) { for (let n = 1; n <= CONFIG.maxBoost; n++) if (fly(order, n, 0).alive) return n; return 0; }
+// How the merchant dies, given the profit made and the best possible.
+function fate(profit, bestProfit) { if (profit < -0.5) return CONFIG.fates[CONFIG.fates.length - 1][1]; const share = bestProfit > 0 ? profit / bestProfit : 0; for (const [s, w] of CONFIG.fates) if (share >= s) return w; return CONFIG.fates[CONFIG.fates.length - 1][1]; }
 // A whole order book for one merchant: every order flown with its allocated boosters; the profit, and the best profit, summed.
 function runBook(orders, alloc, rate) {
   if (alloc.length !== orders.length || alloc.some(n => n < 0 || n > CONFIG.maxBoost || n !== Math.floor(n))) return { error: 'bad allocation' };
@@ -113,5 +118,5 @@ function fmtShare(x) { // 0..1 as words
   if (x >= 0.97) return 'all of it'; if (x >= 0.8) return 'most of it'; if (x >= 0.55) return 'over half'; if (x >= 0.3) return 'a third'; if (x > 0.05) return 'a little'; return 'next to nothing';
 }
 
-const MECH = { CONFIG, compose, speedAfter, clockRate, energy, fuelCost, discount, fly, best, minAlive, runBook, fmtYears, fmtLimit, fmtSpeed, fmtRate, fmtFrancs, fmtShare };
+const MECH = { CONFIG, compose, speedAfter, clockRate, energy, fuelCost, discount, fly, best, minAlive, fate, runBook, fmtYears, fmtLimit, fmtSpeed, fmtRate, fmtFrancs, fmtShare };
 if (typeof module !== 'undefined') module.exports = MECH;

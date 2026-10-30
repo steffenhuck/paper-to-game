@@ -49,6 +49,7 @@ for (const k of Object.keys(R)) for (const o of CONFIG.stars) { const bn = best(
   check(`${k} ${o.name}: best is unique by ≥ ${need} francs`, s[0] - s[1] >= need, (s[0] - s[1]).toFixed(1)); } }
 check('range: four boosters is the fewest that arrive alive', minAlive(CONFIG.range) === 4);
 check('range: two boosters arrive dead (the natural first try)', !fly(CONFIG.range, 2, 0).alive);
+check('fate: every franc there was is the richest merchant; nothing is a poor man; a loss is a pauper', M.fate(100, 100) === 'the richest merchant in Bern' && M.fate(0, 100) === 'a poor man' && M.fate(-5, 100) === 'a pauper');
 check('long haul: only the patient merchant can make it pay', best(CONFIG.haul, 0).n === 6 && best(CONFIG.haul, R.ORDINARY).n === 0);
 
 // The pattern the game stages, and whether it comes from the paper or from our prices:

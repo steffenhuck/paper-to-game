@@ -333,6 +333,8 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
   <ul><li><b>Test range</b>: not the game yet. One star, as many launches as you like, nothing counts. Slide the boosters and watch the race, the clocks and the till.</li>
   <li><b>Order book</b>: the game. First choose which merchant you are. Then four stars: set each rocket's boosters, or refuse the order, and launch them all. Each card shows the fee, what it is worth to you today, and the fuel, before you launch.</li>
   <li><b>The long haul</b>: a museum, a hundred light-years away.</li></ul>
+  <h3>How it ends</h3>
+  <p>At the end of the book you die, as merchants do, and the verdict says how: the richest merchant in Bern, a comfortable man, solvent, a poor man, or a pauper, by how much of the money there was to be made you made.</p>
   <button class="btn" id="b-help-back">Back to the game</button>
 </section>
 
@@ -349,7 +351,7 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
 </script>
 <script>
 (function () {
-  const { CONFIG, fly, best, minAlive, runBook, fmtYears, fmtLimit, fmtSpeed, fmtRate, fmtFrancs, fmtShare, speedAfter, clockRate, fuelCost } = MECH;
+  const { CONFIG, fly, best, minAlive, fate, runBook, fmtYears, fmtLimit, fmtSpeed, fmtRate, fmtFrancs, fmtShare, speedAfter, clockRate, fuelCost } = MECH;
   const $ = s => document.querySelector(s);
   const NS = 'http://www.w3.org/2000/svg';
   const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
@@ -625,7 +627,8 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
   function endBook() {
     const r = S.result, fl = r.flights, bs = r.bests, os = S.orders, rt = rate();
     const share = r.bestProfit > 0 ? r.profit / r.bestProfit : 0;
-    const head = r.profit < -0.5 ? `You lost ${fmtFrancs(-r.profit)} today.` : share >= 0.97 ? `${fmtFrancs(r.profit)} today: every franc there was.` : share >= 0.75 ? `${fmtFrancs(r.profit)} today, of a possible ${fmtFrancs(r.bestProfit)}.` : `${fmtFrancs(r.profit)} today. There was ${fmtFrancs(r.bestProfit)} to be made.`;
+    const head = `You die ${fate(r.profit, r.bestProfit)}.`;
+    const sub = r.profit < -0.5 ? `You lost ${fmtFrancs(-r.profit)} today.` : share >= 0.97 ? `${fmtFrancs(r.profit)} today: every franc there was.` : `${fmtFrancs(r.profit)} today, of a possible ${fmtFrancs(r.bestProfit)}.`;
     const notes = [];
     os.forEach((o, i) => { const f = fl[i], b = bs[i], nm = cap(o.name.toLowerCase());
       if (b.n === 0 && !f.refused) notes.push(f.alive ? `${nm}: the flowers arrived alive, but the fee arrives in ${fmtYears(f.tHome)}, and at your rate that is worth ${fmtShare(f.disc)}. Refusing was the money move.` : `${nm}: dead on arrival, and even alive the fee would have come too late to be worth the fuel. Refuse it.`);
@@ -637,7 +640,7 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
     const did = notes.length ? notes.join(' ') : 'Every rocket carried exactly the boosters that paid, and you refused what could not pay.';
     const others = Object.keys(M0).filter(k => k !== S.who).map(k => { const rr = runBook(os, S.alloc, M0[k].rate); return `${M0[k].title} would have made ${fmtFrancs(rr.profit)} today with these same rockets; their best book is ${fmtFrancs(rr.bestProfit)}.`; });
     const cross = `<p class="p">You were ${M0[S.who].title.toLowerCase()}. ${others.join(' ')}</p>`;
-    $('#verdict').innerHTML = `<h1>${head}</h1><p class="p">${did}</p>${cross}
+    $('#verdict').innerHTML = `<h1>${head}</h1><p class="p"><b>${sub}</b> ${did}</p>${cross}
       <p class="p paper"><b>Einstein, 1905:</b> speeds don’t simply add, and no pile of boosters ever reaches light. A clock that travels runs slow, and the closer to light it goes, the slower it runs. And the energy a body needs grows without limit as it nears the speed of light.</p>
       <p class="p means"><b>What that means for the Light Post:</b> the light limit binds the money. However many boosters you fire, the fee cannot arrive before light would, so a far star's fee is discounted to almost nothing whatever you do, and a merchant who discounts refuses the far stars first. It does not bind the flowers: every booster slows the rocket's clock, so they can arrive as young as you like, at a fuel price that grows without limit.</p>`;
     $('#tally').innerHTML = os.map((o, i) => { const f = fl[i], b = bs[i];
@@ -646,7 +649,7 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
   }
   function endHaul() {
     const f = S.result.flights[0], o = CONFIG.haul, rt = rate(), b = best(o, rt);
-    const head = f.refused ? (b.n ? 'Refused. There was money in it.' : 'Refused, and rightly.') : f.profit >= 0.5 ? `${fmtFrancs(f.profit)} today, for flowers that arrive in a century.` : 'A century on, and a loss.';
+    const head = f.refused ? (b.n ? 'Refused. There was money in it.' : 'Refused, and rightly.') : f.profit >= 0.5 ? `You die ${fate(f.profit, b.profit)}, for flowers that arrive in a century.` : 'You die a pauper, a century before the flowers arrive.';
     const body = f.refused ? (b.n ? `With six boosters the flowers would have aged ${fmtYears(b.tCargo)} while a century passed in Bern, and ${fmtFrancs(o.fee)} a century from now is ${fmtFrancs(b.today)} to you, against ${fmtFrancs(b.cost)} of fuel.` : `${fmtFrancs(o.fee)} paid in a century is worth ${fmtShare(fly(o, 6, rt).disc)} to you today. Only a merchant who does not discount at all can take this order.`)
       : `The station clock read ${fmtYears(f.tHome)}; the rocket clock ${fmtYears(f.tCargo)}${f.alive ? '' : ': dead'}. ` + (f.alive ? `${fmtFrancs(o.fee)} a century from now is worth ${fmtFrancs(f.today)} to you today; the fuel cost ${fmtFrancs(f.cost)}.` : `Nobody pays; the fuel cost ${fmtFrancs(f.cost)}.`) + (f.profit >= 0.5 ? ' Everyone who placed this order is long gone. The flowers are young, and you did not mind waiting.' : '');
     $('#haulverdict').innerHTML = `<h1>${head}</h1><p class="p">${body}</p>

@@ -280,3 +280,25 @@ Steffen, after playing: the story of *where* was not told, and the two clocks we
 **On screen.** A "where everyone is" strip under the order: BERN · YOU (home time; paid on the station clock, which agrees with yours), THE ROCKET (the flowers; age by the rocket's clock, which runs slow), THE STAR · THE CUSTOMER (pays on arrival, if alive). The clocks are now STATION CLOCK, "when you are paid", and ROCKET CLOCK, "how old the flowers are", with the keep-time as the rocket clock's limit and DEAD on the dial past it. The till shows FEE, TODAY (with "paid in 15 years at 10% a year: a little of the fee"), FUEL, PROFIT TODAY. The slider previews all of it. The choice screen asks "which merchant are you?" with the rate in red.
 
 **Build.** `mechanism.js` rewritten; `calibration.js` 39 checks, including §1 (a 4-ly flight at 0.8c arrives at station time 5 years, rocket time 3); `loop.js`, `session-test.js`, the About text rewritten. Browser session at 380 px: range (2 dead, preview 4, 3 dead, 5, 4), the choice screen, the ordinary merchant spread at three (390 of 944: two dead, Brig refused wrongly), the patient merchant played well (1364, every franc), the borrower with the patient's plan (593 of 708: Sion and Brig should have been refused), the long haul at five (dead) and six (alive but worth nothing today to a borrower); no errors, no horizontal scroll, no decimals.
+
+
+## 25. Heuristic players, and the ending (30 Oct)
+
+Eight heuristic players run against the three merchants (`node -e`, recorded here; profit today, share of the optimum, fate):
+
+| heuristic | patient | ordinary | with a loan |
+|---|---|---|---|
+| max out: 6 everywhere | 1049 · 80% · comfortable | 625 · 68% · solvent | 332 · 47% · solvent |
+| spread: 3 everywhere | 432 · 33% · poor | 390 · 43% · solvent | 331 · 47% · solvent |
+| 4 everywhere (what the range taught) | 858 · 65% · solvent | 759 · 83% · comfortable | 622 · 88% · comfortable |
+| physics only: cheapest alive, send everything | 1314 · 100% · richest | 880 · 96% · comfortable | 574 · 81% · comfortable |
+| physics + one spare booster | 1214 · 92% · comfortable | 787 · 86% · comfortable | 490 · 69% · solvent |
+| near stars only, cheapest alive | 958 · 73% · solvent | 850 · 93% · comfortable | 704 · 99% · richest |
+| cheapest alive, refuse if fee today < fuel | 1314 · 100% | 917 · 100% | 704 · 99% |
+| optimal | 1314 | 917 | 708 |
+
+What this says. Maxing out is punished but survivable for the patient merchant (he does not discount, so his only loss is fuel) and ruinous for the borrower. Spreading three everywhere kills two orders. The physics-only player, who finds the cheapest alive rocket for every star and sends everything, is the richest merchant as the patient, and only a comfortable man as the borrower: the economics bites exactly where it should, at the far stars for the impatient. The near-only player is the mirror image: richest as the borrower, solvent as the patient, because he left Sion and Brig on the table. The whole game is the difference between those two rows, which is the discount applied to the light-time.
+
+Tuning from the simulation: Sion is 250 francs (the borrower's refusal is now −17 rather than −7); Brig is 30 light-years (the ordinary merchant's refusal is −37 rather than −17).
+
+**The ending.** Steffen: the end should be about wealth — you die a rich man or a pauper. The verdict now leads with "You die the richest merchant in Bern / a comfortable man / solvent, just / a poor man / a pauper", by the share of the best possible profit (97%, 75%, 40%, 0, loss); the francs are the second line. The long haul ends "You die a pauper, a century before the flowers arrive" or, for the patient merchant, "You die the richest merchant in Bern, for flowers that arrive in a century." The bands are ours and tagged as such in the config.
