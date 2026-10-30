@@ -1,4 +1,4 @@
-// Watson's Cardboard (formerly The Other Chain) — mechanism. The single source of truth: build.py inlines this file verbatim into the game,
+// The Other Chain — mechanism. The single source of truth: build.py inlines this file verbatim into the game,
 // and calibration.js tests this file. No DOM. Runs unchanged in Node and in the browser.
 // Kind: TOY. It formalises the argument of Watson & Crick (1953), Nature 171:737, as cut-out pieces on a ladder.
 (function (root) {
@@ -31,29 +31,12 @@ const CONFIG = {
   LEN: { purine: 3, pyrimidine: 2 },   // our choice: a purine (two rings) is the longer piece
   RAIL_GAP: 5,                         // our choice: the fixed rail distance = one purine + one pyrimidine
 
-  // --- Chargaff's measurements: the evidence on the desk for ladder one. The letter cites them (p. 737, refs 3 and 4: "the ratio of the
-  // amounts of adenine to thymine, and the ratio of guanine to cytosine, are always very close to unity") but prints no numbers.
-  // Percent of the four letters, as commonly tabulated from Chargaff's laboratory (e.g. Stanford Stats 366 notes; Pierce, Genetics,
-  // table 10.1). Sources differ by a point or two (Pierce's 1955 table: human 30.3/30.3/19.5/19.9); some values postdate 1953. Check. ---
-  JARS: [
-    { name: 'human',          A: 30.9, T: 29.4, G: 19.9, C: 19.8 },
-    { name: 'gut bacterium',  A: 24.7, T: 23.6, G: 26.0, C: 25.7 },   // E. coli: all four near a quarter, so it fits any pairing (the decoy)
-    { name: 'yeast',          A: 31.3, T: 32.9, G: 18.7, C: 17.1 },
-    { name: 'TB bacterium',   A: 15.1, T: 14.6, G: 34.9, C: 35.4 },   // Mycobacterium tuberculosis
-  ],
-  JAR_CLOSE: 3,           // our choice: two letters "match" in a jar when within 3 points (the largest true-pair gap is 1.6)
-
   // --- the game ---
-  LADDER1_RUNGS: 6,       // our choice: a short first ladder; pieces face down, built from the jars' evidence, tested only by the zip
+  LADDER1_RUNGS: 8,       // our choice: short first ladder
   LADDER2_RUNGS: 10,      // one full turn of the paper's helix (REPEAT_RESIDUES)
   LADDER2_MIN_EACH_SIDE: 3, // our choice: the given pieces sit on both rails (the paper's dyad), at least 3 on each
-  // Ladder 2 arrives already built, wrongly: a model on the desk. Most rungs pair like with like, which is the model Watson built
-  // first (Watson, The Double Helix, ch. 26; the letter itself says only that like-with-like does not fit). A few rungs are right
-  // by accident and a couple have the right width but clashing ends, so the three faults are all on the desk. Our construction.
-  LADDER2_LIKE: 5,        // our choice: rungs paired like with like (too wide or too narrow)
-  LADDER2_CLASH: 2,       // our choice: rungs with the right width and a bump on a bump
-  COPY_MS_FIRST: 3000,    // our choice: the fork waits this long at the first rung (two spots) and moves on as soon as both are filled
-  COPY_MS_LAST: 1600,     // our choice: and at the last; linear in between
+  COPY_MS_FIRST: 3400,    // our choice: most time the fork waits at the first rung (two spots); it moves on as soon as both are filled
+  COPY_MS_LAST: 2000,     // our choice: and at the last; linear in between
 };
 
 const KEYS = ['A', 'G', 'T', 'C'];
@@ -107,14 +90,8 @@ function drawGame(seed) {
     const c = counts(complete(l2));
     if (nL >= CONFIG.LADDER2_MIN_EACH_SIDE && nR >= CONFIG.LADDER2_MIN_EACH_SIDE && c.A !== c.G) break;
   }
-  // the model on the desk: which rungs are wrong, and how
-  const idx = l2.map((_, i) => i); for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; }
-  const like = idx.slice(0, CONFIG.LADDER2_LIKE), clash = idx.slice(CONFIG.LADDER2_LIKE, CONFIG.LADDER2_LIKE + CONFIG.LADDER2_CLASH);
-  const prefill = l2.map((s, i) => like.includes(i) ? s.given : clash.includes(i) ? clashPartner(s.given) : partnerOf(s.given));
-  return { seed, ladder1: l1, ladder2: l2, prefill };
+  return { seed, ladder1: l1, ladder2: l2 };
 }
-// the piece with the right length and the wrong ends: the other base of the other ring class
-function clashPartner(b) { return KEYS.find(y => y !== b && fit(b, y).fault === 'clash'); }
 
 // a rung as left/right letters, given the player's piece for the empty side (null = empty)
 function rungOf(spot, placed) {
@@ -162,31 +139,6 @@ function scoreCopy(full, entries) {
   return { res, copies, same, right, n: res.length, missed: res.filter(x => x.fault === 'missed').length };
 }
 
-// the copies copied again, without the player: every chain rebuilds its partner by the rule (the letter's last sentence).
-// A rung the player got wrong has a changed letter on one chain; that chain's grandchild pairs it correctly, and so the change
-// is inherited: the grandchildren hold, and differ from the original. A spot the fork passed (null) stays a gap.
-function copyAgain(copies, full) {
-  return copies.map(cp => cp.map((g, i) => {
-    const chain = g.left && g.right ? (g.left === full[i].left ? g.right : g.left) : (g.left || g.right); // the new chain of this copy
-    if (!chain) return { left: null, right: null, held: false, changed: true };
-    const p = partnersOf(chain)[0] || null;
-    const changed = chain !== full[i].left && chain !== full[i].right;
-    return { left: chain, right: p, held: !!p, changed };
-  }));
-}
-
-// Chargaff's jars: the three ways to split the four letters into two couples, and what each jar says about each.
-const PAIRINGS = [['AT', 'GC'], ['AG', 'TC'], ['AC', 'GT']];
-function jarGap(jar, couple) { return Math.abs(jar[couple[0]] - jar[couple[1]]); }
-// for each pairing: the jars it fits (both couples within JAR_CLOSE) and the largest gap anywhere
-function readJars(jars) {
-  jars = jars || CONFIG.JARS;
-  return PAIRINGS.map(p => {
-    const fits = jars.map(j => p.every(c => jarGap(j, c) <= CONFIG.JAR_CLOSE));
-    return { pairing: p, fits, all: fits.every(Boolean), worst: Math.max(...jars.map(j => Math.max(...p.map(c => jarGap(j, c))))) };
-  });
-}
-
 // the closing twist: residue i turned TWIST_DEG further round the axis and RISE_A further along it
 function helixPoint(i) {
   return { angleDeg: (i * CONFIG.TWIST_DEG) % 360, zA: i * CONFIG.RISE_A, radiusA: CONFIG.P_RADIUS_A };
@@ -206,22 +158,20 @@ function howMany(k, n) {
 // the verdict, in words. s = { l1: zip result, l2: zip result, copy: scoreCopy result }
 function verdict(s) {
   const lines = [];
-  const f2 = s.l2.held === s.l2.n;
-  const rule = 'a long piece needs a short one, and the ends must grip: a bump needs a dent. Only A with T and G with C.';
-  const h1 = s.l1.held, n1 = s.l1.n;
-  if (h1 === n1) lines.push('You read Chargaff\'s jars: A always comes with as much T, and G with as much C. Your first ladder held on every rung, and the cardboard showed why: ' + rule + (f2 ? ' Then you mended the model on the desk.' : ''));
-  else if (h1 >= n1 - 2) lines.push('Your first ladder held ' + howMany(h1, n1) + ' rung' + (n1 - h1 === 1 ? '' : 's') + '. The jars said it all along: A always comes with as much T, and G with as much C. The cardboard shows why: ' + rule + (f2 ? ' Then you mended the model on the desk.' : ''));
-  else lines.push('Your first ladder held ' + howMany(h1, n1) + ' of its rungs. The jars said it all along: A always comes with as much T, and G with as much C. The cardboard shows why: ' + rule + (f2 ? ' Then you mended the model on the desk.' : ''));
-  const c = s.copy, both = c.same[0] && c.same[1], g = s.grand;
-  if (both) lines.push('Then you pulled the ladder apart and each half rebuilt the other: two ladders, letter for letter the same as the first. Copied again, without you, they stayed the same.');
-  else { const ch = g ? g.reduce((n, cp) => n + cp.filter(x => x.changed).length, 0) : 0;
-    lines.push('Then you pulled the ladder apart and each half rebuilt the other. Your copies got ' + howMany(c.right, c.n) + ' new piece' + (c.right === 1 ? '' : 's') + ' right' + (c.missed ? '; the fork passed ' + c.missed + ' empty spot' + (c.missed === 1 ? '' : 's') : '') + '. Copied again, without you, ' + (ch ? 'the grandchildren hold on every rung, and ' + ch + ' rung' + (ch === 1 ? '' : 's') + ' of them differ from the ladder you built: a slip, once copied, breeds true.' : 'the grandchildren are the same as the first.')); }
-  lines.push('Watson built his first model with like paired to like. Most of it was wrong; a colleague told him the textbooks had drawn the shapes of the pieces wrongly, and he rebuilt it in a morning.');
+  const f2 = s.l2.held === s.l2.n, f1 = s.l1.held === s.l1.n;
+  const rule = 'a long piece needs a short one, and a bump needs a dent. Only A with T and G with C.';
+  if (f1 && f2) lines.push('You had the rule from the first ladder: ' + rule);
+  else if (f2) lines.push('Your first ladder failed in places; your second held all the way down. You found the rule: ' + rule);
+  else if (s.l2.held >= s.l2.n - 2) lines.push('Your second ladder held ' + howMany(s.l2.held, s.l2.n) + ' rung' + (s.l2.n - s.l2.held === 1 ? '' : 's') + '. Nearly there. The rule: ' + rule);
+  else lines.push('Your rungs kept failing to the end. The rule: ' + rule);
+  const c = s.copy, both = c.same[0] && c.same[1];
+  if (both) lines.push('Then you pulled the ladder apart and each half rebuilt the other: two ladders, letter for letter the same as the first.');
+  else lines.push('Then you pulled the ladder apart and each half rebuilt the other. Your two copies got ' + howMany(c.right, c.n) + ' new piece' + (c.right === 1 ? '' : 's') + ' right' + (c.missed ? ', and the fork passed ' + c.missed + ' empty spot' + (c.missed === 1 ? '' : 's') : '') + '. You never had to be told what went where: each half said it.');
   lines.push('Watson and Crick, 1953: one chain fixes the other. That is why DNA always holds as much A as T and as much G as C, and it "immediately suggests a possible copying mechanism".');
   return lines;
 }
 
-const api = { CONFIG, KEYS, rng, fit, contact, partnersOf, partnerOf, clashPartner, drawGame, rungOf, zip, complete, counts, chargaff,
-  copySpots, copyMs, scoreCopy, copyAgain, PAIRINGS, jarGap, readJars, helixPoint, howMany, verdict };
+const api = { CONFIG, KEYS, rng, fit, contact, partnersOf, partnerOf, drawGame, rungOf, zip, complete, counts, chargaff,
+  copySpots, copyMs, scoreCopy, helixPoint, howMany, verdict };
 if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.MECH = api;
 })(typeof window !== 'undefined' ? window : this);

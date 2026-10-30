@@ -1,4 +1,4 @@
-# Generates watsons-cardboard.html from template.html, mechanism.js (the single source of truth) and the embedded fonts,
+# Generates the-other-chain.html from template.html, mechanism.js (the single source of truth) and the embedded fonts,
 # then verifies byte for byte that the embedded mechanism is the file calibration.js ran against.
 import base64, sys
 mech = open('mechanism.js', encoding='utf-8').read()
@@ -6,13 +6,9 @@ font = lambda f: base64.b64encode(open('fonts/' + f, 'rb').read()).decode()
 about = """
 <h2>What's real here</h2>
 <h3>The game in one line</h3>
-<p>You build the second chain of a DNA ladder from cut-out pieces that lie face down until you zip, with Chargaff's measurements as your only clue; mend a model that was built wrongly, then pull the ladder apart and copy it, and copy the copies. The rule that decides which rungs hold is Watson and Crick's; the pieces, their lengths, the ladders and the fork are this game's.</p>
+<p>You build the second chain of a DNA ladder from cut-out pieces, zip it to see which rungs hold, then pull it apart and copy it. The rule that decides which rungs hold is Watson and Crick's; the pieces, their lengths, the ladders and the fork are this game's.</p>
 <h3>What the paper found</h3>
 <p>In a one-page letter to <i>Nature</i> in April 1953, James Watson and Francis Crick proposed the structure of DNA. Two chains wind round the same axis, right-handed, running in opposite directions. The sugar-phosphate backbones are on the outside (Linus Pauling's model of a month earlier had three chains with the phosphates in the middle). The bases are inside, flat, and joined across in pairs by hydrogen bonds. One base of each pair must be a purine (adenine or guanine, two rings) and the other a pyrimidine (thymine or cytosine, one ring). Assuming the bases take their most plausible (keto) forms, only adenine with thymine and guanine with cytosine can bond. So the order of bases along one chain is unrestricted, but it fixes the order on the other. That explains why, as Erwin Chargaff had measured, DNA holds as much adenine as thymine and as much guanine as cytosine. And, in the letter's most famous sentence, "It has not escaped our notice that the specific pairing we have postulated immediately suggests a possible copying mechanism for the genetic material." The helix has a base pair every 3.4 Å along the axis, each turned 36° from the last, so it repeats every 10 pairs (34 Å); the phosphates sit 10 Å from the axis. The authors say the model is "roughly compatible" with the X-ray data then published and "must be regarded as unproved" until checked.</p>
-<h3>Chargaff's jars</h3>
-<p>The first ladder's only clue is four jars: the share of each letter in DNA from humans, yeast, a gut bacterium (<i>E. coli</i>) and the tuberculosis bacterium, as commonly tabulated from Erwin Chargaff's laboratory (human A 30.9, T 29.4, G 19.9, C 19.8; yeast 31.3, 32.9, 18.7, 17.1; <i>E. coli</i> 24.7, 23.6, 26.0, 25.7; <i>M. tuberculosis</i> 15.1, 14.6, 34.9, 35.4, in percent). Published tables differ by a point or two, and some of these values were measured after 1953. The letter cites Chargaff's finding that A:T and G:C are "always very close to unity" but prints no numbers; it argues from the shapes and offers the ratios as agreement. The game hands you the ratios first, as Watson and Crick had them, and lets the cardboard explain them. The gut bacterium is a decoy: its four letters are all near a quarter, so it fits any pairing.</p>
-<h3>The model on the desk, and the grandchildren</h3>
-<p>Ladder two arrives already built, with most rungs pairing like with like. That is the model Watson built first, in February 1953, before Jerry Donohue told him the textbooks had the shapes of the bases wrong (Watson, <i>The Double Helix</i>, 1968). The letter itself says only that like-with-like pairs do not fit; the story is history, not the paper, and the particular mixture of wrong rungs is this game's. The copying of the copies is the letter's last sentence taken one step further: a chain rebuilds its partner by the rule, so a slip in one generation is inherited by the next. The letter says nothing about errors; that consequence is ours to show.</p>
 <h3>Mechanism: a toy</h3>
 <p><b>This game demonstrates</b> that the letter's two conditions, one purine with one pyrimidine (so every rung has the same width) and hydrogen bonds that line up (in the keto forms), leave exactly two pairs, and that this forces one chain to spell out the other, so a ladder pulled apart can be rebuilt twice over. Each condition alone would leave twice as many pairs; together they leave A–T and G–C.</p>
 <p><b>It assumes</b> pieces instead of molecules. Length stands for ring size: a long piece (A, G) and a short piece (T, C) exactly span the rails; two long pieces are too wide, two short ones too narrow. The lengths are our units; any lengths with purines longer than pyrimidines give the same answer. The bumps and dents stand for hydrogen donors and acceptors at the letter's positions 6 and 1. Which base has which is standard chemistry for the keto forms, not printed in the letter. The game uses the letter's two contacts per pair; guanine and cytosine were later found to share a third. The ladders, their sequences (drawn from the game number), the fork and its speed are ours.</p>
@@ -28,10 +24,9 @@ for k in ['/*__MECHANISM__*/', '/*__ABOUT__*/', '/*__FONT_MARKER__*/', '/*__FONT
     assert t.count(k) == 1, k
 out = (t.replace('/*__FONT_MARKER__*/', font('marker.woff2')).replace('/*__FONT_TYPE_BOLD__*/', font('prime-700.woff2'))
         .replace('/*__FONT_TYPE__*/', font('prime-400.woff2')).replace('/*__ABOUT__*/', about).replace('/*__MECHANISM__*/', mech))
-name = 'watsons-cardboard.html'
+name = 'the-other-chain.html'
 open(name, 'w', encoding='utf-8').write(out)
 built = open(name, encoding='utf-8').read()
 if mech not in built:
     sys.exit('BUILD FAILED: embedded mechanism differs from mechanism.js')
-open('the-other-chain.html', 'w', encoding='utf-8').write('<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=watsons-cardboard.html"><title>Watson\'s Cardboard</title><p>This game is now called <a href="watsons-cardboard.html">Watson\'s Cardboard</a>.</p>')
 print(f'built {name}: {len(built)} bytes; mechanism embedded verbatim ({len(mech)} bytes)')

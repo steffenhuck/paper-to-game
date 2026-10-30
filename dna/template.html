@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Watson's Cardboard</title>
-<meta name="description" content="A game from Watson and Crick's 1953 DNA letter: at the Cavendish desk with cardboard pieces, find the only two pairs that fit, mend Watson's wrong model, then pull the ladder apart and copy it.">
+<title>The Other Chain</title>
+<meta name="description" content="A game from Watson and Crick's 1953 DNA letter: build the other chain from cut-out pieces, find the only two pairs that fit, then pull the ladder apart and copy it.">
 <style>
 @font-face { font-family: 'OC Marker'; src: url(data:font/woff2;base64,/*__FONT_MARKER__*/) format('woff2'); font-weight: 400; }
 @font-face { font-family: 'OC Type'; src: url(data:font/woff2;base64,/*__FONT_TYPE__*/) format('woff2'); font-weight: 400; }
@@ -15,20 +15,10 @@
 }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { margin: 0; background: var(--kraft); color: var(--pencil); font-family: var(--type); font-size: 15px; line-height: 1.4; }
-body { min-height: 100vh; overflow-x: hidden; background: #8E7250;
-  background-image: linear-gradient(90deg, rgba(0,0,0,0.10) 0 1px, transparent 1px 100%), linear-gradient(rgba(0,0,0,0.06) 0 1px, transparent 1px 100%);
-  background-size: 180px 100%, 100% 26px; }
-/* the sheet of kraft card lying on the desk */
-.wrap { max-width: 460px; margin: 10px auto 24px; padding: 6px 16px 28px; background: var(--kraft); position: relative;
-  background-image: radial-gradient(rgba(42,38,33,0.07) 1px, transparent 1.3px), radial-gradient(rgba(255,255,255,0.09) 1px, transparent 1.4px);
-  background-size: 7px 7px, 11px 11px; background-position: 0 0, 3px 5px;
-  box-shadow: 0 2px 0 rgba(0,0,0,0.25), 0 10px 24px rgba(0,0,0,0.35); border-radius: 2px; }
-.wrap::before { content: ''; position: absolute; inset: 10px 10px; border: 1px solid rgba(42,38,33,0.28); pointer-events: none; }
-/* a corner of masking tape holding the sheet down */
-.wrap::after { content: ''; position: absolute; top: -8px; left: 50%; width: 76px; height: 20px; margin-left: -38px; background: rgba(245,237,219,0.75); border: 1px solid rgba(42,38,33,0.18); transform: rotate(-1.5deg); }
-.pencil { position: absolute; right: -6px; top: 140px; width: 9px; height: 150px; background: linear-gradient(90deg,#E0B64C,#F0C95A 55%,#C99C3B); border: 1px solid rgba(42,38,33,0.5); border-radius: 2px 2px 0 0; transform: rotate(8deg); pointer-events: none; }
-.pencil::after { content: ''; position: absolute; left: -1px; right: -1px; bottom: -14px; height: 14px; background: linear-gradient(#DCC9A2, #2A2621 85%); clip-path: polygon(0 0, 100% 0, 50% 100%); }
-@media (max-width: 500px) { .pencil { display: none; } }
+body { min-height: 100vh; overflow-x: hidden;
+  background-image: radial-gradient(rgba(42,38,33,0.07) 1px, transparent 1.3px), radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1.4px);
+  background-size: 7px 7px, 11px 11px; background-position: 0 0, 3px 5px; }
+.wrap { max-width: 460px; margin: 0 auto; padding: 0 16px 28px; }
 .screen { display: none; }
 .screen.on { display: block; }
 h1, h2, h3, .mk { font-family: var(--mark); font-weight: 400; margin: 0; letter-spacing: 0.01em; }
@@ -48,7 +38,7 @@ b { font-weight: 700; }
 .tag { position: relative; display: block; width: 100%; border: 0; background: var(--pencil); color: var(--pencil); cursor: pointer; padding: 2px; font-family: var(--type); font-weight: 700;
   font-size: 16px; letter-spacing: 0.08em; text-transform: uppercase; text-align: left;
   clip-path: polygon(18px 0, 100% 0, 100% 100%, 18px 100%, 0 calc(100% - 18px), 0 18px); transform: rotate(-0.6deg); }
-.tag > span { display: block; background: var(--card); padding: 15px 14px 15px 42px; box-shadow: inset 0 -2px 0 rgba(42,38,33,0.15); clip-path: polygon(17px 0, 100% 0, 100% 100%, 17px 100%, 0 calc(100% - 17px), 0 17px); position: relative; }
+.tag > span { display: block; background: var(--card); padding: 15px 14px 15px 42px; clip-path: polygon(17px 0, 100% 0, 100% 100%, 17px 100%, 0 calc(100% - 17px), 0 17px); position: relative; }
 .tag > span::before { content: ''; position: absolute; left: 16px; top: 50%; width: 12px; height: 12px; margin-top: -6px; border-radius: 50%; background: var(--kraft); box-shadow: inset 0 0 0 2px var(--pencil); }
 .tag:nth-of-type(2n) { transform: rotate(0.5deg); }
 .tag:active > span, .tag.hot > span { background: var(--kraft2); }
@@ -72,10 +62,7 @@ b { font-weight: 700; }
 svg.lad { display: block; width: 100%; height: auto; touch-action: manipulation; }
 .ribbon { fill: none; stroke: var(--blue); stroke-width: 9; stroke-linecap: round; }
 .ribbon-edge { fill: none; stroke: #173793; stroke-width: 1.4; stroke-dasharray: 2 5; }
-.pc { fill: var(--card); stroke: var(--pencil); stroke-width: 2; stroke-linejoin: round; filter: drop-shadow(1px 1.5px 0 rgba(42,38,33,0.35)); }
-.pc.face { fill: #E9DCC0; }
-.lt.face { fill: var(--pencil); }
-.tape { fill: rgba(245,237,219,0.78); stroke: rgba(42,38,33,0.25); stroke-width: 1; }
+.pc { fill: var(--card); stroke: var(--pencil); stroke-width: 2; stroke-linejoin: round; }
 .pc.bad { stroke: var(--red); stroke-width: 2.6; }
 .ring { fill: none; stroke: var(--pencil); stroke-width: 1.1; opacity: 0.55; }
 .lt { font-family: var(--mark); font-size: 19px; fill: var(--pencil); text-anchor: middle; dominant-baseline: central; }
@@ -91,13 +78,7 @@ svg.lad { display: block; width: 100%; height: auto; touch-action: manipulation;
 @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(5px); } 75% { transform: translateX(-4px); } }
 
 /* the tray */
-.tray { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 6px 0 10px; padding: 8px; background: rgba(42,38,33,0.08); border: 2px solid var(--pencil); border-radius: 3px; box-shadow: inset 0 3px 6px rgba(42,38,33,0.25); }
-.tray .pbtn.back svg { opacity: 0.95; }
-.repair .slot.next { stroke: var(--red); }
-.jars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin: 2px 0 6px; }
-.jars svg { display: block; width: 100%; height: auto; }
-.jars .jl { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; text-align: center; line-height: 1.1; margin-top: 2px; }
-.hint { font-size: 13px; margin: -2px 0 8px; color: rgba(42,38,33,0.8); }
+.tray { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 6px 0 10px; }
 .pbtn { border: 2px solid var(--pencil); background: rgba(245,237,219,0.45); padding: 4px 2px; cursor: pointer; border-radius: 4px; min-height: 52px; }
 .pbtn svg { display: block; width: 100%; height: auto; pointer-events: none; }
 .pbtn:active { background: var(--kraft2); }
@@ -144,11 +125,11 @@ svg.lad { display: block; width: 100%; height: auto; touch-action: manipulation;
 <!-- START -->
 <section class="screen on" id="s-start">
   <div class="poster">
-    <div class="kicker"><span>Watson &amp; Crick, 1953</span><span>Cavendish Laboratory, Cambridge</span></div>
-    <h1>Watson's Cardboard</h1>
+    <div class="kicker"><span>Watson &amp; Crick, 1953</span><span>a cardboard game</span></div>
+    <h1>The Other Chain</h1>
     <svg id="art" viewBox="0 0 360 170" aria-hidden="true"></svg>
     <div class="aimline" id="aim-start">Build the other chain so every rung holds when you zip it.</div>
-    <p class="lede">Two blue rails, four kinds of cardboard piece, face down, and Chargaff's jars of DNA as your only clue. Pin, zip, see what fits. Then mend the model on the desk, pull it apart, and copy it.</p>
+    <p class="lede">Two blue rails, cut-out pieces between them. Some fit, some don't. Then pull the ladder apart and copy it.</p>
     <button class="tag" id="b-start"><span>Start: first ladder</span></button>
     <button class="tag" data-help><span>How to play</span></button>
     <button class="tag" data-about><span>What's real here</span></button>
@@ -161,19 +142,16 @@ svg.lad { display: block; width: 100%; height: auto; touch-action: manipulation;
   <div class="bar"><div class="aim">Build the other chain so every rung holds when you zip it.</div><button class="q" data-help aria-label="How to play">?</button></div>
   <div class="kick"><span id="l-kick">Ladder 1 of 2</span><span id="l-count"></span></div>
   <p class="orient" id="l-orient"></p>
-  <div id="jars" class="jars"></div>
   <svg class="lad" id="l-svg" viewBox="0 0 360 400"></svg>
   <div id="l-build">
-    <div class="trayhead"><span id="t-head">Pieces</span><span id="t-sub">tap one to pin it</span></div>
+    <div class="trayhead"><span id="t-head">Pieces</span><span>tap one to pin it</span></div>
     <div class="tray" id="tray"></div>
-    <p class="hint" id="l-hint"></p>
     <button class="tag red" id="b-zip" disabled><span>Zip it</span></button>
   </div>
   <div id="l-done" style="display:none">
     <div class="res"><div class="big" id="r-big"></div><p class="why" id="r-why"></p>
       <div class="bars" id="r-bars"></div><p class="chg" id="r-chg"></p></div>
     <button class="tag" id="b-next"><span>Next ladder</span></button>
-    <button class="tag" id="b-mend" style="display:none"><span>Mend it</span></button>
   </div>
 </section>
 
@@ -190,12 +168,6 @@ svg.lad { display: block; width: 100%; height: auto; touch-action: manipulation;
   </div>
   <div id="c-done" style="display:none">
     <div class="res"><div class="big" id="c-big"></div><p class="why" id="c-why"></p></div>
-    <button class="tag" id="b-again"><span>Copy the copies</span></button>
-  </div>
-  <div id="c-grand" style="display:none">
-    <div class="kick"><span>The grandchildren</span><span>copied without you</span></div>
-    <svg class="lad" id="g-svg" viewBox="0 0 360 380"></svg>
-    <div class="res"><div class="big" id="g-big"></div><p class="why" id="g-why"></p></div>
     <button class="tag" id="b-end"><span>What did you find?</span></button>
   </div>
 </section>
@@ -216,14 +188,13 @@ svg.lad { display: block; width: 100%; height: auto; touch-action: manipulation;
   <p class="red mk" style="font-size:18px">Build the other chain so every rung holds when you zip it.</p>
   <div class="card">
     <p><b>The ladder.</b> Two blue rails (the backbones of DNA) with rungs between them. Each rung is two pieces, one pinned to each rail, meeting in the middle.</p>
-    <p><b>The pieces.</b> Four kinds, A, G, T and C. They lie face down in the tray; you see what shape they are the first time you zip. Each has a length and an end with two contact points, top and bottom; each point is a <b>bump</b> or a <b>dent</b>.</p>
+    <p><b>The pieces.</b> Four kinds: A and G are long, T and C are short. Each has an end with two contact points, top and bottom; each point is a <b>bump</b> or a <b>dent</b>.</p>
     <p><b>A rung holds</b> when the two pieces exactly span the gap between the rails and every bump meets a dent. Too long and the rails bow out. Too short and they pinch in. A bump against a bump pushes the piece away.</p>
   </div>
   <h3>Ladders</h3>
-  <p><b>Ladder one.</b> Above the ladder are Erwin Chargaff's jars: DNA from four creatures, its four letters stacked by how much of each there is. They are your evidence. The left rail has its pieces; tap a piece in the tray to pin it opposite the next one (marked in red), and tap a pinned piece to take it back. The pieces are face down, so nothing is tested until you press <b>Zip it</b>. Then every rung is tested, top to bottom, and the pieces turn face up.</p>
-  <p><b>Ladder two.</b> A model is already on the desk, built the way Watson first built it, mostly wrong. Zip it to see where it fails, then tap a rung to swap its loose piece, and zip again.</p>
+  <p>One rail already has its pieces. Tap a piece in the tray to pin it in the next empty spot (marked in red); tap a pinned piece to take it back. Nothing is tested until you press <b>Zip it</b>. Then every rung is tested, top to bottom. Two ladders.</p>
   <h3>The copy</h3>
-  <p>Your mended ladder is pulled apart into two halves. A red fork runs down them; on each rung it lights one spot on each half. Tap the piece that belongs there before the fork moves on. It moves on as soon as both spots are filled, and gets a little faster; a spot it passes stays empty. Then the two copies are copied again without you, and you see what your slips did.</p>
+  <p>Your second ladder is pulled apart into two halves. A red fork runs down them; on each rung it lights one spot on each half. Tap the piece that belongs there before the fork moves on. It moves on as soon as both spots are filled, and gets faster.</p>
   <h3>The end</h3>
   <p>The two copies twist up into the real shape, and you see what you found. One game, no do-overs; a new game number gives new chains.</p>
   <button class="tag" id="b-help-back"><span>Back to where I was</span></button>
@@ -231,7 +202,6 @@ svg.lad { display: block; width: 100%; height: auto; touch-action: manipulation;
 
 <!-- ABOUT -->
 <section class="screen page" id="s-about">
-  <div class="pencil"></div>
   /*__ABOUT__*/
   <button class="tag" id="b-about-back"><span>Back</span></button>
 </section>
@@ -251,11 +221,6 @@ const NS = 'http://www.w3.org/2000/svg';
 const G0 = { U: 46, LX: 65, RX: 295, CX: 180, PITCH: 37, TOP: 26, H: 28, CP: 7, R: 5.5 };
 function lenPx(b, U) { return M.CONFIG.LEN[B[b].ring] * U; }
 // a piece pinned at rail x = xs, end at xs + dir*len; returns svg markup. y = rung centre.
-// a piece face down: a plain card at the rail, its letter on the back; neither its length nor its ends are shown
-function cardSVG(b, xs, dir, y, g, cls) {
-  const W = 40 * (g.H / 28), h = g.H / 2, x0 = dir === 1 ? xs : xs - W;
-  return `<rect class="pc face ${cls || ''}" x="${x0}" y="${y - h}" width="${W}" height="${g.H}" rx="3"/><text class="lt face" x="${x0 + W / 2}" y="${y + 1}" style="font-size:${Math.round(19 * g.H / 28)}px">${b}</text>`;
-}
 function pieceSVG(b, xs, dir, y, g, cls) {
   const L = lenPx(b, g.U), xe = xs + dir * L, h = g.H / 2, cp = g.CP * (g.H / 28), r = g.R * (g.H / 28);
   const feat = (cy, f) => { const sweep = ((f === 'bump') === (dir === 1)) ? 1 : 0; return `L${xe},${cy - r} A${r},${r} 0 0 ${sweep} ${xe},${cy + r} `; };
@@ -293,8 +258,7 @@ function rails(n, off, g, lx, rx, top) {
   const arr = (x, y, up) => `<path d="M${x - 7},${y + (up ? 6 : -6)} L${x},${y} L${x + 7},${y + (up ? 6 : -6)}" fill="none" stroke="#2350C8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`;
   return `<path class="ribbon" d="${ribbonPath(L)}"/><path class="ribbon" d="${ribbonPath(R)}"/>` +
     `<path class="ribbon-edge" d="${ribbonPath(L)}"/><path class="ribbon-edge" d="${ribbonPath(R)}"/>` +
-    arr(lx, yb + 4, false) + arr(rx, yt - 4, true) +
-    `<rect class="tape" x="${lx - 13}" y="${yt - 4}" width="26" height="11" transform="rotate(-5 ${lx} ${yt})"/><rect class="tape" x="${rx - 13}" y="${yt - 4}" width="26" height="11" transform="rotate(4 ${rx} ${yt})"/>`;
+    arr(lx, yb + 4, false) + arr(rx, yt - 4, true);
 }
 function faultLabel(x, y, word) {
   const w = word.length * 7.4 + 14;
@@ -304,46 +268,26 @@ const WORD = { wide: 'TOO WIDE', narrow: 'TOO NARROW', clash: 'BUMP HITS BUMP', 
 
 // ---------- state ----------
 let S = null, back = 's-start', zipping = false;
-const seen = () => S.seen;   // letters whose shape the player has seen turned up
 function show(id) { $$('.screen').forEach(s => s.classList.toggle('on', s.id === id)); window.scrollTo(0, 0); }
 function seedVal() { const v = parseInt($('#seed').value, 10); return isFinite(v) && v > 0 ? v : 1; }
 
 function newGame() {
   const g = M.drawGame(seedVal());
-  S = { game: g, li: 0, ladders: [g.ladder1, g.ladder2], placed: null, zips: [], copy: null, seen: {}, zipsOnL2: 0 };
+  S = { game: g, li: 0, ladders: [g.ladder1, g.ladder2], placed: null, zips: [], copy: null };
   startLadder(0);
 }
 
 // ---------- ladders ----------
 function startLadder(li) {
   S.li = li; const L = S.ladders[li];
-  S.placed = li === 0 ? L.map(() => null) : S.game.prefill.slice(); S.off = L.map(() => 0); S.result = null; S.repairing = false; S.swapAt = -1;
-  $('#l-kick').textContent = li === 0 ? 'Ladder 1 of 2 · ' + L.length + ' rungs' : 'Ladder 2 of 2 · the model on the desk';
+  S.placed = L.map(() => null); S.off = L.map(() => 0); S.result = null;
+  $('#l-kick').textContent = 'Ladder ' + (li + 1) + ' of 2 · ' + L.length + ' rungs';
   $('#l-orient').innerHTML = li === 0
-    ? 'Chargaff ground up DNA from four creatures and weighed its four letters. Read his jars, then give every piece on the left a partner. The pieces are face down; nothing is tested until you zip.'
-    : 'Someone has already built this one, pairing like with like. Zip it and see.';
-  $('#l-hint').textContent = li === 0 ? 'Each jar is one creature\'s DNA, the letters stacked by how much of each there is.' : '';
-  $('#jars').style.display = li === 0 ? '' : 'none'; if (li === 0) drawJars();
-  $('#l-build').style.display = ''; $('#l-done').style.display = 'none'; $('#b-mend').style.display = 'none';
+    ? 'The left rail has its pieces. Pick one for each empty spot on the right: the two must span the gap, and their ends (bumps, dents) must grip. Nothing is tested until you zip.'
+    : 'Now the given pieces are on <b>both</b> rails. Fill every empty spot, left or right. Same rule.';
+  $('#l-build').style.display = ''; $('#l-done').style.display = 'none';
   $('#l-svg').setAttribute('viewBox', `0 0 360 ${G0.TOP * 2 + (L.length - 1) * G0.PITCH + 8}`);
   drawLadder(); drawTray(); show('s-lad');
-}
-// Chargaff's jars: each creature's four letters stacked as sand, height by share; alphabetical order, so partners are not neighbours
-function drawJars() {
-  const order = ['A', 'C', 'G', 'T'], H = 118, top = 14, x0 = 14, w = 52;
-  const hatch = { A: '', C: 'url(#hC)', G: 'url(#hG)', T: 'url(#hT)' };
-  $('#jars').innerHTML = M.CONFIG.JARS.map(j => {
-    let y = top + H, s = `<defs><pattern id="hC" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M0,5 L5,0" stroke="#2A2621" stroke-width="0.7" opacity="0.5"/></pattern>
-      <pattern id="hG" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="2.5" cy="2.5" r="0.9" fill="#2A2621" opacity="0.5"/></pattern>
-      <pattern id="hT" width="6" height="4" patternUnits="userSpaceOnUse"><path d="M0,2 H6" stroke="#2A2621" stroke-width="0.7" opacity="0.5"/></pattern></defs>`;
-    order.forEach(b => { const h = H * j[b] / 100; y -= h;
-      s += `<rect x="${x0}" y="${y.toFixed(1)}" width="${w}" height="${h.toFixed(1)}" fill="#F5EDDB"/><rect x="${x0}" y="${y.toFixed(1)}" width="${w}" height="${h.toFixed(1)}" fill="${hatch[b] || 'none'}" stroke="#2A2621" stroke-width="1.2"/>`;
-      s += `<text class="lt" x="${x0 + w / 2}" y="${(y + h / 2 + 1).toFixed(1)}" style="font-size:${h > 22 ? 18 : 14}px">${b}</text>`; });
-    // the jar: pencil glass with a lid
-    s += `<path d="M${x0 - 4},${top - 2} V${top + H + 2} Q${x0 - 4},${top + H + 6} ${x0},${top + H + 6} H${x0 + w} Q${x0 + w + 4},${top + H + 6} ${x0 + w + 4},${top + H + 2} V${top - 2}" fill="none" stroke="#2A2621" stroke-width="2"/>
-      <rect x="${x0 - 7}" y="${top - 10}" width="${w + 14}" height="8" rx="2" fill="#BF9C68" stroke="#2A2621" stroke-width="1.6"/>`;
-    return `<div><svg viewBox="0 0 80 ${top + H + 10}">${s}</svg><div class="jl">${j.name}</div></div>`;
-  }).join('');
 }
 function nextEmpty() { return S.placed.findIndex(p => p === null); }
 function drawLadder() {
@@ -351,24 +295,22 @@ function drawLadder() {
   let s = rails(L.length, S.off, g, g.LX, g.RX, g.TOP);
   L.forEach((sp, i) => {
     const y = g.TOP + i * g.PITCH, lx = g.LX - S.off[i], rx = g.RX + S.off[i];
-    const live = null;
-    const r = (res && i < S.zipTo && !(S.swapped && S.swapped[i])) ? res.rungs[i] : live;
+    const r = res && i < S.zipTo ? res.rungs[i] : null;
     const givenL = sp.side === 'L';
     const pl = S.placed[i];
+    // given piece, at full length
     const bad = r && !r.fit.held;
     let shift = 0;
     if (r && (r.fit.fault === 'clash' || r.fit.fault === 'loose')) shift = 14;
-    // the given piece: face up once the zip has reached this rung (or its shape is already known), face down before
-    const up = !!r || seen()[sp.given];
-    if (givenL) s += up ? pieceSVG(sp.given, lx, 1, y, g, bad ? 'bad' : '') : cardSVG(sp.given, lx, 1, y, g);
-    else s += up ? pieceSVG(sp.given, rx, -1, y, g, bad ? 'bad' : '') : cardSVG(sp.given, rx, -1, y, g);
+    if (givenL) s += pieceSVG(sp.given, lx, 1, y, g, bad ? 'bad' : '');
+    else s += pieceSVG(sp.given, rx, -1, y, g, bad ? 'bad' : '');
     // the player's piece
     if (pl && r) {
       if (givenL) s += `<g class="${shift ? 'shake' : ''}" style="transform:translateX(${shift}px)">` + pieceSVG(pl, rx, -1, y, g, bad ? 'bad' : '') + '</g>';
       else s += `<g class="${shift ? 'shake' : ''}" style="transform:translateX(${-shift}px)">` + pieceSVG(pl, lx, 1, y, g, bad ? 'bad' : '') + '</g>';
     } else if (pl) {
-      const known = seen()[pl];
-      s += `<g ${S.repairing ? '' : `data-un="${i}"`} style="cursor:pointer">` + (known ? pieceSVG(pl, givenL ? rx : lx, givenL ? -1 : 1, y, g) : cardSVG(pl, givenL ? rx : lx, givenL ? -1 : 1, y, g)) + '</g>';
+      // pinned, not yet pushed in: a stub at the rail with its letter
+      const x = givenL ? rx - 38 : lx; s += `<g data-un="${i}" style="cursor:pointer"><rect class="stub" x="${x}" y="${y - 13}" width="38" height="26" rx="3"/><text class="lt" x="${x + 19}" y="${y + 1}">${pl}</text></g>`;
     } else {
       const x = givenL ? rx - 40 : lx; s += `<rect class="slot ${i === ne && !res ? 'next' : ''}" x="${x}" y="${y - 13}" width="40" height="26" rx="3"/>`;
       if (i === ne && !res) s += `<text class="flt" x="${givenL ? rx - 54 : lx + 54}" y="${y + 1}" style="font-size:16px">${givenL ? '→' : '←'}</text>`;
@@ -381,49 +323,38 @@ function drawLadder() {
       }
     }
   });
-  if (S.repairing && !zipping) L.forEach((sp, i) => { const y = g.TOP + i * g.PITCH, lx = g.LX - S.off[i], rx = g.RX + S.off[i], x = sp.side === 'L' ? rx - 44 : lx - 4;
-    s += `<rect data-swap="${i}" x="${x}" y="${y - 17}" width="52" height="34" rx="4" fill="transparent" style="cursor:pointer" ${S.swapAt === i ? 'stroke="#D23B25" stroke-width="2.4" stroke-dasharray="4 3"' : ''}/>`; });
   if (S.zipTo != null && S.zipTo < L.length && zipping) {
     const y = g.TOP + S.zipTo * g.PITCH - g.PITCH / 2;
     s += `<g><rect x="${g.CX - 13}" y="${y - 9}" width="26" height="18" rx="4" fill="#BF9C68" stroke="#2A2621" stroke-width="2"/><circle cx="${g.CX}" cy="${y + 2}" r="3" fill="#2A2621"/></g>`;
   }
   svg.innerHTML = s;
   svg.querySelectorAll('[data-un]').forEach(el => el.addEventListener('click', () => { if (S.result || zipping) return; S.placed[+el.dataset.un] = null; drawLadder(); drawTray(); }));
-  svg.querySelectorAll('[data-swap]').forEach(el => el.addEventListener('click', () => { if (zipping) return; S.swapAt = +el.dataset.swap; drawLadder(); drawTray(); }));
 }
 function drawTray() {
-  const L = S.ladders[S.li], rep = S.repairing;
-  const ne = rep ? S.swapAt : nextEmpty();
+  const ne = nextEmpty(), L = S.ladders[S.li];
   const side = ne < 0 ? null : (L[ne].side === 'L' ? 'R' : 'L');
-  $('#t-head').textContent = rep ? (ne < 0 ? 'Tap a rung on the ladder' : 'Swap the loose piece on rung ' + (ne + 1)) : ne < 0 ? 'All spots filled' : 'For the ' + (side === 'R' ? 'right' : 'left') + ' rail';
-  $('#t-sub').textContent = rep ? (ne < 0 ? 'then pick its new piece here' : 'tap one') : 'tap one to pin it';
+  $('#t-head').textContent = ne < 0 ? 'All spots filled' : 'For the ' + (side === 'R' ? 'right' : 'left') + ' rail';
   const order = ['A', 'G', 'T', 'C'];
   $('#tray').innerHTML = order.map(b => {
-    const g = { U: G0.U, H: 28, CP: 7, R: 5.5 };
-    const W = 170, y = 22, known = seen()[b];
-    const inner = known ? (side === 'L' ? pieceSVG(b, W / 2 - (3 * g.U) / 2 + 6, 1, y, g) : pieceSVG(b, W / 2 + (3 * g.U) / 2 - 6, -1, y, g))
-                        : cardSVG(b, W / 2 - 20, 1, y, g);
-    return `<button class="pbtn ${known ? '' : 'back'}" data-p="${b}" ${ne < 0 ? 'disabled' : ''} aria-label="${b}${known ? ', ' + (B[b].ring === 'purine' ? 'long' : 'short') + ' piece' : ', face down'}"><svg viewBox="0 0 ${W} 44">${inner}</svg></button>`;
+    const g = { U: G0.U, H: 28, CP: 7, R: 5.5 }, L2 = lenPx(b, g.U);
+    const W = 170, y = 22;
+    const inner = side === 'L' ? pieceSVG(b, W / 2 - (3 * g.U) / 2 + 6, 1, y, g) : pieceSVG(b, W / 2 + (3 * g.U) / 2 - 6, -1, y, g);
+    return `<button class="pbtn" data-p="${b}" ${ne < 0 ? 'disabled' : ''} aria-label="${b}, ${B[b].ring === 'purine' ? 'long' : 'short'} piece"><svg viewBox="0 0 ${W} 44">${inner}</svg></button>`;
   }).join('');
   $$('#tray .pbtn').forEach(el => el.addEventListener('click', () => {
-    if (zipping) return;
-    if (rep) { if (S.swapAt < 0) return; S.placed[S.swapAt] = el.dataset.p; S.swapped = S.swapped || {}; S.swapped[S.swapAt] = true; S.off[S.swapAt] = 0; S.swapAt = -1; drawLadder(); drawTray(); return; }
-    const i = nextEmpty(); if (i < 0 || S.result) return;
-    S.placed[i] = el.dataset.p; drawLadder(); drawTray();
+    const i = nextEmpty(); if (i < 0 || S.result || zipping) return; S.placed[i] = el.dataset.p; drawLadder(); drawTray();
   }));
-  $('#b-zip').disabled = rep ? false : ne >= 0;
-  $('#b-zip').querySelector('span').textContent = rep ? 'Zip it again' : 'Zip it';
-  const filled = S.placed.filter(Boolean).length;
-  $('#l-count').textContent = rep ? '' : filled + ' of ' + L.length + ' filled';
+  $('#b-zip').disabled = ne >= 0;
+  const filled = S.placed.filter(Boolean).length; $('#l-count').textContent = filled + ' of ' + L.length + ' filled';
 }
 function doZip() {
   if (zipping || nextEmpty() >= 0) return;
-  zipping = true; $('#b-zip').disabled = true; S.swapAt = -1; S.swapped = {}; S.repairing = false;
+  zipping = true; $('#b-zip').disabled = true;
   const L = S.ladders[S.li];
   S.result = M.zip(L, S.placed); S.zipTo = 0;
   const target = S.result.rungs.map(r => r.fit.width === 'ok' ? 0 : r.fit.bulge * G0.U / 2);
   const step = () => {
-    S.zipTo++; const rg = S.result.rungs[S.zipTo - 1]; S.seen[rg.left] = true; S.seen[rg.right] = true;
+    S.zipTo++;
     // rails ease towards their new shape at the zipped rungs
     const from = S.off.slice(), t0 = performance.now();
     const anim = now => { const t = Math.min(1, (now - t0) / 260), e = 1 - Math.pow(1 - t, 3);
@@ -435,32 +366,25 @@ function doZip() {
 }
 function zipDone() {
   zipping = false; const z = S.result; S.zips[S.li] = z; S.off = z.rungs.map(r => r.fit.width === 'ok' ? 0 : r.fit.bulge * G0.U / 2); drawLadder();
-  if (S.li === 1) S.zipsOnL2++;
   $('#l-build').style.display = 'none'; $('#l-done').style.display = '';
-  $('#l-hint').textContent = '';
-  const mendable = S.li === 1 && z.held < z.n;
-  $('#b-mend').style.display = mendable ? '' : 'none'; $('#b-next').style.display = mendable ? 'none' : '';
   $('#r-big').textContent = z.held === z.n ? 'Every rung held.' : z.held + ' of ' + z.n + ' rungs held.';
   const f = { wide: 0, narrow: 0, clash: 0, loose: 0 }; z.rungs.forEach(r => { if (r.fit.fault) f[r.fit.fault]++; });
   const why = [];
   if (f.wide) why.push(f.wide + ' too wide: two long pieces');
   if (f.narrow) why.push(f.narrow + ' too narrow: two short pieces');
   if (f.clash + f.loose) why.push((f.clash + f.loose) + ' with the right width, but a bump hit a bump');
-  $('#r-why').textContent = (why.length ? why.join('; ') + '.' : 'The blue rails run straight all the way down, and every end grips.') + (S.li === 0 ? ' The pieces are face up now: look at their lengths and their ends.' : '');
+  $('#r-why').textContent = why.length ? why.join('; ') + '.' : 'The blue rails run straight all the way down, and every end grips.';
   // Chargaff's bars: the letters in this ladder
   const c = z.counts, col = (b, n) => `<div class="col"><span class="l">${b}</span>${'<i></i>'.repeat(n)}</div>`;
   const eq = (a, b) => `<span class="eq ${a === b ? '' : 'red'}">${a === b ? '=' : '≠'}</span>`;
   $('#r-bars').innerHTML = `<div class="pair">${col('A', c.A)}${eq(c.A, c.T)}${col('T', c.T)}</div><div class="pair">${col('G', c.G)}${eq(c.G, c.C)}${col('C', c.C)}</div>`;
-  if (S.li === 0) $('#r-chg').innerHTML = z.held === z.n
-    ? 'You paired the letters the jars pair, and the cardboard agrees: a long piece needs a short one, a bump needs a dent, and that leaves only A with T and G with C. Chargaff measured it; nobody knew why. You have just built the reason.'
-    : 'The jars pair A with T and G with C: in every creature there is as much of one as of the other. The cardboard says why: a long piece needs a short one, and a bump needs a dent. Only those two pairs do both.';
-  else if (z.held < z.n) $('#r-chg').innerHTML = S.zipsOnL2 === 1
-    ? 'This is the model Watson built first, in February 1953: like paired with like. The rails bulge where two long pieces meet and pinch where two short ones do. Tap a rung to swap its loose piece.'
-    : 'Closer. Tap a rung to swap its loose piece, and zip again.';
+  if (S.li === 0) $('#r-chg').innerHTML = z.chargaff.both
+    ? 'Those are the letters in your ladder. In real DNA, from any creature, there is always as much A as T and as much G as C. Nobody knew why. Yours does it too.'
+    : 'Those are the letters in your ladder. In real DNA, from any creature, there is always as much A as T and as much G as C. Nobody knew why. Yours doesn\'t, yet.';
   else $('#r-chg').innerHTML = z.chargaff.both
-    ? 'Every rung holds, and A matches T, G matches C, though the amounts of A and G differ: <b>any</b> order of pieces on one rail is allowed, and the other rail is then forced.'
+    ? 'A matches T and G matches C again, though the amounts of A and G differ: <b>any</b> order of pieces on one rail is allowed, and the other rail is then forced.'
     : 'Where every rung holds, A always matches T and G matches C, whatever the order of pieces on one rail. That is why real DNA does.';
-  $('#b-next').querySelector('span').textContent = S.li === 0 ? 'Next: the model on the desk' : 'Pull it apart and copy it';
+  $('#b-next').querySelector('span').textContent = S.li === 0 ? 'Next ladder' : 'Pull it apart and copy it';
 }
 
 // ---------- the copy ----------
@@ -540,31 +464,9 @@ function copyDone() {
   c.result = M.scoreCopy(c.full, c.entries); drawCopy();
   $('#c-play').style.display = 'none'; $('#c-count').textContent = '';
   const r = c.result, both = r.same[0] && r.same[1];
-  $('#c-big').textContent = both ? 'Two copies, both the same as the first.' : M.howMany(r.right, r.n)[0].toUpperCase() + M.howMany(r.right, r.n).slice(1) + ' of the new pieces right.';
+  $('#c-big').textContent = both ? 'Two copies, both the same as the first.' : r.right + ' of ' + r.n + ' new pieces right.';
   $('#c-why').textContent = both ? 'Nobody told you what went where. Each half said it.' : 'Where you were right, the copy matches the first ladder letter for letter; where you missed or slipped, it doesn\'t. Each half told you what was needed.';
   setTimeout(() => { $('#c-done').style.display = ''; }, 200);
-}
-function grandScreen() {
-  const c = S.copy; c.grand = M.copyAgain(c.result.copies, c.full);
-  $('#c-done').style.display = 'none'; $('#c-grand').style.display = '';
-  const n = c.full.length, g = Object.assign({}, GC), svg = $('#g-svg');
-  svg.setAttribute('viewBox', `0 0 360 ${g.TOP * 2 + (n - 1) * g.PITCH + 10}`);
-  let s = '';
-  [C1, C2].forEach((cl, ci) => {
-    const cp = c.grand[ci];
-    s += rails(n, cp.map(() => 0), g, cl.lx, cl.rx, g.TOP);
-    cp.forEach((rg, i) => { const y = g.TOP + i * g.PITCH;
-      if (!rg.left && !rg.right) { s += faultLabel((cl.lx + cl.rx) / 2, y, 'GAP'); return; }
-      s += pieceSVG(rg.left, cl.lx, 1, y, g, rg.changed ? 'bad' : '') + pieceSVG(rg.right, cl.rx, -1, y, g, rg.changed ? 'bad' : '');
-      const mx = cl.lx + lenPx(rg.left, g.U); s += `<line class="bond" x1="${mx - 5}" y1="${y - 5}" x2="${mx + 5}" y2="${y - 5}"/><line class="bond" x1="${mx - 5}" y1="${y + 5}" x2="${mx + 5}" y2="${y + 5}"/>`;
-    });
-  });
-  s += `<text x="${(C1.lx + C1.rx) / 2}" y="10" text-anchor="middle" style="font-family:var(--type);font-size:11px;font-weight:700;letter-spacing:1px;fill:#2A2621">COPY OF COPY 1</text><text x="${(C2.lx + C2.rx) / 2}" y="10" text-anchor="middle" style="font-family:var(--type);font-size:11px;font-weight:700;letter-spacing:1px;fill:#2A2621">COPY OF COPY 2</text>`;
-  svg.innerHTML = s;
-  const changed = c.grand.reduce((k, cp) => k + cp.filter(x => x.changed).length, 0), gaps = c.grand.reduce((k, cp) => k + cp.filter(x => !x.left && !x.right).length, 0);
-  $('#g-big').textContent = changed || gaps ? (changed ? changed + ' rung' + (changed === 1 ? '' : 's') + ' changed for good.' : 'The gaps stayed gaps.') : 'Letter for letter, the same as the first.';
-  $('#g-why').textContent = changed ? 'Every rung holds. The chains rebuilt their partners by the rule, and the rule does not know which letter was supposed to be there: a slip, once copied, breeds true. In red, the rungs that differ from the ladder you built.' : gaps ? 'Where the fork passed an empty spot there was nothing to copy from.' : 'The chains rebuilt their partners by the rule, and the rule gave back exactly what you built.';
-  window.scrollTo(0, 0);
 }
 
 // ---------- the twist (closing picture): the paper's 36 degrees per rung, one turn per 10 rungs ----------
@@ -592,10 +494,10 @@ function twistAnim(svg, full, done) {
 
 // ---------- end ----------
 function endScreen() {
-  const v = M.verdict({ l1: S.zips[0], l2: S.zips[1], copy: S.copy.result, grand: S.copy.grand });
+  const v = M.verdict({ l1: S.zips[0], l2: S.zips[1], copy: S.copy.result });
   $('#verdict').innerHTML = v.map((l, i) => `<p class="${i === v.length - 1 ? 'paper' : ''}">${l}</p>`).join('');
   const z1 = S.zips[0], z2 = S.zips[1], r = S.copy.result;
-  $('#tally').innerHTML = `Game ${S.game.seed}. Ladder 1, from the jars: ${S.zips[0].held} of ${S.zips[0].n} rungs held. The model on the desk: mended in ${S.zipsOnL2} zip${S.zipsOnL2 === 1 ? '' : 's'} to ${z2.held} of ${z2.n}. Copy: ${r.right} of ${r.n} new pieces right. Below: your two copies, twisted the way the paper says, a tenth of a turn per rung.`;
+  $('#tally').innerHTML = `Game ${S.game.seed}. Ladder 1: ${z1.held} of ${z1.n} rungs held. Ladder 2: ${z2.held} of ${z2.n}. Copy: ${r.right} of ${r.n} new pieces right. Below: your two copies, twisted the way the paper says, a tenth of a turn per rung.`;
   show('s-end');
   const svg = $('#e-svg'); svg.setAttribute('viewBox', '0 0 360 250');
   twistAnim(svg, S.copy.full);
@@ -603,13 +505,13 @@ function endScreen() {
 
 // ---------- the start picture ----------
 function drawArt() {
-  // the desk before the game: a ladder of face-down pieces, two loose ones, tape. Nothing about the pairs is shown.
-  const g = { U: 30, H: 20, CP: 5, R: 4, PITCH: 26 }, lx = 105, rx = 255, top = 22, n = 5;
-  let s = rails(n, Array(n).fill(0), g, lx, rx, top);
-  const blank = (xs, dir, y) => { const W = 40 * (g.H / 28), h = g.H / 2, x0 = dir === 1 ? xs : xs - W; return `<rect class="pc face" x="${x0}" y="${y - h}" width="${W}" height="${g.H}" rx="3"/>`; };
-  for (let i = 0; i < n; i++) { const y = top + i * g.PITCH; s += blank(lx, 1, y) + blank(rx, -1, y); }
-  s += `<g transform="rotate(-14 40 140)">${blank(4, 1, 140)}</g><g transform="rotate(11 320 136)">${blank(352, -1, 136)}</g>`;
-  s += `<text class="lt" x="${(lx + rx) / 2}" y="${top + (n - 1) * g.PITCH / 2 + 1}" style="font-size:13px;opacity:.6">?</text>`;
+  const g = { U: 30, H: 20, CP: 5, R: 4, PITCH: 26 }, lx = 105, rx = 255, top = 22;
+  const seq = [['A', 'T'], ['G', 'C'], ['T', 'A'], ['C', 'G'], ['A', 'T']];
+  let s = rails(seq.length, seq.map(() => 0), g, lx, rx, top);
+  seq.forEach((p, i) => { const y = top + i * g.PITCH; s += pieceSVG(p[0], lx, 1, y, g); s += pieceSVG(p[1], rx, -1, y, g);
+    const mx = lx + lenPx(p[0], g.U); s += `<line class="bond" x1="${mx - 6}" y1="${y - 5}" x2="${mx + 6}" y2="${y - 5}"/><line class="bond" x1="${mx - 6}" y1="${y + 5}" x2="${mx + 6}" y2="${y + 5}"/>`; });
+  // a loose G and a loose T waiting on the desk
+  s += `<g transform="rotate(-14 40 140)">${pieceSVG('G', 4, 1, 140, g)}</g><g transform="rotate(11 320 136)">${pieceSVG('T', 352, -1, 136, g)}</g>`;
   $('#art').innerHTML = s;
 }
 
@@ -617,9 +519,7 @@ function drawArt() {
 $('#b-start').addEventListener('click', newGame);
 $('#b-zip').addEventListener('click', doZip);
 $('#b-next').addEventListener('click', () => { if (S.li === 0) startLadder(1); else startCopy(); });
-$('#b-mend').addEventListener('click', () => { S.repairing = true; S.swapAt = -1; S.swapped = {}; S.result = S.zips[1]; $('#l-build').style.display = ''; $('#l-done').style.display = 'none'; $('#l-orient').innerHTML = 'Tap a rung that failed, then pick its new piece from the tray. Zip again when you are ready.'; drawLadder(); drawTray(); });
 $('#b-go').addEventListener('click', () => { S.copy.running = true; $('#b-go').style.display = 'none'; startRung(); });
-$('#b-again').addEventListener('click', grandScreen);
 $('#b-end').addEventListener('click', endScreen);
 $('#b-new').addEventListener('click', () => { $('#seed').value = String(seedVal() + 1); show('s-start'); });
 $$('[data-help]').forEach(el => el.addEventListener('click', () => {
