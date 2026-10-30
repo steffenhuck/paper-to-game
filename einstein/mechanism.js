@@ -26,23 +26,23 @@ const CONFIG = {
     ORDINARY: { rate: 0.04, title: 'The ordinary merchant', say: 'Money later is worth less: 4% less for every year you wait for it.' },
     BORROWER: { rate: 0.10, title: 'The merchant with a loan', say: 'The bank wants 10% a year. Every year you wait for a fee, a tenth of it is gone.' },
   },
-  // Test range: one star, unlimited tries, at the ordinary merchant's rate. Needs 4 boosters to arrive alive.
-  range: { name: 'NEW BERN', d: 4, fee: 300, keep: 1 },     // our choice
-  // The order book: four stars, the same under every merchant. Fee and keep-time are the customer's; d is the star's.
-  //   Thun:  everyone sends with two; the borrower adds a third, to be paid sooner (a few francs: the near star is nearly indifferent).
-  //   Olten: everyone sends, and exactly four boosters keep the flowers alive.
-  //   Sion:  the patient and the ordinary merchant send; the borrower refuses (250 francs in 15 years is 50 to him).
-  //   Brig:  only the patient merchant sends, and only with six; to the ordinary merchant 300 francs in 30 years is 88, less than the fuel.
-  stars: [
-    { name: 'THUN',  d: 2,  fee: 500, keep: 2 },   // our choice
-    { name: 'OLTEN', d: 3,  fee: 500, keep: 1 },   // our choice
-    { name: 'SION',  d: 15, fee: 250, keep: 3 },   // our choice
-    { name: 'BRIG',  d: 30, fee: 300, keep: 3 },   // our choice
-  ],
+  // The game: ten rounds, one order each, drawn from a seed. Nine orders come from one pool and are shuffled; two constraints only
+  // (our choice): the first round is a near star with a generous keep-time, so the first launch is a free look at the instruments; and
+  // every game holds at least two far stars. Round ten is always the long haul. Everything else lands where the seed puts it.
+  pool: {
+    d: [1, 2, 2, 3, 3, 4, 5, 6, 8, 10, 12, 15, 18, 20, 25, 30, 40],   // light-years; near ones weighted a little
+    k: [2, 3, 3, 4, 4, 5, 5, 6],                                       // the fewest boosters that arrive alive; the keep-time is drawn to put it there
+    fee: [150, 600],                                                   // francs
+    far: 12,                                                           // a star this far or farther counts as far
+    minFar: 2,                                                         // every game has at least this many far stars among its nine
+    maxKeep: 5,                                                        // years: no flower keeps longer, so far stars need fast rockets
+  },
+  first: { d: [1, 2], k: [2], fee: [150, 300] },          // round one: near, alive with two boosters or more
+  haul: { name: 'LOCARNO', d: 100, k: 6, fee: 800, keep: 10 },  // round ten
+  feeFloor: 1.6,      // our choice: a fee is at least 1.6 × the fuel of the cheapest alive rocket, so the patient merchant can always profit
+  names: ['THUN', 'OLTEN', 'SION', 'BRIG', 'AARAU', 'CHUR', 'BIEL', 'ZUG', 'VEVEY', 'BADEN', 'LUGANO', 'WIL', 'USTER', 'MORGES', 'SCHWYZ', 'ARBON', 'GLARUS', 'SARNEN'],
   // The ending: how you die, by the share of the best possible profit you made. Our choice of words; the shares are arbitrary.
   fates: [ [0.97, 'the richest merchant in Bern'], [0.75, 'a comfortable man'], [0.4, 'solvent, just'], [0, 'a poor man'], [-Infinity, 'a pauper'] ],
-  // The long haul (encore): a museum a century away. Only a merchant who does not discount at all can take it.
-  haul: { name: 'LOCARNO', d: 100, fee: 800, keep: 10 }, // our choice
 };
 
 // Speed after n boosters, each a §5 composition of w with the current speed. The paper: such parallel
@@ -76,6 +76,32 @@ function best(order, rate) {
 }
 // The fewest boosters that get the flowers there alive (0 if none does).
 function minAlive(order) { for (let n = 1; n <= CONFIG.maxBoost; n++) if (fly(order, n, 0).alive) return n; return 0; }
+// ---- the seeded draw ----
+// xorshift32: the same seed gives the same game on every machine. A seed is a positive integer; the start screen shows it.
+function rng(seed) { let s = (seed >>> 0) || 1; return () => { s ^= s << 13; s >>>= 0; s ^= s >> 17; s ^= s << 5; s >>>= 0; return s / 4294967296; }; }
+// The rocket's clock on arrival at d with n boosters.
+function rocketTime(d, n) { const v = speedAfter(n); return d / v * clockRate(v); }
+// Ten orders from a seed. The keep-time is drawn between the rocket times at k and k-1 boosters, so k is the fewest boosters that
+// arrive alive; it is kept to whole months.
+function drawGame(seed) {
+  const r = rng(seed), names = CONFIG.names.slice(), P = CONFIG.pool;
+  const pick = a => a[Math.floor(r() * a.length)], between = (lo, hi) => lo + r() * (hi - lo);
+  const order = (d, k, feeLo, feeHi, keepFixed) => {
+    let keep = keepFixed;
+    if (keep === undefined) { const hi = rocketTime(d, k - 1), lo = rocketTime(d, k); keep = Math.max(1 / 12, Math.round(12 * (lo + (hi - lo) * between(0.15, 0.85))) / 12); }
+    const fee = Math.max(Math.round(between(feeLo, feeHi) / 10) * 10, Math.round(fuelCost(k) * CONFIG.feeFloor / 10) * 10);
+    return { d, fee, keep };
+  };
+  const first = order(Math.round(between(CONFIG.first.d[0], CONFIG.first.d[1])), pick(CONFIG.first.k), CONFIG.first.fee[0], CONFIG.first.fee[1]);
+  let middle;
+  do { middle = []; for (let i = 0; i < 8; i++) { const d = pick(P.d); const ks = P.k.filter(k => rocketTime(d, k) <= P.maxKeep); middle.push(order(d, ks.length ? pick(ks) : CONFIG.maxBoost, P.fee[0], P.fee[1])); } }
+  while (middle.filter(o => o.d >= P.far).length < P.minFar);
+  for (let i = middle.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [middle[i], middle[j]] = [middle[j], middle[i]]; }   // shuffle
+  const haul = Object.assign({ name: CONFIG.haul.name }, order(CONFIG.haul.d, CONFIG.haul.k, CONFIG.haul.fee, CONFIG.haul.fee, CONFIG.haul.keep));
+  const all = [first, ...middle].map(o => Object.assign({ name: names.splice(Math.floor(r() * names.length), 1)[0] }, o)).concat([haul]);
+  all.forEach((o, i) => o.round = i + 1);
+  return all;
+}
 // How the merchant dies, given the profit made and the best possible.
 function fate(profit, bestProfit) { if (profit < -0.5) return CONFIG.fates[CONFIG.fates.length - 1][1]; const share = bestProfit > 0 ? profit / bestProfit : 0; for (const [s, w] of CONFIG.fates) if (share >= s) return w; return CONFIG.fates[CONFIG.fates.length - 1][1]; }
 // A whole order book for one merchant: every order flown with its allocated boosters; the profit, and the best profit, summed.
@@ -118,5 +144,5 @@ function fmtShare(x) { // 0..1 as words
   if (x >= 0.97) return 'all of it'; if (x >= 0.8) return 'most of it'; if (x >= 0.55) return 'over half'; if (x >= 0.3) return 'a third'; if (x > 0.05) return 'a little'; return 'next to nothing';
 }
 
-const MECH = { CONFIG, compose, speedAfter, clockRate, energy, fuelCost, discount, fly, best, minAlive, fate, runBook, fmtYears, fmtLimit, fmtSpeed, fmtRate, fmtFrancs, fmtShare };
+const MECH = { CONFIG, compose, speedAfter, clockRate, energy, fuelCost, discount, fly, best, minAlive, fate, runBook, rng, rocketTime, drawGame, fmtYears, fmtLimit, fmtSpeed, fmtRate, fmtFrancs, fmtShare };
 if (typeof module !== 'undefined') module.exports = MECH;

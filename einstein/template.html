@@ -117,6 +117,20 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
 .till .row.sub { font-size: 11px; color: #555; font-family: var(--text); letter-spacing: 0; }
 .dead { color: var(--red); font-family: var(--disp); }
 
+/* round header and the running wealth */
+.roundbar { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--disp); font-size: 12px; letter-spacing: 0.08em; margin: 2px 0 6px; }
+.roundbar .wealth { font-size: 18px; }
+.roundbar .wealth.loss { color: var(--red); }
+.seed { font-family: var(--disp); font-size: 11px; letter-spacing: 0.1em; color: var(--fog); margin-top: 10px; }
+.seed input { font-family: var(--disp); font-size: 12px; width: 84px; border: 0; border-bottom: 2px solid var(--fog); background: transparent; color: var(--ink); letter-spacing: 0.1em; }
+.decide { margin: 8px 0 0; }
+.decide .keys { grid-template-columns: 64px 1fr 64px 100px; margin: 6px 0 8px; }
+.decide .refuse { height: 64px; border: 0; background: transparent; box-shadow: inset 0 0 0 3px var(--ink); color: var(--ink); font-family: var(--disp); font-size: 13px; letter-spacing: 0.06em; cursor: pointer; }
+.decide .refuse:active, .decide.off .refuse { background: var(--ink); color: var(--paper); }
+.decide.off .key, .decide.off .count { opacity: 0.35; }
+.decide .pre { font-size: 14px; min-height: 20px; margin-bottom: 6px; }
+.tally .r.now { background: #e9e4d8; margin: 0 -6px; padding-left: 6px; padding-right: 6px; }
+
 /* booster slider (test range) */
 .slide { margin: 8px 0 4px; }
 .slide .head { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--disp); font-size: 13px; letter-spacing: 0.06em; }
@@ -222,18 +236,27 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
       <polygon points="250,38 284,38 298,47.5 284,57 250,57" fill="#E2231A"/>
     </svg>
     <div class="legend"><span class="l">light</span><span class="r">your rocket</span></div>
-    <div class="aimline" id="aim-start">Sell flowers to the stars. Make money today.</div>
-    <p class="lede">You run the Light Post in Bern. Customers at far stars pay on delivery, and a franc paid in twenty years is not a franc today. The flowers ride in the rocket and age by the rocket's own clock, which runs slow. Each booster makes the rocket go <b>half as fast as light</b>, faster than it already was, and burns fuel that gets dear near light speed. How many will you fire, and which orders will you take?</p>
-    <button class="btn" id="b-start">Go to the test range</button>
+    <div class="aimline" id="aim-start">Sell flowers to the stars. Die rich.</div>
+    <p class="lede">You run the Light Post in Bern. Ten orders from ten stars; each pays on delivery, if the flowers arrive alive. A franc paid in twenty years is not a franc today. Each booster makes your rocket go <b>half as fast as light</b>, faster than it already was, and burns fuel. Fire as many as you like, or refuse the order. Then you die, and the verdict says how.</p>
+    <button class="btn" id="b-start">Play</button>
     <div class="row2"><button class="btn ghost" data-help>How to play</button><button class="btn ghost" data-about>About</button></div>
+    <div class="seed">GAME NO. <input id="seed" inputmode="numeric" aria-label="game number"> · same number, same ten stars</div>
   </div>
 </section>
 
-<!-- TEST RANGE + FLIGHTS share this layout -->
+<!-- WHICH MERCHANT -->
+<section class="screen" id="s-who">
+  <div class="bar"><div class="aim">Sell flowers to the stars. Die rich.</div><button class="q" data-help aria-label="How to play">?</button></div>
+  <h2 class="disp" style="font-size:30px;line-height:.95">Which merchant are you?</h2>
+  <p class="orient">The same ten stars whichever you choose. What changes is how much a franc paid later is worth to you today.</p>
+  <div id="whos"></div>
+</section>
+
+<!-- A ROUND: decide, then fly -->
 <section class="screen" id="s-fly">
-  <div class="bar"><div class="aim">Sell flowers to the stars. Make money today.</div><button class="q" data-help aria-label="How to play">?</button></div>
-  <div class="kicker" id="f-kicker"><span>TEST RANGE · NOT THE GAME YET</span><span>NOTHING COUNTS</span></div>
-  <div class="order"><h2 id="f-name">New Bern</h2><div class="dist" id="f-dist"></div></div>
+  <div class="bar"><div class="aim">Sell flowers to the stars. Die rich.</div><button class="q" data-help aria-label="How to play">?</button></div>
+  <div class="roundbar"><span id="r-round">ROUND 1 OF 10</span><span>WEALTH <span class="wealth num" id="r-wealth">0</span></span></div>
+  <div class="order"><h2 id="f-name">Thun</h2><div class="dist" id="f-dist"></div></div>
   <p class="cust" id="f-cust"></p>
   <div class="where">
     <div><b>BERN · YOU</b>Home time. You are paid on the station clock, which agrees with yours.</div>
@@ -241,100 +264,59 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
     <div class="star"><b id="w-star">THE STAR</b>The customer. Pays on arrival, if the flowers are alive.</div>
   </div>
   <p class="orient" id="f-orient"></p>
-  <svg class="track" id="track" viewBox="0 0 360 104"></svg>
-  <div class="clocks">
-    <div class="clock"><svg id="ck-home" viewBox="0 0 160 160"></svg><div class="lab">STATION CLOCK</div><div class="read num" id="rd-home">—</div><div class="lim" id="lm-home">when you are paid</div></div>
-    <div class="clock fl"><svg id="ck-fl" viewBox="0 0 160 160"></svg><div class="lab">ROCKET CLOCK</div><div class="read num" id="rd-fl">—</div><div class="lim" id="lm-fl">how old the flowers are</div></div>
-  </div>
-  <div class="till" id="till">
-    <div class="row"><span class="k">FEE</span><div class="sb"><i id="t-fee"></i></div><span class="v num" id="t-fee-v">—</span></div>
-    <div class="row"><span class="k">TODAY</span><div class="sb"><i id="t-today"></i></div><span class="v num" id="t-today-v">—</span></div>
-    <div class="row sub"><span></span><span id="t-why"></span><span></span></div>
-    <div class="row"><span class="k">FUEL</span><div class="sb"><i class="fuel" id="t-fuel"></i></div><span class="v num" id="t-fuel-v">—</span></div>
-    <div class="profit"><span style="font-family:var(--disp);font-size:12px;letter-spacing:.04em">PROFIT TODAY</span><span class="n num" id="t-profit">—</span></div>
-  </div>
-  <div id="range-ctl">
-    <div class="slide">
-      <div class="head"><span>BOOSTERS</span><span class="n num" id="k-n">2</span></div>
-      <input type="range" id="k-range" min="1" max="6" step="1" value="2" aria-label="boosters">
-      <div class="ticks"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div>
-    </div>
+  <div class="decide" id="decide">
+    <div class="keys"><button class="key" id="k-minus" aria-label="one booster fewer">−</button>
+      <div class="count"><div class="n num" id="k-n">2</div><div class="w" id="k-w">boosters</div></div>
+      <button class="key" id="k-plus" aria-label="one booster more">+</button>
+      <button class="refuse" id="k-refuse">REFUSE</button></div>
+    <p class="pre" id="k-pre"></p>
     <button class="btn" id="b-launch">Launch</button>
-    <button class="btn ghost" id="b-tobook" style="display:none">Done testing: to the order book</button>
   </div>
-  <div class="stamp" id="f-stamp"></div>
-  <p class="say" id="f-say"></p>
-  <div id="range-log">
-    <div class="log"><h3>YOUR LOG · WHAT EACH BOOSTER COUNT DID</h3><div id="log"><div class="empty">Every launch adds a row here. You can look back at it later.</div></div></div>
+  <div id="flight" style="display:none">
+    <svg class="track" id="track" viewBox="0 0 360 104"></svg>
+    <div class="clocks">
+      <div class="clock"><svg id="ck-home" viewBox="0 0 160 160"></svg><div class="lab">STATION CLOCK</div><div class="read num" id="rd-home">—</div><div class="lim">when you are paid</div></div>
+      <div class="clock fl"><svg id="ck-fl" viewBox="0 0 160 160"></svg><div class="lab">ROCKET CLOCK</div><div class="read num" id="rd-fl">—</div><div class="lim">how old the flowers are</div></div>
+    </div>
+    <div class="stamp" id="f-stamp"></div>
+    <p class="say" id="f-say"></p>
+    <div class="till" id="till">
+      <div class="row"><span class="k">FEE</span><div class="sb"><i id="t-fee"></i></div><span class="v num" id="t-fee-v">—</span></div>
+      <div class="row"><span class="k">TODAY</span><div class="sb"><i id="t-today"></i></div><span class="v num" id="t-today-v">—</span></div>
+      <div class="row sub"><span></span><span id="t-why"></span><span></span></div>
+      <div class="row"><span class="k">FUEL</span><div class="sb"><i class="fuel" id="t-fuel"></i></div><span class="v num" id="t-fuel-v">—</span></div>
+      <div class="profit"><span style="font-family:var(--disp);font-size:12px;letter-spacing:.04em">PROFIT TODAY</span><span class="n num" id="t-profit">—</span></div>
+    </div>
+    <button class="btn" id="b-next">Next order</button>
   </div>
-  <div id="fly-ctl" style="display:none">
-    <button class="btn" id="b-nextrocket">Next rocket</button>
-  </div>
-</section>
-
-<!-- WHO ARE YOU -->
-<section class="screen" id="s-who">
-  <div class="bar"><div class="aim">Sell flowers to the stars. Make money today.</div><button class="q" data-help aria-label="How to play">?</button></div>
-  <h2 class="disp" style="font-size:30px;line-height:.95">Which merchant are you?</h2>
-  <p class="orient">This is the game. Four stars, the same four for every merchant: Thun, Olten, Sion, Brig. What changes is how much a franc paid later is worth to you today.</p>
-  <div id="whos"></div>
-</section>
-
-<!-- ORDER BOOK -->
-<section class="screen" id="s-book">
-  <div class="bar"><div class="aim">Sell flowers to the stars. Make money today.</div><button class="q" data-help aria-label="How to play">?</button></div>
-  <h2 class="disp" style="font-size:30px;line-height:.95" id="bk-title">The order book</h2>
-  <p class="orient" id="bk-orient"></p>
-  <div id="cards"></div>
-  <button class="btn" id="b-launchall">Launch all</button>
-  <button class="btn ghost" id="b-log">Look at your log</button>
 </section>
 
 <!-- END -->
 <section class="screen" id="s-end">
-  <div class="bar"><div class="aim">Sell flowers to the stars. Make money today.</div><button class="q" data-help aria-label="How to play">?</button></div>
+  <div class="bar"><div class="aim">Sell flowers to the stars. Die rich.</div><button class="q" data-help aria-label="How to play">?</button></div>
   <div class="verdict" id="verdict"></div>
   <div class="tally" id="tally"></div>
-  <button class="btn" id="b-haul">The long haul</button>
-  <div class="row2"><button class="btn ghost" id="b-again">Another merchant</button><button class="btn ghost" data-about>About</button></div>
-</section>
-
-<!-- LONG HAUL END -->
-<section class="screen" id="s-haulend">
-  <div class="bar"><div class="aim">Sell flowers to the stars. Make money today.</div><button class="q" data-help aria-label="How to play">?</button></div>
-  <div class="verdict" id="haulverdict"></div>
-  <button class="btn" id="b-haulagain">Try the long haul again</button>
-  <div class="row2"><button class="btn ghost" id="b-again2">Another merchant</button><button class="btn ghost" data-about>About</button></div>
-</section>
-
-<!-- LOG (from the order book) -->
-<section class="screen page" id="s-log">
-  <div class="bar"><div class="aim">Your log from the test range</div><button class="q" id="b-log-x" aria-label="Back">×</button></div>
-  <div class="aimline">Sell flowers to the stars. Make money today.</div>
-  <div class="log" style="margin-top:0"><div id="log2"></div></div>
-  <button class="btn" id="b-log-back" style="margin-top:12px">Back to the order book</button>
+  <button class="btn" id="b-again">Play again as another merchant</button>
+  <div class="row2"><button class="btn ghost" id="b-new">New stars</button><button class="btn ghost" data-about>About</button></div>
 </section>
 
 <!-- HOW TO PLAY -->
 <section class="screen page" id="s-help">
   <div class="bar"><div class="aim">How to play</div><button class="q" id="b-help-x" aria-label="Back">×</button></div>
-  <div class="aimline">Sell flowers to the stars. Make money today.</div>
+  <div class="aimline">Sell flowers to the stars. Die rich.</div>
+  <p>Ten orders, one at a time. For each, set the boosters and launch, or refuse. Then watch the rocket fly and see what you made. After the tenth, you die, and the verdict says how rich.</p>
   <h3>Where everyone is</h3>
-  <p>You are in Bern and keep Bern time. The customer is at a star, light-years away; the star's station clock has been set to agree with Bern's by light signals (that is the first thing Einstein's paper does). The flowers are in the rocket, and the rocket has its own clock, which runs slow: the faster the rocket, the slower.</p>
+  <p>You are in Bern and keep Bern time. The customer is at a star, light-years away; the star's station clock has been set to agree with Bern's by light signals (the first thing Einstein's paper does). The flowers are in the rocket, and the rocket has its own clock, which runs slow: the faster the rocket, the slower.</p>
   <h3>The two clocks</h3>
-  <p><b>Station clock</b>: when the rocket arrives, in Bern time. That is when you are paid. <b>Rocket clock</b>: how much time passed inside the rocket, which is how old the flowers are when they arrive. The bar at the bottom of the rocket clock is the keep-time: hand still in the white, the flowers are alive; past it, they are dead and nobody pays.</p>
+  <p><b>Station clock</b>: when the rocket arrives, in Bern time. That is when you are paid. <b>Rocket clock</b>: how much time passed inside the rocket, which is how old the flowers are when they arrive. Every order says how long its flowers keep, by the rocket's clock. Younger than that: alive, and you are paid. Older: dead, and nobody pays.</p>
+  <h3>Boosters</h3>
+  <p>Each booster makes the rocket go half as fast as light, faster than it already was: one is half light speed, two is four-fifths, six is all but light speed. Every booster burns fuel, and the bill climbs steeply near light speed. Nothing beats light: however many boosters you fire, the rocket cannot arrive before light would. But boosters shrink the rocket's clock without limit, so the flowers can arrive as young as you like, at a price.</p>
   <h3>Money today</h3>
-  <p>The fee is paid on arrival. A fee paid in years from now is worth less to you today; how much less depends on which merchant you are: the patient merchant doesn't mind waiting at all, the ordinary merchant loses 4% a year, the merchant with a loan 10% a year. The till shows the fee, what it is worth today, the fuel, and the profit today.</p>
-  <h3>Boosters and fuel</h3>
-  <p>Each booster makes the rocket go half as fast as light, faster than it already was. Every booster burns fuel, and the bill climbs steeply near light speed. Nothing beats light: however many boosters you fire, the rocket cannot arrive before light would. But boosters do shrink the rocket's clock without limit, so the flowers can be made to arrive as young as you like, at a price.</p>
-  <h3>The race</h3>
-  <p>Every rocket races a beam of light launched at the same moment. <span class="sw" style="background:#FFC800"></span>Yellow is always light. <span class="sw" style="background:#E2231A"></span>Red is always your rocket.</p>
-  <h3>Rounds</h3>
-  <ul><li><b>Test range</b>: not the game yet. One star, as many launches as you like, nothing counts. Slide the boosters and watch the race, the clocks and the till.</li>
-  <li><b>Order book</b>: the game. First choose which merchant you are. Then four stars: set each rocket's boosters, or refuse the order, and launch them all. Each card shows the fee, what it is worth to you today, and the fuel, before you launch.</li>
-  <li><b>The long haul</b>: a museum, a hundred light-years away.</li></ul>
+  <p>The fee is paid on arrival. A fee paid years from now is worth less to you today; how much less depends on which merchant you are: the patient merchant doesn't mind waiting at all, the ordinary merchant loses 4% a year, the merchant with a loan 10% a year. Your wealth is the sum of what every order made you, in today's francs.</p>
   <h3>How it ends</h3>
-  <p>At the end of the book you die, as merchants do, and the verdict says how: the richest merchant in Bern, a comfortable man, solvent, a poor man, or a pauper, by how much of the money there was to be made you made.</p>
+  <p>After ten orders you die, as merchants do. How rich depends on how much of the money there was to be made, for the merchant you chose, you made: the richest merchant in Bern, a comfortable man, solvent, a poor man, or a pauper.</p>
+  <h3>The game number</h3>
+  <p>Every game is drawn from a number, shown on the start screen. The same number gives the same ten stars, so you can play the same game as another merchant, or hand the number to a friend.</p>
   <button class="btn" id="b-help-back">Back to the game</button>
 </section>
 
@@ -351,7 +333,7 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
 </script>
 <script>
 (function () {
-  const { CONFIG, fly, best, minAlive, fate, runBook, fmtYears, fmtLimit, fmtSpeed, fmtRate, fmtFrancs, fmtShare, speedAfter, clockRate, fuelCost } = MECH;
+  const { CONFIG, fly, best, minAlive, fate, drawGame, fmtYears, fmtLimit, fmtSpeed, fmtRate, fmtFrancs, fmtShare, speedAfter, clockRate, fuelCost } = MECH;
   const $ = s => document.querySelector(s);
   const NS = 'http://www.w3.org/2000/svg';
   const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
@@ -361,12 +343,15 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
   const M0 = CONFIG.merchants;
 
   // ---------- state ----------
-  const S = { screen: 's-start', back: 's-start', rangeN: 2, log: {}, launches: 0, who: 'ORDINARY', alloc: [], orders: [], fi: 0, mode: 'range', busy: false, plays: 0 };
+  const S = { screen: 's-start', back: 's-start', seed: 0, who: 'ORDINARY', orders: [], i: 0, n: 2, flights: [], busy: false };
   const rate = () => M0[S.who].rate;
+  function newSeed() { S.seed = 1 + Math.floor(Math.random() * 99999); $('#seed').value = S.seed; }
+  newSeed();
+  $('#seed').onchange = () => { const v = parseInt($('#seed').value, 10); if (v > 0) S.seed = v; else $('#seed').value = S.seed; };
 
   function show(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id));
-    if (id !== 's-help' && id !== 's-about' && id !== 's-log') S.screen = id;
+    if (id !== 's-help' && id !== 's-about') S.screen = id;
     window.scrollTo(0, 0);
   }
   document.querySelectorAll('[data-help]').forEach(b => b.onclick = () => { S.back = S.screen; show('s-help'); });
@@ -374,9 +359,8 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
   $('#b-help-back').onclick = $('#b-help-x').onclick = () => show(S.back);
   $('#b-about-back').onclick = $('#b-about-x').onclick = () => show(S.back);
 
-  // ---------- the customer line ----------
-  const custLine = o => `<b>${cap(o.name.toLowerCase())}</b> pays <b>${fmtFrancs(o.fee)}</b> on arrival, if the flowers are alive. They keep <b>${fmtLimit(o.keep)}</b> by the rocket's clock.`;
-  const rateLine = r => r === 0 ? 'you do not discount: a franc later is a franc today' : `you discount ${Math.round(r * 100)}% a year`;
+  const custLine = o => `<b>${cap(o.name.toLowerCase())}</b> pays <b>${fmtFrancs(o.fee)}</b> on arrival, if the flowers are alive. They keep <b>${fmtYears(o.keep)}</b> by the rocket's clock.`;
+  const rateLine = r => r === 0 ? 'You do not discount: a franc later is a franc today.' : `You discount ${Math.round(r * 100)}% a year.`;
 
   // ---------- the track ----------
   const TRK = { x0: 22, x1: 336, yL: 34, yR: 62 };
@@ -400,14 +384,12 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
     trk.trail = el('rect', { x: TRK.x0, y: TRK.yR - 1.5, width: 0, height: 3, fill: '#E2231A' }, s);
     trk.flames = el('g', {}, s);
     trk.rocket = el('polygon', { points: '', fill: '#E2231A' }, s);
-    trk.n = 0;
-    placeRocket(0);
+    trk.n = 0; placeRocket(0);
   }
   function star(s, cx, cy, r) {
     const p = []; for (let i = 0; i < 8; i++) { const a = Math.PI / 4 * i - Math.PI / 2, rr = i % 2 ? r * 0.38 : r; p.push((cx + rr * Math.cos(a)).toFixed(1) + ',' + (cy + rr * Math.sin(a)).toFixed(1)); }
     trk.star = el('polygon', { points: p.join(' '), fill: '#111' }, s);
   }
-  function setFlames(n) { trk.n = n; }
   function placeRocket(f) {
     const x = TRK.x0 + (TRK.x1 - TRK.x0) * f, y = TRK.yR;
     trk.rocket.setAttribute('points', `${x - 22},${y - 7} ${x - 6},${y - 7} ${x + 2},${y} ${x - 6},${y + 7} ${x - 22},${y + 7}`);
@@ -417,7 +399,7 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
       el('polygon', { points: `${fx},${y - 6} ${fx + 5},${y} ${fx},${y + 6} ${fx - 3},${y}`, fill: i % 2 ? '#E2231A' : '#FFC800' }, trk.flames); }
   }
 
-  // ---------- the clocks: one full turn = twice the limit, so the limit sits at the bottom ----------
+  // ---------- the clocks ----------
   const CK = {};
   function drawClock(id, limit, isFl) {
     const s = $('#' + id); s.innerHTML = ''; const c = 80, R = 74;
@@ -426,84 +408,91 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
     for (let i = 0; i < 60; i++) { const a = i * 6 * Math.PI / 180, big = i % 5 === 0, r1 = big ? R - 16 : R - 9, r2 = R - 4;
       el('line', { x1: c + r1 * Math.sin(a), y1: c - r1 * Math.cos(a), x2: c + r2 * Math.sin(a), y2: c - r2 * Math.cos(a), stroke: '#111', 'stroke-width': big ? 4.5 : 1.6 }, s); }
     if (isFl) el('rect', { x: c - 3, y: c + R - 30, width: 6, height: 28, fill: '#E2231A' }, s);
-    const z = el('text', { x: c, y: c - R + 30, 'text-anchor': 'middle', 'font-family': 'LP Display', 'font-size': 10, fill: '#111' }, s); z.textContent = '0';
+    el('text', { x: c, y: c - R + 30, 'text-anchor': 'middle', 'font-family': 'LP Display', 'font-size': 10, fill: '#111' }, s).textContent = '0';
     const yl = el('line', { x1: c, y1: c - R + 2, x2: c, y2: c - R + 22, stroke: '#FFC800', 'stroke-width': 7, opacity: 0 }, s);
     const hand = el('g', {}, s);
     if (isFl) { el('line', { x1: c, y1: c + 16, x2: c, y2: c - R + 16, stroke: '#E2231A', 'stroke-width': 3 }, hand); el('circle', { cx: c, cy: c - R + 24, r: 8, fill: '#E2231A' }, hand); }
     else el('rect', { x: c - 4.5, y: c - R + 12, width: 9, height: R - 2, fill: '#111' }, hand);
     el('circle', { cx: c, cy: c, r: 5, fill: isFl ? '#E2231A' : '#111' }, s);
     const over = el('text', { x: c, y: c + 26, 'text-anchor': 'middle', 'font-family': 'LP Display', 'font-size': 11, fill: '#E2231A', opacity: 0 }, s); over.textContent = isFl ? 'DEAD' : '';
-    CK[id] = { hand, limit, yl, over, c };
-    setHand(id, 0);
+    CK[id] = { hand, limit, yl, over, c }; setHand(id, 0);
   }
-  function setHand(id, years) {
-    const k = CK[id], frac = years / (2 * k.limit), cl = Math.min(frac, 0.997);
-    k.hand.setAttribute('transform', `rotate(${cl * 360} ${k.c} ${k.c})`);
-    k.over.setAttribute('opacity', frac > 0.5 ? 1 : 0);
-  }
-  function lightTick(id, years) {
-    const k = CK[id], frac = Math.min(years / (2 * k.limit), 0.997);
-    k.yl.setAttribute('transform', `rotate(${frac * 360} ${k.c} ${k.c})`); k.yl.setAttribute('opacity', 1);
-  }
+  function setHand(id, years) { const k = CK[id], frac = years / (2 * k.limit), cl = Math.min(frac, 0.997); k.hand.setAttribute('transform', `rotate(${cl * 360} ${k.c} ${k.c})`); k.over.setAttribute('opacity', frac > 0.5 ? 1 : 0); }
+  function lightTick(id, years) { const k = CK[id], frac = Math.min(years / (2 * k.limit), 0.997); k.yl.setAttribute('transform', `rotate(${frac * 360} ${k.c} ${k.c})`); k.yl.setAttribute('opacity', 1); }
 
-  // ---------- the till ----------
-  function setTill(order, f, pre) {
-    const t = $('#till'); t.classList.toggle('pre', !!pre);
+  // ---------- the till (after the flight only) ----------
+  function setTill(order, f) {
     const span = order.fee;
-    $('#t-fee').style.width = f ? (100 * (f.alive ? 1 : 0)) + '%' : '0%';
+    $('#t-fee').style.width = f && f.alive ? '100%' : '0%';
     $('#t-today').style.width = f ? (100 * Math.min(1, f.today / span)).toFixed(1) + '%' : '0%';
     $('#t-fuel').style.width = f ? (100 * Math.min(1, f.cost / span)).toFixed(1) + '%' : '0%';
     $('#t-fee-v').innerHTML = !f ? '—' : f.refused ? '0' : f.alive ? fmtFrancs(span) : `<span class="dead">DEAD · 0</span>`;
     $('#t-today-v').textContent = f ? fmtFrancs(f.today) : '—';
     $('#t-why').textContent = !f || f.refused || !f.alive ? '' : (rate() === 0 ? 'paid in ' + fmtYears(f.tHome) + '; you do not discount' : 'paid in ' + fmtYears(f.tHome) + ' at ' + Math.round(rate() * 100) + '% a year: ' + fmtShare(f.disc) + ' of the fee');
     $('#t-fuel-v').textContent = f ? fmtFrancs(f.cost) : '—';
-    const p = $('#t-profit'); p.textContent = f ? (f.profit >= 0.5 ? '+' : '') + fmtFrancs(f.profit) : '—';
-    p.classList.toggle('loss', !!f && f.profit < -0.5);
+    const p = $('#t-profit'); p.textContent = f ? (f.profit >= 0.5 ? '+' : '') + fmtFrancs(f.profit) : '—'; p.classList.toggle('loss', !!f && f.profit < -0.5);
   }
+  function wealth() { return S.flights.reduce((s, f) => s + f.profit, 0); }
+  function setWealth() { const w = wealth(), e = $('#r-wealth'); e.textContent = (w < -0.5 ? '−' : '') + Math.abs(Math.round(w)); e.classList.toggle('loss', w < -0.5); }
 
-  // ---------- one order on screen ----------
-  function setOrder(order) {
-    $('#f-name').textContent = order.name; $('#w-star').textContent = order.name + ' · THE CUSTOMER';
-    $('#f-dist').innerHTML = ly(order.d).toUpperCase() + '<br>LIGHT TAKES ' + fmtLimit(order.d).toUpperCase();
-    $('#f-cust').innerHTML = custLine(order) + ' ' + cap(rateLine(rate())) + '.';
-    drawTrack(order); drawClock('ck-home', Math.max(order.d * 1.6, order.d + 1), false); drawClock('ck-fl', order.keep, true);
-    $('#rd-home').textContent = '—'; $('#rd-fl').textContent = '—'; $('#f-stamp').innerHTML = '';
-    $('#rd-home').classList.remove('pre'); $('#rd-fl').classList.remove('pre');
-    setTill(order, null);
+  // ---------- a round ----------
+  function startGame(who) {
+    S.who = who; S.orders = drawGame(S.seed); S.i = 0; S.flights = []; S.n = 2; round();
   }
-  // the race frozen at the moment the light reaches the star: beam full, star lit, rocket as far as it got
-  function previewRace(order, n) {
-    const f = fly(order, n, rate()); trk.n = n;
-    trk.beam.setAttribute('width', TRK.x1 - TRK.x0); trk.star.setAttribute('fill', '#FFC800');
-    placeRocket(f.v);
-    setHand('ck-home', f.tHome); setHand('ck-fl', f.tCargo); lightTick('ck-home', f.tLight);
-    const h = $('#rd-home'), c = $('#rd-fl');
-    h.textContent = fmtYears(f.tHome); c.textContent = fmtYears(f.tCargo) + (f.alive ? '' : ' · dead'); h.classList.add('pre'); c.classList.add('pre');
-    setTill(order, f, true);
-    return f;
+  function round() {
+    const o = S.orders[S.i];
+    $('#r-round').textContent = `ROUND ${S.i + 1} OF 10` + (S.i === 9 ? ' · THE LONG HAUL' : ''); setWealth();
+    $('#f-name').textContent = o.name; $('#w-star').textContent = o.name + ' · THE CUSTOMER';
+    $('#f-dist').innerHTML = ly(o.d).toUpperCase() + '<br>LIGHT TAKES ' + fmtLimit(o.d).toUpperCase();
+    $('#f-cust').innerHTML = custLine(o) + ' ' + rateLine(rate());
+    $('#f-orient').innerHTML = S.i === 0 ? 'Your first order. Set the boosters and launch; you will see the rocket race the light, and the two clocks run.' : S.i === 9 ? 'A museum, a century away. The last order of your life.' : '';
+    $('#decide').style.display = ''; $('#flight').style.display = 'none'; $('#f-stamp').innerHTML = ''; $('#f-say').innerHTML = '';
+    S.off = false; S.n = Math.min(Math.max(S.n, 1), CONFIG.maxBoost); renderKeys();
+    show('s-fly');
   }
+  function renderKeys() {
+    const d = $('#decide'); d.classList.toggle('off', S.off);
+    $('#k-n').textContent = S.off ? '—' : S.n; $('#k-w').textContent = S.off ? 'refused' : 'booster' + (S.n === 1 ? '' : 's');
+    $('#k-minus').disabled = S.off || S.n <= 1; $('#k-plus').disabled = S.off || S.n >= CONFIG.maxBoost;
+    $('#k-refuse').textContent = S.off ? 'REFUSED' : 'REFUSE';
+    const v = speedAfter(S.n);
+    $('#k-pre').innerHTML = S.off ? 'No rocket flies. Nothing earned, nothing spent.' : `<b>${fmtSpeed(v)}</b>. The rocket's clock runs <b>${fmtRate(clockRate(v))}</b>.`;
+    $('#b-launch').textContent = S.off ? 'Refuse the order' : 'Launch';
+  }
+  $('#k-minus').onclick = () => { if (!S.busy) { S.n = Math.max(1, S.n - 1); renderKeys(); } };
+  $('#k-plus').onclick = () => { if (!S.busy) { S.n = Math.min(CONFIG.maxBoost, S.n + 1); renderKeys(); } };
+  $('#k-refuse').onclick = () => { if (!S.busy) { S.off = !S.off; renderKeys(); } };
+  $('#b-launch').onclick = () => {
+    if (S.busy) return; const o = S.orders[S.i], n = S.off ? 0 : S.n;
+    $('#decide').style.display = 'none'; $('#flight').style.display = ''; $('#b-next').style.visibility = 'hidden';
+    drawTrack(o); trk.n = n; drawClock('ck-home', Math.max(o.d * 1.6, o.d + 1), false); drawClock('ck-fl', o.keep, true);
+    $('#rd-home').textContent = '—'; $('#rd-fl').textContent = '—'; setTill(o, null);
+    $('#f-orient').textContent = n ? `Launched with ${n}. Watch the yellow line and your red rocket.` : 'Refused. The light goes anyway.';
+    animate(o, n, f => {
+      S.flights.push(f); stamp(f); $('#f-say').innerHTML = flightWords(o, f); setTill(o, f); setWealth();
+      $('#b-next').textContent = S.i === 9 ? 'And then you die' : 'Next order'; $('#b-next').style.visibility = 'visible';
+    });
+  };
+  $('#b-next').onclick = () => { if (S.busy) return; if (S.i < 9) { S.i++; round(); } else end(); };
 
-  // ---------- one flight, animated ----------
-  const TL = 1700; // ms for the light to cross, whatever the distance
+  // ---------- the flight ----------
+  const TL = 1700;
   function animate(order, n, done) {
-    const f = fly(order, n, rate());
-    S.busy = true; $('#f-stamp').innerHTML = '';
-    if (f.refused) {
-      const st = performance.now();
+    const f = fly(order, n, rate()); S.busy = true;
+    if (f.refused) { const st = performance.now();
       const lstep = now => { const ms = now - st, y = Math.min(ms, TL) / TL * order.d;
-        trk.beam.setAttribute('width', (TRK.x1 - TRK.x0) * Math.min(1, ms / TL)); setHand('ck-home', y); $('#rd-home').textContent = 'light: ' + fmtYears(y);
-        if (ms < TL) requestAnimationFrame(lstep); else { trk.star.setAttribute('fill', '#FFC800'); lightTick('ck-home', f.tLight); setTill(order, f); S.busy = false; done(f); } };
+        trk.beam.setAttribute('width', Math.max(0, (TRK.x1 - TRK.x0) * Math.min(1, ms / TL))); setHand('ck-home', y); $('#rd-home').textContent = 'light: ' + fmtYears(y);
+        if (ms < TL) requestAnimationFrame(lstep); else { trk.star.setAttribute('fill', '#FFC800'); lightTick('ck-home', f.tLight); S.busy = false; done(f); } };
       requestAnimationFrame(lstep); return; }
     const T = TL / f.v, start = performance.now(); let lightIn = false;
     const step = now => {
       const ms = now - start, tYears = Math.min(ms, T) / TL * order.d;
-      trk.beam.setAttribute('width', (TRK.x1 - TRK.x0) * Math.min(1, ms / TL));
-      placeRocket(Math.min(1, ms / T));
+      trk.beam.setAttribute('width', Math.max(0, (TRK.x1 - TRK.x0) * Math.min(1, ms / TL))); placeRocket(Math.max(0, Math.min(1, ms / T)));
       setHand('ck-home', tYears); setHand('ck-fl', tYears * f.rateClock);
       $('#rd-home').textContent = fmtYears(tYears); $('#rd-fl').textContent = fmtYears(tYears * f.rateClock);
       if (!lightIn && ms >= TL) { lightIn = true; trk.star.setAttribute('fill', '#FFC800'); lightTick('ck-home', f.tLight); }
       if (ms < T) requestAnimationFrame(step);
-      else { $('#rd-home').textContent = fmtYears(f.tHome); $('#rd-fl').textContent = fmtYears(f.tCargo) + (f.alive ? '' : ' · dead'); trk.star.setAttribute('fill', f.alive ? '#E2231A' : '#111'); setTill(order, f); S.busy = false; done(f); }
+      else { $('#rd-home').textContent = fmtYears(f.tHome); $('#rd-fl').textContent = fmtYears(f.tCargo) + (f.alive ? '' : ' · dead'); trk.star.setAttribute('fill', f.alive ? '#E2231A' : '#111'); S.busy = false; done(f); }
     };
     requestAnimationFrame(step);
   }
@@ -511,155 +500,60 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
     const txt = f.refused ? 'REFUSED' : (f.profit >= 0.5 ? '+' : '') + fmtFrancs(f.profit).toUpperCase() + ' TODAY';
     $('#f-stamp').innerHTML = `<span class="pop${f.refused ? ' flat' : f.profit < -0.5 ? ' bad' : ''}">${txt}</span>`;
   }
+  // what happened, in words; never what was best
   function flightWords(order, f) {
     const r = rate();
-    if (f.refused) { const b = best(order, r); return b.n ? `You refused it. With ${words[b.n]} boosters it would have made ${fmtFrancs(b.profit)} today.` : `You refused it, and rightly: no booster count would have made a franc today. ` + (minAlive(order) ? `The fee arrives in ${fmtYears(fly(order, 6, r).tHome)} at the soonest, and at your rate that is worth ${fmtShare(fly(order, 6, r).disc)}.` : `No rocket can get the flowers there alive.`); }
+    if (f.refused) return `No rocket, no fuel, no fee. The light reached ${cap(order.name.toLowerCase())} after ${fmtYears(f.tLight)}; nothing of yours ever will.`;
     const a = `<b>${cap(words[f.n])} booster${f.n > 1 ? 's' : ''}: ${fmtSpeed(f.v)}.</b> The light got there first. `;
     const b = `The station clock read ${fmtYears(f.tHome)} when the rocket arrived; the rocket's clock read ${fmtYears(f.tCargo)}. `;
-    const c = !f.alive ? `The flowers keep ${fmtLimit(order.keep)}: <b class="red">dead on arrival</b>. Nobody pays, and the fuel cost ${fmtFrancs(f.cost)}.`
+    const c = !f.alive ? `The flowers keep ${fmtYears(order.keep)}: <b class="red">dead on arrival</b>. Nobody pays, and the fuel cost ${fmtFrancs(f.cost)}.`
       : `Alive. ${fmtFrancs(order.fee)} paid in ${fmtYears(f.tHome)} is worth ${fmtFrancs(f.today)} today` + (r ? ` at ${Math.round(r * 100)}% a year` : '') + `; the fuel cost ${fmtFrancs(f.cost)}.`;
     return a + b + c;
   }
 
-  // ---------- test range ----------
-  const range = $('#k-range');
-  function renderSlider() {
-    $('#k-n').textContent = S.rangeN; range.value = S.rangeN; range.disabled = S.busy;
-    setOrder(CONFIG.range); previewRace(CONFIG.range, S.rangeN);
-  }
-  function enterRange() {
-    S.mode = 'range'; S.who = 'ORDINARY'; $('#range-ctl').style.display = ''; $('#range-log').style.display = ''; $('#fly-ctl').style.display = 'none';
-    renderSlider();
-    $('#f-kicker').innerHTML = '<span>TEST RANGE · NOT THE GAME YET</span><span>NOTHING COUNTS</span>'; $('#f-kicker').classList.remove('flight');
-    $('#f-orient').innerHTML = S.launches ? 'Try as many booster counts as you like. When you know the rockets, go to the order book: that is the game.' : 'Try the rockets before the game, as the ordinary merchant. Slide to set the boosters: the track shows how far your rocket gets while the light arrives, the two clocks show when you are paid and how old the flowers are, the till shows what it is worth today. Launch as often as you like; nothing counts yet.';
-    $('#f-say').innerHTML = ''; show('s-fly');
-  }
-  $('#b-start').onclick = enterRange;
-  range.oninput = () => { if (S.busy) { range.value = S.rangeN; return; } S.rangeN = +range.value; $('#f-stamp').innerHTML = ''; $('#f-say').innerHTML = ''; renderSlider(); };
-  $('#b-launch').onclick = () => {
-    if (S.busy) return; const o = CONFIG.range, n = S.rangeN;
-    setOrder(o); setFlames(n); range.disabled = true; $('#f-say').innerHTML = ''; $('#f-orient').textContent = 'Launched with ' + n + '. Watch the yellow line and your red rocket.';
-    $('#b-launch').classList.add('hot');
-    animate(o, n, f => {
-      $('#b-launch').classList.remove('hot'); range.disabled = false; stamp(f); S.launches++;
-      let extra = '';
-      if (n === 2 && !S.saw2) { S.saw2 = true; extra = ' Two halves made four-fifths of light speed, not all of it.'; }
-      else if (n >= 5 && f.alive) extra = ' The station clock barely moved from the light-time; the rocket clock fell a lot; the fuel bill jumped.';
-      $('#f-say').innerHTML = flightWords(o, f) + extra;
-      S.log[n] = f; renderLog('#log');
-      $('#f-orient').textContent = '';
-      $('#b-tobook').style.display = '';
-      $('#b-launch').textContent = 'Launch again';
-    });
-  };
-  function renderLog(sel) {
-    const ks = Object.keys(S.log).map(Number).sort((a, b) => a - b); const box = $(sel);
-    if (!ks.length) { box.innerHTML = '<div class="empty">You have no test launches yet.</div>'; return; }
-    box.innerHTML = ks.map(n => { const f = S.log[n];
-      return `<div class="row"><div class="k">${n}</div><div><div class="sb"><i style="width:${(f.v * 100).toFixed(1)}%"></i><em></em></div>
-      <b>${fmtSpeed(f.v)}</b> · station ${fmtYears(f.tHome)}, rocket ${fmtYears(f.tCargo)}${f.alive ? '' : ' <span class="dead">dead</span>'}<br>${f.alive ? 'fee worth ' + fmtFrancs(f.today) + ' today' : 'nothing paid'}, fuel ${fmtFrancs(f.cost)}: <b>${f.profit >= 0.5 ? '+' : ''}${fmtFrancs(f.profit)}</b></div></div>`; }).join('');
-  }
-  $('#b-tobook').onclick = chooseWho;
-
   // ---------- which merchant ----------
   function chooseWho() {
     $('#whos').innerHTML = Object.keys(M0).map(k => { const m = M0[k]; return `<div class="who"><div class="rate">${m.rate ? Math.round(m.rate * 100) + '% A YEAR' : 'NO DISCOUNT'}</div><h3>${m.title}</h3><p>${m.say}</p><button class="btn" data-who="${k}">Be this merchant</button></div>`; }).join('');
-    $('#whos').querySelectorAll('[data-who]').forEach(b => b.onclick = () => openBook(b.dataset.who));
+    $('#whos').querySelectorAll('[data-who]').forEach(b => b.onclick = () => startGame(b.dataset.who));
     show('s-who');
   }
+  $('#b-start').onclick = chooseWho;
 
-  // ---------- order book ----------
-  function openBook(who, haul) {
-    S.who = who; S.haul = !!haul; S.orders = haul ? [CONFIG.haul] : CONFIG.stars; S.alloc = S.orders.map(() => 0);
-    $('#bk-title').textContent = haul ? 'The long haul' : M0[who].title;
-    $('#bk-orient').innerHTML = (haul ? `One order, a hundred light-years away. Light takes a century. A museum pays ${fmtFrancs(CONFIG.haul.fee)} on arrival for flowers no older than ${fmtLimit(CONFIG.haul.keep)}. ` : `${M0[who].say} `) + cap(rateLine(rate())) + '. Set each rocket, or refuse the order, then launch.';
-    $('#b-launchall').textContent = haul ? 'Launch' : 'Launch all';
-    renderBook(); show('s-book');
-  }
-  function renderBook() {
-    const r = rate();
-    $('#cards').innerHTML = S.orders.map((o, i) => {
-      const n = S.alloc[i], off = n === 0, f = fly(o, n, r), span = o.fee;
-      const pre = off ? '<div class="pre">No rocket flies. Nothing earned, nothing spent.</div>'
-        : `<div class="pre"><b>${fmtSpeed(f.v)}</b>. Station clock ${fmtYears(f.tHome)}; rocket clock ${fmtYears(f.tCargo)}${f.alive ? '' : ' <span class="dead">· DEAD</span>'}.</div>`;
-      const till = `<div class="till"><div class="row"><span class="k">FEE</span><div class="sb"><i style="width:${f.alive ? 100 : 0}%"></i></div><span class="v num">${off ? '—' : f.alive ? fmtFrancs(span) : '<span class="dead">DEAD · 0</span>'}</span></div>
-        <div class="row"><span class="k">TODAY</span><div class="sb"><i style="width:${(100 * Math.min(1, f.today / span)).toFixed(1)}%"></i></div><span class="v num">${off ? '—' : fmtFrancs(f.today)}</span></div>
-        <div class="row"><span class="k">FUEL</span><div class="sb"><i class="fuel" style="width:${(100 * Math.min(1, f.cost / span)).toFixed(1)}%"></i></div><span class="v num">${off ? '—' : fmtFrancs(f.cost)}</span></div>
-        <div class="profit"><span style="font-family:var(--disp);font-size:11px;letter-spacing:.04em">PROFIT TODAY</span><span class="n num${f.profit < -0.5 ? ' loss' : ''}">${off ? '0' : (f.profit >= 0.5 ? '+' : '') + fmtFrancs(f.profit)}</span></div></div>`;
-      return `<div class="card${off ? ' off' : ''}"><div class="top"><h3>${o.name}</h3><div class="dist">${ly(o.d).toUpperCase()}<br>LIGHT TAKES ${fmtLimit(o.d).toUpperCase()}</div></div>
-      <p class="cust">${custLine(o)}</p>
-      <div class="keys"><button class="key" data-i="${i}" data-d="-1" ${n <= 1 ? 'disabled' : ''} aria-label="fewer">−</button>
-      <div class="count"><div class="n num">${off ? '—' : n}</div><div class="w">${off ? 'refused' : 'booster' + (n === 1 ? '' : 's')}</div></div>
-      <button class="key" data-i="${i}" data-d="1" ${n >= CONFIG.maxBoost ? 'disabled' : ''} aria-label="more">+</button>
-      <button class="refuse" data-r="${i}">${off ? 'REFUSED' : 'REFUSE'}</button></div>${pre}${till}</div>`; }).join('');
-    $('#cards').querySelectorAll('.key').forEach(b => b.onclick = () => {
-      const i = +b.dataset.i, d = +b.dataset.d;
-      S.alloc[i] = Math.max(1, Math.min(CONFIG.maxBoost, S.alloc[i] + d)); renderBook();
-    });
-    $('#cards').querySelectorAll('.refuse').forEach(b => b.onclick = () => { const i = +b.dataset.r; S.alloc[i] = S.alloc[i] === 0 ? 1 : 0; renderBook(); });
-    $('#b-log').style.display = Object.keys(S.log).length && !S.haul ? '' : 'none';
-  }
-  $('#b-log').onclick = () => { renderLog('#log2'); show('s-log'); };
-  $('#b-log-back').onclick = $('#b-log-x').onclick = () => show('s-book');
-  $('#b-launchall').onclick = () => {
-    const r = runBook(S.orders, S.alloc, rate()); if (r.error) return;
-    S.result = r; S.fi = 0; S.mode = 'fly'; $('#range-ctl').style.display = 'none'; $('#range-log').style.display = 'none'; $('#fly-ctl').style.display = '';
-    playFlight();
-  };
-  function playFlight() {
-    const o = S.orders[S.fi], n = S.alloc[S.fi], m = S.orders.length;
-    setOrder(o); setFlames(n); show('s-fly');
-    $('#f-kicker').innerHTML = `<span>${S.haul ? 'THE LONG HAUL' : M0[S.who].title.toUpperCase()}</span><span>${m > 1 ? 'ROCKET ' + (S.fi + 1) + ' OF ' + m : ''}</span>`; $('#f-kicker').classList.add('flight');
-    $('#f-orient').textContent = n ? `${n} booster${n > 1 ? 's' : ''}.` : 'Refused: no rocket flies.';
-    $('#f-say').innerHTML = ''; $('#b-nextrocket').style.visibility = 'hidden';
-    animate(o, n, f => {
-      stamp(f); $('#f-say').innerHTML = flightWords(o, f);
-      const last = S.fi === m - 1; $('#b-nextrocket').textContent = last ? 'See how you did' : 'Next rocket'; $('#b-nextrocket').style.visibility = 'visible';
-    });
-  }
-  $('#b-nextrocket').onclick = () => {
-    if (S.busy) return;
-    if (S.fi < S.orders.length - 1) { S.fi++; playFlight(); return; }
-    S.haul ? endHaul() : endBook();
-  };
-
-  // ---------- verdicts ----------
-  function endBook() {
-    const r = S.result, fl = r.flights, bs = r.bests, os = S.orders, rt = rate();
-    const share = r.bestProfit > 0 ? r.profit / r.bestProfit : 0;
-    const head = `You die ${fate(r.profit, r.bestProfit)}.`;
-    const sub = r.profit < -0.5 ? `You lost ${fmtFrancs(-r.profit)} today.` : share >= 0.97 ? `${fmtFrancs(r.profit)} today: every franc there was.` : `${fmtFrancs(r.profit)} today, of a possible ${fmtFrancs(r.bestProfit)}.`;
-    const notes = [];
+  // ---------- the end ----------
+  function end() {
+    const os = S.orders, fl = S.flights, rt = rate(), bs = os.map(o => best(o, rt));
+    const profit = wealth(), bestProfit = bs.reduce((s, b) => s + b.profit, 0), share = bestProfit > 0 ? profit / bestProfit : 0;
+    const head = `You die ${fate(profit, bestProfit)}.`;
+    const sub = profit < -0.5 ? `You lost ${fmtFrancs(-profit)} today.` : share >= 0.97 ? `${fmtFrancs(profit)} today: every franc there was.` : `${fmtFrancs(profit)} today, of a possible ${fmtFrancs(bestProfit)}.`;
+    // group the rounds by what went wrong, so the verdict reads as a few sentences, not ten
+    const G = { late: [], dead: [], over: [], under: [], refusedWrong: [], flewDead: [] };
     os.forEach((o, i) => { const f = fl[i], b = bs[i], nm = cap(o.name.toLowerCase());
-      if (b.n === 0 && !f.refused) notes.push(f.alive ? `${nm}: the flowers arrived alive, but the fee arrives in ${fmtYears(f.tHome)}, and at your rate that is worth ${fmtShare(f.disc)}. Refusing was the money move.` : `${nm}: dead on arrival, and even alive the fee would have come too late to be worth the fuel. Refuse it.`);
-      else if (b.n > 0 && f.refused) notes.push(`${nm}: you refused; ${words[b.n]} boosters would have made ${fmtFrancs(b.profit)} today.`);
-      else if (!f.refused && !f.alive) notes.push(`${nm}: dead on arrival. ${cap(words[b.n])} boosters would have kept them alive.`);
-      else if (!f.refused && f.n > b.n) notes.push(`${nm}: ${f.n - b.n > 1 ? 'the last boosters' : 'the last booster'} bought you nothing you were paid for. Nothing arrives before light; once the flowers are alive, more speed is just fuel.`);
-      else if (!f.refused && f.n < b.n) notes.push(`${nm}: one more booster would have brought the fee a little sooner, and at your rate that was worth more than the fuel.`);
+      if (b.n === 0 && !f.refused) (f.alive ? G.late : G.flewDead).push(nm);
+      else if (b.n > 0 && f.refused) G.refusedWrong.push(nm + ' (' + words[b.n] + ' boosters: ' + fmtFrancs(b.profit) + ')');
+      else if (!f.refused && !f.alive) G.dead.push(nm + ' (' + words[b.n] + ')');
+      else if (!f.refused && f.n > b.n) G.over.push(nm);
+      else if (!f.refused && f.n < b.n) G.under.push(nm);
     });
+    const list = a => a.length === 1 ? a[0] : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1];
+    const notes = [];
+    if (G.dead.length) notes.push(`Dead on arrival at ${list(G.dead)}; in brackets, the boosters that would have kept them alive.`);
+    if (G.late.length) notes.push(`${list(G.late)}: alive, but the fee came so late that at your rate it was worth less than the fuel. Refusing was the money move.`);
+    if (G.flewDead.length) notes.push(`${list(G.flewDead)}: dead, and even alive the fee would have come too late to be worth the fuel.`);
+    if (G.refusedWrong.length) notes.push(`You refused ${list(G.refusedWrong)}; there was money in them.`);
+    if (G.over.length) notes.push(`At ${list(G.over)} the last booster bought nothing you were paid for: once the flowers are alive, more speed is just fuel.`);
+    if (G.under.length) notes.push(`At ${list(G.under)} one more booster would have brought the fee a little sooner, worth more than its fuel at your rate.`);
     const did = notes.length ? notes.join(' ') : 'Every rocket carried exactly the boosters that paid, and you refused what could not pay.';
-    const others = Object.keys(M0).filter(k => k !== S.who).map(k => { const rr = runBook(os, S.alloc, M0[k].rate); return `${M0[k].title} would have made ${fmtFrancs(rr.profit)} today with these same rockets; their best book is ${fmtFrancs(rr.bestProfit)}.`; });
-    const cross = `<p class="p">You were ${M0[S.who].title.toLowerCase()}. ${others.join(' ')}</p>`;
-    $('#verdict').innerHTML = `<h1>${head}</h1><p class="p"><b>${sub}</b> ${did}</p>${cross}
+    const others = Object.keys(M0).filter(k => k !== S.who).map(k => { const r2 = M0[k].rate; const p2 = os.reduce((s, o, i) => s + fly(o, fl[i].n, r2).profit, 0), b2 = os.reduce((s, o) => s + best(o, r2).profit, 0); return `${M0[k].title} would have died ${fate(p2, b2)} with these same rockets (${fmtFrancs(p2)} of a possible ${fmtFrancs(b2)}).`; });
+    $('#verdict').innerHTML = `<h1>${head}</h1><p class="p"><b>${sub}</b> ${did}</p><p class="p">You were ${M0[S.who].title.toLowerCase()}. ${others.join(' ')}</p>
       <p class="p paper"><b>Einstein, 1905:</b> speeds don’t simply add, and no pile of boosters ever reaches light. A clock that travels runs slow, and the closer to light it goes, the slower it runs. And the energy a body needs grows without limit as it nears the speed of light.</p>
       <p class="p means"><b>What that means for the Light Post:</b> the light limit binds the money. However many boosters you fire, the fee cannot arrive before light would, so a far star's fee is discounted to almost nothing whatever you do, and a merchant who discounts refuses the far stars first. It does not bind the flowers: every booster slows the rocket's clock, so they can arrive as young as you like, at a fuel price that grows without limit.</p>`;
     $('#tally').innerHTML = os.map((o, i) => { const f = fl[i], b = bs[i];
-      return `<div class="r"><div><b>${o.name}</b> · ${f.refused ? 'refused' : f.n + ' booster' + (f.n === 1 ? '' : 's') + (f.alive ? '' : ' · dead')}${b.n !== f.n ? ` (best: ${b.n ? b.n : 'refuse'})` : ''}</div><span class="${f.profit < -0.5 || (b.n === 0 && !f.refused) ? 'bad' : ''}">${f.refused ? '0' : (f.profit >= 0.5 ? '+' : '') + Math.round(f.profit)}</span></div>`; }).join('');
-    S.plays++; show('s-end');
+      return `<div class="r"><div><b>${o.name}</b> · ${ly(o.d)} · ${f.refused ? 'refused' : f.n + ' booster' + (f.n === 1 ? '' : 's') + (f.alive ? '' : ' · dead')}${b.n !== f.n ? ` (best: ${b.n ? b.n : 'refuse'})` : ''}</div><span class="${f.profit < -0.5 || (b.n === 0 && !f.refused) ? 'bad' : ''}">${f.refused ? '0' : (f.profit >= 0.5 ? '+' : '') + Math.round(f.profit)}</span></div>`; }).join('')
+      + `<div class="r"><div><b>GAME NO. ${S.seed}</b></div><span>${Math.round(profit)}</span></div>`;
+    show('s-end');
   }
-  function endHaul() {
-    const f = S.result.flights[0], o = CONFIG.haul, rt = rate(), b = best(o, rt);
-    const head = f.refused ? (b.n ? 'Refused. There was money in it.' : 'Refused, and rightly.') : f.profit >= 0.5 ? `You die ${fate(f.profit, b.profit)}, for flowers that arrive in a century.` : 'You die a pauper, a century before the flowers arrive.';
-    const body = f.refused ? (b.n ? `With six boosters the flowers would have aged ${fmtYears(b.tCargo)} while a century passed in Bern, and ${fmtFrancs(o.fee)} a century from now is ${fmtFrancs(b.today)} to you, against ${fmtFrancs(b.cost)} of fuel.` : `${fmtFrancs(o.fee)} paid in a century is worth ${fmtShare(fly(o, 6, rt).disc)} to you today. Only a merchant who does not discount at all can take this order.`)
-      : `The station clock read ${fmtYears(f.tHome)}; the rocket clock ${fmtYears(f.tCargo)}${f.alive ? '' : ': dead'}. ` + (f.alive ? `${fmtFrancs(o.fee)} a century from now is worth ${fmtFrancs(f.today)} to you today; the fuel cost ${fmtFrancs(f.cost)}.` : `Nobody pays; the fuel cost ${fmtFrancs(f.cost)}.`) + (f.profit >= 0.5 ? ' Everyone who placed this order is long gone. The flowers are young, and you did not mind waiting.' : '');
-    $('#haulverdict').innerHTML = `<h1>${head}</h1><p class="p">${body}</p>
-      <p class="p paper"><b>Einstein, 1905:</b> a clock carried away at high speed falls behind the clock that stayed. The paper speaks of clocks; this game lets the flowers keep time the same way, and lets the money keep Bern's.</p>
-      <p class="p means">Nothing outruns light, so the century in Bern is unavoidable, and so is the century's discount. The ten years in the box are not.</p>`;
-    show('s-haulend');
-  }
-  $('#b-haul').onclick = () => openBook(S.who, true);
-  $('#b-haulagain').onclick = () => openBook(S.who, true);
-  $('#b-again').onclick = chooseWho; $('#b-again2').onclick = chooseWho;
+  $('#b-again').onclick = chooseWho;
+  $('#b-new').onclick = () => { newSeed(); chooseWho(); };
 })();
 </script>
 </body>

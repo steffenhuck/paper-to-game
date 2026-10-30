@@ -16,26 +16,13 @@ ok   §10: W is ½ m v² at low v, to first order  [0.000050003750312610507]
 ok   fuel: cost rises with every booster
 ok   discount: 4% over 10 years ≈ 0.665  [0.6648326359915009]
 ok   discount: rate 0 is no discount
-ok   patient merchant sends to every star (2,4,5,6)
-ok   ordinary merchant refuses exactly one star (2,4,5,0)
-ok   merchant with a loan refuses exactly two stars (3,4,0,0)
-ok   the borrower adds a booster at the near star, to be paid sooner
-ok   every star the patient sends to is sent with at least the fewest alive boosters
-ok   at the far stars the sender uses exactly the fewest alive boosters (fuel, not speed, decides)
-ok   PATIENT THUN: best is unique by ≥ 3 francs  [10.3]
-ok   PATIENT OLTEN: best is unique by ≥ 4 francs  [32.7]
-ok   PATIENT SION: best is unique by ≥ 4 francs  [56.9]
-ok   PATIENT BRIG: best is unique by ≥ 4 francs  [174.8]
-ok   ORDINARY THUN: best is unique by ≥ 3 francs  [3.9]
-ok   ORDINARY OLTEN: best is unique by ≥ 4 francs  [31.8]
-ok   ORDINARY SION: best is unique by ≥ 4 francs  [56.5]
-ok   BORROWER THUN: best is unique by ≥ 3 francs  [4.0]
-ok   BORROWER OLTEN: best is unique by ≥ 4 francs  [30.8]
-ok   range: four boosters is the fewest that arrive alive
-ok   range: two boosters arrive dead (the natural first try)
+ok   draw: every one of 300 seeds has the designed shape (patient profits everywhere; borrower refuses something; long haul is the patient's; round one near and forgiving; two far stars; keep-times bounded)
+ok   draw: the cheapest alive count spans 2 to 6 across seeds  [{"2":431,"3":372,"4":598,"5":767,"6":832}]
+ok   draw: the first refusal lands in different rounds on different seeds, for both discounting merchants  [ordinary 9 rounds, borrower 9]
+ok   draw: the same seed draws the same game
+ok   draw: different seeds draw different games
 ok   fate: every franc there was is the richest merchant; nothing is a poor man; a loss is a pauper
-ok   long haul: only the patient merchant can make it pay
 ok   pattern (a): the fee never arrives before light would
 ok   pattern (b): every booster makes the flowers younger on arrival
 ok   pattern (c): as the rate rises merchants drop the far stars first, never the near (90 cases)
-40 passed, 0 failed
+27 passed, 0 failed

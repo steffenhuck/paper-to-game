@@ -1,7 +1,7 @@
 // Calibration check for The Light Post: the mechanism against Einstein (1905), §1, §4, §5 and §10, with explicit tolerances;
 // then the robustness of the game's pattern to the game's own prices and rates. Run: node calibration.js
 const M = require('./mechanism.js');
-const { CONFIG, compose, speedAfter, clockRate, energy, fuelCost, discount, fly, best, minAlive } = M;
+const { CONFIG, compose, speedAfter, clockRate, energy, fuelCost, discount, fly, best, minAlive, drawGame } = M;
 let pass = 0, fail = 0; const out = [];
 function check(name, ok, detail) { (ok ? pass++ : fail++); out.push((ok ? 'ok   ' : 'FAIL ') + name + (detail !== undefined ? '  [' + detail + ']' : '')); }
 const near = (a, b, tol) => Math.abs(a - b) <= tol;
@@ -34,24 +34,28 @@ check('fuel: cost rises with every booster', [1, 2, 3, 4, 5, 6].every((n, i, a) 
 check('discount: 4% over 10 years ≈ 0.665', near(discount(10, 0.04), 0.6648, 1e-3), discount(10, 0.04));
 check('discount: rate 0 is no discount', discount(37, 0) === 1);
 
-// The orders, merchant by merchant.
+// The draw. Across many seeds: every game has the shape the design wants (this is a check on our rounds table, not on the paper),
+// and the mechanism's patterns hold on every one of them.
 const R = Object.fromEntries(Object.entries(CONFIG.merchants).map(([k, m]) => [k, m.rate]));
-const bests = k => CONFIG.stars.map(o => best(o, R[k]).n);
-check(`patient merchant sends to every star (${bests('PATIENT').join(',')})`, bests('PATIENT').every(n => n > 0));
-check(`ordinary merchant refuses exactly one star (${bests('ORDINARY').join(',')})`, bests('ORDINARY').filter(n => n === 0).length === 1);
-check(`merchant with a loan refuses exactly two stars (${bests('BORROWER').join(',')})`, bests('BORROWER').filter(n => n === 0).length === 2);
-check('the borrower adds a booster at the near star, to be paid sooner', best(CONFIG.stars[0], R.BORROWER).n > best(CONFIG.stars[0], R.PATIENT).n);
-check('every star the patient sends to is sent with at least the fewest alive boosters', CONFIG.stars.every(o => best(o, 0).n >= minAlive(o)));
-check('at the far stars the sender uses exactly the fewest alive boosters (fuel, not speed, decides)', [2, 3].every(i => best(CONFIG.stars[i], 0).n === minAlive(CONFIG.stars[i])));
-for (const k of Object.keys(R)) for (const o of CONFIG.stars) { const bn = best(o, R[k]).n; if (bn) {
-  const p = [...Array(7).keys()].map(n => fly(o, n, R[k]).profit); const s = [...p].sort((x, y) => y - x);
-  const need = o.name === 'THUN' ? 3 : 4; // the near star is nearly indifferent by design: one booster more or less barely matters there
-  check(`${k} ${o.name}: best is unique by ≥ ${need} francs`, s[0] - s[1] >= need, (s[0] - s[1]).toFixed(1)); } }
-check('range: four boosters is the fewest that arrive alive', minAlive(CONFIG.range) === 4);
-check('range: two boosters arrive dead (the natural first try)', !fly(CONFIG.range, 2, 0).alive);
+let shapeOk = true, seeds = 300, firstRef = { ORDINARY: [], BORROWER: [] }, ks = {};
+for (let seed = 1; seed <= seeds; seed++) {
+  const os = drawGame(seed);
+  if (os.length !== 10 || os[9].d !== 100) shapeOk = false;
+  if (!os.every(o => best(o, R.PATIENT).n > 0)) shapeOk = false;                        // the patient merchant can profit on every order
+  if (os.every(o => best(o, R.BORROWER).n > 0)) shapeOk = false;                       // the borrower refuses something
+  if (best(os[9], R.ORDINARY).n !== 0 || best(os[9], R.PATIENT).n !== 6) shapeOk = false; // the long haul is the patient merchant's alone
+  if (os[0].d > 2 || minAlive(os[0]) > 2) shapeOk = false;                              // round one: near, alive from two boosters
+  if (os.slice(1, 9).filter(o => o.d >= CONFIG.pool.far).length < CONFIG.pool.minFar) shapeOk = false; // at least two far stars
+  if (os.some(o => o.keep > 10.001)) shapeOk = false;                                   // no flower keeps longer than the museum's
+  os.forEach(o => { ks[minAlive(o)] = (ks[minAlive(o)] || 0) + 1; });
+  for (const k of ['ORDINARY', 'BORROWER']) { const i = os.findIndex(o => best(o, R[k]).n === 0); firstRef[k].push(i < 0 ? 11 : i + 1); }
+}
+check(`draw: every one of ${seeds} seeds has the designed shape (patient profits everywhere; borrower refuses something; long haul is the patient's; round one near and forgiving; two far stars; keep-times bounded)`, shapeOk);
+check('draw: the cheapest alive count spans 2 to 6 across seeds', [2, 3, 4, 5, 6].every(k => ks[k] > 0), JSON.stringify(ks));
+const spread = a => new Set(a).size; check('draw: the first refusal lands in different rounds on different seeds, for both discounting merchants', spread(firstRef.ORDINARY) >= 4 && spread(firstRef.BORROWER) >= 4, 'ordinary ' + spread(firstRef.ORDINARY) + ' rounds, borrower ' + spread(firstRef.BORROWER));
+check('draw: the same seed draws the same game', JSON.stringify(drawGame(99)) === JSON.stringify(drawGame(99)));
+check('draw: different seeds draw different games', JSON.stringify(drawGame(1)) !== JSON.stringify(drawGame(2)));
 check('fate: every franc there was is the richest merchant; nothing is a poor man; a loss is a pauper', M.fate(100, 100) === 'the richest merchant in Bern' && M.fate(0, 100) === 'a poor man' && M.fate(-5, 100) === 'a pauper');
-check('long haul: only the patient merchant can make it pay', best(CONFIG.haul, 0).n === 6 && best(CONFIG.haul, R.ORDINARY).n === 0);
-
 // The pattern the game stages, and whether it comes from the paper or from our prices:
 //   (a) the money is bound by the light limit: no booster count brings the fee sooner than d years, so a far star's fee is discounted
 //       to nothing whatever the merchant does; (b) the flowers are not bound: boosters can make the rocket's clock as short as you like.

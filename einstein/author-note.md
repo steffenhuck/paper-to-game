@@ -1,4 +1,5 @@
-**Revised five times after first review.** The game now marries the paper to a merchant's balance sheet: paid on the station clock (synchronised by §1), flowers alive or dead by the rocket's clock (§4), fuel by §10, and a discount rate chosen at the start. See memo §24; every price and rate is tagged in `mechanism.js`.
+**Revised six times after first review.** Ten rounds from a game number, no test range, nothing previewed before launch, the fate at the end; see memo §26. The simulation table in §26 is the quickest way to see what the game rewards.
+
 
 
 
