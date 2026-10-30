@@ -1,0 +1,32 @@
+PASS  P1  b_v != a_{v,v} for all v, 500 random lists of 2..41 rows
+PASS  P2  E0 agrees with no row, 500 random lists
+PASS  P1+P2 against all-m, staircase, checkerboard and binary-counting lists
+PASS  P3  E_I, E_II, E_III (m m m / w w w / m w m) give E0 = (w, m, w)  [wmw]
+PASS  P3  the first book opens with the paper's three elements
+PASS  P4  your row added as row 1, the rule runs again: new E0 not in the new book (300 seeds)
+PASS  R1  five distinct rows, 400 book numbers
+PASS  R1  rows 1-3 are the paper's E_I, E_II, E_III
+PASS  R1  the diagonal rule always strikes all five, in at most 5 letters  [max letters 5]
+PASS  R2  after every letter the page is full of rows that agree with you (300 seeds)
+PASS  R2  arriving rows carry strictly larger row numbers
+PASS  R2  a row number always shows the same letters
+PASS  R2  the round ends after the set number of letters, never by striking everything
+PASS  R3  each row copies your first u-1 letters
+PASS  R3  the diagonal rule lets no row slip and leaves no row agreeing (300 seeds)
+
+Heuristic players, 2000 book numbers each:
+player     | R1 strikes all five | R1 letters used | R3 rows slipped (of 10) | R3 rows still agreeing at the end
+random     |                 92% |            3.80 |                    5.05 |       1.00
+allM       |                  0% |            6.00 |                    5.01 |       1.03
+majority   |                100% |            2.52 |                    0.00 |       0.00
+diagonal   |                100% |            2.74 |                    0.00 |       0.00
+
+PASS  H   random play slips about half the rows in round 3 (4 to 6 of 10)  [5.05]
+PASS  H   always-m slips about half the rows too  [5.01]
+PASS  H   the diagonal slips none
+PASS  H   majority striking wins round 1 almost always and in fewer letters than the diagonal  [100%, 2.52 vs 2.74]
+PASS  H   random play sometimes loses round 1 (a row is you after six letters)  [92%]
+PASS  H   always-m loses round 1 every time (row 1 is all m)
+PASS  V   verdict keys
+
+22 passed, 0 failed
