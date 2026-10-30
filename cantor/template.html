@@ -191,7 +191,7 @@ h1.title{font-size:48px;line-height:.98;text-align:center;margin:8px 0 4px;text-
     <h3>Round 1: the small book</h3>
     <p>Five rows, six letters each. Strike all five before your six letters run out. Think about which letter strikes more of the rows still agreeing with you.</p>
     <h3>Round 2: the endless book</h3>
-    <p>Same game, but the book has no end. Whenever you strike rows, the Lister turns to rows further down that still agree with you. You write five letters, then he has a word.</p>
+    <p>Same game, but the book has no end. Whenever you strike rows, the Lister turns to rows further down that still agree with you. You write all six letters of your row; then he has a word.</p>
     <h3>Round 3: Cantor's bargain</h3>
     <p>Ten rows, ten letters, a teal line down the diagonal. Strike row 1 with your 1st letter, row 2 with your 2nd, and so on. The Lister writes each row only when you reach it, copying what you have written so far, so the only letter that can strike row u on time is the one on the line. A row you fail to strike on its number <b>slips</b>; it stays in the book until a later letter strikes it, if one does.</p>
     <h3>The end</h3>
@@ -342,7 +342,7 @@ function tapRound2(c){
         count(`<b>${st.struckTotal} struck so far</b> · still agreeing with you: all of these, and endlessly more`);
         setControls(true);
       } else {
-        count(`<b>${st.struckTotal} rows struck</b> in five letters. Still agreeing with you: the nine on this page, and endlessly more.`);
+        count(`<b>${st.struckTotal} rows struck</b>, and your row is complete. Still agreeing with you in all six letters: the nine on this page, and endlessly more.`);
         after(`<div class="lister"><div class="who">The Great Lister</div>Strike as many as you like. For every row you strike I have a thousand further down that agree with you. You will never strike them all.</div><button class="ticket" id="btn-bargain">Hear Cantor's bargain</button>`);
         $('#btn-bargain').addEventListener('click', () => show('bargain'));
       }

@@ -42,7 +42,7 @@ const path = require('path');
   await page.click('#btn-r2'); await page.waitForTimeout(300);
   console.log('\nROUND 2:', await text('#roundname'), '|', await text('#orient'));
   await shot('round2-start'); await noHScroll();
-  for (let k = 0; k < 5; k++) {
+  for (let k = 0; k < 6; k++) {
     const c = k % 2 ? 'm' : 'w';
     await page.click('#tap-' + c); await page.waitForTimeout(300);
     console.log(`  tap ${c} ->`, await text('#count'));
@@ -97,7 +97,7 @@ const path = require('path');
   console.log('  round 1 by all-m:', await text('#count'));
   await shot('round1-caught');
   await page.click('#btn-r2'); await page.waitForTimeout(300);
-  for (let k = 0; k < 5; k++) { await page.click('#tap-m'); await page.waitForTimeout(1500); }
+  for (let k = 0; k < 6; k++) { await page.click('#tap-m'); await page.waitForTimeout(1500); }
   await page.click('#btn-bargain'); await page.waitForTimeout(200); await page.click('#btn-r3'); await page.waitForTimeout(300);
   for (let u = 0; u < 10; u++) { const line = await page.evaluate(u => window.__game.G.r3.st.rows[u][u], u); await page.click('#tap-' + Mechanism_flip(line)); await page.waitForTimeout(350); }
   console.log('  round 3 clean:', await text('#count'));

@@ -20,7 +20,7 @@ const CONFIG = {
   // Round 2: the endless book
   R2_WINDOW: 9,               // our choice: rows on the page at once
   R2_WIDTH: 6,                // our choice: letters shown per row
-  R2_LETTERS: 5,              // our choice: letters the player writes before the Lister's card
+  R2_LETTERS: 6,              // our choice: the player writes the whole shown row before the Lister's card
   R2_GAP_MIN: 1,              // our choice: smallest gap between successive agreeing row numbers (density halves per letter)
   // Round 3: Cantor's bargain
   R3_ROWS: 10,                // our choice: rows = letters; the diagonal is square (b_u vs a_{u,u})
