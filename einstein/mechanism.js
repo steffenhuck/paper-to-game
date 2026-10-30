@@ -27,7 +27,7 @@ const CONFIG = {
   range: { name: 'NEW BERN', who: 'FLORIST', d: 4, fee: 150, keep: 3, patience: 1 },   // our choice
   // Order books. The player chooses whom to fly for; the four stars are the same under every valuation.
   //   Florists' guild: every order pays for freshness. Hospital service: every order pays for speed. A mixed book: four customers, four rules.
-  // Under the florists the far stars want the late boosters (bests 4,5,6,6); under the hospitals they stop at four (3,4,4,4). The mixed book has one order to refuse.
+  // Under the florists the far stars want the late boosters (bests 4,5,6,5); under the hospitals they stop at four (3,4,4,4). The mixed book has one order to refuse.
   stars: [
     { name: 'THUN',  d: 2  },
     { name: 'OLTEN', d: 10 },
@@ -35,9 +35,9 @@ const CONFIG = {
     { name: 'BRIG',  d: 20 },
   ],
   employers: {
-    FLORISTS:  { title: 'The florists’ guild', them: 'the florists’ guild', say: 'Every order pays for freshness: 300 francs for flowers that have not aged, nothing once they are 3½ years old.',
-      orders: [ { who: 'FLORIST', fee: 300, keep: 3.5, patience: 1 }, { who: 'FLORIST', fee: 300, keep: 3.5, patience: 1 }, { who: 'FLORIST', fee: 300, keep: 3.5, patience: 1 }, { who: 'FLORIST', fee: 300, keep: 3.5, patience: 1 } ] }, // our choice; bests 4, 5, 6, 6
-    HOSPITALS: { title: 'The hospital service', them: 'the hospital service', say: 'Every order pays for speed: 150 francs if the rocket arrives when light could, nothing if it is 3 years later than that.',
+    FLORISTS:  { title: 'The florists’ guild', them: 'the florists’ guild', say: 'Every order pays for freshness: the full fee for flowers that have not aged, less as they age, nothing once they are past keeping.',
+      orders: [ { who: 'FLORIST', fee: 300, keep: 3.5, patience: 1 }, { who: 'FLORIST', fee: 300, keep: 3.5, patience: 1 }, { who: 'FLORIST', fee: 300, keep: 3.5, patience: 1 }, { who: 'FLORIST', fee: 250, keep: 8, patience: 1 } ] }, // our choice; bests 4, 5, 6, 5 — Brig's flowers are hardier, so the sixth booster overshoots there
+    HOSPITALS: { title: 'The hospital service', them: 'the hospital service', say: 'Every order pays for speed: the full fee if the rocket arrives when light could, less for every year after, nothing once their patience is gone.',
       orders: [ { who: 'HOSPITAL', fee: 150, keep: 1, patience: 3 }, { who: 'HOSPITAL', fee: 150, keep: 1, patience: 3 }, { who: 'HOSPITAL', fee: 150, keep: 1, patience: 3 }, { who: 'HOSPITAL', fee: 150, keep: 1, patience: 3 } ] }, // our choice; bests 3, 4, 4, 4
     MIXED:     { title: 'A mixed book', them: 'the mixed book', say: 'Four customers, four rules, and one order that no rocket can make pay.',
       orders: [ { who: 'HOSPITAL', fee: 100, keep: 1, patience: 2 }, { who: 'FLORIST', fee: 200, keep: 10, patience: 1 }, { who: 'FLORIST', fee: 150, keep: 5, patience: 1 }, { who: 'FLORIST', fee: 150, keep: 2, patience: 1 } ] }, // our choice; bests 3, 4, 5, refuse

@@ -13,11 +13,11 @@ ok   §10: W at 0.8c = 2/3 mc²
 ok   §10: W at 0.999c > 20 mc²  [21.36627204212937]
 ok   §10: W is ½ m v² at low v, to first order  [0.000050003750312610507]
 ok   fuel: cost rises with every booster
-ok   FLORISTS: every order pays at its best (4,5,6,6)
+ok   FLORISTS: every order pays at its best (4,5,6,5)
 ok   FLORISTS THUN: best is unique by ≥ 4 francs  [11.3]
 ok   FLORISTS OLTEN: best is unique by ≥ 4 francs  [10.1]
 ok   FLORISTS SION: best is unique by ≥ 4 francs  [13.3]
-ok   FLORISTS BRIG: best is unique by ≥ 4 francs  [36.8]
+ok   FLORISTS BRIG: best is unique by ≥ 4 francs  [22.8]
 ok   HOSPITALS: every order pays at its best (3,4,4,4)
 ok   HOSPITALS THUN: best is unique by ≥ 4 francs  [7.0]
 ok   HOSPITALS OLTEN: best is unique by ≥ 4 francs  [7.3]
@@ -28,7 +28,7 @@ ok   mixed book: exactly one order to refuse
 ok   MIXED THUN: best is unique by ≥ 4 francs  [7.0]
 ok   MIXED OLTEN: best is unique by ≥ 4 francs  [13.5]
 ok   MIXED SION: best is unique by ≥ 4 francs  [10.6]
-ok   florists vs hospitals, star by star: 4,5,6,6 vs 3,4,4,4 — florists never fewer, more at the far stars
+ok   florists vs hospitals, star by star: 4,5,6,5 vs 3,4,4,4 — florists never fewer, more at the far stars
 ok   range: best count is 4
 ok   range: two boosters lose money (the natural first try)
 ok   pattern: freshness-buyer never wants fewer boosters than speed-buyer (320 price/fee/distance cases)

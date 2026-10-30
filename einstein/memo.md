@@ -251,3 +251,17 @@ Steffen: the idea that the player chooses their own objective had been folded in
 The verdict now closes with what the other two contracts would have paid for the same rockets and what their best books are worth, so a player who flies the florists' plan (4, 5, 6, 6) for the hospitals sees 234 francs against a possible 412, with the reason named star by star. "New order book" returns to the choice. The calibration check (now 35) confirms, star by star, that the florists never want fewer boosters than the hospitals and want more at the far stars, which is the paper's asymmetry between the wait (shrinks like 1 − v) and the ageing (shrinks like √(1 − v)).
 
 Browser session rerun at 380 px: range, the choice screen, the mixed book spread evenly (145 of 219), the florists' book played well (474, every franc), the hospitals flown with the florists' plan (234 of 412), the long haul at five and six, About; no errors, no horizontal scroll, no decimals.
+
+
+## 23. Revision four: the morning after (30 Oct)
+
+Steffen's notes from playing: "Refuse this order" looked like a button but was a label for zero boosters, and refusing is a different act from sending no rocket; the test range needed to say it is not yet the game; the card should say how much less the customer pays when the flowers are wilted; and from his first play it seemed to pay to max out the boosters.
+
+The last was true of the florists' book, where two stars' best was six and the cards showed speed, ageing and fuel but not what the customer would pay, so the only brake was invisible until launch. Changes:
+- **REFUSE is a button**, beside the keys; a refused card greys, reads "refused", and says "No rocket flies. Nothing earned, nothing spent." The keys run from one booster up; refusing is separate from counting.
+- **The till is on every card**: PAID and FUEL bars against the fee, and PROFIT, live as the keys are pressed. The book is no longer blind; the task is to find each customer's frontier, with the numbers in view. The launch confirms.
+- **The discount rule is on the card** in one sentence per customer: "pays 300 francs for flowers that have not aged, less as they age, nothing once they are 3½ years old"; "pays 150 francs if the rocket arrives when light could, less for every year after, nothing 3 years later than light."
+- **The test range is framed**: a kicker "TEST RANGE · NOT THE GAME YET · NOTHING COUNTS", an orientation line that says so, and the button "Done testing: to the order book". The flights in the book carry the contract's name and "rocket n of 4" in the same place.
+- **Brig for the florists is a hardier flower** (250 francs, keeps 8 years): best five, and the sixth booster loses 23. The florists' book is now 4, 5, 6, 5, so the maximum pays at one star only; the hospitals' 3, 4, 4, 4 is unchanged. Calibration adds a check that the florists' book has at least one star below the maximum.
+
+Session rerun at 380 px; no errors, no horizontal scroll, no decimals. Verdicts: mixed book spread at three (145 of 219), florists played well (528, every franc), the hospitals with the florists' plan (234 of 412).

@@ -54,6 +54,10 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
 .legend .l { color: #8a6c00; } .legend .l::before { background: var(--light); }
 .legend .r { color: var(--red); }
 
+/* kicker above the order (test range / rocket n of m) */
+.kicker { font-family: var(--disp); font-size: 11px; letter-spacing: 0.12em; display: flex; justify-content: space-between; margin: 2px 0 6px; color: var(--red); }
+.kicker.flight { color: var(--ink); }
+
 /* order header */
 .order { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 6px; }
 .order h2 { font-size: 26px; line-height: 0.95; white-space: nowrap; }
@@ -162,8 +166,15 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
 .card .keys { grid-template-columns: 54px 1fr 54px; margin: 6px 0 0; }
 .card .key { height: 54px; font-size: 30px; }
 .card .count .n { font-size: 24px; }
-.card .pre { font-size: 13px; line-height: 1.25; margin-top: 6px; min-height: 32px; }
-.card .pre.refuse { color: var(--red); font-family: var(--disp); text-transform: uppercase; font-size: 12px; letter-spacing: 0.04em; }
+.card .pre { font-size: 13px; line-height: 1.25; margin-top: 6px; min-height: 18px; }
+.card .keys { grid-template-columns: 54px 1fr 54px 92px; }
+.card .refuse { height: 54px; border: 0; background: transparent; box-shadow: inset 0 0 0 3px var(--ink); color: var(--ink); font-family: var(--disp); font-size: 12px; letter-spacing: 0.06em; cursor: pointer; }
+.card .refuse:active, .card.off .refuse { background: var(--ink); color: var(--paper); }
+.card.off .key, .card.off .count { opacity: 0.35; }
+.card.off .pre, .card.off .till { opacity: 0.35; }
+.card .till { margin-top: 6px; border-top: 1px solid var(--fog2); padding-top: 4px; }
+.card .till .row { grid-template-columns: 50px 1fr 92px; font-size: 11px; padding: 1px 0; }
+.card .till .profit .n { font-size: 22px; }
 
 /* end */
 .verdict { padding-top: 16px; }
@@ -210,6 +221,7 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
 <!-- TEST RANGE + FLIGHTS share this layout -->
 <section class="screen" id="s-fly">
   <div class="bar"><div class="aim">Deliver flowers to the stars at a profit.</div><button class="q" data-help aria-label="How to play">?</button></div>
+  <div class="kicker" id="f-kicker"><span>TEST RANGE</span><span>NOT THE GAME YET · NOTHING COUNTS</span></div>
   <div class="order"><h2 id="f-name">New Bern</h2><div class="dist" id="f-dist"></div></div>
   <p class="cust" id="f-cust"></p>
   <p class="orient" id="f-orient"></p>
@@ -230,7 +242,7 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
       <div class="ticks"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div>
     </div>
     <button class="btn" id="b-launch">Launch</button>
-    <button class="btn ghost" id="b-tobook" style="display:none">Next: the order book</button>
+    <button class="btn ghost" id="b-tobook" style="display:none">Done testing: to the order book</button>
   </div>
   <div class="stamp" id="f-stamp"></div>
   <p class="say" id="f-say"></p>
@@ -246,7 +258,7 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
 <section class="screen" id="s-who">
   <div class="bar"><div class="aim">Deliver flowers to the stars at a profit.</div><button class="q" data-help aria-label="How to play">?</button></div>
   <h2 class="disp" style="font-size:30px;line-height:.95">Who are you flying for?</h2>
-  <p class="orient">Four stars: Thun, Olten, Sion, Brig. The same four under every contract. What changes is who pays, and for what.</p>
+  <p class="orient">This is the game. Four stars: Thun, Olten, Sion, Brig, the same four under every contract. What changes is who pays, and for what.</p>
   <div id="whos"></div>
 </section>
 
@@ -299,8 +311,8 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
   <h3>The two clocks</h3>
   <p><b>Home clock</b>: the star's station clock, set to agree with home; how long the customer waited. <b>Flowers' clock</b>: a clock riding in the rocket with the flowers; how much they aged. The bar at the bottom of each dial is where that customer stops paying. Hand in the white half: still worth something.</p>
   <h3>Rounds</h3>
-  <ul><li><b>Test range</b>: one florist, as many launches as you like. Slide the boosters and watch the race, the clocks and the till before you launch.</li>
-  <li><b>Order book</b>: first choose whom you fly for: the florists' guild (every order pays for freshness), the hospital service (every order pays for speed), or a mixed book. Then four orders, set blind, launched together, judged on landing. In the mixed book one order can't be made to pay: refusing it is right.</li>
+  <ul><li><b>Test range</b>: not the game yet. One florist, as many launches as you like, nothing counts. Slide the boosters and watch the race, the clocks and the till.</li>
+  <li><b>Order book</b>: the game. First choose whom you fly for: the florists' guild (every order pays for freshness), the hospital service (every order pays for speed), or a mixed book. Then four orders: set each rocket's boosters, or refuse the order, and launch them all. Each card shows what the customer would pay and what the fuel costs before you launch; the launch confirms it. In the mixed book one order can't be made to pay: refusing it is right.</li>
   <li><b>The long haul</b>: a museum, a hundred light-years away.</li></ul>
   <button class="btn" id="b-help-back">Back to the game</button>
 </section>
@@ -359,7 +371,7 @@ const CONFIG = {
   range: { name: 'NEW BERN', who: 'FLORIST', d: 4, fee: 150, keep: 3, patience: 1 },   // our choice
   // Order books. The player chooses whom to fly for; the four stars are the same under every valuation.
   //   Florists' guild: every order pays for freshness. Hospital service: every order pays for speed. A mixed book: four customers, four rules.
-  // Under the florists the far stars want the late boosters (bests 4,5,6,6); under the hospitals they stop at four (3,4,4,4). The mixed book has one order to refuse.
+  // Under the florists the far stars want the late boosters (bests 4,5,6,5); under the hospitals they stop at four (3,4,4,4). The mixed book has one order to refuse.
   stars: [
     { name: 'THUN',  d: 2  },
     { name: 'OLTEN', d: 10 },
@@ -367,9 +379,9 @@ const CONFIG = {
     { name: 'BRIG',  d: 20 },
   ],
   employers: {
-    FLORISTS:  { title: 'The florists’ guild', them: 'the florists’ guild', say: 'Every order pays for freshness: 300 francs for flowers that have not aged, nothing once they are 3½ years old.',
-      orders: [ { who: 'FLORIST', fee: 300, keep: 3.5, patience: 1 }, { who: 'FLORIST', fee: 300, keep: 3.5, patience: 1 }, { who: 'FLORIST', fee: 300, keep: 3.5, patience: 1 }, { who: 'FLORIST', fee: 300, keep: 3.5, patience: 1 } ] }, // our choice; bests 4, 5, 6, 6
-    HOSPITALS: { title: 'The hospital service', them: 'the hospital service', say: 'Every order pays for speed: 150 francs if the rocket arrives when light could, nothing if it is 3 years later than that.',
+    FLORISTS:  { title: 'The florists’ guild', them: 'the florists’ guild', say: 'Every order pays for freshness: the full fee for flowers that have not aged, less as they age, nothing once they are past keeping.',
+      orders: [ { who: 'FLORIST', fee: 300, keep: 3.5, patience: 1 }, { who: 'FLORIST', fee: 300, keep: 3.5, patience: 1 }, { who: 'FLORIST', fee: 300, keep: 3.5, patience: 1 }, { who: 'FLORIST', fee: 250, keep: 8, patience: 1 } ] }, // our choice; bests 4, 5, 6, 5 — Brig's flowers are hardier, so the sixth booster overshoots there
+    HOSPITALS: { title: 'The hospital service', them: 'the hospital service', say: 'Every order pays for speed: the full fee if the rocket arrives when light could, less for every year after, nothing once their patience is gone.',
       orders: [ { who: 'HOSPITAL', fee: 150, keep: 1, patience: 3 }, { who: 'HOSPITAL', fee: 150, keep: 1, patience: 3 }, { who: 'HOSPITAL', fee: 150, keep: 1, patience: 3 }, { who: 'HOSPITAL', fee: 150, keep: 1, patience: 3 } ] }, // our choice; bests 3, 4, 4, 4
     MIXED:     { title: 'A mixed book', them: 'the mixed book', say: 'Four customers, four rules, and one order that no rocket can make pay.',
       orders: [ { who: 'HOSPITAL', fee: 100, keep: 1, patience: 2 }, { who: 'FLORIST', fee: 200, keep: 10, patience: 1 }, { who: 'FLORIST', fee: 150, keep: 5, patience: 1 }, { who: 'FLORIST', fee: 150, keep: 2, patience: 1 } ] }, // our choice; bests 3, 4, 5, refuse
@@ -483,9 +495,9 @@ if (typeof module !== 'undefined') module.exports = MECH;
   // ---------- the customer line ----------
   function custLine(o) {
     const c = CONFIG.customers[o.who], fee = fmtFrancs(o.fee);
-    if (c.wf === 1) return `<b>${WHO[o.who]}</b> pays up to ${fee}, for freshness. The flowers keep ${fmtLimit(o.keep)}.`;
-    if (c.wf === 0) return `<b>${WHO[o.who]}</b> pays up to ${fee}, for speed. Patience: ${fmtLimit(o.patience)} past the moment light could arrive.`;
-    return `<b>${WHO[o.who]}</b> pays up to ${fee}: half for freshness (flowers keep ${fmtLimit(o.keep)}), half for speed (patience ${fmtLimit(o.patience)} past light's arrival).`;
+    if (c.wf === 1) return `<b>${WHO[o.who]}</b> pays ${fee} for flowers that have not aged, less as they age, nothing once they are ${fmtLimit(o.keep)} old.`;
+    if (c.wf === 0) return `<b>${WHO[o.who]}</b> pays ${fee} if the rocket arrives when light could, less for every year after, nothing ${fmtLimit(o.patience)} later than light.`;
+    return `<b>${WHO[o.who]}</b> pays ${fee}: half for freshness (less as the flowers age, nothing at ${fmtLimit(o.keep)}), half for speed (less for every year after light, nothing ${fmtLimit(o.patience)} later).`;
   }
 
   // ---------- the track ----------
@@ -643,7 +655,8 @@ if (typeof module !== 'undefined') module.exports = MECH;
   function enterRange() {
     S.mode = 'range'; $('#range-ctl').style.display = ''; $('#range-log').style.display = ''; $('#fly-ctl').style.display = 'none';
     renderSlider();
-    $('#f-orient').innerHTML = S.launches ? 'Slide to try other booster counts, or move on.' : 'Slide to set the boosters. The track shows how far your rocket gets while the light arrives; the clocks and the till show what it costs. Then launch.';
+    $('#f-kicker').innerHTML = '<span>TEST RANGE</span><span>NOT THE GAME YET · NOTHING COUNTS</span>'; $('#f-kicker').classList.remove('flight');
+    $('#f-orient').innerHTML = S.launches ? 'Try as many booster counts as you like. When you know the rockets, go to the order book: that is the game.' : 'Try the rockets before the game. Slide to set the boosters: the track shows how far your rocket gets while the light arrives, the clocks and the till show what a florist would pay. Launch as often as you like; nothing counts yet.';
     $('#f-say').innerHTML = ''; show('s-fly');
   }
   $('#b-start').onclick = enterRange;
@@ -688,24 +701,29 @@ if (typeof module !== 'undefined') module.exports = MECH;
     S.book = haul ? { key: 'haul', orders: CONFIG.haul.orders } : bookFor(key); S.alloc = S.book.orders.map(() => 0);
     $('#bk-title').textContent = haul ? 'The long haul' : S.book.title;
     $('#bk-orient').innerHTML = haul ? `One order, a hundred light-years away. Light takes a century. A museum pays ${fmtFrancs(CONFIG.haul.orders[0].fee)} for flowers that arrive young.`
-      : `${S.book.say} Set every rocket, then launch them all. Leave a rocket at <b>0</b> to refuse its order.`;
+      : `${S.book.say} Set every rocket, or refuse the order, then launch them all.`;
     $('#b-launchall').textContent = haul ? 'Launch' : 'Launch all';
     renderBook(); show('s-book');
   }
   function renderBook() {
     $('#cards').innerHTML = S.book.orders.map((o, i) => {
-      const n = S.alloc[i], v = speedAfter(n);
-      const pre = n === 0 ? '<div class="pre refuse">Refuse this order</div>'
-        : `<div class="pre"><b>${fmtSpeed(v)}</b>. Flowers age <b class="red">${fmtRate(clockRate(v))}</b>. Fuel: <b>${fmtFrancs(fuelCost(n))}</b>.</div>`;
-      return `<div class="card"><div class="top"><h3>${o.name}</h3><div class="dist">${ly(o.d).toUpperCase()}<br>LIGHT TAKES ${fmtLimit(o.d).toUpperCase()}</div></div>
+      const n = S.alloc[i], off = n === 0, v = speedAfter(n), f = fly(o, n), span = o.fee;
+      const pre = off ? '<div class="pre">No rocket flies. Nothing earned, nothing spent.</div>'
+        : `<div class="pre"><b>${fmtSpeed(v)}</b>. Flowers age <b class="red">${fmtRate(clockRate(v))}</b>. Home clock ${fmtYears(f.tHome)}, flowers ${fmtYears(f.tCargo)}.</div>`;
+      const till = `<div class="till"><div class="row"><span>PAID</span><div class="sb"><i style="width:${(100 * Math.min(1, f.revenue / span)).toFixed(1)}%"></i></div><span class="v num">${fmtFrancs(f.revenue)} of ${Math.round(span)}</span></div>
+        <div class="row"><span>FUEL</span><div class="sb"><i class="fuel" style="width:${(100 * Math.min(1, f.cost / span)).toFixed(1)}%"></i></div><span class="v num">${fmtFrancs(f.cost)}</span></div>
+        <div class="profit"><span style="font-family:var(--disp);font-size:11px;letter-spacing:.04em">PROFIT</span><span class="n num${f.profit < -0.5 ? ' loss' : ''}">${f.profit >= 0.5 ? '+' : ''}${fmtFrancs(f.profit)}</span></div></div>`;
+      return `<div class="card${off ? ' off' : ''}"><div class="top"><h3>${o.name}</h3><div class="dist">${ly(o.d).toUpperCase()}<br>LIGHT TAKES ${fmtLimit(o.d).toUpperCase()}</div></div>
       <p class="cust">${custLine(o)}</p>
-      <div class="keys"><button class="key" data-i="${i}" data-d="-1" ${n <= 0 ? 'disabled' : ''} aria-label="fewer">−</button>
-      <div class="count"><div class="n num">${n}</div><div class="w">booster${n === 1 ? '' : 's'}</div></div>
-      <button class="key" data-i="${i}" data-d="1" ${n >= CONFIG.maxBoost ? 'disabled' : ''} aria-label="more">+</button></div>${pre}</div>`; }).join('');
+      <div class="keys"><button class="key" data-i="${i}" data-d="-1" ${n <= 1 ? 'disabled' : ''} aria-label="fewer">−</button>
+      <div class="count"><div class="n num">${off ? '—' : n}</div><div class="w">${off ? 'refused' : 'booster' + (n === 1 ? '' : 's')}</div></div>
+      <button class="key" data-i="${i}" data-d="1" ${n >= CONFIG.maxBoost ? 'disabled' : ''} aria-label="more">+</button>
+      <button class="refuse" data-r="${i}">${off ? 'REFUSED' : 'REFUSE'}</button></div>${pre}${till}</div>`; }).join('');
     $('#cards').querySelectorAll('.key').forEach(b => b.onclick = () => {
       const i = +b.dataset.i, d = +b.dataset.d;
-      S.alloc[i] = Math.max(0, Math.min(CONFIG.maxBoost, S.alloc[i] + d)); renderBook();
+      S.alloc[i] = Math.max(1, Math.min(CONFIG.maxBoost, S.alloc[i] + d)); renderBook();
     });
+    $('#cards').querySelectorAll('.refuse').forEach(b => b.onclick = () => { const i = +b.dataset.r; S.alloc[i] = S.alloc[i] === 0 ? 1 : 0; renderBook(); });
     $('#b-log').style.display = Object.keys(S.log).length && S.bookKey !== 'haul' ? '' : 'none';
   }
   $('#b-log').onclick = () => { renderLog('#log2'); show('s-log'); };
@@ -718,7 +736,8 @@ if (typeof module !== 'undefined') module.exports = MECH;
   function playFlight() {
     const o = S.book.orders[S.fi], n = S.alloc[S.fi], m = S.book.orders.length;
     setOrder(o); setFlames(n); show('s-fly');
-    $('#f-orient').textContent = (m > 1 ? `Rocket ${S.fi + 1} of ${m}: ` : '') + (n ? `${n} booster${n > 1 ? 's' : ''}.` : 'no boosters: order refused.');
+    $('#f-kicker').innerHTML = `<span>${S.bookKey === 'haul' ? 'THE LONG HAUL' : S.book.title.toUpperCase()}</span><span>${m > 1 ? 'ROCKET ' + (S.fi + 1) + ' OF ' + m : ''}</span>`; $('#f-kicker').classList.add('flight');
+    $('#f-orient').textContent = n ? `${n} booster${n > 1 ? 's' : ''}.` : 'Refused: no rocket flies.';
     $('#f-say').innerHTML = ''; $('#b-nextrocket').style.visibility = 'hidden';
     animate(o, n, f => {
       stamp(f); $('#f-say').innerHTML = flightWords(o, f);
