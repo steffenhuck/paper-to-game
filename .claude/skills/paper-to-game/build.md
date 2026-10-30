@@ -100,7 +100,7 @@ Plain, concrete, numbers only where they help and rounded to what the lesson nee
 - `<slug>/memo.md` — with the mechanism kind, claim boundaries, calibration plan, calibration result and build log appended.
 - `<slug>/author-note.md` — three lines: what to look at first; where the config block is; what we were least sure about. Plus one line saying the game has had the builder's review only.
 - `<slug>/mechanism.js` — the single source of truth — with the build script that generates the HTML from it, the calibration check (`calibration.js`), its result (`calibration-result.txt`), and the screenshots. (Folders built before this document use the names `fidelity.js` and `fidelity-result.txt`; leave them.)
-- The PDF moved from `inbox/` into the folder if it was there.
+- No PDF. The paper itself never goes into the repository: it stays in `inbox/`, which git ignores, and is deleted from there when the build is done. The memo and the About screen carry the citation, the DOI, and a link to where the paper can be read.
 - A row in the README's games table with the play link `https://steffenhuck.github.io/paper-to-game/<slug>/<name>.html` and the memo link.
 - If a folder for the same paper already exists, this is a rebuild: the previous game and memo move into `<slug>/previous/` and the new build replaces the folder's contents and the README row; no second folder for the same paper.
 

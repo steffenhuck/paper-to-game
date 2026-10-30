@@ -111,7 +111,7 @@ A neuron, a molecule, a voxel, an institution, a text may be the agent the playe
 
 ## 4. Reading the paper
 
-Read all of it: text, tables, figure captions (captions often state the mechanism more plainly than the text), supplementary material if attached. If code or data are attached, the mechanism is ported from the code and calibrated from the data. If only the PDF is available, say so; numbers read off a figure are marked as such.
+Read all of it: text, tables, figure captions (captions often state the mechanism more plainly than the text), supplementary material if attached. The paper is read from `inbox/` and never committed; note where it can be read online, for the memo. If code or data are attached, the mechanism is ported from the code and calibrated from the data. If only the PDF is available, say so; numbers read off a figure are marked as such.
 
 Then answer, in writing:
 
