@@ -32,7 +32,8 @@ const CONFIG = {
   RAIL_GAP: 5,                         // our choice: the fixed rail distance = one purine + one pyrimidine
 
   // --- the game ---
-  LADDER_RUNGS: 10,       // one ladder, one full turn of the paper's helix (REPEAT_RESIDUES)
+  LADDER_RUNGS: 10,       // each ladder is one full turn of the paper's helix (REPEAT_RESIDUES)
+  ROUNDS: 2,              // our choice after play: a second ladder, so a player who missed one clue on the first zip can use it; the second scores
   // What other ways of playing score on a ladder of ten, from the heuristic simulation in calibration.js (2000 games each):
   // random about 2.5, reading one clue (lengths or ends) about 5, remembering A-T from school and guessing the rest about 6;
   // all ten held: under 1% for every one of them, 100% for a player who reads both. Shown to the player in words.
@@ -80,13 +81,17 @@ function partnerOf(b) { const p = partnersOf(b); if (p.length !== 1) throw new E
 function drawGame(seed) {
   const r = rng(seed * 7919 + 13);
   const pick = () => KEYS[Math.floor(r() * 4)];
-  let lad;
-  for (let tries = 0; ; tries++) {   // floor: all four letters, and unequal A and G when finished (so the bars show A = T without A = G)
-    lad = Array.from({ length: CONFIG.LADDER_RUNGS }, () => ({ given: pick(), side: 'L' }));
-    const c = counts(complete(lad));
-    if (KEYS.every(k => lad.some(x => x.given === k)) && c.A !== c.G) break;
+  const ladders = [];
+  while (ladders.length < CONFIG.ROUNDS) {
+    let lad;
+    for (let tries = 0; ; tries++) {   // floor: all four letters, and unequal A and G when finished (so the bars show A = T without A = G)
+      lad = Array.from({ length: CONFIG.LADDER_RUNGS }, () => ({ given: pick(), side: 'L' }));
+      const c = counts(complete(lad));
+      if (KEYS.every(k => lad.some(x => x.given === k)) && c.A !== c.G) break;
+    }
+    ladders.push(lad);
   }
-  return { seed, ladder: lad };
+  return { seed, ladders, ladder: ladders[0] };
 }
 
 // a rung as left/right letters, given the player's piece for the empty side (null = empty)
@@ -164,15 +169,27 @@ function reading(z) {
 function score(z) { return Math.round(100 * z.held / z.n); }
 
 // the verdict, in words. s = { z: the zipped ladder }
+// what the first ladder showed, in a phrase, for the verdict after the second
+const FIRST = {
+  like: 'paired like with like, as Watson first did, and bulged',
+  lengths: 'had the right widths but met bump on bump',
+  ends: 'gripped at the ends but bulged or pinched where two long or two short pieces met',
+  guess: 'failed both ways, too wide or narrow and bump on bump',
+};
+// the verdict, in words. s = { z1, z2: the two zipped ladders }; the second is the one that scores
 function verdict(s) {
-  const z = s.z, k = reading(z), lines = [];
+  const z1 = s.z1, z2 = s.z2, k = reading(z2), lines = [];
   const rule = 'a long piece needs a short one, and a bump needs a dent. That leaves only A with T and G with C.';
-  if (k === 'both') lines.push('You saw what Watson saw on the morning of 28 February: ' + rule + ' Every rung held. Someone pinning pieces at random almost never manages that.');
-  else if (k === 'like') lines.push('You paired like with like, which was Watson\'s first idea too. It bulged for him as well. The answer: ' + rule);
-  else if (k === 'lengths') lines.push('Every rung on your ladder had the right width: one long piece, one short. But some ends met bump on bump. The ends are the other half of the clue: ' + rule);
-  else if (k === 'ends') lines.push('Every end on your ladder gripped. But some rungs were two long pieces or two short ones, and the rails bulged or pinched. The lengths are the other half of the clue: ' + rule);
-  else lines.push('Your rungs failed both ways: too wide or too narrow, and bump on bump. That is what pinning without a rule looks like. The clue is in the pieces: ' + rule);
-  lines.push('And this is why it matters. Pull such a ladder apart and each half can take only one piece in each gap: one ladder becomes two, letter for letter the same. Below, yours' + (z.held === z.n ? '' : ' with its loose rungs fixed') + ', copied and twisted into the real shape.');
+  if (k === 'both' && z1.held === z1.n) lines.push('You had it from the start: ' + rule + ' Both ladders held on every rung. Someone pinning pieces at random almost never manages that.');
+  else if (k === 'both') lines.push('Your first ladder ' + FIRST[reading(z1)] + '. Your second held on every rung. You found what Watson found on the morning of 28 February: ' + rule);
+  else {
+    const better = score(z2) > score(z1) ? 'Better than your first ladder, but not there yet. ' : '';
+    if (k === 'like') lines.push(better + 'You paired like with like, which was Watson\'s first idea too. It bulged for him as well. The answer: ' + rule);
+    else if (k === 'lengths') lines.push(better + 'Every rung on your second ladder had the right width: one long piece, one short. But some ends met bump on bump. The ends are the other half of the clue: ' + rule);
+    else if (k === 'ends') lines.push(better + 'Every end on your second ladder gripped. But some rungs were two long pieces or two short ones, and the rails bulged or pinched. The lengths are the other half of the clue: ' + rule);
+    else lines.push(better + 'Your rungs failed both ways: too wide or too narrow, and bump on bump. That is what pinning without a rule looks like. The clue is in the pieces: ' + rule);
+  }
+  lines.push('And this is why it matters. Pull such a ladder apart and each half can take only one piece in each gap: one ladder becomes two, letter for letter the same. Below, your second ladder' + (z2.held === z2.n ? '' : ' with its loose rungs fixed') + ', copied and twisted into the real shape.');
   lines.push('Watson and Crick, 1953: one chain fixes the other. That is why DNA always holds as much A as T and as much G as C, and it "immediately suggests a possible copying mechanism".');
   return lines;
 }

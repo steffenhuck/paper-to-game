@@ -2,43 +2,47 @@ WELCOME: Watson's Cardboard
   [screenshot-welcome.png] scrollWidth 380
 DESK aim: Build the other chain so every rung holds when you zip it.
   [screenshot-start.png] scrollWidth 380
-GAME 1 (guesser): YOUR LADDER · 10 RUNGS | given TATACGGAAT
+GAME 1 (learner) LADDER 1 OF 2 · 10 RUNGS | given TATACGGAAT | The left rail has its pieces. Pick one for each empty spot on the right: the two must span the gap, and their ends (bumps, dents) must grip. Nothing is tested until you zip.
   [screenshot-ladder-empty.png] scrollWidth 380
   took back rung 3: 2 OF 10 FILLED
-  [screenshot-ladder-half.png] scrollWidth 380
   help on: true
   [screenshot-help.png] scrollWidth 380
   back on ladder: true
-  [screenshot-ladder-zipping.png] scrollWidth 380
-  7 OF 10 HOLD
-  [screenshot-ladder-zipped-guesser.png] scrollWidth 380
-  button: SEE YOUR SCORE
+  7 OF 10 HOLD | 7 of 10 held. Look at the red rungs: what went wrong? Then try a second ladder. | button: TRY A SECOND LADDER
+  [screenshot-ladder1-zipped-learner.png] scrollWidth 380
+GAME 1 (learner) LADDER 2 OF 2 · 10 RUNGS | given TTGAATTTCG | A new chain. Same pieces, same rule. Your first zip showed you what to look for. This ladder is the one that scores.
+  10 OF 10 HOLD |  | button: SEE YOUR SCORE
+  [screenshot-ladder2-zipped-learner.png] scrollWidth 380
   [screenshot-end-twisting.png] scrollWidth 380
   END on: true
-  SCORE: 70 / /100 | VERDICT: Every end on your ladder gripped. But some rungs were two long pieces or two short ones, and the rails bulged or pinched. The lengths are the other half of the clue: a long piece needs a short one, and a bump needs a dent. That leaves only A with T and G with C. | The letters in your ladder. In real DNA, from any creature, there is always as much A as T and as much G as C. Nobody knew why. Yours doesn't: only rungs that hold keep the count even. | And this is why it matters. Pull such a ladder apart and each half can take only one piece in each gap: one ladder becomes two, letter for letter the same. Below, yours with its loose rungs fixed, copied and twisted into the real shape. | Watson and Crick, 1953: one chain fixes the other. That is why DNA always holds as much A as T and as much G as C, and it "immediately suggests a possible copying mechanism".
-  TALLY: Game 1: 7 of 10 rungs held, ten points each.
-  [screenshot-end-guesser.png] scrollWidth 380
-  mechanism reads this player as: ends
+  SCORE: 100/100 | Ladder 1: 70 → Ladder 2: 100
+  VERDICT: Your first ladder gripped at the ends but bulged or pinched where two long or two short pieces met. Your second held on every rung. You found what Watson found on the morning of 28 February: a long piece needs a short one, and a bump needs a dent. That leaves only A with T and G with C. | The letters in your ladder. In real DNA, from any creature, there is always as much A as T and as much G as C. Nobody knew why. Yours does it too: any order on one rail is allowed, and the other rail is then forced. | And this is why it matters. Pull such a ladder apart and each half can take only one piece in each gap: one ladder becomes two, letter for letter the same. Below, your second ladder, copied and twisted into the real shape. | Watson and Crick, 1953: one chain fixes the other. That is why DNA always holds as much A as T and as much G as C, and it "immediately suggests a possible copying mechanism".
+  TALLY: Game 1: ladder 1 held 7 of 10, ladder 2 held 10 of 10; ten points a rung, the second ladder scores. Open triangle on the scale: your first ladder.
+  [screenshot-end-learner.png] scrollWidth 380
 about on true
   [screenshot-about.png] scrollWidth 380
 back on end true
 play again: ladder on true game number now 2
-GAME 2 (lengths-only): YOUR LADDER · 10 RUNGS | given GCGAGCCTCC
-  0 OF 10 HOLD
-  [screenshot-ladder-zipped-lengths-only.png] scrollWidth 380
-  button: SEE YOUR SCORE
+GAME 2 (lengths-only) LADDER 1 OF 2 · 10 RUNGS | given GCGAGCCTCC | The left rail has its pieces. Pick one for each empty spot on the right: the two must span the gap, and their ends (bumps, dents) must grip. Nothing is tested until you zip.
+  0 OF 10 HOLD | 0 of 10 held. Look at the red rungs: what went wrong? Then try a second ladder. | button: TRY A SECOND LADDER
+  [screenshot-ladder1-zipped-lengths-only.png] scrollWidth 380
+GAME 2 (lengths-only) LADDER 2 OF 2 · 10 RUNGS | given TAAGAATCGT | A new chain. Same pieces, same rule. Your first zip showed you what to look for. This ladder is the one that scores.
+  0 OF 10 HOLD |  | button: SEE YOUR SCORE
+  [screenshot-ladder2-zipped-lengths-only.png] scrollWidth 380
   END on: true
-  SCORE: 0 / /100 | VERDICT: Every rung on your ladder had the right width: one long piece, one short. But some ends met bump on bump. The ends are the other half of the clue: a long piece needs a short one, and a bump needs a dent. That leaves only A with T and G with C. | The letters in your ladder. In real DNA, from any creature, there is always as much A as T and as much G as C. Nobody knew why. Yours doesn't: only rungs that hold keep the count even. | And this is why it matters. Pull such a ladder apart and each half can take only one piece in each gap: one ladder becomes two, letter for letter the same. Below, yours with its loose rungs fixed, copied and twisted into the real shape. | Watson and Crick, 1953: one chain fixes the other. That is why DNA always holds as much A as T and as much G as C, and it "immediately suggests a possible copying mechanism".
-  TALLY: Game 2: 0 of 10 rungs held, ten points each.
+  SCORE: 0/100 | Ladder 1: 0 → Ladder 2: 0
+  VERDICT: Every rung on your second ladder had the right width: one long piece, one short. But some ends met bump on bump. The ends are the other half of the clue: a long piece needs a short one, and a bump needs a dent. That leaves only A with T and G with C. | The letters in your ladder. In real DNA, from any creature, there is always as much A as T and as much G as C. Nobody knew why. Yours happens to balance, but its rungs don't hold; in real DNA the balance comes from rungs that do. | And this is why it matters. Pull such a ladder apart and each half can take only one piece in each gap: one ladder becomes two, letter for letter the same. Below, your second ladder with its loose rungs fixed, copied and twisted into the real shape. | Watson and Crick, 1953: one chain fixes the other. That is why DNA always holds as much A as T and as much G as C, and it "immediately suggests a possible copying mechanism".
+  TALLY: Game 2: ladder 1 held 0 of 10, ladder 2 held 0 of 10; ten points a rung, the second ladder scores.
   [screenshot-end-lengths-only.png] scrollWidth 380
-  mechanism reads this player as: lengths
-GAME 3 (both): YOUR LADDER · 10 RUNGS | given CGTAGTCGAG
-  10 OF 10 HOLD
-  [screenshot-ladder-zipped-both.png] scrollWidth 380
-  button: SEE YOUR SCORE
+GAME 3 (both) LADDER 1 OF 2 · 10 RUNGS | given CGTAGTCGAG | The left rail has its pieces. Pick one for each empty spot on the right: the two must span the gap, and their ends (bumps, dents) must grip. Nothing is tested until you zip.
+  10 OF 10 HOLD | Every rung held. Can you do it again? | button: TRY A SECOND LADDER
+  [screenshot-ladder1-zipped-both.png] scrollWidth 380
+GAME 3 (both) LADDER 2 OF 2 · 10 RUNGS | given CCGTGGACGC | A new chain. Same pieces, same rule. Your first zip showed you what to look for. This ladder is the one that scores.
+  10 OF 10 HOLD |  | button: SEE YOUR SCORE
+  [screenshot-ladder2-zipped-both.png] scrollWidth 380
   END on: true
-  SCORE: 100 / /100 | VERDICT: You saw what Watson saw on the morning of 28 February: a long piece needs a short one, and a bump needs a dent. That leaves only A with T and G with C. Every rung held. Someone pinning pieces at random almost never manages that. | The letters in your ladder. In real DNA, from any creature, there is always as much A as T and as much G as C. Nobody knew why. Yours does it too: any order on one rail is allowed, and the other rail is then forced. | And this is why it matters. Pull such a ladder apart and each half can take only one piece in each gap: one ladder becomes two, letter for letter the same. Below, yours, copied and twisted into the real shape. | Watson and Crick, 1953: one chain fixes the other. That is why DNA always holds as much A as T and as much G as C, and it "immediately suggests a possible copying mechanism".
-  TALLY: Game 3: 10 of 10 rungs held, ten points each.
+  SCORE: 100/100 | Ladder 1: 100 → Ladder 2: 100
+  VERDICT: You had it from the start: a long piece needs a short one, and a bump needs a dent. That leaves only A with T and G with C. Both ladders held on every rung. Someone pinning pieces at random almost never manages that. | The letters in your ladder. In real DNA, from any creature, there is always as much A as T and as much G as C. Nobody knew why. Yours does it too: any order on one rail is allowed, and the other rail is then forced. | And this is why it matters. Pull such a ladder apart and each half can take only one piece in each gap: one ladder becomes two, letter for letter the same. Below, your second ladder, copied and twisted into the real shape. | Watson and Crick, 1953: one chain fixes the other. That is why DNA always holds as much A as T and as much G as C, and it "immediately suggests a possible copying mechanism".
+  TALLY: Game 3: ladder 1 held 10 of 10, ladder 2 held 10 of 10; ten points a rung, the second ladder scores.
   [screenshot-end-both.png] scrollWidth 380
-  mechanism reads this player as: both
 errors []
