@@ -1,6 +1,6 @@
 // Browser session test (build step 6): drives watsons-cardboard.html at 380 px through three whole games, one ladder each:
 // game 1 a guesser (school memory for A-T, like with like for G, any short piece for the rest), with a piece taken back, help opened
-// mid-ladder and returned from, the ladder pulled apart and watched, the verdict, About; game 2 a player who reads only the lengths;
+// mid-ladder and returned from, the score screen, About; game 2 a player who reads only the lengths;
 // game 3 a player who reads both clues. Run: node session-test.js [outdir] > session-log.txt   (needs playwright)
 const { chromium } = require('playwright'); const M = require('./mechanism.js');
 const D = (process.argv[2] || __dirname) + '/';
@@ -25,19 +25,17 @@ const D = (process.argv[2] || __dirname) + '/';
       if (extras && i === 5) { await shot('ladder-half', false); await p.click('#s-lad [data-help]'); console.log('  help on:', await on('#s-help')); await shot('help'); await p.click('#b-help-back'); console.log('  back on ladder:', await on('#s-lad')); }
     }
     await p.click('#b-zip'); if (extras) { await p.waitForTimeout(1500); await shot('ladder-zipping', false); } await p.waitForTimeout(4600);
-    console.log('  ' + await txt('#r-big') + ' | ' + await txt('#r-why')); console.log('  ' + await txt('#r-chg')); await decimals(); await shot('ladder-zipped-' + tag);
-    console.log('  button: ' + await txt('#b-next')); await p.click('#b-next'); console.log('  pulled apart:', await txt('#c-orient'));
-    if (extras) { await p.waitForTimeout(2500); await shot('apart-filling', false); }
-    await p.waitForSelector('#c-done', { state: 'visible', timeout: 15000 }); console.log('  ' + await txt('#c-big') + ' | ' + await txt('#c-why')); await shot('apart-done-' + tag);
-    await p.click('#b-end'); if (extras) { await p.waitForTimeout(1200); await shot('end-twisting', false); } await p.waitForTimeout(2600);
-    console.log('  END on:', await on('#s-end')); console.log('  VERDICT: ' + await txt('#verdict')); console.log('  TALLY: ' + await txt('#tally')); await decimals(); await shot('end-' + tag);
+    console.log('  ' + await txt('#l-count')); await decimals(); await shot('ladder-zipped-' + tag);
+    console.log('  button: ' + await txt('#b-next')); await p.click('#b-next');
+    if (extras) { await p.waitForTimeout(500); await shot('end-twisting', false); } await p.waitForTimeout(2600);
+    console.log('  END on:', await on('#s-end')); console.log('  SCORE: ' + await txt('#s-end .score') + ' | VERDICT: ' + await txt('#verdict') + ' | ' + await txt('#r-chg') + ' | ' + await txt('#v-copy') + ' | ' + await txt('#v-paper')); console.log('  TALLY: ' + await txt('#tally')); await decimals(); await shot('end-' + tag);
     const z = M.zip(L, L.map(s => choose(s.given))); console.log('  mechanism reads this player as: ' + M.reading(z));
   };
   const guess = g => g === 'A' ? 'T' : g === 'T' ? 'A' : g === 'G' ? 'G' : 'T';
   await play(1, guess, 'guesser', true);
   await p.click('#s-end [data-about]'); console.log('about on', await on('#s-about')); await shot('about'); await p.click('#b-about-back'); console.log('back on end', await on('#s-end'));
-  await p.click('#b-new'); console.log('new game: desk on', await on('#s-start'), 'game number now', await p.$eval('#seed', e => e.value));
+  await p.click('#b-new'); console.log('play again: ladder on', await on('#s-lad'), 'game number now', await p.$eval('#seed', e => e.value)); await p.click('#s-lad [data-help]'); await p.click('#b-help-back'); await p.evaluate(() => { document.querySelector('#s-lad').classList.remove('on'); document.querySelector('#s-start').classList.add('on'); });
   await play(2, g => ({ A: 'C', G: 'T', T: 'G', C: 'A' })[g], 'lengths-only');
-  await p.click('#b-new'); await play(3, g => M.partnerOf(g), 'both');
+  await p.click('#b-new'); await p.evaluate(() => { document.querySelector('#s-lad').classList.remove('on'); document.querySelector('#s-start').classList.add('on'); }); await play(3, g => M.partnerOf(g), 'both');
   console.log('errors', errs); await b.close(); process.exitCode = errs.length ? 1 : 0;
 })();

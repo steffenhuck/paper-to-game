@@ -38,7 +38,6 @@ const CONFIG = {
   // all ten held: under 1% for every one of them, 100% for a player who reads both. Shown to the player in words.
   BENCH_RANDOM: 2.5,      // calibration.js: mean rungs held by a random player
   BENCH_ONE_CLUE: 5,      // calibration.js: mean rungs held by a player who reads lengths only or ends only
-  COPY_STEP_MS: 260,      // our choice: the pace at which the pulled-apart halves fill themselves, for watching
 };
 
 const KEYS = ['A', 'G', 'T', 'C'];
@@ -161,7 +160,10 @@ function reading(z) {
   return w && e ? 'guess' : w ? 'ends' : 'lengths';
 }
 
-// the verdict, in words. s = { z: the zipped ladder, copy: copyByRule result }
+// the score: ten points a rung that holds, out of 100
+function score(z) { return Math.round(100 * z.held / z.n); }
+
+// the verdict, in words. s = { z: the zipped ladder }
 function verdict(s) {
   const z = s.z, k = reading(z), lines = [];
   const rule = 'a long piece needs a short one, and a bump needs a dent. That leaves only A with T and G with C.';
@@ -170,12 +172,12 @@ function verdict(s) {
   else if (k === 'lengths') lines.push('Every rung on your ladder had the right width: one long piece, one short. But some ends met bump on bump. The ends are the other half of the clue: ' + rule);
   else if (k === 'ends') lines.push('Every end on your ladder gripped. But some rungs were two long pieces or two short ones, and the rails bulged or pinched. The lengths are the other half of the clue: ' + rule);
   else lines.push('Your rungs failed both ways: too wide or too narrow, and bump on bump. That is what pinning without a rule looks like. The clue is in the pieces: ' + rule);
-  lines.push('Then the ladder copied itself. Pulled apart, each half could take only one piece in each gap, so one ladder became two, letter for letter the same. Nobody had to choose anything: the pairing did it.');
+  lines.push('And this is why it matters. Pull such a ladder apart and each half can take only one piece in each gap: one ladder becomes two, letter for letter the same. Below, yours' + (z.held === z.n ? '' : ' with its loose rungs fixed') + ', copied and twisted into the real shape.');
   lines.push('Watson and Crick, 1953: one chain fixes the other. That is why DNA always holds as much A as T and as much G as C, and it "immediately suggests a possible copying mechanism".');
   return lines;
 }
 
 const api = { CONFIG, KEYS, rng, fit, contact, partnersOf, partnerOf, drawGame, rungOf, zip, complete, counts, chargaff,
-  copySpots, copyByRule, scoreCopy, reading, helixPoint, howMany, verdict };
+  copySpots, copyByRule, scoreCopy, reading, score, helixPoint, howMany, verdict };
 if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.MECH = api;
 })(typeof window !== 'undefined' ? window : this);

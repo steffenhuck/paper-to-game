@@ -134,6 +134,11 @@ svg.lad { display: block; width: 100%; height: auto; touch-action: manipulation;
 .key:active { background: var(--kraft2); }
 
 /* end */
+.score { display: flex; align-items: baseline; justify-content: center; gap: 4px; margin: 8px 0 0; font-family: var(--mark); transform: rotate(-2deg); }
+.score .num { font-size: 104px; line-height: 0.9; color: var(--red); }
+.score .of { font-size: 34px; }
+svg.scale { display: block; width: 100%; height: auto; margin: 0 0 12px; }
+.paperline { border-left: 4px solid var(--blue); padding-left: 10px; font-size: 15px; }
 .verdict p { font-size: 16px; }
 .verdict p:first-child { font-family: var(--mark); font-size: 22px; line-height: 1.2; }
 .verdict p.paper { border-left: 4px solid var(--blue); padding-left: 10px; }
@@ -179,7 +184,7 @@ svg.lad { display: block; width: 100%; height: auto; touch-action: manipulation;
     <div class="kicker"><span>Watson's Cardboard</span><span>the desk</span></div>
     <svg id="art" viewBox="0 0 360 170" aria-hidden="true"></svg>
     <div class="aimline" id="aim-start">Build the other chain so every rung holds when you zip it.</div>
-    <p class="lede">Two blue rails, his cut-out pieces between them. Some fit, some don't. No clock. Then pull the ladder apart and watch.</p>
+    <p class="lede">Two blue rails, his cut-out pieces between them. Some fit, some don't. No clock. Zip it, and see your score.</p>
     <button class="tag" id="b-start"><span>Start: first ladder</span></button>
     <button class="tag" data-help><span>How to play</span></button>
     <button class="tag" data-about><span>What's real here</span></button>
@@ -199,32 +204,23 @@ svg.lad { display: block; width: 100%; height: auto; touch-action: manipulation;
     <button class="tag red" id="b-zip" disabled><span>Zip it</span></button>
   </div>
   <div id="l-done" style="display:none">
-    <div class="res"><div class="big" id="r-big"></div><p class="why" id="r-why"></p>
-      <div class="bars" id="r-bars"></div><p class="chg" id="r-chg"></p></div>
-    <button class="tag" id="b-next"><span>Next ladder</span></button>
+    <button class="tag red" id="b-next"><span>See your score</span></button>
   </div>
 </section>
 
-<!-- COPY: watched, not played -->
-<section class="screen" id="s-copy">
-  <div class="bar"><div class="aim">Pull it apart and watch.</div><button class="q" data-help aria-label="How to play">?</button></div>
-  <div class="kick"><span>Pulled apart</span><span id="c-count"></span></div>
-  <p class="orient" id="c-orient">Your ladder, unzipped down the middle. Each half keeps one row of pieces. Only one piece fits each gap, so watch what happens.</p>
-  <svg class="lad" id="c-svg" viewBox="0 0 360 380"></svg>
-  <div id="c-done" style="display:none">
-    <div class="res"><div class="big" id="c-big"></div><p class="why" id="c-why"></p></div>
-    <button class="tag" id="b-end"><span>What did you find?</span></button>
-  </div>
-</section>
-
-<!-- END -->
+<!-- END: the score and what you found -->
 <section class="screen" id="s-end">
   <div class="bar"><div class="aim">Build the other chain so every rung holds when you zip it.</div><button class="q" data-help aria-label="How to play">?</button></div>
+  <div class="score"><span class="num" id="sc-num">0</span><span class="of">/100</span></div>
+  <svg class="scale" id="sc-scale" viewBox="0 0 340 62" aria-hidden="true"></svg>
   <div class="verdict" id="verdict"></div>
+  <div class="bars" id="r-bars"></div><p class="chg" id="r-chg"></p>
+  <p id="v-copy"></p>
   <svg class="lad" id="e-svg" viewBox="0 0 360 250" aria-hidden="true"></svg>
-  <p class="counts" id="tally"></p>
-  <button class="tag" id="b-new"><span>New game: new chains</span></button>
+  <p class="paperline" id="v-paper"></p>
+  <button class="tag red" id="b-new"><span>Play again: a new chain</span></button>
   <button class="tag" data-about><span>What's real here</span></button>
+  <p class="counts" id="tally"></p>
 </section>
 
 <!-- HELP -->
@@ -238,10 +234,8 @@ svg.lad { display: block; width: 100%; height: auto; touch-action: manipulation;
   </div>
   <h3>The ladder</h3>
   <p>One rail already has its pieces. Tap a piece in the tray to pin it in the next empty spot (marked in red); tap a pinned piece to take it back. Nothing is tested until you press <b>Zip it</b>. Then every rung is tested, top to bottom. There is no clock: take as long as you like.</p>
-  <h3>Pulled apart</h3>
-  <p>Then you pull your ladder apart and watch. Each half keeps one row of pieces, and each gap can take only one piece. You don't need to do anything.</p>
-  <h3>The end</h3>
-  <p>The two new ladders twist up into the real shape, and you see what you found and how it compares with someone pinning at random. One game, no do-overs; a new game number gives a new chain.</p>
+  <h3>Your score</h3>
+  <p>Ten points for every rung that holds, out of 100. Next to it: what someone pinning at random gets (about 25), someone who reads only the lengths or only the ends (about 50), and someone who reads both (100). Then what your ladder shows, your letters counted, and your ladder copied and twisted into the real shape. Play again for a new chain.</p>
   <button class="tag" id="b-help-back"><span>Back to where I was</span></button>
 </section>
 
@@ -417,82 +411,7 @@ function doZip() {
 function zipDone() {
   zipping = false; const z = S.result; S.zips[S.li] = z; S.off = z.rungs.map(r => r.fit.width === 'ok' ? 0 : r.fit.bulge * G0.U / 2); drawLadder();
   $('#l-build').style.display = 'none'; $('#l-done').style.display = '';
-  $('#r-big').textContent = z.held === z.n ? 'Every rung held.' : z.held + ' of ' + z.n + ' rungs held.';
-  const f = { wide: 0, narrow: 0, clash: 0, loose: 0 }; z.rungs.forEach(r => { if (r.fit.fault) f[r.fit.fault]++; });
-  const why = [];
-  if (f.wide) why.push(f.wide + ' too wide: two long pieces');
-  if (f.narrow) why.push(f.narrow + ' too narrow: two short pieces');
-  if (f.clash + f.loose) why.push((f.clash + f.loose) + ' with the right width, but a bump hit a bump');
-  const bench = ' Someone pinning at random holds about ' + (M.CONFIG.BENCH_RANDOM < 3 ? '2 or 3' : 'a quarter') + '; reading only the lengths or only the ends, about ' + M.CONFIG.BENCH_ONE_CLUE + '.';
-  $('#r-why').textContent = (why.length ? why.join('; ') + '.' : 'The blue rails run straight all the way down, and every end grips.') + bench;
-  // Chargaff's bars: the letters in this ladder
-  const c = z.counts, col = (b, n) => `<div class="col"><span class="l">${b}</span>${'<i></i>'.repeat(n)}</div>`;
-  const eq = (a, b) => `<span class="eq ${a === b ? '' : 'red'}">${a === b ? '=' : '≠'}</span>`;
-  $('#r-bars').innerHTML = `<div class="pair">${col('A', c.A)}${eq(c.A, c.T)}${col('T', c.T)}</div><div class="pair">${col('G', c.G)}${eq(c.G, c.C)}${col('C', c.C)}</div>`;
-  $('#r-chg').innerHTML = z.chargaff.both
-    ? 'Those are the letters in your ladder. In real DNA, from any creature, there is always as much A as T and as much G as C. Nobody knew why. Yours does it too, though it has more of one pair than the other: any order on one rail is allowed, and the other rail is then forced.'
-    : 'Those are the letters in your ladder. In real DNA, from any creature, there is always as much A as T and as much G as C. Nobody knew why. Yours doesn\'t: only rungs that hold keep the count even.';
-  $('#b-next').querySelector('span').textContent = z.held === z.n ? 'Pull it apart' : 'Fix the loose rungs and pull it apart';
-}
-
-// ---------- the copy ----------
-const GC = { U: 26, H: 22, CP: 5.5, R: 4.2, PITCH: 33, TOP: 40 };
-const C1 = { lx: 22, rx: 152 }, C2 = { lx: 208, rx: 338 };
-function startCopy() {
-  // the ladder as the rule completes it (loose rungs fixed), pulled apart; the halves fill themselves, by the rule, while you watch
-  const full = M.complete(S.ladders[0]);
-  S.copy = { full, spots: M.copySpots(full), entries: [], k: 0, running: false };
-  S.copy.result = M.copyByRule(full);
-  $('#c-done').style.display = 'none'; $('#c-count').textContent = '';
-  $('#c-orient').textContent = S.zips[0].held === S.zips[0].n
-    ? 'Your ladder, unzipped down the middle. Each half keeps one row of pieces. Only one piece fits each gap. Watch.'
-    : 'Your ladder with its loose rungs fixed, unzipped down the middle. Each half keeps one row of pieces. Only one piece fits each gap. Watch.';
-  drawCopy(); show('s-copy');
-  const step = () => { const c = S.copy; if (c.k >= c.spots.length) return copyDone();
-    c.entries.push(c.result.res[c.k].entry); c.k++; $('#c-count').textContent = 'rung ' + Math.min(c.full.length, Math.ceil(c.k / 2)) + ' of ' + c.full.length; drawCopy();
-    c.timer = setTimeout(step, M.CONFIG.COPY_STEP_MS); };
-  S.copy.timer = setTimeout(step, 700);
-}
-function drawCopy(twist) {
-  const c = S.copy, n = c.full.length, g = Object.assign({}, GC), svg = $('#c-svg');
-  svg.setAttribute('viewBox', `0 0 360 ${g.TOP * 2 + (n - 1) * g.PITCH + 10}`);
-  let s = '';
-  const cur = c.spots[c.k];
-  [C1, C2].forEach((cl, ci) => {
-    const off = c.full.map((_, i) => { const k = 2 * i + ci, e = c.entries[k]; if (e == null) return 0; const sp = c.spots[k]; const f = sp.side === 'R' ? M.fit(sp.template, e) : M.fit(e, sp.template); return f.width === 'ok' ? 0 : f.bulge * g.U / 2; });
-    s += rails(n, off, g, cl.lx, cl.rx, g.TOP);
-    c.full.forEach((rg, i) => {
-      const y = g.TOP + i * g.PITCH, k = 2 * i + ci, sp = c.spots[k], e = c.entries[k];
-      const lx = cl.lx - off[i], rx = cl.rx + off[i];
-      // the old half
-      if (ci === 0) s += pieceSVG(rg.left, lx, 1, y, g); else s += pieceSVG(rg.right, rx, -1, y, g);
-      if (k < c.entries.length) {
-        if (e == null) s += faultLabel((cl.lx + cl.rx) / 2, y, 'MISSED');
-        else {
-          const f = sp.side === 'R' ? M.fit(sp.template, e) : M.fit(e, sp.template), bad = !f.held;
-          s += sp.side === 'R' ? pieceSVG(e, rx, -1, y, g, bad ? 'bad' : '') : pieceSVG(e, lx, 1, y, g, bad ? 'bad' : '');
-          if (bad) s += faultLabel((cl.lx + cl.rx) / 2, y, f.fault === 'wide' ? 'WIDE' : f.fault === 'narrow' ? 'NARROW' : 'BUMP');
-        }
-      } else {
-        const lit = cur && k === c.k && c.running;
-        const x = sp.side === 'R' ? rx - 30 : lx;
-        s += `<rect class="slot ${lit ? 'next' : ''}" x="${x}" y="${y - 11}" width="30" height="22" rx="3" ${lit ? 'style="fill:rgba(210,59,37,0.12)"' : ''}/>`;
-      }
-    });
-  });
-  // the fork
-  if (c.running && cur) {
-    const y = g.TOP + cur.rung * g.PITCH;
-    s += `<path d="M4,${y - 10} L16,${y} L4,${y + 10} Z" fill="#D23B25"/><path d="M356,${y - 10} L344,${y} L356,${y + 10} Z" fill="#D23B25"/><line x1="16" y1="${y}" x2="344" y2="${y}" stroke="#D23B25" stroke-width="1.2" stroke-dasharray="3 5"/>`;
-  }
-  s += `<text x="${(C1.lx + C1.rx) / 2}" y="10" text-anchor="middle" style="font-family:var(--type);font-size:11px;font-weight:700;letter-spacing:1px;fill:#2A2621">COPY 1</text><text x="${(C2.lx + C2.rx) / 2}" y="10" text-anchor="middle" style="font-family:var(--type);font-size:11px;font-weight:700;letter-spacing:1px;fill:#2A2621">COPY 2</text>`;
-  svg.innerHTML = s;
-}
-function copyDone() {
-  const r = S.copy.result; $('#c-count').textContent = '';
-  $('#c-big').textContent = r.same[0] && r.same[1] ? 'One ladder became two, the same as the first.' : 'Two ladders.';
-  $('#c-why').textContent = 'Nobody chose a single piece: in each gap only one fits. That is what Watson and Crick saw next.';
-  setTimeout(() => { $('#c-done').style.display = ''; }, 250);
+  $('#l-count').textContent = z.held + ' of ' + z.n + ' hold';
 }
 
 // ---------- the twist (closing picture): the paper's 36 degrees per rung, one turn per 10 rungs ----------
@@ -520,13 +439,26 @@ function twistAnim(svg, full, done) {
 
 // ---------- end ----------
 function endScreen() {
-  const v = M.verdict({ z: S.zips[0], copy: S.copy.result });
-  $('#verdict').innerHTML = v.map((l, i) => `<p class="${i === v.length - 1 ? 'paper' : ''}">${l}</p>`).join('');
-  const z = S.zips[0];
-  $('#tally').innerHTML = `Game ${S.game.seed}. Your ladder: ${z.held} of ${z.n} rungs held. Pinning at random: about 2 or 3. Reading one clue: about ${M.CONFIG.BENCH_ONE_CLUE}. Reading both: all ${z.n}. Below: your two copies, twisted the way the paper says, a tenth of a turn per rung.`;
+  const z = S.zips[0], sc = M.score(z), v = M.verdict({ z });
+  // the score, counted up, and where it sits against other ways of playing (calibration.js)
+  const t0 = performance.now(); const count = now => { const k = Math.min(1, (now - t0) / 900); $('#sc-num').textContent = Math.round(sc * k); if (k < 1) requestAnimationFrame(count); }; requestAnimationFrame(count);
+  const X = p => 14 + p * 3.12, rnd = Math.round(10 * M.CONFIG.BENCH_RANDOM), one = Math.round(10 * M.CONFIG.BENCH_ONE_CLUE);
+  const mark = (p, a, b, anchor) => `<line x1="${X(p)}" y1="18" x2="${X(p)}" y2="30" stroke="#2A2621" stroke-width="2"/><text x="${X(p)}" y="44" text-anchor="${anchor}" style="font-family:var(--type);font-size:10px;font-weight:700;fill:#2A2621">${a}</text><text x="${X(p)}" y="56" text-anchor="${anchor}" style="font-family:var(--type);font-size:10px;fill:#2A2621">${b}</text>`;
+  $('#sc-scale').innerHTML = `<line x1="${X(0)}" y1="24" x2="${X(100)}" y2="24" stroke="#2A2621" stroke-width="2.5" stroke-linecap="round"/>` +
+    mark(rnd, 'AT RANDOM', 'about ' + rnd, 'middle') + mark(one, 'ONE CLUE', 'about ' + one, 'middle') + mark(100, 'BOTH CLUES', '100', 'end') +
+    `<path d="M${X(sc) - 8},4 L${X(sc) + 8},4 L${X(sc)},18 Z" fill="#D23B25"/>`;
+  $('#verdict').innerHTML = `<p>${v[0]}</p>`;
+  // Chargaff's bars: the letters in this ladder
+  const c = z.counts, col = (b, n) => `<div class="col"><span class="l">${b}</span>${'<i></i>'.repeat(n)}</div>`;
+  const eq = (a, b) => `<span class="eq ${a === b ? '' : 'red'}">${a === b ? '=' : '≠'}</span>`;
+  $('#r-bars').innerHTML = `<div class="pair">${col('A', c.A)}${eq(c.A, c.T)}${col('T', c.T)}</div><div class="pair">${col('G', c.G)}${eq(c.G, c.C)}${col('C', c.C)}</div>`;
+  $('#r-chg').innerHTML = z.chargaff.both
+    ? 'The letters in your ladder. In real DNA, from any creature, there is always as much A as T and as much G as C. Nobody knew why. Yours does it too: any order on one rail is allowed, and the other rail is then forced.'
+    : 'The letters in your ladder. In real DNA, from any creature, there is always as much A as T and as much G as C. Nobody knew why. Yours doesn\'t: only rungs that hold keep the count even.';
+  $('#v-copy').textContent = v[1]; $('#v-paper').textContent = v[2];
+  $('#tally').textContent = `Game ${S.game.seed}: ${z.held} of ${z.n} rungs held, ten points each.`;
   show('s-end');
-  const svg = $('#e-svg'); svg.setAttribute('viewBox', '0 0 360 250');
-  twistAnim(svg, S.copy.full);
+  twistAnim($('#e-svg'), M.complete(S.ladders[0]));
 }
 
 // ---------- the start picture ----------
@@ -545,9 +477,8 @@ function drawArt() {
 $('#b-start').addEventListener('click', newGame);
 $('#b-desk').addEventListener('click', () => show('s-start'));
 $('#b-zip').addEventListener('click', doZip);
-$('#b-next').addEventListener('click', startCopy);
-$('#b-end').addEventListener('click', endScreen);
-$('#b-new').addEventListener('click', () => { $('#seed').value = String(seedVal() + 1); show('s-start'); });
+$('#b-next').addEventListener('click', endScreen);
+$('#b-new').addEventListener('click', () => { $('#seed').value = String(seedVal() + 1); newGame(); });
 $$('[data-help]').forEach(el => el.addEventListener('click', () => {
   back = $$('.screen').find(s => s.classList.contains('on')).id;
   show('s-help');
