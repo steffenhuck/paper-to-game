@@ -1,7 +1,7 @@
 // Calibration check for Watson's Cardboard (build step 1). Tests mechanism.js against the claims of Watson & Crick (1953).
 // Run: node calibration.js > calibration-result.txt
 const M = require('./mechanism.js'), C = M.CONFIG, K = M.KEYS;
-let pass = 0, fail = 0;
+let pass = 0, fail = 0, g0;
 const ok = (cond, msg) => { if (cond) pass++; else fail++; console.log((cond ? 'PASS ' : 'FAIL ') + msg); };
 const pairsHeld = opts => { const out = []; K.forEach(x => K.forEach(y => { if (M.fit(x, y, opts).held) out.push(x + y); })); return out.sort(); };
 
@@ -33,7 +33,7 @@ console.log('== One chain fixes the other; the sequence is unrestricted; Chargaf
 let unique = true, chargaffAll = true; const aShare = []; let atgc = 0;
 for (let s = 1; s <= 1000; s++) {
   const g = M.drawGame(s);
-  [g.ladder].forEach(L => {
+  g.ladders.forEach(L => {
     L.forEach(sp => { if (M.partnersOf(sp.given).length !== 1) unique = false; });
     const full = M.complete(L), z = M.zip(L, L.map(sp => M.partnerOf(sp.given)));
     if (z.held !== z.n || !z.chargaff.both) chargaffAll = false;
@@ -97,6 +97,15 @@ ok(Math.abs(res['reads lengths only'].mean - C.BENCH_ONE_CLUE) < 0.4 && Math.abs
 ok(res['reads lengths only'].kinds.lengths / 2000 > 0.99 && res['reads ends only'].kinds.ends / 2000 > 0.99, 'the verdict reads a lengths-only player as "lengths" and an ends-only player as "ends" (over 99%)');
 ok(res['like with like (Watson\'s first idea)'].kinds.like === 2000, 'the verdict reads like-with-like as Watson\'s first idea, every time');
 ok(M.score({ held: 10, n: 10 }) === 100 && M.score({ held: 7, n: 10 }) === 70 && M.score({ held: 0, n: 10 }) === 0, 'the score is ten points a rung that holds, out of 100');
+{ // the hidden clue shows itself: a player who reads only the ends sees a width fault on the first zip
+  const r = M.rng(5); let shown = 0, distinctL = 0;
+  for (let s = 1; s <= 2000; s++) { const g = M.drawGame(s), L = g.ladders[0];
+    const z = M.zip(L, L.map(sp => strategies['reads ends only'](sp.given, r))); if (z.rungs.some(x => x.fit.width !== 'ok')) shown++;
+    if (g.ladders[0].map(x => x.given).join('') !== g.ladders[1].map(x => x.given).join('')) distinctL++; }
+  ok(shown / 2000 > 0.99, 'a player who reads only the ends sees TOO WIDE or TOO NARROW on the first zip in ' + (100 * shown / 2000).toFixed(1) + '% of games: the hidden clue shows itself before round two');
+  ok(distinctL === 2000, 'the two ladders of a game are always different chains');
+  const v = M.verdict({ z1: M.zip(g0 = M.drawGame(1).ladders[0], g0.map(sp => sp.given)), z2: M.zip(M.drawGame(1).ladders[1], M.drawGame(1).ladders[1].map(sp => M.partnerOf(sp.given))) });
+  ok(/first ladder paired like with like/.test(v[0]) && /second held on every rung/.test(v[0]), 'the verdict names what the first ladder showed and that the second held'); }
 ok(res['random piece'].kinds.guess / 2000 > 0.9, 'the verdict reads a random player as guessing in over 90% of games (' + Math.round(res['random piece'].kinds.guess / 20) + '%)');
 
 console.log(`\n${pass} passed, ${fail} failed`);

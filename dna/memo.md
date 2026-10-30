@@ -255,3 +255,11 @@ Mechanism: one ladder (`LADDER_RUNGS: 10`), `copyByRule`, `reading`, the benchma
 - Then the verdict line from the fault pattern, Chargaff's bars for the player's ladder, the copying line with the ladder's two copies twisted into helices, the paper's line, and "Play again: a new chain", which deals the next game number straight onto the ladder.
 
 The copy screen and its code are gone. Calibration 31/31 (the score added). Browser session: three games, scoring 70, 0 and 100, with the expected verdicts; play again, help and About all work; no errors.
+
+**Two rounds (30 Oct, night).** Steffen: the lengths are a hidden half of the puzzle, far less obvious than the jigsaw ends; a player may want to discover it on the way. My recommendation, which he followed: a second round, the same ladder again, so a player who missed one clue can use what the first zip showed. The simulation backs it: a player who reads only the ends scores about 50 and sees TOO WIDE or TOO NARROW on the first zip in every simulated game (calibration check).
+- **Round 1** is for finding out. Under the zipped ladder: "7 of 10 held. Look at the red rungs: what went wrong? Then try a second ladder." No other screen in between.
+- **Round 2** is a new chain, and it scores: "This ladder is the one that scores."
+- **The end screen** leads with the second score (100/100), then "Ladder 1: 70 → Ladder 2: 100". The scale shows an open triangle for the first ladder and the red one for the second.
+- **The verdict** names what the first ladder showed and what changed ("Your first ladder gripped at the ends but bulged or pinched… Your second held on every rung. You found what Watson found…"), or "You had it from the start" for two perfect ladders.
+
+Calibration 34/34. Browser session: a learner 70 → 100, a lengths-only player 0 → 0, a perfect player 100 → 100; no errors. Caught on the way: a ladder of all-wrong rungs can balance its letters by chance, so "yours does it too" now needs every rung to hold.
