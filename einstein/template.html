@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>The Light Post</title>
+<title>Einstein's Flower Merchant</title>
 <meta name="description" content="A game from Einstein's 1905 relativity paper: send flowers to the stars with half-light-speed boosters, and find out that you never catch the light, while the flowers age slower than the people waiting.">
 <style>
 @font-face { font-family: 'LP Display'; src: url(data:font/woff2;base64,/*__FONT_DISP__*/) format('woff2'); font-weight: 800; }
@@ -234,8 +234,8 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
 <!-- START -->
 <section class="screen on" id="s-start">
   <div class="poster">
-    <div class="kicker"><span>EINSTEIN · 1905</span><span>A GAME</span></div>
-    <h1>The<br>Light<br>Post</h1>
+    <div class="kicker"><span>EINSTEIN · 1905</span><span>FLEURS LUMIÈRE · BERN</span></div>
+    <h1 style="font-size:52px">Einstein's<br>Flower<br>Merchant</h1>
     <svg viewBox="0 0 360 70" aria-hidden="true">
       <rect x="0" y="16" width="360" height="12" fill="#FFC800"/>
       <rect x="0" y="46" width="250" height="3" fill="#E2231A"/>
@@ -243,7 +243,7 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
     </svg>
     <div class="legend"><span class="l">light</span><span class="r">your rocket</span></div>
     <div class="aimline" id="aim-start">Sell flowers to the stars. Die rich.</div>
-    <p class="lede">You run the Light Post in Bern. Ten orders from ten stars; each pays on delivery, if the flowers arrive alive. A franc paid in twenty years is not a franc today. Each booster makes your rocket go <b>half as fast as light</b>, faster than it already was, and burns fuel. Fire as many as you like, or refuse the order. Then you die, and the verdict says how.</p>
+    <p class="lede">You run Fleurs Lumière, Bern's flower rockets. Ten orders from ten stars; each pays on delivery, if the flowers arrive alive. A franc paid in twenty years is not a franc today. Each booster makes your rocket go <b>half as fast as light</b>, faster than it already was, and burns fuel. Fire as many as you like, or refuse the order. Then you die, and the verdict says how.</p>
     <button class="btn" id="b-start">Play</button>
     <div class="row2"><button class="btn ghost" data-help>How to play</button><button class="btn ghost" data-about>About</button></div>
     <div class="seed">GAME NO. <input id="seed" inputmode="numeric" aria-label="game number"> · same number, same ten stars</div>
@@ -265,7 +265,7 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
   <div class="order"><h2 id="f-name">Thun</h2><div class="dist" id="f-dist"></div></div>
   <p class="cust" id="f-cust"></p>
   <div class="where">
-    <div><b>BERN · YOU</b>Home time. You are paid on the station clock, which agrees with yours.</div>
+    <div><b>FLEURS LUMIÈRE · YOU</b>Bern time. You are paid on the station clock, which agrees with yours.</div>
     <div class="ship"><b>THE ROCKET</b>The flowers. They age by the rocket's clock, which runs slow.</div>
     <div class="star"><b id="w-star">THE STAR</b>The customer. Pays on arrival, if the flowers are alive.</div>
   </div>
@@ -421,9 +421,18 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
     else el('rect', { x: c - 4.5, y: c - R + 12, width: 9, height: R - 2, fill: '#111' }, hand);
     el('circle', { cx: c, cy: c, r: 5, fill: isFl ? '#E2231A' : '#111' }, s);
     const over = el('text', { x: c, y: c + 26, 'text-anchor': 'middle', 'font-family': 'LP Display', 'font-size': 11, fill: '#E2231A', opacity: 0 }, s); over.textContent = isFl ? 'DEAD' : '';
-    CK[id] = { hand, limit, yl, over, c }; setHand(id, 0);
+    // laps: a small counter at 9 o'clock, like a stopwatch's minute register, for a hand that has gone round more than once
+    const lapBox = el('rect', { x: c - 58, y: c - 9, width: 26, height: 18, fill: '#fff', stroke: '#111', 'stroke-width': 1.5, opacity: 0 }, s);
+    const lap = el('text', { x: c - 45, y: c + 4.5, 'text-anchor': 'middle', 'font-family': 'LP Display', 'font-size': 11, fill: '#111', opacity: 0 }, s);
+    CK[id] = { hand, limit, yl, over, c, lap, lapBox, isFl }; setHand(id, 0);
   }
-  function setHand(id, years) { const k = CK[id], frac = years / (2 * k.limit), cl = Math.min(frac, 0.997); k.hand.setAttribute('transform', `rotate(${cl * 360} ${k.c} ${k.c})`); k.over.setAttribute('opacity', frac > 0.5 ? 1 : 0); }
+  // one full turn = twice the limit; past that the hand keeps going round, and the lap counter shows how many turns
+  function setHand(id, years) {
+    const k = CK[id], turns = years / (2 * k.limit), laps = Math.floor(turns);
+    k.hand.setAttribute('transform', `rotate(${(turns % 1) * 360} ${k.c} ${k.c})`);
+    k.over.setAttribute('opacity', turns > 0.5 ? 1 : 0);
+    k.lap.textContent = '+' + laps; k.lap.setAttribute('opacity', laps >= 1 ? 1 : 0); k.lapBox.setAttribute('opacity', laps >= 1 ? 1 : 0);
+  }
   function lightTick(id, years) { const k = CK[id], frac = Math.min(years / (2 * k.limit), 0.997); k.yl.setAttribute('transform', `rotate(${frac * 360} ${k.c} ${k.c})`); k.yl.setAttribute('opacity', 1); }
 
   // ---------- the till (after the flight only) ----------
@@ -553,7 +562,7 @@ b { font-family: var(--disp); font-weight: 800; letter-spacing: 0; }
     const others = Object.keys(M0).filter(k => k !== S.who).map(k => { const r2 = M0[k].rate; const p2 = os.reduce((s, o, i) => s + fly(o, fl[i].n, r2).profit, 0), b2 = os.reduce((s, o) => s + best(o, r2).profit, 0); const f2 = fate(p2, b2); return `${M0[k].title} would have scored ${score(p2, b2)} with these same rockets and died ${f2 === CONFIG.broke ? 'broke' : f2}.`; });
     $('#verdict').innerHTML = `<div class="scorecard"><div class="big num">${sc}<span class="of">/100</span></div><div class="lab">OF THE MONEY THERE WAS TO BE MADE<br>${M0[S.who].title.toUpperCase()} · GAME NO. ${S.seed}</div></div><h1>${head}</h1><p class="p"><b>${sub}</b> ${did}</p><p class="p">${others.join(' ')}</p>
       <p class="p paper"><b>Einstein, 1905:</b> speeds don’t simply add, and no pile of boosters ever reaches light. A clock that travels runs slow, and the closer to light it goes, the slower it runs. And the energy a body needs grows without limit as it nears the speed of light.</p>
-      <p class="p means"><b>What that means for the Light Post:</b> the light limit binds the money. However many boosters you fire, the fee cannot arrive before light would, so a far star's fee is discounted to almost nothing whatever you do, and a merchant who discounts refuses the far stars first. It does not bind the flowers: every booster slows the rocket's clock, so they can arrive as young as you like, at a fuel price that grows without limit.</p>`;
+      <p class="p means"><b>What that means for Fleurs Lumière:</b> the light limit binds the money. However many boosters you fire, the fee cannot arrive before light would, so a far star's fee is discounted to almost nothing whatever you do, and a merchant who discounts refuses the far stars first. It does not bind the flowers: every booster slows the rocket's clock, so they can arrive as young as you like, at a fuel price that grows without limit.</p>`;
     $('#tally').innerHTML = os.map((o, i) => { const f = fl[i], b = bs[i];
       return `<div class="r"><div><b>${o.name}</b> · ${ly(o.d)} · ${f.refused ? 'refused' : f.n + ' booster' + (f.n === 1 ? '' : 's') + (f.alive ? '' : ' · dead')}${b.n !== f.n ? ` (best: ${b.n ? b.n : 'refuse'})` : ''}</div><span class="${f.profit < -0.5 || (b.n === 0 && !f.refused) ? 'bad' : ''}">${f.refused ? '0' : (f.profit >= 0.5 ? '+' : '') + Math.round(f.profit)}</span></div>`; }).join('')
       + `<div class="r"><div><b>WEALTH TODAY</b></div><span>${(profit < -0.5 ? '−' : '') + Math.abs(Math.round(profit))}</span></div>`;

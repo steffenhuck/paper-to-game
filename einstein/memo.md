@@ -1,4 +1,4 @@
-# The Light Post — design memo
+# Einstein's Flower Merchant (formerly The Light Post) — design memo
 
 *Paper-to-game, beta. Built in one run from the PDF alone.*
 
@@ -328,3 +328,10 @@ Steffen's last three: the booster count carried over between rounds, which looke
 - The ladder is five rungs: 97 and above, the richest merchant in Bern; 75, a comfortable man; 40, solvent, just; anything above a loss, a pauper; a loss, **broke**, with the debt in the headline ("You die broke, owing 140 francs"). "Exactly nothing" was dropped as too small a category. The other merchants' line now gives their score and their death with the same rockets.
 
 Session rerun on game 7: the first-timer scores 80 and dies a comfortable man as the ordinary merchant; the optimal patient merchant 100; a max-out borrower 48, solvent, just. No errors, no horizontal scroll, no decimals.
+
+
+## 28. The name, and the rocket clock's laps (30 Oct)
+
+Steffen: the title spoke to the physics, not the economics. The game is now **Einstein's Flower Merchant**; the shop is **Fleurs Lumière**, Bern (a Bern florist would plausibly have a French name, and *lumière* is the speed of light); the file is `einsteins-flower-merchant.html`, with `the-light-post.html` left as a redirect so the earlier link still opens.
+
+He also noticed the rocket clock whipping round to just short of twelve and stopping. Each dial is scaled so one turn is twice its limit, with the limit at six o'clock; the hand was capped at one turn. It now keeps going round, and a small register at nine o'clock counts the laps (+9 for flowers dead nine keep-times over), like a stopwatch's minute hand. Session rerun; no errors.

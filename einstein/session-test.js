@@ -1,4 +1,4 @@
-// Browser session test (build step 6): drives the-light-post.html at 380 px through a whole game: seed set to 7, the ordinary
+// Browser session test (build step 6): drives einsteins-flower-merchant.html at 380 px through a whole game: seed set to 7, the ordinary
 // merchant, ten rounds with a first-timer's choices (two boosters, then what the clocks taught, refusing the far ones late),
 // help opened mid-round and returned from, the verdict; then the same seed as the patient merchant with the optimal plan.
 // Run: node session-test.js [outdir] > session-log.txt   (needs playwright)
@@ -7,7 +7,7 @@ const D = (process.argv[2] || __dirname) + '/';
 (async () => {
   const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 380, height: 760 }, deviceScaleFactor: 2 });
   const errs = []; p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
-  await p.goto('file://' + __dirname + '/the-light-post.html'); await p.waitForTimeout(300);
+  await p.goto('file://' + __dirname + '/einsteins-flower-merchant.html'); await p.waitForTimeout(300);
   const txt = sel => p.$eval(sel, e => e.innerText.replace(/\n+/g, ' / '));
   const on = id => p.$eval(id, e => e.classList.contains('on'));
   const sw = async () => { const w = await p.evaluate(() => document.documentElement.scrollWidth); if (w > 380) errs.push('horizontal scroll ' + w); return w; };

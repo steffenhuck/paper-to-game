@@ -1,12 +1,12 @@
-# Generates the-light-post.html from template.html, mechanism.js (the single source of truth) and the two embedded fonts,
+# Generates einsteins-flower-merchant.html from template.html, mechanism.js (the single source of truth) and the two embedded fonts,
 # then verifies byte for byte that the embedded mechanism is the file calibration.js ran against.
 import base64, sys
 mech = open('mechanism.js', encoding='utf-8').read()
 font = lambda f: base64.b64encode(open('fonts/' + f, 'rb').read()).decode()
 about = """
-<h2>The Light Post</h2>
+<h2>Einstein's Flower Merchant</h2>
 <h3>The game in one line</h3>
-<p>You are a merchant in Bern selling flowers to customers at other stars: ten orders, one at a time, then you die. For each you choose how many boosters the rocket fires, or refuse the order. The speeds, the two clocks and the fuel bills are Einstein's 1905 equations, computed exactly. The customers, the fees, the keep-times, the price of fuel, the merchants' discount rates and the draw of the ten stars from the game number are this game's.</p>
+<p>You run Fleurs Lumière, a flower merchant in Bern selling to customers at other stars: ten orders, one at a time, then you die. For each you choose how many boosters the rocket fires, or refuse the order. The speeds, the two clocks and the fuel bills are Einstein's 1905 equations, computed exactly. The customers, the fees, the keep-times, the price of fuel, the merchants' discount rates and the draw of the ten stars from the game number are this game's.</p>
 <h3>Where everyone is</h3>
 <p>You are at home and keep home time. The customer is at a star, light-years away; the star's station clock has been synchronised with home's by light signals, which is the rule Einstein lays down in §1 of the paper, so when the rocket lands the station clock reads home time, and that is when you are paid. The flowers ride in the rocket, and the rocket carries its own clock, which by §4 runs slow. The flowers age by that clock.</p>
 <h3>What the paper found</h3>
@@ -27,9 +27,10 @@ for k in ['/*__MECHANISM__*/', '/*__ABOUT__*/', '/*__FONT_DISP__*/', '/*__FONT_B
     assert t.count(k) == 1, k
 out = (t.replace('/*__FONT_DISP__*/', font('disp.woff2')).replace('/*__FONT_BODY__*/', font('body.woff2'))
         .replace('/*__ABOUT__*/', about).replace('/*__MECHANISM__*/', mech))
-name = 'the-light-post.html'
+name = 'einsteins-flower-merchant.html'
 open(name, 'w', encoding='utf-8').write(out)
 built = open(name, encoding='utf-8').read()
 if mech not in built:
     sys.exit('BUILD FAILED: embedded mechanism differs from mechanism.js')
+open('the-light-post.html', 'w', encoding='utf-8').write('<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=einsteins-flower-merchant.html"><title>Einstein\'s Flower Merchant</title><p>This game is now called <a href="einsteins-flower-merchant.html">Einstein\'s Flower Merchant</a>.</p>')
 print(f'built {name}: {len(built)} bytes; mechanism embedded verbatim ({len(mech)} bytes)')

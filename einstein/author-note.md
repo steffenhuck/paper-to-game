@@ -1,4 +1,4 @@
-**Revised seven times after first review.** Score out of 100 on the card; a loss dies broke. Ten rounds from a game number, no test range, nothing previewed before launch, the fate at the end; see memo §26. The simulation table in §26 is the quickest way to see what the game rewards.
+**Revised eight times after first review.** Now called Einstein's Flower Merchant; the shop is Fleurs Lumière. Score out of 100 on the card; a loss dies broke. Ten rounds from a game number, no test range, nothing previewed before launch, the fate at the end; see memo §26. The simulation table in §26 is the quickest way to see what the game rewards.
 
 
 

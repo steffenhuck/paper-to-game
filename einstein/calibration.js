@@ -1,4 +1,4 @@
-// Calibration check for The Light Post: the mechanism against Einstein (1905), §1, §4, §5 and §10, with explicit tolerances;
+// Calibration check for Einstein's Flower Merchant: the mechanism against Einstein (1905), §1, §4, §5 and §10, with explicit tolerances;
 // then the robustness of the game's pattern to the game's own prices and rates. Run: node calibration.js
 const M = require('./mechanism.js');
 const { CONFIG, compose, speedAfter, clockRate, energy, fuelCost, discount, fly, best, minAlive, drawGame } = M;

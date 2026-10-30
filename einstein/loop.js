@@ -1,4 +1,4 @@
-// The Light Post — loop on placeholder output (build step 2). Plays a first-timer's game against mechanism.js and prints, after each
+// Einstein's Flower Merchant — loop on placeholder output (build step 2). Plays a first-timer's game against mechanism.js and prints, after each
 // action, what changed and where the player stands. Run: node loop.js > loop-log.txt
 const M = require('./mechanism.js'); const { CONFIG, fly, best, drawGame, fate, fmtYears, fmtSpeed, fmtFrancs, fmtShare } = M;
 const show = (o, n, r) => { const f = fly(o, n, r); if (f.refused) return `  ${o.name}: refused. Light would have arrived after ${fmtYears(f.tLight)}.`;
