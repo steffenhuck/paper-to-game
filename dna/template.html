@@ -74,6 +74,8 @@ b { font-weight: 700; }
 .story::before { content: ''; position: absolute; top: -10px; left: 24px; width: 70px; height: 20px; background: rgba(245,237,219,0.8); border: 1px solid rgba(42,38,33,0.2); transform: rotate(-4deg); }
 .story h3 { font-size: 20px; margin: 4px 0 6px; color: var(--red); }
 .story p { font-size: 14.5px; line-height: 26px; margin: 0 0 8px; }
+.story .pic { display: block; width: 100%; height: auto; margin: 4px 0 12px; background: var(--card); }
+.story .cap { font-family: var(--mark); font-size: 13px; fill: var(--red); text-anchor: middle; }
 .story .src { font-size: 12px; line-height: 1.4; opacity: 0.75; }
 .gameno input { width: 84px; font-family: var(--type); font-weight: 700; font-size: 16px; padding: 6px 8px; border: 2px solid var(--pencil); background: var(--card); color: var(--pencil); border-radius: 0; }
 
@@ -151,11 +153,14 @@ svg.lad { display: block; width: 100%; height: auto; touch-action: manipulation;
     <div class="story">
       <h3>The puzzle</h3>
       <p>Cambridge, early 1953. James Watson and Francis Crick are racing to find the shape of DNA, the molecule that carries genes. X-ray pictures say it is a helix, the same width all the way along. Inside it sit four kinds of base, A, G, T and C, in any order.</p>
+      <svg class="pic" id="w-puzzle" viewBox="0 0 320 150" aria-hidden="true"></svg>
       <p>A jigsaw, then, with four kinds of piece and no picture on the box. How do the pieces fit across the middle without the width ever changing? And how could such a thing copy itself?</p>
       <h3>The cardboard</h3>
       <p>Watson cut the four bases out of stiff card, true to scale, and pushed them around his desk. Like with like bulged. Then, on the morning of Saturday 28 February, he saw it: A with T has exactly the shape of G with C. Two pairs, one width. Five weeks later he and Crick sent their letter to <i>Nature</i>.</p>
+      <svg class="pic" id="w-cardboard" viewBox="0 0 320 128" aria-hidden="true"></svg>
       <h3>Now it's your desk</h3>
       <p>This game lets you be Watson, with nothing but some cardboard. The pieces are his cut-outs. One chain is given; find the other, and watch whether the rails stay straight. Then pull your ladder apart and see what he and Crick saw next: it can copy itself.</p>
+      <svg class="pic" id="w-desk" viewBox="0 0 320 112" aria-hidden="true"></svg>
       <p class="src">Story: Watson, <i>The Double Helix</i> (1968), ch. 26. The letter itself does not mention cardboard.</p>
     </div>
     <button class="tag" id="b-desk"><span>To the desk</span></button>
@@ -575,6 +580,33 @@ $('#b-help-back').addEventListener('click', () => {
 $$('[data-about]').forEach(el => el.addEventListener('click', () => { back = $$('.screen').find(s => s.classList.contains('on')).id; show('s-about'); }));
 $('#b-about-back').addEventListener('click', () => show(back));
 drawArt();
+// ---------- the welcome card's three pictures, drawn from the same pieces ----------
+function drawWelcome() {
+  // 1. the puzzle: the helix, its rungs empty, and four loose pieces beside it
+  { const cx = 82, R = 46, top = 16, pitch = 12, n = 10; let s = `<line x1="${cx}" y1="${top - 8}" x2="${cx}" y2="${top + (n - 1) * pitch + 8}" stroke="#2A2621" stroke-width="1"/>`;
+    for (let i = 0; i < n; i++) { const a = i * M.CONFIG.TWIST_DEG * Math.PI / 180, x1 = cx - R * Math.cos(a), x2 = cx + R * Math.cos(a), y = top + i * pitch;
+      s += `<line x1="${x1.toFixed(1)}" y1="${y}" x2="${x2.toFixed(1)}" y2="${y}" stroke="#2A2621" stroke-width="2" stroke-dasharray="3 3" opacity="0.6"/>`; }
+    [0, 1].forEach(st => { const pts = []; for (let k = -0.5; k <= n - 0.5; k += 0.25) { const a = (k * M.CONFIG.TWIST_DEG + st * 180) * Math.PI / 180; pts.push([cx - R * Math.cos(a), top + k * pitch]); }
+      s += `<path class="ribbon" style="stroke-width:6" d="${ribbonPath(pts)}"/>`; });
+    s += `<text x="${cx}" y="${top + 4.5 * pitch + 12}" text-anchor="middle" style="font-family:var(--mark);font-size:34px;fill:#D23B25">?</text>`;
+    const g = { U: 24, H: 18, CP: 4.5, R: 3.6 };
+    [['A', 168, 34, -8], ['G', 236, 64, 6], ['T', 178, 98, 10], ['C', 250, 126, -5]].forEach(([b, x, y, r]) => { s += `<g transform="rotate(${r} ${x} ${y})">${pieceSVG(b, x, 1, y, g)}</g>`; });
+    $('#w-puzzle').innerHTML = s; }
+  // 2. the cardboard: like with like bulges; A-T and G-C are one width
+  { const g = { U: 20, H: 18, CP: 4.5, R: 3.6, PITCH: 26 }; let s = '';
+    const lad = (pairs, lx, top) => { const off = pairs.map(([a, b]) => { const f = M.fit(a, b); return f.width === 'ok' ? 0 : f.bulge * g.U / 2; });
+      let q = rails(pairs.length, off, g, lx, lx + 5 * g.U, top);
+      pairs.forEach(([a, b], i) => { const y = top + i * g.PITCH; q += pieceSVG(a, lx - off[i], 1, y, g) + pieceSVG(b, lx + 5 * g.U + off[i], -1, y, g); }); return q; };
+    s += lad([['A', 'A'], ['G', 'G']], 34, 30) + `<text class="cap" x="${34 + 2.5 * g.U}" y="120">like with like: bulges</text>`;
+    s += lad([['A', 'T'], ['G', 'C']], 192, 30) + `<text class="cap" x="${192 + 2.5 * g.U}" y="120" style="fill:#2A2621">A–T, G–C: one width</text>`;
+    $('#w-cardboard').innerHTML = s; }
+  // 3. your desk: one chain given, the other empty
+  { const g = { U: 30, H: 20, CP: 5, R: 4, PITCH: 28 }, lx = 85, rx = lx + 5 * g.U, top = 24; const given = ['C', 'A', 'G'];
+    let s = rails(3, [0, 0, 0], g, lx, rx, top);
+    given.forEach((b, i) => { const y = top + i * g.PITCH; s += pieceSVG(b, lx, 1, y, g) + `<rect class="slot next" x="${rx - 32}" y="${y - 10}" width="32" height="20" rx="3"/><text x="${rx - 16}" y="${y + 5}" text-anchor="middle" style="font-family:var(--mark);font-size:14px;fill:#D23B25">?</text>`; });
+    $('#w-desk').innerHTML = s; }
+}
+drawWelcome();
 window.__OC = { state: () => S };
 })();
 </script>
