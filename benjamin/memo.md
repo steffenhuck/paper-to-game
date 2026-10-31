@@ -276,3 +276,27 @@ The author: the machinery computes a target, and the verdict said it only in wor
 ## 25. The verdict says why (31 Oct 2026)
 
 The author: "moved all the people it could have moved" points the wrong way when the halo was lost early; and do we need an apparatus that measures how much people are moved by the halo? We have it: every age is split into the part the halo did and the part being seen did, for the player's path and for the best path. The verdict now uses the comparison. It finds the ages where the player fell short of the best path by more than a thirtieth of the best total and names the cause the mechanism can tell apart: the face kept farther than the age allowed (the best path's veil was wider: fewer saw it), or the halo spent earlier (the veil as wide or wider, but the halo they saw it with thinner). One or two sentences under the score: "But the halo had been spent at the temple, so the crowds of the cathedral and the print shop saw a face with little of it left." / "But at the cathedral and the print shop the face was kept farther than the age allowed, and fewer saw it than could have." Nothing is said within three hundredths of the best. Calibration 38/38.
+
+## 26. The halo never goes on its own (31 Oct 2026): the original, the copy, and the eyes
+
+The author, at the design's last fork: the halo should never fade in the dark; a keeper who hides the face through every age and shows it at last to a mass audience is one of the game's most interesting paths, and under some weights it might even be the best. The first version thinned the stock itself as each age arrived, which Benjamin never claims. What he claims is about the eyes (section III: perception is historically conditioned; the masses' urge to bring things closer by way of the likeness) and about the copy (section II: "even the most perfect reproduction lacks one thing, the here and now of the work of art"; sections VIII and IX: the film actor's aura is gone because he performs for the apparatus and not for a present audience).
+
+So the mechanism now keeps three things apart that it had merged. **The stock**: the halo as it is, spent only by showing (by one minus the nearness of the means), never by time; kept in the dark it stays whole, and is drawn whole, to 1930. **The carry**: how much of the halo a showing by a given means conveys: presence all of it, a coin 0.3, a woodcut 0.5, a lithograph 0.6, a photograph 0.7 (section VI: where the aura emanates for the last time), film 0.35 (the screen cannot carry presence). **The eyes**: each age's multiplier on what a halo does to the people, cumulative, never on the halo itself. What moved an age's people is the stock times the eyes times the carry. The tally, the weights and the exhibition term are unchanged.
+
+Simulated before building (with the control that proves the eyes are needed):
+
+| plan | of the best |
+|---|---|
+| the best possible: the faithful on the day at the cave and the temple, then woodcuts, lithographs, photographs, film | 100% |
+| the day until the lithograph, then the ladder | 98% |
+| woodcuts on, then the ladder · wait for the lithograph | 96% |
+| the newest rung every age, from the cave | 86% |
+| coins at the temple, then the ladder | 84% |
+| **wait, wait, then splash on film** | **45%** |
+| the faithful on the day forever | 23% |
+| always veiled | 2% |
+| *with no change of eyes at all:* best path hoards until the photograph; the splash scores 71 | *rejected* |
+
+The splash fails, and not because of our weights: five crowds saw nothing, and the sixth saw a screen, which carries little, with eyes that had seen a thousand faces. Whether the keeper weighs the early ages or the late ones makes no difference to that, which is why the author's other idea, a keeper's own weighting chosen upfront (Einstein's merchants), was left out: it would change nothing, and a choice that changes nothing is the fork again.
+
+**On screen.** The original is one painting and never changes; what changes is what is shown. Tapping a rung is a **preview** of what the people would see by that means: the painting itself with its halo (in the dark, on the day), or the copy, drawn in the copy's own hand (a worn brass coin, a woodcut, a lithograph, a halftone, a film frame) with the trace of the halo it carries as a printed ring of gold dots. The control shows what it does, and what it does is the essay's subject. When the age passes, the crowd walks into that same picture, and the heads the halo moved are rimmed in gold in proportion; in the cinema a thousand heads and a handful of rims. The arrival of an age does nothing to the picture at all; the one thing said, at the studio, is that the people's eyes have changed. The counterfactual row is gone: the preview is the better version of it. Every miniature is the frame as the age left it. The hoarder's verdict: "The halo is whole, and nobody has seen it." The splasher's: "You kept the halo whole through every age and showed it at last to everyone, on a screen, which cannot carry it, to eyes that had seen a thousand faces." The shortfall diagnosis now groups small losses by cause. Calibration 40/40 (P1 and P2 rewritten for the new reading, including the no-eyes control); session test clean; the picture sits at one height on all six ages.

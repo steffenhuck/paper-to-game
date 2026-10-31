@@ -28,14 +28,9 @@ const L = []; const say = s => { L.push(s); console.log(s); };
       const same = first.n === lastFrame.n && first.tech === lastFrame.tech && first.halo === lastFrame.halo && first.crowd === lastFrame.crowd;
       if (!same) say(`   !! first frame differs from the previous age's last: ${JSON.stringify(first)} vs ${JSON.stringify(lastFrame)}`); else say(`   first frame = previous age's last frame (${first.tech}, halo ${first.halo}, crowd ${first.crowd}, nearness ${first.n})`);
       if (i === 4) await shot(`age${i + 1}-as-left`);
-      await page.waitForTimeout(2200);
+      await page.waitForTimeout(1200);
       const after = await page.$eval('#frame', e => ({ n: +e.dataset.n, tech: e.dataset.tech, halo: e.dataset.halo, crowd: +e.dataset.crowd }));
-      const op = await page.$eval('#frame .arriving', g => g.style.opacity);
-      if (after.n !== first.n || after.crowd !== first.crowd) say('   !! curtains or crowd moved at the arrival');
-      if (op !== '1') say('   !! arrival layer not shown');
-      say(`   after arrival: still ${after.tech}, halo ${after.halo}; curtains, crowd and technique unchanged (the technique changes when the age passes)`);
-      if (after.tech !== first.tech) say('   !! technique changed at the arrival');
-      if (i === 4) await shot(`age${i + 1}-after-arrival`);
+      if (JSON.stringify(after) !== JSON.stringify(first)) say('   !! the picture changed at the arrival'); else say('   nothing in the picture changed at the arrival');
     } else say('   age one starts in the dark');
     const copiesAtStart = await page.$eval('#copies', e => { const s = e.querySelector('svg'); return s ? +s.dataset.copies : 0; });
     if (copiesAtStart < copiesSoFar) say(`   !! copies at age start fell from ${copiesSoFar} to ${copiesAtStart}`); else say(`   copies in the world at age start: ${copiesAtStart}`);
@@ -44,6 +39,7 @@ const L = []; const say = s => { L.push(s); console.log(s); };
     if (i === 3) { await page.click('#play .qbtn'); await page.waitForTimeout(200); await shot('help'); await page.click('#helpback'); await page.waitForTimeout(200); say('   help opened and returned to ' + await page.$eval('.screen.on', e => e.id)); }
     await page.click(`#veils .veil[data-i="${plan[i]}"]`); await page.waitForTimeout(250);
     say('   > tapped ' + slabs[plan[i]] + '; commit says: ' + await text('#commit'));
+    { const pv = await page.$eval('#frame', e => ({ tech: e.dataset.tech, halo: e.dataset.halo, crowd: +e.dataset.crowd })); say(`   preview: ${pv.tech}, halo ${pv.halo}, nobody there yet (crowd ${pv.crowd})`); if (pv.crowd !== 0) say('   !! crowd in the preview'); }
     if (await page.$('#result:not([style*="none"])')) say('   !! result visible before commit');
     if (i === 3) { await shot('age4-veil-set'); await noScroll(); }
     await page.click('#commit'); await page.waitForTimeout(1200);
@@ -51,7 +47,7 @@ const L = []; const say = s => { L.push(s); console.log(s); };
     say('   hold: ' + await text('#holdwords') + ' | copies: ' + await text('#copies'));
     copiesSoFar = await page.$eval('#copies', e => { const s = e.querySelector('svg'); return s ? +s.dataset.copies : 0; });
     lastFrame = await page.$eval('#frame', e => ({ n: +e.dataset.n, tech: e.dataset.tech, halo: e.dataset.halo, crowd: +e.dataset.crowd }));
-    say('   counterfactual: ' + (await page.$$eval('#cfrow .c', cs => cs.map(c => (c.classList.contains('me') ? '[' : '') + c.innerText + (c.classList.contains('me') ? ']' : '') + (c.classList.contains('no') ? '(na)' : '')).join(' / '))));
+    say('   seen: ' + await page.$eval('#frame', e => `${e.dataset.tech}, halo ${e.dataset.halo}, crowd ${e.dataset.crowd}, lit ${e.dataset.lit}`));
     if (i === 0 || i === 2 || i === 3 || i === 4 || i === 5) await shot(`age${i + 1}-passed`);
     await noScroll();
     say('   > ' + await text('#nextage'));

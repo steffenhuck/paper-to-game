@@ -79,14 +79,6 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
 .holdlab{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--display);font-size:14px;letter-spacing:.12em;text-transform:uppercase;margin-top:8px}
 .holdlab span:last-child{font-family:var(--text);font-size:14px;letter-spacing:0;text-transform:none;color:var(--grey)}
 .hold{display:block;width:100%;height:26px;border:3px solid var(--ink);background:var(--cream)}
-.cf{margin-top:12px}
-.cf .lab{font-size:14px;color:var(--grey);margin-bottom:4px}
-.cfrow{display:flex;gap:4px;justify-content:flex-start;flex-wrap:wrap}
-.cfrow .c{flex:0 0 calc((100% - 24px) / 7);text-align:center}
-.cfrow .c svg{display:block;width:100%;height:50px;border:2px solid var(--ink);background:var(--ink)}
-.cfrow .c.me svg{border:3px solid var(--red)}
-.cfrow .c.no svg{opacity:.35}
-.cfrow .c span{display:block;font-family:var(--display);font-size:11px;letter-spacing:.08em;text-transform:uppercase;line-height:1.1;margin-top:3px}
 .lead{font-family:var(--display);font-weight:600;font-size:30px;line-height:1.1;text-transform:uppercase;letter-spacing:.02em;color:var(--red);margin:10px 0}
 .vl{margin:10px 0}
 .vl b{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.12em;font-size:14px;display:block;color:var(--red)}
@@ -112,7 +104,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   </div>
   <p class="lede">Each age you <b>set the veil</b> (how near the people may come), <b>let the age pass</b>, and see who came and what is left of the halo. Six ages, each with a new way to copy a face, then one last choice about where the face goes.</p>
   <p class="aim">Over six ages, let the face move as many people as it can.</p>
-  <p class="lede">A face moves the people who see it, and moves them more while it still has its <b>halo</b>. Being seen needs nearness; the halo needs distance, and once spent it does not grow back. Each age there are more people than the last.</p>
+  <p class="lede">A face moves the people who see it, and moves them more when they see its <b>halo</b>. Only the face itself carries the whole halo; a copy carries a trace, and every copy you make spends some of the original's. Kept in the dark the halo stays whole, but each age's eyes are harder to move than the last, and each age has more people.</p>
   <button class="btn" id="begin">Begin: the first age</button>
   <button class="btn quiet" id="howto">How to play</button>
   <button class="btn quiet" id="aboutbtn">About the paper</button>
@@ -129,7 +121,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   <svg class="frame" id="frame" viewBox="0 0 340 300"></svg>
   <div class="copies" id="copies"></div>
   <div id="choose">
-    <p class="orient" id="choosehint">Set the veil: tap how near the people may come this age. Then let the age pass.</p>
+    <p class="orient" id="choosehint">Set the veil: tap a means and see what the people would see. Then let the age pass.</p>
     <div class="veils" id="veils"></div>
     <button class="btn" id="commit" disabled>Let the age pass<span class="sub" id="commitsub">set the veil first</span></button>
   </div>
@@ -137,7 +129,6 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     <p class="line" id="line"></p>
     <div class="holdlab"><span>Moved this age</span><span id="holdwords"></span></div>
     <svg class="hold" id="hold" viewBox="0 0 340 20" preserveAspectRatio="none"></svg>
-    <div class="cf"><div class="lab">Had you set the veil elsewhere this age (yours is ringed in red):</div><div class="cfrow" id="cfrow"></div></div>
     <button class="btn" id="nextage">Next age</button>
   </div>
 </section>
@@ -168,10 +159,9 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   <div class="band"><b>How to play</b><span></span></div>
   <p class="aim">Over six ages, let the face move as many people as it can.</p>
   <ol>
-    <li><b>Each age, set the veil.</b> A ladder of red slabs: <i>in the dark</i> (only you see the face), <i>on the day</i> (the faithful, once a year), and then the ways of copying a face as the ages bring them: <i>on coins</i>, <i>in woodcuts</i>, <i>in lithographs</i>, <i>in photographs</i>, <i>on film</i>. Each age adds one rung, marked new; the old rungs stay. Tapping a slab parts the red curtains and brings the face nearer. Nothing is spent until you let the age pass.</li>
-    <li><b>Let the age pass.</b> The crowd walks in (how many, and how near, is what the veil gave them); the halo thins by how near you let them; copies go out by the means you chose (coins, sheets, prints, photographs, film). A line says what happened. The bar under it is <b>moved this age</b>: how many of the people this age could have moved you moved; gold for the part the halo did, red for the part being seen did.</li>
-    <li><b>The halo does not grow back.</b> What you spend is spent. And each age arrives with eyes of its own: the more copying there is in the world, the thinner the halo arrives, whatever you did.</li>
-    <li><b>Under the bar,</b> small frames show what the halo would be at each rung this age, yours ringed in red.</li>
+    <li><b>Each age, set the veil.</b> A ladder of red slabs: <i>in the dark</i> (only you see the face), <i>on the day</i> (the faithful, once a year, before the face itself), and then the ways of copying a face as the ages bring them: <i>on coins</i>, <i>in woodcuts</i>, <i>in lithographs</i>, <i>in photographs</i>, <i>on film</i>. Each age adds one rung, marked new; the old rungs stay. Tapping a slab shows you what the people would see by that means: the painting itself, or the copy. Nothing is spent until you let the age pass.</li>
+    <li><b>Let the age pass.</b> The crowd walks in (how many is what the means gave you), and the heads the halo moved are rimmed in gold. A copy carries only a trace of the halo, and every copy spends some of the original's. A line says what happened. The bar under it is <b>moved this age</b>: how many of the people this age could have moved you moved; gold for the part the halo did, red for the part being seen did.</li>
+    <li><b>The halo does not grow back,</b> and it does not fade on its own: kept in the dark it stays whole. But each age's eyes are harder to move than the last: the more copying there is in the world, the less a halo moves the people, whatever you did.</li>
     <li><b>The tally.</b> Each age counts the people it moved, and each age has more people than the last, so the late ages weigh more. There is no running total; the verdict at the end sets your six ages against the most a keeper could have done.</li>
     <li><b>The verdict:</b> how many people your face moved, of what was possible, in words; your six ages beside the most a keeper could have done; what Benjamin says about the path you took; and his last page, 1936, as a reading.</li>
   </ol>
@@ -202,6 +192,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     cave:      { bg: '#5A3F2A', skin: 'none', line: '#C4552C', lw: 5, dash: '10 4', hair: 'none', robe: 'none', opacity: 1 },
     temple:    { bg: '#2A2420', skin: '#E6D3AE', line: '#8A6E45', lw: 1.6, hair: '#D4BE93', robe: '#D4BE93', shade: true },  // warm stone on a dark cella (revision 3)
     icon:      { bg: '#3B2A1A', skin: '#DCB389', line: '#2B1D12', lw: 2.6, hair: '#2B1D12', robe: '#A52A1E' },
+    original:  { bg: '#3B2A1A', skin: '#DCB389', line: '#2B1D12', lw: 2.6, hair: '#2B1D12', robe: '#A52A1E' },   // the painting itself, which never changes; what changes is what is shown (revision 26)
     woodcut:   { bg: '#F3EAD6', skin: 'hatch', line: INK, lw: 3.2, hair: 'cross', robe: 'cross' },   // the woodcut: heavy black line on cream (copies only)
     coin:      { bg: '#8C6B2F', skin: '#C9A961', line: '#5A4214', lw: 2.2, hair: '#B8954E', robe: '#B8954E', shade: true },   // the coin: a worn face in brass (copies only)
     litho:     { bg: '#F1E9D8', skin: 'stipple', line: '#3A3632', lw: 2, hair: 'stipple2', robe: 'stipple2', soft: true },
@@ -262,8 +253,9 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     for (let y = 8; y < 300; y += 30) s += `<rect x="9" y="${y}" width="16" height="12" rx="2" fill="#EFE6D2"/><rect x="315" y="${y}" width="16" height="12" rx="2" fill="#EFE6D2"/>`;
     return s;
   }
-  function crowdMarkup(reach, n, big) { // heads from behind; number = reach, size and rows = nearness
+  function crowdMarkup(reach, n, lit) { // heads from behind; number = reach, size and rows = nearness; lit = the share moved by the halo, drawn with a gold rim
     const count = Math.round(reach * 40);
+    const nLit = Math.round(count * Math.max(0, Math.min(1, lit || 0)));
     if (count < 1) return '';
     const rows = n >= 0.75 ? 3 : n >= 0.5 ? 2 : 1;
     const r = 5 + 10 * n;
@@ -273,7 +265,8 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
       const inRow = Math.ceil(count / rows), k = Math.floor(i / rows);
       const x = 24 + (292 / Math.max(1, inRow)) * (k + 0.5) + ((i * 37) % 11 - 5) * 0.8 + (row % 2 ? r * 0.6 : 0);
       const cy = 300 - r - 3 - row * r * 1.45;
-      s += `<g style="animation-delay:${(i * 35) % 700}ms"><path d="M${x - r * 1.5} ${cy + r * 1.3} Q${x} ${cy + r * .1} ${x + r * 1.5} ${cy + r * 1.3} Z" fill="${INK}"/><circle cx="${x}" cy="${cy - r * .2}" r="${r}" fill="${INK}"/></g>`;
+      const isLit = ((i * 7919) % count) < nLit;   // spread the lit heads through the crowd, deterministically
+      s += `<g style="animation-delay:${(i * 35) % 700}ms"><path d="M${x - r * 1.5} ${cy + r * 1.3} Q${x} ${cy + r * .1} ${x + r * 1.5} ${cy + r * 1.3} Z" fill="${INK}"/><circle cx="${x}" cy="${cy - r * .2}" r="${r}" fill="${INK}"${isLit ? ` stroke="${GOLD2}" stroke-width="${Math.max(1.5, r * 0.28)}"` : ''}/></g>`;
     }
     return s + '</g>';
   }
@@ -284,6 +277,9 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     return `<g class="fade"><rect x="0" y="0" width="${w}" height="300" fill="${RED}"/>${folds(0, w)}<rect x="${340 - w}" y="0" width="${w}" height="300" fill="${RED}"/>${folds(340 - w, w)}<rect x="${w - 3}" y="0" width="3" height="300" fill="${INK}" opacity=".5"/><rect x="${340 - w}" y="0" width="3" height="300" fill="${INK}" opacity=".5"/></g>`;
   }
   // the picture: background, the face at its nearness, curtains, crowd
+  // A frame state: what is shown (tech, by the rung), the halo drawn (the original's, or the trace a copy carries), its kind
+  // (leaf for the original, ink for a printed halo), nearness, the crowd and the share of it lit by the halo.
+  function frameOf(st) { return frameMarkup(st.tech, st.halo, st.n, st.reach, { haloKind: st.kind, lit: st.lit }); }
   function frameMarkup(tech, halo, n, reach, extra) {
     const u = uid(); const T = TECH[tech];
     const s = 0.55 + 0.75 * n, h = 230 * s, yTop = 300 - h - 8, xLeft = 170 - 100 * s;
@@ -294,53 +290,46 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     if (T.film) m += filmFrame(u);
     if (extra && extra.before) m += extra.before;
     m += curtains(n);
-    m += crowdMarkup(reach || 0, extra && extra.crowdN !== undefined ? extra.crowdN : n);
+    m += crowdMarkup(reach || 0, n, extra && extra.lit);
     if (extra && extra.after) m += extra.after;
     return m;
   }
-  // The age passes: a crossfade from the face as it was (last technique, halo as it arrived) to the face as this age leaves it
-  // (this age's technique, halo after the veil), with the crowd walking in. The dataset holds the final state from the start.
-  function passFrame(svg, techBefore, techAfter, haloBefore, haloAfter, n, reach) {
+  // The age passes: a crossfade from the preview (what the people will see, nobody there yet) to what they saw (the crowd in,
+  // lit by the halo as it reached them). The dataset holds the final state from the start.
+  function passFrame(svg, before, after) {
     clearTimeout(arriveTimer);
-    const before = frameMarkup(techBefore, haloBefore, n, reach), after = frameMarkup(techAfter, haloAfter, n, reach);
-    svg.innerHTML = `<g>${before}</g><g class="arriving" style="opacity:0;transition:opacity 1.2s ease">${after}</g>`;
-    svg.dataset.n = n; svg.dataset.tech = techAfter; svg.dataset.halo = haloAfter.toFixed(2); svg.dataset.crowd = Math.round((reach || 0) * 40);
+    svg.innerHTML = `<g>${frameOf(before)}</g><g class="arriving" style="opacity:0;transition:opacity 1.2s ease">${frameOf(after)}</g>`;
+    setData(svg, after);
     svg.querySelectorAll('.crowd').forEach(c => c.classList.add('passing'));
     arriveTimer = setTimeout(() => { const g = svg.querySelector('.arriving'); if (g) g.style.opacity = '1'; }, 350);
   }
-  function drawFrame(svg, tech, halo, n, reach, extra) {
-    svg.innerHTML = frameMarkup(tech, halo, n, reach, extra);
-    svg.dataset.n = n; svg.dataset.tech = tech; svg.dataset.halo = halo.toFixed(2); svg.dataset.crowd = Math.round((reach || 0) * 40);
+  function drawFrame(svg, st) { clearTimeout(arriveTimer); svg.innerHTML = frameOf(st); setData(svg, st); }
+  function setData(svg, st) { svg.dataset.n = st.n; svg.dataset.tech = st.tech; svg.dataset.halo = st.halo.toFixed(2); svg.dataset.crowd = Math.round((st.reach || 0) * 40); svg.dataset.lit = (st.lit || 0).toFixed(2); }
+  // The states. Nothing happens to the picture when an age arrives: the frame at age start is the last age's frame.
+  const darkState = () => ({ tech: 'original', halo: S.halo, kind: 'leaf', n: 0, reach: 0, lit: 0 });
+  function previewState(v) {   // what the people would see by this means: the original with its halo, or the copy with the trace it carries
+    const rung = C.VEILS[v];
+    return rung.copies ? { tech: rung.tech, halo: S.halo * rung.carry, kind: 'ink', n: rung.n, reach: 0, lit: 0 } : { tech: 'original', halo: S.halo, kind: 'leaf', n: rung.n, reach: 0, lit: 0 };
   }
-  // the age boundary: first the last frame of the previous age, still; then, over about a second, the halo thins and the
-  // face re-renders in the new technique; curtains and crowd stay where they were (revision 7)
-  let arriveTimer = null;
-  function arriveFrame(svg, prev, tech, halo, n, reach, onStart) {
-    clearTimeout(arriveTimer);
-    const before = frameMarkup(prev.tech, prev.halo, n, reach), after = frameMarkup(tech, halo, n, reach);
-    svg.innerHTML = `<g>${before}</g><g class="arriving" style="opacity:0;transition:opacity 1s ease">${after}</g>`;
-    svg.dataset.n = n; svg.dataset.tech = prev.tech; svg.dataset.halo = prev.halo.toFixed(2); svg.dataset.crowd = Math.round((reach || 0) * 40);
-    arriveTimer = setTimeout(() => {
-      const g = svg.querySelector('.arriving'); if (!g) return;
-      g.style.opacity = '1'; svg.dataset.tech = tech; svg.dataset.halo = halo.toFixed(2);
-      if (onStart) onStart();
-    }, 900);
+  function passedState(r) {    // what they saw: the same, with the crowd in and lit by what reached them
+    const rung = C.VEILS[r.veil];
+    return rung.copies ? { tech: rung.tech, halo: r.haloArrived * rung.carry, kind: 'ink', n: rung.n, reach: r.reach, lit: r.lit } : { tech: 'original', halo: r.halo, kind: 'leaf', n: rung.n, reach: r.reach, lit: r.lit };
   }
-  // A miniature of the frame as an age left it, or would have: the same renderer as the picture, so the strips are honest.
-  function miniFrame(tech, halo, n, reach) { return `<svg viewBox="0 0 340 300" preserveAspectRatio="xMidYMid slice">${frameMarkup(tech, halo, n, reach)}</svg>`; }
+  let lastState = null; let arriveTimer = null;
+  // A miniature of a frame state: the same renderer as the picture, so the strips are honest.
+  function miniFrame(st) { return `<svg viewBox="0 0 340 300" preserveAspectRatio="xMidYMid slice">${frameOf(st)}</svg>`; }
   function thumb(tech, halo, haloKind, variant) { const u = uid(); return `<svg viewBox="0 0 200 230" preserveAspectRatio="xMidYMid slice">${defs(u)}<rect width="200" height="230" fill="${TECH[tech].bg}"/>${faceMarkup(tech, u, halo, variant || 0, haloKind)}</svg>`; }
 
   // ---------- state and screens
   let S = M.newGame(); let picked = null; let lastScreen = 'start';
   let copiesMade = []; // {tech, count} per age that printed; presentation only, the counts follow reach
-  const lastN = () => S.results.length ? C.VEILS[S.results[S.results.length - 1].veil].n : 0; // where the keeper left the curtains
   function show(id) { document.querySelectorAll('.screen').forEach(e => e.classList.remove('on')); $(id).classList.add('on'); window.scrollTo(0, 0); }
   function words(x) { return M.haloWords(x); }
 
   function renderStrip(el, s) {
     el.innerHTML = C.AGES.map((a, i) => {
       const r = s.results[i];
-      if (r) return `<div class="slot done" title="${a.name}">${miniFrame(a.technique, r.halo, C.VEILS[r.veil].n, r.reach)}<div class="mini"><i style="width:${r.ofAge * r.cult / r.hold * 100}%;background:${GOLD}"></i><i style="width:${r.ofAge * r.bySeen / r.hold * 100}%;background:${RED}"></i></div></div>`;
+      if (r) return `<div class="slot done" title="${a.name}">${miniFrame(passedState(r))}<div class="mini"><i style="width:${r.ofAge * r.cult / r.hold * 100}%;background:${GOLD}"></i><i style="width:${r.ofAge * r.bySeen / r.hold * 100}%;background:${RED}"></i></div></div>`;
       return `<div class="slot${i === s.age ? ' now' : ''}"></div>`;
     }).join('');
   }
@@ -352,10 +341,9 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     $('newthis').textContent = a.newThis;
     const al = M.arrivalLine(S); $('arrive').textContent = al; $('arrive').classList.add('held');
     const prev = S.results.length ? S.results[S.results.length - 1] : null;
-    if (prev) { // the world as the player left it, then the age arrives in the picture
-      const pa = C.AGES[prev.age];
-      arriveFrame($('frame'), { tech: pa.technique, halo: prev.halo }, pa.technique, S.halo, lastN(), prev.reach, () => { $('arrive').classList.remove('held'); });   // the picture is the last picture; only the halo thins. The age's technique touches the face when the age passes.
-    } else drawFrame($('frame'), a.technique, S.halo, 0, 0);
+    lastState = prev ? passedState(prev) : darkState();
+    drawFrame($('frame'), lastState);   // the world as the player left it; nothing changes when an age arrives
+    if (al) arriveTimer = setTimeout(() => $('arrive').classList.remove('held'), 900);
     renderCopies(null);
     const opts = M.options(S);
     $('veils').innerHTML = opts.map(o => `<button class="veil" data-i="${o.index}"><span class="k">${o.label}</span><span class="w">${o.who}</span>${o.isNew ? '<span class="new">NEW</span>' : ''}</button>`).join('');
@@ -367,10 +355,8 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   function pickVeil(i) {
     picked = i; const a = M.currentAge(S), v = C.VEILS[i];
     $('veils').querySelectorAll('.veil').forEach(b => b.classList.toggle('chosen', +b.dataset.i === i));
-    const prev = S.results.length ? S.results[S.results.length - 1] : null;
-    clearTimeout(arriveTimer);
-    if (prev) $('arrive').classList.remove('held');
-    drawFrame($('frame'), prev ? C.AGES[prev.age].technique : a.technique, S.halo, v.n, prev ? prev.reach : 0, { crowdN: prev ? C.VEILS[prev.veil].n : 0 });   // the control shows what it does: the curtains part, the face comes nearer; the crowd stays
+    clearTimeout(arriveTimer); $('arrive').classList.remove('held');
+    drawFrame($('frame'), previewState(i));   // the preview: what the people would see by this means, nobody there yet
     $('commit').disabled = false; $('commitsub').textContent = v.label.toLowerCase() + ': ' + v.who;
   }
   function commitAge() {
@@ -379,7 +365,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     const prev = S.results.length ? S.results[S.results.length - 1] : null;   // the previous age, before this one is recorded
     const r = M.commit(S, picked);
     $('choose').style.display = 'none';
-    passFrame($('frame'), prev ? C.AGES[prev.age].technique : a.technique, a.technique, r.haloArrived, r.halo, v.n, r.reach);   // the age passes: the crowd walks in, the halo thins by what was spent, and the age's technique touches the face
+    passFrame($('frame'), previewState(picked), passedState(r));   // the age passes: the crowd walks in, lit by what the halo did
     // copies out, in the age's technique; earlier ages' copies stay in the world (revision 2)
     const COPYTECH = { coins: 'coin', woodcuts: 'woodcut', lithos: 'litho', photos: 'halftone', film: 'film' };
     const COPYNOTE = { coins: 'in every purse', woodcuts: '…a few dozen', lithos: '…and on, without end', photos: 'every hand', film: 'every screen' };
@@ -391,7 +377,6 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     const how = r.cult > r.bySeen * 2 ? 'mostly by the halo' : r.bySeen > r.cult * 2 ? 'mostly by being seen' : 'by the halo and by being seen alike';
     $('holdwords').textContent = (r.ofAge < 0.03 ? 'hardly anyone' : M.fractionWords(r.ofAge) + ' of what this age could move') + (r.ofAge < 0.03 ? '' : ', ' + how);
     $('hold').innerHTML = `<rect x="0" y="0" width="${gold}" height="20" fill="${GOLD}"/><rect x="${gold}" y="0" width="${red}" height="20" fill="${RED}"/>`;
-    $('cfrow').innerHTML = r.counterfactual.filter(c => c.allowed).map(c => `<div class="c${c.index === picked ? ' me' : ''}">${miniFrame(a.technique, c.halo, C.VEILS[c.index].n, M.reachAt(a, c.index))}<span>${C.VEILS[c.index].label.replace(/^(IN|ON) /, '')}</span></div>`).join('');
     $('nextage').textContent = S.age === C.AGES.length - 1 ? 'The verdict' : 'Next age';
     renderStrip($('strip'), S);
     setTimeout(() => { $('result').style.display = 'block'; }, 700);

@@ -11,19 +11,26 @@
     // n is how much of the halo a showing spends (section III: the aura withers as things are brought nearer and copied);
     // reach is the share of the age's people who see the face by that means (our table, ordered by section I's techniques).
     // Revision of 31 Oct 2026: the rungs are the paper's techniques, one per age, so what an age announces is what it offers.
+    // carry: how much of the halo a showing by this means conveys to the people who see it. Presence carries it whole (section
+    // III: the aura is the here and now of the original). No reproduction carries it whole (section II: "even the most perfect
+    // reproduction lacks one thing, the here and now of the work of art"); a trace survives in the early photograph, where
+    // "the aura emanates for the last time" (section VI), and least on film, where the performance is for the apparatus and
+    // the audience is not present (sections VIII and IX). Our numbers, settled by simulation (memo, section 26).
+    // tech: how a showing by this means is drawn. The original is one painting and never changes; what changes is what is shown.
     VEILS: [
-      { key: 'dark',     n: 0,    reach: 0.02, label: 'IN THE DARK',    who: 'the keeper alone',                  copies: false }, // section V: the god in the cella, only for the priest
-      { key: 'day',      n: 0.2,  reach: 0.18, label: 'ON THE DAY',     who: 'the faithful, once a year',         copies: false }, // section V: Madonnas veiled nearly all year
-      { key: 'coins',    n: 0.55, reach: 0.25, label: 'ON COINS',       who: 'the city, in every purse, tiny',    copies: true  }, // section I: casting and stamping; bronzes, terracottas, coins. The god on the drachma: the most profane hand the face can fall into, and the first thinning (our price: it spends more than the woodcut, for fewer eyes)
-      { key: 'woodcuts', n: 0.45, reach: 0.4,  label: 'IN WOODCUTS',    who: 'the parish, a few dozen sheets',    copies: true  }, // section I: the woodcut, the first graphic reproduction
-      { key: 'lithos',   n: 0.7,  reach: 0.6,  label: 'IN LITHOGRAPHS', who: 'every house, in the daily paper',   copies: true  }, // section I: lithography, the illustrated daily
-      { key: 'photos',   n: 0.85, reach: 0.8,  label: 'IN PHOTOGRAPHS', who: 'every house and every hand',        copies: true  }, // section I; section VI
-      { key: 'film',     n: 1,    reach: 0.95, label: 'ON FILM',        who: 'everyone, together, close up',      copies: true  }  // sections I, IV, XII: film, the mass, the close-up
+      { key: 'dark',     n: 0,    reach: 0.02, carry: 1,    tech: 'original', label: 'IN THE DARK',    who: 'the keeper alone',                  copies: false }, // section V: the god in the cella, only for the priest
+      { key: 'day',      n: 0.2,  reach: 0.18, carry: 1,    tech: 'original', label: 'ON THE DAY',     who: 'the faithful, once a year',         copies: false }, // section V: Madonnas veiled nearly all year
+      { key: 'coins',    n: 0.55, reach: 0.25, carry: 0.3,  tech: 'coin',     label: 'ON COINS',       who: 'the city, in every purse, tiny',    copies: true  }, // section I: casting and stamping; bronzes, terracottas, coins. The god on the drachma: the most profane hand the face can fall into (our price: it spends more than the woodcut, for fewer eyes, and carries little)
+      { key: 'woodcuts', n: 0.45, reach: 0.4,  carry: 0.5,  tech: 'woodcut',  label: 'IN WOODCUTS',    who: 'the parish, a few dozen sheets',    copies: true  }, // section I: the woodcut, the first graphic reproduction
+      { key: 'lithos',   n: 0.7,  reach: 0.6,  carry: 0.6,  tech: 'litho',    label: 'IN LITHOGRAPHS', who: 'every house, in the daily paper',   copies: true  }, // section I: lithography, the illustrated daily
+      { key: 'photos',   n: 0.85, reach: 0.8,  carry: 0.7,  tech: 'halftone', label: 'IN PHOTOGRAPHS', who: 'every house and every hand',        copies: true  }, // section I; section VI: the last trace of the aura
+      { key: 'film',     n: 1,    reach: 0.95, carry: 0.35, tech: 'film',     label: 'ON FILM',        who: 'everyone, together, close up',      copies: true  }  // sections I, IV, VIII, IX, XII: film, the mass, the close-up; the screen cannot carry presence
     ],
 
-    // ---- the ages. eyes: the multiplier the age applies to the halo when it arrives (our reading of sections III and VI:
-    // perception changes with the techniques in the world, whatever this keeper does; the big drops at photography and film
-    // follow section VI). demand: how near the age's people have learned to want things (section III, "Bedürfnis ...
+    // ---- the ages. eyes: how much a halo moves the people of this age, relative to the age before (our reading of sections
+    // III and VI: perception changes with the techniques in the world, whatever this keeper does; the big drops at photography
+    // and film follow section VI). Revision of 31 Oct 2026 (memo, section 26): the eyes act on the halo's effect, never on
+    // the halo itself. The halo is a stock that only showing spends; kept in the dark it stays whole, and is drawn whole. demand: how near the age's people have learned to want things (section III, "Bedürfnis ...
     // näherzubringen"); a face kept farther than that draws fewer than it could. ceiling: the newest rung the age opens.
     AGES: [
       { key: 'cave', name: 'THE CAVE', date: 'LONG AGO', ceiling: 1, eyes: 1, demand: 0,
@@ -119,36 +126,45 @@
   }
   // The most this age could move: its widest allowed reach, with the halo as it arrived. The bar under the picture is drawn against this,
   // so it answers "of what this age could do, how much did you?"; the ages' different sizes show up only in the tally.
-  function ageMax(i, haloSeen, cfg) {
+  function ageMax(i, stock, eyes, cfg) {
     cfg = cfg || CONFIG; const age = cfg.AGES[i]; const w = ageWeights(cfg)[i];
-    let best = 0; for (let v = 0; v <= age.ceiling; v++) best = Math.max(best, reachAt(age, v, cfg));
-    return w * best * (haloSeen + cfg.W_SEEN);
+    let best = 0; for (let v = 0; v <= age.ceiling; v++) best = Math.max(best, reachAt(age, v, cfg) * (stock * eyes * cfg.VEILS[v].carry + cfg.W_SEEN));
+    return w * best;
+  }
+  // What the people saw, in words: the halo as the means carried it, to the eyes of the age.
+  function seenLine(v, stock, seen, eyes) {
+    if (v === 0) return '';
+    if (stock <= CONFIG.HALO_GONE) return 'There was no halo left to see.';
+    if (v === 1) return eyes < 0.5 ? 'They stood before it, halo and all, and it moved them less than it moved their fathers: their eyes have seen a thousand faces.' : 'They stood before it, halo and all.';
+    const carry = CONFIG.VEILS[v].carry;
+    const medium = ['', '', 'A coin', 'A woodcut', 'A lithograph', 'A photograph', 'The screen'][v];
+    const carried = carry >= 0.65 ? 'carries a good part of the halo' : carry >= 0.45 ? 'carries about half of the halo' : 'carries little of the halo';
+    return medium + ' ' + carried + (eyes < 0.5 ? ', and the eyes of this age are not their fathers\' eyes.' : '.');
   }
   function movedScale(cfg) { cfg = cfg || CONFIG; const w = ageWeights(cfg); return Math.max(...w) * 1 * (1 + cfg.W_SEEN); }
 
   function newGame(cfg) {
     cfg = cfg || CONFIG;
-    return { cfg: cfg, age: 0, halo: 1, arrived: false, haloBefore: 1, choice: null, results: [], over: false };
+    return { cfg: cfg, age: 0, halo: 1, eyes: 1, arrived: false, choice: null, results: [], over: false };
   }
   function currentAge(s) { return s.cfg.AGES[s.age]; }
   function isOver(s) { return s.age >= s.cfg.AGES.length; }
 
   // The age arrives: the world's eyes act on the halo before the keeper does anything.
+  // The eyes of an age: the product of every age's multiplier so far. The halo (s.halo) is untouched by arrival.
+  function eyesOf(s, i) { let e = 1; for (let k = 0; k <= (i === undefined ? s.age : i); k++) e *= s.cfg.AGES[k].eyes; return e; }
   function arrive(s) {
     if (s.arrived || s.age >= s.cfg.AGES.length) return s;
-    const age = currentAge(s);
-    s.haloBefore = s.halo;
-    s.halo = s.halo * age.eyes;
+    s.eyes = eyesOf(s);
     s.arrived = true;
     s.choice = null;
     return s;
   }
   function arrivalLine(s) {
     const age = currentAge(s);
-    if (!age.eyesLine || s.haloBefore <= CONFIG.HALO_GONE) return '';
-    const changed = s.halo <= CONFIG.HALO_GONE ? 'The halo is gone.' : (s.halo < s.haloBefore * 0.97 ? (haloWords(s.halo) === haloWords(s.haloBefore) ? 'The halo arrives a shade thinner.' : 'The halo arrives thinner than it was: ' + haloWords(s.halo) + '.') : 'The halo arrives as it was.');
-    // the fact every age; the cause (the people's eyes) once, at the age that carries it (the photograph)
-    return age.sayCause ? 'The people\'s eyes have changed: ' + age.eyesLine + '. ' + changed : changed;
+    // Nothing happens to the picture when an age arrives. The one thing said, once, at the age that carries it (the photograph):
+    // the people's eyes have changed, so a halo moves them less than it moved their fathers.
+    return age.sayCause && age.eyesLine ? 'The people\'s eyes have changed: ' + age.eyesLine + '. A halo moves them less than it moved their fathers.' : '';
   }
   function options(s) {
     const age = currentAge(s);
@@ -160,7 +176,7 @@
     const cap = t => t.charAt(0).toUpperCase() + t.slice(1);
     switch (v) {
       case 0: return 'Nobody came; the face stayed in the dark with ' + w + '.';
-      case 1: return cap(w) + ' saw it.';
+      case 1: return cap(w) + (w.indexOf(',') >= 0 ? ',' : '') + ' saw it.';
       case 2: return 'The coins went out: ' + w + '. A small worn face in every hand.';
       case 3: return 'The sheets went out: ' + w + '.';
       case 4: return 'The prints went out: ' + w + '.';
@@ -172,18 +188,20 @@
     if (!s.arrived || s.choice !== null) throw new Error('not ready to commit');
     const age = currentAge(s);
     if (v < 0 || v > age.ceiling) throw new Error('veil not available this age');
-    const haloArrived = s.halo;
-    const reachFull = s.cfg.VEILS[v].reach;
+    const haloArrived = s.halo;                       // the stock, as it is: showing spends it, nothing else does
+    const rung = s.cfg.VEILS[v];
+    const reachFull = rung.reach;
     const reach = reachAt(age, v, s.cfg);
     const halo = haloAfterVeil(haloArrived, v, s.cfg);
     const weight = ageWeights(s.cfg)[s.age];
-    const mv = movedOf(weight, reach, haloArrived, s.cfg);   // the people saw the halo as it was when they came
-    const cult = mv.byHalo, hold = mv.moved, ofAge = hold / ageMax(s.age, haloArrived, s.cfg);
-    const counterfactual = s.cfg.VEILS.map((_, i) => ({ index: i, halo: haloAfterVeil(haloArrived, i, s.cfg), allowed: i <= age.ceiling }));
+    const haloSeen = haloArrived * s.eyes * rung.carry;   // what moved them: the halo, as this means carries it, to eyes the age has made
+    const mv = movedOf(weight, reach, haloSeen, s.cfg);
+    const cult = mv.byHalo, hold = mv.moved, ofAge = hold / ageMax(s.age, haloArrived, s.eyes, s.cfg);
     let line = crowdLine(age, v, reach);
     if (v > 0 && reach < reachFull * 0.8) line += ' Fewer came than might have: the people want it nearer now.';
-    line += ' The halo is ' + haloWords(halo) + (halo < haloArrived && halo > s.cfg.HALO_GONE ? ', and will not grow back.' : '.');
-    const r = { age: s.age, ageKey: age.key, ageName: age.name, veil: v, haloArrived: haloArrived, halo: halo, cult: cult, bySeen: mv.bySeen, weight: weight, ofAge: ofAge, reach: reach, reachFull: reachFull, hold: hold, line: line, counterfactual: counterfactual, demandCut: v > 0 && reach < reachFull * 0.8 };
+    line += ' ' + seenLine(v, haloArrived, haloSeen, s.eyes);
+    if (halo < haloArrived) line += ' The original\'s halo is ' + haloWords(halo) + (halo > s.cfg.HALO_GONE ? ', and will not grow back.' : '.');
+    const r = { age: s.age, ageKey: age.key, ageName: age.name, veil: v, haloArrived: haloArrived, halo: halo, haloSeen: haloSeen, eyes: s.eyes, carry: rung.carry, lit: Math.min(1, haloSeen), cult: cult, bySeen: mv.bySeen, weight: weight, ofAge: ofAge, reach: reach, reachFull: reachFull, hold: hold, line: line, demandCut: v > 0 && reach < reachFull * 0.8 };
     s.halo = halo; s.choice = v; s.results.push(r);
     return r;
   }
@@ -235,10 +253,12 @@
     const names = s.cfg.AGES.map(a => a.name.toLowerCase());
     const rows = s.results.map((r, i) => { const b = best.state.results[i]; return { i, gap: b.hold - r.hold, narrower: r.veil < b.veil, thinner: r.haloArrived < b.haloArrived - 0.02 }; });
     if (totalHold(s) >= 0.97 * best.total) return '';   // within a few hundredths of the best: nothing to explain
-    const lost = rows.filter(x => x.gap > 0.03 * best.total).sort((a, b) => b.gap - a.gap);
-    if (!lost.length) return '';
+    // a cause counts when the ages it explains lost, together, more than a twenty-fifth of the best; each named age lost at least a hundredth
+    const sum = xs => xs.reduce((a, x) => a + x.gap, 0);
     const list = xs => xs.map(x => names[x.i]).join(xs.length === 2 ? ' and ' : ', ').replace(/, ([^,]*)$/, ' and $1');
-    const narrow = lost.filter(x => x.narrower), thin = lost.filter(x => !x.narrower && x.thinner);
+    let narrow = rows.filter(x => x.narrower && x.gap > 0.01 * best.total), thin = rows.filter(x => !x.narrower && x.thinner && x.gap > 0.01 * best.total);
+    if (sum(narrow) < 0.04 * best.total) narrow = [];
+    if (sum(thin) < 0.04 * best.total) thin = [];
     const bits = [];
     if (narrow.length) bits.push('at ' + list(narrow.sort((a, b) => a.i - b.i)) + ' the face was kept farther than the age allowed, and fewer saw it than could have');
     if (thin.length) {
@@ -255,7 +275,7 @@
     s.results.forEach(r => { if (lifted < 0 && r.veil > 0) lifted = r.age; if (printed < 0 && r.veil >= 3) printed = r.age; });
     return { lifted: lifted, printed: printed };
   }
-  function pathWords(s) {
+  function pathWords(s) {   // the path in words; "put the face in print" means woodcuts or beyond
     const names = s.cfg.AGES.map(a => a.name.toLowerCase().replace(/^the /, 'the '));
     const o = openedAt(s);
     const veiledThrough = s.results.filter(r => r.veil === 0).length;
@@ -263,7 +283,7 @@
     const parts = [];
     if (o.lifted === 0) parts.push('You lifted the veil from the first age');
     else parts.push('You kept the veil down through ' + names.slice(0, o.lifted).join(o.lifted === 2 ? ' and ' : ', ').replace(/, ([^,]*)$/, ' and $1') + ', then lifted it in ' + names[o.lifted]);
-    if (o.printed >= 0) parts.push(o.printed === o.lifted ? 'and put the face in print at once' : 'and put the face in print in ' + names[o.printed]);
+    if (o.printed >= 0) { const by = ['', '', 'on coins', 'in woodcuts', 'in lithographs', 'in photographs', 'on film'][s.results[o.printed].veil]; parts.push(o.printed === o.lifted ? 'and put the face ' + by + ' at once' : 'and put the face ' + by + ' in ' + names[o.printed]); }
     else parts.push('and never put it in print');
     return parts.join(' ') + '.';
   }
@@ -275,17 +295,20 @@
     const ageNames = s.cfg.AGES.map(a => a.name.toLowerCase());
     let readingOfPath;
     const coined = s.results.length > 1 && s.results[1].veil === 2;
-    if (o.printed < 0) readingOfPath = 'The halo went anyway, in the age of the photograph, while the veil was still down; what you kept at the end was a face nobody had seen.';
+    const splash = o.lifted === s.cfg.AGES.length - 1 && s.results[o.lifted].veil >= 2;
+    if (o.lifted < 0) readingOfPath = 'The halo is whole, and nobody has seen it. A face kept from every eye holds nobody: what you kept was a painting in the dark.';
+    else if (splash) readingOfPath = 'You kept the halo whole through every age and showed it at last to everyone, ' + (s.results[o.lifted].veil === 6 ? 'on a screen, which cannot carry it' : 'in copies, which carry a trace of it') + ', to eyes that had seen a thousand faces. The crowds of five ages saw nothing; the sixth saw a copy.';
+    else if (o.printed < 0) readingOfPath = 'The faithful saw it, halo and all, and few else did; the ages of print passed with the face in the dark.';
     else if (o.printed === bestOpen) readingOfPath = (coined ? 'You put the face on coins at the temple first, a worn god in every purse, and the halo paid for it before the woodcut came. Then you ' : 'You ') + 'put the face into the people\'s hands as soon as there was a way to print it, and followed each new way as it came.';
     else if (o.printed === bestOpen + 1) readingOfPath = (coined ? 'You put the face on coins at the temple, a worn god in every purse, and paid for it. ' : '') + 'You waited for the lithograph, where Benjamin dates the turn; the woodcut\'s few dozen sheets were the price of waiting, and it was small.';
-    else readingOfPath = 'You opened late. By then the halo had gone on its own, and the ages of print had passed without the face in them.';
+    else readingOfPath = 'You opened late. The halo was whole, and the eyes of the age could no longer see it as their fathers had; the ages of print had passed without the face in them.';
     return {
       total: total, best: best.total, fraction: f, words: fractionWords(f),
       score: Math.max(0, Math.min(100, Math.round(f * 100))),   // the economist's tally, out of 100: people moved as a share of the most a keeper could have moved
       lead: 'Over six ages your face moved ' + fractionWords(f) + ' of the people it could have moved.',
       shortfall: shortfallWords(s, best),
       did: pathWords(s) + ' ' + readingOfPath + ' ' + bestPathWords(best, s.cfg),
-      benjamin: 'The halo was never in the face. It was the distance between the face and the people, and the age sets the distance. Hide the face and the halo still goes, because the people\'s eyes have changed; show it early and the age cannot yet carry it far. Once the copies are everywhere, the face belongs to politics.',
+      benjamin: 'The halo was never in the face alone. It was between the face and the people, and no copy carries it whole; the age sets what the people can see. Keep the face in the dark and the halo stays, but the eyes of the age change, and when you show it at last they see it as they see everything else. Show it early and the age cannot yet carry it far. Once the copies are everywhere, the face belongs to politics.',
       epilogue: s.cfg.EPILOGUE,
       bestResults: best.state.results,
       bestOpen: bestOpen, printed: o.printed, lifted: o.lifted
@@ -318,6 +341,6 @@
     return c;
   }
 
-  const api = { CONFIG, newGame, currentAge, isOver, arrive, arrivalLine, options, commit, next, verdict, totalHold, maxHold, bestSchedule, runSchedule, heuristics, withConfig, reachAt, haloAfterVeil, movedOf, ageWeights, ageMax, movedScale, bestPathWords, shortfallWords, haloWords, fractionWords, openedAt };
+  const api = { CONFIG, newGame, currentAge, isOver, arrive, arrivalLine, options, commit, next, verdict, totalHold, maxHold, bestSchedule, runSchedule, heuristics, withConfig, reachAt, haloAfterVeil, movedOf, ageWeights, ageMax, eyesOf, seenLine, movedScale, bestPathWords, shortfallWords, haloWords, fractionWords, openedAt };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.VEIL = api;
 })(typeof window !== 'undefined' ? window : globalThis);

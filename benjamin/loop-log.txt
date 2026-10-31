@@ -1,102 +1,74 @@
-AIM: Keep the face's hold on the people through seven ages.
+AIM: Over six ages, let the face move as many people as it can.
 
-== AGE 1 OF 7 · THE CAVE · LONG AGO
-   No way to copy a face yet. It is painted on the wall, for the spirits.
+== AGE 1 OF 6 · THE CAVE · LONG AGO
+   No way to copy a face yet. It is painted on the wall of the cave, for the spirits.
    picture: halo bright; crowd: none yet; veil: not set
-   slabs: IN THE DARK — the keeper and the spirits / SHOWN ON THE DAY — the faithful, once a year / (ON THE WALL: nothing can carry it farther) — whoever comes / (IN PRINT: nothing can carry it farther) — as many as the age can print / (ON THE SCREEN: nothing can carry it farther) — everyone, together, close up
+   slabs: IN THE DARK — you and the spirits / ON THE DAY — the clan
    > tap IN THE DARK: the veil parts to 0%, the face comes nearer; nothing else moves
    > LET THE AGE PASS
    crowd walks in: about 2 of 100 people, far off; halo bright -> bright
-   line: Nobody came; the face stayed in the dark with you and the spirits. The halo is bright.
-   HOLD THIS AGE [##########..........] gold=halo, red=crowd
-   had you set the veil elsewhere, the halo would be: [bright] / a little thinner / about half what it was / a quarter of what it was / gone
+   line: Nobody came; the face stayed in the dark with you and the spirits. 
+   MOVED THIS AGE [#...................] gold=by the halo, red=by being seen; crowd lit 100%
    strip: cave:bright
 
-== AGE 2 OF 7 · THE TEMPLE · ANTIQUITY
-   Casting and coining can copy a bronze or a coin, not a face like this one. It stands in the cella.
+== AGE 2 OF 6 · THE TEMPLE · ANTIQUITY
+   New this age: the coin. A face can be struck in metal and carried in every purse, tiny and worn. Yours stands in the cella.
    picture: halo bright; crowd: none yet; veil: not set
-   slabs: IN THE DARK — the keeper and the spirits / SHOWN ON THE DAY — the faithful, once a year / ON THE WALL — whoever comes / (IN PRINT: no way to print a face) — as many as the age can print / (ON THE SCREEN: no way to print a face) — everyone, together, close up
-   > tap IN THE DARK: the veil parts to 0%, the face comes nearer; nothing else moves
-   > LET THE AGE PASS
-   crowd walks in: about 1 of 100 people, far off; halo bright -> bright
-   line: Nobody came; the face stayed in the dark with you and the god. The halo is bright.
-   HOLD THIS AGE [##########..........] gold=halo, red=crowd
-   had you set the veil elsewhere, the halo would be: [bright] / a little thinner / about half what it was / a quarter of what it was / gone
-   strip: cave:bright | temp:bright
-
-== AGE 3 OF 7 · THE CATHEDRAL · THE MIDDLE AGES
-   New this age: the woodcut. A face can be cut in wood and printed, roughly, a few dozen times. Yours hangs veiled in the choir.
-   The people's eyes have changed: there are woodcuts of saints in the market now. The halo arrives as it was.
-   picture: halo bright; crowd: none yet; veil: not set
-   slabs: IN THE DARK — the keeper and the spirits / SHOWN ON THE DAY — the faithful, once a year / ON THE WALL — whoever comes / (IN PRINT: the woodcut is too rough for this face) — as many as the age can print / (ON THE SCREEN: the woodcut is too rough for this face) — everyone, together, close up
-   > tap SHOWN ON THE DAY: the veil parts to 25%, the face comes nearer; nothing else moves
+   slabs: IN THE DARK — you and the god / ON THE DAY — the city, at the festival / ON COINS — the city, in every purse
+   > tap ON THE DAY: the veil parts to 20%, the face comes nearer; nothing else moves
    > LET THE AGE PASS
    crowd walks in: about 18 of 100 people, far off; halo bright -> a little thinner
-   line: On the day, the parish, on the feast day saw it. The halo is a little thinner, and will not grow back.
-   HOLD THIS AGE [#######==...........] gold=halo, red=crowd
-   had you set the veil elsewhere, the halo would be: bright / [a little thinner] / about half what it was / a quarter of what it was / gone
-   strip: cave:bright | temp:bright | cath:a
+   line: The city, at the festival, saw it. They stood before it, halo and all. The original's halo is a little thinner, and will not grow back.
+   MOVED THIS AGE [#########=..........] gold=by the halo, red=by being seen; crowd lit 100%
+   strip: cave:bright | temp:a
 
-== AGE 4 OF 7 · THE COURT · ABOUT 1500
-   New this age: the engraving. A face can be printed a few hundred times, finely. Yours is a panel in the prince's gallery.
-   The people's eyes have changed: engravings hang in the houses of the town. The halo arrives about half what it was.
-   picture: halo about half what it was; crowd: none yet; veil: not set
-   slabs: IN THE DARK — the keeper and the spirits / SHOWN ON THE DAY — the faithful, once a year / ON THE WALL — whoever comes / IN PRINT — as many as the age can print / (ON THE SCREEN: nothing can show a face to everyone at once) — everyone, together, close up
+== AGE 3 OF 6 · THE CATHEDRAL · ABOUT 1400
+   New this age: the woodcut. A face can be cut in wood and printed, roughly, a few dozen times. Yours hangs in the choir.
+   picture: halo a little thinner; crowd: none yet; veil: not set
+   slabs: IN THE DARK — you and the saints / ON THE DAY — the parish, on the feast day / ON COINS — the town, in every purse / IN WOODCUTS — the parish, a few dozen sheets
    > tap IN THE DARK: the veil parts to 0%, the face comes nearer; nothing else moves
    > LET THE AGE PASS
-   crowd walks in: about 0 of 100 people, far off; halo about half what it was -> about half what it was
-   line: Nobody came; the face stayed in the dark with you and the prince. The halo is about half what it was.
-   HOLD THIS AGE [######..............] gold=halo, red=crowd
-   had you set the veil elsewhere, the halo would be: [about half what it was] / about half what it was / a quarter of what it was / almost gone / gone
-   strip: cave:bright | temp:bright | cath:a | cour:about
+   crowd walks in: about 0 of 100 people, far off; halo a little thinner -> a little thinner
+   line: Nobody came; the face stayed in the dark with you and the saints. 
+   MOVED THIS AGE [....................] gold=by the halo, red=by being seen; crowd lit 72%
+   strip: cave:bright | temp:a | cath:a
 
-== AGE 5 OF 7 · THE PRINT SHOP · ABOUT 1830
+== AGE 4 OF 6 · THE PRINT SHOP · ABOUT 1830
    New this age: the lithograph. A face can be printed in the daily paper, in every house.
-   The people's eyes have changed: the illustrated paper comes out every day. The halo arrives as it was.
-   picture: halo about half what it was; crowd: none yet; veil: not set
-   slabs: IN THE DARK — the keeper and the spirits / SHOWN ON THE DAY — the faithful, once a year / ON THE WALL — whoever comes / IN PRINT — as many as the age can print / (ON THE SCREEN: nothing can show a face to everyone at once) — everyone, together, close up
-   > tap IN PRINT: the veil parts to 75%, the face comes nearer; nothing else moves
+   picture: halo a little thinner; crowd: none yet; veil: not set
+   slabs: IN THE DARK — you and the vault / ON THE DAY — the town, on the day / ON COINS — the town, in every purse / IN WOODCUTS — a few dozen sheets / IN LITHOGRAPHS — every house
+   > tap IN LITHOGRAPHS: the veil parts to 70%, the face comes nearer; nothing else moves
    > LET THE AGE PASS
-   crowd walks in: about 55 of 100 people, close; halo about half what it was -> almost gone
-   line: The prints went out: every house. The halo is almost gone, and will not grow back.
-   HOLD THIS AGE [#======.............] gold=halo, red=crowd
-   had you set the veil elsewhere, the halo would be: about half what it was / a quarter of what it was / a quarter of what it was / [almost gone] / gone
-   strip: cave:bright | temp:bright | cath:a | cour:about | prin:almost
+   crowd walks in: about 60 of 100 people, near; halo a little thinner -> a quarter of what it was
+   line: The prints went out: every house. A lithograph carries about half of the halo. The original's halo is a quarter of what it was, and will not grow back.
+   MOVED THIS AGE [#######===..........] gold=by the halo, red=by being seen; crowd lit 30%
+   strip: cave:bright | temp:a | cath:a | prin:a
 
-== AGE 6 OF 7 · THE STUDIO · ABOUT 1880
+== AGE 5 OF 6 · THE STUDIO · ABOUT 1880
    New this age: the photograph. A face can be taken in a second and printed without end, into every house and every hand.
-   The people's eyes have changed: everyone has a photograph of their dead. The halo arrives as it was.
-   picture: halo almost gone; crowd: none yet; veil: not set
-   slabs: IN THE DARK — the keeper and the spirits / SHOWN ON THE DAY — the faithful, once a year / ON THE WALL — whoever comes / IN PRINT — as many as the age can print / (ON THE SCREEN: the film is not here yet) — everyone, together, close up
-   > tap IN PRINT: the veil parts to 75%, the face comes nearer; nothing else moves
+   The people's eyes have changed: everyone has a photograph of their dead. A halo moves them less than it moved their fathers.
+   picture: halo a quarter of what it was; crowd: none yet; veil: not set
+   slabs: IN THE DARK — you and the vault / ON THE DAY — the town, on the day / ON COINS — the town, in every purse / IN WOODCUTS — a few dozen sheets / IN LITHOGRAPHS — every house / IN PHOTOGRAPHS — every house and every hand
+   > tap IN PHOTOGRAPHS: the veil parts to 85%, the face comes nearer; nothing else moves
    > LET THE AGE PASS
-   crowd walks in: about 75 of 100 people, close; halo almost gone -> gone
-   line: The prints went out: every house and every hand. The halo is gone.
-   HOLD THIS AGE [========............] gold=halo, red=crowd
-   had you set the veil elsewhere, the halo would be: almost gone / almost gone / gone / [gone] / gone
-   strip: cave:bright | temp:bright | cath:a | cour:about | prin:almost | stud:gone
+   crowd walks in: about 80 of 100 people, close; halo a quarter of what it was -> almost gone
+   line: The photographs went out: every house and every hand. A photograph carries a good part of the halo, and the eyes of this age are not their fathers' eyes. The original's halo is almost gone, and will not grow back.
+   MOVED THIS AGE [##========..........] gold=by the halo, red=by being seen; crowd lit 5%
+   strip: cave:bright | temp:a | cath:a | prin:a | stud:almost
 
-== AGE 7 OF 7 · THE CINEMA · ABOUT 1930
+== AGE 6 OF 6 · THE CINEMA · ABOUT 1930
    New this age: film. A face can fill a screen in front of a thousand people at once, in every town, every night.
-   picture: halo gone; crowd: none yet; veil: not set
-   slabs: IN THE DARK — the keeper and the spirits / SHOWN ON THE DAY — the faithful, once a year / ON THE WALL — whoever comes / IN PRINT — as many as the age can print / ON THE SCREEN — everyone, together, close up
-   > tap ON THE SCREEN: the veil parts to 100%, the face comes nearer; nothing else moves
+   picture: halo almost gone; crowd: none yet; veil: not set
+   slabs: IN THE DARK — you and the vault / ON THE DAY — the town, on the day / ON COINS — the town, in every purse / IN WOODCUTS — a few dozen sheets / IN LITHOGRAPHS — every house / IN PHOTOGRAPHS — every house and every hand / ON FILM — everyone, together
+   > tap ON FILM: the veil parts to 100%, the face comes nearer; nothing else moves
    > LET THE AGE PASS
-   crowd walks in: about 95 of 100 people, close; halo gone -> gone
-   line: Everyone saw it, together, in the dark. The halo is gone.
-   HOLD THIS AGE [==========..........] gold=halo, red=crowd
-   had you set the veil elsewhere, the halo would be: gone / gone / gone / gone / [gone]
-   strip: cave:bright | temp:bright | cath:a | cour:about | prin:almost | stud:gone | cine:gone
-
-== 1936
-   The halo is gone. The people's longing for it is not. Where does the face go?
-   slabs: THE VAULT — the one true face, certified, for one buyer / THE STUDIO — a star: the face lit, named, on every poster / THE RALLY — the leader's face over a square full of people / THE NEWSREEL — the people film themselves; the face is one of a million
-   > tap THE RALLY, PUT IT THERE
-   picture: printed halo 1, crowd 1, then the screen goes to war
-   line: The halo is back, enormous, and the square is full. The people are given the face to look at instead of anything to own. Benjamin: this is politics made beautiful, and it ends in war. "Let art be made, though the world perish."
+   crowd walks in: about 95 of 100 people, close; halo almost gone -> gone
+   line: Everyone saw it, together, in the dark. The screen carries little of the halo, and the eyes of this age are not their fathers' eyes. The original's halo is gone.
+   MOVED THIS AGE [==========..........] gold=by the halo, red=by being seen; crowd lit 0%
+   strip: cave:bright | temp:a | cath:a | prin:a | stud:almost | cine:gone
 
 == VERDICT
-   Your face held the people for nearly all of what was possible.
-   What you did: You kept the veil down through the cave and the temple, then lifted it in the cathedral and put the face in print in the print shop. You opened where the halo was already thin and the age could carry the face far: about where Benjamin dates the turn.
-   What Benjamin says: The halo was never in the face. It was the distance between the face and the people, and the age sets the distance. Hide the face and the halo still goes, because the people's eyes have changed; show it early and the age cannot yet carry it far. Once the copies are everywhere, the face belongs to politics.
-   What that means: The halo is back, enormous, and the square is full. The people are given the face to look at instead of anything to own. Benjamin: this is politics made beautiful, and it ends in war. "Let art be made, though the world perish."
+   Over six ages your face moved nearly all of the people it could have moved.
+   What you did: You kept the veil down through the cave, then lifted it in the temple and put the face in lithographs in the print shop. You waited for the lithograph, where Benjamin dates the turn; the woodcut's few dozen sheets were the price of waiting, and it was small. The most a keeper could have done: the faithful on the day from the cave to the temple; in woodcuts at the cathedral; in lithographs at the print shop; in photographs at the studio; on film at the cinema.
+   What Benjamin says: The halo was never in the face alone. It was between the face and the people, and no copy carries it whole; the age sets what the people can see. Keep the face in the dark and the halo stays, but the eyes of the age change, and when you show it at last they see it as they see everything else. Show it early and the age cannot yet carry it far. Once the copies are everywhere, the face belongs to politics.
+   And then, 1936: The halo is gone; the longing for it is not. Where that longing is served, Benjamin says what comes of it: the collector's certificate on a face nobody sees; the film star's "personality", a halo rebuilt to be sold; and the leader's face on every wall and over a square full of people, which is politics made beautiful, and it ends in war. "Let art be made, though the world perish."
