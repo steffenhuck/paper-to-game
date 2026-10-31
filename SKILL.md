@@ -21,6 +21,15 @@ The test of a good result: a smart stranger, handed the link on a phone, plays, 
 
 ---
 
+## Before reading: two questions
+
+Asked together, in the first reply, before the paper is opened, and skipped where the prompt already answers them (a prompt that says "mine" or "for Rauh", and "no ideas" or names a look, gets no questions). In a Code session, ask with the question widget so the answer is a tap; otherwise in plain text. One pause, at the start; then the run continues without stopping.
+
+1. **Is this one of yours?** Yes: the game carries Steffen's signature and counter (build.md, section 7). No: it is a gift for someone else; the beta line is the footer, and the recipient's name, if given, goes in the author-note.
+2. **Any specific ideas for this one?** Whatever comes back (a look, a player position, a device, a title, a thing to avoid) is recorded as the memo's first section, *Given*, and binds the design: it outranks the precedent rule (section 5) where the two conflict, and the memo says where it did. "No" leaves every choice to the engine.
+
+---
+
 ## 1. The player
 
 A smart person from outside the field, on a phone, who did not ask for homework. They tapped a link because someone they like sent it. They will give it thirty seconds before deciding whether to give it five minutes. They read nothing longer than two lines before they are allowed to do something. They do not know the field's words and will not look them up. They can follow a number if told what it measures. They like being surprised, they like being right, and they like being wrong when the game is kind about it.
@@ -193,6 +202,7 @@ What stays: every screen is looked at at phone width with the question "what wou
 
 Written in full and shown to the user before the build, as a record, not a question; the build follows immediately. Stop only if the user interrupts. Length scales with the paper's difficulty. Sections:
 
+0. **Given** — the answers to the two questions: whose game it is, and any ideas the user gave, with where they overrode precedent. "Mine, no ideas" is a complete entry.
 1. **Paper** — citation, DOI, what was available.
 2. **What the paper hands over** — model / estimate / argument, primary and secondary.
 3. **The discovery, and its kind.**
