@@ -8,7 +8,7 @@
   shot age1-cave
    > tapped IN THE DARK — the keeper and the spirits; commit says: LET THE AGE PASS | in the dark: the keeper and the spirits
    line: Nobody came; the face stayed in the dark with you and the spirits. The halo is bright.
-   hold: most of it the halo | copies: COPIES OUT | none yet: the one face only
+   hold: well under a third of what this age could move, mostly by the halo | copies: COPIES OUT | none yet: the one face only
    counterfactual: [IN THE DARK] / SHOWN ON THE DAY / ON THE WALL(na) / IN PRINT(na) / ON THE SCREEN(na)
   shot age1-passed
    > NEXT AGE
@@ -22,24 +22,26 @@
   shot age2-temple
    > tapped IN THE DARK — the keeper and the spirits; commit says: LET THE AGE PASS | in the dark: the keeper and the spirits
    line: Nobody came; the face stayed in the dark with you and the god. The halo is bright.
-   hold: most of it the halo | copies: COPIES OUT | none yet: the one face only
+   hold: well under a third of what this age could move, mostly by the halo | copies: COPIES OUT | none yet: the one face only
    counterfactual: [IN THE DARK] / SHOWN ON THE DAY / ON THE WALL / IN PRINT(na) / ON THE SCREEN(na)
    > NEXT AGE
 
-== THE CATHEDRAL (AGE 3 OF 7 · THE MIDDLE AGES)
-   new: New this age: the woodcut. Saints are being cut in wood and printed in the market, roughly — too roughly for this face. Yours hangs in the choir.
+== THE CATHEDRAL (AGE 3 OF 7 · ABOUT 1400)
+   new: New this age: the woodcut. Saints are printed in the market, roughly: too roughly for this face. Yours hangs in the choir.
+   arrives: The halo arrives a shade thinner.
    slabs: IN THE DARK — the keeper and the spirits / SHOWN ON THE DAY — the faithful, once a year / ON THE WALL — whoever comes / (IN PRINT — not yet: the woodcut is too rough for this face) / (ON THE SCREEN — not yet: the woodcut is too rough for this face)
    first frame = previous age's last frame (temple, halo 1.00, crowd 0, nearness 0)
    after arrival: icon, halo 0.95; curtains and crowd unchanged
    copies in the world at age start: 0
    > tapped IN THE DARK — the keeper and the spirits; commit says: LET THE AGE PASS | in the dark: the keeper and the spirits
    line: Nobody came; the face stayed in the dark with you and the saints. The halo is bright.
-   hold: most of it the halo | copies: COPIES OUT | none yet: the one face only
+   hold: hardly anyone | copies: COPIES OUT | none yet: the one face only
    counterfactual: [IN THE DARK] / SHOWN ON THE DAY / ON THE WALL / IN PRINT(na) / ON THE SCREEN(na)
    > NEXT AGE
 
 == THE COURT (AGE 4 OF 7 · ABOUT 1500)
    new: New this age: the engraving. A face can be printed a few hundred times, finely. Yours is a panel in the prince's gallery.
+   arrives: The halo arrives thinner than it was: a little thinner.
    slabs: IN THE DARK — the keeper and the spirits / SHOWN ON THE DAY — the faithful, once a year / ON THE WALL — whoever comes / IN PRINT — as many as the age can print / (ON THE SCREEN — not yet: nothing can show a face to everyone at once)
    first frame = previous age's last frame (icon, halo 0.95, crowd 0, nearness 0)
    after arrival: engraving, halo 0.81; curtains and crowd unchanged
@@ -47,14 +49,15 @@
   shot help
    help opened and returned to play
    > tapped SHOWN ON THE DAY — the faithful, once a year; commit says: LET THE AGE PASS | shown on the day: the faithful, once a year
-   line: On the day, the court, on the day saw it. Fewer came than might have: the people want it nearer now. The halo is about half what it was, and will not grow back.
-   hold: most of it the halo | copies: COPIES OUT | none yet: the one face only
+   line: The court, on the day saw it. Fewer came than might have: the people want it nearer now. The halo is about half what it was, and will not grow back.
+   hold: well under a third of what this age could move, mostly by the halo | copies: COPIES OUT | none yet: the one face only
    counterfactual: IN THE DARK / [SHOWN ON THE DAY] / ON THE WALL / IN PRINT / ON THE SCREEN(na)
   shot age4-passed
    > NEXT AGE
 
 == THE PRINT SHOP (AGE 5 OF 7 · ABOUT 1830)
    new: New this age: the lithograph. A face can be printed in the daily paper, in every house.
+   arrives: The halo arrives a shade thinner.
    slabs: IN THE DARK — the keeper and the spirits / SHOWN ON THE DAY — the faithful, once a year / ON THE WALL — whoever comes / IN PRINT — as many as the age can print / (ON THE SCREEN — not yet: nothing can show a face to everyone at once)
    first frame = previous age's last frame (engraving, halo 0.61, crowd 3, nearness 0.25)
    after arrival: litho, halo 0.42; curtains and crowd unchanged
@@ -62,13 +65,14 @@
    > tapped IN PRINT — as many as the age can print; commit says: LET THE AGE PASS | in print: as many as the age can print
   shot age5-veil-set
    line: The prints went out: every house. The halo is almost gone, and will not grow back.
-   hold: most of it the crowd | copies: COPIES OUT | …and on, without end
+   hold: all of what this age could move, mostly by the halo | copies: COPIES OUT | …and on, without end
    counterfactual: IN THE DARK / SHOWN ON THE DAY / ON THE WALL / [IN PRINT] / ON THE SCREEN(na)
   shot age5-passed
    > NEXT AGE
 
 == THE STUDIO (AGE 6 OF 7 · ABOUT 1880)
    new: New this age: the photograph. A face can be taken in a second and printed without end, into every house and every hand.
+   arrives: The people's eyes have changed: everyone has a photograph of their dead. The halo arrives a shade thinner.
    slabs: IN THE DARK — the keeper and the spirits / SHOWN ON THE DAY — the faithful, once a year / ON THE WALL — whoever comes / IN PRINT — as many as the age can print / (ON THE SCREEN — not yet: the film is not here yet)
    first frame = previous age's last frame (litho, halo 0.11, crowd 22, nearness 0.75)
   shot age6-as-left
@@ -77,7 +81,7 @@
    copies in the world at age start: 10
    > tapped IN PRINT — as many as the age can print; commit says: LET THE AGE PASS | in print: as many as the age can print
    line: The prints went out: every house and every hand. The halo is gone.
-   hold: most of it the crowd | copies: COPIES OUT | …and on, without end
+   hold: all of what this age could move, mostly by being seen | copies: COPIES OUT | …and on, without end
    counterfactual: IN THE DARK / SHOWN ON THE DAY / ON THE WALL / [IN PRINT] / ON THE SCREEN(na)
   shot age6-passed
    > NEXT AGE
@@ -90,7 +94,7 @@
    copies in the world at age start: 24
    > tapped ON THE SCREEN — everyone, together, close up; commit says: LET THE AGE PASS | on the screen: everyone, together, close up
    line: Everyone saw it, together, in the dark. The halo is gone.
-   hold: most of it the crowd | copies: COPIES OUT | every screen
+   hold: all of what this age could move, mostly by being seen | copies: COPIES OUT | every screen
    counterfactual: IN THE DARK / SHOWN ON THE DAY / ON THE WALL / IN PRINT / [ON THE SCREEN]
   shot age7-passed
    > ON TO 1936
@@ -104,17 +108,17 @@
    line: The halo is back, enormous, and the square is full. The people are given the face to look at instead of anything to own. || Benjamin: this is politics made beautiful, and it ends in war. "Let art be made, though the world perish."
   shot end
 
-== VERDICT: YOUR FACE HELD THE PEOPLE FOR NEARLY ALL OF WHAT WAS POSSIBLE.
-   You kept the veil down through the cave, the temple and the cathedral, then lifted it in the court and put the face in print in the print shop. You opened where the halo was already thin and the age could carry the face far: about where Benjamin dates the turn.
+== VERDICT: OVER SEVEN AGES YOUR FACE MOVED NEARLY ALL OF THE PEOPLE IT COULD HAVE MOVED.
+   You kept the veil down through the cave, the temple and the cathedral, then lifted it in the court and put the face in print in the print shop. You opened where the halo was already thin and the age could carry the face far: about where Benjamin dates the turn. The most a keeper could have done: in the dark from the cave to the temple; the faithful on the day at the cathedral; on the wall at the court; in print from the print shop to the studio; on the screen at the cinema.
    The halo was never in the face. It was the distance between the face and the people, and the age sets the distance. Hide the face and the halo still goes, because the people's eyes have changed; show it early and the age cannot yet carry it far. Once the copies are everywhere, the face belongs to politics.
    The halo is back, enormous, and the square is full. The people are given the face to look at instead of anything to own. Benjamin: this is politics made beautiful, and it ends in war. "Let art be made, though the world perish."
-   The best path, under this game's assumptions, keeps the veil down and first prints the face at the print shop, then puts it on the screen as soon as there is one. A second run is a different plan: open earlier, open later, or never.
+   Under this game's assumptions, that is. A second run is a different plan: open earlier, open later, or never.
   shot about
    about opened and returned to end
 
 == second run, studio, veil down: Nobody came; the face stayed in the dark with you and the vault. The halo is a quarter of what it was.
   shot fork-newsreel
-== second run verdict: YOUR FACE HELD THE PEOPLE FOR ABOUT THREE QUARTERS OF WHAT WAS POSSIBLE. | You kept the veil down through all seven ages. Nobody saw the face but you. The halo went anyway, in the age of the photograph, while the veil was still down; what you kept at the end was a face nobody had seen.
+== second run verdict: OVER SEVEN AGES YOUR FACE MOVED WELL UNDER A THIRD OF THE PEOPLE IT COULD HAVE MOVED. | You kept the veil down through all seven ages. Nobody saw the face but you. The halo went anyway, in the age of the photograph, while the veil was still down; what you kept at the end was a face nobody had seen. The most a keeper could have done: in the dark from the cave to the temple; the faithful on the day at the cathedral; on the wall at the court; in print from the print shop to the studio; on the screen at the cinema.
   shot end-veiled
 
 errors: none

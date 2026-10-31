@@ -206,3 +206,29 @@ Six changes after a first play by the author; the register, the mechanism's numb
 
 Calibration 33/33; the session test (two runs) passes with the two new checks; screenshots refreshed, including `screenshot-age2-temple.png` (the warm marble, the curtains as left) and `screenshot-age6-studio-arrives-as-left.png` (the studio arriving with last age's curtains open to print and the print shop's copies still in the margin).
 7. **Continuity at the age boundary** (second play). The frame at age start had jumped straight to the new age's technique and halo. Now, when an age arrives, the frame is first identical to the last frame of the previous age (same curtains, nearness, crowd, halo, the face in the previous technique, the copies in the margin), held still for about a second; then, over about a second, the halo thins to its new value and the face re-renders in the new technique, which is what the arrival line describes (the line appears with the change). The curtains and the crowd stay where they were: the picture moves again only when the player taps a slab (the curtains move from where they are, the crowd stays) and when the age passes (the crowd is redrawn for this age). Age one has no previous frame and starts in the dark. The session test checks that the first frame of ages two to seven equals the last frame of the previous age (nearness, crowd count, halo, technique) before the arrival runs, and that curtains and crowd are unchanged after it; `screenshot-age6-as-left.png` and `screenshot-age6-after-arrival.png` show the studio's two states.
+
+## 20. Revisions after a third play (31 Oct 2026): the tally, and the picture that would not sit still
+
+**The tally.** The first version scored each age as *hold = halo + reach*, the two added at equal weight. The author's objection, on playing: who cares about an intact halo if nobody ever sees it? Under the sum, a keeper who never lifted the veil scored three quarters of the best, because the unseen halo counted in full every age; there was a tax on showing, not a trade-off. Benjamin half-defends the sum (cult value is the value of a thing that exists unseen, section V), but as a game it had no interior.
+
+The revision makes an age's worth the **people moved**: how many saw the face, times the halo they saw it with, plus a fifth for merely being seen (exhibition value as a value of its own, section VI); and each age has more people than the last (doubling), counted by their square root so that the late masses weigh more without drowning the keeper's present. The three numbers (the doubling, the square root, the fifth) were settled by playing the plans against each other before anything was built, as build.md section 3 asks:
+
+| plan | of the best |
+|---|---|
+| the best possible: dark, dark, the faithful at the cathedral, the wall at the court, print at the print shop and the studio, the screen at the cinema | 100% |
+| open at the court | 97% |
+| open at the print shop | 97% |
+| as open as the age allows, from the cave on | 89% |
+| open at the studio | 77% |
+| open at the cinema | 43% |
+| print at the print shop, then back into the dark | 39% |
+| the faithful on the day, every age | 18% |
+| always veiled | 1% |
+
+So: a halo nobody sees moves nobody; showing from the first age is a little worse than opening step by step; opening late is much worse; and the best keeper opens one step wider as each technique arrives, going to print at the lithograph, where Benjamin dates the turn. Two alternatives were tried and rejected. The product with ages counted equally has no trade-off the other way: "as open as allowed" is the best path, because the small early crowds pay full halo and the age's tax takes the rest. Linear population (no square root) hoards until 1830 then opens, with the early ages worth nothing, which is realistic and a worse game. Robustness (calibration P7): being seen priced at a tenth and at two fifths, the people counted more flatly (power 0.35) and more steeply (0.75), and eyes that change a third more slowly, all keep the best path's first printing between the court and the studio, always-veiled below a fifth, and the best path never narrowing the veil.
+
+On screen: the bar is now **moved this age**, drawn against the most this age could have moved with the halo as it arrived, gold for the halo's part and red for being seen's, with the fraction in words ("about half of what this age could move, mostly by the halo"); the strip's small bars likewise; the start screen defines the quantity in two sentences and says that each age has more people than the last; the aim is "Over seven ages, let the face move as many people as it can." The verdict leads with the fraction of the best path and now names the best path in words, age by age. The counterfactual row still shows the halo, since the halo thinning at every veil is the discovery. The fork stays unscored. The About's assumptions paragraph says all of this in a stranger's words.
+
+**The picture.** The author saw the picture flinch at each age. The frame markup was identical across the boundary (checked in the DOM: same transforms, halo, crowd, technique), but the page was not: the red arrival line was inserted at the moment the age arrived, pushing the picture down as the face changed; and at the cathedral the title band wrapped to two lines. Now the space for the announcement (three lines) and the arrival line (two) is reserved on every age, the arrival line fades in rather than appearing, the cathedral's date is "about 1400" so the band does not wrap, and the frame's top edge sits at the same pixel on all seven ages, before and after the arrival (measured). The cathedral's announcement was shortened to three lines; "On the day, the court, on the day saw it" became "The court, on the day, saw it."
+
+Calibration 36/36; session test clean; screenshots refreshed.

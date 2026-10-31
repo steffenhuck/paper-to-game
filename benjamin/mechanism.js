@@ -34,9 +34,9 @@
         eyesLine: null,
         notYet: 'no way to print a face',
         reach: [0.02, 0.15, 0.22, 0.3, 0.9], crowd: ['you and the god', 'the city, at the festival', 'the city, in the forecourt', '', ''] },
-      { key: 'cathedral', name: 'THE CATHEDRAL', date: 'THE MIDDLE AGES', ceiling: 2, eyes: 0.95, demand: 0.2,
+      { key: 'cathedral', name: 'THE CATHEDRAL', date: 'ABOUT 1400', ceiling: 2, eyes: 0.95, demand: 0.2,
         technique: 'icon',
-        newThis: 'New this age: the woodcut. Saints are being cut in wood and printed in the market, roughly — too roughly for this face. Yours hangs in the choir.', // section I; section V
+        newThis: 'New this age: the woodcut. Saints are printed in the market, roughly: too roughly for this face. Yours hangs in the choir.', // section I; section V
         eyesLine: 'there are woodcuts of saints in the market now',
         notYet: 'the woodcut is too rough for this face',
         reach: [0.02, 0.18, 0.25, 0.3, 0.9], crowd: ['you and the saints', 'the parish, on the feast day', 'the parish, in the nave', '', ''] },
@@ -66,7 +66,16 @@
         reach: [0.02, 0.2, 0.3, 0.75, 0.95], crowd: ['you and the vault', 'the town, on the day', 'whoever comes to the museum', 'every house and every hand', 'everyone, together'] }
     ],
 
-    W_CROWD: 1,          // our price: one unit of reach (everyone) is worth one full halo. Robustness: section 17 of the memo
+    // ---- what an age's showing is worth: the people moved. moved = weight(age) * reach * (halo as they saw it + W_SEEN).
+    // PEOPLE: how many people there are to move, relative, doubling each age (our choice: the masses arrive, sections I, IV, XII).
+    // PEOPLE_CURVE: the weight is PEOPLE to this power, 0.5 = a square root, so the late masses count more without drowning the
+    // early ages (our choice; the keeper's present still counts). Weights are normalised to sum to the number of ages.
+    // W_SEEN: being seen with no halo left still moves people, a fifth as much as a full halo (section VI: exhibition value is
+    // a value of its own; our price). Revision of 31 Oct 2026: the first version summed halo and reach, which paid a keeper for
+    // a halo nobody saw; the heuristics table in the memo (section 17) is what settled these three numbers.
+    PEOPLE: [1, 2, 4, 8, 16, 32, 64],
+    PEOPLE_CURVE: 0.5,
+    W_SEEN: 0.2,
     DEMAND_SCALE: 0.15,  // our choice: how fast the crowd falls away when the face is kept farther than the age demands (section III)
     HALO_GONE: 0.03,     // our choice: below this the halo is drawn as gone
 
@@ -120,7 +129,26 @@
     return age.reach[v] * cut;
   }
   function haloAfterVeil(haloArrived, v, cfg) { cfg = cfg || CONFIG; return haloArrived * (1 - cfg.VEILS[v].n); }
-  function holdOf(cult, reach, cfg) { cfg = cfg || CONFIG; return cult + cfg.W_CROWD * reach; }
+  function ageWeights(cfg) {
+    cfg = cfg || CONFIG;
+    const raw = cfg.PEOPLE.map(p => Math.pow(p, cfg.PEOPLE_CURVE));
+    const sum = raw.reduce((a, b) => a + b, 0);
+    return raw.map(x => x / sum * cfg.AGES.length);
+  }
+  // The people moved this age: how many saw it, times the halo they saw it with, plus a fifth for merely being seen.
+  function movedOf(weight, reach, haloSeen, cfg) {
+    cfg = cfg || CONFIG;
+    return { byHalo: weight * reach * haloSeen, bySeen: weight * reach * cfg.W_SEEN, moved: weight * reach * (haloSeen + cfg.W_SEEN) };
+  }
+  function holdOf(cult, reach, cfg) { return movedOf(1, reach, cult, cfg).moved; }   // kept for the fork's reading; not used for the ages
+  // The most this age could move: its widest allowed reach, with the halo as it arrived. The bar under the picture is drawn against this,
+  // so it answers "of what this age could do, how much did you?"; the ages' different sizes show up only in the tally.
+  function ageMax(i, haloSeen, cfg) {
+    cfg = cfg || CONFIG; const age = cfg.AGES[i]; const w = ageWeights(cfg)[i];
+    let best = 0; for (let v = 0; v <= age.ceiling; v++) best = Math.max(best, reachAt(age, v, cfg));
+    return w * best * (haloSeen + cfg.W_SEEN);
+  }
+  function movedScale(cfg) { cfg = cfg || CONFIG; const w = ageWeights(cfg); return Math.max(...w) * 1 * (1 + cfg.W_SEEN); }
 
   function newGame(cfg) {
     cfg = cfg || CONFIG;
@@ -153,7 +181,7 @@
   function crowdLine(age, v, reach) {
     const w = age.crowd[v];
     if (v === 0) return 'Nobody came; the face stayed in the dark with ' + w + '.';
-    if (v === 1) return 'On the day, ' + w + ' saw it.';
+    if (v === 1) return w.charAt(0).toUpperCase() + w.slice(1) + ' saw it.';
     if (v === 2) return 'Whoever came saw it: ' + w + '.';
     if (v === 3) return 'The prints went out: ' + w + '.';
     return 'Everyone saw it, together, in the dark.';
@@ -166,12 +194,14 @@
     const reachFull = age.reach[v];
     const reach = reachAt(age, v, s.cfg);
     const halo = haloAfterVeil(haloArrived, v, s.cfg);
-    const cult = halo, hold = holdOf(cult, reach, s.cfg);
+    const weight = ageWeights(s.cfg)[s.age];
+    const mv = movedOf(weight, reach, haloArrived, s.cfg);   // the people saw the halo as it was when they came
+    const cult = mv.byHalo, hold = mv.moved, ofAge = hold / ageMax(s.age, haloArrived, s.cfg);
     const counterfactual = s.cfg.VEILS.map((_, i) => ({ index: i, halo: haloAfterVeil(haloArrived, i, s.cfg), allowed: i <= age.ceiling }));
     let line = crowdLine(age, v, reach);
     if (v > 0 && reach < reachFull * 0.8) line += ' Fewer came than might have: the people want it nearer now.';
     line += ' The halo is ' + haloWords(halo) + (halo < haloArrived && halo > s.cfg.HALO_GONE ? ', and will not grow back.' : '.');
-    const r = { age: s.age, ageKey: age.key, ageName: age.name, veil: v, haloArrived: haloArrived, halo: halo, cult: cult, reach: reach, reachFull: reachFull, hold: hold, line: line, counterfactual: counterfactual, demandCut: v > 0 && reach < reachFull * 0.8 };
+    const r = { age: s.age, ageKey: age.key, ageName: age.name, veil: v, haloArrived: haloArrived, halo: halo, cult: cult, bySeen: mv.bySeen, weight: weight, ofAge: ofAge, reach: reach, reachFull: reachFull, hold: hold, line: line, counterfactual: counterfactual, demandCut: v > 0 && reach < reachFull * 0.8 };
     s.halo = halo; s.choice = v; s.results.push(r);
     return r;
   }
@@ -190,7 +220,7 @@
 
   // ---- scoring and the verdict
   function totalHold(s) { return s.results.reduce((a, r) => a + r.hold, 0); }
-  function maxHold(cfg) { cfg = cfg || CONFIG; return cfg.AGES.length * (1 + cfg.W_CROWD); }
+  function maxHold(cfg) { return bestSchedule(cfg || CONFIG).total; }
   // the best schedule, exhaustively (5^7 = 78125 paths), for the verdict's "of what was possible"
   function runSchedule(sched, cfg) {
     cfg = cfg || CONFIG;
@@ -211,6 +241,16 @@
     rec(0);
     if (cfg === CONFIG) _best = best;
     return best;
+  }
+  // The best path in words: where the most careful keeper would have set the veil, age by age, runs of the same veil joined.
+  function bestPathWords(best, cfg) {
+    cfg = cfg || CONFIG;
+    const names = cfg.AGES.map(a => a.name.toLowerCase());
+    const veil = ['in the dark', 'the faithful on the day', 'on the wall', 'in print', 'on the screen'];
+    const runs = [];
+    best.sched.forEach((v, i) => { const last = runs[runs.length - 1]; if (last && last.v === v) last.to = i; else runs.push({ v: v, from: i, to: i }); });
+    const bits = runs.map(r => veil[r.v] + (r.from === r.to ? ' at ' + names[r.from] : ' from ' + names[r.from] + ' to ' + names[r.to]));
+    return 'The most a keeper could have done: ' + bits.join('; ') + '.';
   }
   function openedAt(s) { // first age the face went to print or the screen; first age it was lifted at all
     let printed = -1, lifted = -1;
@@ -242,8 +282,8 @@
     else readingOfPath = 'You opened where the halo was already thin and the age could carry the face far: about where Benjamin dates the turn.';
     return {
       total: total, best: best.total, fraction: f, words: fractionWords(f),
-      lead: 'Your face held the people for ' + fractionWords(f) + ' of what was possible.',
-      did: pathWords(s) + ' ' + readingOfPath,
+      lead: 'Over seven ages your face moved ' + fractionWords(f) + ' of the people it could have moved.',
+      did: pathWords(s) + ' ' + readingOfPath + ' ' + bestPathWords(best, s.cfg),
       benjamin: 'The halo was never in the face. It was the distance between the face and the people, and the age sets the distance. Hide the face and the halo still goes, because the people\'s eyes have changed; show it early and the age cannot yet carry it far. Once the copies are everywhere, the face belongs to politics.',
       fork: s.fork ? (s.fork.line + ' ' + s.fork.benjamin) : '',
       bestOpen: bestOpen, printed: o.printed, lifted: o.lifted
@@ -262,7 +302,9 @@
       { name: 'open at the court', sched: openAt(3) },
       { name: 'open at the print shop', sched: openAt(4) },
       { name: 'open at the studio', sched: openAt(5) },
-      { name: 'open at the cinema', sched: openAt(6) }
+      { name: 'open at the cinema', sched: openAt(6) },
+      { name: 'print, then back in the dark', sched: [0, 0, 0, 0, 3, 0, 0] },
+      { name: 'one step wider each age', sched: [0, 0, 1, 2, 3, 3, 4] }
     ].map(h => { const s = runSchedule(h.sched, cfg); return { name: h.name, sched: h.sched.map((v, i) => Math.min(v, cfg.AGES[i].ceiling)), total: totalHold(s), perAge: s.results.map(r => r.hold) }; });
     const best = bestSchedule(cfg);
     rows.push({ name: 'the best possible', sched: best.sched, total: best.total, perAge: best.state.results.map(r => r.hold) });
@@ -274,6 +316,6 @@
     return c;
   }
 
-  const api = { CONFIG, newGame, currentAge, isFork, arrive, arrivalLine, options, commit, next, fork, verdict, totalHold, maxHold, bestSchedule, runSchedule, heuristics, withConfig, reachAt, haloAfterVeil, holdOf, haloWords, fractionWords, openedAt };
+  const api = { CONFIG, newGame, currentAge, isFork, arrive, arrivalLine, options, commit, next, fork, verdict, totalHold, maxHold, bestSchedule, runSchedule, heuristics, withConfig, reachAt, haloAfterVeil, holdOf, movedOf, ageWeights, ageMax, movedScale, bestPathWords, haloWords, fractionWords, openedAt };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.VEIL = api;
 })(typeof window !== 'undefined' ? window : globalThis);

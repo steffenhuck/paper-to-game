@@ -6,7 +6,7 @@ const bar = (cult, reach) => { const g = Math.round(cult * 10), r = Math.round(r
 const strip = s => s.results.map(r => M.CONFIG.AGES[r.age].key.slice(0, 4) + ':' + M.haloWords(r.halo).split(' ')[0]).join(' | ');
 const plan = [0, 0, 1, 0, 3, 3, 4]; // a plausible stranger: holds, tries the feast day once, holds, then prints
 const s = M.newGame();
-say('AIM: Keep the face\'s hold on the people through seven ages.');
+say('AIM: Over seven ages, let the face move as many people as it can.');
 for (let i = 0; i < 7; i++) {
   M.arrive(s); const a = M.currentAge(s);
   say(`\n== AGE ${i + 1} OF 7 · ${a.name} · ${a.date}`);

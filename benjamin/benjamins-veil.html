@@ -52,7 +52,9 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
 .slot .mini{position:absolute;left:3px;right:3px;bottom:3px;height:6px;display:flex;background:var(--grey-2)}
 .slot .mini i{display:block;height:100%}
 .orient{font-size:15px;line-height:1.4;margin:8px 0 6px}
-.orient.arrive{color:var(--red-2);font-weight:600}
+#newthis{min-height:63px}  /* three lines reserved, so the picture sits at the same height every age */
+.orient.arrive{color:var(--red-2);font-weight:600;transition:opacity .6s ease;min-height:42px;display:block}
+.orient.arrive.held{opacity:0}  /* space reserved from the first frame, so the picture does not jump when the line appears */
 .frame{display:block;width:100%;height:auto;border:4px solid var(--ink);background:var(--ink)}
 .copies{display:flex;align-items:center;gap:6px;margin:6px 0 0;min-height:44px}
 .copies .lab{font-family:var(--display);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--grey);flex:0 0 58px;line-height:1.1}
@@ -103,8 +105,8 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     <p class="lede" style="margin:0">You keep one face. It is painted, it has a halo, and hardly anyone has ever seen it. Every age brings a new way to copy a face, and the people press closer.</p>
   </div>
   <p class="lede">Each age you <b>set the veil</b> (how near the people may come), <b>let the age pass</b>, and see who came and what is left of the halo. Seven ages, then one last choice about where the face goes.</p>
-  <p class="aim">Keep the face's hold on the people through seven ages.</p>
-  <p class="lede">A face holds people in two ways: by its <b>halo</b>, which needs distance, and by <b>being seen</b>, which needs nearness. The halo, once spent, does not grow back.</p>
+  <p class="aim">Over seven ages, let the face move as many people as it can.</p>
+  <p class="lede">A face moves the people who see it, and moves them more while it still has its <b>halo</b>. Being seen needs nearness; the halo needs distance, and once spent it does not grow back. Each age there are more people than the last.</p>
   <button class="btn" id="begin">Begin: the first age</button>
   <button class="btn quiet" id="howto">How to play</button>
   <button class="btn quiet" id="aboutbtn">About the paper</button>
@@ -113,7 +115,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
 
 <!-- PLAY -->
 <section class="screen" id="play">
-  <div class="topbar"><div class="aimline">Keep the face's hold on the people through seven ages.</div><button class="qbtn" data-help="play">?</button></div>
+  <div class="topbar"><div class="aimline">Over seven ages, let the face move as many people as it can.</div><button class="qbtn" data-help="play">?</button></div>
   <div class="band"><b id="agename">THE CAVE</b><span id="agemeta">AGE 1 OF 7 · LONG AGO</span></div>
   <div class="strip" id="strip"></div>
   <p class="orient" id="newthis"></p>
@@ -127,7 +129,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   </div>
   <div id="result" class="result" style="display:none">
     <p class="line" id="line"></p>
-    <div class="holdlab"><span>Hold this age</span><span id="holdwords"></span></div>
+    <div class="holdlab"><span>Moved this age</span><span id="holdwords"></span></div>
     <svg class="hold" id="hold" viewBox="0 0 340 20" preserveAspectRatio="none"></svg>
     <div class="cf"><div class="lab">The halo, had you set the veil elsewhere this age (yours is ringed in red):</div><div class="cfrow" id="cfrow"></div></div>
     <button class="btn" id="nextage">Next age</button>
@@ -169,13 +171,14 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
 <!-- HELP -->
 <section class="screen help" id="help">
   <div class="band"><b>How to play</b><span></span></div>
-  <p class="aim">Keep the face's hold on the people through seven ages.</p>
+  <p class="aim">Over seven ages, let the face move as many people as it can.</p>
   <ol>
     <li><b>Each age, set the veil.</b> Five slabs, from <i>in the dark</i> (only you see the face) to <i>on the screen</i> (everyone, together, close up). An age only offers the slabs its technique allows: there is no print before the woodcut, no screen before film. Tapping a slab parts the red curtains and brings the face nearer. Nothing is spent until you let the age pass.</li>
-    <li><b>Let the age pass.</b> The crowd walks in (how many, and how near, is what the veil gave them); the halo thins by how near you let them; copies go out in the age's technique. A line says what happened. The bar under it is <b>hold this age</b>: gold for the halo's part, red for the crowd's part.</li>
+    <li><b>Let the age pass.</b> The crowd walks in (how many, and how near, is what the veil gave them); the halo thins by how near you let them; copies go out in the age's technique. A line says what happened. The bar under it is <b>moved this age</b>: how many of the people this age could have moved you moved; gold for the part the halo did, red for the part being seen did.</li>
     <li><b>The halo does not grow back.</b> What you spend is spent. And each age arrives with eyes of its own: the more copying there is in the world, the thinner the halo arrives, whatever you did.</li>
     <li><b>Under the bar,</b> five small frames show what the halo would be at each veil this age, yours ringed in red.</li>
-    <li><b>1936:</b> the halo is gone and four places want the face. Pick one. Then the verdict: how much hold you kept of what was possible, in words, and what Benjamin says about the path you took.</li>
+    <li><b>The tally.</b> Each age counts the people it moved, and each age has more people than the last, so the late ages weigh more. There is no running total; the verdict at the end sets your seven ages against the most a keeper could have done.</li>
+    <li><b>1936:</b> the halo is gone and four places want the face. Pick one. Then the verdict: how many people your face moved, of what was possible, in words, and what Benjamin says about the path you took.</li>
   </ol>
   <p class="small">Nothing is random. The same choices give the same ages every time, so a second run is a different plan, not a different draw.</p>
   <button class="btn" id="helpback">Back</button>
@@ -191,7 +194,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
 <p>Walter Benjamin's essay (written in Paris in 1936 and reworked until 1939; this is the third version) says that a work of art has always been copiable, but that technical reproduction (the woodcut, the engraving, lithography, photography, film) is something new: it detaches the work from its here-and-now, the one place and moment it exists in, which is the seat of its authenticity. What a copy cannot carry he calls the <i>aura</i>: "the unique appearance of a distance, however near it may be." The aura, he argues, is not in the object but in the relation between the object and the eyes of its age; and the masses' wish to bring things close, together with the techniques that let them, changes those eyes, so that the aura withers everywhere, not only in the copies. With the aura goes the work's grounding in ritual: art's first use was in cult, and cult value wants the work hidden and unapproachable. Reproduction pushes the other pole, exhibition value, and "with photography, exhibition value begins to drive back cult value along the whole line." What replaces ritual as art's foundation is politics. The essay then reads film through this (the actor tested by the apparatus; the star cult as a halo rebuilt to be sold; the cameraman as a surgeon; the public as a distracted examiner), and ends with the fork: fascism aestheticises politics, giving the masses a face to look at and ending in war; communism answers by politicising art.</p>
 <h3>Mechanism: a toy</h3>
 <p><b>This game demonstrates</b> that, under its own assumptions, a keeper who hides a face does not keep its halo once the age has learned to take things in copies; that a keeper who shows it early spends the halo for a reach the age cannot yet give; that the best age to open the veil is the age of the print and the photograph, about where the essay dates the turn; and that when the halo is gone the longing for it can be served in four places, each with the ending Benjamin gives it.</p>
-<p><b>It assumes</b> the toy. One face. A halo that is a stock, multiplied by each age's eyes when the age arrives (the world's copying, which this keeper does not control) and by one minus the nearness when the veil is set, and never restored. A table of how many people each veil reaches in each age, and a cut when the face is kept farther than the age's people have learned to want it. "Hold" as the halo's part plus the crowd's part at equal weight: that price is ours, and the check that ships with the game shows the shape of the result (open in the middle ages of print and photograph, not at either end) survives the crowd priced at half and at double, and survives eyes that change a third more slowly. The essay has no numbers; every number in the game's config block is ours and is tagged with the passage it was read from.</p>
+<p><b>It assumes</b> the toy. One face. A halo that is a stock, multiplied by each age's eyes when the age arrives (the world's copying, which this keeper does not control) and by one minus the nearness when the veil is set, and never restored. A table of how many people each veil reaches in each age, and a cut when the face is kept farther than the age's people have learned to want it. What an age is worth: the people it moved, which is how many saw the face, times the halo they saw it with, plus a fifth for merely being seen; and each age has more people than the last (doubling, counted by their square root, so the late masses weigh more without drowning the early ages). Those three numbers are ours, settled by playing the plans against each other: under them, a halo nobody sees moves nobody, showing from the first age is a little worse than opening step by step, opening late is much worse, and the best path opens one step wider as each technique arrives, going to print at the lithograph, where Benjamin dates the turn. The check that ships with the game shows that shape survives being-seen priced at a tenth and at two fifths, the people counted more flatly and more steeply, and eyes that change a third more slowly. The essay has no numbers; every number in the game's config block is ours and is tagged with the passage it was read from.</p>
 <p><b>The paper establishes</b> its claims as an argument, not by evidence: that the aura is a relation of distance; that perception is historically conditioned and that mass reproduction changes it; that with photography exhibition value drives back cult value; that art thereby loses its grounding in ritual and gains one in politics; and that fascism aestheticises politics while communism politicises art. It gives no quantities. The game's best age to open the veil is a property of the toy, consistent with the essay's dating, not a finding of the essay. Your hold is a score under our rules, not a measurement of anything.</p>
 <h3>What is cut</h3>
 <p>The film actor and the apparatus (sections VIII to X) beyond one line at the fork; the cameraman as surgeon (XI); the optical unconscious, slow motion and the close-up (XIII); Dadaism and the shock effect (XIV); reception in distraction and the example of architecture (XV); the Sistine Madonna's own story (footnote 11); Huxley's arithmetic (footnote 21); the preface's Marxian framing; most of the epilogue beyond its last lines.</p>
@@ -239,9 +242,9 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
         eyesLine: null,
         notYet: 'no way to print a face',
         reach: [0.02, 0.15, 0.22, 0.3, 0.9], crowd: ['you and the god', 'the city, at the festival', 'the city, in the forecourt', '', ''] },
-      { key: 'cathedral', name: 'THE CATHEDRAL', date: 'THE MIDDLE AGES', ceiling: 2, eyes: 0.95, demand: 0.2,
+      { key: 'cathedral', name: 'THE CATHEDRAL', date: 'ABOUT 1400', ceiling: 2, eyes: 0.95, demand: 0.2,
         technique: 'icon',
-        newThis: 'New this age: the woodcut. Saints are being cut in wood and printed in the market, roughly — too roughly for this face. Yours hangs in the choir.', // section I; section V
+        newThis: 'New this age: the woodcut. Saints are printed in the market, roughly: too roughly for this face. Yours hangs in the choir.', // section I; section V
         eyesLine: 'there are woodcuts of saints in the market now',
         notYet: 'the woodcut is too rough for this face',
         reach: [0.02, 0.18, 0.25, 0.3, 0.9], crowd: ['you and the saints', 'the parish, on the feast day', 'the parish, in the nave', '', ''] },
@@ -271,7 +274,16 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
         reach: [0.02, 0.2, 0.3, 0.75, 0.95], crowd: ['you and the vault', 'the town, on the day', 'whoever comes to the museum', 'every house and every hand', 'everyone, together'] }
     ],
 
-    W_CROWD: 1,          // our price: one unit of reach (everyone) is worth one full halo. Robustness: section 17 of the memo
+    // ---- what an age's showing is worth: the people moved. moved = weight(age) * reach * (halo as they saw it + W_SEEN).
+    // PEOPLE: how many people there are to move, relative, doubling each age (our choice: the masses arrive, sections I, IV, XII).
+    // PEOPLE_CURVE: the weight is PEOPLE to this power, 0.5 = a square root, so the late masses count more without drowning the
+    // early ages (our choice; the keeper's present still counts). Weights are normalised to sum to the number of ages.
+    // W_SEEN: being seen with no halo left still moves people, a fifth as much as a full halo (section VI: exhibition value is
+    // a value of its own; our price). Revision of 31 Oct 2026: the first version summed halo and reach, which paid a keeper for
+    // a halo nobody saw; the heuristics table in the memo (section 17) is what settled these three numbers.
+    PEOPLE: [1, 2, 4, 8, 16, 32, 64],
+    PEOPLE_CURVE: 0.5,
+    W_SEEN: 0.2,
     DEMAND_SCALE: 0.15,  // our choice: how fast the crowd falls away when the face is kept farther than the age demands (section III)
     HALO_GONE: 0.03,     // our choice: below this the halo is drawn as gone
 
@@ -325,7 +337,26 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     return age.reach[v] * cut;
   }
   function haloAfterVeil(haloArrived, v, cfg) { cfg = cfg || CONFIG; return haloArrived * (1 - cfg.VEILS[v].n); }
-  function holdOf(cult, reach, cfg) { cfg = cfg || CONFIG; return cult + cfg.W_CROWD * reach; }
+  function ageWeights(cfg) {
+    cfg = cfg || CONFIG;
+    const raw = cfg.PEOPLE.map(p => Math.pow(p, cfg.PEOPLE_CURVE));
+    const sum = raw.reduce((a, b) => a + b, 0);
+    return raw.map(x => x / sum * cfg.AGES.length);
+  }
+  // The people moved this age: how many saw it, times the halo they saw it with, plus a fifth for merely being seen.
+  function movedOf(weight, reach, haloSeen, cfg) {
+    cfg = cfg || CONFIG;
+    return { byHalo: weight * reach * haloSeen, bySeen: weight * reach * cfg.W_SEEN, moved: weight * reach * (haloSeen + cfg.W_SEEN) };
+  }
+  function holdOf(cult, reach, cfg) { return movedOf(1, reach, cult, cfg).moved; }   // kept for the fork's reading; not used for the ages
+  // The most this age could move: its widest allowed reach, with the halo as it arrived. The bar under the picture is drawn against this,
+  // so it answers "of what this age could do, how much did you?"; the ages' different sizes show up only in the tally.
+  function ageMax(i, haloSeen, cfg) {
+    cfg = cfg || CONFIG; const age = cfg.AGES[i]; const w = ageWeights(cfg)[i];
+    let best = 0; for (let v = 0; v <= age.ceiling; v++) best = Math.max(best, reachAt(age, v, cfg));
+    return w * best * (haloSeen + cfg.W_SEEN);
+  }
+  function movedScale(cfg) { cfg = cfg || CONFIG; const w = ageWeights(cfg); return Math.max(...w) * 1 * (1 + cfg.W_SEEN); }
 
   function newGame(cfg) {
     cfg = cfg || CONFIG;
@@ -358,7 +389,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   function crowdLine(age, v, reach) {
     const w = age.crowd[v];
     if (v === 0) return 'Nobody came; the face stayed in the dark with ' + w + '.';
-    if (v === 1) return 'On the day, ' + w + ' saw it.';
+    if (v === 1) return w.charAt(0).toUpperCase() + w.slice(1) + ' saw it.';
     if (v === 2) return 'Whoever came saw it: ' + w + '.';
     if (v === 3) return 'The prints went out: ' + w + '.';
     return 'Everyone saw it, together, in the dark.';
@@ -371,12 +402,14 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     const reachFull = age.reach[v];
     const reach = reachAt(age, v, s.cfg);
     const halo = haloAfterVeil(haloArrived, v, s.cfg);
-    const cult = halo, hold = holdOf(cult, reach, s.cfg);
+    const weight = ageWeights(s.cfg)[s.age];
+    const mv = movedOf(weight, reach, haloArrived, s.cfg);   // the people saw the halo as it was when they came
+    const cult = mv.byHalo, hold = mv.moved, ofAge = hold / ageMax(s.age, haloArrived, s.cfg);
     const counterfactual = s.cfg.VEILS.map((_, i) => ({ index: i, halo: haloAfterVeil(haloArrived, i, s.cfg), allowed: i <= age.ceiling }));
     let line = crowdLine(age, v, reach);
     if (v > 0 && reach < reachFull * 0.8) line += ' Fewer came than might have: the people want it nearer now.';
     line += ' The halo is ' + haloWords(halo) + (halo < haloArrived && halo > s.cfg.HALO_GONE ? ', and will not grow back.' : '.');
-    const r = { age: s.age, ageKey: age.key, ageName: age.name, veil: v, haloArrived: haloArrived, halo: halo, cult: cult, reach: reach, reachFull: reachFull, hold: hold, line: line, counterfactual: counterfactual, demandCut: v > 0 && reach < reachFull * 0.8 };
+    const r = { age: s.age, ageKey: age.key, ageName: age.name, veil: v, haloArrived: haloArrived, halo: halo, cult: cult, bySeen: mv.bySeen, weight: weight, ofAge: ofAge, reach: reach, reachFull: reachFull, hold: hold, line: line, counterfactual: counterfactual, demandCut: v > 0 && reach < reachFull * 0.8 };
     s.halo = halo; s.choice = v; s.results.push(r);
     return r;
   }
@@ -395,7 +428,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
 
   // ---- scoring and the verdict
   function totalHold(s) { return s.results.reduce((a, r) => a + r.hold, 0); }
-  function maxHold(cfg) { cfg = cfg || CONFIG; return cfg.AGES.length * (1 + cfg.W_CROWD); }
+  function maxHold(cfg) { return bestSchedule(cfg || CONFIG).total; }
   // the best schedule, exhaustively (5^7 = 78125 paths), for the verdict's "of what was possible"
   function runSchedule(sched, cfg) {
     cfg = cfg || CONFIG;
@@ -416,6 +449,16 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     rec(0);
     if (cfg === CONFIG) _best = best;
     return best;
+  }
+  // The best path in words: where the most careful keeper would have set the veil, age by age, runs of the same veil joined.
+  function bestPathWords(best, cfg) {
+    cfg = cfg || CONFIG;
+    const names = cfg.AGES.map(a => a.name.toLowerCase());
+    const veil = ['in the dark', 'the faithful on the day', 'on the wall', 'in print', 'on the screen'];
+    const runs = [];
+    best.sched.forEach((v, i) => { const last = runs[runs.length - 1]; if (last && last.v === v) last.to = i; else runs.push({ v: v, from: i, to: i }); });
+    const bits = runs.map(r => veil[r.v] + (r.from === r.to ? ' at ' + names[r.from] : ' from ' + names[r.from] + ' to ' + names[r.to]));
+    return 'The most a keeper could have done: ' + bits.join('; ') + '.';
   }
   function openedAt(s) { // first age the face went to print or the screen; first age it was lifted at all
     let printed = -1, lifted = -1;
@@ -447,8 +490,8 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     else readingOfPath = 'You opened where the halo was already thin and the age could carry the face far: about where Benjamin dates the turn.';
     return {
       total: total, best: best.total, fraction: f, words: fractionWords(f),
-      lead: 'Your face held the people for ' + fractionWords(f) + ' of what was possible.',
-      did: pathWords(s) + ' ' + readingOfPath,
+      lead: 'Over seven ages your face moved ' + fractionWords(f) + ' of the people it could have moved.',
+      did: pathWords(s) + ' ' + readingOfPath + ' ' + bestPathWords(best, s.cfg),
       benjamin: 'The halo was never in the face. It was the distance between the face and the people, and the age sets the distance. Hide the face and the halo still goes, because the people\'s eyes have changed; show it early and the age cannot yet carry it far. Once the copies are everywhere, the face belongs to politics.',
       fork: s.fork ? (s.fork.line + ' ' + s.fork.benjamin) : '',
       bestOpen: bestOpen, printed: o.printed, lifted: o.lifted
@@ -467,7 +510,9 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
       { name: 'open at the court', sched: openAt(3) },
       { name: 'open at the print shop', sched: openAt(4) },
       { name: 'open at the studio', sched: openAt(5) },
-      { name: 'open at the cinema', sched: openAt(6) }
+      { name: 'open at the cinema', sched: openAt(6) },
+      { name: 'print, then back in the dark', sched: [0, 0, 0, 0, 3, 0, 0] },
+      { name: 'one step wider each age', sched: [0, 0, 1, 2, 3, 3, 4] }
     ].map(h => { const s = runSchedule(h.sched, cfg); return { name: h.name, sched: h.sched.map((v, i) => Math.min(v, cfg.AGES[i].ceiling)), total: totalHold(s), perAge: s.results.map(r => r.hold) }; });
     const best = bestSchedule(cfg);
     rows.push({ name: 'the best possible', sched: best.sched, total: best.total, perAge: best.state.results.map(r => r.hold) });
@@ -479,7 +524,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     return c;
   }
 
-  const api = { CONFIG, newGame, currentAge, isFork, arrive, arrivalLine, options, commit, next, fork, verdict, totalHold, maxHold, bestSchedule, runSchedule, heuristics, withConfig, reachAt, haloAfterVeil, holdOf, haloWords, fractionWords, openedAt };
+  const api = { CONFIG, newGame, currentAge, isFork, arrive, arrivalLine, options, commit, next, fork, verdict, totalHold, maxHold, bestSchedule, runSchedule, heuristics, withConfig, reachAt, haloAfterVeil, holdOf, movedOf, ageWeights, ageMax, movedScale, bestPathWords, haloWords, fractionWords, openedAt };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.VEIL = api;
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -620,7 +665,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   function renderStrip(el, s) {
     el.innerHTML = C.AGES.map((a, i) => {
       const r = s.results[i];
-      if (r) return `<div class="slot done" title="${a.name}">${thumb(a.technique, r.halo)}<div class="mini"><i style="width:${r.cult / 2 * 100}%;background:${GOLD}"></i><i style="width:${r.reach / 2 * 100}%;background:${RED}"></i></div></div>`;
+      if (r) return `<div class="slot done" title="${a.name}">${thumb(a.technique, r.halo)}<div class="mini"><i style="width:${r.ofAge * r.cult / r.hold * 100}%;background:${GOLD}"></i><i style="width:${r.ofAge * r.bySeen / r.hold * 100}%;background:${RED}"></i></div></div>`;
       return `<div class="slot${i === s.age ? ' now' : ''}"></div>`;
     }).join('');
   }
@@ -630,11 +675,11 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     $('agename').textContent = a.name; $('agemeta').textContent = `AGE ${S.age + 1} OF 7 · ${a.date}`;
     renderStrip($('strip'), S);
     $('newthis').textContent = a.newThis;
-    const al = M.arrivalLine(S); $('arrive').textContent = al; $('arrive').style.display = 'none';
+    const al = M.arrivalLine(S); $('arrive').textContent = al; $('arrive').classList.add('held');
     const prev = S.results.length ? S.results[S.results.length - 1] : null;
     if (prev) { // the world as the player left it, then the age arrives in the picture
       const pa = C.AGES[prev.age];
-      arriveFrame($('frame'), { tech: pa.technique, halo: prev.halo }, a.technique, S.halo, lastN(), prev.reach, () => { $('arrive').style.display = al ? 'block' : 'none'; });
+      arriveFrame($('frame'), { tech: pa.technique, halo: prev.halo }, a.technique, S.halo, lastN(), prev.reach, () => { $('arrive').classList.remove('held'); });
     } else drawFrame($('frame'), a.technique, S.halo, 0, 0);
     renderCopies(null);
     const opts = M.options(S);
@@ -649,7 +694,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     $('veils').querySelectorAll('.veil').forEach(b => b.classList.toggle('chosen', +b.dataset.i === i));
     const prev = S.results.length ? S.results[S.results.length - 1] : null;
     clearTimeout(arriveTimer);
-    if (prev) $('arrive').style.display = $('arrive').textContent ? 'block' : 'none';
+    if (prev) $('arrive').classList.remove('held');
     drawFrame($('frame'), a.technique, S.halo, v.n, prev ? prev.reach : 0, { crowdN: prev ? C.VEILS[prev.veil].n : 0 });   // the control shows what it does: the curtains part, the face comes nearer; the crowd stays
     $('commit').disabled = false; $('commitsub').textContent = v.label.toLowerCase() + ': ' + v.who;
   }
@@ -664,8 +709,10 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     if (nCopies) copiesMade.push({ tech: a.technique, count: nCopies, note: picked === 4 ? 'every screen' : r.reach > 0.5 ? '…and on, without end' : '…a few hundred' });
     renderCopies(nCopies ? copiesMade[copiesMade.length - 1] : null);
     $('line').textContent = r.line;
-    $('holdwords').textContent = r.cult > r.reach * 2 ? 'most of it the halo' : r.reach > r.cult * 2 ? 'most of it the crowd' : 'the halo and the crowd alike';
-    $('hold').innerHTML = `<rect x="0" y="0" width="${r.cult / 2 * 340}" height="20" fill="${GOLD}"/><rect x="${r.cult / 2 * 340}" y="0" width="${r.reach / 2 * 340}" height="20" fill="${RED}"/>`;
+    const gold = r.ofAge * r.cult / r.hold * 340, red = r.ofAge * r.bySeen / r.hold * 340;
+    const how = r.cult > r.bySeen * 2 ? 'mostly by the halo' : r.bySeen > r.cult * 2 ? 'mostly by being seen' : 'by the halo and by being seen alike';
+    $('holdwords').textContent = (r.ofAge < 0.03 ? 'hardly anyone' : M.fractionWords(r.ofAge) + ' of what this age could move') + (r.ofAge < 0.03 ? '' : ', ' + how);
+    $('hold').innerHTML = `<rect x="0" y="0" width="${gold}" height="20" fill="${GOLD}"/><rect x="${gold}" y="0" width="${red}" height="20" fill="${RED}"/>`;
     $('cfrow').innerHTML = r.counterfactual.map(c => `<div class="c${c.index === picked ? ' me' : ''}${c.allowed ? '' : ' no'}">${thumb(a.technique, c.halo)}<span>${C.VEILS[c.index].label}</span></div>`).join('');
     $('nextage').textContent = S.age === C.AGES.length - 1 ? 'On to 1936' : 'Next age';
     renderStrip($('strip'), S);
@@ -723,8 +770,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     $('lead').textContent = v.lead;
     renderStrip($('endstrip'), S);
     $('vdid').textContent = v.did; $('vben').textContent = v.benjamin; $('vfork').textContent = v.fork;
-    const bestOpenName = C.AGES[v.bestOpen].name.toLowerCase();
-    $('vbest').textContent = `The best path, under this game's assumptions, keeps the veil down and first prints the face at ${bestOpenName}, then puts it on the screen as soon as there is one. A second run is a different plan: open earlier, open later, or never.`;
+    $('vbest').textContent = `Under this game's assumptions, that is. A second run is a different plan: open earlier, open later, or never.`
     show('end');
   }
   // ---------- wiring

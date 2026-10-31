@@ -59,29 +59,35 @@ const best = H[H.length - 1];
 const get = n => H.find(h => h.name === n);
 const bestOpen = best.sched.findIndex(v => v >= 3);
 check('P6 the best schedule first prints at the print shop or the studio', bestOpen === 4 || bestOpen === 5, C.AGES[bestOpen].key);
-check('P6b always veiled lands below three quarters of the best', get('always veiled').total < 0.75 * best.total, f2(get('always veiled').total / best.total));
-check('P6c always the widest veil lands below three quarters of the best', get('always the widest veil').total < 0.75 * best.total, f2(get('always the widest veil').total / best.total));
-check('P6d open at the print shop and at the studio are both within a tenth of the best', get('open at the print shop').total > 0.9 * best.total && get('open at the studio').total > 0.9 * best.total);
-check('P6e open at the cinema is worse than open at the studio (the ages of print passed unused)', get('open at the cinema').total < get('open at the studio').total);
-check('P6f open at the court is worse than open at the print shop (the halo spent too early)', get('open at the court').total < get('open at the print shop').total);
+check('P6a the best schedule lifts the veil before it prints: a gradual opening', best.sched.findIndex(v => v > 0) < bestOpen, best.sched.join(''));
+check('P6b always veiled lands below a tenth of the best: a halo nobody sees moves nobody', get('always veiled').total < 0.1 * best.total, f2(get('always veiled').total / best.total));
+check('P6c always the widest veil lands below the best, and open at the court or the print shop beats it', get('always the widest veil').total < best.total && Math.max(get('open at the court').total, get('open at the print shop').total) > get('always the widest veil').total, f2(get('always the widest veil').total / best.total));
+check('P6d open at the print shop is within a tenth of the best', get('open at the print shop').total > 0.9 * best.total, f2(get('open at the print shop').total / best.total));
+check('P6e the later the single opening after the print shop, the worse: studio below print shop, cinema below studio', get('open at the studio').total < get('open at the print shop').total && get('open at the cinema').total < get('open at the studio').total);
+check('P6f open at the cinema lands below three fifths of the best: the ages of print passed unused', get('open at the cinema').total < 0.6 * best.total, f2(get('open at the cinema').total / best.total));
+check('P6g print then back in the dark lands below half of the best: the halo does not return', get('print, then back in the dark').total < 0.5 * best.total, f2(get('print, then back in the dark').total / best.total));
+check('P6h the best path opens step by step: the veil never narrows along it', best.sched.every((v, i) => i === 0 || v >= best.sched[i - 1]), best.sched.join(''));
 const spread = Math.max(...H.map(h => h.total)) - Math.min(...H.map(h => h.total));
-check('P6g the heuristics spread: the decision matters (range above a quarter of the best)', spread > 0.25 * best.total, f2(spread));
+check('P6i the heuristics spread: the decision matters (range above half of the best)', spread > 0.5 * best.total, f2(spread));
 
-// ---- P7: robustness
+// ---- P7: robustness. The three numbers the revision introduced (section 17 of the memo), each moved both ways.
 function shape(cfg, label) {
   const h = M.heuristics(cfg); const b = h[h.length - 1]; const o = b.sched.findIndex(v => v >= 3);
   const veiledR = h.find(x => x.name === 'always veiled').total / b.total, wideR = h.find(x => x.name === 'always the widest veil').total / b.total;
   out.push(`      ${label}: best ${b.sched.join('')} (prints first at ${C.AGES[o].key}); always veiled ${f2(veiledR)} of best; always widest ${f2(wideR)} of best`);
-  return { open: o, veiledR, wideR };
+  return { open: o, veiledR, wideR, sched: b.sched };
 }
-const half = shape(M.withConfig({ W_CROWD: 0.5 }), 'crowd at half price');
-const dbl = shape(M.withConfig({ W_CROWD: 2 }), 'crowd at double price');
-const slowAges = JSON.parse(JSON.stringify(C.AGES)).map(a => ({ ...a, eyes: 1 - (1 - a.eyes) * 2 / 3 }));
-const slow = shape(M.withConfig({ AGES: slowAges }), 'eyes declining a third more slowly');
-check('P7 under all three the best schedule first prints between the court and the studio', [half, dbl, slow].every(x => x.open >= 3 && x.open <= 5));
-check('P7b under all three always veiled stays below nine tenths of the best', [half, dbl, slow].every(x => x.veiledR < 0.9));
-check('P7c under all three always widest stays below the best, and below three quarters when the crowd is not overpriced', [half, dbl, slow].every(x => x.wideR < 1) && half.wideR < 0.75 && slow.wideR < 0.75);
-check('P7d the halo under the veil still goes below a quarter by the cinema with the slower eyes', M.runSchedule([0, 0, 0, 0, 0, 0, 0], M.withConfig({ AGES: slowAges })).results[6].halo < 0.25);
+const variants = [
+  shape(M.withConfig({ W_SEEN: 0.1 }), 'being seen worth a tenth'),
+  shape(M.withConfig({ W_SEEN: 0.4 }), 'being seen worth two fifths'),
+  shape(M.withConfig({ PEOPLE_CURVE: 0.35 }), 'people counted more flatly'),
+  shape(M.withConfig({ PEOPLE_CURVE: 0.75 }), 'people counted more steeply'),
+  shape(M.withConfig({ AGES: JSON.parse(JSON.stringify(C.AGES)).map(a => ({ ...a, eyes: 1 - (1 - a.eyes) * 2 / 3 })) }), 'eyes declining a third more slowly')
+];
+check('P7 under all five variants the best schedule first prints between the court and the studio', variants.every(x => x.open >= 3 && x.open <= 5));
+check('P7b under all five always veiled stays below a fifth of the best', variants.every(x => x.veiledR < 0.2));
+check('P7c under all five always widest stays below the best', variants.every(x => x.wideR < 1));
+check('P7d under all five the best path never narrows the veil', variants.every(x => x.sched.every((v, i) => i === 0 || v >= x.sched[i - 1])));
 
 // ---- P8: the fork
 const F = C.FORK;
