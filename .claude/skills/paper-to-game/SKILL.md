@@ -171,6 +171,8 @@ For the pick and the runner-up: the stranger's experience in the present tense, 
 
 Which concept gives the stranger the best five minutes, with real deliberation in them and the discovery landing inside them, and passes the author test. Originality is a criterion, not a tie-breaker: between two concepts that both pass, take the one that does what no game in the README table has done, and a risky concept that passes its walkthrough beats a safe one that passes its walkthrough. Calibration is a constraint, not a criterion: a ported model with a dull walkthrough loses to a toy that declares itself. Record the runner-up and what would make you switch.
 
+Take your fancy! If the reckless concept is the one you want to build, build it; the memo can say why it was a risk. A defensible game nobody wanted is the worse failure.
+
 If no concept survives the walkthrough, say so: explain why the paper resists play, and deliver a clearly labelled interactive illustration instead of a sequence of guesses called a game.
 
 ### The shape
