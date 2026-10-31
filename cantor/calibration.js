@@ -1,4 +1,4 @@
-// Calibration check for Not in the Book. Run: node calibration.js  (writes calibration-result.txt)
+// Calibration check for Cantor's Bargain. Run: node calibration.js  (writes calibration-result.txt)
 // Tests the mechanism against the paper's own construction and claims (Cantor 1891, pp. 75-77):
 //   (P1) b_v differs from a_{v,v} for every v, for any list;
 //   (P2) E0 = (b_1, b_2, ...) agrees with no E_u, for any list;

@@ -1,4 +1,4 @@
-// Not in the Book — mechanism. The single source of truth: every rule that affects outcomes
+// Cantor's Bargain (formerly Not in the Book) — mechanism. The single source of truth: every rule that affects outcomes
 // lives here, headless, runnable unchanged in Node (calibration.js, loop.js) and in the browser
 // (inlined verbatim by build.py). The interface only passes taps in and draws what comes back.
 //

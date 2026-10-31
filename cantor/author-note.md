@@ -1,4 +1,4 @@
-# Not in the Book — note for the author
+# Cantor's Bargain — note for the author
 
 1. Look first at `screenshot-round2-first-tap-striking.png` (the endless book striking and about to refill), then `screenshot-round3-midway.png` (Cantor's line, rows dying on their number) and `screenshot-end-rerun.png` (the verdict and the rule running on its own against a book that now contains your row).
 2. Everything tunable is in the `CONFIG` block at the top of `mechanism.js`, the only copy of the mechanism: the paper's two characters and its three example rows, the widths and row counts of the three books, the number of letters in round 2, the seed range. Edit, run `node calibration.js` (22 checks against the paper's construction and the game's framing), then `python3 build.py`, which refuses to finish if the embedded mechanism differs from the file.
