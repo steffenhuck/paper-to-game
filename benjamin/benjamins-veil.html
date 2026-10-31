@@ -229,7 +229,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     AGES: [
       { key: 'cave', name: 'THE CAVE', date: 'LONG AGO', ceiling: 1, eyes: 1, demand: 0,
         technique: 'cave',
-        newThis: 'No way to copy a face yet. It is painted on the wall, for the spirits.',           // section V: the elk, a magic instrument
+        newThis: 'No way to copy a face yet. It is painted on the wall of the cave.',           // section V: the elk, a magic instrument
         eyesLine: null,
         notYet: 'nothing can carry it farther',
         reach: [0.02, 0.12, 0.2, 0.3, 0.9], crowd: ['you and the spirits', 'the clan', 'the clan', '', ''] },
@@ -241,7 +241,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
         reach: [0.02, 0.15, 0.22, 0.3, 0.9], crowd: ['you and the god', 'the city, at the festival', 'the city, in the forecourt', '', ''] },
       { key: 'cathedral', name: 'THE CATHEDRAL', date: 'THE MIDDLE AGES', ceiling: 2, eyes: 0.95, demand: 0.2,
         technique: 'icon',
-        newThis: 'New this age: the woodcut. A face can be cut in wood and printed, roughly, a few dozen times. Yours hangs veiled in the choir.', // section I; section V
+        newThis: 'New this age: the woodcut. Saints are being cut in wood and printed in the market, roughly — too roughly for this face. Yours hangs in the choir.', // section I; section V
         eyesLine: 'there are woodcuts of saints in the market now',
         notYet: 'the woodcut is too rough for this face',
         reach: [0.02, 0.18, 0.25, 0.3, 0.9], crowd: ['you and the saints', 'the parish, on the feast day', 'the parish, in the nave', '', ''] },
@@ -260,7 +260,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
       { key: 'studio', name: 'THE STUDIO', date: 'ABOUT 1880', ceiling: 3, eyes: 0.4, demand: 0.7,
         technique: 'halftone',
         newThis: 'New this age: the photograph. A face can be taken in a second and printed without end, into every house and every hand.', // section I; section VI
-        eyesLine: 'everyone has a photograph of their dead',
+        eyesLine: 'everyone has a photograph of their dead', sayCause: true, // the cause is said once, here (revision 4)
         notYet: 'the film is not here yet',
         reach: [0.02, 0.2, 0.3, 0.75, 0.9], crowd: ['you and the vault', 'the town, on the day', 'whoever comes to the museum', 'every house and every hand', ''] },
       { key: 'cinema', name: 'THE CINEMA', date: 'ABOUT 1930', ceiling: 4, eyes: 0.2, demand: 0.9,
@@ -347,8 +347,9 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   function arrivalLine(s) {
     const age = currentAge(s);
     if (!age.eyesLine || s.haloBefore <= CONFIG.HALO_GONE) return '';
-    const changed = s.halo <= CONFIG.HALO_GONE ? 'The halo is gone.' : (s.halo < s.haloBefore * 0.97 ? 'The halo arrives thinner than it was: ' + haloWords(s.halo) + '.' : 'The halo arrives as it was.');
-    return 'The people\'s eyes have changed: ' + age.eyesLine + '. ' + changed;
+    const changed = s.halo <= CONFIG.HALO_GONE ? 'The halo is gone.' : (s.halo < s.haloBefore * 0.97 ? (haloWords(s.halo) === haloWords(s.haloBefore) ? 'The halo arrives a shade thinner.' : 'The halo arrives thinner than it was: ' + haloWords(s.halo) + '.') : 'The halo arrives as it was.');
+    // the fact every age; the cause (the people's eyes) once, at the age that carries it (the photograph)
+    return age.sayCause ? 'The people\'s eyes have changed: ' + age.eyesLine + '. ' + changed : changed;
   }
   function options(s) {
     const age = currentAge(s);
@@ -494,7 +495,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   // ---------- the face, in the technique of its age (interface only: no rule lives here)
   const TECH = {
     cave:      { bg: '#5A3F2A', skin: 'none', line: '#C4552C', lw: 5, dash: '10 4', hair: 'none', robe: 'none', opacity: 1 },
-    temple:    { bg: '#2A2420', skin: '#ECE6DA', line: '#8D847A', lw: 1.6, hair: '#D9D2C4', robe: '#D9D2C4', shade: true },
+    temple:    { bg: '#2A2420', skin: '#E6D3AE', line: '#8A6E45', lw: 1.6, hair: '#D4BE93', robe: '#D4BE93', shade: true },  // warm stone on a dark cella (revision 3)
     icon:      { bg: '#3B2A1A', skin: '#DCB389', line: '#2B1D12', lw: 2.6, hair: '#2B1D12', robe: '#A52A1E' },
     engraving: { bg: '#F3EAD6', skin: 'hatch', line: INK, lw: 1.6, hair: 'cross', robe: 'cross' },
     litho:     { bg: '#F1E9D8', skin: 'stipple', line: '#3A3632', lw: 2, hair: 'stipple2', robe: 'stipple2', soft: true },
@@ -593,6 +594,8 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
 
   // ---------- state and screens
   let S = M.newGame(); let picked = null; let forkPicked = null; let lastScreen = 'start';
+  let copiesMade = []; // {tech, count} per age that printed; presentation only, the counts follow reach
+  const lastN = () => S.results.length ? C.VEILS[S.results[S.results.length - 1].veil].n : 0; // where the keeper left the curtains
   function show(id) { document.querySelectorAll('.screen').forEach(e => e.classList.remove('on')); $(id).classList.add('on'); window.scrollTo(0, 0); }
   function words(x) { return M.haloWords(x); }
 
@@ -610,8 +613,9 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     renderStrip($('strip'), S);
     $('newthis').textContent = a.newThis;
     const al = M.arrivalLine(S); $('arrive').textContent = al; $('arrive').style.display = al ? 'block' : 'none';
-    drawFrame($('frame'), a.technique, S.halo, 0, 0);
-    $('copies').innerHTML = `<span class="lab">Copies out</span><span class="none">none yet: the one face only</span>`;
+    drawFrame($('frame'), a.technique, S.halo, lastN(), 0);  // the world as the player left it: last age's curtains, this age's halo, no crowd yet
+    $('frame').dataset.n = lastN();
+    renderCopies(null);
     const opts = M.options(S);
     $('veils').innerHTML = opts.map(o => `<button class="veil" data-i="${o.index}" ${o.allowed ? '' : 'disabled'}><span class="k">${o.label}</span><span class="w">${o.allowed ? o.who : 'not yet: ' + o.why}</span></button>`).join('');
     $('veils').querySelectorAll('.veil').forEach(b => b.addEventListener('click', () => pickVeil(+b.dataset.i)));
@@ -623,6 +627,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     picked = i; const a = M.currentAge(S), v = C.VEILS[i];
     $('veils').querySelectorAll('.veil').forEach(b => b.classList.toggle('chosen', +b.dataset.i === i));
     drawFrame($('frame'), a.technique, S.halo, v.n, 0);   // the control shows what it does: the curtains part, the face comes nearer; nothing else moves
+    $('frame').dataset.n = v.n;
     $('commit').disabled = false; $('commitsub').textContent = v.label.toLowerCase() + ': ' + v.who;
   }
   function commitAge() {
@@ -631,14 +636,10 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     const r = M.commit(S, picked);
     $('choose').style.display = 'none';
     drawFrame($('frame'), a.technique, r.halo, v.n, r.reach);
-    // copies out, in the age's technique
+    // copies out, in the age's technique; earlier ages' copies stay in the world (revision 2)
     const nCopies = picked >= 3 ? Math.min(14, Math.round(r.reach * 18)) : 0;
-    if (nCopies) {
-      let cs = `<svg viewBox="0 0 ${nCopies * 24 + 10} 40">`;
-      for (let i = 0; i < nCopies; i++) { const u = uid(); cs += `<g transform="translate(${i * 24 + 2} 2) scale(.16)">${defs(u)}<rect width="200" height="230" fill="${TECH[a.technique].bg}" stroke="${INK}" stroke-width="10"/>${faceMarkup(a.technique, u, 0, 0)}</g>`; }
-      cs += '</svg>';
-      $('copies').innerHTML = `<span class="lab">Copies out</span>${cs}<span class="none">${picked === 4 ? 'every screen' : r.reach > 0.5 ? '…and on, without end' : '…a few hundred'}</span>`;
-    } else $('copies').innerHTML = `<span class="lab">Copies out</span><span class="none">none: the one face only</span>`;
+    if (nCopies) copiesMade.push({ tech: a.technique, count: nCopies, note: picked === 4 ? 'every screen' : r.reach > 0.5 ? '…and on, without end' : '…a few hundred' });
+    renderCopies(nCopies ? copiesMade[copiesMade.length - 1] : null);
     $('line').textContent = r.line;
     $('holdwords').textContent = r.cult > r.reach * 2 ? 'most of it the halo' : r.reach > r.cult * 2 ? 'most of it the crowd' : 'the halo and the crowd alike';
     $('hold').innerHTML = `<rect x="0" y="0" width="${r.cult / 2 * 340}" height="20" fill="${GOLD}"/><rect x="${r.cult / 2 * 340}" y="0" width="${r.reach / 2 * 340}" height="20" fill="${RED}"/>`;
@@ -646,6 +647,17 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     $('nextage').textContent = S.age === C.AGES.length - 1 ? 'On to 1936' : 'Next age';
     renderStrip($('strip'), S);
     setTimeout(() => { $('result').style.display = 'block'; }, 700);
+  }
+  function renderCopies(thisAge) { // all copies made so far, oldest first, each in the technique of the age that made it
+    const total = copiesMade.reduce((n, c) => n + c.count, 0);
+    if (!total) { $('copies').innerHTML = `<span class="lab">Copies out</span><span class="none">none yet: the one face only</span>`; return; }
+    const show = Math.min(14, total); let cs = `<svg viewBox="0 0 ${show * 24 + 10} 40" data-copies="${total}">`; let k = 0;
+    // keep the oldest copies visible: draw up to 14, taking from each age in proportion
+    const per = copiesMade.map(c => Math.max(1, Math.round(c.count * show / total)));
+    copiesMade.forEach((c, j) => { for (let i = 0; i < per[j] && k < show; i++, k++) { const u = uid(); cs += `<g transform="translate(${k * 24 + 2} 2) scale(.16)">${defs(u)}<rect width="200" height="230" fill="${TECH[c.tech].bg}" stroke="${INK}" stroke-width="10"/>${faceMarkup(c.tech, u, 0, 0)}</g>`; } });
+    cs += '</svg>';
+    const note = thisAge ? thisAge.note : 'from earlier ages';
+    $('copies').innerHTML = `<span class="lab">Copies out</span>${cs}<span class="none">${note}</span>`;
   }
   function nextAge() {
     M.next(S);
@@ -695,8 +707,8 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   // ---------- wiring
   drawFrame({ set innerHTML(v) { $('startface').innerHTML = v; } }, 'icon', 1, 0.5, 0);
   (function () { const u = uid(); $('startface').innerHTML = defs(u) + `<rect width="200" height="230" fill="#3B2A1A"/>` + faceMarkup('icon', u, 1, 0); })();
-  $('begin').addEventListener('click', () => { S = M.newGame(); renderAge(); });
-  $('again').addEventListener('click', () => { S = M.newGame(); renderAge(); });
+  $('begin').addEventListener('click', () => { S = M.newGame(); copiesMade = []; renderAge(); });
+  $('again').addEventListener('click', () => { S = M.newGame(); copiesMade = []; renderAge(); });
   $('commit').addEventListener('click', commitAge);
   $('nextage').addEventListener('click', nextAge);
   $('forkcommit').addEventListener('click', commitFork);

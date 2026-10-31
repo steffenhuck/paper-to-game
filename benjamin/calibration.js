@@ -100,6 +100,9 @@ check('W2 every veil slab and every fork slab has a label and a meaning', C.VEIL
 check('W3 every age has a technique, a line for what is new, and a crowd word up to its ceiling', C.AGES.every(a => a.technique && a.newThis && a.crowd.slice(0, a.ceiling + 1).every(c => c)));
 check('W4 halo words cover the range', ['bright', 'a little thinner', 'about half what it was', 'a quarter of what it was', 'almost gone', 'gone'].every((w, i) => M.haloWords([1, 0.7, 0.5, 0.25, 0.1, 0.01][i]) === w));
 check('W5 the verdict for a sensible path names the turn', /Benjamin dates the turn/.test(M.verdict(M.runSchedule([0, 0, 0, 0, 3, 3, 4])).did));
+{ const t = M.newGame(); const causes = []; for (let i = 0; i < 7; i++) { M.arrive(t); causes.push(/eyes have changed/.test(M.arrivalLine(t))); M.commit(t, 0); M.next(t); }
+  check('W7 the arrival line names the cause once, at the studio, and states the fact elsewhere', causes.filter(Boolean).length === 1 && causes[5] === true, causes.map(c => c ? 'cause' : 'fact').join(' ')); }
+check('W8 no announcement says whether the face is hidden or shown', C.AGES.every(a => !/veil|hidden|shown|in the dark/i.test(a.newThis)));
 check('W6 the verdict for the always-veiled path says the halo went anyway', /went anyway/.test(M.verdict(M.runSchedule([0, 0, 0, 0, 0, 0, 0])).did));
 
 const head = `Benjamin's Veil — calibration result (${new Date().toISOString().slice(0, 10)})\n${pass} passed, ${fail} failed\n`;

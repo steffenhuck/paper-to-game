@@ -13,7 +13,7 @@ const L = []; const say = s => { L.push(s); console.log(s); };
   const text = async sel => (await page.$eval(sel, e => e.innerText)).replace(/\n+/g, ' | ');
   await shot('start'); await noScroll();
   await page.click('#begin'); await page.waitForTimeout(300);
-  const plan = [0, 0, 0, 1, 3, 3, 4];
+  const plan = [0, 0, 0, 1, 3, 3, 4]; let copiesSoFar = 0;
   for (let i = 0; i < 7; i++) {
     say(`\n== ${await text('#agename')} (${await text('#agemeta')})`);
     say('   new: ' + await text('#newthis'));
@@ -21,16 +21,23 @@ const L = []; const say = s => { L.push(s); console.log(s); };
     const slabs = await page.$$eval('#veils .veil', bs => bs.map(b => (b.disabled ? '(' : '') + b.innerText.replace(/\n/g, ' — ') + (b.disabled ? ')' : '')));
     say('   slabs: ' + slabs.join(' / '));
     if (!(await page.$eval('#commit', b => b.disabled))) say('   !! commit enabled before a slab was tapped');
+    if (await page.$('#veils .veil.chosen')) say('   !! a slab is pre-selected at age start');
+    const nStart = +(await page.$eval('#frame', e => e.dataset.n)); const nPrev = i ? [0, 0, 0, 0.25, 0.75, 0.75, 1][i - 1] : 0;
+    if (nStart !== nPrev) say(`   !! frame at age start shows nearness ${nStart}, previous veil was ${nPrev}`); else say(`   frame at age start: curtains where the last age left them (nearness ${nStart})`);
+    const copiesAtStart = await page.$eval('#copies', e => { const s = e.querySelector('svg'); return s ? +s.dataset.copies : 0; });
+    if (copiesAtStart < copiesSoFar) say(`   !! copies at age start fell from ${copiesSoFar} to ${copiesAtStart}`); else say(`   copies in the world at age start: ${copiesAtStart}`);
     if (i === 0) await shot('age1-cave');
+    if (i === 1) await shot('age2-temple');
+    if (i === 5) await shot('age6-studio-arrives-as-left');
     if (i === 3) { await page.click('#play .qbtn'); await page.waitForTimeout(200); await shot('help'); await page.click('#helpback'); await page.waitForTimeout(200); say('   help opened and returned to ' + await page.$eval('.screen.on', e => e.id)); }
     await page.click(`#veils .veil[data-i="${plan[i]}"]`); await page.waitForTimeout(250);
     say('   > tapped ' + slabs[plan[i]] + '; commit says: ' + await text('#commit'));
     if (await page.$('#result:not([style*="none"])')) say('   !! result visible before commit');
     if (i === 4) { await shot('age5-veil-set'); await noScroll(); }
-    if (i === 5) await shot('age6-studio-arrives');
     await page.click('#commit'); await page.waitForTimeout(1200);
     say('   line: ' + await text('#line'));
     say('   hold: ' + await text('#holdwords') + ' | copies: ' + await text('#copies'));
+    copiesSoFar = await page.$eval('#copies', e => { const s = e.querySelector('svg'); return s ? +s.dataset.copies : 0; });
     say('   counterfactual: ' + (await page.$$eval('#cfrow .c', cs => cs.map(c => (c.classList.contains('me') ? '[' : '') + c.innerText + (c.classList.contains('me') ? ']' : '') + (c.classList.contains('no') ? '(na)' : '')).join(' / '))));
     if (i === 0 || i === 3 || i === 4 || i === 5 || i === 6) await shot(`age${i + 1}-passed`);
     await noScroll();
