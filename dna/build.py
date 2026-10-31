@@ -19,7 +19,7 @@ about = """
 <p>Pauling's and Fraser's rival models; the argument that the material is a salt and that the phosphates outside give cations easy access; the water content; the reason ribose would not fit; the helix's geometry, except at the end, where the copies twist a tenth of a turn per rung, the letter's 36°, one full turn per ten rungs.</p>
 <h3>The paper</h3>
 <p>J. D. Watson and F. H. C. Crick, "Molecular Structure of Nucleic Acids: A Structure for Deoxyribose Nucleic Acid", <i>Nature</i> 171:737–738 (1953). doi:10.1038/171737a0. Read it at nature.com/articles/171737a0.</p>
-<p><b>Game built from this paper; the paper is the authority where the two disagree.</b> It is a beta. It has had the builder's review only and has not been tested with real players. Fonts: Permanent Marker (Apache License 2.0) and Courier Prime (SIL Open Font License).</p>
+<p><b>Game built from this paper; the paper is the authority where the two disagree.</b> Fonts: Permanent Marker (Apache License 2.0) and Courier Prime (SIL Open Font License).</p>
 """
 t = open('template.html', encoding='utf-8').read()
 for k in ['/*__MECHANISM__*/', '/*__ABOUT__*/', '/*__FONT_MARKER__*/', '/*__FONT_TYPE__*/', '/*__FONT_TYPE_BOLD__*/']:

@@ -17,7 +17,7 @@ about = """
 <p>The second half of the paper (the generalisation to any set L and the theorem that powers have no maximum); the 1874 proof and the remark that this one does not need the irrational numbers; Cantor's words for manifold, totality and power; the real numbers, which the game never mentions.</p>
 <h3>The paper</h3>
 <p>Georg Cantor, "Über eine elementare Frage der Mannigfaltigkeitslehre", <i>Jahresbericht der Deutschen Mathematiker-Vereinigung</i> 1 (1890–91): 75–78. No DOI. Read it, with an English translation, at logicmuseum.com/cantor/diagarg.htm (the Logic Museum); the game was built from that page's first half, which contains the diagonal argument.</p>
-<p><b>Game built from this paper; the paper is the authority where the two disagree.</b> It is a beta. It has had the builder's review only and has not been tested with real players. Fonts: Rye, Alfa Slab One and Work Sans (SIL Open Font License). Book numbers are game seeds: the same number gives the same books, and the number is in the page address.</p>
+<p><b>Game built from this paper; the paper is the authority where the two disagree.</b> Fonts: Rye, Alfa Slab One and Work Sans (SIL Open Font License). Book numbers are game seeds: the same number gives the same books, and the number is in the page address.</p>
 """
 t = open('template.html', encoding='utf-8').read()
 keys = ['/*__MECHANISM__*/', '/*__ABOUT__*/', '/*__FONT_RYE__*/', '/*__FONT_ALFA__*/', '/*__FONT_WORK__*/', '/*__FONT_WORK_BOLD__*/']
