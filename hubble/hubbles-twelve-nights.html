@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hubble's Twelve Nights</title>
+<script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<meta name="description" content="Hubble (1929) at the eyepiece and the spectrograph: twelve nights on the 100-inch to find out whether the far nebulae drift at random or whether their speed is tied to their distance.">
+<style>
+@font-face{font-family:'Jost';font-weight:600;src:url(data:font/woff2;base64,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) format('woff2');font-display:block}
+@font-face{font-family:'Jost';font-weight:400;src:url(data:font/woff2;base64,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) format('woff2');font-display:block}
+@font-face{font-family:'Plex';font-weight:400;src:url(data:font/woff2;base64,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) format('woff2');font-display:block}
+:root{
+  --sky:#070B14; --sky-2:#0C1322; --glass:#0A1020; --star:#E8EEF8; --star-dim:#8B95A8; --amber:#F2A33A; --red:#E5484D; --blue:#6EA8FF; --brass:#B08D57; --brass-2:#D9B87A; --brass-dark:#6E5733;
+  --display:'Jost',system-ui,sans-serif; --text:'Jost',system-ui,sans-serif; --mono:'Plex','SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--sky)}
+body{color:var(--star);font-family:var(--text);font-size:17px;line-height:1.4;min-height:100vh;
+  background:radial-gradient(ellipse at 50% 0%,#101a30 0%,var(--sky) 60%)}
+.screen{display:none;max-width:460px;margin:0 auto;padding:0 14px 28px;min-height:100vh;position:relative}
+.screen.on{display:block}
+p{margin:.5em 0}
+a{color:var(--brass-2)}
+.caps{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.14em}
+h1.title{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--brass-2);font-size:34px;line-height:1.1;text-align:center;margin:10px 0 6px}
+h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--brass-2);font-size:15px;margin:14px 0 6px;text-align:center}
+.sub{text-align:center;color:var(--star-dim);font-size:15px;margin:0 0 10px}
+.aim{border-top:1px solid var(--brass-dark);border-bottom:1px solid var(--brass-dark);padding:12px 6px;margin:16px 0;text-align:center;font-size:18px;line-height:1.35}
+.mono{font-family:var(--mono)}
+/* buttons: instrument plates */
+.btn{display:block;width:100%;min-height:54px;padding:13px 16px;margin:10px 0;background:transparent;color:var(--brass-2);border:2px solid var(--brass);border-radius:8px;font-family:var(--display);font-weight:600;font-size:16px;text-transform:uppercase;letter-spacing:.12em;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation;text-align:center}
+.btn.primary{background:var(--brass);color:var(--sky);border-color:var(--brass)}
+.btn:active,.btn.down{background:var(--brass-2);color:var(--sky)}
+.btn[disabled]{opacity:.35;cursor:default}
+.btn.quiet{min-height:44px;padding:9px 14px;font-size:13px;border-color:var(--brass-dark);color:var(--brass)}
+.row2{display:flex;gap:10px}.row2 .btn{flex:1}
+.sig{padding:10px 0 18px;font-size:14px;text-align:center;font-family:var(--text)}
+.sig a{color:var(--star-dim);font-style:italic;text-decoration:none;opacity:.8}
+/* top bar */
+.bar{display:flex;align-items:center;gap:8px;padding:12px 0 4px;font-size:14px;line-height:1.25;color:var(--star-dim)}
+.bar .aimtext{flex:1}
+.qbtn{flex:none;width:40px;height:40px;border-radius:50%;border:1.5px solid var(--brass);background:transparent;color:var(--brass-2);font-family:var(--display);font-weight:600;font-size:20px;cursor:pointer}
+.lamps{display:flex;gap:6px;justify-content:center;margin:6px 0 2px}
+.lamp{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--brass-dark);background:transparent;transition:background .5s,box-shadow .5s}
+.lamp.lit{background:var(--amber);border-color:var(--brass-2);box-shadow:0 0 10px 2px rgba(242,163,58,.45)}
+.lamp.spent{background:#1b2030}
+.orient{color:var(--star);font-size:15px;line-height:1.35;margin:6px 2px 8px;min-height:20px}
+.glass{background:var(--glass);border:1.5px solid var(--brass-dark);border-radius:10px;overflow:hidden;position:relative}
+svg{display:block}
+.svgtext{font-family:var(--display);font-weight:600;letter-spacing:.12em;text-transform:uppercase;fill:var(--brass);font-size:11px}
+.svgmono{font-family:var(--mono);fill:var(--star-dim);font-size:11px}
+.panel{min-height:96px;margin:10px 0 0;padding:10px 12px;border:1.5px solid var(--brass-dark);border-radius:10px;background:rgba(12,19,34,.8)}
+.panel .name{font-family:var(--display);font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--brass-2);font-size:14px}
+.panel .hint{color:var(--star-dim);font-size:15px}
+.readout{font-family:var(--mono);text-align:center;font-size:17px;padding:8px 4px;color:var(--star)}
+.readout.red{color:var(--red)}.readout.blue{color:var(--blue)}.readout.amber{color:var(--amber)}
+/* dial */
+.dial{margin:8px 0 2px;padding:0 4px}
+.dial label{display:block;font-family:var(--display);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:11px;color:var(--brass);margin:0 0 4px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:56px;background:transparent;margin:0}
+input[type=range]:focus{outline:none}
+input[type=range]::-webkit-slider-runnable-track{height:10px;border-radius:5px;background:repeating-linear-gradient(90deg,var(--brass-dark) 0 2px,transparent 2px 24px),linear-gradient(#1a2235,#1a2235);border:1px solid var(--brass-dark)}
+input[type=range]::-moz-range-track{height:10px;border-radius:5px;background:#1a2235;border:1px solid var(--brass-dark)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 40% 35%,var(--brass-2),var(--brass) 55%,var(--brass-dark));border:2px solid var(--brass-2);margin-top:-18px;box-shadow:0 2px 8px rgba(0,0,0,.6)}
+input[type=range]::-moz-range-thumb{width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 40% 35%,var(--brass-2),var(--brass) 55%,var(--brass-dark));border:2px solid var(--brass-2);box-shadow:0 2px 8px rgba(0,0,0,.6)}
+.small{font-size:14px;color:var(--star-dim)}
+.verdict-head{font-family:var(--display);font-weight:600;font-size:30px;line-height:1.15;color:var(--brass-2);text-align:center;margin:18px 0 10px}
+.verdict p{font-size:17px;margin:.55em 0}
+.verdict p.key{color:var(--amber)}
+.about p,.help p,.about li{font-size:16px;line-height:1.45}
+.about h3{font-family:var(--display);font-weight:600;letter-spacing:.12em;text-transform:uppercase;font-size:13px;color:var(--brass);margin:18px 0 4px}
+.twinkle{animation:tw 3.2s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.5}50%{opacity:1}}
+.focusin{animation:focus 1.1s ease-out both}
+@keyframes focus{0%{filter:blur(8px);opacity:.3}100%{filter:blur(0);opacity:1}}
+.expose{animation:expose 1.2s ease-out both}
+@keyframes expose{0%{opacity:0}100%{opacity:1}}
+.glow{filter:drop-shadow(0 0 6px rgba(242,163,58,.9))}
+.seedline{text-align:center;font-family:var(--mono);font-size:12px;color:var(--star-dim);margin-top:8px}
+</style>
+</head>
+<body>
+
+<!-- ============================ START ============================ -->
+<section id="start" class="screen on">
+  <div class="glass" style="margin-top:14px"><svg id="startsky" viewBox="0 0 380 150" width="100%" height="150"></svg></div>
+  <h1 class="title">Hubble's<br>Twelve Nights</h1>
+  <p class="sub">Mount Wilson, 1929. The 100-inch is yours.</p>
+  <div class="aim">Find out whether the far nebulae drift at random or whether their speed is tied to their distance. Twelve nights. Then say how fast.</div>
+  <button class="btn primary" id="begin">Begin</button>
+  <div class="row2"><button class="btn quiet" data-go="help">How to play</button><button class="btn quiet" data-go="about">About</button></div>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+
+<!-- ============================ SKY ============================ -->
+<section id="sky" class="screen">
+  <div class="bar"><div class="aimtext">Random drift, or speed tied to distance? Twelve nights to find out.</div><button class="qbtn" data-help="sky">?</button></div>
+  <div class="lamps" id="lamps"></div>
+  <div class="orient" id="skyorient">Tap a nebula to point the telescope at it. Bright ones cost one night; faint ones two or three.</div>
+  <div class="glass"><svg id="skysvg" viewBox="0 0 380 400" width="100%" style="aspect-ratio:380/400;touch-action:manipulation"></svg></div>
+  <div class="panel" id="skypanel"></div>
+  <div class="glass" style="margin-top:10px"><svg id="miniplate" viewBox="0 0 380 150" width="100%" style="aspect-ratio:380/150"></svg></div>
+  <div class="small" id="miniwords" style="text-align:center;margin-top:6px"></div>
+</section>
+
+<!-- ============================ EYEPIECE ============================ -->
+<section id="eye" class="screen">
+  <div class="bar"><div class="aimtext" id="eyebar">The eyepiece</div><button class="qbtn" data-help="eye">?</button></div>
+  <h2 id="eyetitle">The eyepiece</h2>
+  <div class="orient">The ringed star is this nebula's brightest. Brightest stars are all about alike in truth, so how faint it looks tells how far away it is. Turn the dial until the comparison star looks just as bright.</div>
+  <div class="glass"><svg id="eyesvg" viewBox="0 0 380 320" width="100%" style="aspect-ratio:380/320"></svg></div>
+  <div class="dial"><label>Distance dial</label><input type="range" id="eyedial" min="0" max="1000" value="0"></div>
+  <div class="readout" id="eyereadout">—</div>
+  <button class="btn primary" id="eyeread">Read the distance</button>
+</section>
+
+<!-- ============================ SPECTROGRAPH ============================ -->
+<section id="spec" class="screen">
+  <div class="bar"><div class="aimtext" id="specbar">The spectrograph</div><button class="qbtn" data-help="spec">?</button></div>
+  <h2 id="spectitle">The spectrograph</h2>
+  <div class="orient">The nebula's light spread into a strip. The two dark lines are calcium. The amber marks show where a lamp in the lab puts those lines. Slide the marks onto the dark lines: to the right means moving away, to the left means coming toward us.</div>
+  <div class="glass"><svg id="specsvg" viewBox="0 0 380 190" width="100%" style="aspect-ratio:380/190"></svg></div>
+  <div class="dial"><label>Shift slide</label><input type="range" id="specdial" min="-400" max="1300" value="0" step="5"></div>
+  <div class="readout" id="specreadout">—</div>
+  <button class="btn primary" id="specread">Read the speed</button>
+</section>
+
+<!-- ============================ PLATE ============================ -->
+<section id="plate" class="screen">
+  <div class="bar"><div class="aimtext">Random drift, or speed tied to distance?</div><button class="qbtn" data-help="plate">?</button></div>
+  <h2>The plate</h2>
+  <div class="orient" id="platenight"></div>
+  <div class="glass"><svg id="platesvg" viewBox="0 0 380 280" width="100%" style="aspect-ratio:380/280"></svg></div>
+  <div class="readout amber" id="platewords"></div>
+  <button class="btn primary" id="platenext">Next night</button>
+</section>
+
+<!-- ============================ SUN ============================ -->
+<section id="sun" class="screen">
+  <div class="bar"><div class="aimtext">The nights are over.</div><button class="qbtn" data-help="sun">?</button></div>
+  <h2>The Sun's motion</h2>
+  <div class="orient" id="sunorient">Something is in the way. The Sun itself moves through space at about 300 km/s, toward the north. Nebulae ahead of us look as if they come toward us; those behind look faster than they are. Hubble solved for the Sun's motion in the same step as the rate.</div>
+  <div class="glass"><svg id="sunsvg" viewBox="0 0 380 280" width="100%" style="aspect-ratio:380/280"></svg></div>
+  <div class="readout amber" id="sunwords"></div>
+  <button class="btn primary" id="sunbtn">Take out the Sun's motion</button>
+</section>
+
+<!-- ============================ RATE ============================ -->
+<section id="rate" class="screen">
+  <div class="bar"><div class="aimtext">Say how fast: the speed for every million parsecs of distance.</div><button class="qbtn" data-help="rate">?</button></div>
+  <h2>Set the rate</h2>
+  <div class="orient">Swing the red line through your dots. Flat means the speeds do not depend on distance. This is your answer; commit when it fits.</div>
+  <div class="glass"><svg id="ratesvg" viewBox="0 0 380 280" width="100%" style="aspect-ratio:380/280"></svg></div>
+  <div class="dial"><label>Rate dial</label><input type="range" id="ratedial" min="0" max="1000" value="0" step="10"></div>
+  <div class="readout red" id="ratereadout">No relation: flat</div>
+  <button class="btn primary" id="ratecommit">Commit the rate</button>
+</section>
+
+<!-- ============================ HUMASON ============================ -->
+<section id="hum" class="screen">
+  <div class="bar"><div class="aimtext">One more nebula, far beyond your plate.</div><button class="qbtn" data-help="hum">?</button></div>
+  <h2>Humason's nebula</h2>
+  <div class="orient">Milton Humason has spent nights on end exposing on a faint, far cluster. Its brightest nebula, NGC 7619, is about seven million parsecs out, three times farther than anything on your plate. Before he develops the plate: how fast is it going?</div>
+  <div class="glass"><svg id="humsvg" viewBox="0 0 380 280" width="100%" style="aspect-ratio:380/280"></svg></div>
+  <div class="dial"><label>Your prediction</label><input type="range" id="humdial" min="0" max="6000" value="0" step="50"></div>
+  <div class="readout red" id="humreadout"></div>
+  <button class="btn primary" id="humcommit">Commit the prediction</button>
+</section>
+
+<!-- ============================ HUMASON'S SPECTRUM ============================ -->
+<section id="humspec" class="screen">
+  <div class="bar"><div class="aimtext">Humason develops the plate.</div><button class="qbtn" data-help="spec">?</button></div>
+  <h2>NGC 7619</h2>
+  <div class="orient" id="humspecorient">The faintest spectrum ever taken. Watch the marks find the lines.</div>
+  <div class="glass"><svg id="humspecsvg" viewBox="0 0 380 190" width="100%" style="aspect-ratio:380/190"></svg></div>
+  <div class="readout red" id="humspecreadout">exposing…</div>
+  <button class="btn primary" id="toverdict" disabled>The verdict</button>
+</section>
+
+<!-- ============================ END ============================ -->
+<section id="end" class="screen">
+  <div class="verdict-head" id="vhead"></div>
+  <div class="verdict" id="vbody"></div>
+  <h2>Your plate</h2>
+  <div class="glass"><svg id="endmine" viewBox="0 0 380 240" width="100%" style="aspect-ratio:380/240"></svg></div>
+  <h2>Hubble's plate, all twenty-four</h2>
+  <div class="glass"><svg id="endhubble" viewBox="0 0 380 240" width="100%" style="aspect-ratio:380/240"></svg></div>
+  <p class="small" style="margin-top:10px">Hubble's distances were about seven times too short, we now know, and today's rate is about 70 km/s for every million parsecs. The relation itself held. He wrote that it "may represent the de Sitter effect", and left the obvious consequences for later.</p>
+  <button class="btn primary" id="newgame">New game</button>
+  <button class="btn quiet" data-go="about">About</button>
+  <div class="seedline" id="seedline"></div>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+
+<!-- ============================ HELP ============================ -->
+<section id="help" class="screen help">
+  <h2>How to play</h2>
+  <div class="aim">Find out whether the far nebulae drift at random or whether their speed is tied to their distance. Twelve nights. Then say how fast.</div>
+  <p><b>The sky.</b> The smudges are nebulae, the faint far-off ones beyond our own stars. Tap one, and the card below tells you its name and what it costs: bright ones one night, faint ones two or three. You have twelve nights, the lamps along the top. Then tap <i>Point the telescope</i>.</p>
+  <p><b>The eyepiece.</b> The nebula breaks into stars; its brightest is ringed in amber. The brightest stars of all such nebulae are about equally bright in truth, so how faint this one looks tells you how far away the nebula is. Turn the dial until the comparison star in the little circle looks just as bright. A glow around it says you are close. Tap <i>Read the distance</i>.</p>
+  <p><b>The spectrograph.</b> The nebula's light is spread out into a strip, and two dark lines cross it. They belong to calcium. The amber marks show where those lines sit for a lamp in the laboratory. Slide the marks until they sit on the dark lines. The slide tells you the speed: to the right, the nebula is moving away; to the left, it is coming toward us. Tap <i>Read the speed</i>.</p>
+  <p><b>The plate.</b> Each nebula becomes a dot: distance across, speed up. Red is going away, blue is coming toward us. Watch whether the dots climb or sit in a cloud, and choose your next nebula accordingly.</p>
+  <p><b>The Sun.</b> When the nights are over, one tap takes out the Sun's own motion through space, which Hubble worked out at the same time. The dots move.</p>
+  <p><b>The rate.</b> Swing a line through your dots and commit. Then say how fast a nebula far beyond your plate is going, and watch its spectrum come in.</p>
+  <button class="btn primary" id="helpback">Back</button>
+</section>
+
+<!-- ============================ ABOUT ============================ -->
+<section id="about" class="screen about">
+  <h2>About</h2>
+  
+<h3>The game in one line</h3>
+<p>Twelve nights on the 100-inch at Mount Wilson. Each night you point at one of Hubble's twenty-four nebulae, read its distance in the eyepiece from how faint its brightest star looks, read its speed in the spectrograph from how far the calcium lines have slid, and drop a dot on the plate. Then the Sun's own motion comes off, you set the rate, and Humason's far nebula tests it.</p>
+<h3>What the paper found</h3>
+<p>In January 1929 Edwin Hubble put together the twenty-four nebulae whose distances he trusted (from Cepheid variables for the nearest, from the brightness of their brightest stars for most, from the average brightness of nebulae for the four in the Virgo cluster) and the radial velocities that had been measured for them, mostly by Slipher and Humason. The velocities had been a puzzle: a "K term" of several hundred km/s that would not sit still, and a solar motion that came out differently each time. Hubble let the velocity grow with distance and solved for the Sun's motion in the same step. The result: the velocity rises by about 500 km/s for every million parsecs of distance (465 from the nebulae taken singly, 513 from nine groups), with residuals of about 150 km/s, which he read as the nebulae's own motions. Twenty-two more nebulae without distances, run through the relation backwards, came out with the same spread of true brightness as the first twenty-four, which he took as independent support. Humason's new velocity for NGC 7619, 3779 km/s, fitted. Hubble called the relation "a first approximation representing a restricted range in distance" and raised the possibility that it was "the de Sitter effect", a prediction of relativistic cosmology. He did not use the word expansion.</p>
+<h3>Mechanism: reconstructed</h3>
+<p><b>This game demonstrates</b> the pattern in Hubble's Table 1. The twenty-four nebulae on the sky carry the table's distances and velocities; the eyepiece runs the paper's brightest-star criterion (brightest stars at a true brightness of −6.3 magnitudes) and the spectrograph runs the ordinary shift of the calcium H and K lines; the Sun's motion is taken out with the paper's own solution for it. The check that ships with the game re-solves Hubble's four-unknown equation on the table and recovers his constant, his solar motion and his residuals.</p>
+<p><b>It assumes</b> the game's framing. The twelve nights and the one-, two- and three-night costs are ours: Hubble's programme ran for years, and he says only that the far nebulae are the hard ones. The eyepiece reads every nebula by the brightest-star rule, including the six Hubble did by Cepheids and the four Virgo nebulae he did by cluster brightness; where the table gives no brightest-star magnitude the rule is run backwards from the table's distance. The nebulae's positions on the sky are from standard catalogues, not the paper, and are spread apart so they can be tapped. Your readings are your own; the instruments add no error beyond your matching, and the glow that says you are close is ours. The Sun's motion is applied from Hubble's solution, not solved by you. Humason's NGC 7619 is placed at "about seven million parsecs", the cluster distance the paper quotes as independent of the velocity.</p>
+<p><b>The paper establishes</b> a roughly linear relation between distance and radial velocity among these nebulae, with a constant of about 500 km/s per million parsecs on its distances, and a solar motion of about 300 km/s. It does not establish what the relation means; Hubble explicitly left that open. It does not establish the constant we use today: his distances were about seven times too short (the Cepheid scale was wrong and some of his "brightest stars" were clouds of glowing gas), and the modern value is about 70 km/s per million parsecs. The plate at the end redraws his Figure 1 from his table, with his line. Your dots are your readings of his numbers, not new evidence.</p>
+<h3>What is cut</h3>
+<p>Table 2 (the twenty-two nebulae with velocities only, and the matching distributions of brightness that Hubble offered as support); the nine-group solution; Lundmark's earlier attempt; the remark on galactic rotation; everything about de Sitter beyond one line on the end screen.</p>
+<h3>The paper</h3>
+<p>Edwin Hubble, "A relation between distance and radial velocity among extra-galactic nebulae", <i>Proceedings of the National Academy of Sciences</i> 15 (1929): 168–173. doi:10.1073/pnas.15.3.168. Open access at pnas.org.</p>
+<p><b>Game built from this paper; the paper is the authority where the two disagree.</b> Fonts: Jost and IBM Plex Mono (SIL Open Font License). The game number in the page address fixes the look of the plates and star fields; the sky and its numbers are the paper's every time.</p>
+
+  <button class="btn primary" id="aboutback">Back</button>
+</section>
+
+<script>
+// Hubble's Twelve Nights — mechanism. The single source of truth: runs unchanged in Node and in the browser.
+// Built from Hubble (1929), PNAS 15:168–173, doi:10.1073/pnas.15.3.168. Every number below is tagged with its source
+// or its design rationale. The paper is the authority where the two disagree.
+(function (root) {
+'use strict';
+
+const CONFIG = {
+  // ---- Table 1 (p. 169): the 24 nebulae with estimated distances. ms = photographic magnitude of brightest stars
+  // involved (".." in the table = not given); r = distance in millions of parsecs; v = measured radial velocity, km/s.
+  // Transcribed by hand from the scanned PDF (OCR layer unreliable); checked against standard transcriptions.
+  // ra/dec (degrees, J2000, from standard catalogues) are NOT in the paper; Hubble used them but did not print them.
+  // They enter only the solar-motion term. Precession since 1929 moves them by well under a degree: negligible here.
+  NEBULAE: [
+    { name: 'Small Magellanic Cloud', short: 'S. Mag.',   ms: null, r: 0.032, v:  170, ra:  13.2, dec: -72.8 }, // Table 1; r is Shapley's
+    { name: 'Large Magellanic Cloud', short: 'L. Mag.',   ms: null, r: 0.034, v:  290, ra:  80.9, dec: -69.8 }, // Table 1; r is Shapley's
+    { name: 'NGC 6822',               short: '6822',      ms: null, r: 0.214, v: -130, ra: 296.2, dec: -14.8 }, // Table 1; v by Humason
+    { name: 'NGC 598 (M33)',          short: '598',       ms: null, r: 0.263, v:  -70, ra:  23.5, dec:  30.7 }, // Table 1
+    { name: 'NGC 221 (M32)',          short: '221',       ms: null, r: 0.275, v: -185, ra:  10.7, dec:  40.9 }, // Table 1; v by Humason
+    { name: 'NGC 224 (M31)',          short: '224',       ms: null, r: 0.275, v: -220, ra:  10.7, dec:  41.3 }, // Table 1; v by Humason
+    { name: 'NGC 5457 (M101)',        short: '5457',      ms: 17.0, r: 0.45,  v:  200, ra: 210.8, dec:  54.3 }, // Table 1; v by Humason
+    { name: 'NGC 4736 (M94)',         short: '4736',      ms: 17.3, r: 0.5,   v:  290, ra: 192.7, dec:  41.1 }, // Table 1
+    { name: 'NGC 5194 (M51)',         short: '5194',      ms: 17.3, r: 0.5,   v:  270, ra: 202.5, dec:  47.2 }, // Table 1
+    { name: 'NGC 4449',               short: '4449',      ms: 17.8, r: 0.63,  v:  200, ra: 187.0, dec:  44.1 }, // Table 1
+    { name: 'NGC 4214',               short: '4214',      ms: 18.3, r: 0.8,   v:  300, ra: 183.9, dec:  36.3 }, // Table 1
+    { name: 'NGC 3031 (M81)',         short: '3031',      ms: 18.5, r: 0.9,   v:  -30, ra: 148.9, dec:  69.1 }, // Table 1
+    { name: 'NGC 3627 (M66)',         short: '3627',      ms: 18.5, r: 0.9,   v:  650, ra: 170.1, dec:  13.0 }, // Table 1
+    { name: 'NGC 4826 (M64)',         short: '4826',      ms: 18.5, r: 0.9,   v:  150, ra: 194.2, dec:  21.7 }, // Table 1
+    { name: 'NGC 5236 (M83)',         short: '5236',      ms: 18.5, r: 0.9,   v:  500, ra: 204.3, dec: -29.9 }, // Table 1
+    { name: 'NGC 1068 (M77)',         short: '1068',      ms: 18.7, r: 1.0,   v:  920, ra:  40.7, dec:  -0.0 }, // Table 1
+    { name: 'NGC 5055 (M63)',         short: '5055',      ms: 19.0, r: 1.1,   v:  450, ra: 198.9, dec:  42.0 }, // Table 1
+    { name: 'NGC 7331',               short: '7331',      ms: 19.0, r: 1.1,   v:  500, ra: 339.3, dec:  34.4 }, // Table 1
+    { name: 'NGC 4258 (M106)',        short: '4258',      ms: 19.5, r: 1.4,   v:  500, ra: 184.7, dec:  47.3 }, // Table 1
+    { name: 'NGC 4151',               short: '4151',      ms: 20.0, r: 1.7,   v:  960, ra: 182.6, dec:  39.4 }, // Table 1
+    { name: 'NGC 4382 (M85), Virgo',  short: '4382',      ms: null, r: 2.0,   v:  500, ra: 186.3, dec:  18.2 }, // Table 1; cluster distance (p. 170)
+    { name: 'NGC 4472 (M49), Virgo',  short: '4472',      ms: null, r: 2.0,   v:  850, ra: 187.4, dec:   8.0 }, // Table 1; cluster distance
+    { name: 'NGC 4486 (M87), Virgo',  short: '4486',      ms: null, r: 2.0,   v:  800, ra: 187.7, dec:  12.4 }, // Table 1; cluster distance
+    { name: 'NGC 4649 (M60), Virgo',  short: '4649',      ms: null, r: 2.0,   v: 1090, ra: 190.9, dec:  11.6 }, // Table 1; cluster distance
+  ],
+  M_BRIGHTEST_STAR: -6.3,   // p. 168: uniform upper limit of stellar luminosity, M(photographic) = -6.3
+  M_NEBULA_MEAN: -15.2,     // p. 169: average absolute visual magnitude of nebulae (not used by the instruments; About only)
+  // ---- The solution for solar motion and K (p. 170), 24 objects individually
+  SOLAR: { X: -65, Y: 226, Z: -195 },   // p. 170, "24 objects" column, km/s
+  K_24: 465, K_24_ERR: 50,              // p. 170: K = +465 ± 50 km/s per 10^6 parsecs (24 objects)
+  K_9: 513,  K_9_ERR: 60,               // p. 170: K = +513 ± 60 (9 groups)
+  K_ROUND: 500,                         // p. 170: Hubble's round value
+  V0_24: 306,                           // p. 170: speed of solar motion, 24-object solution, km/s
+  RESIDUAL_24: 150,                     // p. 171: average residual, 24 objects (peculiar motions)
+  K_FROM_TABLE2: 530,                   // p. 172: mean of 22 nebulae without distances implies K about 530
+  // ---- Humason's nebula (p. 173 and the preceding note, PNAS 15:167)
+  HUMASON: { name: 'NGC 7619', v: 3779, v_corr: 3910, r_cluster: 7.0, r_from_K: 7.8, m: 11.8 }, // p. 173
+  // ---- The spectrograph: the Ca II K and H lines, which dominate the absorption spectra of these nebulae (p. 167–168
+  // describes the lines in NGC 7619). Wavelengths in Ångström are standard laboratory values, not in the paper.
+  LINES: [ { name: 'K', lambda: 3933.66 }, { name: 'H', lambda: 3968.47 } ],
+  C_KMS: 299792.458,                    // speed of light, km/s
+  WINDOW: { lo: 3880, hi: 4040 },       // our choice: the strip shows 160 Å around H and K so 1000 km/s is a visible slide
+  // ---- The game
+  NIGHTS: 12,                           // our choice: the budget; see memo section 17 (heuristics) for why 12
+  COST: [ { maxMs: 17.95, nights: 1 }, { maxMs: 19.45, nights: 2 }, { maxMs: 99, nights: 3 } ], // our choice: exposure grows with faintness
+  VIRGO_COST: 3,                        // our choice: the Virgo four, the farthest, cost most (p. 173: the far ones need Humason's programme)
+  RATE_MAX: 1000,                       // our choice: the rate dial runs from 0 (no relation) to 1000 km/s per 10^6 parsecs
+  EYE_TOL_LOG: 0.06,                    // our choice: the eyepiece ring glows within ±15% in distance (0.06 dex); Hubble's own errors were larger
+  SPEC_TOL_KMS: 40,                     // our choice: the spectrograph ring glows within ±40 km/s (about 0.5 Å at H and K)
+  WITHIN_HUBBLE_LO: 415, WITHIN_HUBBLE_HI: 573, // p. 170: the span of his two solutions with their errors (465-50 to 513+60)
+  SEED_MAX: 9999,                       // our choice: seeds vary graininess and lamp flicker only; the sky is the paper's
+};
+
+// ---------------------------------------------------------------- helpers
+function makeRng(seed) { // mulberry32
+  let a = (seed >>> 0) || 1;
+  return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+}
+const D2R = Math.PI / 180;
+
+// The solar-motion term of p. 170: X cos a cos d + Y sin a cos d + Z sin d
+function solarTerm(ra, dec, S) {
+  S = S || CONFIG.SOLAR;
+  return S.X * Math.cos(ra * D2R) * Math.cos(dec * D2R) + S.Y * Math.sin(ra * D2R) * Math.cos(dec * D2R) + S.Z * Math.sin(dec * D2R);
+}
+function correctedVelocity(v, ra, dec, S) { return v - solarTerm(ra, dec, S); }
+
+// The brightest-star criterion (p. 168–169): m - M = 5 log10(r_pc) - 5  →  r in millions of parsecs
+function distanceFromMag(ms, M) { M = (M === undefined) ? CONFIG.M_BRIGHTEST_STAR : M; return Math.pow(10, (ms - M + 5) / 5) / 1e6; }
+function magFromDistance(rMpc, M) { M = (M === undefined) ? CONFIG.M_BRIGHTEST_STAR : M; return M + 5 * Math.log10(rMpc * 1e6) - 5; }
+// Apparent magnitude of a nebula's brightest star as the eyepiece shows it: the table's value, or the criterion run backwards
+function brightestStarMag(neb) { return neb.ms !== null ? neb.ms : magFromDistance(neb.r); }
+// Relative brightness of a star of magnitude m, on a scale where m0 is 1
+function relBrightness(m, m0) { return Math.pow(10, -0.4 * (m - m0)); }
+
+// The spectrograph: observed wavelength of a line at radial velocity v (first-order Doppler, as in 1929)
+function shiftedLambda(lambda0, v) { return lambda0 * (1 + v / CONFIG.C_KMS); }
+function velocityFromShift(lambda0, lambdaObs) { return CONFIG.C_KMS * (lambdaObs / lambda0 - 1); }
+// Line profile for drawing: depth and width scale with faintness of the nebula (p. 168: "wide shallow absorption lines ...
+// more pronounced among the smaller and fainter nebulae"). Our mapping: width 1.5–6 Å, depth 0.75–0.3 as ms runs 15–21.
+function lineProfile(neb) {
+  const ms = brightestStarMag(neb);
+  const t = Math.min(1, Math.max(0, (ms - 15) / 6));
+  return { widthA: 1.5 + 4.5 * t, depth: 0.75 - 0.45 * t, grain: 0.05 + 0.25 * t };
+}
+
+// Cost in nights
+function cost(neb) {
+  if (neb.r >= 2.0) return CONFIG.VIRGO_COST;
+  const ms = brightestStarMag(neb);
+  for (const c of CONFIG.COST) if (ms <= c.maxMs) return c.nights;
+  return CONFIG.COST[CONFIG.COST.length - 1].nights;
+}
+
+// Least squares through the origin: v = K r
+function fitK(points) { let sr2 = 0, srv = 0; for (const p of points) { sr2 += p.r * p.r; srv += p.r * p.v; } return sr2 > 0 ? srv / sr2 : 0; }
+function correlation(points) {
+  const n = points.length; if (n < 3) return 0;
+  let mr = 0, mv = 0; for (const p of points) { mr += p.r; mv += p.v; } mr /= n; mv /= n;
+  let srv = 0, sr = 0, sv = 0; for (const p of points) { srv += (p.r - mr) * (p.v - mv); sr += (p.r - mr) ** 2; sv += (p.v - mv) ** 2; }
+  return (sr > 0 && sv > 0) ? srv / Math.sqrt(sr * sv) : 0;
+}
+// Hubble's own 4-parameter solution (p. 170): v = K r + X cos a cos d + Y sin a cos d + Z sin d, by normal equations
+function solveHubble(nebs) {
+  const rows = nebs.map(n => [n.r, Math.cos(n.ra * D2R) * Math.cos(n.dec * D2R), Math.sin(n.ra * D2R) * Math.cos(n.dec * D2R), Math.sin(n.dec * D2R), n.v]);
+  const A = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]], b = [0, 0, 0, 0];
+  for (const row of rows) for (let i = 0; i < 4; i++) { b[i] += row[i] * row[4]; for (let j = 0; j < 4; j++) A[i][j] += row[i] * row[j]; }
+  // gaussian elimination
+  const M = A.map((r, i) => r.concat([b[i]]));
+  for (let i = 0; i < 4; i++) {
+    let p = i; for (let k = i + 1; k < 4; k++) if (Math.abs(M[k][i]) > Math.abs(M[p][i])) p = k;
+    [M[i], M[p]] = [M[p], M[i]];
+    for (let k = 0; k < 4; k++) if (k !== i) { const f = M[k][i] / M[i][i]; for (let j = i; j < 5; j++) M[k][j] -= f * M[i][j]; }
+  }
+  const x = M.map((r, i) => r[4] / r[i]);
+  const res = rows.map(row => row[4] - (x[0] * row[0] + x[1] * row[1] + x[2] * row[2] + x[3] * row[3]));
+  const meanAbs = res.reduce((s, e) => s + Math.abs(e), 0) / res.length;
+  return { K: x[0], X: x[1], Y: x[2], Z: x[3], V0: Math.hypot(x[1], x[2], x[3]), meanAbsResidual: meanAbs };
+}
+
+// ---------------------------------------------------------------- game state
+function newGame(seed) {
+  seed = (seed === undefined || seed === null) ? 1 + Math.floor(Math.random() * CONFIG.SEED_MAX) : seed;
+  return { seed, nightsLeft: CONFIG.NIGHTS, observed: [], // {idx, r (read), v (read), rTrue, vTrue, vCorr}
+    corrected: false, rate: null, prediction: null, finished: false };
+}
+function canObserve(state, idx) {
+  const neb = CONFIG.NEBULAE[idx];
+  return !state.observed.some(o => o.idx === idx) && state.nightsLeft >= cost(neb);
+}
+function affordable(state) { return CONFIG.NEBULAE.map((n, i) => canObserve(state, i)); }
+function nightsOver(state) { return !affordable(state).some(Boolean); }
+// The player's two readings for one nebula: rRead from the eyepiece dial, vRead from the spectrograph slide
+function observe(state, idx, rRead, vRead) {
+  if (!canObserve(state, idx)) throw new Error('cannot observe ' + idx);
+  const neb = CONFIG.NEBULAE[idx];
+  state.nightsLeft -= cost(neb);
+  const o = { idx, r: rRead, v: vRead, rTrue: neb.r, vTrue: neb.v, vCorr: correctedVelocity(vRead, neb.ra, neb.dec), cost: cost(neb) };
+  state.observed.push(o);
+  return o;
+}
+// What the plate shows: raw readings before the Sun's motion is taken out, corrected ones after
+function platePoints(state) { return state.observed.map(o => ({ r: o.r, v: state.corrected ? o.vCorr : o.v, idx: o.idx })); }
+function takeOutSun(state) { state.corrected = true; return platePoints(state); }
+function setRate(state, K) { state.rate = Math.max(0, Math.min(CONFIG.RATE_MAX, K)); return state.rate; }
+function predictHumason(state) { return state.rate * CONFIG.HUMASON.r_cluster; }
+function commitPrediction(state, v) { state.prediction = v; return v; }
+
+// How the eyepiece and spectrograph judge a reading (for the glow ring; the reading itself is never snapped)
+function eyeMatch(neb, rTrial) { return Math.abs(Math.log10(rTrial / neb.r)) <= CONFIG.EYE_TOL_LOG; }
+function specMatch(neb, vTrial) { return Math.abs(vTrial - neb.v) <= CONFIG.SPEC_TOL_KMS; }
+
+// ---------------------------------------------------------------- words
+function fmtK(k) { return Math.round(k / 10) * 10; }
+function roundV(v) { return Math.round(v / 50) * 50; }
+// The sentence under the plate after each night, in the aim's units
+function plateWords(state) {
+  const pts = platePoints(state), n = pts.length;
+  if (n === 0) return 'Nothing on the plate yet.';
+  if (n === 1) return 'One nebula. Nothing to compare it with yet.';
+  if (n === 2) return 'Two nebulae. Too few to see anything.';
+  const rs = pts.map(p => p.r), spread = Math.max(...rs) - Math.min(...rs), c = correlation(pts);
+  if (spread < 0.5) return 'All at about the same distance. Nothing to compare: you need near ones and far ones.';
+  if (c > 0.75) return 'The dots climb: the farther, the faster.';
+  if (c > 0.45) return 'The dots lean upwards. The far ones tend to be the fast ones.';
+  return state.corrected ? 'Still a cloud. Scanty material, Hubble would say.' : 'A cloud. Some come toward us, some go away.';
+}
+// Distances in words, never decimals (the author finds the decimals in CONFIG)
+function distanceWords(r) {
+  if (r < 0.06) return 'a few hundredths of a million parsecs';
+  if (r < 0.16) return 'about a tenth of a million parsecs';
+  if (r < 0.36) return 'about a quarter of a million parsecs';
+  if (r < 0.58) return 'about half a million parsecs';
+  if (r < 0.72) return 'about two thirds of a million parsecs';
+  if (r < 1.25) return 'about a million parsecs';
+  if (r < 1.62) return 'about one and a half million parsecs';
+  if (r < 2.5) return 'about two million parsecs';
+  return 'more than two million parsecs';
+}
+function speedWords(v) {
+  const a = Math.abs(roundV(v));
+  if (a < 50) return 'hardly moving';
+  return `about ${a.toLocaleString('en')} km/s ${v >= 0 ? 'going away' : 'coming toward us'}`;
+}
+function nightWords(o, state) {
+  const neb = CONFIG.NEBULAE[o.idx];
+  const nights = state.nightsLeft === 0 ? 'No nights left.' : state.nightsLeft === 1 ? 'One night left.' : state.nightsLeft + ' nights left.';
+  return `${neb.name}: ${speedWords(o.v)}, ${distanceWords(o.r)} out. ${nights}`;
+}
+function rateWords(state) {
+  const K = state.rate;
+  if (K < 60) return 'You say the speeds do not depend on distance.';
+  if (K >= CONFIG.WITHIN_HUBBLE_LO && K <= CONFIG.WITHIN_HUBBLE_HI) return `You set the rate at about ${fmtK(K)} km/s for every million parsecs. That is within Hubble's two solutions.`;
+  if (K > CONFIG.WITHIN_HUBBLE_HI) return `You set the rate at about ${fmtK(K)} km/s for every million parsecs. Hubble's was lower, about 500.`;
+  return `You set the rate at about ${fmtK(K)} km/s for every million parsecs. Hubble's was higher, about 500.`;
+}
+function verdict(state) {
+  const H = CONFIG.HUMASON, pts = platePoints(state);
+  const n = pts.length, maxR = n ? Math.max(...pts.map(p => p.r)) : 0;
+  const bestK = fitK(pts);
+  const did = `You read ${n} nebula${n === 1 ? '' : 'e'}, the farthest ${distanceWords(maxR)} out.`;
+  const rate = rateWords(state);
+  const err = state.prediction - H.v;
+  let test;
+  if (state.rate < 60) test = `Humason's nebula, seven million parsecs out, you called standing still. The spectrograph said about ${roundV(H.v).toLocaleString('en')} km/s, going away.`;
+  else test = `Humason's nebula, seven million parsecs out: you said about ${roundV(state.prediction).toLocaleString('en')} km/s; the spectrograph said about ${roundV(H.v).toLocaleString('en')}. ${Math.abs(err) <= 800 ? 'Close.' : err > 0 ? 'You were high.' : 'You were low.'} Hubble's own rate would have said about ${roundV(CONFIG.K_ROUND * H.r_cluster).toLocaleString('en')}.`;
+  let plate;
+  const spread = n ? Math.max(...pts.map(p => p.r)) - Math.min(...pts.map(p => p.r)) : 0, c = correlation(pts);
+  if (n >= 3 && spread >= 0.5 && c > 0.45) plate = `Your plate shows it: the far ones are the fast ones. Your own dots, on their own, fit a rate of about ${fmtK(bestK)}.`;
+  else if (n >= 3 && spread < 0.5) plate = 'Your plate could not show it: every nebula on it sits at about the same distance, so there was nothing to compare. The relation needs near ones and far ones together.';
+  else plate = 'Your plate is thin. Hubble needed the whole table, and called it scanty even then.';
+  const showed = n >= 3 && spread >= 0.5 && c > 0.45;
+  const headline = state.rate < 60 ? 'The nebulae do not drift at random.' : showed ? 'The farther, the faster.' : 'The far ones were where the answer was.';
+  const meaning = 'The farther a nebula, the faster it recedes, about 500 km/s for every million parsecs on Hubble\'s distances. The ones that seemed to approach were mostly the Sun\'s own motion. Hubble stopped there; others would call it the expanding universe.';
+  return { headline, did, rate, test, plate, meaning, bestK, n, maxR };
+}
+
+// ---------------------------------------------------------------- heuristics (memo, section 17): simple ways of spending the nights
+function playStrategy(order, noise, rng) {
+  const st = newGame(1);
+  for (const idx of order) {
+    if (!canObserve(st, idx)) continue;
+    const neb = CONFIG.NEBULAE[idx];
+    const rRead = neb.r * Math.pow(10, noise ? (rng() * 2 - 1) * CONFIG.EYE_TOL_LOG : 0);
+    const vRead = neb.v + (noise ? (rng() * 2 - 1) * CONFIG.SPEC_TOL_KMS : 0);
+    observe(st, idx, rRead, vRead);
+  }
+  takeOutSun(st);
+  const pts = platePoints(st);
+  return { n: pts.length, maxR: Math.max(...pts.map(p => p.r)), K: fitK(pts), corr: correlation(pts), nightsUsed: CONFIG.NIGHTS - st.nightsLeft };
+}
+function heuristics(seed) {
+  const rng = makeRng(seed || 7), N = CONFIG.NEBULAE.length, idx = [...Array(N).keys()];
+  const byCost = idx.slice().sort((a, b) => cost(CONFIG.NEBULAE[a]) - cost(CONFIG.NEBULAE[b]) || brightestStarMag(CONFIG.NEBULAE[a]) - brightestStarMag(CONFIG.NEBULAE[b]));
+  const byFar = idx.slice().sort((a, b) => CONFIG.NEBULAE[b].r - CONFIG.NEBULAE[a].r);
+  const bright = byCost.slice(0, 6), far = byFar.slice(0, 6);
+  const alternating = []; for (let i = 0; i < 12; i++) alternating.push(i % 2 ? byCost[i >> 1] : byFar[i >> 1]);
+  const shuffled = idx.slice(); for (let i = N - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; }
+  return {
+    'nearest and cheapest first': playStrategy(byCost, true, rng),
+    'farthest first': playStrategy(byFar, true, rng),
+    'alternate far and near': playStrategy(alternating, true, rng),
+    'random order': playStrategy(shuffled, true, rng),
+    'four Virgo only': playStrategy(byFar.slice(0, 4), true, rng),
+    'all 24, exact (Hubble\'s table)': (() => { const st = newGame(1); st.nightsLeft = 999; for (const i of idx) observe(st, i, CONFIG.NEBULAE[i].r, CONFIG.NEBULAE[i].v); takeOutSun(st); const p = platePoints(st); return { n: p.length, maxR: 2, K: fitK(p), corr: correlation(p), nightsUsed: 999 }; })(),
+  };
+}
+
+const API = { CONFIG, makeRng, solarTerm, correctedVelocity, distanceFromMag, magFromDistance, brightestStarMag, relBrightness,
+  shiftedLambda, velocityFromShift, lineProfile, cost, fitK, correlation, solveHubble, newGame, canObserve, affordable, nightsOver,
+  observe, platePoints, takeOutSun, setRate, predictHumason, commitPrediction, eyeMatch, specMatch, plateWords, nightWords, rateWords,
+  verdict, heuristics, fmtK, roundV, distanceWords, speedWords };
+if (typeof module !== 'undefined' && module.exports) module.exports = API; else root.HUBBLE = API;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+(function(){
+'use strict';
+const M = window.HUBBLE, C = M.CONFIG, N = C.NEBULAE;
+const $ = id => document.getElementById(id);
+const NS = 'http://www.w3.org/2000/svg';
+function el(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+function txt(parent, x, y, s, cls, anchor) { const t = el('text', { x, y, class: cls || 'svgtext', 'text-anchor': anchor || 'start' }, parent); t.textContent = s; return t; }
+function clear(svg) { while (svg.firstChild) svg.removeChild(svg.firstChild); }
+function tween(ms, fn, done) { const t0 = performance.now(); (function step(t) { const p = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - p, 3); fn(e); if (p < 1) requestAnimationFrame(step); else if (done) done(); })(t0); }
+
+// ---------------------------------------------------------------- state and seed
+let state, rng, backTo = 'start', current = 'start', selected = null, pending = null;
+function seedFromUrl() { const m = location.hash.match(/(\d+)/); return m ? +m[1] : null; }
+function go(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('on')); $(id).classList.add('on'); current = id; window.scrollTo(0, 0); }
+
+// ---------------------------------------------------------------- star fields
+function starField(svg, w, h, n, r) {
+  for (let i = 0; i < n; i++) { const s = el('circle', { cx: (r() * w).toFixed(1), cy: (r() * h).toFixed(1), r: (0.4 + r() * 1.1).toFixed(2), fill: '#E8EEF8', opacity: (0.25 + r() * 0.6).toFixed(2) }, svg); if (r() < 0.25) { s.classList.add('twinkle'); s.style.animationDelay = (r() * 3).toFixed(2) + 's'; } }
+}
+function nebulaGlow(svg, x, y, rad, id, strong) {
+  const defs = svg.querySelector('defs') || el('defs', {}, svg);
+  const g = el('radialGradient', { id }, defs);
+  el('stop', { offset: '0%', 'stop-color': '#E8EEF8', 'stop-opacity': strong ? 0.95 : 0.8 }, g);
+  el('stop', { offset: '45%', 'stop-color': '#C9D4EE', 'stop-opacity': strong ? 0.45 : 0.3 }, g);
+  el('stop', { offset: '100%', 'stop-color': '#C9D4EE', 'stop-opacity': 0 }, g);
+  return el('ellipse', { cx: x, cy: y, rx: rad, ry: rad * 0.7, fill: `url(#${id})`, transform: `rotate(${(x * 7) % 60 - 30} ${x} ${y})` }, svg);
+}
+function drawStartSky() { const svg = $('startsky'); clear(svg); const r = M.makeRng(99); starField(svg, 380, 150, 90, r); nebulaGlow(svg, 300, 70, 26, 'g0', true); nebulaGlow(svg, 90, 95, 14, 'g1'); nebulaGlow(svg, 180, 40, 9, 'g2'); }
+
+// ---------------------------------------------------------------- the sky
+const SKYW = 380, SKYH = 400;
+let skyPos = null;
+function layoutSky() {
+  const pos = N.map(n => { let dx = ((n.ra - 190 + 540) % 360) - 180; return { x: SKYW / 2 + dx * 0.9, y: SKYH / 2 - n.dec * 1.9 }; });
+  for (let it = 0; it < 400; it++) {
+    for (let i = 0; i < pos.length; i++) for (let j = i + 1; j < pos.length; j++) {
+      const dx = pos[j].x - pos[i].x, dy = pos[j].y - pos[i].y, d = Math.hypot(dx, dy) || 0.01, min = 46;
+      if (d < min) { const push = (min - d) / 2, ux = dx / d, uy = dy / d; pos[i].x -= ux * push; pos[i].y -= uy * push; pos[j].x += ux * push; pos[j].y += uy * push; }
+    }
+    for (const p of pos) { p.x = Math.max(26, Math.min(SKYW - 26, p.x)); p.y = Math.max(26, Math.min(SKYH - 26, p.y)); }
+  }
+  return pos;
+}
+function nebRadius(n) { const t = (Math.log10(n.r) - Math.log10(0.03)) / (Math.log10(2.5) - Math.log10(0.03)); return 6 + 11 * (1 - Math.max(0, Math.min(1, t))); }
+function costWords(n) { const c = M.cost(n); return c === 1 ? 'Bright. One night.' : c === 2 ? 'Faint. Two nights.' : 'Very faint and far. Three nights.'; }
+function drawSky() {
+  const svg = $('skysvg'); clear(svg); el('defs', {}, svg);
+  const r = M.makeRng(state.seed + 1000); starField(svg, SKYW, SKYH, 160, r);
+  skyPos = skyPos || layoutSky();
+  // the Sun's apex, faint, as a tiny mark (p. 170: A = 277°, D = +36°) — drawn only after the Sun step
+  N.forEach((n, i) => {
+    const p = skyPos[i], rad = nebRadius(n), done = state.observed.some(o => o.idx === i), can = M.canObserve(state, i);
+    const g = el('g', { 'data-idx': i, style: 'cursor:pointer' }, svg);
+    const glow = nebulaGlow(g, p.x, p.y, rad, 'n' + i, n.r < 0.3);
+    if (done) { glow.setAttribute('opacity', 0.35); el('circle', { cx: p.x, cy: p.y, r: rad + 5, fill: 'none', stroke: '#B08D57', 'stroke-width': 1.5 }, g); }
+    else if (!can) glow.setAttribute('opacity', 0.5);
+    if (selected === i) el('circle', { cx: p.x, cy: p.y, r: rad + 8, fill: 'none', stroke: '#F2A33A', 'stroke-width': 2, class: 'glow' }, g);
+    el('circle', { cx: p.x, cy: p.y, r: 23, fill: 'transparent' }, g); // touch target
+  });
+  svg.onclick = e => { const g = e.target.closest('g[data-idx]'); if (!g) return; selected = +g.getAttribute('data-idx'); drawSky(); drawSkyPanel(); };
+}
+function drawLamps() { const L = $('lamps'); L.innerHTML = ''; for (let i = 0; i < C.NIGHTS; i++) { const d = document.createElement('div'); d.className = 'lamp ' + (i < state.nightsLeft ? 'lit' : 'spent'); L.appendChild(d); } }
+function drawSkyPanel() {
+  const P = $('skypanel'); P.innerHTML = '';
+  if (M.nightsOver(state)) {
+    P.innerHTML = `<div class="name">No nights left${state.nightsLeft ? ' that would buy a nebula' : ''}.</div><div class="hint">The telescope goes dark. Take your plate to the desk.</div>`;
+    const b = document.createElement('button'); b.className = 'btn primary'; b.textContent = 'The nights are over'; b.onclick = () => { drawSunScreen(); go('sun'); }; P.appendChild(b); return;
+  }
+  if (selected === null) { P.innerHTML = `<div class="hint">${state.observed.length ? 'Choose the next nebula. Where on the plate do you need a dot?' : 'The brightest smudge, at the right, is Andromeda. Any of them will do for a first night.'}</div>`; return; }
+  const n = N[selected], done = state.observed.some(o => o.idx === selected), can = M.canObserve(state, selected);
+  let hint = costWords(n);
+  if (done) hint = 'Already on your plate.'; else if (!can) hint += ' Not enough nights left for this one.';
+  P.innerHTML = `<div class="name">${n.name}</div><div class="hint">${hint}</div>`;
+  if (!done && can) { const b = document.createElement('button'); b.className = 'btn primary'; b.textContent = 'Point the telescope'; b.onclick = () => startEye(selected); P.appendChild(b); }
+}
+function showSky() { drawLamps(); drawSky(); drawSkyPanel(); drawPlate($('miniplate'), M.platePoints(state), { w: 380, h: 150, mini: true }); $('miniwords').textContent = state.observed.length ? M.plateWords(state) : 'The plate: distance across, speed up. Empty so far.'; go('sky'); }
+
+// ---------------------------------------------------------------- the eyepiece
+const EYE = { w: 380, h: 320, cx: 150, cy: 160, R: 135, cmpx: 318, cmpy: 250 };
+let eyeField = null;
+function eyeDialToR(v) { return Math.pow(10, Math.log10(0.02) + (v / 1000) * (Math.log10(3.0) - Math.log10(0.02))); }
+function starSize(mag, refMag) { const b = M.relBrightness(mag, refMag); return { r: Math.max(0.6, Math.min(16, 5.5 * Math.sqrt(b))), op: Math.max(0.08, Math.min(1, 0.45 + 0.55 * Math.log10(b * 10 + 1))) }; }
+function startEye(idx) {
+  pending = { idx }; const n = N[idx]; selected = null;
+  $('eyetitle').textContent = 'The eyepiece · ' + n.name; $('eyebar').textContent = 'Night ' + (C.NIGHTS - state.nightsLeft + 1) + ': how far is it?';
+  const svg = $('eyesvg'); clear(svg); el('defs', {}, svg);
+  const r = M.makeRng(state.seed * 31 + idx);
+  const clip = el('clipPath', { id: 'eyeclip' }, svg.querySelector('defs')); el('circle', { cx: EYE.cx, cy: EYE.cy, r: EYE.R }, clip);
+  const field = el('g', { 'clip-path': 'url(#eyeclip)', class: 'focusin' }, svg);
+  el('circle', { cx: EYE.cx, cy: EYE.cy, r: EYE.R, fill: '#05080F' }, field);
+  starField(field, 300, 320, 60, r);
+  const ms = M.brightestStarMag(n);
+  // the nebula: a soft glow and its resolved stars; the brightest star is the measurement
+  const grad = el('radialGradient', { id: 'eyeglow' }, svg.querySelector('defs'));
+  el('stop', { offset: '0%', 'stop-color': '#C9D4EE', 'stop-opacity': 0.55 }, grad); el('stop', { offset: '100%', 'stop-color': '#C9D4EE', 'stop-opacity': 0 }, grad);
+  const spread = 50 + 60 * Math.max(0, 1 - Math.log10(n.r / 0.03) / 2);
+  el('ellipse', { cx: EYE.cx, cy: EYE.cy, rx: spread, ry: spread * 0.6, fill: 'url(#eyeglow)', transform: `rotate(-20 ${EYE.cx} ${EYE.cy})` }, field);
+  for (let i = 0; i < 26; i++) { const a = r() * 6.283, d = Math.sqrt(r()) * spread * 0.95; const mag = ms + 0.3 + r() * 2.5; const s = starSize(mag, ms); el('circle', { cx: (EYE.cx + Math.cos(a) * d).toFixed(1), cy: (EYE.cy + Math.sin(a) * d * 0.6).toFixed(1), r: s.r.toFixed(2), fill: '#E8EEF8', opacity: s.op.toFixed(2) }, field); }
+  const bx = EYE.cx + 22, by = EYE.cy - 14, bs = starSize(ms, ms);
+  el('circle', { cx: bx, cy: by, r: bs.r, fill: '#FFFFFF', opacity: bs.op }, field);
+  el('circle', { cx: bx, cy: by, r: 16, fill: 'none', stroke: '#F2A33A', 'stroke-width': 1.5 }, svg);
+  txt(svg, bx, by - 22, 'brightest star', 'svgtext', 'middle');
+  el('circle', { cx: EYE.cx, cy: EYE.cy, r: EYE.R, fill: 'none', stroke: '#B08D57', 'stroke-width': 3 }, svg);
+  // comparison star in its own small circle
+  el('circle', { cx: EYE.cmpx, cy: EYE.cmpy, r: 34, fill: '#05080F', stroke: '#B08D57', 'stroke-width': 2 }, svg);
+  eyeField = { cmp: el('circle', { cx: EYE.cmpx, cy: EYE.cmpy, r: 3, fill: '#FFFFFF' }, svg), ring: el('circle', { cx: EYE.cmpx, cy: EYE.cmpy, r: 40, fill: 'none', stroke: '#F2A33A', 'stroke-width': 2, opacity: 0 }, svg), ms, bs };
+  txt(svg, EYE.cmpx, EYE.cmpy + 54, 'comparison', 'svgtext', 'middle');
+  txt(svg, EYE.cmpx, 40, 'a brightest star', 'svgtext', 'middle'); txt(svg, EYE.cmpx, 54, 'seen from the', 'svgtext', 'middle'); txt(svg, EYE.cmpx, 68, 'dial distance', 'svgtext', 'middle');
+  $('eyedial').value = 0; updateEye(); go('eye');
+}
+function updateEye() {
+  const n = N[pending.idx], rTrial = eyeDialToR(+$('eyedial').value);
+  const magTrial = M.magFromDistance(rTrial); const s = starSize(magTrial, eyeField.ms);
+  eyeField.cmp.setAttribute('r', s.r.toFixed(2)); eyeField.cmp.setAttribute('opacity', s.op.toFixed(2));
+  const ok = M.eyeMatch(n, rTrial); eyeField.ring.setAttribute('opacity', ok ? 1 : 0); eyeField.ring.setAttribute('class', ok ? 'glow' : '');
+  pending.rRead = rTrial;
+  const ratio = M.relBrightness(magTrial, eyeField.ms);
+  $('eyereadout').textContent = (ok ? 'about alike · ' : ratio > 1 ? 'comparison too bright · ' : 'comparison too faint · ') + M.distanceWords(rTrial);
+  $('eyereadout').className = 'readout ' + (ok ? 'amber' : '');
+}
+$('eyedial').addEventListener('input', updateEye);
+$('eyeread').onclick = () => startSpec();
+
+// ---------------------------------------------------------------- the spectrograph
+const SP = { w: 380, h: 190, x0: 20, x1: 360, top: 22, sh: 90, cmpTop: 128, cmpH: 26 };
+function lamToX(l) { return SP.x0 + (l - C.WINDOW.lo) / (C.WINDOW.hi - C.WINDOW.lo) * (SP.x1 - SP.x0); }
+let specEls = null;
+function drawSpectrum(svg, neb, seed, withGrain) {
+  clear(svg); const defs = el('defs', {}, svg);
+  const lp = M.lineProfile(neb), r = M.makeRng(seed);
+  // continuum gradient (violet → blue over this window)
+  const pid = svg.id + '-'; const g = el('linearGradient', { id: pid + 'cont' }, defs); el('stop', { offset: '0%', 'stop-color': '#B8A9FF' }, g); el('stop', { offset: '100%', 'stop-color': '#8FB8FF' }, g);
+  el('rect', { x: SP.x0, y: SP.top, width: SP.x1 - SP.x0, height: SP.sh, fill: `url(#${pid}cont)`, opacity: 0.55, class: 'expose' }, svg);
+  // grain
+  const grain = el('g', { class: 'expose', opacity: lp.grain.toFixed(2) }, svg);
+  for (let i = 0; i < 180; i++) el('rect', { x: (SP.x0 + r() * (SP.x1 - SP.x0)).toFixed(1), y: (SP.top + r() * SP.sh).toFixed(1), width: (1 + r() * 2).toFixed(1), height: (2 + r() * 6).toFixed(1), fill: r() < 0.5 ? '#05080F' : '#FFFFFF', opacity: (0.3 + r() * 0.5).toFixed(2) }, grain);
+  // absorption lines at the nebula's true shift
+  for (const L of C.LINES) { const x = lamToX(M.shiftedLambda(L.lambda, neb.v)), w = lp.widthA * (SP.x1 - SP.x0) / (C.WINDOW.hi - C.WINDOW.lo);
+    const lg = el('linearGradient', { id: pid + 'line' + L.name }, defs);
+    el('stop', { offset: '0%', 'stop-color': '#05080F', 'stop-opacity': 0 }, lg); el('stop', { offset: '50%', 'stop-color': '#05080F', 'stop-opacity': lp.depth }, lg); el('stop', { offset: '100%', 'stop-color': '#05080F', 'stop-opacity': 0 }, lg);
+    el('rect', { x: x - w * 1.6, y: SP.top, width: w * 3.2, height: SP.sh, fill: `url(#${pid}line${L.name})`, class: 'expose' }, svg); }
+  el('rect', { x: SP.x0, y: SP.top, width: SP.x1 - SP.x0, height: SP.sh, fill: 'none', stroke: '#B08D57', 'stroke-width': 1.5 }, svg);
+  txt(svg, SP.x0, 14, 'the nebula', 'svgtext'); txt(svg, SP.x1, 14, 'bluer  ←   →  redder', 'svgmono', 'end');
+  // comparison strip: the lab lamp, fixed
+  el('rect', { x: SP.x0, y: SP.cmpTop, width: SP.x1 - SP.x0, height: SP.cmpH, fill: '#0F1526', stroke: '#B08D57', 'stroke-width': 1.5 }, svg);
+  for (const L of C.LINES) el('rect', { x: lamToX(L.lambda) - 1.2, y: SP.cmpTop, width: 2.4, height: SP.cmpH, fill: '#F2A33A' }, svg);
+  txt(svg, SP.x0, SP.cmpTop + SP.cmpH + 16, 'the lamp in the lab', 'svgtext'); txt(svg, SP.x1, SP.cmpTop + SP.cmpH + 16, 'calcium H and K', 'svgmono', 'end');
+  // the sliding marks over the nebula strip
+  const marks = el('g', {}, svg);
+  for (const L of C.LINES) { el('line', { x1: lamToX(L.lambda), x2: lamToX(L.lambda), y1: SP.top - 6, y2: SP.top + SP.sh + 6, stroke: '#F2A33A', 'stroke-width': 2, 'data-l': L.lambda }, marks); }
+  const ring = el('rect', { x: SP.x0 - 4, y: SP.top - 4, width: SP.x1 - SP.x0 + 8, height: SP.sh + 8, rx: 6, fill: 'none', stroke: '#F2A33A', 'stroke-width': 2, opacity: 0 }, svg);
+  return { marks, ring };
+}
+function positionMarks(els, v) { els.marks.querySelectorAll('line').forEach(l => { const x = lamToX(M.shiftedLambda(+l.getAttribute('data-l'), v)); l.setAttribute('x1', x); l.setAttribute('x2', x); }); }
+function startSpec() {
+  const n = N[pending.idx];
+  $('spectitle').textContent = 'The spectrograph · ' + n.name; $('specbar').textContent = 'Night ' + (C.NIGHTS - state.nightsLeft + 1) + ': how fast, and which way?';
+  specEls = drawSpectrum($('specsvg'), n, state.seed * 17 + pending.idx, true);
+  $('specdial').value = 0; updateSpec(); go('spec');
+}
+function updateSpec() {
+  const n = N[pending.idx], v = +$('specdial').value; positionMarks(specEls, v); pending.vRead = v;
+  const ok = M.specMatch(n, v); specEls.ring.setAttribute('opacity', ok ? 1 : 0); specEls.ring.setAttribute('class', ok ? 'glow' : '');
+  const R = $('specreadout'); R.textContent = M.speedWords(v) + (ok ? ' · on the lines' : ''); R.className = 'readout ' + (Math.abs(v) < 50 ? '' : v > 0 ? 'red' : 'blue');
+}
+$('specdial').addEventListener('input', updateSpec);
+$('specread').onclick = () => { const o = M.observe(state, pending.idx, pending.rRead, pending.vRead); showPlate(o); };
+
+// ---------------------------------------------------------------- the plate
+function drawPlate(svg, pts, opt) {
+  opt = opt || {}; const w = opt.w || 380, h = opt.h || 280, mini = !!opt.mini;
+  const xmax = opt.xmax || 2.4, ymin = opt.ymin !== undefined ? opt.ymin : -400, ymax = opt.ymax || 1300;
+  const L = mini ? 40 : 52, Rm = 14, T = mini ? 12 : 20, B = mini ? 22 : 34;
+  const X = r => L + r / xmax * (w - L - Rm), Y = v => T + (ymax - v) / (ymax - ymin) * (h - T - B);
+  clear(svg);
+  el('rect', { x: 0, y: 0, width: w, height: h, fill: '#0A1020' }, svg);
+  // axes and ticks
+  el('line', { x1: L, x2: w - Rm, y1: Y(0), y2: Y(0), stroke: '#8B95A8', 'stroke-width': 1, 'stroke-dasharray': '2 3' }, svg);
+  el('line', { x1: L, x2: L, y1: T, y2: h - B, stroke: '#B08D57', 'stroke-width': 1.5 }, svg);
+  el('line', { x1: L, x2: w - Rm, y1: h - B, y2: h - B, stroke: '#B08D57', 'stroke-width': 1.5 }, svg);
+  const xt = opt.xticks || [1, 2]; for (const r of xt) { el('line', { x1: X(r), x2: X(r), y1: h - B, y2: h - B + 5, stroke: '#B08D57' }, svg); txt(svg, X(r), h - B + 15, String(r), 'svgmono', 'middle'); }
+  const yt = opt.yticks || [0, 500, 1000]; for (const v of yt) { el('line', { x1: L - 5, x2: L, y1: Y(v), y2: Y(v), stroke: '#B08D57' }, svg); if (!mini || v === 0 || v === 1000) txt(svg, L - 7, Y(v) + 4, String(v), 'svgmono', 'end'); }
+  if (!mini) { txt(svg, L + 6, h - 6, 'distance, million parsecs →', 'svgtext'); txt(svg, L + 6, T + 10, 'speed, km/s ↑', 'svgtext'); }
+  else { txt(svg, L + 5, h - 4, 'distance →', 'svgtext'); txt(svg, L + 5, T + 10, 'speed ↑', 'svgtext'); }
+  // the rate line
+  let line = null;
+  if (opt.K !== undefined && opt.K !== null) { const r2 = Math.min(xmax, (ymax * 0.98) / Math.max(opt.K, 1e-6)); line = el('line', { x1: X(0), y1: Y(0), x2: X(r2), y2: Y(opt.K * r2), stroke: opt.lineColor || '#E5484D', 'stroke-width': 2.5, 'stroke-dasharray': opt.dashed ? '6 5' : 'none' }, svg); }
+  // the dots
+  const dots = pts.map(p => el('circle', { cx: X(p.r), cy: Y(Math.max(ymin, Math.min(ymax, p.v))), r: mini ? 5 : 8, fill: p.v >= 0 ? '#E5484D' : '#6EA8FF', stroke: '#E8EEF8', 'stroke-width': mini ? 0.8 : 1.2 }, svg));
+  if (opt.marker) { const mx = X(opt.marker.r); el('line', { x1: mx, x2: mx, y1: T, y2: h - B, stroke: '#F2A33A', 'stroke-width': 1.5, 'stroke-dasharray': '4 4' }, svg); txt(svg, mx - 6, T + 12, opt.marker.label, 'svgtext', 'end'); if (opt.marker.v !== undefined) el('circle', { cx: mx, cy: Y(Math.min(ymax, opt.marker.v)), r: 9, fill: 'none', stroke: '#F2A33A', 'stroke-width': 2.5 }, svg); }
+  return { X, Y, dots, line };
+}
+function showPlate(o) {
+  $('platenight').textContent = M.nightWords(o, state);
+  const pts = M.platePoints(state), prev = pts.slice(0, -1), last = pts[pts.length - 1];
+  const P = drawPlate($('platesvg'), prev, {});
+  // the new dot drops in
+  const d = el('circle', { cx: P.X(last.r), cy: P.Y(1300), r: 8, fill: last.v >= 0 ? '#E5484D' : '#6EA8FF', stroke: '#E8EEF8', 'stroke-width': 1.2 }, $('platesvg'));
+  const yTo = P.Y(Math.max(-400, Math.min(1300, last.v))), yFrom = P.Y(1300);
+  $('platewords').textContent = '';
+  tween(900, e => d.setAttribute('cy', yFrom + (yTo - yFrom) * e), () => { $('platewords').textContent = M.plateWords(state); });
+  const over = M.nightsOver(state);
+  $('platenext').textContent = over ? 'The nights are over' : 'Back to the sky';
+  $('platenext').onclick = () => { if (over) { drawSunScreen(); go('sun'); } else showSky(); };
+  go('plate');
+}
+
+// ---------------------------------------------------------------- the Sun
+function drawSunScreen() {
+  const pts = M.platePoints(state); drawPlate($('sunsvg'), pts, {}); $('sunwords').textContent = M.plateWords(state);
+  $('sunbtn').textContent = "Take out the Sun's motion"; $('sunbtn').disabled = false;
+  $('sunbtn').onclick = () => {
+    const before = M.platePoints(state), after = M.takeOutSun(state);
+    const P = drawPlate($('sunsvg'), before, {});
+    $('sunbtn').disabled = true; $('sunwords').textContent = 'the dots move…';
+    tween(1600, e => { P.dots.forEach((d, i) => { const v = before[i].v + (after[i].v - before[i].v) * e; d.setAttribute('cy', P.Y(Math.max(-400, Math.min(1300, v)))); d.setAttribute('fill', v >= 0 ? '#E5484D' : '#6EA8FF'); }); }, () => {
+      $('sunwords').textContent = M.plateWords(state);
+      $('sunorient').textContent = 'The Sun\'s motion is out. The ones that seemed to come toward us were mostly us, moving. Now say what you see.';
+      $('sunbtn').textContent = 'Set the rate'; $('sunbtn').disabled = false; $('sunbtn').onclick = () => { drawRate(); go('rate'); };
+    });
+  };
+}
+
+// ---------------------------------------------------------------- the rate
+function drawRate() { $('ratedial').value = 0; updateRate(); }
+function updateRate() { const K = +$('ratedial').value; drawPlate($('ratesvg'), M.platePoints(state), { K }); $('ratereadout').textContent = K < 60 ? 'No relation: flat' : `about ${M.fmtK(K)} km/s for every million parsecs`; }
+$('ratedial').addEventListener('input', updateRate);
+$('ratecommit').onclick = () => { M.setRate(state, +$('ratedial').value); drawHum(); go('hum'); };
+
+// ---------------------------------------------------------------- Humason
+function drawHum() {
+  const guess = Math.round(M.predictHumason(state) / 50) * 50; $('humdial').value = guess; updateHum();
+}
+function updateHum() {
+  const v = +$('humdial').value;
+  drawPlate($('humsvg'), M.platePoints(state), { xmax: 8.2, ymax: 5000, ymin: -400, xticks: [2, 4, 6, 8], yticks: [0, 2000, 4000], K: state.rate, dashed: true, marker: { r: C.HUMASON.r_cluster, label: 'NGC 7619', v } });
+  $('humreadout').textContent = v < 50 ? 'standing still' : `about ${M.roundV(v).toLocaleString('en')} km/s going away`;
+}
+$('humdial').addEventListener('input', updateHum);
+$('humcommit').onclick = () => { M.commitPrediction(state, +$('humdial').value); runHumSpec(); go('humspec'); };
+function runHumSpec() {
+  const H = { name: C.HUMASON.name, ms: 21.5, r: C.HUMASON.r_cluster, v: C.HUMASON.v }; // ms: our choice for drawing only, the faintest profile
+  const els = drawSpectrum($('humspecsvg'), H, state.seed * 7 + 9, true);
+  $('humspecreadout').textContent = 'exposing…'; $('toverdict').disabled = true; positionMarks(els, 0);
+  setTimeout(() => tween(2600, e => { const v = C.HUMASON.v * e; positionMarks(els, v); $('humspecreadout').textContent = `about ${M.roundV(v).toLocaleString('en')} km/s going away…`; }, () => {
+    els.ring.setAttribute('opacity', 1); els.ring.setAttribute('class', 'glow');
+    $('humspecreadout').textContent = `about ${M.roundV(C.HUMASON.v).toLocaleString('en')} km/s going away · on the lines`;
+    $('humspecorient').textContent = 'The lines sit a long way to the red. You said about ' + (state.prediction < 50 ? 'nothing' : M.roundV(state.prediction).toLocaleString('en') + ' km/s') + '.';
+    $('toverdict').disabled = false;
+  }), 900);
+}
+$('toverdict').onclick = () => { showEnd(); go('end'); };
+
+// ---------------------------------------------------------------- the end
+function showEnd() {
+  state.finished = true; const v = M.verdict(state);
+  $('vhead').textContent = v.headline;
+  $('vbody').innerHTML = `<p>${v.did}</p><p>${v.rate}</p><p>${v.test}</p><p>${v.plate}</p><p class="key">${v.meaning}</p>`;
+  drawPlate($('endmine'), M.platePoints(state), { h: 240, K: state.rate });
+  drawPlate($('endhubble'), N.map(n => ({ r: n.r, v: M.correctedVelocity(n.v, n.ra, n.dec) })), { h: 240, K: C.K_ROUND, lineColor: '#F2A33A' });
+  $('seedline').textContent = 'game ' + state.seed;
+}
+
+// ---------------------------------------------------------------- navigation
+function newGame(seed) { state = M.newGame(seed); location.hash = 'g' + state.seed; selected = null; skyPos = null; showSky(); }
+$('begin').onclick = () => newGame(seedFromUrl() || undefined);
+$('newgame').onclick = () => newGame();
+document.querySelectorAll('[data-go]').forEach(b => b.onclick = () => { backTo = current; go(b.getAttribute('data-go')); });
+document.querySelectorAll('.qbtn').forEach(b => b.onclick = () => { backTo = current; go('help'); });
+$('helpback').onclick = () => go(backTo === 'help' || backTo === 'about' ? 'start' : backTo);
+$('aboutback').onclick = () => go(backTo === 'help' || backTo === 'about' ? 'start' : backTo);
+drawStartSky();
+})();
+</script>
+</body>
+</html>
