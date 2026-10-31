@@ -50,13 +50,14 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
 .score .of{font-family:var(--display);font-weight:600;font-size:28px;color:var(--ink);letter-spacing:.06em}
 .lead2{font-size:17px;line-height:1.35;margin:-6px 0 10px;color:var(--ink)}
 .scorelab{text-align:center;font-size:14px;color:var(--grey);margin:0 0 10px;line-height:1.3}
+.facenow{display:flex;gap:12px;align-items:center;margin:8px 0 4px}
+.facenow svg{flex:0 0 150px;width:150px;height:auto}
+.facenow p{margin:0;font-size:15px;line-height:1.35}
 .striplab{font-family:var(--display);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--grey);margin-top:10px}
 .slot{flex:1;height:60px;border:2px dotted var(--grey-2);background:transparent;position:relative}
 .slot.done{border:2px solid var(--ink);background:var(--cream-2)}
 .slot.now{border:3px solid var(--red)}
-.slot svg{display:block;width:100%;height:48px}
-.slot .mini{position:absolute;left:3px;right:3px;bottom:3px;height:6px;display:flex;background:var(--grey-2)}
-.slot .mini i{display:block;height:100%}
+.slot svg{display:block;width:100%;height:56px}
 .orient{font-size:15px;line-height:1.4;margin:8px 0 6px}
 #newthis{min-height:63px}  /* three lines reserved, so the picture sits at the same height every age */
 .orient.arrive{color:var(--red-2);font-weight:600;transition:opacity .6s ease;min-height:63px;display:block}
@@ -102,7 +103,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     <svg id="startface" viewBox="0 0 200 230" style="flex:0 0 120px;height:138px;border:3px solid var(--ink);background:#3b2a1a"></svg>
     <p class="lede" style="margin:0">You keep one face. It is painted, it has a halo, and hardly anyone has ever seen it. Every age brings a new way to copy a face, and the people press closer.</p>
   </div>
-  <p class="lede">Each age you <b>set the veil</b> (how near the people may come), <b>let the age pass</b>, and see who came and what is left of the halo. Six ages, each with a new way to copy a face, then one last choice about where the face goes.</p>
+  <p class="lede">Each age you <b>set the veil</b> (by what means the face goes out, if at all), <b>let the age pass</b>, and see who came and what is left of the halo. Six ages, each with a new way to copy a face. Then the verdict.</p>
   <p class="aim">Over six ages, let the face move as many people as it can.</p>
   <p class="lede">A face moves the people who see it, and moves them more when they see its <b>halo</b>. Only the face itself carries the whole halo; a copy carries a trace, and every copy you make spends some of the original's. Kept in the dark the halo stays whole, but each age's eyes are harder to move than the last, and each age has more people.</p>
   <button class="btn" id="begin">Begin: the first age</button>
@@ -145,6 +146,8 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   <div class="strip" id="endstrip"></div>
   <div class="striplab">The most a keeper could have done</div>
   <div class="strip" id="beststrip"></div>
+  <div class="striplab">The painting, as it is now</div>
+  <div class="facenow"><svg class="frame" id="endface" viewBox="0 0 340 300"></svg><p class="small" id="facenowwords"></p></div>
   <div class="vl"><b>What you did</b><span id="vdid"></span></div>
   <div class="vl"><b>What Benjamin says</b><span id="vben"></span></div>
   <div class="vl"><b>And then, 1936</b><span id="vepi"></span></div>
@@ -163,7 +166,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     <li><b>Let the age pass.</b> The crowd walks in (how many is what the means gave you), and the heads the halo moved are rimmed in gold. A copy carries only a trace of the halo, and every copy spends some of the original's. A line says what happened. The bar under it is <b>moved this age</b>: how many of the people this age could have moved you moved; gold for the part the halo did, red for the part being seen did.</li>
     <li><b>The halo does not grow back,</b> and it does not fade on its own: kept in the dark it stays whole. But each age's eyes are harder to move than the last: the more copying there is in the world, the less a halo moves the people, whatever you did.</li>
     <li><b>The tally.</b> Each age counts the people it moved, and each age has more people than the last, so the late ages weigh more. There is no running total; the verdict at the end sets your six ages against the most a keeper could have done.</li>
-    <li><b>The verdict:</b> how many people your face moved, of what was possible, in words; your six ages beside the most a keeper could have done; what Benjamin says about the path you took; and his last page, 1936, as a reading.</li>
+    <li><b>The verdict:</b> how many people your face moved, of what was possible, as a number out of 100 and in words; your six ages beside the most a keeper could have done; the painting as it is now; what Benjamin says about the path you took; and his last page, 1936, as a reading.</li>
   </ol>
   <p class="small">Nothing is random. The same choices give the same ages every time, so a second run is a different plan, not a different draw.</p>
   <button class="btn" id="helpback">Back</button>
@@ -194,7 +197,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     icon:      { bg: '#3B2A1A', skin: '#DCB389', line: '#2B1D12', lw: 2.6, hair: '#2B1D12', robe: '#A52A1E' },
     original:  { bg: '#3B2A1A', skin: '#DCB389', line: '#2B1D12', lw: 2.6, hair: '#2B1D12', robe: '#A52A1E' },   // the painting itself, which never changes; what changes is what is shown (revision 26)
     woodcut:   { bg: '#F3EAD6', skin: 'hatch', line: INK, lw: 3.2, hair: 'cross', robe: 'cross' },   // the woodcut: heavy black line on cream (copies only)
-    coin:      { bg: '#8C6B2F', skin: '#C9A961', line: '#5A4214', lw: 2.2, hair: '#B8954E', robe: '#B8954E', shade: true },   // the coin: a worn face in brass (copies only)
+    coin:      { bg: '#2A2420', skin: '#C9A961', line: '#5A4214', lw: 2.2, hair: '#B8954E', robe: '#B8954E', shade: true, coin: true },   // the coin: a worn face struck in brass, on dark cloth (copies only)
     litho:     { bg: '#F1E9D8', skin: 'stipple', line: '#3A3632', lw: 2, hair: 'stipple2', robe: 'stipple2', soft: true },
     halftone:  { bg: '#E9E4DA', skin: 'dots', line: 'none', lw: 0, hair: 'dots2', robe: 'dots2', photo: true },
     film:      { bg: '#111111', skin: '#BDB8AE', line: '#1A1A1A', lw: 1.4, hair: '#1A1A1A', robe: '#2A2A2A', film: true, grain: true },   // silver, with a fine grain (revision 7: film is not smooth)
@@ -224,7 +227,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     const gone = halo <= C.HALO_GONE;
     let s = '';
     if (!gone) {
-      if (haloKind === 'ink') s += `<circle cx="100" cy="96" r="${78 + 14 * halo}" fill="url(#${u}golddots)" opacity="${Math.min(1, halo + .15)}"/>`;
+      if (haloKind === 'ink') s += `<circle cx="100" cy="96" r="${66 + 34 * halo}" fill="url(#${u}golddots)" opacity="${(0.25 + 0.75 * halo).toFixed(2)}"/>`;   // a printed halo: its size and strength are the trace the copy carries
       else s += `<circle cx="100" cy="96" r="${84 + 10 * halo}" fill="url(#${u}g)" opacity="${halo}"/><circle cx="100" cy="96" r="${84 + 10 * halo}" fill="none" stroke="${GOLD2}" stroke-width="${1 + 9 * halo}" opacity="${Math.min(1, halo * 1.3)}"/>`;
     }
     const dash = T.dash ? ` stroke-dasharray="${T.dash}"` : '';
@@ -286,7 +289,13 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     let m = defs(u) + `<rect width="340" height="300" fill="${T.bg}"/>`;
     if (T.film) m += `<rect x="34" y="0" width="272" height="300" fill="#8E8A82"/>`;
     if (T.poster) m += `<polygon points="0,300 340,0 340,90 0,300" fill="${INK}" opacity=".9"/>`;
-    m += `<g transform="translate(${xLeft} ${yTop}) scale(${s})" opacity="${0.5 + 0.5 * Math.min(1, n * 2)}">${faceMarkup(tech, u, halo, 0, extra && extra.haloKind)}</g>`;
+    // the coin: a struck disc with a rim, the face clipped inside it, the metal worn at the edge
+    const cr = 118 * (0.7 + 0.3 * n), cx = 170, cy = 300 - cr - 12;
+    if (T.coin) m += `<clipPath id="${u}coinclip"><circle cx="${cx}" cy="${cy}" r="${cr - 10}"/></clipPath><circle cx="${cx}" cy="${cy}" r="${cr}" fill="#A8863F"/><circle cx="${cx}" cy="${cy}" r="${cr - 6}" fill="none" stroke="#7A5E26" stroke-width="3"/><circle cx="${cx}" cy="${cy}" r="${cr - 10}" fill="#B8954E"/>`;
+    const faceOpen = T.coin ? `<g clip-path="url(#${u}coinclip)">` : '', faceClose = T.coin ? '</g>' : '';
+    const fs = T.coin ? (cr * 2 - 20) / 230 : s, fx = T.coin ? cx - 100 * fs : xLeft, fy = T.coin ? cy - 96 * fs : yTop;
+    m += faceOpen + `<g transform="translate(${fx} ${fy}) scale(${fs})" opacity="${0.5 + 0.5 * Math.min(1, n * 2)}">${faceMarkup(tech, u, halo, 0, extra && extra.haloKind)}</g>` + faceClose;
+    if (T.coin) m += `<circle cx="${cx}" cy="${cy}" r="${cr - 10}" fill="none" stroke="#5A4214" stroke-width="2" opacity=".7"/>`;
     if (T.film) m += filmFrame(u);
     if (extra && extra.before) m += extra.before;
     m += curtains(n);
@@ -313,7 +322,8 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   }
   function passedState(r) {    // what they saw: the same, with the crowd in and lit by what reached them
     const rung = C.VEILS[r.veil];
-    return rung.copies ? { tech: rung.tech, halo: r.haloArrived * rung.carry, kind: 'ink', n: rung.n, reach: r.reach, lit: r.lit } : { tech: 'original', halo: r.halo, kind: 'leaf', n: rung.n, reach: r.reach, lit: r.lit };
+    const reach = r.veil === 0 ? 0 : r.reach;   // nobody came: the keeper is behind the curtain, not in the crowd
+    return rung.copies ? { tech: rung.tech, halo: r.haloArrived * rung.carry, kind: 'ink', n: rung.n, reach: reach, lit: r.lit } : { tech: 'original', halo: r.halo, kind: 'leaf', n: rung.n, reach: reach, lit: r.lit };
   }
   let lastState = null; let arriveTimer = null;
   // A miniature of a frame state: the same renderer as the picture, so the strips are honest.
@@ -329,7 +339,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   function renderStrip(el, s) {
     el.innerHTML = C.AGES.map((a, i) => {
       const r = s.results[i];
-      if (r) return `<div class="slot done" title="${a.name}">${miniFrame(passedState(r))}<div class="mini"><i style="width:${r.ofAge * r.cult / r.hold * 100}%;background:${GOLD}"></i><i style="width:${r.ofAge * r.bySeen / r.hold * 100}%;background:${RED}"></i></div></div>`;
+      if (r) return `<div class="slot done" title="${a.name}">${miniFrame(passedState(r))}</div>`;
       return `<div class="slot${i === s.age ? ' now' : ''}"></div>`;
     }).join('');
   }
@@ -362,10 +372,10 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   function commitAge() {
     if (picked === null) return;
     const a = M.currentAge(S), v = C.VEILS[picked];
-    const prev = S.results.length ? S.results[S.results.length - 1] : null;   // the previous age, before this one is recorded
+    const before = previewState(picked);   // taken before the commit spends the halo, so the crossfade starts from the preview exactly
     const r = M.commit(S, picked);
     $('choose').style.display = 'none';
-    passFrame($('frame'), previewState(picked), passedState(r));   // the age passes: the crowd walks in, lit by what the halo did
+    passFrame($('frame'), before, passedState(r));   // the age passes: the crowd walks in, lit by what the halo did
     // copies out, in the age's technique; earlier ages' copies stay in the world (revision 2)
     const COPYTECH = { coins: 'coin', woodcuts: 'woodcut', lithos: 'litho', photos: 'halftone', film: 'film' };
     const COPYNOTE = { coins: 'in every purse', woodcuts: '…a few dozen', lithos: '…and on, without end', photos: 'every hand', film: 'every screen' };
@@ -373,9 +383,9 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     if (nCopies) copiesMade.push({ tech: COPYTECH[C.VEILS[picked].key], count: nCopies, note: COPYNOTE[C.VEILS[picked].key] });
     renderCopies(nCopies ? copiesMade[copiesMade.length - 1] : null);
     $('line').textContent = r.line;
-    const gold = r.ofAge * r.cult / r.hold * 340, red = r.ofAge * r.bySeen / r.hold * 340;
+    const gold = r.hold > 0 ? r.ofAge * r.cult / r.hold * 340 : 0, red = r.hold > 0 ? r.ofAge * r.bySeen / r.hold * 340 : 0;
     const how = r.cult > r.bySeen * 2 ? 'mostly by the halo' : r.bySeen > r.cult * 2 ? 'mostly by being seen' : 'by the halo and by being seen alike';
-    $('holdwords').textContent = (r.ofAge < 0.03 ? 'hardly anyone' : M.fractionWords(r.ofAge) + ' of what this age could move') + (r.ofAge < 0.03 ? '' : ', ' + how);
+    $('holdwords').textContent = r.hold <= 0 ? 'nobody' : (r.ofAge < 0.03 ? 'hardly anyone' : M.fractionWords(r.ofAge) + ' of what this age could move') + (r.ofAge < 0.03 ? '' : ', ' + how);
     $('hold').innerHTML = `<rect x="0" y="0" width="${gold}" height="20" fill="${GOLD}"/><rect x="${gold}" y="0" width="${red}" height="20" fill="${RED}"/>`;
     $('nextage').textContent = S.age === C.AGES.length - 1 ? 'The verdict' : 'Next age';
     renderStrip($('strip'), S);
@@ -387,7 +397,9 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     const show = Math.min(14, total); let cs = `<svg viewBox="0 0 ${show * 24 + 10} 40" data-copies="${total}">`; let k = 0;
     // keep the oldest copies visible: draw up to 14, taking from each age in proportion
     const per = copiesMade.map(c => Math.max(1, Math.round(c.count * show / total)));
-    copiesMade.forEach((c, j) => { for (let i = 0; i < per[j] && k < show; i++, k++) { const u = uid(); cs += `<g transform="translate(${k * 24 + 2} 2) scale(.16)">${defs(u)}<rect width="200" height="230" fill="${TECH[c.tech].bg}" stroke="${INK}" stroke-width="10"/>${faceMarkup(c.tech, u, 0, 0)}</g>`; } });
+    copiesMade.forEach((c, j) => { for (let i = 0; i < per[j] && k < show; i++, k++) { const u = uid();
+      if (c.tech === 'coin') cs += `<g transform="translate(${k * 24 + 2} 2) scale(.16)"><clipPath id="${u}cc"><circle cx="100" cy="115" r="96"/></clipPath>${defs(u)}<circle cx="100" cy="115" r="112" fill="#A8863F" stroke="${INK}" stroke-width="10"/><circle cx="100" cy="115" r="100" fill="#B8954E" stroke="#7A5E26" stroke-width="6"/><g clip-path="url(#${u}cc)">${faceMarkup(c.tech, u, 0, 0)}</g></g>`;   // a coin is round
+      else cs += `<g transform="translate(${k * 24 + 2} 2) scale(.16)">${defs(u)}<rect width="200" height="230" fill="${TECH[c.tech].bg}" stroke="${INK}" stroke-width="10"/>${faceMarkup(c.tech, u, 0, 0)}</g>`; } });
     cs += '</svg>';
     const note = thisAge ? thisAge.note : 'from earlier ages';
     $('copies').innerHTML = `<span class="lab">Copies out</span>${cs}<span class="none">${note}</span>`;
@@ -402,6 +414,8 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     $('lead').textContent = v.lead; $('scorenum').textContent = v.score; $('shortfall').textContent = v.shortfall; $('shortfall').style.display = v.shortfall ? 'block' : 'none';
     renderStrip($('endstrip'), S);
     renderStrip($('beststrip'), { results: v.bestResults, age: C.AGES.length });
+    drawFrame($('endface'), { tech: 'original', halo: S.halo, kind: 'leaf', n: 0.3, reach: 0, lit: 0 });   // the painting itself, curtains parted, nobody there: what is left
+    $('facenowwords').textContent = v.faceNow;
     $('vdid').textContent = v.did; $('vben').textContent = v.benjamin; $('vepi').textContent = v.epilogue;
     $('vbest').textContent = `Under this game's assumptions, that is. A second run is a different plan: open earlier, open later, or never.`
     show('end');
