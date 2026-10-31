@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hubble's Twelve Nights</title>
+<script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<meta name="description" content="Hubble (1929) at the eyepiece and the spectrograph: twelve nights on the 100-inch to find out whether the far nebulae drift at random or whether their speed is tied to their distance.">
+<style>
+@font-face{font-family:'Jost';font-weight:600;src:url(data:font/woff2;base64,/*__FONT_JOST_600__*/) format('woff2');font-display:block}
+@font-face{font-family:'Jost';font-weight:400;src:url(data:font/woff2;base64,/*__FONT_JOST_400__*/) format('woff2');font-display:block}
+@font-face{font-family:'Plex';font-weight:400;src:url(data:font/woff2;base64,/*__FONT_PLEX__*/) format('woff2');font-display:block}
+:root{
+  --sky:#070B14; --sky-2:#0C1322; --glass:#0A1020; --star:#E8EEF8; --star-dim:#8B95A8; --amber:#F2A33A; --red:#E5484D; --blue:#6EA8FF; --brass:#B08D57; --brass-2:#D9B87A; --brass-dark:#6E5733;
+  --display:'Jost',system-ui,sans-serif; --text:'Jost',system-ui,sans-serif; --mono:'Plex','SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--sky)}
+body{color:var(--star);font-family:var(--text);font-size:17px;line-height:1.4;min-height:100vh;
+  background:radial-gradient(ellipse at 50% 0%,#101a30 0%,var(--sky) 60%)}
+.screen{display:none;max-width:460px;margin:0 auto;padding:0 14px 28px;min-height:100vh;position:relative}
+.screen.on{display:block}
+p{margin:.5em 0}
+a{color:var(--brass-2)}
+.caps{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.14em}
+h1.title{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--brass-2);font-size:34px;line-height:1.1;text-align:center;margin:10px 0 6px}
+h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--brass-2);font-size:15px;margin:14px 0 6px;text-align:center}
+.sub{text-align:center;color:var(--star-dim);font-size:15px;margin:0 0 10px}
+.aim{border-top:1px solid var(--brass-dark);border-bottom:1px solid var(--brass-dark);padding:12px 6px;margin:16px 0;text-align:center;font-size:18px;line-height:1.35}
+.mono{font-family:var(--mono)}
+/* buttons: instrument plates */
+.btn{display:block;width:100%;min-height:54px;padding:13px 16px;margin:10px 0;background:transparent;color:var(--brass-2);border:2px solid var(--brass);border-radius:8px;font-family:var(--display);font-weight:600;font-size:16px;text-transform:uppercase;letter-spacing:.12em;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation;text-align:center}
+.btn.primary{background:var(--brass);color:var(--sky);border-color:var(--brass)}
+.btn:active,.btn.down{background:var(--brass-2);color:var(--sky)}
+.btn[disabled]{opacity:.35;cursor:default}
+.btn.quiet{min-height:44px;padding:9px 14px;font-size:13px;border-color:var(--brass-dark);color:var(--brass)}
+.row2{display:flex;gap:10px}.row2 .btn{flex:1}
+.sig{padding:10px 0 18px;font-size:14px;text-align:center;font-family:var(--text)}
+.sig a{color:var(--star-dim);font-style:italic;text-decoration:none;opacity:.8}
+/* top bar */
+.bar{display:flex;align-items:center;gap:8px;padding:12px 0 4px;font-size:14px;line-height:1.25;color:var(--star-dim)}
+.bar .aimtext{flex:1}
+.qbtn{flex:none;width:40px;height:40px;border-radius:50%;border:1.5px solid var(--brass);background:transparent;color:var(--brass-2);font-family:var(--display);font-weight:600;font-size:20px;cursor:pointer}
+.lamps{display:flex;gap:6px;justify-content:center;margin:6px 0 2px}
+.lamp{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--brass-dark);background:transparent;transition:background .5s,box-shadow .5s}
+.lamp.lit{background:var(--amber);border-color:var(--brass-2);box-shadow:0 0 10px 2px rgba(242,163,58,.45)}
+.lamp.spent{background:#1b2030}
+.orient{color:var(--star);font-size:15px;line-height:1.35;margin:6px 2px 8px;min-height:20px}
+.glass{background:var(--glass);border:1.5px solid var(--brass-dark);border-radius:10px;overflow:hidden;position:relative}
+svg{display:block}
+.svgtext{font-family:var(--display);font-weight:600;letter-spacing:.12em;text-transform:uppercase;fill:var(--brass);font-size:11px}
+.svgmono{font-family:var(--mono);fill:var(--star-dim);font-size:11px}
+.panel{min-height:96px;margin:10px 0 0;padding:10px 12px;border:1.5px solid var(--brass-dark);border-radius:10px;background:rgba(12,19,34,.8)}
+.panel .name{font-family:var(--display);font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--brass-2);font-size:14px}
+.panel .hint{color:var(--star-dim);font-size:15px}
+.readout{font-family:var(--mono);text-align:center;font-size:17px;padding:8px 4px;color:var(--star)}
+.readout.red{color:var(--red)}.readout.blue{color:var(--blue)}.readout.amber{color:var(--amber)}
+/* dial */
+.dial{margin:8px 0 2px;padding:0 4px}
+.dial label{display:block;font-family:var(--display);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:11px;color:var(--brass);margin:0 0 4px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:56px;background:transparent;margin:0}
+input[type=range]:focus{outline:none}
+input[type=range]::-webkit-slider-runnable-track{height:10px;border-radius:5px;background:repeating-linear-gradient(90deg,var(--brass-dark) 0 2px,transparent 2px 24px),linear-gradient(#1a2235,#1a2235);border:1px solid var(--brass-dark)}
+input[type=range]::-moz-range-track{height:10px;border-radius:5px;background:#1a2235;border:1px solid var(--brass-dark)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 40% 35%,var(--brass-2),var(--brass) 55%,var(--brass-dark));border:2px solid var(--brass-2);margin-top:-18px;box-shadow:0 2px 8px rgba(0,0,0,.6)}
+input[type=range]::-moz-range-thumb{width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 40% 35%,var(--brass-2),var(--brass) 55%,var(--brass-dark));border:2px solid var(--brass-2);box-shadow:0 2px 8px rgba(0,0,0,.6)}
+.small{font-size:14px;color:var(--star-dim)}
+.verdict-head{font-family:var(--display);font-weight:600;font-size:30px;line-height:1.15;color:var(--brass-2);text-align:center;margin:18px 0 10px}
+.verdict p{font-size:17px;margin:.55em 0}
+.verdict p.key{color:var(--amber)}
+.about p,.help p,.about li{font-size:16px;line-height:1.45}
+.about h3{font-family:var(--display);font-weight:600;letter-spacing:.12em;text-transform:uppercase;font-size:13px;color:var(--brass);margin:18px 0 4px}
+.twinkle{animation:tw 3.2s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.5}50%{opacity:1}}
+.focusin{animation:focus 1.1s ease-out both}
+@keyframes focus{0%{filter:blur(8px);opacity:.3}100%{filter:blur(0);opacity:1}}
+.expose{animation:expose 1.2s ease-out both}
+@keyframes expose{0%{opacity:0}100%{opacity:1}}
+.glow{filter:drop-shadow(0 0 6px rgba(242,163,58,.9))}
+.seedline{text-align:center;font-family:var(--mono);font-size:12px;color:var(--star-dim);margin-top:8px}
+</style>
+</head>
+<body>
+
+<!-- ============================ START ============================ -->
+<section id="start" class="screen on">
+  <div class="glass" style="margin-top:14px"><svg id="startsky" viewBox="0 0 380 150" width="100%" height="150"></svg></div>
+  <h1 class="title">Hubble's<br>Twelve Nights</h1>
+  <p class="sub">Mount Wilson, 1929. The 100-inch is yours.</p>
+  <div class="aim">Find out whether the far nebulae drift at random or whether their speed is tied to their distance. Twelve nights. Then say how fast.</div>
+  <button class="btn primary" id="begin">Begin</button>
+  <div class="row2"><button class="btn quiet" data-go="help">How to play</button><button class="btn quiet" data-go="about">About</button></div>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+
+<!-- ============================ SKY ============================ -->
+<section id="sky" class="screen">
+  <div class="bar"><div class="aimtext">Random drift, or speed tied to distance? Twelve nights to find out.</div><button class="qbtn" data-help="sky">?</button></div>
+  <div class="lamps" id="lamps"></div>
+  <div class="orient" id="skyorient">Tap a nebula to point the telescope at it. Bright ones cost one night; faint ones two or three.</div>
+  <div class="glass"><svg id="skysvg" viewBox="0 0 380 400" width="100%" style="aspect-ratio:380/400;touch-action:manipulation"></svg></div>
+  <div class="panel" id="skypanel"></div>
+  <div class="glass" style="margin-top:10px"><svg id="miniplate" viewBox="0 0 380 150" width="100%" style="aspect-ratio:380/150"></svg></div>
+  <div class="small" id="miniwords" style="text-align:center;margin-top:6px"></div>
+</section>
+
+<!-- ============================ EYEPIECE ============================ -->
+<section id="eye" class="screen">
+  <div class="bar"><div class="aimtext" id="eyebar">The eyepiece</div><button class="qbtn" data-help="eye">?</button></div>
+  <h2 id="eyetitle">The eyepiece</h2>
+  <div class="orient">The ringed star is this nebula's brightest. Brightest stars are all about alike in truth, so how faint it looks tells how far away it is. Turn the dial until the comparison star looks just as bright.</div>
+  <div class="glass"><svg id="eyesvg" viewBox="0 0 380 320" width="100%" style="aspect-ratio:380/320"></svg></div>
+  <div class="dial"><label>Distance dial</label><input type="range" id="eyedial" min="0" max="1000" value="0"></div>
+  <div class="readout" id="eyereadout">—</div>
+  <button class="btn primary" id="eyeread">Read the distance</button>
+</section>
+
+<!-- ============================ SPECTROGRAPH ============================ -->
+<section id="spec" class="screen">
+  <div class="bar"><div class="aimtext" id="specbar">The spectrograph</div><button class="qbtn" data-help="spec">?</button></div>
+  <h2 id="spectitle">The spectrograph</h2>
+  <div class="orient">The nebula's light spread into a strip. The two dark lines are calcium. The amber marks show where a lamp in the lab puts those lines. Slide the marks onto the dark lines: to the right means moving away, to the left means coming toward us.</div>
+  <div class="glass"><svg id="specsvg" viewBox="0 0 380 190" width="100%" style="aspect-ratio:380/190"></svg></div>
+  <div class="dial"><label>Shift slide</label><input type="range" id="specdial" min="-400" max="1300" value="0" step="5"></div>
+  <div class="readout" id="specreadout">—</div>
+  <button class="btn primary" id="specread">Read the speed</button>
+</section>
+
+<!-- ============================ PLATE ============================ -->
+<section id="plate" class="screen">
+  <div class="bar"><div class="aimtext">Random drift, or speed tied to distance?</div><button class="qbtn" data-help="plate">?</button></div>
+  <h2>The plate</h2>
+  <div class="orient" id="platenight"></div>
+  <div class="glass"><svg id="platesvg" viewBox="0 0 380 280" width="100%" style="aspect-ratio:380/280"></svg></div>
+  <div class="readout amber" id="platewords"></div>
+  <button class="btn primary" id="platenext">Next night</button>
+</section>
+
+<!-- ============================ SUN ============================ -->
+<section id="sun" class="screen">
+  <div class="bar"><div class="aimtext">The nights are over.</div><button class="qbtn" data-help="sun">?</button></div>
+  <h2>The Sun's motion</h2>
+  <div class="orient" id="sunorient">Something is in the way. The Sun itself moves through space at about 300 km/s, toward the north. Nebulae ahead of us look as if they come toward us; those behind look faster than they are. Hubble solved for the Sun's motion in the same step as the rate.</div>
+  <div class="glass"><svg id="sunsvg" viewBox="0 0 380 280" width="100%" style="aspect-ratio:380/280"></svg></div>
+  <div class="readout amber" id="sunwords"></div>
+  <button class="btn primary" id="sunbtn">Take out the Sun's motion</button>
+</section>
+
+<!-- ============================ RATE ============================ -->
+<section id="rate" class="screen">
+  <div class="bar"><div class="aimtext">Say how fast: the speed for every million parsecs of distance.</div><button class="qbtn" data-help="rate">?</button></div>
+  <h2>Set the rate</h2>
+  <div class="orient">Swing the red line through your dots. Flat means the speeds do not depend on distance. This is your answer; commit when it fits.</div>
+  <div class="glass"><svg id="ratesvg" viewBox="0 0 380 280" width="100%" style="aspect-ratio:380/280"></svg></div>
+  <div class="dial"><label>Rate dial</label><input type="range" id="ratedial" min="0" max="1000" value="0" step="10"></div>
+  <div class="readout red" id="ratereadout">No relation: flat</div>
+  <button class="btn primary" id="ratecommit">Commit the rate</button>
+</section>
+
+<!-- ============================ HUMASON ============================ -->
+<section id="hum" class="screen">
+  <div class="bar"><div class="aimtext">One more nebula, far beyond your plate.</div><button class="qbtn" data-help="hum">?</button></div>
+  <h2>Humason's nebula</h2>
+  <div class="orient">Milton Humason has spent nights on end exposing on a faint, far cluster. Its brightest nebula, NGC 7619, is about seven million parsecs out, three times farther than anything on your plate. Before he develops the plate: how fast is it going?</div>
+  <div class="glass"><svg id="humsvg" viewBox="0 0 380 280" width="100%" style="aspect-ratio:380/280"></svg></div>
+  <div class="dial"><label>Your prediction</label><input type="range" id="humdial" min="0" max="6000" value="0" step="50"></div>
+  <div class="readout red" id="humreadout"></div>
+  <button class="btn primary" id="humcommit">Commit the prediction</button>
+</section>
+
+<!-- ============================ HUMASON'S SPECTRUM ============================ -->
+<section id="humspec" class="screen">
+  <div class="bar"><div class="aimtext">Humason develops the plate.</div><button class="qbtn" data-help="spec">?</button></div>
+  <h2>NGC 7619</h2>
+  <div class="orient" id="humspecorient">The faintest spectrum ever taken. Watch the marks find the lines.</div>
+  <div class="glass"><svg id="humspecsvg" viewBox="0 0 380 190" width="100%" style="aspect-ratio:380/190"></svg></div>
+  <div class="readout red" id="humspecreadout">exposing…</div>
+  <button class="btn primary" id="toverdict" disabled>The verdict</button>
+</section>
+
+<!-- ============================ END ============================ -->
+<section id="end" class="screen">
+  <div class="verdict-head" id="vhead"></div>
+  <div class="verdict" id="vbody"></div>
+  <h2>Your plate</h2>
+  <div class="glass"><svg id="endmine" viewBox="0 0 380 240" width="100%" style="aspect-ratio:380/240"></svg></div>
+  <h2>Hubble's plate, all twenty-four</h2>
+  <div class="glass"><svg id="endhubble" viewBox="0 0 380 240" width="100%" style="aspect-ratio:380/240"></svg></div>
+  <p class="small" style="margin-top:10px">Hubble's distances were about seven times too short, we now know, and today's rate is about 70 km/s for every million parsecs. The relation itself held. He wrote that it "may represent the de Sitter effect", and left the obvious consequences for later.</p>
+  <button class="btn primary" id="newgame">New game</button>
+  <button class="btn quiet" data-go="about">About</button>
+  <div class="seedline" id="seedline"></div>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+
+<!-- ============================ HELP ============================ -->
+<section id="help" class="screen help">
+  <h2>How to play</h2>
+  <div class="aim">Find out whether the far nebulae drift at random or whether their speed is tied to their distance. Twelve nights. Then say how fast.</div>
+  <p><b>The sky.</b> The smudges are nebulae, the faint far-off ones beyond our own stars. Tap one, and the card below tells you its name and what it costs: bright ones one night, faint ones two or three. You have twelve nights, the lamps along the top. Then tap <i>Point the telescope</i>.</p>
+  <p><b>The eyepiece.</b> The nebula breaks into stars; its brightest is ringed in amber. The brightest stars of all such nebulae are about equally bright in truth, so how faint this one looks tells you how far away the nebula is. Turn the dial until the comparison star in the little circle looks just as bright. A glow around it says you are close. Tap <i>Read the distance</i>.</p>
+  <p><b>The spectrograph.</b> The nebula's light is spread out into a strip, and two dark lines cross it. They belong to calcium. The amber marks show where those lines sit for a lamp in the laboratory. Slide the marks until they sit on the dark lines. The slide tells you the speed: to the right, the nebula is moving away; to the left, it is coming toward us. Tap <i>Read the speed</i>.</p>
+  <p><b>The plate.</b> Each nebula becomes a dot: distance across, speed up. Red is going away, blue is coming toward us. Watch whether the dots climb or sit in a cloud, and choose your next nebula accordingly.</p>
+  <p><b>The Sun.</b> When the nights are over, one tap takes out the Sun's own motion through space, which Hubble worked out at the same time. The dots move.</p>
+  <p><b>The rate.</b> Swing a line through your dots and commit. Then say how fast a nebula far beyond your plate is going, and watch its spectrum come in.</p>
+  <button class="btn primary" id="helpback">Back</button>
+</section>
+
+<!-- ============================ ABOUT ============================ -->
+<section id="about" class="screen about">
+  <h2>About</h2>
+  /*__ABOUT__*/
+  <button class="btn primary" id="aboutback">Back</button>
+</section>
+
+<script>
+/*__MECHANISM__*/
+</script>
+<script>
+(function(){
+'use strict';
+const M = window.HUBBLE, C = M.CONFIG, N = C.NEBULAE;
+const $ = id => document.getElementById(id);
+const NS = 'http://www.w3.org/2000/svg';
+function el(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+function txt(parent, x, y, s, cls, anchor) { const t = el('text', { x, y, class: cls || 'svgtext', 'text-anchor': anchor || 'start' }, parent); t.textContent = s; return t; }
+function clear(svg) { while (svg.firstChild) svg.removeChild(svg.firstChild); }
+function tween(ms, fn, done) { const t0 = performance.now(); (function step(t) { const p = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - p, 3); fn(e); if (p < 1) requestAnimationFrame(step); else if (done) done(); })(t0); }
+
+// ---------------------------------------------------------------- state and seed
+let state, rng, backTo = 'start', current = 'start', selected = null, pending = null;
+function seedFromUrl() { const m = location.hash.match(/(\d+)/); return m ? +m[1] : null; }
+function go(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('on')); $(id).classList.add('on'); current = id; window.scrollTo(0, 0); }
+
+// ---------------------------------------------------------------- star fields
+function starField(svg, w, h, n, r) {
+  for (let i = 0; i < n; i++) { const s = el('circle', { cx: (r() * w).toFixed(1), cy: (r() * h).toFixed(1), r: (0.4 + r() * 1.1).toFixed(2), fill: '#E8EEF8', opacity: (0.25 + r() * 0.6).toFixed(2) }, svg); if (r() < 0.25) { s.classList.add('twinkle'); s.style.animationDelay = (r() * 3).toFixed(2) + 's'; } }
+}
+function nebulaGlow(svg, x, y, rad, id, strong) {
+  const defs = svg.querySelector('defs') || el('defs', {}, svg);
+  const g = el('radialGradient', { id }, defs);
+  el('stop', { offset: '0%', 'stop-color': '#E8EEF8', 'stop-opacity': strong ? 0.95 : 0.8 }, g);
+  el('stop', { offset: '45%', 'stop-color': '#C9D4EE', 'stop-opacity': strong ? 0.45 : 0.3 }, g);
+  el('stop', { offset: '100%', 'stop-color': '#C9D4EE', 'stop-opacity': 0 }, g);
+  return el('ellipse', { cx: x, cy: y, rx: rad, ry: rad * 0.7, fill: `url(#${id})`, transform: `rotate(${(x * 7) % 60 - 30} ${x} ${y})` }, svg);
+}
+function drawStartSky() { const svg = $('startsky'); clear(svg); const r = M.makeRng(99); starField(svg, 380, 150, 90, r); nebulaGlow(svg, 300, 70, 26, 'g0', true); nebulaGlow(svg, 90, 95, 14, 'g1'); nebulaGlow(svg, 180, 40, 9, 'g2'); }
+
+// ---------------------------------------------------------------- the sky
+const SKYW = 380, SKYH = 400;
+let skyPos = null;
+function layoutSky() {
+  const pos = N.map(n => { let dx = ((n.ra - 190 + 540) % 360) - 180; return { x: SKYW / 2 + dx * 0.9, y: SKYH / 2 - n.dec * 1.9 }; });
+  for (let it = 0; it < 400; it++) {
+    for (let i = 0; i < pos.length; i++) for (let j = i + 1; j < pos.length; j++) {
+      const dx = pos[j].x - pos[i].x, dy = pos[j].y - pos[i].y, d = Math.hypot(dx, dy) || 0.01, min = 46;
+      if (d < min) { const push = (min - d) / 2, ux = dx / d, uy = dy / d; pos[i].x -= ux * push; pos[i].y -= uy * push; pos[j].x += ux * push; pos[j].y += uy * push; }
+    }
+    for (const p of pos) { p.x = Math.max(26, Math.min(SKYW - 26, p.x)); p.y = Math.max(26, Math.min(SKYH - 26, p.y)); }
+  }
+  return pos;
+}
+function nebRadius(n) { const t = (Math.log10(n.r) - Math.log10(0.03)) / (Math.log10(2.5) - Math.log10(0.03)); return 6 + 11 * (1 - Math.max(0, Math.min(1, t))); }
+function costWords(n) { const c = M.cost(n); return c === 1 ? 'Bright. One night.' : c === 2 ? 'Faint. Two nights.' : 'Very faint and far. Three nights.'; }
+function drawSky() {
+  const svg = $('skysvg'); clear(svg); el('defs', {}, svg);
+  const r = M.makeRng(state.seed + 1000); starField(svg, SKYW, SKYH, 160, r);
+  skyPos = skyPos || layoutSky();
+  // the Sun's apex, faint, as a tiny mark (p. 170: A = 277°, D = +36°) — drawn only after the Sun step
+  N.forEach((n, i) => {
+    const p = skyPos[i], rad = nebRadius(n), done = state.observed.some(o => o.idx === i), can = M.canObserve(state, i);
+    const g = el('g', { 'data-idx': i, style: 'cursor:pointer' }, svg);
+    const glow = nebulaGlow(g, p.x, p.y, rad, 'n' + i, n.r < 0.3);
+    if (done) { glow.setAttribute('opacity', 0.35); el('circle', { cx: p.x, cy: p.y, r: rad + 5, fill: 'none', stroke: '#B08D57', 'stroke-width': 1.5 }, g); }
+    else if (!can) glow.setAttribute('opacity', 0.5);
+    if (selected === i) el('circle', { cx: p.x, cy: p.y, r: rad + 8, fill: 'none', stroke: '#F2A33A', 'stroke-width': 2, class: 'glow' }, g);
+    el('circle', { cx: p.x, cy: p.y, r: 23, fill: 'transparent' }, g); // touch target
+  });
+  svg.onclick = e => { const g = e.target.closest('g[data-idx]'); if (!g) return; selected = +g.getAttribute('data-idx'); drawSky(); drawSkyPanel(); };
+}
+function drawLamps() { const L = $('lamps'); L.innerHTML = ''; for (let i = 0; i < C.NIGHTS; i++) { const d = document.createElement('div'); d.className = 'lamp ' + (i < state.nightsLeft ? 'lit' : 'spent'); L.appendChild(d); } }
+function drawSkyPanel() {
+  const P = $('skypanel'); P.innerHTML = '';
+  if (M.nightsOver(state)) {
+    P.innerHTML = `<div class="name">No nights left${state.nightsLeft ? ' that would buy a nebula' : ''}.</div><div class="hint">The telescope goes dark. Take your plate to the desk.</div>`;
+    const b = document.createElement('button'); b.className = 'btn primary'; b.textContent = 'The nights are over'; b.onclick = () => { drawSunScreen(); go('sun'); }; P.appendChild(b); return;
+  }
+  if (selected === null) { P.innerHTML = `<div class="hint">${state.observed.length ? 'Choose the next nebula. Where on the plate do you need a dot?' : 'The brightest smudge, at the right, is Andromeda. Any of them will do for a first night.'}</div>`; return; }
+  const n = N[selected], done = state.observed.some(o => o.idx === selected), can = M.canObserve(state, selected);
+  let hint = costWords(n);
+  if (done) hint = 'Already on your plate.'; else if (!can) hint += ' Not enough nights left for this one.';
+  P.innerHTML = `<div class="name">${n.name}</div><div class="hint">${hint}</div>`;
+  if (!done && can) { const b = document.createElement('button'); b.className = 'btn primary'; b.textContent = 'Point the telescope'; b.onclick = () => startEye(selected); P.appendChild(b); }
+}
+function showSky() { drawLamps(); drawSky(); drawSkyPanel(); drawPlate($('miniplate'), M.platePoints(state), { w: 380, h: 150, mini: true }); $('miniwords').textContent = state.observed.length ? M.plateWords(state) : 'The plate: distance across, speed up. Empty so far.'; go('sky'); }
+
+// ---------------------------------------------------------------- the eyepiece
+const EYE = { w: 380, h: 320, cx: 150, cy: 160, R: 135, cmpx: 318, cmpy: 250 };
+let eyeField = null;
+function eyeDialToR(v) { return Math.pow(10, Math.log10(0.02) + (v / 1000) * (Math.log10(3.0) - Math.log10(0.02))); }
+function starSize(mag, refMag) { const b = M.relBrightness(mag, refMag); return { r: Math.max(0.6, Math.min(16, 5.5 * Math.sqrt(b))), op: Math.max(0.08, Math.min(1, 0.45 + 0.55 * Math.log10(b * 10 + 1))) }; }
+function startEye(idx) {
+  pending = { idx }; const n = N[idx]; selected = null;
+  $('eyetitle').textContent = 'The eyepiece · ' + n.name; $('eyebar').textContent = 'Night ' + (C.NIGHTS - state.nightsLeft + 1) + ': how far is it?';
+  const svg = $('eyesvg'); clear(svg); el('defs', {}, svg);
+  const r = M.makeRng(state.seed * 31 + idx);
+  const clip = el('clipPath', { id: 'eyeclip' }, svg.querySelector('defs')); el('circle', { cx: EYE.cx, cy: EYE.cy, r: EYE.R }, clip);
+  const field = el('g', { 'clip-path': 'url(#eyeclip)', class: 'focusin' }, svg);
+  el('circle', { cx: EYE.cx, cy: EYE.cy, r: EYE.R, fill: '#05080F' }, field);
+  starField(field, 300, 320, 60, r);
+  const ms = M.brightestStarMag(n);
+  // the nebula: a soft glow and its resolved stars; the brightest star is the measurement
+  const grad = el('radialGradient', { id: 'eyeglow' }, svg.querySelector('defs'));
+  el('stop', { offset: '0%', 'stop-color': '#C9D4EE', 'stop-opacity': 0.55 }, grad); el('stop', { offset: '100%', 'stop-color': '#C9D4EE', 'stop-opacity': 0 }, grad);
+  const spread = 50 + 60 * Math.max(0, 1 - Math.log10(n.r / 0.03) / 2);
+  el('ellipse', { cx: EYE.cx, cy: EYE.cy, rx: spread, ry: spread * 0.6, fill: 'url(#eyeglow)', transform: `rotate(-20 ${EYE.cx} ${EYE.cy})` }, field);
+  for (let i = 0; i < 26; i++) { const a = r() * 6.283, d = Math.sqrt(r()) * spread * 0.95; const mag = ms + 0.3 + r() * 2.5; const s = starSize(mag, ms); el('circle', { cx: (EYE.cx + Math.cos(a) * d).toFixed(1), cy: (EYE.cy + Math.sin(a) * d * 0.6).toFixed(1), r: s.r.toFixed(2), fill: '#E8EEF8', opacity: s.op.toFixed(2) }, field); }
+  const bx = EYE.cx + 22, by = EYE.cy - 14, bs = starSize(ms, ms);
+  el('circle', { cx: bx, cy: by, r: bs.r, fill: '#FFFFFF', opacity: bs.op }, field);
+  el('circle', { cx: bx, cy: by, r: 16, fill: 'none', stroke: '#F2A33A', 'stroke-width': 1.5 }, svg);
+  txt(svg, bx, by - 22, 'brightest star', 'svgtext', 'middle');
+  el('circle', { cx: EYE.cx, cy: EYE.cy, r: EYE.R, fill: 'none', stroke: '#B08D57', 'stroke-width': 3 }, svg);
+  // comparison star in its own small circle
+  el('circle', { cx: EYE.cmpx, cy: EYE.cmpy, r: 34, fill: '#05080F', stroke: '#B08D57', 'stroke-width': 2 }, svg);
+  eyeField = { cmp: el('circle', { cx: EYE.cmpx, cy: EYE.cmpy, r: 3, fill: '#FFFFFF' }, svg), ring: el('circle', { cx: EYE.cmpx, cy: EYE.cmpy, r: 40, fill: 'none', stroke: '#F2A33A', 'stroke-width': 2, opacity: 0 }, svg), ms, bs };
+  txt(svg, EYE.cmpx, EYE.cmpy + 54, 'comparison', 'svgtext', 'middle');
+  txt(svg, EYE.cmpx, 40, 'a brightest star', 'svgtext', 'middle'); txt(svg, EYE.cmpx, 54, 'seen from the', 'svgtext', 'middle'); txt(svg, EYE.cmpx, 68, 'dial distance', 'svgtext', 'middle');
+  $('eyedial').value = 0; updateEye(); go('eye');
+}
+function updateEye() {
+  const n = N[pending.idx], rTrial = eyeDialToR(+$('eyedial').value);
+  const magTrial = M.magFromDistance(rTrial); const s = starSize(magTrial, eyeField.ms);
+  eyeField.cmp.setAttribute('r', s.r.toFixed(2)); eyeField.cmp.setAttribute('opacity', s.op.toFixed(2));
+  const ok = M.eyeMatch(n, rTrial); eyeField.ring.setAttribute('opacity', ok ? 1 : 0); eyeField.ring.setAttribute('class', ok ? 'glow' : '');
+  pending.rRead = rTrial;
+  const ratio = M.relBrightness(magTrial, eyeField.ms);
+  $('eyereadout').textContent = (ok ? 'about alike · ' : ratio > 1 ? 'comparison too bright · ' : 'comparison too faint · ') + M.distanceWords(rTrial);
+  $('eyereadout').className = 'readout ' + (ok ? 'amber' : '');
+}
+$('eyedial').addEventListener('input', updateEye);
+$('eyeread').onclick = () => startSpec();
+
+// ---------------------------------------------------------------- the spectrograph
+const SP = { w: 380, h: 190, x0: 20, x1: 360, top: 22, sh: 90, cmpTop: 128, cmpH: 26 };
+function lamToX(l) { return SP.x0 + (l - C.WINDOW.lo) / (C.WINDOW.hi - C.WINDOW.lo) * (SP.x1 - SP.x0); }
+let specEls = null;
+function drawSpectrum(svg, neb, seed, withGrain) {
+  clear(svg); const defs = el('defs', {}, svg);
+  const lp = M.lineProfile(neb), r = M.makeRng(seed);
+  // continuum gradient (violet → blue over this window)
+  const pid = svg.id + '-'; const g = el('linearGradient', { id: pid + 'cont' }, defs); el('stop', { offset: '0%', 'stop-color': '#B8A9FF' }, g); el('stop', { offset: '100%', 'stop-color': '#8FB8FF' }, g);
+  el('rect', { x: SP.x0, y: SP.top, width: SP.x1 - SP.x0, height: SP.sh, fill: `url(#${pid}cont)`, opacity: 0.55, class: 'expose' }, svg);
+  // grain
+  const grain = el('g', { class: 'expose', opacity: lp.grain.toFixed(2) }, svg);
+  for (let i = 0; i < 180; i++) el('rect', { x: (SP.x0 + r() * (SP.x1 - SP.x0)).toFixed(1), y: (SP.top + r() * SP.sh).toFixed(1), width: (1 + r() * 2).toFixed(1), height: (2 + r() * 6).toFixed(1), fill: r() < 0.5 ? '#05080F' : '#FFFFFF', opacity: (0.3 + r() * 0.5).toFixed(2) }, grain);
+  // absorption lines at the nebula's true shift
+  for (const L of C.LINES) { const x = lamToX(M.shiftedLambda(L.lambda, neb.v)), w = lp.widthA * (SP.x1 - SP.x0) / (C.WINDOW.hi - C.WINDOW.lo);
+    const lg = el('linearGradient', { id: pid + 'line' + L.name }, defs);
+    el('stop', { offset: '0%', 'stop-color': '#05080F', 'stop-opacity': 0 }, lg); el('stop', { offset: '50%', 'stop-color': '#05080F', 'stop-opacity': lp.depth }, lg); el('stop', { offset: '100%', 'stop-color': '#05080F', 'stop-opacity': 0 }, lg);
+    el('rect', { x: x - w * 1.6, y: SP.top, width: w * 3.2, height: SP.sh, fill: `url(#${pid}line${L.name})`, class: 'expose' }, svg); }
+  el('rect', { x: SP.x0, y: SP.top, width: SP.x1 - SP.x0, height: SP.sh, fill: 'none', stroke: '#B08D57', 'stroke-width': 1.5 }, svg);
+  txt(svg, SP.x0, 14, 'the nebula', 'svgtext'); txt(svg, SP.x1, 14, 'bluer  ←   →  redder', 'svgmono', 'end');
+  // comparison strip: the lab lamp, fixed
+  el('rect', { x: SP.x0, y: SP.cmpTop, width: SP.x1 - SP.x0, height: SP.cmpH, fill: '#0F1526', stroke: '#B08D57', 'stroke-width': 1.5 }, svg);
+  for (const L of C.LINES) el('rect', { x: lamToX(L.lambda) - 1.2, y: SP.cmpTop, width: 2.4, height: SP.cmpH, fill: '#F2A33A' }, svg);
+  txt(svg, SP.x0, SP.cmpTop + SP.cmpH + 16, 'the lamp in the lab', 'svgtext'); txt(svg, SP.x1, SP.cmpTop + SP.cmpH + 16, 'calcium H and K', 'svgmono', 'end');
+  // the sliding marks over the nebula strip
+  const marks = el('g', {}, svg);
+  for (const L of C.LINES) { el('line', { x1: lamToX(L.lambda), x2: lamToX(L.lambda), y1: SP.top - 6, y2: SP.top + SP.sh + 6, stroke: '#F2A33A', 'stroke-width': 2, 'data-l': L.lambda }, marks); }
+  const ring = el('rect', { x: SP.x0 - 4, y: SP.top - 4, width: SP.x1 - SP.x0 + 8, height: SP.sh + 8, rx: 6, fill: 'none', stroke: '#F2A33A', 'stroke-width': 2, opacity: 0 }, svg);
+  return { marks, ring };
+}
+function positionMarks(els, v) { els.marks.querySelectorAll('line').forEach(l => { const x = lamToX(M.shiftedLambda(+l.getAttribute('data-l'), v)); l.setAttribute('x1', x); l.setAttribute('x2', x); }); }
+function startSpec() {
+  const n = N[pending.idx];
+  $('spectitle').textContent = 'The spectrograph · ' + n.name; $('specbar').textContent = 'Night ' + (C.NIGHTS - state.nightsLeft + 1) + ': how fast, and which way?';
+  specEls = drawSpectrum($('specsvg'), n, state.seed * 17 + pending.idx, true);
+  $('specdial').value = 0; updateSpec(); go('spec');
+}
+function updateSpec() {
+  const n = N[pending.idx], v = +$('specdial').value; positionMarks(specEls, v); pending.vRead = v;
+  const ok = M.specMatch(n, v); specEls.ring.setAttribute('opacity', ok ? 1 : 0); specEls.ring.setAttribute('class', ok ? 'glow' : '');
+  const R = $('specreadout'); R.textContent = M.speedWords(v) + (ok ? ' · on the lines' : ''); R.className = 'readout ' + (Math.abs(v) < 50 ? '' : v > 0 ? 'red' : 'blue');
+}
+$('specdial').addEventListener('input', updateSpec);
+$('specread').onclick = () => { const o = M.observe(state, pending.idx, pending.rRead, pending.vRead); showPlate(o); };
+
+// ---------------------------------------------------------------- the plate
+function drawPlate(svg, pts, opt) {
+  opt = opt || {}; const w = opt.w || 380, h = opt.h || 280, mini = !!opt.mini;
+  const xmax = opt.xmax || 2.4, ymin = opt.ymin !== undefined ? opt.ymin : -400, ymax = opt.ymax || 1300;
+  const L = mini ? 40 : 52, Rm = 14, T = mini ? 12 : 20, B = mini ? 22 : 34;
+  const X = r => L + r / xmax * (w - L - Rm), Y = v => T + (ymax - v) / (ymax - ymin) * (h - T - B);
+  clear(svg);
+  el('rect', { x: 0, y: 0, width: w, height: h, fill: '#0A1020' }, svg);
+  // axes and ticks
+  el('line', { x1: L, x2: w - Rm, y1: Y(0), y2: Y(0), stroke: '#8B95A8', 'stroke-width': 1, 'stroke-dasharray': '2 3' }, svg);
+  el('line', { x1: L, x2: L, y1: T, y2: h - B, stroke: '#B08D57', 'stroke-width': 1.5 }, svg);
+  el('line', { x1: L, x2: w - Rm, y1: h - B, y2: h - B, stroke: '#B08D57', 'stroke-width': 1.5 }, svg);
+  const xt = opt.xticks || [1, 2]; for (const r of xt) { el('line', { x1: X(r), x2: X(r), y1: h - B, y2: h - B + 5, stroke: '#B08D57' }, svg); txt(svg, X(r), h - B + 15, String(r), 'svgmono', 'middle'); }
+  const yt = opt.yticks || [0, 500, 1000]; for (const v of yt) { el('line', { x1: L - 5, x2: L, y1: Y(v), y2: Y(v), stroke: '#B08D57' }, svg); if (!mini || v === 0 || v === 1000) txt(svg, L - 7, Y(v) + 4, String(v), 'svgmono', 'end'); }
+  if (!mini) { txt(svg, L + 6, h - 6, 'distance, million parsecs →', 'svgtext'); txt(svg, L + 6, T + 10, 'speed, km/s ↑', 'svgtext'); }
+  else { txt(svg, L + 5, h - 4, 'distance →', 'svgtext'); txt(svg, L + 5, T + 10, 'speed ↑', 'svgtext'); }
+  // the rate line
+  let line = null;
+  if (opt.K !== undefined && opt.K !== null) { const r2 = Math.min(xmax, (ymax * 0.98) / Math.max(opt.K, 1e-6)); line = el('line', { x1: X(0), y1: Y(0), x2: X(r2), y2: Y(opt.K * r2), stroke: opt.lineColor || '#E5484D', 'stroke-width': 2.5, 'stroke-dasharray': opt.dashed ? '6 5' : 'none' }, svg); }
+  // the dots
+  const dots = pts.map(p => el('circle', { cx: X(p.r), cy: Y(Math.max(ymin, Math.min(ymax, p.v))), r: mini ? 5 : 8, fill: p.v >= 0 ? '#E5484D' : '#6EA8FF', stroke: '#E8EEF8', 'stroke-width': mini ? 0.8 : 1.2 }, svg));
+  if (opt.marker) { const mx = X(opt.marker.r); el('line', { x1: mx, x2: mx, y1: T, y2: h - B, stroke: '#F2A33A', 'stroke-width': 1.5, 'stroke-dasharray': '4 4' }, svg); txt(svg, mx - 6, T + 12, opt.marker.label, 'svgtext', 'end'); if (opt.marker.v !== undefined) el('circle', { cx: mx, cy: Y(Math.min(ymax, opt.marker.v)), r: 9, fill: 'none', stroke: '#F2A33A', 'stroke-width': 2.5 }, svg); }
+  return { X, Y, dots, line };
+}
+function showPlate(o) {
+  $('platenight').textContent = M.nightWords(o, state);
+  const pts = M.platePoints(state), prev = pts.slice(0, -1), last = pts[pts.length - 1];
+  const P = drawPlate($('platesvg'), prev, {});
+  // the new dot drops in
+  const d = el('circle', { cx: P.X(last.r), cy: P.Y(1300), r: 8, fill: last.v >= 0 ? '#E5484D' : '#6EA8FF', stroke: '#E8EEF8', 'stroke-width': 1.2 }, $('platesvg'));
+  const yTo = P.Y(Math.max(-400, Math.min(1300, last.v))), yFrom = P.Y(1300);
+  $('platewords').textContent = '';
+  tween(900, e => d.setAttribute('cy', yFrom + (yTo - yFrom) * e), () => { $('platewords').textContent = M.plateWords(state); });
+  const over = M.nightsOver(state);
+  $('platenext').textContent = over ? 'The nights are over' : 'Back to the sky';
+  $('platenext').onclick = () => { if (over) { drawSunScreen(); go('sun'); } else showSky(); };
+  go('plate');
+}
+
+// ---------------------------------------------------------------- the Sun
+function drawSunScreen() {
+  const pts = M.platePoints(state); drawPlate($('sunsvg'), pts, {}); $('sunwords').textContent = M.plateWords(state);
+  $('sunbtn').textContent = "Take out the Sun's motion"; $('sunbtn').disabled = false;
+  $('sunbtn').onclick = () => {
+    const before = M.platePoints(state), after = M.takeOutSun(state);
+    const P = drawPlate($('sunsvg'), before, {});
+    $('sunbtn').disabled = true; $('sunwords').textContent = 'the dots move…';
+    tween(1600, e => { P.dots.forEach((d, i) => { const v = before[i].v + (after[i].v - before[i].v) * e; d.setAttribute('cy', P.Y(Math.max(-400, Math.min(1300, v)))); d.setAttribute('fill', v >= 0 ? '#E5484D' : '#6EA8FF'); }); }, () => {
+      $('sunwords').textContent = M.plateWords(state);
+      $('sunorient').textContent = 'The Sun\'s motion is out. The ones that seemed to come toward us were mostly us, moving. Now say what you see.';
+      $('sunbtn').textContent = 'Set the rate'; $('sunbtn').disabled = false; $('sunbtn').onclick = () => { drawRate(); go('rate'); };
+    });
+  };
+}
+
+// ---------------------------------------------------------------- the rate
+function drawRate() { $('ratedial').value = 0; updateRate(); }
+function updateRate() { const K = +$('ratedial').value; drawPlate($('ratesvg'), M.platePoints(state), { K }); $('ratereadout').textContent = K < 60 ? 'No relation: flat' : `about ${M.fmtK(K)} km/s for every million parsecs`; }
+$('ratedial').addEventListener('input', updateRate);
+$('ratecommit').onclick = () => { M.setRate(state, +$('ratedial').value); drawHum(); go('hum'); };
+
+// ---------------------------------------------------------------- Humason
+function drawHum() {
+  const guess = Math.round(M.predictHumason(state) / 50) * 50; $('humdial').value = guess; updateHum();
+}
+function updateHum() {
+  const v = +$('humdial').value;
+  drawPlate($('humsvg'), M.platePoints(state), { xmax: 8.2, ymax: 5000, ymin: -400, xticks: [2, 4, 6, 8], yticks: [0, 2000, 4000], K: state.rate, dashed: true, marker: { r: C.HUMASON.r_cluster, label: 'NGC 7619', v } });
+  $('humreadout').textContent = v < 50 ? 'standing still' : `about ${M.roundV(v).toLocaleString('en')} km/s going away`;
+}
+$('humdial').addEventListener('input', updateHum);
+$('humcommit').onclick = () => { M.commitPrediction(state, +$('humdial').value); runHumSpec(); go('humspec'); };
+function runHumSpec() {
+  const H = { name: C.HUMASON.name, ms: 21.5, r: C.HUMASON.r_cluster, v: C.HUMASON.v }; // ms: our choice for drawing only, the faintest profile
+  const els = drawSpectrum($('humspecsvg'), H, state.seed * 7 + 9, true);
+  $('humspecreadout').textContent = 'exposing…'; $('toverdict').disabled = true; positionMarks(els, 0);
+  setTimeout(() => tween(2600, e => { const v = C.HUMASON.v * e; positionMarks(els, v); $('humspecreadout').textContent = `about ${M.roundV(v).toLocaleString('en')} km/s going away…`; }, () => {
+    els.ring.setAttribute('opacity', 1); els.ring.setAttribute('class', 'glow');
+    $('humspecreadout').textContent = `about ${M.roundV(C.HUMASON.v).toLocaleString('en')} km/s going away · on the lines`;
+    $('humspecorient').textContent = 'The lines sit a long way to the red. You said about ' + (state.prediction < 50 ? 'nothing' : M.roundV(state.prediction).toLocaleString('en') + ' km/s') + '.';
+    $('toverdict').disabled = false;
+  }), 900);
+}
+$('toverdict').onclick = () => { showEnd(); go('end'); };
+
+// ---------------------------------------------------------------- the end
+function showEnd() {
+  state.finished = true; const v = M.verdict(state);
+  $('vhead').textContent = v.headline;
+  $('vbody').innerHTML = `<p>${v.did}</p><p>${v.rate}</p><p>${v.test}</p><p>${v.plate}</p><p class="key">${v.meaning}</p>`;
+  drawPlate($('endmine'), M.platePoints(state), { h: 240, K: state.rate });
+  drawPlate($('endhubble'), N.map(n => ({ r: n.r, v: M.correctedVelocity(n.v, n.ra, n.dec) })), { h: 240, K: C.K_ROUND, lineColor: '#F2A33A' });
+  $('seedline').textContent = 'game ' + state.seed;
+}
+
+// ---------------------------------------------------------------- navigation
+function newGame(seed) { state = M.newGame(seed); location.hash = 'g' + state.seed; selected = null; skyPos = null; showSky(); }
+$('begin').onclick = () => newGame(seedFromUrl() || undefined);
+$('newgame').onclick = () => newGame();
+document.querySelectorAll('[data-go]').forEach(b => b.onclick = () => { backTo = current; go(b.getAttribute('data-go')); });
+document.querySelectorAll('.qbtn').forEach(b => b.onclick = () => { backTo = current; go('help'); });
+$('helpback').onclick = () => go(backTo === 'help' || backTo === 'about' ? 'start' : backTo);
+$('aboutback').onclick = () => go(backTo === 'help' || backTo === 'about' ? 'start' : backTo);
+drawStartSky();
+})();
+</script>
+</body>
+</html>
