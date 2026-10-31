@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Benjamin's Veil</title>
+<script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<meta name="description" content="Benjamin (1936) as a keeper's problem: one face, seven ages, one veil to set each age. How near do you let the people come, and what is left of the halo?">
+<style>
+@font-face{font-family:'Oswald';font-weight:200 700;src:url(data:font/woff2;base64,/*__FONT_OSWALD__*/) format('woff2');font-display:block}
+@font-face{font-family:'Franklin';font-weight:100 900;font-style:normal;src:url(data:font/woff2;base64,/*__FONT_FRANKLIN__*/) format('woff2');font-display:block}
+@font-face{font-family:'Franklin';font-weight:100 900;font-style:italic;src:url(data:font/woff2;base64,/*__FONT_FRANKLIN_I__*/) format('woff2');font-display:block}
+:root{
+  --cream:#EFE6D2; --cream-2:#E4D9C0; --ink:#141210; --red:#C8321E; --red-2:#A3261A; --grey:#8A857B; --grey-2:#C9C1B0; --gold:#D4A017; --gold-2:#F0CC5A;
+  --display:'Oswald','Arial Narrow',Impact,sans-serif; --text:'Franklin','Helvetica Neue',Arial,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--cream)}
+body{color:var(--ink);font-family:var(--text);font-size:17px;line-height:1.4;min-height:100vh;
+  background-image:repeating-linear-gradient(0deg,rgba(20,18,16,.025) 0 1px,transparent 1px 7px)}
+.screen{display:none;max-width:460px;margin:0 auto;padding:0 16px 28px;min-height:100vh;position:relative}
+.screen.on{display:block}
+p{margin:.5em 0}
+a{color:var(--red)}
+.caps{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.12em}
+h1.title{font-family:var(--display);font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--red);font-size:54px;line-height:.95;margin:18px 0 4px;text-align:left}
+h1.title small{display:block;font-size:20px;letter-spacing:.2em;color:var(--ink);font-weight:500;margin-bottom:6px}
+h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--red);font-size:16px;margin:16px 0 6px}
+.rule{height:4px;background:var(--ink);margin:10px 0}
+.rule.red{background:var(--red)}
+.lede{font-size:16px;line-height:1.45;margin:8px 0}
+.aim{font-family:var(--display);font-weight:500;font-size:21px;line-height:1.2;text-transform:uppercase;letter-spacing:.04em;margin:12px 0;padding:10px 0;border-top:4px solid var(--ink);border-bottom:4px solid var(--ink)}
+.small{font-size:14px;color:var(--grey)}
+.sig{padding:12px 0 18px;font-size:14px;text-align:center;font-family:var(--text)}
+.sig a{color:var(--grey);font-style:italic;text-decoration:none}
+/* buttons: red slabs with an ink rule along the bottom */
+.btn{display:block;width:100%;min-height:54px;padding:12px 14px;margin:10px 0;background:var(--red);color:var(--cream);border:0;border-bottom:4px solid var(--ink);border-radius:0;font-family:var(--display);font-weight:600;font-size:19px;text-transform:uppercase;letter-spacing:.12em;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation;text-align:center}
+.btn:active,.btn.pressed{background:var(--ink)}
+.btn.quiet{background:var(--cream);color:var(--ink);border:3px solid var(--ink);border-bottom-width:4px}
+.btn:disabled{background:var(--grey-2);color:var(--grey);border-bottom-color:var(--grey);cursor:default}
+.btn .sub{display:block;font-family:var(--text);font-weight:400;text-transform:none;letter-spacing:0;font-size:14px;margin-top:2px}
+.topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding-top:10px}
+.topbar .aimline{font-family:var(--display);font-weight:500;font-size:17px;line-height:1.15;text-transform:uppercase;letter-spacing:.04em;flex:1}
+.qbtn{flex:0 0 40px;width:40px;height:40px;border:3px solid var(--ink);background:var(--cream);color:var(--ink);font-family:var(--display);font-weight:700;font-size:22px;line-height:1;cursor:pointer;border-radius:0;padding:0}
+.band{background:var(--red);color:var(--cream);font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.12em;font-size:15px;padding:7px 10px;margin:10px -16px 0;padding-left:16px;display:flex;justify-content:space-between;align-items:baseline}
+.band b{font-size:19px;font-weight:700;letter-spacing:.06em}
+.strip{display:flex;gap:4px;margin:8px 0 6px;justify-content:space-between}
+.slot{flex:1;height:60px;border:2px dotted var(--grey-2);background:transparent;position:relative}
+.slot.done{border:2px solid var(--ink);background:var(--cream-2)}
+.slot.now{border:3px solid var(--red)}
+.slot svg{display:block;width:100%;height:48px}
+.slot .mini{position:absolute;left:3px;right:3px;bottom:3px;height:6px;display:flex;background:var(--grey-2)}
+.slot .mini i{display:block;height:100%}
+.orient{font-size:15px;line-height:1.4;margin:8px 0 6px}
+.orient.arrive{color:var(--red-2);font-weight:600}
+.frame{display:block;width:100%;height:auto;border:4px solid var(--ink);background:var(--ink)}
+.copies{display:flex;align-items:center;gap:6px;margin:6px 0 0;min-height:44px}
+.copies .lab{font-family:var(--display);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--grey);flex:0 0 58px;line-height:1.1}
+.copies svg{display:block;height:40px;flex:1}
+.copies .none{font-size:14px;color:var(--grey);font-style:italic}
+.veils{margin:8px 0 0}
+.veil{display:flex;align-items:center;gap:10px;width:100%;min-height:48px;margin:6px 0;padding:6px 10px;background:var(--red);color:var(--cream);border:0;border-bottom:4px solid var(--ink);border-radius:0;cursor:pointer;text-align:left;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.veil .k{font-family:var(--display);font-weight:600;font-size:17px;text-transform:uppercase;letter-spacing:.1em;flex:0 0 150px;line-height:1.1}
+.veil .w{font-family:var(--text);font-size:14px;line-height:1.2;flex:1;opacity:.95}
+.veil.chosen{background:var(--ink)}
+.veil:disabled{background:var(--grey-2);color:var(--grey);border-bottom-color:var(--grey);cursor:default}
+.veil:disabled .w{font-style:italic}
+.result{margin-top:10px}
+.line{font-size:16px;line-height:1.45;margin:8px 0}
+.holdlab{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--display);font-size:14px;letter-spacing:.12em;text-transform:uppercase;margin-top:8px}
+.holdlab span:last-child{font-family:var(--text);font-size:14px;letter-spacing:0;text-transform:none;color:var(--grey)}
+.hold{display:block;width:100%;height:26px;border:3px solid var(--ink);background:var(--cream)}
+.cf{margin-top:12px}
+.cf .lab{font-size:14px;color:var(--grey);margin-bottom:4px}
+.cfrow{display:flex;gap:6px;justify-content:space-between}
+.cfrow .c{flex:1;text-align:center}
+.cfrow .c svg{display:block;width:100%;height:58px;border:2px solid var(--ink);background:var(--ink)}
+.cfrow .c.me svg{border:3px solid var(--red)}
+.cfrow .c.no svg{opacity:.35}
+.cfrow .c span{display:block;font-family:var(--display);font-size:11px;letter-spacing:.08em;text-transform:uppercase;line-height:1.1;margin-top:3px}
+.forks .veil .k{flex:0 0 125px}
+.lead{font-family:var(--display);font-weight:600;font-size:30px;line-height:1.1;text-transform:uppercase;letter-spacing:.02em;color:var(--red);margin:10px 0}
+.vl{margin:10px 0}
+.vl b{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.12em;font-size:14px;display:block;color:var(--red)}
+.about h3{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.12em;font-size:15px;color:var(--red);margin:16px 0 4px}
+.about p{font-size:15px}
+.help p,.help li{font-size:16px}
+.help ol{padding-left:22px}
+.fade{transition:opacity .8s ease}
+@keyframes popin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.crowd g{animation:popin .35s ease both}
+#warover{transition:opacity 1.2s ease}
+</style>
+</head>
+<body>
+
+<!-- START -->
+<section class="screen on" id="start">
+  <h1 class="title"><small>A keeper's problem, from Benjamin (1936)</small>Benjamin's<br>Veil</h1>
+  <div class="rule"></div>
+  <div style="display:flex;gap:12px;align-items:flex-start">
+    <svg id="startface" viewBox="0 0 200 230" style="flex:0 0 120px;height:138px;border:3px solid var(--ink);background:#3b2a1a"></svg>
+    <p class="lede" style="margin:0">You keep one face. It is painted, it has a halo, and hardly anyone has ever seen it. Every age brings a new way to copy a face, and the people press closer.</p>
+  </div>
+  <p class="lede">Each age you <b>set the veil</b> (how near the people may come), <b>let the age pass</b>, and see who came and what is left of the halo. Seven ages, then one last choice about where the face goes.</p>
+  <p class="aim">Keep the face's hold on the people through seven ages.</p>
+  <p class="lede">A face holds people in two ways: by its <b>halo</b>, which needs distance, and by <b>being seen</b>, which needs nearness. The halo, once spent, does not grow back.</p>
+  <button class="btn" id="begin">Begin: the first age</button>
+  <button class="btn quiet" id="howto">How to play</button>
+  <button class="btn quiet" id="aboutbtn">About the paper</button>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+
+<!-- PLAY -->
+<section class="screen" id="play">
+  <div class="topbar"><div class="aimline">Keep the face's hold on the people through seven ages.</div><button class="qbtn" data-help="play">?</button></div>
+  <div class="band"><b id="agename">THE CAVE</b><span id="agemeta">AGE 1 OF 7 · LONG AGO</span></div>
+  <div class="strip" id="strip"></div>
+  <p class="orient" id="newthis"></p>
+  <p class="orient arrive" id="arrive"></p>
+  <svg class="frame" id="frame" viewBox="0 0 340 300"></svg>
+  <div class="copies" id="copies"></div>
+  <div id="choose">
+    <p class="orient" id="choosehint">Set the veil: tap how near the people may come this age. Then let the age pass.</p>
+    <div class="veils" id="veils"></div>
+    <button class="btn" id="commit" disabled>Let the age pass<span class="sub" id="commitsub">set the veil first</span></button>
+  </div>
+  <div id="result" class="result" style="display:none">
+    <p class="line" id="line"></p>
+    <div class="holdlab"><span>Hold this age</span><span id="holdwords"></span></div>
+    <svg class="hold" id="hold" viewBox="0 0 340 20" preserveAspectRatio="none"></svg>
+    <div class="cf"><div class="lab">The halo, had you set the veil elsewhere this age (yours is ringed in red):</div><div class="cfrow" id="cfrow"></div></div>
+    <button class="btn" id="nextage">Next age</button>
+  </div>
+</section>
+
+<!-- FORK -->
+<section class="screen" id="forkscreen">
+  <div class="topbar"><div class="aimline">The halo is gone. The longing for it is not.</div><button class="qbtn" data-help="forkscreen">?</button></div>
+  <div class="band"><b>1936</b><span>THE LAST AGE</span></div>
+  <p class="orient" id="forkorient">Seven ages have passed. Four places want the face now. Pick one, put the face there, and see what comes of it.</p>
+  <svg class="frame" id="forkframe" viewBox="0 0 340 300"></svg>
+  <div id="forkchoose">
+    <div class="veils forks" id="forks"></div>
+    <button class="btn" id="forkcommit" disabled>Put the face there<span class="sub" id="forksub">pick a place first</span></button>
+  </div>
+  <div id="forkresult" class="result" style="display:none">
+    <p class="line" id="forkline"></p>
+    <p class="line" id="forkbenjamin" style="font-style:italic"></p>
+    <button class="btn" id="toverdict">The verdict</button>
+  </div>
+</section>
+
+<!-- END -->
+<section class="screen" id="end">
+  <div class="band"><b>The verdict</b><span>SEVEN AGES AND 1936</span></div>
+  <p class="lead" id="lead"></p>
+  <div class="rule"></div>
+  <div class="strip" id="endstrip"></div>
+  <div class="vl"><b>What you did</b><span id="vdid"></span></div>
+  <div class="vl"><b>What Benjamin says</b><span id="vben"></span></div>
+  <div class="vl"><b>What that means</b><span id="vfork"></span></div>
+  <p class="small" id="vbest"></p>
+  <button class="btn" id="again">Play again</button>
+  <button class="btn quiet" id="aboutbtn2">About the paper</button>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+
+<!-- HELP -->
+<section class="screen help" id="help">
+  <div class="band"><b>How to play</b><span></span></div>
+  <p class="aim">Keep the face's hold on the people through seven ages.</p>
+  <ol>
+    <li><b>Each age, set the veil.</b> Five slabs, from <i>in the dark</i> (only you see the face) to <i>on the screen</i> (everyone, together, close up). An age only offers the slabs its technique allows: there is no print before the woodcut, no screen before film. Tapping a slab parts the red curtains and brings the face nearer. Nothing is spent until you let the age pass.</li>
+    <li><b>Let the age pass.</b> The crowd walks in (how many, and how near, is what the veil gave them); the halo thins by how near you let them; copies go out in the age's technique. A line says what happened. The bar under it is <b>hold this age</b>: gold for the halo's part, red for the crowd's part.</li>
+    <li><b>The halo does not grow back.</b> What you spend is spent. And each age arrives with eyes of its own: the more copying there is in the world, the thinner the halo arrives, whatever you did.</li>
+    <li><b>Under the bar,</b> five small frames show what the halo would be at each veil this age, yours ringed in red.</li>
+    <li><b>1936:</b> the halo is gone and four places want the face. Pick one. Then the verdict: how much hold you kept of what was possible, in words, and what Benjamin says about the path you took.</li>
+  </ol>
+  <p class="small">Nothing is random. The same choices give the same ages every time, so a second run is a different plan, not a different draw.</p>
+  <button class="btn" id="helpback">Back</button>
+</section>
+
+<!-- ABOUT -->
+<section class="screen about" id="about">
+  <div class="band"><b>About</b><span>THE PAPER AND THE GAME</span></div>
+  <div id="abouttext">/*__ABOUT__*/</div>
+  <button class="btn" id="aboutback">Back</button>
+</section>
+
+<script>
+/*__MECHANISM__*/
+</script>
+<script>
+(function () {
+  'use strict';
+  const M = window.VEIL, C = M.CONFIG;
+  const $ = id => document.getElementById(id);
+  const INK = '#141210', CREAM = '#EFE6D2', RED = '#C8321E', GOLD = '#D4A017', GOLD2 = '#F0CC5A', GREY = '#8A857B';
+  let uidN = 0; const uid = () => 'u' + (uidN++);
+
+  // ---------- the face, in the technique of its age (interface only: no rule lives here)
+  const TECH = {
+    cave:      { bg: '#5A3F2A', skin: 'none', line: '#C4552C', lw: 5, dash: '10 4', hair: 'none', robe: 'none', opacity: 1 },
+    temple:    { bg: '#2A2420', skin: '#ECE6DA', line: '#8D847A', lw: 1.6, hair: '#D9D2C4', robe: '#D9D2C4', shade: true },
+    icon:      { bg: '#3B2A1A', skin: '#DCB389', line: '#2B1D12', lw: 2.6, hair: '#2B1D12', robe: '#A52A1E' },
+    engraving: { bg: '#F3EAD6', skin: 'hatch', line: INK, lw: 1.6, hair: 'cross', robe: 'cross' },
+    litho:     { bg: '#F1E9D8', skin: 'stipple', line: '#3A3632', lw: 2, hair: 'stipple2', robe: 'stipple2', soft: true },
+    halftone:  { bg: '#E9E4DA', skin: 'dots', line: 'none', lw: 0, hair: 'dots2', robe: 'dots2', photo: true },
+    film:      { bg: '#111111', skin: '#BDB8AE', line: '#1A1A1A', lw: 1.4, hair: '#1A1A1A', robe: '#2A2A2A', film: true },
+    poster:    { bg: RED, skin: 'posterdots', line: INK, lw: 3, hair: INK, robe: INK, poster: true }
+  };
+  const HAIR = ['M42 86 C40 30 160 30 158 86 C150 60 50 60 42 86 Z', 'M44 92 C36 26 164 26 156 92 C150 54 120 44 100 54 C80 44 50 54 44 92 Z', 'M46 80 C52 40 148 40 154 80 L160 100 C150 70 50 70 40 100 Z'];
+  function defs(u, t, vSeed) {
+    let d = '';
+    d += `<radialGradient id="${u}g" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="${GOLD2}" stop-opacity="1"/><stop offset=".55" stop-color="${GOLD}" stop-opacity=".9"/><stop offset="1" stop-color="${GOLD}" stop-opacity="0"/></radialGradient>`;
+    d += `<pattern id="${u}hatch" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(40)"><rect width="4" height="4" fill="#F3EAD6"/><line x1="0" y1="0" x2="0" y2="4" stroke="${INK}" stroke-width=".9"/></pattern>`;
+    d += `<pattern id="${u}cross" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><rect width="4" height="4" fill="url(#${u}hatch)"/><line x1="0" y1="0" x2="0" y2="4" stroke="${INK}" stroke-width=".9"/></pattern>`;
+    d += `<pattern id="${u}stipple" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#F1E9D8"/><circle cx="1.5" cy="2" r="1.1" fill="#3A3632"/><circle cx="5" cy="5.5" r=".9" fill="#3A3632"/><circle cx="4.5" cy="1" r=".7" fill="#3A3632"/></pattern>`;
+    d += `<pattern id="${u}stipple2" width="5" height="5" patternUnits="userSpaceOnUse"><rect width="5" height="5" fill="#D9D0BC"/><circle cx="1.2" cy="1.5" r="1.3" fill="#3A3632"/><circle cx="3.8" cy="3.9" r="1.2" fill="#3A3632"/></pattern>`;
+    d += `<pattern id="${u}dots" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#D6CFC2"/><circle cx="3" cy="3" r="1.9" fill="#4A463F"/></pattern>`;
+    d += `<pattern id="${u}dots2" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#4A463F"/><circle cx="3" cy="3" r="2.4" fill="#2A2724"/></pattern>`;
+    d += `<pattern id="${u}posterdots" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="${CREAM}"/><circle cx="3.5" cy="3.5" r="2.1" fill="${INK}"/></pattern>`;
+    d += `<pattern id="${u}golddots" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="3.5" cy="3.5" r="2.4" fill="${GOLD}"/></pattern>`;
+    d += `<linearGradient id="${u}shade" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".35"/></linearGradient>`;
+    d += `<radialGradient id="${u}photo" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#000" stop-opacity=".25"/></radialGradient>`;
+    return `<defs>${d}</defs>`;
+  }
+  const fillOf = (u, f) => (f === 'none' || !f) ? 'none' : (/^#/.test(f) ? f : `url(#${u}${f})`);
+  // the halo (gold, the only gold) and the face, in a 200×230 box; halo in [0,1]; halo kind: 'leaf' (the aura) or 'ink' (printed back)
+  function faceMarkup(tech, u, halo, variant, haloKind) {
+    const T = TECH[tech]; const v = variant || 0;
+    const gone = halo <= C.HALO_GONE;
+    let s = '';
+    if (!gone) {
+      if (haloKind === 'ink') s += `<circle cx="100" cy="96" r="${78 + 14 * halo}" fill="url(#${u}golddots)" opacity="${Math.min(1, halo + .15)}"/>`;
+      else s += `<circle cx="100" cy="96" r="${84 + 10 * halo}" fill="url(#${u}g)" opacity="${halo}"/><circle cx="100" cy="96" r="${84 + 10 * halo}" fill="none" stroke="${GOLD2}" stroke-width="${1 + 9 * halo}" opacity="${Math.min(1, halo * 1.3)}"/>`;
+    }
+    const dash = T.dash ? ` stroke-dasharray="${T.dash}"` : '';
+    const L = `stroke="${T.line}" stroke-width="${T.lw}" stroke-linecap="round" stroke-linejoin="round"${dash}`;
+    const skin = fillOf(u, T.skin), hair = fillOf(u, T.hair), robe = fillOf(u, T.robe);
+    s += `<g ${T.soft ? 'opacity=".9"' : ''}>`;
+    s += `<path d="M28 232 C38 192 70 178 100 178 C130 178 162 192 172 232 Z" fill="${robe}" ${L}/>`;
+    s += `<path d="M86 158 L86 186 L114 186 L114 158 Z" fill="${skin}" ${L}/>`;
+    s += `<ellipse cx="100" cy="98" rx="56" ry="72" fill="${skin}" ${L}/>`;
+    if (T.shade) s += `<ellipse cx="100" cy="98" rx="56" ry="72" fill="url(#${u}shade)"/>`;
+    if (T.photo) s += `<ellipse cx="100" cy="98" rx="56" ry="72" fill="url(#${u}photo)"/>`;
+    s += `<path d="${HAIR[v % 3]}" fill="${hair}" ${L}/>`;
+    const eyeF = T.line === 'none' ? '#2A2724' : T.line;
+    const ex = v % 2 ? 2 : 0;
+    s += `<path d="M${64 - ex} 94 Q78 84 ${92 - ex} 94 Q78 102 ${64 - ex} 94 Z" fill="${T.skin === 'none' ? 'none' : CREAM}" ${L}/><path d="M${108 + ex} 94 Q122 84 ${136 + ex} 94 Q122 102 ${108 + ex} 94 Z" fill="${T.skin === 'none' ? 'none' : CREAM}" ${L}/>`;
+    if (T.skin !== 'none') s += `<circle cx="${78 - ex / 2}" cy="94" r="4.2" fill="${eyeF}"/><circle cx="${122 + ex / 2}" cy="94" r="4.2" fill="${eyeF}"/>`;
+    s += `<path d="M62 80 Q78 72 94 78" fill="none" ${L}/><path d="M106 78 Q122 72 138 80" fill="none" ${L}/>`;
+    s += `<path d="M100 86 L95 124 Q100 131 107 124" fill="none" ${L}/>`;
+    s += `<path d="M84 146 Q100 156 116 146 M86 146 Q100 141 114 146" fill="none" ${L}/>`;
+    s += `</g>`;
+    return s;
+  }
+  function filmFrame(u) { // sprocket holes on both sides and a grey scanline wash, for the cinema and the newsreel
+    let s = `<rect x="0" y="0" width="34" height="300" fill="#000"/><rect x="306" y="0" width="34" height="300" fill="#000"/>`;
+    for (let y = 8; y < 300; y += 30) s += `<rect x="9" y="${y}" width="16" height="12" rx="2" fill="#EFE6D2"/><rect x="315" y="${y}" width="16" height="12" rx="2" fill="#EFE6D2"/>`;
+    return s;
+  }
+  function crowdMarkup(reach, n, big) { // heads from behind; number = reach, size and rows = nearness
+    const count = Math.round(reach * 40);
+    if (count < 1) return '';
+    const rows = n >= 0.75 ? 3 : n >= 0.5 ? 2 : 1;
+    const r = 5 + 10 * n;
+    let s = '<g class="crowd">';
+    for (let i = 0; i < count; i++) {
+      const row = i % rows;
+      const inRow = Math.ceil(count / rows), k = Math.floor(i / rows);
+      const x = 24 + (292 / Math.max(1, inRow)) * (k + 0.5) + ((i * 37) % 11 - 5) * 0.8 + (row % 2 ? r * 0.6 : 0);
+      const cy = 300 - r - 3 - row * r * 1.45;
+      s += `<g style="animation-delay:${(i * 35) % 700}ms"><path d="M${x - r * 1.5} ${cy + r * 1.3} Q${x} ${cy + r * .1} ${x + r * 1.5} ${cy + r * 1.3} Z" fill="${INK}"/><circle cx="${x}" cy="${cy - r * .2}" r="${r}" fill="${INK}"/></g>`;
+    }
+    return s + '</g>';
+  }
+  function curtains(n) {
+    const w = Math.max(0, (1 - n) * 170 - 12);
+    if (w <= 0) return '';
+    const folds = (x0, w) => { let f = ''; for (let i = 1; i < 5; i++) f += `<line x1="${x0 + w * i / 5}" y1="0" x2="${x0 + w * i / 5}" y2="300" stroke="${INK}" stroke-opacity=".25" stroke-width="3"/>`; return f; };
+    return `<g class="fade"><rect x="0" y="0" width="${w}" height="300" fill="${RED}"/>${folds(0, w)}<rect x="${340 - w}" y="0" width="${w}" height="300" fill="${RED}"/>${folds(340 - w, w)}<rect x="${w - 3}" y="0" width="3" height="300" fill="${INK}" opacity=".5"/><rect x="${340 - w}" y="0" width="3" height="300" fill="${INK}" opacity=".5"/></g>`;
+  }
+  // the picture: background, the face at its nearness, curtains, crowd
+  function drawFrame(svg, tech, halo, n, reach, extra) {
+    const u = uid(); const T = TECH[tech];
+    const s = 0.55 + 0.75 * n, h = 230 * s, yTop = 300 - h - 8, xLeft = 170 - 100 * s;
+    let m = defs(u) + `<rect width="340" height="300" fill="${T.bg}"/>`;
+    if (T.film) m += `<rect x="34" y="0" width="272" height="300" fill="#8E8A82"/>`;
+    if (T.poster) m += `<polygon points="0,300 340,0 340,90 0,300" fill="${INK}" opacity=".9"/>`;
+    m += `<g transform="translate(${xLeft} ${yTop}) scale(${s})" opacity="${0.5 + 0.5 * Math.min(1, n * 2)}">${faceMarkup(tech, u, halo, 0, extra && extra.haloKind)}</g>`;
+    if (T.film) m += filmFrame(u);
+    if (extra && extra.before) m += extra.before;
+    m += curtains(n);
+    m += crowdMarkup(reach || 0, n);
+    if (extra && extra.after) m += extra.after;
+    svg.innerHTML = m;
+  }
+  function thumb(tech, halo, haloKind, variant) { const u = uid(); return `<svg viewBox="0 0 200 230" preserveAspectRatio="xMidYMid slice">${defs(u)}<rect width="200" height="230" fill="${TECH[tech].bg}"/>${faceMarkup(tech, u, halo, variant || 0, haloKind)}</svg>`; }
+
+  // ---------- state and screens
+  let S = M.newGame(); let picked = null; let forkPicked = null; let lastScreen = 'start';
+  function show(id) { document.querySelectorAll('.screen').forEach(e => e.classList.remove('on')); $(id).classList.add('on'); window.scrollTo(0, 0); }
+  function words(x) { return M.haloWords(x); }
+
+  function renderStrip(el, s) {
+    el.innerHTML = C.AGES.map((a, i) => {
+      const r = s.results[i];
+      if (r) return `<div class="slot done" title="${a.name}">${thumb(a.technique, r.halo)}<div class="mini"><i style="width:${r.cult / 2 * 100}%;background:${GOLD}"></i><i style="width:${r.reach / 2 * 100}%;background:${RED}"></i></div></div>`;
+      return `<div class="slot${i === s.age ? ' now' : ''}"></div>`;
+    }).join('');
+  }
+  function renderAge() {
+    M.arrive(S); picked = null;
+    const a = M.currentAge(S);
+    $('agename').textContent = a.name; $('agemeta').textContent = `AGE ${S.age + 1} OF 7 · ${a.date}`;
+    renderStrip($('strip'), S);
+    $('newthis').textContent = a.newThis;
+    const al = M.arrivalLine(S); $('arrive').textContent = al; $('arrive').style.display = al ? 'block' : 'none';
+    drawFrame($('frame'), a.technique, S.halo, 0, 0);
+    $('copies').innerHTML = `<span class="lab">Copies out</span><span class="none">none yet: the one face only</span>`;
+    const opts = M.options(S);
+    $('veils').innerHTML = opts.map(o => `<button class="veil" data-i="${o.index}" ${o.allowed ? '' : 'disabled'}><span class="k">${o.label}</span><span class="w">${o.allowed ? o.who : 'not yet: ' + o.why}</span></button>`).join('');
+    $('veils').querySelectorAll('.veil').forEach(b => b.addEventListener('click', () => pickVeil(+b.dataset.i)));
+    $('commit').disabled = true; $('commitsub').textContent = 'set the veil first';
+    $('choose').style.display = 'block'; $('result').style.display = 'none';
+    show('play');
+  }
+  function pickVeil(i) {
+    picked = i; const a = M.currentAge(S), v = C.VEILS[i];
+    $('veils').querySelectorAll('.veil').forEach(b => b.classList.toggle('chosen', +b.dataset.i === i));
+    drawFrame($('frame'), a.technique, S.halo, v.n, 0);   // the control shows what it does: the curtains part, the face comes nearer; nothing else moves
+    $('commit').disabled = false; $('commitsub').textContent = v.label.toLowerCase() + ': ' + v.who;
+  }
+  function commitAge() {
+    if (picked === null) return;
+    const a = M.currentAge(S), v = C.VEILS[picked];
+    const r = M.commit(S, picked);
+    $('choose').style.display = 'none';
+    drawFrame($('frame'), a.technique, r.halo, v.n, r.reach);
+    // copies out, in the age's technique
+    const nCopies = picked >= 3 ? Math.min(14, Math.round(r.reach * 18)) : 0;
+    if (nCopies) {
+      let cs = `<svg viewBox="0 0 ${nCopies * 24 + 10} 40">`;
+      for (let i = 0; i < nCopies; i++) { const u = uid(); cs += `<g transform="translate(${i * 24 + 2} 2) scale(.16)">${defs(u)}<rect width="200" height="230" fill="${TECH[a.technique].bg}" stroke="${INK}" stroke-width="10"/>${faceMarkup(a.technique, u, 0, 0)}</g>`; }
+      cs += '</svg>';
+      $('copies').innerHTML = `<span class="lab">Copies out</span>${cs}<span class="none">${picked === 4 ? 'every screen' : r.reach > 0.5 ? '…and on, without end' : '…a few hundred'}</span>`;
+    } else $('copies').innerHTML = `<span class="lab">Copies out</span><span class="none">none: the one face only</span>`;
+    $('line').textContent = r.line;
+    $('holdwords').textContent = r.cult > r.reach * 2 ? 'most of it the halo' : r.reach > r.cult * 2 ? 'most of it the crowd' : 'the halo and the crowd alike';
+    $('hold').innerHTML = `<rect x="0" y="0" width="${r.cult / 2 * 340}" height="20" fill="${GOLD}"/><rect x="${r.cult / 2 * 340}" y="0" width="${r.reach / 2 * 340}" height="20" fill="${RED}"/>`;
+    $('cfrow').innerHTML = r.counterfactual.map(c => `<div class="c${c.index === picked ? ' me' : ''}${c.allowed ? '' : ' no'}">${thumb(a.technique, c.halo)}<span>${C.VEILS[c.index].label}</span></div>`).join('');
+    $('nextage').textContent = S.age === C.AGES.length - 1 ? 'On to 1936' : 'Next age';
+    renderStrip($('strip'), S);
+    setTimeout(() => { $('result').style.display = 'block'; }, 700);
+  }
+  function nextAge() {
+    M.next(S);
+    if (M.isFork(S)) renderFork(); else renderAge();
+  }
+  // ---------- 1936
+  function renderFork() {
+    forkPicked = null;
+    drawFrame($('forkframe'), 'poster', 0, 0.75, 0);
+    $('forks').innerHTML = C.FORK.map((f, i) => `<button class="veil" data-i="${i}"><span class="k">${f.label}</span><span class="w">${f.meaning}</span></button>`).join('');
+    $('forks').querySelectorAll('.veil').forEach(b => b.addEventListener('click', () => { forkPicked = +b.dataset.i; $('forks').querySelectorAll('.veil').forEach(x => x.classList.toggle('chosen', +x.dataset.i === forkPicked)); $('forkcommit').disabled = false; $('forksub').textContent = C.FORK[forkPicked].label.toLowerCase() + ': ' + C.FORK[forkPicked].meaning; }));
+    $('forkcommit').disabled = true; $('forksub').textContent = 'pick a place first';
+    $('forkchoose').style.display = 'block'; $('forkresult').style.display = 'none';
+    show('forkscreen');
+  }
+  function commitFork() {
+    if (forkPicked === null) return;
+    const f = M.fork(S, forkPicked);
+    $('forkchoose').style.display = 'none';
+    const svg = $('forkframe');
+    if (f.key === 'vault') {
+      drawFrame(svg, 'icon', 0, 0, 0.02, { after: `<g transform="translate(200 40) rotate(6)"><rect x="0" y="0" width="118" height="64" fill="${CREAM}" stroke="${INK}" stroke-width="3"/><text x="59" y="26" text-anchor="middle" font-family="Oswald,sans-serif" font-size="15" letter-spacing="2" fill="${INK}">CERTIFIED</text><text x="59" y="48" text-anchor="middle" font-family="Oswald,sans-serif" font-size="13" letter-spacing="1" fill="${RED}">THE ONE TRUE FACE</text><circle cx="104" cy="52" r="9" fill="${RED}"/></g>` });
+    } else if (f.key === 'studio') {
+      drawFrame(svg, 'halftone', f.haloBack, 0.9, f.reach, { haloKind: 'ink', before: `<text x="170" y="34" text-anchor="middle" font-family="Oswald,sans-serif" font-weight="700" font-size="30" letter-spacing="8" fill="${RED}">THE FACE</text>` });
+    } else if (f.key === 'rally') {
+      drawFrame(svg, 'poster', f.haloBack, 1, f.reach, { haloKind: 'ink', after: `<g id="warover" opacity="0"><rect width="340" height="300" fill="${INK}" opacity=".88"/><polygon points="0,300 340,0 340,70 0,300" fill="${RED}"/><text x="170" y="150" text-anchor="middle" font-family="Oswald,sans-serif" font-weight="700" font-size="64" letter-spacing="10" fill="${CREAM}">WAR</text><text x="170" y="190" text-anchor="middle" font-family="Franklin,sans-serif" font-style="italic" font-size="15" fill="${CREAM}">let art be made, though the world perish</text></g>` });
+      setTimeout(() => { const w = svg.querySelector('#warover'); if (w) w.setAttribute('opacity', '1'); }, 1800);
+    } else {
+      const u = uid(); let grid = `<rect width="340" height="300" fill="#111"/><rect x="34" y="0" width="272" height="300" fill="#8E8A82"/>`;
+      for (let i = 0; i < 12; i++) { const x = 40 + (i % 4) * 66, y = 6 + Math.floor(i / 4) * 98; const uu = uid(); grid += `<g transform="translate(${x} ${y}) scale(.4)">${defs(uu)}<rect width="150" height="230" fill="#8E8A82"/><g transform="translate(-25 0)">${faceMarkup('film', uu, 0, i, null)}</g></g>`; }
+      grid += filmFrame(u);
+      svg.innerHTML = defs(u) + grid;
+    }
+    $('forkline').textContent = f.line; $('forkbenjamin').textContent = f.benjamin;
+    setTimeout(() => { $('forkresult').style.display = 'block'; }, 700);
+  }
+  // ---------- the verdict
+  function renderEnd() {
+    const v = M.verdict(S);
+    $('lead').textContent = v.lead;
+    renderStrip($('endstrip'), S);
+    $('vdid').textContent = v.did; $('vben').textContent = v.benjamin; $('vfork').textContent = v.fork;
+    const bestOpenName = C.AGES[v.bestOpen].name.toLowerCase();
+    $('vbest').textContent = `The best path, under this game's assumptions, keeps the veil down and first prints the face at ${bestOpenName}, then puts it on the screen as soon as there is one. A second run is a different plan: open earlier, open later, or never.`;
+    show('end');
+  }
+  // ---------- wiring
+  drawFrame({ set innerHTML(v) { $('startface').innerHTML = v; } }, 'icon', 1, 0.5, 0);
+  (function () { const u = uid(); $('startface').innerHTML = defs(u) + `<rect width="200" height="230" fill="#3B2A1A"/>` + faceMarkup('icon', u, 1, 0); })();
+  $('begin').addEventListener('click', () => { S = M.newGame(); renderAge(); });
+  $('again').addEventListener('click', () => { S = M.newGame(); renderAge(); });
+  $('commit').addEventListener('click', commitAge);
+  $('nextage').addEventListener('click', nextAge);
+  $('forkcommit').addEventListener('click', commitFork);
+  $('toverdict').addEventListener('click', renderEnd);
+  $('howto').addEventListener('click', () => { lastScreen = 'start'; show('help'); });
+  document.querySelectorAll('.qbtn').forEach(b => b.addEventListener('click', () => { lastScreen = b.dataset.help; show('help'); }));
+  $('helpback').addEventListener('click', () => show(lastScreen));
+  const toAbout = from => () => { lastScreen = from; show('about'); };
+  $('aboutbtn').addEventListener('click', toAbout('start')); $('aboutbtn2').addEventListener('click', toAbout('end'));
+  $('aboutback').addEventListener('click', () => show(lastScreen));
+})();
+</script>
+</body>
+</html>

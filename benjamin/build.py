@@ -1,0 +1,33 @@
+# Generates benjamins-veil.html from template.html, mechanism.js (the single source of truth) and the embedded fonts,
+# then verifies byte for byte that the embedded mechanism is the file calibration.js ran against.
+import base64, sys, os
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+mech = open('mechanism.js', encoding='utf-8').read()
+font = lambda f: base64.b64encode(open('fonts/' + f, 'rb').read()).decode()
+about = """
+<h3>The game in one line</h3>
+<p>You keep one face through seven ages, from the cave to the cinema. Each age you set the veil (how near the people may come) and let the age pass; the crowd comes or does not, the halo thins and never grows back, and each age arrives with eyes of its own. In 1936 the halo is gone and four places want the face.</p>
+<h3>What the paper argues</h3>
+<p>Walter Benjamin's essay (written in Paris in 1936 and reworked until 1939; this is the third version) says that a work of art has always been copiable, but that technical reproduction (the woodcut, the engraving, lithography, photography, film) is something new: it detaches the work from its here-and-now, the one place and moment it exists in, which is the seat of its authenticity. What a copy cannot carry he calls the <i>aura</i>: "the unique appearance of a distance, however near it may be." The aura, he argues, is not in the object but in the relation between the object and the eyes of its age; and the masses' wish to bring things close, together with the techniques that let them, changes those eyes, so that the aura withers everywhere, not only in the copies. With the aura goes the work's grounding in ritual: art's first use was in cult, and cult value wants the work hidden and unapproachable. Reproduction pushes the other pole, exhibition value, and "with photography, exhibition value begins to drive back cult value along the whole line." What replaces ritual as art's foundation is politics. The essay then reads film through this (the actor tested by the apparatus; the star cult as a halo rebuilt to be sold; the cameraman as a surgeon; the public as a distracted examiner), and ends with the fork: fascism aestheticises politics, giving the masses a face to look at and ending in war; communism answers by politicising art.</p>
+<h3>Mechanism: a toy</h3>
+<p><b>This game demonstrates</b> that, under its own assumptions, a keeper who hides a face does not keep its halo once the age has learned to take things in copies; that a keeper who shows it early spends the halo for a reach the age cannot yet give; that the best age to open the veil is the age of the print and the photograph, about where the essay dates the turn; and that when the halo is gone the longing for it can be served in four places, each with the ending Benjamin gives it.</p>
+<p><b>It assumes</b> the toy. One face. A halo that is a stock, multiplied by each age's eyes when the age arrives (the world's copying, which this keeper does not control) and by one minus the nearness when the veil is set, and never restored. A table of how many people each veil reaches in each age, and a cut when the face is kept farther than the age's people have learned to want it. "Hold" as the halo's part plus the crowd's part at equal weight: that price is ours, and the check that ships with the game shows the shape of the result (open in the middle ages of print and photograph, not at either end) survives the crowd priced at half and at double, and survives eyes that change a third more slowly. The essay has no numbers; every number in the game's config block is ours and is tagged with the passage it was read from.</p>
+<p><b>The paper establishes</b> its claims as an argument, not by evidence: that the aura is a relation of distance; that perception is historically conditioned and that mass reproduction changes it; that with photography exhibition value drives back cult value; that art thereby loses its grounding in ritual and gains one in politics; and that fascism aestheticises politics while communism politicises art. It gives no quantities. The game's best age to open the veil is a property of the toy, consistent with the essay's dating, not a finding of the essay. Your hold is a score under our rules, not a measurement of anything.</p>
+<h3>What is cut</h3>
+<p>The film actor and the apparatus (sections VIII to X) beyond one line at the fork; the cameraman as surgeon (XI); the optical unconscious, slow motion and the close-up (XIII); Dadaism and the shock effect (XIV); reception in distraction and the example of architecture (XV); the Sistine Madonna's own story (footnote 11); Huxley's arithmetic (footnote 21); the preface's Marxian framing; most of the epilogue beyond its last lines.</p>
+<h3>The paper</h3>
+<p>Walter Benjamin, "Das Kunstwerk im Zeitalter seiner technischen Reproduzierbarkeit" (Dritte Fassung), in <i>Gesammelte Schriften</i> I.2, ed. Rolf Tiedemann and Hermann Schweppenhäuser (Frankfurt am Main: Suhrkamp, 1974), pp. 471–508. Written 1936–39. No DOI. In English as "The Work of Art in the Age of Its Technological Reproducibility" (third version), in <i>Selected Writings</i>, vol. 4 (Harvard University Press, 2003), and, as "The Work of Art in the Age of Mechanical Reproduction", in <i>Illuminations</i> (1968). The German text is widely available online, for instance at the Internet Archive and zeno.org.</p>
+<p><b>Game built from this paper; the paper is the authority where the two disagree.</b> Fonts: Oswald and Libre Franklin (SIL Open Font License). Nothing in the game is random.</p>
+"""
+t = open('template.html', encoding='utf-8').read()
+keys = ['/*__MECHANISM__*/', '/*__ABOUT__*/', '/*__FONT_OSWALD__*/', '/*__FONT_FRANKLIN__*/', '/*__FONT_FRANKLIN_I__*/']
+for k in keys:
+    assert t.count(k) == 1, k
+out = (t.replace('/*__FONT_OSWALD__*/', font('oswald.woff2')).replace('/*__FONT_FRANKLIN__*/', font('franklin.woff2'))
+        .replace('/*__FONT_FRANKLIN_I__*/', font('franklin-italic.woff2')).replace('/*__ABOUT__*/', about).replace('/*__MECHANISM__*/', mech))
+name = 'benjamins-veil.html'
+open(name, 'w', encoding='utf-8').write(out)
+built = open(name, encoding='utf-8').read()
+if mech not in built:
+    sys.exit('BUILD FAILED: embedded mechanism differs from mechanism.js')
+print(f'built {name}: {len(built)} bytes; mechanism embedded verbatim ({len(mech)} bytes)')
