@@ -1,4 +1,4 @@
-# Generates not-in-the-book.html from template.html, mechanism.js (the single source of truth) and the
+# Generates cantors-bargain.html from template.html, mechanism.js (the single source of truth) and the
 # embedded fonts, then verifies byte for byte that the embedded mechanism is the file calibration.js ran against.
 import base64, sys, os
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -26,7 +26,7 @@ for k in keys:
 out = (t.replace('/*__FONT_RYE__*/', font('rye.woff2')).replace('/*__FONT_ALFA__*/', font('alfa.woff2'))
         .replace('/*__FONT_WORK_BOLD__*/', font('work-700.woff2')).replace('/*__FONT_WORK__*/', font('work-400.woff2'))
         .replace('/*__ABOUT__*/', about).replace('/*__MECHANISM__*/', mech))
-name = 'not-in-the-book.html'
+name = 'cantors-bargain.html'
 open(name, 'w', encoding='utf-8').write(out)
 built = open(name, encoding='utf-8').read()
 if mech not in built:

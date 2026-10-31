@@ -1,4 +1,4 @@
-// Drives not-in-the-book.html through headless Chromium at phone width: a full session with a plausible
+// Drives cantors-bargain.html through headless Chromium at phone width: a full session with a plausible
 // strategy (round 1 by majority, round 2 anything, round 3 one slip then the rule), help opened and
 // returned from mid-play, the end screen's rerun, play again; screenshots along the way; no console errors,
 // no horizontal scroll. Run: node session-test.js > session-log.txt
@@ -10,7 +10,7 @@ const path = require('path');
   const errors = [];
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
-  const url = 'file://' + path.join(__dirname, 'not-in-the-book.html') + '#4821';
+  const url = 'file://' + path.join(__dirname, 'cantors-bargain.html') + '#4821';
   await page.goto(url); await page.waitForTimeout(400);
   const shot = async name => { await page.screenshot({ path: path.join(__dirname, `screenshot-${name}.png`), fullPage: true }); console.log('shot', name); };
   const noHScroll = async () => { const w = await page.evaluate(() => document.documentElement.scrollWidth); if (w > 380) errors.push(`horizontal scroll: ${w}`); };

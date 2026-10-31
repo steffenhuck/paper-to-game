@@ -92,6 +92,8 @@ Anti-patterns: a running point total; a tally as a verdict; a grid of tiny sprit
 
 Plain, concrete, numbers only where they help and rounded to what the lesson needs. Match the substance of the paper; never quote it. Field terms only where the player must use them to act, defined in the same sentence. Greek letters stay in the paper. Explanation after discovery. Claims bounded by the mechanism kind (section 1). The register of the writing matches the look: a comic strip does not talk like a journal.
 
+The title carries the author's name and a thing from the game, not the paper's subject: *Einstein's Flower Merchant*, *Watson's Cardboard*, *Cantor's Bargain*. Every instruction is written so that an eight-year-old could follow it: short sentences; the things on screen named by what they look like (the teal line, not the diagonal); one verb for one action; and the result of a round said plainly by the game itself before any character comments on it. Adults need the handholding too.
+
 ---
 
 ## 7. Deliverables and repository
