@@ -228,6 +228,28 @@
     const bits = runs.map(r => veil[r.v] + (r.from === r.to ? ' at ' + names[r.from] : ' from ' + names[r.from] + ' to ' + names[r.to]));
     return 'The most a keeper could have done: ' + bits.join('; ') + '.';
   }
+  // Where the player's ages fell short of the best path's, and why: the mechanism can tell two causes apart. Kept farther
+  // than the age allowed (the best path's veil was wider: fewer saw it), or the halo spent earlier (the veil was as wide or
+  // wider, but the halo they saw it with was thinner than on the best path). One or two sentences; nothing if within a twentieth.
+  function shortfallWords(s, best) {
+    const names = s.cfg.AGES.map(a => a.name.toLowerCase());
+    const rows = s.results.map((r, i) => { const b = best.state.results[i]; return { i, gap: b.hold - r.hold, narrower: r.veil < b.veil, thinner: r.haloArrived < b.haloArrived - 0.02 }; });
+    if (totalHold(s) >= 0.97 * best.total) return '';   // within a few hundredths of the best: nothing to explain
+    const lost = rows.filter(x => x.gap > 0.03 * best.total).sort((a, b) => b.gap - a.gap);
+    if (!lost.length) return '';
+    const list = xs => xs.map(x => names[x.i]).join(xs.length === 2 ? ' and ' : ', ').replace(/, ([^,]*)$/, ' and $1');
+    const narrow = lost.filter(x => x.narrower), thin = lost.filter(x => !x.narrower && x.thinner);
+    const bits = [];
+    if (narrow.length) bits.push('at ' + list(narrow.sort((a, b) => a.i - b.i)) + ' the face was kept farther than the age allowed, and fewer saw it than could have');
+    if (thin.length) {
+      const wider = s.results.map((r, i) => r.veil > best.state.results[i].veil ? i : -1).filter(i => i >= 0);
+      const where = wider.length === 0 ? 'early' : wider.length === 1 ? 'at ' + names[wider[0]] : 'early, from ' + names[wider[0]] + ' on';
+      bits.push('the halo had been spent ' + where + ', so the crowds of ' + list(thin.sort((a, b) => a.i - b.i)) + ' saw a face with little of it left');
+    }
+    if (!bits.length) return '';
+    const t = bits.join('; ');
+    return 'But ' + t.charAt(0) + t.slice(1) + '.';
+  }
   function openedAt(s) { // first age the face went to print or the screen; first age it was lifted at all
     let printed = -1, lifted = -1;
     s.results.forEach(r => { if (lifted < 0 && r.veil > 0) lifted = r.age; if (printed < 0 && r.veil >= 3) printed = r.age; });
@@ -261,6 +283,7 @@
       total: total, best: best.total, fraction: f, words: fractionWords(f),
       score: Math.max(0, Math.min(100, Math.round(f * 100))),   // the economist's tally, out of 100: people moved as a share of the most a keeper could have moved
       lead: 'Over six ages your face moved ' + fractionWords(f) + ' of the people it could have moved.',
+      shortfall: shortfallWords(s, best),
       did: pathWords(s) + ' ' + readingOfPath + ' ' + bestPathWords(best, s.cfg),
       benjamin: 'The halo was never in the face. It was the distance between the face and the people, and the age sets the distance. Hide the face and the halo still goes, because the people\'s eyes have changed; show it early and the age cannot yet carry it far. Once the copies are everywhere, the face belongs to politics.',
       epilogue: s.cfg.EPILOGUE,
@@ -295,6 +318,6 @@
     return c;
   }
 
-  const api = { CONFIG, newGame, currentAge, isOver, arrive, arrivalLine, options, commit, next, verdict, totalHold, maxHold, bestSchedule, runSchedule, heuristics, withConfig, reachAt, haloAfterVeil, movedOf, ageWeights, ageMax, movedScale, bestPathWords, haloWords, fractionWords, openedAt };
+  const api = { CONFIG, newGame, currentAge, isOver, arrive, arrivalLine, options, commit, next, verdict, totalHold, maxHold, bestSchedule, runSchedule, heuristics, withConfig, reachAt, haloAfterVeil, movedOf, ageWeights, ageMax, movedScale, bestPathWords, shortfallWords, haloWords, fractionWords, openedAt };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.VEIL = api;
 })(typeof window !== 'undefined' ? window : globalThis);
