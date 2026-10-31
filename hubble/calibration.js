@@ -74,7 +74,7 @@ let threw = false; try { M.observe(st, 20, 2, 500); } catch (e) { threw = true; 
 check('G5 a nebula cannot be observed twice', threw);
 for (let i = 0; i < 9; i++) if (M.canObserve(st, i)) M.observe(st, i, N[i].r, N[i].v);
 check('G6 nights run out and nightsOver is true', M.nightsOver(st) && st.nightsLeft === 0, 'left ' + st.nightsLeft);
-check('G7 demonstration match tests: 15% in distance, 40 km/s in velocity', M.eyeMatch(N[7], 0.56) && !M.eyeMatch(N[7], 0.6) && M.specMatch(N[7], 320) && !M.specMatch(N[7], 340));
+check('G7 heuristics reading-error bounds: 15% in distance, 40 km/s in velocity', M.eyeMatch(N[7], 0.56) && !M.eyeMatch(N[7], 0.6) && M.specMatch(N[7], 320) && !M.specMatch(N[7], 340));
 
 // ---- Heuristics (memo, section 17)
 const h = M.heuristics(7);
@@ -123,6 +123,8 @@ check('W4 verdict: prediction at 480 × 7 = 3360 is called close to 3779', /Clos
 M.setRate(st2, 0); M.commitPrediction(st2, 0);
 check('W5 rate 0 reads as "do not depend on distance"', /do not depend/.test(M.rateWords(st2)));
 check('W6 no decimals in the verdict lines', !/\d\.\d/.test(v.did + v.rate + v.test + v.plate + v.meaning), v.did);
+
+check('W7 screw readout: zero at the lamp lines, speed with direction, no decimals', M.screwWords(0) === 'zero' && /about 250 km\/s, coming toward us/.test(M.screwWords(-250)) && /3,800 km\/s, going away/.test(M.screwWords(3779)) && !/\d\.\d/.test(M.screwWords(1234)), M.screwWords(-250));
 
 // ---- Seeds
 let same = true; for (let s = 1; s <= 50; s++) { const a = M.makeRng(s), b = M.makeRng(s); for (let i = 0; i < 20; i++) if (a() !== b()) same = false; }
