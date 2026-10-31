@@ -1,5 +1,5 @@
 Benjamin's Veil — calibration result (2026-10-31)
-33 passed, 0 failed
+36 passed, 0 failed
       halo under the veil, by age: 1.00 1.00 0.95 0.81 0.57 0.23 0.05
 PASS  P1 never lifted: the halo at the cinema is below a tenth of its start  [0.05]
 PASS  P1b most of the loss comes after the court (halo still above three quarters at the court)  [0.81]
@@ -13,28 +13,35 @@ PASS  P4 the halo is non-increasing over every schedule  [5760 schedules]
 PASS  P5 the widest reach available grows strictly from age to age  [0.12 0.22 0.25 0.40 0.55 0.75 0.95]
 PASS  P5b the ceiling never falls and reaches the screen only at the cinema
       heuristics (memo, build.md section 3):
-        always veiled              0000000  total 4.63   by age 1.02 1.01 0.96 0.81 0.57 0.23 0.05
-        always the widest veil     1223334  total 4.59   by age 0.87 0.59 0.43 0.44 0.56 0.75 0.95
-        always shown on the day    1111111  total 2.72   by age 0.87 0.71 0.58 0.33 0.17 0.05 0.01
-        open at the court          0003334  total 5.88   by age 1.02 1.01 0.96 0.60 0.59 0.75 0.95
-        open at the print shop     0000334  total 6.20   by age 1.02 1.01 0.96 0.81 0.69 0.76 0.95
-        open at the studio         0000034  total 6.12   by age 1.02 1.01 0.96 0.81 0.57 0.81 0.95
-        open at the cinema         0000004  total 5.54   by age 1.02 1.01 0.96 0.81 0.57 0.23 0.95
-        the best possible          0000334  total 6.20   by age 1.02 1.01 0.96 0.81 0.69 0.76 0.95
+        always veiled              0000000  total 0.02   by age 0.01 0.00 0.00 0.00 0.00 0.00 0.00
+        always the widest veil     1223334  total 1.12   by age 0.04 0.08 0.08 0.11 0.14 0.24 0.43
+        always shown on the day    1111111  total 0.22   by age 0.04 0.06 0.07 0.03 0.02 0.00 0.00
+        open at the court          0003334  total 1.23   by age 0.01 0.00 0.00 0.32 0.21 0.26 0.43
+        open at the print shop     0000334  total 1.23   by age 0.01 0.00 0.00 0.00 0.47 0.31 0.43
+        open at the studio         0000034  total 0.98   by age 0.01 0.00 0.00 0.00 0.00 0.51 0.45
+        open at the cinema         0000004  total 0.54   by age 0.01 0.00 0.00 0.00 0.00 0.00 0.52
+        print, then back in the dark 0000300  total 0.49   by age 0.01 0.00 0.00 0.00 0.47 0.00 0.00
+        one step wider each age    0012334  total 1.27   by age 0.01 0.00 0.12 0.19 0.25 0.26 0.43
+        the best possible          0012334  total 1.27   by age 0.01 0.00 0.12 0.19 0.25 0.26 0.43
 PASS  P6 the best schedule first prints at the print shop or the studio  [printshop]
-PASS  P6b always veiled lands below three quarters of the best  [0.75]
-PASS  P6c always the widest veil lands below three quarters of the best  [0.74]
-PASS  P6d open at the print shop and at the studio are both within a tenth of the best
-PASS  P6e open at the cinema is worse than open at the studio (the ages of print passed unused)
-PASS  P6f open at the court is worse than open at the print shop (the halo spent too early)
-PASS  P6g the heuristics spread: the decision matters (range above a quarter of the best)  [3.48]
-      crowd at half price: best 0000034 (prints first at studio); always veiled 0.88 of best; always widest 0.57 of best
-      crowd at double price: best 0013334 (prints first at court); always veiled 0.54 of best; always widest 0.91 of best
-      eyes declining a third more slowly: best 0000034 (prints first at studio); always veiled 0.81 of best; always widest 0.72 of best
-PASS  P7 under all three the best schedule first prints between the court and the studio
-PASS  P7b under all three always veiled stays below nine tenths of the best
-PASS  P7c under all three always widest stays below the best, and below three quarters when the crowd is not overpriced
-PASS  P7d the halo under the veil still goes below a quarter by the cinema with the slower eyes
+PASS  P6a the best schedule lifts the veil before it prints: a gradual opening  [0012334]
+PASS  P6b always veiled lands below a tenth of the best: a halo nobody sees moves nobody  [0.01]
+PASS  P6c always the widest veil lands below the best, and open at the court or the print shop beats it  [0.89]
+PASS  P6d open at the print shop is within a tenth of the best  [0.97]
+PASS  P6e the later the single opening after the print shop, the worse: studio below print shop, cinema below studio
+PASS  P6f open at the cinema lands below three fifths of the best: the ages of print passed unused  [0.43]
+PASS  P6g print then back in the dark lands below half of the best: the halo does not return  [0.39]
+PASS  P6h the best path opens step by step: the veil never narrows along it  [0012334]
+PASS  P6i the heuristics spread: the decision matters (range above half of the best)  [1.25]
+      being seen worth a tenth: best 0012334 (prints first at printshop); always veiled 0.02 of best; always widest 0.80 of best
+      being seen worth two fifths: best 0013334 (prints first at court); always veiled 0.01 of best; always widest 0.95 of best
+      people counted more flatly: best 0012334 (prints first at printshop); always veiled 0.02 of best; always widest 0.91 of best
+      people counted more steeply: best 0000334 (prints first at printshop); always veiled 0.01 of best; always widest 0.86 of best
+      eyes declining a third more slowly: best 0000334 (prints first at printshop); always veiled 0.01 of best; always widest 0.82 of best
+PASS  P7 under all five variants the best schedule first prints between the court and the studio
+PASS  P7b under all five always veiled stays below a fifth of the best
+PASS  P7c under all five always widest stays below the best
+PASS  P7d under all five the best path never narrows the veil
 PASS  P8 the rally holds the most and ends in war
 PASS  P8b the newsreel has no halo and everyone in it
 PASS  P8c the vault has a crowd of one and no halo
@@ -47,3 +54,4 @@ PASS  W5 the verdict for a sensible path names the turn
 PASS  W7 the arrival line names the cause once, at the studio, and states the fact elsewhere  [fact fact fact fact fact cause fact]
 PASS  W8 no announcement says whether the face is hidden or shown
 PASS  W6 the verdict for the always-veiled path says the halo went anyway
+
