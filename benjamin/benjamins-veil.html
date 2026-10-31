@@ -88,7 +88,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
 .help ol{padding-left:22px}
 .fade{transition:opacity .8s ease}
 @keyframes popin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.crowd g{animation:popin .35s ease both}
+.crowd.passing g{animation:popin .35s ease both}
 #warover{transition:opacity 1.2s ease}
 </style>
 </head>
@@ -576,7 +576,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     return `<g class="fade"><rect x="0" y="0" width="${w}" height="300" fill="${RED}"/>${folds(0, w)}<rect x="${340 - w}" y="0" width="${w}" height="300" fill="${RED}"/>${folds(340 - w, w)}<rect x="${w - 3}" y="0" width="3" height="300" fill="${INK}" opacity=".5"/><rect x="${340 - w}" y="0" width="3" height="300" fill="${INK}" opacity=".5"/></g>`;
   }
   // the picture: background, the face at its nearness, curtains, crowd
-  function drawFrame(svg, tech, halo, n, reach, extra) {
+  function frameMarkup(tech, halo, n, reach, extra) {
     const u = uid(); const T = TECH[tech];
     const s = 0.55 + 0.75 * n, h = 230 * s, yTop = 300 - h - 8, xLeft = 170 - 100 * s;
     let m = defs(u) + `<rect width="340" height="300" fill="${T.bg}"/>`;
@@ -586,9 +586,27 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     if (T.film) m += filmFrame(u);
     if (extra && extra.before) m += extra.before;
     m += curtains(n);
-    m += crowdMarkup(reach || 0, n);
+    m += crowdMarkup(reach || 0, extra && extra.crowdN !== undefined ? extra.crowdN : n);
     if (extra && extra.after) m += extra.after;
-    svg.innerHTML = m;
+    return m;
+  }
+  function drawFrame(svg, tech, halo, n, reach, extra) {
+    svg.innerHTML = frameMarkup(tech, halo, n, reach, extra);
+    svg.dataset.n = n; svg.dataset.tech = tech; svg.dataset.halo = halo.toFixed(2); svg.dataset.crowd = Math.round((reach || 0) * 40);
+  }
+  // the age boundary: first the last frame of the previous age, still; then, over about a second, the halo thins and the
+  // face re-renders in the new technique; curtains and crowd stay where they were (revision 7)
+  let arriveTimer = null;
+  function arriveFrame(svg, prev, tech, halo, n, reach, onStart) {
+    clearTimeout(arriveTimer);
+    const before = frameMarkup(prev.tech, prev.halo, n, reach), after = frameMarkup(tech, halo, n, reach);
+    svg.innerHTML = `<g>${before}</g><g class="arriving" style="opacity:0;transition:opacity 1s ease">${after}</g>`;
+    svg.dataset.n = n; svg.dataset.tech = prev.tech; svg.dataset.halo = prev.halo.toFixed(2); svg.dataset.crowd = Math.round((reach || 0) * 40);
+    arriveTimer = setTimeout(() => {
+      const g = svg.querySelector('.arriving'); if (!g) return;
+      g.style.opacity = '1'; svg.dataset.tech = tech; svg.dataset.halo = halo.toFixed(2);
+      if (onStart) onStart();
+    }, 900);
   }
   function thumb(tech, halo, haloKind, variant) { const u = uid(); return `<svg viewBox="0 0 200 230" preserveAspectRatio="xMidYMid slice">${defs(u)}<rect width="200" height="230" fill="${TECH[tech].bg}"/>${faceMarkup(tech, u, halo, variant || 0, haloKind)}</svg>`; }
 
@@ -612,9 +630,12 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     $('agename').textContent = a.name; $('agemeta').textContent = `AGE ${S.age + 1} OF 7 · ${a.date}`;
     renderStrip($('strip'), S);
     $('newthis').textContent = a.newThis;
-    const al = M.arrivalLine(S); $('arrive').textContent = al; $('arrive').style.display = al ? 'block' : 'none';
-    drawFrame($('frame'), a.technique, S.halo, lastN(), 0);  // the world as the player left it: last age's curtains, this age's halo, no crowd yet
-    $('frame').dataset.n = lastN();
+    const al = M.arrivalLine(S); $('arrive').textContent = al; $('arrive').style.display = 'none';
+    const prev = S.results.length ? S.results[S.results.length - 1] : null;
+    if (prev) { // the world as the player left it, then the age arrives in the picture
+      const pa = C.AGES[prev.age];
+      arriveFrame($('frame'), { tech: pa.technique, halo: prev.halo }, a.technique, S.halo, lastN(), prev.reach, () => { $('arrive').style.display = al ? 'block' : 'none'; });
+    } else drawFrame($('frame'), a.technique, S.halo, 0, 0);
     renderCopies(null);
     const opts = M.options(S);
     $('veils').innerHTML = opts.map(o => `<button class="veil" data-i="${o.index}" ${o.allowed ? '' : 'disabled'}><span class="k">${o.label}</span><span class="w">${o.allowed ? o.who : 'not yet: ' + o.why}</span></button>`).join('');
@@ -626,8 +647,10 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   function pickVeil(i) {
     picked = i; const a = M.currentAge(S), v = C.VEILS[i];
     $('veils').querySelectorAll('.veil').forEach(b => b.classList.toggle('chosen', +b.dataset.i === i));
-    drawFrame($('frame'), a.technique, S.halo, v.n, 0);   // the control shows what it does: the curtains part, the face comes nearer; nothing else moves
-    $('frame').dataset.n = v.n;
+    const prev = S.results.length ? S.results[S.results.length - 1] : null;
+    clearTimeout(arriveTimer);
+    if (prev) $('arrive').style.display = $('arrive').textContent ? 'block' : 'none';
+    drawFrame($('frame'), a.technique, S.halo, v.n, prev ? prev.reach : 0, { crowdN: prev ? C.VEILS[prev.veil].n : 0 });   // the control shows what it does: the curtains part, the face comes nearer; the crowd stays
     $('commit').disabled = false; $('commitsub').textContent = v.label.toLowerCase() + ': ' + v.who;
   }
   function commitAge() {
@@ -635,7 +658,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     const a = M.currentAge(S), v = C.VEILS[picked];
     const r = M.commit(S, picked);
     $('choose').style.display = 'none';
-    drawFrame($('frame'), a.technique, r.halo, v.n, r.reach);
+    drawFrame($('frame'), a.technique, r.halo, v.n, r.reach); $('frame').querySelector('.crowd') && $('frame').querySelector('.crowd').classList.add('passing');
     // copies out, in the age's technique; earlier ages' copies stay in the world (revision 2)
     const nCopies = picked >= 3 ? Math.min(14, Math.round(r.reach * 18)) : 0;
     if (nCopies) copiesMade.push({ tech: a.technique, count: nCopies, note: picked === 4 ? 'every screen' : r.reach > 0.5 ? '…and on, without end' : '…a few hundred' });
@@ -705,7 +728,6 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     show('end');
   }
   // ---------- wiring
-  drawFrame({ set innerHTML(v) { $('startface').innerHTML = v; } }, 'icon', 1, 0.5, 0);
   (function () { const u = uid(); $('startface').innerHTML = defs(u) + `<rect width="200" height="230" fill="#3B2A1A"/>` + faceMarkup('icon', u, 1, 0); })();
   $('begin').addEventListener('click', () => { S = M.newGame(); copiesMade = []; renderAge(); });
   $('again').addEventListener('click', () => { S = M.newGame(); copiesMade = []; renderAge(); });
