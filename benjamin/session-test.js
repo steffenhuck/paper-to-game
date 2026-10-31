@@ -1,6 +1,6 @@
 // Full session in a real headless browser at phone width. Run: node session-test.js  (writes session-log.txt and screenshots)
 // Strategy: veil down through the cave, temple and cathedral; shown on the day at the court; print at the print shop and the
-// studio; the screen at the cinema; help opened mid-play and returned from; the rally at the fork; the verdict; About; play again.
+// studio; the screen at the cinema; help opened mid-play and returned from; the verdict; About; play again.
 const { chromium } = require('playwright');
 const path = require('path'), fs = require('fs');
 const L = []; const say = s => { L.push(s); console.log(s); };
@@ -13,8 +13,9 @@ const L = []; const say = s => { L.push(s); console.log(s); };
   const text = async sel => (await page.$eval(sel, e => e.innerText)).replace(/\n+/g, ' | ');
   await shot('start'); await noScroll();
   await page.click('#begin'); await page.waitForTimeout(300);
-  const plan = [0, 0, 0, 1, 3, 3, 4]; let copiesSoFar = 0; let lastFrame = null;
-  for (let i = 0; i < 7; i++) {
+  const plan = [0, 1, 3, 4, 5, 6]; // the day at the temple, then each new rung as it comes
+  let copiesSoFar = 0; let lastFrame = null;
+  for (let i = 0; i < 6; i++) {
     say(`\n== ${await text('#agename')} (${await text('#agemeta')})`);
     say('   new: ' + await text('#newthis'));
     const arr = await page.$eval('#arrive', e => e.style.display === 'none' ? '' : e.innerText); if (arr) say('   arrives: ' + arr);
@@ -26,7 +27,7 @@ const L = []; const say = s => { L.push(s); console.log(s); };
     if (i) { // the first frame of this age equals the last frame of the previous age
       const same = first.n === lastFrame.n && first.tech === lastFrame.tech && first.halo === lastFrame.halo && first.crowd === lastFrame.crowd;
       if (!same) say(`   !! first frame differs from the previous age's last: ${JSON.stringify(first)} vs ${JSON.stringify(lastFrame)}`); else say(`   first frame = previous age's last frame (${first.tech}, halo ${first.halo}, crowd ${first.crowd}, nearness ${first.n})`);
-      if (i === 5) await shot(`age${i + 1}-as-left`);
+      if (i === 4) await shot(`age${i + 1}-as-left`);
       await page.waitForTimeout(2200);
       const after = await page.$eval('#frame', e => ({ n: +e.dataset.n, tech: e.dataset.tech, halo: e.dataset.halo, crowd: +e.dataset.crowd }));
       const op = await page.$eval('#frame .arriving', g => g.style.opacity);
@@ -34,7 +35,7 @@ const L = []; const say = s => { L.push(s); console.log(s); };
       if (op !== '1') say('   !! arrival layer not shown');
       say(`   after arrival: still ${after.tech}, halo ${after.halo}; curtains, crowd and technique unchanged (the technique changes when the age passes)`);
       if (after.tech !== first.tech) say('   !! technique changed at the arrival');
-      if (i === 5) await shot(`age${i + 1}-after-arrival`);
+      if (i === 4) await shot(`age${i + 1}-after-arrival`);
     } else say('   age one starts in the dark');
     const copiesAtStart = await page.$eval('#copies', e => { const s = e.querySelector('svg'); return s ? +s.dataset.copies : 0; });
     if (copiesAtStart < copiesSoFar) say(`   !! copies at age start fell from ${copiesSoFar} to ${copiesAtStart}`); else say(`   copies in the world at age start: ${copiesAtStart}`);
@@ -44,34 +45,27 @@ const L = []; const say = s => { L.push(s); console.log(s); };
     await page.click(`#veils .veil[data-i="${plan[i]}"]`); await page.waitForTimeout(250);
     say('   > tapped ' + slabs[plan[i]] + '; commit says: ' + await text('#commit'));
     if (await page.$('#result:not([style*="none"])')) say('   !! result visible before commit');
-    if (i === 4) { await shot('age5-veil-set'); await noScroll(); }
+    if (i === 3) { await shot('age4-veil-set'); await noScroll(); }
     await page.click('#commit'); await page.waitForTimeout(1200);
     say('   line: ' + await text('#line'));
     say('   hold: ' + await text('#holdwords') + ' | copies: ' + await text('#copies'));
     copiesSoFar = await page.$eval('#copies', e => { const s = e.querySelector('svg'); return s ? +s.dataset.copies : 0; });
     lastFrame = await page.$eval('#frame', e => ({ n: +e.dataset.n, tech: e.dataset.tech, halo: e.dataset.halo, crowd: +e.dataset.crowd }));
     say('   counterfactual: ' + (await page.$$eval('#cfrow .c', cs => cs.map(c => (c.classList.contains('me') ? '[' : '') + c.innerText + (c.classList.contains('me') ? ']' : '') + (c.classList.contains('no') ? '(na)' : '')).join(' / '))));
-    if (i === 0 || i === 3 || i === 4 || i === 5 || i === 6) await shot(`age${i + 1}-passed`);
+    if (i === 0 || i === 2 || i === 3 || i === 4 || i === 5) await shot(`age${i + 1}-passed`);
     await noScroll();
     say('   > ' + await text('#nextage'));
     await page.click('#nextage'); await page.waitForTimeout(300);
   }
-  say('\n== ' + await page.$eval('.screen.on', e => e.id) + ': ' + await text('#forkorient'));
-  await shot('fork');
-  say('   slabs: ' + (await page.$$eval('#forks .veil', bs => bs.map(b => b.innerText.replace(/\n/g, ' — ')))).join(' / '));
-  await page.click('#forks .veil[data-i="2"]'); await page.waitForTimeout(200); say('   > tapped the rally; commit says: ' + await text('#forkcommit'));
-  await page.click('#forkcommit'); await page.waitForTimeout(900); await shot('fork-rally'); await page.waitForTimeout(2200); await shot('fork-rally-war');
-  say('   line: ' + await text('#forkline') + ' || ' + await text('#forkbenjamin'));
-  await page.click('#toverdict'); await page.waitForTimeout(300); await shot('end'); await noScroll();
+  await page.waitForTimeout(300); await shot('end'); await noScroll();   // the last Next age is The verdict
   say('\n== VERDICT: ' + await text('#lead'));
-  say('   ' + await text('#vdid')); say('   ' + await text('#vben')); say('   ' + await text('#vfork')); say('   ' + await text('#vbest'));
+  say('   ' + await text('#vdid')); say('   ' + await text('#vben')); say('   ' + await text('#vepi')); say('   ' + await text('#vbest'));
   await page.click('#aboutbtn2'); await page.waitForTimeout(200); await shot('about'); await page.click('#aboutback'); await page.waitForTimeout(200);
   say('   about opened and returned to ' + await page.$eval('.screen.on', e => e.id));
-  // a second run: never lift the veil, then the newsreel
+  // a second run: never lift the veil
   await page.click('#again'); await page.waitForTimeout(300);
-  for (let i = 0; i < 7; i++) { await page.click('#veils .veil[data-i="0"]'); await page.click('#commit'); await page.waitForTimeout(900); if (i === 5) say('\n== second run, studio, veil down: ' + await text('#line')); await page.click('#nextage'); await page.waitForTimeout(200); }
-  await page.click('#forks .veil[data-i="3"]'); await page.click('#forkcommit'); await page.waitForTimeout(900); await shot('fork-newsreel');
-  await page.click('#toverdict'); await page.waitForTimeout(300); say('== second run verdict: ' + await text('#lead') + ' | ' + await text('#vdid')); await shot('end-veiled');
+  for (let i = 0; i < 6; i++) { await page.click('#veils .veil[data-i="0"]'); await page.click('#commit'); await page.waitForTimeout(900); if (i === 4) say('\n== second run, studio, veil down: ' + await text('#line')); await page.click('#nextage'); await page.waitForTimeout(200); }
+  await page.waitForTimeout(300); say('== second run verdict: ' + await text('#lead') + ' | ' + await text('#vdid')); await shot('end-veiled');
   say('\nerrors: ' + (errors.length ? errors.join(' ; ') : 'none'));
   await browser.close();
   fs.writeFileSync(path.join(__dirname, 'session-log.txt'), L.join('\n') + '\n');
