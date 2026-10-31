@@ -98,7 +98,17 @@ check('H7 over 300 seeds, near-only corrected K stays within 350–650', Math.mi
 // ---- Words
 const st2 = M.newGame(3); for (const i of [5, 7, 8, 20]) M.observe(st2, i, N[i].r, N[i].v);
 check('W1 plate words after three nearby raw reads say cloud', /cloud/i.test((() => { const s = M.newGame(1); for (const i of [2, 5, 7, 11]) M.observe(s, i, N[i].r, N[i].v); return M.plateWords(s); })()));
-check('W2 plate words with three near and a Virgo nebula say climb or lean', /climb|lean/i.test(M.plateWords(st2)), M.plateWords(st2));
+check('W2 plate words with three near and a Virgo nebula describe the farthest-is-highest', /farthest dot is also your highest/.test(M.plateWords(st2)), M.plateWords(st2));
+// plate words never conclude before the rate is set
+let concluded = false; for (let s = 1; s <= 60; s++) { const g = M.newGame(s); const rr = M.makeRng(s); const order = [...Array(N.length).keys()].sort(() => rr() - 0.5); for (const i of order) if (M.canObserve(g, i)) { M.observe(g, i, N[i].r * (0.9 + rr() * 0.2), N[i].v + (rr() - 0.5) * 80); if (/faster|relation|tied/i.test(M.plateWords(g))) concluded = true; } M.takeOutSun(g); if (/faster|relation|tied/i.test(M.plateWords(g))) concluded = true; }
+check('W2c plate words describe and never conclude (no "faster", "relation", "tied") over 60 random games', !concluded);
+// Hubble's ghost points and the comparison sentence
+const gh = M.hubblePoints(st2);
+check('W2d hubblePoints gives Table 1 values for the observed nebulae', gh.length === 4 && gh[3].r === 2.0 && gh[3].v === N[20].v);
+check('W2e exact readings: "your dots sat on his"', /sat on his/.test(M.comparisonWords(st2)), M.comparisonWords(st2));
+const stS = M.newGame(4); for (const i of [5, 7, 20, 22]) M.observe(stS, i, N[i].r * 0.8, N[i].v + 150);
+check('W2f short distances and fast far ones are named', /ran short/.test(M.comparisonWords(stS)) && /far ones ran fast/.test(M.comparisonWords(stS)), M.comparisonWords(stS));
+check('W2g no decimals in comparison or plate words', !/\d\.\d/.test(M.comparisonWords(stS) + M.plateWords(stS) + M.comparisonWords(st2)));
 const stV = M.newGame(2); for (const i of [20, 21, 22, 23]) M.observe(stV, i, 2.0, N[i].v);
 check('W2b plate words with Virgo only say nothing to compare', /same distance/.test(M.plateWords(stV)), M.plateWords(stV));
 M.takeOutSun(st2); M.setRate(st2, 480); M.commitPrediction(st2, M.predictHumason(st2));

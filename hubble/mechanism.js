@@ -168,15 +168,37 @@ function fmtK(k) { return Math.round(k / 10) * 10; }
 function roundV(v) { return Math.round(v / 50) * 50; }
 // The sentence under the plate after each night, in the aim's units
 function plateWords(state) {
+  // Describes the plate; never concludes. "The farther, the faster" is the verdict's line, after the rate is set.
   const pts = platePoints(state), n = pts.length;
   if (n === 0) return 'Nothing on the plate yet.';
   if (n === 1) return 'One nebula. Nothing to compare it with yet.';
   if (n === 2) return 'Two nebulae. Too few to see anything.';
   const rs = pts.map(p => p.r), spread = Math.max(...rs) - Math.min(...rs), c = correlation(pts);
-  if (spread < 0.5) return 'All at about the same distance. Nothing to compare: you need near ones and far ones.';
-  if (c > 0.75) return 'The dots climb: the farther, the faster.';
-  if (c > 0.45) return 'The dots lean upwards. The far ones tend to be the fast ones.';
-  return state.corrected ? 'Still a cloud. Scanty material, Hubble would say.' : 'A cloud. Some come toward us, some go away.';
+  const far = pts.reduce((a, p) => p.r > a.r ? p : a), high = pts.reduce((a, p) => p.v > a.v ? p : a);
+  const count = n === 3 ? 'Three' : n === 4 ? 'Four' : n === 5 ? 'Five' : n === 6 ? 'Six' : n === 7 ? 'Seven' : n === 8 ? 'Eight' : n === 9 ? 'Nine' : n === 10 ? 'Ten' : n === 11 ? 'Eleven' : 'Twelve';
+  if (spread < 0.5) return `${count} nebulae, all at about the same distance. Nothing to compare yet.`;
+  if (Math.max(...rs) < 1.3) return `${count} nebulae, all nearby. ${c > 0.6 ? 'The dots rise a little from left to right.' : 'A cloud so far.'}`;
+  if (far === high) return `Your farthest dot is also your highest.${c > 0.6 ? ' The others rise toward it.' : ' The others scatter.'}`;
+  if (c > 0.6) return 'The dots rise from left to right, with some scatter.';
+  return state.corrected ? 'Still a cloud: dots high and low at every distance.' : 'A cloud: dots high and low at every distance.';
+}
+// Hubble's own readings for the nebulae the player observed: Table 1, raw or corrected like the player's (the ghost dots)
+function hubblePoints(state) { return state.observed.map(o => { const n = CONFIG.NEBULAE[o.idx]; return { r: n.r, v: state.corrected ? correctedVelocity(n.v, n.ra, n.dec) : n.v, idx: o.idx }; }); }
+// One sentence comparing the player's plate with Hubble's, in words
+function comparisonWords(state) {
+  const o = state.observed; if (o.length < 2) return 'Too few dots to set beside Hubble\'s.';
+  const logR = o.reduce((s, p) => s + Math.log10(p.r / p.rTrue), 0) / o.length;
+  const far = o.filter(p => p.rTrue >= 1.0), near = o.filter(p => p.rTrue < 1.0);
+  const vErr = arr => arr.length ? arr.reduce((s, p) => s + (p.v - p.vTrue), 0) / arr.length : 0;
+  const farErr = vErr(far), nearErr = vErr(near), allErr = vErr(o);
+  const parts = [];
+  if (logR > 0.04) parts.push('your distances ran long'); else if (logR < -0.04) parts.push('your distances ran short');
+  if (far.length && Math.abs(farErr) > 60) parts.push(farErr > 0 ? 'your far ones ran fast' : 'your far ones ran slow');
+  else if (!far.length && Math.abs(nearErr) > 60) parts.push(nearErr > 0 ? 'your speeds ran fast' : 'your speeds ran slow');
+  else if (far.length && Math.abs(allErr) > 60) parts.push(allErr > 0 ? 'your speeds ran fast' : 'your speeds ran slow');
+  if (!parts.length) return 'Set beside Hubble\'s plate, your dots sat on his.';
+  const s = parts.join(' and ');
+  return 'Set beside Hubble\'s plate, ' + s.charAt(0) + s.slice(1) + '.';
 }
 // Distances in words, never decimals (the author finds the decimals in CONFIG)
 function distanceWords(r) {
@@ -211,7 +233,7 @@ function verdict(state) {
   const H = CONFIG.HUMASON, pts = platePoints(state);
   const n = pts.length, maxR = n ? Math.max(...pts.map(p => p.r)) : 0;
   const bestK = fitK(pts);
-  const did = `You read ${n} nebula${n === 1 ? '' : 'e'}, the farthest ${distanceWords(maxR)} out.`;
+  const did = `You read ${n} nebula${n === 1 ? '' : 'e'}, the farthest ${distanceWords(maxR)} out. ${comparisonWords(state)}`;
   const rate = rateWords(state);
   const err = state.prediction - H.v;
   let test;
@@ -225,7 +247,7 @@ function verdict(state) {
   const showed = n >= 3 && spread >= 0.5 && c > 0.45;
   const headline = state.rate < 60 ? 'The nebulae do not drift at random.' : showed ? 'The farther, the faster.' : 'The far ones were where the answer was.';
   const meaning = 'The farther a nebula, the faster it recedes, about 500 km/s for every million parsecs on Hubble\'s distances. The ones that seemed to approach were mostly the Sun\'s own motion. Hubble stopped there; others would call it the expanding universe.';
-  return { headline, did, rate, test, plate, meaning, bestK, n, maxR };
+  return { headline, did, rate, test, plate, meaning, bestK, n, maxR, comparison: comparisonWords(state) };
 }
 
 // ---------------------------------------------------------------- heuristics (memo, section 17): simple ways of spending the nights
@@ -262,6 +284,6 @@ function heuristics(seed) {
 const API = { CONFIG, makeRng, solarTerm, correctedVelocity, distanceFromMag, magFromDistance, brightestStarMag, relBrightness,
   shiftedLambda, velocityFromShift, lineProfile, cost, fitK, correlation, solveHubble, newGame, canObserve, affordable, nightsOver,
   observe, platePoints, takeOutSun, setRate, predictHumason, commitPrediction, eyeMatch, specMatch, plateWords, nightWords, rateWords,
-  verdict, heuristics, fmtK, roundV, distanceWords, speedWords };
+  verdict, heuristics, fmtK, roundV, distanceWords, speedWords, hubblePoints, comparisonWords };
 if (typeof module !== 'undefined' && module.exports) module.exports = API; else root.HUBBLE = API;
 })(typeof window !== 'undefined' ? window : globalThis);
