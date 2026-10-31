@@ -1,51 +1,52 @@
 Benjamin's Veil — calibration result (2026-10-31)
-38 passed, 0 failed
-      halo under the veil, by age: 1.00 1.00 0.90 0.63 0.28 0.06
-PASS  P1 never lifted: the halo at the cinema is below a tenth of its start  [0.06]
-PASS  P1b most of the loss comes after the cathedral (halo still above three quarters at the cathedral)  [0.90]
-PASS  P1c the halo is still bright through the temple  [1.00]
-      cult (never shown) vs widest reach, by age: cave 1.00/0.18, temple 1.00/0.25, cathedral 0.90/0.40, printshop 0.63/0.60, studio 0.28/0.80, cinema 0.06/0.95
-PASS  P2 the first age at which the widest reach beats the never-shown halo is the studio (photography)  [studio]
-PASS  P2b the first age at which the two are within a tenth is the print shop (lithography)  [printshop]
-PASS  P3 cult value falls with nearness up the ladder (the coin excepted, by design)
-PASS  P3b film leaves no halo at all
-PASS  P3c the coin spends more of the halo than the woodcut, for fewer eyes: the tempting mistake
+40 passed, 0 failed
+      never lifted: the stock by age 1.00 1.00 1.00 1.00 1.00 1.00; what the eyes of the age would see of it 1.00 1.00 0.90 0.63 0.28 0.06
+PASS  P1 never lifted: the halo stays whole through all six ages
+PASS  P1b never lifted: what the eyes of the cinema can see of a whole halo is below a tenth  [0.06]
+PASS  P1c the eyes change little before the print shop (above three quarters at the cathedral)  [0.90]
+PASS  P2 presence carries the halo whole, no copy does
+PASS  P2b the photograph carries more than any other copy (section VI: the aura emanates for the last time)
+PASS  P2c film carries less than the woodcut (the screen cannot carry presence)
+PASS  P2d with no change of eyes at all, hoarding would win: the eyes are what make the splash fail
+PASS  P3 the halo spent rises up the ladder (the coin excepted, by design)
+PASS  P3b film spends the whole halo
+PASS  P3c the coin spends more of the halo than the woodcut, for fewer eyes, and carries less: the tempting mistake
 PASS  P4 the halo is non-increasing over every schedule  [5040 schedules]
 PASS  P5 the widest reach available grows strictly from age to age  [0.18 0.25 0.40 0.60 0.80 0.95]
 PASS  P5b each age opens exactly one new rung, and film only at the cinema
 PASS  P5c what an age announces is what it offers: every age from the temple on names its new rung
       heuristics (memo, build.md section 3):
         always veiled              000000  total 0.01   by age 0.01 0.00 0.00 0.00 0.00 0.00
-        always the newest rung     123456  total 0.97   by age 0.07 0.12 0.13 0.17 0.19 0.29
+        always the newest rung     123456  total 0.82   by age 0.07 0.05 0.09 0.14 0.18 0.29
         always shown on the day    111111  total 0.22   by age 0.07 0.09 0.05 0.01 0.00 0.00
-        coins at the temple, then the newest 023456  total 0.98   by age 0.01 0.14 0.16 0.18 0.19 0.29
-        open at the cathedral      003456  total 1.12   by age 0.01 0.00 0.30 0.30 0.22 0.29
-        open at the print shop     000456  total 1.04   by age 0.01 0.00 0.00 0.47 0.27 0.29
-        open at the studio         000056  total 0.81   by age 0.01 0.00 0.00 0.00 0.49 0.30
-        open at the cinema         000006  total 0.41   by age 0.01 0.00 0.00 0.00 0.00 0.39
-        print, then back in the dark 000400  total 0.48   by age 0.01 0.00 0.00 0.47 0.00 0.00
-        the best possible          003456  total 1.12   by age 0.01 0.00 0.30 0.30 0.22 0.29
+        coins at the temple, then the newest 023456  total 0.79   by age 0.01 0.06 0.10 0.15 0.19 0.29
+        open at the cathedral      003456  total 0.89   by age 0.01 0.00 0.17 0.22 0.21 0.29
+        open at the print shop     000456  total 0.86   by age 0.01 0.00 0.00 0.32 0.24 0.29
+        open at the studio         000056  total 0.70   by age 0.01 0.00 0.00 0.00 0.40 0.29
+        open at the cinema         000006  total 0.34   by age 0.01 0.00 0.00 0.00 0.00 0.32
+        print, then back in the dark 000400  total 0.33   by age 0.01 0.00 0.00 0.32 0.00 0.00
+        the best possible          113456  total 0.94   by age 0.07 0.09 0.12 0.17 0.19 0.29
 PASS  P6 the best schedule first prints at the cathedral or the print shop  [cathedral]
-PASS  P6a the best schedule climbs the ladder: after its first print it takes each new rung as it comes  [003456]
-PASS  P6b always veiled lands below a tenth of the best: a halo nobody sees moves nobody  [0.01]
-PASS  P6c always the newest rung lands below the best, and opening at the cathedral or the print shop beats it  [0.86]
-PASS  P6d open at the print shop is within a tenth of the best  [0.93]
+PASS  P6a the best schedule climbs the ladder: after its first print it takes each new rung as it comes  [113456]
+PASS  P6b always veiled lands below a tenth of the best: a halo nobody sees moves nobody  [0.02]
+PASS  P6c always the newest rung lands below the best, and opening at the cathedral or the print shop beats it  [0.87]
+PASS  P6d open at the print shop is within a tenth of the best  [0.92]
 PASS  P6e the later the single opening after the print shop, the worse: studio below print shop, cinema below studio
-PASS  P6f open at the cinema lands below three fifths of the best: the ages of print passed unused  [0.36]
-PASS  P6g print then back in the dark lands below half of the best: the halo does not return  [0.43]
-PASS  P6j the coin is a tempting mistake: coins at the temple then the newest lands between four fifths and nineteen twentieths of the best  [0.87]
-PASS  P6h the best path opens step by step: the veil never narrows along it  [003456]
-PASS  P6i the heuristics spread: the decision matters (range above half of the best)  [1.11]
-      being seen worth a tenth: best 003456 (prints first at cathedral); always veiled 0.02 of best; always widest 0.83 of best
-      being seen worth two fifths: best 013456 (prints first at cathedral); always veiled 0.01 of best; always widest 0.94 of best
-      people counted more flatly: best 013456 (prints first at cathedral); always veiled 0.02 of best; always widest 0.88 of best
-      people counted more steeply: best 003456 (prints first at cathedral); always veiled 0.01 of best; always widest 0.84 of best
-      eyes declining a third more slowly: best 003456 (prints first at cathedral); always veiled 0.01 of best; always widest 0.83 of best
+PASS  P6f wait then splash on film lands below three fifths of the best: five crowds saw nothing and the sixth saw a screen  [0.36]
+PASS  P6g print then back in the dark lands below half of the best: the halo does not return  [0.36]
+PASS  P6j the coin is a tempting mistake: coins at the temple then the newest lands between four fifths and nineteen twentieths of the best  [0.84]
+PASS  P6h the best path opens step by step: the veil never narrows along it  [113456]
+PASS  P6i the heuristics spread: the decision matters (range above half of the best)  [0.92]
+      being seen worth a tenth: best 013456 (prints first at cathedral); always veiled 0.02 of best; always widest 0.83 of best
+      being seen worth two fifths: best 113456 (prints first at cathedral); always veiled 0.01 of best; always widest 0.94 of best
+      people counted more flatly: best 113456 (prints first at cathedral); always veiled 0.02 of best; always widest 0.86 of best
+      people counted more steeply: best 013456 (prints first at cathedral); always veiled 0.01 of best; always widest 0.88 of best
+      eyes declining a third more slowly: best 013456 (prints first at cathedral); always veiled 0.02 of best; always widest 0.85 of best
 PASS  P7 under all five variants the best schedule first prints at the cathedral or the print shop
 PASS  P7b under all five always veiled stays below a fifth of the best
 PASS  P7c under all five always the newest rung stays below the best
 PASS  P7d under all five the best path never narrows the veil
-PASS  S the score is the fraction out of 100: the best path scores 100, always veiled under 5  [1]
+PASS  S the score is the fraction out of 100: the best path scores 100, always veiled under 5  [2]
 PASS  S2 the shortfall names the cause: early opening is read as halo spent, hoarding as kept farther
 PASS  W no decimals in any string the screen shows
 PASS  W2 every slab has a label and a meaning, and the epilogue ends on Benjamin's line
@@ -53,7 +54,7 @@ PASS  W3 every age has a technique, a line for what is new, and a crowd word up 
 PASS  W4 halo words cover the range
 PASS  W5 the verdict for the wait-for-the-lithograph path names the turn
 PASS  W5b the verdict for the coin path names the coin
-PASS  W7 the arrival line names the cause once, at the studio, and states the fact elsewhere  [fact fact fact fact cause fact]
-PASS  W8 no announcement says whether the face is hidden or shown
-PASS  W6 the verdict for the always-veiled path says the halo went anyway
+PASS  W7 the arrival says one thing once, at the studio: the people's eyes have changed  [silent silent silent silent said silent]
+PASS  W6 the verdict for the always-veiled path says the halo is whole and nobody saw it
+PASS  W9 the verdict for wait-then-splash names the screen that cannot carry it
 

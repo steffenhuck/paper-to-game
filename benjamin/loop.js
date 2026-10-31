@@ -20,8 +20,7 @@ for (let i = 0; i < 6; i++) {
   const r = M.commit(s, v);
   say(`   crowd walks in: about ${Math.round(r.reach * 100)} of 100 people, ${opts[v].n >= 0.75 ? 'close' : opts[v].n >= 0.5 ? 'near' : 'far off'}; halo ${M.haloWords(r.haloArrived)} -> ${M.haloWords(r.halo)}`);
   say('   line: ' + r.line);
-  say('   HOLD THIS AGE ' + bar(r.cult, r.reach) + ' gold=halo, red=crowd');
-  say('   had you set the veil elsewhere, the halo would be: ' + r.counterfactual.map(c => (c.index === v ? '[' : '') + M.haloWords(c.halo) + (c.index === v ? ']' : '')).join(' / '));
+  say('   MOVED THIS AGE ' + bar(r.ofAge * r.cult / r.hold, r.ofAge * r.bySeen / r.hold) + ' gold=by the halo, red=by being seen; crowd lit ' + Math.round(r.lit * 100) + '%');
   say('   strip: ' + strip(s));
   M.next(s);
 }
