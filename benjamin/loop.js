@@ -4,12 +4,12 @@ const M = require('./mechanism.js');
 const fs = require('fs'); const L = []; const say = s => { L.push(s); console.log(s); };
 const bar = (cult, reach) => { const g = Math.round(cult * 10), r = Math.round(reach * 10); return '[' + '#'.repeat(g) + '='.repeat(r) + '.'.repeat(Math.max(0, 20 - g - r)) + ']'; };
 const strip = s => s.results.map(r => M.CONFIG.AGES[r.age].key.slice(0, 4) + ':' + M.haloWords(r.halo).split(' ')[0]).join(' | ');
-const plan = [0, 0, 1, 0, 3, 3, 4]; // a plausible stranger: holds, tries the feast day once, holds, then prints
+const plan = [0, 1, 0, 4, 5, 6]; // a plausible stranger: holds, tries the feast day once, holds, then prints
 const s = M.newGame();
-say('AIM: Over seven ages, let the face move as many people as it can.');
-for (let i = 0; i < 7; i++) {
+say('AIM: Over six ages, let the face move as many people as it can.');
+for (let i = 0; i < 6; i++) {
   M.arrive(s); const a = M.currentAge(s);
-  say(`\n== AGE ${i + 1} OF 7 · ${a.name} · ${a.date}`);
+  say(`\n== AGE ${i + 1} OF 6 · ${a.name} · ${a.date}`);
   say('   ' + a.newThis); if (M.arrivalLine(s)) say('   ' + M.arrivalLine(s));
   say('   picture: halo ' + M.haloWords(s.halo) + '; crowd: none yet; veil: not set');
   const opts = M.options(s);

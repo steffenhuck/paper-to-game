@@ -7,75 +7,67 @@
   'use strict';
 
   const CONFIG = {
-    // ---- the veil: how near the face is let. n is nearness (0 = unapproachable, 1 = everyone, together, close up)
+    // ---- the rungs: how far the face is let go, and by what means. Each age opens one more rung; the old ones stay.
+    // n is how much of the halo a showing spends (section III: the aura withers as things are brought nearer and copied);
+    // reach is the share of the age's people who see the face by that means (our table, ordered by section I's techniques).
+    // Revision of 31 Oct 2026: the rungs are the paper's techniques, one per age, so what an age announces is what it offers.
     VEILS: [
-      { key: 'dark',   n: 0,    label: 'IN THE DARK',      who: 'the keeper and the spirits' },   // section V: the god in the cella, only for the priest
-      { key: 'day',    n: 0.25, label: 'SHOWN ON THE DAY', who: 'the faithful, once a year' },    // section V: Madonnas veiled nearly all year
-      { key: 'wall',   n: 0.5,  label: 'ON THE WALL',      who: 'whoever comes' },                // section V: the panel painting, the gallery
-      { key: 'print',  n: 0.75, label: 'IN PRINT',         who: 'as many as the age can print' }, // section I: woodcut, engraving, lithograph, photograph
-      { key: 'screen', n: 1,    label: 'ON THE SCREEN',    who: 'everyone, together, close up' }  // sections I, IV, XII: film, the mass, the close-up
+      { key: 'dark',     n: 0,    reach: 0.02, label: 'IN THE DARK',    who: 'the keeper alone',                  copies: false }, // section V: the god in the cella, only for the priest
+      { key: 'day',      n: 0.2,  reach: 0.18, label: 'ON THE DAY',     who: 'the faithful, once a year',         copies: false }, // section V: Madonnas veiled nearly all year
+      { key: 'coins',    n: 0.55, reach: 0.25, label: 'ON COINS',       who: 'the city, in every purse, tiny',    copies: true  }, // section I: casting and stamping; bronzes, terracottas, coins. The god on the drachma: the most profane hand the face can fall into, and the first thinning (our price: it spends more than the woodcut, for fewer eyes)
+      { key: 'woodcuts', n: 0.45, reach: 0.4,  label: 'IN WOODCUTS',    who: 'the parish, a few dozen sheets',    copies: true  }, // section I: the woodcut, the first graphic reproduction
+      { key: 'lithos',   n: 0.7,  reach: 0.6,  label: 'IN LITHOGRAPHS', who: 'every house, in the daily paper',   copies: true  }, // section I: lithography, the illustrated daily
+      { key: 'photos',   n: 0.85, reach: 0.8,  label: 'IN PHOTOGRAPHS', who: 'every house and every hand',        copies: true  }, // section I; section VI
+      { key: 'film',     n: 1,    reach: 0.95, label: 'ON FILM',        who: 'everyone, together, close up',      copies: true  }  // sections I, IV, XII: film, the mass, the close-up
     ],
 
     // ---- the ages. eyes: the multiplier the age applies to the halo when it arrives (our reading of sections III and VI:
-    // perception changes with the techniques in the world, whatever this keeper does; the big drops at lithography and
-    // photography follow section I and section VI). demand: how near the age's people have learned to want things
-    // (section III, "Bedürfnis ... näherzubringen"). reach: share of the people who see the face at each veil, our table,
-    // ordered by section I's techniques. ceiling: the widest veil the age's technique allows.
+    // perception changes with the techniques in the world, whatever this keeper does; the big drops at photography and film
+    // follow section VI). demand: how near the age's people have learned to want things (section III, "Bedürfnis ...
+    // näherzubringen"); a face kept farther than that draws fewer than it could. ceiling: the newest rung the age opens.
     AGES: [
       { key: 'cave', name: 'THE CAVE', date: 'LONG AGO', ceiling: 1, eyes: 1, demand: 0,
         technique: 'cave',
-        newThis: 'No way to copy a face yet. It is painted on the wall of the cave.',           // section V: the elk, a magic instrument
+        newThis: 'No way to copy a face yet. It is painted on the wall of the cave, for the spirits.',   // section V: the elk, a magic instrument
         eyesLine: null,
-        notYet: 'nothing can carry it farther',
-        reach: [0.02, 0.12, 0.2, 0.3, 0.9], crowd: ['you and the spirits', 'the clan', 'the clan', '', ''] },
-      { key: 'temple', name: 'THE TEMPLE', date: 'ANTIQUITY', ceiling: 2, eyes: 1, demand: 0.1,
+        crowd: ['you and the spirits', 'the clan', '', '', '', '', ''] },
+      { key: 'temple', name: 'THE TEMPLE', date: 'ANTIQUITY', ceiling: 2, eyes: 1, demand: 0.15,
         technique: 'temple',
-        newThis: 'Casting and coining can copy a bronze or a coin, not a face like this one. It stands in the cella.', // section I; section V
+        newThis: 'New this age: the coin. A face can be struck in metal and carried in every purse, tiny and worn. Yours stands in the cella.',   // section I: casting and stamping; section V
         eyesLine: null,
-        notYet: 'no way to print a face',
-        reach: [0.02, 0.15, 0.22, 0.3, 0.9], crowd: ['you and the god', 'the city, at the festival', 'the city, in the forecourt', '', ''] },
-      { key: 'cathedral', name: 'THE CATHEDRAL', date: 'ABOUT 1400', ceiling: 2, eyes: 0.95, demand: 0.2,
+        crowd: ['you and the god', 'the city, at the festival', 'the city, in every purse', '', '', '', ''] },
+      { key: 'cathedral', name: 'THE CATHEDRAL', date: 'ABOUT 1400', ceiling: 3, eyes: 0.9, demand: 0.3,
         technique: 'icon',
-        newThis: 'New this age: the woodcut. Saints are printed in the market, roughly: too roughly for this face. Yours hangs in the choir.', // section I; section V
+        newThis: 'New this age: the woodcut. A face can be cut in wood and printed, roughly, a few dozen times. Yours hangs in the choir.',   // section I; section V
         eyesLine: 'there are woodcuts of saints in the market now',
-        notYet: 'the woodcut is too rough for this face',
-        reach: [0.02, 0.18, 0.25, 0.3, 0.9], crowd: ['you and the saints', 'the parish, on the feast day', 'the parish, in the nave', '', ''] },
-      { key: 'court', name: 'THE COURT', date: 'ABOUT 1500', ceiling: 3, eyes: 0.85, demand: 0.4,
-        technique: 'engraving',
-        newThis: 'New this age: the engraving. A face can be printed a few hundred times, finely. Yours is a panel in the prince\'s gallery.', // section I; section V (panel vs fresco); footnote 2
-        eyesLine: 'engravings hang in the houses of the town',
-        notYet: 'nothing can show a face to everyone at once',
-        reach: [0.02, 0.2, 0.3, 0.4, 0.9], crowd: ['you and the prince', 'the court, on the day', 'whoever is let into the gallery', 'a few hundred houses', ''] },
-      { key: 'printshop', name: 'THE PRINT SHOP', date: 'ABOUT 1830', ceiling: 3, eyes: 0.7, demand: 0.5,
+        crowd: ['you and the saints', 'the parish, on the feast day', 'the town, in every purse', 'the parish, a few dozen sheets', '', '', ''] },
+      { key: 'printshop', name: 'THE PRINT SHOP', date: 'ABOUT 1830', ceiling: 4, eyes: 0.7, demand: 0.55,
         technique: 'litho',
-        newThis: 'New this age: the lithograph. A face can be printed in the daily paper, in every house.', // section I: lithography, the illustrated daily
+        newThis: 'New this age: the lithograph. A face can be printed in the daily paper, in every house.',   // section I: lithography, the illustrated daily
         eyesLine: 'the illustrated paper comes out every day',
-        notYet: 'nothing can show a face to everyone at once',
-        reach: [0.02, 0.2, 0.3, 0.55, 0.9], crowd: ['you and the vault', 'the town, on the day', 'whoever comes to the museum', 'every house', ''] },
-      { key: 'studio', name: 'THE STUDIO', date: 'ABOUT 1880', ceiling: 3, eyes: 0.4, demand: 0.7,
+        crowd: ['you and the vault', 'the town, on the day', 'the town, in every purse', 'a few dozen sheets', 'every house', '', ''] },
+      { key: 'studio', name: 'THE STUDIO', date: 'ABOUT 1880', ceiling: 5, eyes: 0.45, demand: 0.75,
         technique: 'halftone',
-        newThis: 'New this age: the photograph. A face can be taken in a second and printed without end, into every house and every hand.', // section I; section VI
-        eyesLine: 'everyone has a photograph of their dead', sayCause: true, // the cause is said once, here (revision 4)
-        notYet: 'the film is not here yet',
-        reach: [0.02, 0.2, 0.3, 0.75, 0.9], crowd: ['you and the vault', 'the town, on the day', 'whoever comes to the museum', 'every house and every hand', ''] },
-      { key: 'cinema', name: 'THE CINEMA', date: 'ABOUT 1930', ceiling: 4, eyes: 0.2, demand: 0.9,
+        newThis: 'New this age: the photograph. A face can be taken in a second and printed without end, into every house and every hand.',   // section I; section VI
+        eyesLine: 'everyone has a photograph of their dead', sayCause: true,   // the cause is said once, here (revision 4)
+        crowd: ['you and the vault', 'the town, on the day', 'the town, in every purse', 'a few dozen sheets', 'every house', 'every house and every hand', ''] },
+      { key: 'cinema', name: 'THE CINEMA', date: 'ABOUT 1930', ceiling: 6, eyes: 0.2, demand: 0.9,
         technique: 'film',
-        newThis: 'New this age: film. A face can fill a screen in front of a thousand people at once, in every town, every night.', // sections I, IV, XII
+        newThis: 'New this age: film. A face can fill a screen in front of a thousand people at once, in every town, every night.',   // sections I, IV, XII
         eyesLine: 'everyone has sat in the dark with a thousand others',
-        notYet: '',
-        reach: [0.02, 0.2, 0.3, 0.75, 0.95], crowd: ['you and the vault', 'the town, on the day', 'whoever comes to the museum', 'every house and every hand', 'everyone, together'] }
+        crowd: ['you and the vault', 'the town, on the day', 'the town, in every purse', 'a few dozen sheets', 'every house', 'every house and every hand', 'everyone, together'] }
     ],
 
     // ---- what an age's showing is worth: the people moved. moved = weight(age) * reach * (halo as they saw it + W_SEEN).
     // PEOPLE: how many people there are to move, relative, doubling each age (our choice: the masses arrive, sections I, IV, XII).
     // PEOPLE_CURVE: the weight is PEOPLE to this power, 0.5 = a square root, so the late masses count more without drowning the
     // early ages (our choice; the keeper's present still counts). Weights are normalised to sum to the number of ages.
-    // W_SEEN: being seen with no halo left still moves people, a fifth as much as a full halo (section VI: exhibition value is
+    // W_SEEN: being seen with no halo left still moves people, about a seventh as much as a full halo (section VI: exhibition value is
     // a value of its own; our price). Revision of 31 Oct 2026: the first version summed halo and reach, which paid a keeper for
     // a halo nobody saw; the heuristics table in the memo (section 17) is what settled these three numbers.
-    PEOPLE: [1, 2, 4, 8, 16, 32, 64],
+    PEOPLE: [1, 2, 4, 8, 16, 32],
     PEOPLE_CURVE: 0.5,
-    W_SEEN: 0.2,
+    W_SEEN: 0.15,
     DEMAND_SCALE: 0.15,  // our choice: how fast the crowd falls away when the face is kept farther than the age demands (section III)
     HALO_GONE: 0.03,     // our choice: below this the halo is drawn as gone
 
@@ -85,13 +77,13 @@
         haloBack: 0, reach: 0.01, hold: 0.1,   // footnote 8: authenticity as the collector's fetish
         line: 'Nobody sees it. It has a certificate now: the one true face, with a price. What was a halo is a label.',
         benjamin: 'Benjamin: the idea of the authentic original arrived with the copies, and the collector keeps it as a fetish.' },
-      { key: 'studio', label: 'THE STUDIO', meaning: 'a star: the face lit, named, on every poster',
+      { key: 'studio', label: 'THE STUDIO', meaning: 'a star: the face lit, named, sold',
         haloBack: 0.6, reach: 0.9, hold: 1.3,  // section X: the "personality" built by film capital outside the studio
         line: 'The halo is back, in ink. The studio has built a personality around the face and sells it on every wall.',
         benjamin: 'Benjamin: the star cult is the phony spell of the commodity, a halo rebuilt to be sold.' },
-      { key: 'rally', label: 'THE RALLY', meaning: 'the leader\'s face over a square full of people',
+      { key: 'rally', label: 'THE POSTER', meaning: 'the leader\'s face on every wall and over the square',
         haloBack: 1, reach: 1, hold: 2, war: true, // epilogue: aestheticising politics; the mass given expression, not rights; war
-        line: 'The halo is back, enormous, and the square is full. The people are given the face to look at instead of anything to own.',
+        line: 'The halo is back, enormous, printed in red and black on every wall, and the square is full. The people are given the face to look at instead of anything to own.',
         benjamin: 'Benjamin: this is politics made beautiful, and it ends in war. "Let art be made, though the world perish."' },
       { key: 'newsreel', label: 'THE NEWSREEL', meaning: 'the people film themselves; the face is one of a million',
         haloBack: 0, reach: 1, hold: 1,        // section X: everyone has a claim to be filmed; section XIII; the epilogue's last line
@@ -126,7 +118,7 @@
     const veil = cfg.VEILS[v];
     const gap = age.demand - veil.n;
     const cut = gap > 0 ? Math.exp(-gap / cfg.DEMAND_SCALE) : 1;
-    return age.reach[v] * cut;
+    return cfg.VEILS[v].reach * cut;
   }
   function haloAfterVeil(haloArrived, v, cfg) { cfg = cfg || CONFIG; return haloArrived * (1 - cfg.VEILS[v].n); }
   function ageWeights(cfg) {
@@ -176,22 +168,28 @@
   }
   function options(s) {
     const age = currentAge(s);
-    return s.cfg.VEILS.map((v, i) => ({ index: i, label: v.label, who: v.who, n: v.n, allowed: i <= age.ceiling, why: i <= age.ceiling ? '' : age.notYet }));
+    // Only the rungs this age has opened; the newest is flagged. The ladder grows by one rung an age and never loses one.
+    return s.cfg.VEILS.filter((v, i) => i <= age.ceiling).map((v, i) => ({ index: i, key: v.key, label: v.label, who: age.crowd[i] || v.who, n: v.n, allowed: true, isNew: s.age > 0 && i === age.ceiling }));
   }
   function crowdLine(age, v, reach) {
     const w = age.crowd[v];
-    if (v === 0) return 'Nobody came; the face stayed in the dark with ' + w + '.';
-    if (v === 1) return w.charAt(0).toUpperCase() + w.slice(1) + ' saw it.';
-    if (v === 2) return 'Whoever came saw it: ' + w + '.';
-    if (v === 3) return 'The prints went out: ' + w + '.';
-    return 'Everyone saw it, together, in the dark.';
+    const cap = t => t.charAt(0).toUpperCase() + t.slice(1);
+    switch (v) {
+      case 0: return 'Nobody came; the face stayed in the dark with ' + w + '.';
+      case 1: return cap(w) + ' saw it.';
+      case 2: return 'The coins went out: ' + w + '. A small worn face in every hand.';
+      case 3: return 'The sheets went out: ' + w + '.';
+      case 4: return 'The prints went out: ' + w + '.';
+      case 5: return 'The photographs went out: ' + w + '.';
+      default: return 'Everyone saw it, together, in the dark.';
+    }
   }
   function commit(s, v) {
     if (!s.arrived || s.choice !== null) throw new Error('not ready to commit');
     const age = currentAge(s);
     if (v < 0 || v > age.ceiling) throw new Error('veil not available this age');
     const haloArrived = s.halo;
-    const reachFull = age.reach[v];
+    const reachFull = s.cfg.VEILS[v].reach;
     const reach = reachAt(age, v, s.cfg);
     const halo = haloAfterVeil(haloArrived, v, s.cfg);
     const weight = ageWeights(s.cfg)[s.age];
@@ -246,7 +244,7 @@
   function bestPathWords(best, cfg) {
     cfg = cfg || CONFIG;
     const names = cfg.AGES.map(a => a.name.toLowerCase());
-    const veil = ['in the dark', 'the faithful on the day', 'on the wall', 'in print', 'on the screen'];
+    const veil = ['in the dark', 'the faithful on the day', 'on coins', 'in woodcuts', 'in lithographs', 'in photographs', 'on film'];
     const runs = [];
     best.sched.forEach((v, i) => { const last = runs[runs.length - 1]; if (last && last.v === v) last.to = i; else runs.push({ v: v, from: i, to: i }); });
     const bits = runs.map(r => veil[r.v] + (r.from === r.to ? ' at ' + names[r.from] : ' from ' + names[r.from] + ' to ' + names[r.to]));
@@ -261,7 +259,7 @@
     const names = s.cfg.AGES.map(a => a.name.toLowerCase().replace(/^the /, 'the '));
     const o = openedAt(s);
     const veiledThrough = s.results.filter(r => r.veil === 0).length;
-    if (o.lifted < 0) return 'You kept the veil down through all seven ages. Nobody saw the face but you.';
+    if (o.lifted < 0) return 'You kept the veil down through all six ages. Nobody saw the face but you.';
     const parts = [];
     if (o.lifted === 0) parts.push('You lifted the veil from the first age');
     else parts.push('You kept the veil down through ' + names.slice(0, o.lifted).join(o.lifted === 2 ? ' and ' : ', ').replace(/, ([^,]*)$/, ' and $1') + ', then lifted it in ' + names[o.lifted]);
@@ -276,13 +274,14 @@
     const bestOpen = best.sched.findIndex(v => v >= 3);
     const ageNames = s.cfg.AGES.map(a => a.name.toLowerCase());
     let readingOfPath;
+    const coined = s.results.length > 1 && s.results[1].veil === 2;
     if (o.printed < 0) readingOfPath = 'The halo went anyway, in the age of the photograph, while the veil was still down; what you kept at the end was a face nobody had seen.';
-    else if (o.printed < bestOpen - 1) readingOfPath = 'You opened early. The halo was spent for a reach the age could not yet give; the best age to print was ' + ageNames[bestOpen] + '.';
-    else if (o.printed > bestOpen + 1) readingOfPath = 'You opened late. By then the halo had gone on its own, and the ages of the print and the photograph had passed without the face in them.';
-    else readingOfPath = 'You opened where the halo was already thin and the age could carry the face far: about where Benjamin dates the turn.';
+    else if (o.printed === bestOpen) readingOfPath = (coined ? 'You put the face on coins at the temple first, a worn god in every purse, and the halo paid for it before the woodcut came. Then you ' : 'You ') + 'put the face into the people\'s hands as soon as there was a way to print it, and followed each new way as it came.';
+    else if (o.printed === bestOpen + 1) readingOfPath = (coined ? 'You put the face on coins at the temple, a worn god in every purse, and paid for it. ' : '') + 'You waited for the lithograph, where Benjamin dates the turn; the woodcut\'s few dozen sheets were the price of waiting, and it was small.';
+    else readingOfPath = 'You opened late. By then the halo had gone on its own, and the ages of print had passed without the face in them.';
     return {
       total: total, best: best.total, fraction: f, words: fractionWords(f),
-      lead: 'Over seven ages your face moved ' + fractionWords(f) + ' of the people it could have moved.',
+      lead: 'Over six ages your face moved ' + fractionWords(f) + ' of the people it could have moved.',
       did: pathWords(s) + ' ' + readingOfPath + ' ' + bestPathWords(best, s.cfg),
       benjamin: 'The halo was never in the face. It was the distance between the face and the people, and the age sets the distance. Hide the face and the halo still goes, because the people\'s eyes have changed; show it early and the age cannot yet carry it far. Once the copies are everywhere, the face belongs to politics.',
       fork: s.fork ? (s.fork.line + ' ' + s.fork.benjamin) : '',
@@ -294,17 +293,17 @@
   function heuristics(cfg) {
     cfg = cfg || CONFIG;
     const n = cfg.AGES.length;
-    const openAt = (k) => Array.from({ length: n }, (_, i) => i < k ? 0 : 4);
+    const openAt = (k) => Array.from({ length: n }, (_, i) => i < k ? 0 : cfg.AGES[i].ceiling);
     const rows = [
       { name: 'always veiled', sched: new Array(n).fill(0) },
-      { name: 'always the widest veil', sched: new Array(n).fill(4) },
+      { name: 'always the newest rung', sched: cfg.AGES.map(a => a.ceiling) },
       { name: 'always shown on the day', sched: new Array(n).fill(1) },
-      { name: 'open at the court', sched: openAt(3) },
-      { name: 'open at the print shop', sched: openAt(4) },
-      { name: 'open at the studio', sched: openAt(5) },
-      { name: 'open at the cinema', sched: openAt(6) },
-      { name: 'print, then back in the dark', sched: [0, 0, 0, 0, 3, 0, 0] },
-      { name: 'one step wider each age', sched: [0, 0, 1, 2, 3, 3, 4] }
+      { name: 'coins at the temple, then the newest', sched: [0].concat(cfg.AGES.slice(1).map(a => a.ceiling)) },
+      { name: 'open at the cathedral', sched: openAt(2) },
+      { name: 'open at the print shop', sched: openAt(3) },
+      { name: 'open at the studio', sched: openAt(4) },
+      { name: 'open at the cinema', sched: openAt(5) },
+      { name: 'print, then back in the dark', sched: [0, 0, 0, 4, 0, 0] }
     ].map(h => { const s = runSchedule(h.sched, cfg); return { name: h.name, sched: h.sched.map((v, i) => Math.min(v, cfg.AGES[i].ceiling)), total: totalHold(s), perAge: s.results.map(r => r.hold) }; });
     const best = bestSchedule(cfg);
     rows.push({ name: 'the best possible', sched: best.sched, total: best.total, perAge: best.state.results.map(r => r.hold) });
