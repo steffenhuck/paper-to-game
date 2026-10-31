@@ -635,6 +635,16 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     if (extra && extra.after) m += extra.after;
     return m;
   }
+  // The age passes: a crossfade from the face as it was (last technique, halo as it arrived) to the face as this age leaves it
+  // (this age's technique, halo after the veil), with the crowd walking in. The dataset holds the final state from the start.
+  function passFrame(svg, techBefore, techAfter, haloBefore, haloAfter, n, reach) {
+    clearTimeout(arriveTimer);
+    const before = frameMarkup(techBefore, haloBefore, n, reach), after = frameMarkup(techAfter, haloAfter, n, reach);
+    svg.innerHTML = `<g>${before}</g><g class="arriving" style="opacity:0;transition:opacity 1.2s ease">${after}</g>`;
+    svg.dataset.n = n; svg.dataset.tech = techAfter; svg.dataset.halo = haloAfter.toFixed(2); svg.dataset.crowd = Math.round((reach || 0) * 40);
+    svg.querySelectorAll('.crowd').forEach(c => c.classList.add('passing'));
+    arriveTimer = setTimeout(() => { const g = svg.querySelector('.arriving'); if (g) g.style.opacity = '1'; }, 350);
+  }
   function drawFrame(svg, tech, halo, n, reach, extra) {
     svg.innerHTML = frameMarkup(tech, halo, n, reach, extra);
     svg.dataset.n = n; svg.dataset.tech = tech; svg.dataset.halo = halo.toFixed(2); svg.dataset.crowd = Math.round((reach || 0) * 40);
@@ -679,7 +689,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     const prev = S.results.length ? S.results[S.results.length - 1] : null;
     if (prev) { // the world as the player left it, then the age arrives in the picture
       const pa = C.AGES[prev.age];
-      arriveFrame($('frame'), { tech: pa.technique, halo: prev.halo }, a.technique, S.halo, lastN(), prev.reach, () => { $('arrive').classList.remove('held'); });
+      arriveFrame($('frame'), { tech: pa.technique, halo: prev.halo }, pa.technique, S.halo, lastN(), prev.reach, () => { $('arrive').classList.remove('held'); });   // the picture is the last picture; only the halo thins. The age's technique touches the face when the age passes.
     } else drawFrame($('frame'), a.technique, S.halo, 0, 0);
     renderCopies(null);
     const opts = M.options(S);
@@ -695,15 +705,16 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     const prev = S.results.length ? S.results[S.results.length - 1] : null;
     clearTimeout(arriveTimer);
     if (prev) $('arrive').classList.remove('held');
-    drawFrame($('frame'), a.technique, S.halo, v.n, prev ? prev.reach : 0, { crowdN: prev ? C.VEILS[prev.veil].n : 0 });   // the control shows what it does: the curtains part, the face comes nearer; the crowd stays
+    drawFrame($('frame'), prev ? C.AGES[prev.age].technique : a.technique, S.halo, v.n, prev ? prev.reach : 0, { crowdN: prev ? C.VEILS[prev.veil].n : 0 });   // the control shows what it does: the curtains part, the face comes nearer; the crowd stays
     $('commit').disabled = false; $('commitsub').textContent = v.label.toLowerCase() + ': ' + v.who;
   }
   function commitAge() {
     if (picked === null) return;
     const a = M.currentAge(S), v = C.VEILS[picked];
+    const prev = S.results.length ? S.results[S.results.length - 1] : null;   // the previous age, before this one is recorded
     const r = M.commit(S, picked);
     $('choose').style.display = 'none';
-    drawFrame($('frame'), a.technique, r.halo, v.n, r.reach); $('frame').querySelector('.crowd') && $('frame').querySelector('.crowd').classList.add('passing');
+    passFrame($('frame'), prev ? C.AGES[prev.age].technique : a.technique, a.technique, r.haloArrived, r.halo, v.n, r.reach);   // the age passes: the crowd walks in, the halo thins by what was spent, and the age's technique touches the face
     // copies out, in the age's technique; earlier ages' copies stay in the world (revision 2)
     const nCopies = picked >= 3 ? Math.min(14, Math.round(r.reach * 18)) : 0;
     if (nCopies) copiesMade.push({ tech: a.technique, count: nCopies, note: picked === 4 ? 'every screen' : r.reach > 0.5 ? '…and on, without end' : '…a few hundred' });
