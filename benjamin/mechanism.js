@@ -259,6 +259,7 @@
     else readingOfPath = 'You opened late. By then the halo had gone on its own, and the ages of print had passed without the face in them.';
     return {
       total: total, best: best.total, fraction: f, words: fractionWords(f),
+      score: Math.max(0, Math.min(100, Math.round(f * 100))),   // the economist's tally, out of 100: people moved as a share of the most a keeper could have moved
       lead: 'Over six ages your face moved ' + fractionWords(f) + ' of the people it could have moved.',
       did: pathWords(s) + ' ' + readingOfPath + ' ' + bestPathWords(best, s.cfg),
       benjamin: 'The halo was never in the face. It was the distance between the face and the people, and the age sets the distance. Hide the face and the halo still goes, because the people\'s eyes have changed; show it early and the age cannot yet carry it far. Once the copies are everywhere, the face belongs to politics.',

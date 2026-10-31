@@ -45,6 +45,10 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
 .band{background:var(--red);color:var(--cream);font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.12em;font-size:15px;padding:7px 10px;margin:10px -16px 0;padding-left:16px;display:flex;justify-content:space-between;align-items:baseline}
 .band b{font-size:19px;font-weight:700;letter-spacing:.06em}
 .strip{display:flex;gap:4px;margin:8px 0 6px;justify-content:space-between}
+.score{display:flex;align-items:baseline;justify-content:center;gap:6px;margin:14px 0 2px}
+.score .num{font-family:var(--display);font-weight:700;font-size:92px;line-height:1;color:var(--red)}
+.score .of{font-family:var(--display);font-weight:600;font-size:28px;color:var(--ink);letter-spacing:.06em}
+.scorelab{text-align:center;font-size:14px;color:var(--grey);margin:0 0 10px;line-height:1.3}
 .striplab{font-family:var(--display);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--grey);margin-top:10px}
 .slot{flex:1;height:60px;border:2px dotted var(--grey-2);background:transparent;position:relative}
 .slot.done{border:2px solid var(--ink);background:var(--cream-2)}
@@ -140,6 +144,8 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
 <!-- END -->
 <section class="screen" id="end">
   <div class="band"><b>The verdict</b><span>SIX AGES</span></div>
+  <div class="score"><span class="num" id="scorenum">0</span><span class="of">/100</span></div>
+  <p class="scorelab">The economist's tally: people moved, as a share of the most a keeper could have moved.</p>
   <p class="lead" id="lead"></p>
   <div class="rule"></div>
   <div class="striplab">Your six ages</div>
@@ -454,6 +460,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     else readingOfPath = 'You opened late. By then the halo had gone on its own, and the ages of print had passed without the face in them.';
     return {
       total: total, best: best.total, fraction: f, words: fractionWords(f),
+      score: Math.max(0, Math.min(100, Math.round(f * 100))),   // the economist's tally, out of 100: people moved as a share of the most a keeper could have moved
       lead: 'Over six ages your face moved ' + fractionWords(f) + ' of the people it could have moved.',
       did: pathWords(s) + ' ' + readingOfPath + ' ' + bestPathWords(best, s.cfg),
       benjamin: 'The halo was never in the face. It was the distance between the face and the people, and the age sets the distance. Hide the face and the halo still goes, because the people\'s eyes have changed; show it early and the age cannot yet carry it far. Once the copies are everywhere, the face belongs to politics.',
@@ -719,7 +726,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   // ---------- the verdict
   function renderEnd() {
     const v = M.verdict(S);
-    $('lead').textContent = v.lead;
+    $('lead').textContent = v.lead; $('scorenum').textContent = v.score;
     renderStrip($('endstrip'), S);
     renderStrip($('beststrip'), { results: v.bestResults, age: C.AGES.length });
     $('vdid').textContent = v.did; $('vben').textContent = v.benjamin; $('vepi').textContent = v.epilogue;

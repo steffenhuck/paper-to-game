@@ -1,5 +1,5 @@
 Benjamin's Veil — calibration result (2026-10-31)
-36 passed, 0 failed
+37 passed, 0 failed
       halo under the veil, by age: 1.00 1.00 0.90 0.63 0.28 0.06
 PASS  P1 never lifted: the halo at the cinema is below a tenth of its start  [0.06]
 PASS  P1b most of the loss comes after the cathedral (halo still above three quarters at the cathedral)  [0.90]
@@ -45,6 +45,7 @@ PASS  P7 under all five variants the best schedule first prints at the cathedral
 PASS  P7b under all five always veiled stays below a fifth of the best
 PASS  P7c under all five always the newest rung stays below the best
 PASS  P7d under all five the best path never narrows the veil
+PASS  S the score is the fraction out of 100: the best path scores 100, always veiled under 5  [1]
 PASS  W no decimals in any string the screen shows
 PASS  W2 every slab has a label and a meaning, and the epilogue ends on Benjamin's line
 PASS  W3 every age has a technique, a line for what is new, and a crowd word up to its ceiling

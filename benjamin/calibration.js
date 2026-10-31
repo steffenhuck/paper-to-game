@@ -96,6 +96,7 @@ const strings = [];
 C.AGES.forEach(a => { strings.push(a.name, a.date, a.newThis, a.eyesLine || ''); a.crowd.forEach(c => strings.push(c)); });
 C.VEILS.forEach(v => strings.push(v.label, v.who)); strings.push(C.EPILOGUE);
 const s = M.newGame(); for (let i = 0; i < 6; i++) { M.arrive(s); strings.push(M.arrivalLine(s)); strings.push(M.commit(s, Math.min(i < 2 ? 0 : i + 1, C.AGES[i].ceiling)).line); M.next(s); } const v = M.verdict(s); strings.push(v.lead, v.did, v.benjamin, v.epilogue);
+check('S the score is the fraction out of 100: the best path scores 100, always veiled under 5', M.verdict(M.runSchedule([0, 0, 3, 4, 5, 6])).score === 100 && M.verdict(M.runSchedule([0, 0, 0, 0, 0, 0])).score < 5, M.verdict(M.runSchedule([0, 0, 0, 0, 0, 0])).score + '');
 check('W no decimals in any string the screen shows', strings.every(t => !/\d\.\d/.test(t)));
 check('W2 every slab has a label and a meaning, and the epilogue ends on Benjamin\'s line', C.VEILS.every(x => x.label && x.who) && /though the world perish/.test(C.EPILOGUE));
 check('W3 every age has a technique, a line for what is new, and a crowd word up to its ceiling', C.AGES.every(a => a.technique && a.newThis && a.crowd.slice(0, a.ceiling + 1).every(c => c)));
