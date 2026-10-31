@@ -25,16 +25,16 @@ const L = []; const say = s => { L.push(s); console.log(s); };
     if (n === 0) await shot('sky-selected');
     const btn = await page.$('#skypanel button.primary');
     if (!btn || (await btn.innerText()).toLowerCase().includes('over')) { say('  cannot point: ' + (btn ? await btn.innerText() : 'no button')); continue; }
-    await btn.click(); await page.waitForTimeout(1200);
+    await btn.click(); await page.waitForTimeout(900); if (n === 0) { await shot('eyepiece-demo'); await page.waitForTimeout(2200); }
     // eyepiece: scan the dial until the ring glows (what a player does by eye)
     let found = false;
     for (let v = 0; v <= 1000; v += 5) { await setRange('#eyedial', v); const ok = await page.$eval('#eyereadout', e => e.className.includes('amber')); if (ok) { found = true; break; } }
     say(`  eyepiece: ${await page.$eval('#eyereadout', e => e.innerText)} (${found ? 'ring' : 'no ring'})`);
     if (n === 0) { await shot('eyepiece'); await noScroll(); }
     if (n === 1) { await page.click('.screen.on .qbtn'); await page.waitForTimeout(200); await shot('help'); await page.click('#helpback'); await page.waitForTimeout(200); say('  help opened and returned to ' + await page.$eval('.screen.on', e => e.id)); }
-    await page.click('#eyeread'); await page.waitForTimeout(1300);
+    await page.click('#eyeread'); await page.waitForTimeout(900); if (n === 0) { await shot('spectrograph-demo'); await page.waitForTimeout(2400); }
     found = false;
-    for (let v = -400; v <= 1300; v += 5) { await setRange('#specdial', v); const ok = await page.$eval('#specreadout', e => e.innerText.includes('on the lines')); if (ok) { found = true; break; } }
+    for (let v = -400; v <= 1300; v += 5) { await setRange('#specdial', v); const ok = await page.$eval('#specreadout', e => e.innerText.includes('on the bars')); if (ok) { found = true; break; } }
     say(`  spectrograph: ${await page.$eval('#specreadout', e => e.innerText)} (${found ? 'ring' : 'no ring'})`);
     if (n === 0 || idx === 22) { await shot(idx === 22 ? 'spectrograph-virgo' : 'spectrograph'); await noScroll(); }
     await page.click('#specread'); await page.waitForTimeout(1200);
