@@ -25,14 +25,7 @@ for (let i = 0; i < 6; i++) {
   say('   strip: ' + strip(s));
   M.next(s);
 }
-say('\n== 1936');
-say('   The halo is gone. The people\'s longing for it is not. Where does the face go?');
-say('   slabs: ' + M.CONFIG.FORK.map(f => f.label + ' — ' + f.meaning).join(' / '));
-say('   > tap THE RALLY, PUT IT THERE');
-const f = M.fork(s, 2);
-say('   picture: printed halo ' + f.haloBack + ', crowd ' + f.reach + (f.war ? ', then the screen goes to war' : ''));
-say('   line: ' + f.line + ' ' + f.benjamin);
 const v = M.verdict(s);
 say('\n== VERDICT');
-say('   ' + v.lead); say('   What you did: ' + v.did); say('   What Benjamin says: ' + v.benjamin); say('   What that means: ' + v.fork);
+say('   ' + v.lead); say('   What you did: ' + v.did); say('   What Benjamin says: ' + v.benjamin); say('   And then, 1936: ' + v.epilogue);
 fs.writeFileSync(__dirname + '/loop-log.txt', L.join('\n') + '\n');

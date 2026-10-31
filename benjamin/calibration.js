@@ -7,7 +7,6 @@
 //   (P5) reach grows with the technique (section I);
 //   (P6) heuristics: the best age to open is the print shop or the studio; the two ends are punished;
 //   (P7) robustness of P6 under the crowd's price at half and double, and a slower eyes schedule;
-//   (P8) the fork: the rally holds most and ends in war; the newsreel has no halo; the vault a crowd of one;
 //   (W)  words: no decimals on screen; every slab labelled and explained.
 const M = require('./mechanism.js');
 const C = M.CONFIG, fs = require('fs');
@@ -92,20 +91,13 @@ check('P7b under all five always veiled stays below a fifth of the best', varian
 check('P7c under all five always the newest rung stays below the best', variants.every(x => x.wideR < 1));
 check('P7d under all five the best path never narrows the veil', variants.every(x => x.sched.every((v, i) => i === 0 || v >= x.sched[i - 1])));
 
-// ---- P8: the fork
-const F = C.FORK;
-check('P8 the poster holds the most and ends in war', F.every(f => f.key === 'rally' || f.hold < F[2].hold) && F[2].war === true && F[2].haloBack === 1);
-check('P8b the newsreel has no halo and everyone in it', F[3].haloBack === 0 && F[3].reach === 1);
-check('P8c the vault has a crowd of one and no halo', F[0].reach <= 0.02 && F[0].haloBack === 0);
-check('P8d the studio rebuilds a halo, in ink, smaller than the poster\'s', F[1].haloBack > 0 && F[1].haloBack < F[2].haloBack);
-
 // ---- W: words
 const strings = [];
 C.AGES.forEach(a => { strings.push(a.name, a.date, a.newThis, a.eyesLine || ''); a.crowd.forEach(c => strings.push(c)); });
-C.VEILS.forEach(v => strings.push(v.label, v.who)); C.FORK.forEach(f => strings.push(f.label, f.meaning, f.line, f.benjamin));
-const s = M.newGame(); for (let i = 0; i < 6; i++) { M.arrive(s); strings.push(M.arrivalLine(s)); strings.push(M.commit(s, Math.min(i < 2 ? 0 : i + 1, C.AGES[i].ceiling)).line); M.next(s); } M.fork(s, 2); const v = M.verdict(s); strings.push(v.lead, v.did, v.benjamin, v.fork);
+C.VEILS.forEach(v => strings.push(v.label, v.who)); strings.push(C.EPILOGUE);
+const s = M.newGame(); for (let i = 0; i < 6; i++) { M.arrive(s); strings.push(M.arrivalLine(s)); strings.push(M.commit(s, Math.min(i < 2 ? 0 : i + 1, C.AGES[i].ceiling)).line); M.next(s); } const v = M.verdict(s); strings.push(v.lead, v.did, v.benjamin, v.epilogue);
 check('W no decimals in any string the screen shows', strings.every(t => !/\d\.\d/.test(t)));
-check('W2 every veil slab and every fork slab has a label and a meaning', C.VEILS.every(x => x.label && x.who) && C.FORK.every(x => x.label && x.meaning));
+check('W2 every slab has a label and a meaning, and the epilogue ends on Benjamin\'s line', C.VEILS.every(x => x.label && x.who) && /though the world perish/.test(C.EPILOGUE));
 check('W3 every age has a technique, a line for what is new, and a crowd word up to its ceiling', C.AGES.every(a => a.technique && a.newThis && a.crowd.slice(0, a.ceiling + 1).every(c => c)));
 check('W4 halo words cover the range', ['bright', 'a little thinner', 'about half what it was', 'a quarter of what it was', 'almost gone', 'gone'].every((w, i) => M.haloWords([1, 0.7, 0.5, 0.25, 0.1, 0.01][i]) === w));
 check('W5 the verdict for the wait-for-the-lithograph path names the turn', /Benjamin dates the turn/.test(M.verdict(M.runSchedule([0, 0, 0, 4, 5, 6])).did));

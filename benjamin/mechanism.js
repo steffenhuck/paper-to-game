@@ -71,25 +71,10 @@
     DEMAND_SCALE: 0.15,  // our choice: how fast the crowd falls away when the face is kept farther than the age demands (section III)
     HALO_GONE: 0.03,     // our choice: below this the halo is drawn as gone
 
-    // ---- 1936: the fork. Not scored against the ages; read. haloBack is a printed halo, in ink, not leaf.
-    FORK: [
-      { key: 'vault', label: 'THE VAULT', meaning: 'the one true face, certified, for one buyer',
-        haloBack: 0, reach: 0.01, hold: 0.1,   // footnote 8: authenticity as the collector's fetish
-        line: 'Nobody sees it. It has a certificate now: the one true face, with a price. What was a halo is a label.',
-        benjamin: 'Benjamin: the idea of the authentic original arrived with the copies, and the collector keeps it as a fetish.' },
-      { key: 'studio', label: 'THE STUDIO', meaning: 'a star: the face lit, named, sold',
-        haloBack: 0.6, reach: 0.9, hold: 1.3,  // section X: the "personality" built by film capital outside the studio
-        line: 'The halo is back, in ink. The studio has built a personality around the face and sells it on every wall.',
-        benjamin: 'Benjamin: the star cult is the phony spell of the commodity, a halo rebuilt to be sold.' },
-      { key: 'rally', label: 'THE POSTER', meaning: 'the leader\'s face on every wall and over the square',
-        haloBack: 1, reach: 1, hold: 2, war: true, // epilogue: aestheticising politics; the mass given expression, not rights; war
-        line: 'The halo is back, enormous, printed in red and black on every wall, and the square is full. The people are given the face to look at instead of anything to own.',
-        benjamin: 'Benjamin: this is politics made beautiful, and it ends in war. "Let art be made, though the world perish."' },
-      { key: 'newsreel', label: 'THE NEWSREEL', meaning: 'the people film themselves; the face is one of a million',
-        haloBack: 0, reach: 1, hold: 1,        // section X: everyone has a claim to be filmed; section XIII; the epilogue's last line
-        line: 'No halo. The face is one among the people\'s own faces, and anyone can be in the picture.',
-        benjamin: 'Benjamin: this is art made political, his answer to the rally.' }
-    ]
+    // ---- 1936: the epilogue, read, not played. The essay's last pages (section X on the star, footnote 8 on the collector,
+    // the epilogue on aestheticised politics and war). The first version staged this as a fork with four places; it was a
+    // reading dressed as a choice, with nothing at stake, and was cut (memo, section 22). What stays is Benjamin's sentence.
+    EPILOGUE: 'The halo is gone; the longing for it is not. Where that longing is served, Benjamin says what comes of it: the collector\'s certificate on a face nobody sees; the film star\'s "personality", a halo rebuilt to be sold; and the leader\'s face on every wall and over a square full of people, which is politics made beautiful, and it ends in war. "Let art be made, though the world perish."'
   };
 
   // ---- words (no decimals on screen)
@@ -132,7 +117,6 @@
     cfg = cfg || CONFIG;
     return { byHalo: weight * reach * haloSeen, bySeen: weight * reach * cfg.W_SEEN, moved: weight * reach * (haloSeen + cfg.W_SEEN) };
   }
-  function holdOf(cult, reach, cfg) { return movedOf(1, reach, cult, cfg).moved; }   // kept for the fork's reading; not used for the ages
   // The most this age could move: its widest allowed reach, with the halo as it arrived. The bar under the picture is drawn against this,
   // so it answers "of what this age could do, how much did you?"; the ages' different sizes show up only in the tally.
   function ageMax(i, haloSeen, cfg) {
@@ -144,10 +128,10 @@
 
   function newGame(cfg) {
     cfg = cfg || CONFIG;
-    return { cfg: cfg, age: 0, halo: 1, arrived: false, haloBefore: 1, choice: null, results: [], fork: null, over: false };
+    return { cfg: cfg, age: 0, halo: 1, arrived: false, haloBefore: 1, choice: null, results: [], over: false };
   }
   function currentAge(s) { return s.cfg.AGES[s.age]; }
-  function isFork(s) { return s.age >= s.cfg.AGES.length && !s.fork; }
+  function isOver(s) { return s.age >= s.cfg.AGES.length; }
 
   // The age arrives: the world's eyes act on the halo before the keeper does anything.
   function arrive(s) {
@@ -206,14 +190,8 @@
   function next(s) {
     if (s.choice === null) throw new Error('commit first');
     s.age += 1; s.arrived = false; s.choice = null;
+    if (s.age >= s.cfg.AGES.length) s.over = true;
     return s;
-  }
-  function fork(s, k) {
-    if (!isFork(s)) throw new Error('not at the fork');
-    const f = s.cfg.FORK[k];
-    s.fork = { key: f.key, label: f.label, haloBack: f.haloBack, reach: f.reach, hold: f.hold, war: !!f.war, line: f.line, benjamin: f.benjamin };
-    s.over = true;
-    return s.fork;
   }
 
   // ---- scoring and the verdict
@@ -284,7 +262,8 @@
       lead: 'Over six ages your face moved ' + fractionWords(f) + ' of the people it could have moved.',
       did: pathWords(s) + ' ' + readingOfPath + ' ' + bestPathWords(best, s.cfg),
       benjamin: 'The halo was never in the face. It was the distance between the face and the people, and the age sets the distance. Hide the face and the halo still goes, because the people\'s eyes have changed; show it early and the age cannot yet carry it far. Once the copies are everywhere, the face belongs to politics.',
-      fork: s.fork ? (s.fork.line + ' ' + s.fork.benjamin) : '',
+      epilogue: s.cfg.EPILOGUE,
+      bestResults: best.state.results,
       bestOpen: bestOpen, printed: o.printed, lifted: o.lifted
     };
   }
@@ -315,6 +294,6 @@
     return c;
   }
 
-  const api = { CONFIG, newGame, currentAge, isFork, arrive, arrivalLine, options, commit, next, fork, verdict, totalHold, maxHold, bestSchedule, runSchedule, heuristics, withConfig, reachAt, haloAfterVeil, holdOf, movedOf, ageWeights, ageMax, movedScale, bestPathWords, haloWords, fractionWords, openedAt };
+  const api = { CONFIG, newGame, currentAge, isOver, arrive, arrivalLine, options, commit, next, verdict, totalHold, maxHold, bestSchedule, runSchedule, heuristics, withConfig, reachAt, haloAfterVeil, movedOf, ageWeights, ageMax, movedScale, bestPathWords, haloWords, fractionWords, openedAt };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.VEIL = api;
 })(typeof window !== 'undefined' ? window : globalThis);
