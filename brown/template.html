@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Brown's Restless Dust</title>
+<script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<meta name="description" content="Robert Brown (1828) as a sceptic's bench: dust is dancing in a drop of water under his lens. Seven days, his own experiments, one aim: make it lie still.">
+<style>
+@font-face{font-family:'Fell';font-style:normal;src:url(data:font/woff2;base64,/*__FONT_FELL__*/) format('woff2');font-display:block}
+@font-face{font-family:'Fell';font-style:italic;src:url(data:font/woff2;base64,/*__FONT_FELL_I__*/) format('woff2');font-display:block}
+@font-face{font-family:'FellSC';font-style:normal;src:url(data:font/woff2;base64,/*__FONT_FELL_SC__*/) format('woff2');font-display:block}
+:root{
+  --cream:#F6EEDC; --cream2:#EDE2CA; --ink:#2A2118; --ink2:#6B5B4B; --blue:#1D4E89; --wash:#CFE4EC; --rim:#8DB8C9; --oil:#E8B84A; --oil2:#D39A2B;
+  --carmine:#B8322A; --green:#2F6B4F; --ochre:#D9A441; --granite:#A98B80;
+  --sc:'FellSC','IM Fell English SC',Georgia,serif; --text:'Fell','IM Fell English',Georgia,serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--cream)}
+body{color:var(--ink);font-family:var(--text);font-size:18px;line-height:1.38;min-height:100vh;
+  background-image:radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.5),transparent 60%)}
+.screen{display:none;max-width:460px;margin:0 auto;padding:0 16px 28px;min-height:100vh;position:relative}
+.screen.on{display:block}
+p{margin:.5em 0}
+a{color:var(--carmine)}
+.sc{font-family:var(--sc);letter-spacing:.1em}
+h1.title{font-family:var(--sc);font-weight:400;color:var(--ink);font-size:44px;line-height:1;margin:22px 0 2px;letter-spacing:.04em}
+h1.title small{display:block;font-size:17px;letter-spacing:.3em;color:var(--carmine);margin-bottom:8px}
+h2{font-family:var(--sc);font-weight:400;letter-spacing:.2em;color:var(--carmine);font-size:17px;margin:18px 0 6px}
+h3{font-family:var(--sc);font-weight:400;letter-spacing:.14em;color:var(--ink);font-size:18px;margin:16px 0 4px}
+.rule{height:1px;background:var(--ink);margin:10px 0;position:relative}
+.rule:after{content:"";position:absolute;left:0;right:0;top:3px;height:1px;background:var(--ink)}
+.lede{font-size:18px;line-height:1.4;margin:8px 0}
+.aim{font-family:var(--sc);font-size:19px;line-height:1.25;letter-spacing:.06em;margin:12px 0;padding:10px 0;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);position:relative}
+.aim:before,.aim:after{content:"";position:absolute;left:0;right:0;height:1px;background:var(--ink)}
+.aim:before{top:3px}.aim:after{bottom:3px}
+.small{font-size:15px;color:var(--ink2)}
+.sig{padding:12px 0 18px;font-size:15px;text-align:center;font-family:var(--text)}
+.sig a{color:var(--ink2);font-style:italic;text-decoration:none}
+/* buttons: plate labels with a double rule */
+.btn{display:block;width:100%;min-height:54px;padding:12px 14px;margin:10px 0;background:var(--cream);color:var(--ink);border:1px solid var(--ink);outline:1px solid var(--ink);outline-offset:-4px;border-radius:0;font-family:var(--sc);font-size:19px;letter-spacing:.14em;cursor:pointer;user-select:none;text-align:center}
+.btn:active,.btn.pressed{background:var(--carmine);color:var(--cream);outline-color:var(--cream)}
+.btn.go{background:var(--green);color:var(--cream);border-color:var(--green);outline-color:var(--cream)}
+.btn.go:active{background:var(--ink)}
+.btn:disabled{color:#A89A86;border-color:#A89A86;outline-color:#A89A86;background:var(--cream2);cursor:default}
+.btn.small-btn{min-height:44px;font-size:16px;padding:9px 12px}
+.row{display:flex;gap:10px}.row .btn{flex:1}
+.help-q{position:absolute;right:0;top:0;width:40px;height:40px;border:1px solid var(--ink);outline:1px solid var(--ink);outline-offset:-4px;background:var(--cream);font-family:var(--sc);font-size:22px;line-height:38px;text-align:center;cursor:pointer}
+.top{position:relative;padding-right:48px;margin-top:10px}
+.band{font-family:var(--sc);letter-spacing:.22em;font-size:15px;color:var(--cream);background:var(--carmine);display:inline-block;padding:4px 12px;margin:8px 0 6px}
+/* the plate */
+.plate{width:100%;max-width:348px;margin:0 auto;display:block;position:relative}
+.plate svg{width:100%;height:auto;display:block}
+.fig{font-family:var(--sc);letter-spacing:.2em;font-size:13px;color:var(--ink2);text-align:center;margin:2px 0 0}
+.yard{font-family:var(--sc);font-size:21px;letter-spacing:.06em;margin:10px 0 2px;min-height:28px}
+.what{font-size:17px;line-height:1.4;margin:2px 0 8px;min-height:24px}
+/* the shelf */
+.shelf{display:flex;gap:6px;margin:12px 0 4px}
+.sus{flex:1;position:relative;height:68px;border:1px solid var(--ink);outline:1px solid var(--ink);outline-offset:-4px;background:var(--cream);font-family:var(--sc);font-size:12px;letter-spacing:.03em;line-height:1.1;text-align:center;padding:11px 1px 0;overflow:visible}
+.sus b{display:block;font-weight:400;font-size:11px;color:var(--ink2);letter-spacing:0;font-family:var(--text);font-style:italic;margin-top:3px;line-height:1.05}
+.slip{position:absolute;left:-3px;right:-3px;top:18px;height:30px;background:var(--carmine);color:var(--cream);font-family:var(--sc);font-size:11px;letter-spacing:.14em;line-height:30px;text-align:center;transform:rotate(-7deg) scale(0);transition:transform .5s cubic-bezier(.2,1.4,.4,1);box-shadow:1px 2px 0 rgba(42,33,24,.35)}
+.sus.aside .slip{transform:rotate(-7deg) scale(1)}
+.shelfline{font-size:15px;color:var(--ink2);margin:0 0 8px}
+/* the bench */
+.bench{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+.exp{min-height:58px;padding:8px 6px;background:var(--cream);color:var(--ink);border:1px solid var(--ink);outline:1px solid var(--ink);outline-offset:-4px;font-family:var(--sc);font-size:15px;letter-spacing:.05em;line-height:1.15;text-align:center;cursor:pointer;user-select:none;display:flex;align-items:center;justify-content:center}
+.exp.chosen{background:var(--carmine);color:var(--cream);outline-color:var(--cream)}
+.exp.done{color:#B3A590;border-color:#B3A590;outline-color:#B3A590;text-decoration:line-through;cursor:default;background:var(--cream2)}
+.willdo{font-size:17px;line-height:1.4;min-height:48px;margin:6px 0;font-style:italic}
+.hidden{display:none !important}
+.verdict{font-family:var(--sc);font-size:34px;line-height:1.1;letter-spacing:.04em;margin:18px 0 10px;color:var(--carmine)}
+.coda{border-top:1px solid var(--ink);margin-top:22px;padding-top:12px}
+.coda h2{color:var(--ink)}
+ul{padding-left:20px}li{margin:4px 0}
+.about p,.help p{font-size:17px}
+.clockface{font-family:var(--sc)}
+@keyframes grind{0%{transform:rotate(-18deg) translate(0,0)}50%{transform:rotate(14deg) translate(2px,3px)}100%{transform:rotate(-18deg) translate(0,0)}}
+@keyframes flame{0%{transform:scale(1,1)}50%{transform:scale(1.12,.86)}100%{transform:scale(1,1)}}
+@keyframes shake{0%{transform:translate(0,0) rotate(0)}25%{transform:translate(-6px,2px) rotate(-8deg)}50%{transform:translate(6px,-2px) rotate(8deg)}75%{transform:translate(-5px,1px) rotate(-6deg)}100%{transform:translate(0,0) rotate(0)}}
+@keyframes chip{0%{transform:translate(0,0) rotate(0);opacity:0}20%{opacity:1}100%{transform:translate(70px,60px) rotate(240deg);opacity:1}}
+@keyframes hammer{0%{transform:rotate(-40deg)}60%{transform:rotate(8deg)}100%{transform:rotate(-40deg)}}
+@keyframes sheet{0%{transform:scaleX(0)}100%{transform:scaleX(1)}}
+@keyframes tease{0%{transform:translate(0,0)}100%{transform:translate(0,-26px)}}
+@keyframes scrape{0%{transform:translate(0,0)}100%{transform:translate(90px,0)}}
+@keyframes fadeout{0%{opacity:1}100%{opacity:0}}
+.vig{opacity:0}
+.vig.on{opacity:1;animation:fadeout .5s ease 1.3s forwards}
+.vig.on .grind{animation:grind .35s ease-in-out 3;transform-origin:120px 150px}
+.vig.on .flame{animation:flame .25s ease-in-out 5;transform-origin:174px 150px}
+.vig.on .shake{animation:shake .3s ease-in-out 4;transform-origin:174px 160px}
+.vig.on .chipfly{animation:chip 1s ease-out forwards}
+.vig.on .hammer{animation:hammer .5s ease-in-out 2;transform-origin:236px 118px}
+.vig.on .sheet{animation:sheet .9s ease-out forwards;transform-origin:70px 160px}
+.vig.on .tease{animation:tease 1s ease-in-out forwards}
+.vig.on .scrape{animation:scrape 1s ease-in-out forwards}
+</style>
+</head>
+<body>
+
+<section class="screen on" id="start">
+  <h1 class="title"><small>Robert Brown · 1828</small>Brown's<br>Restless Dust</h1>
+  <div class="rule"></div>
+  <p class="lede">London, the summer of 1827. A pocket microscope with one lens. A cabinet of specimens, a candle, a bottle of almond oil.</p>
+  <p class="lede">You will grind stone and burnt hair to powder, drop the dust in water, seal drops in oil, and look.</p>
+  <p class="aim">Dust is dancing in a drop of water.<br>Make it lie still.</p>
+  <p class="small">Seven days. Each day you try one thing from Brown's own bench and look. About five minutes.</p>
+  <button class="btn go" id="begin">Begin</button>
+  <div class="row"><button class="btn small-btn" data-go="help">How to play</button><button class="btn small-btn" data-go="about">About</button></div>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+
+<section class="screen" id="play">
+  <div class="top"><p class="aim" style="margin-top:0">Dust is dancing in a drop of water. Make it lie still.</p><button class="help-q" data-go="help" aria-label="How to play">?</button></div>
+  <div class="band" id="dayband">THE STAGE</div>
+  <div class="plate" id="plate"></div>
+  <p class="fig" id="figline">PLATE I · FIG. 1 · POLLEN OF CLARCKIA PULCHELLA</p>
+  <p class="yard" id="yard">Dancing.</p>
+  <p class="what" id="what">Dust from the pollen of a flower, in a drop of water, under Brown's lens. The big oblong grains are the pollen's own particles, turning slowly. The small round specks are what Brown called molecules: the smallest things he could see, trembling fast.</p>
+  <div class="shelf" id="shelf"></div>
+  <p class="shelfline" id="shelfline">Five things people have said make it move. A look that answers one lays a slip over it.</p>
+  <div id="benchwrap">
+    <h2 id="benchhead">Day 1 of 7 · What will you try?</h2>
+    <div class="bench" id="bench"></div>
+    <p class="willdo" id="willdo">Tap a label. It says what you will do, not what you will see.</p>
+    <button class="btn go" id="look" disabled>Look</button>
+  </div>
+  <div id="afterwrap" class="hidden">
+    <button class="btn go" id="next">Next day</button>
+  </div>
+</section>
+
+<section class="screen" id="end">
+  <div class="band">AFTER SEVEN DAYS</div>
+  <p class="verdict" id="headline">The dust is still dancing.</p>
+  <div id="verdictbody"></div>
+  <div class="rule"></div>
+  <h2>What Brown wrote</h2>
+  <p>He could not make it stop either. The smallest specks of any matter he could grind, living or never alive, dried a century or burnt in a flame, danced in water; sealed in oil with nothing to dry and no stream to carry them, and even one speck alone, they danced on. He set aside every cause anyone had offered, and his own first one, that it was the life of the pollen. He did not say the specks were alive, and in 1829 wrote plainly that he never had. He ended with motions, in his words, for which he was unable to account.</p>
+  <div class="coda">
+    <h2>What came later</h2>
+    <p>Brown's pamphlet ends without an answer, and this game ends where he did. Seventy-seven years on, in 1905, Albert Einstein worked out what a speck would do if the water around it were made of molecules far too small to see, in ceaseless heat-driven motion, striking it from all sides unevenly from instant to instant: it would wander just like this, and the smaller the speck, the farther it would wander. Jean Perrin measured the wandering in 1908 and found Einstein's numbers. “Brownian motion” became the first direct evidence that atoms and molecules are real.</p>
+    <p>Brown's “molecule” meant only the smallest speck he could see, roughly a thousand times wider than the water molecule that explains it. Two things often said of him are not in his pamphlet: that he watched pollen grains move (he watched the particles inside the grains, which are far too big to dance), and that he thought the specks alive (he denied it in print; “active” meant moving, nothing more). What is in it: that the smallest specks of anything dance in water, that no cause anyone proposed survived his drop of water in oil, and that the one thing that changed the dance was size, which he recorded and left unexplained.</p>
+  </div>
+  <button class="btn go" id="again">Play again</button>
+  <div class="row"><button class="btn small-btn" data-go="help">How to play</button><button class="btn small-btn" data-go="about">About</button></div>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+
+<section class="screen help" id="help">
+  <h2>How to play</h2>
+  <p class="aim">Dust is dancing in a drop of water. Make it lie still.</p>
+  <p>You sit at Robert Brown's microscope in London in 1827. On the stage is a drop of water with dust in it, and the dust will not keep still: it trembles, turns and wanders. The drop is the blue circle; the dust is the specks in it. While there is water and the specks are small, they dance.</p>
+  <p><b>The shelf.</b> Under the drop are five labels: Life, Currents, Drying, Pull, The skin. They are the five things people said made the dust move: that it is alive; that streams in the water carry it; that the drop drying up stirs it; that the specks pull and push each other; that something at the surface of the drop acts on it. When a look answers one of them, a red slip lands on its label: set aside.</p>
+  <p><b>The bench.</b> Fourteen labels, each one thing Brown actually did: grind a chip of the Sphinx, burn hair in a candle, seal the drop in almond oil, make a drop with one speck in it, and so on. Tap one and a line says what you will do. Tap LOOK and the plate shows the act, then the drop as it is afterwards. Then a line says what you saw, and slips land if the look answered anything.</p>
+  <p><b>Seven days.</b> One look a day. Think before you tap: which of the five do you believe, and which look would remove it? Some looks answer more than one; some answer none. After the seventh day comes the verdict: what you tried, what it danced through, what you set aside, and whether you found the one thing that changes the dance.</p>
+  <p><b>Play again</b> to spend the seven days differently.</p>
+  <button class="btn go" id="helpback">Back</button>
+</section>
+
+<section class="screen about" id="about">
+  <h2>About</h2>
+  /*__ABOUT__*/
+  <button class="btn go" id="aboutback">Back</button>
+</section>
+
+<script>
+/*__MECHANISM__*/
+</script>
+<script>
+(function () {
+  const M = window.BROWN, C = M.CONFIG, $ = id => document.getElementById(id);
+  let game, look = null, raf = null, lastT = 0, from = 'start', suspectsBuilt = false;
+  function show(id) { document.querySelectorAll('.screen').forEach(e => e.classList.remove('on')); $(id).classList.add('on'); window.scrollTo(0, 0); }
+  document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => { const cur = document.querySelector('.screen.on').id; if (cur !== 'help' && cur !== 'about') from = cur; show(b.dataset.go); }));
+  $('helpback').addEventListener('click', () => show(from)); $('aboutback').addEventListener('click', () => show(from));
+
+  // ---- the plate (inline SVG, redrawn every frame from the mechanism's state)
+  const NS = 'http://www.w3.org/2000/svg', W = 348, H = 330, CX = 174, CY = 162, R = 128;
+  const el = (n, a, p) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
+  const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': 'the drop under the lens' }, $('plate'));
+  const defs = el('defs', {}, svg);
+  defs.innerHTML = `
+    <radialGradient id="gw" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#EAF4F7"/><stop offset=".55" stop-color="#CFE4EC"/><stop offset="1" stop-color="#A9CBD8"/></radialGradient>
+    <radialGradient id="go" cx="45%" cy="40%" r="70%"><stop offset="0" stop-color="#F4D98A"/><stop offset="1" stop-color="#D39A2B"/></radialGradient>
+    <filter id="shimmer" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="3"><animate attributeName="baseFrequency" values="0.016;0.024;0.016" dur="9s" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" scale="6" xChannelSelector="R" yChannelSelector="G"/></filter>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.2"/></filter>
+    <clipPath id="clipdrop"><circle id="clipc" cx="${CX}" cy="${CY}" r="${R}"/></clipPath>
+    <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><line x1="0" y1="0" x2="0" y2="6" stroke="#2A2118" stroke-width=".7" opacity=".35"/></pattern>`;
+  // plate frame and slide
+  el('rect', { x: 1, y: 1, width: W - 2, height: H - 2, fill: 'none', stroke: '#2A2118', 'stroke-width': 1 }, svg);
+  el('rect', { x: 5, y: 5, width: W - 10, height: H - 10, fill: 'none', stroke: '#2A2118', 'stroke-width': .6 }, svg);
+  const gOil = el('g', { opacity: 0 }, svg);
+  el('rect', { x: 14, y: 14, width: W - 28, height: H - 28, fill: 'url(#go)' }, gOil);
+  const swirls = el('g', { fill: 'none', stroke: '#B07A1A', 'stroke-width': 1, opacity: .45, 'stroke-dasharray': '6 9' }, gOil);
+  for (let i = 0; i < 5; i++) { const p = el('path', { d: `M ${20 + i * 8} ${40 + i * 55} C ${120} ${10 + i * 60}, ${220} ${90 + i * 50}, ${W - 20} ${30 + i * 58}` }, swirls); const a = el('animate', { attributeName: 'stroke-dashoffset', values: '0;-60', dur: `${7 + i * 2}s`, repeatCount: 'indefinite' }, p); }
+  const slide = el('rect', { x: 14, y: 14, width: W - 28, height: H - 28, fill: 'rgba(255,255,255,.18)', stroke: '#2A2118', 'stroke-width': .6 }, svg);
+  const gDry = el('g', {}, svg); // dust dry on the glass
+  const gEngrave = el('g', {}, svg);
+  const shadow = el('ellipse', { cx: CX + 6, cy: CY + 10, rx: R + 2, ry: R + 2, fill: '#2A2118', opacity: .10, filter: 'url(#soft)' }, gEngrave);
+  const ring = el('g', { stroke: '#2A2118', 'stroke-width': .6, opacity: .55 }, gEngrave);
+  for (let i = 0; i < 72; i++) { const a = i / 72 * Math.PI * 2, len = i % 2 ? 5 : 9; el('line', { x1: CX + Math.cos(a) * (R + 4), y1: CY + Math.sin(a) * (R + 4), x2: CX + Math.cos(a) * (R + 4 + len), y2: CY + Math.sin(a) * (R + 4 + len) }, ring); }
+  const gDrop = el('g', {}, svg);
+  const dropBody = el('circle', { cx: CX, cy: CY, r: R, fill: 'url(#gw)', filter: 'url(#shimmer)' }, gDrop);
+  const streams = el('g', { 'clip-path': 'url(#clipdrop)', opacity: 0, fill: 'none', stroke: '#1D4E89', 'stroke-width': .8 }, gDrop);
+  for (let i = 0; i < 18; i++) { const a = i / 18 * Math.PI * 2, p = el('path', { d: `M ${CX + Math.cos(a) * 10} ${CY + Math.sin(a) * 10} Q ${CX + Math.cos(a + .25) * 70} ${CY + Math.sin(a + .25) * 70} ${CX + Math.cos(a) * R} ${CY + Math.sin(a) * R}`, 'stroke-dasharray': '4 7' }, streams); el('animate', { attributeName: 'stroke-dashoffset', values: '0;-44', dur: '1.2s', repeatCount: 'indefinite' }, p); }
+  const gSpecks = el('g', { 'clip-path': 'url(#clipdrop)' }, gDrop);
+  const dropRim = el('circle', { cx: CX, cy: CY, r: R, fill: 'none', stroke: '#1D4E89', 'stroke-width': 2 }, gDrop);
+  const dropHi = el('ellipse', { cx: CX - 50, cy: CY - 62, rx: 34, ry: 14, fill: '#fff', opacity: .55, transform: `rotate(-30 ${CX - 50} ${CY - 62})` }, gDrop);
+  const gBeads = el('g', {}, gDrop);
+  // the clock
+  const gClock = el('g', { opacity: 0 }, svg);
+  el('circle', { cx: W - 54, cy: 44, r: 24, fill: '#F6EEDC', stroke: '#2A2118', 'stroke-width': 1 }, gClock);
+  el('circle', { cx: W - 54, cy: 44, r: 21, fill: 'none', stroke: '#2A2118', 'stroke-width': .5 }, gClock);
+  for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI * 2; el('line', { x1: W - 54 + Math.sin(a) * 17, y1: 44 - Math.cos(a) * 17, x2: W - 54 + Math.sin(a) * 20, y2: 44 - Math.cos(a) * 20, stroke: '#2A2118', 'stroke-width': i % 3 ? .6 : 1.2 }, gClock); }
+  const hand = el('line', { x1: W - 54, y1: 44, x2: W - 54, y2: 27, stroke: '#B8322A', 'stroke-width': 1.6, 'stroke-linecap': 'round' }, gClock);
+  const clockLabel = el('text', { x: W - 54, y: 82, 'text-anchor': 'middle', 'font-family': 'FellSC, serif', 'font-size': 9, 'letter-spacing': 1.2, fill: '#2A2118' }, gClock);
+  // vignettes (engraved line, animate once)
+  const gVig = el('g', { class: 'vig' }, svg);
+  const VIG = {
+    mortar: `<g class="grind"><path d="M70 150 q50 70 100 0" fill="none" stroke="#2A2118" stroke-width="2"/><path d="M60 150 h120" stroke="#2A2118" stroke-width="2"/><path d="M100 185 h40 l6 14 h-52 z" fill="#F6EEDC" stroke="#2A2118" stroke-width="1.5"/></g><g class="grind"><rect x="130" y="60" width="14" height="90" rx="7" fill="#F6EEDC" stroke="#2A2118" stroke-width="1.5" transform="rotate(20 137 150)"/></g>`,
+    sphinx: `<g><path d="M40 230 h270" stroke="#2A2118" stroke-width="1.5"/><path d="M60 230 v-60 q0-20 20-24 l40-6 v-30 q0-26 26-26 h28 q24 0 24 26 v34 l80 10 v76 z" fill="#A98B80" stroke="#2A2118" stroke-width="1.5"/><path d="M146 110 q-10 24 0 46 M200 112 q10 24 0 46" fill="none" stroke="#2A2118" stroke-width="1"/><path d="M160 130 q6-5 12 0 M180 130 q6-5 12 0 M166 150 q8 8 16 0" fill="none" stroke="#2A2118" stroke-width="1.2"/></g><g class="hammer"><rect x="230" y="60" width="8" height="70" fill="#F6EEDC" stroke="#2A2118" stroke-width="1.2"/><rect x="214" y="48" width="40" height="18" fill="#2A2118"/></g><g class="chipfly"><path d="M206 120 l10 -4 l6 8 l-9 6 z" fill="#A98B80" stroke="#2A2118" stroke-width="1"/></g>`,
+    flame: `<g><rect x="160" y="150" width="28" height="90" fill="#F6EEDC" stroke="#2A2118" stroke-width="1.5"/><path d="M140 240 h68" stroke="#2A2118" stroke-width="2"/><line x1="174" y1="150" x2="174" y2="136" stroke="#2A2118" stroke-width="1.5"/></g><g class="flame"><path d="M174 70 q22 30 10 56 q-10 18-10 24 q0-6-10-24 q-12-26 10-56 z" fill="#E8B84A" stroke="#B8322A" stroke-width="1.5"/><path d="M174 100 q8 14 3 26 q-3 6-3 8 q0-2-3-8 q-5-12 3-26 z" fill="#F6EEDC"/></g><g class="grind"><line x1="100" y1="80" x2="166" y2="120" stroke="#2A2118" stroke-width="3"/><path d="M96 78 q-14 6 -10 16" fill="none" stroke="#2A2118" stroke-width="1"/></g>`,
+    vial: `<g class="shake"><path d="M150 60 h48 v30 l22 100 q4 20-16 20 h-60 q-20 0-16-20 l22-100 z" fill="#F6EEDC" stroke="#2A2118" stroke-width="1.5"/><path d="M136 150 q20 -12 38 0 t38 0 v40 q-4 20-16 20 h-60 q-20 0-16-20 z" fill="#E8B84A" opacity=".9"/><circle cx="160" cy="170" r="8" fill="#CFE4EC" stroke="#1D4E89"/><circle cx="188" cy="186" r="5" fill="#CFE4EC" stroke="#1D4E89"/><circle cx="178" cy="162" r="3" fill="#CFE4EC" stroke="#1D4E89"/><rect x="146" y="50" width="56" height="12" fill="#2A2118"/></g>`,
+    sheet: `<g><rect x="70" y="60" width="208" height="200" fill="#F6EEDC" stroke="#2A2118" stroke-width="1.5"/><rect x="80" y="70" width="188" height="180" fill="none" stroke="#2A2118" stroke-width=".5"/></g><g class="sheet"><path d="M110 240 q10-60 30-90 q10-30 40-40 q-6 20 10 30 q20 10 30-10 q-4 30-30 40 q-30 10-50 70 z" fill="#2F6B4F" opacity=".85" stroke="#2A2118" stroke-width="1"/><path d="M140 240 q20-50 50-70" fill="none" stroke="#2A2118" stroke-width="1"/></g><text x="174" y="232" text-anchor="middle" font-family="Fell, serif" font-style="italic" font-size="12" fill="#2A2118">Herb. Brit. Mus. · 1727</text>`,
+    sill: `<g><rect x="40" y="60" width="268" height="120" fill="none" stroke="#2A2118" stroke-width="2"/><line x1="174" y1="60" x2="174" y2="180" stroke="#2A2118" stroke-width="2"/><line x1="40" y1="120" x2="308" y2="120" stroke="#2A2118" stroke-width="2"/><rect x="30" y="180" width="288" height="16" fill="#2A2118"/><rect x="30" y="196" width="288" height="40" fill="#F6EEDC" stroke="#2A2118" stroke-width="1.5"/></g><g class="scrape"><rect x="80" y="164" width="40" height="22" fill="#F6EEDC" stroke="#2A2118" stroke-width="1.2" transform="skewX(-15)"/></g>`,
+    threads: `<g><line x1="90" y1="240" x2="258" y2="240" stroke="#2A2118" stroke-width="1.5"/><line x1="100" y1="90" x2="104" y2="240" stroke="#8E9E90" stroke-width="3"/><line x1="130" y1="100" x2="128" y2="240" stroke="#8E9E90" stroke-width="3"/><line x1="160" y1="80" x2="166" y2="240" stroke="#8E9E90" stroke-width="3"/></g><g class="tease"><line x1="200" y1="150" x2="206" y2="200" stroke="#8E9E90" stroke-width="3"/><line x1="224" y1="170" x2="226" y2="190" stroke="#8E9E90" stroke-width="3"/><line x1="240" y1="160" x2="241" y2="172" stroke="#8E9E90" stroke-width="3"/><path d="M190 150 l-20 -40 M250 150 l20 -40" stroke="#2A2118" stroke-width="2"/></g>`,
+    lens: `<g><circle cx="174" cy="150" r="70" fill="none" stroke="#2A2118" stroke-width="2"/><circle cx="174" cy="150" r="60" fill="none" stroke="#2A2118" stroke-width=".6"/><line x1="174" y1="220" x2="174" y2="260" stroke="#2A2118" stroke-width="3"/><path d="M120 260 h108" stroke="#2A2118" stroke-width="3"/></g><g class="flame"><circle cx="174" cy="150" r="30" fill="#CFE4EC" stroke="#1D4E89" stroke-width="1.5"/></g>`,
+  };
+  const VIG_FOR = { sphinx: 'sphinx', glass: 'mortar', meteorite: 'mortar', coarse: 'mortar', sulphur: 'mortar', sugar: 'mortar', herbarium: 'sheet', burn: 'flame', soot: 'sill', wait: 'lens', oil: 'vial', onespeck: 'vial', surface: 'vial', asbestos: 'threads' };
+  const vigBack = el('rect', { x: 14, y: 14, width: W - 28, height: H - 28, fill: '#F6EEDC', opacity: .96 }, gVig);
+  const vigArt = el('g', {}, gVig);
+
+  // speck drawing
+  const TINT = { pollen: '#D9A441', granite: '#A98B80', glass: '#DDE8EA', meteorite: '#5E5A58', moss: '#2F6B4F', soot: '#1B1612', asbestos: '#8E9E90', sulphur: '#E8D15A', sugar: '#fff' };
+  const SP = C.DRAW; let nodes = [];
+  function buildSpecks(st) {
+    gSpecks.innerHTML = ''; gDry.innerHTML = ''; nodes = [];
+    for (const s of st.specks) {
+      const g = el('g', {}, gSpecks); const tint = TINT[st.tint] || '#2A2118', stroke = '#2A2118';
+      const trail = el('polyline', { fill: 'none', stroke: s.kind === 'molecule' ? '#1D4E89' : stroke, 'stroke-width': s.kind === 'molecule' ? 1.4 : 1, opacity: .3, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, g);
+      let shape;
+      if (s.kind === 'molecule') shape = el('circle', { r: SP.molecule / 2 + 0.4, fill: st.tint === 'soot' ? '#1B1612' : (st.tint === 'glass' ? '#EAF2F4' : tint), stroke, 'stroke-width': .9 }, g);
+      else if (s.kind === 'pollen') shape = el('ellipse', { rx: SP.pollen / 2, ry: SP.pollen / 4, fill: '#D9A441', stroke, 'stroke-width': 1 }, g);
+      else if (s.kind === 'grit') shape = el('polygon', { points: '-4,-3 2,-4 4,1 1,4 -3,2', fill: tint, stroke, 'stroke-width': .9 }, g);
+      else if (s.kind === 'lump') shape = el('path', { d: 'M-18,-6 C-16,-18 4,-20 14,-12 C22,-6 20,8 12,14 C2,20 -12,18 -18,8 Z', fill: tint, stroke, 'stroke-width': 1.2 }, g);
+      else if (s.kind === 'fibril') shape = el('rect', { x: -s.n * SP.fibrilUnit / 2, y: -2, width: s.n * SP.fibrilUnit, height: 4, rx: 2, fill: tint, stroke, 'stroke-width': .9 }, g);
+      if (s.kind === 'lump') el('rect', { x: -18, y: -20, width: 40, height: 40, fill: 'url(#hatch)', 'clip-path': 'none', opacity: .6, 'pointer-events': 'none' }, g).setAttribute('mask', '');
+      nodes.push({ g, trail, s });
+    }
+  }
+  function drawSpecks(st, rad) {
+    for (const n of nodes) {
+      const s = n.s, x = CX + s.x * rad, y = CY + s.y * rad;
+      n.g.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(s.rot * 57.3).toFixed(0)})`);
+      if (s.v > 0 && st.water) n.trail.setAttribute('points', s.tx.map(p => `${((p[0] - s.x) * rad).toFixed(1)},${((p[1] - s.y) * rad).toFixed(1)}`).join(' ')); else n.trail.setAttribute('points', '');
+      n.trail.setAttribute('transform', `rotate(${(-s.rot * 57.3).toFixed(0)})`);
+    }
+  }
+  function drawDry(st) { // the water gone: dust lies on the glass where it was
+    gDry.innerHTML = '';
+    for (const s of st.specks) { const x = CX + s.x * R * 0.95, y = CY + s.y * R * 0.95; el('circle', { cx: x, cy: y, r: s.kind === 'molecule' ? 2.2 : 4, fill: '#8E8375', stroke: '#2A2118', 'stroke-width': .6 }, gDry); }
+  }
+  function setVessel(st) {
+    const oil = st.vessel === 'oil' || st.vessel === 'oil-one';
+    gOil.setAttribute('opacity', oil ? 1 : 0); slide.setAttribute('opacity', oil ? 0 : 1);
+    gBeads.innerHTML = ''; if (st.vessel === 'inverted') for (const b of st.beads) el('circle', { cx: CX + b.x * R, cy: CY + b.y * R, r: C.DRAW.oilbead / 2, fill: 'url(#go)', stroke: '#B07A1A', 'stroke-width': 1 }, gBeads);
+    gClock.setAttribute('opacity', st.vessel === 'oil' || st.vessel === 'oil-one' || st.vessel === 'open-wait' ? 1 : 0);
+    clockLabel.textContent = st.vessel === 'open-wait' ? 'ONE MINUTE' : 'ONE HOUR';
+    streams.setAttribute('opacity', 0);
+  }
+  function drawDrop(st) {
+    const rad = R * st.radius;
+    [dropBody, dropRim].forEach(c => { c.setAttribute('r', Math.max(0, rad)); c.setAttribute('opacity', st.water ? 1 : 0); });
+    document.getElementById('clipc').setAttribute('r', Math.max(0, rad));
+    gEngrave.setAttribute('transform', `translate(${CX} ${CY}) scale(${st.radius}) translate(${-CX} ${-CY})`); gEngrave.setAttribute('opacity', st.water ? 1 : 0);
+    dropHi.setAttribute('opacity', st.water ? .55 * st.radius : 0); dropHi.setAttribute('transform', `translate(${CX} ${CY}) scale(${st.radius}) translate(${-CX} ${-CY}) rotate(-30 ${CX - 50} ${CY - 62})`);
+    streams.setAttribute('opacity', st.current > 0 ? Math.min(1, st.current / C.CURRENT_MAX * 1.4) : 0);
+    if (isFinite(st.life)) { const frac = Math.min(1, st.t / st.life); hand.setAttribute('transform', `rotate(${frac * 360} ${W - 54} 44)`); }
+    drawSpecks(st, rad);
+    if (!st.water) { gSpecks.setAttribute('opacity', 0); if (!gDry.childNodes.length) drawDry(st); } else gSpecks.setAttribute('opacity', 1);
+  }
+  function animate(ts) {
+    if (!look) return;
+    const dt = lastT ? Math.min(0.05, (ts - lastT) / 1000) : 1 / 60; lastT = ts;
+    if (!look.state.done) { M.step(look.state, dt); drawDrop(look.state); if (look.state.done) onLookDone(); }
+    else if (look.state.water) { // the drop keeps dancing after the reading, while there is water (oil: the clock stays at the hour)
+      const save = look.state.t; M.step(look.state, dt); look.state.t = Math.min(save, look.state.life); look.state.done = true; drawDrop(look.state);
+    }
+    raf = requestAnimationFrame(animate);
+  }
+
+  // ---- the shelf and the bench
+  function buildShelf() {
+    $('shelf').innerHTML = '';
+    for (const s of C.SUSPECTS) { const d = document.createElement('div'); d.className = 'sus'; d.id = 'sus-' + s.id; d.innerHTML = `${s.label}<b>${{ life: 'it is alive', currents: 'streams in it', drying: 'the drop dries', pull: 'specks pull each other', skin: 'the drop\'s surface' }[s.id]}</b><div class="slip">Set aside</div>`; $('shelf').appendChild(d); }
+  }
+  function refreshShelf() { for (const s of C.SUSPECTS) $('sus-' + s.id).classList.toggle('aside', !!game.setAside[s.id]); }
+  let chosen = null;
+  function buildBench() {
+    $('bench').innerHTML = ''; chosen = null; $('look').disabled = true; $('willdo').textContent = 'Tap a label. It says what you will do, not what you will see.';
+    $('benchhead').textContent = `Day ${game.day + 1} of ${C.DAYS} · What will you try?`;
+    for (const e of C.EXPERIMENTS) {
+      const b = document.createElement('button'); b.className = 'exp'; b.textContent = e.label; b.dataset.id = e.id;
+      if (game.log.some(l => l.id === e.id)) { b.classList.add('done'); b.disabled = true; }
+      else b.addEventListener('click', () => { document.querySelectorAll('.exp.chosen').forEach(x => x.classList.remove('chosen')); b.classList.add('chosen'); chosen = e.id; $('willdo').textContent = 'You will: ' + e.act; $('look').disabled = false; });
+      $('bench').appendChild(b);
+    }
+  }
+  const FIG = { sphinx: 'GRANITE OF THE SPHINX', glass: 'WINDOW GLASS', meteorite: 'A METEORITE', herbarium: 'MOSS, DRIED 1727', burn: 'ASH OF HAIR, LINEN, WOOD', soot: 'LONDON SOOT', wait: 'AN OPEN DROP, ONE MINUTE', oil: 'A DROP SEALED IN ALMOND OIL', onespeck: 'ONE SPECK, SEALED', surface: 'OIL BEADS ON THE WATER', coarse: 'A COARSE GRIND', asbestos: 'ASBESTOS, TEASED', sulphur: 'SULPHUR', sugar: 'SUGAR' };
+  function startDay0() {
+    game = M.newGame(); const exp = { id: 'day0', vessel: 'open-fresh', specks: 'pollen', tint: 'pollen', answers: [] };
+    look = { exp, state: M.startLook(exp), reading: null }; look.state.life = Infinity; look.state.done = true;
+    buildSpecks(look.state); setVessel(look.state); drawDrop(look.state);
+    $('dayband').textContent = 'THE STAGE · JUNE 1827'; $('figline').textContent = 'PLATE I · FIG. 1 · POLLEN OF CLARCKIA PULCHELLA';
+    $('yard').textContent = 'Dancing.';
+    $('what').textContent = 'Dust from the pollen of a flower, in a drop of water, under Brown\'s lens. The big oblong grains are the pollen\'s own particles, turning slowly. The small round specks are what Brown called molecules: the smallest things he could see, trembling fast.';
+    if (!suspectsBuilt) { buildShelf(); suspectsBuilt = true; } refreshShelf();
+    $('benchwrap').classList.remove('hidden'); $('afterwrap').classList.add('hidden'); buildBench();
+    if (!raf) raf = requestAnimationFrame(animate);
+  }
+  let figN = 1;
+  $('look').addEventListener('click', () => {
+    if (!chosen) return; const d = M.playDay(game, chosen); look = d; figN += 1;
+    $('benchwrap').classList.add('hidden'); $('dayband').textContent = `DAY ${game.day} OF ${C.DAYS}`; $('figline').textContent = `PLATE I · FIG. ${figN} · ${FIG[d.exp.id]}`;
+    $('yard').textContent = 'Looking.'; $('what').textContent = d.exp.act;
+    // vignette, then the drop
+    vigArt.innerHTML = VIG[VIG_FOR[d.exp.id]]; gVig.classList.remove('on'); void gVig.getBoundingClientRect(); gVig.classList.add('on');
+    buildSpecks(d.state); setVessel(d.state); drawDrop(d.state); lastT = 0;
+    // the drop waits until the vignette has played, then runs
+    look.hold = true; setTimeout(() => { look.hold = false; lastT = 0; }, 1500);
+    window.scrollTo({ top: $('plate').offsetTop - 60, behavior: 'smooth' });
+  });
+  const realStep = M.step; M.step = function (st, dt) { if (look && look.hold) return st; return realStep(st, dt); };
+  function onLookDone() {
+    const r = look.reading; $('yard').textContent = r.yard; $('what').textContent = r.what; refreshShelf();
+    $('afterwrap').classList.remove('hidden'); $('next').textContent = game.day >= C.DAYS ? 'See the verdict' : 'Next day';
+  }
+  $('next').addEventListener('click', () => {
+    if (game.day >= C.DAYS) { endGame(); return; }
+    gVig.classList.remove('on'); $('afterwrap').classList.add('hidden'); $('benchwrap').classList.remove('hidden'); buildBench();
+    window.scrollTo({ top: $('benchwrap').offsetTop - 70, behavior: 'smooth' });
+  });
+  function endGame() {
+    const v = M.verdict(game); $('headline').textContent = v.headline; const P = [];
+    const list = a => a.length === 1 ? a[0] : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1];
+    if (v.tried.length) P.push(`<p>In seven days you ${list(v.tried)}. It danced through all of it.</p>`);
+    if (v.allAside) P.push(`<p>You set aside every cause on the shelf: ${list(v.aside.map(a => a.toLowerCase()))}. Nothing you could name was left to blame.</p>`);
+    else if (v.aside.length) P.push(`<p>You set aside ${list(v.aside.map(a => a.toLowerCase()))}. Still standing on the shelf: ${list(v.standing.map(a => a.toLowerCase()))}. Brown's drop of water sealed in almond oil, with one speck in it, set aside drying, currents and pull in a single look, and the oil beads on the water's skin set aside the skin.</p>`);
+    else P.push(`<p>You set aside nothing on the shelf: every look you chose answered none of the five. Brown's drop of water sealed in almond oil, with one speck in it, set aside drying, currents and pull in a single look; a chip of the Sphinx set aside life.</p>`);
+    if (v.leverFound) P.push(`<p>You found the one thing that changes the dance: how small the specks are. Big grains and long threads lie still; fine dust dances, the finest fastest. That is not a cause. It is the clue Brown wrote down and could not read.</p>`);
+    else P.push(`<p>You never looked at the one thing that changes the dance: how small the specks are. Ground coarse, the big grains lie still while the fine dust between them dances; a thread of asbestos lies still beyond four or five specks long. Brown wrote that down, and could not say why.</p>`);
+    if (v.quiet.length) P.push(`<p>The only quiet you got came when you ${list(v.quiet.map(q => q.did + ' (' + q.how + ')'))}. A drop with nothing in it, or no drop at all, is not dust lying still.</p>`);
+    $('verdictbody').innerHTML = P.join(''); show('end');
+  }
+  $('begin').addEventListener('click', () => { figN = 1; startDay0(); show('play'); });
+  $('again').addEventListener('click', () => { figN = 1; startDay0(); show('play'); });
+})();
+</script>
+</body>
+</html>
