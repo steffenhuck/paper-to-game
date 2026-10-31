@@ -24,7 +24,7 @@
     AGES: [
       { key: 'cave', name: 'THE CAVE', date: 'LONG AGO', ceiling: 1, eyes: 1, demand: 0,
         technique: 'cave',
-        newThis: 'No way to copy a face yet. It is painted on the wall, for the spirits.',           // section V: the elk, a magic instrument
+        newThis: 'No way to copy a face yet. It is painted on the wall of the cave.',           // section V: the elk, a magic instrument
         eyesLine: null,
         notYet: 'nothing can carry it farther',
         reach: [0.02, 0.12, 0.2, 0.3, 0.9], crowd: ['you and the spirits', 'the clan', 'the clan', '', ''] },
@@ -36,7 +36,7 @@
         reach: [0.02, 0.15, 0.22, 0.3, 0.9], crowd: ['you and the god', 'the city, at the festival', 'the city, in the forecourt', '', ''] },
       { key: 'cathedral', name: 'THE CATHEDRAL', date: 'THE MIDDLE AGES', ceiling: 2, eyes: 0.95, demand: 0.2,
         technique: 'icon',
-        newThis: 'New this age: the woodcut. A face can be cut in wood and printed, roughly, a few dozen times. Yours hangs veiled in the choir.', // section I; section V
+        newThis: 'New this age: the woodcut. Saints are being cut in wood and printed in the market, roughly — too roughly for this face. Yours hangs in the choir.', // section I; section V
         eyesLine: 'there are woodcuts of saints in the market now',
         notYet: 'the woodcut is too rough for this face',
         reach: [0.02, 0.18, 0.25, 0.3, 0.9], crowd: ['you and the saints', 'the parish, on the feast day', 'the parish, in the nave', '', ''] },
@@ -55,7 +55,7 @@
       { key: 'studio', name: 'THE STUDIO', date: 'ABOUT 1880', ceiling: 3, eyes: 0.4, demand: 0.7,
         technique: 'halftone',
         newThis: 'New this age: the photograph. A face can be taken in a second and printed without end, into every house and every hand.', // section I; section VI
-        eyesLine: 'everyone has a photograph of their dead',
+        eyesLine: 'everyone has a photograph of their dead', sayCause: true, // the cause is said once, here (revision 4)
         notYet: 'the film is not here yet',
         reach: [0.02, 0.2, 0.3, 0.75, 0.9], crowd: ['you and the vault', 'the town, on the day', 'whoever comes to the museum', 'every house and every hand', ''] },
       { key: 'cinema', name: 'THE CINEMA', date: 'ABOUT 1930', ceiling: 4, eyes: 0.2, demand: 0.9,
@@ -142,8 +142,9 @@
   function arrivalLine(s) {
     const age = currentAge(s);
     if (!age.eyesLine || s.haloBefore <= CONFIG.HALO_GONE) return '';
-    const changed = s.halo <= CONFIG.HALO_GONE ? 'The halo is gone.' : (s.halo < s.haloBefore * 0.97 ? 'The halo arrives thinner than it was: ' + haloWords(s.halo) + '.' : 'The halo arrives as it was.');
-    return 'The people\'s eyes have changed: ' + age.eyesLine + '. ' + changed;
+    const changed = s.halo <= CONFIG.HALO_GONE ? 'The halo is gone.' : (s.halo < s.haloBefore * 0.97 ? (haloWords(s.halo) === haloWords(s.haloBefore) ? 'The halo arrives a shade thinner.' : 'The halo arrives thinner than it was: ' + haloWords(s.halo) + '.') : 'The halo arrives as it was.');
+    // the fact every age; the cause (the people's eyes) once, at the age that carries it (the photograph)
+    return age.sayCause ? 'The people\'s eyes have changed: ' + age.eyesLine + '. ' + changed : changed;
   }
   function options(s) {
     const age = currentAge(s);
