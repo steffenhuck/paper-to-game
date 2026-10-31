@@ -1,6 +1,6 @@
 // Full session in a real headless browser at phone width. Run: node session-test.js  (writes session-log.txt and screenshots)
 // Strategy: veil down through the cave, temple and cathedral; shown on the day at the court; print at the print shop and the
-// studio; the screen at the cinema; help opened mid-play and returned from; the rally at the fork; the verdict; About; play again.
+// studio; the screen at the cinema; help opened mid-play and returned from; the verdict; About; play again.
 const { chromium } = require('playwright');
 const path = require('path'), fs = require('fs');
 const L = []; const say = s => { L.push(s); console.log(s); };
@@ -57,22 +57,15 @@ const L = []; const say = s => { L.push(s); console.log(s); };
     say('   > ' + await text('#nextage'));
     await page.click('#nextage'); await page.waitForTimeout(300);
   }
-  say('\n== ' + await page.$eval('.screen.on', e => e.id) + ': ' + await text('#forkorient'));
-  await shot('fork');
-  say('   slabs: ' + (await page.$$eval('#forks .veil', bs => bs.map(b => b.innerText.replace(/\n/g, ' — ')))).join(' / '));
-  await page.click('#forks .veil[data-i="2"]'); await page.waitForTimeout(200); say('   > tapped the rally; commit says: ' + await text('#forkcommit'));
-  await page.click('#forkcommit'); await page.waitForTimeout(900); await shot('fork-rally'); await page.waitForTimeout(2200); await shot('fork-rally-war');
-  say('   line: ' + await text('#forkline') + ' || ' + await text('#forkbenjamin'));
-  await page.click('#toverdict'); await page.waitForTimeout(300); await shot('end'); await noScroll();
+  await page.waitForTimeout(300); await shot('end'); await noScroll();   // the last Next age is The verdict
   say('\n== VERDICT: ' + await text('#lead'));
-  say('   ' + await text('#vdid')); say('   ' + await text('#vben')); say('   ' + await text('#vfork')); say('   ' + await text('#vbest'));
+  say('   ' + await text('#vdid')); say('   ' + await text('#vben')); say('   ' + await text('#vepi')); say('   ' + await text('#vbest'));
   await page.click('#aboutbtn2'); await page.waitForTimeout(200); await shot('about'); await page.click('#aboutback'); await page.waitForTimeout(200);
   say('   about opened and returned to ' + await page.$eval('.screen.on', e => e.id));
-  // a second run: never lift the veil, then the newsreel
+  // a second run: never lift the veil
   await page.click('#again'); await page.waitForTimeout(300);
   for (let i = 0; i < 6; i++) { await page.click('#veils .veil[data-i="0"]'); await page.click('#commit'); await page.waitForTimeout(900); if (i === 4) say('\n== second run, studio, veil down: ' + await text('#line')); await page.click('#nextage'); await page.waitForTimeout(200); }
-  await page.click('#forks .veil[data-i="3"]'); await page.click('#forkcommit'); await page.waitForTimeout(900); await shot('fork-newsreel');
-  await page.click('#toverdict'); await page.waitForTimeout(300); say('== second run verdict: ' + await text('#lead') + ' | ' + await text('#vdid')); await shot('end-veiled');
+  await page.waitForTimeout(300); say('== second run verdict: ' + await text('#lead') + ' | ' + await text('#vdid')); await shot('end-veiled');
   say('\nerrors: ' + (errors.length ? errors.join(' ; ') : 'none'));
   await browser.close();
   fs.writeFileSync(path.join(__dirname, 'session-log.txt'), L.join('\n') + '\n');

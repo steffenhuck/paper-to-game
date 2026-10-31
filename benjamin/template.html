@@ -45,6 +45,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
 .band{background:var(--red);color:var(--cream);font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.12em;font-size:15px;padding:7px 10px;margin:10px -16px 0;padding-left:16px;display:flex;justify-content:space-between;align-items:baseline}
 .band b{font-size:19px;font-weight:700;letter-spacing:.06em}
 .strip{display:flex;gap:4px;margin:8px 0 6px;justify-content:space-between}
+.striplab{font-family:var(--display);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--grey);margin-top:10px}
 .slot{flex:1;height:60px;border:2px dotted var(--grey-2);background:transparent;position:relative}
 .slot.done{border:2px solid var(--ink);background:var(--cream-2)}
 .slot.now{border:3px solid var(--red)}
@@ -81,7 +82,6 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
 .cfrow .c.me svg{border:3px solid var(--red)}
 .cfrow .c.no svg{opacity:.35}
 .cfrow .c span{display:block;font-family:var(--display);font-size:11px;letter-spacing:.08em;text-transform:uppercase;line-height:1.1;margin-top:3px}
-.forks .veil .k{flex:0 0 125px}
 .lead{font-family:var(--display);font-weight:600;font-size:30px;line-height:1.1;text-transform:uppercase;letter-spacing:.02em;color:var(--red);margin:10px 0}
 .vl{margin:10px 0}
 .vl b{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.12em;font-size:14px;display:block;color:var(--red)}
@@ -137,32 +137,18 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   </div>
 </section>
 
-<!-- FORK -->
-<section class="screen" id="forkscreen">
-  <div class="topbar"><div class="aimline">The halo is gone. The longing for it is not.</div><button class="qbtn" data-help="forkscreen">?</button></div>
-  <div class="band"><b>1936</b><span>THE LAST AGE</span></div>
-  <p class="orient" id="forkorient">Six ages have passed. Four places want the face now. Pick one, put the face there, and see what comes of it.</p>
-  <svg class="frame" id="forkframe" viewBox="0 0 340 300"></svg>
-  <div id="forkchoose">
-    <div class="veils forks" id="forks"></div>
-    <button class="btn" id="forkcommit" disabled>Put the face there<span class="sub" id="forksub">pick a place first</span></button>
-  </div>
-  <div id="forkresult" class="result" style="display:none">
-    <p class="line" id="forkline"></p>
-    <p class="line" id="forkbenjamin" style="font-style:italic"></p>
-    <button class="btn" id="toverdict">The verdict</button>
-  </div>
-</section>
-
 <!-- END -->
 <section class="screen" id="end">
-  <div class="band"><b>The verdict</b><span>SIX AGES AND 1936</span></div>
+  <div class="band"><b>The verdict</b><span>SIX AGES</span></div>
   <p class="lead" id="lead"></p>
   <div class="rule"></div>
+  <div class="striplab">Your six ages</div>
   <div class="strip" id="endstrip"></div>
+  <div class="striplab">The most a keeper could have done</div>
+  <div class="strip" id="beststrip"></div>
   <div class="vl"><b>What you did</b><span id="vdid"></span></div>
   <div class="vl"><b>What Benjamin says</b><span id="vben"></span></div>
-  <div class="vl"><b>What that means</b><span id="vfork"></span></div>
+  <div class="vl"><b>And then, 1936</b><span id="vepi"></span></div>
   <p class="small" id="vbest"></p>
   <button class="btn" id="again">Play again</button>
   <button class="btn quiet" id="aboutbtn2">About the paper</button>
@@ -179,7 +165,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     <li><b>The halo does not grow back.</b> What you spend is spent. And each age arrives with eyes of its own: the more copying there is in the world, the thinner the halo arrives, whatever you did.</li>
     <li><b>Under the bar,</b> small frames show what the halo would be at each rung this age, yours ringed in red.</li>
     <li><b>The tally.</b> Each age counts the people it moved, and each age has more people than the last, so the late ages weigh more. There is no running total; the verdict at the end sets your six ages against the most a keeper could have done.</li>
-    <li><b>1936:</b> the halo is gone and four places want the face. Pick one. Then the verdict: how many people your face moved, of what was possible, in words, and what Benjamin says about the path you took.</li>
+    <li><b>The verdict:</b> how many people your face moved, of what was possible, in words; your six ages beside the most a keeper could have done; what Benjamin says about the path you took; and his last page, 1936, as a reading.</li>
   </ol>
   <p class="small">Nothing is random. The same choices give the same ages every time, so a second run is a different plan, not a different draw.</p>
   <button class="btn" id="helpback">Back</button>
@@ -333,7 +319,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   function thumb(tech, halo, haloKind, variant) { const u = uid(); return `<svg viewBox="0 0 200 230" preserveAspectRatio="xMidYMid slice">${defs(u)}<rect width="200" height="230" fill="${TECH[tech].bg}"/>${faceMarkup(tech, u, halo, variant || 0, haloKind)}</svg>`; }
 
   // ---------- state and screens
-  let S = M.newGame(); let picked = null; let forkPicked = null; let lastScreen = 'start';
+  let S = M.newGame(); let picked = null; let lastScreen = 'start';
   let copiesMade = []; // {tech, count} per age that printed; presentation only, the counts follow reach
   const lastN = () => S.results.length ? C.VEILS[S.results[S.results.length - 1].veil].n : 0; // where the keeper left the curtains
   function show(id) { document.querySelectorAll('.screen').forEach(e => e.classList.remove('on')); $(id).classList.add('on'); window.scrollTo(0, 0); }
@@ -394,7 +380,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     $('holdwords').textContent = (r.ofAge < 0.03 ? 'hardly anyone' : M.fractionWords(r.ofAge) + ' of what this age could move') + (r.ofAge < 0.03 ? '' : ', ' + how);
     $('hold').innerHTML = `<rect x="0" y="0" width="${gold}" height="20" fill="${GOLD}"/><rect x="${gold}" y="0" width="${red}" height="20" fill="${RED}"/>`;
     $('cfrow').innerHTML = r.counterfactual.filter(c => c.allowed).map(c => `<div class="c${c.index === picked ? ' me' : ''}">${thumb(a.technique, c.halo)}<span>${C.VEILS[c.index].label.replace(/^(IN|ON) /, '')}</span></div>`).join('');
-    $('nextage').textContent = S.age === C.AGES.length - 1 ? 'On to 1936' : 'Next age';
+    $('nextage').textContent = S.age === C.AGES.length - 1 ? 'The verdict' : 'Next age';
     renderStrip($('strip'), S);
     setTimeout(() => { $('result').style.display = 'block'; }, 700);
   }
@@ -411,45 +397,15 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   }
   function nextAge() {
     M.next(S);
-    if (M.isFork(S)) renderFork(); else renderAge();
-  }
-  // ---------- 1936
-  function renderFork() {
-    forkPicked = null;
-    drawFrame($('forkframe'), 'poster', 0, 0.75, 0);
-    $('forks').innerHTML = C.FORK.map((f, i) => `<button class="veil" data-i="${i}"><span class="k">${f.label}</span><span class="w">${f.meaning}</span></button>`).join('');
-    $('forks').querySelectorAll('.veil').forEach(b => b.addEventListener('click', () => { forkPicked = +b.dataset.i; $('forks').querySelectorAll('.veil').forEach(x => x.classList.toggle('chosen', +x.dataset.i === forkPicked)); $('forkcommit').disabled = false; $('forksub').textContent = C.FORK[forkPicked].label.toLowerCase() + ': ' + C.FORK[forkPicked].meaning; }));
-    $('forkcommit').disabled = true; $('forksub').textContent = 'pick a place first';
-    $('forkchoose').style.display = 'block'; $('forkresult').style.display = 'none';
-    show('forkscreen');
-  }
-  function commitFork() {
-    if (forkPicked === null) return;
-    const f = M.fork(S, forkPicked);
-    $('forkchoose').style.display = 'none';
-    const svg = $('forkframe');
-    if (f.key === 'vault') {
-      drawFrame(svg, 'icon', 0, 0, 0.02, { after: `<g transform="translate(200 40) rotate(6)"><rect x="0" y="0" width="118" height="64" fill="${CREAM}" stroke="${INK}" stroke-width="3"/><text x="59" y="26" text-anchor="middle" font-family="Oswald,sans-serif" font-size="15" letter-spacing="2" fill="${INK}">CERTIFIED</text><text x="59" y="48" text-anchor="middle" font-family="Oswald,sans-serif" font-size="13" letter-spacing="1" fill="${RED}">THE ONE TRUE FACE</text><circle cx="104" cy="52" r="9" fill="${RED}"/></g>` });
-    } else if (f.key === 'studio') {
-      drawFrame(svg, 'halftone', f.haloBack, 0.9, f.reach, { haloKind: 'ink', before: `<text x="170" y="34" text-anchor="middle" font-family="Oswald,sans-serif" font-weight="700" font-size="30" letter-spacing="8" fill="${RED}">THE FACE</text>` });
-    } else if (f.key === 'rally') {
-      drawFrame(svg, 'poster', f.haloBack, 1, f.reach, { haloKind: 'ink', after: `<g id="warover" opacity="0"><rect width="340" height="300" fill="${INK}" opacity=".88"/><polygon points="0,300 340,0 340,70 0,300" fill="${RED}"/><text x="170" y="150" text-anchor="middle" font-family="Oswald,sans-serif" font-weight="700" font-size="64" letter-spacing="10" fill="${CREAM}">WAR</text><text x="170" y="190" text-anchor="middle" font-family="Franklin,sans-serif" font-style="italic" font-size="15" fill="${CREAM}">let art be made, though the world perish</text></g>` });
-      setTimeout(() => { const w = svg.querySelector('#warover'); if (w) w.setAttribute('opacity', '1'); }, 1800);
-    } else {
-      const u = uid(); let grid = `<rect width="340" height="300" fill="#111"/><rect x="34" y="0" width="272" height="300" fill="#8E8A82"/>`;
-      for (let i = 0; i < 12; i++) { const x = 40 + (i % 4) * 66, y = 6 + Math.floor(i / 4) * 98; const uu = uid(); grid += `<g transform="translate(${x} ${y}) scale(.4)">${defs(uu)}<rect width="150" height="230" fill="#8E8A82"/><g transform="translate(-25 0)">${faceMarkup('film', uu, 0, i, null)}</g></g>`; }
-      grid += filmFrame(u);
-      svg.innerHTML = defs(u) + grid;
-    }
-    $('forkline').textContent = f.line; $('forkbenjamin').textContent = f.benjamin;
-    setTimeout(() => { $('forkresult').style.display = 'block'; }, 700);
+    if (M.isOver(S)) renderEnd(); else renderAge();
   }
   // ---------- the verdict
   function renderEnd() {
     const v = M.verdict(S);
     $('lead').textContent = v.lead;
     renderStrip($('endstrip'), S);
-    $('vdid').textContent = v.did; $('vben').textContent = v.benjamin; $('vfork').textContent = v.fork;
+    renderStrip($('beststrip'), { results: v.bestResults, age: C.AGES.length });
+    $('vdid').textContent = v.did; $('vben').textContent = v.benjamin; $('vepi').textContent = v.epilogue;
     $('vbest').textContent = `Under this game's assumptions, that is. A second run is a different plan: open earlier, open later, or never.`
     show('end');
   }
@@ -459,8 +415,6 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   $('again').addEventListener('click', () => { S = M.newGame(); copiesMade = []; renderAge(); });
   $('commit').addEventListener('click', commitAge);
   $('nextage').addEventListener('click', nextAge);
-  $('forkcommit').addEventListener('click', commitFork);
-  $('toverdict').addEventListener('click', renderEnd);
   $('howto').addEventListener('click', () => { lastScreen = 'start'; show('help'); });
   document.querySelectorAll('.qbtn').forEach(b => b.addEventListener('click', () => { lastScreen = b.dataset.help; show('help'); }));
   $('helpback').addEventListener('click', () => show(lastScreen));

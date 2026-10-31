@@ -45,6 +45,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
 .band{background:var(--red);color:var(--cream);font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.12em;font-size:15px;padding:7px 10px;margin:10px -16px 0;padding-left:16px;display:flex;justify-content:space-between;align-items:baseline}
 .band b{font-size:19px;font-weight:700;letter-spacing:.06em}
 .strip{display:flex;gap:4px;margin:8px 0 6px;justify-content:space-between}
+.striplab{font-family:var(--display);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--grey);margin-top:10px}
 .slot{flex:1;height:60px;border:2px dotted var(--grey-2);background:transparent;position:relative}
 .slot.done{border:2px solid var(--ink);background:var(--cream-2)}
 .slot.now{border:3px solid var(--red)}
@@ -81,7 +82,6 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
 .cfrow .c.me svg{border:3px solid var(--red)}
 .cfrow .c.no svg{opacity:.35}
 .cfrow .c span{display:block;font-family:var(--display);font-size:11px;letter-spacing:.08em;text-transform:uppercase;line-height:1.1;margin-top:3px}
-.forks .veil .k{flex:0 0 125px}
 .lead{font-family:var(--display);font-weight:600;font-size:30px;line-height:1.1;text-transform:uppercase;letter-spacing:.02em;color:var(--red);margin:10px 0}
 .vl{margin:10px 0}
 .vl b{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.12em;font-size:14px;display:block;color:var(--red)}
@@ -137,32 +137,18 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   </div>
 </section>
 
-<!-- FORK -->
-<section class="screen" id="forkscreen">
-  <div class="topbar"><div class="aimline">The halo is gone. The longing for it is not.</div><button class="qbtn" data-help="forkscreen">?</button></div>
-  <div class="band"><b>1936</b><span>THE LAST AGE</span></div>
-  <p class="orient" id="forkorient">Six ages have passed. Four places want the face now. Pick one, put the face there, and see what comes of it.</p>
-  <svg class="frame" id="forkframe" viewBox="0 0 340 300"></svg>
-  <div id="forkchoose">
-    <div class="veils forks" id="forks"></div>
-    <button class="btn" id="forkcommit" disabled>Put the face there<span class="sub" id="forksub">pick a place first</span></button>
-  </div>
-  <div id="forkresult" class="result" style="display:none">
-    <p class="line" id="forkline"></p>
-    <p class="line" id="forkbenjamin" style="font-style:italic"></p>
-    <button class="btn" id="toverdict">The verdict</button>
-  </div>
-</section>
-
 <!-- END -->
 <section class="screen" id="end">
-  <div class="band"><b>The verdict</b><span>SIX AGES AND 1936</span></div>
+  <div class="band"><b>The verdict</b><span>SIX AGES</span></div>
   <p class="lead" id="lead"></p>
   <div class="rule"></div>
+  <div class="striplab">Your six ages</div>
   <div class="strip" id="endstrip"></div>
+  <div class="striplab">The most a keeper could have done</div>
+  <div class="strip" id="beststrip"></div>
   <div class="vl"><b>What you did</b><span id="vdid"></span></div>
   <div class="vl"><b>What Benjamin says</b><span id="vben"></span></div>
-  <div class="vl"><b>What that means</b><span id="vfork"></span></div>
+  <div class="vl"><b>And then, 1936</b><span id="vepi"></span></div>
   <p class="small" id="vbest"></p>
   <button class="btn" id="again">Play again</button>
   <button class="btn quiet" id="aboutbtn2">About the paper</button>
@@ -179,7 +165,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     <li><b>The halo does not grow back.</b> What you spend is spent. And each age arrives with eyes of its own: the more copying there is in the world, the thinner the halo arrives, whatever you did.</li>
     <li><b>Under the bar,</b> small frames show what the halo would be at each rung this age, yours ringed in red.</li>
     <li><b>The tally.</b> Each age counts the people it moved, and each age has more people than the last, so the late ages weigh more. There is no running total; the verdict at the end sets your six ages against the most a keeper could have done.</li>
-    <li><b>1936:</b> the halo is gone and four places want the face. Pick one. Then the verdict: how many people your face moved, of what was possible, in words, and what Benjamin says about the path you took.</li>
+    <li><b>The verdict:</b> how many people your face moved, of what was possible, in words; your six ages beside the most a keeper could have done; what Benjamin says about the path you took; and his last page, 1936, as a reading.</li>
   </ol>
   <p class="small">Nothing is random. The same choices give the same ages every time, so a second run is a different plan, not a different draw.</p>
   <button class="btn" id="helpback">Back</button>
@@ -190,7 +176,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   <div class="band"><b>About</b><span>THE PAPER AND THE GAME</span></div>
   <div id="abouttext">
 <h3>The game in one line</h3>
-<p>You keep one face through six ages, from the cave to the cinema. Each age brings a new way to copy a face (coins, woodcuts, lithographs, photographs, film), and the old ways stay. Each age you set the veil (how far the face goes, and by what means) and let the age pass; the crowd comes or does not, the halo thins and never grows back, and each age arrives with eyes of its own. In 1936 the halo is gone and four places want the face.</p>
+<p>You keep one face through six ages, from the cave to the cinema. Each age brings a new way to copy a face (coins, woodcuts, lithographs, photographs, film), and the old ways stay. Each age you set the veil (how far the face goes, and by what means) and let the age pass; the crowd comes or does not, the halo thins and never grows back, and each age arrives with eyes of its own. At the end, the verdict: how many people the face moved of what was possible, your six ages beside the most a keeper could have done, and Benjamin's last page as a reading.</p>
 <h3>What the paper argues</h3>
 <p>Walter Benjamin's essay (written in Paris in 1936 and reworked until 1939; this is the third version) says that a work of art has always been copiable, but that technical reproduction (the woodcut, the engraving, lithography, photography, film) is something new: it detaches the work from its here-and-now, the one place and moment it exists in, which is the seat of its authenticity. What a copy cannot carry he calls the <i>aura</i>: "the unique appearance of a distance, however near it may be." The aura, he argues, is not in the object but in the relation between the object and the eyes of its age; and the masses' wish to bring things close, together with the techniques that let them, changes those eyes, so that the aura withers everywhere, not only in the copies. With the aura goes the work's grounding in ritual: art's first use was in cult, and cult value wants the work hidden and unapproachable. Reproduction pushes the other pole, exhibition value, and "with photography, exhibition value begins to drive back cult value along the whole line." What replaces ritual as art's foundation is politics. The essay then reads film through this (the actor tested by the apparatus; the star cult as a halo rebuilt to be sold; the cameraman as a surgeon; the public as a distracted examiner), and ends with the fork: fascism aestheticises politics, giving the masses a face to look at and ending in war; communism answers by politicising art.</p>
 <h3>Mechanism: a toy</h3>
@@ -198,7 +184,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
 <p><b>It assumes</b> the toy. One face. A halo that is a stock, multiplied by each age's eyes when the age arrives (the world's copying, which this keeper does not control) and by one minus the nearness when the veil is set, and never restored. A table of how many people each veil reaches in each age, and a cut when the face is kept farther than the age's people have learned to want it. What an age is worth: the people it moved, which is how many saw the face, times the halo they saw it with, plus a fifth for merely being seen; and each age has more people than the last (doubling, counted by their square root, so the late masses weigh more without drowning the early ages). Those three numbers are ours, settled by playing the plans against each other: under them, a halo nobody sees moves nobody, showing from the first age is a little worse than opening step by step, opening late is much worse, and the best path opens one step wider as each technique arrives, going to print at the lithograph, where Benjamin dates the turn. The check that ships with the game shows that shape survives being-seen priced at a tenth and at two fifths, the people counted more flatly and more steeply, and eyes that change a third more slowly. The essay has no numbers; every number in the game's config block is ours and is tagged with the passage it was read from.</p>
 <p><b>The paper establishes</b> its claims as an argument, not by evidence: that the aura is a relation of distance; that perception is historically conditioned and that mass reproduction changes it; that with photography exhibition value drives back cult value; that art thereby loses its grounding in ritual and gains one in politics; and that fascism aestheticises politics while communism politicises art. It gives no quantities. The game's best age to open the veil is a property of the toy, consistent with the essay's dating, not a finding of the essay. Your hold is a score under our rules, not a measurement of anything.</p>
 <h3>What is cut</h3>
-<p>The film actor and the apparatus (sections VIII to X) beyond one line at the fork; the cameraman as surgeon (XI); the optical unconscious, slow motion and the close-up (XIII); Dadaism and the shock effect (XIV); reception in distraction and the example of architecture (XV); the Sistine Madonna's own story (footnote 11); Huxley's arithmetic (footnote 21); the preface's Marxian framing; most of the epilogue beyond its last lines.</p>
+<p>The film actor and the apparatus (sections VIII to X) beyond one line in the epilogue; the cameraman as surgeon (XI); the optical unconscious, slow motion and the close-up (XIII); Dadaism and the shock effect (XIV); reception in distraction and the example of architecture (XV); the Sistine Madonna's own story (footnote 11); Huxley's arithmetic (footnote 21); the preface's Marxian framing; most of the epilogue beyond its last lines.</p>
 <h3>The paper</h3>
 <p>Walter Benjamin, "Das Kunstwerk im Zeitalter seiner technischen Reproduzierbarkeit" (Dritte Fassung), in <i>Gesammelte Schriften</i> I.2, ed. Rolf Tiedemann and Hermann Schweppenhäuser (Frankfurt am Main: Suhrkamp, 1974), pp. 471–508. Written 1936–39. No DOI. In English as "The Work of Art in the Age of Its Technological Reproducibility" (third version), in <i>Selected Writings</i>, vol. 4 (Harvard University Press, 2003), and, as "The Work of Art in the Age of Mechanical Reproduction", in <i>Illuminations</i> (1968). The German text is widely available online, for instance at the Internet Archive and zeno.org.</p>
 <p><b>Game built from this paper; the paper is the authority where the two disagree.</b> Fonts: Oswald and Libre Franklin (SIL Open Font License). Nothing in the game is random.</p>
@@ -280,25 +266,10 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     DEMAND_SCALE: 0.15,  // our choice: how fast the crowd falls away when the face is kept farther than the age demands (section III)
     HALO_GONE: 0.03,     // our choice: below this the halo is drawn as gone
 
-    // ---- 1936: the fork. Not scored against the ages; read. haloBack is a printed halo, in ink, not leaf.
-    FORK: [
-      { key: 'vault', label: 'THE VAULT', meaning: 'the one true face, certified, for one buyer',
-        haloBack: 0, reach: 0.01, hold: 0.1,   // footnote 8: authenticity as the collector's fetish
-        line: 'Nobody sees it. It has a certificate now: the one true face, with a price. What was a halo is a label.',
-        benjamin: 'Benjamin: the idea of the authentic original arrived with the copies, and the collector keeps it as a fetish.' },
-      { key: 'studio', label: 'THE STUDIO', meaning: 'a star: the face lit, named, sold',
-        haloBack: 0.6, reach: 0.9, hold: 1.3,  // section X: the "personality" built by film capital outside the studio
-        line: 'The halo is back, in ink. The studio has built a personality around the face and sells it on every wall.',
-        benjamin: 'Benjamin: the star cult is the phony spell of the commodity, a halo rebuilt to be sold.' },
-      { key: 'rally', label: 'THE POSTER', meaning: 'the leader\'s face on every wall and over the square',
-        haloBack: 1, reach: 1, hold: 2, war: true, // epilogue: aestheticising politics; the mass given expression, not rights; war
-        line: 'The halo is back, enormous, printed in red and black on every wall, and the square is full. The people are given the face to look at instead of anything to own.',
-        benjamin: 'Benjamin: this is politics made beautiful, and it ends in war. "Let art be made, though the world perish."' },
-      { key: 'newsreel', label: 'THE NEWSREEL', meaning: 'the people film themselves; the face is one of a million',
-        haloBack: 0, reach: 1, hold: 1,        // section X: everyone has a claim to be filmed; section XIII; the epilogue's last line
-        line: 'No halo. The face is one among the people\'s own faces, and anyone can be in the picture.',
-        benjamin: 'Benjamin: this is art made political, his answer to the rally.' }
-    ]
+    // ---- 1936: the epilogue, read, not played. The essay's last pages (section X on the star, footnote 8 on the collector,
+    // the epilogue on aestheticised politics and war). The first version staged this as a fork with four places; it was a
+    // reading dressed as a choice, with nothing at stake, and was cut (memo, section 22). What stays is Benjamin's sentence.
+    EPILOGUE: 'The halo is gone; the longing for it is not. Where that longing is served, Benjamin says what comes of it: the collector\'s certificate on a face nobody sees; the film star\'s "personality", a halo rebuilt to be sold; and the leader\'s face on every wall and over a square full of people, which is politics made beautiful, and it ends in war. "Let art be made, though the world perish."'
   };
 
   // ---- words (no decimals on screen)
@@ -341,7 +312,6 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     cfg = cfg || CONFIG;
     return { byHalo: weight * reach * haloSeen, bySeen: weight * reach * cfg.W_SEEN, moved: weight * reach * (haloSeen + cfg.W_SEEN) };
   }
-  function holdOf(cult, reach, cfg) { return movedOf(1, reach, cult, cfg).moved; }   // kept for the fork's reading; not used for the ages
   // The most this age could move: its widest allowed reach, with the halo as it arrived. The bar under the picture is drawn against this,
   // so it answers "of what this age could do, how much did you?"; the ages' different sizes show up only in the tally.
   function ageMax(i, haloSeen, cfg) {
@@ -353,10 +323,10 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
 
   function newGame(cfg) {
     cfg = cfg || CONFIG;
-    return { cfg: cfg, age: 0, halo: 1, arrived: false, haloBefore: 1, choice: null, results: [], fork: null, over: false };
+    return { cfg: cfg, age: 0, halo: 1, arrived: false, haloBefore: 1, choice: null, results: [], over: false };
   }
   function currentAge(s) { return s.cfg.AGES[s.age]; }
-  function isFork(s) { return s.age >= s.cfg.AGES.length && !s.fork; }
+  function isOver(s) { return s.age >= s.cfg.AGES.length; }
 
   // The age arrives: the world's eyes act on the halo before the keeper does anything.
   function arrive(s) {
@@ -415,14 +385,8 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   function next(s) {
     if (s.choice === null) throw new Error('commit first');
     s.age += 1; s.arrived = false; s.choice = null;
+    if (s.age >= s.cfg.AGES.length) s.over = true;
     return s;
-  }
-  function fork(s, k) {
-    if (!isFork(s)) throw new Error('not at the fork');
-    const f = s.cfg.FORK[k];
-    s.fork = { key: f.key, label: f.label, haloBack: f.haloBack, reach: f.reach, hold: f.hold, war: !!f.war, line: f.line, benjamin: f.benjamin };
-    s.over = true;
-    return s.fork;
   }
 
   // ---- scoring and the verdict
@@ -493,7 +457,8 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
       lead: 'Over six ages your face moved ' + fractionWords(f) + ' of the people it could have moved.',
       did: pathWords(s) + ' ' + readingOfPath + ' ' + bestPathWords(best, s.cfg),
       benjamin: 'The halo was never in the face. It was the distance between the face and the people, and the age sets the distance. Hide the face and the halo still goes, because the people\'s eyes have changed; show it early and the age cannot yet carry it far. Once the copies are everywhere, the face belongs to politics.',
-      fork: s.fork ? (s.fork.line + ' ' + s.fork.benjamin) : '',
+      epilogue: s.cfg.EPILOGUE,
+      bestResults: best.state.results,
       bestOpen: bestOpen, printed: o.printed, lifted: o.lifted
     };
   }
@@ -524,7 +489,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     return c;
   }
 
-  const api = { CONFIG, newGame, currentAge, isFork, arrive, arrivalLine, options, commit, next, fork, verdict, totalHold, maxHold, bestSchedule, runSchedule, heuristics, withConfig, reachAt, haloAfterVeil, holdOf, movedOf, ageWeights, ageMax, movedScale, bestPathWords, haloWords, fractionWords, openedAt };
+  const api = { CONFIG, newGame, currentAge, isOver, arrive, arrivalLine, options, commit, next, verdict, totalHold, maxHold, bestSchedule, runSchedule, heuristics, withConfig, reachAt, haloAfterVeil, movedOf, ageWeights, ageMax, movedScale, bestPathWords, haloWords, fractionWords, openedAt };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.VEIL = api;
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -667,7 +632,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   function thumb(tech, halo, haloKind, variant) { const u = uid(); return `<svg viewBox="0 0 200 230" preserveAspectRatio="xMidYMid slice">${defs(u)}<rect width="200" height="230" fill="${TECH[tech].bg}"/>${faceMarkup(tech, u, halo, variant || 0, haloKind)}</svg>`; }
 
   // ---------- state and screens
-  let S = M.newGame(); let picked = null; let forkPicked = null; let lastScreen = 'start';
+  let S = M.newGame(); let picked = null; let lastScreen = 'start';
   let copiesMade = []; // {tech, count} per age that printed; presentation only, the counts follow reach
   const lastN = () => S.results.length ? C.VEILS[S.results[S.results.length - 1].veil].n : 0; // where the keeper left the curtains
   function show(id) { document.querySelectorAll('.screen').forEach(e => e.classList.remove('on')); $(id).classList.add('on'); window.scrollTo(0, 0); }
@@ -728,7 +693,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     $('holdwords').textContent = (r.ofAge < 0.03 ? 'hardly anyone' : M.fractionWords(r.ofAge) + ' of what this age could move') + (r.ofAge < 0.03 ? '' : ', ' + how);
     $('hold').innerHTML = `<rect x="0" y="0" width="${gold}" height="20" fill="${GOLD}"/><rect x="${gold}" y="0" width="${red}" height="20" fill="${RED}"/>`;
     $('cfrow').innerHTML = r.counterfactual.filter(c => c.allowed).map(c => `<div class="c${c.index === picked ? ' me' : ''}">${thumb(a.technique, c.halo)}<span>${C.VEILS[c.index].label.replace(/^(IN|ON) /, '')}</span></div>`).join('');
-    $('nextage').textContent = S.age === C.AGES.length - 1 ? 'On to 1936' : 'Next age';
+    $('nextage').textContent = S.age === C.AGES.length - 1 ? 'The verdict' : 'Next age';
     renderStrip($('strip'), S);
     setTimeout(() => { $('result').style.display = 'block'; }, 700);
   }
@@ -745,45 +710,15 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   }
   function nextAge() {
     M.next(S);
-    if (M.isFork(S)) renderFork(); else renderAge();
-  }
-  // ---------- 1936
-  function renderFork() {
-    forkPicked = null;
-    drawFrame($('forkframe'), 'poster', 0, 0.75, 0);
-    $('forks').innerHTML = C.FORK.map((f, i) => `<button class="veil" data-i="${i}"><span class="k">${f.label}</span><span class="w">${f.meaning}</span></button>`).join('');
-    $('forks').querySelectorAll('.veil').forEach(b => b.addEventListener('click', () => { forkPicked = +b.dataset.i; $('forks').querySelectorAll('.veil').forEach(x => x.classList.toggle('chosen', +x.dataset.i === forkPicked)); $('forkcommit').disabled = false; $('forksub').textContent = C.FORK[forkPicked].label.toLowerCase() + ': ' + C.FORK[forkPicked].meaning; }));
-    $('forkcommit').disabled = true; $('forksub').textContent = 'pick a place first';
-    $('forkchoose').style.display = 'block'; $('forkresult').style.display = 'none';
-    show('forkscreen');
-  }
-  function commitFork() {
-    if (forkPicked === null) return;
-    const f = M.fork(S, forkPicked);
-    $('forkchoose').style.display = 'none';
-    const svg = $('forkframe');
-    if (f.key === 'vault') {
-      drawFrame(svg, 'icon', 0, 0, 0.02, { after: `<g transform="translate(200 40) rotate(6)"><rect x="0" y="0" width="118" height="64" fill="${CREAM}" stroke="${INK}" stroke-width="3"/><text x="59" y="26" text-anchor="middle" font-family="Oswald,sans-serif" font-size="15" letter-spacing="2" fill="${INK}">CERTIFIED</text><text x="59" y="48" text-anchor="middle" font-family="Oswald,sans-serif" font-size="13" letter-spacing="1" fill="${RED}">THE ONE TRUE FACE</text><circle cx="104" cy="52" r="9" fill="${RED}"/></g>` });
-    } else if (f.key === 'studio') {
-      drawFrame(svg, 'halftone', f.haloBack, 0.9, f.reach, { haloKind: 'ink', before: `<text x="170" y="34" text-anchor="middle" font-family="Oswald,sans-serif" font-weight="700" font-size="30" letter-spacing="8" fill="${RED}">THE FACE</text>` });
-    } else if (f.key === 'rally') {
-      drawFrame(svg, 'poster', f.haloBack, 1, f.reach, { haloKind: 'ink', after: `<g id="warover" opacity="0"><rect width="340" height="300" fill="${INK}" opacity=".88"/><polygon points="0,300 340,0 340,70 0,300" fill="${RED}"/><text x="170" y="150" text-anchor="middle" font-family="Oswald,sans-serif" font-weight="700" font-size="64" letter-spacing="10" fill="${CREAM}">WAR</text><text x="170" y="190" text-anchor="middle" font-family="Franklin,sans-serif" font-style="italic" font-size="15" fill="${CREAM}">let art be made, though the world perish</text></g>` });
-      setTimeout(() => { const w = svg.querySelector('#warover'); if (w) w.setAttribute('opacity', '1'); }, 1800);
-    } else {
-      const u = uid(); let grid = `<rect width="340" height="300" fill="#111"/><rect x="34" y="0" width="272" height="300" fill="#8E8A82"/>`;
-      for (let i = 0; i < 12; i++) { const x = 40 + (i % 4) * 66, y = 6 + Math.floor(i / 4) * 98; const uu = uid(); grid += `<g transform="translate(${x} ${y}) scale(.4)">${defs(uu)}<rect width="150" height="230" fill="#8E8A82"/><g transform="translate(-25 0)">${faceMarkup('film', uu, 0, i, null)}</g></g>`; }
-      grid += filmFrame(u);
-      svg.innerHTML = defs(u) + grid;
-    }
-    $('forkline').textContent = f.line; $('forkbenjamin').textContent = f.benjamin;
-    setTimeout(() => { $('forkresult').style.display = 'block'; }, 700);
+    if (M.isOver(S)) renderEnd(); else renderAge();
   }
   // ---------- the verdict
   function renderEnd() {
     const v = M.verdict(S);
     $('lead').textContent = v.lead;
     renderStrip($('endstrip'), S);
-    $('vdid').textContent = v.did; $('vben').textContent = v.benjamin; $('vfork').textContent = v.fork;
+    renderStrip($('beststrip'), { results: v.bestResults, age: C.AGES.length });
+    $('vdid').textContent = v.did; $('vben').textContent = v.benjamin; $('vepi').textContent = v.epilogue;
     $('vbest').textContent = `Under this game's assumptions, that is. A second run is a different plan: open earlier, open later, or never.`
     show('end');
   }
@@ -793,8 +728,6 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   $('again').addEventListener('click', () => { S = M.newGame(); copiesMade = []; renderAge(); });
   $('commit').addEventListener('click', commitAge);
   $('nextage').addEventListener('click', nextAge);
-  $('forkcommit').addEventListener('click', commitFork);
-  $('toverdict').addEventListener('click', renderEnd);
   $('howto').addEventListener('click', () => { lastScreen = 'start'; show('help'); });
   document.querySelectorAll('.qbtn').forEach(b => b.addEventListener('click', () => { lastScreen = b.dataset.help; show('help'); }));
   $('helpback').addEventListener('click', () => show(lastScreen));
