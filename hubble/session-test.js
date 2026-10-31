@@ -25,25 +25,35 @@ const L = []; const say = s => { L.push(s); console.log(s); };
     if (n === 0) await shot('sky-selected');
     const btn = await page.$('#skypanel button.primary');
     if (!btn || (await btn.innerText()).toLowerCase().includes('over')) { say('  cannot point: ' + (btn ? await btn.innerText() : 'no button')); continue; }
-    await btn.click(); await page.waitForTimeout(900); if (n === 0) { await shot('eyepiece-demo'); await page.waitForTimeout(2200); }
+    await btn.click(); await page.waitForTimeout(1300);
+    if (n === 0) { // night one: the eyepiece assembles in three pictures
+      await shot('eyepiece-stage1'); say('  eye stage 1: ' + await page.$eval('#eyeorient', e => e.innerText) + ' | ' + await page.$eval('#eyestage button', e => e.innerText));
+      await page.click('#eyestage button'); await page.waitForTimeout(300); await shot('eyepiece-stage2'); say('  eye stage 2: ' + await page.$eval('#eyestage button', e => e.innerText));
+      await page.click('#eyestage button'); await page.waitForTimeout(300); await shot('eyepiece-stage3'); say('  eye stage 3: orient "' + await page.$eval('#eyeorient', e => e.innerText) + '", READ enabled ' + !(await page.$eval('#eyeread', e => e.disabled)));
+    }
     // eyepiece: scan the dial until the ring glows (what a player does by eye)
     // a player's judgement: the true distance times a small error (the dial is logarithmic between 0.02 and 3.0)
     const rTrue = await page.evaluate(i => window.HUBBLE.CONFIG.NEBULAE[i].r, idx);
     const rRead = rTrue * [0.9, 1.1, 0.95, 0.85, 1.05, 0.9, 1.0][n % 7];
     await setRange('#eyedial', Math.round(1000 * (Math.log10(rRead) - Math.log10(0.02)) / (Math.log10(3.0) - Math.log10(0.02))));
     const eyeTxt = await page.$eval('#eyereadout', e => e.innerText);
-    if (/match|fainter|brighter/.test(eyeTxt)) say('  !! eyepiece readout grades the player: ' + eyeTxt);
+    if (/match|fainter|brighter|near|close/.test(eyeTxt)) say('  !! eyepiece readout grades the player: ' + eyeTxt);
     if (await page.$eval('#eyeread', e => e.disabled)) say('  !! READ THE DISTANCE disabled after the demonstration');
     say(`  eyepiece: ${eyeTxt}`);
     if (n === 0) { await shot('eyepiece'); await noScroll(); }
     if (n === 1) { await page.click('.screen.on .qbtn'); await page.waitForTimeout(200); await shot('help'); await page.click('#helpback'); await page.waitForTimeout(200); say('  help opened and returned to ' + await page.$eval('.screen.on', e => e.id)); }
-    await page.click('#eyeread'); await page.waitForTimeout(900); if (n === 0) { await shot('spectrograph-demo'); await page.waitForTimeout(2400); }
+    await page.click('#eyeread'); await page.waitForTimeout(400);
+    if (n === 0) { // night one: the spectrograph assembles in three pictures
+      await shot('spectrograph-stage1'); say('  spec stage 1: ' + await page.$eval('#specorient', e => e.innerText));
+      await page.click('#specstage button'); await page.waitForTimeout(1200); await shot('spectrograph-stage2'); say('  spec stage 2: ' + await page.$eval('#specorient', e => e.innerText));
+      await page.click('#specstage button'); await page.waitForTimeout(300); await shot('spectrograph-stage3'); say('  spec stage 3: ' + await page.$eval('#specorient', e => e.innerText) + ' | readout ' + await page.$eval('#specreadout', e => e.innerText) + ' | READ enabled ' + !(await page.$eval('#specread', e => e.disabled)));
+    }
     const vTrue = await page.evaluate(i => window.HUBBLE.CONFIG.NEBULAE[i].v, idx);
     await setRange('#specdial', Math.round((vTrue + [60, -40, 30, 120, -80, 50, 0][n % 7]) / 5) * 5);
     const specTxt = await page.$eval('#specreadout', e => e.innerText);
-    if (/on the bars/.test(specTxt)) say('  !! spectrograph readout grades the player: ' + specTxt);
+    if (/on the bars|match|close/.test(specTxt)) say('  !! spectrograph readout grades the player: ' + specTxt);
     if (await page.$eval('#specread', e => e.disabled)) say('  !! READ THE SPEED disabled after the demonstration');
-    const glowing = await page.$$eval('#specsvg .glow, #eyesvg .glow', g => g.length);
+    const glowing = await page.$$eval('#specsvg .glow, #eyesvg .glow, #specsvg [stroke-dasharray="3 3"]', g => g.length);
     if (glowing) say('  !! glow visible during play');
     say(`  spectrograph: ${specTxt}`);
     if (n === 0 || idx === 22) { await shot(idx === 22 ? 'spectrograph-virgo' : 'spectrograph'); await noScroll(); }

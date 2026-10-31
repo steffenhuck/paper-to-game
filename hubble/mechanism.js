@@ -58,8 +58,8 @@ const CONFIG = {
   COST: [ { maxMs: 17.95, nights: 1 }, { maxMs: 19.45, nights: 2 }, { maxMs: 99, nights: 3 } ], // our choice: exposure grows with faintness
   VIRGO_COST: 3,                        // our choice: the Virgo four, the farthest, cost most (p. 173: the far ones need Humason's programme)
   RATE_MAX: 1000,                       // our choice: the rate dial runs from 0 (no relation) to 1000 km/s per 10^6 parsecs
-  EYE_TOL_LOG: 0.06,                    // our choice: ±15% in distance (0.06 dex); used only by the night-one demonstration's glow. Hubble's own errors were larger
-  SPEC_TOL_KMS: 40,                     // our choice: ±40 km/s (about 0.5 Å at H and K); used only by the night-one demonstration's glow
+  EYE_TOL_LOG: 0.06,                    // our choice: the reading error assumed for the heuristics (memo 17), ±15% in distance; nothing on screen uses it
+  SPEC_TOL_KMS: 40,                     // our choice: the reading error assumed for the heuristics, ±40 km/s (about 0.5 Å at H and K); nothing on screen uses it
   WITHIN_HUBBLE_LO: 415, WITHIN_HUBBLE_HI: 573, // p. 170: the span of his two solutions with their errors (465-50 to 513+60)
   SEED_MAX: 9999,                       // our choice: seeds vary graininess and lamp flicker only; the sky is the paper's
 };
@@ -159,7 +159,7 @@ function setRate(state, K) { state.rate = Math.max(0, Math.min(CONFIG.RATE_MAX, 
 function predictHumason(state) { return state.rate * CONFIG.HUMASON.r_cluster; }
 function commitPrediction(state, v) { state.prediction = v; return v; }
 
-// Match tests, used only by the night-one demonstrations' glow. During play nothing judges a reading; the reading is the player's.
+// Match tests, kept for the author and the calibration; the game never calls them. The reading is the player's.
 function eyeMatch(neb, rTrial) { return Math.abs(Math.log10(rTrial / neb.r)) <= CONFIG.EYE_TOL_LOG; }
 function specMatch(neb, vTrial) { return Math.abs(vTrial - neb.v) <= CONFIG.SPEC_TOL_KMS; }
 
@@ -216,6 +216,12 @@ function speedWords(v) {
   const a = Math.abs(roundV(v));
   if (a < 50) return 'hardly moving';
   return `about ${a.toLocaleString('en')} km/s ${v >= 0 ? 'going away' : 'coming toward us'}`;
+}
+// The measuring screw's readout: from zero at the lamp's lines, as a speed with direction
+function screwWords(v) {
+  const a = Math.abs(roundV(v));
+  if (a === 0) return 'zero';
+  return `about ${a.toLocaleString('en')} km/s, ${v > 0 ? 'going away' : 'coming toward us'}`;
 }
 function nightWords(o, state) {
   const neb = CONFIG.NEBULAE[o.idx];
@@ -284,6 +290,6 @@ function heuristics(seed) {
 const API = { CONFIG, makeRng, solarTerm, correctedVelocity, distanceFromMag, magFromDistance, brightestStarMag, relBrightness,
   shiftedLambda, velocityFromShift, lineProfile, cost, fitK, correlation, solveHubble, newGame, canObserve, affordable, nightsOver,
   observe, platePoints, takeOutSun, setRate, predictHumason, commitPrediction, eyeMatch, specMatch, plateWords, nightWords, rateWords,
-  verdict, heuristics, fmtK, roundV, distanceWords, speedWords, hubblePoints, comparisonWords };
+  verdict, heuristics, fmtK, roundV, distanceWords, speedWords, screwWords, hubblePoints, comparisonWords };
 if (typeof module !== 'undefined' && module.exports) module.exports = API; else root.HUBBLE = API;
 })(typeof window !== 'undefined' ? window : globalThis);

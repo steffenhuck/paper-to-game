@@ -2,42 +2,52 @@
   shot sky-night1
 tap 5: NGC 224 (M31) | Bright. One night. | POINT THE TELESCOPE
   shot sky-selected
-  shot eyepiece-demo
-  eyepiece: about a quarter of a million parsecs
+  shot eyepiece-stage1
+  eye stage 1: Through the eyepiece the nebula breaks into stars. The ringed one is its brightest. | ADD A COMPARISON STAR
+  shot eyepiece-stage2
+  eye stage 2: TO THE DIAL
+  shot eyepiece-stage3
+  eye stage 3: orient "", READ enabled true
+  eyepiece: comparison star at about a quarter of a million parsecs
   shot eyepiece
-  shot spectrograph-demo
-  spectrograph: about 150 km/s coming toward us
+  shot spectrograph-stage1
+  spec stage 1: Calcium, from a lamp in the lab. The lamp does not move, so this is where calcium's lines sit at rest.
+  shot spectrograph-stage2
+  spec stage 2: The same calcium, in the nebula's light. The bars have moved.
+  shot spectrograph-stage3
+  spec stage 3: Turn the measuring screw. The readout is how far the crosshairs have travelled, as a speed. | readout zero | READ enabled true
+  spectrograph: about 150 km/s, coming toward us
   shot spectrograph
   plate: NGC 224 (M31): about 150 km/s coming toward us, about a quarter of a million parsecs out. 11 nights left. // One nebula. Nothing to compare it with yet.
   now on sky; lamps lit 11
 tap 7: NGC 4736 (M94) | Bright. One night. | POINT THE TELESCOPE
-  eyepiece: about half a million parsecs
+  eyepiece: comparison star at about half a million parsecs
   shot help
   help opened and returned to eye
-  spectrograph: about 250 km/s going away
+  spectrograph: about 250 km/s, going away
   plate: NGC 4736 (M94): about 250 km/s going away, about half a million parsecs out. 10 nights left. // Two nebulae. Too few to see anything.
   now on sky; lamps lit 10
 tap 11: NGC 3031 (M81) | Faint. Two nights. | POINT THE TELESCOPE
-  eyepiece: about a million parsecs
-  spectrograph: hardly moving
+  eyepiece: comparison star at about a million parsecs
+  spectrograph: zero
   plate: NGC 3031 (M81): hardly moving, about a million parsecs out. 8 nights left. // Three nebulae, all nearby. A cloud so far.
   shot plate-near
   now on sky; lamps lit 8
 tap 22: NGC 4486 (M87), VIRGO | Very faint and far. Three nights. | POINT THE TELESCOPE
-  eyepiece: about two million parsecs
-  spectrograph: about 900 km/s going away
+  eyepiece: comparison star at about two million parsecs
+  spectrograph: about 900 km/s, going away
   shot spectrograph-virgo
   plate: NGC 4486 (M87), Virgo: about 900 km/s going away, about two million parsecs out. 5 nights left. // Your farthest dot is also your highest. The others rise toward it.
   shot plate-first-far
   now on sky; lamps lit 5
 tap 19: NGC 4151 | Very faint and far. Three nights. | POINT THE TELESCOPE
-  eyepiece: about two million parsecs
-  spectrograph: about 900 km/s going away
+  eyepiece: comparison star at about two million parsecs
+  spectrograph: about 900 km/s, going away
   plate: NGC 4151: about 900 km/s going away, about two million parsecs out. 2 nights left. // The dots rise from left to right, with some scatter.
   now on sky; lamps lit 2
 tap 16: NGC 5055 (M63) | Faint. Two nights. | POINT THE TELESCOPE
-  eyepiece: about a million parsecs
-  spectrograph: about 500 km/s going away
+  eyepiece: comparison star at about a million parsecs
+  spectrograph: about 500 km/s, going away
   plate: NGC 5055 (M63): about 500 km/s going away, about a million parsecs out. No nights left. // The dots rise from left to right, with some scatter.
   now on sun; lamps lit 2
 tap 4: No nights left.The telescope goes dark. Take your plate to the desk.The nights are over
@@ -51,10 +61,10 @@ rate: about 470 km/s for every million parsecs
 humason: about 3,300 km/s going away
   shot humason-predict
   shot humason-spectrum
-humason spectrum: about 3,800 km/s going away · on the bars
+humason spectrum: about 3,800 km/s, going away
   shot end
 VERDICT: The farther, the faster. // You read 6 nebulae, the farthest about two million parsecs out. Set beside Hubble's plate, your dots sat near his. |  | You set the rate at about 470 km/s for every million parsecs. That is within Hubble's two solutions. |  | Humason's nebula, seven million parsecs out: you said about 3,300 km/s; the spectrograph said about 3,800. Close. Hubble's own rate would have said about 3,500. |  | Your plate shows it: the far ones are the fast ones. Your own dots, on their own, fit a rate of about 520. |  | The farther a nebula, the faster it recedes, about 500 km/s for every million parsecs on Hubble's distances. The ones that seemed to approach were mostly the Sun's own motion. Hubble stopped there; others would call it the expanding universe.
   shot about
 about returned to end
-new game: on sky, lamps 12, g1560
+new game: on sky, lamps 12, g5770
 ERRORS: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED

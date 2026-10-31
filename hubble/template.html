@@ -26,6 +26,7 @@ a{color:var(--brass-2)}
 h1.title{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--brass-2);font-size:34px;line-height:1.1;text-align:center;margin:10px 0 6px}
 h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--brass-2);font-size:15px;margin:14px 0 6px;text-align:center}
 .sub{text-align:center;color:var(--star-dim);font-size:15px;margin:0 0 10px}
+.lede{color:var(--star);font-size:16px;line-height:1.45;margin:10px 2px 0}
 .aim{border-top:1px solid var(--brass-dark);border-bottom:1px solid var(--brass-dark);padding:12px 6px;margin:16px 0;text-align:center;font-size:18px;line-height:1.35}
 .mono{font-family:var(--mono)}
 /* buttons: instrument plates */
@@ -86,7 +87,7 @@ input[type=range]::-moz-range-thumb{width:44px;height:44px;border-radius:50%;bac
 <section id="start" class="screen on">
   <div class="glass" style="margin-top:14px"><svg id="startsky" viewBox="0 0 380 150" width="100%" height="150"></svg></div>
   <h1 class="title">Hubble's<br>Twelve Nights</h1>
-  <p class="sub">Mount Wilson, 1929. The 100-inch is yours.</p>
+  <p class="lede">You have twelve nights on the 100-inch. Each night you swing the telescope onto one nebula and expose a plate. At the eyepiece you set a comparison star beside its brightest star and bring it nearer or push it farther until your eye is satisfied. At the desk you put the spectrum under the measuring microscope and turn the screw until the crosshairs sit where you say they belong. Then you pencil one dot on your chart. Bright nebulae take a night; faint ones, two or three.</p>
   <div class="aim">Find out whether the far nebulae drift at random or whether their speed is tied to their distance. Twelve nights. Then say how fast.</div>
   <button class="btn primary" id="begin">Begin</button>
   <div class="row2"><button class="btn quiet" data-go="help">How to play</button><button class="btn quiet" data-go="about">About</button></div>
@@ -108,10 +109,11 @@ input[type=range]::-moz-range-thumb{width:44px;height:44px;border-radius:50%;bac
 <section id="eye" class="screen">
   <div class="bar"><div class="aimtext" id="eyebar">The eyepiece</div><button class="qbtn" data-help="eye">?</button></div>
   <h2 id="eyetitle">The eyepiece</h2>
-  <div class="orient" id="eyeorient">Left: this nebula's brightest star. Right: a comparison star, as bright as a brightest star would look from the dial's distance. Turn the dial until the halves match.</div>
+  <div class="orient" id="eyeorient"></div>
   <div class="glass"><svg id="eyesvg" viewBox="0 0 380 330" width="100%" style="aspect-ratio:380/330"></svg></div>
-  <div class="dial"><label>Comparison star's distance</label><input type="range" id="eyedial" min="0" max="1000" value="0"></div>
-  <div class="readout" id="eyereadout">—</div>
+  <div id="eyestage"></div>
+  <div class="dial" id="eyedialwrap"><label>Nearer ← comparison star → farther</label><input type="range" id="eyedial" min="0" max="1000" value="1000"></div>
+  <div class="readout" id="eyereadout"></div>
   <button class="btn primary" id="eyeread">Read the distance</button>
 </section>
 
@@ -119,10 +121,11 @@ input[type=range]::-moz-range-thumb{width:44px;height:44px;border-radius:50%;bac
 <section id="spec" class="screen">
   <div class="bar"><div class="aimtext" id="specbar">The spectrograph</div><button class="qbtn" data-help="spec">?</button></div>
   <h2 id="spectitle">The spectrograph</h2>
-  <div class="orient" id="specorient">The nebula's light spread into a strip. The two dark bars are calcium. The amber bracket is where a lamp in the lab puts them; the faint outline is where they would sit if the nebula stood still. Slide the bracket onto the dark bars.</div>
+  <div class="orient" id="specorient"></div>
   <div class="glass"><svg id="specsvg" viewBox="0 0 380 200" width="100%" style="aspect-ratio:380/200"></svg></div>
-  <div class="dial"><label>Bracket slide</label><input type="range" id="specdial" min="-400" max="1300" value="0" step="5"></div>
-  <div class="readout" id="specreadout">—</div>
+  <div id="specstage"></div>
+  <div class="dial" id="specdialwrap"><label>Measuring screw</label><input type="range" id="specdial" min="-400" max="1300" value="0" step="5"></div>
+  <div class="readout" id="specreadout"></div>
   <button class="btn primary" id="specread">Read the speed</button>
 </section>
 
@@ -173,7 +176,7 @@ input[type=range]::-moz-range-thumb{width:44px;height:44px;border-radius:50%;bac
 <section id="humspec" class="screen">
   <div class="bar"><div class="aimtext">Humason develops the plate.</div><button class="qbtn" data-help="spec">?</button></div>
   <h2>NGC 7619</h2>
-  <div class="orient" id="humspecorient">The faintest spectrum ever taken. Watch the bracket find the bars.</div>
+  <div class="orient" id="humspecorient">The faintest spectrum ever taken. Watch the crosshairs find the bars.</div>
   <div class="glass"><svg id="humspecsvg" viewBox="0 0 380 200" width="100%" style="aspect-ratio:380/200"></svg></div>
   <div class="readout red" id="humspecreadout">exposing…</div>
   <button class="btn primary" id="toverdict" disabled>The verdict</button>
@@ -199,8 +202,8 @@ input[type=range]::-moz-range-thumb{width:44px;height:44px;border-radius:50%;bac
   <h2>How to play</h2>
   <div class="aim">Find out whether the far nebulae drift at random or whether their speed is tied to their distance. Twelve nights. Then say how fast.</div>
   <p><b>The sky.</b> The smudges are nebulae, the faint far-off ones beyond our own stars. Tap one, and the card below tells you its name and what it costs: bright ones one night, faint ones two or three. You have twelve nights, the lamps along the top. Then tap <i>Point the telescope</i>.</p>
-  <p><b>The eyepiece.</b> A round field split down the middle. On the left, the nebula's brightest star; on the right, a comparison star, shown as bright as a brightest star would look from the distance on the dial. The brightest stars of all such nebulae are about equally bright in truth, so when the two halves match, the dial's distance is the nebula's. Turn the dial until the halves match, by your own eye; the instrument does not tell you. Tap <i>Read the distance</i>.</p>
-  <p><b>The spectrograph.</b> The nebula's light is spread out into a strip, and two dark bars cross it. They belong to calcium. The amber bracket shows where those bars sit for a lamp in the laboratory, and the faint outline where they would sit if the nebula stood still. Slide the bracket onto the dark bars, by your own eye. How far you slid is the speed: to the right (redder), the nebula is moving away; to the left, it is coming toward us. Tap <i>Read the speed</i>.</p>
+  <p><b>The eyepiece.</b> Through the eyepiece the nebula breaks into stars; its brightest is ringed in amber. The brightest star of any such nebula is about as bright as any other's, in truth: it looks faint only because it is far. On the right half of the field sits a comparison star just like it, which the dial brings nearer (it brightens and grows) or pushes farther away (it fades and shrinks). Put the comparison star where it looks as bright as the nebula's brightest star, by your own eye; the readout says how far away you have put it, and that is your reading of the nebula's distance. Tap <i>Read the distance</i>.</p>
+  <p><b>The spectrograph.</b> A sandwich of three strips. Above and below, the light of a calcium lamp in the laboratory, with its two amber lines: the lamp does not move, so that is where calcium's lines sit at rest. Between them, the nebula's light, with the same two calcium lines as dark bars. If the nebula is moving away, its bars sit to the right of the amber lines (redder); if it is coming toward us, to the left. Turn the measuring screw: the two crosshairs start on the amber lines and travel across; the readout is how far they have travelled, as a speed. Put the crosshairs on the dark bars, by your own eye, and tap <i>Read the speed</i>.</p>
   <p><b>The plate.</b> Each nebula becomes a dot: distance across, speed up. Red is going away, blue is coming toward us. After your dot lands, a faint hollow dot shows where Hubble's own table puts that nebula. Watch the shape the dots make, and choose your next nebula accordingly.</p>
   <p><b>The Sun.</b> When the nights are over, one tap takes out the Sun's own motion through space, which Hubble worked out at the same time. The dots move.</p>
   <p><b>The rate.</b> Swing a line through your dots and commit. Then say how fast a nebula far beyond your plate is going, and watch its spectrum come in.</p>
@@ -295,11 +298,10 @@ function drawSkyPanel() {
 }
 function showSky() { drawLamps(); drawSky(); drawSkyPanel(); drawPlate($('miniplate'), M.platePoints(state), { w: 380, h: 150, mini: true, ghosts: M.hubblePoints(state) }); $('miniwords').textContent = state.observed.length ? M.plateWords(state) : 'The plate: distance across, speed up. Empty so far.'; go('sky'); }
 
-// ---------------------------------------------------------------- the eyepiece: one round field split down the middle
+// ---------------------------------------------------------------- the eyepiece: one round field; the comparison star moves
 const EYE = { w: 380, h: 330, cx: 190, cy: 172, R: 142 };
-let eyeField = null, demoing = false;
-const EYE_ORIENT = "Left: this nebula's brightest star. Right: a comparison star, as bright as a brightest star would look from the dial's distance. Turn the dial until the halves match.";
-const SPEC_ORIENT = "The nebula's light spread into a strip. The two dark bars are calcium. The amber bracket is where a lamp in the lab puts them; the faint outline is where they would sit if the nebula stood still. Slide the bracket onto the dark bars.";
+const EYE_ORIENT = "Through the eyepiece the nebula breaks into stars. The brightest star of any such nebula is about as bright as any other's, in truth: it looks faint only because it is far. Beside it, a comparison star just like it, which you can bring nearer or push farther away.";
+let eyeField = null;
 function eyeDialToR(v) { return Math.pow(10, Math.log10(0.02) + (v / 1000) * (Math.log10(3.0) - Math.log10(0.02))); }
 // a star drawn as a core and a halo; both grow with brightness relative to the nebula's brightest star
 function starLook(mag, refMag) { const b = Math.min(6, M.relBrightness(mag, refMag)); const s = Math.sqrt(b); return { core: 3 + 6 * s, halo: 12 + 44 * s, op: Math.max(0.15, Math.min(1, 0.35 + 0.65 * s)) }; }
@@ -310,108 +312,127 @@ function drawBigStar(parent, x, y, look, gradId) {
   return { halo, core, g };
 }
 function setStar(st, look) { st.halo.setAttribute('r', look.halo); st.halo.setAttribute('opacity', look.op); st.core.setAttribute('r', look.core); st.core.setAttribute('opacity', Math.min(1, look.op + 0.3)); }
-function startEye(idx) {
-  pending = { idx }; const n = N[idx]; selected = null;
-  $('eyetitle').textContent = 'The eyepiece · ' + n.name; $('eyebar').textContent = 'Night ' + (C.NIGHTS - state.nightsLeft + 1) + ': how far is it?';
-  const svg = $('eyesvg'); clear(svg); const defs = el('defs', {}, svg);
+// The field. split=false: the nebula alone, centred (night one, picture 1). split=true: nebula left, comparison star right.
+function drawEyeField(idx, split, animate) {
+  const n = N[idx], svg = $('eyesvg'); clear(svg); const defs = el('defs', {}, svg);
   const r = M.makeRng(state.seed * 31 + idx);
   const hg = el('radialGradient', { id: 'eyesvg-halo' }, defs);
   el('stop', { offset: '0%', 'stop-color': '#FFFFFF', 'stop-opacity': 0.9 }, hg); el('stop', { offset: '35%', 'stop-color': '#DCE6F5', 'stop-opacity': 0.45 }, hg); el('stop', { offset: '100%', 'stop-color': '#DCE6F5', 'stop-opacity': 0 }, hg);
-  const clipL = el('clipPath', { id: 'eyesvg-left' }, defs); el('rect', { x: EYE.cx - EYE.R, y: EYE.cy - EYE.R, width: EYE.R, height: 2 * EYE.R }, clipL);
+  const clipL = el('clipPath', { id: 'eyesvg-left' }, defs); el('rect', { x: EYE.cx - EYE.R, y: EYE.cy - EYE.R, width: split ? EYE.R : 2 * EYE.R, height: 2 * EYE.R }, clipL);
   const clipR = el('clipPath', { id: 'eyesvg-right' }, defs); el('rect', { x: EYE.cx, y: EYE.cy - EYE.R, width: EYE.R, height: 2 * EYE.R }, clipR);
   const clipC = el('clipPath', { id: 'eyesvg-circle' }, defs); el('circle', { cx: EYE.cx, cy: EYE.cy, r: EYE.R }, clipC);
-  const field = el('g', { 'clip-path': 'url(#eyesvg-circle)', class: 'focusin' }, svg);
+  const field = el('g', { 'clip-path': 'url(#eyesvg-circle)', class: animate ? 'focusin' : '' }, svg);
   el('circle', { cx: EYE.cx, cy: EYE.cy, r: EYE.R, fill: '#05080F' }, field);
   starField(field, EYE.w, EYE.h, 70, r);
-  const ms = M.brightestStarMag(n);
-  // left half: the nebula's glow and its brightest star, drawn at its true brightness
+  const ms = M.brightestStarMag(n), nx = split ? EYE.cx - 72 : EYE.cx, ny = split ? EYE.cy : EYE.cy;
   const left = el('g', { 'clip-path': 'url(#eyesvg-left)' }, field);
   const ng = el('radialGradient', { id: 'eyesvg-neb' }, defs); el('stop', { offset: '0%', 'stop-color': '#C9D4EE', 'stop-opacity': 0.4 }, ng); el('stop', { offset: '100%', 'stop-color': '#C9D4EE', 'stop-opacity': 0 }, ng);
   const spread = 50 + 50 * Math.max(0, 1 - Math.log10(n.r / 0.03) / 2);
-  el('ellipse', { cx: EYE.cx - 72, cy: EYE.cy + 10, rx: spread, ry: spread * 0.6, fill: 'url(#eyesvg-neb)', transform: `rotate(-25 ${EYE.cx - 72} ${EYE.cy + 10})` }, left);
-  for (let i = 0; i < 14; i++) { const a = r() * 6.283, d = Math.sqrt(r()) * spread * 0.9; const mag = ms + 0.8 + r() * 2.5; const s = starLook(mag, ms); el('circle', { cx: (EYE.cx - 72 + Math.cos(a) * d).toFixed(1), cy: (EYE.cy + 10 + Math.sin(a) * d * 0.6).toFixed(1), r: (s.core * 0.45).toFixed(2), fill: '#E8EEF8', opacity: s.op.toFixed(2) }, left); }
-  const bright = drawBigStar(left, EYE.cx - 72, EYE.cy, starLook(ms, ms), 'eyesvg-halo');
-  // right half: the comparison star, driven by the dial
-  const right = el('g', { 'clip-path': 'url(#eyesvg-right)' }, field);
-  const cmp = drawBigStar(right, EYE.cx + 72, EYE.cy, starLook(M.magFromDistance(eyeDialToR(0)), ms), 'eyesvg-halo');
-  // the divider and the frame
-  el('line', { x1: EYE.cx, x2: EYE.cx, y1: EYE.cy - EYE.R, y2: EYE.cy + EYE.R, stroke: '#B08D57', 'stroke-width': 2 }, svg);
-  const ring = el('circle', { cx: EYE.cx, cy: EYE.cy, r: EYE.R + 5, fill: 'none', stroke: '#F2A33A', 'stroke-width': 3, opacity: 0 }, svg);
+  el('ellipse', { cx: nx, cy: ny + 10, rx: spread, ry: spread * 0.6, fill: 'url(#eyesvg-neb)', transform: `rotate(-25 ${nx} ${ny + 10})` }, left);
+  for (let i = 0; i < 14; i++) { const a = r() * 6.283, d = Math.sqrt(r()) * spread * 0.9; const mag = ms + 0.8 + r() * 2.5; const s = starLook(mag, ms); el('circle', { cx: (nx + Math.cos(a) * d).toFixed(1), cy: (ny + 10 + Math.sin(a) * d * 0.6).toFixed(1), r: (s.core * 0.45).toFixed(2), fill: '#E8EEF8', opacity: s.op.toFixed(2) }, left); }
+  const bright = drawBigStar(left, nx, ny, starLook(ms, ms), 'eyesvg-halo');
+  el('circle', { cx: nx, cy: ny, r: 24, fill: 'none', stroke: '#F2A33A', 'stroke-width': 1.5 }, svg); // the ring: which star is the brightest
+  let cmp = null;
+  if (split) {
+    const right = el('g', { 'clip-path': 'url(#eyesvg-right)' }, field);
+    cmp = drawBigStar(right, EYE.cx + 72, EYE.cy, starLook(M.magFromDistance(eyeDialToR(+$('eyedial').value)), ms), 'eyesvg-halo');
+    el('line', { x1: EYE.cx, x2: EYE.cx, y1: EYE.cy - EYE.R, y2: EYE.cy + EYE.R, stroke: '#B08D57', 'stroke-width': 2 }, svg);
+    txt(svg, EYE.cx - 72, 18, 'brightest star', 'svgtext', 'middle'); txt(svg, EYE.cx + 72, 18, 'comparison star', 'svgtext', 'middle');
+  } else txt(svg, EYE.cx, 18, 'brightest star', 'svgtext', 'middle');
   el('circle', { cx: EYE.cx, cy: EYE.cy, r: EYE.R, fill: 'none', stroke: '#B08D57', 'stroke-width': 3 }, svg);
-  txt(svg, EYE.cx - 72, 18, 'brightest star', 'svgtext', 'middle'); txt(svg, EYE.cx + 72, 18, 'comparison', 'svgtext', 'middle');
-  eyeField = { cmp, bright, ring, ms };
-  $('eyedial').value = 0; updateEye(); go('eye');
-  if (state.observed.length === 0 && !state.demoEye) demoEye(); else { $('eyeorient').textContent = EYE_ORIENT; $('eyedial').disabled = false; $('eyeread').disabled = false; }
+  eyeField = { cmp, bright, ms };
 }
-// Night one only: the eyepiece runs itself once, then hands over the dial
-function demoEye() {
-  state.demoEye = true; demoing = true; const dial = $('eyedial'); dial.disabled = true; $('eyeread').disabled = true;
-  $('eyeorient').textContent = 'Turn the dial until the halves match.';
-  const set = v => { dial.value = v; updateEye(); };
-  tween(1000, e => set(1000 * e), () => tween(900, e => set(1000 - 1000 * e), () => tween(500, e => set(500 * e), () => { demoing = false; updateEye(); dial.disabled = false; $('eyeread').disabled = false; })));
+function stageButton(holder, label, fn) { holder.innerHTML = ''; const b = document.createElement('button'); b.className = 'btn primary'; b.textContent = label; b.onclick = fn; holder.appendChild(b); }
+function eyeControls(show) { $('eyedialwrap').style.display = show ? '' : 'none'; $('eyereadout').style.display = show ? '' : 'none'; $('eyeread').style.display = show ? '' : 'none'; }
+function startEye(idx) {
+  pending = { idx }; const n = N[idx]; selected = null;
+  $('eyetitle').textContent = 'The eyepiece · ' + n.name; $('eyebar').textContent = 'Night ' + (C.NIGHTS - state.nightsLeft + 1) + ': how far is it?';
+  $('eyedial').value = 1000; // the comparison star starts as far as the dial goes; the player brings it nearer
+  $('eyestage').innerHTML = '';
+  if (state.observed.length === 0 && !state.stagedEye) {
+    // Night one: the instrument assembles in three pictures, one tap each
+    state.stagedEye = true; eyeControls(false);
+    drawEyeField(idx, false, true);
+    $('eyeorient').textContent = 'Through the eyepiece the nebula breaks into stars. The ringed one is its brightest.';
+    stageButton($('eyestage'), 'Add a comparison star', () => {
+      drawEyeField(idx, true, false); $('eyeorient').textContent = EYE_ORIENT;
+      stageButton($('eyestage'), 'To the dial', () => { $('eyestage').innerHTML = ''; $('eyeorient').textContent = ''; eyeControls(true); updateEye(); });
+    });
+  } else { drawEyeField(idx, true, true); $('eyeorient').textContent = EYE_ORIENT; eyeControls(true); updateEye(); }
+  go('eye');
 }
 function updateEye() {
-  // During play the instrument never grades: the readout is the dial's distance in words, and the reading is wherever the dial sits.
-  const n = N[pending.idx], rTrial = eyeDialToR(+$('eyedial').value);
-  const magTrial = M.magFromDistance(rTrial); setStar(eyeField.cmp, starLook(magTrial, eyeField.ms));
-  const ok = demoing && M.eyeMatch(n, rTrial); eyeField.ring.setAttribute('opacity', ok ? 1 : 0); eyeField.ring.setAttribute('class', ok ? 'glow' : '');
+  // Nothing here judges: the readout says where the comparison star has been put, and the reading is wherever the dial sits.
+  const rTrial = eyeDialToR(+$('eyedial').value);
+  if (eyeField.cmp) setStar(eyeField.cmp, starLook(M.magFromDistance(rTrial), eyeField.ms));
   pending.rRead = rTrial;
-  $('eyereadout').textContent = M.distanceWords(rTrial);
-  $('eyereadout').className = 'readout' + (ok ? ' amber' : '');
+  $('eyereadout').textContent = 'comparison star at ' + M.distanceWords(rTrial);
 }
 $('eyedial').addEventListener('input', updateEye);
 $('eyeread').onclick = () => startSpec();
 
-// ---------------------------------------------------------------- the spectrograph: two dark bars, an amber bracket
-const SP = { w: 380, h: 200, x0: 20, x1: 360, top: 26, sh: 96, cmpTop: 140, cmpH: 24 };
+// ---------------------------------------------------------------- the spectrograph: a sandwich of lamp, nebula, lamp; crosshairs on a measuring screw
+const SP = { w: 380, h: 200, x0: 20, x1: 360, top: 30, lampH: 22, nebH: 86 };
+SP.nebTop = SP.top + SP.lampH; SP.lamp2Top = SP.nebTop + SP.nebH; SP.bottom = SP.lamp2Top + SP.lampH;
+const SPEC_ORIENT = "A sandwich: the lamp's calcium lines above and below, in amber, where calcium sits at rest; the nebula's light between them, its calcium as dark bars. Turn the measuring screw to carry the crosshairs from the amber lines to the bars.";
 function lamToX(l) { return SP.x0 + (l - C.WINDOW.lo) / (C.WINDOW.hi - C.WINDOW.lo) * (SP.x1 - SP.x0); }
 const pxPerA = (SP.x1 - SP.x0) / (C.WINDOW.hi - C.WINDOW.lo);
 let specEls = null;
 function barLook(neb) { const lp = M.lineProfile(neb); return { w: Math.max(8, lp.widthA * pxPerA * 2.2), depth: 0.95 - (0.75 - lp.depth) * 0.5, grain: Math.max(0, (lp.grain - 0.05) * 0.5) }; }
-function drawSpectrum(svg, neb, seed) {
+// parts: lamp (top strip), lamp2 (bottom strip), neb (the nebula's strip), hairs (the crosshairs). Each drawn only if asked.
+function drawSpectrum(svg, neb, seed, parts) {
+  parts = parts || { lamp: true, lamp2: true, neb: true, hairs: true };
   clear(svg); const defs = el('defs', {}, svg); const pid = svg.id + '-';
-  const look = barLook(neb), r = M.makeRng(seed);
-  const g = el('linearGradient', { id: pid + 'cont' }, defs); el('stop', { offset: '0%', 'stop-color': '#B8A9FF' }, g); el('stop', { offset: '100%', 'stop-color': '#8FB8FF' }, g);
-  el('rect', { x: SP.x0, y: SP.top, width: SP.x1 - SP.x0, height: SP.sh, fill: `url(#${pid}cont)`, opacity: 0.6, class: 'expose' }, svg);
-  if (look.grain > 0) { const grain = el('g', { class: 'expose', opacity: look.grain.toFixed(2) }, svg); for (let i = 0; i < 120; i++) el('rect', { x: (SP.x0 + r() * (SP.x1 - SP.x0)).toFixed(1), y: (SP.top + r() * SP.sh).toFixed(1), width: 1, height: (1 + r() * 3).toFixed(1), fill: r() < 0.5 ? '#05080F' : '#FFFFFF', opacity: (0.3 + r() * 0.4).toFixed(2) }, grain); }
-  // the ghost: where the bars would sit if the nebula stood still
-  for (const L of C.LINES) el('rect', { x: lamToX(L.lambda) - look.w / 2, y: SP.top + 3, width: look.w, height: SP.sh - 6, fill: 'none', stroke: '#8B95A8', 'stroke-width': 1, 'stroke-dasharray': '3 3', opacity: 0.6 }, svg);
-  // the two dark bars at the nebula's true shift
-  for (const L of C.LINES) { const x = lamToX(M.shiftedLambda(L.lambda, neb.v)); el('rect', { x: x - look.w / 2, y: SP.top, width: look.w, height: SP.sh, rx: 2, fill: '#05080F', opacity: look.depth, class: 'expose' }, svg); }
-  el('rect', { x: SP.x0, y: SP.top, width: SP.x1 - SP.x0, height: SP.sh, fill: 'none', stroke: '#B08D57', 'stroke-width': 1.5 }, svg);
-  txt(svg, SP.x0, 16, 'the nebula', 'svgtext'); txt(svg, SP.x1, 16, 'redder →', 'svgtext', 'end');
-  // the lamp strip, fixed
-  el('rect', { x: SP.x0, y: SP.cmpTop, width: SP.x1 - SP.x0, height: SP.cmpH, fill: '#0F1526', stroke: '#B08D57', 'stroke-width': 1.5 }, svg);
-  for (const L of C.LINES) el('rect', { x: lamToX(L.lambda) - 1.5, y: SP.cmpTop, width: 3, height: SP.cmpH, fill: '#F2A33A' }, svg);
-  txt(svg, SP.x0, SP.cmpTop + SP.cmpH + 16, 'the lamp in the lab · calcium H and K', 'svgtext');
-  // the bracket: two uprights at the lamp's spacing, joined above and below
-  const xk = lamToX(C.LINES[0].lambda), xh = lamToX(C.LINES[1].lambda);
-  const marks = el('g', {}, svg);
-  const path = el('path', { d: `M${xk} ${SP.top + SP.sh + 10} V${SP.top - 10} H${xh} V${SP.top + SP.sh + 10}`, fill: 'none', stroke: '#F2A33A', 'stroke-width': 3, 'stroke-linejoin': 'round' }, marks);
-  el('path', { d: `M${xk} ${SP.top + SP.sh + 10} H${xh}`, fill: 'none', stroke: '#F2A33A', 'stroke-width': 3 }, marks);
-  const ring = el('rect', { x: SP.x0 - 4, y: SP.top - 4, width: SP.x1 - SP.x0 + 8, height: SP.sh + 8, rx: 6, fill: 'none', stroke: '#F2A33A', 'stroke-width': 2, opacity: 0 }, svg);
-  return { marks, ring, xk };
+  const look = barLook(neb), r = M.makeRng(seed), W = SP.x1 - SP.x0;
+  const lampStrip = (y) => { el('rect', { x: SP.x0, y, width: W, height: SP.lampH, fill: '#0F1526' }, svg); for (const L of C.LINES) el('rect', { x: lamToX(L.lambda) - 1.5, y, width: 3, height: SP.lampH, fill: '#F2A33A' }, svg); txt(svg, SP.x0 + 6, y + 15, 'lamp', 'svgtext').setAttribute('fill', '#B08D57'); };
+  if (parts.lamp) lampStrip(SP.top);
+  if (parts.lamp2) lampStrip(SP.lamp2Top);
+  let nebGroup = null;
+  if (parts.neb) {
+    nebGroup = el('g', {}, svg);
+    const g = el('linearGradient', { id: pid + 'cont' }, defs); el('stop', { offset: '0%', 'stop-color': '#B8A9FF' }, g); el('stop', { offset: '100%', 'stop-color': '#8FB8FF' }, g);
+    el('rect', { x: SP.x0, y: SP.nebTop, width: W, height: SP.nebH, fill: `url(#${pid}cont)`, opacity: 0.6 }, nebGroup);
+    if (look.grain > 0) { const grain = el('g', { opacity: look.grain.toFixed(2) }, nebGroup); for (let i = 0; i < 120; i++) el('rect', { x: (SP.x0 + r() * W).toFixed(1), y: (SP.nebTop + r() * SP.nebH).toFixed(1), width: 1, height: (1 + r() * 3).toFixed(1), fill: r() < 0.5 ? '#05080F' : '#FFFFFF', opacity: (0.3 + r() * 0.4).toFixed(2) }, grain); }
+    for (const L of C.LINES) { const x = lamToX(M.shiftedLambda(L.lambda, neb.v)); el('rect', { x: x - look.w / 2, y: SP.nebTop, width: look.w, height: SP.nebH, rx: 2, fill: '#05080F', opacity: look.depth }, nebGroup); }
+    txt(nebGroup, SP.x0 + 6, SP.nebTop + 15, 'nebula', 'svgtext').setAttribute('fill', '#070B14');
+  }
+  el('rect', { x: SP.x0, y: SP.top, width: W, height: SP.bottom - SP.top, fill: 'none', stroke: '#B08D57', 'stroke-width': 1.5 }, svg);
+  if (parts.lamp && parts.neb) { el('line', { x1: SP.x0, x2: SP.x1, y1: SP.nebTop, y2: SP.nebTop, stroke: '#B08D57', 'stroke-width': 1 }, svg); }
+  if (parts.lamp2 && parts.neb) { el('line', { x1: SP.x0, x2: SP.x1, y1: SP.lamp2Top, y2: SP.lamp2Top, stroke: '#B08D57', 'stroke-width': 1 }, svg); }
+  txt(svg, SP.x0, 18, parts.neb ? 'calcium · lamp, nebula, lamp' : 'calcium, from the lamp', 'svgtext'); txt(svg, SP.x1, SP.bottom + 18, 'redder →', 'svgtext', 'end');
+  let hairs = null; const xk = lamToX(C.LINES[0].lambda);
+  if (parts.hairs) { hairs = el('g', {}, svg); for (const L of C.LINES) { const x = lamToX(L.lambda); el('line', { x1: x, x2: x, y1: SP.top - 8, y2: SP.bottom + 8, stroke: '#F2A33A', 'stroke-width': 2 }, hairs); el('line', { x1: x - 5, x2: x + 5, y1: SP.top - 8, y2: SP.top - 8, stroke: '#F2A33A', 'stroke-width': 2 }, hairs); el('line', { x1: x - 5, x2: x + 5, y1: SP.bottom + 8, y2: SP.bottom + 8, stroke: '#F2A33A', 'stroke-width': 2 }, hairs); } }
+  return { hairs, xk, nebGroup };
 }
-function positionMarks(els, v) { const dx = lamToX(M.shiftedLambda(C.LINES[0].lambda, v)) - els.xk; els.marks.setAttribute('transform', `translate(${dx} 0)`); els.marks.setAttribute('class', ''); }
+function positionMarks(els, v) { if (!els.hairs) return; const dx = lamToX(M.shiftedLambda(C.LINES[0].lambda, v)) - els.xk; els.hairs.setAttribute('transform', `translate(${dx} 0)`); }
+function specControls(show) { $('specdialwrap').style.display = show ? '' : 'none'; $('specreadout').style.display = show ? '' : 'none'; $('specread').style.display = show ? '' : 'none'; }
 function startSpec() {
-  const n = N[pending.idx];
+  const n = N[pending.idx], seed = state.seed * 17 + pending.idx;
   $('spectitle').textContent = 'The spectrograph · ' + n.name; $('specbar').textContent = 'Night ' + (C.NIGHTS - state.nightsLeft + 1) + ': how fast, and which way?';
-  specEls = drawSpectrum($('specsvg'), n, state.seed * 17 + pending.idx);
-  $('specdial').value = 0; updateSpec(); go('spec');
-  if (state.observed.length === 0 && !state.demoSpec) demoSpec(); else { $('specorient').textContent = SPEC_ORIENT; $('specdial').disabled = false; $('specread').disabled = false; }
-}
-// Night one only: the bracket slides across once and back
-function demoSpec() {
-  state.demoSpec = true; demoing = true; const dial = $('specdial'); dial.disabled = true; $('specread').disabled = true;
-  $('specorient').textContent = 'Slide the bracket onto the dark bars.';
-  const set = v => { dial.value = Math.round(v / 5) * 5; updateSpec(); };
-  tween(1100, e => set(1300 * e), () => tween(1000, e => set(1300 - 1700 * e), () => tween(500, e => set(-400 + 400 * e), () => { demoing = false; updateSpec(); dial.disabled = false; $('specread').disabled = false; })));
+  $('specdial').value = 0; $('specstage').innerHTML = '';
+  if (state.observed.length === 0 && !state.stagedSpec) {
+    // Night one: lamp alone; the nebula slides in between two lamp strips; the crosshairs and the screw appear
+    state.stagedSpec = true; specControls(false);
+    specEls = drawSpectrum($('specsvg'), n, seed, { lamp: true });
+    $('specorient').textContent = "Calcium, from a lamp in the lab. The lamp does not move, so this is where calcium's lines sit at rest.";
+    stageButton($('specstage'), 'Now the nebula', () => {
+      specEls = drawSpectrum($('specsvg'), n, seed, { lamp: true, lamp2: true, neb: true });
+      specEls.nebGroup.setAttribute('transform', 'translate(380 0)');
+      tween(900, e => specEls.nebGroup.setAttribute('transform', `translate(${380 * (1 - e)} 0)`));
+      $('specorient').textContent = 'The same calcium, in the nebula\'s light. The bars have moved.';
+      stageButton($('specstage'), 'Measure it', () => {
+        specEls = drawSpectrum($('specsvg'), n, seed); $('specstage').innerHTML = '';
+        $('specorient').textContent = 'Turn the measuring screw. The readout is how far the crosshairs have travelled, as a speed.';
+        specControls(true); updateSpec();
+      });
+    });
+  } else { specEls = drawSpectrum($('specsvg'), n, seed); $('specorient').textContent = SPEC_ORIENT; specControls(true); updateSpec(); }
+  go('spec');
 }
 function updateSpec() {
-  // During play the instrument never grades: the readout is the speed and its direction, and the reading is wherever the bracket sits.
-  const n = N[pending.idx], v = +$('specdial').value; positionMarks(specEls, v); pending.vRead = v;
-  const ok = demoing && M.specMatch(n, v); specEls.ring.setAttribute('opacity', ok ? 1 : 0); specEls.ring.setAttribute('class', ok ? 'glow' : ''); specEls.marks.setAttribute('class', ok ? 'glow' : '');
-  const R = $('specreadout'); R.textContent = M.speedWords(v); R.className = 'readout ' + (Math.abs(v) < 50 ? '' : v > 0 ? 'red' : 'blue');
+  // Nothing here judges: the readout is the screw's reading, from zero at the amber lines; the reading is wherever the crosshairs sit.
+  const v = +$('specdial').value; positionMarks(specEls, v); pending.vRead = v;
+  const R = $('specreadout'); R.textContent = M.screwWords(v); R.className = 'readout ' + (v === 0 ? '' : v > 0 ? 'red' : 'blue');
 }
 $('specdial').addEventListener('input', updateSpec);
 $('specread').onclick = () => { const o = M.observe(state, pending.idx, pending.rRead, pending.vRead); showPlate(o); };
@@ -499,9 +520,8 @@ function runHumSpec() {
   const H = { name: C.HUMASON.name, ms: 21.5, r: C.HUMASON.r_cluster, v: C.HUMASON.v }; // ms: our choice for drawing only, the faintest profile
   const els = drawSpectrum($('humspecsvg'), H, state.seed * 7 + 9);
   $('humspecreadout').textContent = 'exposing…'; $('toverdict').disabled = true; positionMarks(els, 0);
-  setTimeout(() => tween(2600, e => { const v = C.HUMASON.v * e; positionMarks(els, v); $('humspecreadout').textContent = `about ${M.roundV(v).toLocaleString('en')} km/s going away…`; }, () => {
-    els.ring.setAttribute('opacity', 1); els.ring.setAttribute('class', 'glow');
-    $('humspecreadout').textContent = `about ${M.roundV(C.HUMASON.v).toLocaleString('en')} km/s going away · on the bars`;
+  setTimeout(() => tween(2600, e => { const v = C.HUMASON.v * e; positionMarks(els, v); $('humspecreadout').textContent = M.screwWords(v); }, () => {
+    $('humspecreadout').textContent = M.screwWords(C.HUMASON.v);
     $('humspecorient').textContent = 'The bars sit a long way to the red. You said about ' + (state.prediction < 50 ? 'nothing' : M.roundV(state.prediction).toLocaleString('en') + ' km/s') + '.';
     $('toverdict').disabled = false;
   }), 900);
