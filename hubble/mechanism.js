@@ -58,8 +58,8 @@ const CONFIG = {
   COST: [ { maxMs: 17.95, nights: 1 }, { maxMs: 19.45, nights: 2 }, { maxMs: 99, nights: 3 } ], // our choice: exposure grows with faintness
   VIRGO_COST: 3,                        // our choice: the Virgo four, the farthest, cost most (p. 173: the far ones need Humason's programme)
   RATE_MAX: 1000,                       // our choice: the rate dial runs from 0 (no relation) to 1000 km/s per 10^6 parsecs
-  EYE_TOL_LOG: 0.06,                    // our choice: the eyepiece ring glows within ±15% in distance (0.06 dex); Hubble's own errors were larger
-  SPEC_TOL_KMS: 40,                     // our choice: the spectrograph ring glows within ±40 km/s (about 0.5 Å at H and K)
+  EYE_TOL_LOG: 0.06,                    // our choice: ±15% in distance (0.06 dex); used only by the night-one demonstration's glow. Hubble's own errors were larger
+  SPEC_TOL_KMS: 40,                     // our choice: ±40 km/s (about 0.5 Å at H and K); used only by the night-one demonstration's glow
   WITHIN_HUBBLE_LO: 415, WITHIN_HUBBLE_HI: 573, // p. 170: the span of his two solutions with their errors (465-50 to 513+60)
   SEED_MAX: 9999,                       // our choice: seeds vary graininess and lamp flicker only; the sky is the paper's
 };
@@ -159,7 +159,7 @@ function setRate(state, K) { state.rate = Math.max(0, Math.min(CONFIG.RATE_MAX, 
 function predictHumason(state) { return state.rate * CONFIG.HUMASON.r_cluster; }
 function commitPrediction(state, v) { state.prediction = v; return v; }
 
-// How the eyepiece and spectrograph judge a reading (for the glow ring; the reading itself is never snapped)
+// Match tests, used only by the night-one demonstrations' glow. During play nothing judges a reading; the reading is the player's.
 function eyeMatch(neb, rTrial) { return Math.abs(Math.log10(rTrial / neb.r)) <= CONFIG.EYE_TOL_LOG; }
 function specMatch(neb, vTrial) { return Math.abs(vTrial - neb.v) <= CONFIG.SPEC_TOL_KMS; }
 
@@ -196,7 +196,7 @@ function comparisonWords(state) {
   if (far.length && Math.abs(farErr) > 60) parts.push(farErr > 0 ? 'your far ones ran fast' : 'your far ones ran slow');
   else if (!far.length && Math.abs(nearErr) > 60) parts.push(nearErr > 0 ? 'your speeds ran fast' : 'your speeds ran slow');
   else if (far.length && Math.abs(allErr) > 60) parts.push(allErr > 0 ? 'your speeds ran fast' : 'your speeds ran slow');
-  if (!parts.length) return 'Set beside Hubble\'s plate, your dots sat on his.';
+  if (!parts.length) return 'Set beside Hubble\'s plate, your dots sat near his.';
   const s = parts.join(' and ');
   return 'Set beside Hubble\'s plate, ' + s.charAt(0) + s.slice(1) + '.';
 }

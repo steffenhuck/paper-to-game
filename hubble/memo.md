@@ -178,3 +178,16 @@ A first play found the instruments felt like guessing: the task was not self-evi
 5. **The plate describes, the verdict concludes.** Until the rate is set the plate's words only describe: "Your farthest dot is also your highest", "Three nebulae, all nearby. A cloud so far", "The dots rise from left to right, with some scatter", "all at about the same distance". "The farther, the faster" appears only as the verdict's headline. A calibration check (W2c) plays sixty random games and asserts the plate never uses "faster", "relation" or "tied" before the verdict.
 
 Calibration after the revision: 50 passed, 0 failed (five new checks on the descriptive words, Hubble's points and the comparison sentence). Browser session rerun with the demonstrations: no page errors, no horizontal scroll at 380 px; new screenshots `screenshot-eyepiece-demo.png`, `screenshot-spectrograph-demo.png`, and the plate with Hubble's dotted dots in `screenshot-plate-first-far.png`.
+
+## 20. Second revision after play: the instrument leaves the judgement to the player
+
+The first revision made the instruments grade the player in real time: a glow and "the halves match" or "on the bars" as soon as the dial came within tolerance. That took the judgement away from the player, who then hunted the glow instead of looking. Changed, and nothing else:
+
+- **Eyepiece.** The readout shows only the dial's distance in words. No "right half fainter", no "the halves match", no ring glow and no amber state during play. READ THE DISTANCE is always enabled; the player reads when they judge the halves alike, and the mechanism records whatever distance the dial is at.
+- **Spectrograph.** The readout shows only the speed and its direction. No "on the bars", no bracket or frame glow during play. READ THE SPEED is always enabled; the reading is wherever the bracket sits.
+- **The plate.** The player's reading error is now real. Hubble's dotted dots still appear under the player's after each reading, and the verdict's comparison sentence is derived from the actual gap between the player's readings and Table 1 (near his / distances ran short or long / far ones ran fast or slow; thresholds 0.04 dex and 60 km/s), in words. Two new calibration checks feed deliberately long-and-slow and small-error readings through it.
+- **Night one.** The demonstrations keep their glow and their one-line captions ("Turn the dial until the halves match", "Slide the bracket onto the dark bars"), unchanged; the glow is tied to a flag that is true only while a demonstration runs. After night one nothing on screen says whether a match is right. The match tests in the mechanism remain, for the demonstration only, and their config lines say so.
+
+Reason: the instrument explains itself once and then leaves the judgement to the player, as it did for Hubble. A reading is an act of judgement with a consequence on the plate, not a target to hit.
+
+Calibration after this revision: 52 passed, 0 failed. The session script no longer relies on any match state: the scripted player sets each dial to the true value times a small deliberate error, checks that the readouts carry no match words, that no glow is visible during play, and that both READ buttons are enabled after the demonstration; no page errors, no horizontal scroll at 380 px.

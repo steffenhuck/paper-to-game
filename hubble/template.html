@@ -199,8 +199,8 @@ input[type=range]::-moz-range-thumb{width:44px;height:44px;border-radius:50%;bac
   <h2>How to play</h2>
   <div class="aim">Find out whether the far nebulae drift at random or whether their speed is tied to their distance. Twelve nights. Then say how fast.</div>
   <p><b>The sky.</b> The smudges are nebulae, the faint far-off ones beyond our own stars. Tap one, and the card below tells you its name and what it costs: bright ones one night, faint ones two or three. You have twelve nights, the lamps along the top. Then tap <i>Point the telescope</i>.</p>
-  <p><b>The eyepiece.</b> A round field split down the middle. On the left, the nebula's brightest star; on the right, a comparison star, shown as bright as a brightest star would look from the distance on the dial. The brightest stars of all such nebulae are about equally bright in truth, so when the two halves match, the dial's distance is the nebula's. Turn the dial until the halves match; the frame glows when you are close. Tap <i>Read the distance</i>.</p>
-  <p><b>The spectrograph.</b> The nebula's light is spread out into a strip, and two dark bars cross it. They belong to calcium. The amber bracket shows where those bars sit for a lamp in the laboratory, and the faint outline where they would sit if the nebula stood still. Slide the bracket onto the dark bars. How far you slid is the speed: to the right (redder), the nebula is moving away; to the left, it is coming toward us. Tap <i>Read the speed</i>.</p>
+  <p><b>The eyepiece.</b> A round field split down the middle. On the left, the nebula's brightest star; on the right, a comparison star, shown as bright as a brightest star would look from the distance on the dial. The brightest stars of all such nebulae are about equally bright in truth, so when the two halves match, the dial's distance is the nebula's. Turn the dial until the halves match, by your own eye; the instrument does not tell you. Tap <i>Read the distance</i>.</p>
+  <p><b>The spectrograph.</b> The nebula's light is spread out into a strip, and two dark bars cross it. They belong to calcium. The amber bracket shows where those bars sit for a lamp in the laboratory, and the faint outline where they would sit if the nebula stood still. Slide the bracket onto the dark bars, by your own eye. How far you slid is the speed: to the right (redder), the nebula is moving away; to the left, it is coming toward us. Tap <i>Read the speed</i>.</p>
   <p><b>The plate.</b> Each nebula becomes a dot: distance across, speed up. Red is going away, blue is coming toward us. After your dot lands, a faint hollow dot shows where Hubble's own table puts that nebula. Watch the shape the dots make, and choose your next nebula accordingly.</p>
   <p><b>The Sun.</b> When the nights are over, one tap takes out the Sun's own motion through space, which Hubble worked out at the same time. The dots move.</p>
   <p><b>The rate.</b> Swing a line through your dots and commit. Then say how fast a nebula far beyond your plate is going, and watch its spectrum come in.</p>
@@ -297,7 +297,7 @@ function showSky() { drawLamps(); drawSky(); drawSkyPanel(); drawPlate($('minipl
 
 // ---------------------------------------------------------------- the eyepiece: one round field split down the middle
 const EYE = { w: 380, h: 330, cx: 190, cy: 172, R: 142 };
-let eyeField = null;
+let eyeField = null, demoing = false;
 const EYE_ORIENT = "Left: this nebula's brightest star. Right: a comparison star, as bright as a brightest star would look from the dial's distance. Turn the dial until the halves match.";
 const SPEC_ORIENT = "The nebula's light spread into a strip. The two dark bars are calcium. The amber bracket is where a lamp in the lab puts them; the faint outline is where they would sit if the nebula stood still. Slide the bracket onto the dark bars.";
 function eyeDialToR(v) { return Math.pow(10, Math.log10(0.02) + (v / 1000) * (Math.log10(3.0) - Math.log10(0.02))); }
@@ -345,19 +345,19 @@ function startEye(idx) {
 }
 // Night one only: the eyepiece runs itself once, then hands over the dial
 function demoEye() {
-  state.demoEye = true; const dial = $('eyedial'); dial.disabled = true; $('eyeread').disabled = true;
+  state.demoEye = true; demoing = true; const dial = $('eyedial'); dial.disabled = true; $('eyeread').disabled = true;
   $('eyeorient').textContent = 'Turn the dial until the halves match.';
   const set = v => { dial.value = v; updateEye(); };
-  tween(1000, e => set(1000 * e), () => tween(900, e => set(1000 - 1000 * e), () => tween(500, e => set(500 * e), () => { dial.disabled = false; $('eyeread').disabled = false; })));
+  tween(1000, e => set(1000 * e), () => tween(900, e => set(1000 - 1000 * e), () => tween(500, e => set(500 * e), () => { demoing = false; updateEye(); dial.disabled = false; $('eyeread').disabled = false; })));
 }
 function updateEye() {
+  // During play the instrument never grades: the readout is the dial's distance in words, and the reading is wherever the dial sits.
   const n = N[pending.idx], rTrial = eyeDialToR(+$('eyedial').value);
   const magTrial = M.magFromDistance(rTrial); setStar(eyeField.cmp, starLook(magTrial, eyeField.ms));
-  const ok = M.eyeMatch(n, rTrial); eyeField.ring.setAttribute('opacity', ok ? 1 : 0); eyeField.ring.setAttribute('class', ok ? 'glow' : '');
+  const ok = demoing && M.eyeMatch(n, rTrial); eyeField.ring.setAttribute('opacity', ok ? 1 : 0); eyeField.ring.setAttribute('class', ok ? 'glow' : '');
   pending.rRead = rTrial;
-  const ratio = M.relBrightness(magTrial, eyeField.ms);
-  $('eyereadout').textContent = (ok ? 'the halves match · ' : ratio > 1 ? 'right half brighter · ' : 'right half fainter · ') + M.distanceWords(rTrial);
-  $('eyereadout').className = 'readout ' + (ok ? 'amber' : '');
+  $('eyereadout').textContent = M.distanceWords(rTrial);
+  $('eyereadout').className = 'readout' + (ok ? ' amber' : '');
 }
 $('eyedial').addEventListener('input', updateEye);
 $('eyeread').onclick = () => startSpec();
@@ -402,15 +402,16 @@ function startSpec() {
 }
 // Night one only: the bracket slides across once and back
 function demoSpec() {
-  state.demoSpec = true; const dial = $('specdial'); dial.disabled = true; $('specread').disabled = true;
+  state.demoSpec = true; demoing = true; const dial = $('specdial'); dial.disabled = true; $('specread').disabled = true;
   $('specorient').textContent = 'Slide the bracket onto the dark bars.';
   const set = v => { dial.value = Math.round(v / 5) * 5; updateSpec(); };
-  tween(1100, e => set(1300 * e), () => tween(1000, e => set(1300 - 1700 * e), () => tween(500, e => set(-400 + 400 * e), () => { dial.disabled = false; $('specread').disabled = false; })));
+  tween(1100, e => set(1300 * e), () => tween(1000, e => set(1300 - 1700 * e), () => tween(500, e => set(-400 + 400 * e), () => { demoing = false; updateSpec(); dial.disabled = false; $('specread').disabled = false; })));
 }
 function updateSpec() {
+  // During play the instrument never grades: the readout is the speed and its direction, and the reading is wherever the bracket sits.
   const n = N[pending.idx], v = +$('specdial').value; positionMarks(specEls, v); pending.vRead = v;
-  const ok = M.specMatch(n, v); specEls.ring.setAttribute('opacity', ok ? 1 : 0); specEls.ring.setAttribute('class', ok ? 'glow' : ''); specEls.marks.setAttribute('class', ok ? 'glow' : '');
-  const R = $('specreadout'); R.textContent = M.speedWords(v) + (ok ? ' · on the bars' : ''); R.className = 'readout ' + (Math.abs(v) < 50 ? '' : v > 0 ? 'red' : 'blue');
+  const ok = demoing && M.specMatch(n, v); specEls.ring.setAttribute('opacity', ok ? 1 : 0); specEls.ring.setAttribute('class', ok ? 'glow' : ''); specEls.marks.setAttribute('class', ok ? 'glow' : '');
+  const R = $('specreadout'); R.textContent = M.speedWords(v); R.className = 'readout ' + (Math.abs(v) < 50 ? '' : v > 0 ? 'red' : 'blue');
 }
 $('specdial').addEventListener('input', updateSpec);
 $('specread').onclick = () => { const o = M.observe(state, pending.idx, pending.rRead, pending.vRead); showPlate(o); };
