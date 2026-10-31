@@ -132,7 +132,7 @@ input[type=range]::-moz-range-thumb{width:44px;height:44px;border-radius:50%;bac
 <!-- ============================ PLATE ============================ -->
 <section id="plate" class="screen">
   <div class="bar"><div class="aimtext">Random drift, or speed tied to distance?</div><button class="qbtn" data-help="plate">?</button></div>
-  <h2>The plate</h2>
+  <h2>The chart</h2>
   <div class="orient" id="platenight"></div>
   <div class="glass"><svg id="platesvg" viewBox="0 0 380 280" width="100%" style="aspect-ratio:380/280"></svg></div>
   <div class="readout amber" id="platewords"></div>
@@ -154,18 +154,18 @@ input[type=range]::-moz-range-thumb{width:44px;height:44px;border-radius:50%;bac
 <section id="rate" class="screen">
   <div class="bar"><div class="aimtext">Say how fast: the speed for every million parsecs of distance.</div><button class="qbtn" data-help="rate">?</button></div>
   <h2>Set the rate</h2>
-  <div class="orient">Swing the red line through your dots. Flat means the speeds do not depend on distance. This is your answer; commit when it fits.</div>
+  <div class="orient">Lay the ruler through your dots. Flat means the speeds do not depend on distance. This is your answer; commit when it fits.</div>
   <div class="glass"><svg id="ratesvg" viewBox="0 0 380 280" width="100%" style="aspect-ratio:380/280"></svg></div>
-  <div class="dial"><label>Rate dial</label><input type="range" id="ratedial" min="0" max="1000" value="0" step="10"></div>
+  <div class="dial"><label>The ruler</label><input type="range" id="ratedial" min="0" max="1000" value="0" step="10"></div>
   <div class="readout red" id="ratereadout">No relation: flat</div>
   <button class="btn primary" id="ratecommit">Commit the rate</button>
 </section>
 
 <!-- ============================ HUMASON ============================ -->
 <section id="hum" class="screen">
-  <div class="bar"><div class="aimtext">One more nebula, far beyond your plate.</div><button class="qbtn" data-help="hum">?</button></div>
+  <div class="bar"><div class="aimtext">One more nebula, far beyond your chart.</div><button class="qbtn" data-help="hum">?</button></div>
   <h2>Humason's nebula</h2>
-  <div class="orient">Milton Humason has spent nights on end exposing on a faint, far cluster. Its brightest nebula, NGC 7619, is about seven million parsecs out, three times farther than anything on your plate. Before he develops the plate: how fast is it going?</div>
+  <div class="orient">Milton Humason has spent nights on end exposing on a faint, far cluster. Its brightest nebula, NGC 7619, is about seven million parsecs out, three times farther than anything on your chart. Before he develops the plate: how fast is it going?</div>
   <div class="glass"><svg id="humsvg" viewBox="0 0 380 280" width="100%" style="aspect-ratio:380/280"></svg></div>
   <div class="dial"><label>Your prediction</label><input type="range" id="humdial" min="0" max="6000" value="0" step="50"></div>
   <div class="readout red" id="humreadout"></div>
@@ -176,7 +176,7 @@ input[type=range]::-moz-range-thumb{width:44px;height:44px;border-radius:50%;bac
 <section id="humspec" class="screen">
   <div class="bar"><div class="aimtext">Humason develops the plate.</div><button class="qbtn" data-help="spec">?</button></div>
   <h2>NGC 7619</h2>
-  <div class="orient" id="humspecorient">The faintest spectrum ever taken. Watch the crosshairs find the bars.</div>
+  <div class="orient" id="humspecorient">The faintest spectrum yet taken. Watch the crosshairs find the bars.</div>
   <div class="glass"><svg id="humspecsvg" viewBox="0 0 380 200" width="100%" style="aspect-ratio:380/200"></svg></div>
   <div class="readout red" id="humspecreadout">exposing…</div>
   <button class="btn primary" id="toverdict" disabled>The verdict</button>
@@ -186,9 +186,9 @@ input[type=range]::-moz-range-thumb{width:44px;height:44px;border-radius:50%;bac
 <section id="end" class="screen">
   <div class="verdict-head" id="vhead"></div>
   <div class="verdict" id="vbody"></div>
-  <h2>Your plate, with Hubble's dots</h2>
+  <h2>Your chart, with Hubble's dots</h2>
   <div class="glass"><svg id="endmine" viewBox="0 0 380 240" width="100%" style="aspect-ratio:380/240"></svg></div>
-  <h2>Hubble's plate, all twenty-four</h2>
+  <h2>Hubble's chart, all twenty-four</h2>
   <div class="glass"><svg id="endhubble" viewBox="0 0 380 240" width="100%" style="aspect-ratio:380/240"></svg></div>
   <p class="small" style="margin-top:10px">Hubble's distances were about seven times too short, we now know, and today's rate is about 70 km/s for every million parsecs. The relation itself held. He wrote that it "may represent the de Sitter effect", and left the obvious consequences for later.</p>
   <button class="btn primary" id="newgame">New game</button>
@@ -204,9 +204,9 @@ input[type=range]::-moz-range-thumb{width:44px;height:44px;border-radius:50%;bac
   <p><b>The sky.</b> The smudges are nebulae, the faint far-off ones beyond our own stars. Tap one, and the card below tells you its name and what it costs: bright ones one night, faint ones two or three. You have twelve nights, the lamps along the top. Then tap <i>Point the telescope</i>.</p>
   <p><b>The eyepiece.</b> Through the eyepiece the nebula breaks into stars; its brightest is ringed in amber. The brightest star of any such nebula is about as bright as any other's, in truth: it looks faint only because it is far. On the right half of the field sits a comparison star just like it, which the dial brings nearer (it brightens and grows) or pushes farther away (it fades and shrinks). Put the comparison star where it looks as bright as the nebula's brightest star, by your own eye; the readout says how far away you have put it, and that is your reading of the nebula's distance. Tap <i>Read the distance</i>.</p>
   <p><b>The spectrograph.</b> A sandwich of three strips. Above and below, the light of a calcium lamp in the laboratory, with its two amber lines: the lamp does not move, so that is where calcium's lines sit at rest. Between them, the nebula's light, with the same two calcium lines as dark bars. If the nebula is moving away, its bars sit to the right of the amber lines (redder); if it is coming toward us, to the left. Turn the measuring screw: the two crosshairs start on the amber lines and travel across; the readout is how far they have travelled, as a speed. Put the crosshairs on the dark bars, by your own eye, and tap <i>Read the speed</i>.</p>
-  <p><b>The plate.</b> Each nebula becomes a dot: distance across, speed up. Red is going away, blue is coming toward us. After your dot lands, a faint hollow dot shows where Hubble's own table puts that nebula. Watch the shape the dots make, and choose your next nebula accordingly.</p>
+  <p><b>The chart.</b> Each nebula becomes a dot: distance across, speed up. Red is going away, blue is coming toward us. After your dot lands, a faint hollow dot shows where Hubble's own table puts that nebula. Watch the shape the dots make, and choose your next nebula accordingly.</p>
   <p><b>The Sun.</b> When the nights are over, one tap takes out the Sun's own motion through space, which Hubble worked out at the same time. The dots move.</p>
-  <p><b>The rate.</b> Swing a line through your dots and commit. Then say how fast a nebula far beyond your plate is going, and watch its spectrum come in.</p>
+  <p><b>The rate.</b> Lay the ruler through your dots. Flat means the speeds do not depend on distance. This is your answer; commit when it fits. Then say how fast a nebula far beyond your chart is going, and watch its spectrum come in.</p>
   <button class="btn primary" id="helpback">Back</button>
 </section>
 
@@ -400,11 +400,11 @@ function specMatch(neb, vTrial) { return Math.abs(vTrial - neb.v) <= CONFIG.SPEC
 // ---------------------------------------------------------------- words
 function fmtK(k) { return Math.round(k / 10) * 10; }
 function roundV(v) { return Math.round(v / 50) * 50; }
-// The sentence under the plate after each night, in the aim's units
+// The sentence under the chart after each night, in the aim's units
 function plateWords(state) {
-  // Describes the plate; never concludes. "The farther, the faster" is the verdict's line, after the rate is set.
+  // Describes the chart; never concludes. "The farther, the faster" is the verdict's line, after the rate is set.
   const pts = platePoints(state), n = pts.length;
-  if (n === 0) return 'Nothing on the plate yet.';
+  if (n === 0) return 'Nothing on the chart yet.';
   if (n === 1) return 'One nebula. Nothing to compare it with yet.';
   if (n === 2) return 'Two nebulae. Too few to see anything.';
   const rs = pts.map(p => p.r), spread = Math.max(...rs) - Math.min(...rs), c = correlation(pts);
@@ -430,9 +430,9 @@ function comparisonWords(state) {
   if (far.length && Math.abs(farErr) > 60) parts.push(farErr > 0 ? 'your far ones ran fast' : 'your far ones ran slow');
   else if (!far.length && Math.abs(nearErr) > 60) parts.push(nearErr > 0 ? 'your speeds ran fast' : 'your speeds ran slow');
   else if (far.length && Math.abs(allErr) > 60) parts.push(allErr > 0 ? 'your speeds ran fast' : 'your speeds ran slow');
-  if (!parts.length) return 'Set beside Hubble\'s plate, your dots sat near his.';
+  if (!parts.length) return 'Set beside Hubble\'s chart, your dots sat near his.';
   const s = parts.join(' and ');
-  return 'Set beside Hubble\'s plate, ' + s.charAt(0) + s.slice(1) + '.';
+  return 'Set beside Hubble\'s chart, ' + s.charAt(0) + s.slice(1) + '.';
 }
 // Distances in words, never decimals (the author finds the decimals in CONFIG)
 function distanceWords(r) {
@@ -481,9 +481,9 @@ function verdict(state) {
   else test = `Humason's nebula, seven million parsecs out: you said about ${roundV(state.prediction).toLocaleString('en')} km/s; the spectrograph said about ${roundV(H.v).toLocaleString('en')}. ${Math.abs(err) <= 800 ? 'Close.' : err > 0 ? 'You were high.' : 'You were low.'} Hubble's own rate would have said about ${roundV(CONFIG.K_ROUND * H.r_cluster).toLocaleString('en')}.`;
   let plate;
   const spread = n ? Math.max(...pts.map(p => p.r)) - Math.min(...pts.map(p => p.r)) : 0, c = correlation(pts);
-  if (n >= 3 && spread >= 0.5 && c > 0.45) plate = `Your plate shows it: the far ones are the fast ones. Your own dots, on their own, fit a rate of about ${fmtK(bestK)}.`;
-  else if (n >= 3 && spread < 0.5) plate = 'Your plate could not show it: every nebula on it sits at about the same distance, so there was nothing to compare. The relation needs near ones and far ones together.';
-  else plate = 'Your plate is thin. Hubble needed the whole table, and called it scanty even then.';
+  if (n >= 3 && spread >= 0.5 && c > 0.45) plate = `Your chart shows it: the far ones are the fast ones. Your own dots, on their own, fit a rate of about ${fmtK(bestK)}.`;
+  else if (n >= 3 && spread < 0.5) plate = 'Your chart could not show it: every nebula on it sits at about the same distance, so there was nothing to compare. The relation needs near ones and far ones together.';
+  else plate = 'Your chart is thin. Hubble needed the whole table, and called it scanty even then.';
   const showed = n >= 3 && spread >= 0.5 && c > 0.45;
   const headline = state.rate < 60 ? 'The nebulae do not drift at random.' : showed ? 'The farther, the faster.' : 'The far ones were where the answer was.';
   const meaning = 'The farther a nebula, the faster it recedes, about 500 km/s for every million parsecs on Hubble\'s distances. The ones that seemed to approach were mostly the Sun\'s own motion. Hubble stopped there; others would call it the expanding universe.';
@@ -595,17 +595,17 @@ function drawLamps() { const L = $('lamps'); L.innerHTML = ''; for (let i = 0; i
 function drawSkyPanel() {
   const P = $('skypanel'); P.innerHTML = '';
   if (M.nightsOver(state)) {
-    P.innerHTML = `<div class="name">No nights left${state.nightsLeft ? ' that would buy a nebula' : ''}.</div><div class="hint">The telescope goes dark. Take your plate to the desk.</div>`;
+    P.innerHTML = `<div class="name">No nights left${state.nightsLeft ? ' that would buy a nebula' : ''}.</div><div class="hint">The telescope goes dark. Take your chart to the desk.</div>`;
     const b = document.createElement('button'); b.className = 'btn primary'; b.textContent = 'The nights are over'; b.onclick = () => { drawSunScreen(); go('sun'); }; P.appendChild(b); return;
   }
-  if (selected === null) { P.innerHTML = `<div class="hint">${state.observed.length ? 'Choose the next nebula. Where on the plate do you need a dot?' : 'The brightest smudge, at the right, is Andromeda. Any of them will do for a first night.'}</div>`; return; }
+  if (selected === null) { P.innerHTML = `<div class="hint">${state.observed.length ? 'Choose the next nebula. Where on the chart do you need a dot?' : 'The brightest smudge, at the right, is Andromeda. Any of them will do for a first night.'}</div>`; return; }
   const n = N[selected], done = state.observed.some(o => o.idx === selected), can = M.canObserve(state, selected);
   let hint = costWords(n);
-  if (done) hint = 'Already on your plate.'; else if (!can) hint += ' Not enough nights left for this one.';
+  if (done) hint = 'Already on your chart.'; else if (!can) hint += ' Not enough nights left for this one.';
   P.innerHTML = `<div class="name">${n.name}</div><div class="hint">${hint}</div>`;
   if (!done && can) { const b = document.createElement('button'); b.className = 'btn primary'; b.textContent = 'Point the telescope'; b.onclick = () => startEye(selected); P.appendChild(b); }
 }
-function showSky() { drawLamps(); drawSky(); drawSkyPanel(); drawPlate($('miniplate'), M.platePoints(state), { w: 380, h: 150, mini: true, ghosts: M.hubblePoints(state) }); $('miniwords').textContent = state.observed.length ? M.plateWords(state) : 'The plate: distance across, speed up. Empty so far.'; go('sky'); }
+function showSky() { drawLamps(); drawSky(); drawSkyPanel(); drawPlate($('miniplate'), M.platePoints(state), { w: 380, h: 150, mini: true, ghosts: M.hubblePoints(state) }); $('miniwords').textContent = state.observed.length ? M.plateWords(state) : 'The chart below: distance across, speed up. Empty so far.'; go('sky'); }
 
 // ---------------------------------------------------------------- the eyepiece: one round field; the comparison star moves
 const EYE = { w: 380, h: 330, cx: 190, cy: 172, R: 142 };
@@ -683,7 +683,7 @@ $('eyeread').onclick = () => startSpec();
 // ---------------------------------------------------------------- the spectrograph: a sandwich of lamp, nebula, lamp; crosshairs on a measuring screw
 const SP = { w: 380, h: 200, x0: 20, x1: 360, top: 30, lampH: 22, nebH: 86 };
 SP.nebTop = SP.top + SP.lampH; SP.lamp2Top = SP.nebTop + SP.nebH; SP.bottom = SP.lamp2Top + SP.lampH;
-const SPEC_ORIENT = "A sandwich: the lamp's calcium lines above and below, in amber, where calcium sits at rest; the nebula's light between them, its calcium as dark bars. Turn the measuring screw to carry the crosshairs from the amber lines to the bars.";
+const SPEC_ORIENT = "Above and below, the lamp's calcium lines, in amber, where calcium sits at rest. Between them, the nebula's light, its calcium as dark bars. Turn the measuring screw. The readout is how far the crosshairs have travelled, as a speed.";
 function lamToX(l) { return SP.x0 + (l - C.WINDOW.lo) / (C.WINDOW.hi - C.WINDOW.lo) * (SP.x1 - SP.x0); }
 const pxPerA = (SP.x1 - SP.x0) / (C.WINDOW.hi - C.WINDOW.lo);
 let specEls = null;
