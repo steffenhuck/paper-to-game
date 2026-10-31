@@ -108,7 +108,9 @@ Every picture answers a question the player has at that moment: what is this? di
 
 ### Orientation before acting; explanation after the discovery
 
-The player acts before reading a paragraph, but every screen carries the one or two sentences a stranger needs to act on it: what the things on screen are, what the choice means, roughly what a good answer looks like. Every word on a button is defined on that screen before the first press; a measure is named before the player sees it move; where two extremes exist, show them side by side before the first choice. Explanation — why the paper's answer is what it is — comes after the discovery.
+The player acts before reading a paragraph, but every screen carries the one or two sentences a stranger needs to act on it: what the things on screen are, what a move changes, and what the question is. Every word on a button is defined on that screen before the first press; a measure is named before the player sees it move; where two extremes exist, show them side by side before the first choice. Explanation — why the paper's answer is what it is — comes after the discovery.
+
+The game explains what a control does and never whether the player is using it well. Orientation does not say the procedure and does not say the answer. A control may show itself once before the first press, and an instrument with parts may assemble in front of the player one tap at a time; from then on the screen shows the consequence of a move and withholds the judgement of it until the player has committed: no "match found", no button that waits for the right answer, no hint that arrives on a stall, no words restating what the picture shows. The paper's own answer appears after the player's (a ghost under their reading), never as a target before. The yardstick during play describes; only the verdict concludes. Help may spell out the procedure for anyone who wants it.
 
 A **How to play** page explains the whole game in plain language, reachable from the start screen and from a small ? on every play screen; returning lands the player where they were. Button labels say what happens.
 
