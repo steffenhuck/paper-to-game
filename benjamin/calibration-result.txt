@@ -1,0 +1,47 @@
+Benjamin's Veil — calibration result (2026-10-31)
+31 passed, 0 failed
+      halo under the veil, by age: 1.00 1.00 0.95 0.81 0.57 0.23 0.05
+PASS  P1 never lifted: the halo at the cinema is below a tenth of its start  [0.05]
+PASS  P1b most of the loss comes after the court (halo still above three quarters at the court)  [0.81]
+PASS  P1c the halo is still bright through the temple  [1.00]
+      cult (never shown) vs widest reach, by age: cave 1.00/0.12, temple 1.00/0.22, cathedral 0.95/0.25, court 0.81/0.40, printshop 0.57/0.55, studio 0.23/0.75, cinema 0.05/0.95
+PASS  P2 the first age at which the widest reach beats the never-shown halo is the studio (photography)  [studio]
+PASS  P2b the first age at which the two are within a tenth is the print shop (lithography)  [printshop]
+PASS  P3 cult value falls strictly with nearness at every age
+PASS  P3b the screen leaves no halo at all
+PASS  P4 the halo is non-increasing over every schedule  [5760 schedules]
+PASS  P5 the widest reach available grows strictly from age to age  [0.12 0.22 0.25 0.40 0.55 0.75 0.95]
+PASS  P5b the ceiling never falls and reaches the screen only at the cinema
+      heuristics (memo, build.md section 3):
+        always veiled              0000000  total 4.63   by age 1.02 1.01 0.96 0.81 0.57 0.23 0.05
+        always the widest veil     1223334  total 4.59   by age 0.87 0.59 0.43 0.44 0.56 0.75 0.95
+        always shown on the day    1111111  total 2.72   by age 0.87 0.71 0.58 0.33 0.17 0.05 0.01
+        open at the court          0003334  total 5.88   by age 1.02 1.01 0.96 0.60 0.59 0.75 0.95
+        open at the print shop     0000334  total 6.20   by age 1.02 1.01 0.96 0.81 0.69 0.76 0.95
+        open at the studio         0000034  total 6.12   by age 1.02 1.01 0.96 0.81 0.57 0.81 0.95
+        open at the cinema         0000004  total 5.54   by age 1.02 1.01 0.96 0.81 0.57 0.23 0.95
+        the best possible          0000334  total 6.20   by age 1.02 1.01 0.96 0.81 0.69 0.76 0.95
+PASS  P6 the best schedule first prints at the print shop or the studio  [printshop]
+PASS  P6b always veiled lands below three quarters of the best  [0.75]
+PASS  P6c always the widest veil lands below three quarters of the best  [0.74]
+PASS  P6d open at the print shop and at the studio are both within a tenth of the best
+PASS  P6e open at the cinema is worse than open at the studio (the ages of print passed unused)
+PASS  P6f open at the court is worse than open at the print shop (the halo spent too early)
+PASS  P6g the heuristics spread: the decision matters (range above a quarter of the best)  [3.48]
+      crowd at half price: best 0000034 (prints first at studio); always veiled 0.88 of best; always widest 0.57 of best
+      crowd at double price: best 0013334 (prints first at court); always veiled 0.54 of best; always widest 0.91 of best
+      eyes declining a third more slowly: best 0000034 (prints first at studio); always veiled 0.81 of best; always widest 0.72 of best
+PASS  P7 under all three the best schedule first prints between the court and the studio
+PASS  P7b under all three always veiled stays below nine tenths of the best
+PASS  P7c under all three always widest stays below the best, and below three quarters when the crowd is not overpriced
+PASS  P7d the halo under the veil still goes below a quarter by the cinema with the slower eyes
+PASS  P8 the rally holds the most and ends in war
+PASS  P8b the newsreel has no halo and everyone in it
+PASS  P8c the vault has a crowd of one and no halo
+PASS  P8d the studio rebuilds a halo, in ink, smaller than the rally's
+PASS  W no decimals in any string the screen shows
+PASS  W2 every veil slab and every fork slab has a label and a meaning
+PASS  W3 every age has a technique, a line for what is new, and a crowd word up to its ceiling
+PASS  W4 halo words cover the range
+PASS  W5 the verdict for a sensible path names the turn
+PASS  W6 the verdict for the always-veiled path says the halo went anyway
