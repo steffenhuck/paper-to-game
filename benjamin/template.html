@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Benjamin's Veil</title>
 <script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<meta name="description" content="Benjamin (1936) as a keeper's problem: one face, seven ages, one veil to set each age. How near do you let the people come, and what is left of the halo?">
+<meta name="description" content="Benjamin (1936) as a keeper's problem: one face, six ages, one veil to set each age. How near do you let the people come, and what is left of the halo?">
 <style>
 @font-face{font-family:'Oswald';font-weight:200 700;src:url(data:font/woff2;base64,/*__FONT_OSWALD__*/) format('woff2');font-display:block}
 @font-face{font-family:'Franklin';font-weight:100 900;font-style:normal;src:url(data:font/woff2;base64,/*__FONT_FRANKLIN__*/) format('woff2');font-display:block}
@@ -53,7 +53,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
 .slot .mini i{display:block;height:100%}
 .orient{font-size:15px;line-height:1.4;margin:8px 0 6px}
 #newthis{min-height:63px}  /* three lines reserved, so the picture sits at the same height every age */
-.orient.arrive{color:var(--red-2);font-weight:600;transition:opacity .6s ease;min-height:42px;display:block}
+.orient.arrive{color:var(--red-2);font-weight:600;transition:opacity .6s ease;min-height:63px;display:block}
 .orient.arrive.held{opacity:0}  /* space reserved from the first frame, so the picture does not jump when the line appears */
 .frame{display:block;width:100%;height:auto;border:4px solid var(--ink);background:var(--ink)}
 .copies{display:flex;align-items:center;gap:6px;margin:6px 0 0;min-height:44px}
@@ -61,8 +61,9 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
 .copies svg{display:block;height:40px;flex:1}
 .copies .none{font-size:14px;color:var(--grey);font-style:italic}
 .veils{margin:8px 0 0}
-.veil{display:flex;align-items:center;gap:10px;width:100%;min-height:48px;margin:6px 0;padding:6px 10px;background:var(--red);color:var(--cream);border:0;border-bottom:4px solid var(--ink);border-radius:0;cursor:pointer;text-align:left;touch-action:manipulation;user-select:none;-webkit-user-select:none}
-.veil .k{font-family:var(--display);font-weight:600;font-size:17px;text-transform:uppercase;letter-spacing:.1em;flex:0 0 150px;line-height:1.1}
+.veil{display:flex;align-items:center;gap:10px;width:100%;min-height:42px;margin:4px 0;padding:5px 10px;position:relative;background:var(--red);color:var(--cream);border:0;border-bottom:4px solid var(--ink);border-radius:0;cursor:pointer;text-align:left;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.veil .k{font-family:var(--display);font-weight:600;font-size:15px;text-transform:uppercase;letter-spacing:.1em;flex:0 0 158px;line-height:1.1}
+.veil .new{position:absolute;right:8px;top:-7px;font-family:var(--display);font-size:11px;letter-spacing:.14em;background:var(--cream);color:var(--red);border:2px solid var(--ink);padding:1px 6px}
 .veil .w{font-family:var(--text);font-size:14px;line-height:1.2;flex:1;opacity:.95}
 .veil.chosen{background:var(--ink)}
 .veil:disabled{background:var(--grey-2);color:var(--grey);border-bottom-color:var(--grey);cursor:default}
@@ -74,9 +75,9 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
 .hold{display:block;width:100%;height:26px;border:3px solid var(--ink);background:var(--cream)}
 .cf{margin-top:12px}
 .cf .lab{font-size:14px;color:var(--grey);margin-bottom:4px}
-.cfrow{display:flex;gap:6px;justify-content:space-between}
-.cfrow .c{flex:1;text-align:center}
-.cfrow .c svg{display:block;width:100%;height:58px;border:2px solid var(--ink);background:var(--ink)}
+.cfrow{display:flex;gap:4px;justify-content:flex-start;flex-wrap:wrap}
+.cfrow .c{flex:0 0 calc((100% - 24px) / 7);text-align:center}
+.cfrow .c svg{display:block;width:100%;height:50px;border:2px solid var(--ink);background:var(--ink)}
 .cfrow .c.me svg{border:3px solid var(--red)}
 .cfrow .c.no svg{opacity:.35}
 .cfrow .c span{display:block;font-family:var(--display);font-size:11px;letter-spacing:.08em;text-transform:uppercase;line-height:1.1;margin-top:3px}
@@ -104,8 +105,8 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     <svg id="startface" viewBox="0 0 200 230" style="flex:0 0 120px;height:138px;border:3px solid var(--ink);background:#3b2a1a"></svg>
     <p class="lede" style="margin:0">You keep one face. It is painted, it has a halo, and hardly anyone has ever seen it. Every age brings a new way to copy a face, and the people press closer.</p>
   </div>
-  <p class="lede">Each age you <b>set the veil</b> (how near the people may come), <b>let the age pass</b>, and see who came and what is left of the halo. Seven ages, then one last choice about where the face goes.</p>
-  <p class="aim">Over seven ages, let the face move as many people as it can.</p>
+  <p class="lede">Each age you <b>set the veil</b> (how near the people may come), <b>let the age pass</b>, and see who came and what is left of the halo. Six ages, each with a new way to copy a face, then one last choice about where the face goes.</p>
+  <p class="aim">Over six ages, let the face move as many people as it can.</p>
   <p class="lede">A face moves the people who see it, and moves them more while it still has its <b>halo</b>. Being seen needs nearness; the halo needs distance, and once spent it does not grow back. Each age there are more people than the last.</p>
   <button class="btn" id="begin">Begin: the first age</button>
   <button class="btn quiet" id="howto">How to play</button>
@@ -115,8 +116,8 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
 
 <!-- PLAY -->
 <section class="screen" id="play">
-  <div class="topbar"><div class="aimline">Over seven ages, let the face move as many people as it can.</div><button class="qbtn" data-help="play">?</button></div>
-  <div class="band"><b id="agename">THE CAVE</b><span id="agemeta">AGE 1 OF 7 · LONG AGO</span></div>
+  <div class="topbar"><div class="aimline">Over six ages, let the face move as many people as it can.</div><button class="qbtn" data-help="play">?</button></div>
+  <div class="band"><b id="agename">THE CAVE</b><span id="agemeta">AGE 1 OF 6 · LONG AGO</span></div>
   <div class="strip" id="strip"></div>
   <p class="orient" id="newthis"></p>
   <p class="orient arrive" id="arrive"></p>
@@ -140,7 +141,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
 <section class="screen" id="forkscreen">
   <div class="topbar"><div class="aimline">The halo is gone. The longing for it is not.</div><button class="qbtn" data-help="forkscreen">?</button></div>
   <div class="band"><b>1936</b><span>THE LAST AGE</span></div>
-  <p class="orient" id="forkorient">Seven ages have passed. Four places want the face now. Pick one, put the face there, and see what comes of it.</p>
+  <p class="orient" id="forkorient">Six ages have passed. Four places want the face now. Pick one, put the face there, and see what comes of it.</p>
   <svg class="frame" id="forkframe" viewBox="0 0 340 300"></svg>
   <div id="forkchoose">
     <div class="veils forks" id="forks"></div>
@@ -155,7 +156,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
 
 <!-- END -->
 <section class="screen" id="end">
-  <div class="band"><b>The verdict</b><span>SEVEN AGES AND 1936</span></div>
+  <div class="band"><b>The verdict</b><span>SIX AGES AND 1936</span></div>
   <p class="lead" id="lead"></p>
   <div class="rule"></div>
   <div class="strip" id="endstrip"></div>
@@ -171,13 +172,13 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
 <!-- HELP -->
 <section class="screen help" id="help">
   <div class="band"><b>How to play</b><span></span></div>
-  <p class="aim">Over seven ages, let the face move as many people as it can.</p>
+  <p class="aim">Over six ages, let the face move as many people as it can.</p>
   <ol>
-    <li><b>Each age, set the veil.</b> Five slabs, from <i>in the dark</i> (only you see the face) to <i>on the screen</i> (everyone, together, close up). An age only offers the slabs its technique allows: there is no print before the woodcut, no screen before film. Tapping a slab parts the red curtains and brings the face nearer. Nothing is spent until you let the age pass.</li>
-    <li><b>Let the age pass.</b> The crowd walks in (how many, and how near, is what the veil gave them); the halo thins by how near you let them; copies go out in the age's technique. A line says what happened. The bar under it is <b>moved this age</b>: how many of the people this age could have moved you moved; gold for the part the halo did, red for the part being seen did.</li>
+    <li><b>Each age, set the veil.</b> A ladder of red slabs: <i>in the dark</i> (only you see the face), <i>on the day</i> (the faithful, once a year), and then the ways of copying a face as the ages bring them: <i>on coins</i>, <i>in woodcuts</i>, <i>in lithographs</i>, <i>in photographs</i>, <i>on film</i>. Each age adds one rung, marked new; the old rungs stay. Tapping a slab parts the red curtains and brings the face nearer. Nothing is spent until you let the age pass.</li>
+    <li><b>Let the age pass.</b> The crowd walks in (how many, and how near, is what the veil gave them); the halo thins by how near you let them; copies go out by the means you chose (coins, sheets, prints, photographs, film). A line says what happened. The bar under it is <b>moved this age</b>: how many of the people this age could have moved you moved; gold for the part the halo did, red for the part being seen did.</li>
     <li><b>The halo does not grow back.</b> What you spend is spent. And each age arrives with eyes of its own: the more copying there is in the world, the thinner the halo arrives, whatever you did.</li>
-    <li><b>Under the bar,</b> five small frames show what the halo would be at each veil this age, yours ringed in red.</li>
-    <li><b>The tally.</b> Each age counts the people it moved, and each age has more people than the last, so the late ages weigh more. There is no running total; the verdict at the end sets your seven ages against the most a keeper could have done.</li>
+    <li><b>Under the bar,</b> small frames show what the halo would be at each rung this age, yours ringed in red.</li>
+    <li><b>The tally.</b> Each age counts the people it moved, and each age has more people than the last, so the late ages weigh more. There is no running total; the verdict at the end sets your six ages against the most a keeper could have done.</li>
     <li><b>1936:</b> the halo is gone and four places want the face. Pick one. Then the verdict: how many people your face moved, of what was possible, in words, and what Benjamin says about the path you took.</li>
   </ol>
   <p class="small">Nothing is random. The same choices give the same ages every time, so a second run is a different plan, not a different draw.</p>
@@ -207,7 +208,8 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     cave:      { bg: '#5A3F2A', skin: 'none', line: '#C4552C', lw: 5, dash: '10 4', hair: 'none', robe: 'none', opacity: 1 },
     temple:    { bg: '#2A2420', skin: '#E6D3AE', line: '#8A6E45', lw: 1.6, hair: '#D4BE93', robe: '#D4BE93', shade: true },  // warm stone on a dark cella (revision 3)
     icon:      { bg: '#3B2A1A', skin: '#DCB389', line: '#2B1D12', lw: 2.6, hair: '#2B1D12', robe: '#A52A1E' },
-    engraving: { bg: '#F3EAD6', skin: 'hatch', line: INK, lw: 1.6, hair: 'cross', robe: 'cross' },
+    woodcut:   { bg: '#F3EAD6', skin: 'hatch', line: INK, lw: 3.2, hair: 'cross', robe: 'cross' },   // the woodcut: heavy black line on cream (copies only)
+    coin:      { bg: '#8C6B2F', skin: '#C9A961', line: '#5A4214', lw: 2.2, hair: '#B8954E', robe: '#B8954E', shade: true },   // the coin: a worn face in brass (copies only)
     litho:     { bg: '#F1E9D8', skin: 'stipple', line: '#3A3632', lw: 2, hair: 'stipple2', robe: 'stipple2', soft: true },
     halftone:  { bg: '#E9E4DA', skin: 'dots', line: 'none', lw: 0, hair: 'dots2', robe: 'dots2', photo: true },
     film:      { bg: '#111111', skin: '#BDB8AE', line: '#1A1A1A', lw: 1.4, hair: '#1A1A1A', robe: '#2A2A2A', film: true },
@@ -347,7 +349,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   function renderAge() {
     M.arrive(S); picked = null;
     const a = M.currentAge(S);
-    $('agename').textContent = a.name; $('agemeta').textContent = `AGE ${S.age + 1} OF 7 · ${a.date}`;
+    $('agename').textContent = a.name; $('agemeta').textContent = `AGE ${S.age + 1} OF ${C.AGES.length} · ${a.date}`;
     renderStrip($('strip'), S);
     $('newthis').textContent = a.newThis;
     const al = M.arrivalLine(S); $('arrive').textContent = al; $('arrive').classList.add('held');
@@ -358,7 +360,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     } else drawFrame($('frame'), a.technique, S.halo, 0, 0);
     renderCopies(null);
     const opts = M.options(S);
-    $('veils').innerHTML = opts.map(o => `<button class="veil" data-i="${o.index}" ${o.allowed ? '' : 'disabled'}><span class="k">${o.label}</span><span class="w">${o.allowed ? o.who : 'not yet: ' + o.why}</span></button>`).join('');
+    $('veils').innerHTML = opts.map(o => `<button class="veil" data-i="${o.index}"><span class="k">${o.label}</span><span class="w">${o.who}</span>${o.isNew ? '<span class="new">NEW</span>' : ''}</button>`).join('');
     $('veils').querySelectorAll('.veil').forEach(b => b.addEventListener('click', () => pickVeil(+b.dataset.i)));
     $('commit').disabled = true; $('commitsub').textContent = 'set the veil first';
     $('choose').style.display = 'block'; $('result').style.display = 'none';
@@ -381,15 +383,17 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     $('choose').style.display = 'none';
     passFrame($('frame'), prev ? C.AGES[prev.age].technique : a.technique, a.technique, r.haloArrived, r.halo, v.n, r.reach);   // the age passes: the crowd walks in, the halo thins by what was spent, and the age's technique touches the face
     // copies out, in the age's technique; earlier ages' copies stay in the world (revision 2)
-    const nCopies = picked >= 3 ? Math.min(14, Math.round(r.reach * 18)) : 0;
-    if (nCopies) copiesMade.push({ tech: a.technique, count: nCopies, note: picked === 4 ? 'every screen' : r.reach > 0.5 ? '…and on, without end' : '…a few hundred' });
+    const COPYTECH = { coins: 'coin', woodcuts: 'woodcut', lithos: 'litho', photos: 'halftone', film: 'film' };
+    const COPYNOTE = { coins: 'in every purse', woodcuts: '…a few dozen', lithos: '…and on, without end', photos: 'every hand', film: 'every screen' };
+    const nCopies = C.VEILS[picked].copies ? Math.min(14, Math.max(3, Math.round(r.reach * 18))) : 0;
+    if (nCopies) copiesMade.push({ tech: COPYTECH[C.VEILS[picked].key], count: nCopies, note: COPYNOTE[C.VEILS[picked].key] });
     renderCopies(nCopies ? copiesMade[copiesMade.length - 1] : null);
     $('line').textContent = r.line;
     const gold = r.ofAge * r.cult / r.hold * 340, red = r.ofAge * r.bySeen / r.hold * 340;
     const how = r.cult > r.bySeen * 2 ? 'mostly by the halo' : r.bySeen > r.cult * 2 ? 'mostly by being seen' : 'by the halo and by being seen alike';
     $('holdwords').textContent = (r.ofAge < 0.03 ? 'hardly anyone' : M.fractionWords(r.ofAge) + ' of what this age could move') + (r.ofAge < 0.03 ? '' : ', ' + how);
     $('hold').innerHTML = `<rect x="0" y="0" width="${gold}" height="20" fill="${GOLD}"/><rect x="${gold}" y="0" width="${red}" height="20" fill="${RED}"/>`;
-    $('cfrow').innerHTML = r.counterfactual.map(c => `<div class="c${c.index === picked ? ' me' : ''}${c.allowed ? '' : ' no'}">${thumb(a.technique, c.halo)}<span>${C.VEILS[c.index].label}</span></div>`).join('');
+    $('cfrow').innerHTML = r.counterfactual.filter(c => c.allowed).map(c => `<div class="c${c.index === picked ? ' me' : ''}">${thumb(a.technique, c.halo)}<span>${C.VEILS[c.index].label.replace(/^(IN|ON) /, '')}</span></div>`).join('');
     $('nextage').textContent = S.age === C.AGES.length - 1 ? 'On to 1936' : 'Next age';
     renderStrip($('strip'), S);
     setTimeout(() => { $('result').style.display = 'block'; }, 700);

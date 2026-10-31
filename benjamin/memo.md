@@ -234,3 +234,25 @@ On screen: the bar is now **moved this age**, drawn against the most this age co
 Calibration 36/36; session test clean; screenshots refreshed.
 
 **Fourth play, the same afternoon.** The author still found the picture changing at the new age counterintuitive: the face was redrawn in the new technique on arrival, 0.9 s after the still frame. Now nothing in the picture changes at the arrival but the halo, which thins by what the age takes, which is what the red line beside it says. The age's technique touches the face when the age *passes*: on commit the frame crossfades from the face as it was to the face as this age leaves it, with the crowd walking in. The veil slabs, while being tried, move the curtains on the old face. The session test now also checks that the technique is unchanged at the arrival.
+
+## 21. Revisions after a fifth play (31 Oct 2026): the ladder is the techniques
+
+The author, at the cathedral: the age announces the woodcut and the player cannot use it. The slabs were nearness rungs (the dark, the day, the wall, print, the screen) and the ages were techniques, and they lined up at only two points, so five ages announced something the ladder did not show. Now **the rungs are the paper's techniques, one per age, and the ladder grows**: in the dark and on the day at the cave; coins at the temple (section I: "casting and stamping", bronzes, terracottas, coins); woodcuts at the cathedral; lithographs at the print shop; photographs at the studio; film at the cinema. The old rungs stay (a face can still be shown on the day in 1930); the newest is marked NEW; what an age announces is what it offers (calibration P5c checks the announcement names the rung). The court and the engraving are gone: six ages, seven rungs. Posters, which the author proposed as a rung, went to the fork instead: the rally slab is now THE POSTER, the leader's face on every wall and over the square, which is where Benjamin's epilogue puts the face and where the game's own look (a 1930s poster) was pointing all along. Film stays as the last rung because sections VIII to XV are about film, and the fork's politics (the rally filmed, the people filming themselves) exist only because of it.
+
+Each rung has its own halo cost and reach (CONFIG.VEILS, tagged). The coin is the designed temptation: the god on the drachma spends more of the halo than a woodcut (0.55 against 0.45) and reaches fewer eyes that matter (0.25 against 0.4), so coining at the temple then following the ladder lands at 87% of the best. Settled by simulation before building, over a grid of eyes schedules, rung costs and reaches:
+
+| plan | of the best |
+|---|---|
+| the best possible: dark, dark, woodcuts at the cathedral, then lithographs, photographs, film | 100% |
+| wait for the lithograph, then each new rung | 93% |
+| coins at the temple, then each new rung | 87% |
+| the newest rung every age, from the day at the cave | 86% |
+| wait for the photograph | 72% |
+| print at the print shop, then back into the dark | 43% |
+| film only | 36% |
+| the faithful on the day, every age | 19% |
+| always veiled | 1% |
+
+So the best keeper takes each new way of printing as it comes, from the woodcut on, and the only ways to do badly are to hide, to coin, or to wait too long. Being seen is now worth a seventh of a full halo (0.15); the eyes schedule is 1, 1, 0.9, 0.7, 0.45, 0.2. Robustness (P7, five variants) keeps the first print at the cathedral or the print shop, always-veiled below a fifth, always-newest below the best, and the best path never narrowing.
+
+Copies go out by the rung chosen, not the age: coins are drawn as worn brass faces, woodcuts in heavy black line, lithographs in grain, photographs in halftone, film in frames; the copies of earlier ages stay in the margin. The counterfactual row shows only the rungs the age offers. The slabs are a little shorter (42 px) so seven fit under the picture. The space reserved for the arrival line is three lines, so the picture sits at one height on all six ages (measured). Calibration 40/40; session test clean.
