@@ -16,37 +16,37 @@ PASS  P5 the widest reach available grows strictly from age to age  [0.18 0.25 0
 PASS  P5b each age opens exactly one new rung, and film only at the cinema
 PASS  P5c what an age announces is what it offers: every age from the temple on names its new rung
       heuristics (memo, build.md section 3):
-        always veiled              000000  total 0.01   by age 0.01 0.00 0.00 0.00 0.00 0.00
+        always veiled              000000  total 0.00   by age 0.00 0.00 0.00 0.00 0.00 0.00
         always the newest rung     123456  total 0.82   by age 0.07 0.05 0.09 0.14 0.18 0.29
         always shown on the day    111111  total 0.22   by age 0.07 0.09 0.05 0.01 0.00 0.00
-        coins at the temple, then the newest 023456  total 0.79   by age 0.01 0.06 0.10 0.15 0.19 0.29
-        open at the cathedral      003456  total 0.89   by age 0.01 0.00 0.17 0.22 0.21 0.29
-        open at the print shop     000456  total 0.86   by age 0.01 0.00 0.00 0.32 0.24 0.29
-        open at the studio         000056  total 0.70   by age 0.01 0.00 0.00 0.00 0.40 0.29
-        open at the cinema         000006  total 0.34   by age 0.01 0.00 0.00 0.00 0.00 0.32
-        print, then back in the dark 000400  total 0.33   by age 0.01 0.00 0.00 0.32 0.00 0.00
+        coins at the temple, then the newest 023456  total 0.78   by age 0.00 0.06 0.10 0.15 0.19 0.29
+        open at the cathedral      003456  total 0.88   by age 0.00 0.00 0.17 0.22 0.21 0.29
+        open at the print shop     000456  total 0.84   by age 0.00 0.00 0.00 0.32 0.24 0.29
+        open at the studio         000056  total 0.69   by age 0.00 0.00 0.00 0.00 0.40 0.29
+        open at the cinema         000006  total 0.32   by age 0.00 0.00 0.00 0.00 0.00 0.32
+        print, then back in the dark 000400  total 0.32   by age 0.00 0.00 0.00 0.32 0.00 0.00
         the best possible          113456  total 0.94   by age 0.07 0.09 0.12 0.17 0.19 0.29
 PASS  P6 the best schedule first prints at the cathedral or the print shop  [cathedral]
 PASS  P6a the best schedule climbs the ladder: after its first print it takes each new rung as it comes  [113456]
-PASS  P6b always veiled lands below a tenth of the best: a halo nobody sees moves nobody  [0.02]
+PASS  P6b always veiled lands below a tenth of the best: a halo nobody sees moves nobody  [0.00]
 PASS  P6c always the newest rung lands below the best, and opening at the cathedral or the print shop beats it  [0.87]
-PASS  P6d open at the print shop is within a tenth of the best  [0.92]
+PASS  P6d open at the print shop is within a tenth of the best  [0.90]
 PASS  P6e the later the single opening after the print shop, the worse: studio below print shop, cinema below studio
-PASS  P6f wait then splash on film lands below three fifths of the best: five crowds saw nothing and the sixth saw a screen  [0.36]
-PASS  P6g print then back in the dark lands below half of the best: the halo does not return  [0.36]
-PASS  P6j the coin is a tempting mistake: coins at the temple then the newest lands between four fifths and nineteen twentieths of the best  [0.84]
+PASS  P6f wait then splash on film lands below three fifths of the best: five crowds saw nothing and the sixth saw a screen  [0.35]
+PASS  P6g print then back in the dark lands below half of the best: the halo does not return  [0.34]
+PASS  P6j the coin is a tempting mistake: coins at the temple then the newest lands between four fifths and nineteen twentieths of the best  [0.83]
 PASS  P6h the best path opens step by step: the veil never narrows along it  [113456]
-PASS  P6i the heuristics spread: the decision matters (range above half of the best)  [0.92]
-      being seen worth a tenth: best 013456 (prints first at cathedral); always veiled 0.02 of best; always widest 0.83 of best
-      being seen worth two fifths: best 113456 (prints first at cathedral); always veiled 0.01 of best; always widest 0.94 of best
-      people counted more flatly: best 113456 (prints first at cathedral); always veiled 0.02 of best; always widest 0.86 of best
-      people counted more steeply: best 013456 (prints first at cathedral); always veiled 0.01 of best; always widest 0.88 of best
-      eyes declining a third more slowly: best 013456 (prints first at cathedral); always veiled 0.02 of best; always widest 0.85 of best
+PASS  P6i the heuristics spread: the decision matters (range above half of the best)  [0.94]
+      being seen worth a tenth: best 113456 (prints first at cathedral); always veiled 0.00 of best; always widest 0.84 of best
+      being seen worth two fifths: best 113456 (prints first at cathedral); always veiled 0.00 of best; always widest 0.94 of best
+      people counted more flatly: best 113456 (prints first at cathedral); always veiled 0.00 of best; always widest 0.86 of best
+      people counted more steeply: best 013456 (prints first at cathedral); always veiled 0.00 of best; always widest 0.89 of best
+      eyes declining a third more slowly: best 013456 (prints first at cathedral); always veiled 0.00 of best; always widest 0.86 of best
 PASS  P7 under all five variants the best schedule first prints at the cathedral or the print shop
 PASS  P7b under all five always veiled stays below a fifth of the best
 PASS  P7c under all five always the newest rung stays below the best
 PASS  P7d under all five the best path never narrows the veil
-PASS  S the score is the fraction out of 100: the best path scores 100, always veiled under 5  [2]
+PASS  S the score is the fraction out of 100: the best path scores 100, always veiled under 5  [0]
 PASS  S2 the shortfall names the cause: early opening is read as halo spent, hoarding as kept farther
 PASS  W no decimals in any string the screen shows
 PASS  W2 every slab has a label and a meaning, and the epilogue ends on Benjamin's line
