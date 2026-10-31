@@ -74,7 +74,7 @@ let threw = false; try { M.observe(st, 20, 2, 500); } catch (e) { threw = true; 
 check('G5 a nebula cannot be observed twice', threw);
 for (let i = 0; i < 9; i++) if (M.canObserve(st, i)) M.observe(st, i, N[i].r, N[i].v);
 check('G6 nights run out and nightsOver is true', M.nightsOver(st) && st.nightsLeft === 0, 'left ' + st.nightsLeft);
-check('G7 tolerance rings: 15% in distance, 40 km/s in velocity', M.eyeMatch(N[7], 0.56) && !M.eyeMatch(N[7], 0.6) && M.specMatch(N[7], 320) && !M.specMatch(N[7], 340));
+check('G7 demonstration match tests: 15% in distance, 40 km/s in velocity', M.eyeMatch(N[7], 0.56) && !M.eyeMatch(N[7], 0.6) && M.specMatch(N[7], 320) && !M.specMatch(N[7], 340));
 
 // ---- Heuristics (memo, section 17)
 const h = M.heuristics(7);
@@ -105,7 +105,12 @@ check('W2c plate words describe and never conclude (no "faster", "relation", "ti
 // Hubble's ghost points and the comparison sentence
 const gh = M.hubblePoints(st2);
 check('W2d hubblePoints gives Table 1 values for the observed nebulae', gh.length === 4 && gh[3].r === 2.0 && gh[3].v === N[20].v);
-check('W2e exact readings: "your dots sat on his"', /sat on his/.test(M.comparisonWords(st2)), M.comparisonWords(st2));
+check('W2e exact readings: "your dots sat near his"', /sat near his/.test(M.comparisonWords(st2)), M.comparisonWords(st2));
+// the comparison is derived from the actual gap: readings 20% long and far ones 200 km/s slow
+const stL = M.newGame(6); for (const i of [5, 7, 20, 22]) M.observe(stL, i, N[i].r * 1.2, N[i].v - (N[i].r >= 1 ? 200 : 0));
+check('W2h long distances and slow far ones are named', /ran long/.test(M.comparisonWords(stL)) && /far ones ran slow/.test(M.comparisonWords(stL)), M.comparisonWords(stL));
+const stN = M.newGame(8); for (const i of [5, 7, 11, 13]) M.observe(stN, i, N[i].r * 0.97, N[i].v + 20);
+check('W2i small errors read as near Hubble\'s', /sat near his/.test(M.comparisonWords(stN)), M.comparisonWords(stN));
 const stS = M.newGame(4); for (const i of [5, 7, 20, 22]) M.observe(stS, i, N[i].r * 0.8, N[i].v + 150);
 check('W2f short distances and fast far ones are named', /ran short/.test(M.comparisonWords(stS)) && /far ones ran fast/.test(M.comparisonWords(stS)), M.comparisonWords(stS));
 check('W2g no decimals in comparison or plate words', !/\d\.\d/.test(M.comparisonWords(stS) + M.plateWords(stS) + M.comparisonWords(st2)));

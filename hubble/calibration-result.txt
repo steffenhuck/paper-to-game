@@ -1,4 +1,4 @@
-Hubble's Twelve Nights — calibration against Hubble (1929). 50 passed, 0 failed.
+Hubble's Twelve Nights — calibration against Hubble (1929). 52 passed, 0 failed.
 PASS  P1 brightest-star criterion reproduces Table 1 distances within 12% for all 14 nebulae with m_s  [worst 7.0%]
       5457: m=17 → 0.46 (table 0.45); 4736: m=17.3 → 0.52 (table 0.5); 5194: m=17.3 → 0.52 (table 0.5); 4449: m=17.8 → 0.66 (table 0.63); 4214: m=18.3 → 0.83 (table 0.8); 3031: m=18.5 → 0.91 (table 0.9); 3627: m=18.5 → 0.91 (table 0.9); 4826: m=18.5 → 0.91 (table 0.9); 5236: m=18.5 → 0.91 (table 0.9); 1068: m=18.7 → 1.00 (table 1); 5055: m=19 → 1.15 (table 1.1); 7331: m=19 → 1.15 (table 1.1); 4258: m=19.5 → 1.45 (table 1.4); 4151: m=20 → 1.82 (table 1.7)
 PASS  P1b m_s = 17.0 gives 0.457 million parsecs (table 0.45)  [0.457]
@@ -29,7 +29,7 @@ PASS  G3 twelve nights buy at least four far nebulae (cost 3)
 PASS  G4 observing a Virgo nebula costs three nights and lands on the plate
 PASS  G5 a nebula cannot be observed twice
 PASS  G6 nights run out and nightsOver is true  [left 0]
-PASS  G7 tolerance rings: 15% in distance, 40 km/s in velocity
+PASS  G7 demonstration match tests: 15% in distance, 40 km/s in velocity
       heuristics (noisy readings within the rings; K through origin after the Sun is taken out):
         nearest and cheapest first         n=11  farthest=0.86  K= 502  corr=0.75
         farthest first                     n= 4  farthest=2.26  K= 393  corr=0.01
@@ -50,12 +50,14 @@ PASS  W1 plate words after three nearby raw reads say cloud
 PASS  W2 plate words with three near and a Virgo nebula describe the farthest-is-highest  [Your farthest dot is also your highest. The others rise toward it.]
 PASS  W2c plate words describe and never conclude (no "faster", "relation", "tied") over 60 random games
 PASS  W2d hubblePoints gives Table 1 values for the observed nebulae
-PASS  W2e exact readings: "your dots sat on his"  [Set beside Hubble's plate, your dots sat on his.]
+PASS  W2e exact readings: "your dots sat near his"  [Set beside Hubble's plate, your dots sat near his.]
+PASS  W2h long distances and slow far ones are named  [Set beside Hubble's plate, your distances ran long and your far ones ran slow.]
+PASS  W2i small errors read as near Hubble's  [Set beside Hubble's plate, your dots sat near his.]
 PASS  W2f short distances and fast far ones are named  [Set beside Hubble's plate, your distances ran short and your far ones ran fast.]
 PASS  W2g no decimals in comparison or plate words
 PASS  W2b plate words with Virgo only say nothing to compare  [Four nebulae, all at about the same distance. Nothing to compare yet.]
 PASS  W3 verdict: within Hubble's two solutions at 480  [You set the rate at about 480 km/s for every million parsecs. That is within Hubble's two solutions.]
 PASS  W4 verdict: prediction at 480 × 7 = 3360 is called close to 3779  [Humason's nebula, seven million parsecs out: you said about 3,350 km/s; the spectrograph said about 3,800. Close. Hubble's own rate would have said about 3,500.]
 PASS  W5 rate 0 reads as "do not depend on distance"
-PASS  W6 no decimals in the verdict lines  [You read 4 nebulae, the farthest about two million parsecs out. Set beside Hubble's plate, your dots sat on his.]
+PASS  W6 no decimals in the verdict lines  [You read 4 nebulae, the farthest about two million parsecs out. Set beside Hubble's plate, your dots sat near his.]
 PASS  S1 seeds are replayable

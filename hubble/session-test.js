@@ -27,15 +27,25 @@ const L = []; const say = s => { L.push(s); console.log(s); };
     if (!btn || (await btn.innerText()).toLowerCase().includes('over')) { say('  cannot point: ' + (btn ? await btn.innerText() : 'no button')); continue; }
     await btn.click(); await page.waitForTimeout(900); if (n === 0) { await shot('eyepiece-demo'); await page.waitForTimeout(2200); }
     // eyepiece: scan the dial until the ring glows (what a player does by eye)
-    let found = false;
-    for (let v = 0; v <= 1000; v += 5) { await setRange('#eyedial', v); const ok = await page.$eval('#eyereadout', e => e.className.includes('amber')); if (ok) { found = true; break; } }
-    say(`  eyepiece: ${await page.$eval('#eyereadout', e => e.innerText)} (${found ? 'ring' : 'no ring'})`);
+    // a player's judgement: the true distance times a small error (the dial is logarithmic between 0.02 and 3.0)
+    const rTrue = await page.evaluate(i => window.HUBBLE.CONFIG.NEBULAE[i].r, idx);
+    const rRead = rTrue * [0.9, 1.1, 0.95, 0.85, 1.05, 0.9, 1.0][n % 7];
+    await setRange('#eyedial', Math.round(1000 * (Math.log10(rRead) - Math.log10(0.02)) / (Math.log10(3.0) - Math.log10(0.02))));
+    const eyeTxt = await page.$eval('#eyereadout', e => e.innerText);
+    if (/match|fainter|brighter/.test(eyeTxt)) say('  !! eyepiece readout grades the player: ' + eyeTxt);
+    if (await page.$eval('#eyeread', e => e.disabled)) say('  !! READ THE DISTANCE disabled after the demonstration');
+    say(`  eyepiece: ${eyeTxt}`);
     if (n === 0) { await shot('eyepiece'); await noScroll(); }
     if (n === 1) { await page.click('.screen.on .qbtn'); await page.waitForTimeout(200); await shot('help'); await page.click('#helpback'); await page.waitForTimeout(200); say('  help opened and returned to ' + await page.$eval('.screen.on', e => e.id)); }
     await page.click('#eyeread'); await page.waitForTimeout(900); if (n === 0) { await shot('spectrograph-demo'); await page.waitForTimeout(2400); }
-    found = false;
-    for (let v = -400; v <= 1300; v += 5) { await setRange('#specdial', v); const ok = await page.$eval('#specreadout', e => e.innerText.includes('on the bars')); if (ok) { found = true; break; } }
-    say(`  spectrograph: ${await page.$eval('#specreadout', e => e.innerText)} (${found ? 'ring' : 'no ring'})`);
+    const vTrue = await page.evaluate(i => window.HUBBLE.CONFIG.NEBULAE[i].v, idx);
+    await setRange('#specdial', Math.round((vTrue + [60, -40, 30, 120, -80, 50, 0][n % 7]) / 5) * 5);
+    const specTxt = await page.$eval('#specreadout', e => e.innerText);
+    if (/on the bars/.test(specTxt)) say('  !! spectrograph readout grades the player: ' + specTxt);
+    if (await page.$eval('#specread', e => e.disabled)) say('  !! READ THE SPEED disabled after the demonstration');
+    const glowing = await page.$$eval('#specsvg .glow, #eyesvg .glow', g => g.length);
+    if (glowing) say('  !! glow visible during play');
+    say(`  spectrograph: ${specTxt}`);
     if (n === 0 || idx === 22) { await shot(idx === 22 ? 'spectrograph-virgo' : 'spectrograph'); await noScroll(); }
     await page.click('#specread'); await page.waitForTimeout(1200);
     say(`  plate: ${await page.$eval('#platenight', e => e.innerText)} // ${await page.$eval('#platewords', e => e.innerText)}`);
