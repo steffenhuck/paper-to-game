@@ -20,7 +20,7 @@ about = """
 <p>The whole electrodynamical part (§§6–9: magnet and conductor, Doppler shift, aberration, light pressure). Length contraction, which would shorten the rocket but changes nothing you do. The relativity of simultaneity is used (the station clock agrees with home's because the two are at rest relative to each other) but not played. Acceleration, braking and coming home.</p>
 <h3>The paper</h3>
 <p>A. Einstein, "Zur Elektrodynamik bewegter Körper", <i>Annalen der Physik</i> 17:891–921 (1905), doi:10.1002/andp.19053221004. Read in the 1923 English translation by W. Perrett and G. B. Jeffery, "On the Electrodynamics of Moving Bodies". Public domain.</p>
-<p><b>Game built from this paper; the paper is the authority where the two disagree.</b> It is a beta. It has had the builder's review only and has not been tested with real players. Font: Archivo, SIL Open Font License.</p>
+<p><b>Game built from this paper; the paper is the authority where the two disagree.</b> Font: Archivo, SIL Open Font License.</p>
 """
 t = open('template.html', encoding='utf-8').read()
 for k in ['/*__MECHANISM__*/', '/*__ABOUT__*/', '/*__FONT_DISP__*/', '/*__FONT_BODY__*/']:

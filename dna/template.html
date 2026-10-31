@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Watson's Cardboard</title>
+<script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <meta name="description" content="A game from Watson and Crick's 1953 DNA letter: build the other chain from cut-out pieces, find the only two pairs that fit, then pull the ladder apart and copy it.">
 <style>
 @font-face { font-family: 'OC Marker'; src: url(data:font/woff2;base64,/*__FONT_MARKER__*/) format('woff2'); font-weight: 400; }
@@ -12,6 +13,11 @@
 :root {
   --kraft: #CFAE7C; --kraft2: #BF9C68; --pencil: #2A2621; --card: #F5EDDB; --blue: #2350C8; --red: #D23B25;
   --mark: 'OC Marker', 'Comic Sans MS', cursive; --type: 'OC Type', 'Courier New', monospace;
+}
+.sig{padding:18px 0 22px;font-size:14px;text-align:center;font-family:var(--type)}
+.sig a{color:var(--pencil);font-style:italic;text-decoration:none;opacity:.6}
+.sig a:hover{opacity:1}
+:root{
 }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { margin: 0; background: var(--kraft); color: var(--pencil); font-family: var(--type); font-size: 15px; line-height: 1.4; }
@@ -177,6 +183,7 @@ svg.scale { display: block; width: 100%; height: auto; margin: 0 0 12px; }
       <p class="src">Story: Watson, <i>The Double Helix</i> (1968), ch. 26. The letter itself does not mention cardboard.</p>
     </div>
     <button class="tag" id="b-desk"><span>To the desk</span></button>
+    <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
   </div>
 </section>
 
@@ -225,6 +232,7 @@ svg.scale { display: block; width: 100%; height: auto; margin: 0 0 12px; }
   <button class="tag red" id="b-new"><span>Play again: a new chain</span></button>
   <button class="tag" data-about><span>What's real here</span></button>
   <p class="counts" id="tally"></p>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
 </section>
 
 <!-- HELP -->
