@@ -166,11 +166,11 @@ function specMatch(neb, vTrial) { return Math.abs(vTrial - neb.v) <= CONFIG.SPEC
 // ---------------------------------------------------------------- words
 function fmtK(k) { return Math.round(k / 10) * 10; }
 function roundV(v) { return Math.round(v / 50) * 50; }
-// The sentence under the plate after each night, in the aim's units
+// The sentence under the chart after each night, in the aim's units
 function plateWords(state) {
-  // Describes the plate; never concludes. "The farther, the faster" is the verdict's line, after the rate is set.
+  // Describes the chart; never concludes. "The farther, the faster" is the verdict's line, after the rate is set.
   const pts = platePoints(state), n = pts.length;
-  if (n === 0) return 'Nothing on the plate yet.';
+  if (n === 0) return 'Nothing on the chart yet.';
   if (n === 1) return 'One nebula. Nothing to compare it with yet.';
   if (n === 2) return 'Two nebulae. Too few to see anything.';
   const rs = pts.map(p => p.r), spread = Math.max(...rs) - Math.min(...rs), c = correlation(pts);
@@ -196,9 +196,9 @@ function comparisonWords(state) {
   if (far.length && Math.abs(farErr) > 60) parts.push(farErr > 0 ? 'your far ones ran fast' : 'your far ones ran slow');
   else if (!far.length && Math.abs(nearErr) > 60) parts.push(nearErr > 0 ? 'your speeds ran fast' : 'your speeds ran slow');
   else if (far.length && Math.abs(allErr) > 60) parts.push(allErr > 0 ? 'your speeds ran fast' : 'your speeds ran slow');
-  if (!parts.length) return 'Set beside Hubble\'s plate, your dots sat near his.';
+  if (!parts.length) return 'Set beside Hubble\'s chart, your dots sat near his.';
   const s = parts.join(' and ');
-  return 'Set beside Hubble\'s plate, ' + s.charAt(0) + s.slice(1) + '.';
+  return 'Set beside Hubble\'s chart, ' + s.charAt(0) + s.slice(1) + '.';
 }
 // Distances in words, never decimals (the author finds the decimals in CONFIG)
 function distanceWords(r) {
@@ -247,9 +247,9 @@ function verdict(state) {
   else test = `Humason's nebula, seven million parsecs out: you said about ${roundV(state.prediction).toLocaleString('en')} km/s; the spectrograph said about ${roundV(H.v).toLocaleString('en')}. ${Math.abs(err) <= 800 ? 'Close.' : err > 0 ? 'You were high.' : 'You were low.'} Hubble's own rate would have said about ${roundV(CONFIG.K_ROUND * H.r_cluster).toLocaleString('en')}.`;
   let plate;
   const spread = n ? Math.max(...pts.map(p => p.r)) - Math.min(...pts.map(p => p.r)) : 0, c = correlation(pts);
-  if (n >= 3 && spread >= 0.5 && c > 0.45) plate = `Your plate shows it: the far ones are the fast ones. Your own dots, on their own, fit a rate of about ${fmtK(bestK)}.`;
-  else if (n >= 3 && spread < 0.5) plate = 'Your plate could not show it: every nebula on it sits at about the same distance, so there was nothing to compare. The relation needs near ones and far ones together.';
-  else plate = 'Your plate is thin. Hubble needed the whole table, and called it scanty even then.';
+  if (n >= 3 && spread >= 0.5 && c > 0.45) plate = `Your chart shows it: the far ones are the fast ones. Your own dots, on their own, fit a rate of about ${fmtK(bestK)}.`;
+  else if (n >= 3 && spread < 0.5) plate = 'Your chart could not show it: every nebula on it sits at about the same distance, so there was nothing to compare. The relation needs near ones and far ones together.';
+  else plate = 'Your chart is thin. Hubble needed the whole table, and called it scanty even then.';
   const showed = n >= 3 && spread >= 0.5 && c > 0.45;
   const headline = state.rate < 60 ? 'The nebulae do not drift at random.' : showed ? 'The farther, the faster.' : 'The far ones were where the answer was.';
   const meaning = 'The farther a nebula, the faster it recedes, about 500 km/s for every million parsecs on Hubble\'s distances. The ones that seemed to approach were mostly the Sun\'s own motion. Hubble stopped there; others would call it the expanding universe.';
