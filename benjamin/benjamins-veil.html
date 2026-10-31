@@ -132,7 +132,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     <p class="line" id="line"></p>
     <div class="holdlab"><span>Moved this age</span><span id="holdwords"></span></div>
     <svg class="hold" id="hold" viewBox="0 0 340 20" preserveAspectRatio="none"></svg>
-    <div class="cf"><div class="lab">The halo, had you set the veil elsewhere this age (yours is ringed in red):</div><div class="cfrow" id="cfrow"></div></div>
+    <div class="cf"><div class="lab">Had you set the veil elsewhere this age (yours is ringed in red):</div><div class="cfrow" id="cfrow"></div></div>
     <button class="btn" id="nextage">Next age</button>
   </div>
 </section>
@@ -511,7 +511,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     coin:      { bg: '#8C6B2F', skin: '#C9A961', line: '#5A4214', lw: 2.2, hair: '#B8954E', robe: '#B8954E', shade: true },   // the coin: a worn face in brass (copies only)
     litho:     { bg: '#F1E9D8', skin: 'stipple', line: '#3A3632', lw: 2, hair: 'stipple2', robe: 'stipple2', soft: true },
     halftone:  { bg: '#E9E4DA', skin: 'dots', line: 'none', lw: 0, hair: 'dots2', robe: 'dots2', photo: true },
-    film:      { bg: '#111111', skin: '#BDB8AE', line: '#1A1A1A', lw: 1.4, hair: '#1A1A1A', robe: '#2A2A2A', film: true },
+    film:      { bg: '#111111', skin: '#BDB8AE', line: '#1A1A1A', lw: 1.4, hair: '#1A1A1A', robe: '#2A2A2A', film: true, grain: true },   // silver, with a fine grain (revision 7: film is not smooth)
     poster:    { bg: RED, skin: 'posterdots', line: INK, lw: 3, hair: INK, robe: INK, poster: true }
   };
   const HAIR = ['M42 86 C40 30 160 30 158 86 C150 60 50 60 42 86 Z', 'M44 92 C36 26 164 26 156 92 C150 54 120 44 100 54 C80 44 50 54 44 92 Z', 'M46 80 C52 40 148 40 154 80 L160 100 C150 70 50 70 40 100 Z'];
@@ -525,6 +525,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     d += `<pattern id="${u}dots" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#D6CFC2"/><circle cx="3" cy="3" r="1.9" fill="#4A463F"/></pattern>`;
     d += `<pattern id="${u}dots2" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#4A463F"/><circle cx="3" cy="3" r="2.4" fill="#2A2724"/></pattern>`;
     d += `<pattern id="${u}posterdots" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="${CREAM}"/><circle cx="3.5" cy="3.5" r="2.1" fill="${INK}"/></pattern>`;
+    d += `<pattern id="${u}grain" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="3" height="3" fill="none"/><rect x="0" y="0" width="1" height="1" fill="#000" opacity=".22"/><rect x="2" y="1" width="1" height="1" fill="#fff" opacity=".16"/><rect x="1" y="2" width="1" height="1" fill="#000" opacity=".12"/></pattern>`;
     d += `<pattern id="${u}golddots" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="3.5" cy="3.5" r="2.4" fill="${GOLD}"/></pattern>`;
     d += `<linearGradient id="${u}shade" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".35"/></linearGradient>`;
     d += `<radialGradient id="${u}photo" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#000" stop-opacity=".25"/></radialGradient>`;
@@ -549,6 +550,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     s += `<ellipse cx="100" cy="98" rx="56" ry="72" fill="${skin}" ${L}/>`;
     if (T.shade) s += `<ellipse cx="100" cy="98" rx="56" ry="72" fill="url(#${u}shade)"/>`;
     if (T.photo) s += `<ellipse cx="100" cy="98" rx="56" ry="72" fill="url(#${u}photo)"/>`;
+    if (T.grain) s += `<ellipse cx="100" cy="98" rx="56" ry="72" fill="url(#${u}grain)"/><path d="M28 232 C38 192 70 178 100 178 C130 178 162 192 172 232 Z" fill="url(#${u}grain)"/>`;
     s += `<path d="${HAIR[v % 3]}" fill="${hair}" ${L}/>`;
     const eyeF = T.line === 'none' ? '#2A2724' : T.line;
     const ex = v % 2 ? 2 : 0;
@@ -629,6 +631,8 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
       if (onStart) onStart();
     }, 900);
   }
+  // A miniature of the frame as an age left it, or would have: the same renderer as the picture, so the strips are honest.
+  function miniFrame(tech, halo, n, reach) { return `<svg viewBox="0 0 340 300" preserveAspectRatio="xMidYMid slice">${frameMarkup(tech, halo, n, reach)}</svg>`; }
   function thumb(tech, halo, haloKind, variant) { const u = uid(); return `<svg viewBox="0 0 200 230" preserveAspectRatio="xMidYMid slice">${defs(u)}<rect width="200" height="230" fill="${TECH[tech].bg}"/>${faceMarkup(tech, u, halo, variant || 0, haloKind)}</svg>`; }
 
   // ---------- state and screens
@@ -641,7 +645,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
   function renderStrip(el, s) {
     el.innerHTML = C.AGES.map((a, i) => {
       const r = s.results[i];
-      if (r) return `<div class="slot done" title="${a.name}">${thumb(a.technique, r.halo)}<div class="mini"><i style="width:${r.ofAge * r.cult / r.hold * 100}%;background:${GOLD}"></i><i style="width:${r.ofAge * r.bySeen / r.hold * 100}%;background:${RED}"></i></div></div>`;
+      if (r) return `<div class="slot done" title="${a.name}">${miniFrame(a.technique, r.halo, C.VEILS[r.veil].n, r.reach)}<div class="mini"><i style="width:${r.ofAge * r.cult / r.hold * 100}%;background:${GOLD}"></i><i style="width:${r.ofAge * r.bySeen / r.hold * 100}%;background:${RED}"></i></div></div>`;
       return `<div class="slot${i === s.age ? ' now' : ''}"></div>`;
     }).join('');
   }
@@ -692,7 +696,7 @@ h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-sp
     const how = r.cult > r.bySeen * 2 ? 'mostly by the halo' : r.bySeen > r.cult * 2 ? 'mostly by being seen' : 'by the halo and by being seen alike';
     $('holdwords').textContent = (r.ofAge < 0.03 ? 'hardly anyone' : M.fractionWords(r.ofAge) + ' of what this age could move') + (r.ofAge < 0.03 ? '' : ', ' + how);
     $('hold').innerHTML = `<rect x="0" y="0" width="${gold}" height="20" fill="${GOLD}"/><rect x="${gold}" y="0" width="${red}" height="20" fill="${RED}"/>`;
-    $('cfrow').innerHTML = r.counterfactual.filter(c => c.allowed).map(c => `<div class="c${c.index === picked ? ' me' : ''}">${thumb(a.technique, c.halo)}<span>${C.VEILS[c.index].label.replace(/^(IN|ON) /, '')}</span></div>`).join('');
+    $('cfrow').innerHTML = r.counterfactual.filter(c => c.allowed).map(c => `<div class="c${c.index === picked ? ' me' : ''}">${miniFrame(a.technique, c.halo, C.VEILS[c.index].n, M.reachAt(a, c.index))}<span>${C.VEILS[c.index].label.replace(/^(IN|ON) /, '')}</span></div>`).join('');
     $('nextage').textContent = S.age === C.AGES.length - 1 ? 'The verdict' : 'Next age';
     renderStrip($('strip'), S);
     setTimeout(() => { $('result').style.display = 'block'; }, 700);
