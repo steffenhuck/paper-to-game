@@ -1,11 +1,12 @@
   shot start
 == TOUR: Meet the Engine
-   The columns of wheels hold numbers. This one, a, holds 5; n holds 7; R is empty, waiting for an answer. | Two cards hang on the chain. The Engine will do what they say, one card at a time, from the top.
+   The columns of wheels hold numbers. This one, a, holds 5; n holds 7; R is empty, waiting for an answer. | A card can only use two numbers. So to add up 5 + 7 + 5, the Engine needs two cards: the first adds a and n and puts the answer on R; the second takes that answer from R and adds a to it.
   shot tour-start
-   step: Card 1: a × n is 5 × 7 = 35. It goes on R.
-   step: Card 2: the Engine prints 35.
+   step: Card 1: a + n is 5 + 7 = 12. It goes on R.
+   step: Card 2: R + a is 12 + 5 = 17. It goes on R.
   shot tour-step
-   step: That is all a chain is: cards, done in order. The cards never said “5” or “7”. They said “a” and “n”, so they work for any numbers on those wheels. Your first job needs one more card than this.
+   step: Card 3: the Engine prints 17.
+   step: Card 2 used R, the answer from card 1, as one of its two numbers. That is how the Engine does a long sum: one step per card, each card carrying on from the last. And the cards never said “5” or “7”, only “a” and “n”, so they work for any numbers on those wheels.
   shot tour-end
 == Job 1 of 3 · Three numbers multiplied | Then the Engine will be handed other numbers.
    Make the Engine multiply a, n and x together and print the answer.
@@ -14,7 +15,7 @@
    sentence: This card says: Multiply a by n, and put the answer on R.
   shot a-task1-card-ready
    hung: a × n → RMultiply a by n, and put the answer on R.
-   first-card line: Good. Now the cards for the rest of the job: multiply in x, then print R.
+   first-card line: Good. When it runs, this card will put a × n on R. Now x still has to be multiplied in. Make a second card: tap ×, then R, then x, then R again. It takes the answer from R, multiplies it by x, and puts the new answer back on R.
    hung: R × x → R
    hung: PRINT R
    chain: a × n → R | R × x → R | PRINT R

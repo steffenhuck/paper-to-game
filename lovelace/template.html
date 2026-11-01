@@ -161,7 +161,7 @@ ul{padding-left:20px}li{margin:4px 0}
   <p class="lede">The Engine does nothing until you hang cards on it. Then it does exactly what the cards say, one card at a time. If it prints the right answer, a bell rings.</p>
   <p class="lede">You will make cards, hang them, set the Engine going, and listen for the bell. Then the Engine gets new numbers and runs your cards again.</p>
   <p class="aim">Hang the cards that make the Engine print what is wanted, for any numbers it is handed.</p>
-  <p class="small">First a short tour, then three jobs from her Notes. About eight minutes.</p>
+  <p class="small">First a short tour that shows how, then three jobs from her Notes. About eight minutes.</p>
   <button class="btn go" id="begin">Begin with the tour</button>
   <div class="row"><button class="btn small-btn" data-go="help">How to play</button><button class="btn small-btn" data-go="about">About</button></div>
   <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
@@ -340,7 +340,7 @@ ul{padding-left:20px}li{margin:4px 0}
       D.done = true;
       document.querySelectorAll('#dcards .hung').forEach(h => h.classList.remove('lit'));
       $('dnarr').textContent = D.title === 'Meet the Engine'
-        ? 'That is all a chain is: cards, done in order. The cards never said “5” or “7”. They said “a” and “n”, so they work for any numbers on those wheels. Your first job needs one more card than this.'
+        ? 'Card 2 used R, the answer from card 1, as one of its two numbers. That is how the Engine does a long sum: one step per card, each card carrying on from the last. And the cards never said “5” or “7”, only “a” and “n”, so they work for any numbers on those wheels.'
         : 'The countdown printed 3, 2, 1 with only three cards. Start k at 100 and the same three cards print a hundred numbers. That is the trick of the BACK card.';
       $('dnext').textContent = demoReturn === 'firsttask' ? 'Start the first job' : 'Back'; $('dskip').classList.add('hidden');
       return;
@@ -358,7 +358,7 @@ ul{padding-left:20px}li{margin:4px 0}
     const t = task(); cols = M.makeCols(t);
     $('band').innerHTML = `Job ${g.task + 1} of ${C.TASKS.length} · ${t.band}<small id="runlabel">${t.then}</small>`;
     $('want').textContent = t.ask; $('worked').textContent = t.worked;
-    $('first').textContent = g.task === 0 ? 'Make your first card: tap × on the blank card below, then tap the columns a, n and R. Read the line under the card, then hang it.' : '';
+    $('first').textContent = g.task === 0 ? 'A card can multiply only two numbers. Make your first card: tap × on the blank card below, then tap the columns a, n and R. Read the line under the card, then hang it.' : '';
     drawStore($('store'), cols, pickCol); renderStrip(wantOf(cols), []); renderChain(); resetComposer(); setBell(null);
     $('narr').textContent = ''; $('result').textContent = ''; $('countess').classList.add('hidden'); $('countess').textContent = '';
     $('nextbtn').classList.add('hidden'); $('handbtn').classList.add('hidden'); $('gobtn').disabled = true; $('gobtn').textContent = 'Set the Engine going'; $('gobtn').classList.remove('hidden');
@@ -378,7 +378,7 @@ ul{padding-left:20px}li{margin:4px 0}
     $('gobtn').disabled = !g.chain.length || running || finished;
     $('prism').style.top = '8px'; $('arcs').innerHTML = '';
   }
-  function afterEdit() { $('result').textContent = ''; $('narr').textContent = ''; setBell(null); renderStrip(wantOf(cols), []); cols.forEach((c, i) => wheels($('store'), i, c.v)); if (g.task === 0 && g.chain.length) $('first').textContent = g.chain.length < 3 ? 'Good. Now the cards for the rest of the job: multiply in x, then print R.' : 'When you think the chain is ready, set the Engine going.'; }
+  function afterEdit() { $('result').textContent = ''; $('narr').textContent = ''; setBell(null); renderStrip(wantOf(cols), []); cols.forEach((c, i) => wheels($('store'), i, c.v)); if (g.task === 0 && g.chain.length) $('first').textContent = g.chain.length === 1 ? 'Good. When it runs, this card will put a × n on R. Now x still has to be multiplied in. Make a second card: tap ×, then R, then x, then R again. It takes the answer from R, multiplies it by x, and puts the new answer back on R.' : g.chain.length === 2 ? 'Last, a card to print the answer: tap P, then R, and hang it.' : 'When you think the chain is ready, set the Engine going.'; }
   // ---- the composer
   const PUNCHES = [['+', '+', 'add'], ['-', '−', 'take'], ['*', '×', 'times'], ['/', '÷', 'divide'], ['print', 'P', 'print'], ['back', '↺', 'back']];
   function resetComposer() {

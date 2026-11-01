@@ -161,7 +161,7 @@ ul{padding-left:20px}li{margin:4px 0}
   <p class="lede">The Engine does nothing until you hang cards on it. Then it does exactly what the cards say, one card at a time. If it prints the right answer, a bell rings.</p>
   <p class="lede">You will make cards, hang them, set the Engine going, and listen for the bell. Then the Engine gets new numbers and runs your cards again.</p>
   <p class="aim">Hang the cards that make the Engine print what is wanted, for any numbers it is handed.</p>
-  <p class="small">First a short tour, then three jobs from her Notes. About eight minutes.</p>
+  <p class="small">First a short tour that shows how, then three jobs from her Notes. About eight minutes.</p>
   <button class="btn go" id="begin">Begin with the tour</button>
   <div class="row"><button class="btn small-btn" data-go="help">How to play</button><button class="btn small-btn" data-go="about">About</button></div>
   <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
@@ -271,7 +271,7 @@ ul{padding-left:20px}li{margin:4px 0}
 <p>In 1842 L. F. Menabrea published a sketch of Charles Babbage's Analytical Engine; in 1843 Ada Lovelace translated it and added seven Notes, longer than the sketch, which are the text this game is built from. Note A separates <i>operations</i> from the things operated on and says the Engine <i>weaves algebraical patterns just as the Jacquard-loom weaves flowers and leaves</i>; the Difference Engine before it did one fixed thing, six additions. Note B draws the Store: columns of figure-wheels, a sign above, a name beneath, and works ax<sup>n</sup>, a·n·x, a/n·x and a+n+x with a = 5, n = 7, x = 98. Note C explains <i>backing</i>: the prism over which the cards pass can revolve backwards so that a card or set of cards does duty again. Note D works two linear equations in eleven operations with three operation cards. Note E names the <i>cycle</i>, and the cycle of cycles. Note F shows three cards doing the work of three hundred and thirty. Note G computes the Numbers of Bernoulli with twenty-five operation cards, "and no more are needed, however great n may be"; and warns that the Engine "has no pretensions whatever to originate anything. It can do whatever we know how to order it to perform."</p>
 <h3>Mechanism: ported</h3>
 <p><b>This game demonstrates</b> the card language of the Memoir and the Notes, run: a Store of columns; cards that put the mill into one of its four states and name the columns that supply it and receive from it; a card that turns the prism back while a column is not nothing, which is Lovelace's backing joined to her Operation 7's feel for n; a bell when the chain ends, and an early bell on a division by nothing (Memoir p. 12). The same interpreter runs Note B's examples with Note B's data, Menabrea's Table 1.3 and Note D's eleven operations against the solutions of their equations, Table 1.1's squares by differences, and the Countess's Bernoulli chain, which prints 1/6, −1/30, 1/42, −1/30 with nine, fourteen and twenty-five operation cards (the calibration check, in the repository).</p>
-<p><b>It assumes</b> our simplifications: one card carries both the operation and its columns, where Lovelace keeps Operation-cards and Variable-cards apart; one contingent card, backward only; constants inscribed on columns at the start instead of cards of numbers; a rack of ten cards and an attendant who stops an Engine after four hundred steps; our data for tasks two and three (a = 3, x = 2, n = 5; the squares to six) so that six figure-wheels suffice; the hidden tests; and two demonstrations of our own, the tour (Note B's a × n with a = 5, n = 7) and a countdown that shows the BACK card at work, plus a plain sentence under every card and a narration of each step, so that the language can be learned by watching before it is used. The card count as the yardstick is the paper's own (Notes D, F, G), the three tasks and the tests are ours. In the coda, Operation 4 divides as the result column requires rather than as the table's symbol column misprints, Operation 24 subtracts so that the printed Number carries the sign formula (8) gives, and the cycle 13–23 is written out for the fourth Number because these cards cannot step a column forward on each pass, as Lovelace's Operation 21 does.</p>
+<p><b>It assumes</b> our simplifications: one card carries both the operation and its columns, where Lovelace keeps Operation-cards and Variable-cards apart; one contingent card, backward only; constants inscribed on columns at the start instead of cards of numbers; a rack of ten cards and an attendant who stops an Engine after four hundred steps; our data for tasks two and three (a = 3, x = 2, n = 5; the squares to six) so that six figure-wheels suffice; the hidden tests; and two demonstrations of our own, the tour (Note B's numbers a = 5, n = 7, added in two cards, the second using the first card's answer) and a countdown that shows the BACK card at work, plus a plain sentence under every card and a narration of each step, so that the language can be learned by watching before it is used. The card count as the yardstick is the paper's own (Notes D, F, G), the three tasks and the tests are ours. In the coda, Operation 4 divides as the result column requires rather than as the table's symbol column misprints, Operation 24 subtracts so that the printed Number carries the sign formula (8) gives, and the cycle 13–23 is written out for the fourth Number because these cards cannot step a column forward on each pass, as Lovelace's Operation 21 does.</p>
 <p><b>The paper establishes</b> the design of a general engine and what such an engine could do if built: that operations and quantities are separable, that cards can be cycled, that a finite chain computes an unbounded table, that the Numbers of Bernoulli follow from twenty-five cards; and its own limits, that the Engine follows analysis and does not anticipate it. The Engine was never built. Nothing here is evidence about the machine; it is the Notes' language, running.</p>
 <h3>What is cut</h3>
 <p>Operation-cards distinct from Variable-cards and the economy of Note D; Retaining and Zero Supply-cards; cards of numbers; the sign discs; forty-digit columns; the symbolic results of Notes A and B; the trigonometric series of Note E; Note F's elimination; the Bernoulli numbers as a task rather than a coda; the stepping column of Operation 21.</p>
@@ -299,7 +299,7 @@ ul{padding-left:20px}li{margin:4px 0}
     // The three tasks, the paper's own examples, ordered for the player (memo §11).
     TASKS: [
       { id: 'anx', band: 'Three numbers multiplied', short: 'three numbers multiplied', ask: 'Make the Engine multiply a, n and x together and print the answer.',
-        worked: '5 × 7 × 98 = 3430',
+        worked: '5 × 7 = 35, then 35 × 98 = 3430. Two multiplications, so two cards, and a third card to print.',
         solution: [['*', 'a', 'n', 'R'], ['*', 'R', 'x', 'R'], ['print', 'R']],   // Note B, p. 31: (×, ×)
         // Note B, p. 29: a = 5, n = 7, x = 98 on V1, V2, V3; p. 31: for a·n·x "the operations would be (×, ×), or 2(×)"
         cols: [{ name: 'a', v: 5 }, { name: 'n', v: 7 }, { name: 'x', v: 98 }, { name: 'R', v: 0, work: true, tip: 'answer' }],
@@ -392,8 +392,8 @@ ul{padding-left:20px}li{margin:4px 0}
   }
   // Two demonstrations the player watches, step by step, before they need the card: our construction, from Note B's example and Note C's backing.
   const DEMOS = {
-    tour: { title: 'Meet the Engine', cols: [{ name: 'a', v: 5 }, { name: 'n', v: 7 }, { name: 'R', v: 0, work: true, tip: 'answer' }], cards: [['*', 'a', 'n', 'R'], ['print', 'R']],
-      intro: ['The columns of wheels hold numbers. This one, a, holds 5; n holds 7; R is empty, waiting for an answer.', 'Two cards hang on the chain. The Engine will do what they say, one card at a time, from the top.'] },
+    tour: { title: 'Meet the Engine', cols: [{ name: 'a', v: 5 }, { name: 'n', v: 7 }, { name: 'R', v: 0, work: true, tip: 'answer' }], cards: [['+', 'a', 'n', 'R'], ['+', 'R', 'a', 'R'], ['print', 'R']],
+      intro: ['The columns of wheels hold numbers. This one, a, holds 5; n holds 7; R is empty, waiting for an answer.', 'A card can only use two numbers. So to add up 5 + 7 + 5, the Engine needs two cards: the first adds a and n and puts the answer on R; the second takes that answer from R and adds a to it.'] },
     countdown: { title: 'The BACK card', cols: [{ name: 'k', v: 3, tip: 'counter' }, { name: '1', v: 1, konst: true, tip: 'just 1' }], cards: [['print', 'k'], ['-', 'k', '1', 'k'], ['back', 2, 'k']],
       intro: ['A countdown. The column k holds 3. The third card is a BACK card: it sends the prism back so the cards above it run again.', 'Watch k go down each time round, and watch what happens when it reaches 0.'] },
   };
@@ -628,7 +628,7 @@ ul{padding-left:20px}li{margin:4px 0}
       D.done = true;
       document.querySelectorAll('#dcards .hung').forEach(h => h.classList.remove('lit'));
       $('dnarr').textContent = D.title === 'Meet the Engine'
-        ? 'That is all a chain is: cards, done in order. The cards never said “5” or “7”. They said “a” and “n”, so they work for any numbers on those wheels. Your first job needs one more card than this.'
+        ? 'Card 2 used R, the answer from card 1, as one of its two numbers. That is how the Engine does a long sum: one step per card, each card carrying on from the last. And the cards never said “5” or “7”, only “a” and “n”, so they work for any numbers on those wheels.'
         : 'The countdown printed 3, 2, 1 with only three cards. Start k at 100 and the same three cards print a hundred numbers. That is the trick of the BACK card.';
       $('dnext').textContent = demoReturn === 'firsttask' ? 'Start the first job' : 'Back'; $('dskip').classList.add('hidden');
       return;
@@ -646,7 +646,7 @@ ul{padding-left:20px}li{margin:4px 0}
     const t = task(); cols = M.makeCols(t);
     $('band').innerHTML = `Job ${g.task + 1} of ${C.TASKS.length} · ${t.band}<small id="runlabel">${t.then}</small>`;
     $('want').textContent = t.ask; $('worked').textContent = t.worked;
-    $('first').textContent = g.task === 0 ? 'Make your first card: tap × on the blank card below, then tap the columns a, n and R. Read the line under the card, then hang it.' : '';
+    $('first').textContent = g.task === 0 ? 'A card can multiply only two numbers. Make your first card: tap × on the blank card below, then tap the columns a, n and R. Read the line under the card, then hang it.' : '';
     drawStore($('store'), cols, pickCol); renderStrip(wantOf(cols), []); renderChain(); resetComposer(); setBell(null);
     $('narr').textContent = ''; $('result').textContent = ''; $('countess').classList.add('hidden'); $('countess').textContent = '';
     $('nextbtn').classList.add('hidden'); $('handbtn').classList.add('hidden'); $('gobtn').disabled = true; $('gobtn').textContent = 'Set the Engine going'; $('gobtn').classList.remove('hidden');
@@ -666,7 +666,7 @@ ul{padding-left:20px}li{margin:4px 0}
     $('gobtn').disabled = !g.chain.length || running || finished;
     $('prism').style.top = '8px'; $('arcs').innerHTML = '';
   }
-  function afterEdit() { $('result').textContent = ''; $('narr').textContent = ''; setBell(null); renderStrip(wantOf(cols), []); cols.forEach((c, i) => wheels($('store'), i, c.v)); if (g.task === 0 && g.chain.length) $('first').textContent = g.chain.length < 3 ? 'Good. Now the cards for the rest of the job: multiply in x, then print R.' : 'When you think the chain is ready, set the Engine going.'; }
+  function afterEdit() { $('result').textContent = ''; $('narr').textContent = ''; setBell(null); renderStrip(wantOf(cols), []); cols.forEach((c, i) => wheels($('store'), i, c.v)); if (g.task === 0 && g.chain.length) $('first').textContent = g.chain.length === 1 ? 'Good. When it runs, this card will put a × n on R. Now x still has to be multiplied in. Make a second card: tap ×, then R, then x, then R again. It takes the answer from R, multiplies it by x, and puts the new answer back on R.' : g.chain.length === 2 ? 'Last, a card to print the answer: tap P, then R, and hang it.' : 'When you think the chain is ready, set the Engine going.'; }
   // ---- the composer
   const PUNCHES = [['+', '+', 'add'], ['-', '−', 'take'], ['*', '×', 'times'], ['/', '÷', 'divide'], ['print', 'P', 'print'], ['back', '↺', 'back']];
   function resetComposer() {

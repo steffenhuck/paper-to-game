@@ -33,6 +33,6 @@ PASS  ROB for random a, x, given n and other n: the straight chain fails the tes
 PASS  W  task line and verdict carry no decimals  [It held for the numbers given, and fell at n = 3. It printed 96 and the number wanted was 24. No card ever used n, so the cards did exactly what they did before.]
 PASS  W  the strip prints fractions as fractions
 PASS  S  the Countess’s cards hold on every job (shown when a job is handed to her)  [true true true]
-PASS  S  the tour prints 35 (Note B’s a × n with a = 5, n = 7)
+PASS  S  the tour prints 17 (5 + 7 = 12, then R + a = 17: the second card uses the first card’s answer)
 PASS  S  the countdown prints 3 2 1 and the BACK card is passed when k reaches 0
-PASS  S  narration and card sentences carry no decimals  [24 lines]
+PASS  S  narration and card sentences carry no decimals  [25 lines]

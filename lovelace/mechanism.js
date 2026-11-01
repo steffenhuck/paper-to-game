@@ -14,7 +14,7 @@
     // The three tasks, the paper's own examples, ordered for the player (memo §11).
     TASKS: [
       { id: 'anx', band: 'Three numbers multiplied', short: 'three numbers multiplied', ask: 'Make the Engine multiply a, n and x together and print the answer.',
-        worked: '5 × 7 × 98 = 3430',
+        worked: '5 × 7 = 35, then 35 × 98 = 3430. Two multiplications, so two cards, and a third card to print.',
         solution: [['*', 'a', 'n', 'R'], ['*', 'R', 'x', 'R'], ['print', 'R']],   // Note B, p. 31: (×, ×)
         // Note B, p. 29: a = 5, n = 7, x = 98 on V1, V2, V3; p. 31: for a·n·x "the operations would be (×, ×), or 2(×)"
         cols: [{ name: 'a', v: 5 }, { name: 'n', v: 7 }, { name: 'x', v: 98 }, { name: 'R', v: 0, work: true, tip: 'answer' }],
@@ -107,8 +107,8 @@
   }
   // Two demonstrations the player watches, step by step, before they need the card: our construction, from Note B's example and Note C's backing.
   const DEMOS = {
-    tour: { title: 'Meet the Engine', cols: [{ name: 'a', v: 5 }, { name: 'n', v: 7 }, { name: 'R', v: 0, work: true, tip: 'answer' }], cards: [['*', 'a', 'n', 'R'], ['print', 'R']],
-      intro: ['The columns of wheels hold numbers. This one, a, holds 5; n holds 7; R is empty, waiting for an answer.', 'Two cards hang on the chain. The Engine will do what they say, one card at a time, from the top.'] },
+    tour: { title: 'Meet the Engine', cols: [{ name: 'a', v: 5 }, { name: 'n', v: 7 }, { name: 'R', v: 0, work: true, tip: 'answer' }], cards: [['+', 'a', 'n', 'R'], ['+', 'R', 'a', 'R'], ['print', 'R']],
+      intro: ['The columns of wheels hold numbers. This one, a, holds 5; n holds 7; R is empty, waiting for an answer.', 'A card can only use two numbers. So to add up 5 + 7 + 5, the Engine needs two cards: the first adds a and n and puts the answer on R; the second takes that answer from R and adds a to it.'] },
     countdown: { title: 'The BACK card', cols: [{ name: 'k', v: 3, tip: 'counter' }, { name: '1', v: 1, konst: true, tip: 'just 1' }], cards: [['print', 'k'], ['-', 'k', '1', 'k'], ['back', 2, 'k']],
       intro: ['A countdown. The column k holds 3. The third card is a BACK card: it sends the prism back so the cards above it run again.', 'Watch k go down each time round, and watch what happens when it reaches 0.'] },
   };

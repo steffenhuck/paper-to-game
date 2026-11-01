@@ -186,3 +186,11 @@ The spread is real: the obvious chain passes the visible test and fails the hidd
 Steffen, on a phone: *I can't choose much in the first screen; whatever I do, it takes just the first option.* Not reproducible in Chromium's iPhone and Pixel emulation, and no WebKit was available to test Safari itself. Two causes in the code fit the report, and both are fixed:
 - **Double-tap zoom.** On iOS Safari two quick taps on a page that allows zooming are read as a zoom gesture, and the second tap is dropped; tapping a, n and R in quick succession could register only a. All buttons and the page now carry `touch-action: manipulation`.
 - **No way to choose a slot.** Once a card's three columns were filled, the next column tap always restarted at the first slot. The card being punched now shows three tappable slots (1st, 2nd, ans); the highlighted one is filled by the next column tap, and tapping a slot selects it for change. Switching the sign keeps the columns. A column tapped before any sign now says to tap a sign first, instead of doing nothing.
+
+## 21. Fix: three numbers need two cards (1 Nov 2026)
+
+Steffen, at job one: *I'm lost; I can only ever multiply two numbers.* The game never showed the step job one depends on: a card takes two numbers, so a × n × x needs two cards, and the second card reads the first card's answer from R. The tour multiplied two numbers and printed, which is exactly the move that does not generalise. Now:
+- **The tour has three cards**: a + n → R (12), R + a → R (17), PRINT R. Its intro says a card can only use two numbers; its close says card 2 used R, card 1's answer, and that this is how the Engine does a long sum.
+- **Job one's worked line** reads "5 × 7 = 35, then 35 × 98 = 3430. Two multiplications, so two cards, and a third card to print."
+- **Job one's coaching** names the second card after the first is hung: tap ×, then R, then x, then R again, with what it does; then the print card.
+Calibration 33/33 (the tour check now expects 17).
