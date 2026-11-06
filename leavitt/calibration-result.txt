@@ -1,0 +1,48 @@
+PASS 25 stars transcribed
+PASS LSQ slope of maxima on log P within ±0.25 of 1/0.48  — 2.018 mag/dex → 0.496 in log P per mag
+PASS LSQ slope of minima on log P within ±0.25 of 1/0.48  — 2.049 mag/dex → 0.488
+PASS her lines (from printed residuals) give about 0.48  — max 0.487, min 0.491
+PASS printed Res. M reproduced within 0.25  — worst 0.077
+PASS printed Res. m reproduced within 0.25 (all but Harvard 1374)  — worst 0.098; Harvard 1374 off by 0.58 (sign slip in the original)
+PASS printed Res. M vs our own LSQ line within 0.3  — worst 0.091
+PASS average range 1.2 ± 0.15 mag  — 1.180
+PASS cleanest non-multiple fold within 4% of her period (≥98% of 280 star-seeds)  — 279/280
+PASS fold at half her period visibly worse (≥95%)  — 279/280
+PASS fold within 1.5% of her period still recognisable (≥90%, roughness < 0.75)  — 280/280, worst 0.61
+PASS fold at her period is clean (roughness < 0.7, ≥95%)  — 280/280
+PASS a wrong beat (1.37 x hers) is rough (mean roughness > 0.85)  — 1.08
+PASS robust: symmetric light curve, best fold still hers (≥95%)  — 105/105
+PASS robust: noise doubled, best fold still hers (≥90%)  — 98/105
+PASS robust: 20 plates instead of 26, best fold still hers (≥90%)  — 101/105
+PASS the seven played stars alone show the slope (0.35–0.65 in log P per mag)  — 0.526
+PASS the first three already slope the right way  — 0.526
+PASS beatWords(1.25336) = "1 day 6 hours"  — 1 day 6 hours
+PASS beatWords(4.547) = "4 days 13 hours"  — 4 days 13 hours
+PASS beatWords(127) = "127 days"  — 127 days
+PASS beatWords(31.94) = "32 days"  — 32 days
+PASS beatWords(0.5) = "12 hours"  — 12 hours
+PASS beatWords(8) = "8 days"  — 8 days
+PASS beatWords(1.999) = "2 days"  — 2 days
+PASS no decimals in any beat
+PASS compare(4.55, 4.547) is same  — Your beat is hers: the two differ by less than an hour.
+PASS compare(4.68, 4.547) is near  — Your beat is close to hers, about 3 hours too long. Over many blinks the dots drift apart.
+PASS compare(9.1, 4.547) is multiple  — Your beat is twice hers: each of your beats holds two of her blinks.
+PASS compare(2.27, 4.547) is multiple  — Your beat is half hers: your beat lays the climb of one blink on the fade of the next.
+PASS compare(6.5, 4.547) is off  — Your beat is not hers: at hers, the dots line up; at yours, they do not.
+PASS compare(127.5, 127) is same  — Your beat is hers: the two differ by about 12 hours.
+PASS compare(3.76, 1.25336) is multiple  — Your beat is three times hers: each of your beats holds three of her blinks.
+PASS guessWords(17) is close  — From its light alone you set it within a few days of her beat.
+PASS guessWords(25) is fair  — From its light alone you set it in the right neighbourhood, a little longer than hers.
+PASS guessWords(8) is far  — From its light alone you set it at about half her beat.
+PASS guessWords(40) is far  — From its light alone you set it about twice as long as her beat.
+PASS guessWords(10) is wide  — From its light alone you set it well shorter than her beat.
+PASS dial start is 8 days
+PASS dial reaches 1 and 128 days
+PASS fine dial step (1 px of 300) well under 1.5%  — 0.067% per px
+  player careful (best fold): You timed seven stars of the Cloud by their blinks. Your beats were hers, or close to hers. The seventh you first set from its light alone, within a few days of her beat.
+  player doubler (always 2x): You timed seven stars of the Cloud by their blinks. Most of your beats held more than one of her blinks, so your black strokes sit to the right of her violet ones, in a line of their own. The seventh you first set from its light alone, well longer than her beat.
+  player sloppy (3% off): You timed seven stars of the Cloud by their blinks. Your beats were hers, or close to hers. The seventh you first set from its light alone, at about 5 times as long as her beat.
+  player random: You timed seven stars of the Cloud by their blinks. Many of your beats were not hers, so your black strokes scatter; her violet ones show the line. The seventh you first set from its light alone, at about half her beat.
+PASS careful player: beats were hers, guess close  — You timed seven stars of the Cloud by their blinks. Your beats were hers, to within hours. The seventh you first set from its light alone, within a few days of her beat.
+
+ALL 42 CHECKS PASSED
