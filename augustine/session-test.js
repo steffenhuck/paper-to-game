@@ -47,7 +47,7 @@ const out = []; const say = s => { out.push(s); console.log(s); };
     say('  4: ' + await ask()); await S('4-listen'); await tap(); await waitStep(1); say('  4b: ' + await ask()); await tap(); await waitStep(2); say('  4c: ' + await ask()); await tap(); await waitStep(3); say('  4d: ' + await ask()); await S('4-guess');
     await hold(player === 'hasty' ? 300 : 1800); await waitPhase(['result']); await result('4 nothing'); await S('4-result'); await next();
     // 5 between
-    say('  5: ' + await ask()); await tap(); await waitStep(1); say('  5b: ' + await ask()); await S('5-hold1'); await hold((player === 'steady' ? PR[0].arith : PR[0].geo) * 1000 * (player === 'hasty' ? 0.7 : 1)); await waitStep(2); await tap(); await waitStep(3); await hold((player === 'steady' ? PR[1].arith : PR[1].geo) * 1000 * (player === 'hasty' ? 0.7 : 1)); await waitStep(4); say('  5c: ' + await ask()); await S('5-half'); await hold(PR[1].long / 2 * 1000 * f); await waitPhase(['result']); await result('5 between'); await S('5-result'); await next();
+    say('  5: ' + await ask()); await tap(); await waitStep(1); say('  5b: ' + await ask()); await S('5-hold1'); await hold((player === 'steady' ? PR[0].arith : PR[0].geo) * 1000 * (player === 'hasty' ? 0.7 : 1)); await waitStep(2); await tap(); await waitStep(3); await hold((player === 'steady' ? PR[1].arith : PR[1].geo) * 1000 * (player === 'hasty' ? 0.7 : 1)); await waitStep(4); say('  5c: ' + await ask()); await S('5-half'); await hold(PR[1].long / 2 * 1000 * f); await waitStep(5); say('  5d: ' + await ask()); await hold(PR[1].short * 2 * 1000 * (player === 'steady' ? 1 / 0.98 : player === 'hasty' ? 0.7 : 0.85)); await waitPhase(['result']); await result('5 between'); await S('5-result'); await next();
     // 6 a planned silence
     say('  6: ' + await ask()); await hold(player === 'hasty' ? 500 : 2200); await waitPhase(['choose']); say('  6b: ' + await ask()); await S('6-choose');
     { const r = await resNow(); const y = r.offered.findIndex(o => o.yours); await choose(player === 'hasty' ? 1 - y : y); }
@@ -57,7 +57,8 @@ const out = []; const say = s => { out.push(s); console.log(s); };
     await hold(SU.stop * 1000 * (player === 'hasty' ? 0.5 : f)); await waitPhase(['result']); await result('7 the sun stands still'); await S('7-result'); await next();
     // 8 three things from yesterday
     say('  8: ' + await ask()); await S('8-meal'); await hold(player === 'hasty' ? 500 : 1800); await waitStep(1); say('  8b: ' + await ask()); await hold(player === 'hasty' ? 700 : 4200); await waitStep(2); say('  8c: ' + await ask()); await hold(player === 'hasty' ? 600 : 2600); await waitPhase(['choose']); say('  8d: ' + await ask() + ' || ' + await big()); await S('8-choose');
-    await choose(player === 'steady' ? 1 : 2); await result('8 three things'); await S('8-result'); await next();
+    await page.click('#chips button[data-k="' + (player === 'steady' ? 1 : 2) + '"]'); await waitFor(s => s.phase === 'choose' && s.s === 4); await page.waitForTimeout(150); say('  8e: ' + await ask() + ' || ' + await big()); await S('8-ratio');
+    await choose(player === 'steady' ? 1 : player === 'hasty' ? 3 : 2); await result('8 three things'); await S('8-result'); await next();
     // 9 the tumult
     say('  9: ' + await ask()); await tap(); await waitStep(1); say('  9b: ' + await ask()); await S('9-ready'); await press(); await page.waitForTimeout(1200); await S('9-holding');
     if (player === 'hasty') await page.waitForTimeout((P.end - 1.2) * 1000 + 300); else await page.waitForTimeout((P.lowEnd - 1.2 + (player === 'steady' ? 0.1 : 0.45)) * 1000);
@@ -74,6 +75,7 @@ const out = []; const say = s => { out.push(s); console.log(s); };
     say('  LAST PAGE: ' + await page.$eval('#headline', e => e.innerText));
     say('  ' + (await page.$eval('#did', e => e.innerText)).replace(/\n+/g, ' | '));
     say('  SCALES: ' + await page.$eval('#scales', e => e.innerText));
+    say('  BUILDER: ' + await page.$eval('#builder', e => e.innerText));
     await S('end'); if (opts.shots) await shot(`${tag.toLowerCase()}-end-full`, true); await noScroll('last page');
   }
 

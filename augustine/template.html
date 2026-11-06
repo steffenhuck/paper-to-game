@@ -173,6 +173,8 @@ footer.sig a{color:var(--mute);text-decoration:none}
   <p id="means"></p>
   <h3>The scales you used</h3>
   <p id="scales"></p>
+  <h3>A note from the builder</h3>
+  <p id="builder"></p>
   <h3>Psalm, evening, life</h3>
   <svg id="psalm" viewBox="0 0 348 250" aria-hidden="true"></svg>
   <p id="psalmtext"></p>
@@ -201,10 +203,10 @@ footer.sig a{color:var(--mute);text-decoration:none}
   <p><b>The circle is now.</b> In the middle of the screen is a black circle on a black line. It is the present moment. Above the line is what is still to come, drawn dashed. Below the line is memory: what is over, drawn solid.</p>
   <p><b>Nothing is drawn while it lasts.</b> While a voice sounds, the circle turns red, and that is all. When the voice stops, a red bar drops into memory. While you hold, the circle turns blue. When you let go, a blue bar drops in, so you can see which was longer.</p>
   <p><b>Holding.</b> Most stations ask you to press and hold the circle for as long as something lasted: a moment of your own life, a voice you just heard, the sun standing still, a meal you had yesterday. The game then says in words how close you came: the same, nine tenths, half, double. Where there is nothing to check against, it says so.</p>
-  <p><b>Choosing.</b> Some stations end with a question in big blue letters and a row of buttons under it: which of two or three voices was yours, which of your three things from yesterday was longest, how many voices were in the crowd. Touch one.</p>
+  <p><b>Choosing.</b> Some stations end with a question in big blue letters and a row of buttons under it: which of two or three voices was yours, which of your three things from yesterday was longest and by how much, how many voices were in the crowd. Touch one.</p>
   <p><b>Night and day.</b> Two holds in a row, a low note for last night and a high note for yesterday, so that the two sounds stand to each other as the night stood to the day. Only the relation is kept.</p>
   <p><b>Nothing.</b> You are told something will sound, and you listen for it three times. Then you guess how long it was, with a hold. There was nothing; the station says why no guess could be right.</p>
-  <p><b>The middle.</b> Hear a short voice and a long one; hold the voice right in the middle. Twice, with two pairs. Then hold half of the last long one.</p>
+  <p><b>The middle.</b> Hear a short voice and a long one; hold the voice right in the middle. Twice, with two pairs. Then hold half of the last long one, and double the last short one.</p>
   <p><b>The tumult.</b> Press and hold, and a crowd of voices starts. Let go the moment the low one stops; the others go on. Then say how many voices there were.</p>
   <p><b>The last page</b> says what you did, what Augustine says about it, which kinds of scale you measured on, and shows the spans that were only ever in you beside what was offered for them.</p>
   <button class="btn" id="helpback">Back</button>
@@ -329,8 +331,9 @@ function scriptFor(r) {
         { t: 'hold', ask: holdAsk, circle: 'MIDDLE', hum: 'default', cap: P[0].long * C.BETWEEN.capMul, slips: [['YOU: THE MIDDLE', COL.blue]], bar: s => ({ kind: 'you', label: 'YOU: THE MIDDLE', secs: Math.min(s, P[0].long * C.BETWEEN.capMul) }) },
         { t: 'listen', ask: betweenAsk(1), circle: 'LISTEN', voices: pair(1), slips: [['SHORT', COL.red], ['LONG', COL.red], ['YOU: THE MIDDLE', COL.blue]] },
         { t: 'hold', ask: 'Again: <b>press and hold for the voice right in the middle</b> of these two.', circle: 'MIDDLE', hum: 'default', cap: P[1].long * C.BETWEEN.capMul, slips: [['YOU: THE MIDDLE', COL.blue]], bar: s => ({ kind: 'you', label: 'YOU: THE MIDDLE', secs: Math.min(s, P[1].long * C.BETWEEN.capMul) }) },
-        { t: 'hold', ask: 'Last: the long one you just heard. <b>Press and hold for half of it.</b>', circle: 'HALF', hum: 'default', cap: P[1].long * C.BETWEEN.halfCap, slips: [['YOU: HALF THE LONG ONE', COL.blue]], bar: s => ({ kind: 'you', label: 'YOU: ITS HALF', secs: Math.min(s, P[1].long * C.BETWEEN.halfCap) }), before: () => ({ kind: 'ref', label: 'THE LONG ONE', secs: P[1].long }), done: 'Two middles and a half. The marks show the plain middle and the middle by proportion.' },
-        { t: 'result', make: ui => { const res = A.betweenHolds(g, ui.held[0], ui.held[1], ui.held[2]); ui.bars = res.mem.map(m => Object.assign({}, m)); ui.bars[ui.bars.length - 2].mark = P[1].long / 2; return res; } }];
+        { t: 'hold', ask: 'Now the long one you just heard. <b>Press and hold for half of it.</b>', circle: 'HALF', hum: 'default', cap: P[1].long * C.BETWEEN.halfCap, slips: [['YOU: HALF THE LONG ONE', COL.blue], ['YOU: DOUBLE THE SHORT ONE', COL.blue]], bar: s => ({ kind: 'you', label: 'YOU: ITS HALF', secs: Math.min(s, P[1].long * C.BETWEEN.halfCap) }), before: () => ({ kind: 'ref', label: 'THE LONG ONE', secs: P[1].long }) },
+        { t: 'hold', ask: 'And the short one you just heard. <b>Press and hold for double it.</b>', circle: 'DOUBLE', hum: 'default', cap: P[1].short * C.BETWEEN.doubleCap, slips: [['YOU: DOUBLE THE SHORT ONE', COL.blue]], bar: s => ({ kind: 'you', label: 'YOU: ITS DOUBLE', secs: Math.min(s, P[1].short * C.BETWEEN.doubleCap) }), before: () => ({ kind: 'ref', label: 'THE SHORT ONE', secs: P[1].short }), done: 'Two middles, a half and a double. The marks show the plain middle, the middle by proportion, the true half and the true double.' },
+        { t: 'result', make: ui => { const res = A.betweenHolds(g, ui.held[0], ui.held[1], ui.held[2], ui.held[3]); ui.bars = res.mem.map(m => Object.assign({}, m)); return res; } }];
     }
     case 'planned': return [
       { t: 'hold', ask: '<b>Press and hold for as long as you like.</b> Nothing will sound. When you let go, two voices will sound, one after the other; one of them is as long as your hold.', circle: 'HOLD', hum: null, min: C.PLANNED.min, cap: C.PLANNED.cap, slips: [['YOUR SILENCE', COL.ink], ['FIRST', COL.red], ['SECOND', COL.red]], bar: s => ({ kind: 'said', label: 'YOUR SILENCE', secs: Math.min(Math.max(s, C.PLANNED.min), C.PLANNED.cap) }) },
@@ -344,7 +347,8 @@ function scriptFor(r) {
       const pitches = [C.VOICE.meal, C.VOICE.talk, C.VOICE.wait], kinds = ['meal', 'talk', 'wait'];
       const step = k => ({ t: 'hold', ask: (k === 0 ? 'Three things from yesterday, as you have them. First, <b>' + N[0] + '</b> you had: press and hold for as long as it lasted. A note sounds while you hold.' : k === 1 ? 'Now <b>' + N[1] + '</b> you had yesterday: press and hold for as long as it lasted.' : 'And <b>' + N[2] + '</b> you had yesterday: for a bus, a kettle, a lift, a reply. Press and hold for as long as it lasted.'), circle: ['MEAL', 'TALK', 'WAIT'][k], hum: pitches[k], min: C.THREE.min, cap: C.THREE.cap, slips: N.slice(k).map(n => [n.toUpperCase(), COL.ink]), bar: s => ({ kind: 'held', label: N[k].toUpperCase() + ': HELD', secs: Math.min(Math.max(s, C.THREE.min), C.THREE.cap) }) });
       return [step(0), step(1), step(2),
-        { t: 'choose', make: ui => A.threeThings(g, ui.held), hide: true, q: 'Which was longest?', sub: 'of the three, as you held them', ask: '<b>Which of the three did you make the longest?</b> Touch it, below.', items: ui => N.map((n, k) => ({ k, label: n.replace(/^a /, '').toUpperCase(), small: '' })), pick: (ui, k) => A.threeThingsPick(g, k), right: (res, k) => res.longest.includes(k), reveal: (ui, res) => { ui.bars = res.mem.map(m => Object.assign({ fresh: true }, m)); }, done: 'Three things from yesterday, and which you made longest.' }];
+        { t: 'choose', make: ui => A.threeThings(g, ui.held), hide: true, q: 'Which was longest?', sub: 'of the three, as you held them', ask: '<b>Which of the three did you make the longest?</b> Touch it, below.', items: ui => N.map((n, k) => ({ k, label: n.replace(/^a /, '').toUpperCase(), small: '' })), pick: (ui, k) => A.threeThingsPick(g, k), right: (res, k) => res.longest.includes(k), then: 'choose' },
+        { t: 'choose', q: 'How many times?', sub: 'your longest against your shortest', ask: '<b>About how many times longer was your longest than your shortest?</b> Touch an answer, below.', items: ui => C.THREE.ratios.map((x, k) => ({ k, label: ['ONE AND A HALF', 'TWICE', 'THREE TIMES', 'FIVE TIMES'][k], small: '' })), pick: (ui, k) => A.threeThingsRatio(g, k), right: (res, k) => k === res.ratioBest, keepLines: true, reveal: (ui, res) => { ui.bars = res.mem.map(m => Object.assign({ fresh: true }, m)); }, done: 'Three things from yesterday: which you made longest, and by how much.' }];
     }
     case 'tumult': return [
       { t: 'listen', ask: 'A crowd is coming: several voices at once. First, touch the circle to hear <b>the low one</b> once more, alone.', circle: 'LISTEN', voices: [Object.assign({}, low, { label: 'THE LOW ONE, ONCE MORE' })], slips: [['THE LOW ONE, ONCE MORE', COL.red], ['THE CROWD', COL.red], ['YOU: TILL THE LOW ONE STOPS', COL.blue]] },
@@ -493,7 +497,7 @@ function drawMind() {
   placeCircle();
   ui.bars.forEach(b => b.fresh = false);
 }
-function rowHeight(b) { return b.kind === 'crowd' ? 16 + b.rows.length * 17 : b.kind === 'hymnvoice' || b.kind === 'hymnyou' ? 44 : b.kind === 'words' ? 34 : b.kind === 'point' ? 36 : b.kind === 'held' ? 34 : b.marks || b.mark != null ? 50 : 40; }
+function rowHeight(b) { return b.kind === 'crowd' ? 16 + b.rows.length * 17 : b.kind === 'words' ? 34 : b.kind === 'point' ? 36 : b.kind === 'held' ? 34 : b.marks || b.mark != null ? 50 : 40; }
 function barRow(b, y) {
   const colour = { you: COL.blue, voice: COL.red, ref: COL.red, said: COL.blue, night: COL.night, day: COL.day, still: COL.yellow, meal: COL.ink, talk: COL.ink, wait: COL.ink }[b.kind] || COL.ink;
   const labelColour = b.kind === 'still' ? COL.ink : colour;
@@ -543,7 +547,7 @@ function barRow(b, y) {
   if (b.kind === 'said') s += svg('rect', { x: x0 + 1.5, y: y + 13.5, width: Math.max(0, ww - 3), height: 19, fill: 'none', stroke: COL.blue, 'stroke-width': 3, 'stroke-dasharray': '7 5' });
   else if (b.kind === 'ref') s += svg('rect', { x: x0, y: y + 12, width: Math.max(0, ww), height: 22, fill: COL.red, opacity: 0.45 });
   else s += svg('rect', { x: x0, y: y + 12, width: Math.max(0, ww), height: 22, fill: colour });
-  if (b.mark != null) { const mx = b.mark * PXS; s += svg('rect', { x: mx - 1.5, y: y + 8, width: 3, height: 30, fill: '#fff' }); s += svg('rect', { x: mx - 1.5, y: y + 8, width: 3, height: 30, fill: COL.ink, opacity: 0.6 }); s += T(mx, y + 46, 'HALF', { 'text-anchor': 'middle', 'font-size': 8 }); }
+  if (b.mark != null) { const mx = b.mark * PXS; s += svg('rect', { x: mx - 1.5, y: y + 8, width: 3, height: 30, fill: '#fff' }); s += svg('rect', { x: mx - 1.5, y: y + 8, width: 3, height: 30, fill: COL.ink, opacity: 0.6 }); s += T(mx, y + 46, b.markLabel || 'HALF', { 'text-anchor': 'middle', 'font-size': 8 }); }
   if (b.marks) b.marks.forEach((m, j) => { const mx = m.at * PXS; s += svg('rect', { x: mx - 1.5, y: y + 8, width: 3, height: 30, fill: '#fff' }); s += svg('rect', { x: mx - 1.5, y: y + 8, width: 3, height: 30, fill: COL.ink, opacity: 0.6 }); const endA = j === 1 && mx > 70; s += T(mx + (endA ? -2 : 2), y + 46, m.label, { 'text-anchor': endA ? 'end' : 'start', 'font-size': 8 }); });
   if (over) s += svg('polygon', { points: '338,' + (y + 12) + ' 348,' + (y + 23) + ' 338,' + (y + 34), fill: COL.ink });
   return svg('g', { class: b.fresh ? 'drop' : '' }, s);
@@ -656,7 +660,7 @@ function showChoice() {
   st.items(ui).forEach(it => { const b = document.createElement('button'); b.innerHTML = esc(it.label) + (it.small ? '<small>' + esc(it.small) + '</small>' : ''); b.dataset.k = it.k; b.addEventListener('click', () => pick(it.k)); ch.appendChild(b); });
   ch.classList.remove('hidden');
   $('#res').classList.remove('hidden'); $('#big').innerHTML = esc(st.q) + '<div class="cap" style="color:var(--blue);margin-top:4px">' + esc(st.sub) + '</div>';
-  $('#lines').innerHTML = st.keepLines && res ? res.lines.map(l => '<p>' + esc(l) + '</p>').join('') : ''; $('#rquote').innerHTML = ''; $('#next').classList.add('hidden');
+  $('#lines').innerHTML = st.keepLines && res && res.lines ? res.lines.map(l => '<p>' + esc(l) + '</p>').join('') : ''; $('#rquote').innerHTML = ''; $('#next').classList.add('hidden');
   $('#res').scrollIntoView({ block: 'start', behavior: 'auto' });
 }
 function pick(k) {
@@ -664,6 +668,7 @@ function pick(k) {
   const st = step(), res = st.pick(ui, k);
   $$('#chips button').forEach(b => { b.disabled = true; const kk = +b.dataset.k; b.classList.toggle('sel', kk === k); b.classList.toggle('wrong', kk === k && !res.right); b.classList.toggle('right', st.right(res, kk)); });
   if (st.reveal) st.reveal(ui, res);
+  if (st.then === 'choose') { ui.res = res; setTimeout(() => nextStep(), 250); return; }
   ui.phase = 'result'; setCircle(); setAsk(); drawMind();
   showResult(res, true);
 }
@@ -671,8 +676,8 @@ function showResult(res, keepChips) {
   const r = ui.r;
   if (!keepChips) { ui.phase = 'result'; setCircle(); setAsk(); }
   $('#res').classList.remove('hidden');
-  const of = { joy: 'as long as it lasted', first: 'yours against the low one', nightday: 'your day against your night', zero: 'what you listened for, three times', between: 'where your middles sat', planned: 'your silence among two voices', sun: 'yours against the sun’s standing still', three: 'your longest, as you held them', tumult: 'your hold against the low one', nightday2: 'your relation among three pairs', joy2: 'your moment among two voices' }[r.id];
-  $('#big').innerHTML = esc(res.big) + '<div class="cap" style="color:var(--blue);margin-top:4px">' + of + '</div>';
+  const of = { joy: 'as long as it lasted', first: 'yours against the low one', nightday: 'your day against your night', zero: 'what you listened for, three times', between: 'where your middles sat', planned: 'your silence among two voices', sun: 'yours against the sun’s standing still', three: 'your longest against your shortest', tumult: 'your hold against the low one', nightday2: 'your relation among three pairs', joy2: 'your moment among two voices' }[r.id];
+  $('#big').innerHTML = esc(res.big2 || res.big) + '<div class="cap" style="color:var(--blue);margin-top:4px">' + of + '</div>';
   $('#lines').innerHTML = res.lines.map(l => '<p>' + esc(l) + '</p>').join('');
   $('#rquote').innerHTML = esc(res.quote.text) + '<span class="cite">' + esc(res.quote.cite) + '</span>';
   $('#next').classList.remove('hidden');
@@ -694,6 +699,7 @@ function showEnd() {
   $('#means').innerHTML = esc(v.means).replace('distentio', '<i>distentio</i>');
   drawInner(v); drawWorldPage(v);
   $('#scales').textContent = v.scales;
+  $('#builder').textContent = v.builder;
   drawPsalm();
   $('#psalmtext').textContent = v.psalm;
   $('#pq').innerHTML = esc(v.psalmQuote.text) + '<span class="cite">' + esc(v.psalmQuote.cite) + '</span>';
@@ -714,7 +720,7 @@ function drawInner(v) {                          // the spans that were only in 
   const row = (label, c, kind, secs, extra) => { s += T(0, y + 8, label, { fill: c, 'font-weight': 800, 'font-size': 9 }); if (kind === 'said') s += svg('rect', { x: 1.5, y: y + 12.5, width: Math.max(0, secs * sc - 3), height: 13, fill: 'none', stroke: COL.blue, 'stroke-width': 2.5, 'stroke-dasharray': '6 4' }); else s += svg('rect', { x: 0, y: y + 11, width: secs * sc, height: 16, fill: c, opacity: kind === 'ref' ? 0.45 : 1 }); if (extra) s += T(344, y + 8, extra, { 'text-anchor': 'end', fill: COL.ink, 'font-size': 8.5 }); y += 32; };
   const pairRow = (label, c, night, day, extra) => { s += T(0, y + 8, label, { fill: c, 'font-weight': 800, 'font-size': 9 }); s += svg('rect', { x: 0, y: y + 11, width: night * sc, height: 16, fill: COL.night }); s += svg('rect', { x: night * sc + 2, y: y + 11, width: day * sc, height: 16, fill: COL.day }); if (extra) s += T(344, y + 8, extra, { 'text-anchor': 'end', fill: COL.ink, 'font-size': 8.5 }); y += 32; };
   if (I.joy) { row('THE MOMENT OF JOY, AS YOU HELD IT', COL.blue, 'said', I.joy.made); I.joy.offered.forEach((o, j) => row('OFFERED, ' + A.ORD[j].toUpperCase() + (o.yours ? ' (YOURS)' : ''), COL.red, o.yours ? 'voice' : 'ref', o.secs, I.joy.pick === j ? 'YOU CHOSE THIS' : '')); y += 8; }
-  if (I.three) { I.three.holds.forEach((h, j) => row(I.three.names[j].toUpperCase() + (I.three.longest.includes(j) ? ' (YOUR LONGEST)' : ''), COL.ink, 'you', h, I.three.pick === j ? 'YOU SAID THIS' : '')); y += 8; }
+  if (I.three) { I.three.holds.forEach((h, j) => row(I.three.names[j].toUpperCase() + (I.three.longest.includes(j) ? ' (YOUR LONGEST)' : ''), COL.ink, 'you', h, I.three.pick === j ? 'YOU SAID THIS' : '')); if (I.three.ratioSaid) { s += T(0, y + 4, 'LONGEST AGAINST SHORTEST: ' + A.amount(I.three.trueRatio).big.toUpperCase() + '; YOU SAID ' + ({ 1.5: 'ONE AND A HALF TIMES', 2: 'TWICE', 3: 'THREE TIMES', 5: 'FIVE TIMES' })[I.three.ratioSaid], { 'font-size': 8.5, fill: COL.ink }); y += 14; } y += 8; }
   if (I.nd) { pairRow('YOUR NIGHT AND YOUR DAY', COL.ink, I.nd.night, I.nd.day); I.nd.pairs.forEach((p, j) => pairRow('OFFERED, ' + A.ORD[j].toUpperCase() + (p.yours ? ' (YOURS)' : ''), p.yours ? COL.ink : COL.mute, p.night, p.day, I.nd.pick === j ? 'YOU CHOSE THIS' : '')); y += 8; }
   if (I.planned) { row('THE SILENCE YOU PLANNED', COL.blue, 'said', I.planned.made); I.planned.offered.forEach((o, j) => row('OFFERED, ' + A.ORD[j].toUpperCase() + (o.yours ? ' (YOURS)' : ''), COL.red, o.yours ? 'voice' : 'ref', o.secs, I.planned.pick === j ? 'YOU CHOSE THIS' : '')); }
   $('#inner').setAttribute('viewBox', '0 0 348 ' + (y + 4)); $('#inner').innerHTML = s;

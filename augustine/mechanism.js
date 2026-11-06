@@ -34,9 +34,10 @@
     // ---- ours
     VOICE: { low: 50, mid: 57, high: 64, top: 71, stranger: 60, stranger2: 53, night: 45, day: 69, short: 62, long: 55, meal: 52, talk: 59, wait: 66 }, // MIDI pitches
     LENGTH: { min: 2.2, max: 4.2 },            // seconds: the low one's length
-    BETWEEN: { shortMin: 0.7, shortMax: 1.1, ratioMin: 4, ratioMax: 5.5, capMul: 2, halfCap: 2 }, // two pairs: a short voice of 0.7–1.1 s and a long
-                                               //   one 4–5.5 × it; a between-hold ends by itself at 2 × the long one; the half at 2 × the long one
-    THREE: { min: 0.3, cap: 10 },              // three things from yesterday: each hold at least 0.3 s, at most 10 s
+    BETWEEN: { shortMin: 0.7, shortMax: 1.1, ratioMin: 4, ratioMax: 5.5, capMul: 2, halfCap: 2, doubleCap: 5, cohere: 0.15 }, // two pairs: a short voice of
+                                               //   0.7–1.1 s and a long one 4–5.5 × it; a middle-hold ends by itself at 2 × the long one; the half at 2 × the long one;
+                                               //   the double of the short one at 5 × it; half and double cohere when their product is within 20 % of the whole
+    THREE: { min: 0.3, cap: 10, ratios: [1.5, 2, 3, 5] }, // three things from yesterday: each hold at least 0.3 s, at most 10 s; the ratio question's answers
     ZERO: { listens: 3, min: 0.05, cap: 8 },  // nothing is listened for three times; the guess is a hold, capped
     JOY: { min: 0.3, cap: 12, off: 1.5, longAt: 5 },   // the held moment: at least 0.3 s, at most 12 s; the decoy is 1.5 × or 1/1.5 of it
     NIGHTDAY: { min: 0.3, cap: 8, off: 1.5, scales: [1.0, 1.7, 2.6], maxDay: 6.5 }, // two holds; three pairs offered at three scales
@@ -257,24 +258,24 @@
   }
 
   // ---- 5 between: twice, the voice as far from the short one as from the long one; then half of the long one, from the present
-  function betweenHolds(g, b1, b2, h) {
+  function betweenHolds(g, b1, b2, h, d) {
     const r = current(g); if (r.id !== 'between') throw new Error('not the between station');
     const B = CONFIG.BETWEEN, P = r.pairs;
     const holds = [b1, b2].map((b, k) => round3(Math.min(b, P[k].long * B.capMul)));
-    const half = round3(Math.min(h, P[1].long * B.halfCap));
+    const half = round3(Math.min(h, P[1].long * B.halfCap)), dbl = round3(Math.min(d, P[1].short * B.doubleCap));
     const reads = holds.map((b, k) => { const p = P[k], dA = abs(log(b / p.arith)), dG = abs(log(b / p.geo)); return { made: b, arith: p.arith, geo: p.geo, nearer: dA <= dG ? 'clock' : 'ratio', within: Math.min(dA, dG) }; });
     const scale = reads[0].nearer === reads[1].nearer ? reads[0].nearer : 'mixed';
-    const hx = half / (P[1].long / 2);
-    const res = { id: r.id, title: r.title, pairs: P, holds, half, halfRatio: hx, reads, scale, quote: QUOTES.compare,
+    const hx = half / (P[1].long / 2), dx = dbl / (P[1].short * 2), prod = hx * dx, cohere = abs(log(prod)) <= B.cohere;
+    const res = { id: r.id, title: r.title, pairs: P, holds, half, halfRatio: hx, dbl, dblRatio: dx, prod, cohere, reads, scale, quote: QUOTES.compare,
       big: scale === 'clock' ? 'the plain middle' : scale === 'ratio' ? 'the middle by proportion' : 'one each way',
-      mem: [].concat.apply([], P.map((p, k) => [{ kind: 'voice', label: 'SHORT', secs: p.short }, { kind: 'voice', label: 'LONG', secs: p.long }, { kind: 'you', label: 'YOU: THE MIDDLE', secs: holds[k], marks: [{ at: p.arith, label: 'PLAIN' }, { at: p.geo, label: 'PROPORTION' }] }])).concat([{ kind: 'ref', label: 'THE LONG ONE, FROM THE PRESENT', secs: P[1].long, mark: P[1].long / 2 }, { kind: 'you', label: 'YOU: ITS HALF', secs: half }]),
+      mem: [].concat.apply([], P.map((p, k) => [{ kind: 'voice', label: 'SHORT', secs: p.short }, { kind: 'voice', label: 'LONG', secs: p.long }, { kind: 'you', label: 'YOU: THE MIDDLE', secs: holds[k], marks: [{ at: p.arith, label: 'PLAIN' }, { at: p.geo, label: 'PROPORTION' }] }])).concat([{ kind: 'ref', label: 'THE LONG ONE', secs: P[1].long, mark: P[1].long / 2 }, { kind: 'you', label: 'YOU: ITS HALF', secs: half }, { kind: 'ref', label: 'THE SHORT ONE', secs: P[1].short, mark: P[1].short * 2, markLabel: 'DOUBLE' }, { kind: 'you', label: 'YOU: ITS DOUBLE', secs: dbl }]),
       lines: [] };
     const where = k => reads[k].nearer === 'clock' ? 'the plain middle' : 'the middle by proportion';
     res.lines.push('Between a short voice and a long one there are two middles. The plain middle is the same stretch away from each. The middle by proportion is as many times the short one as the long one is times it, and it comes sooner. ' + (scale === 'mixed' ? 'Your first middle sat nearer ' + where(0) + ', your second nearer ' + where(1) + '.' : 'Both your middles sat nearer ' + where(0) + '.'));
-    res.lines.push('Your half of the long one was ' + amount(hx).pre + ' a true half' + (verdictWord(hx) ? ': ' + verdictWord(hx) + '.' : '.'));
-    res.lines.push(scale === 'clock' ? 'So your inside counts the way a clock does, in equal stretches, from a zero. Your middles and your half were the same kind of act.'
-      : scale === 'ratio' ? 'So your inside counts in proportions, the way an ear hears pitch. On such a scale nothing is endlessly far away, and there is no middle between nothing and something. Your half, then, was an act of another kind: taken from the present, which has no length.'
-        : 'Two middles are the least from which a scale can be read, and yours disagree, so tonight they read none. Your half was taken from the present either way.');
+    res.lines.push('Your half of the long one was ' + amount(hx).pre + ' a true half' + (verdictWord(hx) ? ', ' + verdictWord(hx) : '') + '; your double of the short one ' + amount(dx).pre + ' a true double' + (verdictWord(dx) ? ', ' + verdictWord(dx) : '') + '. On a clock, halving and doubling undo each other. Yours, laid together, come to ' + amount(prod).pre + ' the whole: ' + (cohere ? 'they undo each other, near enough.' : hx < 1 && dx < 1 ? 'both fell short. What you made from a voice, the middles, sat where it should; what you made from the present came out short.' : hx > 1 && dx > 1 ? 'both ran long. What you made from a voice, the middles, sat where it should; what you made from the present came out long.' : hx > 1 ? 'your halves run long and your doubles fall short, which is what most people do: the inside\u2019s scale is squeezed against the clock\u2019s, and the squeeze is not the same at both ends.' : 'your halves fall short and your doubles run long: the inside\u2019s scale is stretched against the clock\u2019s, and not the same at both ends.'));
+    res.lines.push(scale === 'clock' ? (cohere ? 'So your inside counts the way a clock does: equal stretches from a zero, and halving and doubling as inverses. For once the strong thing can be said: your scale is the clock\u2019s.' : 'So your inside counts in equal stretches like a clock, but its halves and doubles do not undo each other: a scale with a zero whose multiples drift.')
+      : scale === 'ratio' ? 'So your inside counts in proportions, the way an ear hears pitch. On such a scale nothing is endlessly far away, and there is no middle between nothing and something. Your half and your double, then, were acts of another kind: taken from the present, which has no length.'
+        : 'Two middles are the least from which a scale can be read, and yours disagree, so tonight they read none. Your half and your double were taken from the present either way.');
     return finish(g, res);
   }
 
@@ -328,10 +329,23 @@
     res.pick = k; res.right = res.longest.includes(k);
     const order = res.holds.map((x, j) => j).sort((a, b) => res.holds[b] - res.holds[a]);
     res.order = order; res.big = res.right ? 'yours' : 'not yours';
+    res.trueRatio = res.holds[order[0]] / res.holds[order[2]];
     res.lines = [res.right ? (res.longest.length > 1 ? 'Two of them were much the same, so ' + THREE_NAMES[k] + ' is as good an answer as any.' : 'You made ' + THREE_NAMES[k] + ' the longest, and you knew it.')
       : 'You took ' + THREE_NAMES[k] + ' for your longest. It was ' + THREE_NAMES[order[0]] + ', ' + amount(res.holds[order[0]] / res.holds[k]).pre + ' ' + THREE_NAMES[k] + '.',
       'Longest first, as you held them: ' + order.map(j => THREE_NAMES[j]).join(', then ') + '.',
-      'No unit, no ratio, no clock: only which was longer than which. That is the first and oldest thing a mind does with times, and it was done here on three spans that nothing but you ever measured, and it could still be wrong about them.'];
+      'One more: about how many times longer was your longest, ' + THREE_NAMES[order[0]] + ', than your shortest, ' + THREE_NAMES[order[2]] + '?'];
+    return res;
+  }
+  function threeThingsRatio(g, k) {                // k indexes CONFIG.THREE.ratios
+    const res = g.results[g.i]; if (!res || res.id !== 'three' || res.order == null) throw new Error('no order yet');
+    const R3 = CONFIG.THREE.ratios, said = R3[k], truth = res.trueRatio;
+    let best = 0; R3.forEach((x, j) => { if (abs(log(truth / x)) < abs(log(truth / R3[best]))) best = j; });
+    res.ratioPick = k; res.ratioBest = best; res.ratioRight = k === best;
+    const names = { 1.5: 'one and a half times', 2: 'twice', 3: 'three times', 5: 'five times' };
+    res.big2 = res.ratioRight ? 'yours' : 'not yours';
+    res.lines = res.lines.slice(0, 2).concat([
+      (res.ratioRight ? 'You said ' + names[said] + ', the nearest of the answers: your longest was ' + amount(truth).pre + ' your shortest, as you held them.' : 'You said ' + names[said] + '. Your longest was ' + amount(truth).pre + ' your shortest, as you held them; of the answers, ' + names[R3[best]] + ' was nearest.'),
+      'First an order, then a proportion: the oldest thing a mind does with times, and the newest. Both were done here on three spans that nothing but you ever measured, seconds apart, and the second is the one most people get wrong: you can know which was longer and still not know by how much.']);
     return res;
   }
 
@@ -418,21 +432,21 @@
     if (first) did.push('The low one, heard and held: ' + (amount(first.ratio).x === 1 ? 'about its length.' : amount(first.ratio).n + ' its length.'));
     if (nd && nd2) did.push('Your day you sounded as ' + amount(nd.ratio).n + ' your night; later, among three pairs at three sizes, ' + (nd2.right ? 'you heard that relation again.' : 'you took a pair with the day ' + amount(nd2.pairs[nd2.pick].ratio).n + ' the night for it.'));
     if (ze) did.push('You listened for nothing three times and then guessed its length; it had none, and no guess could be right.');
-    if (bt) did.push('Your middles sat ' + (bt.scale === 'clock' ? 'at the plain middle' : bt.scale === 'ratio' ? 'at the middle by proportion' : 'one each way') + ', and your half of the long one was ' + amount(bt.halfRatio).n + ' a true half.');
-    if (th) did.push('Three things from yesterday, held as you have them: ' + (th.right ? 'you knew which you had made the longest.' : 'you took the wrong one for your longest.'));
+    if (bt) did.push('Your middles sat ' + (bt.scale === 'clock' ? 'at the plain middle' : bt.scale === 'ratio' ? 'at the middle by proportion' : 'one each way') + '; your half of the long one was ' + amount(bt.halfRatio).n + ' a true half and your double of the short one ' + amount(bt.dblRatio).n + ' a true double, so halving and doubling ' + (bt.cohere ? 'undid each other.' : 'did not undo each other.'));
+    if (th) did.push('Three things from yesterday, held as you have them: ' + (th.right ? 'you knew which you had made the longest' : 'you took the wrong one for your longest') + (th.ratioRight == null ? '.' : th.ratioRight ? ', and by about how much.' : ', but not by how much.'));
     if (pl) did.push('You planned a silence and then ' + (pl.right ? 'knew it again among two voices.' : 'took a voice ' + amount(pl.offered[pl.pick].secs / pl.made).pre + ' it for it.'));
     if (su) did.push('The sun stood still, and you measured its standing still with a sound ' + amount(su.ratio).pre + ' it.');
     if (tu) did.push(tu.reading === 'waited' ? 'In the crowd you held to the end; the low one had stopped first.' : tu.reading === 'early' ? 'In the crowd you let go before the low one had come in.' : 'In the crowd you let go ' + (Math.abs(tu.off) <= 0.15 ? 'on the moment the low one stopped' : secondsWords(tu.off) + (tu.off < 0 ? ' before the low one stopped' : ' after the low one stopped')) + (tu.right ? ', and counted the voices rightly.' : ', and miscounted the voices.'));
     const world = [];
     if (first) world.push({ label: 'THE LOW ONE', target: first.target, made: first.made });
-    if (bt) { bt.pairs.forEach((p, k) => world.push({ label: 'THE MIDDLE, ' + ORD[k].toUpperCase() + ' PAIR', target: p.arith, made: bt.holds[k], whole: p.long, second: p.geo, secondLabel: 'PROPORTION', firstLabel: 'PLAIN' })); world.push({ label: 'HALF OF THE LONG ONE', target: bt.pairs[1].long / 2, made: bt.half, whole: bt.pairs[1].long }); }
+    if (bt) { bt.pairs.forEach((p, k) => world.push({ label: 'THE MIDDLE, ' + ORD[k].toUpperCase() + ' PAIR', target: p.arith, made: bt.holds[k], whole: p.long, second: p.geo, secondLabel: 'PROPORTION', firstLabel: 'PLAIN' })); world.push({ label: 'HALF OF THE LONG ONE', target: bt.pairs[1].long / 2, made: bt.half, whole: bt.pairs[1].long }); world.push({ label: 'DOUBLE OF THE SHORT ONE', target: bt.pairs[1].short * 2, made: bt.dbl, whole: bt.pairs[1].short * 2 }); }
     if (su) world.push({ label: 'THE SUN’S STANDING STILL', target: su.target, made: su.made });
     const errs = [first, su].filter(Boolean).map(r => Math.abs(Math.log(r.ratio))).concat(bt ? [Math.abs(Math.log(bt.halfRatio))] : []).sort((a, b) => a - b);
     const med = errs.length ? errs[Math.floor((errs.length - 1) / 2)] : 0;
     return {
       headline, did, seed: g.seed, world, med: closeness(med),
-      inner: { joy: joy1 && j2 ? { made: joy1.made, offered: j2.offered, pick: j2.pick } : null, nd: nd && nd2 ? { night: nd.night, day: nd.day, pairs: nd2.pairs, pick: nd2.pick } : null, planned: pl ? { made: pl.made, offered: pl.offered, pick: pl.pick } : null, three: th ? { holds: th.holds, names: th.names, pick: th.pick, longest: th.longest } : null },
-      scales: 'Tonight you measured on every kind of scale a mind has. The moment of joy had none: a length with nothing to lay it against. Three things from yesterday had only an order, longer and shorter. Your night and your day had a ratio. Your middles had equal steps' + (bt ? (bt.scale === 'clock' ? ', and they were the clock\u2019s steps' : bt.scale === 'ratio' ? ', and they were not the clock\u2019s: equal steps in you are equal proportions outside, and on such a scale nothing lies endlessly far off' : ', or would have, had they agreed') : '') + '. And twice you touched the zero: once to listen for nothing and guess at its length, which no guess could have, once to take half of a voice from it. The zero is the present, which has no length and is where all of this was measured; and it is the zero Augustine says the world began from, when there was no then.',
+      inner: { joy: joy1 && j2 ? { made: joy1.made, offered: j2.offered, pick: j2.pick } : null, nd: nd && nd2 ? { night: nd.night, day: nd.day, pairs: nd2.pairs, pick: nd2.pick } : null, planned: pl ? { made: pl.made, offered: pl.offered, pick: pl.pick } : null, three: th ? { holds: th.holds, names: th.names, pick: th.pick, longest: th.longest, ratioSaid: th.ratioPick != null ? CONFIG.THREE.ratios[th.ratioPick] : null, trueRatio: th.trueRatio } : null },
+      scales: 'Tonight you measured on every kind of scale a mind has. The moment of joy had none: a length with nothing to lay it against. Three things from yesterday had an order, longer and shorter, and then a proportion you were asked for and ' + (th && th.ratioRight ? 'knew' : 'did not know') + '. Your night and your day had a ratio. Your middles had equal steps' + (bt ? (bt.scale === 'clock' ? ', and they were the clock\u2019s steps' : bt.scale === 'ratio' ? ', and they were not the clock\u2019s: equal steps in you are equal proportions outside, and on such a scale nothing lies endlessly far off' : ', or would have, had they agreed') : '') + '. And twice you touched the zero: once to listen for nothing and guess at its length, which no guess could have, once to take half of a voice and double of another from it' + (bt ? (bt.cohere ? ', and the two undid each other' : ', and the two did not quite undo each other') : '') + '. The zero is the present, which has no length and is where all of this was measured; and it is the zero Augustine says the world began from, when there was no then.',
       says: 'Where is a length of time held? Not in the thing: the low one was gone before you measured it. Not in the sun: you measured its standing still with a sound. Not in the future or the past as such: last night is nowhere in you at all, and the present, which you listened for three times, has no length to be heard. It is held in the mind, in passing, stretched between what it expects and what it remembers. Three things tonight were held nowhere else, and the game could only ask you whether you still knew them.',
       means: 'For Augustine, time is a stretching of the mind (his word is distentio), between what it expects and what it remembers. A life is the same shape as a psalm said by heart, or an evening like this: expected whole, then passing through attention into memory. And the stretching that lets a mind measure anything is the stretching that scatters it.',
       meansQuote: QUOTES.mind,
@@ -441,6 +455,7 @@
       present: 'A hundred years can’t all be present: only one year of it is now, the rest is past or still to come. Nor can that year: only one month. Nor the month, nor the day, nor the hour. Look closer and closer, and nothing is left but a point. The present has no length. That point was the black circle you pressed all evening.',
       presentQuote: QUOTES.present,
       stranger: 'Had the game asked you for the half of a voice you had never heard, every release would have been as right as any other. You can expect only what you remember. That is why the night, which you never attended to, is in you only as a number a clock gave you, and the moment of joy, which nothing measured, is in you as a length.',
+      builder: 'Augustine\u2019s problem is the economist\u2019s, because the thing economists most want to measure, how much better off a person is, is also measured in the mind, and the same ladder was climbed there, in the same order, fifteen hundred years later. First the claim that only an order can be known, better or worse, never by how much: that was Pareto\u2019s, and it is your three things. Then the claim that differences can be compared, that going from here to there can be known to be a bigger step than going from there to beyond: that gives equal steps, it was Lange\u2019s and Alt\u2019s, and it is your middles. Then gambles were found to pin the steps down, which was von Neumann\u2019s and Morgenstern\u2019s. And then the one thing nobody could supply: a zero, because no experience is a zero of experience, so \u201ctwice as well off\u201d never got a meaning. Time has what utility lacks. The present is its zero. Tonight you were handed that zero, you halved and doubled from it, and you found that against it, nothing can be counted.',
       torn: 'Augustine does not end here pleased with the clock he found. The same stretching of the mind that measures a voice is what scatters a life: in the next chapter he calls himself torn among times whose order he does not know, his thoughts mangled by tumultuous varieties, and asks to be gathered. The crowd you were in was his.',
       tornQuote: QUOTES.extended,
       before: 'And before there was anything at all? Augustine refuses the old joke that God was “preparing hell for pryers into mysteries”. There was no before: time began with the things that were made.',
@@ -449,5 +464,5 @@
   }
 
   return { CONFIG, STATIONS, QUOTES, rng, newSeed, newGame, current, sunAt, holdCap, amount, verdictWord, closeness, amountSentence, secondsWords, AMOUNTS, ORD, COUNT,
-    joy, hold, nightDay, zero, betweenHolds, planned, plannedPick, sunHold, threeThings, threeThingsPick, THREE_NAMES, tumult, tumultCount, nightDayPairs, nightDayPick, joyPairs, joyPick, next, verdict };
+    joy, hold, nightDay, zero, betweenHolds, planned, plannedPick, sunHold, threeThings, threeThingsPick, threeThingsRatio, THREE_NAMES, tumult, tumultCount, nightDayPairs, nightDayPick, joyPairs, joyPick, next, verdict };
 });

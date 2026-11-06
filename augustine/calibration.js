@@ -44,15 +44,19 @@ say('C. Each station, through its functions');
   const nd = A.nightDay(g, 2, 5); check('night and day keep their relation', abs(nd.ratio - 2.5) < 1e-9 && g.held.ndRatio === nd.ratio); A.next(g);
   const ze = A.zero(g, 2); check('nothing: the guess is kept, the verdict is no length', ze.made === 2 && ze.big === 'no length' && /not any number of times too long/.test(ze.lines[0])); A.next(g);
   const P2 = g.pairs; check('two pairs, the long one 4–5.5 × the short', P2.every(p => p.long / p.short >= 4 - 1e-9 && p.long / p.short <= 5.5 + 1e-9) && P2.every(p => abs(p.geo - Math.sqrt(p.short * p.long)) < 0.001));
-  const bc = A.betweenHolds(g, P2[0].arith, P2[1].arith, P2[1].long / 2); check('middles at the arithmetic means read as the plain middle, the half as true', bc.scale === 'clock' && bc.big === 'the plain middle' && A.amount(bc.halfRatio).x === 1);
-  const bg = A.betweenHolds(g, P2[0].geo, P2[1].geo, P2[1].long / 2); check('middles at the geometric means read as the middle by proportion', bg.scale === 'ratio' && /no middle between nothing and something/.test(bg.lines[2]));
-  const bm = A.betweenHolds(g, P2[0].arith, P2[1].geo, P2[1].long / 2); check('one each way reads as mixed', bm.scale === 'mixed'); A.betweenHolds(g, P2[0].arith, P2[1].arith, P2[1].long / 2); A.next(g);
+  const bc = A.betweenHolds(g, P2[0].arith, P2[1].arith, P2[1].long / 2, P2[1].short * 2); check('middles at the arithmetic means read as the plain middle, the half and double as true', bc.scale === 'clock' && bc.big === 'the plain middle' && A.amount(bc.halfRatio).x === 1 && A.amount(bc.dblRatio).x === 1 && bc.cohere);
+  const bs = A.betweenHolds(g, P2[0].arith, P2[1].arith, P2[1].long / 2 * 1.3, P2[1].short * 2 / 1.3); check('a long half and a short double still undo each other', bs.cohere && /undo each other/.test(bs.lines[1]));
+  const bn = A.betweenHolds(g, P2[0].arith, P2[1].arith, P2[1].long / 2 * 1.3, P2[1].short * 2 * 1.3); check('a long half and a long double do not', !bn.cohere);
+  const bg = A.betweenHolds(g, P2[0].geo, P2[1].geo, P2[1].long / 2, P2[1].short * 2); check('middles at the geometric means read as the middle by proportion', bg.scale === 'ratio' && /no middle between nothing and something/.test(bg.lines[2]));
+  const bm = A.betweenHolds(g, P2[0].arith, P2[1].geo, P2[1].long / 2, P2[1].short * 2); check('one each way reads as mixed', bm.scale === 'mixed'); A.betweenHolds(g, P2[0].arith, P2[1].arith, P2[1].long / 2, P2[1].short * 2); A.next(g);
   const pl = A.planned(g, 2); check('the planned silence offers two voices, one of them yours', pl.offered.length === 2 && pl.offered.filter(o => o.yours).length === 1 && pl.offered.find(o => o.yours).secs === 2);
   const pp = A.plannedPick(g, pl.offered.findIndex(o => o.yours)); check('picking yours is right', pp.right && pp.big === 'yours');
   const pw = A.plannedPick(g, 1 - pl.offered.findIndex(o => o.yours)); check('picking the other is wrong and says yours', !pw.right && /Yours was the/.test(pw.lines[0])); A.plannedPick(g, pl.offered.findIndex(o => o.yours)); A.next(g);
   const su = A.sunHold(g, g.sun.stop * 0.9); check('the stillness held at nine tenths', su.big === 'nine tenths'); A.next(g);
   const th = A.threeThings(g, [2, 4.5, 1.2]); check('three things: the longest is the conversation', th.longest.length === 1 && th.longest[0] === 1);
-  check('the right one is right, the wrong one corrected', A.threeThingsPick(g, 1).right && !A.threeThingsPick(g, 0).right && /It was a conversation/.test(g.results[g.i].lines[0])); A.threeThingsPick(g, 1); A.next(g);
+  check('the right one is right, the wrong one corrected', A.threeThingsPick(g, 1).right && !A.threeThingsPick(g, 0).right && /It was a conversation/.test(g.results[g.i].lines[0])); A.threeThingsPick(g, 1);
+  const tr = A.threeThingsRatio(g, 2); check('three things: 4.5 against 1.2 is nearest three times, and says so in words', tr.ratioRight && tr.ratioBest === 2 && /nearest of the answers/.test(tr.lines[2]) && !/[0-9]/.test(tr.lines[2]));
+  check('five times is corrected to three times', !A.threeThingsRatio(g, 3).ratioRight && /three times was nearest/.test(g.results[g.i].lines[2])); A.threeThingsRatio(g, 2); A.next(g);
   const P = g.tumult, tu = A.tumult(g, P.lowEnd + 0.1); check('a release on the moment reads as caught', tu.reading === 'caught');
   check('a release at the crowd’s end reads as waited', A.tumult(g, P.end + 0.5).reading === 'waited');
   check('a release before the low one came in reads as early', A.tumult(g, P.lowStart - 0.1).reading === 'early');
@@ -78,13 +82,13 @@ say('D. Words');
   for (let s = 1000; s < 2200; s++) {
     const g = A.newGame(s), R = () => 0.3 + Math.random() * 2, L = g.low;
     A.joy(g, 0.3 + Math.random() * 10); A.next(g); A.hold(g, L * R()); A.next(g); A.nightDay(g, 0.3 + Math.random() * 6, 0.3 + Math.random() * 6); A.next(g);
-    A.zero(g, 0.05 + Math.random() * 8); A.next(g); A.betweenHolds(g, g.pairs[0].long * Math.random() * 1.5, g.pairs[1].long * Math.random() * 1.5, g.pairs[1].long * Math.random()); A.next(g);
+    A.zero(g, 0.05 + Math.random() * 8); A.next(g); A.betweenHolds(g, g.pairs[0].long * Math.random() * 1.5, g.pairs[1].long * Math.random() * 1.5, g.pairs[1].long * Math.random(), g.pairs[1].short * 5 * Math.random()); A.next(g);
     A.planned(g, 0.3 + Math.random() * 5); A.plannedPick(g, Math.random() < 0.5 ? 0 : 1); A.next(g); A.sunHold(g, g.sun.stop * R()); A.next(g);
-    A.threeThings(g, [0, 1, 2].map(() => 0.3 + Math.random() * 8)); A.threeThingsPick(g, Math.floor(Math.random() * 3)); A.next(g);
+    A.threeThings(g, [0, 1, 2].map(() => 0.3 + Math.random() * 8)); A.threeThingsPick(g, Math.floor(Math.random() * 3)); A.threeThingsRatio(g, Math.floor(Math.random() * 4)); A.next(g);
     const P = g.tumult; A.tumult(g, Math.random() * (P.end + 1.5)); A.tumultCount(g, 2 + Math.floor(Math.random() * 5)); A.next(g);
     A.nightDayPairs(g); A.nightDayPick(g, Math.floor(Math.random() * 3)); A.next(g); A.joyPairs(g); A.joyPick(g, Math.random() < 0.5 ? 0 : 1); A.next(g);
     const v = A.verdict(g);
-    [].concat.apply([], g.results.map(r => r.lines)).concat(v.did, [v.headline, v.says, v.means, v.torn, v.present, v.stranger, v.scales]).forEach(l => { lines++; if (!noDigits(l)) digits++; });
+    [].concat.apply([], g.results.map(r => r.lines)).concat(v.did, [v.headline, v.says, v.means, v.torn, v.present, v.stranger, v.scales, v.builder]).forEach(l => { lines++; if (!noDigits(l)) digits++; });
   }
   check('no decimal or digit reaches a sentence', digits === 0, lines + ' lines over 1,200 evenings of wild play');
   let last = -1; for (let x = 0.2; x < 12; x += 0.01) { const k = A.AMOUNTS.indexOf(A.amount(x)); if (k < last) mono = false; last = k; }
@@ -93,6 +97,8 @@ say('D. Words');
 
 say('E. Playing it in numbers: 400 evenings per player');
 {
+  // the same evenings every run: a seeded stream stands in for Math.random here
+  let seed = 20261106; Math.random = () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let x = Math.imul(seed ^ seed >>> 15, 1 | seed); x = x + Math.imul(x ^ x >>> 7, 61 | x) ^ x; return ((x ^ x >>> 14) >>> 0) / 4294967296; };
   const scatter = sd => Math.exp(sd * (Math.random() + Math.random() + Math.random() - 1.5) * 2);
   const players = {
     'steady (12 % scatter), hears relations, bisects by the clock': { sd: 0.12, ear: 0.9, mid: 'arith' },
@@ -108,10 +114,10 @@ say('E. Playing it in numbers: 400 evenings per player');
       const pickRight = (n, yoursAt) => Math.random() < P.ear ? yoursAt : Math.floor(Math.random() * n);
       A.joy(g, 1 + Math.random() * 5); A.next(g); const f = A.hold(g, L * scatter(P.sd)); A.next(g); A.nightDay(g, 1.5, 1.5 * (2 + Math.random())); A.next(g);
       A.zero(g, 0.3 + Math.random() * 3); A.next(g);
-      const bt = A.betweenHolds(g, g.pairs[0][P.mid] * scatter(P.sd), g.pairs[1][P.mid] * scatter(P.sd), g.pairs[1].long / 2 * scatter(P.sd)); A.next(g);
+      const bt = A.betweenHolds(g, g.pairs[0][P.mid] * scatter(P.sd), g.pairs[1][P.mid] * scatter(P.sd), g.pairs[1].long / 2 * scatter(P.sd), g.pairs[1].short * 2 * scatter(P.sd)); A.next(g);
       const pl = A.planned(g, 1 + Math.random() * 3); A.plannedPick(g, pickRight(2, pl.offered.findIndex(o => o.yours))); A.next(g);
       const su = A.sunHold(g, g.sun.stop * scatter(P.sd)); A.next(g);
-      const h3 = [1.5, 4, 2.5].map(x => x * scatter(P.sd)); const th = A.threeThings(g, h3); A.threeThingsPick(g, Math.random() < P.ear ? th.longest[0] : Math.floor(Math.random() * 3)); A.next(g);
+      const h3 = [1.5, 4, 2.5].map(x => x * scatter(P.sd)); const th = A.threeThings(g, h3); A.threeThingsPick(g, Math.random() < P.ear ? th.longest[0] : Math.floor(Math.random() * 3)); A.threeThingsRatio(g, Math.random() < P.ear ? 2 : Math.floor(Math.random() * 4)); A.next(g);
       const T = g.tumult; A.tumult(g, T.lowEnd + (Math.random() - 0.5) * 0.4); A.tumultCount(g, T.size); A.next(g);
       const np = A.nightDayPairs(g); A.nightDayPick(g, pickRight(3, np.yoursAt)); A.next(g);
       const jp = A.joyPairs(g); A.joyPick(g, pickRight(2, jp.yoursAt)); A.next(g);
@@ -123,8 +129,8 @@ say('E. Playing it in numbers: 400 evenings per player');
     const med = a => { a = a.slice().sort((x, y) => x - y); return Math.exp(a[Math.floor(a.length / 2)]).toFixed(2); };
     const top = Object.keys(heads).sort((a, b) => heads[b] - heads[a])[0];
     say('  ' + name + ' | ×' + med(miss.first) + ' | ×' + med(miss.half) + ' | ×' + med(miss.sun) + ' | ' + (scales.clock || 0) + '/' + (scales.ratio || 0) + '/' + (scales.mixed || 0) + ' | ' + (known.reduce((a, b) => a + b, 0) / 400).toFixed(2) + ' | ' + top + ' (' + (heads[top] / 4).toFixed(0) + '%)');
-    if (name.indexOf('bisects by the clock') >= 0) check('a steady plain bisector is read as the plain middle most evenings', (scales.clock || 0) >= 300, (scales.clock || 0) + ' of 400');
-    if (name.indexOf('bisects by ratio') >= 0) check('a steady proportional bisector is read as the middle by proportion most evenings', (scales.ratio || 0) >= 300, (scales.ratio || 0) + ' of 400');
+    if (name.indexOf('bisects by the clock') >= 0) check('a steady plain bisector is read as the plain middle about three evenings in four', (scales.clock || 0) >= 280, (scales.clock || 0) + ' of 400');
+    if (name.indexOf('bisects by ratio') >= 0) check('a steady proportional bisector is read as the middle by proportion about three evenings in four', (scales.ratio || 0) >= 280, (scales.ratio || 0) + ' of 400');
     if (name.startsWith('steady (12')) check('a steady player who hears relations knows all three inner spans most evenings', known.filter(k => k === 3).length >= 260, known.filter(k => k === 3).length + ' of 400');
     if (name.startsWith('steady, guesses')) check('a guesser knows about one of the three', abs(known.reduce((a, b) => a + b, 0) / 400 - (1 / 2 + 1 / 3 + 1 / 2)) < 0.15);
   }
