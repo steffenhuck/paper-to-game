@@ -176,3 +176,13 @@ Steffen's note after a first look: the play screens were too dense ("Now turn th
 - How to play rewritten in the same words. About left for adults.
 
 Calibration: all 42 checks pass (the verdict-words check updated to the new wording). Browser session at 380 px: no errors, no horizontal scroll.
+
+## Revision 2 (6 Nov 2026): the box shows the answer to the eye
+
+Steffen, playing revision 1: he still did not see what to do, and suspected his eye only ever caught the largish black dots. Diagnosis: the photo and the box used the same black dots with two meanings (size = brightness on the glass, height = brightness in the box, size meaning nothing), and at the right blink time most dots lie in a flat band near the bottom, so the right fold and a wrong one looked much alike unless you knew what to look for. Changes, mechanism untouched:
+
+- **The thread.** In the sorted view a thin line joins the nights in order of your blink time. A wrong blink time draws a jagged scribble; nearing the right one it calms; at the right one it is a clean wave, a quick jump up and a slow slide down, twice. This is the roughness measure of the calibration check made visible: it describes the picture and grades nothing.
+- **Dots sized like the star.** Each night's dot in the box is as big as the star was that night (and higher when brighter), in a softer graphite than the stars on the glass, so the box reads as the ringed star night after night, and at the right blink time the big dots stack into the peak.
+- **Words follow the picture:** "Turn the dial until the scribble becomes a neat zigzag." The first-touch line now introduces the line; round 2 warns that two jumps in each half means twice too long; How to play says the same.
+
+Browser session at 380 px: no errors, no horizontal scroll. Calibration unchanged (42/42).

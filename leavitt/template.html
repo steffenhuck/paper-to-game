@@ -146,11 +146,11 @@ input[type=range]:disabled{opacity:.4}
   <p class="aim" id="aim-help"></p>
   <h3>The photos</h3>
   <p>Each glass photo shows a far-away cloud of stars on one night. Every black dot is a star. The bigger the dot, the brighter the star. The star in the ring is the one you are timing.</p>
-  <p>Each photo becomes a dot in the box below it. Further right means a later night. Higher means the star was brighter that night. At first the dots look messy, because the photos were taken on random nights.</p>
+  <p>Each photo becomes a dot in the box below it, the same size as the star was that night. Further right means a later night. Higher (and bigger) means the star was brighter that night. At first the dots look messy, because the photos were taken on random nights.</p>
   <h3>The dial</h3>
   <p>The blink time is how long the star takes to blink once: a quick jump up to bright, then a slow slide down. Move the dial to guess it. The dots jump to new places: now they show where each night fell inside one blink, and the box shows two blinks side by side.</p>
-  <p>Wrong guess: the dots stay messy. Right guess: they make the same shape twice, a jump up and a slow slide down. The top dial goes from 1 day to 128 days. The lower dial is for fine tuning.</p>
-  <p>Careful: if you see two jumps in each half of the box, your guess is twice too long.</p>
+  <p>A thin line joins the dots in order. Wrong guess: the line is a messy scribble. Right guess: it turns into a neat zigzag, a quick jump up and a slow slide down, twice. The top dial goes from 1 day to 128 days. The lower dial is for fine tuning.</p>
+  <p>Careful: if the zigzag jumps up twice in each half of the box, your guess is twice too long.</p>
   <h3>Write it down</h3>
   <p>When the dots line up, press Write it down. Then you see Leavitt&rsquo;s own blink time for that star, in violet, and her blink drawn over your dots.</p>
   <h3>The chart</h3>
@@ -176,7 +176,7 @@ input[type=range]:disabled{opacity:.4}
 var M = MECH, C = M.CONFIG;
 var AIM = 'Time how long each star takes to blink, and find the pattern.';
 ['aim-start','aim-round','aim-chart','aim-help'].forEach(function(id){ document.getElementById(id).textContent = AIM; });
-var COL = { glass:'#E9E6EE', silver:'#17141B', violet:'#6A3FA0', lilac:'#A99CBD', faint:'#B8B0C4', grid:'#D3CDDB' };
+var COL = { dot:'#3A3342', thread:'#17141B', glass:'#E9E6EE', silver:'#17141B', violet:'#6A3FA0', lilac:'#A99CBD', faint:'#B8B0C4', grid:'#D3CDDB' };
 var $ = function(id){ return document.getElementById(id); };
 var touched = false, morph0 = 0, game, rd, phase, mode = 'beat', P = 8, fig = 2, chartAnim = null, raf = 0, arrivedN = 0, arriveTimer = 0, guessP = null;
 var seed = (Date.now() % 9000) + 1000;
@@ -233,6 +233,8 @@ function drawRecord() {
   var c = $('c-record'), g = setup(c), x = g.x, s = M.star(rd.h), rec = rd.rec;
   var L = 14, R = g.w - 14, T = 44, B = g.h - 26;
   var top = s.max - 0.35, bot = s.min + 0.35, Y = function (m) { return T + (m - top) / (bot - top) * (B - T); };
+  // a night's dot is drawn like the star on the glass that night: bigger when brighter (and higher)
+  var Rd = function (m) { var k = Math.max(0, Math.min(1, (s.min + 0.1 - m) / (s.min - s.max + 0.2))); return 2.4 + 5.2 * k; };
   x.strokeStyle = COL.grid; x.lineWidth = 1;
   for (var k = 0; k <= 4; k++) { var yy = T + k * (B - T) / 4; x.beginPath(); x.moveTo(L, yy); x.lineTo(R, yy); x.stroke(); }
   x.fillStyle = '#6d6478'; x.font = 'italic 12px Spectral, serif'; x.textAlign = 'left';
@@ -240,24 +242,33 @@ function drawRecord() {
   var n = phase === 'arriving' ? arrivedN : rec.plates.length;
   if (mode === 'date' || phase === 'arriving') {
     $('rec-tag').textContent = 'The photos, by date';
-    var span = Math.max(rec.span, 0.01), X = function (t) { return L + 6 + t / span * (R - L - 12); };
+    var span = Math.max(rec.span, 0.01), X = function (t) { return L + 8 + t / span * (R - L - 16); };
     x.textAlign = 'left'; x.fillText('first night', L, g.h - 8); x.textAlign = 'right'; x.fillText(M.beatWords(rec.span) + ' later →', R, g.h - 8);
-    x.fillStyle = COL.silver;
-    for (var i = 0; i < n; i++) { var p = rec.plates[i]; x.beginPath(); x.arc(X(p.t), Y(p.mag), i === n - 1 && phase === 'arriving' ? 5.5 : 4, 0, 7); x.fill(); }
+    x.fillStyle = COL.dot;
+    for (var i = 0; i < n; i++) { var p = rec.plates[i], newest = i === n - 1 && phase === 'arriving'; x.fillStyle = newest ? COL.silver : COL.dot; x.beginPath(); x.arc(X(p.t), Y(p.mag), Rd(p.mag) + (newest ? 1.5 : 0), 0, 7); x.fill(); }
   } else {
     $('rec-tag').textContent = 'By your blink time';
     var mid = (L + R) / 2, W = (R - L) / 2, Xb = function (ph) { return L + ph * W; };
     x.strokeStyle = '#8f859c'; x.setLineDash([3, 3]); x.beginPath(); x.moveTo(mid, T - 4); x.lineTo(mid, B + 4); x.stroke(); x.setLineDash([]);
     x.textAlign = 'center'; x.fillText('one blink', L + W / 2, g.h - 8); x.fillText('the next blink', mid + W / 2, g.h - 8);
+    var mk = Math.min(1, (performance.now() - morph0) / 700); mk = 1 - Math.pow(1 - mk, 3);
+    var spanD = Math.max(rec.span, 0.01), Xd = function (t) { return L + 8 + t / spanD * (R - L - 16); };
+    var F = M.fold(rec, P).map(function (d, j) { return { phase: d.phase, mag: d.mag, x0: Xd(rec.plates[j].t) }; });
+    var pts = [];
+    [0, 1].forEach(function (o) { F.forEach(function (d) { pts.push({ x: d.x0 + (Xb(d.phase + o) - d.x0) * mk, xs: d.phase + o, y: Y(d.mag), r: Rd(d.mag) }); }); });
+    // the thread: the nights joined in the order of your blink time. A wrong blink time makes a scribble; the right one a neat zigzag.
+    if (mk > 0.6) {
+      var line = pts.slice().sort(function (a, b) { return a.xs - b.xs; });
+      x.globalAlpha = (mk - 0.6) / 0.4; x.strokeStyle = COL.thread; x.lineWidth = 1.6; x.lineJoin = 'round'; x.beginPath();
+      line.forEach(function (q, j) { if (j) x.lineTo(q.x, q.y); else x.moveTo(q.x, q.y); }); x.stroke(); x.globalAlpha = 1;
+    }
     if (phase === 'written') {
-      x.strokeStyle = COL.violet; x.lineWidth = 2.2; x.beginPath();
+      x.strokeStyle = COL.violet; x.lineWidth = 2.6; x.beginPath();
       for (var q = 0; q <= 400; q++) { var ph = q / 200, yv = Y(M.herCurveAt(rec, P, ph)); if (q) x.lineTo(Xb(ph), yv); else x.moveTo(Xb(ph), yv); }
       x.stroke();
     }
-    x.fillStyle = COL.silver;
-    var mk = Math.min(1, (performance.now() - morph0) / 700); mk = 1 - Math.pow(1 - mk, 3);
-    var spanD = Math.max(rec.span, 0.01), Xd = function (t) { return L + 6 + t / spanD * (R - L - 12); };
-    M.fold(rec, P).forEach(function (d, j) { var x0 = Xd(rec.plates[j].t); [0, 1].forEach(function (o) { x.beginPath(); x.arc(x0 + (Xb(d.phase + o) - x0) * mk, Y(d.mag), 4, 0, 7); x.fill(); }); });
+    x.fillStyle = COL.dot;
+    pts.forEach(function (q) { x.beginPath(); x.arc(q.x, q.y, q.r, 0, 7); x.fill(); });
   }
 }
 
@@ -327,7 +338,7 @@ function startRound() {
 function arrive(speed, done) {
   phase = 'arriving'; arrivedN = 0; $('b-act').classList.add('hide');
   var n = rd.rec.plates.length;
-  if (speed === 'slow') setSay('r-say', 'Here come the photos, one night at a time. Each photo becomes a dot in the box. <b>Further right</b> means a later night. <b>Higher</b> means the star was brighter that night.');
+  if (speed === 'slow') setSay('r-say', 'Here come the photos, one night at a time. Each photo becomes a dot in the box, as big as the star was that night. <b>Further right</b> means a later night. <b>Higher</b> means brighter.');
   else setSay('r-say', 'Here come its photos. One dot per night: later to the right, brighter higher up.');
   (function step() {
     arrivedN++; drawRecord();
@@ -341,10 +352,10 @@ function beginTuning(startDays) {
   phase = 'tuning'; touched = game.round > 0; mode = touched ? 'beat' : 'date';
   $('r-dial').classList.remove('hide'); setDial(startDays); $('rec-sw').classList.toggle('hide', !touched); syncSw();
   setSay('r-say', game.round === 0
-    ? 'Now find the <b>blink time</b>: how long the star takes to blink once.<br>Move the dial to guess. The dots will jump to new places.<br><b>Wrong guess:</b> they stay messy.<br><b>Right guess:</b> they make the same shape twice, a quick jump up and a slow slide down.<br>When they line up, press Write it down.'
-    : game.round === 1 ? 'Move the dial until the dots make one jump up and one slow slide down in each half of the box. Careful: if you see <b>two jumps</b> in each half, your guess is twice too long.'
-    : game.round === C.PREDICT_ROUND ? 'The dial starts at your guess. Move it until the dots line up, then write it down.'
-    : 'Move the dial until the dots make one jump up and one slow slide down in each half of the box. Then write it down.');
+    ? 'Now find the <b>blink time</b>: how long the star takes to blink once.<br>Move the top dial to guess, and watch the dots move.'
+    : game.round === 1 ? 'Turn the dial until the scribble becomes a neat zigzag. Careful: if it jumps up <b>twice</b> in each half of the box, your guess is twice too long.'
+    : game.round === C.PREDICT_ROUND ? 'The dial starts at your guess. Turn it until the scribble becomes a neat zigzag, then write it down.'
+    : 'Turn the dial until the scribble becomes a neat zigzag: one jump up and one slow slide down in each half. Then write it down.');
   var b = $('b-act'); b.textContent = 'Write it down'; b.classList.remove('hide'); b.onclick = writeIt;
   drawRecord();
 }
@@ -375,7 +386,7 @@ function startGuess() {
 }
 function drawGuess() { drawChart($('c-guess'), { upto: C.PREDICT_ROUND, preview: { days: P, s: M.star(rd.h) } }); }
 function onDial() { readDial(); if (phase === 'guess') drawGuess(); else if (phase === 'tuning') {
-  if (!touched) { touched = true; morph0 = performance.now(); $('rec-sw').classList.remove('hide'); setSay('r-say', 'See? The dots jumped. Now they are sorted by your blink time, not by date, and the box shows <b>two blinks side by side</b>. Keep moving the dial until they make the same shape twice: a quick jump up, a slow slide down. Then press Write it down.'); morphLoop(); }
+  if (!touched) { touched = true; morph0 = performance.now(); $('rec-sw').classList.remove('hide'); setSay('r-say', 'See? The dots moved. Now they are sorted by your blink time, and a line joins them in order.<br><b>Wrong guess:</b> the line is a messy scribble.<br><b>Right guess:</b> it becomes a neat zigzag, a quick jump up and a slow slide down, twice.<br>Turn the dial until the scribble turns neat, then press Write it down.'); morphLoop(); }
   mode = 'beat'; syncSw(); drawRecord(); } }
 function morphLoop() { drawRecord(); if (performance.now() - morph0 < 700) requestAnimationFrame(morphLoop); }
 $('coarse').addEventListener('input', function () { $('fine').value = 0.5; onDial(); });
