@@ -118,7 +118,7 @@ const strategies = {
 };
 for (const [name, st] of Object.entries(strategies)) { const v = play(st, 7); out.push('  player ' + name + ': ' + v.did); }
 const v0 = play(strategies['careful (best fold)'], 3);
-check('careful player: beats were hers, guess close', /hers, to within hours|hers, or close/.test(v0.did) && /within a few days/.test(v0.did), v0.did);
+check('careful player: beats were hers, guess close', /matched Leavitt/.test(v0.did) && !/except/.test(v0.did) && /guess was close/.test(v0.did), v0.did);
 
 console.log(out.join('\n'));
 console.log('\n' + (fails ? fails + ' FAILED' : 'ALL ' + out.filter(l => l.startsWith('PASS')).length + ' CHECKS PASSED'));

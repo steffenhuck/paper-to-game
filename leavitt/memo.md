@@ -163,3 +163,16 @@ The comparison-star sequences and the magnitude scale; the provisional-scale cav
 5. Self-review with How to play closed: the aim can be said from the start screen; each round screen says what the glass, the box and the dial are and what a right beat looks like; the result is stated by the game before her number; the discovery can be read off the top of the end screen. Unlike anything in the table: a lit glass negative in a dark room, a fold as the instrument.
 
 Session length: an estimate of five to eight minutes until a person has played it.
+
+## Revision 1 (6 Nov 2026): for a smart eleven-year-old
+
+Steffen's note after a first look: the play screens were too dense ("Now turn the dial to try a beat..." did not say plainly what to look for), and the game should be playable by a smart eleven-year-old. Every line on screen rewritten for that reader, mechanism unchanged:
+
+- "Plates" became glass photos, "beat" became blink time, "Miss Leavitt" became Henrietta Leavitt, then Leavitt. The aim is now *Time how long each star takes to blink, and find the pattern.*
+- Round 1 now starts in date order and stays there until the dial is first touched. Then the dots visibly slide from their dates to their places in the blink, with the line "See? The dots jumped. Now they are sorted by your blink time..." so the switch the instructions talk about is something the player watches happen.
+- Instructions are one idea per line (wrong guess: messy; right guess: the same shape twice, a quick jump up and a slow slide down). Round 2 warns about two jumps in each half (twice too long).
+- Result lines in the game's voice are short and plain ("Spot on!", "Very close!", "Yours is twice as long as hers"); the guess on the last star is judged in plain words ("Good guess: just a few days off").
+- The verdict: what you found, the pattern, and why it matters (same cloud, same distance; a star's blink tells how bright it really is, and so how far away it is; Leavitt hoped someone would find out). "Who did the work" replaces "Whose circular".
+- How to play rewritten in the same words. About left for adults.
+
+Calibration: all 42 checks pass (the verdict-words check updated to the new wording). Browser session at 380 px: no errors, no horizontal scroll.

@@ -153,24 +153,24 @@ function gapWords(dDays) {
   if (h < 36) return 'about ' + Math.round(h) + ' hours';
   return 'about ' + Math.round(Math.abs(dDays)) + ' days';
 }
-// how a written beat compares with hers: {kind, line}
+// how a written blink time compares with hers: {kind, line}. Words for a smart eleven-year-old.
 function compare(playerP, herP) {
   var ratio = playerP / herP, d = playerP - herP;
-  if (Math.abs(ratio - 1) <= CONFIG.SAME_TOL) return { kind: 'same', line: 'Your beat is hers: the two differ by ' + gapWords(d) + '.' };
-  if (Math.abs(ratio - 1) <= CONFIG.NEAR_TOL) return { kind: 'near', line: 'Your beat is close to hers, ' + gapWords(d) + (d > 0 ? ' too long' : ' too short') + '. Over many blinks the dots drift apart.' };
-  var mults = [[2, 'twice hers: each of your beats holds two of her blinks'], [3, 'three times hers: each of your beats holds three of her blinks'], [4, 'four times hers: each of your beats holds four of her blinks'],
-    [0.5, 'half hers: your beat lays the climb of one blink on the fade of the next'], [1 / 3, 'a third of hers']];
-  for (var i = 0; i < mults.length; i++) if (Math.abs(ratio / mults[i][0] - 1) <= CONFIG.MULTIPLE_TOL) return { kind: 'multiple', k: mults[i][0], line: 'Your beat is ' + mults[i][1] + '.' };
-  return { kind: 'off', line: 'Your beat is not hers: at hers, the dots line up; at yours, they do not.' };
+  if (Math.abs(ratio - 1) <= CONFIG.SAME_TOL) return { kind: 'same', line: 'Spot on! Yours and hers are ' + gapWords(d) + ' apart.' };
+  if (Math.abs(ratio - 1) <= CONFIG.NEAR_TOL) return { kind: 'near', line: 'Very close! Yours is ' + gapWords(d) + (d > 0 ? ' too long' : ' too short') + '. That looks tiny, but it adds up over many blinks.' };
+  var mults = [[2, 'twice as long as hers. Your blink time fits two of her blinks.'], [3, 'three times as long as hers. Your blink time fits three of her blinks.'], [4, 'four times as long as hers. Your blink time fits four of her blinks.'],
+    [0.5, 'half of hers. Your blink time cuts each of her blinks in two.'], [1 / 3, 'a third of hers.']];
+  for (var i = 0; i < mults.length; i++) if (Math.abs(ratio / mults[i][0] - 1) <= CONFIG.MULTIPLE_TOL) return { kind: 'multiple', k: mults[i][0], line: 'Yours is ' + mults[i][1] };
+  return { kind: 'off', line: 'Yours is not hers. With her blink time the dots line up; with yours they stay messy.' };
 }
 function guessWords(guessP, herP) {
   var r = guessP / herP, e = Math.abs(Math.log(r));
-  var dir = r > 1 ? 'longer' : 'shorter';
-  if (e <= Math.log(1 + CONFIG.GUESS_CLOSE)) return { kind: 'close', short: 'within a few days of her beat', line: 'From its light alone you set it within a few days of her beat.' };
-  if (e <= Math.log(1 + CONFIG.GUESS_FAIR)) return { kind: 'fair', short: 'in the right neighbourhood', line: 'From its light alone you set it in the right neighbourhood, a little ' + dir + ' than hers.' };
-  if (r >= 1.8) { var tw = (Math.round(r) === 2 ? 'twice' : Math.round(r) + ' times') + ' as long as her beat'; return { kind: 'far', short: 'at about ' + tw, line: 'From its light alone you set it about ' + tw + '.' }; }
-  if (r <= 1 / 1.8) { var q = Math.round(1 / r), pt = 'at about ' + (q === 2 ? 'half' : q === 3 ? 'a third of' : q === 4 ? 'a quarter of' : 'a small part of') + ' her beat'; return { kind: 'far', short: pt, line: 'From its light alone you set it ' + pt + '.' }; }
-  return { kind: 'wide', short: 'well ' + dir + ' than her beat', line: 'From its light alone you set it well ' + dir + ' than her beat.' };
+  var dir = r > 1 ? 'long' : 'short';
+  if (e <= Math.log(1 + CONFIG.GUESS_CLOSE)) return { kind: 'close', short: 'and your guess was close', line: 'Good guess: just a few days off.' };
+  if (e <= Math.log(1 + CONFIG.GUESS_FAIR)) return { kind: 'fair', short: 'and your guess was not far off', line: 'Not bad: a bit too ' + dir + '.' };
+  if (r >= 1.8) { var tw = (Math.round(r) === 2 ? 'twice' : Math.round(r) + ' times') + ' as long as hers'; return { kind: 'far', short: 'and your guess was ' + tw, line: 'Way off: your guess was about ' + tw + '.' }; }
+  if (r <= 1 / 1.8) { var q = Math.round(1 / r), pt = 'about ' + (q === 2 ? 'half' : q === 3 ? 'a third' : q === 4 ? 'a quarter' : 'a small part') + ' of hers'; return { kind: 'far', short: 'and your guess was ' + pt, line: 'Way off: your guess was ' + pt + '.' }; }
+  return { kind: 'wide', short: 'and your guess was quite a bit too ' + dir, line: 'Quite a bit too ' + dir + '.' };
 }
 
 // ---------- her lines (Figure 2) ----------
@@ -219,18 +219,18 @@ function verdict(game) {
   R.forEach(function (r) {
     var k = r.cmp ? r.cmp.kind : 'off';
     if (k !== 'same') allSame = false;
-    if (k === 'multiple') ex.push('Harvard ' + r.h + ', where yours held ' + (r.cmp.k >= 1 ? (r.cmp.k === 2 ? 'two' : r.cmp.k === 3 ? 'three' : 'four') + ' of her blinks' : 'half of her blink'));
+    if (k === 'multiple') ex.push('Harvard ' + r.h + (r.cmp.k >= 1 ? ', where yours fitted ' + (r.cmp.k === 2 ? 'two' : r.cmp.k === 3 ? 'three' : 'four') + ' of her blinks' : ', where yours cut her blink in two'));
     else if (k === 'off') ex.push('Harvard ' + r.h + ', where yours was not hers');
   });
-  var how = ex.length === 0 ? (allSame ? 'Your beats were hers, to within hours.' : 'Your beats were hers, or close to hers.')
-    : ex.length <= 3 ? 'Your beats were hers, except at ' + ex.join(', and at ') + '.'
-    : R.every(function (r) { return r.cmp && r.cmp.kind !== 'off'; }) ? 'Most of your beats held more than one of her blinks, so your black strokes sit to the right of her violet ones, in a line of their own.'
-    : 'Many of your beats were not hers, so your black strokes scatter; her violet ones show the line.';
+  var how = ex.length === 0 ? (allSame ? 'Your blink times matched Leavitt\u2019s, to within hours.' : 'Your blink times matched Leavitt\u2019s, or came very close.')
+    : ex.length <= 3 ? 'Your blink times matched Leavitt\u2019s, except at ' + ex.join(', and at ') + '.'
+    : R.every(function (r) { return r.cmp && r.cmp.kind !== 'off'; }) ? 'Most of your blink times fitted two or more of her blinks, so your black lines sit to the right of her violet ones.'
+    : 'Many of your blink times were not hers, so your black lines are scattered. Her violet ones show the pattern.';
   var g = R[CONFIG.PREDICT_ROUND];
   return {
-    did: 'You timed seven stars of the Cloud by their blinks. ' + how + (g.guessCmp ? ' The seventh you first set from its light alone, ' + g.guessCmp.short + '.' : ''),
-    paper: 'Miss Leavitt’s twenty-five fall on a straight line. The brighter the star, the slower it blinks: a blink about three times as long goes with about two and a half times the light.',
-    means: 'They are all in one cloud, about equally far away, so this is how bright they really are. Time a star like this anywhere in the sky and you know its true brightness; how faint it looks then says how far away it is. The circular does not claim that. It hopes for it.'
+    did: 'You timed seven blinking stars. ' + how + (g.guessCmp ? ' You guessed the last one from its brightness alone, ' + g.guessCmp.short + '.' : ''),
+    paper: 'The pattern: the brighter the star, the slower it blinks. When a blink takes about three times as long, the star gives off about two and a half times as much light.',
+    means: 'Why this matters: all these stars are in the same cloud, so they are all about the same distance from us. That means the brighter-looking ones really are brighter. So if you find a star like this anywhere in the sky, its blink tells you how bright it really is, and then how faint it looks tells you how far away it is. Leavitt did not say that in 1912. She hoped someone would find out.'
   };
 }
 

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Leavitt's Cloud</title>
 <script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<meta name="description" content="Harvard, 1912. Time the blinking stars of a far-off cloud on glass plates, and find what Henrietta Leavitt found.">
+<meta name="description" content="Harvard, 1912. Time the blinking stars of a far-away cloud on old glass photos, and find what Henrietta Leavitt found.">
 <style>
 @font-face{font-family:Spectral;font-weight:400;font-style:normal;src:url(data:font/woff2;base64,/*__F_SPECTRAL_400__*/) format('woff2')}
 @font-face{font-family:Spectral;font-weight:400;font-style:italic;src:url(data:font/woff2;base64,/*__F_SPECTRAL_400I__*/) format('woff2')}
@@ -80,10 +80,11 @@ input[type=range]:disabled{opacity:.4}
 
 <!-- START -->
 <section class="screen on" id="s-start">
-  <div class="caps">Harvard College Observatory · 1912</div>
+  <div class="caps">Harvard, 1912</div>
   <h1>Leavitt&rsquo;s <i>Cloud</i></h1>
-  <div class="panel"><canvas id="c-cover" height="150"></canvas><span class="tag tagb">The Small Magellanic Cloud, on glass</span></div>
-  <p>Night after night, the observatory photographed a far-off cloud of stars on glass plates. Some of its stars blink. You will look at the plates, turn a dial until one star&rsquo;s blinks line up, and put it on a chart. Then the next star.</p>
+  <div class="panel"><canvas id="c-cover" height="150"></canvas><span class="tag tagb">A far-away cloud of stars, on glass</span></div>
+  <p>In 1912, Henrietta Leavitt at Harvard looked at photos of a far-away cloud of stars, taken on glass night after night. Some of the stars blink: they get bright, fade, and get bright again, over and over.</p>
+  <p>You will look at her photos, turn a dial to find how long each star takes to blink, and put the star on a chart. Then you look at the chart. Is there a pattern?</p>
   <p class="aim" id="aim-start"></p>
   <button class="btn pri" id="b-begin">Begin</button>
   <button class="btn link" data-help>How to play</button>
@@ -94,23 +95,23 @@ input[type=range]:disabled{opacity:.4}
 <section class="screen" id="s-round">
   <div class="topbar"><div class="aimline" id="aim-round"></div><button class="q" data-help aria-label="How to play">?</button></div>
   <div class="caps" id="r-label"></div>
-  <div class="panel"><canvas id="c-plate" height="120"></canvas><span class="tag" id="plate-tag">A glass plate</span></div>
+  <div class="panel"><canvas id="c-plate" height="120"></canvas><span class="tag" id="plate-tag">A glass photo</span></div>
   <p class="say small" id="r-plate-say"></p>
   <div id="r-record-box">
-    <div class="panel"><canvas id="c-record" height="210"></canvas><span class="tag" id="rec-tag">The plates</span>
-      <div class="sw hide" id="rec-sw"><button data-mode="date">by date</button><button data-mode="beat" class="on">by beat</button></div></div>
+    <div class="panel"><canvas id="c-record" height="210"></canvas><span class="tag" id="rec-tag">The photos</span>
+      <div class="sw hide" id="rec-sw"><button data-mode="date">by date</button><button data-mode="beat" class="on">by blink</button></div></div>
   </div>
   <div id="r-chart-box" class="hide">
     <div class="panel"><canvas id="c-guess" height="230"></canvas></div>
   </div>
   <p class="say" id="r-say"></p>
   <div class="dial hide" id="r-dial">
-    <div class="caps">The beat <span id="dial-what" style="text-transform:none;letter-spacing:0;font-family:Spectral,serif;font-weight:400;font-size:13px">&mdash; how long one blink takes</span></div>
+    <div class="caps">Blink time <span id="dial-what" style="text-transform:none;letter-spacing:0;font-family:Spectral,serif;font-weight:400;font-size:13px">&mdash; how long one blink takes</span></div>
     <div class="val" id="dial-val"></div>
-    <input type="range" id="coarse" min="0" max="1" step="0.0005" aria-label="beat, rough">
+    <input type="range" id="coarse" min="0" max="1" step="0.0005" aria-label="blink time">
     <div class="ticks" id="ticks"></div>
-    <input type="range" id="fine" min="0" max="1" step="0.001" value="0.5" aria-label="beat, fine">
-    <div class="finelab"><span>&larr; a little shorter</span><span>fine</span><span>a little longer &rarr;</span></div>
+    <input type="range" id="fine" min="0" max="1" step="0.001" value="0.5" aria-label="blink time, fine">
+    <div class="finelab"><span>&larr; a bit shorter</span><span>fine tuning</span><span>a bit longer &rarr;</span></div>
   </div>
   <div class="result hide" id="r-result"></div>
   <button class="btn pri hide" id="b-act"></button>
@@ -121,19 +122,19 @@ input[type=range]:disabled{opacity:.4}
   <div class="topbar"><div class="aimline" id="aim-chart"></div><button class="q" data-help aria-label="How to play">?</button></div>
   <div class="caps" id="ch-label">The chart</div>
   <div class="panel"><canvas id="c-chart" height="330"></canvas>
-    <div class="sw hide" id="fig-sw"><button data-fig="2" class="on">doublings</button><button data-fig="1">days</button></div></div>
+    <div class="sw hide" id="fig-sw"><button data-fig="2" class="on">&times;2 steps</button><button data-fig="1">days</button></div></div>
   <p class="say" id="ch-say"></p>
   <button class="btn pri" id="b-chart"></button>
 </section>
 
 <!-- VERDICT -->
 <section class="screen" id="s-verdict">
-  <div class="caps">The plates, read</div>
+  <div class="caps">What you found</div>
   <div class="verdict" id="v-lines"></div>
   <div class="panel"><canvas id="c-final" height="260"></canvas></div>
   <p class="small muted" id="final-tag"></p>
   <div class="note" id="v-note"></div>
-  <button class="btn pri" id="b-again">Another night at the plates</button>
+  <button class="btn pri" id="b-again">Play again, with new photos</button>
   <div class="row2"><button class="btn" data-help>How to play</button><button class="btn" data-about>About</button></div>
   <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
 </section>
@@ -143,21 +144,22 @@ input[type=range]:disabled{opacity:.4}
   <div class="caps">Leavitt&rsquo;s Cloud</div>
   <h2>How to play</h2>
   <p class="aim" id="aim-help"></p>
-  <h3>The plates</h3>
-  <p>Each glass plate is a photograph of a far-off cloud of stars on one night. On the glass a star is a black dot: the brighter the star that night, the bigger the dot. The star you are timing has a thin black ring round it.</p>
-  <p>Every plate becomes a dot in the box below the glass: its night across, how bright the star was up. By date, the dots jump about, because the nights are uneven.</p>
+  <h3>The photos</h3>
+  <p>Each glass photo shows a far-away cloud of stars on one night. Every black dot is a star. The bigger the dot, the brighter the star. The star in the ring is the one you are timing.</p>
+  <p>Each photo becomes a dot in the box below it. Further right means a later night. Higher means the star was brighter that night. At first the dots look messy, because the photos were taken on random nights.</p>
   <h3>The dial</h3>
-  <p>The beat is how long the star takes to blink once: a quick climb to bright, then a long slow fade. Turn the dial to try a beat. The dots are then laid out by where each night falls in that beat, two beats side by side. At the right beat each beat holds one blink and the dots make the same shape twice. At a wrong beat they scatter. The top dial goes from 1 day to 128 days; the fine dial below nudges a little shorter or a little longer.</p>
-  <p>At twice the right beat the dots line up too, but each beat holds two blinks. Look for one blink per beat.</p>
+  <p>The blink time is how long the star takes to blink once: a quick jump up to bright, then a slow slide down. Move the dial to guess it. The dots jump to new places: now they show where each night fell inside one blink, and the box shows two blinks side by side.</p>
+  <p>Wrong guess: the dots stay messy. Right guess: they make the same shape twice, a jump up and a slow slide down. The top dial goes from 1 day to 128 days. The lower dial is for fine tuning.</p>
+  <p>Careful: if you see two jumps in each half of the box, your guess is twice too long.</p>
   <h3>Write it down</h3>
-  <p>When you are happy, press Write it down. Only then does Miss Leavitt&rsquo;s beat for that star appear, in violet, with her blink drawn over your dots.</p>
+  <p>When the dots line up, press Write it down. Then you see Leavitt&rsquo;s own blink time for that star, in violet, and her blink drawn over your dots.</p>
   <h3>The chart</h3>
-  <p>Each star goes on the chart as a stroke from its faintest to its brightest, at the beat you wrote. Across: the beat, each step a doubling. Up: brighter. Look at what the strokes do.</p>
+  <p>Each star goes on the chart as a line from its faintest to its brightest. Left to right is the blink time you wrote: slow blinkers on the right. Each step to the right doubles the time. Up is brighter. Watch what the lines do.</p>
   <h3>The last star</h3>
-  <p>For the seventh star you first set a beat from how bright it is, before its plates come in. A dashed stroke shows where your beat would put it on the chart. Then its plates arrive and you time it as before, starting from your setting.</p>
+  <p>For the seventh star you guess its blink time from how bright it is, before its photos arrive. A dashed line shows where your guess would put it on the chart. Then its photos come in and you time it as before, starting from your guess.</p>
   <h3>Violet</h3>
-  <p>Everything in violet is Miss Leavitt&rsquo;s. It appears only after you have written yours.</p>
-  <button class="btn pri" id="b-help-close">Back to the plates</button>
+  <p>Everything in violet is Leavitt&rsquo;s. You only see it after you have written down yours.</p>
+  <button class="btn pri" id="b-help-close">Back to the game</button>
 </div></div>
 
 <div class="overlay" id="o-about"><div class="wrap">
@@ -172,11 +174,11 @@ input[type=range]:disabled{opacity:.4}
 (function(){
 'use strict';
 var M = MECH, C = M.CONFIG;
-var AIM = 'Find how long each star in the Cloud takes to blink, and see what the blinks have in common.';
+var AIM = 'Time how long each star takes to blink, and find the pattern.';
 ['aim-start','aim-round','aim-chart','aim-help'].forEach(function(id){ document.getElementById(id).textContent = AIM; });
 var COL = { glass:'#E9E6EE', silver:'#17141B', violet:'#6A3FA0', lilac:'#A99CBD', faint:'#B8B0C4', grid:'#D3CDDB' };
 var $ = function(id){ return document.getElementById(id); };
-var game, rd, phase, mode = 'beat', P = 8, fig = 2, chartAnim = null, raf = 0, arrivedN = 0, arriveTimer = 0, guessP = null;
+var touched = false, morph0 = 0, game, rd, phase, mode = 'beat', P = 8, fig = 2, chartAnim = null, raf = 0, arrivedN = 0, arriveTimer = 0, guessP = null;
 var seed = (Date.now() % 9000) + 1000;
 (function(){ var t = document.getElementById('ticks'), h=''; for (var k = 0; k <= 7; k++) h += '<span style="left:calc(15px + ' + (k / 7).toFixed(4) + ' * (100% - 30px))">' + Math.pow(2, k) + '</span>'; t.innerHTML = h + '<em>days</em>'; })();
 try { var u = new URLSearchParams(location.search); if (u.get('seed')) seed = parseInt(u.get('seed'), 10) || seed; } catch (e) {}
@@ -237,23 +239,25 @@ function drawRecord() {
   x.fillText('brighter ↑', L, T - 8); x.textAlign = 'right';
   var n = phase === 'arriving' ? arrivedN : rec.plates.length;
   if (mode === 'date' || phase === 'arriving') {
-    $('rec-tag').textContent = 'The plates, by date';
+    $('rec-tag').textContent = 'The photos, by date';
     var span = Math.max(rec.span, 0.01), X = function (t) { return L + 6 + t / span * (R - L - 12); };
-    x.textAlign = 'left'; x.fillText('first plate', L, g.h - 8); x.textAlign = 'right'; x.fillText(M.beatWords(rec.span) + ' later', R, g.h - 8);
+    x.textAlign = 'left'; x.fillText('first night', L, g.h - 8); x.textAlign = 'right'; x.fillText(M.beatWords(rec.span) + ' later →', R, g.h - 8);
     x.fillStyle = COL.silver;
     for (var i = 0; i < n; i++) { var p = rec.plates[i]; x.beginPath(); x.arc(X(p.t), Y(p.mag), i === n - 1 && phase === 'arriving' ? 5.5 : 4, 0, 7); x.fill(); }
   } else {
-    $('rec-tag').textContent = 'The plates, by beat';
+    $('rec-tag').textContent = 'By your blink time';
     var mid = (L + R) / 2, W = (R - L) / 2, Xb = function (ph) { return L + ph * W; };
     x.strokeStyle = '#8f859c'; x.setLineDash([3, 3]); x.beginPath(); x.moveTo(mid, T - 4); x.lineTo(mid, B + 4); x.stroke(); x.setLineDash([]);
-    x.textAlign = 'center'; x.fillText('one beat', L + W / 2, g.h - 8); x.fillText('the next beat', mid + W / 2, g.h - 8);
+    x.textAlign = 'center'; x.fillText('one blink', L + W / 2, g.h - 8); x.fillText('the next blink', mid + W / 2, g.h - 8);
     if (phase === 'written') {
       x.strokeStyle = COL.violet; x.lineWidth = 2.2; x.beginPath();
       for (var q = 0; q <= 400; q++) { var ph = q / 200, yv = Y(M.herCurveAt(rec, P, ph)); if (q) x.lineTo(Xb(ph), yv); else x.moveTo(Xb(ph), yv); }
       x.stroke();
     }
     x.fillStyle = COL.silver;
-    M.fold(rec, P).forEach(function (d) { [0, 1].forEach(function (o) { x.beginPath(); x.arc(Xb(d.phase + o), Y(d.mag), 4, 0, 7); x.fill(); }); });
+    var mk = Math.min(1, (performance.now() - morph0) / 700); mk = 1 - Math.pow(1 - mk, 3);
+    var spanD = Math.max(rec.span, 0.01), Xd = function (t) { return L + 6 + t / spanD * (R - L - 12); };
+    M.fold(rec, P).forEach(function (d, j) { var x0 = Xd(rec.plates[j].t); [0, 1].forEach(function (o) { x.beginPath(); x.arc(x0 + (Xb(d.phase + o) - x0) * mk, Y(d.mag), 4, 0, 7); x.fill(); }); });
   }
 }
 
@@ -265,7 +269,7 @@ function axes(x, g, G, f) {
   x.strokeStyle = COL.grid; x.lineWidth = 1; x.fillStyle = '#6d6478'; x.font = '600 10px Josefin, sans-serif'; x.textAlign = 'center';
   var ticks = f === 1 ? [0, 20, 40, 60, 80, 100, 120] : [1, 2, 4, 8, 16, 32, 64, 128];
   ticks.forEach(function (d) { var xx = f === 1 ? G.L + d / 135 * (G.R - G.L) : CX(G, d, 2); x.beginPath(); x.moveTo(xx, G.T); x.lineTo(xx, G.B); x.stroke(); x.fillText(String(d), xx, G.B + 14); });
-  x.font = 'italic 12px Spectral, serif'; x.textAlign = 'right'; x.fillText(f === 1 ? 'days, evenly spaced →' : 'the beat in days, each step a doubling →', G.R, g.h - 3);
+  x.font = 'italic 12px Spectral, serif'; x.textAlign = 'right'; x.fillText(f === 1 ? 'blink time in days →' : 'blink time in days, each step ×2 →', G.R, g.h - 3);
   x.textAlign = 'left'; x.fillText('brighter ↑', G.L, G.T - 10); x.textAlign = 'right'; x.fillText('fainter ↓', G.R - 2, G.B - 6);
 }
 function stroke(x, G, days, s, col, w, f, dashed, label, grow) {
@@ -315,39 +319,40 @@ function startRound() {
   $('coarse').disabled = false; $('fine').disabled = false;
   if (i === C.PREDICT_ROUND) return startGuess();
   $('r-record-box').classList.remove('hide'); $('r-chart-box').classList.add('hide');
-  $('plate-tag').textContent = 'A glass plate';
-  if (i === 0) $('r-plate-say').innerHTML = 'Each glass plate is a photograph of the Cloud on one night. On the glass a star is a black dot: <b>the brighter the star, the bigger the dot</b>. The ringed one is the star you are timing.';
-  else $('r-plate-say').innerHTML = i === 1 ? 'Another blinking star of the Cloud, on the same glass. Bigger dot, brighter star.' : 'Another blinking star of the Cloud. Bigger dot, brighter star.';
+  $('plate-tag').textContent = 'A glass photo';
+  if (i === 0) $('r-plate-say').innerHTML = 'This is one glass photo of the cloud. Every black dot is a star. <b>The bigger the dot, the brighter the star.</b> The star in the ring is the one you are timing.';
+  else $('r-plate-say').innerHTML = i === 1 ? 'A new blinking star, in the ring. Remember: bigger dot, brighter star.' : 'A new blinking star, in the ring. Bigger dot, brighter star.';
   arrive(i === 0 ? 'slow' : 'fast', function () { beginTuning(C.DIAL_START); });
 }
 function arrive(speed, done) {
   phase = 'arriving'; arrivedN = 0; $('b-act').classList.add('hide');
   var n = rd.rec.plates.length;
-  if (speed === 'slow') setSay('r-say', 'The plates come in one by one. Each one becomes a dot in the box: its night across, how bright the star was up.');
-  else setSay('r-say', 'Its plates come in. One dot per plate: night across, brightness up.');
+  if (speed === 'slow') setSay('r-say', 'Here come the photos, one night at a time. Each photo becomes a dot in the box. <b>Further right</b> means a later night. <b>Higher</b> means the star was brighter that night.');
+  else setSay('r-say', 'Here come its photos. One dot per night: later to the right, brighter higher up.');
   (function step() {
     arrivedN++; drawRecord();
-    if (speed === 'slow' && arrivedN <= 5) $('r-say').innerHTML = 'Plate ' + arrivedN + ' of ' + n + (arrivedN === 1 ? ', the first night' : ', ' + M.beatWords(rd.rec.plates[arrivedN - 1].t) + ' after the first') + ': the dot on the glass was this big, so it goes this high in the box.';
-    if (speed === 'slow' && arrivedN === 6) setSay('r-say', 'And the rest. By date the dots jump about: the nights were uneven, and the star was caught at all points of its blink.');
+    if (speed === 'slow' && arrivedN <= 5) $('r-say').innerHTML = 'Photo ' + arrivedN + (arrivedN === 1 ? ', the first night' : ', ' + M.beatWords(rd.rec.plates[arrivedN - 1].t) + ' after the first') + ': the star was this big, so its dot goes this high.';
+    if (speed === 'slow' && arrivedN === 6) setSay('r-say', 'And the rest. The dots look messy, because the photos were taken on random nights, catching the star at different moments of its blink.');
     if (arrivedN < n) arriveTimer = setTimeout(step, speed === 'slow' ? (arrivedN < 5 ? 1300 : 160) : 55);
     else arriveTimer = setTimeout(done, speed === 'slow' ? 1800 : 300);
   })();
 }
 function beginTuning(startDays) {
-  phase = 'tuning'; mode = 'beat';
-  $('r-dial').classList.remove('hide'); setDial(startDays); $('rec-sw').classList.remove('hide'); syncSw();
-  var first = game.round === 0;
-  setSay('r-say', first
-    ? 'Now turn the dial to try a <b>beat</b>: how long the star takes to blink once. The dots are laid out by where each night falls in that beat, two beats side by side. At the right beat each beat holds one blink, <b>a quick climb to bright, a long slow fade</b>, and the dots make that shape twice. At a wrong beat they scatter.'
-    : (game.round === C.PREDICT_ROUND ? 'The dial starts at the beat you set. Turn it until the dots make one blink in each beat, then write it down.' : 'Turn the dial until each beat holds one blink: a quick climb, a long slow fade, twice. Then write it down.'));
+  phase = 'tuning'; touched = game.round > 0; mode = touched ? 'beat' : 'date';
+  $('r-dial').classList.remove('hide'); setDial(startDays); $('rec-sw').classList.toggle('hide', !touched); syncSw();
+  setSay('r-say', game.round === 0
+    ? 'Now find the <b>blink time</b>: how long the star takes to blink once.<br>Move the dial to guess. The dots will jump to new places.<br><b>Wrong guess:</b> they stay messy.<br><b>Right guess:</b> they make the same shape twice, a quick jump up and a slow slide down.<br>When they line up, press Write it down.'
+    : game.round === 1 ? 'Move the dial until the dots make one jump up and one slow slide down in each half of the box. Careful: if you see <b>two jumps</b> in each half, your guess is twice too long.'
+    : game.round === C.PREDICT_ROUND ? 'The dial starts at your guess. Move it until the dots line up, then write it down.'
+    : 'Move the dial until the dots make one jump up and one slow slide down in each half of the box. Then write it down.');
   var b = $('b-act'); b.textContent = 'Write it down'; b.classList.remove('hide'); b.onclick = writeIt;
   drawRecord();
 }
 function writeIt() {
   var cmp = M.write(game, P), s = M.star(rd.h); phase = 'written'; mode = 'beat'; syncSw();
   $('coarse').disabled = true; $('fine').disabled = true;
-  var html = 'You wrote <b>' + M.beatWords(P) + '</b>.<br><span class="ink">Miss Leavitt wrote ' + M.beatWords(s.period) + ', and her blink is drawn over your dots in violet.</span><br>' + cmp.line;
-  if (game.round === C.PREDICT_ROUND && rd.guessCmp) html += '<br>Before the plates you set <b>' + M.beatWords(rd.guess) + '</b> from its light alone. ' + rd.guessCmp.line;
+  var html = 'You wrote <b>' + M.beatWords(P) + '</b>.<br><span class="ink">Leavitt wrote ' + M.beatWords(s.period) + '. Her blink is the violet line over your dots.</span><br>' + cmp.line;
+  if (game.round === C.PREDICT_ROUND && rd.guessCmp) html += '<br>Before the photos came, you guessed <b>' + M.beatWords(rd.guess) + '</b>. ' + rd.guessCmp.line;
   var r = $('r-result'); r.innerHTML = html; r.classList.remove('hide'); r.classList.remove('fade'); void r.offsetWidth; r.classList.add('fade');
   $('r-say').innerHTML = '';
   var b = $('b-act'); b.textContent = 'Put it on the chart'; b.onclick = toChart;
@@ -356,20 +361,23 @@ function writeIt() {
 function startGuess() {
   phase = 'guess'; var s = M.star(rd.h);
   $('r-record-box').classList.add('hide'); $('r-chart-box').classList.remove('hide');
-  $('plate-tag').textContent = 'Its brightest';
-  $('r-plate-say').innerHTML = 'One more blinking star of the Cloud. Its plates are not in yet; the dot shows it at its brightest.';
-  setSay('r-say', 'Before the plates come in, <b>set the beat you expect from how bright it is</b>. The dashed stroke shows where your beat would put it on the chart, beside your six.');
+  $('plate-tag').textContent = 'At its brightest';
+  $('r-plate-say').innerHTML = 'One last star. Its photos are not here yet. The dot shows it at its brightest.';
+  setSay('r-say', 'Can you <b>guess its blink time just from how bright it is?</b> Move the dial. The dashed line shows where your guess would put it on the chart, next to your six stars.');
   $('r-dial').classList.remove('hide'); setDial(C.DIAL_START); drawGuess();
-  var b = $('b-act'); b.textContent = 'Set it here'; b.classList.remove('hide'); b.onclick = function () {
+  var b = $('b-act'); b.textContent = 'That’s my guess'; b.classList.remove('hide'); b.onclick = function () {
     guessP = P; M.guess(game, P);
-    $('r-chart-box').classList.add('hide'); $('r-record-box').classList.remove('hide'); $('plate-tag').textContent = 'A glass plate';
-    $('r-plate-say').innerHTML = 'You set <b>' + M.beatWords(guessP) + '</b>. Now its plates come in.';
+    $('r-chart-box').classList.add('hide'); $('r-record-box').classList.remove('hide'); $('plate-tag').textContent = 'A glass photo';
+    $('r-plate-say').innerHTML = 'You guessed <b>' + M.beatWords(guessP) + '</b>. Now its photos arrive.';
     $('r-dial').classList.add('hide');
     arrive('fast', function () { beginTuning(guessP); });
   };
 }
 function drawGuess() { drawChart($('c-guess'), { upto: C.PREDICT_ROUND, preview: { days: P, s: M.star(rd.h) } }); }
-function onDial() { readDial(); if (phase === 'guess') drawGuess(); else if (phase === 'tuning') { mode = 'beat'; syncSw(); drawRecord(); } }
+function onDial() { readDial(); if (phase === 'guess') drawGuess(); else if (phase === 'tuning') {
+  if (!touched) { touched = true; morph0 = performance.now(); $('rec-sw').classList.remove('hide'); setSay('r-say', 'See? The dots jumped. Now they are sorted by your blink time, not by date, and the box shows <b>two blinks side by side</b>. Keep moving the dial until they make the same shape twice: a quick jump up, a slow slide down. Then press Write it down.'); morphLoop(); }
+  mode = 'beat'; syncSw(); drawRecord(); } }
+function morphLoop() { drawRecord(); if (performance.now() - morph0 < 700) requestAnimationFrame(morphLoop); }
 $('coarse').addEventListener('input', function () { $('fine').value = 0.5; onDial(); });
 $('fine').addEventListener('input', onDial);
 function syncSw() { document.querySelectorAll('#rec-sw button').forEach(function (b) { b.classList.toggle('on', b.dataset.mode === mode); }); }
@@ -381,26 +389,26 @@ function toChart() {
   var i = game.round, r = rd, s = M.star(r.h);
   $('ch-label').textContent = 'The chart · ' + (i + 1) + (i ? ' stars' : ' star');
   var say = '';
-  if (i === 0) say = '<b>Harvard ' + r.h + '</b> goes on the chart as a stroke from its faintest to its brightest. <b>Across</b> is the beat you wrote: further right, a slower blink. <b>Up</b> is brighter. ';
+  if (i === 0) say = '<b>Harvard ' + r.h + '</b> goes on the chart. Its line goes from how faint it gets to how bright it gets. <b>Left to right</b> is the blink time you wrote: slow blinkers on the right, and each step doubles the time. <b>Up</b> is brighter. ';
   else {
     var pr = game.rounds[i - 1], ps = M.star(pr.h);
     var br = s.max < ps.max - 0.05 ? 'brighter than' : s.max > ps.max + 0.05 ? 'fainter than' : 'about as bright as';
-    var sl = r.written > pr.written * 1.03 ? 'a slower blink' : r.written < pr.written / 1.03 ? 'a quicker blink' : 'about the same blink';
-    say = '<b>Harvard ' + r.h + '</b> is ' + br + ' Harvard ' + pr.h + ', and you wrote ' + sl + '. ';
+    var sl = r.written > pr.written * 1.03 ? 'it blinks more slowly' : r.written < pr.written / 1.03 ? 'it blinks faster' : 'it blinks about as fast';
+    say = '<b>Harvard ' + r.h + '</b> is ' + br + ' Harvard ' + pr.h + ', and you found ' + sl + '. ';
   }
-  if (r.cmp.kind !== 'same') say += '<span class="ink">Her stroke for it, at her beat, is the thin violet one.</span>';
+  if (r.cmp.kind !== 'same') say += '<span class="ink">The thin violet line is where it goes with Leavitt’s blink time.</span>';
   $('ch-say').innerHTML = say;
   var b = $('b-chart');
   if (i < game.rounds.length - 1) { b.textContent = i === C.PREDICT_ROUND - 1 ? 'The last star' : 'Next star'; b.onclick = function () { game.round++; startRound(); }; }
-  else { b.textContent = 'Her other eighteen'; b.onclick = others; }
+  else { b.textContent = 'See all 25 of her stars'; b.onclick = others; }
   animate(function (k) { drawChart($('c-chart'), { upto: i + 1, newest: i, grow: k }); }, 650);
 }
 function animate(draw, ms) { cancelAnimationFrame(chartAnim); var t0 = performance.now(); (function f(now) { var k = Math.min(1, (now - t0) / ms); draw(1 - Math.pow(1 - k, 3)); if (k < 1) chartAnim = requestAnimationFrame(f); })(t0); }
 function others() {
-  $('ch-label').textContent = 'The chart · all twenty-five';
-  $('ch-say').innerHTML = '<span class="ink">Miss Leavitt timed twenty-five blinking stars in the Cloud. Here are the eighteen you did not, in violet, and the two straight lines she ruled: one through the stars at their brightest, one through them at their faintest.</span> The switch at the top right spaces the chart by days instead of doublings, as in her first drawing.';
+  $('ch-label').textContent = 'The chart · all 25 stars';
+  $('ch-say').innerHTML = '<span class="ink">Leavitt timed 25 blinking stars in this cloud. Here are the 18 you did not do, in violet. She drew two straight lines through them: one through the stars at their brightest, one at their faintest.</span> Tap <b>days</b> at the top right to see her first drawing, with the days spaced evenly: then the lines bend.';
   $('fig-sw').classList.remove('hide'); syncFig();
-  var b = $('b-chart'); b.textContent = 'The verdict'; b.onclick = verdict;
+  var b = $('b-chart'); b.textContent = 'What did you find?'; b.onclick = verdict;
   animate(function (k) { drawChart($('c-chart'), { upto: 7, others: true, othersGrow: k, lines: k > 0.6, fig: fig }); }, 900);
 }
 function syncFig() { document.querySelectorAll('#fig-sw button').forEach(function (b) { b.classList.toggle('on', +b.dataset.fig === fig); }); }
@@ -409,8 +417,8 @@ document.querySelectorAll('#fig-sw button').forEach(function (b) { b.onclick = f
 function verdict() {
   var v = M.verdict(game); show('s-verdict');
   $('v-lines').innerHTML = '<p class="first">' + v.did + '</p><p>' + v.paper + '</p><p>' + v.means + '</p>';
-  $('v-note').innerHTML = '<span class="caps">Whose circular</span><br>It is signed by Edward C. Pickering, the observatory&rsquo;s director. Its first sentence says it was prepared by Miss Leavitt: <span class="ink">Henrietta Swan Leavitt</span>, who read the Cloud&rsquo;s plates and found the line. Astronomers now often call it Leavitt&rsquo;s law.';
-  $('final-tag').innerHTML = 'Black: your seven, at the beats you wrote. <span class="ink">Violet: hers, and her two lines.</span> Plates no. ' + seed + '.';
+  $('v-note').innerHTML = '<span class="caps">Who did the work</span><br>The 1912 report is signed by Edward Pickering, the boss of the observatory. But its first line says it was written by Miss Leavitt. <span class="ink">Henrietta Swan Leavitt</span> read the photos and found the pattern. Astronomers now often call it Leavitt&rsquo;s law.';
+  $('final-tag').innerHTML = 'Black: your seven stars, at the blink times you wrote. <span class="ink">Violet: hers, and her two lines.</span> Photo set no. ' + seed + '.';
   drawChart($('c-final'), { upto: 7, others: true, lines: true, fig: 2 });
 }
 $('b-again').onclick = function () { seed = seed * 7 % 9000 + 1000; rd = null; startGame(); };
@@ -423,7 +431,7 @@ $('b-help-close').onclick = function () { $('o-help').classList.remove('on'); };
 $('b-about-close').onclick = function () { $('o-about').classList.remove('on'); };
 window.addEventListener('resize', function () {
   if ($('s-round').classList.contains('on') && rd) { if (phase === 'guess') drawGuess(); else drawRecord(); }
-  if ($('s-chart').classList.contains('on')) drawChart($('c-chart'), { upto: game.round + 1, others: $('b-chart').textContent === 'The verdict', lines: true, fig: fig });
+  if ($('s-chart').classList.contains('on')) drawChart($('c-chart'), { upto: game.round + 1, others: $('b-chart').textContent === 'What did you find?', lines: true, fig: fig });
   if ($('s-verdict').classList.contains('on')) drawChart($('c-final'), { upto: 7, others: true, lines: true, fig: 2 });
 });
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (rd && $('s-round').classList.contains('on') && phase !== 'guess') drawRecord(); });

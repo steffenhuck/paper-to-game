@@ -4,7 +4,7 @@ const path = require('path');
 (async () => {
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 380, height: 760 }, deviceScaleFactor: 1 });
-  const errors = []; page.on('pageerror', e => errors.push(e.message)); page.on('console', m => { if (m.type() === 'error' && !/goatcounter|gc\.zgo/.test(m.text())) errors.push(m.text()); });
+  const errors = []; page.on('pageerror', e => errors.push(e.message)); page.on('console', m => { if (m.type() === 'error' && !/goatcounter|gc\.zgo|ERR_FAILED/.test(m.text())) errors.push(m.text()); });
   await page.route(/gc\.zgo\.at/, r => r.abort());
   const url = 'file://' + path.resolve(__dirname, 'leavitts-cloud.html') + '?seed=1912';
   await page.goto(url); await page.waitForTimeout(800);
@@ -27,7 +27,7 @@ const path = require('path');
       await page.click('#b-act');
     }
     await page.waitForFunction(() => window.__game().phase === 'tuning', null, { timeout: 60000 });
-    if (i < 3 || i === 6) { await setBeat(st.P * 1.37); await page.waitForTimeout(150); await shot(`a-${i + 1}-wrong`, true); }
+    if (i < 3 || i === 6) { await setBeat(st.P * 1.37); await page.waitForTimeout(i === 0 ? 900 : 150); await shot(`a-${i + 1}-wrong`, true); }
     // the fine dial as a thumb would: coarse near, fine to the exact place
     const want = st.P * plan[i], coarseDays = want * 1.04;
     await setBeat(coarseDays);
