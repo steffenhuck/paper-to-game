@@ -264,7 +264,7 @@ const WORDS = (function () {
     const n = Math.min(100, Math.max(0, R(sc.score)));
     const beat = sc.score > 100.5;
     const head = beat ? `${n} of 100, and a little better than the best path we found` : `${n} of 100`;
-    const body = `Count every generation the same, the one after 2065 too, and let a doubling count the same for a poor generation as for a rich one. Then the typical generation on your sheet had ${sizeAgainst(sc.typical, 'the income per head of 1865')}; the best path we could find gives ${sizeAgainst(sc.best, 'it')}.`;
+    const body = `Count every generation the same, the one after 2065 too, and let a doubling count the same for a poor generation as for a rich one. That gives the typical generation. On your sheet it had ${mult(sc.typical)} the income per head of 1865 (the ledger's figures, taken together). On the best path we could find it has ${mult(sc.best)}. Your score is the one against the other.`;
     return { head, body };
   }
   function verdict(v, st, used, sc) {
