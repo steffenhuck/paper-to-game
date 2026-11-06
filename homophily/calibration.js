@@ -1,153 +1,101 @@
-// Calibration check (build step 1): runs against mechanism.js, the file build.py inlines into the game.
-// Run: node calibration.js  > calibration-result.txt
+// Calibration check (build step 1), iteration 2: runs against mechanism.js, the file build.py inlines into the game.
+// Run: node calibration.js > calibration-result.txt
+const fs = require('fs');
 const M = require('./mechanism.js');
 const C = M.CONFIG;
 let fails = 0;
 const ok = (cond, msg) => { console.log((cond ? 'PASS ' : 'FAIL ') + msg); if (!cond) fails++; };
 const f = (x, d = 2) => x.toFixed(d);
 const P = s => M.parseJudges(s, 'x');
+const key = j => j.p + '/' + j.w;
 
-console.log('== 1. The paper\'s estimates are carried exactly');
-ok(C.bonus.both === 0.164 && C.bonus.citz === 0.075 && C.bonus.country === 0.056, 'bonuses = Supp. Table 2 col 1 (0.164 / 0.075 / 0.056)');
-ok(C.bonus.gender === 0.024, 'gender bonus = Supp. Table 1 col 1 (0.024)');
-ok(Math.abs(M.starWeight('citz') - 0.457) < 0.001 && Math.abs(M.starWeight('country') - 0.341) < 0.001,
-  `star weights: citizenship only ${f(M.starWeight('citz'), 3)} ("about half"), country only ${f(M.starWeight('country'), 3)} ("about a third")`);
-ok(Math.abs(C.bonus.gender / C.bonus.both - 1 / 7) < 0.01, `gender / both = ${f(C.bonus.gender / C.bonus.both, 3)} ("about a seventh")`);
-const single = (C.bonus.citz + C.bonus.country) / 2 / C.bonus.gender;
-ok(single >= 2 && single <= 3.2, `single country or citizenship match vs gender: ${f(single)}x (paper p. 7: "on average 2 to 3 times larger")`);
+console.log('== 1. Data');
+const fileCSV = fs.readFileSync(__dirname + '/applicant_country_citizenship.csv', 'utf8').trim();
+ok(C.applicantCSV.trim() === fileCSV, 'embedded applicant data is identical to applicant_country_citizenship.csv');
+ok(M.APPLICANTS.length === fileCSV.split('\n').length - 1, `all ${M.APPLICANTS.length} applicant rows kept`);
+ok(M.APPLICANTS.every(a => a.p && a.w && C.names[a.p] && C.people[a.p] && C.names[a.w]), 'every applicant country and passport has a code, a name and an adjective');
+const tot = M.APPLICANTS.reduce((s, a) => s + a.s, 0);
+ok(Math.abs(tot - 1) < 1e-9, `applicant shares sum to ${f(tot, 6)}`);
+const panelRows = fs.readFileSync(__dirname + '/panel_member_country_citizenship.csv', 'utf8').trim().split('\n').slice(1)
+  .map(l => { const [c, p, s] = l.split(','); return { w: C.codes[c], p: C.codes[p], s: +s }; });
+ok(panelRows.every(r => r.p && r.w && C.names[r.p] && C.people[r.p]), `all ${panelRows.length} panel-member rows map to codes`);
 
-console.log('\n== 2. Applicant population and the ERC-like panel against Table 2');
-const tot = M.APPLICANTS.reduce((a, b) => a + b.s, 0);
-const big = M.APPLICANTS.filter(a => M.isBig(a.w)).reduce((a, b) => a + b.s, 0) / tot;
-ok(Math.abs(tot - 100) < 1e-9, `applicant weights sum to ${f(tot, 1)}`);
-ok(Math.abs(big - C.table2.bigShare) < 0.002, `big-five share ${f(100 * big, 1)}% (Table 2 N: ${f(100 * C.table2.bigShare, 1)}%)`);
-const mobile = M.APPLICANTS.filter(a => a.p !== a.w).reduce((a, b) => a + b.s, 0) / tot;
-console.log(`     (constructed: ${f(100 * mobile, 1)}% of applicants work outside their passport country, incl. XX passports)`);
-const erc = M.evaluate(P(C.ercPanel));
-for (const g of ['big', 'other']) for (const t of ['both', 'country', 'citz']) {
-  const d = erc[g][t] - C.table2[g][t];
-  ok(Math.abs(d) <= 1.2, `ERC-like panel, ${g}, ${t}: ${f(erc[g][t], 1)}% (Table 2: ${C.table2[g][t]}%, tolerance ±1.2 p.p.)`);
-}
-const t2 = M.table2Stars();
-console.log(`     Table 2 implies home stars per 10 juries: big five ${f(t2.big)}, everyone else ${f(t2.other)}, ratio ${f(t2.ratio)}`);
-ok(Math.abs(erc.big.stars - t2.big) <= 0.4 && Math.abs(erc.other.stars - t2.other) <= 0.4,
-  `ERC-like panel stars: big ${f(erc.big.stars)}, other ${f(erc.other.stars)} (Table 2: ${f(t2.big)}, ${f(t2.other)}; ±0.4)`);
-ok(erc.ratio >= 1.8 && erc.ratio <= 3.4, `ERC-like panel ratio ${f(erc.ratio)} (Table 2: ${f(t2.ratio)}; accepted 1.8–3.4)`);
-ok(!erc.level, 'the ERC-like panel starts NOT level');
-console.log(`     expected bonus per mark: big five +${f(erc.big.bonusPts, 4)}, other +${f(erc.other.bonusPts, 4)} points ` +
-  `(Table 2 shares × Supp. Table 2: +${f((4.6 * .164 + 4.5 * .056 + 3.8 * .075) / 100, 4)}, +${f((1.5 * .164 + 1.8 * .056 + 2.6 * .075) / 100, 4)})`);
+console.log('\n== 2. Token rule');
+ok(C.tokens.both === 3 && C.tokens.one === 1 && C.tokens.none === 0, 'tokens: both match 3, one match 1, no match 0');
+ok(M.tokensFor(M.matchType({ p: 'DE', w: 'UK' }, { p: 'DE', w: 'UK' })) === 3 && M.tokensFor(M.matchType({ p: 'DE', w: 'UK' }, { p: 'DE', w: 'FR' })) === 1 &&
+  M.tokensFor(M.matchType({ p: 'DE', w: 'UK' }, { p: 'IT', w: 'UK' })) === 1 && M.tokensFor(M.matchType({ p: 'DE', w: 'UK' }, { p: 'UK', w: 'DE' })) === 0,
+  'German in the UK: 3 from a German in the UK, 1 from a German in France, 1 from an Italian in the UK, 0 from a Brit in Germany');
+ok(M.matchType({ p: 'DE', w: 'FR' }, { p: 'FR', w: 'DE' }) === null, '"same" means the same named country, not two Big Five countries');
 
-console.log('\n== 3. The paper\'s own Table 2 arithmetic, quoted in the verdict (correlational)');
-const edge = s => (C.ape.citz * s.citz + C.ape.country * s.country + C.ape.both * s.both) / 100;
-const eb = edge(C.table2.big), eo = edge(C.table2.other);
-ok(Math.abs(eb - C.fundingEdge.big) < 0.1 && Math.abs(eo - C.fundingEdge.other) < 0.1,
-  `APE × share: big five ${f(eb)} p.p. (paper 1.7), other ${f(eo)} p.p. (paper 0.8)`);
-
-console.log('\n== 4. Random assignment simulated (4 or 5 judges, mean 4.2) matches the analytic expectation');
-for (const seed of [1, 2, 3]) {
-  const s = M.simulate(P(C.ercPanel), 200000, seed);
-  ok(Math.abs(s.big - erc.big.stars) / erc.big.stars < 0.03 && Math.abs(s.other - erc.other.stars) / erc.other.stars < 0.05,
-    `seed ${seed}: simulated big ${f(s.big)}, other ${f(s.other)} vs analytic ${f(erc.big.stars)}, ${f(erc.other.stars)}`);
+console.log('\n== 3. The four applicant-group bars');
+const tilted = P(C.tilted), te = M.evaluate(tilted);
+const c = te.cells;
+ok(M.CELLS.every(k => c[k].weight > 0) && Math.abs(M.CELLS.reduce((s, k) => s + c[k].weight, 0) - 1) < 1e-9,
+  'the four groups partition the applicants: ' + M.CELLS.map(k => `${k} ${f(100 * c[k].weight, 1)}%`).join(', '));
+const wavg = (a, b) => (c[a].tokens * c[a].weight + c[b].tokens * c[b].weight) / (c[a].weight + c[b].weight);
+ok(Math.abs(wavg('bigP_bigW', 'othP_bigW') - te.big.tokens) < 1e-9 && Math.abs(wavg('bigP_othW', 'othP_othW') - te.other.tokens) < 1e-9,
+  `share-weighted bars reproduce the success measure (works in Big Five ${f(te.big.tokens)}, elsewhere ${f(te.other.tokens)})`);
+// by hand, for one applicant: a German working in Germany facing the tilted panel
+const hand = 4.2 * (3 + 3 + 1 /* DE/CH passport */) / 15;
+const deDe = M.APPLICANTS.find(a => a.p === 'DE' && a.w === 'DE');
+const one = M.evaluate(tilted, { applicants: [deDe] }).big.tokens;
+ok(Math.abs(one - hand) < 1e-9, `by hand: a German in Germany meets 2 German home judges and 1 German working in Switzerland: 4.2 × 7 / 15 = ${f(hand)} = ${f(one)}`);
+for (const seed of [1, 2]) {
+  const s = M.simulate(tilted, 200000, seed);
+  ok(Math.abs(s.big - te.big.tokens) / te.big.tokens < 0.03 && Math.abs(s.other - te.other.tokens) / te.other.tokens < 0.05,
+    `seed ${seed}: simulated random juries ${f(s.big)} / ${f(s.other)} vs expected ${f(te.big.tokens)} / ${f(te.other.tokens)}`);
 }
 
-console.log('\n== 5. Game balance');
-// Round 1: a panel that mirrors who applies, and a deliberately diverse one
-const mirror = P('DE/DE DE/DE UK/UK UK/UK FR/FR IT/IT ES/ES IT/UK DE/CH NL/NL PL/PL SE/SE IL/IL PT/PT GR/GR');
-const diverse = P('DE/DE UK/UK IT/UK DE/CH NL/UK GR/UK PL/DE ES/NL NL/NL PL/PL SE/SE PT/PT GR/GR IL/IL AT/AT');
-const em = M.evaluate(mirror), ed = M.evaluate(diverse);
-ok(em.ratio > 2.3, `round 1 mirror panel: big ${f(em.big.stars)}, other ${f(em.other.stars)}, ratio ${f(em.ratio)} (leans at least like the ERC)`);
-ok(ed.ratio < em.ratio, `round 1 diverse panel: big ${f(ed.big.stars)}, other ${f(ed.other.stars)}, ratio ${f(ed.ratio)} (leans less)`);
-const pool = M.parseJudges(C.pool, 'p');
-const bigHome = pool.filter(j => j.p === j.w && M.isBig(j.w)).length;
-ok(pool.length === 24 && bigHome === 11, `pool: ${pool.length} judges, ${bigHome} big-five home judges, so at least ${bigHome - 9} must be seated`);
-// Round 2: exhaustive for 1–2 swaps, enumerated "thoughtful" plans and random plans for the full budget
-const T = P(C.ercPanel), B = P(C.bench), K = C.swaps;
-const comb = (a, k) => k === 0 ? [[]] : a.flatMap((x, i) => comb(a.slice(i + 1), k - 1).map(c => [x].concat(c)));
-const apply = (t0, outs, ins, b0) => { const t = t0.slice(); outs.forEach((i, k) => { t[i] = b0[ins[k]]; }); return t; };
-function exhaustive(k, o) {
-  let n = 0, lv = 0; const tol = o.tol; const rec = (table, bench, d) => {
-    if (d === k) { n++; if (Math.abs(M.evaluate(table, o.opt).gap) <= tol) lv++; return; }
-    for (let i = 0; i < table.length; i++) for (let b = 0; b < bench.length; b++) { const t2 = table.slice(), b2 = bench.slice(); [t2[i], b2[b]] = [b2[b], t2[i]]; rec(t2, b2, d + 1); }
-  }; rec(T, B, 0); return [lv, n];
-}
-const bigHomeIdx = T.map((j, i) => i).filter(i => T[i].p === T[i].w && M.isBig(T[i].w));
-const tiedIdx = T.map((j, i) => i).filter(i => M.isBig(T[i].w) || M.isBig(T[i].p));
-const smallIdx = T.map((j, i) => i).filter(i => !M.isBig(T[i].w) && !M.isBig(T[i].p));
-function planRate(outSet, o) {
-  let n = 0, lv = 0;
-  for (const outs of comb(outSet, K)) for (const ins of comb(B.map((_, i) => i), K)) { n++; if (Math.abs(M.evaluate(apply(T, outs, ins, B), o.opt).gap) <= o.tol) lv++; }
-  return [lv, n];
-}
-function randomRate(o, seed, N) {
-  const r = M.rng(seed); let lv = 0;
-  for (let x = 0; x < N; x++) { let t = T.slice(), b = B.slice(); for (let s = 0; s < K; s++) { const i = Math.floor(r() * t.length), j = Math.floor(r() * b.length); [t[i], b[j]] = [b[j], t[i]]; } if (Math.abs(M.evaluate(t, o.opt).gap) <= o.tol) lv++; }
-  return lv / N;
-}
-const base = { tol: C.levelTol, opt: {} };
-const [l1, n1] = exhaustive(1, base), [l2, n2] = exhaustive(2, base);
-ok(l1 === 0 && l2 === 0, `round 2: no plan of 1 or 2 swaps levels the jars (${l1}/${n1}, ${l2}/${n2})`);
-const [lh, nh] = planRate(bigHomeIdx, base), [lt, nt] = planRate(tiedIdx, base), [ls, ns] = planRate(smallIdx, base);
-const rr = randomRate(base, 7, 40000);
-ok(lh / nh > 0.5, `round 2, ${K} swaps that unseat big-five home judges: ${lh}/${nh} level (${f(100 * lh / nh, 0)}%)`);
-console.log(`     ${K} swaps that unseat anyone tied to the big five: ${lt}/${nt} level (${f(100 * lt / nt, 0)}%)`);
-ok(ls === 0, `round 2, ${K} swaps that only unseat judges with no big-five tie: ${ls}/${ns} level`);
-ok(rr < 0.02, `round 2, ${K} random swaps: ${f(100 * rr, 2)}% level (not by chance)`);
-// A seat from a small country barely moves the small jar; a big home judge moves the big jar a lot
-let dSmallMax = 0, dBigMax = 0;
-for (let i = 0; i < T.length; i++) for (let b = 0; b < B.length; b++) { const e = M.evaluate(apply(T, [i], [b], B)); dSmallMax = Math.max(dSmallMax, e.other.stars - erc.other.stars); dBigMax = Math.max(dBigMax, erc.big.stars - e.big.stars); }
-ok(dBigMax > 3 * dSmallMax, `largest single-swap move: big jar −${f(dBigMax)}, small jar +${f(dSmallMax)} (big moves > 3× small)`);
+console.log('\n== 4. Rosters, guided by the panel-member file');
+const inPanelFile = j => panelRows.some(r => r.p === j.p && r.w === j.w);
+const pool = P(C.pool), bench = P(C.bench);
+ok([...pool, ...tilted, ...bench].every(inPanelFile), 'every roster judge is a passport/work combination that occurs in the panel-member file');
+const top6 = panelRows.slice().sort((a, b) => b.s - a.s).slice(0, 6).map(key);
+console.log(`     panel-member file, six largest combinations: ${top6.join(', ')}`);
+const count = (list, k) => list.filter(j => key(j) === k).length;
+ok(C.bigFive.every(b => count(pool, b + '/' + b) === 2), 'pool: each Big Five home combination appears twice');
+const smaller = pool.filter(j => !M.isBig(j.p) && !M.isBig(j.w));
+ok(smaller.every(j => count(pool, key(j)) === 1) && smaller.length >= 10, `pool: ${smaller.length} judges from smaller countries, one each`);
+ok(pool.length === 24 && tilted.length === 15 && bench.length === 10, 'pool 24, panel 15, bench 10');
+const bigHomePool = pool.filter(j => j.p === j.w && M.isBig(j.w)).length;
+ok(bigHomePool - (24 - 15) <= 1, `a Round 1 player must seat at least ${Math.max(0, bigHomePool - 9)} Big Five home judge(s), so a balanced panel is possible`);
+const mirror = P('DE/DE DE/DE IT/IT IT/IT UK/UK UK/UK FR/FR ES/ES US/US NL/NL BE/BE SE/SE DE/CH IT/UK PL/PL');
+const balanced = P('DE/DE US/US NL/NL BE/BE SE/SE PL/PL IL/IL DK/DK FI/FI PT/PT CZ/CZ GR/GR AT/AT DE/CH IT/UK');
+const em = M.evaluate(mirror), eb = M.evaluate(balanced);
+ok(em.gap > 0.8, `Round 1, a panel that mirrors the panel-member file: works in Big Five ${f(em.big.tokens)}, elsewhere ${f(em.other.tokens)} (tilted)`);
+ok(Math.abs(eb.gap) < Math.abs(em.gap) / 2, `Round 1, a balanced panel from the same pool: ${f(eb.big.tokens)} vs ${f(eb.other.tokens)} (gap ${f(eb.gap)})`);
 
-console.log('\n== 6. Robustness of the central discovery under assumptions the paper does not identify');
-// (a) the mirror panel leans more than the ERC-like one would suggest is fair (ratio > 2); (b) unseating a big home judge moves
-// the big jar > 2× what seating any bench judge moves the small jar; (c) round 2: no 1-swap plan levels, plans that unseat
-// big-five home judges level at least 30% of the time, random plans under 3%. Under: Step 2 bonuses, PI bonuses, half/1.5x mobility, 4 judges.
-function mobilityVariant(m) {
-  // scale every workplace's abroad weights by m, keeping each workplace's total (home-grown absorbs the difference)
-  const apps = M.APPLICANTS.map(a => Object.assign({}, a));
-  const byW = {}; apps.forEach(a => { (byW[a.w] = byW[a.w] || []).push(a); });
-  for (const w in byW) {
-    const home = byW[w].find(a => a.p === w), abroad = byW[w].filter(a => a.p !== w);
-    if (!home) continue;
-    const ab = abroad.reduce((s, a) => s + a.s, 0);
-    abroad.forEach(a => { a.s *= m; }); home.s += ab - ab * m;
-  }
-  return apps;
+console.log('\n== 5. Round 2: the GAP meter and the four-swap puzzle');
+const comb = (a, k) => k === 0 ? [[]] : a.flatMap((x, i) => comb(a.slice(i + 1), k - 1).map(r => [x].concat(r)));
+const apply = (outs, ins, o) => { const t = tilted.slice(); outs.forEach((i, k) => { t[i] = bench[ins[k]]; }); return M.evaluate(t, o); };
+function rate(k, outSet, o, tol) {
+  let n = 0, l = 0;
+  for (const outs of comb(outSet || tilted.map((_, i) => i), k)) for (const ins of comb(bench.map((_, i) => i), k)) { n++; if (Math.abs(apply(outs, ins, o).gap) <= tol) l++; }
+  return [l, n];
 }
-const variants = [
-  ['Step 2 project bonuses', { bonus: C.bonusAlt.step2project }],
-  ['Step 1 PI bonuses', { bonus: C.bonusAlt.step1PI }],
-  ['half the mobility', { applicants: mobilityVariant(C.mobilityAlt[0]) }],
-  ['1.5x the mobility', { applicants: mobilityVariant(C.mobilityAlt[1]) }],
-  ['exactly 4 judges per proposal', { reviewers: 4 }],
-];
-for (const [name, opt] of variants) {
-  const em2 = M.evaluate(mirror, opt), e0 = M.evaluate(T, opt);
-  const o = { opt, tol: C.levelTol * e0.gap / erc.gap }; // the target scales with the starting gap under this variant
-  let dS = 0, dBg = 0;
-  for (let i = 0; i < T.length; i++) for (let b = 0; b < B.length; b++) { const e = M.evaluate(apply(T, [i], [b], B), opt); dS = Math.max(dS, e.other.stars - e0.other.stars); dBg = Math.max(dBg, e0.big.stars - e.big.stars); }
-  const [v1] = exhaustive(1, o), [vh, vn] = planRate(bigHomeIdx, o), vr = randomRate(o, 11, 10000);
-  ok(em2.ratio > 2 && dBg > 2 * dS && v1 === 0 && vh / vn > 0.3 && vr < 0.03,
-    `${name}: mirror ratio ${f(em2.ratio)}, ERC-like ratio ${f(e0.ratio)}, biggest moves big −${f(dBg)} / small +${f(dS)}, ` +
-    `level: 1 swap ${v1}, big-home plans ${f(100 * vh / vn, 0)}%, random ${f(100 * vr, 1)}%`);
+ok(!te.level && te.gap > 3 * C.levelTol, `the starting panel is tilted: gap ${f(te.gap)} tokens, LEVEL zone ±${C.levelTol}`);
+const [l1] = rate(1, null, {}, C.levelTol), [l2] = rate(2, null, {}, C.levelTol), [l4, n4] = rate(4, null, {}, C.levelTol);
+ok(l1 === 0 && l2 === 0, 'no plan of 1 or 2 swaps reaches LEVEL');
+ok(l4 > 0, `${l4} of ${n4} four-swap plans reach LEVEL (${f(100 * l4 / n4, 1)}%; at least one solution exists)`);
+const bigHomeIdx = tilted.map((j, i) => i).filter(i => tilted[i].p === tilted[i].w && M.isBig(tilted[i].w));
+const smallIdx = tilted.map((j, i) => i).filter(i => !M.isBig(tilted[i].p) && !M.isBig(tilted[i].w));
+const [lh, nh] = rate(4, bigHomeIdx, {}, C.levelTol), [ls] = rate(4, smallIdx, {}, C.levelTol);
+ok(lh / nh > 0.5, `plans that bench four Big Five home judges: ${lh}/${nh} reach LEVEL (${f(100 * lh / nh, 0)}%)`);
+ok(ls === 0, 'plans that only bench judges from smaller countries never reach LEVEL');
+let shown = 0;
+for (const outs of comb(bigHomeIdx, 4)) for (const ins of comb(bench.map((_, i) => i), 4)) {
+  const e = apply(outs, ins, {}); if (e.level && shown < 1) { shown++; console.log(`     e.g. ${outs.map((o, k) => key(tilted[o]) + '->' + key(bench[ins[k]])).join(', ')}: ${f(e.big.tokens)} vs ${f(e.other.tokens)}`); }
 }
+ok(Math.abs(te.gap) < C.gapMax, `the meter's range (±${C.gapMax}) holds the starting gap`);
 
-console.log('\n== 7. Claim boundaries');
-ok(typeof C.fundingEdge === 'object' && !('fundingEdge' in M.evaluate(T)), 'the correlational funding edge is quoted, never computed from the player\'s panel');
-
-console.log('\n== 8. The four applicant-group bars (passport row × workplace column)');
-for (const [name, pan] of [['ERC-like', C.ercPanel], ['mirror', 'DE/DE DE/DE UK/UK UK/UK FR/FR IT/IT ES/ES IT/UK DE/CH NL/NL PL/PL SE/SE IL/IL PT/PT GR/GR']]) {
-  const e = M.evaluate(P(pan)), c = e.cells;
-  const wsum = M.CELLS.reduce((a, k) => a + c[k].weight, 0);
-  ok(Math.abs(wsum - 100) < 1e-9 && M.CELLS.every(k => c[k].weight > 0), `${name}: the four groups partition the applicants (${M.CELLS.map(k => k + ' ' + f(c[k].weight, 1) + '%').join(', ')})`);
-  const wavg = (a, b) => (c[a].stars * c[a].weight + c[b].stars * c[b].weight) / (c[a].weight + c[b].weight);
-  const big = wavg('bigP_bigW', 'othP_bigW'), oth = wavg('bigP_othW', 'othP_othW');
-  ok(Math.abs(big - e.big.stars) < 1e-9 && Math.abs(oth - e.other.stars) < 1e-9,
-    `${name}: weighted cells reproduce the success measure (works in Big Five ${f(big)} = ${f(e.big.stars)}, elsewhere ${f(oth)} = ${f(e.other.stars)})`);
-  const naive = (c.bigP_bigW.stars + c.othP_bigW.stars) / 2;
-  console.log(`     (an unweighted average of the two bar heights would say ${f(naive)} instead of ${f(big)}; not used)`);
+console.log('\n== 6. Robustness: the paper\'s own relative sizes instead of 3 / 1 / 0, and exactly 4 judges');
+for (const [name, o] of [['paper relative sizes (3 / 1.37 / 1.02)', { rule: C.tokensPaper }], ['exactly 4 judges per applicant', { reviewers: 4 }]]) {
+  const e0 = M.evaluate(tilted, o), em2 = M.evaluate(mirror, o), eb2 = M.evaluate(balanced, o);
+  const tol = C.levelTol * e0.gap / te.gap; // the target scales with the starting gap under this variant
+  const [v1] = rate(1, null, o, tol), [vh, vn] = rate(4, bigHomeIdx, o, tol);
+  ok(em2.gap > 0 && Math.abs(eb2.gap) < Math.abs(em2.gap) / 2 && v1 === 0 && vh > 0,
+    `${name}: mirror gap ${f(em2.gap)}, balanced ${f(eb2.gap)}, start ${f(e0.gap)}, 1-swap levels ${v1}, big-home four-swap plans level ${f(100 * vh / vn, 0)}%`);
 }
-ok(M.cellOf({ p: 'DE', w: 'FR' }) === 'bigP_bigW' && M.matchType({ p: 'DE', w: 'FR' }, { p: 'FR', w: 'DE' }) === null,
-  '"same" means the same named country: a German in France and a French judge in Germany do not match');
 
 console.log(`\n${fails ? 'FAILURES: ' + fails : 'ALL PASS'}`);
 process.exitCode = fails ? 1 : 0;
