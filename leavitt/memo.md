@@ -186,3 +186,14 @@ Steffen, playing revision 1: he still did not see what to do, and suspected his 
 - **Words follow the picture:** "Turn the dial until the scribble becomes a neat zigzag." The first-touch line now introduces the line; round 2 warns that two jumps in each half means twice too long; How to play says the same.
 
 Browser session at 380 px: no errors, no horizontal scroll. Calibration unchanged (42/42).
+
+## Revision 3 (6 Nov 2026): one glass, and brightness in colour
+
+Steffen: "the brighter the star, the bigger the dot doesn't work, so it stays all guesswork" — and, his suggestion, the gap may again be between what the builder can measure and what a human eye perceives; work with colour. Diagnosis: each round showed one star alone, so its size could not be compared with anything, and the size scale was narrow; the seventh star's guess had nothing on the glass to compare against. Changes, mechanism untouched:
+
+- **One glass for the whole game.** Every star you time keeps its place on the same photo with a thin ring and the blink time you found; the new one has a thick ring. During play they all blink at their own pace, so the bright ones visibly breathe slowly next to the faint quick ones.
+- **Brightness in colour as well as size**, on one scale for the whole game: small and pale pink is faint, big and dark plum is bright (a five-dot key in the corner of the glass). The size range is twice as wide as before. On the chart each of your stars is a thick line running from its faint colour at the bottom to its bright colour at the top, so a dot on the glass and its line on the chart are visibly the same star. Leavitt's own stars stay thin violet.
+- **The seventh star** is guessed with all the stars on the glass frozen at their brightest, each labelled with your blink time: is it bigger and darker than the others, or smaller and paler?
+- Words updated to match ("Small and pale pink: a faint star. Big and dark: a bright star."). Black is now kept for the ordinary stars of the cloud and for the line in the box.
+
+Browser session at 380 px: no errors, no horizontal scroll. Calibration unchanged.

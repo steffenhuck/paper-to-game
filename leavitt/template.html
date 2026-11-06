@@ -95,7 +95,7 @@ input[type=range]:disabled{opacity:.4}
 <section class="screen" id="s-round">
   <div class="topbar"><div class="aimline" id="aim-round"></div><button class="q" data-help aria-label="How to play">?</button></div>
   <div class="caps" id="r-label"></div>
-  <div class="panel"><canvas id="c-plate" height="120"></canvas><span class="tag" id="plate-tag">A glass photo</span></div>
+  <div class="panel"><canvas id="c-plate" height="170"></canvas><span class="tag" id="plate-tag">A glass photo</span></div>
   <p class="say small" id="r-plate-say"></p>
   <div id="r-record-box">
     <div class="panel"><canvas id="c-record" height="210"></canvas><span class="tag" id="rec-tag">The photos</span>
@@ -145,7 +145,7 @@ input[type=range]:disabled{opacity:.4}
   <h2>How to play</h2>
   <p class="aim" id="aim-help"></p>
   <h3>The photos</h3>
-  <p>Each glass photo shows a far-away cloud of stars on one night. Every black dot is a star. The bigger the dot, the brighter the star. The star in the ring is the one you are timing.</p>
+  <p>Each glass photo shows a far-away cloud of stars on one night. Every dot is a star. Small and pale pink: a faint star. Big and dark: a bright star. The key in the corner shows the scale. The star in the thick ring is the one you are timing. Stars you have already timed keep a thin ring, with the blink time you found, so you can compare their dots with the new one.</p>
   <p>Each photo becomes a dot in the box below it, the same size as the star was that night. Further right means a later night. Higher (and bigger) means the star was brighter that night. At first the dots look messy, because the photos were taken on random nights.</p>
   <h3>The dial</h3>
   <p>The blink time is how long the star takes to blink once: a quick jump up to bright, then a slow slide down. Move the dial to guess it. The dots jump to new places: now they show where each night fell inside one blink, and the box shows two blinks side by side.</p>
@@ -154,9 +154,9 @@ input[type=range]:disabled{opacity:.4}
   <h3>Write it down</h3>
   <p>When the dots line up, press Write it down. Then you see Leavitt&rsquo;s own blink time for that star, in violet, and her blink drawn over your dots.</p>
   <h3>The chart</h3>
-  <p>Each star goes on the chart as a line from its faintest to its brightest. Left to right is the blink time you wrote: slow blinkers on the right. Each step to the right doubles the time. Up is brighter. Watch what the lines do.</p>
+  <p>Each star goes on the chart as a line from its faintest to its brightest, in the same colours as on the glass. Left to right is the blink time you wrote: slow blinkers on the right. Each step to the right doubles the time. Up is brighter. Watch what the lines do.</p>
   <h3>The last star</h3>
-  <p>For the seventh star you guess its blink time from how bright it is, before its photos arrive. A dashed line shows where your guess would put it on the chart. Then its photos come in and you time it as before, starting from your guess.</p>
+  <p>For the seventh star you guess its blink time from its dot, before its photos arrive. All the stars on the glass are then shown at their brightest, so you can compare. A dashed line shows where your guess would put it on the chart. Then its photos come in and you time it as before, starting from your guess.</p>
   <h3>Violet</h3>
   <p>Everything in violet is Leavitt&rsquo;s. You only see it after you have written down yours.</p>
   <button class="btn pri" id="b-help-close">Back to the game</button>
@@ -190,7 +190,16 @@ function setup(c) {
   var x = c.getContext('2d'); x.setTransform(dpr, 0, 0, dpr, 0, 0); x.clearRect(0, 0, w, h);
   return { x: x, w: w, h: h };
 }
-function dotR(mag) { return Math.max(1.6, 1.5 + (16.9 - mag) * 1.45); }
+// one brightness scale for the whole game, from pale pink (faint) to almost black plum (bright): the same on the glass and the chart
+var RAMP = [[0, [201, 168, 186]], [0.35, [200, 112, 146]], [0.7, [122, 38, 96]], [1, [26, 14, 30]]];
+function tB(mag) { return Math.max(0, Math.min(1, (16.6 - mag) / (16.6 - 11.0))); }
+function bcol(mag) { var t = tB(mag); for (var i = 1; i < RAMP.length; i++) if (t <= RAMP[i][0]) { var a = RAMP[i - 1], b = RAMP[i], k = (t - a[0]) / (b[0] - a[0]); return 'rgb(' + [0, 1, 2].map(function (j) { return Math.round(a[1][j] + (b[1][j] - a[1][j]) * k); }).join(',') + ')'; } return 'rgb(26,14,30)'; }
+function key(x, w) { // faint -> bright, top right of the glass
+  var x0 = w - 150, y = 13; x.font = 'italic 11px Spectral, serif'; x.fillStyle = '#6d6478'; x.textAlign = 'right'; x.fillText('faint', x0 - 4, y + 4);
+  for (var i = 0; i < 5; i++) { var m = 16.4 - i * 1.3; x.fillStyle = bcol(m); x.beginPath(); x.arc(x0 + 8 + i * 22, y, Math.min(7, dotR(m) * 0.55), 0, 7); x.fill(); }
+  x.textAlign = 'left'; x.fillStyle = '#6d6478'; x.fillText('bright', x0 + 8 + 4 * 22 + 10, y + 4);
+}
+function dotR(mag) { return Math.max(2, 2 + (16.6 - mag) * 2.1); } // bigger dot, brighter star: wide enough to compare stars by eye
 var fields = {};
 function field(sd) { return fields[sd] || (fields[sd] = M.cloudField(sd, 340)); }
 function drawSpecks(x, w, h, sd) {
@@ -209,23 +218,29 @@ function drawCover(t) {
   drawSpecks(x, g.w, g.h, 7);
   [[1505, .18, .42], [1425, .36, .66], [1374, .55, .36], [823, .72, .62], [821, .86, .30]].forEach(function (a) {
     var s = M.star(a[0]), mag = M.lightCurve(t / C.TIMELAPSE_SEC_PER_DAY / s.period + a[1] * 3, s.max, s.min);
-    x.fillStyle = COL.silver; x.beginPath(); x.arc(a[1] * g.w, a[2] * g.h, dotR(mag), 0, 7); x.fill();
+    x.fillStyle = bcol(mag); x.beginPath(); x.arc(a[1] * g.w, a[2] * g.h, dotR(mag), 0, 7); x.fill();
   });
 }
 
 // the plate in a round
-function starPos(i) { var P0 = [[.62, .46], [.32, .55], [.7, .38], [.42, .44], [.58, .6], [.28, .4], [.66, .52]]; return P0[i % P0.length]; }
+// one glass for the whole game: every star you time keeps its place and a thin ring, so dots can be compared
+function starPos(i) { var P0 = [[.40, .50], [.12, .26], [.64, .25], [.12, .76], [.66, .76], [.38, .24], [.38, .78]]; return P0[i % P0.length]; }
+function shortTime(d) { return d < 2 ? Math.round(d * 24) + ' hours' : Math.round(d) + ' days'; }
 function drawPlate(t) {
-  var c = $('c-plate'), g = setup(c), x = g.x, s = M.star(rd.h), pos = starPos(game.round), mag;
-  drawSpecks(x, g.w, g.h, seed + game.round * 13);
-  if (phase === 'guess') mag = s.max;
-  else if (phase === 'arriving') mag = arrivedN ? rd.rec.plates[arrivedN - 1].mag : s.min;
-  else mag = M.lightCurve(t / C.TIMELAPSE_SEC_PER_DAY / s.period + 0.3, s.max, s.min);
-  var cx = pos[0] * g.w, cy = pos[1] * g.h;
-  x.fillStyle = COL.glass; x.beginPath(); x.arc(cx, cy, 14, 0, 7); x.fill();
-  x.fillStyle = COL.silver; x.beginPath(); x.arc(cx, cy, dotR(mag), 0, 7); x.fill();
-  ring(x, cx, cy, 15.5);
-  x.font = '600 10px Josefin, sans-serif'; x.fillStyle = COL.silver; x.textAlign = 'left'; x.fillText('HARVARD ' + rd.h, cx + 20, cy + 4);
+  var c = $('c-plate'), g = setup(c), x = g.x;
+  drawSpecks(x, g.w, g.h, 7); key(x, g.w);
+  for (var i = 0; i <= game.round; i++) {
+    var r = game.rounds[i], s = M.star(r.h), pos = starPos(i), cx = pos[0] * g.w, cy = pos[1] * g.h, now = i === game.round, mag;
+    if (phase === 'guess') mag = s.max;                                   // all at their brightest, for a fair comparison
+    else if (now && phase === 'arriving') mag = arrivedN ? rd.rec.plates[arrivedN - 1].mag : s.min;
+    else mag = M.lightCurve(t / C.TIMELAPSE_SEC_PER_DAY / s.period + 0.3 + i * 0.17, s.max, s.min);
+    x.fillStyle = COL.glass; x.beginPath(); x.arc(cx, cy, 17, 0, 7); x.fill();
+    x.fillStyle = bcol(mag); x.beginPath(); x.arc(cx, cy, dotR(mag), 0, 7); x.fill();
+    x.strokeStyle = COL.silver; x.lineWidth = now ? 2 : 0.8; x.beginPath(); x.arc(cx, cy, 17, 0.25, Math.PI * 2 - 0.25); x.stroke();
+    x.textAlign = 'left'; x.fillStyle = COL.silver;
+    if (now) { x.font = '600 10px Josefin, sans-serif'; x.fillText(phase === 'guess' ? 'THIS ONE: ?' : 'TIMING NOW', cx + 22, cy + 4); }
+    else { x.font = 'italic 12px Spectral, serif'; x.fillText(shortTime(r.written), cx + 22, cy + 4); }
+  }
 }
 
 // the record: by date or by beat
@@ -285,9 +300,11 @@ function axes(x, g, G, f) {
 }
 function stroke(x, G, days, s, col, w, f, dashed, label, grow) {
   var xx = CX(G, days, f), y1 = CY(G, s.max), y2 = CY(G, s.min), gr = grow == null ? 1 : grow, m = (y1 + y2) / 2;
-  x.strokeStyle = col; x.lineWidth = w; x.lineCap = 'round'; if (dashed) x.setLineDash([4, 4]);
-  x.beginPath(); x.moveTo(xx, m + (y1 - m) * gr); x.lineTo(xx, m + (y2 - m) * gr); x.stroke(); x.setLineDash([]); x.lineCap = 'butt';
-  if (label) { x.fillStyle = col; x.font = '600 9px Josefin, sans-serif'; x.textAlign = 'center'; x.fillText(label, xx, y1 - 7); }
+  var ya = m + (y1 - m) * gr, yb = m + (y2 - m) * gr, paint = col;
+  if (col === 'bright') { paint = x.createLinearGradient(0, y1, 0, y2); paint.addColorStop(0, bcol(s.max)); paint.addColorStop(1, bcol(s.min)); }
+  x.strokeStyle = paint; x.lineWidth = w; x.lineCap = 'round'; if (dashed) x.setLineDash([4, 4]);
+  x.beginPath(); x.moveTo(xx, ya); x.lineTo(xx, yb); x.stroke(); x.setLineDash([]); x.lineCap = 'butt';
+  if (label) { x.fillStyle = col === 'bright' ? COL.silver : col; x.font = '600 9px Josefin, sans-serif'; x.textAlign = 'center'; x.fillText(label, xx, y1 - 7); }
 }
 function herLine(x, G, f, which) {
   var Hl = M.herLines()[which]; x.strokeStyle = COL.violet; x.lineWidth = 1.2; x.beginPath();
@@ -302,9 +319,9 @@ function drawChart(c, o) {
   for (var i = 0; i < o.upto; i++) {
     var r = game.rounds[i]; if (r.written == null) continue; var s = M.star(r.h);
     if (r.cmp.kind !== 'same') stroke(x, G, s.period, s, COL.violet, 1.6, f, false, null);
-    stroke(x, G, r.written, s, COL.silver, 3.2, f, false, String(r.h), i === o.newest ? o.grow : 1);
+    stroke(x, G, r.written, s, 'bright', 4, f, false, String(r.h), i === o.newest ? o.grow : 1);
   }
-  if (o.preview) stroke(x, G, o.preview.days, o.preview.s, COL.silver, 2.4, f, true, 'HARVARD ' + o.preview.s.h);
+  if (o.preview) stroke(x, G, o.preview.days, o.preview.s, 'bright', 3, f, true, 'THIS ONE');
 }
 
 // ---------- the loop ----------
@@ -331,8 +348,8 @@ function startRound() {
   if (i === C.PREDICT_ROUND) return startGuess();
   $('r-record-box').classList.remove('hide'); $('r-chart-box').classList.add('hide');
   $('plate-tag').textContent = 'A glass photo';
-  if (i === 0) $('r-plate-say').innerHTML = 'This is one glass photo of the cloud. Every black dot is a star. <b>The bigger the dot, the brighter the star.</b> The star in the ring is the one you are timing.';
-  else $('r-plate-say').innerHTML = i === 1 ? 'A new blinking star, in the ring. Remember: bigger dot, brighter star.' : 'A new blinking star, in the ring. Bigger dot, brighter star.';
+  if (i === 0) $('r-plate-say').innerHTML = 'This is a glass photo of the cloud. Every dot is a star. <b>Small and pale pink: a faint star. Big and dark: a bright star.</b> The star in the thick ring is the one you are timing. Watch it blink.';
+  else $('r-plate-say').innerHTML = i === 1 ? 'A new blinking star, in the thick ring. The star you already timed keeps a thin ring, with the blink time you found. <b>Bigger and darker means brighter:</b> compare them.' : 'A new blinking star, in the thick ring. The stars you timed keep thin rings, with the blink times you found. Bigger and darker means brighter.';
   arrive(i === 0 ? 'slow' : 'fast', function () { beginTuning(C.DIAL_START); });
 }
 function arrive(speed, done) {
@@ -373,8 +390,8 @@ function startGuess() {
   phase = 'guess'; var s = M.star(rd.h);
   $('r-record-box').classList.add('hide'); $('r-chart-box').classList.remove('hide');
   $('plate-tag').textContent = 'At its brightest';
-  $('r-plate-say').innerHTML = 'One last star. Its photos are not here yet. The dot shows it at its brightest.';
-  setSay('r-say', 'Can you <b>guess its blink time just from how bright it is?</b> Move the dial. The dashed line shows where your guess would put it on the chart, next to your six stars.');
+  $('r-plate-say').innerHTML = 'One last star, in the thick ring. Its photos are not here yet. Every star on the glass is now shown <b>at its brightest</b>, next to the blink time you found for it. Compare the dots.';
+  setSay('r-say', 'Can you <b>guess its blink time just from its dot?</b> Is it bigger and darker than the others, or smaller and paler? Move the dial. The dashed line shows where your guess would put it on the chart, next to your six stars.');
   $('r-dial').classList.remove('hide'); setDial(C.DIAL_START); drawGuess();
   var b = $('b-act'); b.textContent = 'That’s my guess'; b.classList.remove('hide'); b.onclick = function () {
     guessP = P; M.guess(game, P);
@@ -400,7 +417,7 @@ function toChart() {
   var i = game.round, r = rd, s = M.star(r.h);
   $('ch-label').textContent = 'The chart · ' + (i + 1) + (i ? ' stars' : ' star');
   var say = '';
-  if (i === 0) say = '<b>Harvard ' + r.h + '</b> goes on the chart. Its line goes from how faint it gets to how bright it gets. <b>Left to right</b> is the blink time you wrote: slow blinkers on the right, and each step doubles the time. <b>Up</b> is brighter. ';
+  if (i === 0) say = '<b>Harvard ' + r.h + '</b> goes on the chart. Its line goes from how faint it gets to how bright it gets, in the same colours as on the glass. <b>Left to right</b> is the blink time you wrote: slow blinkers on the right, and each step doubles the time. <b>Up</b> is brighter. ';
   else {
     var pr = game.rounds[i - 1], ps = M.star(pr.h);
     var br = s.max < ps.max - 0.05 ? 'brighter than' : s.max > ps.max + 0.05 ? 'fainter than' : 'about as bright as';
@@ -429,7 +446,7 @@ function verdict() {
   var v = M.verdict(game); show('s-verdict');
   $('v-lines').innerHTML = '<p class="first">' + v.did + '</p><p>' + v.paper + '</p><p>' + v.means + '</p>';
   $('v-note').innerHTML = '<span class="caps">Who did the work</span><br>The 1912 report is signed by Edward Pickering, the boss of the observatory. But its first line says it was written by Miss Leavitt. <span class="ink">Henrietta Swan Leavitt</span> read the photos and found the pattern. Astronomers now often call it Leavitt&rsquo;s law.';
-  $('final-tag').innerHTML = 'Black: your seven stars, at the blink times you wrote. <span class="ink">Violet: hers, and her two lines.</span> Photo set no. ' + seed + '.';
+  $('final-tag').innerHTML = 'Thick lines, pale pink to dark plum: your seven stars, at the blink times you wrote. <span class="ink">Violet: hers, and her two lines.</span> Photo set no. ' + seed + '.';
   drawChart($('c-final'), { upto: 7, others: true, lines: true, fig: 2 });
 }
 $('b-again').onclick = function () { seed = seed * 7 % 9000 + 1000; rd = null; startGame(); };
