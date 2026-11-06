@@ -501,10 +501,19 @@ PASS  {"AFTER_YEARS":400} (g) the box after: a stand leaves the next ten generat
 PASS  {"AFTER_YEARS":400} (h) typical generation: cut x0.08, stand x0.85, slower x1.38, now x1.07, faster x0.79 (the interior beats both corners: slower > as now and slower > a stand; a stand > cut back)
 
 --- 4. The score's best path, against a fresh search ---
-PASS  optimum.json: typical x1.523 on 2.4 1.5 1 1 1.25 1.25 1.75 2.4 2 2; a fresh search gives x1.523 on 2.4 1.5 1 1 1.25 1.25 1.75 2.4 2 2 (within 0.5%; if not, run node optimum.js and rebuild)
-PASS  the best path is interior: it neither burns at the top all the way nor holds all the way (2.4 1.5 1 1 1.25 1.25 1.75 2.4 2 2)
+PASS  optimum.json: typical x1.523 on 2.4 1.5 1 1 1 1.5 1.5 2.4 2.4 2; a fresh search gives x1.523 on 2.4 1.5 1 1 1 1.5 1.5 2.4 2.4 2 (within 0.5%; if not, run node optimum.js and rebuild)
+PASS  the best path is interior: it neither burns at the top all the way nor holds all the way (2.4 1.5 1 1 1 1.5 1.5 2.4 2.4 2)
 PASS  the best path scores 100
-PASS  the best path leaves 19 squares for after 2065 (the box after counts)
+PASS  the best path leaves 21 squares for after 2065 (the box after counts)
+PASS  the best path uses only the ruler's marks, so it can be told in its words and followed (2.4 1.5 1 1 1 1.5 1.5 2.4 2.4 2)
+PASS  the best path is a plan for the engines: without them the best even share is x0.86, with them x1.52
+PASS  coda: with a substitute from 1965, the best path is "faster" in 9 of 10 generations and leaves 2.1 squares (brief greatness)
+PASS  coda: the earlier the substitute, the less coal the best path leaves: from 1965 2.1, from 2025 7.3, none 21
+PASS  coda: the earlier the substitute, the better off the even share (x2.48, x2.21, x1.52)
+PASS  coda data: every year 1965–2024 (60 rows)
+PASS  coda data: coal 1965 196.3 million tons of coal equivalent; oil and gas 2024 196
+PASS  coda data: no negative layer
+PASS  coda: coal really dug 1865–2024 is 24.2 billion tons; 71% of Hull's coal is still in the ground ("about two-thirds")
 
 --- 5. The obvious ways of playing (build.md, section 3) ---
 strategy | score | typical | shape | noon | noon, x 1865 | evening | 2065, x 1865 | squares burnt of 167 | left | America passed | over the sea (M) | engines B/A | best gen per head | last gen per head | after per head
@@ -518,7 +527,7 @@ a stand three times, then as now | 81 | x1.23 | greatness | 1991 | 10.3 | 2005 |
 as now three times, then cut back | 41 | x0.63 | greatness | 1925 | 9.2 | - | 0.04 | 84 | 83 | 1928 | 71 | air 1912/1913, perfected 1947/1953 | x3.3 (1905) | x0.04 | x0.72
 slower, then as now from 1925 | 83 | x1.26 | greatness | 1962 | 11.9 | 1985 | 0.95 | 158 | 9 | 1905 | 70 | air 1913/1913, perfected 1950/1953 | x5.1 (1945) | x0.41 | x0.15
 as now twice, then slower | 84 | x1.29 | greatness | 1953 | 12.7 | 1965 | 1.00 | 150 | 17 | 1922 | 63 | air 1912/1913, perfected 1947/1953 | x4.9 (1945) | x0.40 | x0.24
-the best path found | 100 | x1.52 | greatness | 1970 | 5.1 | 2025 | 2.44 | 148 | 19 | 1914 | 54 | air 1912/1913, perfected 1950/1953 | x2.8 (1945) | x0.90 | x0.25
+the best path found | 100 | x1.52 | between | 2026 | 5.0 | 2045 | 2.71 | 146 | 21 | 1914 | 51 | air 1912/1913, perfected 1950/1953 | x2.6 (1945) | x0.97 | x0.27
 
 ledgers (income per head, x 1865, per generation from 1865; then after):
   as now: 1.2 1.6 3.3 5.2 6.1 1.5 0.8 0.6 0.4 0.3 | after 0.11 (5 sq)
@@ -531,6 +540,6 @@ ledgers (income per head, x 1865, per generation from 1865; then after):
   as now three times, then cut back: 1.2 1.6 3.3 3.2 2.0 0.9 0.4 0.2 0.1 0.0 | after 0.72 (83 sq)
   slower, then as now from 1925: 1.1 1.2 1.9 3.2 5.1 4.1 1.9 1.0 0.6 0.4 | after 0.15 (9 sq)
   as now twice, then slower: 1.2 1.6 2.9 4.0 4.9 2.5 1.3 0.8 0.6 0.4 | after 0.24 (17 sq)
-  the best path found: 1.3 1.7 2.3 2.5 2.8 2.5 2.0 1.8 1.4 0.9 | after 0.25 (19 sq)
+  the best path found: 1.3 1.7 2.3 2.5 2.6 2.4 2.0 1.8 1.5 1.0 | after 0.27 (21 sq)
 
-500 of 500 checks pass.
+509 of 509 checks pass.

@@ -27,9 +27,9 @@ function session(label, choose) {
     if (M.checkEvening(st)) { evening(st, used); break; }
   }
   M.runOut(st);
-  const v = M.verdict(st), sc = M.scoreOf(st, opt.typical), vt = W.verdict(v, st, used, sc);
+  const v = M.verdict(st), sc = M.scoreOf(st, opt), vt = W.verdict(v, st, used, sc);
   console.log(`\nLEDGER: ${v.ledger.gens.map(g => `${g.from}: per head ${W.mult(g.perHead)}, income ${W.mult(g.income)}, ${g.squares.toFixed(0)} sq`).join(' | ')} | after: ${W.mult(v.ledger.after.perHead)}, ${v.ledger.left.toFixed(0)} sq`);
-  console.log(`\nVERDICT: ${vt.heading}\n  SCORE ${vt.score.head}: ${vt.score.body}`); vt.lines.forEach(l => console.log('  ' + l));
+  console.log(`\nVERDICT: ${vt.heading}\n  SCORE ${vt.score.head}:`); vt.score.paras.forEach(p => console.log("   | " + p)); vt.lines.forEach(l => console.log('  ' + l));
   vt.quotes.forEach(q => console.log(`  Jevons (${q.where}): ${q.text}`));
 }
 function evening(st, used) {

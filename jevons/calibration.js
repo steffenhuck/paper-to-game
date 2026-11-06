@@ -109,11 +109,24 @@ for (const a of ALT) discoveries(a, JSON.stringify(a) + ' ');
 
 console.log('\n--- 4. The score\'s best path, against a fresh search ---');
 const opt = JSON.parse(fs.readFileSync(__dirname + '/optimum.json', 'utf8'));
-const fresh = require('./optimum.js').search();
+const fresh = require('./optimum.js').search(null);
 ok(near(fresh.typical, opt.typical, 0.005), `optimum.json: typical x${opt.typical.toFixed(3)} on ${opt.path.join(' ')}; a fresh search gives x${fresh.typical.toFixed(3)} on ${fresh.path.join(' ')} (within 0.5%; if not, run node optimum.js and rebuild)`);
 ok(opt.path.some(m => m < 2) && opt.path.some(m => m >= 2), `the best path is interior: it neither burns at the top all the way nor holds all the way (${opt.path.join(' ')})`);
 ok(M.scoreOf(M.playPath(opt.path), opt.typical).score > 99.9, 'the best path scores 100');
 { const st = M.playPath(opt.path), L = M.ledger(st); ok(L.left > 5, `the best path leaves ${L.left.toFixed(0)} squares for after 2065 (the box after counts)`); }
+
+{ const subs = opt.substitutes || [], s65 = subs.find(x => x.from === 1965), s25 = subs.find(x => x.from === 2025);
+  ok(opt.path.every(m => [0.5, 1, 1.5, 2, 2.4].includes(m)), `the best path uses only the ruler's marks, so it can be told in its words and followed (${opt.path.join(' ')})`);
+  ok(opt.noEngines && opt.noEngines.typical < 0.75 * opt.typical, `the best path is a plan for the engines: without them the best even share is x${opt.noEngines && opt.noEngines.typical.toFixed(2)}, with them x${opt.typical.toFixed(2)}`);
+  ok(s65 && s65.path.filter(m => m === 2.4).length >= 8 && s65.left < 5, `coda: with a substitute from 1965, the best path is "faster" in ${s65 && s65.path.filter(m => m === 2.4).length} of 10 generations and leaves ${s65 && s65.left} squares (brief greatness)`);
+  ok(s65 && s25 && s65.left < s25.left && s25.left < opt.left, `coda: the earlier the substitute, the less coal the best path leaves: from 1965 ${s65 && s65.left}, from 2025 ${s25 && s25.left}, none ${opt.left}`);
+  ok(s65 && s25 && s65.typical > s25.typical && s25.typical > opt.typical, `coda: the earlier the substitute, the better off the even share (x${s65 && s65.typical.toFixed(2)}, x${s25 && s25.typical.toFixed(2)}, x${opt.typical.toFixed(2)})`); }
+{ const mix = M.MIX, f = mix[0], l = mix[mix.length - 1];
+  ok(f[0] === 1965 && l[0] === 2024 && mix.every((r, i) => r[0] === 1965 + i), `coda data: every year 1965–2024 (${mix.length} rows)`);
+  ok(near(f[1], 196, 0.02) && near(l[2] + l[3], 196, 0.05), `coda data: coal 1965 ${f[1]} million tons of coal equivalent; oil and gas 2024 ${(l[2] + l[3]).toFixed(0)}`);
+  ok(mix.every(r => r.slice(1).every(x => x >= 0)), 'coda data: no negative layer');
+  const sum = M.REAL.reduce((a, r) => a + r[1], 0), share = 1 - sum / C.RESERVE;
+  ok(share > 0.6 && share < 0.75, `coda: coal really dug 1865–2024 is ${(sum / 1000).toFixed(1)} billion tons; ${(100 * share).toFixed(0)}% of Hull's coal is still in the ground ("about two-thirds")`); }
 
 console.log('\n--- 5. The obvious ways of playing (build.md, section 3) ---');
 const STRATS = [

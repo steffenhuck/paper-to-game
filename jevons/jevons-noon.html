@@ -76,6 +76,10 @@ h2.big{font-size:26px;letter-spacing:.12em;margin:10px 0 8px;line-height:1.12}
 .score{margin:12px 0 8px;padding:10px 14px 8px;border:2px solid var(--soot);box-shadow:inset 0 0 0 3px var(--paper),inset 0 0 0 4px var(--soot)}
 .scorehead{font-size:11px;color:var(--ash)}
 .scorenum{font-style:italic;font-weight:700;font-size:34px;line-height:1.05;margin:2px 0 4px}
+.score p{font-size:15px;line-height:1.38;margin:.45em 0}
+.legend{font-size:12.5px;font-style:italic;color:#5f594f;margin:6px 0 0;line-height:1.5}
+.legend .sw{display:inline-block;vertical-align:-2px;margin:0 4px 0 0}
+.legend span.item{white-space:nowrap;margin-right:10px}
 </style>
 </head>
 <body>
@@ -103,8 +107,9 @@ h2.big{font-size:26px;letter-spacing:.12em;margin:10px 0 8px;line-height:1.12}
 <section id="verdict" class="screen">
   <div class="aimrow"><div class="aim ash">1865 to 2065</div><button class="q" data-help aria-label="How to play">?</button></div>
   <h2 class="big" id="vhead"></h2>
-  <div class="sheetwrap"><svg id="vsheet" class="sheet" aria-label="Your sheet, with your morning, noon and evening, and the ledger"></svg></div>
-  <div class="score"><div class="scorehead caps">Score</div><div class="scorenum" id="scorenum"></div><p class="small" id="scorebody"></p></div>
+  <div class="sheetwrap"><svg id="vsheet" class="sheet" aria-label="Your sheet, with your morning, noon and evening, the best path dotted, and the ledger"></svg></div>
+  <p class="legend" id="vlegend"></p>
+  <div class="score"><div class="scorehead caps">Score</div><div class="scorenum" id="scorenum"></div><div id="scorebody"></div></div>
   <div class="vtwo" id="vtwo"></div>
   <div class="res" id="vlines"></div>
   <div id="vquotes"></div>
@@ -116,7 +121,18 @@ h2.big{font-size:26px;letter-spacing:.12em;margin:10px 0 8px;line-height:1.12}
 
 <section id="last" class="screen">
   <div class="sheetwrap" style="margin-top:22px"><svg id="lsheet" class="sheet"></svg></div>
+  <button class="btn line hidden" id="tocoda">Why it stopped</button>
   <div class="foot"><button class="back" id="lastback" aria-label="Back">&lsaquo;</button><footer class="sig" style="margin:0"><a href="https://steffenhuck.github.io/">steffen huck</a></footer><span style="width:30px"></span></div>
+</section>
+
+<section id="coda" class="screen">
+  <h2 class="big" style="margin-top:20px" id="ctitle"></h2>
+  <div class="sheetwrap"><svg id="csheet" class="sheet" aria-label="All of Britain's energy since 1965, in tons of coal a year, above the coal still in the ground"></svg></div>
+  <div class="legend" id="clegend"></div>
+  <div class="res" id="ctext"></div>
+  <button class="btn soot" id="codaback">Back to your sheet</button>
+  <button class="btn" id="codaagain">Another sheet</button>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
 </section>
 
 <section id="help" class="screen">
@@ -138,7 +154,8 @@ h2.big{font-size:26px;letter-spacing:.12em;margin:10px 0 8px;line-height:1.12}
     <h3>The evening</h3>
     <p>If coal has grown so dear that the fire could not grow at any pace, the evening has come: the fire falls whatever you set, and the rest of the sheet draws itself.</p>
     <h3>The score</h3>
-    <p>Count every generation the same, the one after 2065 too, and let a doubling count the same for a poor generation as for a rich one. That gives the typical generation on your sheet. Your score is that against the best path we could find, out of 100. The last page also reads your sheet: how high the fire went, how long it lasted, and who got the coal. Then the curve, continued.</p>
+    <p>Your score asks: what even share, given to every generation alike from 1865 to the ones after 2065, would be worth as much as your sheet? A rich generation cannot make up for a poor one: we count so that ×4 for one generation and ×1 for the next is worth no more than ×2 for both. Your even share against the best path's, out of 100, is your score.</p>
+    <p>The last page shows the best path we found, dotted on your sheet and in hollow bars in your ledger, and says why it goes as it does. Then the curve, continued, and why it stopped.</p>
   </div>
   <button class="btn" id="helpback">Back</button>
 </section>
@@ -159,7 +176,10 @@ h2.big{font-size:26px;letter-spacing:.12em;margin:10px 0 8px;line-height:1.12}
 <p>Left out: the household grate, a third of the coal and the one saving Jevons says is real ("laid up for the use of posterity"); substitutes, imports and iron (chapters not given); the two parties of chapter I by name; the preface's duties (schooling, the end of child labour, the national debt), which are read on the last page rather than played.</p>
 <h3>Income per head, and the score</h3>
 <p>Income per head in the ledger is per head of all the people Britain would have had at the census rate, those who went over the sea counted in. Per head of the people at home it would be higher on every path that sends people away, and the best path would then be to send them away first; counting them in removes that. The last box of the ledger, <i>after</i>, values the coal still in the ground in 2065 as if it were burnt evenly over ten more generations, with the engines of 2065, for the people of 2065: what the generations after the sheet could have from it.</p>
-<p>The score is our choice, and the one place the game ranks what Jevons would not. It is the <i>typical generation</i>: the geometric mean of income per head over the ten generations on the sheet and the box after, which is what a planner gets who counts every generation the same, discounts nothing, and lets a doubling count the same for a poor generation as for a rich one (log utility). Your score is that against the best path found by a search over the ruler's settings (optimum.js), out of 100. Under this planner the best path is to push early, hold for three generations, and push again at the end; a steady "slower" scores about 90, "as now" about 70, a stand about 56, "faster" about 52. A planner who weighed the present more, or the far generations more, would rank them differently; the text does not rank them at all.</p>
+<p>The score is our choice, and the one place the game ranks what Jevons would not. It is an <i>even share</i>: the income per head which, given alike to every generation from 1865 to the ones after 2065, would be worth as much as your sheet. A rich generation cannot make up for a poor one: ×4 for one generation and ×1 for the next is worth no more than ×2 for both. In an economist's words this is the geometric mean of the eleven boxes of the ledger, the equally-distributed equivalent of a planner with log utility who counts every generation the same and discounts nothing. Your score is your even share against the best path's, out of 100. The best path is searched over the ruler's five marks (optimum.js), so it can be told in the ruler's words and followed: faster, then slower, then a stand three times, then slower twice, then faster twice, then as now; it gives an even ×1.5 and leaves 21 squares. A steady "slower" scores about 90, "as now" about 70, a stand about 56, "faster" about 52. A planner who weighed the present more, or the far generations more, would rank them differently.</p>
+<p>The best path is a plan for the engines that come. Without the two new engines the best even share falls from ×1.5 to ×0.9; with them a generation earlier it rises, and the best path's noon moves to 1913; a generation later, its pause and its second push move later too. The shape (burn hard early, hold, burn again for the many later people) survives without the engines: it comes from the cheap shallow coal at the start and the many people at the end.</p>
+<h3>The coda</h3>
+<p>The last screen ends with a button, <i>Why it stopped</i>. The coda draws all of Britain's energy from 1965 to 2024, by source, counted in the tons of coal it would take (Energy Institute data published by Our World in Data, non-fossil sources by the substitution method, converted at the same factor as the coal curve); before 1965 the data has no breakdown, and coal is drawn alone. It also searches the best path again with a substitute for coal, our choice, that gives every generation from a given year (and the box after) at least twice the income per head of 1865: from 1965 (about when nuclear power and North Sea gas came), the best path burns faster in nearly every generation and leaves 2 squares; from 2025 (about when wind and sun became the cheapest power), it leaves 7. This is the economist's backstop result (Nordhaus, 1973): the best rate of using a store depends on when its substitute comes. The dates: Calder Hall, 17 October 1956, the first nuclear power station to feed a national grid; North Sea gas ashore at Easington from the West Sole field, March 1967; Ratcliffe-on-Soar, Britain's last coal power station, closed 30 September 2024. "The cheapest power there has ever been" is the International Energy Agency's <i>World Energy Outlook 2020</i>, of solar power where it is well placed and cheaply financed.</p>
 <h3>The future on the sheet</h3>
 <p>The ledger's boxes from 1985 on say what the toy gives the generations after the player's turns, and they carry a line: supposing, as Jevons did, that no substitute for coal is found. He supposed it in chapter I ("no probability that when our coal is used up any more powerful substitute will be forthcoming"), and Tyndall's letter in the preface supposes it harder. The real curve on the last screen fell for other reasons: oil, gas, nuclear power, renewables, imports, and the end of heavy industry in Britain, with about two-thirds of Hull's coal still in the ground. The sheet knows none of them.</p>
 <h3>The last screen</h3>
@@ -197,6 +217,12 @@ const CONFIG = {
                               //   Jevons, that no substitute for coal is found (a little more than his own century)
   AFTER_YEARS: 200,           // our choice: the box after 2065 values the coal left as if burnt evenly over ten more
                               //   generations, with the engines of 2065, for the people of 2065
+  SUBSTITUTE: [{ from: 1965, floor: 2 }, { from: 2025, floor: 2 }],
+                              // the coda only, our choice: a substitute for coal that gives every generation from the
+                              //   year on (and the box after) at least FLOOR times the income per head of 1865, coal or
+                              //   no coal; the best path is searched again under each (optimum.js). 1965: about when
+                              //   nuclear power and North Sea gas came; 2025: about when wind and sun became the
+                              //   cheapest power
 
   // ---- Britain's fire --------------------------------------------------------------------------------------
   C0: 95,                     // preface: Hunt's report puts the 1865 production at "about ninety-five millions of tons"
@@ -533,14 +559,15 @@ function ledger(st) {
 // The score: the typical generation, the geometric mean of income per head over the generations on the sheet and
 // the box after (a planner who counts every generation the same, and a doubling the same for a poor generation as
 // for a rich one: log utility, no discounting; our choice), against the best path found (optimum.js).
-function typicalOf(st) {
-  const L = ledger(st);
-  const xs = L.gens.map(g => g.perHead).concat([L.after.perHead]);
+function typicalOf(st, substitute) {
+  const L = ledger(st), sub = substitute || null;
+  const lift = (x, from) => sub && from >= sub.from ? Math.max(x, sub.floor) : x;
+  const xs = L.gens.map(g => lift(g.perHead, g.from)).concat([lift(L.after.perHead, CONFIG.RUN_TO)]);
   return Math.exp(xs.reduce((a, x) => a + Math.log(Math.max(1e-6, x)), 0) / xs.length);
 }
-function scoreOf(st, best) {
-  const typical = typicalOf(st);
-  return { typical, best, score: 100 * typical / best };
+function scoreOf(st, opt) {
+  const typical = typicalOf(st), best = typeof opt === 'number' ? opt : opt ? opt.typical : null;
+  return { typical, best, score: best ? 100 * typical / best : null, opt: typeof opt === 'object' ? opt : null };
 }
 // A whole game played as the page plays it: a pace per generation; after the evening, the rest at the last pace.
 function playPath(mults) {
@@ -615,10 +642,33 @@ const REAL = [
 ];
 
 
+// ---- the coda: all of Britain's energy since 1965, in millions of tons of coal a year ---------------------------
+// Our World in Data / Energy Institute (owid-energy-data.csv), consumption by source in TWh (non-fossil sources by
+// the substitution method), converted at the same factor as REAL (1900 = 225.2 million tons). Columns: year, coal,
+// oil, gas, wood and other burnt renewables (biofuel + other_renewable), nuclear, water wind and sun (hydro + wind +
+// solar). Before 1965 the source has no breakdown; the coda draws coal alone there (REAL, production).
+const MIX = [
+  [1965, 196.3, 127.3, 1.2, 0.0, 6.0, 1.8], [1966, 186.8, 136.4, 1.2, 0.0, 8.1, 1.8], [1967, 174.5, 146.6, 2.0, 0.0, 9.3, 2.0], [1968, 174.6, 155.2, 4.6, 0.0, 10.5, 1.5],
+  [1969, 170.2, 166.8, 8.9, 0.0, 11.6, 1.3], [1970, 160.5, 176.7, 17.0, 0.0, 10.4, 1.8], [1971, 142.3, 177.6, 27.4, 0.0, 11.0, 1.3], [1972, 124.6, 188.3, 38.9, 0.0, 11.7, 1.3],
+  [1973, 135.0, 193.3, 42.1, 0.0, 11.2, 1.5], [1974, 118.8, 179.5, 50.3, 0.0, 13.4, 1.6], [1975, 119.6, 157.0, 52.8, 0.0, 12.1, 1.5], [1976, 121.7, 156.1, 56.0, 0.0, 14.4, 1.8],
+  [1977, 122.1, 157.4, 59.5, 0.0, 16.0, 1.6], [1978, 118.9, 161.5, 61.7, 0.0, 14.9, 1.6], [1979, 127.8, 162.9, 67.6, 0.0, 15.3, 1.7], [1980, 118.8, 139.3, 67.4, 0.0, 14.8, 1.6],
+  [1981, 118.2, 129.0, 68.3, 0.0, 15.2, 1.8], [1982, 110.2, 130.5, 68.0, 0.0, 17.6, 1.8], [1983, 111.2, 125.5, 70.8, 0.0, 19.9, 1.8], [1984, 79.0, 154.2, 72.5, 0.0, 21.6, 1.8],
+  [1985, 105.1, 134.0, 78.0, 0.0, 24.4, 1.6], [1986, 113.5, 134.3, 79.2, 0.0, 23.6, 1.9], [1987, 116.3, 130.6, 81.4, 0.0, 22.1, 1.7], [1988, 112.9, 138.9, 77.5, 0.0, 25.3, 2.0],
+  [1989, 108.7, 142.0, 75.8, 0.0, 28.6, 1.9], [1990, 108.6, 143.9, 78.9, 0.3, 26.3, 2.0], [1991, 108.8, 143.2, 85.2, 0.3, 28.2, 1.8], [1992, 102.3, 144.8, 84.8, 0.4, 30.7, 2.1],
+  [1993, 89.1, 145.5, 96.6, 0.5, 35.7, 1.8], [1994, 83.2, 144.0, 99.5, 0.7, 35.3, 2.2], [1995, 79.3, 142.3, 106.1, 0.7, 35.5, 2.0], [1996, 74.2, 145.9, 123.6, 0.8, 37.8, 1.6],
+  [1997, 66.2, 141.7, 127.1, 0.9, 39.2, 2.0], [1998, 64.5, 140.2, 132.2, 1.2, 39.7, 2.4], [1999, 57.3, 138.3, 140.7, 1.5, 38.0, 2.5], [2000, 61.4, 136.9, 145.7, 1.7, 34.0, 2.4],
+  [2001, 65.1, 136.2, 145.0, 2.0, 35.8, 2.0], [2002, 59.7, 135.2, 143.1, 2.3, 34.6, 2.4], [2003, 63.7, 136.2, 143.5, 2.8, 34.7, 1.8], [2004, 62.2, 140.0, 146.6, 3.3, 31.2, 2.6],
+  [2005, 63.3, 144.0, 142.9, 4.2, 31.5, 3.0], [2006, 69.1, 142.6, 135.5, 4.5, 29.0, 3.4], [2007, 65.1, 138.6, 137.0, 4.8, 24.1, 4.0], [2008, 60.4, 135.7, 140.6, 5.7, 19.9, 4.6],
+  [2009, 49.8, 129.9, 131.1, 4.9, 26.1, 5.5], [2010, 51.0, 128.2, 141.6, 5.6, 23.3, 5.2], [2011, 51.4, 124.9, 117.8, 6.1, 25.7, 8.2], [2012, 64.9, 122.1, 110.6, 6.7, 26.1, 9.8],
+  [2013, 62.5, 120.8, 109.7, 9.8, 26.0, 12.9], [2014, 50.5, 120.6, 100.7, 12.1, 23.3, 15.3], [2015, 39.9, 122.2, 103.6, 14.7, 25.6, 19.7], [2016, 20.3, 125.6, 114.9, 15.1, 25.9, 19.1],
+  [2017, 16.4, 127.1, 112.5, 15.9, 25.3, 24.1], [2018, 13.9, 125.1, 113.4, 18.0, 23.3, 26.8], [2019, 9.9, 121.7, 112.0, 19.8, 20.0, 29.2], [2020, 9.0, 95.9, 105.6, 20.1, 17.8, 33.7],
+  [2021, 9.2, 97.9, 110.6, 20.4, 16.3, 29.2], [2022, 8.5, 105.0, 101.3, 19.4, 16.7, 35.2], [2023, 7.3, 106.6, 91.5, 19.2, 14.2, 35.7], [2024, 6.8, 107.0, 88.9, 22.0, 14.2, 36.7],
+];
+
 const MECH = { CONFIG, newGame, engineNews, previewPlan, burnGeneration, checkEvening, playerTurnsOver, runOut,
   verdict, ledger, ledgerOf, afterBox, typicalOf, scoreOf, playPath, naturalPop, depthOf, priceOf, shareBurnt, fireOf, keepTarget, cloneState, paceFromMult, multFromPace, clampPace, squareTons,
   groundSquares, lastsUntil, dragOf, relCost, eveningNow, doesOf, powerOf, incomeOf, incomePerHeadOf, fuelShareOf,
-  daysOf, powerCost, paysAt, americaFitsIn, REAL };
+  daysOf, powerCost, paysAt, americaFitsIn, REAL, MIX };
 if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
 
 // Jevons's Noon: the words. Everything the game says, built from what the mechanism reports. No rule that affects
@@ -866,6 +916,7 @@ const WORDS = (function () {
   // ---- the ledger ---------------------------------------------------------------------------------------------
   const LEDGER_HEADING = 'WHAT EACH GENERATION GOT: INCOME PER HEAD, AGAINST 1865';
   const LEDGER_CAPTION = 'big figure: income per head; small: the whole income; after: the coal left, for ten more generations';
+  const LEDGER_CAPTION_VERDICT = 'big figure and black bar: yours; small figure and hollow bar: the best path’s';
   const FUTURE_FLAG = 'from 1985: supposing, as Jevons did, that no substitute for coal is found';
 
   // ---- the verdict -----------------------------------------------------------------------------------------
@@ -883,13 +934,68 @@ const WORDS = (function () {
     return s + '.';
   }
   function span(g) { return `${g.from}–${g.to}`; }
-  function scoreWords(sc) {
+  // ---- the score, as an even share, and the best path ------------------------------------------------------
+  const TIMES = ['', '', 'twice', 'three times', 'four times', 'five times', 'six times', 'seven times', 'eight times', 'nine times', 'ten times'];
+  function markName(m) { const k = MARKS.find(k => Math.abs(k.mult - m) < 1e-9); return k ? k.name : mult(m); }
+  function pathWords(path) {              // "faster, then slower, then a stand three times, ..."
+    const runs = [];
+    for (const m of path) { if (runs.length && runs[runs.length - 1].m === m) runs[runs.length - 1].n++; else runs.push({ m, n: 1 }); }
+    return runs.map(r => markName(r.m) + (r.n > 1 ? ' ' + TIMES[r.n] : '')).join(', then ');
+  }
+  function pathStory(opt) {               // what the best path does, read off its shape
+    const p = opt.path, out = [];
+    if (p[0] >= 2) out.push('It burns hard at first, while the coal is shallow and cheap and the people are few.');
+    let run = 0, longest = 0, at = -1;
+    p.forEach((m, i) => { if (m <= 1) { run++; if (run > longest) { longest = run; at = i - run + 1; } } else run = 0; });
+    if (longest >= 2) out.push(`Then it holds the fire level for ${TIMES[longest] === 'twice' ? 'two' : ['', '', 'two', 'three', 'four', 'five', 'six'][longest] || longest} generations, from ${1865 + 20 * at}, while the pits deepen and the new engines come in.`);
+    const late = p.slice(-4).filter(m => m >= 2).length;
+    if (late >= 2) out.push('Then it lets the fire grow again for the many people of the later generations, once the perfected engine makes each ton do about three times the work.');
+    out.push(`It leaves ${R(opt.left)} squares for the generations after 2065.`);
+    return out.join(' ');
+  }
+  function boxName(g) { return g.isAfter ? 'the generations after 2065' : `${g.from}–${g.to}`; }
+  function scoreWords(sc, v, opt) {
     const n = Math.min(100, Math.max(0, R(sc.score)));
     const beat = sc.score > 100.5;
     const head = beat ? `${n} of 100, and a little better than the best path we found` : `${n} of 100`;
-    const body = `Count every generation the same, the one after 2065 too, and let a doubling count the same for a poor generation as for a rich one. That gives the typical generation. On your sheet it had ${mult(sc.typical)} the income per head of 1865 (the ledger's figures, taken together). On the best path we could find it has ${mult(sc.best)}. Your score is the one against the other.`;
-    return { head, body };
+    const boxes = v.ledger.gens.map(g => ({ from: g.from, to: g.to, perHead: g.perHead })).concat([{ isAfter: true, perHead: v.ledger.after.perHead }]);
+    const sorted = boxes.slice().sort((a, b) => a.perHead - b.perHead), top = sorted[sorted.length - 1];
+    const onSheet = boxes.filter(b => !b.isAfter), bestOn = opt.perHead;
+    const paras = [];
+    paras.push(`Your sheet is worth as much as giving every generation, from 1865 to the ones after 2065, an even ${mult(sc.typical)} the income per head of 1865. The best path we found is worth an even ${mult(sc.best)}. So you got ${n} parts in 100 of what was possible.`);
+    let why = `Why an even share, and not the average of your ledger? Because a rich generation cannot make up for a poor one. We count so that ×4 for one generation and ×1 for the next is worth no more than ×2 for both.`;
+    if (top.perHead > 1.5 * sc.typical) why += ` That is why ${boxName(top)}, with ${mult(top.perHead)}, did not lift you more.`;
+    why += ` Your poorest boxes pulled you down: ${boxName(sorted[0])} (${mult(sorted[0].perHead)}) and ${boxName(sorted[1])} (${mult(sorted[1].perHead)}).`;
+    paras.push(why);
+    paras.push(`The best path we found: ${pathWords(opt.path)}. ${pathStory(opt)} Its generations on the sheet run from ${mult(Math.min(...bestOn))} to ${mult(Math.max(...bestOn))}; yours ran from ${mult(Math.min(...onSheet.map(b => b.perHead)))} to ${mult(Math.max(...onSheet.map(b => b.perHead)))}. It is drawn dotted on your sheet, and in hollow bars in your ledger.`);
+    paras.push(`This best path is a plan for the engines that came in. Without them, the best anyone could do would be an even ${mult(opt.noEngines.typical)}. A plan for coal is always a plan for the engines in view.`);
+    return { head, paras, body: paras.join(' ') };
   }
+  const VERDICT_LEGEND = 'Dotted on the sheet: the best path we found. In the ledger, the orange line is your even share; the dashed line, the best path’s.';
+
+  // ---- the coda ----------------------------------------------------------------------------------------------
+  const CODA_TITLE = 'The engines Jevons could not see';
+  const CODA_HEADING = "BRITAIN'S ENERGY, ALL OF IT, IN TONS OF COAL A YEAR";
+  const CODA_LEGEND = [
+    { key: 'coal', name: 'coal' }, { key: 'oil', name: 'oil' }, { key: 'gas', name: 'gas' }, { key: 'wood', name: 'wood and waste' },
+    { key: 'nuclear', name: 'nuclear' }, { key: 'clean', name: 'water, wind and sun' },
+  ];
+  const CODA_NOTE = 'from 1965 all of Britain’s energy, counted in the coal it would take; before 1965, coal alone';
+  function coda(opt, leftShare) {
+    const s1 = opt.substitutes.find(s => s.from === 1965), s2 = opt.substitutes.find(s => s.from === 2025);
+    const thirds = leftShare > 0.6 && leftShare < 0.72 ? 'about two-thirds' : `about ${R(100 * leftShare)} in every 100 squares`;
+    return [
+      { lead: true, text: `Jevons could see no substitute for coal. Professor Tyndall wrote to him: “I see no prospect of any substitute being found for coal, as a source of motive power.” So the game supposed none.` },
+      { text: `In this game, the best path was a plan for the engines that came. Change what is coming, and the best path changes. If something else could have done coal’s work from 1965 on, the best path here would be to burn faster in nearly every generation and leave ${R(s1.left)} squares in the ground: Jevons’s brief greatness would have been right. If it came only about 2025, the best path would leave ${R(s2.left)} squares, not ${R(opt.left)}.` },
+      { text: `Something else did come. Oil came first. Nuclear power came in 1956, when Calder Hall became the first nuclear power station to feed a national grid, and North Sea gas from 1967. Britain dug the most coal it ever would in 1913, and less after that. When its last coal power station, Ratcliffe-on-Soar, closed on 30 September 2024, ${thirds} of the coal Jevons counted was still in the ground: the black squares below.` },
+      { text: `Today, wind and sun are not only cleaner. Where they are well placed and cheaply financed, they give the cheapest power there has ever been (International Energy Agency, 2020). The fire Jevons watched has not gone out: it changed what it burns, and more and more of it burns nothing at all.` },
+      { lead: true, text: 'A plan for coal was always a plan for the engines in view.' },
+    ];
+  }
+  const CODA_MARKS = [
+    { year: 1913, text: '1913 most coal' }, { year: 1956, text: '1956 nuclear' }, { year: 1967, text: '1967 gas' },
+    { year: 2024, text: '2024 coal power ends' },
+  ];
   function verdict(v, st, used, sc) {
     const heading = v.kind === 'greatness' ? 'A BRIEF GREATNESS' : v.kind === 'mediocrity' ? 'A LONGER CONTINUED MEDIOCRITY' : 'BETWEEN THE TWO';
     const C0 = MECH.CONFIG.START_YEAR;
@@ -932,33 +1038,33 @@ const WORDS = (function () {
       ppl = `${cap(pw)} went over the sea for want of work, ${when}.`;
     }
     lines.push((after ? after + ' ' : '') + am + ' ' + ppl);
-    lines.push(gens);
     const qs = [];
     const k = v.kind === 'greatness' ? 'instincts' : v.kind === 'mediocrity' ? 'littleness' : 'wise';
     qs.push({ text: Q[k][0], where: Q[k][1] });
     qs.push({ text: Q.choice[0], where: Q.choice[1], big: true });
     qs.push({ text: Q.noon[0], where: Q.noon[1] });
-    return { heading, lines, quotes: qs, score: sc ? scoreWords(sc) : null };
+    return { heading, lines, quotes: qs, score: sc ? scoreWords(sc, v, sc.opt) : null };
   }
 
   return { fireChange, sizeAgainst, mult, priceWords, daysWords, americaWords, peopleWords, depthWords, pitsWords, squaresWords,
     lastsWords, lastsShort, lastsSentence, MARKS, markNear, planReading, engineCard, engineName, result, evening,
-    LEDGER_HEADING, LEDGER_CAPTION, FUTURE_FLAG, scoreWords, verdict, whatYouDid, Q };
+    LEDGER_HEADING, LEDGER_CAPTION, LEDGER_CAPTION_VERDICT, FUTURE_FLAG, scoreWords, pathWords, pathStory, VERDICT_LEGEND, CODA_TITLE, CODA_HEADING,
+    CODA_LEGEND, CODA_NOTE, CODA_MARKS, coda, verdict, whatYouDid, Q };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = WORDS;
 
 const OPTIMUM = {
- "typical": 1.5226215762719657,
+ "typical": 1.5232268489380556,
  "path": [
   2.4,
   1.5,
   1,
   1,
-  1.25,
-  1.25,
-  1.75,
+  1,
+  1.5,
+  1.5,
   2.4,
-  2,
+  2.4,
   2
  ],
  "perHead": [
@@ -966,18 +1072,124 @@ const OPTIMUM = {
   1.653,
   2.315,
   2.529,
-  2.791,
-  2.548,
-  2.02,
-  1.792,
-  1.414,
-  0.899
+  2.561,
+  2.394,
+  1.989,
+  1.75,
+  1.47,
+  0.969
  ],
- "after": 0.253,
- "left": 18.8,
- "noonMult": 5.09,
- "runs": 3534,
- "ms": 1652
+ "after": 0.273,
+ "left": 21,
+ "noonMult": 4.99,
+ "noonYear": 2026,
+ "runs": 4782,
+ "ms": 2257,
+ "noEngines": {
+  "typical": 0.8580895808311002,
+  "path": [
+   2.4,
+   1.5,
+   1.5,
+   1,
+   1.5,
+   1.5,
+   1.5,
+   2.4,
+   2.4,
+   2.4
+  ],
+  "perHead": [
+   1.274,
+   1.653,
+   1.814,
+   1.623,
+   1.364,
+   1.198,
+   0.921,
+   0.753,
+   0.603,
+   0.388
+  ],
+  "after": 0.113,
+  "left": 18.3,
+  "noonMult": 5.07,
+  "noonYear": 1973,
+  "runs": 4983,
+  "ms": 1800
+ },
+ "substitutes": [
+  {
+   "from": 1965,
+   "floor": 2,
+   "typical": 2.48179300530593,
+   "path": [
+    2.4,
+    2.4,
+    2,
+    2.4,
+    2.4,
+    2.4,
+    2.4,
+    2.4,
+    2.4,
+    2.4
+   ],
+   "perHead": [
+    1.274,
+    1.978,
+    4.18,
+    6.741,
+    4.842,
+    0.723,
+    0.503,
+    0.438,
+    0.317,
+    0.185
+   ],
+   "after": 0.054,
+   "left": 2.1,
+   "noonMult": 20.26,
+   "noonYear": 1946,
+   "runs": 4142,
+   "ms": 1714
+  },
+  {
+   "from": 2025,
+   "floor": 2,
+   "typical": 2.2132613465053996,
+   "path": [
+    2.4,
+    2.4,
+    1,
+    1,
+    1.5,
+    2.4,
+    2.4,
+    2.4,
+    2.4,
+    2.4
+   ],
+   "perHead": [
+    1.274,
+    1.978,
+    3.155,
+    3.204,
+    3.739,
+    2.985,
+    2.12,
+    1.295,
+    0.761,
+    0.449
+   ],
+   "after": 0.131,
+   "left": 7.3,
+   "noonMult": 8.07,
+   "noonYear": 1953,
+   "runs": 4851,
+   "ms": 2298
+  }
+ ]
 };
 
 // ================================================================================================================
@@ -1023,6 +1235,10 @@ const OPTIMUM = {
     const sqp = el('pattern', { id: svg.id + '-sq', width: SQ, height: SQ, x: 0, y: H1 % SQ, patternUnits: 'userSpaceOnUse' }, defs);
     el('rect', { x: 0, y: 0, width: SQ, height: SQ, fill: '#1D1B18' }, sqp);
     el('path', { d: `M0 0H${fmt(SQ)}M0 0V${fmt(SQ)}`, stroke: '#F2EBD9', 'stroke-width': 1.2, fill: 'none' }, sqp);
+    const pat = (id, w, rot, draw) => { const p = el('pattern', { id: svg.id + '-' + id, width: w, height: w, patternUnits: 'userSpaceOnUse', patternTransform: `rotate(${rot})` }, defs); el('rect', { x: 0, y: 0, width: w, height: w, fill: '#F2EBD9' }, p); draw(p, w); };
+    pat('oil', 3.2, 45, (p, w) => el('line', { x1: 0, y1: 0, x2: 0, y2: w, stroke: '#1D1B18', 'stroke-width': 1.5 }, p));
+    pat('gas', 5, -45, (p, w) => el('line', { x1: 0, y1: 0, x2: 0, y2: w, stroke: '#1D1B18', 'stroke-width': 1 }, p));
+    pat('wood', 4, 0, (p, w) => el('circle', { cx: w / 2, cy: w / 2, r: .8, fill: '#1D1B18' }, p));
     const glow = el('radialGradient', { id: svg.id + '-glow' }, defs);
     el('stop', { offset: '0', 'stop-color': '#E2611B', 'stop-opacity': '.55' }, glow); el('stop', { offset: '1', 'stop-color': '#E2611B', 'stop-opacity': '0' }, glow);
     el('rect', { x: 0, y: 0, width: SW, height: H, fill: '#F2EBD9' }, svg);
@@ -1064,6 +1280,9 @@ const OPTIMUM = {
       america: el('path', { fill: 'none', stroke: '#1D1B18', 'stroke-width': 1.2, 'stroke-dasharray': '5 3' }, above),
       jevons: el('path', { fill: 'none', stroke: '#1D1B18', 'stroke-width': 1.1, 'stroke-dasharray': '1.2 2.6', 'stroke-linecap': 'round' }, above),
       bhalo: el('path', { fill: 'none', stroke: '#F2EBD9', 'stroke-width': 3.4, 'stroke-dasharray': '1 3.4', 'stroke-linecap': 'round' }, above),
+      mix: el('g', {}, above),
+      besthalo: el('path', { fill: 'none', stroke: '#F2EBD9', 'stroke-width': 4, 'stroke-dasharray': '1.4 3.2', 'stroke-linecap': 'round' }, above),
+      best: el('path', { fill: 'none', stroke: '#1D1B18', 'stroke-width': 2, 'stroke-dasharray': '1.4 3.2', 'stroke-linecap': 'round' }, above),
       beyond: el('path', { fill: 'none', stroke: '#9b948a', 'stroke-width': 1.3, 'stroke-dasharray': '1 3.4', 'stroke-linecap': 'round' }, above),
       halo: el('path', { fill: 'none', stroke: '#F2EBD9', 'stroke-width': 3.8, 'stroke-dasharray': '1 3.4', 'stroke-linecap': 'round' }, above),
       pencil: el('path', { fill: 'none', stroke: '#6f685e', 'stroke-width': 1.8, 'stroke-dasharray': '1 3.4', 'stroke-linecap': 'round' }, above),
@@ -1076,7 +1295,7 @@ const OPTIMUM = {
     const tl = (s, y) => txt(s, { x: SW - 3, y, 'text-anchor': 'end', 'font-size': 8, 'font-style': 'italic', fill: '#5f594f', 'paint-order': 'stroke', stroke: '#F2EBD9', 'stroke-width': 2.4 }, svg);
     for (let c = 100; c < rows * CF.ROW_TONS; c += 200) tl(c === 100 ? '100 million tons a year' : String(c), yOf(c) - 2.5);
     if (mode !== 'last') {
-      heading(mode === 'cover' ? 'COAL BURNT IN BRITAIN EACH YEAR' : "BRITAIN'S FIRE: COAL BURNT EACH YEAR", 5, 10.5, svg);
+      heading(mode === 'cover' ? 'COAL BURNT IN BRITAIN EACH YEAR' : mode === 'coda' ? W.CODA_HEADING : "BRITAIN'S FIRE: COAL BURNT EACH YEAR", 5, 10.5, svg);
       heading(`COAL STILL IN THE GROUND: ${NSQ} SQUARES, 8 LAYERS DEEP`, 5, G0 - 3.5, svg);
       if (people) heading('PEOPLE GONE OVER THE SEA FOR WANT OF WORK', 5, P0 - 3.5, svg);
     }
@@ -1086,7 +1305,7 @@ const OPTIMUM = {
       el('rect', { x: 1.5, y: y - 6.2, width: 34, height: 9.6, fill: '#F2EBD9', stroke: '#94AEC3', 'stroke-width': .6 }, tabs);
       txt(ft.toLocaleString('en-GB') + ' ft', { x: 18.5, y: y + 1.1, 'text-anchor': 'middle', 'font-size': 7.4, 'font-style': 'italic', fill: '#1D1B18' }, tabs);
     }
-    let bar = null; const cells = [];
+    let bar = null, S_evenG = null; const cells = [];
     if (people) {
       bar = el('rect', { x: 0, y: P0 + 1, width: 0, height: PH - 2, fill: `url(#${svg.id}-hatch)` }, svg);
       txt(`one square: ${CF.PEOPLE_PER_SQUARE} million people`, { x: SW - 3, y: P0 + PH + 10, 'text-anchor': 'end', 'font-size': 8, 'font-style': 'italic', fill: '#5f594f' }, svg);
@@ -1100,19 +1319,22 @@ const OPTIMUM = {
         if (future) el('rect', { x: x0, y: L0, width: w, height: LH, fill: `url(#${svg.id}-fhatch)` }, svg);
         if (i) el('line', { x1: x0, y1: L0, x2: x0, y2: L0 + LH, stroke: isAfter ? '#1D1B18' : '#C3D2DE', 'stroke-width': isAfter ? .8 : .6 }, svg);
         txt(isAfter ? 'after' : String(from), { x: x0 + w / 2, y: L0 + 7.5, 'text-anchor': 'middle', 'font-size': 6.6, 'font-style': 'italic', fill: '#5f594f' }, svg);
-        const barEl = el('rect', { x: x0 + 3, y: base, width: w - 6, height: 0, fill: '#1D1B18' }, svg);
+        const two = mode === 'verdict', bw = two ? (w - 8) / 2 : w - 6;
+        const barEl = el('rect', { x: x0 + 3, y: base, width: bw, height: 0, fill: '#1D1B18' }, svg);
+        const hollow = two ? el('rect', { x: x0 + 5 + bw, y: base, width: bw, height: 0, fill: 'none', stroke: '#1D1B18', 'stroke-width': 1 }, svg) : null;
         const over = txt('', { x: x0 + w / 2, y: L0 + 15, 'text-anchor': 'middle', 'font-size': 7, fill: '#1D1B18' }, svg);
         const big = txt('', { x: x0 + w / 2, y: base + 9.5, 'text-anchor': 'middle', 'font-size': 8.4, 'font-style': 'italic', 'font-weight': 700, fill: '#1D1B18' }, svg);
         const small = txt('', { x: x0 + w / 2, y: base + 19, 'text-anchor': 'middle', 'font-size': 7.4, 'font-style': 'italic', fill: '#5f594f' }, svg);
-        cells.push({ from, isAfter, barEl, big, small, over, x0, w });
+        cells.push({ from, isAfter, barEl, hollow, big, small, over, x0, w });
       }
       // the 1865 line across the ledger
       el('line', { x1: 0, y1: base - LEDGER_UNIT, x2: SW, y2: base - LEDGER_UNIT, stroke: '#8B847A', 'stroke-width': .7, 'stroke-dasharray': '2 2' }, svg);
       el('line', { x1: 0, y1: base, x2: SW, y2: base, stroke: '#1D1B18', 'stroke-width': .8 }, svg);
-      txt(W.LEDGER_CAPTION, { x: 5, y: L0 + LH + 9.5, 'font-size': 7.2, 'font-style': 'italic', fill: '#5f594f' }, svg);
+      txt(mode === 'verdict' ? W.LEDGER_CAPTION_VERDICT : W.LEDGER_CAPTION, { x: 5, y: L0 + LH + 9.5, 'font-size': 7.2, 'font-style': 'italic', fill: '#5f594f' }, svg);
+      S_evenG = el('g', {}, svg);
       txt(W.FUTURE_FLAG, { x: 5, y: L0 + LH + LCAP + 9.5, 'font-size': 7.6, 'font-style': 'italic', fill: '#5f594f' }, svg);
     }
-    const S = { svg, mode, rows, H1, yOf, L, sqs, planG, digG, bar, cells, H };
+    const S = { svg, mode, rows, H1, yOf, L, sqs, planG, digG, bar, cells, H, G0 };
 
     S.ground = function (Sburnt, digging, planTo) {
       const done = Sburnt / SQT;
@@ -1188,17 +1410,31 @@ const OPTIMUM = {
         txt(e.key === 'air' ? 'air-engine' : 'perfected', { x: x + 2, y: y - 13, 'font-size': 7.4, 'font-style': 'italic', fill: '#1D1B18', 'paint-order': 'stroke', stroke: '#F2EBD9', 'stroke-width': 2.4 }, L.engines);
       }
     };
-    S.ledger = function (rows, after) {
+    // best: on the verdict, the best path's income per head per generation and after (hollow bars, small figures)
+    S.ledger = function (rows, after, best) {
       if (!cells.length) return;
-      for (const c of cells) {
+      cells.forEach((c, i) => {
         const r = c.isAfter ? (after ? { n: CF.GEN_YEARS, perHead: after.perHead, income: null, squares: after.squares } : null) : rows.find(q => q.from === c.from);
-        if (!r || !r.n) { c.barEl.setAttribute('height', 0); c.big.textContent = ''; c.small.textContent = ''; c.over.textContent = ''; continue; }
+        if (!r || !r.n) { c.barEl.setAttribute('height', 0); c.big.textContent = ''; c.small.textContent = ''; c.over.textContent = ''; return; }
         const h = Math.min(LEDGER_MAX, r.perHead) * LEDGER_UNIT;
         c.barEl.setAttribute('y', fmt(L0 + LBAR - h)); c.barEl.setAttribute('height', fmt(h));
         c.over.textContent = r.perHead > LEDGER_MAX ? '▲' : '';
-        c.big.textContent = W.mult(r.perHead); c.small.textContent = c.isAfter ? `${Math.round(r.squares)} sq` : W.mult(r.income);
+        c.big.textContent = W.mult(r.perHead);
+        c.small.textContent = c.isAfter ? `${Math.round(r.squares)} sq` : W.mult(r.income);
         c.barEl.setAttribute('fill', r.n < CF.GEN_YEARS ? '#E2611B' : '#1D1B18');
-      }
+        if (best && c.hollow) {
+          const b = c.isAfter ? best.after : best.perHead[i], hb = Math.min(LEDGER_MAX, b) * LEDGER_UNIT;
+          c.hollow.setAttribute('y', fmt(L0 + LBAR - hb)); c.hollow.setAttribute('height', fmt(hb));
+          c.small.textContent = W.mult(b);
+        }
+      });
+    };
+    // the even shares across the ledger: yours solid, the best path's dashed
+    S.evenLines = function (yours, best) {
+      if (!S_evenG) return;
+      const y = v => L0 + LBAR - Math.min(LEDGER_MAX, v) * LEDGER_UNIT;
+      el('line', { x1: 0, y1: fmt(y(yours)), x2: SW, y2: fmt(y(yours)), stroke: '#E2611B', 'stroke-width': 1.6 }, S_evenG);
+      el('line', { x1: 0, y1: fmt(y(best)), x2: SW, y2: fmt(y(best)), stroke: '#1D1B18', 'stroke-width': 1.2, 'stroke-dasharray': '4 2.5' }, S_evenG);
     };
     S.clearLabels = function () { while (L.labels.firstChild) L.labels.removeChild(L.labels.firstChild); };
     S.label = function (s, x, y, opts) {
@@ -1414,23 +1650,31 @@ const OPTIMUM = {
 
   // ---- the verdict -------------------------------------------------------------------------------------------------
   function toVerdict() {
-    const st = U.st, v = M.verdict(st), sc = M.scoreOf(st, OPTIMUM.typical), t = W.verdict(v, st, U.used, sc);
+    const st = U.st, v = M.verdict(st), sc = M.scoreOf(st, OPTIMUM), t = W.verdict(v, st, U.used, sc);
+    const bestSt = M.playPath(OPTIMUM.path);
     show('verdict'); window.scrollTo(0, 0);
     $('#vhead').textContent = t.heading;
-    const S = makeSheet($('#vsheet'), 'verdict', rowsFor(maxFire(st.history)));
+    const S = makeSheet($('#vsheet'), 'verdict', rowsFor(Math.max(maxFire(st.history), maxFire(bestSt.history))));
     S.fire(st.history); drawAmerica(S, st.history); S.clearLabels(); americaLabel(S, st.history);
     S.ground(st.S, false, null); S.people(st.gone); S.emberAt(null);
-    S.engineMarks(st.events, st.history); S.ledger(M.ledgerOf(st.history), M.afterBox(st));
+    S.engineMarks(st.events, st.history);
+    S.ledger(M.ledgerOf(st.history), M.afterBox(st), { perHead: OPTIMUM.perHead, after: OPTIMUM.after });
+    S.evenLines(sc.typical, sc.best);
+    // the best path, dotted, with its name where it stands highest
+    S.line(S.L.best, bestSt.history); S.line(S.L.besthalo, bestSt.history);
+    { const bh = bestSt.history, top = bh.reduce((a, h) => h.C > a.C ? h : a, bh[0]);
+      S.label('best path', Math.min(SW - 54, xOf(top.year) + 4), Math.max(14, S.yOf(top.C) - 6), { size: 9.4, weight: 700 }); }
+    $('#vlegend').innerHTML = W.VERDICT_LEGEND;
     if (v.noonYear > CF.START_YEAR) {
       S.label('morning', xOf(1868), S.yOf(95) - 8, { size: 10 });
       const nx = xOf(v.noonYear), ny = S.yOf(v.noonC), right = nx < SW - 90;
-      S.label(`noon, ${v.noonYear}`, right ? nx + 7 : nx - 7, Math.max(34, ny + 12), { size: 10.5, weight: 700, anchor: right ? 'start' : 'end' });
+      S.label(`noon, ${v.noonYear}`, right ? nx + 7 : nx - 7, Math.max(40, ny + 24), { size: 10.5, weight: 700, anchor: right ? 'start' : 'end' });
     } else S.label('noon, 1865', xOf(1866), S.yOf(95) - 10, { size: 10.5, weight: 700 });
     if (v.evening) {
       const e = st.history.find(h => h.year === v.eveningYear);
       S.label(`evening, ${v.eveningYear}`, Math.min(SW - 92, xOf(e.year) + 8), Math.max(50, S.yOf(e.C) + 4), { size: 10.5, weight: 700 });
     }
-    $('#scorenum').textContent = t.score.head; $('#scorebody').textContent = t.score.body;
+    $('#scorenum').textContent = t.score.head; $('#scorebody').innerHTML = t.score.paras.map(p => `<p>${p}</p>`).join('');
     $('#vtwo').innerHTML = t.lines.slice(0, 2).map(l => `<p>${l}</p>`).join('');
     $('#vlines').innerHTML = t.lines.slice(2).map(l => `<p>${l}</p>`).join('');
     $('#vquotes').innerHTML = t.quotes.map(q => quoteHtml(q, q.big)).join('');
@@ -1460,11 +1704,55 @@ const OPTIMUM = {
       const t = S.label(dateText, Math.min(SW - 46, x), S.yOf(52) - 4, { size: 10.5, anchor: 'middle', weight: 600 });
       t.setAttribute('opacity', 0);
       requestAnimationFrame(() => { t.style.transition = 'opacity 1.6s'; t.setAttribute('opacity', 1); });
+      setTimeout(() => $('#tocoda').classList.remove('hidden'), reduced ? 0 : 2600);
     };
+    $('#tocoda').classList.add('hidden');
     if (reduced) return finish();
     const t0 = performance.now(), ms = 7000;
     const step = n => { const f = Math.min(1, (n - t0) / ms), k = Math.floor(f * (real.length - 1)); draw(k); if (f < 1) requestAnimationFrame(step); else setTimeout(finish, 500); };
     requestAnimationFrame(step);
+  }
+
+  // ---- the coda: the engines Jevons could not see --------------------------------------------------------------------
+  function swatch(key) {
+    const fill = { coal: '#1D1B18', oil: 'url(#sw-oil)', gas: 'url(#sw-gas)', wood: 'url(#sw-wood)', nuclear: '#8B847A', clean: '#94AEC3' }[key];
+    return `<svg class="sw" width="14" height="11"><defs><pattern id="sw-oil" width="3.2" height="3.2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="3.2" height="3.2" fill="#F2EBD9"/><line x1="0" y1="0" x2="0" y2="3.2" stroke="#1D1B18" stroke-width="1.5"/></pattern><pattern id="sw-gas" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><rect width="5" height="5" fill="#F2EBD9"/><line x1="0" y1="0" x2="0" y2="5" stroke="#1D1B18" stroke-width="1"/></pattern><pattern id="sw-wood" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="4" fill="#F2EBD9"/><circle cx="2" cy="2" r=".8" fill="#1D1B18"/></pattern></defs><rect x=".5" y=".5" width="13" height="10" fill="${fill}" stroke="#1D1B18" stroke-width=".8"/></svg>`;
+  }
+  function toCoda() {
+    show('coda'); window.scrollTo(0, 0);
+    $('#ctitle').textContent = W.CODA_TITLE;
+    const S = makeSheet($('#csheet'), 'coda');
+    const id = '#csheet';
+    // coal alone to 1965 (production, as on the last screen), then everything, stacked, from 1965
+    const real = M.REAL.filter(([y]) => y <= 1965);
+    let d = `M${fmt(xOf(1865))} ${fmt(S.H1)}`; for (const [y, c] of real) d += `L${fmt(xOf(y))} ${fmt(S.yOf(c))}`; d += `L${fmt(xOf(1965))} ${fmt(S.H1)}Z`;
+    S.L.real.setAttribute('d', d);
+    const layers = [['coal', '#1D1B18'], ['oil', `url(${id}-oil)`], ['gas', `url(${id}-gas)`], ['wood', `url(${id}-wood)`], ['nuclear', '#8B847A'], ['clean', '#94AEC3']];
+    const base = M.MIX.map(() => 0);
+    layers.forEach(([key, fill], li) => {
+      const lo = base.slice(); M.MIX.forEach((r, i) => { base[i] += r[li + 1]; });
+      let p = '';
+      M.MIX.forEach((r, i) => { p += `${i ? 'L' : 'M'}${fmt(xOf(r[0]))} ${fmt(S.yOf(base[i]))}`; });
+      for (let i = M.MIX.length - 1; i >= 0; i--) p += `L${fmt(xOf(M.MIX[i][0]))} ${fmt(S.yOf(lo[i]))}`;
+      el('path', { d: p + 'Z', fill, stroke: '#1D1B18', 'stroke-width': .5 }, S.L.mix);
+    });
+    // where the stack begins
+    el('line', { x1: fmt(xOf(1965)), y1: fmt(S.yOf(560)), x2: fmt(xOf(1965)), y2: S.H1, stroke: '#1D1B18', 'stroke-width': .8, 'stroke-dasharray': '2 2' }, S.L.labels);
+    // what is burning now: the top of the burning layers in the last year
+    const last = M.MIX[M.MIX.length - 1], burning = last[1] + last[2] + last[3] + last[4];
+    S.emberAt(last[0], burning);
+    // the ground, emptied by the coal really dug
+    let cum = 0; for (const [, c] of M.REAL) cum += c; S.ground(cum, false, null);
+    // the dates
+    for (const m of W.CODA_MARKS) {
+      const x = xOf(m.year), h = m.year >= 1965 ? (M.MIX.find(r => r[0] === m.year) || last).slice(1).reduce((a, b) => a + b, 0) : (M.REAL.find(r => r[0] === m.year) || [0, 0])[1];
+      const y0 = S.yOf(h) - 4;
+      el('line', { x1: fmt(x), y1: fmt(y0), x2: fmt(x), y2: fmt(y0 - 6), stroke: '#1D1B18', 'stroke-width': .8 }, S.L.labels);
+      const t = S.label(m.text, 0, 0, { size: 8.4, weight: 600 }); t.setAttribute('transform', `translate(${fmt(x + 3)} ${fmt(y0 - 8)}) rotate(-90)`);
+    }
+    $('#clegend').innerHTML = W.CODA_LEGEND.map(l => `<span class="item">${swatch(l.key)}${l.name}</span>`).join(' ') + `<br>${W.CODA_NOTE}`;
+    const sum = M.REAL.reduce((a, r) => a + r[1], 0);
+    $('#ctext').innerHTML = W.coda(OPTIMUM, 1 - sum / CF.RESERVE).map(p => `<p${p.lead ? ' class="lead"' : ''}>${p.text}</p>`).join('');
   }
 
   function openAside(id) { U.prevScreen = U.screen; U.prevScroll = window.scrollY; show(id); window.scrollTo(0, 0); }
@@ -1477,9 +1765,12 @@ const OPTIMUM = {
   $('#again').onclick = startGame;
   $('#tolast').onclick = toLast;
   $('#lastback').onclick = () => { show('verdict'); window.scrollTo(0, 0); };
+  $('#tocoda').onclick = toCoda;
+  $('#codaback').onclick = () => { show('verdict'); window.scrollTo(0, 0); };
+  $('#codaagain').onclick = startGame;
 
   drawCover();
-  U.api = { startGame, burn, setPace, toVerdict, toLast };
+  U.api = { startGame, burn, setPace, toVerdict, toLast, toCoda };
 })();
 </script>
 </body>

@@ -243,6 +243,7 @@ const WORDS = (function () {
   // ---- the ledger ---------------------------------------------------------------------------------------------
   const LEDGER_HEADING = 'WHAT EACH GENERATION GOT: INCOME PER HEAD, AGAINST 1865';
   const LEDGER_CAPTION = 'big figure: income per head; small: the whole income; after: the coal left, for ten more generations';
+  const LEDGER_CAPTION_VERDICT = 'big figure and black bar: yours; small figure and hollow bar: the best path’s';
   const FUTURE_FLAG = 'from 1985: supposing, as Jevons did, that no substitute for coal is found';
 
   // ---- the verdict -----------------------------------------------------------------------------------------
@@ -260,13 +261,68 @@ const WORDS = (function () {
     return s + '.';
   }
   function span(g) { return `${g.from}–${g.to}`; }
-  function scoreWords(sc) {
+  // ---- the score, as an even share, and the best path ------------------------------------------------------
+  const TIMES = ['', '', 'twice', 'three times', 'four times', 'five times', 'six times', 'seven times', 'eight times', 'nine times', 'ten times'];
+  function markName(m) { const k = MARKS.find(k => Math.abs(k.mult - m) < 1e-9); return k ? k.name : mult(m); }
+  function pathWords(path) {              // "faster, then slower, then a stand three times, ..."
+    const runs = [];
+    for (const m of path) { if (runs.length && runs[runs.length - 1].m === m) runs[runs.length - 1].n++; else runs.push({ m, n: 1 }); }
+    return runs.map(r => markName(r.m) + (r.n > 1 ? ' ' + TIMES[r.n] : '')).join(', then ');
+  }
+  function pathStory(opt) {               // what the best path does, read off its shape
+    const p = opt.path, out = [];
+    if (p[0] >= 2) out.push('It burns hard at first, while the coal is shallow and cheap and the people are few.');
+    let run = 0, longest = 0, at = -1;
+    p.forEach((m, i) => { if (m <= 1) { run++; if (run > longest) { longest = run; at = i - run + 1; } } else run = 0; });
+    if (longest >= 2) out.push(`Then it holds the fire level for ${TIMES[longest] === 'twice' ? 'two' : ['', '', 'two', 'three', 'four', 'five', 'six'][longest] || longest} generations, from ${1865 + 20 * at}, while the pits deepen and the new engines come in.`);
+    const late = p.slice(-4).filter(m => m >= 2).length;
+    if (late >= 2) out.push('Then it lets the fire grow again for the many people of the later generations, once the perfected engine makes each ton do about three times the work.');
+    out.push(`It leaves ${R(opt.left)} squares for the generations after 2065.`);
+    return out.join(' ');
+  }
+  function boxName(g) { return g.isAfter ? 'the generations after 2065' : `${g.from}–${g.to}`; }
+  function scoreWords(sc, v, opt) {
     const n = Math.min(100, Math.max(0, R(sc.score)));
     const beat = sc.score > 100.5;
     const head = beat ? `${n} of 100, and a little better than the best path we found` : `${n} of 100`;
-    const body = `Count every generation the same, the one after 2065 too, and let a doubling count the same for a poor generation as for a rich one. That gives the typical generation. On your sheet it had ${mult(sc.typical)} the income per head of 1865 (the ledger's figures, taken together). On the best path we could find it has ${mult(sc.best)}. Your score is the one against the other.`;
-    return { head, body };
+    const boxes = v.ledger.gens.map(g => ({ from: g.from, to: g.to, perHead: g.perHead })).concat([{ isAfter: true, perHead: v.ledger.after.perHead }]);
+    const sorted = boxes.slice().sort((a, b) => a.perHead - b.perHead), top = sorted[sorted.length - 1];
+    const onSheet = boxes.filter(b => !b.isAfter), bestOn = opt.perHead;
+    const paras = [];
+    paras.push(`Your sheet is worth as much as giving every generation, from 1865 to the ones after 2065, an even ${mult(sc.typical)} the income per head of 1865. The best path we found is worth an even ${mult(sc.best)}. So you got ${n} parts in 100 of what was possible.`);
+    let why = `Why an even share, and not the average of your ledger? Because a rich generation cannot make up for a poor one. We count so that ×4 for one generation and ×1 for the next is worth no more than ×2 for both.`;
+    if (top.perHead > 1.5 * sc.typical) why += ` That is why ${boxName(top)}, with ${mult(top.perHead)}, did not lift you more.`;
+    why += ` Your poorest boxes pulled you down: ${boxName(sorted[0])} (${mult(sorted[0].perHead)}) and ${boxName(sorted[1])} (${mult(sorted[1].perHead)}).`;
+    paras.push(why);
+    paras.push(`The best path we found: ${pathWords(opt.path)}. ${pathStory(opt)} Its generations on the sheet run from ${mult(Math.min(...bestOn))} to ${mult(Math.max(...bestOn))}; yours ran from ${mult(Math.min(...onSheet.map(b => b.perHead)))} to ${mult(Math.max(...onSheet.map(b => b.perHead)))}. It is drawn dotted on your sheet, and in hollow bars in your ledger.`);
+    paras.push(`This best path is a plan for the engines that came in. Without them, the best anyone could do would be an even ${mult(opt.noEngines.typical)}. A plan for coal is always a plan for the engines in view.`);
+    return { head, paras, body: paras.join(' ') };
   }
+  const VERDICT_LEGEND = 'Dotted on the sheet: the best path we found. In the ledger, the orange line is your even share; the dashed line, the best path’s.';
+
+  // ---- the coda ----------------------------------------------------------------------------------------------
+  const CODA_TITLE = 'The engines Jevons could not see';
+  const CODA_HEADING = "BRITAIN'S ENERGY, ALL OF IT, IN TONS OF COAL A YEAR";
+  const CODA_LEGEND = [
+    { key: 'coal', name: 'coal' }, { key: 'oil', name: 'oil' }, { key: 'gas', name: 'gas' }, { key: 'wood', name: 'wood and waste' },
+    { key: 'nuclear', name: 'nuclear' }, { key: 'clean', name: 'water, wind and sun' },
+  ];
+  const CODA_NOTE = 'from 1965 all of Britain’s energy, counted in the coal it would take; before 1965, coal alone';
+  function coda(opt, leftShare) {
+    const s1 = opt.substitutes.find(s => s.from === 1965), s2 = opt.substitutes.find(s => s.from === 2025);
+    const thirds = leftShare > 0.6 && leftShare < 0.72 ? 'about two-thirds' : `about ${R(100 * leftShare)} in every 100 squares`;
+    return [
+      { lead: true, text: `Jevons could see no substitute for coal. Professor Tyndall wrote to him: “I see no prospect of any substitute being found for coal, as a source of motive power.” So the game supposed none.` },
+      { text: `In this game, the best path was a plan for the engines that came. Change what is coming, and the best path changes. If something else could have done coal’s work from 1965 on, the best path here would be to burn faster in nearly every generation and leave ${R(s1.left)} squares in the ground: Jevons’s brief greatness would have been right. If it came only about 2025, the best path would leave ${R(s2.left)} squares, not ${R(opt.left)}.` },
+      { text: `Something else did come. Oil came first. Nuclear power came in 1956, when Calder Hall became the first nuclear power station to feed a national grid, and North Sea gas from 1967. Britain dug the most coal it ever would in 1913, and less after that. When its last coal power station, Ratcliffe-on-Soar, closed on 30 September 2024, ${thirds} of the coal Jevons counted was still in the ground: the black squares below.` },
+      { text: `Today, wind and sun are not only cleaner. Where they are well placed and cheaply financed, they give the cheapest power there has ever been (International Energy Agency, 2020). The fire Jevons watched has not gone out: it changed what it burns, and more and more of it burns nothing at all.` },
+      { lead: true, text: 'A plan for coal was always a plan for the engines in view.' },
+    ];
+  }
+  const CODA_MARKS = [
+    { year: 1913, text: '1913 most coal' }, { year: 1956, text: '1956 nuclear' }, { year: 1967, text: '1967 gas' },
+    { year: 2024, text: '2024 coal power ends' },
+  ];
   function verdict(v, st, used, sc) {
     const heading = v.kind === 'greatness' ? 'A BRIEF GREATNESS' : v.kind === 'mediocrity' ? 'A LONGER CONTINUED MEDIOCRITY' : 'BETWEEN THE TWO';
     const C0 = MECH.CONFIG.START_YEAR;
@@ -309,17 +365,17 @@ const WORDS = (function () {
       ppl = `${cap(pw)} went over the sea for want of work, ${when}.`;
     }
     lines.push((after ? after + ' ' : '') + am + ' ' + ppl);
-    lines.push(gens);
     const qs = [];
     const k = v.kind === 'greatness' ? 'instincts' : v.kind === 'mediocrity' ? 'littleness' : 'wise';
     qs.push({ text: Q[k][0], where: Q[k][1] });
     qs.push({ text: Q.choice[0], where: Q.choice[1], big: true });
     qs.push({ text: Q.noon[0], where: Q.noon[1] });
-    return { heading, lines, quotes: qs, score: sc ? scoreWords(sc) : null };
+    return { heading, lines, quotes: qs, score: sc ? scoreWords(sc, v, sc.opt) : null };
   }
 
   return { fireChange, sizeAgainst, mult, priceWords, daysWords, americaWords, peopleWords, depthWords, pitsWords, squaresWords,
     lastsWords, lastsShort, lastsSentence, MARKS, markNear, planReading, engineCard, engineName, result, evening,
-    LEDGER_HEADING, LEDGER_CAPTION, FUTURE_FLAG, scoreWords, verdict, whatYouDid, Q };
+    LEDGER_HEADING, LEDGER_CAPTION, LEDGER_CAPTION_VERDICT, FUTURE_FLAG, scoreWords, pathWords, pathStory, VERDICT_LEGEND, CODA_TITLE, CODA_HEADING,
+    CODA_LEGEND, CODA_NOTE, CODA_MARKS, coda, verdict, whatYouDid, Q };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = WORDS;

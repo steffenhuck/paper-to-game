@@ -88,6 +88,10 @@ const MARK = { cut: 0.5, stand: 1, slower: 1.5, now: 2, faster: 2.4 };
   await verdict('a-end');
   await page.click('#toabout'); await page.waitForTimeout(250); await shot('about', true); await page.click('#aboutback'); await page.waitForTimeout(200);
   await page.click('#tolast'); await page.waitForTimeout(3500); await shot('a-last-drawing'); await page.waitForTimeout(6500); await shot('a-last', true);
+  await page.waitForTimeout(2800); say(`  last screen: button to the coda visible: ${await page.$eval('#tocoda', e => !e.classList.contains('hidden'))}`);
+  await page.click('#tocoda'); await page.waitForTimeout(600); await shot('coda', true); await noScroll('coda');
+  say(`  CODA: ${await text('#ctitle')} | ${await text('#clegend')} | ${await text('#ctext')}`);
+  await page.click('#codaback'); await page.waitForTimeout(300); await page.click('#tolast'); await page.waitForTimeout(300);
   say(`  last screen text: "${await page.$eval('#lsheet', e => [...e.querySelectorAll('text')].map(t => t.textContent).join(' / '))}"`);
   await page.click('#lastback'); await page.waitForTimeout(300);
 
