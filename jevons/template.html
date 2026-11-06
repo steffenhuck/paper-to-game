@@ -76,6 +76,10 @@ h2.big{font-size:26px;letter-spacing:.12em;margin:10px 0 8px;line-height:1.12}
 .score{margin:12px 0 8px;padding:10px 14px 8px;border:2px solid var(--soot);box-shadow:inset 0 0 0 3px var(--paper),inset 0 0 0 4px var(--soot)}
 .scorehead{font-size:11px;color:var(--ash)}
 .scorenum{font-style:italic;font-weight:700;font-size:34px;line-height:1.05;margin:2px 0 4px}
+.score p{font-size:15px;line-height:1.38;margin:.45em 0}
+.legend{font-size:12.5px;font-style:italic;color:#5f594f;margin:6px 0 0;line-height:1.5}
+.legend .sw{display:inline-block;vertical-align:-2px;margin:0 4px 0 0}
+.legend span.item{white-space:nowrap;margin-right:10px}
 </style>
 </head>
 <body>
@@ -103,8 +107,9 @@ h2.big{font-size:26px;letter-spacing:.12em;margin:10px 0 8px;line-height:1.12}
 <section id="verdict" class="screen">
   <div class="aimrow"><div class="aim ash">1865 to 2065</div><button class="q" data-help aria-label="How to play">?</button></div>
   <h2 class="big" id="vhead"></h2>
-  <div class="sheetwrap"><svg id="vsheet" class="sheet" aria-label="Your sheet, with your morning, noon and evening, and the ledger"></svg></div>
-  <div class="score"><div class="scorehead caps">Score</div><div class="scorenum" id="scorenum"></div><p class="small" id="scorebody"></p></div>
+  <div class="sheetwrap"><svg id="vsheet" class="sheet" aria-label="Your sheet, with your morning, noon and evening, the best path dotted, and the ledger"></svg></div>
+  <p class="legend" id="vlegend"></p>
+  <div class="score"><div class="scorehead caps">Score</div><div class="scorenum" id="scorenum"></div><div id="scorebody"></div></div>
   <div class="vtwo" id="vtwo"></div>
   <div class="res" id="vlines"></div>
   <div id="vquotes"></div>
@@ -116,7 +121,18 @@ h2.big{font-size:26px;letter-spacing:.12em;margin:10px 0 8px;line-height:1.12}
 
 <section id="last" class="screen">
   <div class="sheetwrap" style="margin-top:22px"><svg id="lsheet" class="sheet"></svg></div>
+  <button class="btn line hidden" id="tocoda">Why it stopped</button>
   <div class="foot"><button class="back" id="lastback" aria-label="Back">&lsaquo;</button><footer class="sig" style="margin:0"><a href="https://steffenhuck.github.io/">steffen huck</a></footer><span style="width:30px"></span></div>
+</section>
+
+<section id="coda" class="screen">
+  <h2 class="big" style="margin-top:20px" id="ctitle"></h2>
+  <div class="sheetwrap"><svg id="csheet" class="sheet" aria-label="All of Britain's energy since 1965, in tons of coal a year, above the coal still in the ground"></svg></div>
+  <div class="legend" id="clegend"></div>
+  <div class="res" id="ctext"></div>
+  <button class="btn soot" id="codaback">Back to your sheet</button>
+  <button class="btn" id="codaagain">Another sheet</button>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
 </section>
 
 <section id="help" class="screen">
@@ -138,7 +154,8 @@ h2.big{font-size:26px;letter-spacing:.12em;margin:10px 0 8px;line-height:1.12}
     <h3>The evening</h3>
     <p>If coal has grown so dear that the fire could not grow at any pace, the evening has come: the fire falls whatever you set, and the rest of the sheet draws itself.</p>
     <h3>The score</h3>
-    <p>Count every generation the same, the one after 2065 too, and let a doubling count the same for a poor generation as for a rich one. That gives the typical generation on your sheet. Your score is that against the best path we could find, out of 100. The last page also reads your sheet: how high the fire went, how long it lasted, and who got the coal. Then the curve, continued.</p>
+    <p>Your score asks: what even share, given to every generation alike from 1865 to the ones after 2065, would be worth as much as your sheet? A rich generation cannot make up for a poor one: we count so that ×4 for one generation and ×1 for the next is worth no more than ×2 for both. Your even share against the best path's, out of 100, is your score.</p>
+    <p>The last page shows the best path we found, dotted on your sheet and in hollow bars in your ledger, and says why it goes as it does. Then the curve, continued, and why it stopped.</p>
   </div>
   <button class="btn" id="helpback">Back</button>
 </section>
@@ -197,6 +214,10 @@ const OPTIMUM = /*__OPTIMUM__*/;
     const sqp = el('pattern', { id: svg.id + '-sq', width: SQ, height: SQ, x: 0, y: H1 % SQ, patternUnits: 'userSpaceOnUse' }, defs);
     el('rect', { x: 0, y: 0, width: SQ, height: SQ, fill: '#1D1B18' }, sqp);
     el('path', { d: `M0 0H${fmt(SQ)}M0 0V${fmt(SQ)}`, stroke: '#F2EBD9', 'stroke-width': 1.2, fill: 'none' }, sqp);
+    const pat = (id, w, rot, draw) => { const p = el('pattern', { id: svg.id + '-' + id, width: w, height: w, patternUnits: 'userSpaceOnUse', patternTransform: `rotate(${rot})` }, defs); el('rect', { x: 0, y: 0, width: w, height: w, fill: '#F2EBD9' }, p); draw(p, w); };
+    pat('oil', 3.2, 45, (p, w) => el('line', { x1: 0, y1: 0, x2: 0, y2: w, stroke: '#1D1B18', 'stroke-width': 1.5 }, p));
+    pat('gas', 5, -45, (p, w) => el('line', { x1: 0, y1: 0, x2: 0, y2: w, stroke: '#1D1B18', 'stroke-width': 1 }, p));
+    pat('wood', 4, 0, (p, w) => el('circle', { cx: w / 2, cy: w / 2, r: .8, fill: '#1D1B18' }, p));
     const glow = el('radialGradient', { id: svg.id + '-glow' }, defs);
     el('stop', { offset: '0', 'stop-color': '#E2611B', 'stop-opacity': '.55' }, glow); el('stop', { offset: '1', 'stop-color': '#E2611B', 'stop-opacity': '0' }, glow);
     el('rect', { x: 0, y: 0, width: SW, height: H, fill: '#F2EBD9' }, svg);
@@ -238,6 +259,9 @@ const OPTIMUM = /*__OPTIMUM__*/;
       america: el('path', { fill: 'none', stroke: '#1D1B18', 'stroke-width': 1.2, 'stroke-dasharray': '5 3' }, above),
       jevons: el('path', { fill: 'none', stroke: '#1D1B18', 'stroke-width': 1.1, 'stroke-dasharray': '1.2 2.6', 'stroke-linecap': 'round' }, above),
       bhalo: el('path', { fill: 'none', stroke: '#F2EBD9', 'stroke-width': 3.4, 'stroke-dasharray': '1 3.4', 'stroke-linecap': 'round' }, above),
+      mix: el('g', {}, above),
+      besthalo: el('path', { fill: 'none', stroke: '#F2EBD9', 'stroke-width': 4, 'stroke-dasharray': '1.4 3.2', 'stroke-linecap': 'round' }, above),
+      best: el('path', { fill: 'none', stroke: '#1D1B18', 'stroke-width': 2, 'stroke-dasharray': '1.4 3.2', 'stroke-linecap': 'round' }, above),
       beyond: el('path', { fill: 'none', stroke: '#9b948a', 'stroke-width': 1.3, 'stroke-dasharray': '1 3.4', 'stroke-linecap': 'round' }, above),
       halo: el('path', { fill: 'none', stroke: '#F2EBD9', 'stroke-width': 3.8, 'stroke-dasharray': '1 3.4', 'stroke-linecap': 'round' }, above),
       pencil: el('path', { fill: 'none', stroke: '#6f685e', 'stroke-width': 1.8, 'stroke-dasharray': '1 3.4', 'stroke-linecap': 'round' }, above),
@@ -250,7 +274,7 @@ const OPTIMUM = /*__OPTIMUM__*/;
     const tl = (s, y) => txt(s, { x: SW - 3, y, 'text-anchor': 'end', 'font-size': 8, 'font-style': 'italic', fill: '#5f594f', 'paint-order': 'stroke', stroke: '#F2EBD9', 'stroke-width': 2.4 }, svg);
     for (let c = 100; c < rows * CF.ROW_TONS; c += 200) tl(c === 100 ? '100 million tons a year' : String(c), yOf(c) - 2.5);
     if (mode !== 'last') {
-      heading(mode === 'cover' ? 'COAL BURNT IN BRITAIN EACH YEAR' : "BRITAIN'S FIRE: COAL BURNT EACH YEAR", 5, 10.5, svg);
+      heading(mode === 'cover' ? 'COAL BURNT IN BRITAIN EACH YEAR' : mode === 'coda' ? W.CODA_HEADING : "BRITAIN'S FIRE: COAL BURNT EACH YEAR", 5, 10.5, svg);
       heading(`COAL STILL IN THE GROUND: ${NSQ} SQUARES, 8 LAYERS DEEP`, 5, G0 - 3.5, svg);
       if (people) heading('PEOPLE GONE OVER THE SEA FOR WANT OF WORK', 5, P0 - 3.5, svg);
     }
@@ -260,7 +284,7 @@ const OPTIMUM = /*__OPTIMUM__*/;
       el('rect', { x: 1.5, y: y - 6.2, width: 34, height: 9.6, fill: '#F2EBD9', stroke: '#94AEC3', 'stroke-width': .6 }, tabs);
       txt(ft.toLocaleString('en-GB') + ' ft', { x: 18.5, y: y + 1.1, 'text-anchor': 'middle', 'font-size': 7.4, 'font-style': 'italic', fill: '#1D1B18' }, tabs);
     }
-    let bar = null; const cells = [];
+    let bar = null, S_evenG = null; const cells = [];
     if (people) {
       bar = el('rect', { x: 0, y: P0 + 1, width: 0, height: PH - 2, fill: `url(#${svg.id}-hatch)` }, svg);
       txt(`one square: ${CF.PEOPLE_PER_SQUARE} million people`, { x: SW - 3, y: P0 + PH + 10, 'text-anchor': 'end', 'font-size': 8, 'font-style': 'italic', fill: '#5f594f' }, svg);
@@ -274,19 +298,22 @@ const OPTIMUM = /*__OPTIMUM__*/;
         if (future) el('rect', { x: x0, y: L0, width: w, height: LH, fill: `url(#${svg.id}-fhatch)` }, svg);
         if (i) el('line', { x1: x0, y1: L0, x2: x0, y2: L0 + LH, stroke: isAfter ? '#1D1B18' : '#C3D2DE', 'stroke-width': isAfter ? .8 : .6 }, svg);
         txt(isAfter ? 'after' : String(from), { x: x0 + w / 2, y: L0 + 7.5, 'text-anchor': 'middle', 'font-size': 6.6, 'font-style': 'italic', fill: '#5f594f' }, svg);
-        const barEl = el('rect', { x: x0 + 3, y: base, width: w - 6, height: 0, fill: '#1D1B18' }, svg);
+        const two = mode === 'verdict', bw = two ? (w - 8) / 2 : w - 6;
+        const barEl = el('rect', { x: x0 + 3, y: base, width: bw, height: 0, fill: '#1D1B18' }, svg);
+        const hollow = two ? el('rect', { x: x0 + 5 + bw, y: base, width: bw, height: 0, fill: 'none', stroke: '#1D1B18', 'stroke-width': 1 }, svg) : null;
         const over = txt('', { x: x0 + w / 2, y: L0 + 15, 'text-anchor': 'middle', 'font-size': 7, fill: '#1D1B18' }, svg);
         const big = txt('', { x: x0 + w / 2, y: base + 9.5, 'text-anchor': 'middle', 'font-size': 8.4, 'font-style': 'italic', 'font-weight': 700, fill: '#1D1B18' }, svg);
         const small = txt('', { x: x0 + w / 2, y: base + 19, 'text-anchor': 'middle', 'font-size': 7.4, 'font-style': 'italic', fill: '#5f594f' }, svg);
-        cells.push({ from, isAfter, barEl, big, small, over, x0, w });
+        cells.push({ from, isAfter, barEl, hollow, big, small, over, x0, w });
       }
       // the 1865 line across the ledger
       el('line', { x1: 0, y1: base - LEDGER_UNIT, x2: SW, y2: base - LEDGER_UNIT, stroke: '#8B847A', 'stroke-width': .7, 'stroke-dasharray': '2 2' }, svg);
       el('line', { x1: 0, y1: base, x2: SW, y2: base, stroke: '#1D1B18', 'stroke-width': .8 }, svg);
-      txt(W.LEDGER_CAPTION, { x: 5, y: L0 + LH + 9.5, 'font-size': 7.2, 'font-style': 'italic', fill: '#5f594f' }, svg);
+      txt(mode === 'verdict' ? W.LEDGER_CAPTION_VERDICT : W.LEDGER_CAPTION, { x: 5, y: L0 + LH + 9.5, 'font-size': 7.2, 'font-style': 'italic', fill: '#5f594f' }, svg);
+      S_evenG = el('g', {}, svg);
       txt(W.FUTURE_FLAG, { x: 5, y: L0 + LH + LCAP + 9.5, 'font-size': 7.6, 'font-style': 'italic', fill: '#5f594f' }, svg);
     }
-    const S = { svg, mode, rows, H1, yOf, L, sqs, planG, digG, bar, cells, H };
+    const S = { svg, mode, rows, H1, yOf, L, sqs, planG, digG, bar, cells, H, G0 };
 
     S.ground = function (Sburnt, digging, planTo) {
       const done = Sburnt / SQT;
@@ -362,17 +389,31 @@ const OPTIMUM = /*__OPTIMUM__*/;
         txt(e.key === 'air' ? 'air-engine' : 'perfected', { x: x + 2, y: y - 13, 'font-size': 7.4, 'font-style': 'italic', fill: '#1D1B18', 'paint-order': 'stroke', stroke: '#F2EBD9', 'stroke-width': 2.4 }, L.engines);
       }
     };
-    S.ledger = function (rows, after) {
+    // best: on the verdict, the best path's income per head per generation and after (hollow bars, small figures)
+    S.ledger = function (rows, after, best) {
       if (!cells.length) return;
-      for (const c of cells) {
+      cells.forEach((c, i) => {
         const r = c.isAfter ? (after ? { n: CF.GEN_YEARS, perHead: after.perHead, income: null, squares: after.squares } : null) : rows.find(q => q.from === c.from);
-        if (!r || !r.n) { c.barEl.setAttribute('height', 0); c.big.textContent = ''; c.small.textContent = ''; c.over.textContent = ''; continue; }
+        if (!r || !r.n) { c.barEl.setAttribute('height', 0); c.big.textContent = ''; c.small.textContent = ''; c.over.textContent = ''; return; }
         const h = Math.min(LEDGER_MAX, r.perHead) * LEDGER_UNIT;
         c.barEl.setAttribute('y', fmt(L0 + LBAR - h)); c.barEl.setAttribute('height', fmt(h));
         c.over.textContent = r.perHead > LEDGER_MAX ? '▲' : '';
-        c.big.textContent = W.mult(r.perHead); c.small.textContent = c.isAfter ? `${Math.round(r.squares)} sq` : W.mult(r.income);
+        c.big.textContent = W.mult(r.perHead);
+        c.small.textContent = c.isAfter ? `${Math.round(r.squares)} sq` : W.mult(r.income);
         c.barEl.setAttribute('fill', r.n < CF.GEN_YEARS ? '#E2611B' : '#1D1B18');
-      }
+        if (best && c.hollow) {
+          const b = c.isAfter ? best.after : best.perHead[i], hb = Math.min(LEDGER_MAX, b) * LEDGER_UNIT;
+          c.hollow.setAttribute('y', fmt(L0 + LBAR - hb)); c.hollow.setAttribute('height', fmt(hb));
+          c.small.textContent = W.mult(b);
+        }
+      });
+    };
+    // the even shares across the ledger: yours solid, the best path's dashed
+    S.evenLines = function (yours, best) {
+      if (!S_evenG) return;
+      const y = v => L0 + LBAR - Math.min(LEDGER_MAX, v) * LEDGER_UNIT;
+      el('line', { x1: 0, y1: fmt(y(yours)), x2: SW, y2: fmt(y(yours)), stroke: '#E2611B', 'stroke-width': 1.6 }, S_evenG);
+      el('line', { x1: 0, y1: fmt(y(best)), x2: SW, y2: fmt(y(best)), stroke: '#1D1B18', 'stroke-width': 1.2, 'stroke-dasharray': '4 2.5' }, S_evenG);
     };
     S.clearLabels = function () { while (L.labels.firstChild) L.labels.removeChild(L.labels.firstChild); };
     S.label = function (s, x, y, opts) {
@@ -588,23 +629,31 @@ const OPTIMUM = /*__OPTIMUM__*/;
 
   // ---- the verdict -------------------------------------------------------------------------------------------------
   function toVerdict() {
-    const st = U.st, v = M.verdict(st), sc = M.scoreOf(st, OPTIMUM.typical), t = W.verdict(v, st, U.used, sc);
+    const st = U.st, v = M.verdict(st), sc = M.scoreOf(st, OPTIMUM), t = W.verdict(v, st, U.used, sc);
+    const bestSt = M.playPath(OPTIMUM.path);
     show('verdict'); window.scrollTo(0, 0);
     $('#vhead').textContent = t.heading;
-    const S = makeSheet($('#vsheet'), 'verdict', rowsFor(maxFire(st.history)));
+    const S = makeSheet($('#vsheet'), 'verdict', rowsFor(Math.max(maxFire(st.history), maxFire(bestSt.history))));
     S.fire(st.history); drawAmerica(S, st.history); S.clearLabels(); americaLabel(S, st.history);
     S.ground(st.S, false, null); S.people(st.gone); S.emberAt(null);
-    S.engineMarks(st.events, st.history); S.ledger(M.ledgerOf(st.history), M.afterBox(st));
+    S.engineMarks(st.events, st.history);
+    S.ledger(M.ledgerOf(st.history), M.afterBox(st), { perHead: OPTIMUM.perHead, after: OPTIMUM.after });
+    S.evenLines(sc.typical, sc.best);
+    // the best path, dotted, with its name where it stands highest
+    S.line(S.L.best, bestSt.history); S.line(S.L.besthalo, bestSt.history);
+    { const bh = bestSt.history, top = bh.reduce((a, h) => h.C > a.C ? h : a, bh[0]);
+      S.label('best path', Math.min(SW - 54, xOf(top.year) + 4), Math.max(14, S.yOf(top.C) - 6), { size: 9.4, weight: 700 }); }
+    $('#vlegend').innerHTML = W.VERDICT_LEGEND;
     if (v.noonYear > CF.START_YEAR) {
       S.label('morning', xOf(1868), S.yOf(95) - 8, { size: 10 });
       const nx = xOf(v.noonYear), ny = S.yOf(v.noonC), right = nx < SW - 90;
-      S.label(`noon, ${v.noonYear}`, right ? nx + 7 : nx - 7, Math.max(34, ny + 12), { size: 10.5, weight: 700, anchor: right ? 'start' : 'end' });
+      S.label(`noon, ${v.noonYear}`, right ? nx + 7 : nx - 7, Math.max(40, ny + 24), { size: 10.5, weight: 700, anchor: right ? 'start' : 'end' });
     } else S.label('noon, 1865', xOf(1866), S.yOf(95) - 10, { size: 10.5, weight: 700 });
     if (v.evening) {
       const e = st.history.find(h => h.year === v.eveningYear);
       S.label(`evening, ${v.eveningYear}`, Math.min(SW - 92, xOf(e.year) + 8), Math.max(50, S.yOf(e.C) + 4), { size: 10.5, weight: 700 });
     }
-    $('#scorenum').textContent = t.score.head; $('#scorebody').textContent = t.score.body;
+    $('#scorenum').textContent = t.score.head; $('#scorebody').innerHTML = t.score.paras.map(p => `<p>${p}</p>`).join('');
     $('#vtwo').innerHTML = t.lines.slice(0, 2).map(l => `<p>${l}</p>`).join('');
     $('#vlines').innerHTML = t.lines.slice(2).map(l => `<p>${l}</p>`).join('');
     $('#vquotes').innerHTML = t.quotes.map(q => quoteHtml(q, q.big)).join('');
@@ -634,11 +683,55 @@ const OPTIMUM = /*__OPTIMUM__*/;
       const t = S.label(dateText, Math.min(SW - 46, x), S.yOf(52) - 4, { size: 10.5, anchor: 'middle', weight: 600 });
       t.setAttribute('opacity', 0);
       requestAnimationFrame(() => { t.style.transition = 'opacity 1.6s'; t.setAttribute('opacity', 1); });
+      setTimeout(() => $('#tocoda').classList.remove('hidden'), reduced ? 0 : 2600);
     };
+    $('#tocoda').classList.add('hidden');
     if (reduced) return finish();
     const t0 = performance.now(), ms = 7000;
     const step = n => { const f = Math.min(1, (n - t0) / ms), k = Math.floor(f * (real.length - 1)); draw(k); if (f < 1) requestAnimationFrame(step); else setTimeout(finish, 500); };
     requestAnimationFrame(step);
+  }
+
+  // ---- the coda: the engines Jevons could not see --------------------------------------------------------------------
+  function swatch(key) {
+    const fill = { coal: '#1D1B18', oil: 'url(#sw-oil)', gas: 'url(#sw-gas)', wood: 'url(#sw-wood)', nuclear: '#8B847A', clean: '#94AEC3' }[key];
+    return `<svg class="sw" width="14" height="11"><defs><pattern id="sw-oil" width="3.2" height="3.2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="3.2" height="3.2" fill="#F2EBD9"/><line x1="0" y1="0" x2="0" y2="3.2" stroke="#1D1B18" stroke-width="1.5"/></pattern><pattern id="sw-gas" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><rect width="5" height="5" fill="#F2EBD9"/><line x1="0" y1="0" x2="0" y2="5" stroke="#1D1B18" stroke-width="1"/></pattern><pattern id="sw-wood" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="4" fill="#F2EBD9"/><circle cx="2" cy="2" r=".8" fill="#1D1B18"/></pattern></defs><rect x=".5" y=".5" width="13" height="10" fill="${fill}" stroke="#1D1B18" stroke-width=".8"/></svg>`;
+  }
+  function toCoda() {
+    show('coda'); window.scrollTo(0, 0);
+    $('#ctitle').textContent = W.CODA_TITLE;
+    const S = makeSheet($('#csheet'), 'coda');
+    const id = '#csheet';
+    // coal alone to 1965 (production, as on the last screen), then everything, stacked, from 1965
+    const real = M.REAL.filter(([y]) => y <= 1965);
+    let d = `M${fmt(xOf(1865))} ${fmt(S.H1)}`; for (const [y, c] of real) d += `L${fmt(xOf(y))} ${fmt(S.yOf(c))}`; d += `L${fmt(xOf(1965))} ${fmt(S.H1)}Z`;
+    S.L.real.setAttribute('d', d);
+    const layers = [['coal', '#1D1B18'], ['oil', `url(${id}-oil)`], ['gas', `url(${id}-gas)`], ['wood', `url(${id}-wood)`], ['nuclear', '#8B847A'], ['clean', '#94AEC3']];
+    const base = M.MIX.map(() => 0);
+    layers.forEach(([key, fill], li) => {
+      const lo = base.slice(); M.MIX.forEach((r, i) => { base[i] += r[li + 1]; });
+      let p = '';
+      M.MIX.forEach((r, i) => { p += `${i ? 'L' : 'M'}${fmt(xOf(r[0]))} ${fmt(S.yOf(base[i]))}`; });
+      for (let i = M.MIX.length - 1; i >= 0; i--) p += `L${fmt(xOf(M.MIX[i][0]))} ${fmt(S.yOf(lo[i]))}`;
+      el('path', { d: p + 'Z', fill, stroke: '#1D1B18', 'stroke-width': .5 }, S.L.mix);
+    });
+    // where the stack begins
+    el('line', { x1: fmt(xOf(1965)), y1: fmt(S.yOf(560)), x2: fmt(xOf(1965)), y2: S.H1, stroke: '#1D1B18', 'stroke-width': .8, 'stroke-dasharray': '2 2' }, S.L.labels);
+    // what is burning now: the top of the burning layers in the last year
+    const last = M.MIX[M.MIX.length - 1], burning = last[1] + last[2] + last[3] + last[4];
+    S.emberAt(last[0], burning);
+    // the ground, emptied by the coal really dug
+    let cum = 0; for (const [, c] of M.REAL) cum += c; S.ground(cum, false, null);
+    // the dates
+    for (const m of W.CODA_MARKS) {
+      const x = xOf(m.year), h = m.year >= 1965 ? (M.MIX.find(r => r[0] === m.year) || last).slice(1).reduce((a, b) => a + b, 0) : (M.REAL.find(r => r[0] === m.year) || [0, 0])[1];
+      const y0 = S.yOf(h) - 4;
+      el('line', { x1: fmt(x), y1: fmt(y0), x2: fmt(x), y2: fmt(y0 - 6), stroke: '#1D1B18', 'stroke-width': .8 }, S.L.labels);
+      const t = S.label(m.text, 0, 0, { size: 8.4, weight: 600 }); t.setAttribute('transform', `translate(${fmt(x + 3)} ${fmt(y0 - 8)}) rotate(-90)`);
+    }
+    $('#clegend').innerHTML = W.CODA_LEGEND.map(l => `<span class="item">${swatch(l.key)}${l.name}</span>`).join(' ') + `<br>${W.CODA_NOTE}`;
+    const sum = M.REAL.reduce((a, r) => a + r[1], 0);
+    $('#ctext').innerHTML = W.coda(OPTIMUM, 1 - sum / CF.RESERVE).map(p => `<p${p.lead ? ' class="lead"' : ''}>${p.text}</p>`).join('');
   }
 
   function openAside(id) { U.prevScreen = U.screen; U.prevScroll = window.scrollY; show(id); window.scrollTo(0, 0); }
@@ -651,9 +744,12 @@ const OPTIMUM = /*__OPTIMUM__*/;
   $('#again').onclick = startGame;
   $('#tolast').onclick = toLast;
   $('#lastback').onclick = () => { show('verdict'); window.scrollTo(0, 0); };
+  $('#tocoda').onclick = toCoda;
+  $('#codaback').onclick = () => { show('verdict'); window.scrollTo(0, 0); };
+  $('#codaagain').onclick = startGame;
 
   drawCover();
-  U.api = { startGame, burn, setPace, toVerdict, toLast };
+  U.api = { startGame, burn, setPace, toVerdict, toLast, toCoda };
 })();
 </script>
 </body>

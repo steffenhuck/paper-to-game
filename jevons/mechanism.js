@@ -24,6 +24,12 @@ const CONFIG = {
                               //   Jevons, that no substitute for coal is found (a little more than his own century)
   AFTER_YEARS: 200,           // our choice: the box after 2065 values the coal left as if burnt evenly over ten more
                               //   generations, with the engines of 2065, for the people of 2065
+  SUBSTITUTE: [{ from: 1965, floor: 2 }, { from: 2025, floor: 2 }],
+                              // the coda only, our choice: a substitute for coal that gives every generation from the
+                              //   year on (and the box after) at least FLOOR times the income per head of 1865, coal or
+                              //   no coal; the best path is searched again under each (optimum.js). 1965: about when
+                              //   nuclear power and North Sea gas came; 2025: about when wind and sun became the
+                              //   cheapest power
 
   // ---- Britain's fire --------------------------------------------------------------------------------------
   C0: 95,                     // preface: Hunt's report puts the 1865 production at "about ninety-five millions of tons"
@@ -360,14 +366,15 @@ function ledger(st) {
 // The score: the typical generation, the geometric mean of income per head over the generations on the sheet and
 // the box after (a planner who counts every generation the same, and a doubling the same for a poor generation as
 // for a rich one: log utility, no discounting; our choice), against the best path found (optimum.js).
-function typicalOf(st) {
-  const L = ledger(st);
-  const xs = L.gens.map(g => g.perHead).concat([L.after.perHead]);
+function typicalOf(st, substitute) {
+  const L = ledger(st), sub = substitute || null;
+  const lift = (x, from) => sub && from >= sub.from ? Math.max(x, sub.floor) : x;
+  const xs = L.gens.map(g => lift(g.perHead, g.from)).concat([lift(L.after.perHead, CONFIG.RUN_TO)]);
   return Math.exp(xs.reduce((a, x) => a + Math.log(Math.max(1e-6, x)), 0) / xs.length);
 }
-function scoreOf(st, best) {
-  const typical = typicalOf(st);
-  return { typical, best, score: 100 * typical / best };
+function scoreOf(st, opt) {
+  const typical = typicalOf(st), best = typeof opt === 'number' ? opt : opt ? opt.typical : null;
+  return { typical, best, score: best ? 100 * typical / best : null, opt: typeof opt === 'object' ? opt : null };
 }
 // A whole game played as the page plays it: a pace per generation; after the evening, the rest at the last pace.
 function playPath(mults) {
@@ -442,8 +449,31 @@ const REAL = [
 ];
 
 
+// ---- the coda: all of Britain's energy since 1965, in millions of tons of coal a year ---------------------------
+// Our World in Data / Energy Institute (owid-energy-data.csv), consumption by source in TWh (non-fossil sources by
+// the substitution method), converted at the same factor as REAL (1900 = 225.2 million tons). Columns: year, coal,
+// oil, gas, wood and other burnt renewables (biofuel + other_renewable), nuclear, water wind and sun (hydro + wind +
+// solar). Before 1965 the source has no breakdown; the coda draws coal alone there (REAL, production).
+const MIX = [
+  [1965, 196.3, 127.3, 1.2, 0.0, 6.0, 1.8], [1966, 186.8, 136.4, 1.2, 0.0, 8.1, 1.8], [1967, 174.5, 146.6, 2.0, 0.0, 9.3, 2.0], [1968, 174.6, 155.2, 4.6, 0.0, 10.5, 1.5],
+  [1969, 170.2, 166.8, 8.9, 0.0, 11.6, 1.3], [1970, 160.5, 176.7, 17.0, 0.0, 10.4, 1.8], [1971, 142.3, 177.6, 27.4, 0.0, 11.0, 1.3], [1972, 124.6, 188.3, 38.9, 0.0, 11.7, 1.3],
+  [1973, 135.0, 193.3, 42.1, 0.0, 11.2, 1.5], [1974, 118.8, 179.5, 50.3, 0.0, 13.4, 1.6], [1975, 119.6, 157.0, 52.8, 0.0, 12.1, 1.5], [1976, 121.7, 156.1, 56.0, 0.0, 14.4, 1.8],
+  [1977, 122.1, 157.4, 59.5, 0.0, 16.0, 1.6], [1978, 118.9, 161.5, 61.7, 0.0, 14.9, 1.6], [1979, 127.8, 162.9, 67.6, 0.0, 15.3, 1.7], [1980, 118.8, 139.3, 67.4, 0.0, 14.8, 1.6],
+  [1981, 118.2, 129.0, 68.3, 0.0, 15.2, 1.8], [1982, 110.2, 130.5, 68.0, 0.0, 17.6, 1.8], [1983, 111.2, 125.5, 70.8, 0.0, 19.9, 1.8], [1984, 79.0, 154.2, 72.5, 0.0, 21.6, 1.8],
+  [1985, 105.1, 134.0, 78.0, 0.0, 24.4, 1.6], [1986, 113.5, 134.3, 79.2, 0.0, 23.6, 1.9], [1987, 116.3, 130.6, 81.4, 0.0, 22.1, 1.7], [1988, 112.9, 138.9, 77.5, 0.0, 25.3, 2.0],
+  [1989, 108.7, 142.0, 75.8, 0.0, 28.6, 1.9], [1990, 108.6, 143.9, 78.9, 0.3, 26.3, 2.0], [1991, 108.8, 143.2, 85.2, 0.3, 28.2, 1.8], [1992, 102.3, 144.8, 84.8, 0.4, 30.7, 2.1],
+  [1993, 89.1, 145.5, 96.6, 0.5, 35.7, 1.8], [1994, 83.2, 144.0, 99.5, 0.7, 35.3, 2.2], [1995, 79.3, 142.3, 106.1, 0.7, 35.5, 2.0], [1996, 74.2, 145.9, 123.6, 0.8, 37.8, 1.6],
+  [1997, 66.2, 141.7, 127.1, 0.9, 39.2, 2.0], [1998, 64.5, 140.2, 132.2, 1.2, 39.7, 2.4], [1999, 57.3, 138.3, 140.7, 1.5, 38.0, 2.5], [2000, 61.4, 136.9, 145.7, 1.7, 34.0, 2.4],
+  [2001, 65.1, 136.2, 145.0, 2.0, 35.8, 2.0], [2002, 59.7, 135.2, 143.1, 2.3, 34.6, 2.4], [2003, 63.7, 136.2, 143.5, 2.8, 34.7, 1.8], [2004, 62.2, 140.0, 146.6, 3.3, 31.2, 2.6],
+  [2005, 63.3, 144.0, 142.9, 4.2, 31.5, 3.0], [2006, 69.1, 142.6, 135.5, 4.5, 29.0, 3.4], [2007, 65.1, 138.6, 137.0, 4.8, 24.1, 4.0], [2008, 60.4, 135.7, 140.6, 5.7, 19.9, 4.6],
+  [2009, 49.8, 129.9, 131.1, 4.9, 26.1, 5.5], [2010, 51.0, 128.2, 141.6, 5.6, 23.3, 5.2], [2011, 51.4, 124.9, 117.8, 6.1, 25.7, 8.2], [2012, 64.9, 122.1, 110.6, 6.7, 26.1, 9.8],
+  [2013, 62.5, 120.8, 109.7, 9.8, 26.0, 12.9], [2014, 50.5, 120.6, 100.7, 12.1, 23.3, 15.3], [2015, 39.9, 122.2, 103.6, 14.7, 25.6, 19.7], [2016, 20.3, 125.6, 114.9, 15.1, 25.9, 19.1],
+  [2017, 16.4, 127.1, 112.5, 15.9, 25.3, 24.1], [2018, 13.9, 125.1, 113.4, 18.0, 23.3, 26.8], [2019, 9.9, 121.7, 112.0, 19.8, 20.0, 29.2], [2020, 9.0, 95.9, 105.6, 20.1, 17.8, 33.7],
+  [2021, 9.2, 97.9, 110.6, 20.4, 16.3, 29.2], [2022, 8.5, 105.0, 101.3, 19.4, 16.7, 35.2], [2023, 7.3, 106.6, 91.5, 19.2, 14.2, 35.7], [2024, 6.8, 107.0, 88.9, 22.0, 14.2, 36.7],
+];
+
 const MECH = { CONFIG, newGame, engineNews, previewPlan, burnGeneration, checkEvening, playerTurnsOver, runOut,
   verdict, ledger, ledgerOf, afterBox, typicalOf, scoreOf, playPath, naturalPop, depthOf, priceOf, shareBurnt, fireOf, keepTarget, cloneState, paceFromMult, multFromPace, clampPace, squareTons,
   groundSquares, lastsUntil, dragOf, relCost, eveningNow, doesOf, powerOf, incomeOf, incomePerHeadOf, fuelShareOf,
-  daysOf, powerCost, paysAt, americaFitsIn, REAL };
+  daysOf, powerCost, paysAt, americaFitsIn, REAL, MIX };
 if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
