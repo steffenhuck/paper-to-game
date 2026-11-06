@@ -1,62 +1,43 @@
-== 1. The paper's estimates are carried exactly
-PASS bonuses = Supp. Table 2 col 1 (0.164 / 0.075 / 0.056)
-PASS gender bonus = Supp. Table 1 col 1 (0.024)
-PASS star weights: citizenship only 0.457 ("about half"), country only 0.341 ("about a third")
-PASS gender / both = 0.146 ("about a seventh")
-PASS single country or citizenship match vs gender: 2.73x (paper p. 7: "on average 2 to 3 times larger")
+== 1. Data
+PASS embedded applicant data is identical to applicant_country_citizenship.csv
+PASS all 30 applicant rows kept
+PASS every applicant country and passport has a code, a name and an adjective
+PASS applicant shares sum to 1.000000
+PASS all 30 panel-member rows map to codes
 
-== 2. Applicant population and the ERC-like panel against Table 2
-PASS applicant weights sum to 100.0
-PASS big-five share 53.8% (Table 2 N: 53.8%)
-     (constructed: 24.9% of applicants work outside their passport country, incl. XX passports)
-PASS ERC-like panel, big, both: 5.2% (Table 2: 4.6%, tolerance ±1.2 p.p.)
-PASS ERC-like panel, big, country: 4.7% (Table 2: 4.5%, tolerance ±1.2 p.p.)
-PASS ERC-like panel, big, citz: 3.3% (Table 2: 3.8%, tolerance ±1.2 p.p.)
-PASS ERC-like panel, other, both: 1.7% (Table 2: 1.5%, tolerance ±1.2 p.p.)
-PASS ERC-like panel, other, country: 1.2% (Table 2: 1.8%, tolerance ±1.2 p.p.)
-PASS ERC-like panel, other, citz: 1.6% (Table 2: 2.6%, tolerance ±1.2 p.p.)
-     Table 2 implies home stars per 10 juries: big five 3.31, everyone else 1.39, ratio 2.38
-PASS ERC-like panel stars: big 3.49, other 1.19 (Table 2: 3.31, 1.39; ±0.4)
-PASS ERC-like panel ratio 2.94 (Table 2: 2.38; accepted 1.8–3.4)
-PASS the ERC-like panel starts NOT level
-     expected bonus per mark: big five +0.0136, other +0.0046 points (Table 2 shares × Supp. Table 2: +0.0129, +0.0054)
+== 2. Token rule
+PASS tokens: both match 3, one match 1, no match 0
+PASS German in the UK: 3 from a German in the UK, 1 from a German in France, 1 from an Italian in the UK, 0 from a Brit in Germany
+PASS "same" means the same named country, not two Big Five countries
 
-== 3. The paper's own Table 2 arithmetic, quoted in the verdict (correlational)
-PASS APE × share: big five 1.64 p.p. (paper 1.7), other 0.75 p.p. (paper 0.8)
+== 3. The four applicant-group bars
+PASS the four groups partition the applicants: bigP_bigW 58.0%, bigP_othW 2.7%, othP_bigW 1.0%, othP_othW 38.3%
+PASS share-weighted bars reproduce the success measure (works in Big Five 1.41, elsewhere 0.38)
+PASS by hand: a German in Germany meets 2 German home judges and 1 German working in Switzerland: 4.2 × 7 / 15 = 1.96 = 1.96
+PASS seed 1: simulated random juries 1.41 / 0.37 vs expected 1.41 / 0.38
+PASS seed 2: simulated random juries 1.41 / 0.38 vs expected 1.41 / 0.38
 
-== 4. Random assignment simulated (4 or 5 judges, mean 4.2) matches the analytic expectation
-PASS seed 1: simulated big 3.48, other 1.20 vs analytic 3.49, 1.19
-PASS seed 2: simulated big 3.51, other 1.18 vs analytic 3.49, 1.19
-PASS seed 3: simulated big 3.49, other 1.19 vs analytic 3.49, 1.19
+== 4. Rosters, guided by the panel-member file
+PASS every roster judge is a passport/work combination that occurs in the panel-member file
+     panel-member file, six largest combinations: DE/DE, IT/IT, UK/UK, FR/FR, US/US, ES/ES
+PASS pool: each Big Five home combination appears twice
+PASS pool: 12 judges from smaller countries, one each
+PASS pool 24, panel 15, bench 10
+PASS a Round 1 player must seat at least 1 Big Five home judge(s), so a balanced panel is possible
+PASS Round 1, a panel that mirrors the panel-member file: works in Big Five 1.54, elsewhere 0.38 (tilted)
+PASS Round 1, a balanced panel from the same pool: 0.41 vs 0.72 (gap -0.31)
 
-== 5. Game balance
-PASS round 1 mirror panel: big 4.39, other 1.35, ratio 3.25 (leans at least like the ERC)
-PASS round 1 diverse panel: big 2.88, other 1.67, ratio 1.73 (leans less)
-PASS pool: 24 judges, 11 big-five home judges, so at least 2 must be seated
-PASS round 2: no plan of 1 or 2 swaps levels the jars (0/150, 0/22500)
-PASS round 2, 4 swaps that unseat big-five home judges: 730/1050 level (70%)
-     4 swaps that unseat anyone tied to the big five: 3437/14700 level (23%)
-PASS round 2, 4 swaps that only unseat judges with no big-five tie: 0/7350 level
-PASS round 2, 4 random swaps: 0.47% level (not by chance)
-PASS largest single-swap move: big jar −0.68, small jar +0.14 (big moves > 3× small)
+== 5. Round 2: the GAP meter and the four-swap puzzle
+PASS the starting panel is tilted: gap 1.03 tokens, LEVEL zone ±0.3
+PASS no plan of 1 or 2 swaps reaches LEVEL
+PASS 12203 of 286650 four-swap plans reach LEVEL (4.3%; at least one solution exists)
+PASS plans that bench four Big Five home judges: 4362/7350 reach LEVEL (59%)
+PASS plans that only bench judges from smaller countries never reach LEVEL
+     e.g. DE/DE->IL/IL, DE/DE->FI/FI, IT/IT->PT/PT, IT/IT->PL/PL: 0.63 vs 0.62
+PASS the meter's range (±1.5) holds the starting gap
 
-== 6. Robustness of the central discovery under assumptions the paper does not identify
-PASS Step 2 project bonuses: mirror ratio 3.26, ERC-like ratio 2.97, biggest moves big −0.70 / small +0.16, level: 1 swap 0, big-home plans 44%, random 0.3%
-PASS Step 1 PI bonuses: mirror ratio 3.23, ERC-like ratio 2.88, biggest moves big −0.70 / small +0.15, level: 1 swap 0, big-home plans 36%, random 0.2%
-PASS half the mobility: mirror ratio 3.64, ERC-like ratio 3.09, biggest moves big −0.73 / small +0.15, level: 1 swap 0, big-home plans 78%, random 0.5%
-PASS 1.5x the mobility: mirror ratio 2.90, ERC-like ratio 2.80, biggest moves big −0.63 / small +0.14, level: 1 swap 0, big-home plans 59%, random 0.4%
-PASS exactly 4 judges per proposal: mirror ratio 3.25, ERC-like ratio 2.94, biggest moves big −0.65 / small +0.14, level: 1 swap 0, big-home plans 70%, random 0.5%
-
-== 7. Claim boundaries
-PASS the correlational funding edge is quoted, never computed from the player's panel
-
-== 8. The four applicant-group bars (passport row × workplace column)
-PASS ERC-like: the four groups partition the applicants (bigP_bigW 45.3%, bigP_othW 3.9%, othP_bigW 8.5%, othP_othW 42.3%)
-PASS ERC-like: weighted cells reproduce the success measure (works in Big Five 3.49 = 3.49, elsewhere 1.19 = 1.19)
-     (an unweighted average of the two bar heights would say 2.81 instead of 3.49; not used)
-PASS mirror: the four groups partition the applicants (bigP_bigW 45.3%, bigP_othW 3.9%, othP_bigW 8.5%, othP_othW 42.3%)
-PASS mirror: weighted cells reproduce the success measure (works in Big Five 4.39 = 4.39, elsewhere 1.35 = 1.35)
-     (an unweighted average of the two bar heights would say 3.45 instead of 4.39; not used)
-PASS "same" means the same named country: a German in France and a French judge in Germany do not match
+== 6. Robustness: the paper's own relative sizes instead of 3 / 1 / 0, and exactly 4 judges
+PASS paper relative sizes (3 / 1.37 / 1.02): mirror gap 1.22, balanced -0.26, start 1.09, 1-swap levels 0, big-home four-swap plans level 45%
+PASS exactly 4 judges per applicant: mirror gap 1.11, balanced -0.29, start 0.98, 1-swap levels 0, big-home four-swap plans level 59%
 
 ALL PASS
