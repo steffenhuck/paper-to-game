@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ganguli's Letters</title>
+<meta name="description" content="A town, twelve streets, ten pounds a household for saplings. You write the letter that says who gets to see what each household chose, and when. Find the letter that makes a street plant more, and how far the ripple goes.">
+<style>
+@font-face{font-family:Fredoka;font-weight:300 700;font-style:normal;src:url(data:font/woff2;base64,/*__F_FREDOKA__*/) format('woff2')}
+:root{
+  --cream:#F3E9CF; --cream2:#E9DCB9; --forest:#1F5A38; --leaf:#7CBB4C; --soil:#9A6A3A; --soil2:#7E5530; --marigold:#F2A93B; --mute:#5E6E55; --white:#FBF6E8;
+  color-scheme:light;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--cream);color:var(--forest)}
+body.lock{overflow:hidden}
+body{font-family:Fredoka,'Trebuchet MS',Arial,sans-serif;font-weight:400;font-size:16.5px;line-height:1.42;overflow-x:hidden}
+.wrap{max-width:420px;margin:0 auto;padding:12px 16px 28px}
+.screen{display:none}.screen.on{display:block}
+.caps{font-weight:600;text-transform:uppercase;letter-spacing:.12em;font-size:12.5px;color:var(--mute)}
+h1{font-weight:700;font-size:46px;line-height:.98;margin:10px 0 10px;letter-spacing:-.01em}
+h2{font-weight:700;font-size:30px;line-height:1.05;margin:6px 0 10px}
+h3{font-weight:700;font-size:19px;margin:16px 0 6px}
+p{margin:0 0 10px}
+b{font-weight:600}
+.aim{font-weight:600;font-size:18.5px;line-height:1.3;border-top:3px solid var(--forest);border-bottom:3px solid var(--forest);padding:10px 0;margin:14px 0}
+.small{font-size:14px;line-height:1.38;color:var(--mute)}
+.topbar{display:flex;align-items:flex-start;gap:10px;margin-bottom:6px}
+.topbar .aimline{flex:1;font-weight:600;font-size:14.5px;line-height:1.28;padding-top:5px}
+.q{flex:none;width:36px;height:36px;border-radius:50%;border:none;background:var(--forest);color:var(--cream);font-family:Fredoka,sans-serif;font-weight:700;font-size:20px;cursor:pointer;line-height:36px;padding:0}
+/* poster buttons */
+.btn{display:block;width:100%;border:none;border-radius:9px;background:var(--forest);color:var(--cream);font-family:Fredoka,sans-serif;font-weight:700;font-size:17px;letter-spacing:.04em;text-transform:uppercase;padding:14px 14px;margin:8px 0;cursor:pointer;text-align:center}
+.btn.pri{background:var(--marigold);color:var(--forest)}
+.btn.dim{opacity:.35;pointer-events:none}
+.btn.link{background:transparent;color:var(--forest);text-decoration:underline;text-transform:none;font-weight:600;letter-spacing:0;padding:8px;font-size:15.5px}
+.row2{display:flex;gap:8px}.row2 .btn{flex:1}
+/* the picture */
+.pic{position:relative;margin:6px 0 4px}
+.pic canvas{display:block;width:100%}
+/* the tally */
+.tally{margin:4px 0 8px}
+.tally .trow{display:flex;align-items:center;gap:8px;margin:3px 0}
+.tally .tl{flex:none;width:92px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;font-size:11.5px;color:var(--mute);line-height:1.1}
+.tally .tb{flex:1;position:relative;height:22px;background:var(--cream2);border-radius:5px;overflow:visible}
+.tally .tb .fill{position:absolute;left:0;top:0;bottom:0;background:var(--leaf);border-radius:5px;width:0;transition:width .12s linear}
+.tally .tb .plainmark{position:absolute;top:-3px;bottom:-3px;width:3px;margin-left:-1px;background:var(--forest);border-radius:2px}
+.tally .tb .bet{position:absolute;top:-6px;width:0;height:0;margin-left:-7px;border-left:7px solid transparent;border-right:7px solid transparent;border-top:9px solid var(--marigold);display:none}
+.tally .tb .bet.show{display:block}
+.tally .tn{flex:none;width:44px;text-align:right;font-weight:700;font-size:24px;line-height:1;font-variant-numeric:tabular-nums}
+.tally .tn.faint{color:var(--cream2)}
+/* envelopes */
+.envs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 6px}
+.env{position:relative;display:block;width:100%;text-align:left;font-family:Fredoka,sans-serif;background:var(--white);color:var(--forest);border:2px solid var(--forest);border-radius:6px;padding:23px 8px 6px;cursor:pointer;min-height:66px}
+.env::before{content:"";position:absolute;left:-1px;right:-1px;top:-1px;height:0;border-top:2px solid var(--forest);border-radius:6px 6px 0 0}
+.env .flap{position:absolute;left:4px;right:4px;top:2px;height:18px;overflow:hidden;pointer-events:none}
+.env .flap i{position:absolute;left:0;top:0;width:100%;height:18px;background:linear-gradient(to bottom right,transparent 49.5%,var(--forest) 49.5%,var(--forest) 52%,transparent 52%) no-repeat;background-size:50% 100%}
+.env .flap i::after{content:"";position:absolute;left:50%;top:0;width:50%;height:18px;background:linear-gradient(to bottom left,transparent 49.5%,var(--forest) 49.5%,var(--forest) 52%,transparent 52%)}
+.env .t{font-weight:700;font-size:16.5px;line-height:1.1;display:block}
+.env svg{display:block;margin-top:3px;height:20px;width:92px}
+.env.sel{background:var(--marigold)}
+.desc{min-height:62px;font-size:15px;line-height:1.36;margin:2px 0 8px}
+.desc .who{color:var(--mute);font-size:13.5px}
+/* results */
+.result{background:var(--white);border:2px solid var(--forest);border-radius:8px;padding:10px 12px;margin:8px 0}
+.result p{margin:0 0 7px}.result p:last-child{margin:0}
+.result .paper{font-weight:600}
+.result .betline{color:var(--soil2)}
+/* the bet */
+.betbox{margin:8px 0}
+.betbox .big{font-weight:700;font-size:44px;line-height:1;text-align:center;margin:2px 0 0}
+.betbox .lab{text-align:center;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);font-weight:600;margin-bottom:6px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:36px;background:transparent;margin:0}
+input[type=range]::-webkit-slider-runnable-track{height:10px;border-radius:5px;background:var(--cream2);border:2px solid var(--forest)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:34px;height:34px;border-radius:50%;background:var(--marigold);border:3px solid var(--forest);margin-top:-14px;cursor:pointer}
+input[type=range]::-moz-range-track{height:10px;border-radius:5px;background:var(--cream2);border:2px solid var(--forest)}
+input[type=range]::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:var(--marigold);border:3px solid var(--forest);cursor:pointer}
+.scale{display:flex;justify-content:space-between;font-size:12px;color:var(--mute);font-weight:600;letter-spacing:.06em;padding:0 10px}
+/* the end */
+.three{display:flex;gap:8px;margin:10px 0}
+.three div{flex:1;background:var(--forest);color:var(--cream);border-radius:9px;padding:10px 6px 8px;text-align:center}
+.three div.you{background:var(--marigold);color:var(--forest)}
+.three .n{font-weight:700;font-size:34px;line-height:1}
+.three .l{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin-top:4px;opacity:.85}
+.verd{font-size:17px;line-height:1.4}
+.paperlines p{padding-left:14px;text-indent:-14px}
+/* poster art */
+.poster{display:block;width:100%;height:auto;margin:4px 0 2px}
+footer.beta{margin-top:22px;font-size:13px;color:var(--mute);text-align:center;line-height:1.35}
+/* overlays */
+.ov{position:fixed;inset:0;background:var(--cream);overflow-y:auto;display:none;z-index:10}
+.ov.on{display:block}
+.ov .wrap{padding-top:14px}
+.ov h2{margin-top:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ===================== START ===================== -->
+<section class="screen on" id="s-start">
+  <div class="caps">A game from a paper</div>
+  <h1>Ganguli&rsquo;s Letters</h1>
+  <svg class="poster" viewBox="0 0 348 118" aria-hidden="true">
+    <rect x="0" y="92" width="348" height="26" fill="#9A6A3A"/>
+    <g fill="#1F5A38">
+      <rect x="14" y="58" width="44" height="34"/><polygon points="10,60 36,36 62,60"/>
+      <rect x="84" y="62" width="40" height="30"/><polygon points="80,64 104,42 128,64"/>
+      <rect x="152" y="54" width="48" height="38"/><polygon points="148,56 176,30 204,56"/>
+      <rect x="228" y="62" width="40" height="30"/><polygon points="224,64 248,42 272,64"/>
+      <rect x="296" y="58" width="44" height="34"/><polygon points="292,60 318,36 344,60"/>
+    </g>
+    <g fill="#F3E9CF"><rect x="30" y="74" width="12" height="18"/><rect x="98" y="76" width="12" height="16"/><rect x="170" y="72" width="12" height="20"/><rect x="242" y="76" width="12" height="16"/><rect x="312" y="74" width="12" height="18"/></g>
+    <g stroke="#1F5A38" stroke-width="3" fill="none"><line x1="72" y1="92" x2="72" y2="60"/><line x1="140" y1="92" x2="140" y2="70"/><line x1="214" y1="92" x2="214" y2="56"/><line x1="284" y1="92" x2="284" y2="70"/></g>
+    <g fill="#7CBB4C" stroke="#1F5A38" stroke-width="3"><circle cx="72" cy="46" r="18"/><circle cx="140" cy="58" r="14"/><circle cx="214" cy="40" r="20"/><circle cx="284" cy="58" r="14"/></g>
+  </svg>
+  <p>A town wants its streets green. Every household on a street gets ten pounds and can put any of it towards saplings for its front garden: a pound, a sapling. The rest it keeps.</p>
+  <p>You are the council&rsquo;s planner. You cannot make anyone plant. You write the letter: it says who will get to see what each household chose, and when. No names, ever.</p>
+  <p>Your hands will pick a letter for a street, plant the street, and bet on what the next street plants once it sees what the letter sends.</p>
+  <div class="aim">Twelve streets, six letters: get the town to plant as many saplings as you can.</div>
+  <button class="btn pri" id="b-begin">Begin</button>
+  <button class="btn link" id="b-help-start">How to play</button>
+  <footer class="beta">A beta, built from the paper. Builder&rsquo;s review only; the author finishes it.</footer>
+</section>
+
+<!-- ===================== THE PLAIN STREET ===================== -->
+<section class="screen" id="s-plain">
+  <div class="caps">Before you write anything</div>
+  <h2>A plain street</h2>
+  <div class="pic"><canvas id="pic-plain" width="348" height="150"></canvas></div>
+  <div class="tally" id="tally-plain"></div>
+  <p>Twenty households got the plain letter: <b>here is ten pounds, plant what you like, keep the rest, nobody sees what you chose.</b> Each plot is one household; each sapling is a pound it gave.</p>
+  <p>They planted <b>57 saplings</b> between them. Five households planted nothing. Three planted five, half the money. One planted all ten. This is what a street does when nobody is looking; the dark mark on the bar is where it stands, and every street you write to carries that mark.</p>
+  <button class="btn pri" id="b-first">Write the first letter</button>
+</section>
+
+<!-- ===================== PLAY ===================== -->
+<section class="screen" id="s-play">
+  <div class="topbar"><div class="aimline">Twelve streets, six letters: get the town to plant as many saplings as you can.</div><button class="q" id="q-play" aria-label="How to play">?</button></div>
+  <div class="caps" id="pairline">Streets 1 &amp; 2 of 12</div>
+  <div class="pic"><canvas id="pic" width="348" height="372"></canvas></div>
+  <div class="tally" id="tally"></div>
+
+  <div id="ph-letter">
+    <p class="small" id="letter-lead">The top street gets your letter; the bottom street sees only what the letter sends. The dark mark on each bar is a plain street, 57: a letter that works plants past it. Touch a letter to see who will see whom, then plant.</p>
+    <div class="envs" id="envs"></div>
+    <div class="desc" id="desc"><span class="who">Touch a letter.</span></div>
+    <button class="btn pri dim" id="b-plant">Plant this street</button>
+  </div>
+
+  <div id="ph-this" style="display:none">
+    <div class="result" id="res-this"></div>
+    <div id="betwrap">
+      <p id="bet-lead"></p>
+      <div class="betbox">
+        <div class="lab">Your bet: saplings on the next street</div>
+        <div class="big" id="bet-num">57</div>
+        <input type="range" id="bet" min="40" max="100" value="57" step="1" aria-label="How many saplings will the next street plant">
+        <div class="scale"><span>40</span><span>plain 57</span><span>100</span></div>
+      </div>
+      <button class="btn pri" id="b-send">Send it to the next street</button>
+    </div>
+    <div id="nobetwrap" style="display:none">
+      <p id="nobet-lead"></p>
+      <button class="btn pri" id="b-nobet">Let the next street plant</button>
+    </div>
+  </div>
+
+  <div id="ph-next" style="display:none">
+    <div class="result" id="res-next"></div>
+    <p id="pairsay" class="verd"></p>
+    <button class="btn pri" id="b-nextpair">Next streets</button>
+  </div>
+</section>
+
+<!-- ===================== THE TOWN ===================== -->
+<section class="screen" id="s-end">
+  <div class="caps">The town, twelve streets later</div>
+  <h2 id="end-head"></h2>
+  <div class="pic"><canvas id="pic-town" width="348" height="176"></canvas></div>
+  <div class="three"><div class="you"><div class="n" id="n-you"></div><div class="l">your town</div></div><div><div class="n" id="n-plain"></div><div class="l">plain letters</div></div><div><div class="n" id="n-best"></div><div class="l">best letter</div></div></div>
+  <div class="verd" id="end-lines"></div>
+  <h3>What the paper found</h3>
+  <div class="paperlines" id="end-paper"></div>
+  <p class="small" id="end-boundary"></p>
+  <button class="btn pri" id="b-again">Another town</button>
+  <div class="row2"><button class="btn" id="b-help-end">How to play</button><button class="btn" id="b-about">About</button></div>
+  <footer class="beta">A beta, built from the paper. Builder&rsquo;s review only; the author finishes it.</footer>
+</section>
+</div>
+
+<!-- ===================== HELP ===================== -->
+<div class="ov" id="help"><div class="wrap">
+  <div class="caps">How to play</div>
+  <h2>Ganguli&rsquo;s Letters</h2>
+  <div class="aim">Twelve streets, six letters: get the town to plant as many saplings as you can.</div>
+  <p><b>The streets.</b> Every household on a street gets ten pounds and may put any of it towards saplings for its front garden, keeping the rest. A plot is one household; a sapling is a pound it gave. A plain street, where nobody is told anything and nobody sees anything, plants 57 saplings. Green grows only where someone chose it.</p>
+  <p><b>The letter.</b> Streets come in pairs. The top street gets your letter, which tells each household who will see its pledge, and when. The bottom street sees only what the letter sends, before it decides. Touch an envelope and the picture shows who will see whom: an eye on a plot that is told it will be seen, cards and arrows on the road for what travels, a slot on a plot that receives something. The six letters are: <b>the plain letter</b> (nobody sees anything); <b>the sheet</b> (all twenty pledges to every household on the next street, before they decide); <b>the spokesperson</b> (one household&rsquo;s pledge to all twenty on the next street, before; the other nineteen told nothing); <b>pass it on</b> (each pledge to one household on the next street, before); <b>afterwards</b> (each pledge to one household on the next street, after they have decided); <b>the clipboard</b> (all twenty pledges to one household on the next street, before). No letter carries a name.</p>
+  <p><b>Plant this street.</b> The top street fills, plot by plot, and its bar and number show how many saplings it planted against the plain mark at 57. The game then says what the letter told the households, what they planted, and what the paper found about that letter.</p>
+  <p><b>The bet.</b> When the letter sends something to the next street before it decides, you say how many saplings the next street will plant. The slider starts at the plain street&rsquo;s 57; the marigold marker on the bottom bar shows your bet. Send, and the bottom street fills. The game says what they saw, what they planted, what you expected, and what the paper found. When nothing reaches the next street in time, there is no bet, and it plants like a plain street.</p>
+  <p><b>Next streets.</b> Six pairs, one letter each; you may send the same letter again. Nothing carries over from one pair to the next. After the sixth pair the town is counted: your saplings against a town of plain letters and against the best letter on every street, and the paper&rsquo;s word for how you bet.</p>
+  <button class="btn pri" id="b-help-close">Back</button>
+</div></div>
+
+<!-- ===================== ABOUT ===================== -->
+<div class="ov" id="about"><div class="wrap">
+/*__ABOUT__*/
+  <button class="btn pri" id="b-about-close">Back</button>
+</div></div>
+
+<script>
+/*__MECHANISM__*/
+</script>
+<script>
+(function () {
+  'use strict';
+  var M = MECH, C = M.CONFIG;
+  var COL = { cream: '#F3E9CF', cream2: '#E9DCB9', forest: '#1F5A38', leaf: '#7CBB4C', soil: '#9A6A3A', soil2: '#7E5530', marigold: '#F2A93B', white: '#FBF6E8', road: '#E2D3AE' };
+  var W = 348, COLS = 5, ROWS = 4, PW = 64, PH = 30, GX = 7, GY = 4, BLOCK_H = ROWS * PH + (ROWS - 1) * GY; // 132
+  var LABEL_H = 16, ROAD_H = 56;
+  var $ = function (id) { return document.getElementById(id); };
+  var game, sel = null, cur = null, anim = null, lastPhaseEl = null;
+  var dpr = Math.min(2, window.devicePixelRatio || 1);
+
+  function setupCanvas(cv, h) { cv.width = W * dpr; cv.height = h * dpr; cv.style.height = h + 'px'; var ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); return ctx; }
+  function plotXY(i) { var r = Math.floor(i / COLS), c = i % COLS; return { x: c * (PW + GX), y: r * (PH + GY) }; }
+
+  // ---- drawing ----------------------------------------------------------------------------------
+  function sapling(ctx, x, y) {
+    ctx.strokeStyle = COL.forest; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(x, y + 3); ctx.lineTo(x, y + 9); ctx.stroke();
+    ctx.fillStyle = COL.leaf; ctx.beginPath(); ctx.arc(x, y, 4.2, 0, Math.PI * 2); ctx.fill();
+    ctx.lineWidth = 1.2; ctx.strokeStyle = COL.forest; ctx.stroke();
+  }
+  function rrect(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+  // one street block at (0, y0); pledges: array of 0..10 or null (bare); shown: how many plots are planted so far (animation)
+  function block(ctx, y0, label, pledges, shown, marks) {
+    ctx.save();
+    ctx.fillStyle = COL.forest; ctx.font = '600 11px Fredoka'; ctx.textBaseline = 'alphabetic';
+    ctx.letterSpacing = '1px';
+    ctx.fillText(label.toUpperCase(), 0, y0 + 11);
+    var top = y0 + LABEL_H, i, p, n;
+    for (i = 0; i < COLS * ROWS; i++) {
+      p = plotXY(i);
+      ctx.fillStyle = COL.soil; rrect(ctx, p.x, top + p.y, PW, PH, 4); ctx.fill();
+      ctx.strokeStyle = COL.soil2; ctx.lineWidth = 1; rrect(ctx, p.x + .5, top + p.y + .5, PW - 1, PH - 1, 4); ctx.stroke();
+      if (marks && marks.spokes === i) { ctx.strokeStyle = COL.marigold; ctx.lineWidth = 3; rrect(ctx, p.x + 1.5, top + p.y + 1.5, PW - 3, PH - 3, 4); ctx.stroke(); }
+      n = (pledges && i < shown) ? pledges[i] : 0;
+      for (var k = 0; k < n; k++) sapling(ctx, p.x + 10 + (k % 5) * 11, top + p.y + 8 + Math.floor(k / 5) * 12);
+      if (marks && marks.told && (marks.told === 'all' || (marks.told === 'one' && i === marks.spokes))) eye(ctx, p.x + PW - 9, top + p.y + 6, marks.after);
+      if (marks && marks.receives && (marks.receives === 'all' || (marks.receives === 'one' && i === 0))) slot(ctx, p.x + 4, top + p.y + 2);
+    }
+    ctx.restore();
+  }
+  function eye(ctx, x, y, closed) {   // "someone will see this"; closed = will see it afterwards
+    ctx.save(); ctx.fillStyle = COL.marigold; ctx.strokeStyle = COL.forest; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.ellipse(x, y, 6, 3.6, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    if (closed) { ctx.beginPath(); ctx.moveTo(x - 6, y); ctx.lineTo(x + 6, y); ctx.stroke(); }
+    else { ctx.fillStyle = COL.forest; ctx.beginPath(); ctx.arc(x, y, 1.8, 0, Math.PI * 2); ctx.fill(); }
+    ctx.restore();
+  }
+  function slot(ctx, x, y) {   // a letterbox slot: something arrives here before they decide
+    ctx.save(); ctx.fillStyle = COL.cream; rrect(ctx, x, y, 14, 4, 2); ctx.fill(); ctx.strokeStyle = COL.forest; ctx.lineWidth = 1; ctx.stroke(); ctx.restore();
+  }
+  function card(ctx, x, y, w, h, lines) {
+    ctx.save(); ctx.fillStyle = COL.white; rrect(ctx, x, y, w, h, 2); ctx.fill(); ctx.strokeStyle = COL.forest; ctx.lineWidth = 1.2; ctx.stroke();
+    ctx.strokeStyle = COL.leaf; ctx.lineWidth = 1.2;
+    for (var i = 0; i < lines; i++) { var ly = y + 3 + (h - 6) * (lines === 1 ? .5 : i / (lines - 1)); ctx.beginPath(); ctx.moveTo(x + 3, ly); ctx.lineTo(x + w - 3, ly); ctx.stroke(); }
+    ctx.restore();
+  }
+  function arrow(ctx, x, y1, y2, dashed) {
+    ctx.save(); ctx.strokeStyle = COL.forest; ctx.lineWidth = 1.6; if (dashed) ctx.setLineDash([3, 3]);
+    ctx.beginPath(); ctx.moveTo(x, y1); ctx.lineTo(x, y2 - 3); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = COL.forest; ctx.beginPath(); ctx.moveTo(x - 4, y2 - 6); ctx.lineTo(x + 4, y2 - 6); ctx.lineTo(x, y2); ctx.closePath(); ctx.fill(); ctx.restore();
+  }
+  function road(ctx, y0, key) {
+    ctx.save();
+    ctx.fillStyle = COL.road; ctx.fillRect(0, y0, W, ROAD_H);
+    ctx.strokeStyle = COL.cream; ctx.lineWidth = 2; ctx.setLineDash([10, 8]); ctx.beginPath(); ctx.moveTo(0, y0 + ROAD_H / 2); ctx.lineTo(W, y0 + ROAD_H / 2); ctx.stroke(); ctx.setLineDash([]);
+    if (!key || key === 'plain') { ctx.restore(); return; }
+    var n = C.STREET, i, cx, top = y0 + 5, a1 = y0 + 30, a2 = y0 + ROAD_H - 2, dashed = key === 'after';
+    var step = (W - 20) / (n - 1), x0 = 10;
+    if (key === 'pass' || key === 'after') {
+      for (i = 0; i < n; i++) { cx = x0 + i * step; card(ctx, cx - 5, top, 10, 16, 1); arrow(ctx, cx, a1, a2, dashed); }
+      if (dashed) { ctx.fillStyle = COL.forest; ctx.font = '700 11px Fredoka'; ctx.textAlign = 'center'; ctx.fillStyle = COL.marigold; rrect(ctx, W / 2 - 32, y0 + 20, 64, 15, 3); ctx.fill(); ctx.fillStyle = COL.forest; ctx.fillText('AFTERWARDS', W / 2, y0 + 31.5); }
+    } else if (key === 'sheet') {
+      card(ctx, W / 2 - 26, top, 52, 22, 5);
+      for (i = 0; i < n; i++) { cx = x0 + i * step; arrow(ctx, cx, a1, a2, false); }
+    } else if (key === 'clip') {
+      card(ctx, W / 2 - 26, top, 52, 22, 5);
+      ctx.strokeStyle = COL.forest; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(W / 2, top + 22); ctx.lineTo(W / 2, a1 - 4); ctx.lineTo(plotXY(0).x + PW / 2, a1 - 4); ctx.stroke();
+      arrow(ctx, plotXY(0).x + PW / 2, a1 - 4, a2, false);
+    } else if (key === 'spokes') {
+      var sx = plotXY(C.SPOKES_INDEX).x + PW / 2;
+      ctx.strokeStyle = COL.marigold; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(sx, y0 - 1); ctx.lineTo(sx, top + 8); ctx.stroke();
+      card(ctx, sx - 7, top + 4, 14, 18, 1);
+      ctx.strokeStyle = COL.forest; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(x0, a1 - 2); ctx.lineTo(W - 10, a1 - 2); ctx.stroke();
+      for (i = 0; i < n; i++) { cx = x0 + i * step; arrow(ctx, cx, a1 - 2, a2, false); }
+    }
+    ctx.restore();
+  }
+  function marksFor(key, phase) {
+    if (!key) return { top: null, bottom: null };
+    var L = M.LETTER[key];
+    var told = key === 'plain' ? null : key === 'spokes' ? 'one' : 'all';
+    var receives = (key === 'plain' || key === 'after') ? null : key === 'clip' ? 'one' : 'all';
+    return { top: { told: told, spokes: key === 'spokes' ? C.SPOKES_INDEX : -1, after: key === 'after' }, bottom: { receives: receives } };
+  }
+  var picCtx, picState = { key: null, thisP: null, thisShown: 0, nextP: null, nextShown: 0 };
+  function drawPic() {
+    var ctx = picCtx; ctx.clearRect(0, 0, W, 400);
+    var mk = marksFor(picState.key);
+    block(ctx, 0, 'This street · gets your letter', picState.thisP, picState.thisShown, mk.top);
+    road(ctx, LABEL_H + BLOCK_H + 4, picState.key);
+    block(ctx, LABEL_H + BLOCK_H + 4 + ROAD_H + 4, 'Next street · sees what the letter sends', picState.nextP, picState.nextShown, mk.bottom);
+  }
+
+  // ---- tally ----------------------------------------------------------------------------------
+  function tallyHTML(rows) {
+    return rows.map(function (r) { return '<div class="trow"><div class="tl">' + r.label + '</div><div class="tb"><div class="fill" id="' + r.id + '-fill"></div><div class="plainmark" style="left:' + pct(C.BASE_MEAN * C.STREET) + '%"></div><div class="bet" id="' + r.id + '-bet"></div></div><div class="tn faint" id="' + r.id + '-n">–</div></div>'; }).join('');
+  }
+  function pct(v) { return Math.max(0, Math.min(100, v)); }   // the bar runs 0..100 saplings
+  function setTally(id, v) { var f = $(id + '-fill'), n = $(id + '-n'); if (!f) return; f.style.width = pct(v) + '%'; n.textContent = v === null ? '–' : Math.round(v); n.className = 'tn' + (v === null ? ' faint' : ''); }
+  function setBetMark(v) { var b = $('tn-bet'); if (!b) return; if (v === null) { b.className = 'bet'; return; } b.className = 'bet show'; b.style.left = pct(v) + '%'; }
+
+  // ---- envelopes -------------------------------------------------------------------------------
+  var GLYPH = {
+    plain: '<svg viewBox="0 0 92 22"><g fill="#1F5A38"><circle cx="8" cy="5" r="2.5"/><circle cx="8" cy="11" r="2.5"/><circle cx="8" cy="17" r="2.5"/><circle cx="84" cy="5" r="2.5"/><circle cx="84" cy="11" r="2.5"/><circle cx="84" cy="17" r="2.5"/></g></svg>',
+    pass: '<svg viewBox="0 0 92 22"><g fill="#1F5A38"><circle cx="8" cy="5" r="2.5"/><circle cx="8" cy="11" r="2.5"/><circle cx="8" cy="17" r="2.5"/><circle cx="84" cy="5" r="2.5"/><circle cx="84" cy="11" r="2.5"/><circle cx="84" cy="17" r="2.5"/></g><g stroke="#1F5A38" stroke-width="1.6"><line x1="12" y1="5" x2="80" y2="5"/><line x1="12" y1="11" x2="80" y2="11"/><line x1="12" y1="17" x2="80" y2="17"/></g></svg>',
+    after: '<svg viewBox="0 0 92 22"><g fill="#1F5A38"><circle cx="8" cy="5" r="2.5"/><circle cx="8" cy="11" r="2.5"/><circle cx="8" cy="17" r="2.5"/><circle cx="84" cy="5" r="2.5"/><circle cx="84" cy="11" r="2.5"/><circle cx="84" cy="17" r="2.5"/></g><g stroke="#1F5A38" stroke-width="1.6" stroke-dasharray="3 3"><line x1="12" y1="5" x2="80" y2="5"/><line x1="12" y1="11" x2="80" y2="11"/><line x1="12" y1="17" x2="80" y2="17"/></g></svg>',
+    sheet: '<svg viewBox="0 0 92 22"><g fill="#1F5A38"><circle cx="8" cy="5" r="2.5"/><circle cx="8" cy="11" r="2.5"/><circle cx="8" cy="17" r="2.5"/><circle cx="84" cy="5" r="2.5"/><circle cx="84" cy="11" r="2.5"/><circle cx="84" cy="17" r="2.5"/></g><rect x="40" y="3" width="12" height="16" fill="#FBF6E8" stroke="#1F5A38" stroke-width="1.4"/><g stroke="#1F5A38" stroke-width="1.4"><line x1="12" y1="5" x2="40" y2="9"/><line x1="12" y1="11" x2="40" y2="11"/><line x1="12" y1="17" x2="40" y2="13"/><line x1="52" y1="9" x2="80" y2="5"/><line x1="52" y1="11" x2="80" y2="11"/><line x1="52" y1="13" x2="80" y2="17"/></g></svg>',
+    clip: '<svg viewBox="0 0 92 22"><g fill="#1F5A38"><circle cx="8" cy="5" r="2.5"/><circle cx="8" cy="11" r="2.5"/><circle cx="8" cy="17" r="2.5"/><circle cx="84" cy="11" r="2.5"/></g><rect x="40" y="3" width="12" height="16" fill="#FBF6E8" stroke="#1F5A38" stroke-width="1.4"/><g stroke="#1F5A38" stroke-width="1.4"><line x1="12" y1="5" x2="40" y2="9"/><line x1="12" y1="11" x2="40" y2="11"/><line x1="12" y1="17" x2="40" y2="13"/><line x1="52" y1="11" x2="80" y2="11"/></g></svg>',
+    spokes: '<svg viewBox="0 0 92 22"><g fill="#1F5A38"><circle cx="8" cy="11" r="3.5" fill="#F2A93B" stroke="#1F5A38" stroke-width="1.4"/><circle cx="84" cy="5" r="2.5"/><circle cx="84" cy="11" r="2.5"/><circle cx="84" cy="17" r="2.5"/></g><g stroke="#1F5A38" stroke-width="1.4"><line x1="12" y1="11" x2="80" y2="5"/><line x1="12" y1="11" x2="80" y2="11"/><line x1="12" y1="11" x2="80" y2="17"/></g></svg>'
+  };
+  var WHO = {
+    plain: 'Nobody is told anything; nothing is sent.',
+    sheet: 'Each household is told: twenty people will see your pledge, among the nineteen others. The next street gets the sheet before deciding.',
+    spokes: 'One household is told: all twenty will see your pledge. Nineteen are told nothing. The next street gets that one pledge before deciding.',
+    pass: 'Each household is told: one person will see your pledge before deciding. Each household on the next street gets one pledge.',
+    after: 'Each household is told: one person will see your pledge, after they have decided. The next street gets the pledges too late to matter.',
+    clip: 'Each household is told: one person will see your pledge, among the nineteen others. One household on the next street gets the clipboard before deciding.'
+  };
+  function buildEnvs() {
+    var el = $('envs'); el.innerHTML = '';
+    M.LETTERS.forEach(function (L) {
+      var b = document.createElement('button'); b.className = 'env'; b.setAttribute('data-key', L.key);
+      b.innerHTML = '<span class="flap"><i></i></span><span class="t">' + L.name + '</span>' + GLYPH[L.key];
+      b.addEventListener('click', function () { selectLetter(L.key); });
+      el.appendChild(b);
+    });
+  }
+  function selectLetter(key) {
+    sel = key;
+    var all = document.querySelectorAll('.env'); for (var i = 0; i < all.length; i++) all[i].className = 'env' + (all[i].getAttribute('data-key') === key ? ' sel' : '');
+    var L = M.LETTER[key];
+    $('desc').innerHTML = '<b>' + L.name + '.</b> ' + L.line + ' <span class="who">' + WHO[key] + '</span>';
+    $('b-plant').className = 'btn pri';
+    picState.key = key; drawPic();
+  }
+
+  // ---- the loop ---------------------------------------------------------------------------------
+  function showScreen(id) { var s = document.querySelectorAll('.screen'); for (var i = 0; i < s.length; i++) s[i].className = 'screen' + (s[i].id === id ? ' on' : ''); window.scrollTo(0, 0); }
+  function showPhase(id) { ['ph-letter', 'ph-this', 'ph-next'].forEach(function (p) { $(p).style.display = p === id ? '' : 'none'; }); }
+  function resetLetterPhase() {
+    sel = null; picState = { key: null, thisP: null, thisShown: 0, nextP: null, nextShown: 0 }; drawPic();
+    $('tally').innerHTML = tallyHTML([{ id: 'tt', label: 'This street' }, { id: 'tn', label: 'Next street' }]);
+    setTally('tt', null); setTally('tn', null);
+    var all = document.querySelectorAll('.env'); for (var i = 0; i < all.length; i++) all[i].className = 'env';
+    $('desc').innerHTML = '<span class="who">Touch a letter.</span>';
+    $('b-plant').className = 'btn pri dim';
+    $('pairline').textContent = 'Streets ' + (game.pair * 2 - 1) + ' & ' + (game.pair * 2) + ' of 12';
+    showPhase('ph-letter');
+  }
+  function startGame() { game = M.newGame(); resetLetterPhase(); showScreen('s-play'); }
+
+  // plant a street plot by plot; onDone after the last
+  function growStreet(which, pledges, total, onDone) {
+    if (anim) clearInterval(anim);
+    var i = 0, n = pledges.length;
+    if (which === 'this') { picState.thisP = pledges; picState.thisShown = 0; } else { picState.nextP = pledges; picState.nextShown = 0; }
+    var id = which === 'this' ? 'tt' : 'tn';
+    anim = setInterval(function () {
+      i++;
+      if (which === 'this') picState.thisShown = i; else picState.nextShown = i;
+      drawPic();
+      var sofar = 0; for (var k = 0; k < i; k++) sofar += pledges[k];
+      setTally(id, i < n ? sofar : total);
+      if (i >= n) { clearInterval(anim); anim = null; setTally(id, total); if (onDone) onDone(); }
+    }, 70);
+  }
+  function plantThis() {
+    if (!sel) return;
+    var r = M.plantThis(game, sel); cur = r;
+    $('b-plant').className = 'btn pri dim';
+    growStreet('this', r.thisPledges, r.thisTotal, function () {
+      var w = r.thisWords;
+      $('res-this').innerHTML = '<p><b>What you did.</b> ' + w.what + '</p><p><b>What came of it.</b> ' + w.came + '</p><p class="paper">' + w.paper + '</p>';
+      if (M.needsBet(sel)) {
+        $('betwrap').style.display = ''; $('nobetwrap').style.display = 'none';
+        $('bet-lead').innerHTML = '<b>Now the next street.</b> It gets ' + M.LETTER[sel].sends + ' before it decides, and is told nothing about who will see its own pledges. How many saplings will it plant? A plain street plants 57. Slide to your bet (the marigold marker on the bottom bar), then send.';
+        $('bet').value = 57; $('bet-num').textContent = '57'; setBetMark(57);
+      } else {
+        $('betwrap').style.display = 'none'; $('nobetwrap').style.display = '';
+        $('nobet-lead').innerHTML = '<b>Now the next street.</b> ' + (sel === 'after' ? 'The pledges reach it only after it has decided, so it decides on its own.' : 'Nothing reaches it, so it decides on its own.');
+      }
+      showPhase('ph-this');
+    });
+  }
+  function plantNext() {
+    var expected = M.needsBet(cur.letter) ? parseInt($('bet').value, 10) : null;
+    var r = M.plantNext(game, expected);
+    $('b-send').className = 'btn pri dim';
+    growStreet('next', r.nextPledges, r.nextTotal, function () {
+      var w = r.nextWords;
+      $('res-next').innerHTML = '<p><b>What they saw.</b> ' + w.saw + '</p><p><b>What came of it.</b> ' + w.came + '</p>' + (w.bet ? '<p class="betline"><b>Your bet.</b> ' + w.bet + '</p>' : '') + '<p class="paper">' + w.paper + '</p>';
+      var pt = Math.round(r.pairTotal), pp = Math.round(r.plain * 2);
+      $('pairsay').innerHTML = 'These two streets: <b>' + pt + ' saplings</b>. Two plain streets: ' + pp + '. ' + (pt > pp + 2 ? 'Greener.' : pt < pp - 2 ? 'Less green.' : 'About the same.');
+      $('b-nextpair').textContent = game.pairs.length >= C.PAIRS ? 'See the town' : 'Next streets';
+      $('b-send').className = 'btn pri';
+      showPhase('ph-next');
+    });
+  }
+  function nextPair() {
+    if (M.nextPair(game)) { resetLetterPhase(); window.scrollTo(0, 0); } else showEnd();
+  }
+  function showEnd() {
+    var v = M.verdict(game);
+    $('end-head').textContent = v.town >= v.best - 2 ? 'The greenest town there was' : v.town > v.plain + 2 ? 'Greener than a plain town' : 'A plain town, with letters';
+    $('n-you').textContent = v.town; $('n-plain').textContent = v.plain; $('n-best').textContent = v.best;
+    $('end-lines').innerHTML = v.lines.map(function (l) { return '<p>' + l + '</p>'; }).join('');
+    $('end-paper').innerHTML = v.paper.map(function (l) { return '<p>' + l + '</p>'; }).join('');
+    $('end-boundary').textContent = v.boundary;
+    drawTown();
+    showScreen('s-end');
+  }
+  // the twelve streets, small: a plot is a tiny square, green for every sapling in it
+  function drawTown() {
+    var ctx = setupCanvas($('pic-town'), 176); ctx.clearRect(0, 0, W, 176);
+    var sw = 52, sh = 62, gx = (W - 6 * sw) / 5, i, j, p, s, x0, y0, cw = sw / 5, ch = sh / 4;
+    for (i = 0; i < game.pairs.length; i++) {
+      p = game.pairs[i];
+      [p.thisPledges, p.nextPledges].forEach(function (pl, row) {
+        x0 = i * (sw + gx); y0 = row * (sh + 14) + 10;
+        for (j = 0; j < 20; j++) {
+          var cx = x0 + (j % 5) * cw, cy = y0 + Math.floor(j / 5) * ch;
+          ctx.fillStyle = COL.soil; ctx.fillRect(cx + .5, cy + .5, cw - 1, ch - 1);
+          if (pl[j] > 0) { ctx.fillStyle = COL.leaf; var hh = (ch - 2) * pl[j] / 10; ctx.fillRect(cx + 1, cy + ch - 1 - hh, cw - 2, hh); }
+        }
+        ctx.fillStyle = COL.forest; ctx.font = '600 10px Fredoka'; ctx.textAlign = 'center';
+        ctx.fillText(String(Math.round(row === 0 ? p.thisTotal : p.nextTotal)), x0 + sw / 2, y0 + sh + 10);
+      });
+    }
+  }
+
+  // ---- the plain street screen ----------------------------------------------------------------
+  function drawPlain() {
+    var ctx = setupCanvas($('pic-plain'), LABEL_H + BLOCK_H + 2);
+    var pl = M.drawStreet(M.thisStreetMeans('plain'));
+    block(ctx, 0, 'A plain street · nobody is told anything', pl, 20, null);
+    $('tally-plain').innerHTML = tallyHTML([{ id: 'tp', label: 'Saplings' }]);
+    setTally('tp', M.plainTotal());
+  }
+
+  // ---- overlays ---------------------------------------------------------------------------------
+  var ovScroll = 0;
+  function openOv(id) { ovScroll = window.scrollY; $(id).className = 'ov on'; $(id).scrollTop = 0; document.body.className = 'lock'; }
+  function closeOv(id) { $(id).className = 'ov'; document.body.className = ''; window.scrollTo(0, ovScroll); }
+
+  // ---- wiring -----------------------------------------------------------------------------------
+  picCtx = setupCanvas($('pic'), LABEL_H + BLOCK_H + 4 + ROAD_H + 4 + LABEL_H + BLOCK_H + 2);
+  buildEnvs(); drawPlain();
+  $('b-begin').addEventListener('click', function () { showScreen('s-plain'); });
+  $('b-first').addEventListener('click', startGame);
+  $('b-plant').addEventListener('click', plantThis);
+  $('bet').addEventListener('input', function () { $('bet-num').textContent = $('bet').value; setBetMark(parseInt($('bet').value, 10)); });
+  $('b-send').addEventListener('click', plantNext);
+  $('b-nobet').addEventListener('click', plantNext);
+  $('b-nextpair').addEventListener('click', nextPair);
+  $('b-again').addEventListener('click', startGame);
+  ['b-help-start', 'q-play', 'b-help-end'].forEach(function (id) { $(id).addEventListener('click', function () { openOv('help'); }); });
+  $('b-help-close').addEventListener('click', function () { closeOv('help'); });
+  $('b-about').addEventListener('click', function () { openOv('about'); });
+  $('b-about-close').addEventListener('click', function () { closeOv('about'); });
+  window.__game = function () { return { game: game, sel: sel, cur: cur, pic: picState }; };
+})();
+</script>
+</body>
+</html>
