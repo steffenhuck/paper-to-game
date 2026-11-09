@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Carbuccia's Counter</title>
+<meta name="description" content="Paris, 2022. A hundred expectant mothers, a purse of public money, two things to buy: videos or a helper on the phone. Close the gap in childcare places, if you can.">
+<style>
+@font-face{font-family:Barlow;font-weight:400;font-style:normal;src:url(data:font/woff2;base64,/*__F_BARLOW_400__*/) format('woff2')}
+@font-face{font-family:Barlow;font-weight:400;font-style:italic;src:url(data:font/woff2;base64,/*__F_BARLOW_400I__*/) format('woff2')}
+@font-face{font-family:Barlow;font-weight:600;font-style:normal;src:url(data:font/woff2;base64,/*__F_BARLOW_600__*/) format('woff2')}
+@font-face{font-family:BarlowC;font-weight:400;font-style:normal;src:url(data:font/woff2;base64,/*__F_BARLOWC_400__*/) format('woff2')}
+@font-face{font-family:BarlowC;font-weight:600;font-style:normal;src:url(data:font/woff2;base64,/*__F_BARLOWC_600__*/) format('woff2')}
+:root{
+  --wall:#EDE7DC; --wall2:#E2DBCD; --ink:#1B1C20; --led:#FF3B2E; --leddim:#3A2422; --blue:#2242A6; --orange:#E8792B; --ticket:#FFFDF7; --mute:#6E6A62; --rule:#C9C1B1;
+  color-scheme:light;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--wall);color:var(--ink)}
+body.lock{overflow:hidden}
+body{font-family:Barlow,'Helvetica Neue',Arial,sans-serif;font-size:16.5px;line-height:1.42;overflow-x:hidden}
+.wrap{max-width:420px;margin:0 auto;padding:12px 16px 28px}
+.screen{display:none}.screen.on{display:block}
+.caps{font-family:BarlowC,'Arial Narrow',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.08em;font-size:13px;color:var(--mute)}
+h1{font-family:BarlowC,'Arial Narrow',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.02em;font-size:46px;line-height:.95;margin:14px 0 12px}
+p{margin:0 0 10px}
+.aim{font-weight:600;font-size:18px;line-height:1.3;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:10px 0;margin:14px 0}
+.small{font-size:14px;line-height:1.38;color:var(--mute)}
+.topbar{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.topbar .aimline{flex:1;font-weight:600;font-size:14px;line-height:1.28}
+.q{flex:none;width:34px;height:34px;border-radius:4px;border:1.5px solid var(--ink);background:var(--ticket);color:var(--ink);font-family:BarlowC,sans-serif;font-weight:600;font-size:19px;cursor:pointer}
+/* the board */
+.board{background:var(--ink);border-radius:6px;padding:8px 10px 6px;margin:8px 0;display:flex;gap:8px;box-shadow:inset 0 0 0 1px #000, 0 1px 0 #fff8}
+.board .cell{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center}
+.board .lab{font-family:BarlowC,sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.1em;font-size:10.5px;color:#B8AFA3;white-space:nowrap;margin-bottom:3px}
+.board canvas{display:block}
+.board .was{font-family:BarlowC,sans-serif;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:#7D7368;margin-top:2px;white-space:nowrap}
+/* the stairs */
+.legend{display:flex;gap:14px;font-size:13px;margin:6px 0 2px;align-items:center}
+.legend i{display:inline-block;width:12px;height:12px;margin-right:5px;vertical-align:-1px}
+.legend .bl i{background:var(--blue)}.legend .or i{background:var(--orange)}
+.stairs{position:relative;margin:4px 0 6px}
+.stairs canvas{display:block;width:100%}
+.sw{display:flex;gap:4px;margin:6px 0 2px}
+.sw button{font-family:BarlowC,sans-serif;font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;border:1.5px solid var(--ink);background:transparent;color:var(--ink);border-radius:3px;padding:6px 8px 5px;cursor:pointer;flex:1}
+.sw button.on{background:var(--ink);color:var(--wall)}
+.sw button.hide{display:none}
+/* ticket stubs */
+.stub{position:relative;display:block;width:100%;text-align:left;font-family:Barlow,sans-serif;background:var(--ticket);color:var(--ink);border:1.5px solid var(--rule);border-left:none;border-right:none;padding:11px 12px 10px 14px;cursor:pointer;margin:6px 0;
+  box-shadow:0 1px 2px #0002}
+.stub::before,.stub::after{content:"";position:absolute;left:0;right:0;height:5px;background-image:radial-gradient(circle at 5px 0,var(--wall) 3px,transparent 3.5px);background-size:10px 5px;background-repeat:repeat-x}
+.stub::before{top:-1px;background-position:0 -2px}
+.stub::after{bottom:-1px;transform:scaleY(-1);background-position:0 -2px}
+.stub .num{position:absolute;right:12px;top:9px;font-family:BarlowC,sans-serif;font-weight:400;font-size:12px;letter-spacing:.08em;color:var(--mute)}
+.stub .t{font-family:BarlowC,sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:16px;display:block;line-height:1.1}
+.stub .d{display:block;font-size:13.5px;line-height:1.3;color:var(--mute);margin-top:3px}
+.stub.sel{border-color:var(--ink);box-shadow:0 0 0 2px var(--ink) inset}
+.stub.pri{background:var(--ink);color:var(--wall);border-color:var(--ink);text-align:center;padding:14px 12px 13px}
+.stub.pri .t{font-size:18px;letter-spacing:.12em}
+.stub.pri .d{color:#C9C1B1}
+.stub.dim{opacity:.4;pointer-events:none}
+.stub.link{background:transparent;box-shadow:none;border-color:transparent;text-align:center;padding:8px}
+.stub.link::before,.stub.link::after{display:none}
+.stub.link .t{font-size:13px;color:var(--mute)}
+.row2{display:flex;gap:8px}.row2 .stub{flex:1}
+.rowt .stub{padding:9px 12px 8px 14px;margin:5px 0}.rowt .stub .t{padding-right:40px;font-size:15px}.rowt .stub .d{display:inline;margin-left:6px}
+.say{font-size:15.5px;line-height:1.42;margin:8px 0}
+.say b{font-weight:600}
+.result{border-left:3px solid var(--ink);padding:2px 0 2px 12px;margin:10px 0}
+.result p{margin:0 0 8px}
+.result .paper{font-style:italic}
+.verdict p{font-size:17.5px;line-height:1.4;margin:0 0 14px}
+.verdict p.first{font-size:21px;font-weight:600;line-height:1.3}
+.foot{text-align:center;margin:24px 0 4px;font-style:italic;font-size:13.5px;color:var(--mute)}
+.overlay{position:fixed;inset:0;background:var(--wall);overflow-y:auto;z-index:20;display:none}
+.overlay.on{display:block}
+.overlay h2{font-family:BarlowC,sans-serif;font-weight:600;text-transform:uppercase;font-size:30px;margin:8px 0 10px}
+.overlay h3{font-family:BarlowC,sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.08em;font-size:14px;color:var(--mute);margin:18px 0 6px}
+.overlay p,.overlay li{font-size:15.5px}
+.overlay a{color:var(--blue)}
+.fade{animation:fade .45s ease both}@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.hide{display:none!important}
+.steps3{margin:8px 0 2px;padding-left:18px}.steps3 li{margin-bottom:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- START -->
+<section class="screen on" id="s-start">
+  <div class="board"><div class="cell"><div class="lab">Now waiting</div><canvas id="led-start"></canvas><div class="was">mothers, each with a baby on the way</div></div></div>
+  <h1>Carbuccia's<br>Counter</h1>
+  <p>Paris, autumn 2022. A hundred women in a maternity-ward waiting room, each with a baby on the way. Most want a childcare place for it. The town hall gives out the places in June.</p>
+  <p>You hold the fund's purse for four years. Each year you pick a tool, pick whom it goes to, and send it; the year runs, and the counter's board shows what came of it.</p>
+  <p class="aim">Four years and a purse: get the mothers without a degree a place as often as the mothers with one.</p>
+  <button class="stub pri" id="b-begin"><span class="t">Begin</span></button>
+  <button class="stub link" data-help><span class="t">How to play</span></button>
+  <div class="foot">A beta, built from the paper. Builder's review only; the author finishes it.</div>
+</section>
+
+<!-- THE WARD WITH NO HELP -->
+<section class="screen" id="s-ward">
+  <div class="topbar"><div class="aimline">Four years and a purse: get the mothers without a degree a place as often as the mothers with one.</div><button class="q" data-help>?</button></div>
+  <div class="caps">The ward when the fund does nothing</div>
+  <div class="legend"><span class="bl"><i></i>mothers with a degree</span><span class="or"><i></i>mothers without</span></div>
+  <div class="stairs"><canvas id="st-ward"></canvas></div>
+  <div class="board" id="gb-ward"></div>
+  <p class="say">Three steps up to the counter. <b>Wants a place</b>: asked while pregnant. <b>Applied</b>: a year later, sent in the forms. <b>Got a place</b>: the town hall said yes. Each bar is a share: of every hundred mothers in its colour, how many got this far. The darker band inside the top bars: the ones with a <b>crèche</b> place (a daycare centre, the kind most parents want) rather than a childminder.</p>
+  <p class="say">The bars shrink as they climb, and the orange ones shrink faster. The board counts the gap between blue and orange, in mothers per hundred, at the applied step and at the place step. The second number is the one you are here to bring down.</p>
+  <button class="stub pri" id="b-year1"><span class="t">Take the purse: year 1</span></button>
+</section>
+
+<!-- A YEAR -->
+<section class="screen" id="s-year">
+  <div class="topbar"><div class="aimline">Four years and a purse: get the mothers without a degree a place as often as the mothers with one.</div><button class="q" data-help>?</button></div>
+  <div class="board" id="tb">
+    <div class="cell"><div class="lab">Year</div><canvas id="led-year"></canvas><div class="was">of four</div></div>
+    <div class="cell"><div class="lab">Purse, €</div><canvas id="led-purse"></canvas><div class="was" id="purse-was">to spend or keep</div></div>
+    <div class="cell"><div class="lab">This order, €</div><canvas id="led-cost"></canvas><div class="was" id="cost-was">nothing picked</div></div>
+  </div>
+  <div class="sw" id="view-sw"><button data-view="degree" class="on">By degree</button><button data-view="birthplace">By birthplace</button><button data-view="target" class="hide">The ones you called</button></div>
+  <div class="legend" id="legend"><span class="bl"><i></i>mothers with a degree</span><span class="or"><i></i>mothers without</span></div>
+  <div class="stairs"><canvas id="st-year"></canvas></div>
+  <div class="board" id="gb-year"></div>
+
+  <div id="order">
+    <p class="say" id="order-say">Pick a tool, then whom it goes to. The bars stand where they would with nothing; after <b>Send</b> the year runs and they move. A dotted line shows which mothers an order reaches.</p>
+    <div class="row2">
+      <button class="stub" data-tool="videos"><span class="t">Videos</span><span class="d">€5.50 a mother. Five text messages with short films on where to apply and how, and reminders.</span></button>
+      <button class="stub" data-tool="calls"><span class="t">Calls</span><span class="d">€55 a mother. The videos, then a helper phones her, works out what fits, and fills in the forms with her.</span></button>
+    </div>
+    <div class="caps" style="margin-top:8px">To whom</div>
+    <div class="rowt">
+      <button class="stub" data-target="all"><span class="num">100 mothers</span><span class="t">Everyone</span></button>
+      <button class="stub" data-target="nodegree"><span class="num">39 mothers</span><span class="t">Without a degree</span><span class="d">the orange bars</span></button>
+      <button class="stub" data-target="abroad"><span class="num">46 mothers</span><span class="t">Born abroad</span><span class="d">in both colours</span></button>
+      <button class="stub" data-target="lowknow"><span class="num">15 mothers</span><span class="t">Know least about crèches</span><span class="d">mostly orange</span></button>
+      <button class="stub" data-target="inactive"><span class="num">30 mothers</span><span class="t">Not in work</span><span class="d">mostly orange</span></button>
+    </div>
+    <p class="say" id="cost-say"></p>
+    <button class="stub pri dim" id="b-send"><span class="t">Send</span><span class="d">the year runs</span></button>
+    <button class="stub link" id="b-save"><span class="t">Send nothing this year and keep the purse</span></button>
+  </div>
+
+  <div id="result" class="hide">
+    <div class="result"><p id="r-what"></p><p id="r-steps"></p><p class="paper" id="r-paper"></p></div>
+    <button class="stub pri" id="b-next"><span class="t">Next year</span></button>
+  </div>
+</section>
+
+<!-- VERDICT -->
+<section class="screen" id="s-verdict">
+  <div class="caps">After four years</div>
+  <div class="board" id="gb-verdict" style="flex-direction:column;gap:10px"></div>
+  <div class="verdict" id="v-lines"></div>
+  <button class="stub pri" id="b-again"><span class="t">Another four years</span></button>
+  <button class="stub link" data-help><span class="t">How to play</span></button>
+  <button class="stub link" data-about><span class="t">About the paper and this game</span></button>
+  <div class="foot">A beta, built from the paper. Builder's review only; the author finishes it.</div>
+</section>
+
+</div>
+
+<!-- HELP -->
+<div class="overlay" id="help"><div class="wrap">
+  <div class="caps">Carbuccia's Counter</div>
+  <h2>How to play</h2>
+  <p class="aim">Four years and a purse: get the mothers without a degree a place as often as the mothers with one.</p>
+  <h3>The ward</h3>
+  <p>A hundred expectant mothers; blue bars are the mothers with a degree, orange the mothers without. Three steps up to the counter: <b>Wants a place</b>, <b>Applied</b>, <b>Got a place</b>. Each bar is a share: of every hundred mothers in its colour, how many got this far. The thin outline behind each bar is the ghost: where the bar stands when the fund does nothing. On the top step a darker band inside a bar is the mothers who got a <b>crèche</b> place (a daycare centre, the kind most parents want) rather than a childminder.</p>
+  <h3>The board</h3>
+  <p>Red numbers are the counter's. On the top board: the year, the purse in euros, and the cost of the order you are picking. Under the stairs: the gap between blue and orange at the applied step and at the place step, in mothers per hundred, with the no-help gap small beneath. The place gap is the aim.</p>
+  <h3>Each year</h3>
+  <ol class="steps3">
+    <li>Pick a tool. <b>Videos</b>: five text messages with short films and reminders, €5.50 a mother. <b>Calls</b>: the videos, then a helper on the phone who works out what fits and fills in the forms with her, €55 a mother.</li>
+    <li>Pick whom it goes to: everyone, the mothers without a degree, the mothers born abroad, the fifteen who know least about crèches, or the thirty not in work. A dotted line shows which bars the order reaches. The cost lights on the board; the purse is €3,000 a year, and what you do not spend stays for next year.</li>
+    <li><b>Send</b>. The year runs: messages go out or phones ring (about half pick up), the bars move, the shutter opens in June, the places are given out, and the board counts. The game says what you sent, what the steps did, and what the paper found. Or send nothing and keep the purse.</li>
+  </ol>
+  <p>The switch above the stairs shows the same ward by degree, by birthplace (blue born in France, orange born abroad), or the mothers you called against the rest.</p>
+  <h3>The end</h3>
+  <p>After year four the board shows the four years, and the verdict says what became of the two gaps on your path and what the paper found. There is no score.</p>
+  <button class="stub pri" id="b-help-close"><span class="t">Back</span></button>
+</div></div>
+
+<!-- ABOUT -->
+<div class="overlay" id="about"><div class="wrap">
+/*__ABOUT__*/
+  <button class="stub pri" id="b-about-close"><span class="t">Back</span></button>
+</div></div>
+
+<script>
+/*__MECHANISM__*/
+</script>
+<script>
+(function () {
+  'use strict';
+  var C = MECH.CONFIG;
+  var COL = { blue: '#2242A6', orange: '#E8792B', ink: '#1B1C20', wall: '#EDE7DC', led: '#FF3B2E', leddim: '#3A2422', mute: '#6E6A62', ticket: '#FFFDF7' };
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var DPR = Math.min(2, window.devicePixelRatio || 1);
+
+  // ---------- seven-segment digits ----------
+  var SEG = { '0': 'abcdef', '1': 'bc', '2': 'abdeg', '3': 'abcdg', '4': 'bcfg', '5': 'acdfg', '6': 'acdefg', '7': 'abc', '8': 'abcdefg', '9': 'abcdfg', '-': 'g', ' ': '' };
+  function segPath(ctx, x, y, w, h, t, s) {
+    // segment s of a digit in box (x,y,w,h), thickness t; hexagonal ends
+    var hw = w - t, hh = (h - t) / 2, g = t * 0.12;
+    function hor(cx, cy) { ctx.moveTo(cx - hw / 2 + g, cy); ctx.lineTo(cx - hw / 2 + t / 2 + g, cy - t / 2); ctx.lineTo(cx + hw / 2 - t / 2 - g, cy - t / 2); ctx.lineTo(cx + hw / 2 - g, cy); ctx.lineTo(cx + hw / 2 - t / 2 - g, cy + t / 2); ctx.lineTo(cx - hw / 2 + t / 2 + g, cy + t / 2); ctx.closePath(); }
+    function ver(cx, cy) { ctx.moveTo(cx, cy - hh / 2 + g); ctx.lineTo(cx + t / 2, cy - hh / 2 + t / 2 + g); ctx.lineTo(cx + t / 2, cy + hh / 2 - t / 2 - g); ctx.lineTo(cx, cy + hh / 2 - g); ctx.lineTo(cx - t / 2, cy + hh / 2 - t / 2 - g); ctx.lineTo(cx - t / 2, cy - hh / 2 + t / 2 + g); ctx.closePath(); }
+    var cx = x + w / 2, top = y + t / 2, mid = y + h / 2, bot = y + h - t / 2, lx = x + t / 2, rx = x + w - t / 2;
+    ctx.beginPath();
+    if (s === 'a') hor(cx, top); if (s === 'd') hor(cx, bot); if (s === 'g') hor(cx, mid);
+    if (s === 'b') ver(rx, (top + mid) / 2); if (s === 'c') ver(rx, (mid + bot) / 2);
+    if (s === 'f') ver(lx, (top + mid) / 2); if (s === 'e') ver(lx, (mid + bot) / 2);
+    ctx.fill();
+  }
+  // draws str right-aligned into canvas sized to fit; h = digit height in css px
+  function led(canvas, str, h, opts) {
+    opts = opts || {};
+    var w = h * 0.56, gap = h * 0.16, t = h * 0.15, pad = h * 0.12, n = str.length;
+    var W = n * w + (n - 1) * gap + pad * 2, H = h + pad * 2;
+    canvas.width = Math.round(W * DPR); canvas.height = Math.round(H * DPR); canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+    var ctx = canvas.getContext('2d'); ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    for (var i = 0; i < n; i++) {
+      var ch = str[i], lit = SEG[ch] || '', x = pad + i * (w + gap), y = pad;
+      if (ch === ' ') continue; // a blank: nothing lit, nothing dim
+      'abcdefg'.split('').forEach(function (s) {
+        ctx.fillStyle = lit.indexOf(s) >= 0 ? (opts.color || COL.led) : (opts.dim || COL.leddim);
+        segPath(ctx, x, y, w, h, t, s);
+      });
+      if (lit && opts.glow !== false) { ctx.save(); ctx.globalAlpha = 0.18; ctx.fillStyle = opts.color || COL.led; ctx.shadowBlur = h * 0.3; ctx.shadowColor = opts.color || COL.led; 'abcdefg'.split('').forEach(function (s) { if (lit.indexOf(s) >= 0) segPath(ctx, x, y, w, h, t, s); }); ctx.restore(); }
+    }
+  }
+  function padN(n, len) { var s = String(Math.round(n)); while (s.length < len) s = ' ' + s; return s; }
+
+  // ---------- the gap board ----------
+  function gapBoard(el, cur, was, labels) {
+    // cur, was: {apply, access}; labels: ['Applied gap','Place gap'] or for the target view
+    el.innerHTML = '';
+    [['apply', labels[0]], ['access', labels[1]]].forEach(function (k) {
+      var cell = document.createElement('div'); cell.className = 'cell';
+      cell.innerHTML = '<div class="lab">' + k[1] + '</div><canvas></canvas><div class="was"></div>';
+      el.appendChild(cell);
+      led($('canvas', cell), padN(cur[k[0]], 2), 34);
+      var wc = $('.was', cell);
+      if (was) { wc.innerHTML = (labels[2] || 'with nothing') + ' <canvas></canvas>'; led($('canvas', wc), padN(was[k[0]], 2), 11, { color: '#8A6E66', dim: '#2A2220', glow: false }); $('canvas', wc).style.verticalAlign = 'middle'; }
+      else wc.textContent = labels[2] || 'mothers per hundred';
+    });
+  }
+
+  // ---------- the stairs ----------
+  var ST = { W: 348, H: 300, BAR: 128, RISE: 34, stepW: 106, x0: 12 };
+  function stairs(canvas, S) {
+    // S: {a:{wants,apply,access,dcAccess}, b:{...}, ghostA, ghostB, shutter 0..1 (1 = open), reach:{a:cov,b:cov}|null, line:{n,picked,tool}|null, names:[a,b]}
+    var W = ST.W, H = ST.H;
+    var cssW = canvas.parentNode.clientWidth || W; var scale = cssW / W;
+    canvas.width = Math.round(W * DPR * scale); canvas.height = Math.round(H * DPR * scale);
+    canvas.style.width = cssW + 'px'; canvas.style.height = Math.round(H * scale) + 'px';
+    var ctx = canvas.getContext('2d'); ctx.setTransform(DPR * scale, 0, 0, DPR * scale, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    // wall and floor
+    ctx.fillStyle = '#E4DDCF'; ctx.fillRect(0, 0, W, H);
+    var treadY = [H - 24, H - 24 - ST.RISE, H - 24 - 2 * ST.RISE];
+    // the counter: window at top right, shutter
+    var cx = W - 108, cy = 10, cw = 96, chh = treadY[2] - ST.BAR - 22 - cy;
+    ctx.fillStyle = COL.ink; ctx.fillRect(cx - 4, cy - 4, cw + 8, chh + 8);
+    ctx.fillStyle = '#F6F2EA'; ctx.fillRect(cx, cy, cw, chh);
+    // what is behind the window: a desk line and a stamp
+    ctx.fillStyle = '#D8D0C0'; ctx.fillRect(cx, cy + chh - 12, cw, 12);
+    ctx.fillStyle = COL.blue; ctx.globalAlpha = .9; ctx.fillRect(cx + cw - 30, cy + chh - 30, 18, 14); ctx.globalAlpha = 1;
+    // shutter
+    var sh = Math.max(0, 1 - (S.shutter == null ? 0 : S.shutter));
+    ctx.fillStyle = '#8E867A'; ctx.fillRect(cx, cy, cw, chh * sh);
+    ctx.strokeStyle = '#5E584F'; ctx.lineWidth = 1;
+    for (var yy = cy + 6; yy < cy + chh * sh - 2; yy += 7) { ctx.beginPath(); ctx.moveTo(cx, yy); ctx.lineTo(cx + cw, yy); ctx.stroke(); }
+    ctx.fillStyle = COL.ink; ctx.font = '600 11px BarlowC, Arial Narrow, sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText(sh > 0.5 ? 'CLOSED' : 'OPEN', cx + cw / 2, cy + chh + 18);
+    ctx.font = '400 10px BarlowC, Arial Narrow, sans-serif'; ctx.fillStyle = COL.mute;
+    ctx.fillText('PLACES · TOWN HALL', cx + cw / 2, cy + chh + 30);
+    // steps
+    var labels = ['WANTS A PLACE', 'APPLIED', 'GOT A PLACE'];
+    for (var i = 0; i < 3; i++) {
+      var x = ST.x0 + i * ST.stepW, ty = treadY[i];
+      ctx.fillStyle = '#D5CDBD'; ctx.fillRect(x, ty, W - x - 8, H - ty); // the step block, extends right
+      ctx.fillStyle = '#BDB4A2'; ctx.fillRect(x, ty, W - x - 8, 3);
+      ctx.fillStyle = COL.ink; ctx.font = '600 11px BarlowC, Arial Narrow, sans-serif'; ctx.textAlign = 'left';
+      ctx.fillText(labels[i], x + 4, ty + 15);
+    }
+    // bars
+    var keys = ['wants', 'apply', 'access'];
+    var cols = [COL.blue, COL.orange];
+    ['a', 'b'].forEach(function (g, gi) {
+      var v = S[g], ghost = S['ghost' + g.toUpperCase()];
+      for (var i = 0; i < 3; i++) {
+        var x = ST.x0 + i * ST.stepW + 14 + gi * 44, bw = 34, ty = treadY[i];
+        var hg = ghost ? ghost[keys[i]] * ST.BAR : null, hv = v[keys[i]] * ST.BAR;
+        if (hg != null) { ctx.setLineDash([3, 3]); ctx.strokeStyle = COL.ink; ctx.lineWidth = 1; ctx.globalAlpha = .55; ctx.strokeRect(x + .5, ty - hg + .5, bw - 1, hg - 1); ctx.globalAlpha = 1; ctx.setLineDash([]); }
+        ctx.fillStyle = cols[gi]; ctx.fillRect(x, ty - hv, bw, hv);
+        if (i === 2 && v.dcAccess != null) { var hd = v.dcAccess * ST.BAR; ctx.fillStyle = 'rgba(27,28,32,.38)'; ctx.fillRect(x, ty - hd, bw, hd); }
+        // reach: a dotted frame round the bars an order reaches, hatched for a part
+        if (S.reach && S.reach[g] > 0) {
+          var cov = S.reach[g], top = ty - Math.max(hv, hg || 0) - 6;
+          ctx.setLineDash([2, 2]); ctx.strokeStyle = COL.ink; ctx.lineWidth = 1.5;
+          ctx.strokeRect(x - 4, top, bw + 8, ty - top + 2); ctx.setLineDash([]);
+          if (cov < 0.999) { // a hatched band: the share of this bar the order reaches
+            var hb = hv * cov; ctx.save(); ctx.beginPath(); ctx.rect(x, ty - hb, bw, hb); ctx.clip();
+            ctx.strokeStyle = 'rgba(255,255,255,.75)'; ctx.lineWidth = 2;
+            for (var d = -40; d < bw + 40; d += 7) { ctx.beginPath(); ctx.moveTo(x + d, ty); ctx.lineTo(x + d + 40, ty - 40); ctx.stroke(); }
+            ctx.restore();
+          }
+        }
+      }
+    });
+    // the phone line / message line, over the first step
+    if (S.line && S.line.n > 0) {
+      var lx = ST.x0 + 4, ly = 22, lw = 200 * (S.line.n / C.WARD), p = S.line.progress == null ? 1 : S.line.progress;
+      ctx.font = '600 11px BarlowC, Arial Narrow, sans-serif'; ctx.textAlign = 'left'; ctx.fillStyle = COL.ink;
+      ctx.fillText(S.line.tool === 'calls' ? 'PHONED' : 'MESSAGED', lx, ly - 6);
+      ctx.fillStyle = '#F6F2EA'; ctx.fillRect(lx, ly, 200, 10);
+      ctx.strokeStyle = COL.ink; ctx.lineWidth = 1; ctx.strokeRect(lx + .5, ly + .5, 199, 9);
+      ctx.fillStyle = S.line.tool === 'calls' ? '#B8AFA3' : COL.ink; ctx.fillRect(lx, ly, lw * p, 10);
+      if (S.line.tool === 'calls') {
+        var pw = 200 * (S.line.picked / C.WARD) * p; ctx.fillStyle = COL.ink; ctx.fillRect(lx, ly, pw, 10);
+        ctx.fillStyle = COL.mute; ctx.font = '400 10px BarlowC, Arial Narrow, sans-serif'; ctx.fillText('dark: picked up', lx, ly + 22);
+      } else { ctx.fillStyle = COL.mute; ctx.font = '400 10px BarlowC, Arial Narrow, sans-serif'; ctx.fillText('of a hundred', lx, ly + 22); }
+    }
+    // of every hundred
+    ctx.save(); ctx.translate(8, treadY[0] - ST.BAR / 2); ctx.rotate(-Math.PI / 2); ctx.font = '400 10px BarlowC, Arial Narrow, sans-serif'; ctx.fillStyle = COL.mute; ctx.textAlign = 'center'; ctx.fillText('OF EVERY HUNDRED', 0, 0); ctx.restore();
+  }
+
+  // ---------- state ----------
+  var game, phase = 'start', sel = { tool: null, target: null }, view = 'degree', last = null, animT = null;
+  var LEG = { degree: ['mothers with a degree', 'mothers without'], birthplace: ['mothers born in France', 'mothers born abroad'], target: ['the ones you called', 'the rest'] };
+  function groupsFor(v, order) {
+    if (v === 'target' && order) return ['target', 'rest'];
+    var c = MECH.CUTS[v]; return [c.a, c.b];
+  }
+  function lad(g, order) { if (g === 'target') return MECH.ladder(order.target, order); if (g === 'rest') return MECH.ladder('rest-' + order.target, null); return MECH.ladder(g, order); }
+  function ctl(g, order) { if (g === 'target') return MECH.ladder(order.target, null); if (g === 'rest') return MECH.ladder('rest-' + order.target, null); return MECH.ladder(g, null); }
+  function lerpL(A, B, t) { var o = {}; Object.keys(A).forEach(function (k) { o[k] = A[k] + (B[k] - A[k]) * t; }); return o; }
+
+  function show(id) { $$('.screen').forEach(function (s) { s.classList.remove('on'); }); var s = $('#' + id); s.classList.add('on'); s.classList.remove('fade'); void s.offsetWidth; s.classList.add('fade'); window.scrollTo(0, 0); }
+
+  // ---------- the ward (year 0) ----------
+  function drawWard() {
+    var A = MECH.ladder('degree', null), B = MECH.ladder('nodegree', null);
+    stairs($('#st-ward'), { a: A, b: B, shutter: 0, names: ['degree', 'nodegree'] });
+    var g = MECH.gaps('degree', null);
+    gapBoard($('#gb-ward'), g, null, ['Applied: gap', 'Got a place: gap', 'blue minus orange, per hundred']);
+  }
+
+  // ---------- a year ----------
+  function topBoard() {
+    led($('#led-year'), String(game.year), 30);
+    led($('#led-purse'), padN(game.purse, 4), 30); $('#purse-was').textContent = 'to spend or keep';
+    var o = (sel.tool && sel.target) ? { tool: sel.tool, target: sel.target } : null;
+    var c = MECH.cost(o);
+    led($('#led-cost'), o ? padN(c, 4) : '    ', 30, o && c > game.purse ? { color: '#FFB199' } : {});
+    $('#cost-was').textContent = !o ? (sel.tool || sel.target ? 'pick the other half' : 'nothing picked') : (c > game.purse ? 'more than the purse' : 'fits the purse');
+  }
+  function drawYear(progress) {
+    // progress: null (order phase: fills at ghost), or 0..1 during the run, or 1 after
+    var order = last ? last.order : null;
+    var gs = groupsFor(view, order);
+    var A0 = ctl(gs[0], order), B0 = ctl(gs[1], order);
+    var A1 = order ? lad(gs[0], order) : A0, B1 = order ? lad(gs[1], order) : B0;
+    var p = progress == null ? 0 : progress;
+    // phases of the run: 0-.22 line; .22-.5 applied bars; .5-.62 shutter opens; .62-.9 place bars; .9-1 shutter closes
+    var tA = clamp((p - .22) / .28), tP = clamp((p - .62) / .28), shut = p < .5 ? 0 : p < .62 ? (p - .5) / .12 : p < .9 ? 1 : 1 - (p - .9) / .1;
+    if (progress == null) shut = 0;
+    var A = { wants: A1.wants, apply: A0.apply + (A1.apply - A0.apply) * tA, access: A0.access + (A1.access - A0.access) * tP, dcAccess: A0.dcAccess + (A1.dcAccess - A0.dcAccess) * tP };
+    var B = { wants: B1.wants, apply: B0.apply + (B1.apply - B0.apply) * tA, access: B0.access + (B1.access - B0.access) * tP, dcAccess: B0.dcAccess + (B1.dcAccess - B0.dcAccess) * tP };
+    var reach = null;
+    if (progress == null && sel.target && view !== 'target') { reach = { a: MECH.coverage(sel.target, gs[0]), b: MECH.coverage(sel.target, gs[1]) }; }
+    var line = null;
+    if (order && progress != null) line = { n: last.sent, picked: last.pickedUp, tool: order.tool, progress: clamp(p / .22) };
+    stairs($('#st-year'), { a: A, b: B, ghostA: A0, ghostB: B0, shutter: shut, reach: reach, line: line });
+    // the gap board
+    var cur, was, labels;
+    if (view === 'target' && order) {
+      var tA2 = { apply: Math.round(A.apply * 100), access: Math.round(A.access * 100) };
+      cur = tA2; was = { apply: Math.round(A0.apply * 100), access: Math.round(A0.access * 100) };
+      labels = ['Of the ones you called: applied', 'Got a place', 'with nothing'];
+    } else {
+      var gA = Math.round((A.apply - B.apply) * 100), gP = Math.round((A.access - B.access) * 100);
+      cur = { apply: gA, access: gP }; was = MECH.gaps(view, null); labels = ['Applied: gap', 'Got a place: gap', 'with nothing'];
+    }
+    gapBoard($('#gb-year'), cur, (progress == null && !order) ? null : was, progress == null && !order ? labels.slice(0, 2).concat(['blue minus orange, per hundred']) : labels);
+    var L = LEG[view]; $('#legend').innerHTML = '<span class="bl"><i></i>' + L[0] + '</span><span class="or"><i></i>' + L[1] + '</span>';
+  }
+  function clamp(x) { return Math.max(0, Math.min(1, x)); }
+
+  function startYear() {
+    sel = { tool: null, target: null }; last = null; phase = 'order';
+    if (view === 'target') view = 'degree';
+    $$('#view-sw button').forEach(function (b) { b.classList.toggle('on', b.dataset.view === view); });
+    $('#view-sw [data-view=target]').classList.add('hide');
+    $$('.stub[data-tool],.stub[data-target]').forEach(function (b) { b.classList.remove('sel'); });
+    $('#order').classList.remove('hide'); $('#result').classList.add('hide');
+    $('#b-send').classList.add('dim');
+    $('#cost-say').textContent = '';
+    show('s-year'); topBoard(); drawYear(null);
+  }
+  function pick() {
+    $$('.stub[data-tool]').forEach(function (b) { b.classList.toggle('sel', b.dataset.tool === sel.tool); });
+    $$('.stub[data-target]').forEach(function (b) { b.classList.toggle('sel', b.dataset.target === sel.target); });
+    topBoard(); drawYear(null);
+    var o = (sel.tool && sel.target) ? { tool: sel.tool, target: sel.target } : null;
+    var ok = o && MECH.canAfford(game, o);
+    $('#b-send').classList.toggle('dim', !ok);
+    var say = '';
+    if (o) {
+      var n = MECH.count(o.target);
+      say = (o.tool === 'videos' ? 'Videos to ' : 'Calls to ') + (o.target === 'all' ? 'all ' + n + ' mothers' : 'the ' + n + ' ' + MECH.GROUP_NAME[o.target]) + '. ';
+      say += ok ? 'The board shows the cost against the purse. Send, and the year runs.' : 'That is more than the purse holds this year: pick a smaller group, a cheaper tool, or save.';
+    } else if (sel.tool || sel.target) say = sel.tool ? 'Now pick whom it goes to.' : 'Now pick a tool.';
+    $('#cost-say').textContent = say;
+  }
+  function send(order) {
+    if (phase !== 'order') return;
+    if (order && !MECH.canAfford(game, order)) return;
+    phase = 'running';
+    $('#order').classList.add('hide');
+    last = MECH.runYear(game, order);
+    var t0 = null, DUR = order ? 2600 : 900;
+    function frame(ts) {
+      if (t0 == null) t0 = ts; var p = Math.min(1, (ts - t0) / DUR);
+      drawYear(order ? p : 1);
+      if (p < 1) animT = requestAnimationFrame(frame); else finishYear();
+    }
+    animT = requestAnimationFrame(frame);
+  }
+  function finishYear() {
+    phase = 'result';
+    $('#r-what').textContent = last.words.what; $('#r-steps').textContent = last.words.steps; $('#r-paper').textContent = last.words.paper;
+    $('#r-paper').classList.toggle('hide', !last.words.paper);
+    $('#result').classList.remove('hide');
+    $('#b-next').querySelector('.t').textContent = game.done ? 'The verdict' : 'Next year';
+    if (last.order && last.order.target !== 'all') $('#view-sw [data-view=target]').classList.remove('hide');
+    led($('#led-purse'), padN(last.purseAfter, 4), 30); $('#purse-was').textContent = 'left after this order';
+    led($('#led-cost'), padN(last.cost, 4), 30); $('#cost-was').textContent = last.order ? 'spent' : 'nothing sent';
+  }
+  function setView(v) {
+    view = v; $$('#view-sw button').forEach(function (b) { b.classList.toggle('on', b.dataset.view === v); });
+    drawYear(phase === 'order' ? null : 1);
+  }
+  // ---------- the verdict ----------
+  function showVerdict() {
+    var V = MECH.verdict(game);
+    var el = $('#gb-verdict'); el.innerHTML = '';
+    var g0 = V.startGaps;
+    var rows = [['Applied: gap', 'apply'], ['Got a place: gap', 'access']];
+    rows.forEach(function (r) {
+      var cell = document.createElement('div'); cell.className = 'cell'; cell.style.alignItems = 'stretch';
+      var seq = [g0[r[1]]].concat(game.results.map(function (x) { return x.gaps.degree[r[1]]; }));
+      cell.style.alignItems = 'center';
+      cell.innerHTML = '<div class="lab">' + r[0] + ', by degree</div><canvas></canvas><div class="was">no help &nbsp;·&nbsp; year 1 &nbsp;·&nbsp; 2 &nbsp;·&nbsp; 3 &nbsp;·&nbsp; 4</div>';
+      el.appendChild(cell);
+      led($('canvas', cell), seq.map(function (n) { return padN(n, 2); }).join(' '), 24);
+    });
+    var lines = $('#v-lines'); lines.innerHTML = '';
+    V.lines.forEach(function (t, i) { var p = document.createElement('p'); if (i === 0) p.className = 'first'; p.textContent = t; lines.appendChild(p); });
+    show('s-verdict');
+  }
+
+  // ---------- wiring ----------
+  $('#b-begin').addEventListener('click', function () { game = MECH.newGame(); view = 'degree'; show('s-ward'); drawWard(); });
+  $('#b-year1').addEventListener('click', startYear);
+  $$('.stub[data-tool]').forEach(function (b) { b.addEventListener('click', function () { if (phase !== 'order') return; sel.tool = b.dataset.tool; pick(); }); });
+  $$('.stub[data-target]').forEach(function (b) { b.addEventListener('click', function () { if (phase !== 'order') return; sel.target = b.dataset.target; pick(); }); });
+  $('#b-send').addEventListener('click', function () { if (sel.tool && sel.target) send({ tool: sel.tool, target: sel.target }); });
+  $('#b-save').addEventListener('click', function () { send(null); });
+  $('#b-next').addEventListener('click', function () { if (phase !== 'result') return; if (game.done) showVerdict(); else startYear(); });
+  $$('#view-sw button').forEach(function (b) { b.addEventListener('click', function () { setView(b.dataset.view); }); });
+  $('#b-again').addEventListener('click', function () { game = MECH.newGame(); view = 'degree'; show('s-ward'); drawWard(); });
+  function openOv(id) { $('#' + id).classList.add('on'); $('#' + id).scrollTop = 0; document.body.classList.add('lock'); }
+  function closeOv(id) { $('#' + id).classList.remove('on'); document.body.classList.remove('lock'); }
+  $$('[data-help]').forEach(function (b) { b.addEventListener('click', function () { openOv('help'); }); });
+  $('#b-help-close').addEventListener('click', function () { closeOv('help'); });
+  $$('[data-about]').forEach(function (b) { b.addEventListener('click', function () { openOv('about'); }); });
+  $('#b-about-close').addEventListener('click', function () { closeOv('about'); });
+  window.addEventListener('resize', function () { if ($('#s-ward').classList.contains('on')) drawWard(); if ($('#s-year').classList.contains('on')) drawYear(phase === 'order' ? null : 1); });
+
+  led($('#led-start'), '100', 44);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { led($('#led-start'), '100', 44); if ($('#s-ward').classList.contains('on')) drawWard(); });
+  window.__game = function () { return { game: game, phase: phase, sel: sel, view: view, last: last }; };
+})();
+</script>
+</body>
+</html>

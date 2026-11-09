@@ -1,0 +1,82 @@
+PASS cut degree: shares sum to one  — 0.61 + 0.39
+PASS control wants by degree averages to Table 2 (0.81) within 0.02  — 0.808
+PASS control apply by degree averages to Table 2 (0.75) within 0.02  — 0.746
+PASS control access by degree averages to Table 2 (0.57) within 0.02  — 0.561
+PASS control dcApply by degree averages to Table 2 (0.59) within 0.02  — 0.586
+PASS control dcAccess by degree averages to Table 2 (0.21) within 0.02  — 0.214
+PASS cut birthplace: shares sum to one  — 0.54 + 0.46
+PASS control wants by birthplace averages to Table 2 (0.81) within 0.02  — 0.802
+PASS control apply by birthplace averages to Table 2 (0.75) within 0.02  — 0.756
+PASS control access by birthplace averages to Table 2 (0.57) within 0.02  — 0.567
+PASS control dcApply by birthplace averages to Table 2 (0.59) within 0.02  — 0.598
+PASS control dcAccess by birthplace averages to Table 2 (0.21) within 0.02  — 0.217
+PASS videos apply: point -0.01 inside its SCI [-0.06,0.04] and the SCI includes 0
+PASS videos apply: the SCI rules out effects beyond ±0.08
+PASS videos apply: played as zero
+PASS videos access: point -0.02 inside its SCI [-0.08,0.04] and the SCI includes 0
+PASS videos access: the SCI rules out effects beyond ±0.08
+PASS videos access: played as zero
+PASS videos dcApply: point 0.01 inside its SCI [-0.06,0.07] and the SCI includes 0
+PASS videos dcApply: the SCI rules out effects beyond ±0.08
+PASS videos dcApply: played as zero
+PASS videos dcAccess: point -0.01 inside its SCI [-0.07,0.05] and the SCI includes 0
+PASS videos dcAccess: the SCI rules out effects beyond ±0.08
+PASS videos dcAccess: played as zero
+PASS videos: degree ladder equals the ward with nothing
+PASS videos: nodegree ladder equals the ward with nothing
+PASS videos: france ladder equals the ward with nothing
+PASS videos: abroad ladder equals the ward with nothing
+PASS calls to all, apply by degree: weighted ITT 0.041 within 0.02 of Table 2 (0.04)
+PASS calls to all, access by degree: weighted ITT 0.012 within 0.02 of Table 2 (0.02)
+PASS calls to all, dcApply by degree: weighted ITT 0.082 within 0.02 of Table 2 (0.08)
+PASS calls to all, dcAccess by degree: weighted ITT 0.049 within 0.02 of Table 2 (0.05)
+PASS calls to all, apply by birthplace: weighted ITT 0.041 within 0.02 of Table 2 (0.04)
+PASS calls to all, access by birthplace: weighted ITT 0.021 within 0.02 of Table 2 (0.02)
+PASS calls to all, dcApply by birthplace: weighted ITT 0.074 within 0.02 of Table 2 (0.08)
+PASS calls to all, dcAccess by birthplace: weighted ITT 0.055 within 0.02 of Table 2 (0.05)
+PASS ATT apply = ITT / 0.52 = 0.077 within 0.015 of ED Table 2 (0.08)
+PASS ATT access = ITT / 0.52 = 0.038 within 0.015 of ED Table 2 (0.03)
+PASS ATT dcApply = ITT / 0.52 = 0.154 within 0.015 of ED Table 2 (0.15)
+PASS ATT dcAccess = ITT / 0.52 = 0.096 within 0.015 of ED Table 2 (0.1)
+PASS low-SES application ATT 0.17 × 0.52 ≈ ITT 0.09  — 0.088
+PASS migrant application ATT 0.15 × 0.52 ≈ ITT 0.09  — 0.078
+PASS low knowledge: derived ITT apply ≈ 0.22 (Fig. 5)  — 0.218
+PASS low knowledge: derived ITT access ≈ 0.25 (Fig. 5)  — 0.250
+PASS inactive: derived ITT apply ≈ 0.15 (Fig. 6)  — 0.166
+PASS calls to no-degree: their application share 0.60 → 0.69 (ED Table 3)  — 0.690
+PASS calls to no-degree: their place share 0.36 → 0.39 (ED Table 3)  — 0.390
+PASS calls to no-degree: mothers with a degree untouched
+PASS application gap 24 → 15 in a hundred  — 24 → 15
+PASS place gap 33 → 30 in a hundred  — 33 → 30
+PASS complier application gap under 0.10 ("nearly closed")  — 0.070
+PASS calls to all: degree crèche places 0.23 → 0.31 (ED Table 4)  — 0.310
+PASS calls to all: no-degree crèche places unchanged at 0.19 (ED Table 4)  — 0.190
+PASS cross-shares agree: share of abroad without a degree  — 0.551 vs 0.55
+PASS coverage(all, g) = 1 and coverage(nodegree, degree) = 0
+PASS rest of ward outside lowknow reconstructs Table 2 apply  — 0.750
+PASS rest of ward outside inactive reconstructs Table 2 apply  — 0.750
+PASS rest of ward outside nodegree reconstructs Table 2 apply  — 0.750
+PASS rest of ward outside abroad reconstructs Table 2 apply  — 0.750
+PASS all 11 orders × 7 groups keep crèche ≤ place ≤ applied ≤ 1
+PASS videos to all cost €550
+PASS calls to all cost €5,500
+PASS calls to the 39 without a degree cost €2,145
+PASS year 1: calls to all unaffordable, calls to no-degree affordable
+PASS year 2 after saving: calls to all affordable  — purse 6000
+PASS four years end the game
+PASS verdict has four lines and the spend  — 6875
+PASS no single order brings the place gap below 25 in a hundred, under any cross-shares tried  — floor 26
+PASS videos never move either gap by 1.5 or more
+PASS only calls narrow the application gap by 5 or more
+PASS upper bound of the no-degree place effect (SCI +0.15, ED Table 3) would leave a gap of about 18  — 18
+
+Play it in numbers: the gap by degree (mothers per hundred) after each year, applications / places; start 24 / 33
+  videos every year                           24 / 33   24 / 33   24 / 33   24 / 33   spent €2200
+  calls to no-degree every year               15 / 30   15 / 30   15 / 30   15 / 30   spent €8580
+  calls to abroad every year                  21 / 31   21 / 31   21 / 31   21 / 31   spent €10120
+  save, then calls to all, twice              24 / 33   16 / 30   24 / 33   16 / 30   spent €11000
+  calls to those who know least, every year   20 / 29   20 / 29   20 / 29   20 / 29   spent €3300
+  calls to mothers not in work, every year    20 / 32   20 / 32   20 / 32   20 / 32   spent €6600
+  videos, no-degree, know least, all          24 / 33   15 / 30   20 / 29   16 / 30   spent €9020
+
+ALL CHECKS PASSED
