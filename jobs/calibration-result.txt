@@ -1,0 +1,66 @@
+One Number, Please: calibration check, 2026-11-09, 3000 sessions per cell
+
+--- The price apparatus (the paper's design, phase 1 rules): RECONSTRUCTED ---
+PASS  mean bid deviation, top, flat, men: -39.92  [-46, -34]  read off Fig. 4 TF phase 1 (about -40)
+PASS  mean bid deviation, top, flat, women: -27.07  [-33, -21]  Fig. 4 TF; Table 1 Female +13.99* (10% level)
+PASS  women minus men, top, flat: 12.85  [9, 19]  Table 1, NormBidTF, Female 13.99
+PASS  mean bid deviation, top, steep, men: -47.06  [-53, -41]  read off Fig. 4 TS phase 1 (about -47)
+PASS  women minus men, top, steep: 7.89  [3, 13]  Table 1, NormBidTS, Female 8.44 (n.s.)
+PASS  mean bid deviation, middle, flat (all): -9.32  [-14, -2]  read off Fig. 4 MF phase 1 (about -8); Sect. 4.1 "close to the prediction"
+PASS  mean bid deviation, middle, steep (all): 5.10  [-1, 11]  read off Fig. 4 MS phase 1 (about +5); Sect. 4.1 "slight over bidding"
+PASS  women's share of top jobs, flat: 0.54  [0.52, 0.62]  Fig. 5 TF phase 1: 52% actual vs 44% expected (+8); here expected is 50%
+PASS  women's share of top jobs, steep: 0.52  [0.49, 0.58]  Fig. 5 TS phase 1: 47% actual vs 44% expected (+3); Table 2 Female 0.363* (phase 1, 10%)
+PASS  earnings of the top job, flat: 61.68  [50, 75]  read off Fig. 8 phase 1 TF (about 60) and Fig. 10 TF periods 2-4 (about 55)
+PASS  earnings of a middle job, flat: 103.08  [90, 112]  read off Fig. 8 phase 1 MF (about 100)
+PASS  earnings of the top job, steep: 68.83  [50, 75]  read off Fig. 8 phase 1 TS (about 58) and Fig. 10 TS periods 2-4 (about 60)
+PASS  earnings of a middle job, steep: 87.86  [75, 97]  read off Fig. 8 phase 1 MS (about 84)
+PASS  middle pays more than top, flat: 41.40  [20, 60]  Sect. 4.3: "earnings appear to be much higher in the middle than in the top"; Table 3 model 2: MF 35.4 vs TF 3.5
+PASS  middle pays more than top, steep: 19.03  [8, 45]  Table 3 model 2: MS 28.5 vs TS 5.2
+PASS  gender difference in earnings, flat (men minus women): -0.57  [-6, 6]  Table 3: Female -2.0 (n.s.)
+PASS  gender difference in earnings, steep (men minus women): -0.82  [-6, 6]  Table 3: Female -2.0 (n.s.)
+PASS  one-session verdict "about the same" or "women a little higher", flat: 0.88  [0.8, 1]  Sect. 4.1: no significant differences, women somewhat higher for TF
+PASS  one-session verdict "about the same", steep: 0.96  [0.9, 1]  Sect. 4.1: none of the other differences significant
+
+--- The one-job price cell: TOY (a second-price auction for one job) ---
+PASS  men minus women, one-job price index: -0.21  [-3, 3]  Chen, Katuščák & Ozdenoren 2013 as cited in Sect. 2: no gender difference in second-price bidding
+
+--- The sums apparatus: RECONSTRUCTED FROM THE LITERATURE the paper cites (Niederle & Vesterlund 2007) ---
+PASS  men who believe they are the best of four: 0.74  [0.7, 0.8]  NV 2007 (75%), as described in Sect. 1-2
+PASS  women who believe they are the best of four: 0.43  [0.38, 0.48]  NV 2007 (43%)
+PASS  men who choose the contest (one winner): 0.76  [0.6799999999999999, 0.78]  NV 2007 (73%)
+PASS  women who choose the contest (one winner): 0.34  [0.3, 0.39999999999999997]  NV 2007 (35%)
+PASS  one-session verdict "men about twice as often" or "clearly more", sums one winner: 0.93  [0.85, 1]  NV 2007: the gap is large and robust
+PASS  women earn at least as much as men, sums one winner (men minus women): -6.17  [-20, 2]  NV 2007 as cited: men enter too much, women too little; over-entry does not pay
+PASS  men's share of top jobs, sums one winner: 0.66  [0.58, 0.72]  follows from entry: more men enter, more men win (no gender difference in performance, NV 2007)
+
+--- The crossed cells (sums with a ladder): TOY, the paper never ran them ---
+PASS  the gap is still there with a flat ladder (men minus women, points): 37.68  [15, 50]  our model: a ladder dilutes the gamble a little; the view of one's own rank still decides
+PASS  the gap is still there with a steep ladder (men minus women, points): 41.18  [15, 50]  our model
+
+--- The central discovery: a gap wherever competing means sums, none wherever it means a price ---
+PASS  gap, sums one winner (men minus women, points): 41.32  [25, 55]  NV 2007: 73 vs 35
+PASS  gap, price flat (men minus women, points): -3.99  [-8, 2]  Fig. 4, Table 1: none; women a little higher at the top
+PASS  gap, price steep (men minus women, points): -1.88  [-6, 2]  Fig. 4, Table 1: none
+
+--- Robustness: does the discovery survive other decompositions of the sums gap? (build.md, section 1) ---
+  (a) all confidence, no risk difference: sums one winner gap 46.4; sums flat ladder gap 43.2; price flat gap -4.6
+PASS  (a) sums gap survives: 46.42  [20, 60]  alternative decomposition
+PASS  (a) price gap still absent: -4.60  [-8, 2]  the price apparatus loads on neither trait by construction
+  (b) all risk, no confidence difference: sums one winner gap 25.4; sums flat ladder gap 24.1; price flat gap -4.6
+PASS  (b) sums gap survives: 25.42  [20, 60]  alternative decomposition
+PASS  (b) price gap still absent: -4.60  [-8, 2]  by construction
+  Under (a) the ladder cells shrink the gap less; under (b) more (a ladder is a smaller gamble). The direction of the
+  crossed cells is the one thing that depends on the decomposition; the game's central contrast does not.
+
+--- The draw (build.md, section 3): shape over seeds ---
+PASS  share of sums-one-winner sessions that fail to show the gap (noise): 0.03  [0, 0.08]  our choice: a session of 24 is noisy, but not often misleading
+PASS  share of price-flat sessions that show the men clearly higher (noise): 0.01  [0, 0.05]  our choice
+
+--- Verdict logic ---
+PASS  both columns run: "depends" is backed: 1.00  [1, 1]  design
+PASS  both columns run: "less" is not backed: 0.00  [0, 0]  design
+PASS  sums only: "less" is backed: 1.00  [1, 1]  design
+PASS  sums only: "depends" is not backed: 0.00  [0, 0]  design
+PASS  price only: "same" is backed: 1.00  [1, 1]  design
+
+43 passed, 0 failed
