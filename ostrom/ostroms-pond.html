@@ -28,6 +28,7 @@ p{margin:0 0 10px}
 b{font-weight:400;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:2px}
 .small{font-size:14px;line-height:1.38;color:var(--mute)}
 .caps{font-family:Schoolbell,cursive;font-size:17px;color:var(--mute)}
+.run{font-family:Schoolbell,cursive;font-size:19px;color:var(--mute);margin:0 0 6px;padding-bottom:3px;border-bottom:2px solid var(--grid)}
 .aim{font-size:18px;line-height:1.32;padding:8px 0 8px 10px;margin:12px 0;border-left:4px solid var(--orange)}
 .topbar{display:flex;align-items:flex-start;gap:8px;margin-bottom:4px}
 .topbar .aimline{flex:1;font-size:13.5px;line-height:1.28;padding-top:4px;color:var(--mute)}
@@ -79,7 +80,6 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
 
 <!-- ===================== START ===================== -->
 <section class="screen on" id="s-start">
-  <div class="caps">a game from a paper</div>
   <h1>Ostrom&rsquo;s Pond</h1>
   <div class="pic"><canvas id="c-start" width="336" height="200"></canvas></div>
   <p>This is our village. There are ten of us and one pond. Every summer we all go fishing, and over the winter the fish have babies. A full pond makes about ten new fish a summer: one each. Some of us take two.</p>
@@ -92,6 +92,7 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
 
 <!-- ===================== PLAY ===================== -->
 <section class="screen" id="s-play">
+  <div class="run">Ostrom&rsquo;s Pond</div>
   <div class="topbar"><div class="aimline">Keep the pond alive and the village fed for ten summers, and leave villagers who share when nobody&rsquo;s looking.</div><button class="q" id="q-play" aria-label="How to play">?</button></div>
   <h2 id="h-summer">Summer 1 of 10</h2>
   <div class="pic"><canvas id="c-pic" width="336" height="186"></canvas></div>
@@ -123,6 +124,7 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
 
 <!-- ===================== END ===================== -->
 <section class="screen" id="s-end">
+  <div class="run">Ostrom&rsquo;s Pond</div>
   <div class="caps">the verdict</div>
   <div class="big" id="end-head"></div>
   <div class="verd" id="end-lines"></div>
