@@ -1,4 +1,4 @@
-# Ganguli's Letters — note for the authors
+# Dear Household — note for the authors
 
 1. Look first at `screenshot-a-1-letter-set.png` (the sheet chosen: eyes on every plot, the sheet on the road, twenty arrows), then `screenshot-a-1-this-result.png` (the sheet's street at 58 on the plain mark), `screenshot-a-3-next-result.png` (pass it on: 66, and the next street at 57 with "less than one sapling more") and `screenshot-a-end.png`. Then play it once on a phone.
 2. Everything tunable is in `CONFIG` at the top of `mechanism.js`, the only copy of the mechanism: Table 2's constant and INF-(1,1) effect, Table 3's three margins (each with its point estimate and the value played), Table 4's slope and constant, the belief numbers and type shares, the two histograms read off Table 2's figure, and everything ours (the street of twenty, the pairs, the spokesperson's plot, the copy's centring, the bet's range and cutoffs, the words). Edit, run `node calibration.js` (82 checks and the play-it-in-numbers table), then `python3 build.py`, which refuses to build if the embedded mechanism differs from the file.

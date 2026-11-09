@@ -1,6 +1,8 @@
-# Ganguli's Letters — design memo
+# Dear Household — design memo
 
 ## 0. Given
+
+**Title.** First built as *Ganguli's Letters*; renamed *Dear Household* at Steffen's request after the first merge: the paper has two authors and a title naming one was wrong, and a title about the game was wanted. *Dear Household* is the salutation of the letter the player writes.
 
 Not Steffen's: a gift for someone else, with the beta line in the footer and no signature or counter. No recipient named.
 
@@ -166,3 +168,4 @@ Reading: one simple rule wins everywhere, and it is the sentence the player shou
 - `session-test.js` drove a full session at 380 px in headless Chromium: every letter previewed, six pairs with the stranger's plan (sheet, spokesperson, pass it on, afterwards, pass it on, clipboard), bets of 75, 70, 60, 58, 57, help opened mid-play and closed, About, the verdict, then a second town (pass it on everywhere, bet 58): 741, "about right". No errors, no horizontal scroll.
 - Screenshot review fixed: the "plain" label on the bar mark colliding with the plots and the bet marker (the mark is now explained in the lead and the label removed); the town drawing's second row of numbers cut off; the envelope grid shortened so the third row sits closer to the preview; the letter screen now says what a good outcome looks like (past the mark).
 - Estimated length: four to six minutes for six pairs; not measured on a person.
+- Renamed from *Ganguli's Letters* to *Dear Household* (file `dear-household.html`); rebuilt, checks and session re-run.

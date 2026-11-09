@@ -1,4 +1,4 @@
-// Ganguli's Letters — mechanism. The single source of truth: plain functions, no DOM, no randomness.
+// Dear Household — mechanism. The single source of truth: plain functions, no DOM, no randomness.
 // Runs unchanged in Node (calibration.js, loop.js) and in the browser (inlined verbatim by build.py).
 // Kind: RECONSTRUCTED. The paper's treatment means, its wave-2 response and its belief numbers are the data;
 // the town, the streets of twenty, the six letters as real-life arrangements, the additive ripple, the bet's
