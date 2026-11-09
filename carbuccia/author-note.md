@@ -1,4 +1,4 @@
-# Carbuccia's Counter — note for the authors
+# The Crèche Counter — note for the authors
 
 1. Look first at `screenshot-a-ward.png` (the ward with no help: the gap widening down the stairs), then `screenshot-a-1-result.png` (the videos: the bars sit on their ghosts), `screenshot-a-2-result.png` (calls to the 39 mothers without a degree: the orange APPLIED bar past its ghost, the place gap at 30), `screenshot-a-3-target.png` (calls to the fifteen who knew least, seen as the ones you called against the rest) and `screenshot-a-end.png`. Then play it once on a phone.
 2. Everything tunable is in `CONFIG` at the top of `mechanism.js`, the only copy of the mechanism: the control means and intention-to-treat effects by group from Table 2 and Extended Data Tables 3 and 4, the first stage, the exploratory subgroups from the text and read off Figures 5 and 6, the costs, and everything ours (the ward of 100, the subgroup shares and cross-shares, the purse, the four years, the words). Edit, run `node calibration.js` (72 checks and the play-it-in-numbers table), then `python3 build.py`, which refuses to build if the embedded mechanism differs from the file.

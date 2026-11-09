@@ -1,4 +1,4 @@
-// Calibration check for Carbuccia's Counter: runs mechanism.js headless against the paper's own numbers.
+// Calibration check for The Crèche Counter: runs mechanism.js headless against the paper's own numbers.
 const M = require('./mechanism.js');
 const C = M.CONFIG;
 let fails = 0, out = [];
