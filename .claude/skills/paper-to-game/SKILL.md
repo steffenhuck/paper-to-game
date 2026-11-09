@@ -21,12 +21,13 @@ The test of a good result: a smart stranger, handed the link on a phone, plays, 
 
 ---
 
-## Before reading: two questions
+## Before reading: three questions
 
-Asked together, in the first reply, before the paper is opened, and skipped where the prompt already answers them (a prompt that says "mine" or "for Rauh", and "no ideas" or names a look, gets no questions). In a Code session, ask with the question widget so the answer is a tap; otherwise in plain text. One pause, at the start; then the run continues without stopping.
+Asked together, in the first reply, before the paper is opened, and skipped where the prompt already answers them (a prompt that says "mine" or "for Rauh", names the kind of title, and says "no ideas" or names a look, gets no questions; a prompt that answers some asks only the rest). In a Code session, ask with the question widget so the answer is a tap; otherwise in plain text. One pause, at the start; then the run continues without stopping.
 
 1. **Is this one of yours?** Yes: the game carries Steffen's signature and counter (build.md, section 7). No: it is a gift for someone else; the beta line is the footer, and the recipient's name, if given, goes in the author-note.
-2. **Any specific ideas for this one?** Whatever comes back (a look, a player position, a device, a title, a thing to avoid) is recorded as the memo's first section, *Given*, and binds the design: it outranks the precedent rule (section 5) where the two conflict, and the memo says where it did. "No" leaves every choice to the engine.
+2. **Should the title name the author, or the substance?** Author: the title carries the author's name and a thing from the game (build.md, section 6). Substance: the title names a thing or an idea from the game and no author at all, so no co-author is left out. If the prompt does not say and the question goes unanswered, a game of Steffen's names the author and a gift names the substance.
+3. **Any specific ideas for this one?** Whatever comes back (a look, a player position, a device, a title, a thing to avoid) is recorded as the memo's first section, *Given*, and binds the design: it outranks the precedent rule (section 5) where the two conflict, and the memo says where it did. "No" leaves every choice to the engine.
 
 ---
 
@@ -216,7 +217,7 @@ What stays: every screen is looked at at phone width with the question "what wou
 
 Written in full and shown to the user before the build, as a record, not a question; the build follows immediately. Stop only if the user interrupts. Length scales with the paper's difficulty. Sections:
 
-0. **Given** — the answers to the two questions: whose game it is, and any ideas the user gave, with where they overrode precedent. "Mine, no ideas" is a complete entry.
+0. **Given** — the answers to the three questions: whose game it is, which kind of title, and any ideas the user gave, with where they overrode precedent. "Mine, author title, no ideas" is a complete entry.
 1. **Paper** — citation, DOI, what was available.
 2. **What the paper hands over** — model / estimate / argument, primary and secondary.
 3. **The discovery, and its kind.**
