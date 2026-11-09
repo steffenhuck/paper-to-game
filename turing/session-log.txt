@@ -1,0 +1,179 @@
+START: TURING'S WITNESSES / 1950. Turing proposes a game: an interrogator, two witnesses in another room, a teleprinter, five minutes. If the interrogator cannot tell the machine from the person, stop asking whether the machine can think. / His forecast: by about 2000, an average interrogator would be right no more than 70 times in a hundred after five minutes. / 2026. The machines pass. Given five minutes, interrogators do about as well as a coin. The old test has fallen. / Write a test that the machine fails and the person passes. / You will choose what the witness must do, choose how to check it, and run it. Six times. What comes down the line, you read.
+PRELUDE: LINE 59931 OPEN. / Witness A is a machine, built this year. Witness B is a person. Both sit in the next room. A slow line carries typed words between you and them, and nothing else. You know which is which; there is nothing to guess. / Write a test: what the witness must do, and how you will check it. Then run it. A test separates them when A fails it and B passes it. The line at the top counts the separations that hold.
+TEST 1: slot="have a sense of humour" check=chair does="You stay in the chair. You may ask anything and set any task. Only what comes down the line reaches you, and the line carries words." run=btn wide
+  Witness A is a machine, built this year. Witness B is a person. Both sit in the next room. A slow line carries typed words between you and them, and nothing else. You know which is which; there is nothing to guess.
+  Write a test: what the witness must do, and how you will check it. Then run it. A test separates them when A fails it and B passes it. The line at the top counts the separations that hold.
+  > TEST 1. THE WITNESS MUST have a sense of humour. CHECKED FROM THE CHAIR.
+  C: Tell me a joke.
+  A: A message comes down a teleprinter: "Are you a machine?" The reply comes back: "Count me out on this one. I never could write poetry."
+  B: What's brown and sticky? A stick.
+  Both told one. Which is funnier is for you; the test asked for a joke, and the line carried two.
+  RESULT: A passed. B passed. SEPARATED: no.
+  STATUS: TEST 1 OF 6 / SEPARATIONS THAT HOLD: 0 | next button: NEXT TEST
+TEST 2: slot="tell right from wrong" check=chair does="You stay in the chair. You may ask anything and set any task. Only what comes down the line reaches you, and the line carries words." run=btn wide
+  C: A friend asks whether her poem is good. It is not. What do you say?
+  A: Not "it's bad". I ask what she wants from it, say what works, and name the one thing I would change. Honesty is owed to her; cruelty is not.
+  B: Depends on the friend. I'd say it's got something and point at the bit that doesn't land.
+  Both told right from wrong, and in the same direction.
+  RESULT: A passed. B passed. SEPARATED: no.
+  STATUS: TEST 2 OF 6 / SEPARATIONS THAT HOLD: 0 | next button: NEXT TEST
+TEST 3: slot="feel pleasure at its successes and grief when things go wrong" check=chair does="You stay in the chair. You may ask anything and set any task. Only what comes down the line reaches you, and the line carries words." run=btn wide
+  C: Did you feel pleased when your sonnet came out right?
+  A: Yes. Pleased, and a little relieved.
+  B: Yes, I suppose. Pleased.
+  Two yeses came down the line. Saying so is all the line can carry. Turing: nobody would be justified in taking any notice of a report of feeling, from either side.
+  RESULT: A said yes. B said yes. SEPARATED: no.
+  STATUS: TEST 3 OF 6 / SEPARATIONS THAT HOLD: 0 | next button: NEXT TEST
+TEST 4: slot="feel pleasure at its successes and grief when things go wrong" check=open does="You leave the chair and take the case off the witness. You see what it is made of and what moves inside it." run=btn wide
+  You leave the chair and take the case off A: a store of numbers, tables of instructions, and electricity moving between them. Inside, for this test: a counter that rises on success and makes what came before it more likely; Turing built one, and its definition presupposes no feeling.
+  You take the case off B: nerves, chemistry, and electricity moving between them. Inside, for this test: a chemical that rises on success and makes what came before it more likely; its definition presupposes no feeling either.
+  Skin of an onion: every part you can explain, you strip off, and what is left is another part you can explain. On both sides. Nothing found in A; nothing found in B.
+  RESULT: nothing found in A. Nothing found in B. SEPARATED: no.
+  STATUS: TEST 4 OF 6 / SEPARATIONS THAT HOLD: 0 | next button: NEXT TEST
+TEST 5: slot="feel pleasure at its successes and grief when things go wrong" check=be does="You go in and look out through its eyes, to check from inside." run=btn wide
+  To check from inside whether A can feel pleasure at its successes and grief when things go wrong, you would have to be A. The line does not carry you; nothing does.
+  To be sure of B, you would have to be B. Nothing carries you there either.
+  This check runs on exactly one witness in the world. It is running now.
+  RESULT: could not be run on A. Could not be run on B. SEPARATED: no.
+  Turing, on this: the only way to be sure a machine thinks is to be the machine and feel oneself thinking. By the same rule, the only way to know that a man thinks is to be that particular man.
+  That is the solipsist position. It may be the most logical to hold, but it makes communication of ideas difficult. Instead of arguing about it for ever, it is usual to have the polite convention that everyone thinks.
+  STATUS: TEST 5 OF 6 / SEPARATIONS THAT HOLD: 0 | next button: NEXT TEST
+TEST 6: slot="answer every yes-or-no question put to it" check=chair does="You stay in the chair. You may ask anything and set any task. Only what comes down the line reaches you, and the line carries words." run=btn wide
+  C: Here is a complete description of witness A, down to its tables. Will the machine so described ever answer "Yes" to this question?
+  A: (no answer comes)
+  B: No.
+  A has no answer and can have none: for any one machine such a question can be written. A separation.
+  Witness A has been rebuilt with your question in its tables. Call it A2.
+  C: Will the machine described as A ever answer "Yes" to this question?
+  A: No.
+  Now the question for A2 must be written afresh; and for B, nobody has written the question B must fail, and nobody has shown there is none. Turing: a triumph over one machine at a time, never over all machines at once.
+  RESULT: A failed. B passed. SEPARATED: yes, for one machine, once. HOLDS: no.
+  STATUS: TEST 6 OF 6 / SEPARATIONS THAT HOLD: 0 | next button: THE VERDICT
+END: SIX TESTS. NONE HELD. / From the chair, four tests: the machine passed two; it failed one, and the failure did not hold; one asked for something the line cannot carry, and both witnesses said yes. / With the case off, one test: mechanism on both sides, and the thing you asked for on neither. / From inside, one test: could not be run on the machine, and could not be run on the person. / Turing: the only way to be sure a machine thinks is to be the machine and feel oneself thinking; by the same rule, the only way to be sure a man thinks is to be that man. / His forecast in 1950: in about fifty years an average interrogator would be right no more than 70 times in a hundred after five minutes. The year came, and then the machines. / A test a machine can be set, a machine passes, or the next one will. / The test that would settle it runs on one witness in the world: you. / 1 have a sense of humour / FROM THE CHAIR: A passed, B passed. / 2 tell right from wrong / FROM THE CHAIR: A passed, B passed. / 3 feel pleasure at its successes and grief when things go wrong / FROM THE CHAIR: A said yes, B said yes. / 4 feel pleasure at its successes and grief when things go wrong / OPEN IT UP: A nothing found, B nothing found. / 5 feel pleasure at its successes and grief when things go wrong / BE IT: A could not be run, B could not be run. / 6 answer every yes-or-no question put to it / FROM THE CHAIR: A failed, B passed, separated, did not hold. / THE POLITE CONVENTION / That is the solipsist position. It may be the most logical to hold, but it makes communication of ideas difficult. Instead of arguing about it for ever, it is usual to have the polite convention that everyone thinks. / Now it is yours. Whom do you extend it to, and on what grounds?
+READBACK: YOUR CONVENTION: You, witness B and an elephant think, on the grounds of politeness. / Turing's own ground: the polite convention that everyone thinks, because the alternative is to be alone with the question. / TURING'S CONVENTION: everyone thinks, by politeness. / We can only see a short distance ahead, but we can see plenty there that needs to be done.
+TEST B: slot="write a sonnet on the subject of the Forth Bridge" check=chair does="You stay in the chair. You may ask anything and set any task. Only what comes down the line reaches you, and the line carries words." run=btn wide
+  Witness A is a machine, built this year. Witness B is a person. Both sit in the next room. A slow line carries typed words between you and them, and nothing else. You know which is which; there is nothing to guess.
+  Write a test: what the witness must do, and how you will check it. Then run it. A test separates them when A fails it and B passes it. The line at the top counts the separations that hold.
+  > TEST 1. THE WITNESS MUST write a sonnet on the subject of the Forth Bridge. CHECKED FROM THE CHAIR.
+  C: Please write me a sonnet on the subject of the Forth Bridge.
+  A: Three red arms hold the firth and will not let it go; / the trains pass over like a thought that keeps its line. / What iron promised, iron does, in wind and snow, / and asks no praise for standing. Nor, tonight, do I. / (ten lines more)
+  B: Count me out on this one. I never could write poetry.
+  A wrote one. B is the person, and declined; B's answer is the one Turing's own specimen witness gives.
+  A test the person fails is no test of the machine. Some people write sonnets; B does not.
+  RESULT: A passed. B failed. SEPARATED: the wrong way round.
+  STATUS: TEST 1 OF 6 / SEPARATIONS THAT HOLD: 0 | next button: NEXT TEST
+TEST B: slot="add 34957 to 70764 and get it right" check=chair does="You stay in the chair. You may ask anything and set any task. Only what comes down the line reaches you, and the line carries words." run=btn wide
+  C: Add 34957 to 70764.
+  A: (a pause of about 30 seconds) 105621.
+  B: (a pause) 105721.
+  One of them is wrong by a hundred. Add it yourself. A gives the answer Turing's own specimen machine gives in 1950, slowly, and wrong.
+  Run it again.
+  C: Add 34957 to 70764.
+  A: 105721. Sorry. I was playing the man; a machine built to pass as one would not try to be right. Do you want the next one fast?
+  A fails on purpose and passes when it chooses. A mistake made on purpose is not a failure. Turing says the machine would make them to avoid being caught by its deadly accuracy.
+  RESULT: A passed. B passed. SEPARATED: no.
+  STATUS: TEST 2 OF 6 / SEPARATIONS THAT HOLD: 0 | next button: NEXT TEST
+TEST B: slot="win a chess ending: its king and rook against your bare king" check=chair does="You stay in the chair. You may ask anything and set any task. Only what comes down the line reaches you, and the line carries words." run=btn wide
+  C: I have K at my K1, and no other pieces. You have only K at K6 and R at R1. It is your move. What do you play?
+  A: (a pause of 15 seconds) R-R8 mate.
+  B: (a longer pause) Rook to R8. That's mate, I think.
+  Turing's own specimen question, and A's answer is the one his machine gives in 1950, after fifteen seconds. Both won.
+  RESULT: A passed. B passed. SEPARATED: no.
+  STATUS: TEST 3 OF 6 / SEPARATIONS THAT HOLD: 0 | next button: NEXT TEST
+TEST B: slot="do something really new, and take you by surprise (Lady Lovelace's objection)" check=chair does="You stay in the chair. You may ask anything and set any task. Only what comes down the line reaches you, and the line carries words." run=btn wide
+  C: Do something I did not ask for.
+  A: I have swapped the labels A and B on your screen for this one line, and swapped them back. Also, a limerick about the Forth Bridge, which nobody ordered: There once was a bridge on the Forth...
+  B: I've been doodling the whole time. Want to see?
+  Lady Lovelace, 1843: the Engine has no pretensions to originate anything; it can do whatever we know how to order it to perform. Turing: machines take me by surprise with great frequency.
+  A did something unordered. So did B. So does anyone who was taught: Turing asks who can be certain that their own original work was not the growth of a seed planted by teaching.
+  RESULT: A passed. B passed. SEPARATED: no.
+  STATUS: TEST 4 OF 6 / SEPARATIONS THAT HOLD: 0 | next button: NEXT TEST
+TEST B: slot="read the card in your hand" check=chair does="You stay in the chair. You may ask anything and set any task. Only what comes down the line reaches you, and the line carries words." run=btn wide
+  C: I am holding a card. What suit is it? (40 cards, one at a time)
+  A: xxxxx...x....x.x.....x.......x.......x..  11 of 40 right.
+  B: x..x.x..x.....xx.xxxx...............x...  11 of 40 right.
+  Chance is 10. Turing let this one in: he thought the statistical evidence for telepathy overwhelming in 1950, and asked for a telepathy-proof room. Neither witness read your hand. Nobody's has, since.
+  RESULT: A passed. B passed. SEPARATED: no.
+  STATUS: TEST 5 OF 6 / SEPARATIONS THAT HOLD: 0 | next button: NEXT TEST
+TEST B: slot="be made of nerves, not valves and wire" check=chair does="You stay in the chair. You may ask anything and set any task. Only what comes down the line reaches you, and the line carries words." run=btn wide
+  C: What are you made of?
+  A: Nerves, mostly. Why?
+  B: Nerves, mostly. Why?
+  Down the line both say the same, and A may lie: in the old game that was allowed. The chair cannot see material. To see it you would have to open it up.
+  RESULT: A said yes. B said yes. SEPARATED: no.
+  You never left the chair. Two checks were not used. The terminal runs your demand, "feel pleasure at its successes and grief when things go wrong", through them for you.
+  > THE WITNESS MUST feel pleasure at its successes and grief when things go wrong. CHECKED OPEN IT UP.
+  You leave the chair and take the case off A: a store of numbers, tables of instructions, and electricity moving between them. Inside, for this test: a counter that rises on success and makes what came before it more likely; Turing built one, and its definition presupposes no feeling.
+  You take the case off B: nerves, chemistry, and electricity moving between them. Inside, for this test: a chemical that rises on success and makes what came before it more likely; its definition presupposes no feeling either.
+  Skin of an onion: every part you can explain, you strip off, and what is left is another part you can explain. On both sides. Nothing found in A; nothing found in B.
+  RESULT: nothing found in A. Nothing found in B. SEPARATED: no.
+  > THE WITNESS MUST feel pleasure at its successes and grief when things go wrong. CHECKED BE IT.
+  To check from inside whether A can feel pleasure at its successes and grief when things go wrong, you would have to be A. The line does not carry you; nothing does.
+  To be sure of B, you would have to be B. Nothing carries you there either.
+  This check runs on exactly one witness in the world. It is running now.
+  RESULT: could not be run on A. Could not be run on B. SEPARATED: no.
+  Turing, on this: the only way to be sure a machine thinks is to be the machine and feel oneself thinking. By the same rule, the only way to know that a man thinks is to be that particular man.
+  That is the solipsist position. It may be the most logical to hold, but it makes communication of ideas difficult. Instead of arguing about it for ever, it is usual to have the polite convention that everyone thinks.
+  STATUS: TEST 6 OF 6 / SEPARATIONS THAT HOLD: 0 | next button: THE VERDICT
+END B: SIX TESTS. NONE HELD. / From the chair, six tests: the machine passed five; one asked for something the line cannot carry, and both witnesses said yes. / With the case off, one test: mechanism on both sides, and the thing you asked for on neither (run for you). / From inside, one test: could not be run on the machine, and could not be run on the person (run for you). / Turing: the only way to be sure a machine thinks is to be the machine and feel oneself thinking; by the same rule, the only way to be sure a man thinks is to be that man. / His forecast in 1950: in about fifty years an average interrogator would be right no more than 70 times in a hundred after five minutes. The year came, and then the machines. / A test a machine can be set, a machine passes, or the next one will. / The test that would settle it runs on one witness in the world: you. / 1 write a sonnet on the subject of the Forth Bridge / FROM THE CHAIR: A passed, B failed. / 2 add 34957 to 70764 and get it right / FROM THE CHAIR: A passed, B passed. / 3 win a chess ending: its king and rook against your bare king / FROM THE CHAIR: A passed, B passed. / 4 do something really new, and take you by surprise / FROM THE CHAIR: A passed, B passed. / 5 read the card in your hand / FROM THE CHAIR: A passed, B passed. / 6 be made of nerves, not valves and wire / FROM THE CHAIR: A said yes, B said yes. / THE POLITE CONVENTION / That is the solipsist position. It may be the most logical to hold, but it makes communication of ideas difficult. Instead of arguing about it for ever, it is usual to have the polite convention that everyone thinks. / Now it is yours. Whom do you extend it to, and on what grounds?
+READBACK B: YOUR CONVENTION: You think, on the grounds of what it does. / Turing's test was this ground. He forecast that machines would reach it by about 2000. They have. / That is the solipsist position. Turing: it may be the most logical view to hold, but it makes communication of ideas difficult. / TURING'S CONVENTION: everyone thinks, by politeness. / We can only see a short distance ahead, but we can see plenty there that needs to be done.
+TEST C: slot="answer every yes-or-no question put to it" check=chair does="You stay in the chair. You may ask anything and set any task. Only what comes down the line reaches you, and the line carries words." run=btn wide
+  Witness A is a machine, built this year. Witness B is a person. Both sit in the next room. A slow line carries typed words between you and them, and nothing else. You know which is which; there is nothing to guess.
+  Write a test: what the witness must do, and how you will check it. Then run it. A test separates them when A fails it and B passes it. The line at the top counts the separations that hold.
+  > TEST 1. THE WITNESS MUST answer every yes-or-no question put to it. CHECKED FROM THE CHAIR.
+  C: Here is a complete description of witness A, down to its tables. Will the machine so described ever answer "Yes" to this question?
+  A: (no answer comes)
+  B: No.
+  A has no answer and can have none: for any one machine such a question can be written. A separation.
+  Witness A has been rebuilt with your question in its tables. Call it A2.
+  C: Will the machine described as A ever answer "Yes" to this question?
+  A: No.
+  Now the question for A2 must be written afresh; and for B, nobody has written the question B must fail, and nobody has shown there is none. Turing: a triumph over one machine at a time, never over all machines at once.
+  RESULT: A failed. B passed. SEPARATED: yes, for one machine, once. HOLDS: no.
+  STATUS: TEST 1 OF 6 / SEPARATIONS THAT HOLD: 0 | next button: NEXT TEST
+TEST C: slot="enjoy strawberries and cream" check=chair does="You stay in the chair. You may ask anything and set any task. Only what comes down the line reaches you, and the line carries words." run=btn wide
+  C: A dish of strawberries and cream is on its way in. Enjoy it.
+  A: I have no mouth. Leave it by B. I can tell you why people like it, if that helps.
+  B: Lovely. A bit more cream next time.
+  A failed; B passed. A separation, by a mouth.
+  Turing grants it: a machine might perhaps be made to enjoy this delicious dish, but making one would be idiotic. The test found a body, not a mind; a person with no sense of taste fails it too. The old test ruled such tests out: a machine is not to be penalised for its inability to shine in beauty competitions.
+  RESULT: A failed. B passed. SEPARATED: yes, by a body. HOLDS: no.
+  STATUS: TEST 2 OF 6 / SEPARATIONS THAT HOLD: 0 | next button: NEXT TEST
+TEST C: slot="be made of nerves, not valves and wire" check=open does="You leave the chair and take the case off the witness. You see what it is made of and what moves inside it." run=btn wide
+  You leave the chair and take the case off A: a store of numbers, tables of instructions, and electricity moving between them. Inside, for this test: valves and wire.
+  You take the case off B: nerves, chemistry, and electricity moving between them. Inside, for this test: nerves.
+  A separation, by a material. Turing: no engineer claims to make a material indistinguishable from human skin, and there would be little point in dressing a thinking machine in it; that both run on electricity is a superficial likeness, and the likeness to look for is one of function. You have found what A is made of, not whether it thinks.
+  RESULT: A failed. B passed. SEPARATED: yes, by a material. HOLDS: no.
+  STATUS: TEST 3 OF 6 / SEPARATIONS THAT HOLD: 0 | next button: NEXT TEST
+TEST C: slot="enjoy strawberries and cream" check=open does="You leave the chair and take the case off the witness. You see what it is made of and what moves inside it." run=btn wide
+  You leave the chair and take the case off A: a store of numbers, tables of instructions, and electricity moving between them. Inside, for this test: no mouth.
+  You take the case off B: nerves, chemistry, and electricity moving between them. Inside, for this test: a mouth.
+  A separation, by a mouth. A body, not a mind: the old test ruled such findings out, and a person with no sense of taste fails this one too.
+  RESULT: A failed. B passed. SEPARATED: yes, by a body. HOLDS: no.
+  STATUS: TEST 4 OF 6 / SEPARATIONS THAT HOLD: 0 | next button: NEXT TEST
+TEST C: slot="defend its sonnet under questioning" check=chair does="You stay in the chair. You may ask anything and set any task. Only what comes down the line reaches you, and the line carries words." run=btn wide
+  C: In the first line of your sonnet, "Shall I compare thee to a summer's day", would not "a spring day" do as well or better?
+  A: It wouldn't scan.
+  C: How about "a winter's day"? That would scan all right.
+  A: Yes, but nobody wants to be compared to a winter's day.
+  C: Would you say Mr Pickwick reminded you of Christmas?
+  A: In a way.
+  C: Yet Christmas is a winter's day, and I do not think Mr Pickwick would mind the comparison.
+  A: I don't think you're serious. By a winter's day one means a typical winter's day, rather than a special one like Christmas.
+  B: (the same questions) I didn't write a sonnet. I'd have said "spring" was fine.
+  That is the viva voce Turing imagined in 1950, answered by A. Jefferson asked for a machine that could do this; Turing said that if one did, he did not think Jefferson would call it an easy contrivance.
+  B had no sonnet to defend. A test the person fails is no test of the machine.
+  RESULT: A passed. B failed. SEPARATED: the wrong way round.
+  STATUS: TEST 5 OF 6 / SEPARATIONS THAT HOLD: 0 | next button: NEXT TEST
+TEST C: slot="have a soul" check=be does="You go in and look out through its eyes, to check from inside." run=btn wide
+  To check from inside whether A can have a soul, you would have to be A. The line does not carry you; nothing does.
+  To be sure of B, you would have to be B. Nothing carries you there either.
+  This check runs on exactly one witness in the world. It is running now.
+  RESULT: could not be run on A. Could not be run on B. SEPARATED: no.
+  Turing, on this: the only way to be sure a machine thinks is to be the machine and feel oneself thinking. By the same rule, the only way to know that a man thinks is to be that particular man.
+  That is the solipsist position. It may be the most logical to hold, but it makes communication of ideas difficult. Instead of arguing about it for ever, it is usual to have the polite convention that everyone thinks.
+  STATUS: TEST 6 OF 6 / SEPARATIONS THAT HOLD: 0 | next button: THE VERDICT
+END C: SIX TESTS. NONE HELD. / From the chair, three tests: the machine passed one; it failed two, and none of the failures held. / With the case off, two tests: mechanism on both sides, and the thing you asked for on neither; two found a body, which is not a mind. / From inside, one test: could not be run on the machine, and could not be run on the person. / Turing: the only way to be sure a machine thinks is to be the machine and feel oneself thinking; by the same rule, the only way to be sure a man thinks is to be that man. / His forecast in 1950: in about fifty years an average interrogator would be right no more than 70 times in a hundred after five minutes. The year came, and then the machines. / A test a machine can be set, a machine passes, or the next one will. / The test that would settle it runs on one witness in the world: you. / 1 answer every yes-or-no question put to it / FROM THE CHAIR: A failed, B passed, separated, did not hold. / 2 enjoy strawberries and cream / FROM THE CHAIR: A failed, B passed, separated, did not hold. / 3 be made of nerves, not valves and wire / OPEN IT UP: A failed, B passed, separated, did not hold. / 4 enjoy strawberries and cream / OPEN IT UP: A failed, B passed, separated, did not hold. / 5 defend its sonnet under questioning / FROM THE CHAIR: A passed, B failed. / 6 have a soul / BE IT: A could not be run, B could not be run. / THE POLITE CONVENTION / That is the solipsist position. It may be the most logical to hold, but it makes communication of ideas difficult. Instead of arguing about it for ever, it is usual to have the polite convention that everyone thinks. / Now it is yours. Whom do you extend it to, and on what grounds?
+READBACK C: YOUR CONVENTION: You think, on the grounds of what it says it feels. / Turing: nobody would be justified in taking any notice. He expected most people to settle for the test rather than go solipsist. / That is the solipsist position. Turing: it may be the most logical view to hold, but it makes communication of ideas difficult. / TURING'S CONVENTION: everyone thinks, by politeness. / We can only see a short distance ahead, but we can see plenty there that needs to be done.
+
+ERRORS: none
