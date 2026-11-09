@@ -1,4 +1,4 @@
-# Generates carbuccias-counter.html from template.html, mechanism.js (the single source of truth), about.html and the
+# Generates the-creche-counter.html from template.html, mechanism.js (the single source of truth), about.html and the
 # embedded fonts, then verifies byte for byte that the embedded mechanism is the file calibration.js ran against.
 import base64, sys, os
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -17,7 +17,7 @@ subs = {
 }
 for k in subs: assert t.count(k) == 1, k
 for k, v in subs.items(): t = t.replace(k, v)
-name = 'carbuccias-counter.html'
+name = 'the-creche-counter.html'
 open(name, 'w', encoding='utf-8').write(t)
 built = open(name, encoding='utf-8').read()
 if mech not in built:

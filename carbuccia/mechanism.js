@@ -1,4 +1,4 @@
-// Carbuccia's Counter — mechanism. The single source of truth: plain functions, no DOM.
+// The Crèche Counter — mechanism. The single source of truth: plain functions, no DOM.
 // Runs unchanged in Node (calibration.js, loop.js) and in the browser (inlined verbatim by build.py).
 // Kind: RECONSTRUCTED. The paper's intention-to-treat estimates are the data; the ward, the purse, the years and
 // the composition of targeted orders are ours.

@@ -5,7 +5,7 @@ const path = require('path');
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 380, height: 760 }, deviceScaleFactor: 1 });
   const errors = []; page.on('pageerror', e => errors.push(e.message)); page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
-  const url = 'file://' + path.resolve(__dirname, 'carbuccias-counter.html');
+  const url = 'file://' + path.resolve(__dirname, 'the-creche-counter.html');
   await page.goto(url); await page.waitForTimeout(600);
   const shot = async (n, full) => page.screenshot({ path: path.join(__dirname, 'screenshot-' + n + '.png'), fullPage: !!full });
   // an overlay is fixed; to capture all of it, lay it out as the page for the shot

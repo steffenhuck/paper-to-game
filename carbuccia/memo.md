@@ -1,4 +1,4 @@
-# Carbuccia's Counter — design memo
+# The Crèche Counter — design memo
 
 ## 0. Given
 
@@ -159,3 +159,7 @@ Reading: the decisions matter for the application gap (24 down to 15) and for th
 - `session-test.js` drove a full session at 380 px in headless Chromium: an unaffordable order refused, four orders, help opened mid-play and closed, three views, the verdict, About, a retry, and a second run that saves and then calls everyone. No errors, no horizontal scroll.
 - Screenshot review fixed: the bottom step's label clipped; the verdict board overflowing (now two rows); target stubs colliding with their counts (now one column); a stale purse caption; a stray mask dot on the stubs; blank LED positions drawn as unlit digits; the page under an overlay now locked.
 - Estimated length: five to seven minutes for four years; not measured on a person.
+
+## 20. Revision 1 (9 Nov 2026): the title
+
+Steffen asked for a title that reflects the substance rather than alluding to an author. *The Crèche Counter*: the town hall's counter where the places are given out, which the player cannot reach, and the board that counts the gap. The file is now `the-creche-counter.html`; the folder stays `carbuccia/`.
