@@ -182,3 +182,14 @@ The decisions matter: only a notebook with both columns backs the paper's senten
 - Screenshots at 380 px: start, empty apparatus, task only, both set, running, four results, notebook, help, reply, end (both-columns and sums-only), about. Fixes from the review: a class clash boxed the radio labels; the notebook rows truncated their words (now wrap); the "what to expect" line was missing from the run button (added above it); the walkthrough's "about half" for the ladder cells corrected to what the model gives.
 - Full session in headless Chromium (`session-test.js`, `session-log.txt`): seed 2026, the walkthrough's eight sessions, help opened mid-play and returned from, reply "depends" backed; a second play of sums only with reply "less" backed; "Run the lab again" reseeds; no errors, no horizontal scroll on any screen.
 - Length: five to seven minutes, estimated; not measured on a person.
+
+## 21. Revision 1 (9 Nov 2026): why eight sessions for six screens
+
+Steffen's question: six ways to set the screen, eight sessions, what am I missing? The slack was deliberate (one session of 24 is noisy; the two extra sessions are for repeating a result the player does not yet believe) but nothing on the play screen said so. Four light touches, no change to any number:
+
+- The apparatus window says it: *Six ways to set the screen, eight sessions. One session of 24 is noisy; repeat the ones you want to believe.*
+- When a cell is run again, the result window adds a line: *Second time with this apparatus. Last time: the women bid clearly higher. All 2 together: about the same.* The pooled reading comes from the mechanism (`pooled`: the bars averaged, the same words), so the precision gain is seen where the decision to repeat was made.
+- The end screen says where the sessions went (`spendLine`): *You spent 4 sessions on sums, where one is nearly always enough, and 4 on price, where the differences are small and one session can mislead.* After the decisions, so it explains rather than coaches; the hook for a second play, since the strong strategy is lopsided (one sums, the rest price).
+- The dead end is named only when the player's own rows show it (`deadEndLine`: two or more prize levels on one side, all reading the same way): *Changing the prizes moved nothing in your notebook; only changing what competing meant did.*
+
+Calibration: 47 checks, 47 passed (four new: the pooled reading of three price-flat sessions lands at the paper's; the spend line names both sides; the dead end is named for three prize levels on the sums side and not for one level a side). Full session re-run at 380 px, no errors, no horizontal scroll; `screenshot-5-price-flat-result.png` shows the repeat line, `screenshot-end.png` the two new end lines.

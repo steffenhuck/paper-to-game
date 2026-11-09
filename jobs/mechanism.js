@@ -320,7 +320,39 @@ function verdict(notebook, reply) {
   return { did, backed, why, left, right, sums: sums.length, price: price.length };
 }
 
-const MECH = { CONFIG, makeRng, normal, Phi, drawStudent, drawGroup, beliefs, prizeVector, sureAlternative, choosesContest,
+// ---- Repeats and the end screen (revision 1) -----------------------------------------------------------------------
+// The pooled reading of several sessions of one cell: the bars averaged, then the same words.
+function pooled(sessions) {
+  const n = sessions.length;
+  const idx = { men: sessions.reduce((a, r) => a + r.idx.men, 0) / n, women: sessions.reduce((a, r) => a + r.idx.women, 0) / n };
+  return { n, idx, words: gapWords(sessions[0].task, idx), gap: gapClass(sessions[0].task, idx) };
+}
+// Where the eight sessions went, said after the decisions are over.
+function spendLine(notebook) {
+  const s = notebook.filter(r => r.task === 'sums').length, p = notebook.filter(r => r.task === 'price').length;
+  if (!s) return 'You spent every session on the price side and none on sums, so your lab never saw the textbook gap.';
+  if (!p) return 'You spent every session on the sums side and none on the price, where the noise is and where the paper looked.';
+  const sumsPart = s + (s === 1 ? ' session' : ' sessions') + ' on sums, where one is nearly always enough';
+  const pricePart = p + ' on price, where the differences are small and one session can mislead';
+  return 'You spent ' + sumsPart + ', and ' + pricePart + '.';
+}
+// The dead end, named only when the notebook shows it: two or more prize levels on one side, all reading the same way.
+function deadEndLine(notebook) {
+  for (const t of ['sums', 'price']) {
+    const levels = {};
+    notebook.filter(r => r.task === t).forEach(r => { levels[r.prizes] = levels[r.prizes] || []; levels[r.prizes].push(r); });
+    const keys = Object.keys(levels);
+    if (keys.length < 2) continue;
+    const dirs = keys.map(k => { const g = pooled(levels[k]).gap; return g === 'same' ? 'same' : (g.startsWith('men') ? 'men' : 'women'); });
+    const lead = t === 'sums' ? 'men' : 'same';
+    if (dirs.every(d => d === lead || (t === 'price' && d !== 'men'))) {
+      return 'Changing the prizes moved nothing in your notebook; only changing what competing meant did.';
+    }
+  }
+  return null;
+}
+
+const MECH = { CONFIG, pooled, spendLine, deadEndLine, makeRng, normal, Phi, drawStudent, drawGroup, beliefs, prizeVector, sureAlternative, choosesContest,
   runSumsGroup, runPriceGroup, bidsFor, runSession, gapClass, gapWords, topWords, earnWords, indexLabel, measuredLine,
   ghostLine, verdict };
 if (typeof module !== 'undefined') module.exports = MECH;

@@ -172,6 +172,7 @@ h2 { font-size: 14px; margin: 12px 0 4px; }
         <div class="radio" data-k="prizes" data-v="flat"><span class="dot"></span><span class="lab">a flat ladder: 350 for the top job, 200 for each of two middle jobs, 50 for the one left over</span></div>
         <div class="radio" data-k="prizes" data-v="steep"><span class="dot"></span><span class="lab">a steep ladder: 450 for the top job, 150 for each of two middle jobs, 50 for the one left over</span></div>
       </fieldset>
+      <p class="note" style="margin:0 0 4px">Six ways to set the screen, eight sessions. One session of 24 is noisy; repeat the ones you want to believe.</p>
       <div class="status"><span>Budget left: <b id="t-budget">€2,400</b> · a session costs €300</span></div>
     </div>
   </div>
@@ -205,6 +206,7 @@ h2 { font-size: 14px; margin: 12px 0 4px; }
       <p class="head" id="r-words"></p>
       <p class="line" id="r-tops"></p>
       <p class="line" id="r-earn"></p>
+      <p class="line" id="r-again" style="display:none"></p>
       <p class="line" id="r-measured" style="color:#222"></p>
       <p class="ghost" id="r-ghost"></p>
       <div class="row"><span class="sp"></span><button class="btn def" id="b-log">Write it in the notebook</button></div>
@@ -256,6 +258,8 @@ h2 { font-size: 14px; margin: 12px 0 4px; }
       <p class="line" id="e-why"></p>
       <h2>What your lab found</h2>
       <div class="grid" id="e-grid"></div>
+      <p class="line" id="e-spend" style="margin-top:10px"></p>
+      <p class="line" id="e-dead" style="display:none"></p>
       <h2>What the paper found</h2>
       <p class="line">Three economists ran the <b>price</b> apparatus in Rome: 168 students, a flat firm and a steep one, 32 rounds each. The women bid as high as the men; for the top of the flat firm a few points higher. The women got the top job more often than their share. Nobody earned more for being at the top: the middle jobs paid better. The famous gap comes from labs where competing means a race at sums; this one measures something else, the willingness to pay for rank, and finds no gap in it.</p>
       <div class="bars" style="margin-bottom:8px">
@@ -284,7 +288,7 @@ h2 { font-size: 14px; margin: 12px 0 4px; }
       <p><b>The lab.</b> Each session, 24 students come in and sit in groups of four: two men, two women. They play once for the lab's money, ECU (10 ECU is a euro). The students are the same kind of people every session. Only their screen changes, and you write it.</p>
       <p><b>Your two choices.</b> In the <i>Apparatus</i> window, tick what the students must do to compete: <i>solve sums</i> (whoever solves the most of their four wins; a student may also sit out for a sure amount) or <i>name a price</i> (each student writes the most they would pay for a job; the highest offer gets it and pays the second-highest). Then tick what they can win: <i>one winner</i> (350, the rest 50), a <i>flat ladder</i> (350, 200, 200, 50) or a <i>steep ladder</i> (450, 150, 150, 50). Both boxes start empty every session. The window below, <i>What the students will see</i>, fills in as you tick, so you can read their screen before you run it.</p>
       <p><b>Run.</b> Press <i>Run session</i>. The room fills, the clock runs, and a <i>Result</i> window opens with two bars: how hard the men went for the top, and how hard the women did. Under sums, the bar is the share who chose to compete. Under price, it is what they offered for the top job, out of every 100 it is worth. Then: who got the six top jobs, what the two groups took home, and a line on what this apparatus actually measured. When the apparatus is the one the paper ran, the paper's own result is shown in grey underneath. Press <i>Write it in the notebook</i> to keep the row.</p>
-      <p><b>The notebook.</b> One row per session: Σ for sums, € for price, the prize boxes, the two bars small, and the result in words. One session of 24 is noisy; a result worth believing is one you have seen twice.</p>
+      <p><b>The notebook.</b> One row per session: Σ for sums, € for price, the prize boxes, the two bars small, and the result in words. There are six ways to set the screen and eight sessions. One session of 24 is noisy; a result worth believing is one you have seen twice, and when you run an apparatus again the result window says what the sessions say together.</p>
       <p><b>Write back.</b> After the eighth session, pick one sentence for the journalist. The game reads your notebook against it and says whether your own sessions back what you sent, then shows what the paper found.</p>
       <div class="row"><span class="sp"></span><button class="btn def" id="b-help-close">Back</button></div>
     </div>
@@ -423,6 +427,13 @@ h2 { font-size: 14px; margin: 12px 0 4px; }
     $('r-tops').textContent = r.topWords;
     $('r-earn').textContent = r.earnWords;
     $('r-measured').textContent = 'What this measured: ' + MECH.measuredLine(r.task, r.prizes);
+    const before = G.notebook.filter(x => x.task === r.task && x.prizes === r.prizes);
+    if (before.length) {
+      const pool = MECH.pooled(before.concat([r]));
+      const nth = ['Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh', 'Eighth'][Math.min(before.length - 1, 6)];
+      $('r-again').innerHTML = '<b>' + nth + ' time with this apparatus.</b> Last time: ' + before[before.length - 1].words.replace(/^The /, 'the ').replace(/\.$/, '') + '. All ' + pool.n + ' together: ' + pool.words.replace(/^The /, 'the ');
+      $('r-again').style.display = '';
+    } else $('r-again').style.display = 'none';
     const g = MECH.ghostLine(r.task, r.prizes);
     $('r-ghost').innerHTML = g ? '<b>The paper ran this apparatus.</b> ' + g : '<b>The paper did not run this apparatus.</b> ' + (sums ? 'The sums contest is the standard lab the paper argues with; its numbers here come from that literature, as the paper describes it.' : 'A one-job price is our own cell; the auction literature the paper cites finds no gender difference in it.');
     $('w-result').style.display = '';
@@ -473,6 +484,9 @@ h2 { font-size: 14px; margin: 12px 0 4px; }
     }));
     const rm = 100 * (1 + C.bidDev.TF.men / (C.prizes.flat.T - C.prizes.flat.U)), rw = 100 * (1 + C.bidDev.TF.women / (C.prizes.flat.T - C.prizes.flat.U));
     $('e-nm').textContent = pct(rm) + ' of 100'; $('e-nw').textContent = pct(rw) + ' of 100';
+    $('e-spend').textContent = MECH.spendLine(G.notebook);
+    const dead = MECH.deadEndLine(G.notebook);
+    $('e-dead').textContent = dead || ''; $('e-dead').style.display = dead ? '' : 'none';
     $('t-seed').textContent = G.seed;
     show('s-end');
     requestAnimationFrame(() => { $('e-bm').style.width = rm + '%'; $('e-bw').style.width = rw + '%'; });
