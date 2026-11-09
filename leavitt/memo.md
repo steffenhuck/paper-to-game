@@ -209,3 +209,11 @@ A fresh pass through every screen, mechanism untouched. The main finding was not
 - Plate captions from round 3 on cut to one line.
 
 Browser session at 380 × 700: no errors, no horizontal scroll, box and dial on screen together in all seven rounds. Calibration unchanged (42/42).
+
+## Revision 5 (9 Nov 2026): the last star in a line-up
+
+Steffen at the last stage: "one last star in the big ring, but there is no big ring, just one star that is a bit darker, and it doesn't sit in between." All seven rings were the same size, the current one only a heavier line; and the dots at their brightest differed by a couple of pixels, so the new star could not be told apart, let alone placed. Changes, mechanism untouched:
+
+- The star being timed now has a clearly bigger ring (radius 24 against 17) in every round; "thick ring" became "big ring" in the words.
+- In the last round the glass becomes a **line-up**: all seven stars at their brightest in a row from faintest to brightest, blink times underneath, the new one marked THIS ONE with a ? in its slot between two timed stars. The hint says: look at the two on either side, guess a time between theirs.
+- How to play gained "A good way to do it": slide the top dial slowly, stop where the line snaps tidy, check one hump per half (two means halve it), then fine-tune until the dots hug the line with no strays; once the chart has a pattern, use it to know where to start.
