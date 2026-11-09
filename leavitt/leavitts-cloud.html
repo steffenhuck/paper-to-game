@@ -46,19 +46,21 @@ p{margin:0 0 10px}
 .btn.dim{opacity:.35;pointer-events:none}
 .btn.link{border:none;padding:8px;font-size:12px;color:var(--lilac);margin:2px 0}
 .row2{display:flex;gap:10px}.row2 .btn{flex:1}
-.dial{margin:6px 0 2px}
-.dial .val{font-size:30px;font-weight:600;line-height:1.1;margin:2px 0 4px}
+.dial{margin:4px 0 0}
+.dial .val{font-size:26px;font-weight:600;line-height:1.1;margin:0 0 2px}
+.dial .val small{font-family:Josefin,sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.16em;font-size:11px;color:var(--lilac);margin-right:8px;vertical-align:middle}
 .dial .val small{font-size:15px;font-weight:400;color:var(--lilac);margin-left:6px}
-input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:44px;background:transparent;margin:0;touch-action:none}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:38px;background:transparent;margin:0;touch-action:none}
 input[type=range]::-webkit-slider-runnable-track{height:2px;background:var(--lilac)}
 input[type=range]::-moz-range-track{height:2px;background:var(--lilac)}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;border-radius:50%;background:var(--glass);border:2px solid var(--silver);box-shadow:0 0 0 1px var(--lilac);margin-top:-14px}
+#fine::-webkit-slider-thumb{width:24px;height:24px;margin-top:-11px}
 input[type=range]::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:var(--glass);border:2px solid var(--silver)}
 input[type=range]:disabled{opacity:.4}
-.ticks{position:relative;height:18px;font-size:12px;color:var(--lilac);margin:-8px 0 14px;font-family:Josefin,sans-serif;font-weight:600;letter-spacing:.05em}
+.ticks{position:relative;height:16px;font-size:12px;color:var(--lilac);margin:-10px 0 12px;font-family:Josefin,sans-serif;font-weight:600;letter-spacing:.05em}
 .ticks span{position:absolute;transform:translateX(-50%);top:0}
-.ticks em{position:absolute;right:0;top:15px;font-style:italic;font-family:Spectral,serif;font-weight:400;font-size:12px;letter-spacing:0}
-.finelab{display:flex;justify-content:space-between;font-size:12.5px;color:var(--lilac);margin:-8px 0 2px;font-style:italic}
+.ticks em{position:absolute;right:0;top:14px;font-style:italic;font-family:Spectral,serif;font-weight:400;font-size:12px;letter-spacing:0}
+.finelab{display:flex;justify-content:space-between;font-size:12.5px;color:var(--lilac);margin:-10px 0 0;font-style:italic}
 .result{border-left:2px solid var(--violet-l);padding:2px 0 2px 12px;margin:10px 0}
 .verdict p{font-size:18px;line-height:1.42;margin:0 0 14px}
 .verdict p.first{font-size:20px}
@@ -95,24 +97,24 @@ input[type=range]:disabled{opacity:.4}
 <section class="screen" id="s-round">
   <div class="topbar"><div class="aimline" id="aim-round"></div><button class="q" data-help aria-label="How to play">?</button></div>
   <div class="caps" id="r-label"></div>
-  <div class="panel"><canvas id="c-plate" height="170"></canvas><span class="tag" id="plate-tag">A glass photo</span></div>
+  <div class="panel"><canvas id="c-plate" height="140"></canvas><span class="tag" id="plate-tag">A glass photo</span></div>
   <p class="say small" id="r-plate-say"></p>
   <div id="r-record-box">
-    <div class="panel"><canvas id="c-record" height="210"></canvas><span class="tag" id="rec-tag">The photos</span>
+    <div class="panel"><canvas id="c-record" height="200"></canvas><span class="tag" id="rec-tag">The photos</span>
       <div class="sw hide" id="rec-sw"><button data-mode="date">by date</button><button data-mode="beat" class="on">by blink</button></div></div>
   </div>
   <div id="r-chart-box" class="hide">
-    <div class="panel"><canvas id="c-guess" height="230"></canvas></div>
+    <div class="panel"><canvas id="c-guess" height="200"></canvas></div>
   </div>
-  <p class="say" id="r-say"></p>
   <div class="dial hide" id="r-dial">
-    <div class="caps">Blink time <span id="dial-what" style="text-transform:none;letter-spacing:0;font-family:Spectral,serif;font-weight:400;font-size:13px">&mdash; how long one blink takes</span></div>
+    <p class="say hide" id="r-hint" style="margin:6px 0 2px"><b>Now move the dial, and watch the dots.</b></p>
     <div class="val" id="dial-val"></div>
     <input type="range" id="coarse" min="0" max="1" step="0.0005" aria-label="blink time">
     <div class="ticks" id="ticks"></div>
     <input type="range" id="fine" min="0" max="1" step="0.001" value="0.5" aria-label="blink time, fine">
     <div class="finelab"><span>&larr; a bit shorter</span><span>fine tuning</span><span>a bit longer &rarr;</span></div>
   </div>
+  <p class="say" id="r-say"></p>
   <div class="result hide" id="r-result"></div>
   <button class="btn pri hide" id="b-act"></button>
 </section>
@@ -578,7 +580,7 @@ function stroke(x, G, days, s, col, w, f, dashed, label, grow) {
   if (col === 'bright') { paint = x.createLinearGradient(0, y1, 0, y2); paint.addColorStop(0, bcol(s.max)); paint.addColorStop(1, bcol(s.min)); }
   x.strokeStyle = paint; x.lineWidth = w; x.lineCap = 'round'; if (dashed) x.setLineDash([4, 4]);
   x.beginPath(); x.moveTo(xx, ya); x.lineTo(xx, yb); x.stroke(); x.setLineDash([]); x.lineCap = 'butt';
-  if (label) { x.fillStyle = col === 'bright' ? COL.silver : col; x.font = '600 9px Josefin, sans-serif'; x.textAlign = 'center'; x.fillText(label, xx, y1 - 7); }
+  if (label) { x.fillStyle = col === 'bright' ? COL.silver : col; x.font = '600 9px Josefin, sans-serif'; x.textAlign = 'center'; x.fillText(label, xx, dashed ? y2 + 14 : y1 - 7); }
 }
 function herLine(x, G, f, which) {
   var Hl = M.herLines()[which]; x.strokeStyle = COL.violet; x.lineWidth = 1.2; x.beginPath();
@@ -610,7 +612,7 @@ function setSay(id, html) { var e = $(id); e.innerHTML = html; e.classList.remov
 function setDial(days) {
   $('coarse').value = M.daysToCoarse(Math.min(C.DIAL_MAX, Math.max(C.DIAL_MIN, days))); $('fine').value = 0.5; readDial();
 }
-function readDial() { P = M.dialToDays(parseFloat($('coarse').value), parseFloat($('fine').value)); $('dial-val').innerHTML = M.beatWords(P); }
+function readDial() { P = M.dialToDays(parseFloat($('coarse').value), parseFloat($('fine').value)); $('dial-val').innerHTML = '<small>Blink time</small>' + M.beatWords(P); }
 
 function startGame() { game = M.newGame(seed); game.round = 0; startRound(); }
 function startRound() {
@@ -623,7 +625,7 @@ function startRound() {
   $('r-record-box').classList.remove('hide'); $('r-chart-box').classList.add('hide');
   $('plate-tag').textContent = 'A glass photo';
   if (i === 0) $('r-plate-say').innerHTML = 'This is a glass photo of the cloud. Every dot is a star. <b>Small and pale pink: a faint star. Big and dark: a bright star.</b> The star in the thick ring is the one you are timing. Watch it blink.';
-  else $('r-plate-say').innerHTML = i === 1 ? 'A new blinking star, in the thick ring. The star you already timed keeps a thin ring, with the blink time you found. <b>Bigger and darker means brighter:</b> compare them.' : 'A new blinking star, in the thick ring. The stars you timed keep thin rings, with the blink times you found. Bigger and darker means brighter.';
+  else $('r-plate-say').innerHTML = i === 1 ? 'A new blinking star, in the thick ring. The star you already timed keeps a thin ring, with the blink time you found. <b>Bigger and darker means brighter:</b> compare them.' : 'A new star, in the thick ring. Bigger and darker means brighter.';
   arrive(i === 0 ? 'slow' : 'fast', function () { beginTuning(C.DIAL_START); });
 }
 function arrive(speed, done) {
@@ -641,9 +643,9 @@ function arrive(speed, done) {
 }
 function beginTuning(startDays) {
   phase = 'tuning'; touched = game.round > 0; mode = touched ? 'beat' : 'date';
-  $('r-dial').classList.remove('hide'); setDial(startDays); $('rec-sw').classList.toggle('hide', !touched); syncSw();
+  $('r-dial').classList.remove('hide'); setDial(startDays); $('rec-sw').classList.toggle('hide', !touched); syncSw(); $('r-hint').classList.toggle('hide', touched);
   setSay('r-say', game.round === 0
-    ? 'Now find the <b>blink time</b>: how long the star takes to blink once.<br>Move the top dial to guess, and watch the dots move.'
+    ? 'The dial is your guess at the <b>blink time</b>: how long the star takes to blink once. Move it and watch the dots.'
     : game.round === 1 ? 'Turn the dial until the scribble becomes a neat zigzag. Careful: if it jumps up <b>twice</b> in each half of the box, your guess is twice too long.'
     : game.round === C.PREDICT_ROUND ? 'The dial starts at your guess. Turn it until the scribble becomes a neat zigzag, then write it down.'
     : 'Turn the dial until the scribble becomes a neat zigzag: one jump up and one slow slide down in each half. Then write it down.');
@@ -664,9 +666,9 @@ function startGuess() {
   phase = 'guess'; var s = M.star(rd.h);
   $('r-record-box').classList.add('hide'); $('r-chart-box').classList.remove('hide');
   $('plate-tag').textContent = 'At its brightest';
-  $('r-plate-say').innerHTML = 'One last star, in the thick ring. Its photos are not here yet. Every star on the glass is now shown <b>at its brightest</b>, next to the blink time you found for it. Compare the dots.';
-  setSay('r-say', 'Can you <b>guess its blink time just from its dot?</b> Is it bigger and darker than the others, or smaller and paler? Move the dial. The dashed line shows where your guess would put it on the chart, next to your six stars.');
-  $('r-dial').classList.remove('hide'); setDial(C.DIAL_START); drawGuess();
+  $('r-plate-say').innerHTML = 'One last star, in the thick ring. No photos yet. Every star is shown <b>at its brightest</b>, with the blink time you found for it.';
+  setSay('r-say', 'Can you <b>guess its blink time just from its dot?</b> Find the two stars it sits between, bigger than one and smaller than the other, and guess a blink time between theirs. The dashed line shows where your guess lands on the chart.');
+  $('r-dial').classList.remove('hide'); $('r-hint').classList.add('hide'); setDial(C.DIAL_START); drawGuess();
   var b = $('b-act'); b.textContent = 'That’s my guess'; b.classList.remove('hide'); b.onclick = function () {
     guessP = P; M.guess(game, P);
     $('r-chart-box').classList.add('hide'); $('r-record-box').classList.remove('hide'); $('plate-tag').textContent = 'A glass photo';
@@ -677,7 +679,7 @@ function startGuess() {
 }
 function drawGuess() { drawChart($('c-guess'), { upto: C.PREDICT_ROUND, preview: { days: P, s: M.star(rd.h) } }); }
 function onDial() { readDial(); if (phase === 'guess') drawGuess(); else if (phase === 'tuning') {
-  if (!touched) { touched = true; morph0 = performance.now(); $('rec-sw').classList.remove('hide'); setSay('r-say', 'See? The dots moved. Now they are sorted by your blink time, and a line joins them in order.<br><b>Wrong guess:</b> the line is a messy scribble.<br><b>Right guess:</b> it becomes a neat zigzag, a quick jump up and a slow slide down, twice.<br>Turn the dial until the scribble turns neat, then press Write it down.'); morphLoop(); }
+  if (!touched) { touched = true; morph0 = performance.now(); $('rec-sw').classList.remove('hide'); $('r-hint').classList.add('hide'); setSay('r-say', 'See? The dots moved. Now they are sorted by your blink time, and a line joins them in order.<br><b>Wrong guess:</b> the line is a messy scribble.<br><b>Right guess:</b> it becomes a neat zigzag, a quick jump up and a slow slide down, twice.<br>Turn the dial until the scribble turns neat, then press Write it down.'); morphLoop(); }
   mode = 'beat'; syncSw(); drawRecord(); } }
 function morphLoop() { drawRecord(); if (performance.now() - morph0 < 700) requestAnimationFrame(morphLoop); }
 $('coarse').addEventListener('input', function () { $('fine').value = 0.5; onDial(); });
@@ -697,6 +699,8 @@ function toChart() {
     var br = s.max < ps.max - 0.05 ? 'brighter than' : s.max > ps.max + 0.05 ? 'fainter than' : 'about as bright as';
     var sl = r.written > pr.written * 1.03 ? 'it blinks more slowly' : r.written < pr.written / 1.03 ? 'it blinks faster' : 'it blinks about as fast';
     say = '<b>Harvard ' + r.h + '</b> is ' + br + ' Harvard ' + pr.h + ', and you found ' + sl + '. ';
+    if (i === 2) say += 'Three stars now. <b>Look at where they sit. Do you see a pattern?</b> ';
+    if (i === C.PREDICT_ROUND - 1) say += 'For the last star you will <b>guess</b> its blink time from its brightness before you see any photos. Look at the chart first. ';
   }
   if (r.cmp.kind !== 'same') say += '<span class="ink">The thin violet line is where it goes with Leavitt’s blink time.</span>';
   $('ch-say').innerHTML = say;

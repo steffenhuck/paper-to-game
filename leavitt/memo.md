@@ -197,3 +197,15 @@ Steffen: "the brighter the star, the bigger the dot doesn't work, so it stays al
 - Words updated to match ("Small and pale pink: a faint star. Big and dark: a bright star."). Black is now kept for the ordinary stars of the cloud and for the line in the box.
 
 Browser session at 380 px: no errors, no horizontal scroll. Calibration unchanged.
+
+## Revision 4 (9 Nov 2026): a full sweep, played as the eleven-year-old
+
+A fresh pass through every screen, mechanism untouched. The main finding was not words but layout: on a phone the dial sat far below the box, so while she dragged the dial the dots she was meant to watch were off screen. Control and feedback now share the screen.
+
+- **Round screen reordered**: glass (shorter), one line, the box, the dial directly under it, then the explanation, the result, the button. The dial is more compact (its name sits inline with the value). The session test now asserts, in every round, that the box and the dial are both on screen without scrolling at 380 × 700, a small phone with the browser chrome taken off.
+- **First round**: a one-line nudge between box and dial, "Now move the dial, and watch the dots", shown until the first touch; the paragraph under the dial is one sentence.
+- **The guess round**: the chart sits where the box sits, with the dial under it; the hint now says how to reason ("find the two stars it sits between, bigger than one and smaller than the other, and guess a blink time between theirs"); the dashed stroke's label moved below the stroke so it cannot collide with a star's label.
+- **Chart screen**: at three stars, "Look at where they sit. Do you see a pattern?"; before the last star, a line saying that the next blink time is guessed from brightness before any photos, so look at the chart first.
+- Plate captions from round 3 on cut to one line.
+
+Browser session at 380 × 700: no errors, no horizontal scroll, box and dial on screen together in all seven rounds. Calibration unchanged (42/42).
