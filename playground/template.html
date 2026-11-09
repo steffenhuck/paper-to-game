@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Me and My Friends</title>
+<meta name="description" content="Build a country where boys and girls are friends, ring the school bell, and see who plays with whom. Then look inside one street. A game from Bagues and Zinovyeva's paper on childhood friendships and the gender-equality paradox.">
+<style>
+@font-face{font-family:Gloria;font-weight:400;src:url(data:font/woff2;base64,/*__F_GLORIA__*/) format('woff2')}
+@font-face{font-family:Patrick;font-weight:400;src:url(data:font/woff2;base64,/*__F_PATRICK__*/) format('woff2')}
+:root{--paper:#F2EAD3;--wax:#2A2826;--red:#D9402A;--blue:#3F7FCB;--yellow:#F0BE2C;--green:#5FA052;--pencil:#6b655c}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--paper);color:var(--wax)}
+body{font-family:Patrick,'Comic Sans MS',cursive;font-size:18px;line-height:1.38;overflow-x:hidden;
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .3 0 0 0 0 .2 0 0 0 .13 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{max-width:420px;margin:0 auto;padding:12px 16px 28px}
+.screen{display:none}.screen.on{display:block}
+h1{font-family:Gloria,Patrick,cursive;font-weight:400;font-size:40px;line-height:1.05;margin:6px 0 10px;transform:rotate(-1.5deg)}
+h2{font-family:Gloria,Patrick,cursive;font-weight:400;font-size:24px;margin:14px 0 6px;transform:rotate(-.8deg)}
+.big{font-size:20px;line-height:1.35}
+p{margin:0 0 10px}
+.aim{font-family:Gloria,Patrick,cursive;font-size:20px;line-height:1.25;margin:14px 0;padding:8px 0;border-top:2px solid var(--wax);border-bottom:2px solid var(--wax);border-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='8'%3E%3Cpath d='M0 4 Q15 1 30 4 T60 4 T90 4 T120 4' fill='none' stroke='%232A2826' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E") 0 0 8 0/0 0 8px 0 round}
+.muted{color:var(--pencil)}
+.small{font-size:15.5px;line-height:1.35}
+.topbar{display:flex;align-items:flex-start;gap:10px;margin-bottom:6px}
+.topbar .aimline{flex:1;font-family:Gloria,Patrick,cursive;font-size:17px;line-height:1.2}
+.q{flex:none;width:36px;height:36px;border:none;background:none;color:var(--wax);font-family:Gloria,cursive;font-size:22px;cursor:pointer;padding:0;position:relative}
+.q svg{position:absolute;inset:0;width:36px;height:36px}
+.q span{position:relative}
+.count{font-family:Gloria,Patrick,cursive;font-size:15px;color:var(--pencil);margin:0 0 4px}
+.pic{display:block;width:100%;height:auto;margin:4px 0}
+.rows{margin:6px 0 4px}
+.row{margin:8px 0}
+.row .lab{font-size:17px;margin:0 0 4px}
+.cards{display:flex;gap:8px}
+.card{flex:1;position:relative;background:none;border:none;padding:0;cursor:pointer;color:var(--wax);font-family:Patrick,cursive;font-size:15.5px;line-height:1.1;min-height:84px}
+.card svg{display:block;width:100%;height:auto}
+.card .ring{position:absolute;inset:-4px;pointer-events:none;opacity:0;transition:opacity .15s}
+.card.on .ring{opacity:1}
+.btn{display:block;width:100%;position:relative;background:none;border:none;padding:0;margin:10px 0;cursor:pointer;color:var(--wax);font-family:Gloria,Patrick,cursive;font-size:21px;min-height:58px;text-align:center}
+.btn svg{position:absolute;inset:0;width:100%;height:100%}
+.btn span{position:relative;display:block;padding:14px 10px}
+.btn.sec{font-size:18px;min-height:50px}.btn.sec span{padding:11px 10px}
+.btn:disabled{opacity:.35;cursor:default}
+.result{margin:10px 0 6px}
+.result p{margin:0 0 7px}
+.hide{display:none!important}
+.bubble{position:relative;margin:10px 0}
+.beta{font-style:italic;color:var(--pencil);font-size:15px;margin-top:22px;text-align:center}
+.overlay{display:none}
+.overlay.on{display:block}
+.overlay .wrap{padding-top:10px}
+#main.off{display:none}
+.links{display:flex;gap:18px;justify-content:center;margin:12px 0 0}
+.links button{background:none;border:none;color:var(--wax);font-family:Patrick,cursive;font-size:18px;text-decoration:underline;text-decoration-style:wavy;cursor:pointer;padding:4px}
+ul{padding-left:22px;margin:0 0 10px}li{margin:0 0 6px}
+code{font-family:monospace;font-size:14px}
+.verdict .big{margin:0 0 12px}
+#reveal-pic{margin:6px 0}
+.kidsay{display:flex;gap:10px;align-items:flex-end;margin:8px 0}
+</style>
+</head>
+<body>
+<div class="wrap" id="main">
+
+<!-- ===================== START ===================== -->
+<section id="s-start" class="screen on">
+  <svg id="start-pic" class="pic" viewBox="0 0 348 150"></svg>
+  <h1>Me and <br>My Friends</h1>
+  <p>Thirty-seven countries. Half a million children. One question on a school worksheet: <i>how many of your close friends are boys, and how many are girls?</i></p>
+  <p>You will set up a country with three cards, ring the school bell, and watch ten kids draw who they are friends with. Then you will look inside one street and try to change it.</p>
+  <div class="aim">Build a country where boys and girls are friends.</div>
+  <button class="btn" id="b-begin"><svg></svg><span>BEGIN</span></button>
+  <div class="links"><button data-help>How to play</button><button data-about>About</button></div>
+  <p class="beta">A beta, built from the paper. Builder&rsquo;s review only; the author finishes it.</p>
+</section>
+
+<!-- ===================== PART ONE: A COUNTRY ===================== -->
+<section id="s-country" class="screen">
+  <div class="topbar"><div class="aimline">Build a country where boys and girls are friends.</div><button class="q" data-help><svg></svg><span>?</span></button></div>
+  <div class="count" id="c-count">Country 1 of 3</div>
+  <svg id="c-pic" class="pic" viewBox="0 0 348 140"></svg>
+  <div id="c-set">
+    <p class="small">Tap one card in each row. The picture above shows what you set: the houses, who gets the jobs, what parents say. Nothing else about the country changes.</p>
+    <div class="rows">
+      <div class="row"><div class="lab">The houses are&hellip;</div><div class="cards" data-dial="money"></div></div>
+      <div class="row"><div class="lab">The jobs go to&hellip;</div><div class="cards" data-dial="jobs"></div></div>
+      <div class="row"><div class="lab">Parents say a child should&hellip;</div><div class="cards" data-dial="learn"></div></div>
+    </div>
+    <p class="small">Then ring the bell. School&rsquo;s out, ten kids go out to play, and we draw who is friends with whom. A line is a friendship. A <b style="color:var(--red)">red line</b> is a friend from the other side of the playground. The more red, the better you did.</p>
+    <button class="btn" id="b-bell"><svg></svg><span>RING THE BELL</span></button>
+  </div>
+  <div id="c-out" class="hide">
+    <svg id="c-play" class="pic" viewBox="0 0 348 230"></svg>
+    <svg id="c-ruler" class="pic" viewBox="0 0 348 76"></svg>
+    <div class="result" id="c-result"></div>
+    <button class="btn" id="b-another"><svg></svg><span>ANOTHER COUNTRY</span></button>
+    <button class="btn sec" id="b-enough"><svg></svg><span>THAT&rsquo;S ENOUGH, SHOW ME THE MAP</span></button>
+  </div>
+</section>
+
+<!-- ===================== THE REVEAL ===================== -->
+<section id="s-reveal" class="screen">
+  <h2>The map</h2>
+  <p>Your countries on the ruler, with two real ones from the paper.</p>
+  <svg id="r-ruler" class="pic" viewBox="0 0 348 160"></svg>
+  <div class="result" id="r-text"></div>
+  <button class="btn" id="b-inside"><svg></svg><span>LOOK INSIDE ONE STREET</span></button>
+</section>
+
+<!-- ===================== PART TWO: THE STREET ===================== -->
+<section id="s-street" class="screen">
+  <h2>One street in Britain</h2>
+  <svg id="st-pic" class="pic" viewBox="0 0 348 110"></svg>
+  <p>A study followed ten thousand British children from the day they were born. Here are ten of them at eleven: five from small houses, the poorest fifth of families, and five from big houses, the richest fifth. Boys on the left, girls on the right, the same as before.</p>
+  <div class="count">The small-house kids</div>
+  <svg id="st-small" class="pic" viewBox="0 0 348 200"></svg>
+  <svg id="st-small-r" class="pic" viewBox="0 0 348 76"></svg>
+  <div class="count">The big-house kids</div>
+  <svg id="st-big" class="pic" viewBox="0 0 348 200"></svg>
+  <svg id="st-big-r" class="pic" viewBox="0 0 348 76"></svg>
+  <div class="result" id="st-text"></div>
+  <div class="aim">Get the big-house kids mixing like the small-house kids.</div>
+  <button class="btn" id="b-try"><svg></svg><span>TRY</span></button>
+</section>
+
+<section id="s-levers" class="screen">
+  <div class="topbar"><div class="aimline">Get the big-house kids mixing like the small-house kids.</div><button class="q" data-help><svg></svg><span>?</span></button></div>
+  <div class="count" id="l-count">Try 1 of 3</div>
+  <svg id="l-pic" class="pic" viewBox="0 0 348 140"></svg>
+  <div id="l-set">
+    <p class="small">These are the big-house families. Tap one card in each row; the picture shows what you set. The houses stay big: that is the one thing you cannot change.</p>
+    <div class="rows">
+      <div class="row"><div class="lab">The mums think&hellip;</div><div class="cards" data-dial="mums"></div></div>
+      <div class="row"><div class="lab">A child should&hellip;</div><div class="cards" data-dial="learn2"></div></div>
+      <div class="row"><div class="lab">After school the kids are&hellip;</div><div class="cards" data-dial="week"></div></div>
+    </div>
+    <p class="small">Then draw it: the big-house kids draw their friends again. The small-house kids&rsquo; mark stays on the ruler as a dotted tick, so you can see how close you got.</p>
+    <button class="btn" id="b-draw"><svg></svg><span>DRAW IT</span></button>
+  </div>
+  <div id="l-out" class="hide">
+    <svg id="l-play" class="pic" viewBox="0 0 348 230"></svg>
+    <svg id="l-ruler" class="pic" viewBox="0 0 348 76"></svg>
+    <div class="result" id="l-result"></div>
+    <button class="btn" id="b-again"><svg></svg><span>ANOTHER TRY</span></button>
+    <button class="btn sec" id="b-enough2"><svg></svg><span>THAT&rsquo;S ENOUGH, TELL ME</span></button>
+  </div>
+</section>
+
+<section id="s-short" class="screen">
+  <h2>Why it won&rsquo;t close</h2>
+  <svg id="sh-pic" class="pic" viewBox="0 0 348 150"></svg>
+  <div class="result" id="sh-text"></div>
+  <button class="btn" id="b-verdict"><svg></svg><span>SO WHAT DOES IT MEAN?</span></button>
+</section>
+
+<!-- ===================== VERDICT ===================== -->
+<section id="s-verdict" class="screen verdict">
+  <h2>What you found</h2>
+  <div class="big" id="v-did"></div>
+  <h2>What the paper says</h2>
+  <div class="big" id="v-paper"></div>
+  <h2>What that means</h2>
+  <svg id="v-pic" class="pic" viewBox="0 0 348 120"></svg>
+  <div class="big" id="v-means"></div>
+  <button class="btn" id="b-restart"><svg></svg><span>ANOTHER STREET</span></button>
+  <div class="links"><button data-help>How to play</button><button data-about>About</button></div>
+  <p class="beta">A beta, built from the paper. Builder&rsquo;s review only; the author finishes it.</p>
+</section>
+</div>
+
+<!-- ===================== HELP ===================== -->
+<div id="o-help" class="overlay"><div class="wrap">
+  <h2>How to play</h2>
+  <p><b>Part one: build a country where boys and girls are friends.</b> Tap one card in each of three rows: how big the houses are, whether jobs go mostly to dads or to both the same, and what parents say a child should learn (do as you&rsquo;re told, work hard, think for yourself). The picture shows what you set. Ring the bell: ten kids go out to play, boys on the left, girls on the right, and lines are drawn between friends. A red line is a friend from the other side. The ruler under the playground counts how many of the ten kids have one. You get three countries; the cards go back to the middle each time. Then the map: your countries on the ruler next to Finland and Portugal.</p>
+  <p><b>Part two: get the big-house kids mixing like the small-house kids.</b> One street in Britain, five small houses and five big. The small-house kids&rsquo; mark is on the ruler as a dotted tick. Tap one card in each of three rows for the big-house families: what the mums think about mums working, what a child should learn, and whether the week after school is all clubs, a bit of both, or out on the street. Draw it, and the big-house kids draw their friends again. Three tries. Then the game says what moved the mark, what didn&rsquo;t, and why the paper says the gap stays.</p>
+  <p><b>The rule of the world.</b> Boys on the left, girls on the right, ten kids, twelve lines: that never changes. Only the number of red lines does.</p>
+  <p class="small muted">The numbers under the drawing come from the paper; the game rounds them to kids of ten and says &ldquo;a touch&rdquo; or &ldquo;about half a kid&rdquo; rather than decimals. Which kids hold the red lines is a coin toss with a visible seed in the address bar.</p>
+  <button class="btn" id="b-help-close"><svg></svg><span>BACK TO THE GAME</span></button>
+</div></div>
+
+<!-- ===================== ABOUT ===================== -->
+<div id="o-about" class="overlay"><div class="wrap">
+  /*__ABOUT__*/
+  <button class="btn" id="b-about-close"><svg></svg><span>BACK TO THE GAME</span></button>
+</div></div>
+
+<script>
+/*__MECHANISM__*/
+</script>
+<script>
+(function () {
+  'use strict';
+  var M = MECH, C = M.CONFIG;
+  var NS = 'http://www.w3.org/2000/svg';
+  var WAX = '#2A2826', RED = '#D9402A', BLUE = '#3F7FCB', YEL = '#F0BE2C', GRN = '#5FA052', PEN = '#6b655c';
+  var seed = parseInt((location.search.match(/seed=(\d+)/) || [])[1], 10) || (Date.now() % 100000);
+  if (!/seed=/.test(location.search)) { try { history.replaceState(null, '', location.pathname + '?seed=' + seed); } catch (e) {} }
+
+  // ---------- crayon drawing ----------
+  function el(n, a) { var e = document.createElementNS(NS, n); for (var k in a) e.setAttribute(k, a[k]); return e; }
+  function txt(g, x, y, s, size, color, anchor, font) { var t = el('text', { x: x, y: y, 'font-size': size || 14, fill: color || WAX, 'text-anchor': anchor || 'start', 'font-family': font === 'g' ? 'Gloria, cursive' : 'Patrick, cursive' }); t.textContent = s; g.appendChild(t); return t; }
+  function wpath(pts, r, amp, close) {
+    amp = amp == null ? 1.1 : amp; var P = [];
+    for (var i = 0; i < pts.length; i++) {
+      var x = pts[i][0], y = pts[i][1]; P.push([x + (r() - .5) * amp * 2, y + (r() - .5) * amp * 2]);
+      if (i < pts.length - 1) { var x2 = pts[i + 1][0], y2 = pts[i + 1][1]; P.push([(x + x2) / 2 + (r() - .5) * amp * 2.4, (y + y2) / 2 + (r() - .5) * amp * 2.4]); }
+    }
+    var d = 'M' + P.map(function (p) { return p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join('L'); if (close) d += 'Z'; return d;
+  }
+  function stroke(g, d, color, w, r, once) {
+    var p = el('path', { d: d, stroke: color, 'stroke-width': w, fill: 'none', 'stroke-linecap': 'round', 'stroke-linejoin': 'round', opacity: .9 }); g.appendChild(p);
+    if (!once) { var p2 = el('path', { d: d, stroke: color, 'stroke-width': w * .6, fill: 'none', 'stroke-linecap': 'round', 'stroke-linejoin': 'round', opacity: .45, transform: 'translate(' + ((r() - .5) * 2.4).toFixed(1) + ' ' + ((r() - .5) * 2.4).toFixed(1) + ')' }); g.appendChild(p2); }
+    return p;
+  }
+  function line(g, x1, y1, x2, y2, color, w, r, once) { return stroke(g, wpath([[x1, y1], [x2, y2]], r, .9), color, w, r, once); }
+  function circle(g, cx, cy, rad, color, w, r) { var pts = []; for (var i = 0; i <= 14; i++) { var a = i / 14 * Math.PI * 2 - .3; pts.push([cx + Math.cos(a) * rad, cy + Math.sin(a) * rad]); } return stroke(g, wpath(pts, r, Math.max(.6, rad * .07)), color, w, r); }
+  function ring(g, cx, cy, rx, ry, r) { var pts = []; for (var i = 0; i <= 18; i++) { var a = i / 18 * Math.PI * 2.15 - .6; pts.push([cx + Math.cos(a) * rx, cy + Math.sin(a) * ry]); } return stroke(g, wpath(pts, r, 1.6), WAX, 3, r, true); }
+  function hatch(g, x, y, w, h, color, r, gap) {
+    gap = gap || 5;
+    for (var i = -h; i < w; i += gap) {
+      var t0 = Math.max(0, -i / h), t1 = Math.min(1, (w - i) / h); if (t0 >= t1) continue;
+      stroke(g, wpath([[x + i + t0 * h, y + h - t0 * h], [x + i + t1 * h, y + h - t1 * h]], r, .7), color, 2.6, r, true);
+    }
+  }
+  function tri(g, pts, color, r) { // hatched triangle/polygon: hatch its bbox then clip
+    var xs = pts.map(function (p) { return p[0]; }), ys = pts.map(function (p) { return p[1]; });
+    var id = 'cp' + Math.floor(r() * 1e9); var cp = el('clipPath', { id: id }); cp.appendChild(el('path', { d: 'M' + pts.map(function (p) { return p.join(' '); }).join('L') + 'Z' })); g.appendChild(cp);
+    var gg = el('g', { 'clip-path': 'url(#' + id + ')' }); g.appendChild(gg);
+    hatch(gg, Math.min.apply(null, xs) - 2, Math.min.apply(null, ys) - 2, Math.max.apply(null, xs) - Math.min.apply(null, xs) + 4, Math.max.apply(null, ys) - Math.min.apply(null, ys) + 4, color, r);
+    stroke(g, wpath(pts.concat([pts[0]]), r, 1), WAX, 2.2, r);
+  }
+  var CLOTHES = [BLUE, YEL, GRN];
+  // a child: feet at (x,y); scale s; girl: dress and bunches; boy: shorts and scribble hair
+  function kid(g, x, y, girl, color, r, s, smile) {
+    s = s || 1; var hy = y - 50 * s, hr = 8.5 * s;
+    circle(g, x, hy, hr, WAX, 2.2 * s, r);
+    if (girl) { line(g, x - hr + 1, hy - 1, x - hr - 4 * s, hy + 9 * s, WAX, 2.2 * s, r, true); line(g, x + hr - 1, hy - 1, x + hr + 4 * s, hy + 9 * s, WAX, 2.2 * s, r, true); circle(g, x - hr - 4 * s, hy + 10 * s, 2.5 * s, WAX, 1.8 * s, r); circle(g, x + hr + 4 * s, hy + 10 * s, 2.5 * s, WAX, 1.8 * s, r); }
+    else stroke(g, wpath([[x - 7 * s, hy - 6 * s], [x - 4 * s, hy - 11 * s], [x - 1 * s, hy - 7 * s], [x + 2 * s, hy - 12 * s], [x + 5 * s, hy - 7 * s], [x + 8 * s, hy - 9 * s]], r, .5), WAX, 2 * s, r, true);
+    g.appendChild(el('circle', { cx: x - 3 * s, cy: hy - 1.5 * s, r: 1.2 * s, fill: WAX })); g.appendChild(el('circle', { cx: x + 3 * s, cy: hy - 1.5 * s, r: 1.2 * s, fill: WAX }));
+    var sm = smile == null ? 1 : smile; stroke(g, wpath([[x - 3.5 * s, hy + 3 * s], [x, hy + (3 + 2.2 * sm) * s], [x + 3.5 * s, hy + 3 * s]], r, .3), WAX, 1.6 * s, r, true);
+    var ny = hy + hr, hip;
+    if (girl) { hip = y - 13 * s; tri(g, [[x, ny + 1], [x - 12 * s, hip], [x + 12 * s, hip]], color, r); }
+    else { hip = y - 10 * s; line(g, x, ny, x, y - 20 * s, WAX, 2.4 * s, r); var gg = el('g'); g.appendChild(gg); hatch(gg, x - 8 * s, y - 21 * s, 16 * s, 11 * s, color, r, 4.5); stroke(g, wpath([[x - 8 * s, y - 21 * s], [x + 8 * s, y - 21 * s], [x + 8 * s, hip], [x - 8 * s, hip]], r, .8, true), WAX, 2 * s, r); }
+    line(g, x, ny + 8 * s, x - 13 * s, ny + 20 * s, WAX, 2.2 * s, r, true); line(g, x, ny + 8 * s, x + 13 * s, ny + 20 * s, WAX, 2.2 * s, r, true);
+    line(g, x - 4 * s, hip, x - 6 * s, y, WAX, 2.4 * s, r, true); line(g, x + 4 * s, hip, x + 6 * s, y, WAX, 2.4 * s, r, true);
+    return { x: x, y: ny + 12 * s };
+  }
+  function house(g, x, y, w, h, color, r, car) { // base-left at (x,y)
+    hatch(g, x, y - h, w, h, color, r, 6);
+    stroke(g, wpath([[x, y], [x, y - h], [x + w / 2, y - h - w * .45], [x + w, y - h], [x + w, y]], r, 1), WAX, 2.4, r);
+    stroke(g, wpath([[x, y], [x + w, y]], r, .8), WAX, 2.4, r);
+    stroke(g, wpath([[x + w * .4, y], [x + w * .4, y - h * .55], [x + w * .6, y - h * .55], [x + w * .6, y]], r, .7), WAX, 2, r, true);
+    if (w > 34) { stroke(g, wpath([[x + w * .12, y - h * .5], [x + w * .3, y - h * .5], [x + w * .3, y - h * .8], [x + w * .12, y - h * .8]], r, .6, true), WAX, 1.8, r, true); stroke(g, wpath([[x + w * .7, y - h * .5], [x + w * .88, y - h * .5], [x + w * .88, y - h * .8], [x + w * .7, y - h * .8]], r, .6, true), WAX, 1.8, r, true); }
+    if (w > 50) stroke(g, wpath([[x + w * .78, y - h - w * .15], [x + w * .78, y - h - w * .42], [x + w * .9, y - h - w * .42], [x + w * .9, y - h - w * .05]], r, .5), WAX, 2, r, true);
+    if (car) { var cx = x + w + 10, cy = y; stroke(g, wpath([[cx, cy - 4], [cx + 6, cy - 14], [cx + 24, cy - 14], [cx + 30, cy - 4], [cx, cy - 4]], r, .8), WAX, 2.2, r); hatch(g, cx + 2, cy - 13, 26, 9, RED === color ? YEL : YEL, r, 4); circle(g, cx + 7, cy - 2, 3.5, WAX, 2, r); circle(g, cx + 23, cy - 2, 3.5, WAX, 2, r); }
+  }
+  function sun(g, x, y, rad, r) { circle(g, x, y, rad, YEL, 3, r); for (var i = 0; i < 8; i++) { var a = i / 8 * Math.PI * 2; line(g, x + Math.cos(a) * (rad + 4), y + Math.sin(a) * (rad + 4), x + Math.cos(a) * (rad + 12), y + Math.sin(a) * (rad + 12), YEL, 2.6, r, true); } }
+  function grass(g, x, y, w, r) { for (var i = 0; i < w; i += 9) { var gx = x + i + r() * 4; stroke(g, wpath([[gx, y], [gx + 2, y - 7 - r() * 5]], r, .5), GRN, 2.2, r, true); } }
+  function bubble(g, x, y, w, h, r, tailTo, thought) { // speech bubble top-left (x,y), tail toward tailTo [tx,ty]
+    var pts = [[x, y], [x + w, y], [x + w, y + h], [x + w * .45, y + h]];
+    if (!thought && tailTo) pts.push([tailTo[0], tailTo[1]], [x + w * .3, y + h]);
+    pts.push([x, y + h]);
+    stroke(g, wpath(pts, r, .9, true), WAX, 2, r, true);
+    if (thought && tailTo) { circle(g, (x + w * .35 + tailTo[0]) / 2 + 2, (y + h + tailTo[1]) / 2 - 2, 3, WAX, 1.6, r); circle(g, tailTo[0], tailTo[1], 1.8, WAX, 1.4, r); }
+  }
+  function adult(g, x, y, woman, color, r, s) { return kid(g, x, y, woman, color, r, s || 1.25, 1); }
+  function briefcase(g, x, y, r) { stroke(g, wpath([[x, y], [x + 12, y], [x + 12, y + 9], [x, y + 9]], r, .5, true), WAX, 1.8, r, true); stroke(g, wpath([[x + 4, y], [x + 4, y - 3], [x + 8, y - 3], [x + 8, y]], r, .3), WAX, 1.6, r, true); }
+
+  // ---------- pictures ----------
+  function clear(svg) { while (svg.firstChild) svg.removeChild(svg.firstChild); return svg; }
+  function R(k) { return M.rng(seed * 7 + (k || 0)); }
+
+  function drawCountry(svg, d) { // 348 x 140
+    var g = clear(svg), r = R(1);
+    sun(g, 24, 24, 10, r); grass(g, 0, 136, 348, r);
+    // the houses, by money
+    var hw = [26, 40, 56][d.money + 1], hh = [20, 30, 42][d.money + 1];
+    house(g, 14, 128, hw, hh, [GRN, BLUE, BLUE][d.money + 1], r, d.money === 1);
+    txt(g, 14 + hw / 2 + (d.money === 1 ? 20 : 0), 138 + 0, '', 11);
+    // the jobs: a shop with people at a counter, by jobs
+    var sx = 128, sy = 128; stroke(g, wpath([[sx, sy], [sx, sy - 58], [sx + 92, sy - 58], [sx + 92, sy]], r, 1), WAX, 2.4, r);
+    stroke(g, wpath([[sx - 4, sy - 58], [sx + 96, sy - 58]], r, .8), WAX, 2.6, r); hatch(g, sx, sy - 72, 92, 12, YEL, r, 5); stroke(g, wpath([[sx, sy - 60], [sx, sy - 72], [sx + 92, sy - 72], [sx + 92, sy - 60]], r, .8), WAX, 2.2, r, true);
+    txt(g, sx + 46, sy - 62, 'JOBS', 12, WAX, 'middle', 'g');
+    var women = [1, 2, 3][d.jobs + 1], n = 6, order = d.jobs === 1 ? [1, 0, 1, 0, 1, 0] : d.jobs === 0 ? [0, 1, 0, 0, 1, 0] : [0, 0, 1, 0, 0, 0];
+    for (var i = 0; i < n; i++) { var w = order[i] === 1; adult(g, sx + 12 + i * 14, sy - 2, w, CLOTHES[i % 3], r, .72); }
+    // the parents and their bubble, by learn
+    var px = 262; adult(g, px, 128, true, YEL, r, 1.05); adult(g, px + 30, 128, false, GRN, r, 1.05);
+    bubble(g, 238, 8, 104, 40, r, [px + 14, 66]);
+    var words = [['Do as', 'you’re told'], ['Work', 'hard'], ['Think for', 'yourself']][d.learn + 1];
+    txt(g, 290, 25, words[0], 14, WAX, 'middle'); txt(g, 290, 41, words[1], 14, WAX, 'middle');
+  }
+  function drawFamily(svg, l) { // 348 x 120: the big-house family
+    var g = clear(svg), r = R(2);
+    grass(g, 0, 136, 348, r);
+    house(g, 8, 128, 56, 42, BLUE, r, true);
+    // mum with a thought bubble
+    var mx = 118; adult(g, mx, 130, true, YEL, r, 1.05);
+    bubble(g, 60, 6, 110, 38, r, [mx - 6, 70], true);
+    var mw = [['Mums stay', 'home'], ['Mums can go', 'either way'], ['Mums work', 'same as dads']][l.mums + 1];
+    txt(g, 115, 22, mw[0], 13, WAX, 'middle'); txt(g, 115, 37, mw[1], 13, WAX, 'middle');
+    if (l.mums === 1) briefcase(g, mx + 14, 110, r);
+    // the child with a speech bubble
+    var kx = 172; kid(g, kx, 130, r() < .5, GRN, r, .95, 1);
+    bubble(g, 178, 56, 76, 34, r, [kx + 8, 100]);
+    var lw = [['Do as', 'you’re told'], ['Work', 'hard'], ['Think for', 'yourself']][l.learn + 1];
+    txt(g, 216, 71, lw[0], 12, WAX, 'middle'); txt(g, 216, 85, lw[1], 12, WAX, 'middle');
+    // the week: five little afternoon boxes
+    var wx = 272, wy = 8; txt(g, wx + 30, wy + 10, 'the week', 12, PEN, 'middle', 'g');
+    for (i = 0; i < 5; i++) {
+      var bx = wx + (i % 3) * 22, by = wy + 16 + Math.floor(i / 3) * 22;
+      stroke(g, wpath([[bx, by], [bx + 18, by], [bx + 18, by + 18], [bx, by + 18]], r, .5, true), WAX, 1.6, r, true);
+      var club = l.week === -1 || (l.week === 0 && i % 2 === 0);
+      if (club) { circle(g, bx + 8.5, by + 8.5, 4.5, i % 2 ? BLUE : RED === WAX ? BLUE : YEL, 2, r); } // a ball
+      else { stroke(g, wpath([[bx + 3, by + 15], [bx + 14, by + 15]], r, .3), GRN, 2.2, r, true); stroke(g, wpath([[bx + 8.5, by + 15], [bx + 8.5, by + 6]], r, .3), WAX, 1.6, r, true); circle(g, bx + 8.5, by + 6, 4, GRN, 2, r); } // a tree
+    }
+    var i;
+    var ww = [['all clubs'], ['a bit of both'], ['out on the street']][l.week + 1];
+    txt(g, wx + 32, wy + 76, ww[0], 12, PEN, 'middle');
+  }
+  function drawStreet(svg) { // 348 x 110
+    var g = clear(svg), r = R(3); grass(g, 0, 106, 348, r);
+    for (var i = 0; i < 5; i++) house(g, 8 + i * 30, 98, 22, 18, [GRN, YEL, GRN, BLUE, YEL][i], r, false);
+    for (i = 0; i < 5; i++) house(g, 170 + i * 36, 98, 30, 26, [BLUE, BLUE, YEL, BLUE, GRN][i], r, false);
+    txt(g, 75, 30, 'small houses', 14, PEN, 'middle', 'g'); txt(g, 258, 30, 'big houses', 14, PEN, 'middle', 'g');
+  }
+  // the playground: ten kids, lines; returns the elements of the lines for animation
+  function drawPlayground(svg, draw, k, H, smiles) {
+    var g = clear(svg), r = R(10 + k), W = 348; H = H || 230;
+    sun(g, W - 30, 26, 11, r); grass(g, 0, H - 4, W, r);
+    // the middle, in pencil, dotted
+    for (var y = 30; y < H - 6; y += 12) stroke(g, wpath([[W / 2, y], [W / 2, y + 6]], r, .4), PEN, 2, r, true);
+    txt(g, 12, 20, 'boys', 15, PEN, 'start', 'g'); txt(g, W - 12, 20, 'girls', 15, PEN, 'end', 'g');
+    var anchors = [], hs = H / 230;
+    draw.kids.forEach(function (kd, i) {
+      var x = kd.x * W, y = H * (0.56 + (kd.y - 0.35) * 1.2);
+      anchors.push(kid(g, x, y, kd.side === 1, CLOTHES[i % 3], r, .95 * Math.min(1, hs + .15), smiles ? smiles[i] : 1));
+    });
+    var lg = el('g'); g.appendChild(lg); var lines = [];
+    draw.lines.forEach(function (ln) {
+      var a = anchors[ln.a], b = anchors[ln.b];
+      var p = line(lg, a.x, a.y, b.x, b.y, ln.cross ? RED : WAX, ln.cross ? 3.2 : 2, r, false);
+      var grp = el('g'); lg.appendChild(grp); grp.appendChild(p); if (p.nextSibling) grp.appendChild(lg.children[lg.children.length - 2]);
+      grp.style.opacity = 0; lines.push({ g: grp, cross: ln.cross });
+    });
+    return lines;
+  }
+  function animateLines(lines, done) {
+    var i = 0; (function step() { if (i >= lines.length) { if (done) done(); return; } lines[i].g.style.transition = 'opacity .25s'; lines[i].g.style.opacity = 1; i++; setTimeout(step, lines[i - 1] && lines[i - 1].cross ? 360 : 220); })();
+  }
+  // the ruler: 0..10 kids of ten with a friend from the other side; marks: [{k, big, label, dotted, color}]
+  function drawRuler(svg, marks, k, title) {
+    var g = clear(svg), r = R(20 + (k || 0)), x0 = 22, x1 = 326, y = 50;
+    stroke(g, wpath([[x0 - 6, y], [x1 + 6, y]], r, .9), WAX, 2.6, r);
+    for (var i = 0; i <= 10; i++) { var x = x0 + (x1 - x0) * i / 10; stroke(g, wpath([[x, y - (i % 5 ? 5 : 8)], [x, y + (i % 5 ? 5 : 8)]], r, .5), WAX, 2, r, true); if (i % 5 === 0) txt(g, x, y + 24, String(i), 14, WAX, 'middle', 'g'); }
+    txt(g, (x0 + x1) / 2, 12, title || 'kids of ten with a friend from the other side', 13, PEN, 'middle');
+    marks.forEach(function (m) {
+      var x = x0 + (x1 - x0) * m.k / 10;
+      if (m.dotted) { for (var yy = y - 16; yy < y + 16; yy += 6) stroke(g, wpath([[x, yy], [x, yy + 3]], r, .3), PEN, 2.2, r, true); if (m.label) txt(g, x + 5, y - 21, m.label, 12, PEN, 'start'); return; }
+      if (m.big) { var mk = el('g'); g.appendChild(mk); stroke(mk, wpath([[x - 5, y - 14], [x + 1, y + 14]], r, .8), m.color || RED, 5, r); stroke(mk, wpath([[x + 5, y - 14], [x - 1, y + 14]], r, .8), m.color || RED, 5, r); mk.style.transformOrigin = x + 'px ' + y + 'px'; mk.style.transform = 'scale(0)'; mk.style.transition = 'transform .35s cubic-bezier(.3,1.6,.6,1)'; setTimeout(function () { mk.style.transform = 'scale(1)'; }, 60); }
+      else { stroke(g, wpath([[x, y - 11], [x, y + 11]], r, .6), m.color || WAX, 2.6, r, true); if (m.label) txt(g, x, y - 21, m.label, 12, PEN, 'middle'); }
+    });
+  }
+  function drawReveal(svg, countries) { // 348 x 150: the ruler with the player's countries and Finland, Portugal
+    var g = clear(svg), r = R(30), x0 = 22, x1 = 326, y = 92;
+    stroke(g, wpath([[x0 - 6, y], [x1 + 6, y]], r, .9), WAX, 2.6, r);
+    for (var i = 0; i <= 10; i++) { var x = x0 + (x1 - x0) * i / 10; stroke(g, wpath([[x, y - (i % 5 ? 5 : 8)], [x, y + (i % 5 ? 5 : 8)]], r, .5), WAX, 2, r, true); if (i % 5 === 0) txt(g, x, y + 24, String(i), 14, WAX, 'middle', 'g'); }
+    txt(g, (x0 + x1) / 2, 156, 'kids of ten with a friend from the other side', 13, PEN, 'middle');
+    var fin = C.KIDS * (1 - C.NONE_FINLAND), por = C.KIDS * (1 - C.NONE_PORTUGAL);
+    [[fin, 'Finland', 1], [por, 'Portugal', -1]].forEach(function (c) {
+      var x = x0 + (x1 - x0) * c[0] / 10; stroke(g, wpath([[x, y - 12], [x, y + 12]], r, .6), BLUE, 3.2, r); txt(g, x, y - 52, c[1], 15, BLUE, 'middle', 'g');
+      // its dial pictures, tiny: house, jobs, bubble
+      var d = c[2]; house(g, x - 44, y - 20, [16, 0, 26][d + 1], [12, 0, 20][d + 1], BLUE, r, false);
+      adult(g, x - 8, y - 18, false, GRN, r, .5); adult(g, x + 4, y - 18, d === 1, YEL, r, .5);
+      txt(g, x + 28, y - 26, d === 1 ? 'think' : 'obey', 11, BLUE, 'middle');
+    });
+    countries.forEach(function (c, i) {
+      var x = x0 + (x1 - x0) * c.kids / 10;
+      stroke(g, wpath([[x - 4, y - 10], [x + 1, y + 10]], r, .7), RED, 4, r); stroke(g, wpath([[x + 4, y - 10], [x - 1, y + 10]], r, .7), RED, 4, r);
+      txt(g, x + (i % 2 ? 8 : -8), y + 40, String(i + 1), 13, RED, 'middle', 'g');
+    });
+    txt(g, x0 - 8, y + 40, 'yours:', 12, RED, 'start');
+  }
+  function drawShortfall(svg) { // 348 x 150: two big-house kids, happy, saying so
+    var g = clear(svg), r = R(40); grass(g, 0, 146, 348, r);
+    house(g, 8, 140, 50, 38, BLUE, r, true);
+    var a = kid(g, 160, 140, false, BLUE, r, 1.15, 1.3), b = kid(g, 215, 140, false, YEL, r, 1.15, 1.3), c = kid(g, 300, 140, true, GRN, r, 1.15, 1.3);
+    line(g, a.x, a.y, b.x, b.y, WAX, 2, r);
+    bubble(g, 120, 6, 120, 34, r, [185, 72]); txt(g, 180, 28, 'We like our friends.', 13, WAX, 'middle');
+    bubble(g, 252, 40, 88, 30, r, [300, 84]); txt(g, 296, 60, 'Me too.', 13, WAX, 'middle');
+  }
+  function drawSchool(svg) { // 348 x 120: a school with two doors
+    var g = clear(svg), r = R(50); grass(g, 0, 116, 348, r);
+    stroke(g, wpath([[60, 110], [60, 40], [288, 40], [288, 110]], r, 1), WAX, 2.4, r); hatch(g, 60, 40, 228, 70, YEL, r, 9);
+    stroke(g, wpath([[52, 40], [174, 12], [296, 40]], r, 1), WAX, 2.4, r);
+    txt(g, 174, 32, 'SCHOOL', 14, WAX, 'middle', 'g');
+    [[110, 'Physics'], [238, 'Drama']].forEach(function (d) { stroke(g, wpath([[d[0] - 16, 110], [d[0] - 16, 70], [d[0] + 16, 70], [d[0] + 16, 110]], r, .7), WAX, 2, r, true); txt(g, d[0], 64, d[1], 12, WAX, 'middle'); });
+    kid(g, 92, 110, false, BLUE, r, .55, 1); kid(g, 128, 110, true, GRN, r, .55, 1); kid(g, 220, 110, true, YEL, r, .55, 1); kid(g, 256, 110, false, GRN, r, .55, 1);
+    line(g, 92, 85, 128, 85, RED, 2.6, r); line(g, 220, 85, 256, 85, RED, 2.6, r);
+  }
+  function drawStart(svg) { // 348 x 150
+    var g = clear(svg), r = R(60); sun(g, 300, 30, 13, r); grass(g, 0, 146, 348, r);
+    var a = kid(g, 70, 140, false, BLUE, r, 1.3, 1.2), b = kid(g, 150, 140, true, YEL, r, 1.3, 1.2), c = kid(g, 230, 140, false, GRN, r, 1.3, 1.2);
+    line(g, a.x, a.y, b.x, b.y, RED, 3.4, r); line(g, b.x, b.y, c.x, c.y, RED, 3.4, r);
+    txt(g, 20, 28, 'me and my friends', 16, PEN, 'start', 'g');
+  }
+
+  // ---------- cards ----------
+  function cardIcon(svg, dial, v) { // 100 x 56
+    var g = clear(svg), r = R(70 + v);
+    if (dial === 'money') { var w = [20, 32, 46][v + 1], h = [14, 22, 32][v + 1]; house(g, v === 1 ? 10 : 50 - w / 2, 50, w, h, [GRN, BLUE, BLUE][v + 1], r, v === 1); }
+    if (dial === 'jobs') { var order = v === 1 ? [1, 0, 1, 0] : v === 0 ? [0, 1, 0, 0] : [0, 0, 0, 0]; for (var i = 0; i < 4; i++) adult(g, 22 + i * 19, 52, order[i] === 1, CLOTHES[i % 3], r, .72); }
+    if (dial === 'learn' || dial === 'learn2') { bubble(g, 12, 6, 76, 34, r, [30, 50]); var wds = [['Do as', 'you’re told'], ['Work', 'hard'], ['Think for', 'yourself']][v + 1]; txt(g, 50, 21, wds[0], 12, WAX, 'middle'); txt(g, 50, 35, wds[1], 12, WAX, 'middle'); }
+    if (dial === 'mums') { adult(g, 30, 52, true, YEL, r, .8); if (v === -1) house(g, 50, 52, 26, 18, GRN, r, false); if (v === 0) { house(g, 50, 52, 18, 13, GRN, r, false); briefcase(g, 78, 40, r); } if (v === 1) { briefcase(g, 40, 40, r); adult(g, 70, 52, false, BLUE, r, .8); briefcase(g, 80, 40, r); } }
+    if (dial === 'week') { for (i = 0; i < 5; i++) { var bx = 8 + i * 18, by = 20; stroke(g, wpath([[bx, by], [bx + 15, by], [bx + 15, by + 15], [bx, by + 15]], r, .5, true), WAX, 1.5, r, true); var club = v === -1 || (v === 0 && i % 2 === 0); if (club) circle(g, bx + 7.5, by + 7.5, 4, i % 2 ? BLUE : YEL, 2, r); else { stroke(g, wpath([[bx + 7.5, by + 14], [bx + 7.5, by + 6]], r, .3), WAX, 1.5, r, true); circle(g, bx + 7.5, by + 6, 3.5, GRN, 2, r); } } }
+  }
+  var CARD_WORDS = { money: ['small', 'middling', 'big'], jobs: ['mostly dads', 'dads first, then mums', 'both the same'], learn: ['do as you’re told', 'work hard', 'think for yourself'], learn2: ['do as you’re told', 'work hard', 'think for yourself'], mums: ['mums stay home', 'either way', 'mums work, same as dads'], week: ['all clubs', 'a bit of both', 'out on the street'] };
+  function buildCards(container, dial, onPick) {
+    container.innerHTML = '';
+    [-1, 0, 1].forEach(function (v) {
+      var b = document.createElement('button'); b.className = 'card'; b.setAttribute('data-v', v); b.setAttribute('aria-pressed', 'false');
+      var ic = el('svg', { viewBox: '0 0 100 56' }); cardIcon(ic, dial, v); b.appendChild(ic);
+      var lab = document.createElement('div'); lab.textContent = CARD_WORDS[dial][v + 1]; b.appendChild(lab);
+      var rg = el('svg', { viewBox: '0 0 100 90', 'class': 'ring', preserveAspectRatio: 'none' }); ring(rg, 50, 45, 47, 42, R(80 + v)); b.appendChild(rg);
+      b.addEventListener('click', function () { setCard(container, v); onPick(dial, v); });
+      container.appendChild(b);
+    });
+  }
+  function setCard(container, v) { Array.prototype.forEach.call(container.children, function (c) { var on = +c.getAttribute('data-v') === v; c.classList.toggle('on', on); c.setAttribute('aria-pressed', on ? 'true' : 'false'); }); }
+  function drawButtons() { Array.prototype.forEach.call(document.querySelectorAll('.btn'), function (b, i) { var svg = b.querySelector('svg'); if (!svg || svg.childNodes.length) return; svg.setAttribute('viewBox', '0 0 300 58'); svg.setAttribute('preserveAspectRatio', 'none'); var r = R(90 + i); var g = el('g'); svg.appendChild(g); var primary = !b.classList.contains('sec'); if (primary) hatch(g, 4, 4, 292, 50, RED, r, 7); stroke(g, wpath([[4, 4], [296, 4], [296, 54], [4, 54]], r, 1.2, true), WAX, 3, r); }); Array.prototype.forEach.call(document.querySelectorAll('.q'), function (b, i) { var svg = b.querySelector('svg'); if (svg.childNodes.length) return; svg.setAttribute('viewBox', '0 0 36 36'); circle(svg, 18, 18, 15, WAX, 2.4, R(99 + i)); }); }
+
+  // ---------- state and flow ----------
+  var game = { seed: seed, phase: 'start', countries: [], streets: [], dials: { money: 0, jobs: 0, learn: 0 }, levers: { mums: 0, learn: 0, week: 0 }, lastKidsC: null, lastKidsS: null };
+  var $ = function (id) { return document.getElementById(id); };
+  function show(id) { Array.prototype.forEach.call(document.querySelectorAll('.screen'), function (s) { s.classList.toggle('on', s.id === id); }); window.scrollTo(0, 0); }
+  function fill(node, lines) { node.innerHTML = ''; lines.forEach(function (l) { var p = document.createElement('p'); p.textContent = l; node.appendChild(p); }); }
+
+  // part one
+  function startCountry() {
+    game.phase = 'country'; game.dials = { money: 0, jobs: 0, learn: 0 };
+    $('c-count').textContent = 'Country ' + (game.countries.length + 1) + ' of ' + C.TRIES_COUNTRY;
+    ['money', 'jobs', 'learn'].forEach(function (k) { var cont = document.querySelector('#s-country .cards[data-dial="' + k + '"]'); buildCards(cont, k, function (dial, v) { game.dials[dial] = v; drawCountry($('c-pic'), game.dials); }); setCard(cont, 0); });
+    drawCountry($('c-pic'), game.dials);
+    $('c-set').classList.remove('hide'); $('c-out').classList.add('hide'); $('b-enough').classList.toggle('hide', game.countries.length < 1);
+    show('s-country');
+  }
+  function ringBell() {
+    var c = M.country(game.dials); game.countries.push(c); game.phase = 'country-out';
+    var draw = M.drawPlayground(seed + 101 * game.countries.length, c.kids, c.share);
+    $('c-set').classList.add('hide'); $('c-out').classList.remove('hide');
+    fill($('c-result'), []); clear($('c-ruler')); $('b-another').classList.add('hide'); $('b-enough').classList.add('hide');
+    var lines = drawPlayground($('c-play'), draw, game.countries.length);
+    window.scrollTo(0, 0); $('c-play').scrollIntoView({ block: 'start' });
+    animateLines(lines, function () {
+      var marks = game.countries.slice(0, -1).map(function (p, i) { return { k: p.kids, label: String(i + 1) }; }); marks.push({ k: c.kids, big: true, label: String(game.countries.length) });
+      drawRuler($('c-ruler'), marks, game.countries.length);
+      setTimeout(function () {
+        fill($('c-result'), M.countryResult(c, game.lastKidsC)); game.lastKidsC = c.kids;
+        $('b-another').classList.toggle('hide', game.countries.length >= C.TRIES_COUNTRY);
+        $('b-enough').classList.toggle('hide', game.countries.length < 2); $('b-enough').querySelector('span').innerHTML = game.countries.length >= C.TRIES_COUNTRY ? 'SHOW ME THE MAP' : 'THAT’S ENOUGH, SHOW ME THE MAP';
+      }, 450);
+    });
+  }
+  function reveal() {
+    game.phase = 'reveal'; drawReveal($('r-ruler'), game.countries);
+    var fin = M.kidsWords(C.KIDS * (1 - C.NONE_FINLAND)), por = M.kidsWords(C.KIDS * (1 - C.NONE_PORTUGAL));
+    fill($('r-text'), [
+      'Finland: big houses, jobs for both the same, parents who say think for yourself. ' + fin.replace(/^./, function (m) { return m.toUpperCase(); }) + ' of ten kids have a friend from the other side, and four in ten have none.',
+      'Portugal: smaller houses, dads first, do as you’re told. ' + por.replace(/^./, function (m) { return m.toUpperCase(); }) + ' of ten.',
+      'Every rich, equal, think-for-yourself country you can build comes out at the Finland end. In the paper’s 37 countries the three go together, and the playground sorts itself most where they are highest. The paper calls it the gender-equality paradox: it was known from universities, where the richest, most equal countries have the most boys-only and girls-only subjects. The paper finds it on the playground at eleven, before anyone has chosen a subject.',
+      'But a country is just a lot of streets. Was it the equality that did it? Look inside one.'
+    ]);
+    show('s-reveal');
+  }
+  // part two
+  function street() {
+    game.phase = 'street'; drawStreet($('st-pic'));
+    var sm = M.smallHouses(), bg = M.bigHouses({ mums: 0, learn: 0, week: 0 });
+    var ds = M.drawPlayground(seed + 7, sm.kids, 0.3), db = M.drawPlayground(seed + 8, C.KIDS * C.MIXED_HIGHEST_FIFTH, 0.22);
+    var l1 = drawPlayground($('st-small'), ds, 51, 200), l2 = drawPlayground($('st-big'), db, 52, 200);
+    l1.concat(l2).forEach(function (x) { x.g.style.opacity = 1; });
+    drawRuler($('st-small-r'), [{ k: sm.kids, big: true }], 53); drawRuler($('st-big-r'), [{ k: C.KIDS * C.MIXED_HIGHEST_FIFTH, big: true }, { k: sm.kids, dotted: true, label: 'small-house kids' }], 54);
+    fill($('st-text'), [
+      'The small-house kids: ' + M.kidsWords(sm.kids) + ' of ten have a friend from the other side. The big-house kids: ' + M.kidsWords(C.KIDS * C.MIXED_HIGHEST_FIFTH) + '. Same country, same towns, same schools. About two kids in ten, and the paper finds the same gap in 34 of its 37 countries.',
+      'You can change three things about the big-house families: what the mums think about mums working, what they say a child should learn, and what the kids do after school. You cannot change the houses.'
+    ]);
+    show('s-street');
+  }
+  function startLevers() {
+    game.phase = 'levers'; game.levers = { mums: 0, learn: 0, week: 0 };
+    $('l-count').textContent = 'Try ' + (game.streets.length + 1) + ' of ' + C.TRIES_STREET;
+    [['mums', 'mums'], ['learn2', 'learn'], ['week', 'week']].forEach(function (p) { var cont = document.querySelector('#s-levers .cards[data-dial="' + p[0] + '"]'); buildCards(cont, p[0], function (dial, v) { game.levers[p[1]] = v; drawFamily($('l-pic'), game.levers); }); setCard(cont, 0); });
+    drawFamily($('l-pic'), game.levers);
+    $('l-set').classList.remove('hide'); $('l-out').classList.add('hide');
+    show('s-levers');
+  }
+  function drawIt() {
+    var b = M.bigHouses(game.levers); game.streets.push(b); game.phase = 'levers-out';
+    var draw = M.drawPlayground(seed + 301 * game.streets.length, b.kids, 0.2 + 0.2 * b.share);
+    $('l-set').classList.add('hide'); $('l-out').classList.remove('hide');
+    fill($('l-result'), []); clear($('l-ruler')); $('b-again').classList.add('hide'); $('b-enough2').classList.add('hide');
+    var lines = drawPlayground($('l-play'), draw, 60 + game.streets.length);
+    window.scrollTo(0, 0); $('l-play').scrollIntoView({ block: 'start' });
+    animateLines(lines, function () {
+      var marks = game.streets.slice(0, -1).map(function (p, i) { return { k: p.kids, label: String(i + 1) }; });
+      marks.push({ k: M.smallHouses().kids, dotted: true, label: 'small-house kids' }); marks.push({ k: b.kids, big: true, label: String(game.streets.length) });
+      drawRuler($('l-ruler'), marks, 60 + game.streets.length);
+      setTimeout(function () {
+        fill($('l-result'), M.streetResult(b, game.lastKidsS)); game.lastKidsS = b.kids;
+        $('b-again').classList.toggle('hide', game.streets.length >= C.TRIES_STREET);
+        $('b-enough2').classList.toggle('hide', game.streets.length < 2); $('b-enough2').querySelector('span').innerHTML = game.streets.length >= C.TRIES_STREET ? 'TELL ME WHY' : 'THAT’S ENOUGH, TELL ME WHY';
+      }, 450);
+    });
+  }
+  function shortfall() { game.phase = 'short'; drawShortfall($('sh-pic')); fill($('sh-text'), M.shortfall().lines); show('s-short'); }
+  function verdict() {
+    game.phase = 'verdict'; var v = M.verdict(game.countries, game.streets);
+    $('v-did').textContent = v.did; $('v-paper').textContent = v.paper; $('v-means').textContent = v.means; drawSchool($('v-pic'));
+    show('s-verdict');
+  }
+  function restart() { game.countries = []; game.streets = []; game.lastKidsC = null; game.lastKidsS = null; seed = (seed * 9301 + 49297) % 233280 + 1; game.seed = seed; try { history.replaceState(null, '', location.pathname + '?seed=' + seed); } catch (e) {} startCountry(); }
+
+  // help / about
+  var returnTo = null;
+  function openOverlay(id) { returnTo = window.scrollY; $('main').classList.add('off'); $(id).classList.add('on'); window.scrollTo(0, 0); }
+  function closeOverlay(id) { $(id).classList.remove('on'); $('main').classList.remove('off'); if (returnTo != null) window.scrollTo(0, returnTo); }
+  Array.prototype.forEach.call(document.querySelectorAll('[data-help]'), function (b) { b.addEventListener('click', function () { openOverlay('o-help'); }); });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-about]'), function (b) { b.addEventListener('click', function () { openOverlay('o-about'); }); });
+  $('b-help-close').addEventListener('click', function () { closeOverlay('o-help'); });
+  $('b-about-close').addEventListener('click', function () { closeOverlay('o-about'); });
+
+  $('b-begin').addEventListener('click', startCountry);
+  $('b-bell').addEventListener('click', ringBell);
+  $('b-another').addEventListener('click', startCountry);
+  $('b-enough').addEventListener('click', reveal);
+  $('b-inside').addEventListener('click', street);
+  $('b-try').addEventListener('click', startLevers);
+  $('b-draw').addEventListener('click', drawIt);
+  $('b-again').addEventListener('click', startLevers);
+  $('b-enough2').addEventListener('click', shortfall);
+  $('b-verdict').addEventListener('click', verdict);
+  $('b-restart').addEventListener('click', restart);
+
+  drawButtons(); drawStart($('start-pic'));
+  window.__game = function () { return { phase: game.phase, game: game, seed: seed }; };
+})();
+</script>
+</body>
+</html>

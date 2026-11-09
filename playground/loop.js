@@ -1,0 +1,21 @@
+// Headless play of the loop: prints what the player sees after each act (placeholder for the skin).
+const M = require('./mechanism.js'), C = M.CONFIG;
+const tries = [{ money: 1, jobs: 1, learn: 1 }, { money: 1, jobs: 1, learn: -1 }, { money: -1, jobs: -1, learn: -1 }];
+let prev = null, countries = [];
+console.log('PART ONE · Build a country where boys and girls are friends');
+tries.forEach((d, i) => { const c = M.country(d); countries.push(c); const p = M.drawPlayground(100 + i, c.kids, c.share);
+  console.log(`\nCOUNTRY ${i + 1}: money ${d.money} jobs ${d.jobs} learn ${d.learn} -> share ${c.share.toFixed(3)}, none ${c.none.toFixed(3)}, ruler ${c.kids.toFixed(2)} | drawn: ${p.kidsWithRed} kids red, ${p.crossLines} red lines of ${p.lines.length}`);
+  M.countryResult(c, prev).forEach(l => console.log('  ' + l)); prev = c.kids; });
+console.log('\nREVEAL: Finland ' + (C.KIDS * (1 - C.NONE_FINLAND)).toFixed(1) + ', Portugal ' + (C.KIDS * (1 - C.NONE_PORTUGAL)).toFixed(1));
+console.log('\nPART TWO · Get the big-house kids mixing like the small-house kids');
+console.log('  street: small houses ' + M.smallHouses().kids.toFixed(2) + ', big houses (middle levers) ' + M.bigHouses({ mums: 0, learn: 0, week: 0 }).kids.toFixed(2));
+const st = [{ mums: -1, learn: -1, week: 1 }, { mums: 1, learn: -1, week: 1 }, { mums: 1, learn: 1, week: -1 }];
+prev = null; const streets = [];
+st.forEach((l, i) => { const b = M.bigHouses(l); streets.push(b); console.log(`\nTRY ${i + 1}: ${JSON.stringify(l)} -> share ${b.share.toFixed(3)}, ruler ${b.kids.toFixed(2)}; effects ${JSON.stringify(Object.fromEntries(Object.entries(b.effects).map(([k, v]) => [k, +(10 * v).toFixed(2)])))} kids`);
+  M.streetResult(b, prev).forEach(x => console.log('  ' + x)); prev = b.kids; });
+console.log('\nSHORTFALL'); M.shortfall().lines.forEach(x => console.log('  ' + x));
+const v = M.verdict(countries, streets); console.log('\nVERDICT\n  ' + v.did + '\n  ' + v.paper + '\n  ' + v.means);
+console.log('\nPLAY IT IN NUMBERS: all 27 country settings (kids of ten, bivariate | multivariate, corner flag)');
+[-1, 0, 1].forEach(a => [-1, 0, 1].forEach(b => [-1, 0, 1].forEach(c => { const d = { money: a, jobs: b, learn: c }, r = M.country(d); console.log(`  ${a} ${b} ${c}: ${r.kids.toFixed(1)} | ${(C.KIDS * (1 - M.noneFromShare(M.countryShareMultivariate(d)))).toFixed(1)}${r.corner ? '  corner' : ''}`); })));
+console.log('\nall 27 street settings (big-house kids of ten; target ' + M.smallHouses().kids.toFixed(1) + ')');
+[-1, 0, 1].forEach(a => [-1, 0, 1].forEach(b => [-1, 0, 1].forEach(c => { const r = M.bigHouses({ mums: a, learn: b, week: c }); console.log(`  mums ${a} learn ${b} week ${c}: ${r.kids.toFixed(2)}`); })));

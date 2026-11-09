@@ -1,0 +1,44 @@
+PASS all dials up gives Finland's share (16%) within 0.02  — 0.160
+PASS all dials down gives Portugal's share (39%) within 0.02  — 0.390
+PASS middle gives the age-11 mean share (27%) within 0.02  — 0.275
+PASS all up: share with no opposite-sex friend 41% within 0.03  — 0.410
+PASS all down: 6% within 0.02  — 0.060
+PASS middle: about 21-23% with none (p. 17: 21% at 11 overall)  — 0.235
+PASS ruler: Finland end about 6 of 10, Portugal end about 9 of 10  — 5.90 / 9.40
+PASS dial money up lowers the share (reported rho < 0)  — 0.060 swing
+PASS dial jobs up lowers the share (reported rho < 0)  — 0.066 swing
+PASS dial learn up lowers the share (reported rho < 0)  — 0.103 swing
+PASS parenting swing > equality swing > money swing (|rho| .67 > .43 > .39)  — 0.060 / 0.066 / 0.103
+PASS robust: both constructions order all-up < middle < all-down  — 0.160|0.160  0.275|0.275  0.390|0.390
+PASS robust: every setting where the two constructions disagree in sign carries the corner or the hedge line on screen  — 6 disagreeing settings
+PASS robust: a lone move of the jobs dial is hedged; a lone move of the parents' dial or the money dial is not
+PASS the flagged corners are a minority of settings  — 12 of 27
+PASS small houses at 65.6%, about 7 of 10  — 6.56
+PASS big houses, levers in the middle, near the top fifth (48%), within 0.03  — 0.499
+PASS the gap in the middle is about 17 points (Fig. 4: 17.4)  — 0.157
+PASS mums "same as dads" raises mixing (Table A14: +0.018/SD)  — 0.054
+PASS "think for yourself" lowers mixing vs "do as you're told" (Table 4: -0.018)  — 0.018
+PASS "work hard" between the two, nearer "obey" (Table 4: -0.002)
+PASS the street raises mixing vs all clubs (Table 5: clubs -0.010, roaming +0.024)  — 0.093
+PASS the week moves most, the mums' views least of the three
+PASS mums lever at +1 = 0.018 x (1.5 - 0.2)  — 0.0234
+PASS street: clubs at the floor, roaming at +1.5
+PASS no lever setting reaches the small-house share (the shortfall is real)  — best 0.571 vs 0.656
+PASS the best setting is mums same as dads, do as you're told, out on the street  — {"mums":1,"learn":-1,"week":1}
+PASS pulling every lever closes between a third and two thirds of the gap  — 51%
+PASS robust: typical big-house z set to zero, the target is still out of reach  — 0.551
+PASS robust: typical z zero, best levers unchanged  — {"mums":1,"learn":-1,"week":1}
+PASS Table 5 income effect x 2.8 SD gives the Figure 4 gap within 0.03  — 0.174
+PASS paper's shares: week an eighth, child a quarter, remainder more than half
+PASS drawing: exactly round(kids) children hold a red line (all seeds, all settings)  — 8100/8100
+PASS drawing: twelve lines every time  — 8100/8100
+PASS drawing: red lines within one of share x twelve (>= 90%)  — 100.0%
+PASS drawing works for part two shares  — 5 kids red
+PASS kidsWords(6.0) = "about six"  — about six
+PASS kidsWords(9.4) = "nine and a half"  — nine and a half
+PASS kidsWords(7.7) = "seven and a half"  — seven and a half
+PASS kidsWords(4.1) = "about four"  — about four
+PASS moveWords: small effects say hardly / a touch
+PASS no decimals in result text
+
+all passed
