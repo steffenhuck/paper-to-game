@@ -1,0 +1,108 @@
+PART ONE · Build a country where boys and girls are friends
+
+COUNTRY 1: money 1 jobs 1 learn 1 -> share 0.160, none 0.410, ruler 5.90 | drawn: 6 kids red, 3 red lines of 12
+  You set big houses, jobs for both the same and parents who say “think for yourself”.
+  About six of your ten kids have a friend from the other side.
+  That is the Finland end of the ruler, where the rich, equal, think-for-yourself countries sit.
+
+COUNTRY 2: money 1 jobs 1 learn -1 -> share 0.263, none 0.253, ruler 7.47 | drawn: 7 kids red, 4 red lines of 12
+  You set big houses, jobs for both the same and parents who say “do as you’re told”.
+  Seven and a half of your ten kids have a friend from the other side, up by about 2 kids in ten from last time.
+  That is the middle of the ruler, about where most of the 37 countries sit.
+  Few real countries look like this one: in the paper’s 37, rich, equal and think-for-yourself go together. Out here the paper can’t say much.
+
+COUNTRY 3: money -1 jobs -1 learn -1 -> share 0.390, none 0.060, ruler 9.40 | drawn: 9 kids red, 5 red lines of 12
+  You set small houses, jobs mostly for dads and parents who say “do as you’re told”.
+  Nine and a half of your ten kids have a friend from the other side, up by about 2 kids in ten from last time.
+  That is the Portugal end of the ruler, where the poorer, less equal, do-as-you’re-told countries sit.
+
+REVEAL: Finland 5.9, Portugal 9.4
+
+PART TWO · Get the big-house kids mixing like the small-house kids
+  street: small houses 6.56, big houses (middle levers) 4.99
+
+TRY 1: {"mums":-1,"learn":-1,"week":1} -> share 0.517, ruler 5.17; effects {"norms":-0.31,"learn":0.1,"clubs":0.1,"unsup":0.46} kids
+  You set the big houses to “mums stay home”, “do as you’re told” and out on the street.
+  About five of the ten big-house kids have a friend from the other side. The small-house kids are at six and a half.
+  The week (out on the street): up by about half a kid in ten. “Do as you’re told”: hardly at all. “Mums stay home”: down a touch.
+  Inside one country it runs the other way from the map: the kids of mums who say “same as dads” have a friend from the other side a little more often, not less.
+
+TRY 2: {"mums":1,"learn":-1,"week":1} -> share 0.571, ruler 5.71; effects {"norms":0.23,"learn":0.1,"clubs":0.1,"unsup":0.46} kids
+  You set the big houses to “mums work the same as dads”, “do as you’re told” and out on the street.
+  Five and a half of the ten big-house kids have a friend from the other side, up by about half a kid in ten from last time. The small-house kids are at six and a half.
+  The week (out on the street): up by about half a kid in ten. “Do as you’re told”: hardly at all. “Mums work the same as dads”: up a touch.
+  Inside one country this runs the other way from the map: equal-minded mums’ kids mix a little more, not less.
+
+TRY 3: {"mums":1,"learn":1,"week":-1} -> share 0.460, ruler 4.60; effects {"norms":0.23,"learn":-0.08,"clubs":-0.11,"unsup":-0.26} kids
+  You set the big houses to “mums work the same as dads”, “think for yourself” and all clubs.
+  Four and a half of the ten big-house kids have a friend from the other side, down by about one kid in ten from last time. The small-house kids are at six and a half.
+  The week (all clubs): down by about half a kid in ten. “Think for yourself”: hardly at all. “Mums work the same as dads”: up a touch.
+  Inside one country this runs the other way from the map: equal-minded mums’ kids mix a little more, not less.
+
+SHORTFALL
+  You can’t get there from here. Pulling every lever as far as it goes (mums work the same as dads, “do as you’re told”, out on the street) gets the big-house kids to five and a half of ten, and closes about half of the gap.
+  The paper, looking at what families actually do rather than what they could, puts the week at about an eighth of the gap and the children themselves at a quarter: big-house kids are calmer, get on with everyone, score higher, grow up a little later, and every one of those goes with same-side friends. They are also more popular, and happier with the friends they have.
+  The rest of the gap, more than half, nobody can explain yet.
+
+VERDICT
+  Of the countries you built, the one where most kids had a friend from the other side (nine and a half of ten) was small houses, jobs mostly for dads, “do as you’re told”. The fewest (about six) was big houses, jobs for both the same, “think for yourself”. Inside, you got the big-house kids to five and a half of ten; the small-house kids were at six and a half.
+  Richer, more equal countries have more boys-on-one-side playgrounds at eleven, and more boys-on-one-side universities too. Inside a country it is the money, not the views: children of equal-minded mums mix a little more; children of richer families mix less, in 34 countries of 37. Part of why is the week money buys, part is the calm, popular child money raises, who likes the friends they have; most of it the paper cannot say.
+  Children with a friend from the other side at seven pick slightly less boyish or girlish subjects at sixteen, still mix at fourteen, hold more equal views, and want slightly more mixed jobs. Where the playground mixes, so does the university. The paper shows patterns, not levers; this game let you pull them.
+
+PLAY IT IN NUMBERS: all 27 country settings (kids of ten, bivariate | multivariate, corner flag)
+  -1 -1 -1: 9.4 | 9.4
+  -1 -1 0: 8.6 | 7.4
+  -1 -1 1: 7.8 | 5.4  corner
+  -1 0 -1: 8.9 | 9.8
+  -1 0 0: 8.1 | 7.8
+  -1 0 1: 7.3 | 5.8  corner
+  -1 1 -1: 8.4 | 9.8  corner
+  -1 1 0: 7.6 | 8.1  corner
+  -1 1 1: 6.8 | 6.2  corner
+  0 -1 -1: 8.9 | 9.3
+  0 -1 0: 8.2 | 7.3
+  0 -1 1: 7.4 | 5.3  corner
+  0 0 -1: 8.4 | 9.6
+  0 0 0: 7.7 | 7.7
+  0 0 1: 6.9 | 5.7
+  0 1 -1: 7.9 | 9.8  corner
+  0 1 0: 7.1 | 8.0
+  0 1 1: 6.4 | 6.0
+  1 -1 -1: 8.5 | 9.1  corner
+  1 -1 0: 7.7 | 7.2  corner
+  1 -1 1: 6.9 | 5.2  corner
+  1 0 -1: 8.0 | 9.5  corner
+  1 0 0: 7.2 | 7.5
+  1 0 1: 6.4 | 5.5
+  1 1 -1: 7.5 | 9.8  corner
+  1 1 0: 6.7 | 7.9
+  1 1 1: 5.9 | 5.9
+
+all 27 street settings (big-house kids of ten; target 6.6)
+  mums -1 learn -1 week -1: 4.24
+  mums -1 learn -1 week 0: 4.75
+  mums -1 learn -1 week 1: 5.17
+  mums -1 learn 0 week -1: 4.21
+  mums -1 learn 0 week 0: 4.72
+  mums -1 learn 0 week 1: 5.14
+  mums -1 learn 1 week -1: 4.06
+  mums -1 learn 1 week 0: 4.57
+  mums -1 learn 1 week 1: 4.99
+  mums 0 learn -1 week -1: 4.51
+  mums 0 learn -1 week 0: 5.02
+  mums 0 learn -1 week 1: 5.44
+  mums 0 learn 0 week -1: 4.48
+  mums 0 learn 0 week 0: 4.99
+  mums 0 learn 0 week 1: 5.41
+  mums 0 learn 1 week -1: 4.33
+  mums 0 learn 1 week 0: 4.84
+  mums 0 learn 1 week 1: 5.26
+  mums 1 learn -1 week -1: 4.78
+  mums 1 learn -1 week 0: 5.29
+  mums 1 learn -1 week 1: 5.71
+  mums 1 learn 0 week -1: 4.75
+  mums 1 learn 0 week 0: 5.26
+  mums 1 learn 0 week 1: 5.68
+  mums 1 learn 1 week -1: 4.60
+  mums 1 learn 1 week 0: 5.11
+  mums 1 learn 1 week 1: 5.53
