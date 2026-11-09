@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>One Number, Please</title>
+<meta name="description" content="A journalist wants one number: are women less competitive than men? You run the lab. Eight sessions; you decide what competing means on the students' screens. Built from Angelovski, Brandts & Güth (2026), Theory and Decision.">
+<style>
+@font-face { font-family: 'Lib'; font-weight: 400; font-style: normal; font-display: swap;
+  src: url(data:font/woff2;base64,/*__F_LIB_400__*/) format('woff2'); }
+@font-face { font-family: 'Lib'; font-weight: 700; font-style: normal; font-display: swap;
+  src: url(data:font/woff2;base64,/*__F_LIB_700__*/) format('woff2'); }
+:root {
+  --desk: #3A6EA5;      /* the Windows 2000 desktop */
+  --face: #D4D0C8;      /* every window face */
+  --navy: #0A246A;      /* title bars; the men's bar */
+  --navy2: #A6CAF0;     /* the right end of a title bar */
+  --field: #FFFFFF;     /* text fields, the notebook page, the students' screen */
+  --red: #C00000;       /* the students' amounts; the women's bar */
+  --dk: #404040; --mid: #808080; --lt: #FFFFFF; --lt2: #DFDFDF;
+  --yellow: #FFF200;    /* the frame round the students' screen while a session runs */
+  --ink: #000000;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; padding: 0; background: var(--desk); color: var(--ink); }
+body { font-family: 'Lib', Tahoma, Verdana, Arial, sans-serif; font-size: 13px; line-height: 1.38; padding: 8px 0 24px; min-height: 100vh; }
+.screen { display: none; }
+.screen.on { display: block; }
+.win { background: var(--face); max-width: 440px; margin: 10px auto; width: calc(100% - 16px);
+  border: 1px solid; border-color: var(--lt2) var(--dk) var(--dk) var(--lt2);
+  box-shadow: inset 1px 1px var(--lt), inset -1px -1px var(--mid), 2px 2px 0 rgba(0,0,0,.35); padding: 3px; }
+.tb { display: flex; align-items: center; height: 22px; padding: 0 4px 0 7px; color: #fff; font-weight: 700; font-size: 13px;
+  background: linear-gradient(90deg, var(--navy) 0%, var(--navy2) 100%); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tb span { flex: 1; overflow: hidden; text-overflow: ellipsis; }
+.tb .q { width: 18px; height: 16px; margin-left: 4px; background: var(--face); color: var(--ink); font-weight: 700; font-size: 12px; line-height: 14px; text-align: center;
+  border: 1px solid; border-color: var(--lt) var(--dk) var(--dk) var(--lt); cursor: pointer; padding: 0; font-family: inherit; }
+.tb .q:active { border-color: var(--dk) var(--lt) var(--lt) var(--dk); }
+.body { padding: 10px 10px 8px; }
+.body p { margin: 0 0 9px; }
+.aim { margin: 0 0 10px; font-size: 13px; padding: 6px 8px; background: var(--field); border: 1px solid; border-color: var(--mid) var(--lt) var(--lt) var(--mid); }
+.aim b { font-weight: 700; }
+fieldset { border: 1px solid var(--mid); box-shadow: 1px 1px 0 var(--lt), inset 1px 1px 0 var(--lt); margin: 0 0 10px; padding: 4px 8px 6px; }
+legend { padding: 0 4px; font-size: 13px; }
+.radio { display: flex; align-items: flex-start; gap: 8px; padding: 6px 2px; min-height: 34px; cursor: pointer; user-select: none; }
+.radio .dot { flex: none; width: 14px; height: 14px; margin-top: 2px; border-radius: 50%; background: var(--field);
+  border: 1px solid; border-color: var(--mid) var(--lt) var(--lt) var(--mid); box-shadow: inset 1px 1px 0 var(--dk), inset -1px -1px 0 var(--lt2); position: relative; }
+.radio.sel .dot::after { content: ''; position: absolute; left: 3px; top: 3px; width: 6px; height: 6px; border-radius: 50%; background: var(--ink); }
+.radio .lab { flex: 1; }
+.radio .lab small { display: block; color: #333; font-size: 12px; }
+.note { font-size: 12px; color: #222; margin: 0 0 8px; }
+.btn { font-family: inherit; font-size: 13px; color: var(--ink); background: var(--face); min-height: 34px; padding: 6px 14px; cursor: pointer;
+  border: 1px solid; border-color: var(--lt) var(--dk) var(--dk) var(--lt); box-shadow: inset 1px 1px 0 var(--lt2), inset -1px -1px 0 var(--mid); }
+.btn.def { outline: 1px solid var(--ink); outline-offset: 0; font-weight: 700; }
+.btn:active { border-color: var(--dk) var(--lt) var(--lt) var(--dk); box-shadow: inset 1px 1px 0 var(--mid), inset -1px -1px 0 var(--lt2); }
+.btn:disabled { color: var(--mid); text-shadow: 1px 1px 0 var(--lt); cursor: default; outline: none; font-weight: 400; }
+.btn:disabled:active { border-color: var(--lt) var(--dk) var(--dk) var(--lt); }
+.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 6px 0 2px; }
+.row .sp { flex: 1; }
+.status { margin: 8px -10px -8px; padding: 3px 8px; font-size: 12px; border-top: 1px solid var(--mid); box-shadow: inset 0 1px 0 var(--lt); display: flex; gap: 8px; }
+.status span { flex: 1; }
+.status .cell { border: 1px solid; border-color: var(--mid) var(--lt) var(--lt) var(--mid); padding: 1px 6px; }
+.field { background: var(--field); border: 1px solid; border-color: var(--mid) var(--lt) var(--lt) var(--mid); box-shadow: inset 1px 1px 0 var(--dk), inset -1px -1px 0 var(--lt2); padding: 8px; }
+.mail { font-size: 13px; }
+.mail .hdr { color: #333; font-size: 12px; border-bottom: 1px solid #ccc; padding-bottom: 4px; margin-bottom: 6px; }
+.mail .q { font-size: 15px; margin: 4px 0 2px; }
+/* the students' screen */
+.sub { background: var(--field); border: 1px solid; border-color: var(--mid) var(--lt) var(--lt) var(--mid); box-shadow: inset 1px 1px 0 var(--dk), inset -1px -1px 0 var(--lt2); padding: 6px; min-height: 150px; }
+.sub.live { outline: 3px solid var(--yellow); outline-offset: -1px; }
+.sub .mini { border: 1px solid; border-color: var(--lt2) var(--dk) var(--dk) var(--lt2); background: var(--face); padding: 2px; font-size: 12px; }
+.sub .mtb { background: var(--face); color: var(--ink); font-weight: 700; text-align: center; border: 1px solid var(--mid); padding: 2px; letter-spacing: 1px; font-size: 11px; }
+.sub .mbody { padding: 7px 6px 4px; min-height: 100px; }
+.sub .mbody p { margin: 0 0 6px; }
+.sub .amt { color: var(--red); font-weight: 700; }
+.sub .mbox { display: inline-block; border: 1px solid var(--mid); background: #ECE9F9; color: var(--red); font-weight: 700; padding: 2px 10px; margin: 2px 6px 2px 0; }
+.sub .inp { display: inline-block; width: 46px; height: 16px; background: #C6CBF3; border: 1px solid var(--mid); vertical-align: middle; margin: 0 4px; }
+.sub .mbtn { display: inline-block; border: 1px solid; border-color: var(--lt) var(--dk) var(--dk) var(--lt); padding: 1px 10px; margin: 4px 4px 0 0; background: var(--face); font-size: 11px; }
+.sub .blank { color: var(--mid); padding: 30px 8px; text-align: center; }
+/* the lab */
+.labroom { background: var(--field); border: 1px solid; border-color: var(--mid) var(--lt) var(--lt) var(--mid); padding: 8px; }
+.cubes { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+.cube { aspect-ratio: 1 / 1.15; background: var(--face); border: 1px solid var(--mid); position: relative; }
+.cube .scr { position: absolute; left: 18%; right: 18%; top: 12%; height: 42%; background: #222; border: 1px solid #555; transition: background .25s; }
+.cube.on .scr { background: #ECE9F9; }
+.cube.men .scr { border-color: var(--navy); } .cube.women .scr { border-color: var(--red); }
+.cube.done .scr { background: var(--red); }
+.cube .hd { position: absolute; left: 50%; bottom: 10%; width: 32%; aspect-ratio: 1; border-radius: 50%; background: #333; transform: translateX(-50%); }
+.cube.men .hd { background: var(--navy); } .cube.women .hd { background: var(--red); }
+.clock { text-align: center; font-weight: 700; color: var(--red); font-size: 20px; margin-top: 8px; font-variant-numeric: tabular-nums; }
+/* bars */
+.bars { background: var(--field); border: 1px solid; border-color: var(--mid) var(--lt) var(--lt) var(--mid); box-shadow: inset 1px 1px 0 var(--dk); padding: 10px 10px 6px; }
+.brow { display: flex; align-items: center; gap: 8px; margin: 0 0 10px; }
+.brow .bl { width: 58px; font-weight: 700; flex: none; }
+.brow .btrack { flex: 1; height: 26px; background: #EEE; border: 1px solid var(--mid); position: relative; }
+.brow .bfill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; transition: width .7s ease-out; }
+.brow.men .bfill { background: var(--navy); } .brow.women .bfill { background: var(--red); }
+.brow .bn { width: 70px; flex: none; font-weight: 700; font-size: 14px; text-align: right; }
+.bcap { font-size: 12px; color: #333; margin: 0 0 4px; }
+.head { font-size: 16px; font-weight: 700; margin: 8px 0 6px; }
+.line { margin: 0 0 6px; }
+.ghost { color: #555; font-size: 12px; border-top: 1px dotted var(--mid); padding-top: 6px; margin-top: 8px; }
+.ghost b { color: #333; }
+/* notebook */
+.nb { background: var(--field); border: 1px solid; border-color: var(--mid) var(--lt) var(--lt) var(--mid); box-shadow: inset 1px 1px 0 var(--dk); padding: 2px 6px; min-height: 48px; }
+.nrow { display: flex; align-items: center; gap: 6px; min-height: 30px; padding: 3px 0; font-size: 12px; border-bottom: 1px solid #D9E3F2; }
+.nrow:last-child { border-bottom: none; }
+.nrow .n { width: 14px; color: #555; flex: none; text-align: right; }
+.nrow .ic { width: 18px; text-align: center; font-weight: 700; flex: none; font-size: 14px; }
+.nrow .pz { width: 22px; height: 18px; flex: none; }
+.nrow .mb { width: 72px; flex: none; }
+.nrow .mb div { height: 6px; margin: 1px 0; }
+.nrow .mb .m { background: var(--navy); } .nrow .mb .w { background: var(--red); }
+.nrow .wd { flex: 1; line-height: 1.2; }
+.nrow.empty { color: var(--mid); }
+.nkey { font-size: 11px; color: #333; margin: 4px 0 0; }
+/* the grid of six on the end screen */
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.gcell { border: 1px solid var(--mid); background: var(--field); padding: 5px 6px; font-size: 12px; min-height: 52px; }
+.gcell.none { background: #E8E6E1; color: var(--mid); }
+.gcell b { display: block; font-size: 11px; color: #333; font-weight: 400; }
+.gcell .mb div { height: 6px; margin: 2px 0; } .gcell .mb .m { background: var(--navy); } .gcell .mb .w { background: var(--red); } .gcell.none .mb div { background: #C8C5BD; }
+.ghead { font-size: 12px; font-weight: 700; margin: 4px 0 2px; }
+.foot { max-width: 440px; margin: 14px auto 0; width: calc(100% - 16px); color: #DCE6F2; font-size: 12px; text-align: center; }
+.foot a { color: #fff; }
+h2 { font-size: 14px; margin: 12px 0 4px; }
+.help p, .about p { margin: 0 0 8px; }
+.about h3 { font-size: 13px; margin: 12px 0 4px; }
+.about ul { margin: 0 0 8px 18px; padding: 0; }
+.about li { margin: 0 0 4px; }
+.about a { color: var(--navy); }
+.sum { font-size: 12px; color: #333; }
+.sentence { font-size: 15px; font-weight: 700; margin: 2px 0 6px; }
+</style>
+</head>
+<body>
+
+<!-- ======================================================= START ======================================================= -->
+<section class="screen on" id="s-start">
+  <div class="win">
+    <div class="tb"><span>One Number, Please</span></div>
+    <div class="body">
+      <div class="field mail">
+        <div class="hdr">From: a journalist &nbsp;·&nbsp; To: the lab &nbsp;·&nbsp; Subject: quick question</div>
+        <div class="q">“Are women less competitive than men? I need one number by Friday.”</div>
+      </div>
+      <p style="margin-top:10px">You run a lab in Rome where students come to play for money. Before each session you tick two things on the screen they will see: what they must do to compete, and what they can win. Then you press <b>Run</b>, watch the room fill, and read the two bars that come out, one for the men and one for the women. Eight sessions, then you write back.</p>
+      <p class="aim"><b>Find out, in eight lab sessions, whether women are less competitive than men, and write back.</b></p>
+      <div class="row">
+        <button class="btn def" id="b-begin">Open the lab</button>
+        <button class="btn" id="b-help-start">How to play</button>
+        <button class="btn" id="b-about-start">About</button>
+      </div>
+    </div>
+  </div>
+  <div class="foot">A beta, built from the paper. Builder's review only; the author finishes it.</div>
+</section>
+
+<!-- ======================================================= PLAY ======================================================= -->
+<section class="screen" id="s-play">
+  <div class="win" id="w-app">
+    <div class="tb"><span id="t-session">Session 1 of 8 — Apparatus</span><button class="q" id="b-help-play" aria-label="How to play">?</button></div>
+    <div class="body">
+      <p class="aim"><b>Find out, in eight lab sessions, whether women are less competitive than men, and write back.</b></p>
+      <p class="note">Each session: 24 students, in groups of four, two men and two women. The students never change between sessions. Only what you put on their screen does.</p>
+      <fieldset id="f-task">
+        <legend>To compete, the students must:</legend>
+        <div class="radio" data-k="task" data-v="sums"><span class="dot"></span><span class="lab">solve as many sums as they can in five minutes<small>whoever solves the most of their four wins</small></span></div>
+        <div class="radio" data-k="task" data-v="price"><span class="dot"></span><span class="lab">name a price for the job<small>whoever offers to pay the most of their four gets it</small></span></div>
+      </fieldset>
+      <fieldset id="f-prizes">
+        <legend>What they can win (in ECU, the lab's money; 10 ECU is a euro):</legend>
+        <div class="radio" data-k="prizes" data-v="one"><span class="dot"></span><span class="lab">one winner takes 350; the other three get 50</span></div>
+        <div class="radio" data-k="prizes" data-v="flat"><span class="dot"></span><span class="lab">a flat ladder: 350 for the top job, 200 for each of two middle jobs, 50 for the one left over</span></div>
+        <div class="radio" data-k="prizes" data-v="steep"><span class="dot"></span><span class="lab">a steep ladder: 450 for the top job, 150 for each of two middle jobs, 50 for the one left over</span></div>
+      </fieldset>
+      <div class="status"><span>Budget left: <b id="t-budget">€2,400</b> · a session costs €300</span></div>
+    </div>
+  </div>
+
+  <div class="win" id="w-sub">
+    <div class="tb"><span>What the students will see</span></div>
+    <div class="body">
+      <div class="sub" id="sub"></div>
+      <p class="note" id="t-runhint" style="margin:8px 0 6px">Tick both boxes above; the screen fills in as you do.</p>
+      <div class="row"><span class="sp"></span><button class="btn def" id="b-run" disabled>Run session</button></div>
+    </div>
+  </div>
+
+  <div class="win" id="w-lab" style="display:none">
+    <div class="tb"><span>Laboratory — session running</span></div>
+    <div class="body">
+      <div class="labroom"><div class="cubes" id="cubes"></div><div class="clock" id="clock">0:00</div></div>
+      <p class="note" style="margin:6px 0 0" id="t-labline">The students are reading their screens.</p>
+    </div>
+  </div>
+
+  <div class="win" id="w-result" style="display:none">
+    <div class="tb"><span id="t-result">Result — Session 1</span></div>
+    <div class="body">
+      <p class="sum" id="r-setup"></p>
+      <div class="bars">
+        <p class="bcap" id="r-cap"></p>
+        <div class="brow men"><span class="bl">Men</span><span class="btrack"><span class="bfill" id="r-bm"></span></span><span class="bn" id="r-nm"></span></div>
+        <div class="brow women"><span class="bl">Women</span><span class="btrack"><span class="bfill" id="r-bw"></span></span><span class="bn" id="r-nw"></span></div>
+      </div>
+      <p class="head" id="r-words"></p>
+      <p class="line" id="r-tops"></p>
+      <p class="line" id="r-earn"></p>
+      <p class="line" id="r-measured" style="color:#222"></p>
+      <p class="ghost" id="r-ghost"></p>
+      <div class="row"><span class="sp"></span><button class="btn def" id="b-log">Write it in the notebook</button></div>
+    </div>
+  </div>
+
+  <div class="win" id="w-nb">
+    <div class="tb"><span>Notebook</span></div>
+    <div class="body">
+      <div class="nb" id="nb"></div>
+      <p class="nkey">Σ sums · € price · the boxes are the prizes · <span style="color:var(--navy)">■</span> men <span style="color:var(--red)">■</span> women, how hard they went for the top</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================= REPLY ======================================================= -->
+<section class="screen" id="s-reply">
+  <div class="win">
+    <div class="tb"><span>Reply to the email</span><button class="q" id="b-help-reply" aria-label="How to play">?</button></div>
+    <div class="body">
+      <div class="field mail">
+        <div class="hdr">From: a journalist &nbsp;·&nbsp; Subject: quick question</div>
+        <div class="q">“Are women less competitive than men? I need one number by Friday.”</div>
+      </div>
+      <p style="margin-top:10px">Your eight sessions are in the notebook below. Write back one sentence. The notebook will be read against it.</p>
+      <fieldset id="f-reply">
+        <legend>Dear journalist,</legend>
+        <div class="radio" data-k="reply" data-v="less"><span class="dot"></span><span class="lab">Yes. Women are less competitive than men.</span></div>
+        <div class="radio" data-k="reply" data-v="same"><span class="dot"></span><span class="lab">No. Women are as competitive as men, if anything more.</span></div>
+        <div class="radio" data-k="reply" data-v="depends"><span class="dot"></span><span class="lab">It depends on what you make them do to compete.</span></div>
+      </fieldset>
+      <div class="row"><span class="sp"></span><button class="btn def" id="b-send" disabled>Send</button></div>
+    </div>
+  </div>
+  <div class="win">
+    <div class="tb"><span>Notebook</span></div>
+    <div class="body"><div class="nb" id="nb2"></div></div>
+  </div>
+</section>
+
+<!-- ======================================================= END ======================================================= -->
+<section class="screen" id="s-end">
+  <div class="win">
+    <div class="tb"><span>Sent</span></div>
+    <div class="body">
+      <p class="sum">You wrote back:</p>
+      <p class="sentence" id="e-sentence"></p>
+      <p class="head" id="e-backed"></p>
+      <p class="line" id="e-why"></p>
+      <h2>What your lab found</h2>
+      <div class="grid" id="e-grid"></div>
+      <h2>What the paper found</h2>
+      <p class="line">Three economists ran the <b>price</b> apparatus in Rome: 168 students, a flat firm and a steep one, 32 rounds each. The women bid as high as the men; for the top of the flat firm a few points higher. The women got the top job more often than their share. Nobody earned more for being at the top: the middle jobs paid better. The famous gap comes from labs where competing means a race at sums; this one measures something else, the willingness to pay for rank, and finds no gap in it.</p>
+      <div class="bars" style="margin-bottom:8px">
+        <p class="bcap">Rome, flat firm: bid for the top job, for every 100 it is worth</p>
+        <div class="brow men"><span class="bl">Men</span><span class="btrack"><span class="bfill" id="e-bm"></span></span><span class="bn" id="e-nm"></span></div>
+        <div class="brow women"><span class="bl">Women</span><span class="btrack"><span class="bfill" id="e-bw"></span></span><span class="bn" id="e-nw"></span></div>
+      </div>
+      <p class="line">Their own sentence, near enough: <i>neither way of measuring is the better one; they measure different things, and what you infer about women and competition depends on which you chose.</i></p>
+      <div class="row">
+        <button class="btn def" id="b-again">Run the lab again</button>
+        <button class="btn" id="b-help-end">How to play</button>
+        <button class="btn" id="b-about-end">About</button>
+      </div>
+      <div class="status"><span>Lab seed <span class="cell" id="t-seed"></span> · the same seed gives the same students</span></div>
+    </div>
+  </div>
+  <div class="foot">A beta, built from the paper. Builder's review only; the author finishes it.</div>
+</section>
+
+<!-- ======================================================= HELP ======================================================= -->
+<section class="screen" id="s-help">
+  <div class="win">
+    <div class="tb"><span>How to play</span></div>
+    <div class="body help">
+      <p><b>Find out, in eight lab sessions, whether women are less competitive than men, and write back.</b></p>
+      <p><b>The lab.</b> Each session, 24 students come in and sit in groups of four: two men, two women. They play once for the lab's money, ECU (10 ECU is a euro). The students are the same kind of people every session. Only their screen changes, and you write it.</p>
+      <p><b>Your two choices.</b> In the <i>Apparatus</i> window, tick what the students must do to compete: <i>solve sums</i> (whoever solves the most of their four wins; a student may also sit out for a sure amount) or <i>name a price</i> (each student writes the most they would pay for a job; the highest offer gets it and pays the second-highest). Then tick what they can win: <i>one winner</i> (350, the rest 50), a <i>flat ladder</i> (350, 200, 200, 50) or a <i>steep ladder</i> (450, 150, 150, 50). Both boxes start empty every session. The window below, <i>What the students will see</i>, fills in as you tick, so you can read their screen before you run it.</p>
+      <p><b>Run.</b> Press <i>Run session</i>. The room fills, the clock runs, and a <i>Result</i> window opens with two bars: how hard the men went for the top, and how hard the women did. Under sums, the bar is the share who chose to compete. Under price, it is what they offered for the top job, out of every 100 it is worth. Then: who got the six top jobs, what the two groups took home, and a line on what this apparatus actually measured. When the apparatus is the one the paper ran, the paper's own result is shown in grey underneath. Press <i>Write it in the notebook</i> to keep the row.</p>
+      <p><b>The notebook.</b> One row per session: Σ for sums, € for price, the prize boxes, the two bars small, and the result in words. One session of 24 is noisy; a result worth believing is one you have seen twice.</p>
+      <p><b>Write back.</b> After the eighth session, pick one sentence for the journalist. The game reads your notebook against it and says whether your own sessions back what you sent, then shows what the paper found.</p>
+      <div class="row"><span class="sp"></span><button class="btn def" id="b-help-close">Back</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================= ABOUT ======================================================= -->
+<section class="screen" id="s-about">
+  <div class="win">
+    <div class="tb"><span>About</span></div>
+    <div class="body about">
+      /*__ABOUT__*/
+      <div class="row"><span class="sp"></span><button class="btn def" id="b-about-close">Back</button></div>
+    </div>
+  </div>
+</section>
+
+<script>
+/*__MECHANISM__*/
+</script>
+<script>
+(function () {
+  const C = MECH.CONFIG;
+  const $ = id => document.getElementById(id);
+  const params = new URLSearchParams(location.search);
+  let seed = parseInt(params.get('seed'), 10);
+  if (!seed) seed = 1 + Math.floor(Math.random() * 999999);
+  const G = { seed, rng: MECH.makeRng(seed), session: 0, task: null, prizes: null, reply: null, notebook: [], phase: 'start', returnTo: 's-start', last: null };
+  window.__game = () => G;
+
+  function show(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id));
+    window.scrollTo(0, 0);
+  }
+  const euro = n => '€' + n.toLocaleString('en-GB');
+  const pct = x => Math.round(x);
+
+  // ---- the apparatus radios --------------------------------------------------------------------------------------
+  document.querySelectorAll('.radio').forEach(r => r.addEventListener('click', () => {
+    const k = r.dataset.k, v = r.dataset.v;
+    if (G.phase !== 'choose' && k !== 'reply') return;
+    G[k] = v;
+    r.parentElement.querySelectorAll('.radio').forEach(x => x.classList.toggle('sel', x === r));
+    if (k === 'reply') $('b-send').disabled = false; else renderPreview();
+  }));
+  function clearRadios(fs) { fs.querySelectorAll('.radio').forEach(x => x.classList.remove('sel')); }
+
+  // ---- the students' screen, written from the choices (a preview of the control, never of the result) --------------
+  function amt(n) { return '<span class="amt">' + n + ' ECU</span>'; }
+  function boxes(prizes) {
+    const P = C.prizes[prizes];
+    return P.M === null ? '<span class="mbox">T = ' + P.T + '</span><span class="mbox">U = ' + P.U + '</span>'
+      : '<span class="mbox">T = ' + P.T + '</span><span class="mbox">M = ' + P.M + '</span><span class="mbox">U = ' + P.U + '</span>';
+  }
+  function renderPreview() {
+    const t = G.task, p = G.prizes, sub = $('sub');
+    if (!t && !p) { sub.innerHTML = '<div class="blank">The students\' screen is empty. Tick the two boxes above and it fills in.</div>'; $('b-run').disabled = true; return; }
+    let body = '';
+    if (p) body += '<p>Your group of four plays for these salaries:<br>' + boxes(p) + '</p>';
+    else body += '<p>Your group of four plays for these salaries: <span style="color:#808080">(not set yet)</span></p>';
+    if (t === 'sums') {
+      const P = p ? C.prizes[p] : null, sure = p ? MECH.sureAlternative(p) : null;
+      body += '<p>You will have <b>5 minutes</b> to solve as many sums as you can.</p>';
+      if (P && P.M === null) body += '<p><b>Compete:</b> if you solve the most of your four, ' + amt(P.T) + '; otherwise ' + amt(P.U) + '.<br><b>Sit out:</b> ' + amt(sure) + ' whatever you solve.</p>';
+      else if (P) body += '<p><b>Compete:</b> the most of your four, ' + amt(P.T) + '; second or third, ' + amt(P.M) + '; last, ' + amt(P.U) + '.<br><b>Sit out:</b> ' + amt(sure) + ' whatever you solve.</p>';
+      else body += '<p><b>Compete</b> for the salaries, or <b>sit out</b> for a sure amount. <span style="color:#808080">(set the salaries)</span></p>';
+      body += '<span class="mbtn">Compete</span><span class="mbtn">Sit out</span>';
+    } else if (t === 'price') {
+      const P = p ? C.prizes[p] : null;
+      if (P && P.M === null) body += '<p>Write the most you would pay for the job worth ' + amt(P.T) + '. The highest of your four gets it and pays the second-highest offer. The others get ' + amt(P.U) + '.</p><p>b(t) <span class="inp"></span></p>';
+      else if (P) body += '<p>Write the most you would pay for the top job (' + amt(P.T) + ') and for a middle job (' + amt(P.M) + '). Top: the highest of your four, at the second-highest offer. Middle: the next two, at the third\'s offer. The one left over gets ' + amt(P.U) + '.</p><p>b(t) <span class="inp"></span> b(m) <span class="inp"></span></p>';
+      else body += '<p>Write the most you would pay for each job. The highest offer gets the job and pays the next offer down. <span style="color:#808080">(set the salaries)</span></p><p>b( ) <span class="inp"></span></p>';
+      body += '<span class="mbtn">Procedi &rsaquo;</span>';
+    } else {
+      body += '<p><span style="color:#808080">(what must they do to compete?)</span></p>';
+    }
+    sub.innerHTML = '<div class="mini"><div class="mtb">ESPERIMENTO</div><div class="mbody">' + body + '</div></div>';
+    const ready = !!(t && p);
+    $('b-run').disabled = !ready;
+    $('t-runhint').textContent = ready ? 'This is what the 24 students will read. Run it, and two bars come back: how hard the men went for the top, and how hard the women did.' : 'Tick both boxes above; the screen fills in as you do.';
+  }
+
+  // ---- the session ------------------------------------------------------------------------------------------------
+  function startSession() {
+    G.session += 1; G.task = null; G.prizes = null; G.phase = 'choose';
+    clearRadios($('f-task')); clearRadios($('f-prizes'));
+    $('t-session').textContent = 'Session ' + G.session + ' of ' + C.sessions + ' — Apparatus';
+    $('t-budget').textContent = euro((C.sessions - G.session + 1) * C.sessionCostEuro);
+    $('b-run').textContent = 'Run session ' + G.session + ' (24 students, ' + euro(C.sessionCostEuro) + ')';
+    $('w-result').style.display = 'none'; $('w-lab').style.display = 'none';
+    $('w-app').style.display = ''; $('w-sub').style.display = '';
+    $('sub').classList.remove('live');
+    renderPreview(); renderNotebook($('nb'));
+    show('s-play');
+  }
+  function run() {
+    if (!(G.task && G.prizes) || G.phase !== 'choose') return;
+    G.phase = 'running';
+    $('b-run').disabled = true; $('sub').classList.add('live');
+    const sessionSeed = Math.floor(G.rng() * 1e9);
+    const r = MECH.runSession(G.task, G.prizes, sessionSeed);
+    G.last = r;
+    // the lab fills
+    const cubes = $('cubes'); cubes.innerHTML = '';
+    const cells = [];
+    for (let g = 0; g < C.groupsPerSession; g++) for (let i = 0; i < C.groupSize; i++) {
+      const d = document.createElement('div'); d.className = 'cube ' + (i < C.menPerGroup ? 'men' : 'women');
+      d.innerHTML = '<div class="scr"></div><div class="hd"></div>'; cubes.appendChild(d); cells.push(d);
+    }
+    $('w-lab').style.display = ''; $('clock').textContent = '0:00'; $('t-labline').textContent = 'The students are reading their screens.';
+    $('w-lab').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const T0 = performance.now(), total = 2600;
+    const order = cells.map((c, i) => i).sort(() => G.rng() - 0.5);
+    function tick(now) {
+      const u = Math.min(1, (now - T0) / total);
+      const on = Math.floor(u * 1.6 * cells.length);
+      order.forEach((ci, k) => { cells[ci].classList.toggle('on', k < on); cells[ci].classList.toggle('done', u > 0.85 && k < (u - 0.85) / 0.15 * cells.length); });
+      const secs = Math.floor(u * 300); $('clock').textContent = Math.floor(secs / 60) + ':' + String(secs % 60).padStart(2, '0');
+      if (u > 0.3) $('t-labline').textContent = G.task === 'sums' ? 'They are choosing, then solving sums against the clock.' : 'They are writing down their prices.';
+      if (u > 0.85) $('t-labline').textContent = 'Paying out.';
+      if (u < 1) requestAnimationFrame(tick); else setTimeout(() => renderResult(r), 350);
+    }
+    requestAnimationFrame(tick);
+  }
+  function renderResult(r) {
+    G.phase = 'result';
+    const P = C.prizes[r.prizes], sums = r.task === 'sums';
+    $('t-result').textContent = 'Result — Session ' + G.session;
+    $('r-setup').textContent = (sums ? 'Sums' : 'Price') + ', ' + P.label + '. 24 students, six groups of four, two men and two women each.';
+    $('r-cap').textContent = sums ? 'How many chose to compete rather than sit out' : 'What they offered for the top job, for every 100 ECU it is worth above the 50 everyone gets anyway';
+    $('r-bm').style.width = '0'; $('r-bw').style.width = '0';
+    const nM = sums ? Math.round(r.idx.men / 100 * r.count.men) + ' of ' + r.count.men : pct(r.idx.men) + ' of 100';
+    const nW = sums ? Math.round(r.idx.women / 100 * r.count.women) + ' of ' + r.count.women : pct(r.idx.women) + ' of 100';
+    $('r-nm').textContent = nM; $('r-nw').textContent = nW;
+    $('r-words').textContent = r.words;
+    $('r-tops').textContent = r.topWords;
+    $('r-earn').textContent = r.earnWords;
+    $('r-measured').textContent = 'What this measured: ' + MECH.measuredLine(r.task, r.prizes);
+    const g = MECH.ghostLine(r.task, r.prizes);
+    $('r-ghost').innerHTML = g ? '<b>The paper ran this apparatus.</b> ' + g : '<b>The paper did not run this apparatus.</b> ' + (sums ? 'The sums contest is the standard lab the paper argues with; its numbers here come from that literature, as the paper describes it.' : 'A one-job price is our own cell; the auction literature the paper cites finds no gender difference in it.');
+    $('w-result').style.display = '';
+    requestAnimationFrame(() => { $('r-bm').style.width = Math.min(100, r.idx.men) + '%'; $('r-bw').style.width = Math.min(100, r.idx.women) + '%'; });
+    $('w-result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function log() {
+    if (G.phase !== 'result') return;
+    G.notebook.push(G.last);
+    renderNotebook($('nb'));
+    if (G.session >= C.sessions) { G.phase = 'reply'; renderNotebook($('nb2')); show('s-reply'); }
+    else startSession();
+  }
+
+  // ---- the notebook -----------------------------------------------------------------------------------------------
+  function prizeIcon(prizes, grey) {
+    const P = C.prizes[prizes], col = grey ? '#C8C5BD' : '#222';
+    const h = v => Math.round(v / 450 * 16);
+    const bars = P.M === null ? [[0, P.T], [8, P.U], [14, P.U]] : [[0, P.T], [8, P.M], [14, P.M]];
+    return '<svg class="pz" viewBox="0 0 22 18">' + bars.map(([x, v]) => '<rect x="' + x + '" y="' + (18 - h(v)) + '" width="' + (x === 0 ? 7 : 5) + '" height="' + h(v) + '" fill="' + col + '"/>').join('') + '</svg>';
+  }
+  function miniBars(r) { return '<span class="mb"><div class="m" style="width:' + Math.min(100, r.idx.men) + '%"></div><div class="w" style="width:' + Math.min(100, r.idx.women) + '%"></div></span>'; }
+  function renderNotebook(el) {
+    if (!G.notebook.length) { el.innerHTML = '<div class="nrow empty"><span class="n"></span><span class="wd">Nothing yet. Session 1 goes here.</span></div>'; return; }
+    el.innerHTML = G.notebook.map((r, i) => '<div class="nrow"><span class="n">' + (i + 1) + '</span><span class="ic">' + (r.task === 'sums' ? 'Σ' : '€') + '</span>' + prizeIcon(r.prizes) + miniBars(r) + '<span class="wd">' + r.words + '</span></div>').join('');
+  }
+
+  // ---- the reply and the verdict ----------------------------------------------------------------------------------
+  function send() {
+    if (!G.reply) return;
+    G.phase = 'end';
+    const v = MECH.verdict(G.notebook, G.reply);
+    const sentences = { less: 'Yes. Women are less competitive than men.', same: 'No. Women are as competitive as men, if anything more.', depends: 'It depends on what you make them do to compete.' };
+    $('e-sentence').textContent = '“' + sentences[G.reply] + '”';
+    $('e-backed').textContent = v.backed ? 'Your notebook backs it.' : 'Your notebook does not back it.';
+    $('e-why').textContent = v.why;
+    const grid = $('e-grid'); grid.innerHTML = '';
+    ['sums', 'price'].forEach(t => ['one', 'flat', 'steep'].forEach(p => {
+      const d = v.did.find(x => x.task === t && x.prizes === p);
+      const rs = G.notebook.filter(r => r.task === t && r.prizes === p);
+      const cell = document.createElement('div');
+      if (!d) { cell.className = 'gcell none'; cell.innerHTML = '<b>' + (t === 'sums' ? 'Sums' : 'Price') + ', ' + C.prizes[p].label + '</b>not run<span class="mb"><div style="width:60%"></div><div style="width:60%"></div></span>'; }
+      else {
+        const m = rs.reduce((a, r) => a + r.idx.men, 0) / rs.length, w = rs.reduce((a, r) => a + r.idx.women, 0) / rs.length;
+        cell.className = 'gcell'; cell.innerHTML = '<b>' + (t === 'sums' ? 'Sums' : 'Price') + ', ' + C.prizes[p].label + ' · ' + (rs.length === 1 ? 'once' : rs.length + ' sessions') + '</b>' + d.text.replace(/^[^:]+: /, '').replace(/, (once|\d+ sessions)/, '') + '<span class="mb"><div class="m" style="width:' + Math.min(100, m) + '%"></div><div class="w" style="width:' + Math.min(100, w) + '%"></div></span>';
+      }
+      grid.appendChild(cell);
+    }));
+    const rm = 100 * (1 + C.bidDev.TF.men / (C.prizes.flat.T - C.prizes.flat.U)), rw = 100 * (1 + C.bidDev.TF.women / (C.prizes.flat.T - C.prizes.flat.U));
+    $('e-nm').textContent = pct(rm) + ' of 100'; $('e-nw').textContent = pct(rw) + ' of 100';
+    $('t-seed').textContent = G.seed;
+    show('s-end');
+    requestAnimationFrame(() => { $('e-bm').style.width = rm + '%'; $('e-bw').style.width = rw + '%'; });
+  }
+  function again() {
+    const url = location.pathname + '?seed=' + (1 + Math.floor(Math.random() * 999999));
+    location.href = url;
+  }
+
+  // ---- help and about ---------------------------------------------------------------------------------------------
+  function openHelp() { G.returnTo = document.querySelector('.screen.on').id; show('s-help'); }
+  function openAbout() { G.returnTo = document.querySelector('.screen.on').id; show('s-about'); }
+  function back() { show(G.returnTo || 's-start'); }
+
+  $('b-begin').addEventListener('click', startSession);
+  $('b-run').addEventListener('click', run);
+  $('b-log').addEventListener('click', log);
+  $('b-send').addEventListener('click', send);
+  $('b-again').addEventListener('click', again);
+  ['b-help-start', 'b-help-play', 'b-help-reply', 'b-help-end'].forEach(id => $(id).addEventListener('click', openHelp));
+  ['b-about-start', 'b-about-end'].forEach(id => $(id).addEventListener('click', openAbout));
+  $('b-help-close').addEventListener('click', back);
+  $('b-about-close').addEventListener('click', back);
+  // test hooks
+  window.__act = { startSession, run, log, send, pick: (k, v) => { const r = document.querySelector('.radio[data-k="' + k + '"][data-v="' + v + '"]'); r && r.click(); } };
+})();
+</script>
+</body>
+</html>
