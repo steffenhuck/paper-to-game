@@ -16,42 +16,42 @@ const path = require('path');
   await page.click('#b-begin'); await page.waitForTimeout(300); await shot('a-1-ready', true); await shot('view-1-ready', false);
   // help opened mid-play and returned from
   await page.click('#q-play'); await page.waitForTimeout(200); await shot('help', true); await page.click('#b-help-close');
-  // act one: a plausible stranger's sequence, with the jump at the grazing angle
-  const dives = [45, 50, 60, 30, 34, 33.5, 26, 22.5, 10, 80, 70, 0, 85, 75, 65, 55, 40, 16.5];
+  // act one: a plausible stranger's sequence, with the jump at the grazing angle; the twelfth wave ends the act by itself
+  const dives = [45, 50, 60, 30, 34, 33.5, 26, 22.5, 10, 80, 70, 0];
   for (let k = 0; k < dives.length; k++) {
     await setRange('dive', dives[k]); await page.waitForTimeout(100);
     if (k === 0) await shot('a-1-preview', true);
     await page.click('#b-fire'); await page.waitForTimeout(400);
     if (k === 0) await shot('a-1-travelling', false);
-    await idle(); await page.waitForTimeout(150);
-    log.push(await page.evaluate(() => document.getElementById('res1').innerText.replace(/\n/g, ' / ')) + '   [' + await page.evaluate(() => document.getElementById('status').innerText) + ']');
-    if (k === 0) await shot('a-1-result', true);
+    if (k < dives.length - 1) { await idle(); await page.waitForTimeout(150); }
+    else { await page.waitForFunction(() => window.__game().phase === 'reveal', null, { timeout: 15000 }); await page.waitForTimeout(600); await shot('a-fan-firing', false); await idle(); await page.waitForTimeout(200); }
+    log.push(await page.evaluate(() => document.getElementById('res').innerText.replace(/\n/g, ' / ')) + '   [' + await page.evaluate(() => document.getElementById('status').innerText) + ']');
+    if (k === 0) { await shot('a-1-result', true); await shot('view-1-result', false); }
     if (k === 4) await shot('a-5-graze-mantle', true);
     if (k === 5) { await shot('a-6-graze-core', true); await shot('view-6-graze-core', false); }
     if (await hscroll()) errors.push('horizontal scroll after shot ' + (k + 1));
   }
-  await shot('a-fan-before-done', true);
-  await page.click('#b-done1'); await page.waitForTimeout(600); await shot('a-fan-firing', false); await idle(); await page.waitForTimeout(200);
+  const dialKept = await page.evaluate(() => document.getElementById('dive').value);
+  if (dialKept !== '0') errors.push('the dial should stay where the player left it (0), reads ' + dialKept);
   await shot('a-reveal', true);
-  log.push('REVEAL: ' + await page.evaluate(() => document.getElementById('res-reveal').innerText.replace(/\n/g, ' / ')));
   await page.click('#b-twist'); await page.waitForTimeout(200); await shot('a-twist', true);
   await page.click('#b-build'); await page.waitForTimeout(200); await shot('b-1-ready', true); await shot('view-b-1-ready', false);
-  // act two: slower first (the wrong way), then a faster ball, then a tiny one, then Lehmann's
-  const balls = [[0.25, 0.9], [0.25, 1.1], [0.1, 1.05], [0.22, 1.075]];
-  for (let k = 0; k < balls.length; k++) {
-    await setRange('size', balls[k][0]); await setRange('speed', balls[k][1]); await page.waitForTimeout(100);
+  // act two: slower first (the wrong way), the same, then faster
+  const speeds = [0.9, 1.0, 1.1];
+  for (let k = 0; k < speeds.length; k++) {
+    await setRange('speed', speeds[k]); await page.waitForTimeout(100);
     if (k === 0) await shot('b-1-set', true);
     await page.click('#b-quake'); await page.waitForTimeout(700);
-    if (k === 1) await shot('b-2-firing', false);
+    if (k === 2) await shot('b-3-firing', false);
     await idle(); await page.waitForTimeout(200);
-    log.push(await page.evaluate(() => document.getElementById('res2').innerText.replace(/\n/g, ' / ')) + '   [' + await page.evaluate(() => document.getElementById('status').innerText) + ']');
+    log.push(await page.evaluate(() => document.getElementById('res').innerText.replace(/\n/g, ' / ')) + '   [' + await page.evaluate(() => document.getElementById('status').innerText) + ']');
     await shot('b-' + (k + 1) + '-result', true);
-    if (k === 1) await shot('view-b-2-result', false);
+    if (k === 2) await shot('view-b-3-result', false);
     if (await hscroll()) errors.push('horizontal scroll after quake ' + (k + 1));
   }
-  const btn = await page.evaluate(() => document.getElementById('b-done2').innerText);
-  if (!/verdict/i.test(btn)) errors.push('after four quakes the quiet button should read See the verdict, reads: ' + btn);
-  await page.click('#b-done2'); await page.waitForTimeout(400); await shot('end', true); await shot('view-end', false);
+  const btn = await page.evaluate(() => document.getElementById('b-quake').innerText);
+  if (!/verdict/i.test(btn)) errors.push('after three quakes the gold button should read See the verdict, reads: ' + btn);
+  await page.click('#b-quake'); await page.waitForTimeout(400); await shot('end', true); await shot('view-end', false);
   log.push('VERDICT: ' + await page.evaluate(() => document.querySelector('.verdict').innerText.replace(/\n+/g, ' / ')));
   if (await hscroll()) errors.push('horizontal scroll on the end screen');
   await page.click('#b-about'); await page.waitForTimeout(200); await shot('about', true); await page.click('#b-about-close');
@@ -60,10 +60,12 @@ const path = require('path');
   const ok = await page.evaluate(() => { const g = window.__game(); return g.phase === 'act1' && g.game.shots.length === 0 && document.getElementById('dive').value === '45'; });
   if (!ok) errors.push('retry did not restart cleanly');
   await shot('c-restart', true);
-  // early finish path: one quake then That's my Earth
-  await setRange('dive', 40); await page.click('#b-fire'); await idle(); await page.click('#b-done1'); await idle(); await page.click('#b-twist'); await page.click('#b-build');
-  await setRange('size', 0.3); await setRange('speed', 0.8); await page.click('#b-quake'); await idle(); await page.waitForTimeout(100);
-  log.push('EARLY: ' + await page.evaluate(() => document.getElementById('res2').innerText.replace(/\n/g, ' / ')));
+  // early finish path: twelve quick waves, one slow quake, then the quiet button
+  for (let k = 0; k < 12; k++) { await setRange('dive', 40 + k * 2); await page.click('#b-fire'); if (k < 11) await idle(); }
+  await page.waitForFunction(() => window.__game().phase === 'reveal', null, { timeout: 15000 }); await idle();
+  await page.click('#b-twist'); await page.click('#b-build');
+  await setRange('speed', 0.8); await page.click('#b-quake'); await idle(); await page.waitForTimeout(100);
+  log.push('EARLY: ' + await page.evaluate(() => document.getElementById('res').innerText.replace(/\n/g, ' / ')));
   await page.click('#b-done2'); await page.waitForTimeout(300); await shot('c-end-slow', true);
   log.push('EARLY VERDICT: ' + await page.evaluate(() => document.getElementById('v-fate').innerText + ' / ' + document.getElementById('v-did').innerText));
   console.log(log.join('\n'));

@@ -46,7 +46,7 @@ i{font-style:italic}
 .drum{margin:2px 0 6px}
 .drum svg{display:block;width:100%;height:auto}
 /* dials */
-.dial{margin:10px 0 2px}
+.dial{margin:4px 0 2px}
 .dial .dl{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px}
 .dial .dl .name{font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
 .dial .dl .read{font-family:'DM Mono',monospace;font-size:18px;color:var(--gold)}
@@ -65,7 +65,7 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
 .rule b{color:var(--bone);font-weight:400}
 .rule .oc{color:var(--ochre)} .rule .ru{color:#C2634F} .rule .bo{color:var(--bone)} .rule .go{color:var(--gold)}
 .status{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);text-align:center;margin:4px 0 2px}
-.result{border-left:2px solid var(--gold);padding:6px 0 6px 12px;margin:10px 0}
+.result{border-left:2px solid var(--gold);padding:6px 0 6px 12px;margin:8px 0;min-height:66px}
 .result p{margin:0 0 6px}.result p:last-child{margin:0}
 .result .lead{font-weight:700}
 .result .mu{color:var(--mute)}
@@ -94,51 +94,43 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
   <div class="caps">A game from Inge Lehmann’s paper “P′” (1936)</div>
   <h1>Lehmann’s Shadow</h1>
   <div class="plate start-pic" id="start-plate"></div>
-  <p>You are an earthquake wave. Turn a dial to choose how steeply you dive into the Earth. Fire, and watch yourself bend where the rock changes. Then put a ball inside the Earth and fire again.</p>
-  <div class="aim">Reach every listening post on the far side of the Earth with a wave.</div>
+  <p>You are an earthquake wave. Turn a dial to choose how steeply you dive into the Earth. Fire twelve times, and watch yourself bend where the rock changes. Then set the speed of a ball inside the core, and fire again.</p>
+  <div class="aim">Light as many listening posts as you can with twelve waves.</div>
   <button class="btn pri" id="b-begin">Begin</button>
   <button class="btn link" id="b-help-start">How to play</button>
   <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
 </section>
 
 <section class="screen" id="s-play">
-  <div class="topbar"><div class="aimline" id="aimline">Reach every listening post on the far side of the Earth with a wave.</div><button class="q" id="q-play" aria-label="How to play">?</button></div>
+  <div class="topbar"><div class="aimline" id="aimline">Light as many listening posts as you can with twelve waves.</div><button class="q" id="q-play" aria-label="How to play">?</button></div>
   <div class="plate" id="plate"></div>
   <div class="drum" id="drum"></div>
-  <div class="status" id="status">0 of 18 posts have heard you</div>
+  <div class="status" id="status">Wave 1 of 12</div>
+  <div class="result" id="res"><p class="mu" id="res-hint">Set the dive, then fire.</p></div>
 
   <div id="panel1">
-    <p class="rule" id="rule1">The burst at the top is the quake. <span class="oc">Ochre</span> is the mantle, where a wave runs fast; <span class="ru">rust</span> is the core, where it runs slower, so a wave bends toward the middle going in and back coming out. It bends only where the colour changes. The <span class="bo">dots</span> on the right are listening posts; one lights when a wave comes up close to it.</p>
     <div class="dial">
       <div class="dl"><span class="name">Dive</span><span class="nudge"><button class="nb" id="dive-minus" aria-label="half a degree less">−</button><span class="read" id="dive-read">45°</span><button class="nb" id="dive-plus" aria-label="half a degree more">+</button></span></div>
       <input type="range" id="dive" min="0" max="90" step="0.5" value="45">
       <div class="ends"><span>0° straight down</span><span>90° along the ground</span></div>
     </div>
     <button class="btn pri" id="b-fire">Fire the wave</button>
-    <div class="result hide" id="res1"></div>
-    <button class="btn quiet dim" id="b-done1">That’s every post I can reach</button>
+    <p class="rule" id="rule1"><span class="oc">Ochre</span> is the mantle, where a wave runs fast; <span class="ru">rust</span> is the core, where it runs slower, so a wave bends toward the middle going in and back coming out. It bends only where the colour changes. The <span class="bo">dots</span> are listening posts.</p>
   </div>
 
   <div id="panel-reveal" class="hide">
-    <div class="result" id="res-reveal"></div>
-    <button class="btn pri" id="b-twist">What the posts heard</button>
+    <button class="btn pri" id="b-twist">Next</button>
   </div>
 
   <div id="panel2" class="hide">
-    <p class="rule">The <span class="bo">ringed ball</span> in the middle is yours: it goes paler the faster a wave runs in it, darker the slower. Into slower rock a wave bends toward the middle; into faster rock it bends away, and if it meets faster rock at a shallow slant it bounces off. The quake fires at every angle at once.</p>
-    <div class="dial">
-      <div class="dl"><span class="name">Size of the ball</span><span class="read words" id="size-read"></span></div>
-      <input type="range" id="size" min="0.10" max="0.50" step="0.01" value="0.25">
-      <div class="ends"><span>small</span><span>half the Earth’s radius</span></div>
-    </div>
     <div class="dial">
       <div class="dl"><span class="name">Speed in the ball</span><span class="read words" id="speed-read"></span></div>
       <input type="range" id="speed" min="0.75" max="1.25" step="0.01" value="1">
       <div class="ends"><span>slower than the core</span><span>same</span><span>faster</span></div>
     </div>
-    <button class="btn pri" id="b-quake">Quake · 1 of 4</button>
-    <div class="result hide" id="res2"></div>
-    <button class="btn quiet dim" id="b-done2">That’s my Earth</button>
+    <button class="btn pri" id="b-quake">Quake · 1 of 3</button>
+    <button class="btn quiet dim" id="b-done2">See the verdict</button>
+    <p class="rule">The <span class="bo">ringed ball</span> is Lehmann’s, a bit smaller than the Moon; it goes paler the faster a wave runs in it. Into slower rock a wave bends toward the middle; into faster rock it bends away, and at a shallow slant it bounces off.</p>
   </div>
 </section>
 
@@ -169,13 +161,13 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
 <div class="ov help" id="help"><div class="wrap">
   <div class="caps">Lehmann’s Shadow</div>
   <h2>How to play</h2>
-  <p><b>Reach every listening post on the far side of the Earth with a wave.</b></p>
+  <p><b>Light as many listening posts as you can with twelve waves.</b></p>
   <p>The picture is the Earth cut open, as Inge Lehmann drew it in 1936: ochre is the mantle, where a wave runs fast; rust is the core, where it runs slower. A wave runs straight and bends only where the colour changes: entering the core it bends toward the middle, leaving it bends back. The quake is the burst at the top. The dots round the right-hand edge are eighteen listening posts, every ten degrees round from the quake. A post lights when a wave comes up within three degrees of it.</p>
   <ol>
-    <li><b>Dive.</b> Slide the dial, or tap − and + for half a degree at a time. 0° dives straight down through the middle; 90° runs along the ground. A dotted stub at the quake shows the direction you chose. After every shot the dial goes back to 45°.</li>
-    <li><b>Fire the wave.</b> Watch it run, bend and come up. The game says where it came up and whether a post heard it. The drum under the Earth writes what the post felt: a big up-and-down when the wave comes up steeply, a small one when it comes up flat. Each wave you fire stays drawn, so your shots build Lehmann’s own figure.</li>
-    <li>Fire as many waves as you like. When you believe you have reached every post a wave can reach, press <b>That’s every post I can reach</b>. The whole fan fires, every angle at once, and you see which posts no angle reaches.</li>
-    <li><b>The second part.</b> The posts no wave could reach had heard something in 1936. Lehmann’s idea was a ball inside the core. Two dials set it: how big, and how fast a wave runs in it compared with the core. Going into slower rock a wave bends toward the middle; into faster rock it bends away, and at a shallow slant it bounces off. Press <b>Quake</b> and every angle fires at once. You have four quakes; make the four dark posts hear one. Press <b>That’s my Earth</b> when you are satisfied, or the fourth quake ends it.</li>
+    <li><b>Dive.</b> Slide the dial, or tap − and + for half a degree at a time. 0° dives straight down through the middle; 90° runs along the ground. A dotted stub at the quake shows the direction. The dial stays where you leave it.</li>
+    <li><b>Fire the wave.</b> Watch it run, bend and come up. The line under the Earth says where it came up and whether a post heard it; the drum writes what the post felt, a big up-and-down when the wave comes up steeply. Every wave stays drawn, so your twelve shots build Lehmann’s own figure.</li>
+    <li>After the twelfth wave the whole fan fires by itself, every angle at once, and you see the posts no angle reaches: the shadow.</li>
+    <li><b>The ball.</b> Those posts heard something in 1936. Lehmann’s idea was a ball inside the core, a bit smaller than the Moon. One dial sets how fast a wave runs in it compared with the core. Into slower rock a wave bends toward the middle; into faster rock it bends away, and at a shallow slant it bounces off. Press <b>Quake</b> and every angle fires at once. Three quakes; make the four dark posts hear one.</li>
   </ol>
   <p>The verdict says what your ball did, what hers did, and what became of her idea.</p>
   <button class="btn pri" id="b-help-close">Back</button>
@@ -264,10 +256,10 @@ var CONFIG = {
   FAN_STEP_DRAW: 0.5,         // ours: take-off step of the fan that is drawn (180 rays a side)
 
   // ---- ours: the dials --------------------------------------------------------------------------------
-  DIVE_MIN: 0, DIVE_MAX: 90, DIVE_STEP: 0.5, DIVE_START: 45,   // ours: the dive dial; every shot starts at 45°
-  SIZE_MIN: 0.10, SIZE_MAX: 0.50, SIZE_STEP: 0.01, SIZE_START: 0.25, // ours: the ball's radius as a fraction of r0 (the core is 0.556); Lehmann's 0.2205 is inside
+  WAVES: 12,                  // ours: waves in the first act; after the last the whole fan fires by itself
+  DIVE_MIN: 0, DIVE_MAX: 90, DIVE_STEP: 0.5, DIVE_START: 45,   // ours: the dive dial; the first wave starts at 45°, after that the dial stays where the player left it
   SPEED_MIN: 0.75, SPEED_MAX: 1.25, SPEED_STEP: 0.01, SPEED_START: 1.00, // ours: the ball's speed as a multiple of the core's; Lehmann's 8.6/8 = 1.075 is inside
-  QUAKES: 4,                  // ours: quakes in the second act; the fourth is final
+  QUAKES: 3,                  // ours: quakes in the second act; the third is final. The ball's size is Lehmann's (INNER_FRAC); quake() takes a size for an author who wants the dial back
 
   // ---- ours: words ------------------------------------------------------------------------------------
   MOON_KM: 1737,              // radius of the Moon, km, the yardstick for the ball's size in words
@@ -397,65 +389,60 @@ var MECH = (function () {
   // ---- the game -----------------------------------------------------------------------------------------
   function newGame() { return { act: 1, shots: [], heard: {}, quakes: [], done: false }; }
 
-  // Act one: fire one wave at dive i0 into Lehmann's two-shell Earth.
+  // Act one: fire one wave at dive i0 into Lehmann's two-shell Earth. The dial stays where the player left it.
   function fire(game, i0) {
     i0 = round(Math.max(CONFIG.DIVE_MIN, Math.min(CONFIG.DIVE_MAX, i0)), CONFIG.DIVE_STEP);
     var ray = trace(i0, twoShell()), hit = postsHeardBy([ray]), posts = Object.keys(hit).map(Number), newPosts = [];
     posts.forEach(function (P) { if (!game.heard[P]) { game.heard[P] = i0; newPosts.push(P); } });
     game.shots.push({ i0: i0, fold: ray.fold, branch: ray.branch, posts: posts });
-    var what, came, heardLine;
-    if (ray.branch === 'mantle') what = 'Dived at ' + fmtDive(i0) + ', ran straight through the mantle without touching the core';
-    else what = 'Dived at ' + fmtDive(i0) + ', bent into the core at the rust, bent again coming out';
-    if (ray.delta > 180) came = 'and came up ' + deg(ray.delta) + ' round, past the far point, which is ' + deg(ray.fold) + ' round the other way.';
-    else came = 'and came up ' + deg(ray.fold) + ' round from the quake.';
-    if (posts.length) heardLine = 'The post at ' + deg(posts[0]) + ' heard it' + (newPosts.length ? '.' : ' again.') + ' Up-and-down: ' + steepWords(i0) + '.';
-    else { var near = nearestPost(ray.fold); heardLine = 'Nobody heard it. The nearest post, at ' + deg(near) + ', is ' + fmtGap(Math.abs(near - ray.fold)) + ' away; a post hears only within ' + CONFIG.EAR_DEG + '°.'; }
-    return { ray: ray, posts: posts, newPosts: newPosts, heardCount: Object.keys(game.heard).length, words: { what: what, came: came, heard: heardLine }, steep: steepWords(i0), vertical: verticalShare(i0) };
+    var what = 'Dived at ' + fmtDive(i0) + (ray.branch === 'mantle' ? ', missed the core' : ', bent through the core') + ', came up at ' + deg(ray.fold) + (ray.delta > 180 ? ' (past the far point and back round)' : '') + '.';
+    var heardLine;
+    if (posts.length) heardLine = 'Post ' + deg(posts[0]) + ' heard it' + (newPosts.length ? '' : ' again') + '. Up-and-down: ' + steepWords(i0) + '.';
+    else { var near = nearestPost(ray.fold); heardLine = 'Nobody heard it. The nearest post, ' + deg(near) + ', is ' + fmtGap(Math.abs(near - ray.fold)) + ' away.'; }
+    var left = CONFIG.WAVES - game.shots.length;
+    return { ray: ray, posts: posts, newPosts: newPosts, heardCount: Object.keys(game.heard).length, left: left, last: left <= 0, words: { what: what, heard: heardLine }, steep: steepWords(i0), vertical: verticalShare(i0) };
   }
-  function fmtGap(g) { var h = Math.ceil(g * 2) / 2; return (h < 1 ? 'under 1' : h.toString().replace(/\.5$/, '\u00BD')) + '\u00B0'; } // rounded up to the half degree, so a gap of 3.2 reads 3½, never 3
+  function fmtGap(g) { var h = Math.ceil(g * 2) / 2; return (h < 1 ? 'under 1' : h.toString().replace(/\.5$/, '½')) + '°'; } // rounded up to the half degree, so a gap of 3.2 reads 3½, never 3
   function nearestPost(f) { var best = CONFIG.POSTS[0]; CONFIG.POSTS.forEach(function (P) { if (Math.abs(P - f) < Math.abs(best - f)) best = P; }); return best; }
   function fmtDive(a) { return (Math.round(a * 2) / 2).toString().replace(/\.5$/, '½') + '°'; }
 
-  // Act one ends: the player says every reachable post is reached. The whole fan fires; the shadow is named.
+  // Act one ends after the last wave: the whole fan fires and the shadow is named.
   function reveal(game) {
     var earth = twoShell(), reach = reachablePosts(earth), shadow = shadowPosts(earth);
     var got = reach.filter(function (P) { return game.heard[P]; }), missed = reach.filter(function (P) { return !game.heard[P]; });
     var missedWith = missed.map(function (P) { return { post: P, dive: diveFor(P, earth) }; });
     var cov = coverage(earth);
     var lines = [];
-    lines.push('You fired ' + game.shots.length + ' wave' + (game.shots.length === 1 ? '' : 's') + ' and reached ' + got.length + ' of the ' + reach.length + ' posts a wave can reach.');
-    if (missed.length === 1) lines.push('One post you missed could have been reached: ' + deg(missed[0]) + ', with a dive of ' + fmtDive(missedWith[0].dive) + '.');
-    else if (missed.length) lines.push(missed.length + ' posts you missed could have been reached' + (missed.length > 3 ? ', for instance ' : ': ') + missedWith.slice(0, 3).map(function (m) { return deg(m.post) + ' with a dive of ' + fmtDive(m.dive); }).join(', ') + '.');
-    lines.push('No angle at all reaches the posts at ' + listPosts(shadow) + '. Waves that miss the core come up no further than ' + deg(cov.mantle[1]) + ' round; waves bent through it come up no nearer than ' + deg(cov.core[0]) + '. Between them lies the shadow.');
+    lines.push('Your ' + game.shots.length + ' waves lit ' + got.length + ' of the ' + reach.length + ' posts a wave can reach.' + (missed.length ? ' A dive of ' + fmtDive(missedWith[0].dive) + ' would have lit ' + deg(missed[0]) + '.' : ''));
+    lines.push('No angle reaches the posts at ' + listPosts(shadow) + '. Waves that miss the core come up no further than ' + deg(cov.mantle[1]) + '; waves bent through it, no nearer than ' + deg(cov.core[0]) + '. Between them lies the shadow.');
     game.act = 2; game.reveal = { reach: reach, got: got, missed: missedWith, shadow: shadow, coverage: cov };
     return { fan: fan(earth, CONFIG.FAN_STEP_DRAW), reach: reach, got: got, missed: missedWith, shadow: shadow, coverage: cov, lines: lines };
   }
   var TWIST = [
-    'In 1936 the posts in the shadow had heard something anyway. Faint, and mostly up-and-down, as if the wave had come up steeply; and the further round the post stood, the stronger it was.',
-    'A wave creeping round the outside of the core could not do that. Inge Lehmann had another idea: a second ball, inside the core, that waves run through at a different speed.',
-    'Build it. A quake fires at every angle at once. Your aim: make the four shadow posts hear it.'
+    'In 1936 the posts in the shadow had heard something anyway: faint, and mostly up-and-down, as if the wave had come up steeply.',
+    'Inge Lehmann’s idea: a second ball, inside the core, in which waves run at a different speed. Build it. A quake fires at every angle at once; make the four shadow posts hear it.'
   ];
 
-  // Act two: build the ball and fire a quake at every angle.
-  function quake(game, sizeFrac, speedRatio) {
-    sizeFrac = round(Math.max(CONFIG.SIZE_MIN, Math.min(CONFIG.SIZE_MAX, sizeFrac)), CONFIG.SIZE_STEP);
+  // Act two: set the speed in the ball (its size is Lehmann's unless a size is passed) and fire a quake at every angle.
+  function quake(game, speedRatio, sizeFrac) {
+    sizeFrac = sizeFrac == null ? CONFIG.INNER_FRAC : sizeFrac;
     speedRatio = round(Math.max(CONFIG.SPEED_MIN, Math.min(CONFIG.SPEED_MAX, speedRatio)), CONFIG.SPEED_STEP);
     var earth = threeShell(sizeFrac, speedRatio), heard = heardByQuake(earth);
     var shadow = game.reveal ? game.reveal.shadow : shadowPosts(twoShell());
     var lit = shadow.filter(function (P) { return heard[P]; });
     var cov = coverage(earth), how;
     if (speedRatio > 1 + 1e-9) {
-      how = cov.reflect ? 'Waves that met the ball at a shallow slant bounced off it and came up between ' + deg(cov.reflect[0]) + ' and ' + deg(cov.reflect[1]) + '; waves that went through it were bent away from the middle and came up from ' + deg(cov.inner[0]) + ' out to the far point.'
-        : 'Waves that went through the ball were bent away from the middle and came up from ' + deg(cov.inner[0]) + ' out to the far point.';
+      how = cov.reflect ? 'Waves meeting the ball at a shallow slant bounced off it and came up from ' + deg(cov.reflect[0]) + '; waves going through it bent away from the middle.'
+        : 'Waves going through the ball bent away from the middle and came up from ' + deg(cov.inner[0]) + '.';
     } else if (speedRatio < 1 - 1e-9) {
       var wrapped = fan(earth, CONFIG.FAN_STEP_HEAR).some(function (r) { return r.branch === 'inner' && r.delta > 180 + CONFIG.EAR_DEG; });
-      how = 'Waves that went through the ball were bent further toward the middle' + (wrapped ? ', crossed past the far point, and came round the other side as far as ' + deg(cov.inner[0]) + '.' : ' and came up between ' + deg(cov.inner[0]) + ' and the far point, where waves already came up.');
-    } else how = 'A ball running at the same speed as the core bends nothing. Every wave went through it as if it were not there.';
+      how = 'Waves going through the ball bent further toward the middle' + (wrapped ? ', crossed the far point and came back round as far as ' + deg(cov.inner[0]) + '.' : ' and came up where waves already came up.');
+    } else how = 'A ball at the same speed as the core bends nothing: every wave went through as if it were not there.';
     var result = cap(countPosts(lit.length)) + ' heard the quake' + (lit.length ? ': ' + listPosts(lit) + '.' : '.');
     var q = { n: game.quakes.length + 1, sizeFrac: sizeFrac, speedRatio: speedRatio, heard: heard, lit: lit, coverage: cov };
     game.quakes.push(q);
     if (game.quakes.length >= CONFIG.QUAKES) game.done = true;
-    return { quake: q, fan: fan(earth, CONFIG.FAN_STEP_DRAW), heard: heard, lit: lit, shadow: shadow, left: CONFIG.QUAKES - game.quakes.length, words: { ball: 'A ball ' + sizeWords(sizeFrac) + ', running ' + speedWords(speedRatio) + '. The quake fired at every angle.', result: result, how: how } };
+    return { quake: q, fan: fan(earth, CONFIG.FAN_STEP_DRAW), heard: heard, lit: lit, shadow: shadow, left: CONFIG.QUAKES - game.quakes.length, words: { ball: 'The ball ran ' + speedWords(speedRatio) + '.', result: result, how: how } };
   }
   function finish(game) { game.done = true; return verdict(game); }
 
@@ -463,10 +450,10 @@ var MECH = (function () {
     var last = game.quakes[game.quakes.length - 1], shadow = game.reveal ? game.reveal.shadow : shadowPosts(twoShell());
     var best = game.quakes.reduce(function (b, q) { return !b || q.lit.length > b.lit.length ? q : b; }, null);
     var L = lehmannEarth(), lCov = coverage(L);
-    var did = 'You fired ' + game.shots.length + ' wave' + (game.shots.length === 1 ? '' : 's') + ' into Lehmann’s Earth of two shells and found the shadow: four posts, from ' + deg(shadow[0]) + ' to ' + deg(shadow[shadow.length - 1]) + ' round from the quake, that no angle could reach.';
+    var did = 'You fired ' + game.shots.length + ' waves into Lehmann’s Earth of two shells and found the shadow: four posts, from ' + deg(shadow[0]) + ' to ' + deg(shadow[shadow.length - 1]) + ' round from the quake, that no angle could reach.';
     if (last) {
-      did += ' Then you put a ball ' + sizeWords(last.sizeFrac) + ' inside the core, running ' + speedWords(last.speedRatio) + ', and ' + countPosts(last.lit.length) + ' heard the quake.';
-      if (best && best !== last && best.lit.length > last.lit.length) did += ' Your best ball, ' + sizeWords(best.sizeFrac) + ' and ' + speedWords(best.speedRatio) + ', reached ' + countPosts(best.lit.length).replace(' shadow posts', '') + '.';
+      did += ' Then you put a ball inside the core running ' + speedWords(last.speedRatio) + ', and ' + countPosts(last.lit.length) + ' heard the quake.';
+      if (best && best !== last && best.lit.length > last.lit.length) did += ' Your best ball, ' + speedWords(best.speedRatio) + ', reached ' + countPosts(best.lit.length).replace(' shadow posts', '') + '.';
     }
     var paper = 'Lehmann’s ball was ' + sizeWords(CONFIG.INNER_FRAC) + ' (about ' + Math.round(CONFIG.INNER_FRAC * CONFIG.R0_KM / 100) * 100 + ' km from its centre to its edge) and ran ' + speedWords(CONFIG.V_INNER / CONFIG.V_CORE) + '. Waves bounce off it and come up from about ' + deg(lCov.reflect[0]) + ' round, right inside the shadow, arriving steeply, with a strong up-and-down, and stronger the further round they land: what the posts had recorded. She called it a hypothesis that seemed probable and could not be proved from the data at hand.';
     var means = 'It held. Two years later Gutenberg and Richter computed an inner core about ' + CONFIG.PAPER.GUTENBERG_RICHTER_KM + ' km from centre to edge; in 1939 Jeffreys showed the creeping-round explanation could not work; by 1946 the inner ball was agreed to be solid. The Earth is a ball inside a ball inside a ball, and the innermost was found with cardboard cards, oatmeal boxes and a pencil.';
@@ -606,7 +593,7 @@ if (typeof module !== 'undefined') module.exports = MECH;
 
   // ---- the game --------------------------------------------------------------------------------------
   var game, phase = 'start', busy = false, plate, drum, startPlate, startLoop = null, endPlate = null;
-  var AIM1 = 'Reach every listening post on the far side of the Earth with a wave.', AIM2 = 'Build the inside of the Earth so the posts in the shadow hear the quake too.';
+  var AIM1 = 'Light as many listening posts as you can with twelve waves.', AIM2 = 'Set the speed in the ball so the posts in the shadow hear the quake.';
   function show(id) { ['s-start', 's-play', 's-end'].forEach(function (s) { $(s).classList.toggle('on', s === id); }); window.scrollTo(0, 0); }
   function openOv(id) { $(id).classList.add('on'); document.body.classList.add('lock'); $(id).scrollTop = 0; }
   function closeOv(id) { $(id).classList.remove('on'); document.body.classList.remove('lock'); }
@@ -620,42 +607,40 @@ if (typeof module !== 'undefined') module.exports = MECH;
     drumWrite(drum, null);
     $('aimline').textContent = AIM1; plate.cap.textContent = 'LEHMANN’S EARTH, 1936 · TWO SHELLS';
     $('panel1').classList.remove('hide'); $('panel-reveal').classList.add('hide'); $('panel2').classList.add('hide');
-    $('res1').classList.add('hide'); $('res1').innerHTML = ''; $('res2').classList.add('hide'); $('res2').innerHTML = '';
-    $('b-done1').classList.add('dim'); $('b-done2').classList.add('dim'); $('b-fire').classList.remove('dim'); $('b-quake').classList.remove('dim');
-    $('dive').value = C.DIVE_START; readDive();
-    $('size').value = C.SIZE_START; $('speed').value = C.SPEED_START; readBall();
+    $('res').innerHTML = '<p class="mu">Set the dive, then fire.</p>';
+    $('b-done2').classList.add('dim'); $('b-done2').classList.remove('hide'); $('b-fire').classList.remove('dim'); $('b-quake').classList.remove('dim');
     $('b-quake').textContent = 'Quake · 1 of ' + C.QUAKES;
+    $('dive').value = C.DIVE_START; readDive();
+    $('speed').value = C.SPEED_START;
     status1();
     show('s-play');
   }
-  function status1() { var n = Object.keys(game.heard).length; $('status').textContent = n + ' of ' + C.POSTS.length + ' posts have heard you'; }
+  function status1() { var n = Object.keys(game.heard).length, w = Math.min(C.WAVES, game.shots.length + 1); $('status').textContent = (game.shots.length >= C.WAVES ? C.WAVES + ' waves fired' : 'Wave ' + w + ' of ' + C.WAVES) + ' · ' + n + ' of ' + C.POSTS.length + ' posts lit'; }
   function readDive() { var v = parseFloat($('dive').value); $('dive-read').textContent = MECH.fmtDive(v); setPreview(plate, v); }
-  function readBall() { var s = parseFloat($('size').value), v = parseFloat($('speed').value); $('size-read').textContent = MECH.sizeWords(s); $('speed-read').textContent = MECH.speedWords(v); setBall(plate, s, v); }
+  function readBall() { var v = parseFloat($('speed').value); $('speed-read').textContent = MECH.speedWords(v); setBall(plate, C.INNER_FRAC, v); }
 
   function fire() {
     if (busy || phase !== 'act1') return; busy = true; $('b-fire').classList.add('dim');
     var i0 = parseFloat($('dive').value), r = MECH.fire(game, i0);
-    clearGroup(plate.preview);
     travel(plate, r.ray).then(function () {
       keepShot(plate, r.ray);
       r.posts.forEach(function (P) { litPost(plate, P, true); });
       drumWrite(drum, r.posts.length ? r.posts[0] : null, r.vertical, r.steep);
-      $('res1').innerHTML = '<p>' + r.words.what + ' ' + r.words.came + '</p><p class="lead">' + r.words.heard + '</p>';
-      $('res1').classList.remove('hide');
+      $('res').innerHTML = '<p>' + r.words.what + '</p><p class="lead">' + r.words.heard + '</p>';
       status1();
-      $('dive').value = C.DIVE_START; readDive();
-      $('b-done1').classList.remove('dim'); $('b-fire').classList.remove('dim'); busy = false;
+      if (r.last) { setTimeout(revealNow, 900); return; }
+      $('b-fire').classList.remove('dim'); busy = false;
     });
   }
-  function done1() {
-    if (busy || phase !== 'act1' || !game.shots.length) return; busy = true; phase = 'reveal';
+  function revealNow() {
+    phase = 'reveal';
     $('panel1').classList.add('hide'); clearGroup(plate.preview);
     var r = MECH.reveal(game);
     drawFan(plate, r.fan, 1800).then(function () {
       r.reach.forEach(function (P) { litPost(plate, P, true); });
       plate.shadow.classList.remove('hide'); plate.shadowLabel.classList.remove('hide');
-      $('status').textContent = r.got.length + ' of ' + r.reach.length + ' reachable posts heard you · ' + r.shadow.length + ' in the shadow';
-      $('res-reveal').innerHTML = r.lines.map(function (l, i) { return '<p' + (i === r.lines.length - 1 ? ' class="lead"' : '') + '>' + l + '</p>'; }).join('');
+      $('status').textContent = 'Every angle at once · ' + r.shadow.length + ' posts in the shadow';
+      $('res').innerHTML = r.lines.map(function (l, i) { return '<p' + (i === r.lines.length - 1 ? ' class="lead"' : '') + '>' + l + '</p>'; }).join('');
       $('panel-reveal').classList.remove('hide'); busy = false;
     });
   }
@@ -669,28 +654,28 @@ if (typeof module !== 'undefined') module.exports = MECH;
     C.POSTS.forEach(function (P) { litPost(plate, P, false); });
     drumWrite(drum, null);
     $('aimline').textContent = AIM2; plate.cap.textContent = 'LEHMANN’S EARTH, 1936 · THREE SHELLS';
-    $('status').textContent = '0 of 4 shadow posts have heard the quake';
+    $('status').textContent = 'Quake 1 of ' + C.QUAKES + ' · 0 of 4 shadow posts lit';
+    $('res').innerHTML = '<p class="mu">Set the speed in the ball, then fire the quake.</p>';
     $('panel-reveal').classList.add('hide'); $('panel2').classList.remove('hide');
     readBall(); window.scrollTo(0, 0);
   }
   function quake() {
-    if (busy || phase !== 'act2' || game.done) return; busy = true; $('b-quake').classList.add('dim');
-    var s = parseFloat($('size').value), v = parseFloat($('speed').value), r = MECH.quake(game, s, v);
+    if (busy || phase !== 'act2') return;
+    if (game.done) { done2(); return; }
+    busy = true; $('b-quake').classList.add('dim');
+    var v = parseFloat($('speed').value), r = MECH.quake(game, v);
     clearGroup(plate.fanL); clearGroup(plate.fanR);
     C.POSTS.forEach(function (P) { litPost(plate, P, false); });
     drawFan(plate, r.fan, 1900).then(function () {
       var lit = C.POSTS.filter(function (P) { return r.heard[P]; });
       lit.forEach(function (P, k) { setTimeout(function () { litPost(plate, P, true); }, 60 * k); });
       setTimeout(function () {
-        var shadowLit = r.lit;
-        if (shadowLit.length) { var steepest = shadowLit[0]; drumWrite(drum, steepest, MECH.verticalShare(14), 'strong'); } else drumWrite(drum, null);
-        $('status').textContent = shadowLit.length + ' of 4 shadow posts have heard the quake';
-        $('res2').innerHTML = '<p>' + r.words.ball + '</p><p class="lead">' + r.words.result + '</p><p class="mu">' + r.words.how + '</p>';
-        $('res2').classList.remove('hide');
-        $('b-done2').classList.remove('dim');
-        if (game.done) { $('b-quake').textContent = 'No quakes left'; $('b-done2').textContent = 'See the verdict'; }
-        else { $('b-quake').textContent = 'Quake · ' + (game.quakes.length + 1) + ' of ' + C.QUAKES; $('b-quake').classList.remove('dim'); }
-        busy = false;
+        if (r.lit.length) drumWrite(drum, r.lit[0], MECH.verticalShare(14), 'strong'); else drumWrite(drum, null);
+        $('status').textContent = (game.done ? C.QUAKES + ' quakes fired' : 'Quake ' + (game.quakes.length + 1) + ' of ' + C.QUAKES) + ' · ' + r.lit.length + ' of 4 shadow posts lit';
+        $('res').innerHTML = '<p>' + r.words.ball + '</p><p class="lead">' + r.words.result + '</p><p class="mu">' + r.words.how + '</p>';
+        if (game.done) { $('b-quake').textContent = 'See the verdict'; $('b-done2').classList.add('hide'); }
+        else { $('b-quake').textContent = 'Quake · ' + (game.quakes.length + 1) + ' of ' + C.QUAKES; $('b-done2').classList.remove('dim'); }
+        $('b-quake').classList.remove('dim'); busy = false;
       }, 60 * lit.length + 150);
     });
   }
@@ -702,10 +687,10 @@ if (typeof module !== 'undefined') module.exports = MECH;
     if (!endPlate) endPlate = makePlate($('end-plate'), true);
     clearGroup(endPlate.fanL); clearGroup(endPlate.fanR);
     var last = v.last, earth = MECH.threeShell(last.sizeFrac, last.speedRatio);
-    setBall(endPlate, last.sizeFrac, last.speedRatio); endPlate.ghost.classList.remove('hide'); endPlate.shadow.classList.remove('hide');
+    setBall(endPlate, last.sizeFrac, last.speedRatio); endPlate.shadow.classList.remove('hide');
     MECH.fan(earth, 1.5).forEach(function (r) { el('polyline', { points: pointsOf(r.pts, false) }, endPlate.fanR); el('polyline', { points: pointsOf(r.pts, true) }, endPlate.fanL); });
     C.POSTS.forEach(function (P) { litPost(endPlate, P, !!last.heard[P]); });
-    $('v-ghost').textContent = 'Your Earth, with your last quake drawn through it. The dotted ring is Lehmann’s ball, ' + MECH.sizeWords(v.lehmann.sizeFrac) + '; the hatched band is the shadow of the two-shell Earth.';
+    $('v-ghost').textContent = 'Your Earth, with your last quake drawn through it: Lehmann’s ball at your speed. The hatched band is the shadow of the two-shell Earth.';
     show('s-end');
   }
 
@@ -734,9 +719,8 @@ if (typeof module !== 'undefined') module.exports = MECH;
   $('dive').addEventListener('input', readDive);
   $('dive-minus').addEventListener('click', function () { $('dive').value = Math.max(C.DIVE_MIN, parseFloat($('dive').value) - C.DIVE_STEP); readDive(); });
   $('dive-plus').addEventListener('click', function () { $('dive').value = Math.min(C.DIVE_MAX, parseFloat($('dive').value) + C.DIVE_STEP); readDive(); });
-  $('size').addEventListener('input', readBall); $('speed').addEventListener('input', readBall);
+  $('speed').addEventListener('input', readBall);
   $('b-fire').addEventListener('click', fire);
-  $('b-done1').addEventListener('click', done1);
   $('b-twist').addEventListener('click', twist);
   $('b-build').addEventListener('click', build);
   $('b-quake').addEventListener('click', quake);
