@@ -1,4 +1,4 @@
-// Calibration check for Ganguli's Letters: runs mechanism.js headless against the paper's own numbers.
+// Calibration check for Dear Household: runs mechanism.js headless against the paper's own numbers.
 const M = require('./mechanism.js');
 const C = M.CONFIG;
 let fails = 0, out = [];
