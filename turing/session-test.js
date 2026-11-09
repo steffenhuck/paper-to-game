@@ -37,7 +37,7 @@ const main = async () => {
     await page.waitForTimeout(100);
     await page.click(`#checks .btn[data-key=${c}]`); await page.waitForTimeout(150);
     if (shots) await shot(`${i}-set`, true);
-    log.push(`TEST ${i}: slot="${await text('#b-slot')}" check=${c} does="${await text('#check-does')}" run=${await page.evaluate(() => document.getElementById('b-run').className)}`);
+    log.push(`TEST ${i}: slot="${await text('#b-slot')}" check=${c}  does="${await page.evaluate(() => (document.querySelector('#checks .cdoes.on') || { innerText: '' }).innerText)}" run=${await page.evaluate(() => document.getElementById('b-run').className)}`);
     await page.click('#b-run'); await page.waitForTimeout(900);
     if (shots) await shot(`${i}-arriving`, false);
     await hurry(); await until('#after'); await page.waitForTimeout(250);

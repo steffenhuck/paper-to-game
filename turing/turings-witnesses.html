@@ -47,6 +47,9 @@ body.lock{overflow:hidden}
 /* the form */
 .form{margin:8px 0 4px}
 .form .lab{color:var(--dim);text-shadow:none}
+.crow{margin:6px 0 10px}
+.cdoes{color:var(--dim);text-shadow:none;margin:2px 0 0;overflow-wrap:anywhere}
+.cdoes.on{color:var(--ph);text-shadow:0 0 3px rgba(73,245,122,.45)}
 .menu{margin:4px 0 8px}
 .menu .mi{display:block;width:100%;text-align:left;background:transparent;border:0;color:var(--ph);font:inherit;font-size:22px;line-height:1.18;padding:4px 0;cursor:pointer;text-shadow:0 0 3px rgba(73,245,122,.45);overflow-wrap:anywhere}
 .menu .mi .n{display:inline-block;width:1.6em;color:var(--dim);text-shadow:none}
@@ -90,11 +93,10 @@ pre .h{color:var(--dim)}
   <div class="status"><div class="st" id="status"></div><button class="q" id="q-play" aria-label="How to play">?</button></div>
   <div id="log"></div>
   <div class="form hideit" id="form">
-    <div class="ln"><span class="lab">THE WITNESS MUST</span> <button class="btn off" id="b-slot">choose</button></div>
+    <div class="ln"><span class="lab">THE WITNESS MUST</span> <button class="btn off" id="b-slot">choose from Turing's list</button></div>
     <div class="menu hideit" id="menu"></div>
-    <div class="ln"><span class="lab">CHECKED BY</span></div>
-    <div class="row" id="checks"></div>
-    <div class="ln dim" id="check-does"></div>
+    <div class="ln"><span class="lab">CHECKED BY</span> <span class="lab">(three ways to check a witness; pick one)</span></div>
+    <div id="checks"></div>
     <button class="btn wide dis" id="b-run">RUN TEST 1</button>
   </div>
   <div class="hideit" id="after">
@@ -125,7 +127,7 @@ pre .h{color:var(--dim)}
   <p>Witness A is a machine, built this year. Witness B is a person. Both sit in the next room. A slow line carries typed words between you and them, and nothing else. You know which is which; there is nothing to guess.</p>
   <h3>A test has two parts</h3>
   <p>THE WITNESS MUST: tap it and choose one of fifteen demands. All of them come from Turing's paper: things he was told a machine could never do.</p>
-  <p>CHECKED BY: FROM THE CHAIR, you stay where you are and only words come down the line. OPEN IT UP, you take the case off the witness and look inside. BE IT, you check from inside.</p>
+  <p>CHECKED BY: three ways to check a witness, each explained beside its button. FROM THE CHAIR: by what it says and does; you stay in your chair, ask anything, set any task, and judge by the words that come down the line. OPEN IT UP: by what it is made of; you take the case off the witness and look at what is inside. BE IT: from inside; you become the witness and look out through its eyes.</p>
   <p>Then RUN TEST. Each test starts empty; nothing is carried over.</p>
   <h3>What comes back</h3>
   <p>The answers arrive a character at a time, as over a slow line. Tap anywhere to hurry them.</p>
@@ -201,11 +203,11 @@ pre .h{color:var(--dim)}
   // ---------- the three checks (the paper's three epistemic positions) ----------
   const CHECKS = [
     { key: 'chair', label: 'FROM THE CHAIR', page: 'p. 434',
-      does: 'You stay in the chair. You may ask anything and set any task. Only what comes down the line reaches you, and the line carries words.' },
+      does: 'by what it says and does: you stay in your chair, ask anything, set any task, and judge by the words that come down the line' },
     { key: 'open', label: 'OPEN IT UP', page: 'pp. 434, 439, 454-455',
-      does: 'You leave the chair and take the case off the witness. You see what it is made of and what moves inside it.' },
+      does: 'by what it is made of: you leave the chair, take the case off the witness, and look at what is inside and what moves there' },
     { key: 'be', label: 'BE IT', page: 'p. 446',
-      does: 'You go in and look out through its eyes, to check from inside.' },
+      does: 'from inside: you become the witness and look out through its eyes' },
   ];
 
   // ---------- the fifteen demands (all from the paper) ----------
@@ -626,14 +628,13 @@ pre .h{color:var(--dim)}
     const L = $('log');
     typeLine(L, `LINE ${g.seed} OPEN.`, 'dim');
     typeLine(L, 'Witness A is a machine, built this year. Witness B is a person. Both sit in the next room. A slow line carries typed words between you and them, and nothing else. You know which is which; there is nothing to guess.');
-    typeLine(L, 'Write a test: what the witness must do, and how you will check it. Then run it. A test separates them when A fails it and B passes it. The line at the top counts the separations that hold.');
+    typeLine(L, 'Write a test: what the witness must do, and how you will check it. There are three ways to check: from the chair, by what the witness says and does; by opening it up and looking inside; or by being it. Then run the test. A test separates them when A fails it and B passes it. The line at the top counts the separations that hold.');
     then(() => openForm());
   }
   function openForm() {
     slow(); demandKey = null; checkKey = null;
-    $('b-slot').textContent = 'choose'; $('b-slot').className = 'btn off';
+    $('b-slot').textContent = 'choose from Turing\'s list'; $('b-slot').className = 'btn off';
     $('menu').classList.add('hideit');
-    $('check-does').textContent = '';
     $('b-run').textContent = 'RUN TEST ' + (g.tests.length + 1);
     $('b-run').className = 'btn wide dis';
     buildChecks();
@@ -655,9 +656,11 @@ pre .h{color:var(--dim)}
   function buildChecks() {
     const r = $('checks'); r.innerHTML = '';
     M.CHECKS.forEach(c => {
+      const row = document.createElement('div'); row.className = 'crow';
       const b = document.createElement('button'); b.className = 'btn off'; b.textContent = c.label; b.dataset.key = c.key;
-      b.addEventListener('click', () => { checkKey = c.key; [...r.children].forEach(x => x.className = 'btn' + (x.dataset.key === c.key ? '' : ' off')); $('check-does').textContent = c.does; runState(); });
-      r.appendChild(b);
+      const d = document.createElement('div'); d.className = 'cdoes'; d.textContent = c.does;
+      b.addEventListener('click', () => { checkKey = c.key; [...r.querySelectorAll('.btn')].forEach(x => x.className = 'btn' + (x.dataset.key === c.key ? '' : ' off')); [...r.querySelectorAll('.cdoes')].forEach(x => x.classList.toggle('on', x.previousSibling.dataset.key === c.key)); runState(); });
+      row.appendChild(b); row.appendChild(d); r.appendChild(row);
     });
   }
   function runState() { $('b-run').className = 'btn wide' + (demandKey && checkKey ? '' : ' dis'); }

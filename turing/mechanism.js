@@ -33,11 +33,11 @@
   // ---------- the three checks (the paper's three epistemic positions) ----------
   const CHECKS = [
     { key: 'chair', label: 'FROM THE CHAIR', page: 'p. 434',
-      does: 'You stay in the chair. You may ask anything and set any task. Only what comes down the line reaches you, and the line carries words.' },
+      does: 'by what it says and does: you stay in your chair, ask anything, set any task, and judge by the words that come down the line' },
     { key: 'open', label: 'OPEN IT UP', page: 'pp. 434, 439, 454-455',
-      does: 'You leave the chair and take the case off the witness. You see what it is made of and what moves inside it.' },
+      does: 'by what it is made of: you leave the chair, take the case off the witness, and look at what is inside and what moves there' },
     { key: 'be', label: 'BE IT', page: 'p. 446',
-      does: 'You go in and look out through its eyes, to check from inside.' },
+      does: 'from inside: you become the witness and look out through its eyes' },
   ];
 
   // ---------- the fifteen demands (all from the paper) ----------
