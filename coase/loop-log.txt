@@ -1,0 +1,139 @@
+strategy | per quarrel (yours / best) | total / possible | share
+the fair instinct: make the harmer pay, every time | 14/14 10/10 14/16 30/30 210/230 300/300 | 578/600 | 96% | the farmer and the rancher both send you a card. so does the railway.
+let them carry on, every time | 14/14 10/10 16/16 20/30 230/230 150/300 | 440/600 | 86% | the valley is doing all right, and nobody is sure whose fault that is.
+ban the harmful thing, every time | 8/14 2/10 8/16 15/30 210/230 300/300 | 543/600 | 61% | the cows have asked for a new judge.
+pay in the farm, let the big ones spark | 14/14 10/10 14/16 20/30 230/230 150/300 | 438/600 | 84% | the valley is doing all right, and nobody is sure whose fault that is.
+Coase overlearned: pay until the lawyer, then let them be | 14/14 10/10 16/16 20/30 230/230 150/300 | 440/600 | 86% | the valley is doing all right, and nobody is sure whose fault that is.
+the paper's reading (best ruling each time) | 14/14 10/10 16/16 30/30 230/230 300/300 | 600/600 | 100% | the valley paints your face on the signpost.
+ruling by coin (seed 1) | 14/14 2/10 14/16 20/30 210/230 300/300 | 560/600 | 78% | the valley is doing all right, and nobody is sure whose fault that is.
+
+--- loop on placeholder graphics: a stranger's run (pay, roam, roam, pay, pay, pay) ---
+
+[quarrel 1 of 6: the cows and the corn]  sign: (blank)  picture: farm scene level 3
+  fact (cows): each cow brings the rancher $5, then $4, then $1; a fourth would lose $1
+  fact (corn): the corn is worth $8. one cow eats $1 of it, two eat $3, three eat $6, four eat $10
+  fact (fence): a fence costs $9 a year. either of them could build it
+  fact (talk): they can talk over the brook for free
+  ruling 0: the cows may roam  -> sign "cows welcome"
+  ruling 1: the corn is protected: the rancher pays for what the cows eat  -> sign "corn protected"
+  ruling 2: no cows on this side of the brook  -> sign "no cows"
+  > player taps ruling 1; sign reads "corn protected"; presses rule
+    beat: the sign goes up: corn protected.   [picture: level 3 ["main"]]
+    beat: the farmer plants the corn: whatever the cows eat, the rancher will pay for.   [picture: level 3 ["main"]]
+    beat: the rancher counts: a third cow would bring $1 and eat $3 of corn. he keeps two cows.   [picture: level 2 ["main"]]
+    beat: the rancher pays the farmer $3 for the damage.   [picture: level 2 ["main"] coins -3]
+    beat: the valley is worth $14.   [picture: level 2 ["main"]]
+  purses: the rancher $6, the farmer $8 | valley $14 of $14
+  result: that is the most any ruling could get.
+  result: had the cows been let roam, the farmer would have paid the rancher to send one home. same herd, money the other way.
+  ghost: "cows welcome": two cows, corn; the farmer pays the rancher $2; valley $14
+  ghost: "no cows": no cows, corn; valley $8
+
+[quarrel 2 of 6: the strip by the brook]  sign: (blank)  picture: farm scene level 3
+  fact (cows): the same cows: $5, then $4, then $1, and a fourth would lose $1
+  fact (corn): the strip is where the cows go to drink. its corn is worth $2 once it is grown. one cow eats $1, two eat $3, three eat $6
+  fact (fence): a fence costs $9 a year
+  fact (talk): they can still talk for free
+  ruling 0: the cows may roam  -> sign "cows welcome"
+  ruling 1: the strip is protected: the rancher pays for what the cows eat  -> sign "strip protected"
+  ruling 2: no cows on this side of the brook  -> sign "no cows"
+  > player taps ruling 0; sign reads "cows welcome"; presses rule
+    beat: the sign goes up: cows welcome.   [picture: level 3 ["main"]]
+    beat: the rancher owes nothing for corn. he keeps three cows, the most that pay, and they wander where they like.   [picture: level 3 ["main"]]
+    beat: the farmer looks at $2 of corn and $6 of cows eating it, and does not plant. the strip stays grass.   [picture: level 3 ["none"]]
+    beat: the valley is worth $10.   [picture: level 3 ["none"]]
+  purses: the rancher $10, the farmer $0 | valley $10 of $10
+  result: that is the most any ruling could get.
+  result: had the strip been protected, the farmer would have planted it and then taken the rancher's money to give it up. same bare strip, and the farmer a little richer.
+  ghost: "strip protected": three cows, the strip bare; the rancher pays the farmer $3; valley $10
+  ghost: "no cows": no cows, corn; valley $2
+
+[quarrel 3 of 6: the lawyer]  sign: (blank)  picture: farm scene level 3
+  fact (cows): the same cows: $5, then $4, then $1, and a fourth would lose $1
+  fact (corn): corn is worth $8; one cow eats $1, two eat $3, three eat $6. the farmer could grow turnips instead: worth $6, and cows will not touch them
+  fact (fence): a fence costs $9 a year
+  fact (lawyer): the neighbours are not speaking. any deal now goes through a lawyer, who charges $3
+  ruling 0: the cows may roam  -> sign "cows welcome"
+  ruling 1: the corn is protected: the rancher pays for what the cows eat  -> sign "corn protected"
+  ruling 2: no cows on this side of the brook  -> sign "no cows"
+  > player taps ruling 0; sign reads "cows welcome"; presses rule
+    beat: the sign goes up: cows welcome.   [picture: level 3 ["main"]]
+    beat: the rancher owes nothing for corn. he keeps three cows, the most that pay, and they wander where they like.   [picture: level 3 ["main"]]
+    beat: the farmer looks at the cows, and plants turnips instead of corn: $6, and nothing eats them.   [picture: level 3 ["alt"]]
+    beat: the valley is worth $16.   [picture: level 3 ["alt"]]
+  purses: the rancher $10, the farmer $6 | valley $16 of $16
+  result: that is the most any ruling could get.
+  result: now the ruling matters: a deal costs money, so whoever holds the right keeps it. the farmer could switch to turnips by himself; the rancher could only have paid him to, through the lawyer.
+  ghost: "corn protected": two cows, corn; the rancher pays the farmer $3; valley $14
+  ghost: "no cows": no cows, corn; valley $8
+
+[quarrel 4 of 6: the chimney]  sign: (blank)  picture: smoke scene level 1
+  fact (works): running the works brings $20
+  fact (houses): a hundred houses hang out $15 of washing and fresh paint between them. the smoke spoils all of it
+  fact (filter): a filter on the chimney costs $5 and stops the smoke. only the works can fit it
+  fact (crowd): a hundred households cannot agree on a deal with anyone. no deal is possible
+  ruling 0: the works may smoke  -> sign "smoke allowed"
+  ruling 1: the houses are protected: the works pays for what the smoke spoils  -> sign "houses protected"
+  ruling 2: no smoke in this town  -> sign "no smoke"
+  > player taps ruling 1; sign reads "houses protected"; presses rule
+    beat: the sign goes up: houses protected.   [picture: level 1 ["main"]]
+    beat: the hundred houses hang out their washing: whatever the smoke spoils, the works will pay for.   [picture: level 1 ["main"]]
+    beat: the works counts: paying for the smoke costs more than a filter. it fits the filter for $5 and runs.   [picture: level 1 ["main"] device]
+    beat: the valley is worth $30.   [picture: level 1 ["main"] device]
+  purses: the works $15, the hundred houses $15 | valley $30 of $30
+  result: that is the most any ruling could get.
+  result: a hundred houses cannot club together for a filter. the works can fit one. the ruling that puts the cost on the one who can fix it cheaply gets the filter fitted.
+  ghost: "smoke allowed": the works running, smoke and all; valley $20
+  ghost: "no smoke": the works shut; valley $15
+
+[quarrel 5 of 6: sparks]  sign: (blank)  picture: rail scene level 2
+  fact (train): one train a day brings the railway $100 after its costs. a second brings $50 more
+  fact (fields): the far fields grow $200 of crops. each train burns $60 of them
+  fact (strip): the strip beside the line would grow $10 of net crops, and each train would burn $60 of it. the farmers plant it only if someone pays for the burning
+  fact (crowd): a hundred farms along the line. no deal is possible
+  ruling 0: the railway may spark  -> sign "trains may spark"
+  ruling 1: the farms are protected: the railway pays for what the sparks burn  -> sign "farms protected"
+  ruling 2: no trains through this valley  -> sign "no trains"
+  > player taps ruling 1; sign reads "farms protected"; presses rule
+    beat: the sign goes up: farms protected.   [picture: level 2 ["main","none"]]
+    beat: the farms plant the far fields and the strip by the line too: it pays either way, since the railway will pay for the burning.   [picture: level 2 ["main","main"]]
+    beat: the railway counts: one train would bring $100 and owe $120 for burning. no trains run.   [picture: level 0 ["main","main"]]
+    beat: a hundred farms and one railway: there is no deal anyone could strike.   [picture: level 0 ["main","main"]]
+    beat: the valley is worth $210.   [picture: level 0 ["main","main"]]
+  purses: the railway $0, the farms along the line $210 | valley $210 of $230
+  result: the most any ruling could get was $230. yours fell $20 short.
+  result: if everyone in the valley could sit at one table for free, it would be worth $240. no ruling gets that.
+  result: make the railway pay, and the farmers plant the strip that burns, because it pays either way; then no train pays for its sparks. let it spark, and two trains run and the strip stays bare. one train would be best, and no ruling gets it.
+  ghost: "trains may spark": two trains, the strip bare; valley $230
+  ghost: "no trains": no trains, the strip planted; valley $210
+
+[quarrel 6 of 6: the orchard]  sign: (blank)  picture: rail scene level 2
+  fact (train): the same railway: $100 for one train a day, $50 more for a second
+  fact (orchard): the orchards along the line are worth $300. sparks burn $200 of them a train
+  fact (none): there is no strip to plant and no device to fit
+  fact (crowd): a hundred orchards. no deal is possible
+  ruling 0: the railway may spark  -> sign "trains may spark"
+  ruling 1: the orchards are protected: the railway pays for what the sparks burn  -> sign "orchards protected"
+  ruling 2: no trains through this valley  -> sign "no trains"
+  > player taps ruling 1; sign reads "orchards protected"; presses rule
+    beat: the sign goes up: orchards protected.   [picture: level 2 ["main"]]
+    beat: the orchards stand: whatever burns, the railway will pay for.   [picture: level 2 ["main"]]
+    beat: the railway counts: one train would bring $100 and owe $200 for burning. no trains run.   [picture: level 0 ["main"]]
+    beat: the valley is worth $300.   [picture: level 0 ["main"]]
+  purses: the railway $0, the orchards along the line $300 | valley $300 of $300
+  result: that is the most any ruling could get.
+  result: the same railway, different figures: here the sparks cost more than the trains bring, and making the railway pay is right. there is no rule of thumb. you count the valley every time.
+  ghost: "trains may spark": two trains, the orchards gone; valley $150
+  ghost: "no trains": no trains, the orchards standing; valley $300
+
+[verdict]
+  your six valleys came to $580 of the $600 they could be: valley by valley, nearly all of what was possible.
+  when neighbours can talk for free, a ruling changes who pays whom and nothing else. when they cannot, the ruling decides what the valley is worth, and the ruling that feels fair, make the one who did the harm pay, can leave everyone poorer.
+  there is no culprit to find. there are two neighbours, and the question is which harm is the smaller. the right ruling counts the whole valley.
+  fate: the farmer and the rancher both send you a card. so does the railway.
+  the cows and the corn: you made the rancher pay: two cows, corn; the rancher pays the farmer $3. ($14 of $14)
+  the strip by the brook: you let the rancher carry on: three cows, the strip bare. ($10 of $10)
+  the lawyer: you let the rancher carry on: three cows, turnips. ($16 of $16)
+  the chimney: you made the works pay: the works running with a filter. ($30 of $30)
+  sparks: you made the railway pay: no trains, the strip planted. ($210 of $230)
+  the orchard: you made the railway pay: no trains, the orchards standing. ($300 of $300)
