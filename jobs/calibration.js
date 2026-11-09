@@ -131,6 +131,15 @@ check('sums only: "depends" is not backed', M.verdict(nbL, 'depends').backed ? 1
 const nbR = [M.runSession('price', 'flat', 5), M.runSession('price', 'one', 6)];
 check('price only: "same" is backed', M.verdict(nbR, 'same').backed ? 1 : 0, 1, 1, 'design');
 out.push('');
+out.push('--- Repeats and the end screen (revision 1) ---');
+const pp = M.pooled([M.runSession('price', 'flat', 5), M.runSession('price', 'flat', 6), M.runSession('price', 'flat', 7)]);
+check('pooled reading of three price-flat sessions is "about the same" or "women a little"', (pp.gap === 'same' || pp.gap === 'women+') ? 1 : 0, 1, 1, 'design: pooling three sessions lands at the paper\'s reading');
+check('spend line names both sides', M.spendLine(nb).indexOf('2 sessions on sums') >= 0 && M.spendLine(nb).indexOf('2 on price') >= 0 ? 1 : 0, 1, 1, 'design');
+const nbD = [M.runSession('sums', 'one', 1), M.runSession('sums', 'flat', 2), M.runSession('sums', 'steep', 3)];
+check('dead end named when three prize levels on the sums side all show the gap', M.deadEndLine(nbD) ? 1 : 0, 1, 1, 'design');
+const nbOne = [M.runSession('sums', 'one', 1), M.runSession('sums', 'one', 2), M.runSession('price', 'flat', 3)];
+check('dead end not named with one prize level a side', M.deadEndLine(nbOne) ? 1 : 0, 0, 0, 'design');
+out.push('');
 out.push(pass + ' passed, ' + fail + ' failed');
 require('fs').writeFileSync(__dirname + '/calibration-result.txt', out.join('\n') + '\n');
 console.log(out.join('\n'));
