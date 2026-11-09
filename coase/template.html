@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>coase's cows</title>
+<script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<style>
+@font-face { font-family: 'Nunito'; font-weight: 200 1000; font-style: normal; src: url(data:font/woff2;base64,/*__F_NUNITO__*/) format('woff2'); }
+:root { --ink: #1B1B1B; --red: #E2231A; --yellow: #F6C000; --green: #3FA535; --blue: #1E63B5; --brown: #8C5A2B; --page: #FFFFFF; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; padding: 0; background: var(--page); color: var(--ink); }
+body { font-family: 'Nunito', system-ui, sans-serif; font-weight: 600; font-size: 18px; line-height: 1.35; text-transform: lowercase; }
+#main { max-width: 420px; margin: 0 auto; padding: 14px 16px 28px; }
+.screen { display: none; }
+.screen.on { display: block; }
+h1 { font-weight: 900; font-size: 44px; line-height: 1; margin: 10px 0 8px; letter-spacing: -0.5px; }
+h2 { font-weight: 900; font-size: 24px; line-height: 1.1; margin: 0 0 8px; }
+p { margin: 0 0 10px; }
+.aim { font-weight: 900; font-size: 19px; margin: 6px 0 10px; }
+.frame { display: block; width: 100%; border: 4px solid var(--ink); border-radius: 16px; background: var(--page); color: var(--ink); font: inherit; font-weight: 700; font-size: 18px; text-align: left; padding: 11px 14px; margin: 0 0 10px; cursor: pointer; text-transform: lowercase; line-height: 1.25; }
+.frame.chosen { background: var(--yellow); }
+.frame.go { background: var(--red); color: #fff; font-weight: 900; text-align: center; font-size: 22px; padding: 13px; }
+.frame.go:disabled { background: var(--page); color: var(--ink); opacity: 0.35; cursor: default; }
+.frame.small { width: auto; display: inline-block; font-size: 16px; padding: 7px 14px; border-radius: 12px; margin-right: 8px; }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.q { flex: 0 0 auto; width: 40px; height: 40px; border: 4px solid var(--ink); border-radius: 50%; background: var(--page); font: inherit; font-weight: 900; font-size: 22px; line-height: 1; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; }
+.sub { font-weight: 800; font-size: 16px; margin: 0 0 6px; }
+#valley { display: block; width: 100%; height: auto; border: 4px solid var(--ink); border-radius: 18px; background: var(--page); margin: 0 0 10px; }
+#valley * { transition: transform 0.7s ease, opacity 0.5s ease; }
+.facts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 0 12px; }
+.fact { border: 4px solid var(--ink); border-radius: 14px; padding: 8px 8px 8px; font-size: 14.5px; line-height: 1.25; font-weight: 700; }
+.fact svg { display: block; width: 44px; height: 44px; margin-bottom: 4px; }
+.lead { font-weight: 800; font-size: 15px; margin: 2px 0 6px; }
+.preview { min-height: 46px; font-size: 16px; font-weight: 700; margin: 2px 0 10px; }
+.beat { font-size: 21px; font-weight: 800; line-height: 1.25; min-height: 80px; margin: 4px 0 10px; }
+.purses { display: flex; justify-content: space-between; gap: 8px; margin: 4px 0 8px; }
+.purse { flex: 1; text-align: center; }
+.purse svg { display: block; width: 72px; height: 72px; margin: 0 auto; }
+.purse .n { font-weight: 900; font-size: 24px; line-height: 1; margin-top: 2px; }
+.purse .l { font-size: 14px; font-weight: 700; line-height: 1.15; }
+.bar { position: relative; height: 30px; border: 4px solid var(--ink); border-radius: 10px; margin: 6px 0 4px; overflow: hidden; background: var(--page); }
+.bar .fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--yellow); transition: width 0.9s ease; }
+.bar .best { position: absolute; top: -4px; bottom: -4px; width: 4px; background: var(--ink); }
+.barlabel { font-size: 15px; font-weight: 700; margin: 0 0 10px; }
+.result { font-size: 17px; font-weight: 700; margin: 0 0 10px; }
+.result p { margin: 0 0 8px; }
+.ghost { border: 4px dashed var(--ink); border-radius: 14px; padding: 8px 12px; margin: 0 0 8px; font-size: 15px; font-weight: 700; }
+.ghost b { font-weight: 900; }
+.verdict-lines p { font-size: 20px; font-weight: 800; margin: 0 0 12px; line-height: 1.3; }
+.fate { font-size: 26px; font-weight: 900; line-height: 1.15; margin: 6px 0 16px; }
+.signs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 0 0 14px; }
+.signs svg { display: block; width: 100%; height: auto; }
+.did { font-size: 15px; font-weight: 700; margin: 0 0 14px; }
+.did p { margin: 0 0 6px; }
+.overlay { display: none; position: fixed; inset: 0; background: var(--page); overflow: auto; z-index: 10; }
+.overlay.on { display: block; }
+.overlay .inner { max-width: 420px; margin: 0 auto; padding: 14px 16px 40px; }
+.overlay p, .overlay li { font-size: 16px; font-weight: 600; }
+.overlay h3 { font-weight: 900; font-size: 18px; margin: 16px 0 6px; }
+#s-about .inner { text-transform: none; }
+#s-about .inner h2, #s-about .inner h3, #s-about .inner button { text-transform: lowercase; }
+.sig { margin-top: 26px; font-style: italic; font-weight: 400; font-size: 15px; opacity: 0.55; }
+.sig a { color: inherit; text-decoration: none; }
+.cover { display: block; width: 100%; height: auto; border: 4px solid var(--ink); border-radius: 18px; margin: 4px 0 14px; }
+.acts { font-weight: 700; margin: 0 0 8px; }
+.coin { pointer-events: none; }
+@keyframes pop { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.pop { animation: pop 0.35s ease; }
+</style>
+</head>
+<body>
+<main id="main">
+
+<section id="s-start" class="screen on">
+  <svg class="cover" viewBox="0 0 348 190" id="cover"></svg>
+  <h1>coase's cows</h1>
+  <p>a farmer, a rancher, a brook between them, and cows that do not care about brooks.</p>
+  <p class="acts">hear six quarrels between neighbours. tap a ruling. watch what the neighbours do with it.</p>
+  <p class="aim">rule on six quarrels so the valley is worth the most.</p>
+  <button class="frame go" id="b-begin">begin</button>
+  <button class="frame" id="b-help-start">how to play</button>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+
+<section id="s-play" class="screen">
+  <div class="row"><p class="aim" style="margin:0">rule on six quarrels so the valley is worth the most.</p><button class="q" id="b-help-play" aria-label="how to play">?</button></div>
+  <p class="sub" id="p-sub"></p>
+  <svg id="valley" viewBox="0 0 348 230"></svg>
+  <div id="c-choose">
+    <p class="lead" id="p-lead"></p>
+    <div class="facts" id="facts"></div>
+    <p class="lead">your ruling. touch one to read it on the sign, then press rule.</p>
+    <div id="rulings"></div>
+    <p class="preview" id="p-preview"></p>
+    <button class="frame go" id="b-rule" disabled>rule</button>
+  </div>
+  <div id="c-beats" style="display:none">
+    <p class="beat" id="p-beat"></p>
+    <button class="frame go" id="b-next">next</button>
+  </div>
+  <div id="c-tally" style="display:none">
+    <div class="purses" id="purses"></div>
+    <div class="bar"><div class="fill" id="bar-fill"></div><div class="best" id="bar-best"></div></div>
+    <p class="barlabel" id="p-barlabel"></p>
+    <div class="result" id="p-result"></div>
+    <p class="lead">the other two rulings would have ended with:</p>
+    <div id="ghosts"></div>
+    <button class="frame go" id="b-nextq">next quarrel</button>
+  </div>
+</section>
+
+<section id="s-verdict" class="screen">
+  <h2>the verdict</h2>
+  <div class="verdict-lines">
+    <p id="v-did"></p>
+    <p id="v-paper"></p>
+    <p id="v-means"></p>
+  </div>
+  <p class="fate" id="v-fate"></p>
+  <div class="signs" id="v-signs"></div>
+  <div class="did" id="v-list"></div>
+  <p class="result" id="v-caveat">the valley is measured in dollars because coase measures it so: the value of what gets produced. he says himself that the real choice between arrangements is wider than that, and takes in "all spheres of life".</p>
+  <button class="frame go" id="b-again">rule again</button>
+  <button class="frame" id="b-help-end">how to play</button>
+  <button class="frame" id="b-about">about this game and the paper</button>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+
+</main>
+
+<div id="s-help" class="overlay"><div class="inner">
+  <h2>how to play</h2>
+  <p class="aim">rule on six quarrels so the valley is worth the most.</p>
+  <p>six quarrels come to you, one at a time. each is two neighbours and a harm: cows that eat corn, a chimney that spoils washing, a railway whose sparks burn fields. you are the judge.</p>
+  <h3>the picture</h3>
+  <p>the valley is drawn at the top. the one doing the harm is on the right (the rancher, the works, the railway); the one harmed is on the left (the farmer, the houses, the farms). the signpost on the bank is where your ruling will stand.</p>
+  <h3>the facts</h3>
+  <p>four cards under the picture say what each thing is worth: what each cow brings in, what the corn is worth and how much of it the cows eat, what a fence or a filter costs, and whether the neighbours can talk, for free, through a lawyer, or not at all. you need these to rule well: the valley's worth is what both neighbours produce, less what the harm spoils and what any fence, filter or lawyer costs.</p>
+  <h3>the ruling</h3>
+  <p>three rulings, every time: the harmer may carry on; the harmer must pay for the harm; the harmful thing is banned here. touch one and the sign on the bank shows it, with a line saying what each neighbour now owes or holds. nothing yet says what they will do with it. press rule to commit.</p>
+  <h3>what happens</h3>
+  <p>press next to watch the neighbours act on your ruling, one step at a time: who plants what, who keeps how many cows, who pays whom, whether a deal is struck. a deal can only be struck if the neighbours can talk and the deal is worth more than talking costs.</p>
+  <h3>the tally</h3>
+  <p>three money bags: the harmed neighbour's purse, the harmer's purse, and the valley's chest, which is both together less any fee. the bar shows the valley's worth against the most any ruling could have got for this quarrel. the two rulings you did not give are shown as dashed cards, with what they would have ended in.</p>
+  <h3>the end</h3>
+  <p>after six quarrels, the verdict: what your valleys came to against what they could have, valley by valley; what the paper says; and what that means. then rule again, and try the other rulings.</p>
+  <button class="frame go" id="b-help-close">back</button>
+</div></div>
+
+<div id="s-about" class="overlay"><div class="inner">
+/*__ABOUT__*/
+<button class="frame go" id="b-about-close">back</button>
+</div></div>
+
+<script>
+/*__MECHANISM__*/
+</script>
+<script>
+(function () {
+'use strict';
+var M = window.COASE, $ = function (id) { return document.getElementById(id); };
+var INK = '#1B1B1B', RED = '#E2231A', YEL = '#F6C000', GRN = '#3FA535', BLU = '#1E63B5', BRN = '#8C5A2B', WHT = '#FFFFFF';
+var SW = 'stroke="' + INK + '" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"';
+var SW3 = 'stroke="' + INK + '" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"';
+
+// ---------------------------------------------------------------------------------------------- drawing
+function person(x, y, shirt, extra) {
+  // feet at y, about 64 tall, frontal, bruna: round head, dot eyes, one short mouth line
+  return '<g ' + (extra || '') + '>' +
+    '<rect x="' + (x - 11) + '" y="' + (y - 22) + '" width="9" height="22" rx="4" fill="' + shirt + '" ' + SW + '/>' +
+    '<rect x="' + (x + 2) + '" y="' + (y - 22) + '" width="9" height="22" rx="4" fill="' + shirt + '" ' + SW + '/>' +
+    '<rect x="' + (x - 15) + '" y="' + (y - 42) + '" width="30" height="26" rx="8" fill="' + shirt + '" ' + SW + '/>' +
+    '<circle cx="' + x + '" cy="' + (y - 54) + '" r="16" fill="' + WHT + '" ' + SW + '/>' +
+    '<circle cx="' + (x - 5) + '" cy="' + (y - 56) + '" r="1.8" fill="' + INK + '"/><circle cx="' + (x + 5) + '" cy="' + (y - 56) + '" r="1.8" fill="' + INK + '"/>' +
+    '<path d="M' + (x - 3) + ' ' + (y - 48) + ' h6" ' + SW3 + ' fill="none"/>' +
+    '</g>';
+}
+function cowShape(x, y, id) {
+  // feet at y; body 46 wide; id for persistence; facing left (head on the left)
+  return '<g id="' + id + '" style="transform-box:fill-box;transform-origin:center">' +
+    '<rect x="' + (x - 20) + '" y="' + (y - 14) + '" width="7" height="14" fill="' + BRN + '" ' + SW3 + '/>' +
+    '<rect x="' + (x + 13) + '" y="' + (y - 14) + '" width="7" height="14" fill="' + BRN + '" ' + SW3 + '/>' +
+    '<rect x="' + (x - 24) + '" y="' + (y - 36) + '" width="48" height="26" rx="10" fill="' + BRN + '" ' + SW + '/>' +
+    '<ellipse cx="' + (x + 6) + '" cy="' + (y - 24) + '" rx="9" ry="6" fill="' + WHT + '" stroke="none"/>' +
+    '<circle cx="' + (x - 26) + '" cy="' + (y - 34) + '" r="11" fill="' + BRN + '" ' + SW + '/>' +
+    '<ellipse cx="' + (x - 28) + '" cy="' + (y - 29) + '" rx="6" ry="4" fill="' + WHT + '" ' + SW3 + '/>' +
+    '<circle cx="' + (x - 36) + '" cy="' + (y - 41) + '" r="3.5" fill="' + BRN + '" ' + SW3 + '/><circle cx="' + (x - 17) + '" cy="' + (y - 42) + '" r="3.5" fill="' + BRN + '" ' + SW3 + '/>' +
+    '<circle cx="' + (x - 30) + '" cy="' + (y - 37) + '" r="1.6" fill="' + INK + '"/><circle cx="' + (x - 22) + '" cy="' + (y - 37) + '" r="1.6" fill="' + INK + '"/>' +
+    '<path d="M' + (x + 24) + ' ' + (y - 30) + ' q8 4 4 12" ' + SW3 + ' fill="none"/>' +
+    '</g>';
+}
+function ear(x, y, id) {
+  return '<g id="' + id + '" style="transform-box:fill-box;transform-origin:bottom center">' +
+    '<path class="stalk" d="M' + x + ' ' + y + ' v-28" ' + SW3 + '/>' +
+    '<path class="leaf" d="M' + x + ' ' + (y - 10) + ' q-9 -3 -11 -11" ' + SW3 + ' fill="none"/><path class="leaf" d="M' + x + ' ' + (y - 14) + ' q9 -3 11 -11" ' + SW3 + ' fill="none"/>' +
+    '<ellipse class="cob" cx="' + x + '" cy="' + (y - 26) + '" rx="6" ry="11" fill="' + YEL + '" ' + SW3 + '/>' +
+    '<path class="stub" d="M' + x + ' ' + y + ' v-7" ' + SW + ' style="opacity:0"/>' +
+    '</g>';
+}
+function turnip(x, y, id) {
+  return '<g id="' + id + '" style="transform-box:fill-box;transform-origin:bottom center">' +
+    '<path d="M' + x + ' ' + (y - 8) + ' v-14 M' + (x - 5) + ' ' + (y - 9) + ' l-6 -11 M' + (x + 5) + ' ' + (y - 9) + ' l6 -11" ' + SW3 + ' fill="none" stroke="' + GRN + '" stroke-width="4"/>' +
+    '<circle cx="' + x + '" cy="' + (y - 2) + '" r="8" fill="' + WHT + '" ' + SW3 + '/>' +
+    '</g>';
+}
+function tree(x, y, id) {
+  return '<g id="' + id + '" style="transform-box:fill-box;transform-origin:bottom center">' +
+    '<rect class="trunk" x="' + (x - 4) + '" y="' + (y - 22) + '" width="8" height="22" fill="' + BRN + '" ' + SW3 + '/>' +
+    '<circle class="crown" cx="' + x + '" cy="' + (y - 34) + '" r="17" fill="' + GRN + '" ' + SW + '/>' +
+    '<circle class="crown" cx="' + (x - 6) + '" cy="' + (y - 36) + '" r="3" fill="' + RED + '"/><circle class="crown" cx="' + (x + 7) + '" cy="' + (y - 28) + '" r="3" fill="' + RED + '"/>' +
+    '<rect class="stump" x="' + (x - 6) + '" y="' + (y - 10) + '" width="12" height="10" fill="' + BRN + '" ' + SW3 + ' style="opacity:0"/>' +
+    '</g>';
+}
+function signpost(x, y) {
+  return '<g id="signpost">' +
+    '<rect x="' + (x - 4) + '" y="' + (y - 48) + '" width="8" height="48" fill="' + BRN + '" ' + SW3 + '/>' +
+    '<rect id="signboard" x="' + (x - 58) + '" y="' + (y - 78) + '" width="116" height="32" rx="6" fill="' + WHT + '" ' + SW + '/>' +
+    '<text id="signtext" x="' + x + '" y="' + (y - 57) + '" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="12.5" fill="' + INK + '"></text>' +
+    '</g>';
+}
+function fence(x, y0, y1) {
+  var s = '<g id="fence" style="opacity:0">';
+  for (var y = y0; y <= y1; y += 26) s += '<rect x="' + (x - 3) + '" y="' + (y - 30) + '" width="6" height="30" fill="' + BRN + '" ' + SW3 + '/>';
+  s += '<path d="M' + x + ' ' + (y0 - 22) + ' V' + (y1 - 22) + ' M' + x + ' ' + (y0 - 10) + ' V' + (y1 - 10) + '" stroke="' + BRN + '" stroke-width="5"/>' +
+       '<path d="M' + x + ' ' + (y0 - 22) + ' V' + (y1 - 22) + ' M' + x + ' ' + (y0 - 10) + ' V' + (y1 - 10) + '" ' + SW3 + ' stroke-width="1.5" fill="none"/></g>';
+  return s;
+}
+function lawyer(x, y) {
+  return person(x, y, INK, 'id="lawyer"') +
+    '<g id="lawyertag"><rect x="' + (x + 12) + '" y="' + (y - 40) + '" width="30" height="20" rx="4" fill="' + YEL + '" ' + SW3 + '/>' +
+    '<text x="' + (x + 27) + '" y="' + (y - 25) + '" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="13" fill="' + INK + '">$' + M.CONFIG.LAWYER_FEE + '</text></g>';
+}
+function house(x, y, w, h, roof) {
+  return '<g><rect x="' + (x - w / 2) + '" y="' + (y - h) + '" width="' + w + '" height="' + h + '" fill="' + WHT + '" ' + SW3 + '/>' +
+    '<path d="M' + (x - w / 2 - 4) + ' ' + (y - h) + ' L' + x + ' ' + (y - h - roof) + ' L' + (x + w / 2 + 4) + ' ' + (y - h) + ' Z" fill="' + RED + '" ' + SW3 + '/>' +
+    '<rect x="' + (x - 4) + '" y="' + (y - h * 0.55) + '" width="8" height="' + (h * 0.55) + '" fill="' + BLU + '" ' + SW3 + ' stroke-width="2"/></g>';
+}
+function shirt(x, y, id) {
+  return '<g id="' + id + '" style="transform-box:fill-box;transform-origin:top center">' +
+    '<path d="M' + (x - 8) + ' ' + y + ' h16 l4 6 -4 2 v12 h-16 v-12 l-4 -2 z" fill="' + WHT + '" ' + SW3 + ' stroke-width="2.5"/>' +
+    '<g class="dirt" style="opacity:0"><circle cx="' + (x - 3) + '" cy="' + (y + 8) + '" r="2" fill="' + INK + '"/><circle cx="' + (x + 4) + '" cy="' + (y + 13) + '" r="2.4" fill="' + INK + '"/><circle cx="' + (x - 1) + '" cy="' + (y + 16) + '" r="1.6" fill="' + INK + '"/></g></g>';
+}
+function engine(x, y, id) {
+  // rails at y; engine about 70 wide
+  return '<g id="' + id + '" style="transform-box:fill-box;transform-origin:center">' +
+    '<rect x="' + (x - 34) + '" y="' + (y - 34) + '" width="52" height="24" rx="5" fill="' + RED + '" ' + SW + '/>' +
+    '<rect x="' + (x + 10) + '" y="' + (y - 46) + '" width="24" height="36" rx="4" fill="' + RED + '" ' + SW + '/>' +
+    '<rect x="' + (x + 15) + '" y="' + (y - 41) + '" width="14" height="12" rx="2" fill="' + BLU + '" ' + SW3 + ' stroke-width="2.5"/>' +
+    '<rect x="' + (x - 26) + '" y="' + (y - 50) + '" width="12" height="18" fill="' + INK + '"/>' +
+    '<circle cx="' + (x - 22) + '" cy="' + (y - 6) + '" r="7" fill="' + INK + '"/><circle cx="' + (x - 2) + '" cy="' + (y - 6) + '" r="7" fill="' + INK + '"/><circle cx="' + (x + 20) + '" cy="' + (y - 6) + '" r="7" fill="' + INK + '"/>' +
+    '<g class="sparks"><path d="M' + (x - 20) + ' ' + (y - 53) + ' l-5 -6 M' + (x - 14) + ' ' + (y - 54) + ' l2 -8 M' + (x - 26) + ' ' + (y - 55) + ' l-7 -3" stroke="' + YEL + '" stroke-width="4" stroke-linecap="round"/>' +
+    '<circle cx="' + (x - 28) + '" cy="' + (y - 62) + '" r="3" fill="' + YEL + '"/><circle cx="' + (x - 10) + '" cy="' + (y - 64) + '" r="2.5" fill="' + YEL + '"/></g>' +
+    '</g>';
+}
+function coinSvg(x, y, cls) {
+  return '<g class="' + (cls || 'coin') + '" style="transform-box:fill-box;transform-origin:center"><circle cx="' + x + '" cy="' + y + '" r="11" fill="' + YEL + '" ' + SW3 + '/><text x="' + x + '" y="' + (y + 5) + '" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="14" fill="' + INK + '">$</text></g>';
+}
+
+// positions
+var FARM = { farmerX: 36, farmerFeet: 216, rancherX: 322, rancherFeet: 118, brookX: 174, earsY: 100 };
+var EAR_X = [22, 46, 70, 94, 118, 142];
+var COW_HOME = [[296, 214], [232, 214], [300, 170], [240, 170]];   // rancher's side, feet at y
+var COW_CORN = [[124, 210], [92, 172]];                             // standing in the corn
+var TREE_X = [40, 84, 128, 172, 216, 260, 304];
+
+function buildFarm(q) {
+  var s = '';
+  s += '<rect x="0" y="0" width="348" height="230" fill="' + GRN + '"/>';
+  s += '<rect x="158" y="0" width="32" height="230" fill="' + BLU + '"/>';
+  s += '<path d="M168 0 q6 20 0 40 q-6 20 0 40 q6 20 0 40 q-6 20 0 40 q6 20 0 40 q-6 20 0 30 M180 0 q-6 20 0 40 q6 20 0 40 q-6 20 0 40 q6 20 0 40 q-6 20 0 40 q6 20 0 30" ' + SW3 + ' stroke-width="2.5" fill="none"/>';
+  s += '<path d="M158 0 V230 M190 0 V230" ' + SW + ' fill="none"/>';
+  // corn (six ears) or turnips (six) on the farmer's side, persistent
+  for (var i = 0; i < 6; i++) s += ear(EAR_X[i], FARM.earsY, 'ear' + i);
+  for (var j = 0; j < 6; j++) s += turnip(EAR_X[j], FARM.earsY, 'tur' + j);
+  s += fence(152, 60, 226);
+  s += person(FARM.farmerX, FARM.farmerFeet, RED, 'id="farmer"');
+  s += person(FARM.rancherX, FARM.rancherFeet, BLU, 'id="rancher"');
+  for (var k = 0; k < 4; k++) s += cowShape(COW_HOME[k][0], COW_HOME[k][1], 'cow' + k);
+  if (q.talk > 0 && isFinite(q.talk)) s += lawyer(216, 126);
+  s += signpost(FARM.brookX, 98);
+  s += '<g id="coins"></g>';
+  return s;
+}
+function buildSmoke(q) {
+  var s = '<rect x="0" y="0" width="348" height="230" fill="' + GRN + '"/>';
+  s += '<rect x="0" y="122" width="348" height="20" fill="' + BRN + '" ' + SW3 + '/>';
+  // the works, right
+  s += '<rect x="214" y="70" width="110" height="52" fill="' + BLU + '" ' + SW + '/>';
+  s += '<rect x="226" y="84" width="16" height="16" fill="' + YEL + '" ' + SW3 + ' stroke-width="2.5"/><rect x="256" y="84" width="16" height="16" fill="' + YEL + '" ' + SW3 + ' stroke-width="2.5"/><rect x="286" y="84" width="16" height="16" fill="' + YEL + '" ' + SW3 + ' stroke-width="2.5"/>';
+  s += '<rect x="288" y="30" width="20" height="44" fill="' + BRN + '" ' + SW + '/>';
+  s += '<g id="filter" style="opacity:0"><rect x="282" y="18" width="32" height="16" rx="4" fill="' + GRN + '" ' + SW + '/></g>';
+  s += '<g id="smoke"><circle cx="296" cy="20" r="9" fill="' + WHT + '" ' + SW3 + '/><circle cx="278" cy="14" r="11" fill="' + WHT + '" ' + SW3 + '/><circle cx="256" cy="12" r="9" fill="' + WHT + '" ' + SW3 + '/><circle cx="236" cy="16" r="7" fill="' + WHT + '" ' + SW3 + '/></g>';
+  // a row of small houses, left, with washing lines
+  var xs = [26, 64, 102, 140, 178];
+  for (var i = 0; i < 5; i++) s += house(xs[i], 118, 28, 26, 12);
+  s += '<path d="M12 164 H190" ' + SW3 + ' stroke-width="2.5"/>';
+  for (var j = 0; j < 5; j++) s += shirt(xs[j], 164, 'shirt' + j);
+  s += '<path d="M12 150 V230 M190 150 V230" ' + SW3 + ' stroke-width="2.5"/>';
+  s += '<text x="100" y="222" text-anchor="middle" font-family="Nunito" font-weight="800" font-size="13" fill="' + INK + '">a hundred houses</text>';
+  s += signpost(282, 228);
+  s += '<g id="coins"></g>';
+  return s;
+}
+function buildRail(q) {
+  var orchard = q.b.plots.length === 1;
+  var s = '<rect x="0" y="0" width="348" height="230" fill="' + GRN + '"/>';
+  // far fields (ears, top) or orchard (trees)
+  if (!orchard) {
+    for (var i = 0; i < 6; i++) s += ear(44 + i * 52, 60, 'ear' + i);
+    for (var j = 0; j < 8; j++) s += ear(30 + j * 41, 118, 'near' + j);
+    s += '<text x="340" y="18" text-anchor="end" font-family="Nunito" font-weight="800" font-size="12" fill="' + INK + '">the far fields</text>';
+    s += '<text id="striplabel" x="340" y="75" text-anchor="end" font-family="Nunito" font-weight="800" font-size="12" fill="' + INK + '">the strip by the line</text>';
+  } else {
+    for (var t = 0; t < 7; t++) s += tree(TREE_X[t], 118, 'tree' + t);
+  }
+  // track
+  s += '<rect x="0" y="176" width="348" height="24" fill="' + BRN + '"/>';
+  for (var k = 0; k < 14; k++) s += '<rect x="' + (6 + k * 26) + '" y="176" width="10" height="24" fill="' + INK + '"/>';
+  s += '<path d="M0 182 H348 M0 194 H348" stroke="' + INK + '" stroke-width="3"/>';
+  s += engine(64, 176, 'train0') + engine(154, 176, 'train1');
+  s += signpost(286, 228);
+  s += '<g id="burn" style="opacity:0"><path d="M60 82 l-8 -14 M70 82 l6 -16 M110 82 l-6 -14 M120 82 l8 -12 M220 82 l-7 -13 M230 82 l7 -14" stroke="' + INK + '" stroke-width="3" stroke-linecap="round"/></g>';
+  s += '<g id="coins"></g>';
+  return s;
+}
+function setOpacity(id, v) { var e = $(id); if (e) e.style.opacity = v; }
+function translate(id, dx, dy) { var e = $(id); if (e) e.style.transform = 'translate(' + dx + 'px,' + dy + 'px)'; }
+
+var current = { kind: null, q: null };
+function buildValley(q) {
+  var svg = $('valley');
+  svg.innerHTML = q.kind === 'farm' ? buildFarm(q) : q.kind === 'smoke' ? buildSmoke(q) : buildRail(q);
+  current.kind = q.kind; current.q = q;
+}
+function applyState(st, sign, fresh) {
+  var q = current.q, kind = current.kind, i;
+  $('signtext').textContent = sign || '';
+  $('signboard').setAttribute('fill', sign ? YEL : WHT);
+  if (kind === 'farm') {
+    var choice = st.choices[0], corn = choice === 'main', tur = choice === 'alt';
+    var inCorn = (corn && !st.device) ? Math.min(st.level, 2) : 0;
+    var eaten = (corn && !st.device && !fresh) ? Math.min(6, Math.round(6 * burnShare(q, st.level))) : 0;
+    for (i = 0; i < 6; i++) {
+      var e = $('ear' + i); e.style.opacity = corn ? 1 : 0;
+      var isEaten = corn && i >= 6 - eaten;
+      e.querySelector('.cob').style.opacity = isEaten ? 0 : 1; e.querySelectorAll('.leaf').forEach(function (l) { l.style.opacity = isEaten ? 0 : 1; });
+      e.querySelector('.stalk').style.opacity = isEaten ? 0 : 1; e.querySelector('.stub').style.opacity = isEaten ? 1 : 0;
+      $('tur' + i).style.opacity = tur ? 1 : 0;
+    }
+    for (i = 0; i < 4; i++) {
+      var c = $('cow' + i), home = COW_HOME[i];
+      if (i >= st.level) { c.style.opacity = 0; c.style.transform = 'translate(80px,0)'; continue; }
+      c.style.opacity = 1;
+      if (i < inCorn) { var p = COW_CORN[i]; c.style.transform = 'translate(' + (p[0] - home[0]) + 'px,' + (p[1] - home[1]) + 'px)'; }
+      else c.style.transform = 'translate(0,0)';
+    }
+    setOpacity('fence', st.device ? 1 : 0);
+  } else if (kind === 'smoke') {
+    var washing = st.choices[0] === 'main', running = st.level > 0, smoky = running && !st.device;
+    setOpacity('smoke', smoky ? 1 : 0); setOpacity('filter', st.device ? 1 : 0);
+    for (i = 0; i < 5; i++) { var sh = $('shirt' + i); sh.style.opacity = washing ? 1 : 0; sh.querySelector('.dirt').style.opacity = (washing && smoky) ? 1 : 0; }
+  } else {
+    var orchard = q.b.plots.length === 1;
+    for (i = 0; i < 2; i++) { var tr = $('train' + i); var on = i < st.level; tr.style.opacity = on ? 1 : 0; tr.style.transform = on ? 'translate(0,0)' : 'translate(-120px,0)'; tr.querySelector('.sparks').style.opacity = on ? 1 : 0; }
+    if (!orchard) {
+      var far = st.choices[0] === 'main', near = st.choices[1] === 'main';
+      var burntFar = (far && !fresh) ? Math.round(6 * (st.level * q.b.plots[0].burn[0]) / q.b.plots[0].worth) : 0;
+      for (i = 0; i < 6; i++) { var fe = $('ear' + i); fe.style.opacity = far ? 1 : 0; var b = far && i >= 6 - burntFar; fe.querySelector('.cob').style.opacity = b ? 0 : 1; fe.querySelectorAll('.leaf').forEach(function (l) { l.style.opacity = b ? 0 : 1; }); fe.querySelector('.stalk').style.opacity = b ? 0 : 1; fe.querySelector('.stub').style.opacity = b ? 1 : 0; }
+      var burntNear = (near && st.level > 0 && !fresh) ? 8 : 0;
+      for (i = 0; i < 8; i++) { var ne = $('near' + i); ne.style.opacity = near ? 1 : 0; var nb = i < burntNear; ne.querySelector('.cob').style.opacity = nb ? 0 : 1; ne.querySelectorAll('.leaf').forEach(function (l) { l.style.opacity = nb ? 0 : 1; }); ne.querySelector('.stalk').style.opacity = nb ? 0 : 1; ne.querySelector('.stub').style.opacity = nb ? 1 : 0; }
+      $('striplabel').textContent = near ? 'the strip by the line, planted' : 'the strip by the line, bare';
+    } else {
+      var standing = st.choices[0] === 'main';
+      for (i = 0; i < 7; i++) { var tt = $('tree' + i); tt.querySelectorAll('.crown, .trunk').forEach(function (c2) { c2.style.opacity = standing ? 1 : 0; }); tt.querySelector('.stump').style.opacity = standing ? 0 : 1; }
+      setOpacity('burn', standing && st.level > 0 && !fresh ? 1 : 0);
+    }
+  }
+}
+function burnShare(q, level) { var p = q.b.plots[0]; return level === 0 ? 0 : Math.min(1, p.burn[level - 1] / p.worth); }
+
+// coins flying between the two neighbours (farm only; elsewhere no money changes hands on screen)
+function flyCoins(n, fromRight) {
+  var g = $('coins'); if (!g) return;
+  var count = Math.min(Math.abs(n), 5);
+  var x0 = fromRight ? FARM.rancherX - 20 : FARM.farmerX + 20, x1 = fromRight ? FARM.farmerX + 20 : FARM.rancherX - 20, y = fromRight ? 60 : 150;
+  g.innerHTML = '';
+  for (var i = 0; i < count; i++) {
+    var ns = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    ns.innerHTML = coinSvg(x0 + (i - count / 2) * 14, y - i * 6, 'coin');
+    g.appendChild(ns);
+    var el = ns.firstChild;
+    var y1 = fromRight ? 150 : 60;
+    try { el.animate([{ transform: 'translate(0,0)', opacity: 1 }, { transform: 'translate(' + ((x1 - x0) / 2) + 'px,' + ((y1 - y) / 2 - 50) + 'px)', opacity: 1, offset: 0.5 }, { transform: 'translate(' + (x1 - x0) + 'px,' + (y1 - y) + 'px)', opacity: 1, offset: 0.85 }, { transform: 'translate(' + (x1 - x0) + 'px,' + (y1 - y) + 'px)', opacity: 0 }], { duration: 1300, delay: i * 90, easing: 'ease-in-out', fill: 'forwards' }); } catch (e) {}
+  }
+  setTimeout(function () { g.innerHTML = ''; }, 1900);
+}
+function showOffer(fromRight) {
+  var g = $('coins'); if (!g) return; g.innerHTML = '';
+  var x0 = fromRight ? FARM.rancherX - 26 : FARM.farmerX + 26, y0 = fromRight ? 56 : 150;
+  var ns = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  ns.innerHTML = coinSvg(x0, y0, 'coin pop') + coinSvg(x0 + (fromRight ? -14 : 14), y0 - 10, 'coin pop');
+  g.appendChild(ns);
+}
+
+// fact icons, 44 × 44
+function icon(kind) {
+  var v = '<svg viewBox="0 0 44 44">';
+  switch (kind) {
+    case 'cows': v += '<rect x="6" y="14" width="30" height="16" rx="7" fill="' + BRN + '" ' + SW3 + '/><circle cx="8" cy="15" r="7" fill="' + BRN + '" ' + SW3 + '/><rect x="12" y="29" width="5" height="9" fill="' + BRN + '" ' + SW3 + ' stroke-width="2"/><rect x="26" y="29" width="5" height="9" fill="' + BRN + '" ' + SW3 + ' stroke-width="2"/><circle cx="6" cy="14" r="1.4" fill="' + INK + '"/>'; break;
+    case 'corn': v += '<path d="M14 40 V14 M30 40 V12" ' + SW3 + '/><ellipse cx="14" cy="14" rx="5" ry="9" fill="' + YEL + '" ' + SW3 + '/><ellipse cx="30" cy="12" rx="5" ry="9" fill="' + YEL + '" ' + SW3 + '/>'; break;
+    case 'fence': v += '<rect x="8" y="10" width="6" height="28" fill="' + BRN + '" ' + SW3 + '/><rect x="30" y="10" width="6" height="28" fill="' + BRN + '" ' + SW3 + '/><path d="M4 18 H40 M4 30 H40" stroke="' + BRN + '" stroke-width="5"/><path d="M4 18 H40 M4 30 H40" ' + SW3 + ' stroke-width="1.5"/>'; break;
+    case 'talk': v += '<circle cx="13" cy="16" r="8" fill="' + WHT + '" ' + SW3 + '/><circle cx="31" cy="16" r="8" fill="' + WHT + '" ' + SW3 + '/><circle cx="11" cy="15" r="1.2" fill="' + INK + '"/><circle cx="15" cy="15" r="1.2" fill="' + INK + '"/><circle cx="29" cy="15" r="1.2" fill="' + INK + '"/><circle cx="33" cy="15" r="1.2" fill="' + INK + '"/><rect x="4" y="26" width="18" height="12" rx="4" fill="' + RED + '" ' + SW3 + '/><rect x="22" y="26" width="18" height="12" rx="4" fill="' + BLU + '" ' + SW3 + '/>'; break;
+    case 'lawyer': v += '<circle cx="18" cy="12" r="8" fill="' + WHT + '" ' + SW3 + '/><circle cx="16" cy="11" r="1.2" fill="' + INK + '"/><circle cx="20" cy="11" r="1.2" fill="' + INK + '"/><rect x="8" y="22" width="20" height="18" rx="4" fill="' + INK + '"/><rect x="26" y="26" width="16" height="12" rx="3" fill="' + YEL + '" ' + SW3 + '/><text x="34" y="35" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="9" fill="' + INK + '">$</text>'; break;
+    case 'works': v += '<rect x="6" y="18" width="32" height="20" fill="' + BLU + '" ' + SW3 + '/><rect x="28" y="4" width="8" height="16" fill="' + BRN + '" ' + SW3 + '/><rect x="11" y="24" width="6" height="6" fill="' + YEL + '"/><rect x="21" y="24" width="6" height="6" fill="' + YEL + '"/>'; break;
+    case 'houses': v += '<rect x="4" y="20" width="12" height="14" fill="' + WHT + '" ' + SW3 + '/><path d="M2 20 L10 12 L18 20 Z" fill="' + RED + '" ' + SW3 + '/><rect x="18" y="20" width="12" height="14" fill="' + WHT + '" ' + SW3 + '/><path d="M16 20 L24 12 L32 20 Z" fill="' + RED + '" ' + SW3 + '/><rect x="32" y="20" width="10" height="14" fill="' + WHT + '" ' + SW3 + '/><path d="M30 20 L37 12 L44 20 Z" fill="' + RED + '" ' + SW3 + '/>'; break;
+    case 'filter': v += '<rect x="18" y="16" width="10" height="24" fill="' + BRN + '" ' + SW3 + '/><rect x="12" y="6" width="22" height="12" rx="4" fill="' + GRN + '" ' + SW3 + '/>'; break;
+    case 'crowd': v += '<circle cx="9" cy="14" r="5" fill="' + WHT + '" ' + SW3 + ' stroke-width="2"/><circle cx="22" cy="12" r="5" fill="' + WHT + '" ' + SW3 + ' stroke-width="2"/><circle cx="35" cy="14" r="5" fill="' + WHT + '" ' + SW3 + ' stroke-width="2"/><circle cx="15" cy="28" r="5" fill="' + WHT + '" ' + SW3 + ' stroke-width="2"/><circle cx="29" cy="28" r="5" fill="' + WHT + '" ' + SW3 + ' stroke-width="2"/><path d="M4 40 H40" ' + SW3 + '/>'; break;
+    case 'train': v += '<rect x="4" y="18" width="26" height="12" rx="3" fill="' + RED + '" ' + SW3 + '/><rect x="26" y="12" width="12" height="18" rx="2" fill="' + RED + '" ' + SW3 + '/><rect x="8" y="10" width="6" height="8" fill="' + INK + '"/><circle cx="10" cy="34" r="4" fill="' + INK + '"/><circle cx="22" cy="34" r="4" fill="' + INK + '"/><circle cx="33" cy="34" r="4" fill="' + INK + '"/>'; break;
+    case 'fields': v += '<path d="M8 40 V18 M20 40 V14 M32 40 V18" ' + SW3 + '/><ellipse cx="8" cy="18" rx="4" ry="7" fill="' + YEL + '" ' + SW3 + '/><ellipse cx="20" cy="14" rx="4" ry="7" fill="' + YEL + '" ' + SW3 + '/><ellipse cx="32" cy="18" rx="4" ry="7" fill="' + YEL + '" ' + SW3 + '/>'; break;
+    case 'strip': v += '<rect x="2" y="30" width="40" height="8" fill="' + BRN + '"/><path d="M2 34 H42" stroke="' + INK + '" stroke-width="2"/><path d="M12 28 V14 M24 28 V12" ' + SW3 + '/><ellipse cx="12" cy="14" rx="4" ry="7" fill="' + YEL + '" ' + SW3 + '/><ellipse cx="24" cy="12" rx="4" ry="7" fill="' + YEL + '" ' + SW3 + '/>'; break;
+    case 'orchard': v += '<rect x="19" y="26" width="6" height="14" fill="' + BRN + '" ' + SW3 + '/><circle cx="22" cy="18" r="13" fill="' + GRN + '" ' + SW3 + '/><circle cx="17" cy="16" r="2.5" fill="' + RED + '"/><circle cx="27" cy="22" r="2.5" fill="' + RED + '"/>'; break;
+    default: v += '<circle cx="22" cy="22" r="14" fill="' + WHT + '" ' + SW3 + '/><path d="M12 12 L32 32" ' + SW3 + '/>';
+  }
+  return v + '</svg>';
+}
+function bag(label, amount, fill) {
+  return '<div class="purse"><svg viewBox="0 0 72 72"><path d="M22 26 q14 -14 28 0 q16 16 10 34 q-4 8 -24 8 q-20 0 -24 -8 q-6 -18 10 -34z" fill="' + fill + '" ' + SW + '/><path d="M26 24 h20" ' + SW + '/><path d="M30 18 q6 -8 12 0" ' + SW3 + ' fill="none"/></svg><div class="n">' + M.dollars(amount) + '</div><div class="l">' + label + '</div></div>';
+}
+function signSmall(text, line) {
+  return '<svg viewBox="0 0 120 80"><rect x="57" y="40" width="7" height="40" fill="' + BRN + '" ' + SW3 + '/><rect x="2" y="2" width="116" height="38" rx="6" fill="' + YEL + '" ' + SW + '/><text x="60" y="20" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="11.5" fill="' + INK + '">' + text + '</text><text x="60" y="34" text-anchor="middle" font-family="Nunito" font-weight="700" font-size="11" fill="' + INK + '">' + line + '</text></svg>';
+}
+
+// ---------------------------------------------------------------------------------------------- game loop
+var G, Q = M.quarrels(), chosen = null, res = null, beatIdx = 0, phase = 'start', helpFrom = null;
+function show(id) { ['s-start', 's-play', 's-verdict'].forEach(function (s) { $(s).classList.toggle('on', s === id); }); window.scrollTo(0, 0); }
+function startGame() { G = M.newGame(); showQuarrel(); show('s-play'); }
+function showQuarrel() {
+  var q = Q[G.rulings.length]; chosen = null; res = null; beatIdx = 0; phase = 'choose';
+  $('p-sub').textContent = 'quarrel ' + q.n + ' of 6: ' + q.title;
+  buildValley(q); applyState({ level: q.scene.level, choices: q.scene.choices, device: false }, '', true);
+  $('p-lead').textContent = q.kind === 'farm' ? 'the farmer, left, and the rancher, right. the cows cross the brook and eat the corn. the sign on the bank will say your ruling.' :
+    q.kind === 'smoke' ? 'a hundred houses, left, and the works, right. its smoke spoils their washing. the sign will say your ruling.' :
+    (q.b.plots.length > 1 ? 'the farms along the line, and the railway. its sparks burn the crops. the sign will say your ruling.' : 'the orchards along the line, and the railway. its sparks burn the trees. the sign will say your ruling.');
+  $('facts').innerHTML = q.facts.map(function (f) { return '<div class="fact">' + icon(f.icon) + f.text + '</div>'; }).join('');
+  $('rulings').innerHTML = q.rulings.map(function (t, i) { return '<button class="frame ruling" data-r="' + i + '">' + t + '</button>'; }).join('');
+  $('p-preview').textContent = '';
+  $('b-rule').disabled = true;
+  $('c-choose').style.display = ''; $('c-beats').style.display = 'none'; $('c-tally').style.display = 'none';
+  Array.prototype.forEach.call(document.querySelectorAll('.ruling'), function (b) { b.addEventListener('click', function () { choose(+b.getAttribute('data-r')); }); });
+}
+function choose(r) {
+  var q = Q[G.rulings.length]; chosen = r;
+  Array.prototype.forEach.call(document.querySelectorAll('.ruling'), function (b, i) { b.classList.toggle('chosen', i === r); });
+  $('signtext').textContent = q.signs[r]; $('signboard').setAttribute('fill', YEL);
+  $('p-preview').textContent = q.means[r];
+  $('b-rule').disabled = false;
+}
+function doRule() {
+  if (chosen === null) return;
+  res = M.rule(G, chosen); beatIdx = 0; phase = 'beats';
+  $('c-choose').style.display = 'none'; $('c-beats').style.display = '';
+  showBeat();
+}
+function showBeat() {
+  var b = res.outcome.beats[beatIdx], q = res.quarrel;
+  $('p-beat').textContent = b.text; $('p-beat').classList.remove('pop'); void $('p-beat').offsetWidth; $('p-beat').classList.add('pop');
+  applyState(b.state, res.quarrel.signs[res.ruling], b.state.fresh);
+  if (q.kind === 'farm') {
+    if (b.state.offer) showOffer(res.outcome.transfer > 0);
+    else if (b.state.coins) flyCoins(b.state.coins, b.state.coins < 0 ? true : false);
+    else { var g = $('coins'); if (g) g.innerHTML = ''; }
+  }
+  $('b-next').textContent = beatIdx === res.outcome.beats.length - 1 ? 'the tally' : 'next';
+}
+function nextBeat() {
+  if (beatIdx < res.outcome.beats.length - 1) { beatIdx++; showBeat(); return; }
+  showTally();
+}
+function showTally() {
+  phase = 'tally';
+  var q = res.quarrel, o = res.outcome;
+  $('c-beats').style.display = 'none'; $('c-tally').style.display = '';
+  var html = bag(q.b.name, o.payB, RED) + bag(q.a.name, o.payA, BLU) + bag('the valley' + (o.fee ? ' (less the lawyer\'s ' + M.dollars(o.fee) + ')' : ''), o.total, YEL);
+  $('purses').innerHTML = html;
+  var scale = Math.max(res.bestTotal, o.total, 1);
+  $('bar-fill').style.width = '0%'; $('bar-best').style.left = 'min(calc(' + (100 * res.bestTotal / scale) + '% - 4px), calc(100% - 6px))';
+  setTimeout(function () { $('bar-fill').style.width = (100 * o.total / scale) + '%'; }, 50);
+  $('p-barlabel').textContent = 'the valley is worth ' + M.dollars(o.total) + '. the black mark is the most any ruling could get: ' + M.dollars(res.bestTotal) + '.';
+  $('p-result').innerHTML = res.result.map(function (l) { return '<p>' + l + '</p>'; }).join('');
+  $('ghosts').innerHTML = res.others.map(function (g) { return '<div class="ghost"><b>' + g.sign + '</b>: ' + g.summary.text + '. the valley ' + M.dollars(g.summary.total) + '.</div>'; }).join('');
+  $('b-nextq').textContent = G.done ? 'the verdict' : 'next quarrel';
+}
+function nextQuarrel() { if (G.done) showVerdict(); else { showQuarrel(); window.scrollTo(0, 0); } }
+function showVerdict() {
+  phase = 'verdict';
+  var v = M.verdict(G);
+  $('v-did').textContent = v.didText; $('v-paper').textContent = v.paper; $('v-means').textContent = v.means; $('v-fate').textContent = v.fate;
+  $('v-signs').innerHTML = v.did.map(function (d) { return signSmall(d.sign, M.dollars(d.total) + ' of ' + M.dollars(d.best)); }).join('');
+  $('v-list').innerHTML = v.did.map(function (d) { return '<p><b>' + d.title + '.</b> ' + d.line + '</p>'; }).join('');
+  show('s-verdict');
+}
+function openHelp(from) { helpFrom = from; $('s-help').classList.add('on'); $('s-help').scrollTop = 0; }
+function closeHelp() { $('s-help').classList.remove('on'); }
+$('b-begin').addEventListener('click', startGame);
+$('b-rule').addEventListener('click', doRule);
+$('b-next').addEventListener('click', nextBeat);
+$('p-beat').addEventListener('click', nextBeat);
+$('b-nextq').addEventListener('click', nextQuarrel);
+$('b-again').addEventListener('click', startGame);
+$('b-help-start').addEventListener('click', function () { openHelp('start'); });
+$('b-help-play').addEventListener('click', function () { openHelp('play'); });
+$('b-help-end').addEventListener('click', function () { openHelp('end'); });
+$('b-help-close').addEventListener('click', closeHelp);
+$('b-about').addEventListener('click', function () { $('s-about').classList.add('on'); $('s-about').scrollTop = 0; });
+$('b-about-close').addEventListener('click', function () { $('s-about').classList.remove('on'); });
+
+// the cover: a cow and a farmer, both looking out
+(function cover() {
+  var s = '<rect x="0" y="0" width="348" height="190" fill="' + GRN + '"/>' +
+    '<rect x="0" y="0" width="348" height="112" fill="' + WHT + '"/>' +
+    '<circle cx="296" cy="40" r="24" fill="' + YEL + '" ' + SW + '/>' +
+    '<g transform="translate(-30 -60) scale(1.35)">' + person(80, 176, RED) + '</g>' +
+    // a big frontal cow
+    '<rect x="150" y="128" width="110" height="46" rx="18" fill="' + BRN + '" ' + SW + '/>' +
+    '<rect x="162" y="160" width="12" height="24" rx="4" fill="' + BRN + '" ' + SW + '/><rect x="236" y="160" width="12" height="24" rx="4" fill="' + BRN + '" ' + SW + '/>' +
+    '<ellipse cx="226" cy="146" rx="18" ry="11" fill="' + WHT + '" stroke="none"/>' +
+    '<circle cx="190" cy="120" r="30" fill="' + BRN + '" ' + SW + '/>' +
+    '<ellipse cx="190" cy="134" rx="17" ry="10" fill="' + WHT + '" ' + SW + '/>' +
+    '<circle cx="186" cy="136" r="1.8" fill="' + INK + '"/><circle cx="194" cy="136" r="1.8" fill="' + INK + '"/>' +
+    '<ellipse cx="160" cy="98" rx="10" ry="6" fill="' + BRN + '" ' + SW + ' transform="rotate(-30 160 98)"/><ellipse cx="220" cy="98" rx="10" ry="6" fill="' + BRN + '" ' + SW + ' transform="rotate(30 220 98)"/>' +
+    '<circle cx="180" cy="116" r="2.2" fill="' + INK + '"/><circle cx="200" cy="116" r="2.2" fill="' + INK + '"/>' +
+    '<path d="M110 150 q12 -20 0 -40" ' + SW3 + ' fill="none"/><ellipse cx="110" cy="106" rx="6" ry="12" fill="' + YEL + '" ' + SW3 + '/>';
+  $('cover').innerHTML = s;
+})();
+
+window.__game = function () { return { game: G, phase: phase, chosen: chosen, res: res, beat: beatIdx }; };
+})();
+</script>
+</body>
+</html>
