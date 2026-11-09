@@ -1,0 +1,93 @@
+PASS HIST_BASE sums to 100  — 100
+PASS HIST_INF sums to 100  — 100
+PASS HIST_BASE mean = Table 2 constant 2.830 within 0.01  — 2.830
+PASS HIST_INF mean = 2.830 + 0.477 within 0.01  — 3.300
+PASS histogram: 0 and 5 are the two most frequent choices and 10 stands above its neighbours 8 and 9, in both (text, section 3.1)
+PASS histogram: fewer zeros and more fives and tens under INF-(1,1) than BASE (text)
+PASS Table 3 constant 3.307 = Table 2 constant 2.830 + INF-(1,1) 0.477  — 3.307
+PASS INF-(1,1) raises the plain pledge by about 17% (abstract)  — 0.169
+PASS OBS-(1,1) point −0.014 is within one SE (0.211) of zero; played as zero
+PASS INF-(20,1) point +0.131 is within one SE (0.414) of zero; played as zero
+PASS INF-(1,20) vs BASE = 0.477 − 0.496 = −0.019, "no higher than baseline"; played at the plain mean  — -0.019
+PASS INF-(20,20) vs BASE = 0.477 − 0.411 = +0.066, played at its point  — 0.066
+PASS motive per letter matches the cells
+PASS seeing £10 instead of £0 adds 75 pence (text) = slope × 10
+PASS a reader who sees an ordinary pledge gives about the plain amount under Table 4 itself (2.536 + 0.075 × 2.83 within 0.1 of 2.83), so centring on the plain pledge is a small liberty  — 2.748
+PASS social multiplier 1/(1 − 0.075) ≈ 1.1 (footnote 14)  — 1.081
+PASS beliefs: £2 → £5 seen, Table 4 slope gives +0.225, the text’s raw +0.27, within 0.05
+PASS beliefs: participants expected about six times the actual for £2 → £5  — 6.000
+PASS type shares add to one
+PASS a plain street plants 56.6 → 57 saplings  — 56.600
+PASS pass it on: this street plants 66 (20 × 3.307)  — 66.140
+PASS pass it on: next street ripple = 0.075 × 9.54 = 0.72 saplings  — 0.715
+PASS pass it on: the pair’s multiplier is about 1.075 (the paper: 1.1 for a long chain)
+PASS spokesperson: one household at 3.307, nineteen at 2.830
+PASS spokesperson: next street ripple = 20 × 0.075 × 0.477 = 0.72, the same as pass it on’s
+PASS sheet: this street 57.9 → 58; next street sees the mean and barely moves  — 0.099
+PASS clipboard: this street plain; one reader sees the mean; next street plain
+PASS afterwards and plain send nothing before deciding
+PASS drawn street (plain): 20 plots, each 0..10, summing to the rounded total  — 57 vs 57
+PASS drawn next street (plain): sums to the rounded total  — 57 vs 57
+PASS drawn street (sheet): 20 plots, each 0..10, summing to the rounded total  — 58 vs 58
+PASS drawn next street (sheet): sums to the rounded total  — 57 vs 57
+PASS drawn street (spokes): 20 plots, each 0..10, summing to the rounded total  — 57 vs 57
+PASS drawn next street (spokes): sums to the rounded total  — 57 vs 57
+PASS drawn street (pass): 20 plots, each 0..10, summing to the rounded total  — 66 vs 66
+PASS drawn next street (pass): sums to the rounded total  — 57 vs 57
+PASS drawn street (after): 20 plots, each 0..10, summing to the rounded total  — 57 vs 57
+PASS drawn next street (after): sums to the rounded total  — 57 vs 57
+PASS drawn street (clip): 20 plots, each 0..10, summing to the rounded total  — 57 vs 57
+PASS drawn next street (clip): sums to the rounded total  — 57 vs 57
+PASS plain street: about five plots bare, three or four at five, one at ten (histogram × 20)  — [0,0,0,0,0,1,1,1,2,2,2,2,3,4,5,5,5,6,8,10]
+PASS pass it on street: fewer bare plots than plain, more at five or ten  — [0,0,0,0,1,1,1,2,2,2,3,4,5,5,5,5,5,6,9,10]
+PASS spokesperson plot is drawn with 3 saplings (its mean 3.307)  — 3
+PASS bet: expecting 57 or 58 for a ripple of 0.72 is accurate
+PASS bet: expecting 54 is under; 63 is mild; 70 is substantial
+PASS bet: the paper’s average expectation for a step of 0.477 seen (1.62/3 × 0.477 per household × 20 ≈ 5 saplings) lands as mild, its extreme as substantial
+PASS plantThis(sheet) returns a result
+PASS plantThis(spokes) returns a result
+PASS plantThis(pass) returns a result
+PASS plantThis(after) returns a result
+PASS plantThis(pass) returns a result
+PASS plantThis(pass) returns a result
+PASS six pairs end the game
+PASS plantThis refused after the end
+PASS verdict: plain town 679, best town 741 with pass it on (6 × 123.46)  — 679 741 pass
+PASS verdict: this path lands between plain and best  — 713
+PASS verdict has three lines and five paper lines and the no-names boundary
+PASS verdict: a bet of 70 on every letter that sends is a substantial overestimate  — substantial
+PASS pass it on everywhere with a bet of 58: town = best, type accurate  — 741 accurate
+PASS plain everywhere: town = plain, no bet, no type
+PASS no decimal in any verdict line
+PASS no decimal in the words for sheet
+PASS no decimal in the words for spokes
+PASS no decimal in the words for pass
+PASS no decimal in the words for after
+PASS no decimal in the words for pass
+PASS no decimal in the words for pass
+PASS words for plain carry no decimals
+PASS words for sheet carry no decimals
+PASS words for spokes carry no decimals
+PASS words for pass carry no decimals
+PASS words for after carry no decimals
+PASS words for clip carry no decimals
+PASS baseline: pass it on beats every other letter by at least 7 saplings a pair  — {"plain":"113.200","sheet":"114.619","spokes":"114.392","pass":"123.456","after":"113.200","clip":"113.200"}
+PASS with the extensive margin at its point (+0.131): pass it on still wins (the spokesperson is one household)
+PASS with OBS and INF-(1,20) at their points: pass it on still wins
+PASS with the ripple centred on Table 4’s own constant (readers of an ordinary pledge give 2.75): pass it on still wins
+PASS with twice the imitation slope (0.15): pass it on still wins
+PASS with the sheet’s readers copying the mode (5) instead of the mean: pass it on still wins
+PASS the discovery is the paper’s: it rests on INF-(1,1) × 20 households, not on the ripple (pass it on wins even with no ripple at all)
+PASS with INF-(1,1) at the bottom of its 95% interval (0.477 − 1.96 × 0.209 = 0.067): pass it on still edges the sheet
+
+Play it in numbers: the town’s saplings after six pairs (plain town 679)
+  the sheet every time                                 115 115 115 115 115 115   town 688
+  the spokesperson every time                          114 114 114 114 114 114   town 686
+  afterwards every time                                113 113 113 113 113 113   town 679
+  the clipboard every time                             113 113 113 113 113 113   town 679
+  plain every time                                     113 113 113 113 113 113   town 679
+  one of each                                          113 115 114 123 113 113   town 692
+  the stranger (sheet, spokesperson, then pass it on)  115 114 123 113 123 123   town 713
+  pass it on every time                                123 123 123 123 123 123   town 741
+
+ALL CHECKS PASSED
