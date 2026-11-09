@@ -116,9 +116,23 @@ const strategies = {
   'sloppy (3% off)': { beat: her => her * 1.03, guess: () => 80 },
   'random': { beat: () => Math.pow(2, Math.random() * 7), guess: () => 8 }
 };
-for (const [name, st] of Object.entries(strategies)) { const v = play(st, 7); out.push('  player ' + name + ': ' + v.did); }
+for (const [name, st] of Object.entries(strategies)) { const v = play(st, 7); out.push('  player ' + name + ': ' + v.you + ' // ' + v.part + ' // ' + v.ifStood); }
 const v0 = play(strategies['careful (best fold)'], 3);
-check('careful player: beats were hers, guess close', /matched Leavitt/.test(v0.did) && !/except/.test(v0.did) && /guess was close/.test(v0.did), v0.did);
+check('careful player: all seven hers, guess close', v0.kind === 'hers' && /All seven/.test(v0.you) && /guess was close/.test(v0.you), v0.you);
+const vD = play(strategies['doubler (always 2x)'], 3);
+check('doubler: shifted, distances too short by about a quarter', vD.kind === 'shifted' && /about twice/.test(vD.part) && /about a quarter too short/.test(vD.ifStood), vD.part + ' | ' + vD.ifStood);
+const vS = play(strategies['sloppy (3% off)'], 3);
+check('sloppy (3% long): still hers', vS.kind === 'hers', vS.you);
+const vR = play(strategies['random'], 3);
+check('random player: a verdict with a what-if', vR.part.length > 20 && vR.ifStood.length > 40 && /None of your blink times|of your blink times/.test(vR.you), vR.kind + ' | ' + vR.you);
+const vH = play({ beat: her => her * 0.5, guess: () => 8 }, 3);
+check('halver: shifted, distances too long', vH.kind === 'shifted' && /too long/.test(vH.ifStood), vH.ifStood);
+const vM = play({ beat: (her, rec) => [1, 1, 1, 1.3, 1, 1, 0.7][C.ROUNDS.indexOf(rec.h)] * her, guess: () => 17 }, 3);
+check('two strays: ragged', vM.kind === 'ragged' && /2 stars sit off it/.test(vM.part), vM.part);
+// direction and variety in the off lines
+const offs = [5.2, 6.1, 7.3, 3.0, 2.6].map(p => M.compare(p, 4.547));
+check('off lines say the direction', offs.every(o => /too (long|short)/.test(o.line)) && offs[0].dir === 'long' && offs[3].dir === 'short');
+check('off lines vary', new Set(offs.map(o => o.line.replace(/a bit|quite a bit|far/, ''))).size >= 3, offs.map(o => o.line).join(' | '));
 
 console.log(out.join('\n'));
 console.log('\n' + (fails ? fails + ' FAILED' : 'ALL ' + out.filter(l => l.startsWith('PASS')).length + ' CHECKS PASSED'));

@@ -18,7 +18,7 @@ const path = require('path');
   const setBeat = async (days, fine) => page.evaluate(([d, f]) => { const c = document.getElementById('coarse'); c.value = MECH.daysToCoarse(d); c.dispatchEvent(new Event('input')); if (f != null) { const e = document.getElementById('fine'); e.value = f; e.dispatchEvent(new Event('input')); } }, [days, fine]);
   // help opened mid-play and returned from
   await page.click('#s-round .q'); await page.waitForTimeout(300); await shot('help', true); await page.click('#b-help-close');
-  const plan = [1, 2, 1, 1.006, 0.99, 1, 1]; // round 2: twice her beat
+  const plan = [1, 2, 1, 1.4, 0.99, 1, 1]; // round 2: twice her beat; round 4: far too long
   for (let i = 0; i < 7; i++) {
     const st = await page.evaluate(() => { const g = window.__game().game; return { h: g.rounds[g.round].h, P: MECH.star(g.rounds[g.round].h).period, round: g.round }; });
     if (i === 6) {
@@ -51,6 +51,7 @@ const path = require('path');
   await page.click('#fig-sw button[data-fig="2"]');
   await page.click('#b-chart'); await page.waitForTimeout(500); await shot('a-end', true);
   log.push('VERDICT: ' + await page.evaluate(() => document.getElementById('v-lines').innerText.replace(/\n+/g, ' / ')));
+  if (!(await page.evaluate(() => /If your numbers had stood/i.test(document.getElementById('v-lines').innerText)))) errors.push('verdict lacks the what-if');
   await page.click('#s-verdict [data-about]'); await page.waitForTimeout(200); await shot('about', true); await page.click('#b-about-close');
   // retry: another night
   await page.click('#b-again'); await page.waitForTimeout(1500); await shot('b-1-arriving', true);

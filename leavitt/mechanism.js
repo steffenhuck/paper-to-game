@@ -155,13 +155,21 @@ function gapWords(dDays) {
 }
 // how a written blink time compares with hers: {kind, line}. Words for a smart eleven-year-old.
 function compare(playerP, herP) {
-  var ratio = playerP / herP, d = playerP - herP;
-  if (Math.abs(ratio - 1) <= CONFIG.SAME_TOL) return { kind: 'same', line: 'Spot on! Yours and hers are ' + gapWords(d) + ' apart.' };
-  if (Math.abs(ratio - 1) <= CONFIG.NEAR_TOL) return { kind: 'near', line: 'Very close! Yours is ' + gapWords(d) + (d > 0 ? ' too long' : ' too short') + '. That looks tiny, but it adds up over many blinks.' };
-  var mults = [[2, 'twice as long as hers. Your blink time fits two of her blinks.'], [3, 'three times as long as hers. Your blink time fits three of her blinks.'], [4, 'four times as long as hers. Your blink time fits four of her blinks.'],
-    [0.5, 'half of hers. Your blink time cuts each of her blinks in two.'], [1 / 3, 'a third of hers.']];
-  for (var i = 0; i < mults.length; i++) if (Math.abs(ratio / mults[i][0] - 1) <= CONFIG.MULTIPLE_TOL) return { kind: 'multiple', k: mults[i][0], line: 'Yours is ' + mults[i][1] };
-  return { kind: 'off', line: 'Yours is not hers. With her blink time the dots line up; with yours they stay messy.' };
+  var ratio = playerP / herP, d = playerP - herP, dir = d > 0 ? 'long' : 'short';
+  if (Math.abs(ratio - 1) <= CONFIG.SAME_TOL) return { kind: 'same', dir: dir, line: 'Spot on! Yours and hers are ' + gapWords(d) + ' apart.' };
+  if (Math.abs(ratio - 1) <= CONFIG.NEAR_TOL) return { kind: 'near', dir: dir, line: 'Very close! Yours is ' + gapWords(d) + ' too ' + dir + '. That looks tiny, but it adds up over many blinks.' };
+  var mults = [[2, 'twice as long as hers: each of your blinks holds two of hers.'], [3, 'three times as long as hers: each of your blinks holds three of hers.'], [4, 'four times as long as hers: each of your blinks holds four of hers.'],
+    [0.5, 'half of hers: your blink time cuts each of her blinks in two.'], [1 / 3, 'a third of hers: your blink time cuts each of her blinks in three.']];
+  for (var i = 0; i < mults.length; i++) if (Math.abs(ratio / mults[i][0] - 1) <= CONFIG.MULTIPLE_TOL) return { kind: 'multiple', k: mults[i][0], dir: dir, line: 'Yours is ' + mults[i][1] + ' The dots line up at both, so look for one hump in each half.' };
+  // off: say which way and roughly how far, in a different voice each time
+  var how = ratio > 1 ? (ratio < 1.25 ? 'a bit too long' : ratio < 1.7 ? 'quite a bit too long' : 'far too long') : (ratio > 0.8 ? 'a bit too short' : ratio > 0.6 ? 'quite a bit too short' : 'far too short');
+  var tails = [
+    'Yours is ' + how + '. Slide the dial ' + (ratio > 1 ? 'left' : 'right') + ' a little and the scribble will settle.',
+    'Yours is ' + how + ': the real blink is ' + (ratio > 1 ? 'quicker' : 'slower') + ' than you set it.',
+    'Yours is ' + how + '. At her time the dots hug the line; at yours they still wander.',
+    'Yours is ' + how + '. Her blink ' + (ratio > 1 ? 'comes round sooner' : 'takes longer to come round') + ' than yours.'
+  ];
+  return { kind: 'off', dir: dir, line: tails[Math.floor(playerP * 97) % tails.length] };
 }
 function guessWords(guessP, herP) {
   var r = guessP / herP, e = Math.abs(Math.log(r));
@@ -213,24 +221,66 @@ function write(game, P) { // commit the beat for the current round; returns the 
 }
 function guess(game, P) { var r = game.rounds[game.round], s = star(r.h); r.guess = P; r.guessCmp = guessWords(P, s.period); return r.guessCmp; }
 
-// the verdict, in words
+// the verdict, in words: what she found, what you found, where you part, and what would follow if yours had stood
+function fracWords(f) { // a shortfall or excess as a plain fraction
+  if (f < 0.08) return 'a little'; if (f < 0.2) return 'about a sixth'; if (f < 0.3) return 'about a quarter'; if (f < 0.42) return 'about a third'; if (f < 0.6) return 'about half'; return 'more than half';
+}
 function verdict(game) {
-  var R = game.rounds, ex = [], allSame = true;
-  R.forEach(function (r) {
-    var k = r.cmp ? r.cmp.kind : 'off';
-    if (k !== 'same') allSame = false;
-    if (k === 'multiple') ex.push('Harvard ' + r.h + (r.cmp.k >= 1 ? ', where yours fitted ' + (r.cmp.k === 2 ? 'two' : r.cmp.k === 3 ? 'three' : 'four') + ' of her blinks' : ', where yours cut her blink in two'));
-    else if (k === 'off') ex.push('Harvard ' + r.h + ', where yours was not hers');
-  });
-  var how = ex.length === 0 ? (allSame ? 'Your blink times matched Leavitt\u2019s, to within hours.' : 'Your blink times matched Leavitt\u2019s, or came very close.')
-    : ex.length <= 3 ? 'Your blink times matched Leavitt\u2019s, except at ' + ex.join(', and at ') + '.'
-    : R.every(function (r) { return r.cmp && r.cmp.kind !== 'off'; }) ? 'Most of your blink times fitted two or more of her blinks, so your black lines sit to the right of her violet ones.'
-    : 'Many of your blink times were not hers, so your black lines are scattered. Her violet ones show the pattern.';
+  var R = game.rounds, S = R.map(function (r) { return star(r.h); }), H = herLines();
+  var kinds = R.map(function (r) { return r.cmp ? r.cmp.kind : 'off'; });
+  var nSame = kinds.filter(function (k) { return k === 'same' || k === 'near'; }).length;
+  var nLong = R.filter(function (r) { return r.cmp && r.cmp.kind !== 'same' && r.cmp.kind !== 'near' && r.written > star(r.h).period; }).length;
+  var nShort = R.length - nSame - nLong;
+  // the player's own chart: a line through their seven, brightness on log blink time
+  var lx = R.map(function (r) { return Math.log10(r.written); }), ly = S.map(function (s) { return s.max; });
+  var L = fitLine(lx, ly), rms = 0; for (var i = 0; i < R.length; i++) { var e = ly[i] - (L.a + L.b * lx[i]); rms += e * e; } rms = Math.sqrt(rms / R.length);
+  // how far the player's times sit from hers, as one factor, and how much they wander
+  var lr = R.map(function (r) { return Math.log10(r.written / star(r.h).period); });
+  var meanLr = lr.reduce(function (a, b) { return a + b; }, 0) / lr.length, sdLr = Math.sqrt(lr.reduce(function (a, b) { return a + (b - meanLr) * (b - meanLr); }, 0) / lr.length);
+  var factor = Math.pow(10, meanLr);
   var g = R[CONFIG.PREDICT_ROUND];
+
+  var she = 'Leavitt timed 25 blinking stars and put them on a chart. They fell on a straight line: the brighter the star, the slower it blinks. Since the stars all sit in one cloud, at about one distance, the brighter-looking ones really are brighter. So a star\u2019s blink tells you how bright it truly is; and if you know that, how faint it looks tells you how far away it is. She did not say that last part in 1912; she hoped someone would find it. They did, and this is how the first distances to other galaxies were measured.';
+
+  var part, ifStood, kind;
+  if (nSame === 7) {
+    kind = 'hers';
+    part = 'Nowhere. Your chart is her chart.';
+    ifStood = 'Nothing would change. The stars would be measured as they are.';
+  } else if (sdLr < 0.08 && Math.abs(meanLr) > 0.1) {
+    kind = 'shifted';
+    var k = factor, kw = k > 1 ? (k < 1.7 ? 'about half again as long as' : k < 2.6 ? 'about twice' : k < 3.6 ? 'about three times' : 'several times') : (k > 0.6 ? 'about two thirds of' : k > 0.4 ? 'about half' : 'a fraction of');
+    part = 'Your stars line up as neatly as hers, but every blink time is ' + kw + ' hers. Same pattern, shifted sideways.';
+    var shift = Math.abs(L.b) * Math.abs(meanLr); // magnitudes a star would be misread by
+    var dist = Math.sqrt(Math.pow(10, 0.4 * shift)); // the factor distances would be wrong by
+    var short = k > 1; // too-long blink times: a star is read as fainter than it is, so placed too close
+    ifStood = 'Your chart would still work as a yardstick, but a crooked one. Anyone timing a star elsewhere and reading its brightness off your chart would take it for a ' + (short ? 'fainter' : 'brighter') + ' star than it is, and so place it ' + (short ? 'too close' : 'too far') + '. Every distance measured this way would come out ' + fracWords(short ? 1 - 1 / dist : dist - 1) + ' too ' + (short ? 'short' : 'long') + '. We would think the galaxies ' + (short ? 'nearer' : 'farther') + ' than they are, all of them, by the same crooked amount, and nobody would notice until a distance was measured some other way.';
+  } else if (L.b < 0 && rms < 0.8 && nSame >= 3) {
+    kind = 'ragged';
+    part = 'Your line runs the right way, but ' + (7 - nSame === 1 ? 'one star sits' : (7 - nSame) + ' stars sit') + ' off it: ' + (nLong && nShort ? 'some timed too long, some too short' : nLong ? 'timed too long, so pushed to the right' : 'timed too short, so pushed to the left') + '. Hers has every star near the line.';
+    ifStood = 'A ragged yardstick. A star read off your chart might be right, or might be out by ' + fracWords(Math.min(0.7, Math.sqrt(Math.pow(10, 0.4 * rms)) - 1)) + ' in distance, and you would not know which. People would have trusted it less, argued about it longer, and the distances to other galaxies would have come later and fuzzier.';
+  } else if (L.b < 0) {
+    kind = 'rough';
+    part = 'There is a trend on your chart, but the stars stray so far from it that the line is hard to see. Hers is clean.';
+    ifStood = 'No usable yardstick. With stars this scattered nobody could read a brightness off the chart with any confidence. The pattern would have been a rumour, not a law, and the first distances to other galaxies would have had to wait for someone to time the stars again, properly.';
+  } else {
+    kind = 'none';
+    part = 'Everything. On your chart the brighter stars do not blink more slowly; on hers they do.';
+    ifStood = 'The cloud would have told us nothing. No pattern, no yardstick, no way from a star\u2019s blink to its distance. We would have gone on not knowing how far away the other galaxies are, until someone timed the stars again and found what she found.';
+  }
+  var nOff = 7 - nSame;
+  var yourChart = kind === 'hers' || kind === 'shifted' ? 'a clean line, the brighter the slower, like hers'
+    : kind === 'ragged' ? 'a line the right way, the brighter the slower, with ' + (nOff === 1 ? 'one star' : nOff + ' stars') + ' off it'
+    : kind === 'rough' ? 'a rough trend, the brighter the slower, with stars straying far off it'
+    : 'no pattern of the right kind: on your chart the brighter stars do not blink more slowly';
+  var you = 'You timed seven of her stars. ' + (nSame === 7 ? 'All seven of your blink times were hers, to within hours.' : nSame === 0 ? 'None of your blink times was hers' + (nLong && nShort ? ': ' + nLong + ' came out too long and ' + nShort + ' too short.' : nLong ? ': all came out too long.' : ': all came out too short.') :
+    nSame + ' of your blink times ' + (nSame === 1 ? 'was' : 'were') + ' hers; ' + (nLong && nShort ? nLong + ' came out too long and ' + nShort + ' too short' : nLong ? (nLong === 1 ? 'one came out too long' : nLong + ' came out too long') : (nShort === 1 ? 'one came out too short' : nShort + ' came out too short')) + '.') +
+    ' Your own chart shows ' + yourChart + '.' + (g.guessCmp ? ' Before the last star\u2019s photos came you guessed its blink time from its brightness, ' + g.guessCmp.short + '.' : '');
+
   return {
-    did: 'You timed seven blinking stars. ' + how + (g.guessCmp ? ' You guessed the last one from its brightness alone, ' + g.guessCmp.short + '.' : ''),
-    paper: 'The pattern: the brighter the star, the slower it blinks. When a blink takes about three times as long, the star gives off about two and a half times as much light.',
-    means: 'Why this matters: all these stars are in the same cloud, so they are all about the same distance from us. That means the brighter-looking ones really are brighter. So if you find a star like this anywhere in the sky, its blink tells you how bright it really is, and then how faint it looks tells you how far away it is. Leavitt did not say that in 1912. She hoped someone would find out.'
+    kind: kind, she: she, you: you, part: part, ifStood: ifStood,
+    // kept for older callers
+    did: you, paper: she, means: ifStood
   };
 }
 
@@ -246,5 +296,5 @@ function cloudField(seed, n) {
 
 var MECH = { CONFIG: CONFIG, rng: rng, star: star, allStars: allStars, lightCurve: lightCurve, makePlates: makePlates, fold: fold, roughness: roughness, herCurveAt: herCurveAt,
   dialToDays: dialToDays, daysToCoarse: daysToCoarse, beatWords: beatWords, gapWords: gapWords, compare: compare, guessWords: guessWords, herLines: herLines, tableLines: tableLines,
-  fitLine: fitLine, chartX01: chartX01, chartY01: chartY01, newGame: newGame, write: write, guess: guess, verdict: verdict, cloudField: cloudField };
+  fracWords: fracWords, fitLine: fitLine, chartX01: chartX01, chartY01: chartY01, newGame: newGame, write: write, guess: guess, verdict: verdict, cloudField: cloudField };
 if (typeof module !== 'undefined') module.exports = MECH;

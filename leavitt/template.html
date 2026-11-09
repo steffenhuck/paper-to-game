@@ -62,8 +62,9 @@ input[type=range]:disabled{opacity:.4}
 .ticks em{position:absolute;right:0;top:14px;font-style:italic;font-family:Spectral,serif;font-weight:400;font-size:12px;letter-spacing:0}
 .finelab{display:flex;justify-content:space-between;font-size:12.5px;color:var(--lilac);margin:-10px 0 0;font-style:italic}
 .result{border-left:2px solid var(--violet-l);padding:2px 0 2px 12px;margin:10px 0}
-.verdict p{font-size:18px;line-height:1.42;margin:0 0 14px}
-.verdict p.first{font-size:20px}
+.verdict p{font-size:17px;line-height:1.45;margin:0 0 14px}
+.verdict .caps{margin:16px 0 4px;color:var(--violet-l)}
+.verdict .caps.you{color:var(--lilac)}
 .note{border-top:1px solid #4a3f52;padding-top:12px;margin-top:16px;font-size:15px}
 .sig{text-align:center;margin:22px 0 4px;font-style:italic;font-size:14px}
 .sig a{color:var(--lilac);text-decoration:none;text-transform:lowercase}
@@ -131,10 +132,10 @@ input[type=range]:disabled{opacity:.4}
 
 <!-- VERDICT -->
 <section class="screen" id="s-verdict">
-  <div class="caps">What you found</div>
-  <div class="verdict" id="v-lines"></div>
+  <div class="caps">The end of the night</div>
   <div class="panel"><canvas id="c-final" height="260"></canvas></div>
   <p class="small muted" id="final-tag"></p>
+  <div class="verdict" id="v-lines"></div>
   <div class="note" id="v-note"></div>
   <button class="btn pri" id="b-again">Play again, with new photos</button>
   <div class="row2"><button class="btn" data-help>How to play</button><button class="btn" data-about>About</button></div>
@@ -345,6 +346,13 @@ function drawChart(c, o) {
     stroke(x, G, r.written, s, 'bright', 4, f, false, String(r.h), i === o.newest ? o.grow : 1);
   }
   if (o.preview) stroke(x, G, o.preview.days, o.preview.s, 'bright', 3, f, true, 'THIS ONE');
+  if (o.yourLine) {
+    var lx = [], ly = [];
+    game.rounds.forEach(function (r) { if (r.written != null) { lx.push(Math.log10(r.written)); ly.push(M.star(r.h).max); } });
+    var Lf = M.fitLine(lx, ly); x.strokeStyle = COL.dot; x.lineWidth = 1.6; x.setLineDash([5, 4]); x.beginPath();
+    for (var q = 0; q <= 200; q++) { var lp = Math.log10(1.15) + q / 200 * (Math.log10(135) - Math.log10(1.15)), mag = Lf.a + Lf.b * lp; if (mag < C.CHART_MAG_TOP || mag > C.CHART_MAG_BOTTOM) { x.moveTo(CX(G, Math.pow(10, lp), f), CY(G, Math.max(C.CHART_MAG_TOP, Math.min(C.CHART_MAG_BOTTOM, mag)))); continue; } if (q) x.lineTo(CX(G, Math.pow(10, lp), f), CY(G, mag)); else x.moveTo(CX(G, Math.pow(10, lp), f), CY(G, mag)); }
+    x.stroke(); x.setLineDash([]);
+  }
 }
 
 // ---------- the loop ----------
@@ -449,7 +457,7 @@ function toChart() {
     if (i === 2) say += 'Three stars now. <b>Look at where they sit. Do you see a pattern?</b> ';
     if (i === C.PREDICT_ROUND - 1) say += 'For the last star you will <b>guess</b> its blink time from its brightness before you see any photos. Look at the chart first. ';
   }
-  if (r.cmp.kind !== 'same') say += '<span class="ink">The thin violet line is where it goes with Leavitt’s blink time.</span>';
+  if (r.cmp.kind !== 'same') say += '<span class="ink">The thin violet line is where it goes with Leavitt’s blink time' + (r.cmp.kind === 'near' ? '' : ', to the ' + (r.cmp.dir === 'long' ? 'left of yours: your time was too long' : 'right of yours: your time was too short')) + '.</span>';
   $('ch-say').innerHTML = say;
   var b = $('b-chart');
   if (i < game.rounds.length - 1) { b.textContent = i === C.PREDICT_ROUND - 1 ? 'The last star' : 'Next star'; b.onclick = function () { game.round++; startRound(); }; }
@@ -469,10 +477,15 @@ document.querySelectorAll('#fig-sw button').forEach(function (b) { b.onclick = f
 
 function verdict() {
   var v = M.verdict(game); show('s-verdict');
-  $('v-lines').innerHTML = '<p class="first">' + v.did + '</p><p>' + v.paper + '</p><p>' + v.means + '</p>';
+  $('v-lines').innerHTML =
+    '<div class="caps">What she measured and found</div><p>' + v.she + '</p>' +
+    '<div class="caps you">What you measured and found</div><p>' + v.you + '</p>' +
+    '<div class="caps you">Where you and she part</div><p>' + v.part + '</p>' +
+    '<div class="caps you">If your numbers had stood</div><p>' + v.ifStood + '</p>' +
+    (v.kind === 'hers' ? '' : '<p class="small muted">The what-if is the game\u2019s, not the paper\u2019s: it follows your chart to where it would have led.</p>');
   $('v-note').innerHTML = '<span class="caps">Who did the work</span><br>The 1912 report is signed by Edward Pickering, the boss of the observatory. But its first line says it was written by Miss Leavitt. <span class="ink">Henrietta Swan Leavitt</span> read the photos and found the pattern. Astronomers now often call it Leavitt&rsquo;s law.';
-  $('final-tag').innerHTML = 'Thick lines, pale pink to dark plum: your seven stars, at the blink times you wrote. <span class="ink">Violet: hers, and her two lines.</span> Photo set no. ' + seed + '.';
-  drawChart($('c-final'), { upto: 7, others: true, lines: true, fig: 2 });
+  $('final-tag').innerHTML = 'Thick lines, pale pink to dark plum: your seven stars, at the blink times you wrote' + (v.kind === 'hers' ? '' : ', and the dashed line through them') + '. <span class="ink">Violet: her stars, and her two lines.</span> Photo set no. ' + seed + '.';
+  drawChart($('c-final'), { upto: 7, others: true, lines: true, fig: 2, yourLine: v.kind !== 'hers' });
 }
 $('b-again').onclick = function () { seed = seed * 7 % 9000 + 1000; rd = null; startGame(); };
 $('b-begin').onclick = startGame;
