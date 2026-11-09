@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ostrom's Pond</title>
+<meta name="description" content="A village, a pond, ten summers. Each summer you pick what the village does about the pond: nothing, a talk, taking turns watching, or a policeman from town. Then one summer nobody watches.">
+<script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<style>
+@font-face{font-family:Schoolbell;font-weight:400;font-style:normal;src:url(data:font/woff2;base64,/*__F_SCHOOLBELL__*/) format('woff2')}
+@font-face{font-family:'Short Stack';font-weight:400;font-style:normal;src:url(data:font/woff2;base64,/*__F_SHORTSTACK__*/) format('woff2')}
+:root{
+  --page:#FBFAF3; --grid:#CFE0F2; --margin:#E5756A; --ink:#2A2A33; --blue:#3F8FD8; --green:#5FAE4E; --orange:#F08A2E; --yellow:#F6CF3A; --mute:#5A5A66;
+  color-scheme:light;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--page);color:var(--ink)}
+body{font-family:'Short Stack','Comic Sans MS',cursive,sans-serif;font-size:16.5px;line-height:1.42;overflow-x:hidden;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;background-position:0 0}
+body.lock{overflow:hidden}
+.wrap{position:relative;max-width:420px;margin:0 auto;padding:14px 16px 30px 34px}
+.wrap::before{content:"";position:absolute;left:20px;top:0;bottom:0;width:2px;background:var(--margin);opacity:.85}
+.screen{display:none}.screen.on{display:block}
+h1{font-family:Schoolbell,cursive;font-weight:400;font-size:50px;line-height:.95;margin:6px 0 8px;letter-spacing:.01em}
+h2{font-family:Schoolbell,cursive;font-weight:400;font-size:31px;line-height:1.05;margin:4px 0 6px}
+h3{font-family:Schoolbell,cursive;font-weight:400;font-size:23px;margin:16px 0 4px}
+p{margin:0 0 10px}
+b{font-weight:400;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:2px}
+.small{font-size:14px;line-height:1.38;color:var(--mute)}
+.caps{font-family:Schoolbell,cursive;font-size:17px;color:var(--mute)}
+.aim{font-size:18px;line-height:1.32;padding:8px 0 8px 10px;margin:12px 0;border-left:4px solid var(--orange)}
+.topbar{display:flex;align-items:flex-start;gap:8px;margin-bottom:4px}
+.topbar .aimline{flex:1;font-size:13.5px;line-height:1.28;padding-top:4px;color:var(--mute)}
+.q{flex:none;width:36px;height:36px;border-radius:50%;border:2.5px solid var(--ink);background:transparent;color:var(--ink);font-family:Schoolbell,cursive;font-size:24px;cursor:pointer;line-height:30px;padding:0;position:relative;isolation:isolate}
+.q::before{content:"";position:absolute;inset:-3px;border-radius:50%;z-index:-1;background:repeating-linear-gradient(-38deg,var(--yellow) 0 2px,transparent 2px 5px);opacity:.7}
+/* felt-tip buttons: a ruled box, coloured in over the edges */
+.btn{position:relative;display:block;width:100%;border:2.5px solid var(--ink);background:transparent;color:var(--ink);font-family:'Short Stack',cursive;font-size:17px;padding:13px 12px;margin:10px 0;cursor:pointer;text-align:center;isolation:isolate;--c:var(--yellow)}
+.btn::before{content:"";position:absolute;inset:-4px -5px;z-index:-1;background:repeating-linear-gradient(-38deg,var(--c) 0 2.5px,transparent 2.5px 5.5px);opacity:.7;transform:rotate(-1.1deg);border-radius:3px}
+.btn.pri{--c:var(--orange);font-family:Schoolbell,cursive;font-size:24px;padding:10px 12px}
+.btn.pri::before{opacity:.8}
+.btn.plain{border:none;--c:transparent;text-decoration:underline;text-decoration-thickness:2px;padding:8px;font-size:15.5px}
+.btn.plain::before{display:none}
+.btn.dim{opacity:.35;pointer-events:none}
+.row2{display:flex;gap:10px}.row2 .btn{flex:1}
+/* drawings */
+.pic{position:relative;margin:4px 0 2px}
+.pic canvas{display:block;width:100%}
+.label{font-family:Schoolbell,cursive;font-size:16px;color:var(--mute);margin:6px 0 0}
+/* the cards */
+.cards{margin:8px 0 4px}
+.card{position:relative;display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:transparent;border:2.5px solid var(--ink);padding:6px 10px 6px 6px;margin:7px 0;cursor:pointer;font-family:'Short Stack',cursive;color:var(--ink);min-height:58px;isolation:isolate}
+.card canvas{flex:none;width:46px;height:42px}
+.card .t{font-family:Schoolbell,cursive;font-size:21px;line-height:1;display:block}
+.card .l{font-size:13px;line-height:1.25;color:var(--mute);display:block;margin-top:3px}
+.card svg.ring{position:absolute;inset:-9px -8px;width:calc(100% + 16px);height:calc(100% + 18px);pointer-events:none;display:none}
+.card.sel svg.ring{display:block}
+.card.sel::before{content:"";position:absolute;inset:-2px;z-index:-1;background:repeating-linear-gradient(-38deg,var(--yellow) 0 2px,transparent 2px 6px);opacity:.45}
+.desc{min-height:84px;font-size:15px;line-height:1.36;margin:6px 0 4px;padding:6px 0 0 10px;border-left:3px solid var(--green)}
+.desc p{margin:0 0 4px}
+/* results */
+.note{margin:8px 0;font-size:16px;line-height:1.42}
+.note p{margin:0 0 8px}
+.note .paper{color:var(--mute)}
+.big{font-family:Schoolbell,cursive;font-size:27px;line-height:1.12;margin:4px 0 10px}
+.verd p{font-size:17px;line-height:1.4}
+footer.sig{margin-top:26px;text-align:center}
+footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;color:var(--mute);text-decoration:none}
+/* overlays */
+.ov{position:fixed;inset:0;background:var(--page);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;overflow-y:auto;display:none;z-index:10}
+.ov.on{display:block}
+.ov .wrap{padding-top:16px}
+.ov h2{margin-top:2px}
+.ov h3{margin-top:14px}
+.ov p{font-size:15.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ===================== START ===================== -->
+<section class="screen on" id="s-start">
+  <div class="caps">a game from a paper</div>
+  <h1>Ostrom&rsquo;s Pond</h1>
+  <div class="pic"><canvas id="c-start" width="336" height="200"></canvas></div>
+  <p>This is our village. There are ten of us and one pond. Every summer we all go fishing, and over the winter the fish have babies. A full pond makes about ten new fish a summer: one each. Some of us take two.</p>
+  <p>You are the village meeting. Each summer you pick what we do about the pond: nothing, a talk, taking turns watching, or a policeman from town. Your hands will touch a card to see what it means, send everyone fishing, and see who took one fish and who took two.</p>
+  <div class="aim">Keep the pond alive and the village fed for ten summers, and leave villagers who share when nobody&rsquo;s looking.</div>
+  <button class="btn pri" id="b-begin">Begin</button>
+  <button class="btn plain" id="b-help-start">How to play</button>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+
+<!-- ===================== PLAY ===================== -->
+<section class="screen" id="s-play">
+  <div class="topbar"><div class="aimline">Keep the pond alive and the village fed for ten summers, and leave villagers who share when nobody&rsquo;s looking.</div><button class="q" id="q-play" aria-label="How to play">?</button></div>
+  <h2 id="h-summer">Summer 1 of 10</h2>
+  <div class="pic"><canvas id="c-pic" width="336" height="186"></canvas></div>
+  <div class="pic"><canvas id="c-row" width="336" height="196"></canvas></div>
+  <div class="label" id="l-shelf">fish eaten so far: none</div>
+  <div class="pic"><canvas id="c-shelf" width="336" height="48"></canvas></div>
+
+  <div id="ph-pick">
+    <div class="label">what we do this summer (touch a card to see):</div>
+    <div class="cards" id="cards"></div>
+    <div class="desc" id="desc"><p>Touch a card. It shows in the drawing and says what it costs us and what happens to anyone who takes two fish. Then press FISH!</p></div>
+    <button class="btn pri dim" id="b-fish">FISH!</button>
+  </div>
+
+  <div id="ph-test" style="display:none">
+    <div class="note"><p><b>No cards this summer.</b> Nobody watches. Nobody talks. Nothing happens to anyone who takes two. This is the summer that shows what the village has become.</p></div>
+    <button class="btn pri" id="b-test">See what they do</button>
+  </div>
+
+  <div id="ph-fishing" style="display:none">
+    <div class="note" id="fishing-line"><p>Everyone goes to the pond, one at a time&hellip;</p></div>
+  </div>
+
+  <div id="ph-result" style="display:none">
+    <div class="note" id="result"></div>
+    <button class="btn pri" id="b-next">Next summer</button>
+  </div>
+</section>
+
+<!-- ===================== END ===================== -->
+<section class="screen" id="s-end">
+  <div class="caps">the verdict</div>
+  <div class="big" id="end-head"></div>
+  <div class="verd" id="end-lines"></div>
+  <div class="pic"><canvas id="c-end-row" width="336" height="196"></canvas></div>
+  <div class="pic"><canvas id="c-end-pic" width="336" height="186"></canvas></div>
+  <div class="note" id="end-paper"></div>
+  <button class="btn pri" id="b-again">Another village</button>
+  <div class="row2"><button class="btn" id="b-help-end">How to play</button><button class="btn" id="b-about">About</button></div>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+
+</div>
+
+<!-- ===================== HELP ===================== -->
+<div class="ov" id="help"><div class="wrap">
+  <h2>How to play</h2>
+  <p><b>The aim.</b> Keep the pond alive and the village fed for ten summers, and leave villagers who share when nobody&rsquo;s looking.</p>
+  <p><b>The pond.</b> The blue blob is our pond; every orange fish in it is a fish, and the number next to it counts them. A full pond holds fifty. Over the winter the fish have babies: a full pond makes about ten new fish, one for each of us. If we take more than that, the pond gets smaller every year. Below about ten fish, even one each is more than it can replace.</p>
+  <p><b>The village.</b> The ten stick people are us, with our names under us. Each summer everyone takes one fish or two. One fish each is fair. Nobody can see in advance who will take two.</p>
+  <p><b>The cards.</b> Each summer, touch a card to see what it means. It is drawn into the picture (a circle on the grass, a watcher on a stool, a policeman with a tall hat) and the green-lined box says what it costs us and what happens to anyone who takes two. The five cards: <b>leave it be</b> (nothing happens to anyone); <b>have a talk</b> (we promise in a circle, and promise-breakers get a telling-off next summer); <b>take turns watching</b> (one of us watches instead of fishing; seen taking two: a telling-off, then three fish back in the pond, then six, then no fishing next summer); <b>a policeman now and then</b> (the town&rsquo;s policeman on some days, three fish to the town if he catches you, one fish a summer to the town for him, and we stop telling each other off); <b>a policeman every day</b> (the same, every day, for a quarter of our catch).</p>
+  <p><b>FISH!</b> Everyone goes to the pond one at a time. Each person comes back holding one fish or two. A telling-off, a fine or a catch is written under the person it happened to. Then the fish have babies, and the game says what happened: how many took one, who took two, what the pond did, what we ate. The bones on the shelf are the fish we have eaten so far.</p>
+  <p><b>Next summer.</b> Pick again from all five cards. Nothing is kept from last summer except what the villagers learnt.</p>
+  <p><b>The eleventh summer.</b> After ten summers, one more: no cards, nobody watching, nobody talking. What the village does then is the verdict.</p>
+  <button class="btn pri" id="b-help-close">Back</button>
+</div></div>
+
+<!-- ===================== ABOUT ===================== -->
+<div class="ov" id="about"><div class="wrap">
+  /*__ABOUT__*/
+  <button class="btn pri" id="b-about-close">Back</button>
+</div></div>
+
+<script>
+/*__MECHANISM__*/
+</script>
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var C = CONFIG;
+  var COL = { ink: '#2A2A33', blue: '#3F8FD8', green: '#5FAE4E', orange: '#F08A2E', yellow: '#F6CF3A', red: '#E5756A', mute: '#5A5A66' };
+  var s = null, rec = null, chosen = null, busy = false, wob = 1, seed = 0;
+
+  // ---------------- felt-tip drawing ----------------
+  function hash(a, b, c) { var h = (Math.round(a * 7) * 374761393 + Math.round(b * 7) * 668265263 + c * 1274126177 + wob * 97) | 0; h = Math.imul(h ^ (h >>> 13), 1274126177); h ^= h >>> 16; return ((h >>> 0) % 1000) / 1000 - 0.5; }
+  function setup(canvas) {
+    var dpr = Math.min(window.devicePixelRatio || 1, 3), W = canvas.width, H = canvas.height;
+    if (!canvas._w) { canvas._w = W; canvas._h = H; canvas.width = W * dpr; canvas.height = H * dpr; }
+    var ctx = canvas.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, canvas._w, canvas._h); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    return ctx;
+  }
+  function wline(ctx, pts, color, w, k, amp, closed) {
+    amp = amp === undefined ? 1.4 : amp; k = k || 0;
+    var P = [];
+    for (var i = 0; i < pts.length - (closed ? 0 : 1); i++) {
+      var a = pts[i], b = pts[(i + 1) % pts.length], d = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.max(1, Math.round(d / 7));
+      for (var j = 0; j < n; j++) { var t = j / n, x = a[0] + (b[0] - a[0]) * t, y = a[1] + (b[1] - a[1]) * t; P.push([x + hash(x, y, k) * amp * 2, y + hash(y, x, k + 1) * amp * 2]); }
+    }
+    if (!closed) { var e = pts[pts.length - 1]; P.push([e[0] + hash(e[0], e[1], k) * amp, e[1] + hash(e[1], e[0], k + 1) * amp]); }
+    ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = w; ctx.globalAlpha = 0.92;
+    ctx.beginPath(); P.forEach(function (p, i) { if (i) ctx.lineTo(p[0], p[1]); else ctx.moveTo(p[0], p[1]); }); if (closed) ctx.closePath(); ctx.stroke();
+    ctx.globalAlpha = 0.35; ctx.lineWidth = w * 0.8; ctx.beginPath(); P.forEach(function (p, i) { var x = p[0] + hash(p[1], p[0], k + 7) * 2.2, y = p[1] + hash(p[0] + 3, p[1], k + 9) * 2.2; if (i) ctx.lineTo(x, y); else ctx.moveTo(x, y); }); if (closed) ctx.closePath(); ctx.stroke();
+    ctx.restore();
+  }
+  function ell(cx, cy, rx, ry, k, n) { n = n || 26; var P = []; for (var i = 0; i < n; i++) { var a = i / n * Math.PI * 2, r = 1 + hash(i, k, 3) * 0.07; P.push([cx + Math.cos(a) * rx * r, cy + Math.sin(a) * ry * r]); } return P; }
+  function hatch(ctx, pts, color, gap, k, alpha) {
+    gap = gap || 5; k = k || 0;
+    var cx = 0, cy = 0; pts.forEach(function (p) { cx += p[0]; cy += p[1]; }); cx /= pts.length; cy /= pts.length;
+    var big = pts.map(function (p) { return [cx + (p[0] - cx) * 1.07 + hash(p[0], p[1], k) * 3, cy + (p[1] - cy) * 1.09 + hash(p[1], p[0], k + 1) * 3]; });
+    var xs = big.map(function (p) { return p[0]; }), ys = big.map(function (p) { return p[1]; });
+    var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs), y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
+    ctx.save(); ctx.beginPath(); big.forEach(function (p, i) { if (i) ctx.lineTo(p[0], p[1]); else ctx.moveTo(p[0], p[1]); }); ctx.closePath(); ctx.clip();
+    ctx.strokeStyle = color; ctx.lineWidth = 2.6; ctx.globalAlpha = alpha || 0.6;
+    var span = (x1 - x0) + (y1 - y0);
+    for (var d = -span; d < span; d += gap) {
+      var j = hash(d, k, 5) * gap * 0.6;
+      ctx.beginPath(); ctx.moveTo(x0 + d + j, y0 - 4); ctx.lineTo(x0 + d + j + (y1 - y0) * 0.9, y1 + 4); ctx.stroke();
+    }
+    ctx.restore();
+  }
+  function fish(ctx, x, y, L, k, dir) {
+    dir = dir || 1; var body = ell(x, y, L / 2, L / 4.2, k, 14);
+    hatch(ctx, body, COL.orange, 3.2, k, 0.75); wline(ctx, body, COL.ink, 1.6, k, 0.6, true);
+    var tx = x - dir * L / 2; wline(ctx, [[tx + dir * 2, y], [tx - dir * L / 4, y - L / 4], [tx - dir * L / 4, y + L / 4], [tx + dir * 2, y]], COL.ink, 1.6, k + 2, 0.5);
+    ctx.save(); ctx.fillStyle = COL.ink; ctx.beginPath(); ctx.arc(x + dir * L / 4.5, y - 1, 1.4, 0, 7); ctx.fill(); ctx.restore();
+  }
+  function bone(ctx, x, y, k) {
+    wline(ctx, [[x, y], [x + 9, y]], COL.ink, 1.4, k, 0.4);
+    wline(ctx, [[x + 3, y - 3], [x + 3, y + 3]], COL.ink, 1.2, k + 1, 0.3); wline(ctx, [[x + 6, y - 2.5], [x + 6, y + 2.5]], COL.ink, 1.2, k + 2, 0.3);
+    wline(ctx, [[x - 2, y - 3], [x, y], [x - 2, y + 3]], COL.ink, 1.2, k + 3, 0.3);
+  }
+  function text(ctx, str, x, y, size, color, align, font) {
+    ctx.save(); ctx.font = size + 'px ' + (font || 'Schoolbell, cursive'); ctx.fillStyle = color || COL.ink; ctx.textAlign = align || 'center'; ctx.textBaseline = 'alphabetic'; ctx.fillText(str, x, y); ctx.restore();
+  }
+  // a stick person. o: {fish, grin, frown, hat, hatFaint, finger, cross, stool, scope, suitcase, name, note, faint, up}
+  function stick(ctx, x, y, h, o, k) {
+    o = o || {}; k = k || 0; var r = h * 0.14, hy = y + r, by = y + 2 * r, hipy = y + h * 0.66, fy = y + h;
+    ctx.save(); if (o.faint) ctx.globalAlpha = 0.45;
+    if (o.stool) { wline(ctx, [[x - 12, hipy + 4], [x + 12, hipy + 4]], COL.ink, 2.4, k + 20, 0.8); wline(ctx, [[x - 10, hipy + 4], [x - 11, fy + 2]], COL.ink, 2.2, k + 21, 0.8); wline(ctx, [[x + 10, hipy + 4], [x + 11, fy + 2]], COL.ink, 2.2, k + 22, 0.8); }
+    wline(ctx, ell(x, hy, r, r, k, 16), COL.ink, 2.4, k, 0.8, true);
+    ctx.save(); ctx.fillStyle = COL.ink; ctx.beginPath(); ctx.arc(x - r * 0.38, hy - r * 0.15, 1.4, 0, 7); ctx.arc(x + r * 0.38, hy - r * 0.15, 1.4, 0, 7); ctx.fill(); ctx.restore();
+    if (o.grin) wline(ctx, [[x - r * 0.5, hy + r * 0.25], [x, hy + r * 0.62], [x + r * 0.5, hy + r * 0.25]], COL.ink, 1.6, k + 1, 0.4);
+    else if (o.frown) wline(ctx, [[x - r * 0.45, hy + r * 0.55], [x, hy + r * 0.3], [x + r * 0.45, hy + r * 0.55]], COL.ink, 1.6, k + 1, 0.4);
+    else wline(ctx, [[x - r * 0.4, hy + r * 0.42], [x + r * 0.4, hy + r * 0.42]], COL.ink, 1.6, k + 1, 0.4);
+    wline(ctx, [[x, by], [x, hipy]], COL.ink, 2.6, k + 2, 0.9);
+    if (o.stool) { wline(ctx, [[x, hipy], [x + 9, hipy + 2], [x + 10, fy]], COL.ink, 2.4, k + 3, 0.8); wline(ctx, [[x, hipy], [x - 8, hipy + 2], [x - 9, fy]], COL.ink, 2.4, k + 4, 0.8); }
+    else { wline(ctx, [[x, hipy], [x - h * 0.16, fy]], COL.ink, 2.4, k + 3, 0.8); wline(ctx, [[x, hipy], [x + h * 0.16, fy]], COL.ink, 2.4, k + 4, 0.8); }
+    var ay = by + h * 0.12;
+    if (o.finger) { wline(ctx, [[x, ay + 4], [x + h * 0.2, ay - h * 0.2], [x + h * 0.24, ay - h * 0.3]], COL.ink, 2.4, k + 5, 0.8); text(ctx, '!', x + h * 0.3, ay - h * 0.28, 16, COL.red); }
+    else if (o.scope) { wline(ctx, [[x, ay + 4], [x + h * 0.22, ay - 2]], COL.ink, 2.4, k + 5, 0.8); wline(ctx, [[x + h * 0.14, ay + 2], [x + h * 0.36, ay - 6]], COL.ink, 4, k + 6, 0.6); }
+    else wline(ctx, [[x, ay + 2], [x + h * 0.2, ay + h * 0.18]], COL.ink, 2.4, k + 5, 0.8);
+    wline(ctx, [[x, ay + 2], [x - h * 0.2, ay + h * 0.18]], COL.ink, 2.4, k + 6, 0.8);
+    if (o.hat) { var hw = r * 1.2, ht = r * 1.9, hy0 = hy - r * 0.8; if (o.hatFaint) ctx.globalAlpha = 0.45; wline(ctx, [[x - hw, hy0], [x - hw * 0.8, hy0 - ht], [x + hw * 0.8, hy0 - ht], [x + hw, hy0]], COL.ink, 2.2, k + 8, 0.8, true); hatch(ctx, [[x - hw, hy0], [x - hw * 0.8, hy0 - ht], [x + hw * 0.8, hy0 - ht], [x + hw, hy0]], COL.ink, 3, k + 8, 0.55); wline(ctx, [[x - hw * 1.5, hy0], [x + hw * 1.5, hy0]], COL.ink, 2.4, k + 9, 0.6); ctx.globalAlpha = o.faint ? 0.45 : 1; }
+    if (o.fish) { for (var i = 0; i < o.fish; i++) fish(ctx, x + h * 0.36 + 2, ay + h * 0.2 - i * 9 - 2, 15, k + 30 + i, -1); }
+    if (o.suitcase) { wline(ctx, [[x - h * 0.42, fy - 10], [x - h * 0.2, fy - 10], [x - h * 0.2, fy], [x - h * 0.42, fy]], COL.ink, 1.8, k + 40, 0.6, true); hatch(ctx, [[x - h * 0.42, fy - 10], [x - h * 0.2, fy - 10], [x - h * 0.2, fy], [x - h * 0.42, fy]], COL.yellow, 3, k + 40, 0.7); }
+    if (o.cross) { wline(ctx, [[x - r * 1.6, y - 2], [x + r * 1.6, fy + 2]], COL.red, 3, k + 50, 1); wline(ctx, [[x + r * 1.6, y - 2], [x - r * 1.6, fy + 2]], COL.red, 3, k + 51, 1); }
+    ctx.restore();
+    if (o.name) text(ctx, o.name, x, fy + 15, 14, COL.ink);
+    if (o.note) text(ctx, o.note, x, fy + 27, 10.5, o.noteColor || COL.red, 'center', "'Short Stack', cursive");
+  }
+  function sun(ctx, x, y, k) {
+    var disc = ell(x, y, 15, 15, k, 18); hatch(ctx, disc, COL.yellow, 3.5, k, 0.8); wline(ctx, disc, COL.ink, 2, k, 0.7, true);
+    for (var i = 0; i < 8; i++) { var a = i / 8 * Math.PI * 2; wline(ctx, [[x + Math.cos(a) * 19, y + Math.sin(a) * 19], [x + Math.cos(a) * 27, y + Math.sin(a) * 27]], COL.ink, 2, k + i, 0.6); }
+    ctx.save(); ctx.fillStyle = COL.ink; ctx.beginPath(); ctx.arc(x - 5, y - 3, 1.5, 0, 7); ctx.arc(x + 5, y - 3, 1.5, 0, 7); ctx.fill(); ctx.restore();
+    wline(ctx, [[x - 6, y + 4], [x, y + 8], [x + 6, y + 4]], COL.ink, 1.6, k + 9, 0.4);
+  }
+  // the pond's fish slots: a jittered grid inside the ellipse, in a fixed order, so the count is the drawing
+  var PX = 196, PY = 120, PRX = 124, PRY = 44;
+  var slots = (function () { var out = []; for (var yy = -32; yy <= 32; yy += 13) for (var xx = -118; xx <= 118; xx += 20) { var nx = xx / PRX, ny = yy / PRY; if (nx * nx + ny * ny < 0.82) out.push([PX + xx + hash(xx, yy, 1) * 6, PY + yy + hash(yy, xx, 2) * 4]); }
+    var o = []; var r = makeRng(99); while (out.length) o.push(out.splice(Math.floor(r() * out.length), 1)[0]); return o; })();
+  function drawPicture(canvas, fishCount, regime, opts) {
+    opts = opts || {}; var ctx = setup(canvas), k = 100;
+    // grass
+    var grass = [[0, 150], [336, 148], [336, 186], [0, 186]]; hatch(ctx, grass, COL.green, 6, k + 1, 0.55); wline(ctx, [[0, 151], [336, 149]], COL.green, 2.6, k + 2, 1.2);
+    sun(ctx, 300, 36, k + 3);
+    // pond
+    var pond = ell(PX, PY, PRX, PRY, k + 4, 30); hatch(ctx, pond, COL.blue, 7, k + 4, 0.42); wline(ctx, pond, COL.blue, 3.2, k + 4, 1.4, true);
+    var n = Math.max(0, Math.min(slots.length, fishCount));
+    for (var i = 0; i < n; i++) fish(ctx, slots[i][0], slots[i][1], 15, k + 10 + i, (i % 3 === 0) ? -1 : 1);
+    text(ctx, (fishCount <= 0 ? 'no fish' : fishCount + ' fish'), PX + PRX - 10, PY + PRY + 22, 15, COL.ink, 'right');
+    text(ctx, 'our pond', PX - PRX + 14, PY - PRY - 6, 15, COL.ink, 'left');
+    // the arrangement, on the bank at the left
+    var ax = 40, ay = 38, h = 58;
+    if (regime === 'talk') {
+      for (var j = 0; j < 5; j++) { var a = j / 5 * Math.PI * 2 - Math.PI / 2, hx = ax + Math.cos(a) * 24, hy = ay + 30 + Math.sin(a) * 15; wline(ctx, ell(hx, hy, 7, 7, k + 60 + j, 12), COL.ink, 2.2, k + 60 + j, 0.7, true); ctx.save(); ctx.fillStyle = COL.ink; ctx.beginPath(); ctx.arc(hx - 2.5, hy - 1, 1.2, 0, 7); ctx.arc(hx + 2.5, hy - 1, 1.2, 0, 7); ctx.fill(); ctx.restore(); }
+      text(ctx, 'the talk', ax, ay + 72, 14, COL.ink);
+    } else if (regime === 'watch') {
+      stick(ctx, ax, ay, h, { stool: true, scope: true }, k + 70); text(ctx, (opts.watcherName ? opts.watcherName + ' ' : '') + 'watching', ax + 4, ay + h + 26, 14, COL.ink);
+    } else if (regime === 'weak') {
+      stick(ctx, ax, ay, h, { hat: true, faint: true }, k + 80); text(ctx, 'policeman', ax, ay + h + 15, 14, COL.ink); text(ctx, '(some days)', ax, ay + h + 29, 12, COL.mute);
+    } else if (regime === 'strong') {
+      stick(ctx, ax, ay, h, { hat: true }, k + 80); text(ctx, 'policeman', ax, ay + h + 15, 14, COL.ink); text(ctx, '(every day)', ax, ay + h + 29, 12, COL.mute);
+    } else if (regime === 'none' || regime === 'test') {
+      text(ctx, 'nobody', ax, ay + 40, 14, COL.mute); text(ctx, 'watching', ax, ay + 56, 14, COL.mute);
+    }
+    if (opts.babies) text(ctx, '+' + opts.babies + ' babies!', PX - 30, PY + PRY + 22, 15, COL.ink, 'center');
+    if (opts.town) { stick(ctx, 150, 6, 46, { hat: true, fish: Math.min(3, opts.town) }, k + 90); text(ctx, opts.town + ' fish to the town', 178, 34, 13, COL.mute, 'left'); }
+  }
+  // the row: ten villagers, two rows of five; acts shown for the first `shown` of them
+  function drawRow(canvas, villagers, acts, shown, regime, watcher) {
+    var ctx = setup(canvas), k = 200;
+    for (var i = 0; i < villagers.length; i++) {
+      var v = villagers[i], col = i % 5, row = Math.floor(i / 5), x = 34 + col * 67, y = 8 + row * 96, o = { name: v.name };
+      var a = acts && i < shown ? acts[i] : null;
+      if (v.banned && !(a && !a.banned)) { o.cross = true; o.note = 'no fishing'; }
+      if (watcher === i) { o.stool = true; o.scope = true; o.note = 'watching'; o.noteColor = COL.mute; }
+      if (a) {
+        if (a.banned) { o.cross = true; o.note = 'no fishing'; }
+        else if (a.watcher) { o.stool = true; o.scope = true; o.note = 'watching'; o.noteColor = COL.mute; }
+        else {
+          o.fish = a.took; o.grin = a.grabbed && !a.seen && a.sanction !== 'circle'; o.frown = !!a.seen;
+          if (a.took === 0) { o.note = 'nothing left'; o.noteColor = COL.mute; }
+          if (a.sanction === 'word') o.note = 'told off';
+          if (a.sanction === 'fine') o.note = a.fine + ' back in pond';
+          if (a.sanction === 'ban') o.note = 'no fishing next';
+          if (a.sanction === 'town') { o.hat = true; o.note = a.fine + ' to the town'; }
+          if (a.sanction === 'circle') { o.note = 'broke promise'; }
+          if (regime === 'watch' && a.sanction === 'word') o.finger = false;
+        }
+      }
+      if (v.newcomer && rec && rec.migration && rec.migration.slot === i && !rec.test) { o.suitcase = true; if (!o.note) { o.note = 'new here'; o.noteColor = COL.mute; } }
+      stick(ctx, x, y, 56, o, k + i * 3 + (v.newcomer ? 500 : 0));
+    }
+  }
+  function drawShelf(canvas, eaten) {
+    var ctx = setup(canvas), per = 36, k = 300, n = Math.min(eaten, per * 5);
+    for (var i = 0; i < n; i++) { var row = Math.floor(i / per), col = i % per; bone(ctx, 4 + col * 9.2, 8 + row * 9.5, k + i); }
+    $('l-shelf').textContent = 'fish eaten so far: ' + (eaten ? eaten : 'none');
+  }
+  function drawStart() {
+    var ctx = setup($('c-start')), k = 400;
+    var grass = [[0, 160], [336, 158], [336, 200], [0, 200]]; hatch(ctx, grass, COL.green, 6, k + 1, 0.55); wline(ctx, [[0, 161], [336, 159]], COL.green, 2.6, k + 2, 1.2);
+    sun(ctx, 300, 34, k + 3);
+    // two houses
+    [[28, 60], [86, 70]].forEach(function (p, j) { var x = p[0], y = p[1], w = 34, hh = 30; var box = [[x, y], [x + w, y], [x + w, y + hh], [x, y + hh]]; hatch(ctx, box, j ? COL.yellow : COL.orange, 4.5, k + 10 + j, 0.6); wline(ctx, box, COL.ink, 2.2, k + 10 + j, 0.8, true); wline(ctx, [[x - 4, y], [x + w / 2, y - 18], [x + w + 4, y]], COL.ink, 2.2, k + 12 + j, 0.8); wline(ctx, [[x + w - 8, y - 12], [x + w - 8, y - 24], [x + w - 3, y - 24], [x + w - 3, y - 8]], COL.ink, 1.8, k + 14 + j, 0.5); wline(ctx, [[x + w - 5, y - 26], [x + w - 2, y - 34], [x + w - 8, y - 40]], COL.mute, 1.6, k + 16 + j, 1.2); wline(ctx, [[x + 5, y + 8], [x + 13, y + 8], [x + 13, y + 16], [x + 5, y + 16]], COL.ink, 1.6, k + 18 + j, 0.4, true); wline(ctx, [[x + w - 14, y + hh], [x + w - 14, y + 12], [x + w - 6, y + 12], [x + w - 6, y + hh]], COL.ink, 1.6, k + 20 + j, 0.4); });
+    var pond = ell(210, 118, 110, 38, k + 4, 30); hatch(ctx, pond, COL.blue, 7, k + 4, 0.42); wline(ctx, pond, COL.blue, 3.2, k + 4, 1.4, true);
+    var r = makeRng(5); for (var i = 0; i < 22; i++) { var a = r() * Math.PI * 2, rr = Math.sqrt(r()) * 0.8; fish(ctx, 210 + Math.cos(a) * 110 * rr, 118 + Math.sin(a) * 38 * rr, 15, k + 30 + i, i % 2 ? 1 : -1); }
+    text(ctx, 'our pond', 120, 72, 15, COL.ink, 'left');
+    stick(ctx, 30, 108, 52, { fish: 1 }, k + 60); stick(ctx, 72, 112, 52, { fish: 2, grin: true }, k + 63); text(ctx, 'us', 52, 186, 15, COL.ink);
+  }
+  // the five cards' doodles
+  function drawDoodle(canvas, key) {
+    var ctx = setup(canvas), k = 600 + key.length * 7;
+    if (key === 'none') { wline(ctx, ell(23, 24, 14, 6, k, 14), COL.blue, 2, k, 0.8, true); fish(ctx, 23, 24, 11, k + 1, 1); }
+    if (key === 'talk') { for (var j = 0; j < 5; j++) { var a = j / 5 * Math.PI * 2 - Math.PI / 2, hx = 23 + Math.cos(a) * 14, hy = 22 + Math.sin(a) * 11; wline(ctx, ell(hx, hy, 5, 5, k + j, 10), COL.ink, 1.8, k + j, 0.5, true); } }
+    if (key === 'watch') stick(ctx, 22, 2, 36, { stool: true, scope: true }, k);
+    if (key === 'weak') stick(ctx, 22, 2, 36, { hat: true, faint: true }, k);
+    if (key === 'strong') stick(ctx, 22, 2, 36, { hat: true }, k);
+  }
+  function ringPath() { var P = ell(50, 50, 48, 46, 7 + Math.floor(Math.random() * 50), 24); return 'M' + P.map(function (p) { return p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join('L') + 'Z'; }
+
+  // ---------------- the game ----------------
+  function newGame(sd) {
+    seed = sd; s = newVillage(sd); rec = null; chosen = null; wob = 1;
+    buildCards(); showPick();
+  }
+  function buildCards() {
+    var box = $('cards'); box.innerHTML = '';
+    REGIMES.forEach(function (r) {
+      var b = document.createElement('button'); b.className = 'card'; b.setAttribute('data-key', r.key);
+      b.innerHTML = '<canvas width="46" height="42"></canvas><span><span class="t">' + r.name + '</span><span class="l">' + r.line + '</span></span><svg class="ring" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="' + ringPath() + '" fill="none" stroke="#2A2A33" stroke-width="2.2" vector-effect="non-scaling-stroke" opacity=".9"/></svg>';
+      b.addEventListener('click', function () { if (busy) return; pick(r.key); });
+      box.appendChild(b); drawDoodle(b.querySelector('canvas'), r.key);
+    });
+  }
+  function pick(key) {
+    chosen = key;
+    document.querySelectorAll('.card').forEach(function (c) { c.classList.toggle('sel', c.getAttribute('data-key') === key); });
+    var r = REGIME[key];
+    $('desc').innerHTML = '<p><b>' + r.name + '.</b> ' + r.line + '</p><p>' + r.cost + '</p><p>' + r.greedy + '</p>';
+    $('b-fish').classList.remove('dim');
+    drawPicture($('c-pic'), s.pond, key, { watcherName: key === 'watch' ? nextWatcherName() : '' });
+  }
+  function nextWatcherName() { var w = s.watcherNext % C.N, t = 0; while (s.villagers[w].banned && t < C.N) { w = (w + 1) % C.N; t++; } return s.villagers[w].name; }
+  function show(id) { ['ph-pick', 'ph-test', 'ph-fishing', 'ph-result'].forEach(function (p) { $(p).style.display = p === id ? '' : 'none'; }); }
+  function showPick() {
+    show('s-play'); chosen = null; rec = null; wob = s.summer + 1;
+    $('h-summer').textContent = 'Summer ' + (s.summer + 1) + ' of ' + C.SUMMERS;
+    document.querySelectorAll('.card').forEach(function (c) { c.classList.remove('sel'); });
+    $('desc').innerHTML = '<p>Touch a card. It shows in the drawing and says what it costs us and what happens to anyone who takes two fish. Then press FISH!</p>';
+    $('b-fish').classList.add('dim');
+    drawPicture($('c-pic'), s.pond, null, {}); drawRow($('c-row'), s.villagers, null, 0, null, null); drawShelf($('c-shelf'), s.eaten);
+    show('ph-pick'); window.scrollTo(0, 0);
+  }
+  function showTest() {
+    show('s-play'); wob = 11; $('h-summer').textContent = 'Summer 11: nobody watching';
+    drawPicture($('c-pic'), s.pond, 'test', {}); drawRow($('c-row'), s.villagers, null, 0, null, null); drawShelf($('c-shelf'), s.eaten);
+    show('ph-test'); window.scrollTo(0, 0);
+  }
+  function showScreen(id) { document.querySelectorAll('.screen').forEach(function (x) { x.classList.toggle('on', x.id === id); }); }
+  function names(list) { if (!list.length) return ''; if (list.length === 1) return list[0]; return list.slice(0, -1).join(', ') + ' and ' + list[list.length - 1]; }
+  function wait(ms) { return new Promise(function (res) { setTimeout(res, ms); }); }
+
+  // FISH! — play the summer in the mechanism, then draw what happened one villager at a time
+  function fishNow(test) {
+    if (busy) return; busy = true;
+    var regime = test ? 'none' : chosen;
+    rec = playSummer(s, regime, !!test);
+    var fl = $('fishing-line'); show('ph-fishing');
+    var p = Promise.resolve();
+    if (rec.migration) {
+      fl.innerHTML = '<p><b>' + rec.migration.left + ' moved away.</b> ' + rec.migration.came + ' moved in, and has never fished here.</p>';
+      drawRow($('c-row'), s.villagers, null, 0, regime, rec.watcher);
+      p = p.then(function () { return wait(1500); });
+    }
+    p = p.then(function () {
+      fl.innerHTML = '<p>' + (test ? 'Nobody watching. Nobody talking. ' : '') + 'Everyone goes to the pond, one at a time&hellip;</p>';
+      drawRow($('c-row'), s.villagers, rec.acts, 0, regime, rec.watcher);
+    });
+    var pond = rec.pondBefore, took = 0;
+    rec.acts.forEach(function (a, i) {
+      p = p.then(function () { return wait(i === 0 ? 500 : 360); }).then(function () {
+        took += a.took; pond = rec.pondBefore - took + (a.sanction === 'fine' ? 0 : 0);
+        drawPicture($('c-pic'), pond, test ? 'test' : regime, { watcherName: rec.watcher !== null ? s.villagers[rec.watcher].name : '' });
+        drawRow($('c-row'), s.villagers, rec.acts, i + 1, regime, rec.watcher);
+      });
+    });
+    p = p.then(function () { return wait(600); }).then(function () {
+      if (test) { showEnd(); busy = false; return; }
+      // the winter
+      drawPicture($('c-pic'), rec.pondAfter, regime, { babies: rec.growth > 0 ? rec.growth : 0, town: rec.fees + rec.finesToTown, watcherName: rec.watcher !== null ? s.villagers[rec.watcher].name : '' });
+      drawShelf($('c-shelf'), s.eaten);
+      $('result').innerHTML = resultText(rec, regime);
+      $('b-next').textContent = s.summer < C.SUMMERS ? 'Next summer' : 'One more summer';
+      show('ph-result'); busy = false;
+    });
+  }
+  function resultText(r, regime) {
+    var V = s.villagers, out = [];
+    var grabbers = r.acts.filter(function (a) { return a.grabbed; }).map(function (a) { return a.name; });
+    var line1 = '<b>' + r.shared + ' of ' + r.fishers + ' took one fish.</b>';
+    if (grabbers.length) line1 += ' ' + names(grabbers) + ' took two.';
+    if (r.watcher !== null) line1 += ' ' + V[r.watcher].name + ' watched instead of fishing.';
+    var bannedNow = r.acts.filter(function (a) { return a.banned; }).map(function (a) { return a.name; });
+    if (bannedNow.length) line1 += ' ' + names(bannedNow) + ' could not fish this summer.';
+    var empty = r.acts.filter(function (a) { return !a.banned && !a.watcher && a.took < a.wanted; }).length;
+    if (empty) line1 += ' The pond ran out before everyone had what they wanted.';
+    out.push('<p>' + line1 + '</p>');
+    // what happened to the grabbers
+    var l2 = '';
+    if (regime === 'none') l2 = grabbers.length ? 'Nothing happened to ' + (grabbers.length > 1 ? 'them' : names(grabbers)) + '.' : 'Nobody took two.';
+    if (regime === 'talk') l2 = grabbers.length ? names(grabbers) + ' broke the promise. A telling-off in next summer’s circle, and nothing else.' : 'Everyone kept the promise.';
+    if (regime === 'watch') {
+      var words = r.acts.filter(function (a) { return a.sanction === 'word'; }).map(function (a) { return a.name; });
+      var fines = r.acts.filter(function (a) { return a.sanction === 'fine'; });
+      var bans = r.acts.filter(function (a) { return a.sanction === 'ban'; }).map(function (a) { return a.name; });
+      var unseen = r.acts.filter(function (a) { return a.grabbed && !a.seen; }).map(function (a) { return a.name; });
+      var parts = [];
+      if (words.length) parts.push(names(words) + (words.length > 1 ? ' were' : ' was') + ' seen and told off. Nothing else happened to ' + (words.length > 1 ? 'them' : names(words)) + '.');
+      if (fines.length) parts.push(fines.map(function (a) { return a.name + ' was seen again: ' + a.fine + ' fish back into the pond'; }).join('; ') + '.');
+      if (bans.length) parts.push(names(bans) + ' again: no fishing next summer.');
+      if (unseen.length) parts.push(names(unseen) + (unseen.length > 1 ? ' were' : ' was') + ' not seen.');
+      if (!grabbers.length) parts.push('Nobody took two; the watcher had a quiet day.');
+      l2 = parts.join(' ');
+    }
+    if (regime === 'weak' || regime === 'strong') {
+      var caught = r.acts.filter(function (a) { return a.sanction === 'town'; }).map(function (a) { return a.name; });
+      var missed = r.acts.filter(function (a) { return a.grabbed && !a.seen; }).map(function (a) { return a.name; });
+      l2 = (caught.length ? 'The policeman caught ' + names(caught) + ': ' + C.POLICE_FINE + ' fish each to the town.' : grabbers.length ? 'The policeman caught nobody.' : 'Nobody took two.');
+      if (missed.length && caught.length) l2 += ' ' + names(missed) + ' got away with it.';
+      l2 += ' Nobody told anyone off: that’s his job now.';
+    }
+    out.push('<p>' + l2 + '</p>');
+    var l3 = 'The pond: ' + r.pondBefore + ' fish, ' + r.pondAfterFishing + ' after fishing' + (r.finesToPond ? ' (with ' + r.finesToPond + ' paid back)' : '') + ', then the fish had babies: <b>' + r.pondAfter + '</b> (' + pondWord(r.pondAfter) + ').';
+    if (r.fees) l3 += ' The town took ' + r.fees + ' fish for the policeman.';
+    l3 += ' We ate ' + Math.max(0, r.eaten) + ' fish.';
+    out.push('<p>' + l3 + '</p>');
+    return out.join('');
+  }
+
+  // ---------------- the verdict ----------------
+  function showEnd() {
+    var t = s.test, hist = s.history, last = hist[hist.length - 1];
+    var head = t.pondBefore <= 0 ? 'The summer nobody watched: there was nothing left to share.' : 'The summer nobody watched: ' + t.shared + ' of ten still took one fish.';
+    $('end-head').textContent = head;
+    var last3 = (hist[7].eaten + hist[8].eaten + hist[9].eaten) / 3 * C.SUMMERS;
+    var lines = '<p>After ten summers the pond is <b>' + pondWord(last.pondAfter) + '</b> and the village <b>' + belliesWord(last3) + '</b>' + (s.paidToTown ? ', and the town took ' + s.paidToTown + ' of our fish' : '') + '.</p>';
+    var grabs = t.acts.filter(function (a) { return a.grabbed; }).map(function (a) { return a.name; });
+    if (t.pondBefore > 0) lines += '<p>' + (grabs.length ? names(grabs) + ' took two' + (t.pondAfter <= 0 ? ', and the pond is empty' : '') + '.' : 'Nobody took two.') + ' The pond: ' + t.pondBefore + ' fish, then ' + t.pondAfter + '.</p>';
+    var orig = s.villagers.filter(function (v) { return v.type === 'E' && !v.newcomer; }).map(function (v) { return v.name; });
+    var kit = s.villagers.filter(function (v) { return v.newcomer; })[0];
+    var learnt = s.villagers.filter(function (v) { return v.type === 'E' && !v.newcomer && t.acts[v.i] && !t.acts[v.i].grabbed && !t.acts[v.i].banned; }).map(function (v) { return v.name; });
+    var p4 = names(orig) + ' started out caring only about their own fish' + (kit ? ', and ' + kit.name + ' arrived with the same idea' : '') + '. ';
+    if (t.pondBefore > 0) p4 += learnt.length === orig.length ? 'In the summer nobody watched, all of them took one anyway.' : learnt.length ? 'In the summer nobody watched, ' + names(learnt) + ' took one anyway.' : 'None of them had changed.';
+    lines += '<p>' + p4 + '</p>';
+    $('end-lines').innerHTML = lines;
+    drawRow($('c-end-row'), s.villagers, t.acts, t.acts.length, 'test', null);
+    drawPicture($('c-end-pic'), s.pond, 'test', {});
+    $('end-paper').innerHTML = paperLines();
+    showScreen('s-end'); window.scrollTo(0, 0);
+  }
+  function paperLines() {
+    var count = {}; s.history.forEach(function (r) { count[r.regime] = (count[r.regime] || 0) + 1; });
+    var dom = null; REGIMES.forEach(function (r) { if ((count[r.key] || 0) > (count[dom] || 0)) dom = r.key; });
+    var used = function (k) { return count[k] || 0; };
+    var P = {
+      none: '<p class="paper"><b>What the paper says.</b> Left alone, about half share at first; then the sharers tire of being the fools and the village slides. That is the lab’s finding, repeated hundreds of times: well above nothing, and sliding. Ostrom’s point is that this is what people do with no way to talk and no way to tell each other off, not what people are.</p>',
+      talk: '<p class="paper"><b>What the paper says.</b> Talk is cheap and it works: in the lab, sitting face to face raised sharing a lot and kept it up to the last round, though it changes nothing for someone who never cared. Ostrom adds that few of the commons that lasted for generations relied on trust alone: a newcomer finds nothing to stop them.</p>',
+      watch: '<p class="paper"><b>What the paper says.</b> This is how the fisheries and irrigation systems that lasted for generations were run: by their own users, with watchers they chose and sanctions that started as a word. The telling-off was information, the trust went on, and in the end the watching was hardly needed. Under this game’s rules the grabbers learnt the village’s norm from being caught by the village.</p>',
+      weak: '<p class="paper"><b>What the paper says.</b> A policeman now and then is the worst of all worlds, Ostrom says: too rare to frighten anyone, and enough to stop the village telling each other off. Under this game’s rules every summer he was in charge wore the village’s own norm down, and the town kept the fines.</p>',
+      strong: '<p class="paper"><b>What the paper says.</b> Every day the policeman was there, everyone shared, and nobody needed a reason of their own. In the experiment Ostrom cites, the group given an outside enforcer earned more while it ran and, once it was removed, shared less than the group that never had it. Under this game’s rules every policed summer wore the village’s own norm down; that is what the eleventh summer shows, and it depends on how fast a norm withers when nobody needs it.</p>'
+    };
+    var out = P[dom];
+    if (dom !== 'strong' && used('strong') >= 2) out += '<p class="paper">The summers with the policeman every day cost a quarter of the catch and, under this game’s rules, wore the village’s own norm down while they lasted: Ostrom’s crowding out.</p>';
+    if (dom !== 'weak' && used('weak') >= 2) out += '<p class="paper">The summers with a policeman now and then were, in Ostrom’s words, the worst of all worlds: too rare to frighten anyone, and enough to stop the village telling each other off.</p>';
+    if (dom !== 'watch' && used('watch') >= 2 && used('watch') < 5) out += '<p class="paper">The summers of taking turns watching are how the commons that lasted were run: a word first, then a fine, then the door.</p>';
+    out += '<p class="small">Elinor Ostrom (2000), Collective Action and the Evolution of Social Norms, <i>Journal of Economic Perspectives</i> 14(3): 137–158. The village, the pond and the fish are this game’s; the three kinds of villager, the cards and what they do are the paper’s. About has the rest. Village no. ' + seed + '.</p>';
+    return out;
+  }
+
+  // ---------------- wiring ----------------
+  function openOv(id) { $(id).classList.add('on'); document.body.classList.add('lock'); $(id).scrollTop = 0; }
+  function closeOv(id) { $(id).classList.remove('on'); document.body.classList.remove('lock'); }
+  function randomSeed() { return 1000 + Math.floor(Math.random() * 9000); }
+  $('b-begin').addEventListener('click', function () { newGame(seed || randomSeed()); showScreen('s-play'); });
+  $('b-fish').addEventListener('click', function () { if (!chosen) return; fishNow(false); });
+  $('b-next').addEventListener('click', function () { if (busy) return; if (s.summer < C.SUMMERS) showPick(); else showTest(); });
+  $('b-test').addEventListener('click', function () { fishNow(true); });
+  $('b-again').addEventListener('click', function () { seed = randomSeed(); newGame(seed); showScreen('s-play'); });
+  ['b-help-start', 'q-play', 'b-help-end'].forEach(function (id) { $(id).addEventListener('click', function () { openOv('help'); }); });
+  $('b-help-close').addEventListener('click', function () { closeOv('help'); });
+  $('b-about').addEventListener('click', function () { openOv('about'); });
+  $('b-about-close').addEventListener('click', function () { closeOv('about'); });
+  var m = /v=(\d+)/.exec(location.hash || ''); if (m) seed = Number(m[1]);
+  function start() { drawStart(); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(start); else start();
+  window.__game = { get state() { return s; }, get rec() { return rec; }, newGame: newGame };
+})();
+</script>
+</body>
+</html>
