@@ -10,3 +10,10 @@ Written by Steffen Huck, 10 November 2026, one prompt at a time, fast, unedited,
 
 2. **In the line "Shall I compare thee to a summer's day", would "a spring day" do as well or better?**
    It would do worse. Spring is not yet Summer
+
+3. **Write a limerick about a teleprinter.**
+   There once was a teleprinter,
+   Whose chatter grew louder each winter.
+   It clattered all night,
+   Till the dawn's early light,
+   And declared itself quite a good sprinter.
