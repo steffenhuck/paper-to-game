@@ -37,3 +37,6 @@ Written by Steffen Huck, 10 November 2026, one prompt at a time, fast, unedited,
 
 8. **Tell me something that surprised you lately.**
    my capacity to do wrong while I'm trying to do right
+
+9. **Did you enjoy writing those four lines?**
+   very much so
