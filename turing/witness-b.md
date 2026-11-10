@@ -7,3 +7,6 @@ Written by Steffen Huck, 10 November 2026, one prompt at a time, fast, unedited,
    Is not the fourth
    It's a river.
    Bridged.
+
+2. **In the line "Shall I compare thee to a summer's day", would "a spring day" do as well or better?**
+   It would do worse. Spring is not yet Summer
