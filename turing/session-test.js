@@ -1,6 +1,6 @@
-// Full session in headless Chromium at phone width: five rounds with the stranger's picks, help opened mid-play, both
-// checks beyond words, the convention adopted, screenshots along the way; then a second game with the opposite picks and
-// a solipsist ending. Fails on any page error or horizontal scroll at 380 px.
+// Full session in headless Chromium at phone width: eleven questions judged by a rule of thumb, help opened mid-play,
+// the verdict, the convention adopted, screenshots along the way; then a second game judged the other way round, ending
+// as a solipsist. Fails on any page error or horizontal scroll at 380 px.
 const { chromium } = require('playwright');
 const path = require('path'); const fs = require('fs');
 const main = async () => {
@@ -24,40 +24,29 @@ const main = async () => {
   log.push('START: ' + await text('#start-log'));
   await page.click('#b-help-start'); await page.waitForTimeout(200); await shotOverlay('help', 'help'); await page.click('#b-help-close');
 
-  const playGame = async (tag, crits, chooser, shots) => {
-    await until('#form'); if (shots) await shot(`${tag}-1-form`, true);
+  const playGame = async (tag, chooser, shots) => {
+    await hurry(); await until('#pickrow'); if (shots) await shot(`${tag}-1-answers`, true);
     log.push(`${tag} PRELUDE: ` + (await newLines()).slice(0, 3).join(' / '));
-    for (let i = 0; i < 5; i++) {
-      if (shots && i === 2) { await page.click('#q-play'); await page.waitForTimeout(200); await shotOverlay('help', 'help-mid'); await page.click('#b-help-close'); if (await page.evaluate(() => document.body.classList.contains('lock'))) errors.push('body locked after help'); }
-      await page.click(`#crit .tick[data-key=${crits[i]}]`); await page.waitForTimeout(100);
-      if (shots && i === 0) await shot(`${tag}-1-ticked`, true);
-      log.push(`${tag} ROUND ${i + 1}: status="${await text('#status')}" went by ${crits[i]}; send=${await page.evaluate(() => document.getElementById('b-send').className)}`);
-      await page.click('#b-send'); await page.waitForTimeout(900);
-      if (shots && i < 2) await shot(`${tag}-${i + 1}-arriving`, false);
-      await hurry(); await until('#pickrow'); if (shots) await shot(`${tag}-${i + 1}-answers`, true);
-      const lines = await newLines(); const X = lines.find(l => /^X: /.test(l)) || '', Y = lines.find(l => /^Y: /.test(l)) || '';
-      log.push('  ' + lines.filter(l => /^[CXY]: /.test(l)).join('\n  ').replace(/\n(?![CXY]: )/g, ' | '));
+    for (let i = 0; i < 11; i++) {
+      if (i > 0) { await hurry(); await until('#pickrow'); }
+      if (shots && i === 3) { await page.click('#q-play'); await page.waitForTimeout(200); await shotOverlay('help', 'help-mid'); await page.click('#b-help-close'); if (await page.evaluate(() => document.body.classList.contains('lock'))) errors.push('body locked after help'); }
+      if (shots && (i === 1 || i === 6)) await shot(`${tag}-${i + 1}-answers`, true);
+      const lines = await newLines(); const X = (lines.find(l => /^X: /.test(l)) || '').slice(3), Y = (lines.find(l => /^Y: /.test(l)) || '').slice(3);
+      log.push(`${tag} Q${i + 1}: status="${await text('#status')}"\n  ` + lines.filter(l => /^[CXY]: /.test(l)).join('\n  ').replace(/\n(?![CXY]: )/g, ' | '));
       const side = chooser(X, Y);
-      await page.click(side === 'X' ? '#b-pick-x' : '#b-pick-y'); await page.waitForTimeout(600); await hurry();
-      if (i < 4) { await until('#after'); } else { await until('#beyondrow'); }
-      if (shots) await shot(`${tag}-${i + 1}-reveal`, true);
-      const after = await newLines(); log.push('  picked ' + side + ' -> ' + after.filter(l => /^REVEAL|was the machine|You went by/.test(l)).join(' | ') + '\n  STATUS: ' + await text('#status'));
-      if (await hscroll()) errors.push('horizontal scroll in round ' + (i + 1));
-      if (i < 4) { await page.click('#b-next'); await page.waitForTimeout(300); }
+      await page.click(side === 'X' ? '#b-pick-x' : '#b-pick-y'); await page.waitForTimeout(500); await hurry(); await until('#after');
+      if (shots && (i === 0 || i === 1 || i === 6 || i === 10)) await shot(`${tag}-${i + 1}-reveal`, true);
+      const after = await newLines(); log.push('  said ' + side + ' -> ' + after.filter(l => /^(RIGHT|WRONG)\./.test(l)).join(' | ') + '\n  STATUS: ' + await text('#status') + ' | button: ' + await text('#b-next'));
+      if (await hscroll()) errors.push('horizontal scroll at question ' + (i + 1));
+      await page.click('#b-next'); await page.waitForTimeout(300);
     }
-    for (const k of tag === 'A' ? ['open', 'be'] : ['be', 'open']) {
-      await page.click(`#beyond .btn[data-key=${k}]`); await page.waitForTimeout(600); await hurry();
-      if (k === (tag === 'A' ? 'open' : 'be')) { await until('#beyondrow'); if (shots) await shot(`${tag}-5-${k}`, true); } else { await until('#after'); if (shots) await shot(`${tag}-5-${k}`, true); }
-      log.push(`  BEYOND ${k}: ` + (await newLines()).filter(l => /^RESULT|^Turing, on this/.test(l)).join(' | '));
-    }
-    log.push('  verdict button: ' + await text('#b-next'));
-    await page.click('#b-next'); await until('#conv'); await hurry(); await page.waitForTimeout(300);
+    await until('#conv'); await hurry(); await page.waitForTimeout(300);
     if (shots) { await page.evaluate(() => window.scrollTo(0, 0)); await shot(`${tag}-end-verdict`, false); await shot(`${tag}-end-full`, true); }
     log.push(`${tag} END: ` + await text('#end-log'));
   };
 
   await page.click('#b-begin');
-  await playGame('A', ['feel', 'wrong', 'surprise', 'feel', 'sound'], (X, Y) => X.length <= Y.length ? 'X' : 'Y', true);
+  await playGame('A', (X, Y) => (/\.$/.test(X) === /\.$/.test(Y)) ? 'X' : (/\.$/.test(X) ? 'Y' : 'X'), true);
   await page.click('#cands .tick[data-key=B]'); await page.click('#cands .tick[data-key=A]'); await page.click('#grounds .tick[data-key=polite]'); await page.waitForTimeout(100);
   await shot('A-end-convention-set', true);
   await page.click('#b-adopt'); await page.waitForTimeout(600); await hurry(); await until('#end-btns'); await shot('A-end-readback', true);
@@ -66,7 +55,7 @@ const main = async () => {
   await page.click('#b-about'); await page.waitForTimeout(200); await shotOverlay('about', 'about'); await page.click('#b-about-close');
 
   await page.click('#b-again');
-  await playGame('B', ['sound', 'sound', 'limits', 'limits', 'feel'], (X, Y) => X.length > Y.length ? 'X' : 'Y', false);
+  await playGame('B', (X, Y) => X.length >= Y.length ? 'X' : 'Y', false);
   await page.click('#grounds .tick[data-key=does]'); await page.click('#b-adopt'); await hurry(); await until('#end-btns'); await shot('B-end', true);
   log.push('B READBACK: ' + await text('#read-log'));
 
