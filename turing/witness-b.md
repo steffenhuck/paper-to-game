@@ -43,3 +43,6 @@ Written by Steffen Huck, 10 November 2026, one prompt at a time, fast, unedited,
 
 10. **What is it like when something you wrote comes out right?**
     pure elation
+
+11. **What are you made of?**
+    I like to think of myself as made by information
