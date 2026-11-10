@@ -1,6 +1,6 @@
-// Full session in headless Chromium at phone width: the stranger's six tests from the memo (section 9), help opened
-// mid-play, the convention adopted, screenshots along the way; then a second game that never leaves the chair (the forced
-// run) and a third with the separation hunter's tests. Fails on any page error or horizontal scroll at 380 px.
+// Full session in headless Chromium at phone width: five rounds with the stranger's picks, help opened mid-play, both
+// checks beyond words, the convention adopted, screenshots along the way; then a second game with the opposite picks and
+// a solipsist ending. Fails on any page error or horizontal scroll at 380 px.
 const { chromium } = require('playwright');
 const path = require('path'); const fs = require('fs');
 const main = async () => {
@@ -13,71 +13,62 @@ const main = async () => {
   const shotOverlay = async (id, n) => { await page.evaluate(id => { const o = document.getElementById(id); o.style.position = 'absolute'; o.style.inset = 'auto'; o.style.top = '0'; o.style.left = '0'; o.style.right = '0'; o.style.overflow = 'visible'; document.body.classList.remove('lock'); document.querySelectorAll('body > .wrap').forEach(w => w.style.display = 'none'); }, id); await page.evaluate(() => window.scrollTo(0, 0)); await shot(n, true); await page.evaluate(id => { const o = document.getElementById(id); o.style.position = ''; o.style.inset = ''; o.style.top = ''; o.style.left = ''; o.style.right = ''; o.style.overflow = ''; document.querySelectorAll('body > .wrap').forEach(w => w.style.display = ''); document.body.classList.add('lock'); }, id); };
   const hscroll = async () => page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
   const hurry = async () => { await page.mouse.click(5, 5); }; // the top-left padding: never a button
-  const settled = async () => { await page.waitForFunction(() => !document.querySelector('.cur') || true); await page.waitForTimeout(150); };
-  // wait until the typing queue is idle: the cursor sits inside the element we expect to be visible
   const until = async (sel, ms) => { await page.waitForSelector(sel, { state: 'visible', timeout: ms || 60000 }); await page.waitForTimeout(200); };
   const text = async sel => page.evaluate(s => (document.querySelector(s) || { innerText: '' }).innerText.replace(/\n+/g, ' / '), sel);
+  const newLines = async () => page.evaluate(() => [...document.querySelectorAll('#log .ln:not(.old)')].map(x => x.innerText));
 
   await page.goto(url); await page.waitForTimeout(500);
   await shot('start-typing', false);
   await hurry(); await page.waitForTimeout(400); await shot('start', true);
   if (await hscroll()) errors.push('horizontal scroll on start');
   log.push('START: ' + await text('#start-log'));
-
-  // How to play from the start screen
   await page.click('#b-help-start'); await page.waitForTimeout(200); await shotOverlay('help', 'help'); await page.click('#b-help-close');
 
-  await page.click('#b-begin'); await until('#form'); await shot('1-prelude', true);
-  log.push('PRELUDE: ' + await text('#log'));
-  const plan = [['joke', 'chair'], ['moral', 'chair'], ['feel', 'chair'], ['feel', 'open'], ['feel', 'be'], ['godel', 'chair']];
-  const runOne = async (d, c, i, shots) => {
-    await page.click('#b-slot'); await page.waitForTimeout(150);
-    if (shots) await shot(`${i}-menu`, true);
-    await page.click(`#menu .mi:nth-child(${['sonnet','sum','chess','joke','moral','learn','new','straw','feel','know','soul','viva','godel','esp','flesh'].indexOf(d) + 1})`);
-    await page.waitForTimeout(100);
-    await page.click(`#checks .btn[data-key=${c}]`); await page.waitForTimeout(150);
-    if (shots) await shot(`${i}-set`, true);
-    log.push(`TEST ${i}: slot="${await text('#b-slot')}" check=${c}  does="${await page.evaluate(() => (document.querySelector('#checks .cdoes.on') || { innerText: '' }).innerText)}" run=${await page.evaluate(() => document.getElementById('b-run').className)}`);
-    await page.click('#b-run'); await page.waitForTimeout(900);
-    if (shots) await shot(`${i}-arriving`, false);
-    await hurry(); await until('#after'); await page.waitForTimeout(250);
-    if (shots) await shot(`${i}-result`, true);
-    const lines = await page.evaluate(() => [...document.querySelectorAll('#log .ln:not(.old)')].map(x => x.innerText));
-    log.push('  ' + lines.slice(1).join('\n  '));
-    log.push('  STATUS: ' + await text('#status') + ' | next button: ' + await text('#b-next'));
-    if (await hscroll()) errors.push('horizontal scroll in test ' + i);
+  const playGame = async (tag, crits, chooser, shots) => {
+    await until('#form'); if (shots) await shot(`${tag}-1-form`, true);
+    log.push(`${tag} PRELUDE: ` + (await newLines()).slice(0, 3).join(' / '));
+    for (let i = 0; i < 5; i++) {
+      if (shots && i === 2) { await page.click('#q-play'); await page.waitForTimeout(200); await shotOverlay('help', 'help-mid'); await page.click('#b-help-close'); if (await page.evaluate(() => document.body.classList.contains('lock'))) errors.push('body locked after help'); }
+      await page.click(`#crit .tick[data-key=${crits[i]}]`); await page.waitForTimeout(100);
+      if (shots && i === 0) await shot(`${tag}-1-ticked`, true);
+      log.push(`${tag} ROUND ${i + 1}: status="${await text('#status')}" went by ${crits[i]}; send=${await page.evaluate(() => document.getElementById('b-send').className)}`);
+      await page.click('#b-send'); await page.waitForTimeout(900);
+      if (shots && i < 2) await shot(`${tag}-${i + 1}-arriving`, false);
+      await hurry(); await until('#pickrow'); if (shots) await shot(`${tag}-${i + 1}-answers`, true);
+      const lines = await newLines(); const X = lines.find(l => /^X: /.test(l)) || '', Y = lines.find(l => /^Y: /.test(l)) || '';
+      log.push('  ' + lines.filter(l => /^[CXY]: /.test(l)).join('\n  ').replace(/\n(?![CXY]: )/g, ' | '));
+      const side = chooser(X, Y);
+      await page.click(side === 'X' ? '#b-pick-x' : '#b-pick-y'); await page.waitForTimeout(600); await hurry();
+      if (i < 4) { await until('#after'); } else { await until('#beyondrow'); }
+      if (shots) await shot(`${tag}-${i + 1}-reveal`, true);
+      const after = await newLines(); log.push('  picked ' + side + ' -> ' + after.filter(l => /^REVEAL|was the machine|You went by/.test(l)).join(' | ') + '\n  STATUS: ' + await text('#status'));
+      if (await hscroll()) errors.push('horizontal scroll in round ' + (i + 1));
+      if (i < 4) { await page.click('#b-next'); await page.waitForTimeout(300); }
+    }
+    for (const k of tag === 'A' ? ['open', 'be'] : ['be', 'open']) {
+      await page.click(`#beyond .btn[data-key=${k}]`); await page.waitForTimeout(600); await hurry();
+      if (k === (tag === 'A' ? 'open' : 'be')) { await until('#beyondrow'); if (shots) await shot(`${tag}-5-${k}`, true); } else { await until('#after'); if (shots) await shot(`${tag}-5-${k}`, true); }
+      log.push(`  BEYOND ${k}: ` + (await newLines()).filter(l => /^RESULT|^Turing, on this/.test(l)).join(' | '));
+    }
+    log.push('  verdict button: ' + await text('#b-next'));
+    await page.click('#b-next'); await until('#conv'); await hurry(); await page.waitForTimeout(300);
+    if (shots) { await page.evaluate(() => window.scrollTo(0, 0)); await shot(`${tag}-end-verdict`, false); await shot(`${tag}-end-full`, true); }
+    log.push(`${tag} END: ` + await text('#end-log'));
   };
-  for (let i = 0; i < plan.length; i++) {
-    if (i === 2) { await page.click('#q-play'); await page.waitForTimeout(200); await shotOverlay('help', 'help-mid'); await page.click('#b-help-close'); if (await page.evaluate(() => document.body.classList.contains('lock'))) errors.push('body locked after help'); }
-    await runOne(plan[i][0], plan[i][1], i + 1, i < 6);
-    await page.click('#b-next'); await page.waitForTimeout(300);
-  }
-  await until('#conv'); await hurry(); await page.waitForTimeout(300);
-  await page.evaluate(() => window.scrollTo(0, 0)); await shot('end-verdict', false); await shot('end-full', true);
-  log.push('END: ' + await text('#end-log'));
-  await page.click('#cands .tick[data-key=B]'); await page.click('#cands .tick[data-key=elephant]'); await page.click('#grounds .tick[data-key=polite]'); await page.waitForTimeout(100);
-  await shot('end-convention-set', true);
-  await page.click('#b-adopt'); await page.waitForTimeout(600); await hurry(); await until('#end-btns'); await shot('end-readback', true);
-  log.push('READBACK: ' + await text('#read-log'));
+
+  await page.click('#b-begin');
+  await playGame('A', ['feel', 'wrong', 'surprise', 'feel', 'sound'], (X, Y) => X.length <= Y.length ? 'X' : 'Y', true);
+  await page.click('#cands .tick[data-key=B]'); await page.click('#cands .tick[data-key=A]'); await page.click('#grounds .tick[data-key=polite]'); await page.waitForTimeout(100);
+  await shot('A-end-convention-set', true);
+  await page.click('#b-adopt'); await page.waitForTimeout(600); await hurry(); await until('#end-btns'); await shot('A-end-readback', true);
+  log.push('A READBACK: ' + await text('#read-log'));
   if (await hscroll()) errors.push('horizontal scroll at the end');
   await page.click('#b-about'); await page.waitForTimeout(200); await shotOverlay('about', 'about'); await page.click('#b-about-close');
 
-  // game B: never leaves the chair
-  await page.click('#b-again'); await until('#form');
-  for (const d of ['sonnet', 'sum', 'chess', 'new', 'esp', 'flesh']) { await runOne(d, 'chair', 'B', false); if (await page.evaluate(() => document.getElementById('b-next').innerText) !== 'THE VERDICT') await page.click('#b-next'); await page.waitForTimeout(200); }
-  await shot('b-forced', true);
-  await page.click('#b-next'); await until('#conv'); await hurry(); await page.waitForTimeout(300);
-  log.push('END B: ' + await text('#end-log'));
-  await page.click('#grounds .tick[data-key=does]'); await page.click('#b-adopt'); await hurry(); await until('#end-btns'); await shot('b-end', true);
-  log.push('READBACK B: ' + await text('#read-log'));
-
-  // game C: the separation hunter, with a solipsist ending
-  await page.click('#b-again'); await until('#form');
-  for (const [d, c] of [['godel', 'chair'], ['straw', 'chair'], ['flesh', 'open'], ['straw', 'open'], ['viva', 'chair'], ['soul', 'be']]) { await runOne(d, c, 'C', false); if (await page.evaluate(() => document.getElementById('b-next').innerText) !== 'THE VERDICT') await page.click('#b-next'); await page.waitForTimeout(200); }
-  await page.click('#b-next'); await until('#conv'); await hurry(); await page.waitForTimeout(300);
-  log.push('END C: ' + await text('#end-log'));
-  await page.click('#grounds .tick[data-key=says]'); await page.click('#b-adopt'); await hurry(); await until('#end-btns'); await shot('c-end', true);
-  log.push('READBACK C: ' + await text('#read-log'));
+  await page.click('#b-again');
+  await playGame('B', ['sound', 'sound', 'limits', 'limits', 'feel'], (X, Y) => X.length > Y.length ? 'X' : 'Y', false);
+  await page.click('#grounds .tick[data-key=does]'); await page.click('#b-adopt'); await hurry(); await until('#end-btns'); await shot('B-end', true);
+  log.push('B READBACK: ' + await text('#read-log'));
 
   fs.writeFileSync(path.join(__dirname, 'session-log.txt'), log.join('\n') + '\n\nERRORS: ' + (errors.length ? errors.join('\n') : 'none') + '\n');
   console.log(log.join('\n')); console.log('\nERRORS:', errors.length ? errors : 'none');

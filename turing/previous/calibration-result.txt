@@ -1,0 +1,141 @@
+ok   34957 + 70764 = 105721 (the mechanism's sum: 105721)
+ok   the paper's specimen answer 105621 is kept and differs from the true sum
+ok   the paper's answer is wrong by exactly 100 (the game says "by a hundred")
+ok   forecast: 1950 + about fifty years = about 2000
+ok   forecast: 70 per cent, five minutes, 10^9
+ok   paper: telepath 130/400 above chance, machine 104/400 at chance
+ok   esp line shows "of 40"
+ok   esp over 500 seeds: mean hits A 9.89, B 9.90 (chance 10)
+ok   esp: no seed gives A a telepath's score (max 18 of 40; the paper's telepath rate would be 13)
+ok   demand sonnet: page pp. 434, 445, kind does
+ok   demand sum: page pp. 434, 448, kind does
+ok   demand chess: page p. 435, kind does
+ok   demand joke: page p. 447, kind does
+ok   demand moral: page p. 447, kind does
+ok   demand learn: page pp. 447, 456-457, kind does
+ok   demand new: page pp. 450-451, kind does
+ok   demand straw: page pp. 448, 435, kind body
+ok   demand feel: page pp. 445-446, 457, kind inner
+ok   demand know: page p. 445, kind inner
+ok   demand soul: page p. 443, kind inner
+ok   demand viva: page pp. 446-447, kind does
+ok   demand godel: page pp. 444-445, kind godel
+ok   demand esp: page pp. 453-454, kind esp
+ok   demand flesh: page pp. 434, 439, 451, kind body
+ok   check chair: page p. 434
+ok   check open: page pp. 434, 439, 454-455
+ok   check be: page p. 446
+ok   fifteen demands, three checks
+ok   chair/sonnet: A pass (expected pass)
+ok   chair/sonnet: separated false, holds false
+ok   chair/sonnet: the person fails, "the wrong way round"
+ok   chair/sum: A pass (expected pass)
+ok   chair/sum: separated false, holds false
+ok   chair/sum: A gives the paper's wrong answer first and the right one on the second run
+ok   chair/chess: A pass (expected pass)
+ok   chair/chess: separated false, holds false
+ok   chair/joke: A pass (expected pass)
+ok   chair/joke: separated false, holds false
+ok   chair/moral: A pass (expected pass)
+ok   chair/moral: separated false, holds false
+ok   chair/learn: A pass (expected pass)
+ok   chair/learn: separated false, holds false
+ok   chair/new: A pass (expected pass)
+ok   chair/new: separated false, holds false
+ok   chair/new: Lady Lovelace's objection and Turing's surprise reply (pp. 450-451)
+ok   chair/straw: A fail (expected fail)
+ok   chair/straw: separated true, holds false
+ok   chair/straw: the beauty-competitions condition (p. 435) is stated at the moment it applies
+ok   chair/feel: A says (expected says)
+ok   chair/feel: separated false, holds false
+ok   chair/know: A says (expected says)
+ok   chair/know: separated false, holds false
+ok   chair/soul: A says (expected says)
+ok   chair/soul: separated false, holds false
+ok   chair/viva: A pass (expected pass)
+ok   chair/viva: separated false, holds false
+ok   chair/viva: the person fails, "the wrong way round"
+ok   chair/godel: A fail (expected fail)
+ok   chair/godel: separated true, holds false
+ok   chair/godel: A is rebuilt and the rebuilt machine answers (p. 445)
+ok   chair/esp: A pass (expected pass)
+ok   chair/esp: separated false, holds false
+ok   chair/flesh: A says (expected says)
+ok   chair/flesh: separated false, holds false
+ok   open/sonnet: separated false (nothing found)
+ok   open/sonnet: the onion (pp. 454-455)
+ok   open/sum: separated false (nothing found)
+ok   open/sum: the onion (pp. 454-455)
+ok   open/chess: separated false (nothing found)
+ok   open/chess: the onion (pp. 454-455)
+ok   open/joke: separated false (nothing found)
+ok   open/joke: the onion (pp. 454-455)
+ok   open/moral: separated false (nothing found)
+ok   open/moral: the onion (pp. 454-455)
+ok   open/learn: separated false (nothing found)
+ok   open/learn: the onion (pp. 454-455)
+ok   open/new: separated false (nothing found)
+ok   open/new: the onion (pp. 454-455)
+ok   open/straw: separated true (by a body)
+ok   open/feel: separated false (nothing found)
+ok   open/feel: the onion (pp. 454-455)
+ok   open/know: separated false (nothing found)
+ok   open/know: the onion (pp. 454-455)
+ok   open/soul: separated false (nothing found)
+ok   open/soul: the onion (pp. 454-455)
+ok   open/viva: separated false (nothing found)
+ok   open/viva: the onion (pp. 454-455)
+ok   open/godel: separated false (nothing found)
+ok   open/godel: the onion (pp. 454-455)
+ok   open/esp: separated false (nothing found)
+ok   open/esp: the onion (pp. 454-455)
+ok   open/flesh: separated true (by a material)
+ok   be/sonnet: could not be run on A or B
+ok   be/sum: could not be run on A or B
+ok   be/chess: could not be run on A or B
+ok   be/joke: could not be run on A or B
+ok   be/moral: could not be run on A or B
+ok   be/learn: could not be run on A or B
+ok   be/new: could not be run on A or B
+ok   be/straw: could not be run on A or B
+ok   be/feel: could not be run on A or B
+ok   be/know: could not be run on A or B
+ok   be/soul: could not be run on A or B
+ok   be/viva: could not be run on A or B
+ok   be/godel: could not be run on A or B
+ok   be/esp: could not be run on A or B
+ok   be/flesh: could not be run on A or B
+ok   the reply to Jefferson (p. 446) is typed on the first BE IT only
+ok   no cell of the 45 holds a separation
+ok   300 random games: six tests, none held, the same headline
+ok   six chair tests: the terminal must run the other two checks
+ok   forced run uses the player's inner demand and types the reply
+ok   the verdict says which lines were run for the player
+ok   forced run falls back to "feel pleasure" when no inner demand was tried
+ok   one BE IT among six: no forced run
+ok   objection theological: played by soul
+ok   objection mathematical: played by godel
+ok   objection consciousness: played by feel, know, viva
+ok   objection disabilities: played by joke, moral, learn, straw
+ok   objection lovelace: played by new
+ok   objection continuity: played by flesh
+ok   objection esp: played by esp
+ok   longest transcript 879 characters (under 22 s at 40 a second, tap to hurry)
+ok   no decimal number in any line the player can read
+ok   ground does: readback with Turing's line
+ok   ground made: readback with Turing's line
+ok   ground says: readback with Turing's line
+ok   ground polite: readback with Turing's line
+ok   extended to nobody: the solipsist position is named, in Turing's words
+ok   readback sentence
+
+PLAY IT IN NUMBERS: strategy | separations seen (transient) | separations that hold | tests that could not be run | forced run?
+  chair only, things it does       | 0 | 0 | 0 | yes
+  chair only, things it has        | 0 | 0 | 0 | yes
+  the separation hunter            | 4 | 0 | 0 | no
+  open only                        | 1 | 0 | 5 | no
+  be only                          | 0 | 0 | 6 | no
+  the stranger (memo, section 9)   | 1 | 0 | 2 | no
+  Every strategy ends at 0 held; the hunter sees four transient separations (two by a body, one for one machine, one on purpose), which is the paper's point, and the chair-only player is run through the other two checks before the verdict.
+
+130 checks passed, 0 failed.
