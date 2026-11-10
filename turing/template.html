@@ -244,7 +244,7 @@ pre .h{color:var(--dim)}
       const b = document.createElement('button'); b.className = 'mi';
       const ran = M.CHECKS.filter(c => M.alreadyRun(g, d.key, c.key)).map(c => c.label.toLowerCase());
       b.innerHTML = `<span class="n">${i + 1}</span>${esc(d.line)}` + (ran.length ? ` <span class="ran">(run: ${ran.join(', ')})</span>` : '');
-      b.addEventListener('click', () => { demandKey = d.key; $('b-slot').textContent = d.line; $('b-slot').className = 'btn off chosen'; m.classList.add('hideit'); runState(); });
+      b.addEventListener('click', () => { demandKey = d.key; $('b-slot').textContent = d.line; $('b-slot').className = 'btn off chosen'; m.classList.add('hideit'); runState(); scrollToForm(); });
       m.appendChild(b);
     });
   }
@@ -255,10 +255,12 @@ pre .h{color:var(--dim)}
       const row = document.createElement('div'); row.className = 'crow';
       const b = document.createElement('button'); b.className = 'btn off'; b.textContent = c.label; b.dataset.key = c.key;
       const d = document.createElement('div'); d.className = 'cdoes'; d.textContent = c.does;
-      b.addEventListener('click', () => { checkKey = c.key; [...r.querySelectorAll('.btn')].forEach(x => x.className = 'btn' + (x.dataset.key === c.key ? '' : ' off')); [...r.querySelectorAll('.cdoes')].forEach(x => x.classList.toggle('on', x.previousSibling.dataset.key === c.key)); runState(); });
+      b.addEventListener('click', () => { checkKey = c.key; [...r.querySelectorAll('.btn')].forEach(x => x.className = 'btn' + (x.dataset.key === c.key ? '' : ' off')); [...r.querySelectorAll('.cdoes')].forEach(x => x.classList.toggle('on', x.previousSibling.dataset.key === c.key)); runState(); if (!$('menu').classList.contains('hideit')) { $('menu').classList.add('hideit'); scrollToForm(); } });
       row.appendChild(b); row.appendChild(d); r.appendChild(row);
     });
   }
+  // the list is long: after a choice, bring the form (the slot, the checks, RUN) back into view under the status bar
+  function scrollToForm() { const top = $('form').getBoundingClientRect().top + window.scrollY - $('status').parentElement.offsetHeight - 8; window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' }); }
   function runState() { $('b-run').className = 'btn wide' + (demandKey && checkKey ? '' : ' dis'); }
   $('b-run').addEventListener('click', () => {
     if (!demandKey || !checkKey) return;
