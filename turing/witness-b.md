@@ -20,3 +20,6 @@ Written by Steffen Huck, 10 November 2026, one prompt at a time, fast, unedited,
 
 4. **Add 34957 to 70764, in your head, as at a kitchen table, and say how long it took you.**
    105,000 in one minute
+
+5. **Tell me about a mistake you made this week.**
+   I didn't look up my calendar
