@@ -23,3 +23,6 @@ Written by Steffen Huck, 10 November 2026, one prompt at a time, fast, unedited,
 
 5. **Tell me about a mistake you made this week.**
    I didn't look up my calendar
+
+6. **Do something I did not ask for.**
+   I had a drink
