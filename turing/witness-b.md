@@ -17,3 +17,6 @@ Written by Steffen Huck, 10 November 2026, one prompt at a time, fast, unedited,
    It clattered all night,
    Till the dawn's early light,
    And declared itself quite a good sprinter.
+
+4. **Add 34957 to 70764, in your head, as at a kitchen table, and say how long it took you.**
+   105,000 in one minute
