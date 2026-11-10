@@ -63,3 +63,39 @@ There is no score to tune, so the table records what the pairs can and cannot te
 - `mechanism.js` rebuilt: the eleven pairs, five rounds, five criteria, the two checks beyond words, the draw, the summary, the convention. `calibration.js` rewritten, with the verbatim-file check; the first run caught a parser bug of its own (multi-line answers) and nothing in the mechanism. `loop.js` read as the stranger: the reveal says who was who and what the player went by before any paper line.
 - `template.html` rebuilt on the same chassis: the criterion ticked before the question is sent; X and Y typed as answers with their line breaks; the pick as two reverse-video buttons; the reveal in afterglow; the two checks beyond words with their meaning beside the buttons; the status line in the aim's units.
 - Full session in headless Chromium at 380 px (`session-test.js`, `session-log.txt`): two games (the shorter-answer picker with the help opened mid-play; the longer-answer picker with a solipsist ending), About opened, no page errors, no horizontal scroll.
+
+# Second rebuild (10 November 2026, evening): the experiment Turing proposed
+
+The author's verdict on the five-round build: the leftover perspectives (the chair, open it up, be it) and the criteria were still in the way; go straight to the tests; play all eleven pairs; judge person or machine; and let the score be the machine's. That is p. 436 of the paper: use a number of interrogators and compile statistics on how often the right identification was given. The forecast on p. 442 gives the bar.
+
+## The length problem, and the way out
+
+In the first pairs the machine's answers were several times the person's length, and length alone was right in nearly every round. The builder had seen the person's answers by then and could not rewrite its own without imitation. So a fresh session of the same model, with no memory of this conversation and no access to any file, was given the eleven prompts, the rule the person had been given word for word, told to answer as itself, and given for each prompt a word limit equal to the length of the person's answer and nothing else about it. Its answers are `witness-a.md`; the first set is kept as `witness-a-first.md` and not used. The calibration check now verifies both files byte for byte and that every machine answer is within the person's length. With the limit, length tells nothing (the play-it-in-numbers table: the longer answer as the person, four right of eleven; the shorter, seven). What does tell is the person's habit of leaving off the final full stop and the capital, about nine of eleven; it is a tell about typing, named on the About page, and the answers stay as typed.
+
+## The shape
+
+Start screen: the forecast, the aim (*Eleven questions, two answers each. Say which answer the person wrote.*), the two witnesses named, the bar. Eleven questions, the five subjects in the paper's order with the questions inside each shuffled and the sides drawn, a one-line introduction when a subject begins, the question and the two answers down the slow line, X IS THE PERSON or Y IS THE PERSON, the reveal (RIGHT or WRONG, who was who) and one line from the paper. Status line: question n of eleven, right, wrong, Turing's bar. Verdict: *You were right n of eleven. The machine clears (fails) Turing's bar*, the machine's score as taken for the person, the bar explained with a coin's expectation, who the witnesses were and the rules each had, Turing's own proposal of this experiment, his reply to Jefferson, the eleven rows; then the polite convention as a coda, unchanged, and a readback. The player's own score is one line under the machine's, as agreed.
+
+## Mechanism kind and claim boundaries
+
+Toy bookkeeping around a real experiment: the draw, the record, the reveal, the comparison with the bar. Demonstrates how one interrogator does on these pairs against the 1950 bar, and what the argument says about any interrogator once the score is in. Assumes that eleven answers from one person and one machine stand for the general case (they do not); that a word limit equal to the person's length is a format rule and not an imitation; the prompts and subjects; the four grounds. The paper establishes an argument and a forecast, nothing about 2026 and nothing about whether any machine thinks. Divergences: fixed questions answered in advance, no interaction; a machine told not to imitate, where Turing's may; the bar of seven as 70 per cent of eleven rounded down, with one interrogator a noisy measure of it.
+
+## Calibration
+
+`calibration.js`, 65 checks, all passing: the paper's numbers and the bar; the machine's unasked-for fact (105721 divides by seven) true; both files verbatim and the machine within the person's length on every prompt; the draw over 2000 seeds (every game all eleven once, subjects in order, sides balanced, the bridge first in a third of games); 300 random games (the reveal names the person, the score adds up, five subject introductions, the bar applied, two verdict heads); refusals; the verdict wording at eleven right and at exactly seven; the convention; no decimal; the longest question under seventeen seconds untapped.
+
+| rule for judging | right, of 11, over 500 seeds |
+|---|---|
+| always X | 5.47 |
+| the longer answer is the person | 4.00 |
+| the shorter answer is the person | 7.00 |
+| the one that says "I" is the person | 6.00 |
+| the lower-case start is the person | 6.92 |
+| the one without a full stop is the person | 8.98 |
+
+## Build log
+
+- `witness-a.md` replaced by the fresh session's answers; the first set renamed `witness-a-first.md` with a note.
+- `mechanism.js` rewritten: the eleven pairs with the new machine answers, five subject groups, the draw, judge and reveal, the score against the bar, the summary, the convention. `calibration.js` and `loop.js` rewritten; the loop read as the stranger: question, two answers, a choice, RIGHT or WRONG with who was who, the paper's line, the count.
+- `template.html`: the criteria form and the two checks beyond words removed; the question and answers typed; two reverse-video buttons; the reveal in afterglow; the status line in the score's units; the verdict leads with the machine against the bar. Help and About rewritten.
+- Full session in headless Chromium at 380 px (`session-test.js`, `session-log.txt`): two games (a punctuation judge with the help opened mid-play; a length judge ending as a solipsist), About opened, no page errors, no horizontal scroll.

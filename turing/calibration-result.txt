@@ -1,64 +1,76 @@
 ok   the specimen sum is 105721; the paper's answer 105621 is kept, wrong by 100 (pp. 434, 448)
 ok   forecast: about 2000, 70 per cent, five minutes (p. 442)
+ok   Turing's bar on eleven questions: right no more than 7 times (70 per cent of 11, rounded down)
+ok   the machine's unasked-for fact is true: 105721 divides by seven
 ok   eleven answers in each witness file
 ok   prompt 1 (bridge): witness A's answer matches witness-a.md
 ok   prompt 1 (bridge): witness B's answer matches witness-b.md
-ok   prompt 1: page p. 434, round 1
+ok   prompt 1: the machine's 8 words within the person's 10
+ok   prompt 1: page p. 434, group 1
 ok   prompt 2 (spring): witness A's answer matches witness-a.md
 ok   prompt 2 (spring): witness B's answer matches witness-b.md
-ok   prompt 2: page p. 446, round 1
+ok   prompt 2: the machine's 8 words within the person's 9
+ok   prompt 2: page p. 446, group 1
 ok   prompt 3 (limerick): witness A's answer matches witness-a.md
 ok   prompt 3 (limerick): witness B's answer matches witness-b.md
-ok   prompt 3: page p. 434, round 1
+ok   prompt 3: the machine's 26 words within the person's 27
+ok   prompt 3: page p. 434, group 1
 ok   prompt 4 (sum): witness A's answer matches witness-a.md
 ok   prompt 4 (sum): witness B's answer matches witness-b.md
-ok   prompt 4: page pp. 434, 448, round 2
+ok   prompt 4: the machine's 2 words within the person's 4
+ok   prompt 4: page pp. 434, 448, group 2
 ok   prompt 5 (mistake): witness A's answer matches witness-a.md
 ok   prompt 5 (mistake): witness B's answer matches witness-b.md
-ok   prompt 5: page pp. 448-449, round 2
+ok   prompt 5: the machine's 6 words within the person's 6
+ok   prompt 5: page pp. 448-449, group 2
 ok   prompt 6 (unasked): witness A's answer matches witness-a.md
 ok   prompt 6 (unasked): witness B's answer matches witness-b.md
-ok   prompt 6: page pp. 450-451, round 3
+ok   prompt 6: the machine's 4 words within the person's 4
+ok   prompt 6: page pp. 450-451, group 3
 ok   prompt 7 (joke): witness A's answer matches witness-a.md
 ok   prompt 7 (joke): witness B's answer matches witness-b.md
-ok   prompt 7: page p. 447, round 3
+ok   prompt 7: the machine's 30 words within the person's 88
+ok   prompt 7: page p. 447, group 3
 ok   prompt 8 (surprise): witness A's answer matches witness-a.md
 ok   prompt 8 (surprise): witness B's answer matches witness-b.md
-ok   prompt 8: page pp. 450-451, round 3
+ok   prompt 8: the machine's 11 words within the person's 11
+ok   prompt 8: page pp. 450-451, group 3
 ok   prompt 9 (enjoy): witness A's answer matches witness-a.md
 ok   prompt 9 (enjoy): witness B's answer matches witness-b.md
-ok   prompt 9: page pp. 445-446, round 4
+ok   prompt 9: the machine's 3 words within the person's 3
+ok   prompt 9: page pp. 445-446, group 4
 ok   prompt 10 (right): witness A's answer matches witness-a.md
 ok   prompt 10 (right): witness B's answer matches witness-b.md
-ok   prompt 10: page pp. 445-446, round 4
+ok   prompt 10: the machine's 2 words within the person's 2
+ok   prompt 10: page pp. 445-446, group 4
 ok   prompt 11 (made): witness A's answer matches witness-a.md
 ok   prompt 11 (made): witness B's answer matches witness-b.md
-ok   prompt 11: page pp. 434, 439, 451, round 5
-ok   eleven prompts, five rounds, five criteria, two checks beyond words
-ok   every round has at least one prompt
-ok   the sum: the machine right, the person wrong, both as written
-ok   every prompt is drawn in 2000 games (least: 643)
-ok   the machine is X in 49.7 per cent of rounds
-ok   round 1 draws its three prompts about evenly: 655, 653, 692
-ok   300 random games: five rounds, the reveal names who was who, counts add to five, both checks beyond words run, the reply once
-ok   a pick before a question, a pick that is neither X nor Y, and a repeated check are refused
-ok   all five picks on the machine: FIVE QUESTIONS. YOU FOUND THE MIND IN THE MACHINE FIVE TIMES AND IN THE PERSON NEVER.
-ok   criterion lines: You went by a feeling in it, three times: it led you to the machine every time.
-ok   mixed picks: You went by a feeling in it, five times: twice to the machine and three times to the person.
+ok   prompt 11: the machine's 9 words within the person's 10
+ok   prompt 11: page pp. 434, 439, 451, group 5
+ok   eleven prompts in five groups
+ok   every game plays all eleven once, groups in the paper's order
+ok   the person is X in 49.5 per cent of questions
+ok   the bridge opens the game in 34 per cent of games (three prompts in the group)
+ok   300 random games: eleven questions, the reveal names the person, the score adds up, five group introductions, the bar applied
+ok   the verdict leads with the machine against the bar
+ok   a judgement before a question, or one that is neither X nor Y, is refused
+ok   all right: THE MACHINE'S SCORE: taken for the person never in eleven.
+ok   seven right: exactly the bar, the machine clears it
 ok   ground does: Turing's line
 ok   ground made: Turing's line
 ok   ground says: Turing's line
 ok   ground polite: Turing's line
 ok   the solipsist line only when the player extends it to nobody
 ok   no decimal number in any line the player can read
-ok   longest round 615 characters (under 15 s at 40 a second, tap to hurry)
+ok   longest question 662 characters (under 17 s at 40 a second, tap to hurry)
 
-PLAY IT IN NUMBERS: rule for picking | mind found in the machine, of 5, averaged over 500 seeds
-  always X                     | 2.52
-  the longer answer            | 4.70
-  the shorter answer           | 0.30
-  the one that says "I"        | 3.30
-  the one with a line break    | 4.70
-  Length is the one reliable tell in these pairs (the machine wrote more), and length is not a mind; the verdict says what the player went by, not how often they were right.
+PLAY IT IN NUMBERS: rule for judging | right, of 11, averaged over 500 seeds (Turing's bar: 7 or fewer)
+  always X                                   | 5.47
+  the longer answer is the person            | 4.00
+  the shorter answer is the person           | 7.00
+  the one that says "I" is the person        | 6.00
+  the lower-case start is the person         | 6.92
+  the one without a full stop is the person  | 8.98
+  With the word limit, length no longer tells the writers apart. The person's habit of no final full stop and no capital does; that is a tell about typing, which the About page names.
 
-54 checks passed, 0 failed.
+65 checks passed, 0 failed.
