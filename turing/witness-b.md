@@ -34,3 +34,6 @@ Written by Steffen Huck, 10 November 2026, one prompt at a time, fast, unedited,
    They try everything, but somehow the horses always end up looking identical.
    Finally, one man says to the other:
    "Look, why don't you just take the black one, and I'll take the white one?"
+
+8. **Tell me something that surprised you lately.**
+   my capacity to do wrong while I'm trying to do right
