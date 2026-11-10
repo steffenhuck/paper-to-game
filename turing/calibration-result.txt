@@ -48,6 +48,7 @@ ok   prompt 11 (made): witness B's answer matches witness-b.md
 ok   prompt 11: the machine's 9 words within the person's 10
 ok   prompt 11: page pp. 434, 439, 451, group 5
 ok   eleven prompts in five groups
+ok   every answer on both sides ends on a full stop (or a question mark inside a quotation)
 ok   every game plays all eleven once, groups in the paper's order
 ok   the person is X in 49.5 per cent of questions
 ok   the bridge opens the game in 34 per cent of games (three prompts in the group)
@@ -66,11 +67,11 @@ ok   longest question 662 characters (under 17 s at 40 a second, tap to hurry)
 
 PLAY IT IN NUMBERS: rule for judging | right, of 11, averaged over 500 seeds (Turing's bar: 7 or fewer)
   always X                                   | 5.47
-  the longer answer is the person            | 4.00
-  the shorter answer is the person           | 7.00
+  the longer answer is the person            | 4.47
+  the shorter answer is the person           | 6.47
   the one that says "I" is the person        | 6.00
   the lower-case start is the person         | 6.92
-  the one without a full stop is the person  | 8.98
-  With the word limit, length no longer tells the writers apart. The person's habit of no final full stop and no capital does; that is a tell about typing, which the About page names.
+  the one without a full stop is the person  | 4.95
+  With the word limit, length no longer tells the writers apart, and with the final full stops added, punctuation does not either; the lower-case start is what is left, which the About page names.
 
-65 checks passed, 0 failed.
+66 checks passed, 0 failed.
