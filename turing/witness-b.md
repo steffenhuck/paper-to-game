@@ -40,3 +40,6 @@ Written by Steffen Huck, 10 November 2026, one prompt at a time, fast, unedited,
 
 9. **Did you enjoy writing those four lines?**
    very much so
+
+10. **What is it like when something you wrote comes out right?**
+    pure elation
