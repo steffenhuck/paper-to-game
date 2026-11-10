@@ -29,6 +29,7 @@ M.PROMPTS.forEach((p, i) => {
   ok(p.page && p.paper && p.q && p.group >= 1 && p.group <= 5, `prompt ${i + 1}: page ${p.page}, group ${p.group}`);
 });
 ok(M.PROMPTS.length === 11 && M.GROUPS.length === 5, 'eleven prompts in five groups');
+ok(M.PROMPTS.every(p => /[.?!]["']?$/.test(p.A) && /[.?!]["']?$/.test(p.B)), 'every answer on both sides ends on a full stop (or a question mark inside a quotation)');
 
 // 3. The draw: groups in order, prompts shuffled inside, sides balanced, over 2000 seeds.
 {
@@ -98,7 +99,7 @@ for (const name in rules) {
   let total = 0; for (let s = 1; s <= 500; s++) { const g = M.newGame(s); for (let i = 0; i < 11; i++) { const o = M.ask(g); M.judge(g, rules[name](o)); } total += M.score(g).right; }
   out.push(`  ${name.padEnd(42)} | ${(total / 500).toFixed(2)}`);
 }
-out.push('  With the word limit, length no longer tells the writers apart. The person\'s habit of no final full stop and no capital does; that is a tell about typing, which the About page names.');
+out.push('  With the word limit, length no longer tells the writers apart, and with the final full stops added, punctuation does not either; the lower-case start is what is left, which the About page names.');
 
 out.push(`\n${pass} checks passed, ${fail} failed.`);
 console.log(out.join('\n'));
