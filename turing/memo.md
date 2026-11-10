@@ -70,7 +70,7 @@ The author's verdict on the five-round build: the leftover perspectives (the cha
 
 ## The length problem, and the way out
 
-In the first pairs the machine's answers were several times the person's length, and length alone was right in nearly every round. The builder had seen the person's answers by then and could not rewrite its own without imitation. So a fresh session of the same model, with no memory of this conversation and no access to any file, was given the eleven prompts, the rule the person had been given word for word, told to answer as itself, and given for each prompt a word limit equal to the length of the person's answer and nothing else about it. Its answers are `witness-a.md`; the first set is kept as `witness-a-first.md` and not used. The calibration check now verifies both files byte for byte and that every machine answer is within the person's length. With the limit, length tells nothing (the play-it-in-numbers table: the longer answer as the person, four right of eleven; the shorter, seven). What did tell was the person's habit of leaving off the final full stop, about nine of eleven; at the author's request a final full stop was then added to every answer that lacked one, on both sides (the only edit to either file, recorded in both), after which punctuation tells nothing and the lower-case start, about seven of eleven, is what is left, named on the About page.
+In the first pairs the machine's answers were several times the person's length, and length alone was right in nearly every round. The builder had seen the person's answers by then and could not rewrite its own without imitation. So a fresh session of the same model, with no memory of this conversation and no access to any file, was given the eleven prompts, the rule the person had been given word for word, told to answer as itself, and given for each prompt a word limit equal to the length of the person's answer and nothing else about it. Its answers are `witness-a.md`; the first set is kept as `witness-a-first.md` and not used. The calibration check now verifies both files byte for byte and that every machine answer is within the person's length. With the limit, length tells nothing (the play-it-in-numbers table: the longer answer as the person, four right of eleven; the shorter, seven). What did tell was the person's habit of leaving off the final full stop, about nine of eleven; at the author's request a final full stop was then added to every answer that lacked one, on both sides (the only edit to either file, recorded in both), and then capitalisation was harmonised the same way (a capital to start, no stray capitals, spelling checked, no word changed), after which no rule of typing beats a coin by much.
 
 ## The shape
 
@@ -90,7 +90,7 @@ Toy bookkeeping around a real experiment: the draw, the record, the reveal, the 
 | the longer answer is the person | 4.00 |
 | the shorter answer is the person | 7.00 |
 | the one that says "I" is the person | 6.00 |
-| the lower-case start is the person | 6.92 |
+| the lower-case start is the person | 5.47 (after capitals were harmonised) |
 | the one without a full stop is the person | 4.95 (after the full stops were added) |
 
 ## Build log
@@ -98,5 +98,5 @@ Toy bookkeeping around a real experiment: the draw, the record, the reveal, the 
 - `witness-a.md` replaced by the fresh session's answers; the first set renamed `witness-a-first.md` with a note.
 - `mechanism.js` rewritten: the eleven pairs with the new machine answers, five subject groups, the draw, judge and reveal, the score against the bar, the summary, the convention. `calibration.js` and `loop.js` rewritten; the loop read as the stranger: question, two answers, a choice, RIGHT or WRONG with who was who, the paper's line, the count.
 - `template.html`: the criteria form and the two checks beyond words removed; the question and answers typed; two reverse-video buttons; the reveal in afterglow; the status line in the score's units; the verdict leads with the machine against the bar. Help and About rewritten.
-- The final full stops added on both sides; the calibration check gained a rule for it; the witness files record the edit.
+- The final full stops added on both sides, then capitalisation harmonised and spelling checked; the calibration check gained a rule for each; the witness files record the edits.
 - Full session in headless Chromium at 380 px (`session-test.js`, `session-log.txt`): two games (a punctuation judge with the help opened mid-play; a length judge ending as a solipsist), About opened, no page errors, no horizontal scroll.

@@ -30,6 +30,7 @@ M.PROMPTS.forEach((p, i) => {
 });
 ok(M.PROMPTS.length === 11 && M.GROUPS.length === 5, 'eleven prompts in five groups');
 ok(M.PROMPTS.every(p => /[.?!]["']?$/.test(p.A) && /[.?!]["']?$/.test(p.B)), 'every answer on both sides ends on a full stop (or a question mark inside a quotation)');
+ok(M.PROMPTS.every(p => /^[A-Z0-9"]/.test(p.A) && /^[A-Z0-9"]/.test(p.B)), 'every answer on both sides starts with a capital letter, a digit or a quotation mark');
 
 // 3. The draw: groups in order, prompts shuffled inside, sides balanced, over 2000 seeds.
 {
@@ -99,7 +100,7 @@ for (const name in rules) {
   let total = 0; for (let s = 1; s <= 500; s++) { const g = M.newGame(s); for (let i = 0; i < 11; i++) { const o = M.ask(g); M.judge(g, rules[name](o)); } total += M.score(g).right; }
   out.push(`  ${name.padEnd(42)} | ${(total / 500).toFixed(2)}`);
 }
-out.push('  With the word limit, length no longer tells the writers apart, and with the final full stops added, punctuation does not either; the lower-case start is what is left, which the About page names.');
+out.push('  With the word limit, length no longer tells the writers apart; with punctuation and capitals harmonised, neither does typing. None of these rules beats a coin by much.');
 
 out.push(`\n${pass} checks passed, ${fail} failed.`);
 console.log(out.join('\n'));

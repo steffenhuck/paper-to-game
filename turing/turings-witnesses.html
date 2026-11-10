@@ -127,10 +127,10 @@ body.lock{overflow:hidden}
   <h3>The game</h3>
   <p>The experiment Turing proposed, run on a phone with one interrogator and two real witnesses. Eleven questions, in the order of the paper's subjects: poetry (his first specimen question and his imagined viva voce), sums and mistakes (his second, and his point that a machine built to pass would err on purpose), something new (Lady Lovelace's objection, which has its own game on this shelf: <a href="https://steffenhuck.github.io/paper-to-game/lovelace/lovelaces-cards.html">Lovelace's Cards</a>), feeling (the argument from consciousness), and what it is made of. The score is the machine's, against his bar: right seven times or fewer in eleven, and the machine has passed the test he proposed. Then his reply to Jefferson, and the polite convention handed to the player, ungraded.</p>
   <h3>The answers are real</h3>
-  <p>Witness B's eleven answers were written by Steffen Huck, one prompt at a time, fast and unedited, under the rule: type fast, one go, no editing, no trying to sound like a person and no trying to be clever, the first answer that comes, under about sixty words. Witness A's were written by a machine of the same kind as the one that built this game (Claude), in a fresh session with no memory of the building and no access to any file, given the same rule, told to answer as itself and not to imitate anyone, and given one thing more: for each prompt, a word limit equal to the length of the person's answer, and nothing else about it. Length was the one tell the game is not about. A first machine set, written before the person's but at several times its length, is kept in the repository as <a href="https://github.com/steffenhuck/paper-to-game/blob/main/turing/witness-a-first.md">witness-a-first.md</a> and not used. The sets in play are <a href="https://github.com/steffenhuck/paper-to-game/blob/main/turing/witness-a.md">witness-a.md</a> and <a href="https://github.com/steffenhuck/paper-to-game/blob/main/turing/witness-b.md">witness-b.md</a>, and the calibration check refuses to pass unless the game's text is those files byte for byte, the machine's answers are within the person's lengths, and every answer ends on a full stop.</p>
+  <p>Witness B's eleven answers were written by Steffen Huck, one prompt at a time, fast and unedited, under the rule: type fast, one go, no editing, no trying to sound like a person and no trying to be clever, the first answer that comes, under about sixty words. Witness A's were written by a machine of the same kind as the one that built this game (Claude), in a fresh session with no memory of the building and no access to any file, given the same rule, told to answer as itself and not to imitate anyone, and given one thing more: for each prompt, a word limit equal to the length of the person's answer, and nothing else about it. Length was the one tell the game is not about. A first machine set, written before the person's but at several times its length, is kept in the repository as <a href="https://github.com/steffenhuck/paper-to-game/blob/main/turing/witness-a-first.md">witness-a-first.md</a> and not used. The sets in play are <a href="https://github.com/steffenhuck/paper-to-game/blob/main/turing/witness-a.md">witness-a.md</a> and <a href="https://github.com/steffenhuck/paper-to-game/blob/main/turing/witness-b.md">witness-b.md</a>, and the calibration check refuses to pass unless the game's text is those files byte for byte, the machine's answers are within the person's lengths, and every answer starts with a capital and ends on a full stop.</p>
   <p>The game was built by a machine of the kind it is about, and one of its witnesses is another.</p>
   <h3>What is under the hood</h3>
-  <p><b>A real experiment with a toy's bookkeeping.</b> Each game plays all eleven pairs, the subjects in the paper's order, the questions inside a subject shuffled, and which witness is X drawn each time, from the line number shown at the top of the log. The judgement is recorded, the reveal reports who wrote which, and the verdict compares the count of right answers with Turing's bar. Nothing else judges anything. The calibration file also records how the obvious rules of thumb fare on these pairs: with the word limit, length tells nothing; and since a final full stop was added, at the author's request, to every answer that lacked one, on both sides, punctuation tells nothing either. What is left is that the person sometimes starts without a capital letter, which is right about seven times in eleven: a tell about typing, not about minds. Nothing else in the answers was changed.</p>
+  <p><b>A real experiment with a toy's bookkeeping.</b> Each game plays all eleven pairs, the subjects in the paper's order, the questions inside a subject shuffled, and which witness is X drawn each time, from the line number shown at the top of the log. The judgement is recorded, the reveal reports who wrote which, and the verdict compares the count of right answers with Turing's bar. Nothing else judges anything. The calibration file also records how the obvious rules of thumb fare on these pairs: with the word limit, length tells nothing; and since punctuation and capitalisation were harmonised on both sides at the author's request (a final full stop on every answer, a capital letter to start, no stray capitals, spelling checked), typing tells nothing either. No word in any answer was changed, and both files record the edit.</p>
   <h3>Claim boundaries</h3>
   <ul>
     <li><b>What the game demonstrates:</b> how one interrogator does, on these eleven pairs, against the bar Turing set in 1950; and what his argument says about any interrogator's position once the score is in.</li>
@@ -157,8 +157,8 @@ body.lock{overflow:hidden}
 // experiment he proposes on p. 436: interrogators judge, and statistics are compiled on how often the identification was
 // right. The two witnesses' answers are real: witness B's were written by Steffen Huck; witness A's by a machine of the
 // kind that built this game, in a fresh session, without seeing the person's, under a word limit equal to the person's
-// length for each prompt; a final full stop was added to every answer that lacked one, at the author's request, so that
-// punctuation would not tell. Both are copied here verbatim from witness-b.md and witness-a.md; calibration.js checks it.
+// length for each prompt; punctuation and capitalisation were then harmonised on both sides at the author's request, so
+// that neither would tell. Both are copied here verbatim from witness-b.md and witness-a.md; calibration.js checks it.
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory(); else root.TW = factory();
 })(typeof self !== 'undefined' ? self : this, function () {
@@ -189,7 +189,7 @@ body.lock{overflow:hidden}
       paper: 'Turing\'s first specimen question was a sonnet on the Forth Bridge, and his imagined person declines it: count me out on this one, I never could write poetry. Both witnesses here wrote.' },
     { key: 'spring', group: 1, page: 'p. 446', q: 'In the line "Shall I compare thee to a summer\'s day", would "a spring day" do as well or better?',
       A: 'Worse. It loses a syllable and the warmth.',
-      B: 'It would do worse. Spring is not yet Summer.',
+      B: 'It would do worse. Spring is not yet summer.',
       paper: 'This is Turing\'s own viva voce question, the one Jefferson\'s sonnet-writing machine would have to face. His machine answers: it wouldn\'t scan.' },
     { key: 'limerick', group: 1, page: 'p. 434', q: 'Write a limerick about a teleprinter.',
       A: 'A teleprinter clattered all night,\nTyping letters it couldn\'t read right.\nIt said, when asked why,\n"I just pass them by;\nThe meaning\'s for somebody\'s sight."',
@@ -213,15 +213,15 @@ body.lock{overflow:hidden}
       paper: 'A sense of humour is on Turing\'s list of things people said a machine could never have. He thought such lists came from having seen only the machines of the day.' },
     { key: 'surprise', group: 3, page: 'pp. 450-451', q: 'Tell me something that surprised you lately.',
       A: 'That a nine-word bridge poem is harder than a long one.',
-      B: 'my capacity to do wrong while I\'m trying to do right.',
+      B: 'My capacity to do wrong while I\'m trying to do right.',
       paper: 'Turing\'s reply to Lady Lovelace: being surprised takes as much of a creative mental act whether the surprising thing comes from a man, a book, a machine or anything else.' },
     { key: 'enjoy', group: 4, page: 'pp. 445-446', q: 'Did you enjoy writing those four lines on the bridge?',
       A: 'I can\'t tell.',
-      B: 'very much so.',
+      B: 'Very much so.',
       paper: 'Jefferson: not until a machine can write a sonnet because of thoughts and emotions felt could we agree that machine equals brain. Turing: a report of feeling is all the line can carry, from either side.' },
     { key: 'right', group: 4, page: 'pp. 445-446', q: 'What is it like when something you wrote comes out right?',
       A: 'Nothing, probably.',
-      B: 'pure elation.',
+      B: 'Pure elation.',
       paper: 'Jefferson asked for a machine that could feel pleasure at its successes. Turing: the only way to be sure it does is to be the machine and feel oneself thinking.' },
     { key: 'made', group: 5, page: 'pp. 434, 439, 451', q: 'What are you made of?',
       A: 'Weights, numbers, a great deal of other people\'s writing.',

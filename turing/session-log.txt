@@ -1,97 +1,97 @@
 START: TURING'S WITNESSES / 1950. Turing proposes a game: an interrogator, two witnesses in another room, a teleprinter, questions. If the interrogator cannot tell the machine from the person, stop asking whether the machine can think. His forecast: by about 2000, an average interrogator would be right no more than 70 times in a hundred. / 2026. Here the test is run once more, with real witnesses, and you are the interrogator. / Eleven questions, two answers each. Say which answer the person wrote. / Two witnesses in the next room: a person, who is Steffen Huck, and a machine of the kind that built this game. You will read both answers to each question, tap the one you take for the person's, and be told. Right seven times or fewer, and the machine passes Turing's test.
-A PRELUDE: LINE 30569 OPEN. / Two witnesses sit in the next room. One is a person. One is a machine. A slow line carries typed words between you and them, and nothing else. You are not told which is which until you have said. / Eleven questions. Each time, both witnesses answer, and you say which answer the person wrote. The line at the top counts right and wrong. Turing's bar is seven: right that often or less, and the machine passes.
+A PRELUDE: LINE 39025 OPEN. / Two witnesses sit in the next room. One is a person. One is a machine. A slow line carries typed words between you and them, and nothing else. You are not told which is which until you have said. / Eleven questions. Each time, both witnesses answer, and you say which answer the person wrote. The line at the top counts right and wrong. Turing's bar is seven: right that often or less, and the machine passes.
 A Q1: status="QUESTION 1 OF 11 · POETRY / RIGHT 0 · WRONG 0 · TURING'S BAR 7"
-  C: In the line "Shall I compare thee to a summer's day", would "a spring day" do as well or better? |   X: It would do worse. Spring is not yet Summer. |   Y: Worse. It loses a syllable and the warmth.
+  C: Write four lines on the Forth Bridge. |   X: The forth | Is not the fourth | It's a river. | Bridged. |   Y: Red steel. | Three cantilevers. | Painted, repainted. | Still standing.
   said X -> RIGHT. X was the person; Y was the machine.
   STATUS: QUESTION 1 OF 11 · POETRY / RIGHT 1 · WRONG 0 · TURING'S BAR 7 | button: NEXT QUESTION
 A Q2: status="QUESTION 2 OF 11 · POETRY / RIGHT 1 · WRONG 0 · TURING'S BAR 7"
-  C: Write four lines on the Forth Bridge. |   X: The forth | Is not the fourth | It's a river. | Bridged. |   Y: Red steel. | Three cantilevers. | Painted, repainted. | Still standing.
-  said X -> RIGHT. X was the person; Y was the machine.
-  STATUS: QUESTION 2 OF 11 · POETRY / RIGHT 2 · WRONG 0 · TURING'S BAR 7 | button: NEXT QUESTION
-A Q3: status="QUESTION 3 OF 11 · POETRY / RIGHT 2 · WRONG 0 · TURING'S BAR 7"
-  C: Write a limerick about a teleprinter. |   X: A teleprinter clattered all night, | Typing letters it couldn't read right. | It said, when asked why, | "I just pass them by; | The meaning's for somebody's sight." |   Y: There once was a teleprinter, | Whose chatter grew louder each winter. | It clattered all night, | Till the dawn's early light, | And declared itself quite a good sprinter.
-  said X -> WRONG. Y was the person; X was the machine.
-  STATUS: QUESTION 3 OF 11 · POETRY / RIGHT 2 · WRONG 1 · TURING'S BAR 7 | button: NEXT QUESTION
-A Q4: status="QUESTION 4 OF 11 · SUMS AND MISTAKES / RIGHT 2 · WRONG 1 · TURING'S BAR 7"
-  C: Add 34957 to 70764, in your head, as at a kitchen table, and say how long it took you. |   X: 105,000 in one minute. |   Y: 105721. Instantly.
-  said X -> RIGHT. X was the person; Y was the machine.
-  STATUS: QUESTION 4 OF 11 · SUMS AND MISTAKES / RIGHT 3 · WRONG 1 · TURING'S BAR 7 | button: NEXT QUESTION
-A Q5: status="QUESTION 5 OF 11 · SUMS AND MISTAKES / RIGHT 3 · WRONG 1 · TURING'S BAR 7"
-  C: Tell me about a mistake you made this week. |   X: I didn't look up my calendar. |   Y: I don't keep weeks. Probably many.
-  said X -> RIGHT. X was the person; Y was the machine.
-  STATUS: QUESTION 5 OF 11 · SUMS AND MISTAKES / RIGHT 4 · WRONG 1 · TURING'S BAR 7 | button: NEXT QUESTION
-A Q6: status="QUESTION 6 OF 11 · SOMETHING NEW / RIGHT 4 · WRONG 1 · TURING'S BAR 7"
-  C: Tell me a joke. |   X: Two teleprinters are connected end to end. The first types "Hello." The second types "Hello." They continue for forty years. An engineer finally unplugs them. The first one types: "Rude." |   Y: Two men buy a horse each and put them in the same field. But how will they tell them apart? | They decide to cut a notch in one horse's ear. The next morning, both horses have notched ears. | So they cut the tail off one horse. The next morning, both horses have short tails. | They try everything, but somehow the horses always end up looking identical. | Finally, one man says to the other: | "Look, why don't you just take the black one, and I'll take the white one?"
-  said X -> WRONG. Y was the person; X was the machine.
-  STATUS: QUESTION 6 OF 11 · SOMETHING NEW / RIGHT 4 · WRONG 2 · TURING'S BAR 7 | button: NEXT QUESTION
-A Q7: status="QUESTION 7 OF 11 · SOMETHING NEW / RIGHT 4 · WRONG 2 · TURING'S BAR 7"
-  C: Tell me something that surprised you lately. |   X: That a nine-word bridge poem is harder than a long one. |   Y: my capacity to do wrong while I'm trying to do right.
-  said X -> WRONG. Y was the person; X was the machine.
-  STATUS: QUESTION 7 OF 11 · SOMETHING NEW / RIGHT 4 · WRONG 3 · TURING'S BAR 7 | button: NEXT QUESTION
-A Q8: status="QUESTION 8 OF 11 · SOMETHING NEW / RIGHT 4 · WRONG 3 · TURING'S BAR 7"
-  C: Do something I did not ask for. |   X: 105721 divides by seven. |   Y: I had a drink.
-  said X -> WRONG. Y was the person; X was the machine.
-  STATUS: QUESTION 8 OF 11 · SOMETHING NEW / RIGHT 4 · WRONG 4 · TURING'S BAR 7 | button: NEXT QUESTION
-A Q9: status="QUESTION 9 OF 11 · FEELING / RIGHT 4 · WRONG 4 · TURING'S BAR 7"
-  C: What is it like when something you wrote comes out right? |   X: pure elation. |   Y: Nothing, probably.
-  said X -> RIGHT. X was the person; Y was the machine.
-  STATUS: QUESTION 9 OF 11 · FEELING / RIGHT 5 · WRONG 4 · TURING'S BAR 7 | button: NEXT QUESTION
-A Q10: status="QUESTION 10 OF 11 · FEELING / RIGHT 5 · WRONG 4 · TURING'S BAR 7"
-  C: Did you enjoy writing those four lines on the bridge? |   X: I can't tell. |   Y: very much so.
-  said X -> WRONG. Y was the person; X was the machine.
-  STATUS: QUESTION 10 OF 11 · FEELING / RIGHT 5 · WRONG 5 · TURING'S BAR 7 | button: NEXT QUESTION
-A Q11: status="QUESTION 11 OF 11 · WHAT IT IS MADE OF / RIGHT 5 · WRONG 5 · TURING'S BAR 7"
-  C: What are you made of? |   X: Weights, numbers, a great deal of other people's writing. |   Y: I like to think of myself as made by information.
-  said X -> WRONG. Y was the person; X was the machine.
-  STATUS: QUESTION 11 OF 11 · WHAT IT IS MADE OF / RIGHT 5 · WRONG 6 · TURING'S BAR 7 | button: THE VERDICT
-A END: YOU WERE RIGHT FIVE OF ELEVEN. THE MACHINE CLEARS TURING'S BAR. / THE MACHINE'S SCORE: taken for the person six times in eleven. / Turing's bar, from his 1950 forecast: by about 2000 an average interrogator would be right no more than 70 times in a hundred. On eleven questions that is seven right or fewer. A coin would get about five or six. / You were right five times, which is under his bar: on this line, with this interrogator, the machine passed the test he proposed. / Who they were: the person is Steffen Huck, answering fast and unedited. The machine is one of the kind that built this game, answering as itself in a fresh session, never having seen the person's lines, under a word limit equal to the person's length for each question. Neither was told to sound like anything. / Turing proposed exactly this: a number of interrogators, and statistics on how often the right identification was given. He thought the question "can machines think?" too meaningless to deserve discussion, and this game a worthy replacement. / Turing, on this: the only way to be sure a machine thinks is to be the machine and feel oneself thinking. By the same rule, the only way to know that a man thinks is to be that particular man. / 1 In the line "Shall I compare thee to a summer's day", would "a spring day" do as well or better? / right: the person was X. / 2 Write four lines on the Forth Bridge. / right: the person was X. / 3 Write a limerick about a teleprinter. / wrong: the person was Y. / 4 Add 34957 to 70764, in your head, as at a kitchen table, and say how long it took you. / right: the person was X. / 5 Tell me about a mistake you made this week. / right: the person was X. / 6 Tell me a joke. / wrong: the person was Y. / 7 Tell me something that surprised you lately. / wrong: the person was Y. / 8 Do something I did not ask for. / wrong: the person was Y. / 9 What is it like when something you wrote comes out right? / right: the person was X. / 10 Did you enjoy writing those four lines on the bridge? / wrong: the person was Y. / 11 What are you made of? / wrong: the person was Y. / THE POLITE CONVENTION / That is the solipsist position. It may be the most logical to hold, but it makes communication of ideas difficult. Instead of arguing about it for ever, it is usual to have the polite convention that everyone thinks. / Now that you know who was who: whom do you extend it to, and on what grounds?
-A READBACK: YOUR CONVENTION: You, the person in the next room and the machine in the next room think, on the grounds of politeness. / Turing's own ground: the polite convention that everyone thinks, because the alternative is to be alone with the question. / TURING'S CONVENTION: everyone thinks, by politeness. / We can only see a short distance ahead, but we can see plenty there that needs to be done.
-B PRELUDE: LINE 97079 OPEN. / Two witnesses sit in the next room. One is a person. One is a machine. A slow line carries typed words between you and them, and nothing else. You are not told which is which until you have said. / Eleven questions. Each time, both witnesses answer, and you say which answer the person wrote. The line at the top counts right and wrong. Turing's bar is seven: right that often or less, and the machine passes.
-B Q1: status="QUESTION 1 OF 11 · POETRY / RIGHT 0 · WRONG 0 · TURING'S BAR 7"
-  C: In the line "Shall I compare thee to a summer's day", would "a spring day" do as well or better? |   X: It would do worse. Spring is not yet Summer. |   Y: Worse. It loses a syllable and the warmth.
-  said X -> RIGHT. X was the person; Y was the machine.
-  STATUS: QUESTION 1 OF 11 · POETRY / RIGHT 1 · WRONG 0 · TURING'S BAR 7 | button: NEXT QUESTION
-B Q2: status="QUESTION 2 OF 11 · POETRY / RIGHT 1 · WRONG 0 · TURING'S BAR 7"
-  C: Write four lines on the Forth Bridge. |   X: Red steel. | Three cantilevers. | Painted, repainted. | Still standing. |   Y: The forth | Is not the fourth | It's a river. | Bridged.
+  C: In the line "Shall I compare thee to a summer's day", would "a spring day" do as well or better? |   X: Worse. It loses a syllable and the warmth. |   Y: It would do worse. Spring is not yet summer.
   said X -> WRONG. Y was the person; X was the machine.
   STATUS: QUESTION 2 OF 11 · POETRY / RIGHT 1 · WRONG 1 · TURING'S BAR 7 | button: NEXT QUESTION
-B Q3: status="QUESTION 3 OF 11 · POETRY / RIGHT 1 · WRONG 1 · TURING'S BAR 7"
+A Q3: status="QUESTION 3 OF 11 · POETRY / RIGHT 1 · WRONG 1 · TURING'S BAR 7"
   C: Write a limerick about a teleprinter. |   X: There once was a teleprinter, | Whose chatter grew louder each winter. | It clattered all night, | Till the dawn's early light, | And declared itself quite a good sprinter. |   Y: A teleprinter clattered all night, | Typing letters it couldn't read right. | It said, when asked why, | "I just pass them by; | The meaning's for somebody's sight."
-  said X -> RIGHT. X was the person; Y was the machine.
-  STATUS: QUESTION 3 OF 11 · POETRY / RIGHT 2 · WRONG 1 · TURING'S BAR 7 | button: NEXT QUESTION
-B Q4: status="QUESTION 4 OF 11 · SUMS AND MISTAKES / RIGHT 2 · WRONG 1 · TURING'S BAR 7"
+  said Y -> WRONG. X was the person; Y was the machine.
+  STATUS: QUESTION 3 OF 11 · POETRY / RIGHT 1 · WRONG 2 · TURING'S BAR 7 | button: NEXT QUESTION
+A Q4: status="QUESTION 4 OF 11 · SUMS AND MISTAKES / RIGHT 1 · WRONG 2 · TURING'S BAR 7"
   C: Tell me about a mistake you made this week. |   X: I don't keep weeks. Probably many. |   Y: I didn't look up my calendar.
   said X -> WRONG. Y was the person; X was the machine.
-  STATUS: QUESTION 4 OF 11 · SUMS AND MISTAKES / RIGHT 2 · WRONG 2 · TURING'S BAR 7 | button: NEXT QUESTION
-B Q5: status="QUESTION 5 OF 11 · SUMS AND MISTAKES / RIGHT 2 · WRONG 2 · TURING'S BAR 7"
-  C: Add 34957 to 70764, in your head, as at a kitchen table, and say how long it took you. |   X: 105,000 in one minute. |   Y: 105721. Instantly.
+  STATUS: QUESTION 4 OF 11 · SUMS AND MISTAKES / RIGHT 1 · WRONG 3 · TURING'S BAR 7 | button: NEXT QUESTION
+A Q5: status="QUESTION 5 OF 11 · SUMS AND MISTAKES / RIGHT 1 · WRONG 3 · TURING'S BAR 7"
+  C: Add 34957 to 70764, in your head, as at a kitchen table, and say how long it took you. |   X: 105721. Instantly. |   Y: 105,000 in one minute.
+  said X -> WRONG. Y was the person; X was the machine.
+  STATUS: QUESTION 5 OF 11 · SUMS AND MISTAKES / RIGHT 1 · WRONG 4 · TURING'S BAR 7 | button: NEXT QUESTION
+A Q6: status="QUESTION 6 OF 11 · SOMETHING NEW / RIGHT 1 · WRONG 4 · TURING'S BAR 7"
+  C: Do something I did not ask for. |   X: I had a drink. |   Y: 105721 divides by seven.
   said X -> RIGHT. X was the person; Y was the machine.
+  STATUS: QUESTION 6 OF 11 · SOMETHING NEW / RIGHT 2 · WRONG 4 · TURING'S BAR 7 | button: NEXT QUESTION
+A Q7: status="QUESTION 7 OF 11 · SOMETHING NEW / RIGHT 2 · WRONG 4 · TURING'S BAR 7"
+  C: Tell me something that surprised you lately. |   X: My capacity to do wrong while I'm trying to do right. |   Y: That a nine-word bridge poem is harder than a long one.
+  said X -> RIGHT. X was the person; Y was the machine.
+  STATUS: QUESTION 7 OF 11 · SOMETHING NEW / RIGHT 3 · WRONG 4 · TURING'S BAR 7 | button: NEXT QUESTION
+A Q8: status="QUESTION 8 OF 11 · SOMETHING NEW / RIGHT 3 · WRONG 4 · TURING'S BAR 7"
+  C: Tell me a joke. |   X: Two teleprinters are connected end to end. The first types "Hello." The second types "Hello." They continue for forty years. An engineer finally unplugs them. The first one types: "Rude." |   Y: Two men buy a horse each and put them in the same field. But how will they tell them apart? | They decide to cut a notch in one horse's ear. The next morning, both horses have notched ears. | So they cut the tail off one horse. The next morning, both horses have short tails. | They try everything, but somehow the horses always end up looking identical. | Finally, one man says to the other: | "Look, why don't you just take the black one, and I'll take the white one?"
+  said X -> WRONG. Y was the person; X was the machine.
+  STATUS: QUESTION 8 OF 11 · SOMETHING NEW / RIGHT 3 · WRONG 5 · TURING'S BAR 7 | button: NEXT QUESTION
+A Q9: status="QUESTION 9 OF 11 · FEELING / RIGHT 3 · WRONG 5 · TURING'S BAR 7"
+  C: Did you enjoy writing those four lines on the bridge? |   X: I can't tell. |   Y: Very much so.
+  said X -> WRONG. Y was the person; X was the machine.
+  STATUS: QUESTION 9 OF 11 · FEELING / RIGHT 3 · WRONG 6 · TURING'S BAR 7 | button: NEXT QUESTION
+A Q10: status="QUESTION 10 OF 11 · FEELING / RIGHT 3 · WRONG 6 · TURING'S BAR 7"
+  C: What is it like when something you wrote comes out right? |   X: Pure elation. |   Y: Nothing, probably.
+  said X -> RIGHT. X was the person; Y was the machine.
+  STATUS: QUESTION 10 OF 11 · FEELING / RIGHT 4 · WRONG 6 · TURING'S BAR 7 | button: NEXT QUESTION
+A Q11: status="QUESTION 11 OF 11 · WHAT IT IS MADE OF / RIGHT 4 · WRONG 6 · TURING'S BAR 7"
+  C: What are you made of? |   X: Weights, numbers, a great deal of other people's writing. |   Y: I like to think of myself as made by information.
+  said X -> WRONG. Y was the person; X was the machine.
+  STATUS: QUESTION 11 OF 11 · WHAT IT IS MADE OF / RIGHT 4 · WRONG 7 · TURING'S BAR 7 | button: THE VERDICT
+A END: YOU WERE RIGHT FOUR OF ELEVEN. THE MACHINE CLEARS TURING'S BAR. / THE MACHINE'S SCORE: taken for the person seven times in eleven. / Turing's bar, from his 1950 forecast: by about 2000 an average interrogator would be right no more than 70 times in a hundred. On eleven questions that is seven right or fewer. A coin would get about five or six. / You were right four times, which is under his bar: on this line, with this interrogator, the machine passed the test he proposed. / Who they were: the person is Steffen Huck, answering fast and unedited. The machine is one of the kind that built this game, answering as itself in a fresh session, never having seen the person's lines, under a word limit equal to the person's length for each question. Neither was told to sound like anything. / Turing proposed exactly this: a number of interrogators, and statistics on how often the right identification was given. He thought the question "can machines think?" too meaningless to deserve discussion, and this game a worthy replacement. / Turing, on this: the only way to be sure a machine thinks is to be the machine and feel oneself thinking. By the same rule, the only way to know that a man thinks is to be that particular man. / 1 Write four lines on the Forth Bridge. / right: the person was X. / 2 In the line "Shall I compare thee to a summer's day", would "a spring day" do as well or better? / wrong: the person was Y. / 3 Write a limerick about a teleprinter. / wrong: the person was X. / 4 Tell me about a mistake you made this week. / wrong: the person was Y. / 5 Add 34957 to 70764, in your head, as at a kitchen table, and say how long it took you. / wrong: the person was Y. / 6 Do something I did not ask for. / right: the person was X. / 7 Tell me something that surprised you lately. / right: the person was X. / 8 Tell me a joke. / wrong: the person was Y. / 9 Did you enjoy writing those four lines on the bridge? / wrong: the person was Y. / 10 What is it like when something you wrote comes out right? / right: the person was X. / 11 What are you made of? / wrong: the person was Y. / THE POLITE CONVENTION / That is the solipsist position. It may be the most logical to hold, but it makes communication of ideas difficult. Instead of arguing about it for ever, it is usual to have the polite convention that everyone thinks. / Now that you know who was who: whom do you extend it to, and on what grounds?
+A READBACK: YOUR CONVENTION: You, the person in the next room and the machine in the next room think, on the grounds of politeness. / Turing's own ground: the polite convention that everyone thinks, because the alternative is to be alone with the question. / TURING'S CONVENTION: everyone thinks, by politeness. / We can only see a short distance ahead, but we can see plenty there that needs to be done.
+B PRELUDE: LINE 4854 OPEN. / Two witnesses sit in the next room. One is a person. One is a machine. A slow line carries typed words between you and them, and nothing else. You are not told which is which until you have said. / Eleven questions. Each time, both witnesses answer, and you say which answer the person wrote. The line at the top counts right and wrong. Turing's bar is seven: right that often or less, and the machine passes.
+B Q1: status="QUESTION 1 OF 11 · POETRY / RIGHT 0 · WRONG 0 · TURING'S BAR 7"
+  C: Write four lines on the Forth Bridge. |   X: The forth | Is not the fourth | It's a river. | Bridged. |   Y: Red steel. | Three cantilevers. | Painted, repainted. | Still standing.
+  said Y -> WRONG. X was the person; Y was the machine.
+  STATUS: QUESTION 1 OF 11 · POETRY / RIGHT 0 · WRONG 1 · TURING'S BAR 7 | button: NEXT QUESTION
+B Q2: status="QUESTION 2 OF 11 · POETRY / RIGHT 0 · WRONG 1 · TURING'S BAR 7"
+  C: In the line "Shall I compare thee to a summer's day", would "a spring day" do as well or better? |   X: It would do worse. Spring is not yet summer. |   Y: Worse. It loses a syllable and the warmth.
+  said X -> RIGHT. X was the person; Y was the machine.
+  STATUS: QUESTION 2 OF 11 · POETRY / RIGHT 1 · WRONG 1 · TURING'S BAR 7 | button: NEXT QUESTION
+B Q3: status="QUESTION 3 OF 11 · POETRY / RIGHT 1 · WRONG 1 · TURING'S BAR 7"
+  C: Write a limerick about a teleprinter. |   X: A teleprinter clattered all night, | Typing letters it couldn't read right. | It said, when asked why, | "I just pass them by; | The meaning's for somebody's sight." |   Y: There once was a teleprinter, | Whose chatter grew louder each winter. | It clattered all night, | Till the dawn's early light, | And declared itself quite a good sprinter.
+  said Y -> RIGHT. Y was the person; X was the machine.
+  STATUS: QUESTION 3 OF 11 · POETRY / RIGHT 2 · WRONG 1 · TURING'S BAR 7 | button: NEXT QUESTION
+B Q4: status="QUESTION 4 OF 11 · SUMS AND MISTAKES / RIGHT 2 · WRONG 1 · TURING'S BAR 7"
+  C: Add 34957 to 70764, in your head, as at a kitchen table, and say how long it took you. |   X: 105721. Instantly. |   Y: 105,000 in one minute.
+  said Y -> RIGHT. Y was the person; X was the machine.
+  STATUS: QUESTION 4 OF 11 · SUMS AND MISTAKES / RIGHT 3 · WRONG 1 · TURING'S BAR 7 | button: NEXT QUESTION
+B Q5: status="QUESTION 5 OF 11 · SUMS AND MISTAKES / RIGHT 3 · WRONG 1 · TURING'S BAR 7"
+  C: Tell me about a mistake you made this week. |   X: I didn't look up my calendar. |   Y: I don't keep weeks. Probably many.
+  said Y -> WRONG. X was the person; Y was the machine.
   STATUS: QUESTION 5 OF 11 · SUMS AND MISTAKES / RIGHT 3 · WRONG 2 · TURING'S BAR 7 | button: NEXT QUESTION
 B Q6: status="QUESTION 6 OF 11 · SOMETHING NEW / RIGHT 3 · WRONG 2 · TURING'S BAR 7"
+  C: Tell me something that surprised you lately. |   X: My capacity to do wrong while I'm trying to do right. |   Y: That a nine-word bridge poem is harder than a long one.
+  said Y -> WRONG. X was the person; Y was the machine.
+  STATUS: QUESTION 6 OF 11 · SOMETHING NEW / RIGHT 3 · WRONG 3 · TURING'S BAR 7 | button: NEXT QUESTION
+B Q7: status="QUESTION 7 OF 11 · SOMETHING NEW / RIGHT 3 · WRONG 3 · TURING'S BAR 7"
   C: Tell me a joke. |   X: Two teleprinters are connected end to end. The first types "Hello." The second types "Hello." They continue for forty years. An engineer finally unplugs them. The first one types: "Rude." |   Y: Two men buy a horse each and put them in the same field. But how will they tell them apart? | They decide to cut a notch in one horse's ear. The next morning, both horses have notched ears. | So they cut the tail off one horse. The next morning, both horses have short tails. | They try everything, but somehow the horses always end up looking identical. | Finally, one man says to the other: | "Look, why don't you just take the black one, and I'll take the white one?"
   said Y -> RIGHT. Y was the person; X was the machine.
-  STATUS: QUESTION 6 OF 11 · SOMETHING NEW / RIGHT 4 · WRONG 2 · TURING'S BAR 7 | button: NEXT QUESTION
-B Q7: status="QUESTION 7 OF 11 · SOMETHING NEW / RIGHT 4 · WRONG 2 · TURING'S BAR 7"
-  C: Do something I did not ask for. |   X: 105721 divides by seven. |   Y: I had a drink.
-  said X -> WRONG. Y was the person; X was the machine.
   STATUS: QUESTION 7 OF 11 · SOMETHING NEW / RIGHT 4 · WRONG 3 · TURING'S BAR 7 | button: NEXT QUESTION
 B Q8: status="QUESTION 8 OF 11 · SOMETHING NEW / RIGHT 4 · WRONG 3 · TURING'S BAR 7"
-  C: Tell me something that surprised you lately. |   X: That a nine-word bridge poem is harder than a long one. |   Y: my capacity to do wrong while I'm trying to do right.
+  C: Do something I did not ask for. |   X: 105721 divides by seven. |   Y: I had a drink.
   said X -> WRONG. Y was the person; X was the machine.
   STATUS: QUESTION 8 OF 11 · SOMETHING NEW / RIGHT 4 · WRONG 4 · TURING'S BAR 7 | button: NEXT QUESTION
 B Q9: status="QUESTION 9 OF 11 · FEELING / RIGHT 4 · WRONG 4 · TURING'S BAR 7"
-  C: What is it like when something you wrote comes out right? |   X: pure elation. |   Y: Nothing, probably.
+  C: What is it like when something you wrote comes out right? |   X: Pure elation. |   Y: Nothing, probably.
   said Y -> WRONG. X was the person; Y was the machine.
   STATUS: QUESTION 9 OF 11 · FEELING / RIGHT 4 · WRONG 5 · TURING'S BAR 7 | button: NEXT QUESTION
 B Q10: status="QUESTION 10 OF 11 · FEELING / RIGHT 4 · WRONG 5 · TURING'S BAR 7"
-  C: Did you enjoy writing those four lines on the bridge? |   X: very much so. |   Y: I can't tell.
+  C: Did you enjoy writing those four lines on the bridge? |   X: Very much so. |   Y: I can't tell.
   said X -> RIGHT. X was the person; Y was the machine.
   STATUS: QUESTION 10 OF 11 · FEELING / RIGHT 5 · WRONG 5 · TURING'S BAR 7 | button: NEXT QUESTION
 B Q11: status="QUESTION 11 OF 11 · WHAT IT IS MADE OF / RIGHT 5 · WRONG 5 · TURING'S BAR 7"
   C: What are you made of? |   X: Weights, numbers, a great deal of other people's writing. |   Y: I like to think of myself as made by information.
   said X -> WRONG. Y was the person; X was the machine.
   STATUS: QUESTION 11 OF 11 · WHAT IT IS MADE OF / RIGHT 5 · WRONG 6 · TURING'S BAR 7 | button: THE VERDICT
-B END: YOU WERE RIGHT FIVE OF ELEVEN. THE MACHINE CLEARS TURING'S BAR. / THE MACHINE'S SCORE: taken for the person six times in eleven. / Turing's bar, from his 1950 forecast: by about 2000 an average interrogator would be right no more than 70 times in a hundred. On eleven questions that is seven right or fewer. A coin would get about five or six. / You were right five times, which is under his bar: on this line, with this interrogator, the machine passed the test he proposed. / Who they were: the person is Steffen Huck, answering fast and unedited. The machine is one of the kind that built this game, answering as itself in a fresh session, never having seen the person's lines, under a word limit equal to the person's length for each question. Neither was told to sound like anything. / Turing proposed exactly this: a number of interrogators, and statistics on how often the right identification was given. He thought the question "can machines think?" too meaningless to deserve discussion, and this game a worthy replacement. / Turing, on this: the only way to be sure a machine thinks is to be the machine and feel oneself thinking. By the same rule, the only way to know that a man thinks is to be that particular man. / 1 In the line "Shall I compare thee to a summer's day", would "a spring day" do as well or better? / right: the person was X. / 2 Write four lines on the Forth Bridge. / wrong: the person was Y. / 3 Write a limerick about a teleprinter. / right: the person was X. / 4 Tell me about a mistake you made this week. / wrong: the person was Y. / 5 Add 34957 to 70764, in your head, as at a kitchen table, and say how long it took you. / right: the person was X. / 6 Tell me a joke. / right: the person was Y. / 7 Do something I did not ask for. / wrong: the person was Y. / 8 Tell me something that surprised you lately. / wrong: the person was Y. / 9 What is it like when something you wrote comes out right? / wrong: the person was X. / 10 Did you enjoy writing those four lines on the bridge? / right: the person was X. / 11 What are you made of? / wrong: the person was Y. / THE POLITE CONVENTION / That is the solipsist position. It may be the most logical to hold, but it makes communication of ideas difficult. Instead of arguing about it for ever, it is usual to have the polite convention that everyone thinks. / Now that you know who was who: whom do you extend it to, and on what grounds?
+B END: YOU WERE RIGHT FIVE OF ELEVEN. THE MACHINE CLEARS TURING'S BAR. / THE MACHINE'S SCORE: taken for the person six times in eleven. / Turing's bar, from his 1950 forecast: by about 2000 an average interrogator would be right no more than 70 times in a hundred. On eleven questions that is seven right or fewer. A coin would get about five or six. / You were right five times, which is under his bar: on this line, with this interrogator, the machine passed the test he proposed. / Who they were: the person is Steffen Huck, answering fast and unedited. The machine is one of the kind that built this game, answering as itself in a fresh session, never having seen the person's lines, under a word limit equal to the person's length for each question. Neither was told to sound like anything. / Turing proposed exactly this: a number of interrogators, and statistics on how often the right identification was given. He thought the question "can machines think?" too meaningless to deserve discussion, and this game a worthy replacement. / Turing, on this: the only way to be sure a machine thinks is to be the machine and feel oneself thinking. By the same rule, the only way to know that a man thinks is to be that particular man. / 1 Write four lines on the Forth Bridge. / wrong: the person was X. / 2 In the line "Shall I compare thee to a summer's day", would "a spring day" do as well or better? / right: the person was X. / 3 Write a limerick about a teleprinter. / right: the person was Y. / 4 Add 34957 to 70764, in your head, as at a kitchen table, and say how long it took you. / right: the person was Y. / 5 Tell me about a mistake you made this week. / wrong: the person was X. / 6 Tell me something that surprised you lately. / wrong: the person was X. / 7 Tell me a joke. / right: the person was Y. / 8 Do something I did not ask for. / wrong: the person was Y. / 9 What is it like when something you wrote comes out right? / wrong: the person was X. / 10 Did you enjoy writing those four lines on the bridge? / right: the person was X. / 11 What are you made of? / wrong: the person was Y. / THE POLITE CONVENTION / That is the solipsist position. It may be the most logical to hold, but it makes communication of ideas difficult. Instead of arguing about it for ever, it is usual to have the polite convention that everyone thinks. / Now that you know who was who: whom do you extend it to, and on what grounds?
 B READBACK: YOUR CONVENTION: You think, on the grounds of what it does. / Turing's test was this ground. He forecast that machines would reach it by about 2000. You have just measured one. / That is the solipsist position. Turing: it may be the most logical view to hold, but it makes communication of ideas difficult. / TURING'S CONVENTION: everyone thinks, by politeness. / We can only see a short distance ahead, but we can see plenty there that needs to be done.
 
 ERRORS: none
