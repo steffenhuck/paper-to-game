@@ -4,8 +4,8 @@
 // experiment he proposes on p. 436: interrogators judge, and statistics are compiled on how often the identification was
 // right. The two witnesses' answers are real: witness B's were written by Steffen Huck; witness A's by a machine of the
 // kind that built this game, in a fresh session, without seeing the person's, under a word limit equal to the person's
-// length for each prompt; a final full stop was added to every answer that lacked one, at the author's request, so that
-// punctuation would not tell. Both are copied here verbatim from witness-b.md and witness-a.md; calibration.js checks it.
+// length for each prompt; punctuation and capitalisation were then harmonised on both sides at the author's request, so
+// that neither would tell. Both are copied here verbatim from witness-b.md and witness-a.md; calibration.js checks it.
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory(); else root.TW = factory();
 })(typeof self !== 'undefined' ? self : this, function () {
@@ -36,7 +36,7 @@
       paper: 'Turing\'s first specimen question was a sonnet on the Forth Bridge, and his imagined person declines it: count me out on this one, I never could write poetry. Both witnesses here wrote.' },
     { key: 'spring', group: 1, page: 'p. 446', q: 'In the line "Shall I compare thee to a summer\'s day", would "a spring day" do as well or better?',
       A: 'Worse. It loses a syllable and the warmth.',
-      B: 'It would do worse. Spring is not yet Summer.',
+      B: 'It would do worse. Spring is not yet summer.',
       paper: 'This is Turing\'s own viva voce question, the one Jefferson\'s sonnet-writing machine would have to face. His machine answers: it wouldn\'t scan.' },
     { key: 'limerick', group: 1, page: 'p. 434', q: 'Write a limerick about a teleprinter.',
       A: 'A teleprinter clattered all night,\nTyping letters it couldn\'t read right.\nIt said, when asked why,\n"I just pass them by;\nThe meaning\'s for somebody\'s sight."',
@@ -60,15 +60,15 @@
       paper: 'A sense of humour is on Turing\'s list of things people said a machine could never have. He thought such lists came from having seen only the machines of the day.' },
     { key: 'surprise', group: 3, page: 'pp. 450-451', q: 'Tell me something that surprised you lately.',
       A: 'That a nine-word bridge poem is harder than a long one.',
-      B: 'my capacity to do wrong while I\'m trying to do right.',
+      B: 'My capacity to do wrong while I\'m trying to do right.',
       paper: 'Turing\'s reply to Lady Lovelace: being surprised takes as much of a creative mental act whether the surprising thing comes from a man, a book, a machine or anything else.' },
     { key: 'enjoy', group: 4, page: 'pp. 445-446', q: 'Did you enjoy writing those four lines on the bridge?',
       A: 'I can\'t tell.',
-      B: 'very much so.',
+      B: 'Very much so.',
       paper: 'Jefferson: not until a machine can write a sonnet because of thoughts and emotions felt could we agree that machine equals brain. Turing: a report of feeling is all the line can carry, from either side.' },
     { key: 'right', group: 4, page: 'pp. 445-446', q: 'What is it like when something you wrote comes out right?',
       A: 'Nothing, probably.',
-      B: 'pure elation.',
+      B: 'Pure elation.',
       paper: 'Jefferson asked for a machine that could feel pleasure at its successes. Turing: the only way to be sure it does is to be the machine and feel oneself thinking.' },
     { key: 'made', group: 5, page: 'pp. 434, 439, 451', q: 'What are you made of?',
       A: 'Weights, numbers, a great deal of other people\'s writing.',

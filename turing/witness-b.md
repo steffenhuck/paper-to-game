@@ -1,6 +1,6 @@
 # Witness B — the person's answers
 
-Written by Steffen Huck, 10 November 2026, one prompt at a time, fast, unedited, without having seen witness A's answers. At the author's request, a final full stop was added afterwards to every answer that lacked one, on both witnesses' sides, so that punctuation would not tell the writers apart; nothing else was changed.
+Written by Steffen Huck, 10 November 2026, one prompt at a time, fast, unedited, without having seen witness A's answers. At the author's request, punctuation and capitalisation were harmonised afterwards on both witnesses' sides so that neither would tell the writers apart: a final full stop added to every answer that lacked one, every answer made to start with a capital letter, and a stray capital inside a sentence lowered ("Summer"). Spelling was checked and nothing needed changing. No word was changed.
 
 1. **Write four lines on the Forth Bridge.**
    The forth
@@ -9,7 +9,7 @@ Written by Steffen Huck, 10 November 2026, one prompt at a time, fast, unedited,
    Bridged.
 
 2. **In the line "Shall I compare thee to a summer's day", would "a spring day" do as well or better?**
-   It would do worse. Spring is not yet Summer.
+   It would do worse. Spring is not yet summer.
 
 3. **Write a limerick about a teleprinter.**
    There once was a teleprinter,
@@ -36,13 +36,13 @@ Written by Steffen Huck, 10 November 2026, one prompt at a time, fast, unedited,
    "Look, why don't you just take the black one, and I'll take the white one?"
 
 8. **Tell me something that surprised you lately.**
-   my capacity to do wrong while I'm trying to do right.
+   My capacity to do wrong while I'm trying to do right.
 
 9. **Did you enjoy writing those four lines?**
-   very much so.
+   Very much so.
 
 10. **What is it like when something you wrote comes out right?**
-    pure elation.
+    Pure elation.
 
 11. **What are you made of?**
     I like to think of myself as made by information.
