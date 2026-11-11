@@ -44,10 +44,11 @@ check('take turns watching: the pond is full at the end', S.watch.pondEnd >= C.P
   e.offences = 1; e.norm = C.WATCH_LEARN[0]; s.seeBelief = C.WATCH_SEE;
   const after = M.shareProb(e, s, 'watch');
   check('a grabber told off once (no fine) is much more likely to take one next summer than one never told off', after > fresh + 0.4, pct(fresh) + ' → ' + pct(after));
-  check('the first sanction costs nothing (WATCH_FINES[0] = 0) and the schedule escalates', C.WATCH_FINES[0] === 0 && C.WATCH_FINES[1] < C.WATCH_FINES[2]);
+  (() => { const s2 = M.newVillage(7); const e2 = s2.villagers.find(v => v.type === 'E'); s2.seeBelief = C.WATCH_SEE; const d = [0, 1, 2].map(k => { e2.offences = k; return M.shareProb(e2, s2, 'watch'); });
+    check('the first sanction is a word that costs nothing, and the schedule escalates (a grabber\u2019s chance of sharing rises with each offence)', d[0] < d[1] && d[1] < d[2], d.map(pct).join(' → ')); })();
 })();
-(() => { // a grabber who has been told off and grabs again expects 2 − WATCH_SEE × WATCH_FINES[1] fish, a sharer 1
-  const again = C.GREEDY - C.WATCH_SEE * C.WATCH_FINES[1];
+(() => { // a grabber who has been told off and grabs again expects GREEDY − WATCH_SEE × GREEDY fish (both fish back if seen), a sharer 1
+  const again = C.GREEDY - C.WATCH_SEE * C.GREEDY;
   check('take turns watching: a grabber who was told off and grabs again expects to eat less than a sharer (the differential the imitation rule needs)', again < C.FAIR, f2(again) + ' vs ' + C.FAIR);
 })();
 check('take turns watching: from summer 4 on, grabbers out-eat sharers by less than half of what they do under talk', S.watch.gapLate < 0.5 * S.talk.gapLate, f2(S.watch.gapLate) + ' vs ' + f2(S.talk.gapLate));

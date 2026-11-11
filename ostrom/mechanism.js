@@ -49,19 +49,20 @@ var CONFIG = {
   SHAME_WATCH: 0.4,               // ours: × norm; being told off in front of the village
   ASSURE_WATCH: 0.5,              // ours: × norm; "with local monitors, conditional cooperators are assured that
                                   // someone is generally checking" (p. 151)
-  WATCH_SEE: 0.5,                 // ours: chance the day's watcher sees a grab (monitoring "at least from time to time", p. 152)
-  WATCH_SEE_BELIEF0: 0.25,        // ours: what villagers think that chance is before anyone has been told off
+  WATCH_SEE: 0.6,                 // ours: chance the day's watcher sees a grab (monitoring "at least from time to time", p. 152)
+  WATCH_SEE_BELIEF0: 0.3,         // ours: what villagers think that chance is before anyone has been told off
   WATCH_INFO: true,               // p. 151: the first sanction "needs to be considered more as information both to the
                                   // person who is 'caught' and to others": once a telling-off is seen, everyone
                                   // believes the true WATCH_SEE
-  WATCH_FINES: [0, 3, 6],         // design principle 5, graduated sanctions (p. 151): a word, then three fish back into the
-                                  // pond, then six; a fourth offence is a summer's ban (sizes ours: the second fine, seen half
-                                  // the time, outweighs the one-fish temptation, so a grabber who was told off eats less)
-  WATCH_BAN_VALUE: 8,             // ours: what a summer without fishing is worth, in fish, when weighing a fourth offence
+  // design principle 5, graduated sanctions (p. 151), all in kind so that every sanction is a drawing: first offence seen,
+  // a telling-off and nothing else; second, both fish go back into the pond; third and after, both fish back and no fishing
+  // next summer. A grabber who has been told off and grabs again expects GREEDY − WATCH_SEE × GREEDY = 0.8 fish, less
+  // than a sharer's one, which is the differential the imitation rule needs.
+  WATCH_BAN_VALUE: 8,             // ours: what a summer without fishing is worth, in fish, when weighing a third offence
   WATCH_LEARN: [0.25, 0.25, 0.25],// ours: how much a sanction from one's own village raises an egoist's norm (p. 151:
                                   // "learns that others basically continue to extend their trust"; Fehr & Gächter,
                                   // p. 141: least trusting "transformed into strong cooperators")
-  POLICE_FINE: 3,                 // ours: the town's flat fine, three fish, paid to the town (not graduated)
+  POLICE_TAKES_CATCH: true,       // ours: the town's flat sanction: a grabber who is caught hands both fish to the policeman (not graduated)
   POLICE_WEAK_SEE: 0.15,          // ours: "only able to achieve weak monitoring" (p. 147)
   POLICE_STRONG_SEE: 0.9,         // ours: "strong external monitoring" (p. 147)
   POLICE_WEAK_FEE: 1,             // ours: one fish a summer for the occasional policeman
@@ -82,6 +83,8 @@ var CONFIG = {
                                   // of social norms", p. 147)
   CROWD_STRONG: 0.08,             // ours: every summer the daily policeman is in charge ("cooperation is enforced without
                                   // any need for internal norms to develop", p. 147; Frey 1994 crowding out)
+  IMITATE_UP_UNDER_POLICE: false, // ours: under a policeman, sharers who out-earn the caught are showing compliance, not a
+                                  // norm, so imitation builds no norm there; it still erodes one when grabbers out-earn
   HALF: 0.5,                      // the share of the village that counts as "most of us"
 
   // ---- the threat (p. 153: in-migration "may bring new participants who do not trust others and do not rapidly
@@ -100,7 +103,7 @@ var REGIMES = [
     cost: 'Costs us nothing.', greedy: 'Anyone who took two gets a telling-off in the circle next summer. Nothing else.' },
   { key: 'watch', name: 'Take turns watching',
     line: 'One of us sits by the pond all day and watches instead of fishing.',
-    cost: 'Costs us the watcher’s fish.', greedy: 'Seen taking two: first a telling-off; then three fish back in the pond; then six; then no fishing next summer.' },
+    cost: 'Costs us the watcher’s fish.', greedy: 'Seen taking two: first a telling-off; then both fish back in the pond; then both fish back and no fishing next summer.' },
   { key: 'weak', name: 'A policeman now and then',
     line: 'The town sends a policeman on some days. We never know which.',
     cost: 'Costs us one fish a summer, paid to the town.', greedy: 'Caught taking two: three fish to the town. We don’t tell each other off; that’s his job now.' },
@@ -141,12 +144,12 @@ function shareProb(v, s, regime) {
   var cHat = regime === 'talk' ? s.cHat + C.TALK_PROMISE_PULL * (1 - s.cHat) : s.cHat;
   var deter = 0, shame = 0, assure = 0;
   if (regime === 'watch') {
-    var next = v.offences < C.WATCH_FINES.length ? C.WATCH_FINES[v.offences] : C.WATCH_BAN_VALUE;
+    var next = v.offences === 0 ? 0 : v.offences === 1 ? C.GREEDY : C.GREEDY + C.WATCH_BAN_VALUE;   // what the next offence costs
     deter = s.seeBelief * next;
     shame = n * C.SHAME_WATCH;
     assure = n * C.ASSURE_WATCH;
-  } else if (regime === 'weak') { deter = C.POLICE_WEAK_SEE * C.POLICE_FINE; }
-  else if (regime === 'strong') { deter = C.POLICE_STRONG_SEE * C.POLICE_FINE; }
+  } else if (regime === 'weak') { deter = C.POLICE_WEAK_SEE * C.GREEDY; }
+  else if (regime === 'strong') { deter = C.POLICE_STRONG_SEE * C.GREEDY; }
   else if (regime === 'talk') { shame = n * C.SHAME_TALK; }
   var delta = -C.TEMPTATION + n * (C.W_RECIP * cHat + C.G_BASE) + deter + shame + assure;
   return logistic(delta / C.TAU);
@@ -186,14 +189,12 @@ function playSummer(s, regime, test) {
       if (regime === 'watch' && rng() < C.WATCH_SEE) {
         act.seen = true; seenAny = true;
         var k = v.offences; v.offences++;
-        if (k < C.WATCH_FINES.length) {
-          act.fine = C.WATCH_FINES[k]; act.sanction = k === 0 ? 'word' : 'fine';
-          if (act.fine > 0) { act.ate -= act.fine; rec.finesToPond += act.fine; v.fined++; } else v.toldOff++;
-        } else { act.sanction = 'ban'; rec.bansNext.push(i); v.fined++; }
+        if (k === 0) { act.sanction = 'word'; v.toldOff++; }
+        else { act.sanction = k === 1 ? 'back' : 'ban'; act.fine = act.took; act.ate -= act.fine; rec.finesToPond += act.fine; v.fined++; if (k >= 2) rec.bansNext.push(i); }
         v.norm = clamp01(v.norm + C.WATCH_LEARN[Math.min(k, C.WATCH_LEARN.length - 1)]);
       } else if (regime === 'weak' || regime === 'strong') {
         var see = regime === 'weak' ? C.POLICE_WEAK_SEE : C.POLICE_STRONG_SEE;
-        if (rng() < see) { act.seen = true; act.sanction = 'town'; act.fine = C.POLICE_FINE; act.ate -= act.fine; rec.finesToTown += act.fine; v.fined++; }
+        if (rng() < see) { act.seen = true; act.sanction = 'town'; act.fine = act.took; act.ate -= act.fine; rec.finesToTown += act.fine; v.fined++; }
       } else if (regime === 'talk') { act.sanction = 'circle'; v.toldOff++; }
     }
     rec.acts.push(act);
@@ -206,8 +207,8 @@ function playSummer(s, regime, test) {
   // 5. the books
   var ate = rec.acts.reduce(function (a, x) { return a + x.ate; }, 0) - rec.fees;
   rec.catch = catchTotal;
-  rec.eaten = ate;                               // can be below the catch when fines are paid
-  s.eaten = Math.max(0, s.eaten + ate);
+  rec.eaten = ate;                               // the fish in hands after sanctions, less the town's fee; never negative
+  s.eaten += ate;
   s.paidToTown += rec.fees + rec.finesToTown;
   rec.acts.forEach(function (x) { V[x.i].eaten += x.ate; });
   rec.shared = rec.acts.filter(function (x) { return !x.banned && !x.watcher && !x.grabbed; }).length;
@@ -255,6 +256,7 @@ function winter(s, rec, regime) {
   var mean = function (xs) { return xs.reduce(function (a, x) { return a + x.ate; }, 0) / xs.length; };
   var gap = (sharers.length && grabbers.length) ? mean(grabbers) - mean(sharers) : 0;   // fish a grabber ate over a sharer
   var external = regime === 'weak' || regime === 'strong';
+  if (external && gap < 0 && !C.IMITATE_UP_UNDER_POLICE) gap = 0;
   rec.acts.forEach(function (a) {
     var v = V[a.i], d = 0;
     d -= C.IMITATE * gap;                                                   // toward whoever ate better

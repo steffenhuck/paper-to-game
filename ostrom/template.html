@@ -144,8 +144,8 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
   <p><b>The aim.</b> Keep the pond alive and the village fed for ten summers, and leave villagers who share when nobody&rsquo;s looking.</p>
   <p><b>The pond.</b> The blue blob is our pond; every orange fish in it is a fish, and the number next to it counts them. A full pond holds fifty. Over the winter the fish have babies: a full pond makes about ten new fish, one for each of us. If we take more than that, the pond gets smaller every year. Below about ten fish, even one each is more than it can replace.</p>
   <p><b>The village.</b> The ten stick people are us, with our names under us. Each summer everyone takes one fish or two. One fish each is fair. Nobody can see in advance who will take two.</p>
-  <p><b>The cards.</b> Each summer, touch a card to see what it means. It is drawn into the picture (a circle on the grass, a watcher on a stool, a policeman with a tall hat) and the green-lined box says what it costs us and what happens to anyone who takes two. The five cards: <b>leave it be</b> (nothing happens to anyone); <b>have a talk</b> (we promise in a circle, and promise-breakers get a telling-off next summer); <b>take turns watching</b> (one of us watches instead of fishing; seen taking two: a telling-off, then three fish back in the pond, then six, then no fishing next summer); <b>a policeman now and then</b> (the town&rsquo;s policeman on some days, three fish to the town if he catches you, one fish a summer to the town for him, and we stop telling each other off); <b>a policeman every day</b> (the same, every day, for a quarter of our catch).</p>
-  <p><b>FISH!</b> Everyone goes to the pond one at a time. Each person comes back holding one fish or two. A telling-off, a fine or a catch is written under the person it happened to. Then the fish have babies, and the game says what happened: how many took one, who took two, what the pond did, what we ate. The bones on the shelf are the fish we have eaten so far.</p>
+  <p><b>The cards.</b> Each summer, touch a card to see what it means. It is drawn into the picture (a circle on the grass, a watcher on a stool, a policeman with a tall hat) and the green-lined box says what it costs us and what happens to anyone who takes two. The five cards: <b>leave it be</b> (nothing happens to anyone); <b>have a talk</b> (we promise in a circle, and promise-breakers get a telling-off next summer); <b>take turns watching</b> (one of us watches instead of fishing; seen taking two: a telling-off, then both fish back in the pond, then both fish back and no fishing next summer); <b>a policeman now and then</b> (the town&rsquo;s policeman on some days, both fish to the town if he catches you, one fish a summer to the town for him, and we stop telling each other off); <b>a policeman every day</b> (the same, every day, for a quarter of our catch).</p>
+  <p><b>FISH!</b> Everyone goes to the pond one at a time. Each person comes back holding one fish or two, or nothing if their fish went back into the pond or to the policeman. A telling-off, fish put back or a catch is written under the person it happened to. Then the fish have babies, and the game says what happened: how many took one, who took two, what the pond did, what we ate. The bones on the shelf are the fish we have eaten so far.</p>
   <p><b>Next summer.</b> Pick again from all five cards. Nothing is kept from last summer except what the villagers learnt.</p>
   <p><b>The eleventh summer.</b> After ten summers, one more: no cards, nobody watching, nobody talking. What the village does then is the verdict.</p>
   <button class="btn pri" id="b-help-close">Back</button>
@@ -216,8 +216,10 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
     wline(ctx, [[x + 3, y - 3], [x + 3, y + 3]], COL.ink, 1.2, k + 1, 0.3); wline(ctx, [[x + 6, y - 2.5], [x + 6, y + 2.5]], COL.ink, 1.2, k + 2, 0.3);
     wline(ctx, [[x - 2, y - 3], [x, y], [x - 2, y + 3]], COL.ink, 1.2, k + 3, 0.3);
   }
-  function text(ctx, str, x, y, size, color, align, font) {
-    ctx.save(); ctx.font = size + 'px ' + (font || 'Schoolbell, cursive'); ctx.fillStyle = color || COL.ink; ctx.textAlign = align || 'center'; ctx.textBaseline = 'alphabetic'; ctx.fillText(str, x, y); ctx.restore();
+  function text(ctx, str, x, y, size, color, align, font, maxW) {
+    ctx.save(); ctx.font = size + 'px ' + (font || 'Schoolbell, cursive');
+    if (maxW) { while (size > 7.5 && ctx.measureText(str).width > maxW) { size -= 0.5; ctx.font = size + 'px ' + (font || 'Schoolbell, cursive'); } }
+    ctx.fillStyle = color || COL.ink; ctx.textAlign = align || 'center'; ctx.textBaseline = 'alphabetic'; ctx.fillText(str, x, y); ctx.restore();
   }
   // a stick person. o: {fish, grin, frown, hat, hatFaint, finger, cross, stool, scope, suitcase, name, note, faint, up}
   function stick(ctx, x, y, h, o, k) {
@@ -243,7 +245,8 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
     if (o.cross) { wline(ctx, [[x - r * 1.6, y - 2], [x + r * 1.6, fy + 2]], COL.red, 3, k + 50, 1); wline(ctx, [[x + r * 1.6, y - 2], [x - r * 1.6, fy + 2]], COL.red, 3, k + 51, 1); }
     ctx.restore();
     if (o.name) text(ctx, o.name, x, fy + 15, 14, COL.ink);
-    if (o.note) text(ctx, o.note, x, fy + 27, 10.5, o.noteColor || COL.red, 'center', "'Short Stack', cursive");
+    if (o.note) text(ctx, o.note, x, fy + 27, 10.5, o.noteColor || COL.red, 'center', "'Short Stack', cursive", 64);
+    if (o.note2) text(ctx, o.note2, x, fy + 38, 10.5, o.noteColor || COL.red, 'center', "'Short Stack', cursive", 64);
   }
   function sun(ctx, x, y, k) {
     var disc = ell(x, y, 15, 15, k, 18); hatch(ctx, disc, COL.yellow, 3.5, k, 0.8); wline(ctx, disc, COL.ink, 2, k, 0.7, true);
@@ -272,7 +275,7 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
       for (var j = 0; j < 5; j++) { var a = j / 5 * Math.PI * 2 - Math.PI / 2, hx = ax + Math.cos(a) * 24, hy = ay + 30 + Math.sin(a) * 15; wline(ctx, ell(hx, hy, 7, 7, k + 60 + j, 12), COL.ink, 2.2, k + 60 + j, 0.7, true); ctx.save(); ctx.fillStyle = COL.ink; ctx.beginPath(); ctx.arc(hx - 2.5, hy - 1, 1.2, 0, 7); ctx.arc(hx + 2.5, hy - 1, 1.2, 0, 7); ctx.fill(); ctx.restore(); }
       text(ctx, 'the talk', ax, ay + 72, 14, COL.ink);
     } else if (regime === 'watch') {
-      stick(ctx, ax, ay, h, { stool: true, scope: true }, k + 70); text(ctx, (opts.watcherName ? opts.watcherName + ' ' : '') + 'watching', ax + 4, ay + h + 26, 14, COL.ink);
+      stick(ctx, ax, ay, h, { stool: true, scope: !opts.finger, finger: !!opts.finger }, k + 70); text(ctx, (opts.watcherName ? opts.watcherName + ' ' : '') + 'watching', ax + 4, ay + h + 26, 14, COL.ink);
     } else if (regime === 'weak') {
       stick(ctx, ax, ay, h, { hat: true, faint: true }, k + 80); text(ctx, 'policeman', ax, ay + h + 15, 14, COL.ink); text(ctx, '(some days)', ax, ay + h + 29, 12, COL.mute);
     } else if (regime === 'strong') {
@@ -281,13 +284,13 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
       text(ctx, 'nobody', ax, ay + 40, 14, COL.mute); text(ctx, 'watching', ax, ay + 56, 14, COL.mute);
     }
     if (opts.babies) text(ctx, '+' + opts.babies + ' babies!', PX - 30, PY + PRY + 22, 15, COL.ink, 'center');
-    if (opts.town) { stick(ctx, 150, 6, 46, { hat: true, fish: Math.min(3, opts.town) }, k + 90); text(ctx, opts.town + ' fish to the town', 178, 34, 13, COL.mute, 'left'); }
+    if (opts.town) { stick(ctx, 118, 4, 44, { hat: true }, k + 90); for (var f = 0; f < Math.min(12, opts.town); f++) fish(ctx, 150 + (f % 4) * 17, 14 + Math.floor(f / 4) * 10, 14, k + 91 + f, -1); text(ctx, opts.town + ' fish to the town', 142, 58, 13, COL.mute, 'left'); }
   }
   // the row: ten villagers, two rows of five; acts shown for the first `shown` of them
   function drawRow(canvas, villagers, acts, shown, regime, watcher) {
     var ctx = setup(canvas), k = 200;
     for (var i = 0; i < villagers.length; i++) {
-      var v = villagers[i], col = i % 5, row = Math.floor(i / 5), x = 34 + col * 67, y = 8 + row * 96, o = { name: v.name };
+      var v = villagers[i], col = i % 5, row = Math.floor(i / 5), x = 34 + col * 67, y = 6 + row * 100, o = { name: v.name };
       var a = acts && i < shown ? acts[i] : null;
       if (v.banned && !(a && !a.banned)) { o.cross = true; o.note = 'no fishing'; }
       if (watcher === i) { o.stool = true; o.scope = true; o.note = 'watching'; o.noteColor = COL.mute; }
@@ -295,14 +298,13 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
         if (a.banned) { o.cross = true; o.note = 'no fishing'; }
         else if (a.watcher) { o.stool = true; o.scope = true; o.note = 'watching'; o.noteColor = COL.mute; }
         else {
-          o.fish = a.took; o.grin = a.grabbed && !a.seen && a.sanction !== 'circle'; o.frown = !!a.seen;
+          o.fish = a.took - a.fine; o.grin = a.grabbed && !a.seen && a.sanction !== 'circle'; o.frown = !!a.seen;
           if (a.took === 0) { o.note = 'nothing left'; o.noteColor = COL.mute; }
           if (a.sanction === 'word') o.note = 'told off';
-          if (a.sanction === 'fine') o.note = a.fine + ' back in pond';
-          if (a.sanction === 'ban') o.note = 'no fishing next';
-          if (a.sanction === 'town') { o.hat = true; o.note = a.fine + ' to the town'; }
+          if (a.sanction === 'back') o.note = 'fish back';
+          if (a.sanction === 'ban') { o.note = 'fish back'; o.note2 = 'no fishing next'; }
+          if (a.sanction === 'town') o.note = 'fish to town';
           if (a.sanction === 'circle') { o.note = 'broke promise'; }
-          if (regime === 'watch' && a.sanction === 'word') o.finger = false;
         }
       }
       if (v.newcomer && rec && rec.migration && rec.migration.slot === i && !rec.test) { o.suitcase = true; if (!o.note) { o.note = 'new here'; o.noteColor = COL.mute; } }
@@ -394,18 +396,19 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
       fl.innerHTML = '<p>' + (test ? 'Nobody watching. Nobody talking. ' : '') + 'Everyone goes to the pond, one at a time&hellip;</p>';
       drawRow($('c-row'), s.villagers, rec.acts, 0, regime, rec.watcher);
     });
-    var pond = rec.pondBefore, took = 0;
+    var pond = rec.pondBefore, took = 0, back = 0, finger = false;
     rec.acts.forEach(function (a, i) {
       p = p.then(function () { return wait(i === 0 ? 500 : 360); }).then(function () {
-        took += a.took; pond = rec.pondBefore - took + (a.sanction === 'fine' ? 0 : 0);
-        drawPicture($('c-pic'), pond, test ? 'test' : regime, { watcherName: rec.watcher !== null ? s.villagers[rec.watcher].name : '' });
+        took += a.took; if (a.sanction === 'back' || a.sanction === 'ban') back += a.fine; if (a.sanction === 'word' || a.sanction === 'back' || a.sanction === 'ban') finger = true;
+        pond = rec.pondBefore - took + back;
+        drawPicture($('c-pic'), pond, test ? 'test' : regime, { watcherName: rec.watcher !== null ? s.villagers[rec.watcher].name : '', finger: finger });
         drawRow($('c-row'), s.villagers, rec.acts, i + 1, regime, rec.watcher);
       });
     });
     p = p.then(function () { return wait(600); }).then(function () {
       if (test) { showEnd(); busy = false; return; }
       // the winter
-      drawPicture($('c-pic'), rec.pondAfter, regime, { babies: rec.growth > 0 ? rec.growth : 0, town: rec.fees + rec.finesToTown, watcherName: rec.watcher !== null ? s.villagers[rec.watcher].name : '' });
+      drawPicture($('c-pic'), rec.pondAfter, regime, { babies: rec.growth > 0 ? rec.growth : 0, town: rec.fees + rec.finesToTown, watcherName: rec.watcher !== null ? s.villagers[rec.watcher].name : '', finger: finger });
       drawShelf($('c-shelf'), s.eaten);
       $('result').innerHTML = resultText(rec, regime);
       $('b-next').textContent = s.summer < C.SUMMERS ? 'Next summer' : 'One more summer';
@@ -429,13 +432,13 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
     if (regime === 'talk') l2 = grabbers.length ? names(grabbers) + ' broke the promise. A telling-off in next summer’s circle, and nothing else.' : 'Everyone kept the promise.';
     if (regime === 'watch') {
       var words = r.acts.filter(function (a) { return a.sanction === 'word'; }).map(function (a) { return a.name; });
-      var fines = r.acts.filter(function (a) { return a.sanction === 'fine'; });
+      var fines = r.acts.filter(function (a) { return a.sanction === 'back'; }).map(function (a) { return a.name; });
       var bans = r.acts.filter(function (a) { return a.sanction === 'ban'; }).map(function (a) { return a.name; });
       var unseen = r.acts.filter(function (a) { return a.grabbed && !a.seen; }).map(function (a) { return a.name; });
       var parts = [];
       if (words.length) parts.push(names(words) + (words.length > 1 ? ' were' : ' was') + ' seen and told off. Nothing else happened to ' + (words.length > 1 ? 'them' : names(words)) + '.');
-      if (fines.length) parts.push(fines.map(function (a) { return a.name + ' was seen again: ' + a.fine + ' fish back into the pond'; }).join('; ') + '.');
-      if (bans.length) parts.push(names(bans) + ' again: no fishing next summer.');
+      if (fines.length) parts.push(names(fines) + (fines.length > 1 ? ' were' : ' was') + ' seen again: both fish back into the pond.');
+      if (bans.length) parts.push(names(bans) + (bans.length > 1 ? ' were' : ' was') + ' seen a third time: both fish back into the pond, and no fishing next summer.');
       if (unseen.length) parts.push(names(unseen) + (unseen.length > 1 ? ' were' : ' was') + ' not seen.');
       if (!grabbers.length) parts.push('Nobody took two; the watcher had a quiet day.');
       l2 = parts.join(' ');
@@ -443,14 +446,15 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
     if (regime === 'weak' || regime === 'strong') {
       var caught = r.acts.filter(function (a) { return a.sanction === 'town'; }).map(function (a) { return a.name; });
       var missed = r.acts.filter(function (a) { return a.grabbed && !a.seen; }).map(function (a) { return a.name; });
-      l2 = (caught.length ? 'The policeman caught ' + names(caught) + ': ' + C.POLICE_FINE + ' fish each to the town.' : grabbers.length ? 'The policeman caught nobody.' : 'Nobody took two.');
+      l2 = (caught.length ? 'The policeman caught ' + names(caught) + ': both fish to the town.' : grabbers.length ? 'The policeman caught nobody.' : 'Nobody took two.');
       if (missed.length && caught.length) l2 += ' ' + names(missed) + ' got away with it.';
       l2 += ' Nobody told anyone off: that’s his job now.';
     }
     out.push('<p>' + l2 + '</p>');
-    var l3 = 'The pond: ' + r.pondBefore + ' fish, ' + r.pondAfterFishing + ' after fishing' + (r.finesToPond ? ' (with ' + r.finesToPond + ' paid back)' : '') + ', then the fish had babies: <b>' + r.pondAfter + '</b> (' + pondWord(r.pondAfter) + ').';
-    if (r.fees) l3 += ' The town took ' + r.fees + ' fish for the policeman.';
-    l3 += ' We ate ' + Math.max(0, r.eaten) + ' fish.';
+    var l3 = 'The pond: ' + r.pondBefore + ' fish, ' + r.pondAfterFishing + ' after fishing' + (r.finesToPond ? ' (' + r.finesToPond + ' of them put back)' : '') + ', then the fish had babies: <b>' + r.pondAfter + '</b> (' + pondWord(r.pondAfter) + ').';
+    if (r.fees) l3 += ' The town took ' + r.fees + ' fish for the policeman' + (r.finesToTown ? ' and ' + r.finesToTown + ' from the ones he caught' : '') + '.';
+    else if (r.finesToTown) l3 += ' The town took ' + r.finesToTown + ' fish from the ones he caught.';
+    l3 += ' We ate ' + r.eaten + ' fish.';
     out.push('<p>' + l3 + '</p>');
     return out.join('');
   }
@@ -490,7 +494,7 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
     var out = P[dom];
     if (dom !== 'strong' && used('strong') >= 2) out += '<p class="paper">The summers with the policeman every day cost a quarter of the catch and, under this game’s rules, wore the village’s own norm down while they lasted: Ostrom’s crowding out.</p>';
     if (dom !== 'weak' && used('weak') >= 2) out += '<p class="paper">The summers with a policeman now and then were, in Ostrom’s words, the worst of all worlds: too rare to frighten anyone, and enough to stop the village telling each other off.</p>';
-    if (dom !== 'watch' && used('watch') >= 2 && used('watch') < 5) out += '<p class="paper">The summers of taking turns watching are how the commons that lasted were run: a word first, then a fine, then the door.</p>';
+    if (dom !== 'watch' && used('watch') >= 2 && used('watch') < 5) out += '<p class="paper">The summers of taking turns watching are how the commons that lasted were run: a word first, then the fish back, then the door.</p>';
     out += '<p class="small">Elinor Ostrom (2000), Collective Action and the Evolution of Social Norms, <i>Journal of Economic Perspectives</i> 14(3): 137–158. The village, the pond and the fish are this game’s; the three kinds of villager, the cards and what they do are the paper’s. About has the rest. Village no. ' + seed + '.</p>';
     return out;
   }
