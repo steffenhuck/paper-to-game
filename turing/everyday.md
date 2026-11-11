@@ -18,7 +18,7 @@ Three earlier machine sets were run and not used, and are kept at the end of thi
 
 4. **Getting lost in a city you thought you knew.**
    Machine: Came out of the station the wrong side and nothing looked right for ten minutes.
-   Person: 
+   Person: I took the wrong exit and was so confused when I reached the street level.
 
 5. **The last day of a holiday.**
    Machine: Packed the case tonight so I don't have to think about it tomorrow.
