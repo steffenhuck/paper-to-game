@@ -1,4 +1,6 @@
-# Turing's Witnesses: the three-module build (11 November 2026)
+# Test It Like Turing: the three-module build (11 November 2026)
+
+Renamed from *Turing's Witnesses* on 11 November 2026, at the author's suggestion, to depart from the author's-name-plus-thing pattern of the other titles: the title now names what the player does, in the paper's own verb. The file is `test-it-like-turing.html`.
 
 The earlier memos are in `previous/` (the first build's full design memo in `previous/memo.md`; the five-round rebuild in `previous/five-rounds/memo.md`; the eleven-question build in `previous/eleven/memo.md`). This memo records what changed and why, and the build.
 
