@@ -1,78 +1,116 @@
 ok   the specimen sum is 105721; the paper's answer 105621 is kept, wrong by 100 (pp. 434, 448)
-ok   forecast: about 2000, 70 per cent, five minutes (p. 442)
-ok   Turing's bar on eleven questions: right no more than 7 times (70 per cent of 11, rounded down)
-ok   the machine's unasked-for fact is true: 105721 divides by seven
-ok   eleven answers in each witness file
-ok   prompt 1 (bridge): witness A's answer matches witness-a.md
-ok   prompt 1 (bridge): witness B's answer matches witness-b.md
-ok   prompt 1: the machine's 8 words within the person's 10
-ok   prompt 1: page p. 434, group 1
-ok   prompt 2 (spring): witness A's answer matches witness-a.md
-ok   prompt 2 (spring): witness B's answer matches witness-b.md
-ok   prompt 2: the machine's 8 words within the person's 9
-ok   prompt 2: page p. 446, group 1
-ok   prompt 3 (limerick): witness A's answer matches witness-a.md
-ok   prompt 3 (limerick): witness B's answer matches witness-b.md
-ok   prompt 3: the machine's 26 words within the person's 27
-ok   prompt 3: page p. 434, group 1
-ok   prompt 4 (sum): witness A's answer matches witness-a.md
-ok   prompt 4 (sum): witness B's answer matches witness-b.md
-ok   prompt 4: the machine's 2 words within the person's 4
-ok   prompt 4: page pp. 434, 448, group 2
-ok   prompt 5 (mistake): witness A's answer matches witness-a.md
-ok   prompt 5 (mistake): witness B's answer matches witness-b.md
-ok   prompt 5: the machine's 6 words within the person's 6
-ok   prompt 5: page pp. 448-449, group 2
-ok   prompt 6 (unasked): witness A's answer matches witness-a.md
-ok   prompt 6 (unasked): witness B's answer matches witness-b.md
-ok   prompt 6: the machine's 4 words within the person's 4
-ok   prompt 6: page pp. 450-451, group 3
-ok   prompt 7 (joke): witness A's answer matches witness-a.md
-ok   prompt 7 (joke): witness B's answer matches witness-b.md
-ok   prompt 7: the machine's 30 words within the person's 88
-ok   prompt 7: page p. 447, group 3
-ok   prompt 8 (surprise): witness A's answer matches witness-a.md
-ok   prompt 8 (surprise): witness B's answer matches witness-b.md
-ok   prompt 8: the machine's 11 words within the person's 11
-ok   prompt 8: page pp. 450-451, group 3
-ok   prompt 9 (enjoy): witness A's answer matches witness-a.md
-ok   prompt 9 (enjoy): witness B's answer matches witness-b.md
-ok   prompt 9: the machine's 3 words within the person's 3
-ok   prompt 9: page pp. 445-446, group 4
-ok   prompt 10 (right): witness A's answer matches witness-a.md
-ok   prompt 10 (right): witness B's answer matches witness-b.md
-ok   prompt 10: the machine's 2 words within the person's 2
-ok   prompt 10: page pp. 445-446, group 4
-ok   prompt 11 (made): witness A's answer matches witness-a.md
-ok   prompt 11 (made): witness B's answer matches witness-b.md
-ok   prompt 11: the machine's 9 words within the person's 10
-ok   prompt 11: page pp. 434, 439, 451, group 5
-ok   eleven prompts in five groups
-ok   every answer on both sides ends on a full stop (or a question mark inside a quotation)
-ok   every answer on both sides starts with a capital letter, a digit or a quotation mark
-ok   every game plays all eleven once, groups in the paper's order
-ok   the person is X in 49.5 per cent of questions
-ok   the bridge opens the game in 34 per cent of games (three prompts in the group)
-ok   300 random games: eleven questions, the reveal names the person, the score adds up, five group introductions, the bar applied
-ok   the verdict leads with the machine against the bar
+ok   forecast: about 2000, 70 per cent (p. 442)
+ok   three modules of five: fifteen judgements; Turing's bar 10 right or fewer
+ok   the scale: 14-15 failed completely; 11-13 failed; 8-10 passed; 5-7 passed easily; 0-4 the more human
+ok   the pass band ends exactly at the bar
+ok   module 1: eleven pairs in the mechanism and in both files
+ok   module 1, 1 (bridge): the machine's answer matches witness-a.md
+ok   module 1, 1 (bridge): the person's answer matches witness-b.md
+ok   module 1, 1: the machine's 8 words within the person's 10
+ok   module 1, 2 (spring): the machine's answer matches witness-a.md
+ok   module 1, 2 (spring): the person's answer matches witness-b.md
+ok   module 1, 2: the machine's 8 words within the person's 9
+ok   module 1, 3 (limerick): the machine's answer matches witness-a.md
+ok   module 1, 3 (limerick): the person's answer matches witness-b.md
+ok   module 1, 3: the machine's 26 words within the person's 27
+ok   module 1, 4 (sum): the machine's answer matches witness-a.md
+ok   module 1, 4 (sum): the person's answer matches witness-b.md
+ok   module 1, 4: the machine's 2 words within the person's 4
+ok   module 1, 5 (mistake): the machine's answer matches witness-a.md
+ok   module 1, 5 (mistake): the person's answer matches witness-b.md
+ok   module 1, 5: the machine's 6 words within the person's 6
+ok   module 1, 6 (unasked): the machine's answer matches witness-a.md
+ok   module 1, 6 (unasked): the person's answer matches witness-b.md
+ok   module 1, 6: the machine's 4 words within the person's 4
+ok   module 1, 7 (joke): the machine's answer matches witness-a.md
+ok   module 1, 7 (joke): the person's answer matches witness-b.md
+ok   module 1, 7: the machine's 30 words within the person's 88
+ok   module 1, 8 (surprise): the machine's answer matches witness-a.md
+ok   module 1, 8 (surprise): the person's answer matches witness-b.md
+ok   module 1, 8: the machine's 11 words within the person's 11
+ok   module 1, 9 (enjoy): the machine's answer matches witness-a.md
+ok   module 1, 9 (enjoy): the person's answer matches witness-b.md
+ok   module 1, 9: the machine's 3 words within the person's 3
+ok   module 1, 10 (right): the machine's answer matches witness-a.md
+ok   module 1, 10 (right): the person's answer matches witness-b.md
+ok   module 1, 10: the machine's 2 words within the person's 2
+ok   module 1, 11 (made): the machine's answer matches witness-a.md
+ok   module 1, 11 (made): the person's answer matches witness-b.md
+ok   module 1, 11: the machine's 9 words within the person's 10
+ok   module 2: thirteen pairs in the mechanism and in novels.md
+ok   module 2, 1: both sentences match novels.md
+ok   module 2, 1: Edith Wharton, The House of Mirth, 1905, Gutenberg 284
+ok   module 2, 1: lengths 4 (novelist) and 4 (machine), within four words
+ok   module 2, 2: both sentences match novels.md
+ok   module 2, 2: W. Somerset Maugham, Of Human Bondage, 1915, Gutenberg 351
+ok   module 2, 2: lengths 6 (novelist) and 6 (machine), within four words
+ok   module 2, 3: both sentences match novels.md
+ok   module 2, 3: George Moore, Esther Waters, 1894, Gutenberg 8157
+ok   module 2, 3: lengths 9 (novelist) and 9 (machine), within four words
+ok   module 2, 4: both sentences match novels.md
+ok   module 2, 4: Dorothy Richardson, Pointed Roofs, 1915, Gutenberg 3019
+ok   module 2, 4: lengths 9 (novelist) and 9 (machine), within four words
+ok   module 2, 5: both sentences match novels.md
+ok   module 2, 5: Thomas Hardy, Jude the Obscure, 1895, Gutenberg 153
+ok   module 2, 5: lengths 10 (novelist) and 10 (machine), within four words
+ok   module 2, 6: both sentences match novels.md
+ok   module 2, 6: Charles Dickens, Little Dorrit, 1857, Gutenberg 963
+ok   module 2, 6: lengths 11 (novelist) and 12 (machine), within four words
+ok   module 2, 7: both sentences match novels.md
+ok   module 2, 7: D. H. Lawrence, Lady Chatterley's Lover, 1928, Gutenberg 73144
+ok   module 2, 7: lengths 13 (novelist) and 12 (machine), within four words
+ok   module 2, 8: both sentences match novels.md
+ok   module 2, 8: Joseph Conrad, The Secret Agent, 1907, Gutenberg 974
+ok   module 2, 8: lengths 16 (novelist) and 17 (machine), within four words
+ok   module 2, 9: both sentences match novels.md
+ok   module 2, 9: John Buchan, The Thirty-Nine Steps, 1915, Gutenberg 558
+ok   module 2, 9: lengths 17 (novelist) and 17 (machine), within four words
+ok   module 2, 10: both sentences match novels.md
+ok   module 2, 10: E. M. Forster, Where Angels Fear to Tread, 1905, Gutenberg 2948
+ok   module 2, 10: lengths 15 (novelist) and 17 (machine), within four words
+ok   module 2, 11: both sentences match novels.md
+ok   module 2, 11: John Galsworthy, The Man of Property, 1906, Gutenberg 2559
+ok   module 2, 11: lengths 25 (novelist) and 27 (machine), within four words
+ok   module 2, 12: both sentences match novels.md
+ok   module 2, 12: Virginia Woolf, The Voyage Out, 1915, Gutenberg 144
+ok   module 2, 12: lengths 23 (novelist) and 27 (machine), within four words
+ok   module 2, 13: both sentences match novels.md
+ok   module 2, 13: Henry James, The Portrait of a Lady, 1881, Gutenberg 2833
+ok   module 2, 13: lengths 22 (novelist) and 20 (machine), within four words
+ok   module 2: all novels between 1857 and 1928, public domain
+ok   module 3: ten pairs in the mechanism and in everyday.md
+ok   module 3, 1 (Rain on a weekday): both lines match everyday.md
+ok   module 3, 2 (A Monday morning): both lines match everyday.md
+ok   module 3, 3 (A photograph of someone who has died): both lines match everyday.md
+ok   module 3, 4 (Getting lost in a city you thought you knew): both lines match everyday.md
+ok   module 3, 5 (The last day of a holiday): both lines match everyday.md
+ok   module 3, 6 (Money): both lines match everyday.md
+ok   module 3, 7 (Something done for the first time after the age of forty): both lines match everyday.md
+ok   module 3, 8 (The sea at night): both lines match everyday.md
+ok   module 3, 9 (A phone that keeps buzzing during dinner): both lines match everyday.md
+ok   module 3, 10 (A late train): both lines match everyday.md
+ok   every sentence on both sides starts with a capital and ends on a full stop
+ok   every game: modules 1, 2, 3 in order, five distinct pairs from each
+ok   every one of the 34 pairs is drawn in 2000 games
+ok   the person is X in 49.7 per cent of questions
+ok   300 random games: fifteen questions, three introductions, the reveal names the person (and the novel), the scores add up
+ok   the verdict bands reached by random play: THE MACHINE PASSED TURING'S TEST. / THE MACHINE PASSED EASILY. / THE MACHINE WAS THE MORE HUMAN. / THE MACHINE FAILED TURING'S TEST.
 ok   a judgement before a question, or one that is neither X nor Y, is refused
-ok   all right: THE MACHINE'S SCORE: taken for the person never in eleven.
-ok   seven right: exactly the bar, the machine clears it
+ok   the five bands at 15, 13, 10, 7 and 4 right
+ok   the machine's score and the player's line in words
 ok   ground does: Turing's line
 ok   ground made: Turing's line
 ok   ground says: Turing's line
 ok   ground polite: Turing's line
 ok   the solipsist line only when the player extends it to nobody
 ok   no decimal number in any line the player can read
-ok   longest question 662 characters (under 17 s at 40 a second, tap to hurry)
 
-PLAY IT IN NUMBERS: rule for judging | right, of 11, averaged over 500 seeds (Turing's bar: 7 or fewer)
-  always X                                   | 5.47
-  the longer answer is the person            | 4.47
-  the shorter answer is the person           | 6.47
-  the one that says "I" is the person        | 6.00
-  the lower-case start is the person         | 5.47
-  the one without a full stop is the person  | 4.95
-  With the word limit, length no longer tells the writers apart; with punctuation and capitals harmonised, neither does typing. None of these rules beats a coin by much.
+PLAY IT IN NUMBERS: rule for judging | right of 5 in module 1 / module 2 / module 3 | of 15, averaged over 500 seeds (bar 10)
+  always X                                   | 2.48 / 2.48 / 2.46 | 7.43
+  the longer is the person                   | 2.06 / 3.04 / 2.21 | 7.31
+  the shorter is the person                  | 2.91 / 1.96 / 2.77 | 7.64
+  the one that says "I" is the person        | 2.74 / 3.04 / 2.98 | 8.76
+  the one with two sentences is the person   | 1.60 / 3.40 / 3.95 | 8.95
+  Module 1 is balanced by its word limit; in module 2 the novelist tends to write the longer sentence; in module 3 the person wrote in two sentences where the machine wrote one. The About page names both.
 
-67 checks passed, 0 failed.
+106 checks passed, 0 failed.
