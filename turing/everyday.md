@@ -6,7 +6,7 @@ Three earlier machine sets were run and not used, and are kept at the end of thi
 
 1. **Rain on a weekday.**
    Machine: Forgot the umbrella again, so sat in the car till it eased off.
-   Person: 
+   Person: Once again much rain. Got wet like a poodle.
 
 2. **A Monday morning.**
    Machine: Alarm went at six and I genuinely could not remember what day it was.
