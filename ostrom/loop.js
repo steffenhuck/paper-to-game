@@ -18,9 +18,9 @@ for (let t = 0; t < C.SUMMERS; t++) {
     if (a.watcher) continue;
     let line = `  ${a.name} takes ${a.took === 0 ? 'nothing (the pond is empty)' : a.took === 1 ? 'one fish' : 'two fish'}`;
     if (a.grabbed && a.sanction === 'word') line += ' and is told off';
-    if (a.grabbed && a.sanction === 'fine') line += ` and is seen: ${a.fine} fish back into the pond`;
-    if (a.grabbed && a.sanction === 'ban') line += ' and is seen again: no fishing next summer';
-    if (a.grabbed && a.sanction === 'town') line += ` and the policeman catches them: ${a.fine} fish to the town`;
+    if (a.grabbed && a.sanction === 'back') line += ' and is seen again: both fish back into the pond';
+    if (a.grabbed && a.sanction === 'ban') line += ' and is seen a third time: both fish back into the pond, and no fishing next summer';
+    if (a.grabbed && a.sanction === 'town') line += ' and the policeman catches them: both fish to the town';
     if (a.grabbed && a.sanction === 'circle') line += ' (a telling-off in next summer’s circle)';
     console.log(line + '.');
   }
