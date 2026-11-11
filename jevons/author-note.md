@@ -1,4 +1,4 @@
-# Jevons's Noon: author note
+# Burn Bright with Jevons: author note
 
 **Look first at** the ruler (both rows: how big the fire gets, how long the coal lasts), then the 1885 engine card and the burn after it. Play to the end: the verdict leads with the score as an even share, shows the best path dotted on your sheet and in hollow bars in your ledger, and flags that it is a plan for the engines. Then *The curve, continued* (silent, as your Given had it), and the button after the date, *Why it stopped*, for the coda.
 

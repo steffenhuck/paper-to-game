@@ -26,7 +26,7 @@ const say = s => console.log(s);
   const pressBtn = async (sel, what) => { const ok = await page.$eval(sel, e => !e.disabled && !e.classList.contains('hidden')); if (!ok) { say(`  (${what}: not possible with this)`); return; } await page.click(sel); await page.waitForTimeout(250); say(`  ${what}: ${await text('#typed')}`); };
   const play = async (holdMs) => { let s = await state(); while (s.phase === 'mound') s = await press(holdMs); return s; };
 
-  await page.goto('file://' + path.join(__dirname, 'goodalls-long-grass.html#p=7'));
+  await page.goto('file://' + path.join(__dirname, 'go-fishing-with-goodall.html#p=7'));
   await shot('a-cover'); await noScroll('cover');
   say('AFTERNOON 1 (page 7): a first-timer, every mistake, then the hollow');
   await page.click('#begin'); await page.waitForTimeout(400); await shot('a-mound-start'); await noScroll('mound');
