@@ -26,7 +26,7 @@ Three earlier machine sets were run and not used, and are kept at the end of thi
 
 6. **Money.**
    Machine: Checked the account twice before buying the trainers, which is a bad sign.
-   Person: 
+   Person: So, yes, I did buy the new trainers in the end. Probably the last time the ATM was generous this month.
 
 7. **Something done for the first time after the age of forty.**
    Machine: Went to a swimming lesson, forty-three, and the kids there were very kind about it.
