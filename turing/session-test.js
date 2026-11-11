@@ -7,7 +7,7 @@ const main = async () => {
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 380, height: 760 }, deviceScaleFactor: 1 });
   const errors = []; page.on('pageerror', e => errors.push(e.message)); page.on('console', m => { if (m.type() === 'error' && !/ERR_TUNNEL_CONNECTION_FAILED|gc\.zgo\.at/.test(m.text())) errors.push(m.text()); }); // the counter script is blocked by the sandbox proxy; not a page error
-  const url = 'file://' + path.resolve(__dirname, 'turings-witnesses.html');
+  const url = 'file://' + path.resolve(__dirname, 'test-it-like-turing.html');
   const log = [];
   const shot = async (n, full) => page.screenshot({ path: path.join(__dirname, 'screenshot-' + n + '.png'), fullPage: !!full });
   const shotOverlay = async (id, n) => { await page.evaluate(id => { const o = document.getElementById(id); o.style.position = 'absolute'; o.style.inset = 'auto'; o.style.top = '0'; o.style.left = '0'; o.style.right = '0'; o.style.overflow = 'visible'; document.body.classList.remove('lock'); document.querySelectorAll('body > .wrap').forEach(w => w.style.display = 'none'); }, id); await page.evaluate(() => window.scrollTo(0, 0)); await shot(n, true); await page.evaluate(id => { const o = document.getElementById(id); o.style.position = ''; o.style.inset = ''; o.style.top = ''; o.style.left = ''; o.style.right = ''; o.style.overflow = ''; document.querySelectorAll('body > .wrap').forEach(w => w.style.display = ''); document.body.classList.add('lock'); }, id); };

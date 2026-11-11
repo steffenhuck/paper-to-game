@@ -1,4 +1,4 @@
-# Turing's Witnesses — note for the author
+# Test It Like Turing — note for the author
 
 1. Look first at `screenshot-A-1-answers.png` (module 1 begins: its line, the question, X and Y), `screenshot-A-6-answers.png` and `screenshot-A-11-answers.png` (modules 2 and 3 beginning), `screenshot-A-end-verdict.png` (the machine on the scale) and `screenshot-A-end-readback.png`. Then play it on a phone; the draw changes the pairs and the sides.
 2. Everything tunable is in `CONFIG` at the top of `mechanism.js`, the only copy of the mechanism: the paper's numbers (pp. 434, 442, 448), from which the bar of ten is derived; `perModule`, five, from which the fifteen, the bar and the scale's edges follow; and the line speed. The thirty-four pairs, the three module introductions, the scale's words and every line the terminal says are in the same file. The sentences must stay byte for byte what `witness-a.md`, `witness-b.md`, `novels.md` and `everyday.md` hold: edit a file and the mechanism together, or `node calibration.js` (106 checks and the play-it-in-numbers table) fails. Then `python3 build.py`, which refuses to build if the embedded mechanism differs from the file.

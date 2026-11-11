@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Turing's Witnesses</title>
+<title>Test It Like Turing</title>
 <script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <meta name="description" content="Turing's test, run once more with real witnesses, in three modules: a person and a machine answering the paper's questions blind; novelists against a machine given the premise; and a machine told to imitate, answered by a person. Fifteen judgements; the score is the machine's, against Turing's 1950 bar.">
 <style>
@@ -179,7 +179,7 @@ body.lock{overflow:hidden}
   // ---------- start ----------
   function startScreen() {
     const L = $('start-log'); L.innerHTML = '';
-    typeLine(L, "TURING'S WITNESSES", 'big', 30);
+    typeLine(L, "TEST IT LIKE TURING", 'big', 30);
     typeLine(L, `${C.forecastYear}. Turing proposes a game: an interrogator, two witnesses in another room, a teleprinter, questions. If the interrogator cannot tell the machine from the person, stop asking whether the machine can think. His forecast: by about ${C.forecastYear + C.forecastHorizon}, an average interrogator would be right no more than ${C.forecastPct} times in a hundred.`, '', 90);
     typeLine(L, `${C.nowYear}. Here the test is run once more, with real witnesses, three ways: a person and a machine answering his questions blind; novelists against a machine given the premise; and a machine told to imitate, answered by a person. You are the interrogator.`, '', 90);
     typeLine(L, 'Fifteen times, two sentences: say which one the person wrote.', 'glow hdr', 90);
