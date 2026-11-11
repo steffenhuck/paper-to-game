@@ -296,7 +296,19 @@
     MODULES.forEach(md => {
       const idx = md.items.map((_, i) => i);
       for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); const t = idx[i]; idx[i] = idx[j]; idx[j] = t; }
-      idx.slice(0, CONFIG.perModule).forEach(i => order.push({ module: md.n, item: i, personIs: r() < 0.5 ? 'X' : 'Y' }));
+      const drawn = idx.slice(0, CONFIG.perModule);
+      if (md.n === 1) {
+        // "Did you enjoy writing those four lines" and the machine's "nine-word bridge poem" refer to the bridge question:
+        // they are played only after it. If one is drawn without the bridge, the next undrawn question (not one of the
+        // two, and not the bridge, so the bridge keeps an even share) takes its place; if the bridge is drawn, it is
+        // moved ahead of the first of them.
+        const key = i => md.items[i].key; const bridge = md.items.findIndex(p => p.key === 'bridge');
+        const dep = i => key(i) === 'enjoy' || key(i) === 'surprise';
+        if (drawn.indexOf(bridge) < 0) { const spare = idx.slice(CONFIG.perModule).filter(i => !dep(i) && i !== bridge); drawn.forEach((i, k) => { if (dep(i)) drawn[k] = spare.shift(); }); }
+        const b = drawn.indexOf(bridge), firstDep = drawn.findIndex(dep);
+        if (b >= 0 && firstDep >= 0 && b > firstDep) { drawn[b] = drawn[firstDep]; drawn[firstDep] = bridge; }
+      }
+      drawn.forEach(i => order.push({ module: md.n, item: i, personIs: r() < 0.5 ? 'X' : 'Y' }));
     });
     return { seed: s, order, answers: [], pending: null };
   }
