@@ -2,11 +2,12 @@
 // Runs unchanged in Node (require) and in the browser (inlined verbatim by build.py).
 // Turing (1950), "Computing Machinery and Intelligence", Mind 59(236):433-460 (page numbers are Mind's), played as the
 // experiment he proposes on p. 436: an interrogator judges, and the statistics are the machine's. Three modules:
-//   1. eleven questions from the paper answered blind by a person (Steffen Huck) and by a machine answering as itself,
-//      within the person's length (witness-b.md, witness-a.md);
-//   2. the first sentences of thirteen public-domain novels, and a machine's openings written from the year, a premise
-//      and the length (novels.md);
-//   3. ten diary lines: the machine wrote first, told to pass for a person, and the person answered (everyday.md).
+//   1. Turing's questions: eleven from the paper answered blind by a human (Steffen Huck) and by a machine as itself,
+//      within the human's length (witness-b.md, witness-a.md);
+//   2. novels: the first sentences of thirteen public-domain novels, and a machine's openings written from the year, a
+//      premise and the length (novels.md);
+//   3. diaries: ten lines; the machine wrote first, told to pass as human, and the human answered (everyday.md).
+// Five pairs are drawn from each stage. The score is the machine's: how often it was taken for the human.
 // Every sentence here is copied verbatim from those files; calibration.js checks it.
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory(); else root.TW = factory();
@@ -261,33 +262,28 @@
 ];
 
   const MODULES = [
-    { n: 1, key: 'questions', name: 'ELEVEN QUESTIONS', items: M1,
-      intro: 'Eleven questions from Turing\'s paper were put to a person and to a machine. Both answered blind, in a few words; the machine answered as itself, within the person\'s length. Five of the eleven follow.',
-      person: 'the person', machine: 'the machine' },
-    { n: 2, key: 'novels', name: 'THIRTEEN NOVELS', items: M2,
-      intro: 'Thirteen novels, each with its first sentence. For each, a machine was given the year, a one-line premise and the length, and wrote an opening of its own. One sentence is the novelist\'s, one the machine\'s. Five of the thirteen follow.',
-      person: 'the novelist', machine: 'the machine' },
-    { n: 3, key: 'diary', name: 'TEN DIARY LINES', items: M3,
-      intro: 'Ten lines from a diary. Here the machine wrote first, and was told to pass for a person keeping a diary; the person read each line and wrote his own. This is the game as Turing proposed it: the machine imitates. Five of the ten follow.',
-      person: 'the person', machine: 'the machine, imitating' },
+    { n: 1, key: 'questions', name: 'TURING\'S QUESTIONS', items: M1,
+      intro: 'A human and a machine answered questions from Turing\'s paper. Both wrote blind.' },
+    { n: 2, key: 'novels', name: 'NOVELS', items: M2,
+      intro: 'One sentence opens a published novel; the other is a machine\'s attempt at the same opening.' },
+    { n: 3, key: 'diary', name: 'DIARIES', items: M3,
+      intro: 'Lines from a diary. The machine wrote first, trying to pass as human; the human read it and replied.' },
   ];
   const TOTAL = CONFIG.perModule * MODULES.length;
-  const BAR = Math.floor(TOTAL * CONFIG.forecastPct / 100); // Turing's bar: right no more than 70 per cent, 10 of 15
+  const BAR = Math.floor(TOTAL * CONFIG.forecastPct / 100); // Turing's bar: the interrogator right no more than 70 per cent, 10 of 15
+  const PASS = TOTAL - BAR;                                   // so the machine taken for the human at least 5 times in 15
 
-  // The verdict scale, from the machine's side, by the interrogator's right answers out of TOTAL (ours).
+  // The verdict scale, from the machine's side, by how often it was taken for the human out of TOTAL (ours; the band
+  // edges follow Turing's bar: an interrogator right no more than 70 per cent, so the machine taken for the human in at
+  // least 30 per cent of rounds, 5 of 15).
   const SCALE = [
-    { min: 14, head: 'THE MACHINE FAILED COMPLETELY.', line: 'You told them apart almost every time. On this line, with this interrogator, the machine was never in the running.' },
-    { min: 11, head: 'THE MACHINE FAILED TURING\'S TEST.', line: 'You were right more often than Turing\'s bar allows. Turing\'s bar is right no more than seven times in ten; on fifteen questions that is ten.' },
-    { min: 8, head: 'THE MACHINE PASSED TURING\'S TEST.', line: 'You were right no more than Turing\'s bar allows, which is seven times in ten; on fifteen questions, ten. This is the result he forecast for about the year 2000.' },
-    { min: 5, head: 'THE MACHINE PASSED EASILY.', line: 'You did no better than a coin would. Turing asked only that the interrogator be unsure; here the interrogator was lost.' },
-    { min: 0, head: 'THE MACHINE WAS THE MORE HUMAN.', line: 'You took the machine for the person more often than the person. That is what interrogators did in the trials of 2025, and what Turing did not foresee.' },
+    { minFooled: 11, head: 'THE MACHINE WAS THE MORE HUMAN.', line: 'It was taken for the human more often than the human was. That is what happened in the trials of 2025, and what Turing did not foresee.' },
+    { minFooled: 8, head: 'THE MACHINE PASSED EASILY.', line: 'It was taken for the human about as often as a coin would have allowed: on this line, the two could not be told apart.' },
+    { minFooled: 5, head: 'THE MACHINE PASSED TURING\'S TEST.', line: 'It was taken for the human often enough to clear the bar Turing set in 1950.' },
+    { minFooled: 2, head: 'THE MACHINE FAILED TURING\'S TEST.', line: 'It was taken for the human too seldom to clear the bar Turing set in 1950.' },
+    { minFooled: 0, head: 'THE MACHINE FAILED COMPLETELY.', line: 'It was taken for the human once at most. On this line it was never in the running.' },
   ];
-
-  // Turing's reply to the argument from consciousness, p. 446; the coda.
-  const REPLY = [
-    'Turing, on what a score like this can and cannot settle: the only way to be sure a machine thinks is to be the machine and feel oneself thinking. By the same rule, the only way to know that a man thinks is to be that particular man.',
-    'That is the solipsist position. It may be the most logical to hold, but it makes communication of ideas difficult. Instead of arguing about it for ever, it is usual to have the polite convention that everyone thinks.',
-  ];
+  const LAST = 'We can only see a short distance ahead, but we can see plenty there that needs to be done.'; // the paper's last sentence
 
   const wordsIn = t => t.trim().split(/\s+/).length;
   function rng(seed) { let s = seed >>> 0; return function () { s += 0x6D2B79F5; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
@@ -322,7 +318,7 @@
     if (d.module === 1) q = it.q;
     else if (d.module === 2) q = `The first sentence of a novel published in ${it.year}.`;
     else q = `A diary line: ${it.topic.charAt(0).toLowerCase() + it.topic.slice(1)}.`;
-    state.pending = { n, total: TOTAL, module: d.module, moduleName: md.name, inModule, perModule: CONFIG.perModule, q, X: d.personIs === 'X' ? it.B : it.A, Y: d.personIs === 'X' ? it.A : it.B, intro: first ? md.intro : null, person: md.person, machine: md.machine };
+    state.pending = { n, total: TOTAL, module: d.module, moduleName: md.name, inModule, perModule: CONFIG.perModule, q, X: d.personIs === 'X' ? it.B : it.A, Y: d.personIs === 'X' ? it.A : it.B, intro: first ? md.intro : null };
     return state.pending;
   }
   // The judgement: which sentence the player takes for the person's; then the reveal.
@@ -334,57 +330,27 @@
     const rec = { n: o.n, module: d.module, item: it.key, q: o.q, pick: side, personIs: d.personIs, right };
     state.answers.push(rec); state.pending = null;
     const other = d.personIs === 'X' ? 'Y' : 'X';
-    const who = d.module === 2 ? `${d.personIs} was the novelist: ${it.who}. ${other} was the machine.` : `${d.personIs} was ${md.person}; ${other} was ${md.machine}.`;
+    const who = d.module === 2 ? `${d.personIs} was the human: ${it.who}. ${other} was the machine.` : `${d.personIs} was the human; ${other} was the machine.`;
     return { rec, reveal: `${right ? 'RIGHT' : 'WRONG'}. ${who}`, score: score(state), last: state.answers.length >= TOTAL };
   }
 
   // ---------- the verdict ----------
   function summary(state) {
     const s = score(state);
-    const band = SCALE.find(b => s.right >= b.min);
-    const head = band.head;
-    const machine = `THE MACHINE'S SCORE: taken for the person ${times(s.fooled)} in ${words(s.total)}.`;
-    const yours = `You were right ${times(s.right)} in ${words(s.total)}. Turing's bar: ${words(s.bar)} or fewer, and the machine passes.`;
-    const modules = s.byModule.map(m => `${m.name}: taken for the person ${times(m.fooled)} in ${words(m.asked)}.`);
-    const witnesses = [
-      'Module 1: the person is Steffen Huck, answering fast and unedited; the machine is one of the kind that built this game, answering as itself in a fresh session, never having seen the person\'s lines, within the person\'s length.',
-      'Module 2: the person is the novelist; the machine was given the year, a one-line premise and the length, and never the title, the author or the sentence.',
-      'Module 3: the machine wrote first, in a fresh session, told to pass for a person keeping a diary; the person read each line and answered in his own.',
-    ];
-    const paper = [
-      `Turing proposed exactly this: interrogators judging, and statistics on how often the right identification was given. His forecast in ${CONFIG.forecastYear}: by about ${CONFIG.forecastYear + CONFIG.forecastHorizon} an average interrogator would be right no more than ${CONFIG.forecastPct} times in a hundred.`,
-      REPLY[0],
-    ];
-    const table = state.answers.map(a => ({ n: a.n, module: a.module, q: a.q, right: a.right, personIs: a.personIs }));
-    return { head, band: band.line, machine, yours, modules, witnesses, paper, table, score: s };
-  }
-
-  // ---------- the polite convention (the coda) ----------
-  const CANDIDATES = [
-    { key: 'you', label: 'you', fixed: true, note: 'the one witness you can be sure of' },
-    { key: 'B', label: 'the person in the next room' },
-    { key: 'A', label: 'the machine in the next room' },
-    { key: 'elephant', label: 'an elephant', note: 'Turing\'s own example, in his reply to the theological objection' },
-  ];
-  const GROUNDS = [
-    { key: 'does', label: 'what it does', turing: 'Turing\'s test was this ground. He forecast that machines would reach it by about 2000. You have just measured one.' },
-    { key: 'made', label: 'what it is made of', turing: 'Turing: the stuff is a superficial likeness; look for a likeness of function. He saw little point in dressing a thinking machine in artificial flesh.' },
-    { key: 'says', label: 'what it says it feels', turing: 'Turing: nobody would be justified in taking any notice. He expected most people to settle for the test rather than go solipsist.' },
-    { key: 'polite', label: 'politeness', turing: 'Turing\'s own ground: the polite convention that everyone thinks, because the alternative is to be alone with the question.' },
-  ];
-  function convention(extend, ground) {
-    const g = GROUNDS.find(x => x.key === ground);
-    if (!g) throw new Error('unknown ground');
-    const set = ['you'].concat(CANDIDATES.filter(c => !c.fixed && extend.indexOf(c.key) >= 0).map(c => c.key));
-    const names = set.map(k => CANDIDATES.find(c => c.key === k).label);
-    const list = names.length === 1 ? names[0] : names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1];
-    const yours = `YOUR CONVENTION: ${list.charAt(0).toUpperCase() + list.slice(1)} think, on the grounds of ${g.label}.`;
-    const only = set.length === 1 ? 'That is the solipsist position. Turing: it may be the most logical view to hold, but it makes communication of ideas difficult.' : null;
-    return { yours, turing: g.turing, only, his: 'TURING\'S CONVENTION: everyone thinks, by politeness.', last: 'We can only see a short distance ahead, but we can see plenty there that needs to be done.' };
+    const band = SCALE.find(b => s.fooled >= b.minFooled);
+    const machine = `The machine was taken for the human ${times(s.fooled)} in ${words(s.total)}.`;
+    const stages = `On Turing's questions it managed ${s.byModule[0].fooled} of ${s.byModule[0].asked}, on the novels ${s.byModule[1].fooled} of ${s.byModule[1].asked}, in the diaries ${s.byModule[2].fooled} of ${s.byModule[2].asked}.`;
+    const names = ['Turing\'s questions', 'novels', 'diaries'];
+    const f = s.byModule.map(x => x.fooled); const hi = Math.max(...f), lo = Math.min(...f);
+    const best = names.filter((_, i) => f[i] === hi), worst = names.filter((_, i) => f[i] === lo);
+    const join = a => a.length === 1 ? a[0] : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1];
+    const relative = hi === lo ? `Going by your answers, in ${CONFIG.nowYear} machines are about equally good at all three.` : `Going by your answers, in ${CONFIG.nowYear} machines are best at ${join(best)} and worst at ${join(worst)}.`;
+    const forecast = `Turing's forecast in ${CONFIG.forecastYear}: by about ${CONFIG.forecastYear + CONFIG.forecastHorizon}, an interrogator would be right no more than ${words(CONFIG.forecastPct / 10)} times in ${words(10)}, so a machine would be taken for the human at least ${words(PASS)} times in ${words(TOTAL)}. This one managed ${words(s.fooled)}.`;
+    return { head: band.head, band: band.line, machine, stages, relative, forecast, last: LAST, score: s };
   }
 
   function words(n) { return n === 50 ? 'fifty' : (['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen'][n] || String(n)); }
   function times(n) { return n === 0 ? 'never' : n === 1 ? 'once' : n === 2 ? 'twice' : words(n) + ' times'; }
 
-  return { CONFIG, TOTAL, BAR, SCALE, MODULES, M1, M2, M3, REPLY, CANDIDATES, GROUNDS, wordsIn, newGame, current, score, ask, judge, summary, convention, words, times };
+  return { CONFIG, TOTAL, BAR, PASS, SCALE, LAST, MODULES, M1, M2, M3, wordsIn, newGame, current, score, ask, judge, summary, words, times };
 });

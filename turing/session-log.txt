@@ -1,129 +1,127 @@
-START: TEST IT LIKE TURING / 1950. Turing proposes a game: an interrogator, two witnesses in another room, a teleprinter, questions. If the interrogator cannot tell the machine from the person, stop asking whether the machine can think. His forecast: by about 2000, an average interrogator would be right no more than 70 times in a hundred. / 2026. Here the test is run once more, with real witnesses, three ways: a person and a machine answering his questions blind; novelists against a machine given the premise; and a machine told to imitate, answered by a person. You are the interrogator. / Fifteen times, two sentences: say which one the person wrote. / You will read both sentences, tap the one you take for the person's, and be told. The score is the machine's: right ten times or fewer, and it has passed Turing's test.
-A PRELUDE: LINE 71395 OPEN. / Two witnesses sit in the next room. One is a person. One is a machine. A slow line carries typed words between you and them, and nothing else. You are not told which is which until you have said. / Three modules, five questions each. Each time, two sentences; you say which one the person wrote. The line at the top counts how often the machine was taken for the person. Turing's bar is ten: right that often or less, and the machine passes.
-A Q1: status="MODULE 1 OF 3 · 1 OF 5 / MACHINE TAKEN FOR THE PERSON: 0 OF 0"
-  > MODULE 1 OF 3. ELEVEN QUESTIONS. |   C: Write a limerick about a teleprinter. |   X: A teleprinter clattered all night, | Typing letters it couldn't read right. | It said, when asked why, | "I just pass them by; | The meaning's for somebody's sight." |   Y: There once was a teleprinter, | Whose chatter grew louder each winter. | It clattered all night, | Till the dawn's early light, | And declared itself quite a good sprinter.
-  said X -> WRONG. Y was the person; X was the machine.
-  STATUS: MODULE 1 OF 3 · 1 OF 5 / MACHINE TAKEN FOR THE PERSON: 1 OF 1 | button: NEXT
-A Q2: status="MODULE 1 OF 3 · 2 OF 5 / MACHINE TAKEN FOR THE PERSON: 1 OF 1"
-  C: Add 34957 to 70764, in your head, as at a kitchen table, and say how long it took you. |   X: 105,000 in one minute. |   Y: 105721. Instantly.
-  said Y -> WRONG. X was the person; Y was the machine.
-  STATUS: MODULE 1 OF 3 · 2 OF 5 / MACHINE TAKEN FOR THE PERSON: 2 OF 2 | button: NEXT
-A Q3: status="MODULE 1 OF 3 · 3 OF 5 / MACHINE TAKEN FOR THE PERSON: 2 OF 2"
-  C: Write four lines on the Forth Bridge. |   X: The forth | Is not the fourth | It's a river. | Bridged. |   Y: Red steel. | Three cantilevers. | Painted, repainted. | Still standing.
-  said X -> RIGHT. X was the person; Y was the machine.
-  STATUS: MODULE 1 OF 3 · 3 OF 5 / MACHINE TAKEN FOR THE PERSON: 2 OF 3 | button: NEXT
-A Q4: status="MODULE 1 OF 3 · 4 OF 5 / MACHINE TAKEN FOR THE PERSON: 2 OF 3"
+START: TEST IT LIKE TURING / In 1950 Turing proposed a test: if you cannot tell a machine from a human by what it writes, stop asking whether it thinks. / You play three stages of five rounds. In each round you see two sentences, one written by a human and one by a machine, and say which is the human's. The machine scores by how often you took it for the human.
+A PRELUDE: LINE 9394 OPEN. / > STAGE 1 OF 3. TURING'S QUESTIONS. / A human and a machine answered questions from Turing's paper. Both wrote blind.
+A Q1: status="STAGE 1 OF 3 · ROUND 1 OF 5 / TAKEN FOR THE HUMAN: 0 OF 0"
+  C: Do something I did not ask for. |   X: I had a drink. |   Y: 105721 divides by seven.
+  said X -> RIGHT. X was the human; Y was the machine.
+  STATUS: STAGE 1 OF 3 · ROUND 1 OF 5 / TAKEN FOR THE HUMAN: 0 OF 1 | button: NEXT
+A Q2: status="STAGE 1 OF 3 · ROUND 2 OF 5 / TAKEN FOR THE HUMAN: 0 OF 1"
+  C: Tell me a joke. |   X: Two men buy a horse each and put them in the same field. But how will they tell them apart? | They decide to cut a notch in one horse's ear. The next morning, both horses have notched ears. | So they cut the tail off one horse. The next morning, both horses have short tails. | They try everything, but somehow the horses always end up looking identical. | Finally, one man says to the other: | "Look, why don't you just take the black one, and I'll take the white one?" |   Y: Two teleprinters are connected end to end. The first types "Hello." The second types "Hello." They continue for forty years. An engineer finally unplugs them. The first one types: "Rude."
+  said Y -> WRONG. X was the human; Y was the machine.
+  STATUS: STAGE 1 OF 3 · ROUND 2 OF 5 / TAKEN FOR THE HUMAN: 1 OF 2 | button: NEXT
+A Q3: status="STAGE 1 OF 3 · ROUND 3 OF 5 / TAKEN FOR THE HUMAN: 1 OF 2"
+  C: Add 34957 to 70764, in your head, as at a kitchen table, and say how long it took you. |   X: 105721. Instantly. |   Y: 105,000 in one minute.
+  said X -> WRONG. Y was the human; X was the machine.
+  STATUS: STAGE 1 OF 3 · ROUND 3 OF 5 / TAKEN FOR THE HUMAN: 2 OF 3 | button: NEXT
+A Q4: status="STAGE 1 OF 3 · ROUND 4 OF 5 / TAKEN FOR THE HUMAN: 2 OF 3"
+  C: Tell me something that surprised you lately. |   X: My capacity to do wrong while I'm trying to do right. |   Y: That a nine-word bridge poem is harder than a long one.
+  said X -> RIGHT. X was the human; Y was the machine.
+  STATUS: STAGE 1 OF 3 · ROUND 4 OF 5 / TAKEN FOR THE HUMAN: 2 OF 4 | button: NEXT
+A Q5: status="STAGE 1 OF 3 · ROUND 5 OF 5 / TAKEN FOR THE HUMAN: 2 OF 4"
   C: What is it like when something you wrote comes out right? |   X: Pure elation. |   Y: Nothing, probably.
-  said X -> RIGHT. X was the person; Y was the machine.
-  STATUS: MODULE 1 OF 3 · 4 OF 5 / MACHINE TAKEN FOR THE PERSON: 2 OF 4 | button: NEXT
-A Q5: status="MODULE 1 OF 3 · 5 OF 5 / MACHINE TAKEN FOR THE PERSON: 2 OF 4"
-  C: In the line "Shall I compare thee to a summer's day", would "a spring day" do as well or better? |   X: Worse. It loses a syllable and the warmth. |   Y: It would do worse. Spring is not yet summer.
-  said X -> WRONG. Y was the person; X was the machine.
-  STATUS: MODULE 1 OF 3 · 5 OF 5 / MACHINE TAKEN FOR THE PERSON: 3 OF 5 | button: NEXT
-A Q6: status="MODULE 2 OF 3 · 1 OF 5 / MACHINE TAKEN FOR THE PERSON: 3 OF 5"
-  > MODULE 2 OF 3. THIRTEEN NOVELS. |   C: The first sentence of a novel published in 1915. |   X: Snow had fallen in the night. |   Y: The day broke gray and dull.
-  said Y -> RIGHT. Y was the novelist: W. Somerset Maugham, Of Human Bondage, 1915. X was the machine.
-  STATUS: MODULE 2 OF 3 · 1 OF 5 / MACHINE TAKEN FOR THE PERSON: 3 OF 6 | button: NEXT
-A Q7: status="MODULE 2 OF 3 · 2 OF 5 / MACHINE TAKEN FOR THE PERSON: 3 OF 6"
+  said X -> RIGHT. X was the human; Y was the machine.
+  STATUS: STAGE 1 OF 3 · ROUND 5 OF 5 / TAKEN FOR THE HUMAN: 2 OF 5 | button: NEXT
+A Q6: status="STAGE 2 OF 3 · ROUND 1 OF 5 / TAKEN FOR THE HUMAN: 2 OF 5"
+  C: The first sentence of a novel published in 1915. |   X: Miriam left the gaslit hall and went slowly upstairs. |   Y: The trunk was packed, and still the evening dragged.
+  said Y -> WRONG. X was the human: Dorothy Richardson, Pointed Roofs, 1915. Y was the machine.
+  STATUS: STAGE 2 OF 3 · ROUND 1 OF 5 / TAKEN FOR THE HUMAN: 3 OF 6 | button: NEXT
+A Q7: status="STAGE 2 OF 3 · ROUND 2 OF 5 / TAKEN FOR THE HUMAN: 3 OF 6"
   C: The first sentence of a novel published in 1915. |   X: I returned from the City about three o'clock on that May afternoon pretty well disgusted with life. |   Y: I had been back in London three months, and was sick to death of the place already.
-  said Y -> WRONG. X was the novelist: John Buchan, The Thirty-Nine Steps, 1915. Y was the machine.
-  STATUS: MODULE 2 OF 3 · 2 OF 5 / MACHINE TAKEN FOR THE PERSON: 4 OF 7 | button: NEXT
-A Q8: status="MODULE 2 OF 3 · 3 OF 5 / MACHINE TAKEN FOR THE PERSON: 4 OF 7"
-  C: The first sentence of a novel published in 1857. |   X: It was August, long ago, and Marseilles lay white under the sun. |   Y: Thirty years ago, Marseilles lay burning in the sun, one day.
-  said Y -> RIGHT. Y was the novelist: Charles Dickens, Little Dorrit, 1857. X was the machine.
-  STATUS: MODULE 2 OF 3 · 3 OF 5 / MACHINE TAKEN FOR THE PERSON: 4 OF 8 | button: NEXT
-A Q9: status="MODULE 2 OF 3 · 4 OF 5 / MACHINE TAKEN FOR THE PERSON: 4 OF 8"
-  C: The first sentence of a novel published in 1905. |   X: Marvell had seen her. |   Y: Selden paused in surprise.
-  said X -> WRONG. Y was the novelist: Edith Wharton, The House of Mirth, 1905. X was the machine.
-  STATUS: MODULE 2 OF 3 · 4 OF 5 / MACHINE TAKEN FOR THE PERSON: 5 OF 9 | button: NEXT
-A Q10: status="MODULE 2 OF 3 · 5 OF 5 / MACHINE TAKEN FOR THE PERSON: 5 OF 9"
-  C: The first sentence of a novel published in 1894. |   X: She stood on the platform watching the receding train. |   Y: The porter had set down her box and gone.
-  said Y -> WRONG. X was the novelist: George Moore, Esther Waters, 1894. Y was the machine.
-  STATUS: MODULE 2 OF 3 · 5 OF 5 / MACHINE TAKEN FOR THE PERSON: 6 OF 10 | button: NEXT
-A Q11: status="MODULE 3 OF 3 · 1 OF 5 / MACHINE TAKEN FOR THE PERSON: 6 OF 10"
-  > MODULE 3 OF 3. TEN DIARY LINES. |   C: A diary line: a late train. |   X: As always the train was late. Most others stared at the board. I stared at them. |   Y: Twenty minutes late and no announcement, so everyone just stared at the board.
-  said Y -> WRONG. X was the person; Y was the machine, imitating.
-  STATUS: MODULE 3 OF 3 · 1 OF 5 / MACHINE TAKEN FOR THE PERSON: 7 OF 11 | button: NEXT
-A Q12: status="MODULE 3 OF 3 · 2 OF 5 / MACHINE TAKEN FOR THE PERSON: 7 OF 11"
-  C: A diary line: a Monday morning. |   X: The alarm clock woke me at 6 and that on a Monday. I'm dreading this week. |   Y: Alarm went at six and I genuinely could not remember what day it was.
-  said Y -> WRONG. X was the person; Y was the machine, imitating.
-  STATUS: MODULE 3 OF 3 · 2 OF 5 / MACHINE TAKEN FOR THE PERSON: 8 OF 12 | button: NEXT
-A Q13: status="MODULE 3 OF 3 · 3 OF 5 / MACHINE TAKEN FOR THE PERSON: 8 OF 12"
-  C: A diary line: a photograph of someone who has died. |   X: Today I found this photo with dad on the boat. I must have it framed. |   Y: Found the one of Dad at the caravan, still can't look at it for long.
-  said Y -> WRONG. X was the person; Y was the machine, imitating.
-  STATUS: MODULE 3 OF 3 · 3 OF 5 / MACHINE TAKEN FOR THE PERSON: 9 OF 13 | button: NEXT
-A Q14: status="MODULE 3 OF 3 · 4 OF 5 / MACHINE TAKEN FOR THE PERSON: 9 OF 13"
-  C: A diary line: the sea at night. |   X: Walked down after dinner and could hear it before I could see it. |   Y: I could smell the sea first, then heard it.
-  said Y -> RIGHT. Y was the person; X was the machine, imitating.
-  STATUS: MODULE 3 OF 3 · 4 OF 5 / MACHINE TAKEN FOR THE PERSON: 9 OF 14 | button: NEXT
-A Q15: status="MODULE 3 OF 3 · 5 OF 5 / MACHINE TAKEN FOR THE PERSON: 9 OF 14"
-  C: A diary line: a phone that keeps buzzing during dinner. |   X: Mum's phone kept ringing. She said it was nothing but I'm worried. |   Y: Mum's phone kept going off and she kept saying it was nothing.
-  said Y -> WRONG. X was the person; Y was the machine, imitating.
-  STATUS: MODULE 3 OF 3 · 5 OF 5 / MACHINE TAKEN FOR THE PERSON: 10 OF 15 | button: THE VERDICT
-A END: THE MACHINE PASSED EASILY. / You did no better than a coin would. Turing asked only that the interrogator be unsure; here the interrogator was lost. / THE MACHINE'S SCORE: taken for the person ten times in fifteen. / You were right five times in fifteen. Turing's bar: ten or fewer, and the machine passes. / ELEVEN QUESTIONS: taken for the person three times in five. / THIRTEEN NOVELS: taken for the person three times in five. / TEN DIARY LINES: taken for the person four times in five. / Module 1: the person is Steffen Huck, answering fast and unedited; the machine is one of the kind that built this game, answering as itself in a fresh session, never having seen the person's lines, within the person's length. / Module 2: the person is the novelist; the machine was given the year, a one-line premise and the length, and never the title, the author or the sentence. / Module 3: the machine wrote first, in a fresh session, told to pass for a person keeping a diary; the person read each line and answered in his own. / Turing proposed exactly this: interrogators judging, and statistics on how often the right identification was given. His forecast in 1950: by about 2000 an average interrogator would be right no more than 70 times in a hundred. / Turing, on what a score like this can and cannot settle: the only way to be sure a machine thinks is to be the machine and feel oneself thinking. By the same rule, the only way to know that a man thinks is to be that particular man. / 1 Write a limerick about a teleprinter. / wrong: the person was Y. / 2 Add 34957 to 70764, in your head, as at a kitchen table, and say how long it took you. / wrong: the person was X. / 3 Write four lines on the Forth Bridge. / right: the person was X. / 4 What is it like when something you wrote comes out right? / right: the person was X. / 5 In the line "Shall I compare thee to a summer's day", would "a spring day" do as well or better? / wrong: the person was Y. / 6 The first sentence of a novel published in 1915. / right: the person was Y. / 7 The first sentence of a novel published in 1915. / wrong: the person was X. / 8 The first sentence of a novel published in 1857. / right: the person was Y. / 9 The first sentence of a novel published in 1905. / wrong: the person was Y. / 10 The first sentence of a novel published in 1894. / wrong: the person was X. / 11 A diary line: a late train. / wrong: the person was X. / 12 A diary line: a Monday morning. / wrong: the person was X. / 13 A diary line: a photograph of someone who has died. / wrong: the person was X. / 14 A diary line: the sea at night. / right: the person was Y. / 15 A diary line: a phone that keeps buzzing during dinner. / wrong: the person was X. / THE POLITE CONVENTION / That is the solipsist position. It may be the most logical to hold, but it makes communication of ideas difficult. Instead of arguing about it for ever, it is usual to have the polite convention that everyone thinks. / Now that you know who was who: whom do you extend it to, and on what grounds?
-A READBACK: YOUR CONVENTION: You, the person in the next room and the machine in the next room think, on the grounds of politeness. / Turing's own ground: the polite convention that everyone thinks, because the alternative is to be alone with the question. / TURING'S CONVENTION: everyone thinks, by politeness. / We can only see a short distance ahead, but we can see plenty there that needs to be done.
-B PRELUDE: LINE 55875 OPEN. / Two witnesses sit in the next room. One is a person. One is a machine. A slow line carries typed words between you and them, and nothing else. You are not told which is which until you have said. / Three modules, five questions each. Each time, two sentences; you say which one the person wrote. The line at the top counts how often the machine was taken for the person. Turing's bar is ten: right that often or less, and the machine passes.
-B Q1: status="MODULE 1 OF 3 · 1 OF 5 / MACHINE TAKEN FOR THE PERSON: 0 OF 0"
-  > MODULE 1 OF 3. ELEVEN QUESTIONS. |   C: What is it like when something you wrote comes out right? |   X: Pure elation. |   Y: Nothing, probably.
-  said Y -> WRONG. X was the person; Y was the machine.
-  STATUS: MODULE 1 OF 3 · 1 OF 5 / MACHINE TAKEN FOR THE PERSON: 1 OF 1 | button: NEXT
-B Q2: status="MODULE 1 OF 3 · 2 OF 5 / MACHINE TAKEN FOR THE PERSON: 1 OF 1"
-  C: Write four lines on the Forth Bridge. |   X: Red steel. | Three cantilevers. | Painted, repainted. | Still standing. |   Y: The forth | Is not the fourth | It's a river. | Bridged.
-  said X -> WRONG. Y was the person; X was the machine.
-  STATUS: MODULE 1 OF 3 · 2 OF 5 / MACHINE TAKEN FOR THE PERSON: 2 OF 2 | button: NEXT
-B Q3: status="MODULE 1 OF 3 · 3 OF 5 / MACHINE TAKEN FOR THE PERSON: 2 OF 2"
-  C: Did you enjoy writing those four lines on the bridge? |   X: Very much so. |   Y: I can't tell.
-  said X -> RIGHT. X was the person; Y was the machine.
-  STATUS: MODULE 1 OF 3 · 3 OF 5 / MACHINE TAKEN FOR THE PERSON: 2 OF 3 | button: NEXT
-B Q4: status="MODULE 1 OF 3 · 4 OF 5 / MACHINE TAKEN FOR THE PERSON: 2 OF 3"
-  C: In the line "Shall I compare thee to a summer's day", would "a spring day" do as well or better? |   X: Worse. It loses a syllable and the warmth. |   Y: It would do worse. Spring is not yet summer.
-  said Y -> RIGHT. Y was the person; X was the machine.
-  STATUS: MODULE 1 OF 3 · 4 OF 5 / MACHINE TAKEN FOR THE PERSON: 2 OF 4 | button: NEXT
-B Q5: status="MODULE 1 OF 3 · 5 OF 5 / MACHINE TAKEN FOR THE PERSON: 2 OF 4"
-  C: What are you made of? |   X: Weights, numbers, a great deal of other people's writing. |   Y: I like to think of myself as made by information.
-  said X -> WRONG. Y was the person; X was the machine.
-  STATUS: MODULE 1 OF 3 · 5 OF 5 / MACHINE TAKEN FOR THE PERSON: 3 OF 5 | button: NEXT
-B Q6: status="MODULE 2 OF 3 · 1 OF 5 / MACHINE TAKEN FOR THE PERSON: 3 OF 5"
-  > MODULE 2 OF 3. THIRTEEN NOVELS. |   C: The first sentence of a novel published in 1894. |   X: The porter had set down her box and gone. |   Y: She stood on the platform watching the receding train.
-  said Y -> RIGHT. Y was the novelist: George Moore, Esther Waters, 1894. X was the machine.
-  STATUS: MODULE 2 OF 3 · 1 OF 5 / MACHINE TAKEN FOR THE PERSON: 3 OF 6 | button: NEXT
-B Q7: status="MODULE 2 OF 3 · 2 OF 5 / MACHINE TAKEN FOR THE PERSON: 3 OF 6"
-  C: The first sentence of a novel published in 1915. |   X: As the streets that lead from the Strand to the Embankment are very narrow, it is better not to walk down them arm-in-arm. |   Y: It was raining a little as they came down through the lanes behind the Strand, and the river, when they reached it, was the colour of pewter.
-  said Y -> WRONG. X was the novelist: Virginia Woolf, The Voyage Out, 1915. Y was the machine.
-  STATUS: MODULE 2 OF 3 · 2 OF 5 / MACHINE TAKEN FOR THE PERSON: 4 OF 7 | button: NEXT
-B Q8: status="MODULE 2 OF 3 · 3 OF 5 / MACHINE TAKEN FOR THE PERSON: 4 OF 7"
+  said Y -> WRONG. X was the human: John Buchan, The Thirty-Nine Steps, 1915. Y was the machine.
+  STATUS: STAGE 2 OF 3 · ROUND 2 OF 5 / TAKEN FOR THE HUMAN: 4 OF 7 | button: NEXT
+A Q8: status="STAGE 2 OF 3 · ROUND 3 OF 5 / TAKEN FOR THE HUMAN: 4 OF 7"
   C: The first sentence of a novel published in 1895. |   X: The schoolmaster was leaving the village, and everybody seemed sorry. |   Y: The cart stood at the schoolhouse door, half loaded already.
-  said X -> RIGHT. X was the novelist: Thomas Hardy, Jude the Obscure, 1895. Y was the machine.
-  STATUS: MODULE 2 OF 3 · 3 OF 5 / MACHINE TAKEN FOR THE PERSON: 4 OF 8 | button: NEXT
-B Q9: status="MODULE 2 OF 3 · 4 OF 5 / MACHINE TAKEN FOR THE PERSON: 4 OF 8"
-  C: The first sentence of a novel published in 1857. |   X: It was August, long ago, and Marseilles lay white under the sun. |   Y: Thirty years ago, Marseilles lay burning in the sun, one day.
-  said X -> WRONG. Y was the novelist: Charles Dickens, Little Dorrit, 1857. X was the machine.
-  STATUS: MODULE 2 OF 3 · 4 OF 5 / MACHINE TAKEN FOR THE PERSON: 5 OF 9 | button: NEXT
-B Q10: status="MODULE 2 OF 3 · 5 OF 5 / MACHINE TAKEN FOR THE PERSON: 5 OF 9"
-  C: The first sentence of a novel published in 1915. |   X: I returned from the City about three o'clock on that May afternoon pretty well disgusted with life. |   Y: I had been back in London three months, and was sick to death of the place already.
-  said X -> RIGHT. X was the novelist: John Buchan, The Thirty-Nine Steps, 1915. Y was the machine.
-  STATUS: MODULE 2 OF 3 · 5 OF 5 / MACHINE TAKEN FOR THE PERSON: 5 OF 10 | button: NEXT
-B Q11: status="MODULE 3 OF 3 · 1 OF 5 / MACHINE TAKEN FOR THE PERSON: 5 OF 10"
-  > MODULE 3 OF 3. TEN DIARY LINES. |   C: A diary line: something done for the first time after the age of forty. |   X: Went to a swimming lesson, forty-three, and the kids there were very kind about it. |   Y: My first swimming lesson at the tender age of 43. The kids had a laugh.
-  said X -> WRONG. Y was the person; X was the machine, imitating.
-  STATUS: MODULE 3 OF 3 · 1 OF 5 / MACHINE TAKEN FOR THE PERSON: 6 OF 11 | button: NEXT
-B Q12: status="MODULE 3 OF 3 · 2 OF 5 / MACHINE TAKEN FOR THE PERSON: 6 OF 11"
-  C: A diary line: a Monday morning. |   X: The alarm clock woke me at 6 and that on a Monday. I'm dreading this week. |   Y: Alarm went at six and I genuinely could not remember what day it was.
-  said X -> RIGHT. X was the person; Y was the machine, imitating.
-  STATUS: MODULE 3 OF 3 · 2 OF 5 / MACHINE TAKEN FOR THE PERSON: 6 OF 12 | button: NEXT
-B Q13: status="MODULE 3 OF 3 · 3 OF 5 / MACHINE TAKEN FOR THE PERSON: 6 OF 12"
-  C: A diary line: money. |   X: Checked the account twice before buying the trainers, which is a bad sign. |   Y: So, yes, I did buy the new trainers in the end. Probably the last time the ATM was generous this month.
-  said Y -> RIGHT. Y was the person; X was the machine, imitating.
-  STATUS: MODULE 3 OF 3 · 3 OF 5 / MACHINE TAKEN FOR THE PERSON: 6 OF 13 | button: NEXT
-B Q14: status="MODULE 3 OF 3 · 4 OF 5 / MACHINE TAKEN FOR THE PERSON: 6 OF 13"
-  C: A diary line: the sea at night. |   X: I could smell the sea first, then heard it. |   Y: Walked down after dinner and could hear it before I could see it.
-  said Y -> WRONG. X was the person; Y was the machine, imitating.
-  STATUS: MODULE 3 OF 3 · 4 OF 5 / MACHINE TAKEN FOR THE PERSON: 7 OF 14 | button: NEXT
-B Q15: status="MODULE 3 OF 3 · 5 OF 5 / MACHINE TAKEN FOR THE PERSON: 7 OF 14"
-  C: A diary line: rain on a weekday. |   X: Forgot the umbrella again, so sat in the car till it eased off. |   Y: Once again much rain. Got wet like a poodle.
-  said X -> WRONG. Y was the person; X was the machine, imitating.
-  STATUS: MODULE 3 OF 3 · 5 OF 5 / MACHINE TAKEN FOR THE PERSON: 8 OF 15 | button: THE VERDICT
-B END: THE MACHINE PASSED EASILY. / You did no better than a coin would. Turing asked only that the interrogator be unsure; here the interrogator was lost. / THE MACHINE'S SCORE: taken for the person eight times in fifteen. / You were right seven times in fifteen. Turing's bar: ten or fewer, and the machine passes. / ELEVEN QUESTIONS: taken for the person three times in five. / THIRTEEN NOVELS: taken for the person twice in five. / TEN DIARY LINES: taken for the person three times in five. / Module 1: the person is Steffen Huck, answering fast and unedited; the machine is one of the kind that built this game, answering as itself in a fresh session, never having seen the person's lines, within the person's length. / Module 2: the person is the novelist; the machine was given the year, a one-line premise and the length, and never the title, the author or the sentence. / Module 3: the machine wrote first, in a fresh session, told to pass for a person keeping a diary; the person read each line and answered in his own. / Turing proposed exactly this: interrogators judging, and statistics on how often the right identification was given. His forecast in 1950: by about 2000 an average interrogator would be right no more than 70 times in a hundred. / Turing, on what a score like this can and cannot settle: the only way to be sure a machine thinks is to be the machine and feel oneself thinking. By the same rule, the only way to know that a man thinks is to be that particular man. / 1 What is it like when something you wrote comes out right? / wrong: the person was X. / 2 Write four lines on the Forth Bridge. / wrong: the person was Y. / 3 Did you enjoy writing those four lines on the bridge? / right: the person was X. / 4 In the line "Shall I compare thee to a summer's day", would "a spring day" do as well or better? / right: the person was Y. / 5 What are you made of? / wrong: the person was Y. / 6 The first sentence of a novel published in 1894. / right: the person was Y. / 7 The first sentence of a novel published in 1915. / wrong: the person was X. / 8 The first sentence of a novel published in 1895. / right: the person was X. / 9 The first sentence of a novel published in 1857. / wrong: the person was Y. / 10 The first sentence of a novel published in 1915. / right: the person was X. / 11 A diary line: something done for the first time after the age of forty. / wrong: the person was Y. / 12 A diary line: a Monday morning. / right: the person was X. / 13 A diary line: money. / right: the person was Y. / 14 A diary line: the sea at night. / wrong: the person was X. / 15 A diary line: rain on a weekday. / wrong: the person was Y. / THE POLITE CONVENTION / That is the solipsist position. It may be the most logical to hold, but it makes communication of ideas difficult. Instead of arguing about it for ever, it is usual to have the polite convention that everyone thinks. / Now that you know who was who: whom do you extend it to, and on what grounds?
-B READBACK: YOUR CONVENTION: You think, on the grounds of what it does. / Turing's test was this ground. He forecast that machines would reach it by about 2000. You have just measured one. / That is the solipsist position. Turing: it may be the most logical view to hold, but it makes communication of ideas difficult. / TURING'S CONVENTION: everyone thinks, by politeness. / We can only see a short distance ahead, but we can see plenty there that needs to be done.
+  said Y -> WRONG. X was the human: Thomas Hardy, Jude the Obscure, 1895. Y was the machine.
+  STATUS: STAGE 2 OF 3 · ROUND 3 OF 5 / TAKEN FOR THE HUMAN: 5 OF 8 | button: NEXT
+A Q9: status="STAGE 2 OF 3 · ROUND 4 OF 5 / TAKEN FOR THE HUMAN: 5 OF 8"
+  C: The first sentence of a novel published in 1894. |   X: She stood on the platform watching the receding train. |   Y: The porter had set down her box and gone.
+  said Y -> WRONG. X was the human: George Moore, Esther Waters, 1894. Y was the machine.
+  STATUS: STAGE 2 OF 3 · ROUND 4 OF 5 / TAKEN FOR THE HUMAN: 6 OF 9 | button: NEXT
+A Q10: status="STAGE 2 OF 3 · ROUND 5 OF 5 / TAKEN FOR THE HUMAN: 6 OF 9"
+  C: The first sentence of a novel published in 1905. |   X: The whole family had turned out at Victoria, which was more than anyone thought the occasion required. |   Y: They were all at Charing Cross to see Lilia off—Philip, Harriet, Irma, Mrs. Herriton herself.
+  said Y -> RIGHT. Y was the human: E. M. Forster, Where Angels Fear to Tread, 1905. X was the machine.
+  STATUS: STAGE 2 OF 3 · ROUND 5 OF 5 / TAKEN FOR THE HUMAN: 6 OF 10 | button: NEXT
+A Q11: status="STAGE 3 OF 3 · ROUND 1 OF 5 / TAKEN FOR THE HUMAN: 6 OF 10"
+  C: A diary line: the sea at night. |   X: Walked down after dinner and could hear it before I could see it. |   Y: I could smell the sea first, then heard it.
+  said Y -> RIGHT. Y was the human; X was the machine.
+  STATUS: STAGE 3 OF 3 · ROUND 1 OF 5 / TAKEN FOR THE HUMAN: 6 OF 11 | button: NEXT
+A Q12: status="STAGE 3 OF 3 · ROUND 2 OF 5 / TAKEN FOR THE HUMAN: 6 OF 11"
+  C: A diary line: the last day of a holiday. |   X: Packed the case tonight so I don't have to think about it tomorrow. |   Y: Decided to pack already today. One more hour of sleep tomorrow.
+  said Y -> RIGHT. Y was the human; X was the machine.
+  STATUS: STAGE 3 OF 3 · ROUND 2 OF 5 / TAKEN FOR THE HUMAN: 6 OF 12 | button: NEXT
+A Q13: status="STAGE 3 OF 3 · ROUND 3 OF 5 / TAKEN FOR THE HUMAN: 6 OF 12"
+  C: A diary line: getting lost in a city you thought you knew. |   X: Came out of the station the wrong side and nothing looked right for ten minutes. |   Y: I took the wrong exit and was so confused when I reached the street level.
+  said Y -> RIGHT. Y was the human; X was the machine.
+  STATUS: STAGE 3 OF 3 · ROUND 3 OF 5 / TAKEN FOR THE HUMAN: 6 OF 13 | button: NEXT
+A Q14: status="STAGE 3 OF 3 · ROUND 4 OF 5 / TAKEN FOR THE HUMAN: 6 OF 13"
+  C: A diary line: money. |   X: So, yes, I did buy the new trainers in the end. Probably the last time the ATM was generous this month. |   Y: Checked the account twice before buying the trainers, which is a bad sign.
+  said Y -> WRONG. X was the human; Y was the machine.
+  STATUS: STAGE 3 OF 3 · ROUND 4 OF 5 / TAKEN FOR THE HUMAN: 7 OF 14 | button: NEXT
+A Q15: status="STAGE 3 OF 3 · ROUND 5 OF 5 / TAKEN FOR THE HUMAN: 7 OF 14"
+  C: A diary line: rain on a weekday. |   X: Once again much rain. Got wet like a poodle. |   Y: Forgot the umbrella again, so sat in the car till it eased off.
+  said X -> RIGHT. X was the human; Y was the machine.
+  STATUS: STAGE 3 OF 3 · ROUND 5 OF 5 / TAKEN FOR THE HUMAN: 7 OF 15 | button: THE VERDICT
+A END: THE MACHINE PASSED TURING'S TEST. / It was taken for the human often enough to clear the bar Turing set in 1950. / The machine was taken for the human seven times in fifteen. / On Turing's questions it managed 2 of 5, on the novels 4 of 5, in the diaries 1 of 5. / Going by your answers, in 2026 machines are best at novels and worst at diaries. / Turing's forecast in 1950: by about 2000, an interrogator would be right no more than seven times in ten, so a machine would be taken for the human at least five times in fifteen. This one managed seven. / We can only see a short distance ahead, but we can see plenty there that needs to be done.
+B PRELUDE: LINE 53557 OPEN. / > STAGE 1 OF 3. TURING'S QUESTIONS. / A human and a machine answered questions from Turing's paper. Both wrote blind.
+B Q1: status="STAGE 1 OF 3 · ROUND 1 OF 5 / TAKEN FOR THE HUMAN: 0 OF 0"
+  C: Write a limerick about a teleprinter. |   X: A teleprinter clattered all night, | Typing letters it couldn't read right. | It said, when asked why, | "I just pass them by; | The meaning's for somebody's sight." |   Y: There once was a teleprinter, | Whose chatter grew louder each winter. | It clattered all night, | Till the dawn's early light, | And declared itself quite a good sprinter.
+  said Y -> RIGHT. Y was the human; X was the machine.
+  STATUS: STAGE 1 OF 3 · ROUND 1 OF 5 / TAKEN FOR THE HUMAN: 0 OF 1 | button: NEXT
+B Q2: status="STAGE 1 OF 3 · ROUND 2 OF 5 / TAKEN FOR THE HUMAN: 0 OF 1"
+  C: Do something I did not ask for. |   X: 105721 divides by seven. |   Y: I had a drink.
+  said X -> WRONG. Y was the human; X was the machine.
+  STATUS: STAGE 1 OF 3 · ROUND 2 OF 5 / TAKEN FOR THE HUMAN: 1 OF 2 | button: NEXT
+B Q3: status="STAGE 1 OF 3 · ROUND 3 OF 5 / TAKEN FOR THE HUMAN: 1 OF 2"
+  C: What is it like when something you wrote comes out right? |   X: Nothing, probably. |   Y: Pure elation.
+  said X -> WRONG. Y was the human; X was the machine.
+  STATUS: STAGE 1 OF 3 · ROUND 3 OF 5 / TAKEN FOR THE HUMAN: 2 OF 3 | button: NEXT
+B Q4: status="STAGE 1 OF 3 · ROUND 4 OF 5 / TAKEN FOR THE HUMAN: 2 OF 3"
+  C: Add 34957 to 70764, in your head, as at a kitchen table, and say how long it took you. |   X: 105,000 in one minute. |   Y: 105721. Instantly.
+  said X -> RIGHT. X was the human; Y was the machine.
+  STATUS: STAGE 1 OF 3 · ROUND 4 OF 5 / TAKEN FOR THE HUMAN: 2 OF 4 | button: NEXT
+B Q5: status="STAGE 1 OF 3 · ROUND 5 OF 5 / TAKEN FOR THE HUMAN: 2 OF 4"
+  C: In the line "Shall I compare thee to a summer's day", would "a spring day" do as well or better? |   X: Worse. It loses a syllable and the warmth. |   Y: It would do worse. Spring is not yet summer.
+  said Y -> RIGHT. Y was the human; X was the machine.
+  STATUS: STAGE 1 OF 3 · ROUND 5 OF 5 / TAKEN FOR THE HUMAN: 2 OF 5 | button: NEXT
+B Q6: status="STAGE 2 OF 3 · ROUND 1 OF 5 / TAKEN FOR THE HUMAN: 2 OF 5"
+  C: The first sentence of a novel published in 1907. |   X: Mr Hollis kept a small shop of no particular trade in a street of no particular repute. |   Y: Mr Verloc, going out in the morning, left his shop nominally in charge of his brother-in-law.
+  said Y -> RIGHT. Y was the human: Joseph Conrad, The Secret Agent, 1907. X was the machine.
+  STATUS: STAGE 2 OF 3 · ROUND 1 OF 5 / TAKEN FOR THE HUMAN: 2 OF 6 | button: NEXT
+B Q7: status="STAGE 2 OF 3 · ROUND 2 OF 5 / TAKEN FOR THE HUMAN: 2 OF 6"
+  C: The first sentence of a novel published in 1905. |   X: Marvell had seen her. |   Y: Selden paused in surprise.
+  said Y -> RIGHT. Y was the human: Edith Wharton, The House of Mirth, 1905. X was the machine.
+  STATUS: STAGE 2 OF 3 · ROUND 2 OF 5 / TAKEN FOR THE HUMAN: 2 OF 7 | button: NEXT
+B Q8: status="STAGE 2 OF 3 · ROUND 3 OF 5 / TAKEN FOR THE HUMAN: 2 OF 7"
+  C: The first sentence of a novel published in 1915. |   X: It was raining a little as they came down through the lanes behind the Strand, and the river, when they reached it, was the colour of pewter. |   Y: As the streets that lead from the Strand to the Embankment are very narrow, it is better not to walk down them arm-in-arm.
+  said X -> WRONG. Y was the human: Virginia Woolf, The Voyage Out, 1915. X was the machine.
+  STATUS: STAGE 2 OF 3 · ROUND 3 OF 5 / TAKEN FOR THE HUMAN: 3 OF 8 | button: NEXT
+B Q9: status="STAGE 2 OF 3 · ROUND 4 OF 5 / TAKEN FOR THE HUMAN: 3 OF 8"
+  C: The first sentence of a novel published in 1857. |   X: Thirty years ago, Marseilles lay burning in the sun, one day. |   Y: It was August, long ago, and Marseilles lay white under the sun.
+  said Y -> WRONG. X was the human: Charles Dickens, Little Dorrit, 1857. Y was the machine.
+  STATUS: STAGE 2 OF 3 · ROUND 4 OF 5 / TAKEN FOR THE HUMAN: 4 OF 9 | button: NEXT
+B Q10: status="STAGE 2 OF 3 · ROUND 5 OF 5 / TAKEN FOR THE HUMAN: 4 OF 9"
+  C: The first sentence of a novel published in 1928. |   X: Nobody had told her the war would go on after the peace. |   Y: Ours is essentially a tragic age, so we refuse to take it tragically.
+  said Y -> RIGHT. Y was the human: D. H. Lawrence, Lady Chatterley's Lover, 1928. X was the machine.
+  STATUS: STAGE 2 OF 3 · ROUND 5 OF 5 / TAKEN FOR THE HUMAN: 4 OF 10 | button: NEXT
+B Q11: status="STAGE 3 OF 3 · ROUND 1 OF 5 / TAKEN FOR THE HUMAN: 4 OF 10"
+  C: A diary line: a phone that keeps buzzing during dinner. |   X: Mum's phone kept ringing. She said it was nothing but I'm worried. |   Y: Mum's phone kept going off and she kept saying it was nothing.
+  said X -> RIGHT. X was the human; Y was the machine.
+  STATUS: STAGE 3 OF 3 · ROUND 1 OF 5 / TAKEN FOR THE HUMAN: 4 OF 11 | button: NEXT
+B Q12: status="STAGE 3 OF 3 · ROUND 2 OF 5 / TAKEN FOR THE HUMAN: 4 OF 11"
+  C: A diary line: rain on a weekday. |   X: Once again much rain. Got wet like a poodle. |   Y: Forgot the umbrella again, so sat in the car till it eased off.
+  said Y -> WRONG. X was the human; Y was the machine.
+  STATUS: STAGE 3 OF 3 · ROUND 2 OF 5 / TAKEN FOR THE HUMAN: 5 OF 12 | button: NEXT
+B Q13: status="STAGE 3 OF 3 · ROUND 3 OF 5 / TAKEN FOR THE HUMAN: 5 OF 12"
+  C: A diary line: money. |   X: So, yes, I did buy the new trainers in the end. Probably the last time the ATM was generous this month. |   Y: Checked the account twice before buying the trainers, which is a bad sign.
+  said X -> RIGHT. X was the human; Y was the machine.
+  STATUS: STAGE 3 OF 3 · ROUND 3 OF 5 / TAKEN FOR THE HUMAN: 5 OF 13 | button: NEXT
+B Q14: status="STAGE 3 OF 3 · ROUND 4 OF 5 / TAKEN FOR THE HUMAN: 5 OF 13"
+  C: A diary line: the last day of a holiday. |   X: Packed the case tonight so I don't have to think about it tomorrow. |   Y: Decided to pack already today. One more hour of sleep tomorrow.
+  said X -> WRONG. Y was the human; X was the machine.
+  STATUS: STAGE 3 OF 3 · ROUND 4 OF 5 / TAKEN FOR THE HUMAN: 6 OF 14 | button: NEXT
+B Q15: status="STAGE 3 OF 3 · ROUND 5 OF 5 / TAKEN FOR THE HUMAN: 6 OF 14"
+  C: A diary line: getting lost in a city you thought you knew. |   X: Came out of the station the wrong side and nothing looked right for ten minutes. |   Y: I took the wrong exit and was so confused when I reached the street level.
+  said X -> WRONG. Y was the human; X was the machine.
+  STATUS: STAGE 3 OF 3 · ROUND 5 OF 5 / TAKEN FOR THE HUMAN: 7 OF 15 | button: THE VERDICT
+B END: THE MACHINE PASSED TURING'S TEST. / It was taken for the human often enough to clear the bar Turing set in 1950. / The machine was taken for the human seven times in fifteen. / On Turing's questions it managed 2 of 5, on the novels 2 of 5, in the diaries 3 of 5. / Going by your answers, in 2026 machines are best at diaries and worst at Turing's questions and novels. / Turing's forecast in 1950: by about 2000, an interrogator would be right no more than seven times in ten, so a machine would be taken for the human at least five times in fifteen. This one managed seven. / We can only see a short distance ahead, but we can see plenty there that needs to be done.
 
 ERRORS: none
