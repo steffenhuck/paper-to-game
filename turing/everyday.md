@@ -14,7 +14,7 @@ Three earlier machine sets were run and not used, and are kept at the end of thi
 
 3. **A photograph of someone who has died.**
    Machine: Found the one of Dad at the caravan, still can't look at it for long.
-   Person: 
+   Person: Today I found this photo with dad on the boat. I must have it framed.
 
 4. **Getting lost in a city you thought you knew.**
    Machine: Came out of the station the wrong side and nothing looked right for ten minutes.
