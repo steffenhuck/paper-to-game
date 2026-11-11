@@ -38,7 +38,7 @@ Three earlier machine sets were run and not used, and are kept at the end of thi
 
 9. **A phone that keeps buzzing during dinner.**
    Machine: Mum's phone kept going off and she kept saying it was nothing.
-   Person: 
+   Person: Mum's kept ringing. She said it was nothing but I'm worried.
 
 10. **A late train.**
     Machine: Twenty minutes late and no announcement, so everyone just stared at the board.
