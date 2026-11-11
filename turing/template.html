@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Test It Like Turing</title>
 <script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<meta name="description" content="Turing's test, run once more with real witnesses, in three modules: a person and a machine answering the paper's questions blind; novelists against a machine given the premise; and a machine told to imitate, answered by a person. Fifteen judgements; the score is the machine's, against Turing's 1950 bar.">
+<meta name="description" content="Three stages of five rounds. Each round, two sentences, one by a human and one by a machine: say which is the human's. The machine scores by how often you took it for the human, against the bar Turing set in 1950.">
 <style>
 @font-face{font-family:VT323;font-weight:400;font-style:normal;src:url(data:font/woff2;base64,/*__F_VT323__*/) format('woff2')}
 :root{--black:#070A08;--ph:#49F57A;--dim:#1E8A45;--glow:#C9FFD8;color-scheme:dark}
@@ -80,8 +80,8 @@ body.lock{overflow:hidden}
   <div class="status"><div class="st" id="status"></div><button class="q" id="q-play" aria-label="How to play">?</button></div>
   <div id="log"></div>
   <div class="hideit" id="pickrow">
-    <div class="ln"><span class="lab">WHICH ANSWER DID THE PERSON WRITE?</span></div>
-    <div class="row2"><button class="btn" id="b-pick-x">X IS THE PERSON</button><button class="btn" id="b-pick-y">Y IS THE PERSON</button></div>
+    <div class="ln"><span class="lab">WHICH ONE DID THE HUMAN WRITE?</span></div>
+    <div class="row2"><button class="btn" id="b-pick-x">X IS THE HUMAN</button><button class="btn" id="b-pick-y">Y IS THE HUMAN</button></div>
   </div>
   <div class="hideit" id="after">
     <button class="btn wide" id="b-next">NEXT</button>
@@ -90,14 +90,6 @@ body.lock{overflow:hidden}
 
 <div class="wrap screen" id="s-end">
   <div id="end-log"></div>
-  <div class="hideit" id="conv">
-    <div class="ln hdr"><span class="lab">EXTEND IT TO</span></div>
-    <div id="cands"></div>
-    <div class="ln hdr"><span class="lab">ON THE GROUNDS OF</span></div>
-    <div id="grounds"></div>
-    <button class="btn wide dis" id="b-adopt">ADOPT</button>
-  </div>
-  <div id="read-log"></div>
   <div class="hideit foot" id="end-btns">
     <button class="btn wide" id="b-again">PLAY AGAIN</button>
     <div class="row"><button class="link" id="b-help-end">How to play</button><button class="link" id="b-about">About</button></div>
@@ -107,15 +99,13 @@ body.lock{overflow:hidden}
 
 <div class="ov" id="help"><div class="wrap">
   <h2>HOW TO PLAY</h2>
-  <p>Fifteen times, two sentences: say which one the person wrote.</p>
-  <p>Two witnesses sit in the next room, one a person and one a machine, and a slow line carries typed words between you and them, and nothing else. You are not told which is which until you have said.</p>
-  <h3>Three modules, five questions each</h3>
-  <p>ELEVEN QUESTIONS: questions from Turing's paper, answered blind by a person (Steffen Huck) and by a machine answering as itself, within the person's length. THIRTEEN NOVELS: the first sentence of a novel, against a machine given the year, a one-line premise and the length. TEN DIARY LINES: the machine wrote first, told to pass for a person keeping a diary, and the person answered. Each module begins with a line saying so. Five pairs are drawn from each, and which witness is X is drawn each time; the line number at the top of the log is the draw.</p>
-  <p>Read the two sentences, which arrive a character at a time; tap anywhere to hurry them. Then X IS THE PERSON or Y IS THE PERSON. The reveal says RIGHT or WRONG and who wrote which; in the novels, which novel.</p>
-  <h3>The score</h3>
-  <p>The score is the machine's: how often you took it for the person. The line at the top keeps count. Turing forecast that by about 2000 an interrogator would be right no more than 70 times in a hundred; on fifteen questions that is ten. Right ten times or fewer, and the machine has passed the test he proposed. The verdict says, in words, how the machine did.</p>
-  <h3>The end</h3>
-  <p>The verdict, the three modules side by side, the witnesses named, Turing's reply to the question of whether anyone can ever be sure, and then a question for you: whom do you extend the polite convention to, and on what grounds.</p>
+  <p>Three stages of five rounds. In each round you see two sentences, one written by a human and one by a machine, and say which is the human's. The machine scores by how often you took it for the human.</p>
+  <h3>The stages</h3>
+  <p>TURING'S QUESTIONS: a human and a machine answered questions from Turing's 1950 paper; both wrote blind. NOVELS: one sentence opens a published novel, the other is a machine's attempt at the same opening. DIARIES: the machine wrote first, trying to pass as human, and the human read it and replied. Each stage begins with a line saying so. The five rounds of each stage, and which sentence is X, are drawn afresh each game; the line number at the top of the log is the draw.</p>
+  <h3>A round</h3>
+  <p>The two sentences arrive a character at a time; tap anywhere to hurry them. Then X IS THE HUMAN or Y IS THE HUMAN. The reveal says RIGHT or WRONG and which was which; in the novels, which novel.</p>
+  <h3>The verdict</h3>
+  <p>The line at the top counts how often the machine was taken for the human. Turing forecast that by about 2000 an interrogator would be right no more than seven times in ten, so a machine would be taken for the human at least five times in fifteen. The verdict says in words how this machine did, stage by stage, and what that suggests machines are best and worst at today.</p>
   <button class="btn wide" id="b-help-close">BACK</button>
 </div></div>
 
@@ -180,33 +170,28 @@ body.lock{overflow:hidden}
   function startScreen() {
     const L = $('start-log'); L.innerHTML = '';
     typeLine(L, "TEST IT LIKE TURING", 'big', 30);
-    typeLine(L, `${C.forecastYear}. Turing proposes a game: an interrogator, two witnesses in another room, a teleprinter, questions. If the interrogator cannot tell the machine from the person, stop asking whether the machine can think. His forecast: by about ${C.forecastYear + C.forecastHorizon}, an average interrogator would be right no more than ${C.forecastPct} times in a hundred.`, '', 90);
-    typeLine(L, `${C.nowYear}. Here the test is run once more, with real witnesses, three ways: a person and a machine answering his questions blind; novelists against a machine given the premise; and a machine told to imitate, answered by a person. You are the interrogator.`, '', 90);
-    typeLine(L, 'Fifteen times, two sentences: say which one the person wrote.', 'glow hdr', 90);
-    typeLine(L, `You will read both sentences, tap the one you take for the person's, and be told. The score is the machine's: right ${M.words(M.BAR)} times or fewer, and it has passed Turing's test.`, '', 90);
+    typeLine(L, `In ${C.forecastYear} Turing proposed a test: if you cannot tell a machine from a human by what it writes, stop asking whether it thinks.`, '', 90);
+    typeLine(L, 'You play three stages of five rounds. In each round you see two sentences, one written by a human and one by a machine, and say which is the human\'s. The machine scores by how often you took it for the human.', 'glow hdr', 90);
     cursorTo(L);
   }
 
   // ---------- play ----------
   function statusLine(o, sc) {
-    $('status').innerHTML = `<b>MODULE</b> ${o.module} <b>OF</b> ${M.MODULES.length} <b>·</b> ${o.inModule} <b>OF</b> ${o.perModule}<br><b>MACHINE TAKEN FOR THE PERSON:</b> <i>${sc.fooled}</i> <b>OF</b> ${sc.asked}`;
+    $('status').innerHTML = `<b>STAGE</b> ${o.module} <b>OF</b> ${M.MODULES.length} <b>·</b> <b>ROUND</b> ${o.inModule} <b>OF</b> ${o.perModule}<br><b>TAKEN FOR THE HUMAN:</b> <i>${sc.fooled}</i> <b>OF</b> ${sc.asked}`;
   }
   function beginPlay() {
     slow(); g = M.newGame();
     $('log').innerHTML = ''; ['pickrow', 'after'].forEach(id => $(id).classList.add('hideit'));
     show('s-play');
-    const L = $('log');
-    typeLine(L, `LINE ${g.seed} OPEN.`, 'dim');
-    typeLine(L, 'Two witnesses sit in the next room. One is a person. One is a machine. A slow line carries typed words between you and them, and nothing else. You are not told which is which until you have said.');
-    typeLine(L, `Three modules, five questions each. Each time, two sentences; you say which one the person wrote. The line at the top counts how often the machine was taken for the person. Turing's bar is ${M.words(M.BAR)}: right that often or less, and the machine passes.`);
+    typeLine($('log'), `LINE ${g.seed} OPEN.`, 'dim');
     then(() => askNext());
   }
   function askNext() {
     slow();
     const o = g.pending || M.ask(g); statusLine(o, M.score(g));
     const L = $('log');
-    if (o.intro) { typeLine(L, `> MODULE ${o.module} OF ${M.MODULES.length}. ${o.moduleName}.`, 'hdr'); typeLine(L, o.intro); }
-    typeLine(L, `> ${o.inModule} OF ${o.perModule}.`, 'dim hdr');
+    if (o.intro) { typeLine(L, `> STAGE ${o.module} OF ${M.MODULES.length}. ${o.moduleName}.`, 'hdr'); typeLine(L, o.intro); }
+    typeLine(L, `> ROUND ${o.inModule} OF ${o.perModule}.`, 'dim hdr');
     typeLine(L, 'C: ' + o.q);
     typeLine(L, 'X: ' + o.X);
     typeLine(L, 'Y: ' + o.Y);
@@ -230,62 +215,19 @@ body.lock{overflow:hidden}
   });
 
   // ---------- the ending ----------
-  let extend = [], ground = null;
   function endScreen() {
     slow(); show('s-end');
     const s = M.summary(g);
-    const L = $('end-log'); L.innerHTML = ''; $('read-log').innerHTML = ''; $('conv').classList.add('hideit'); $('end-btns').classList.add('hideit');
-    extend = []; ground = null;
+    const L = $('end-log'); L.innerHTML = ''; $('end-btns').classList.add('hideit');
     typeLine(L, s.head, 'big');
     typeLine(L, s.band);
     typeLine(L, s.machine, 'glow');
-    typeLine(L, s.yours);
-    s.modules.forEach(t => typeLine(L, t, 'hdr'));
-    s.witnesses.forEach(t => typeLine(L, t, 'dim'));
-    s.paper.forEach(t => typeLine(L, t, 'hdr'));
-    then(() => {
-      s.table.forEach(t => {
-        const d = document.createElement('div'); d.className = 'ln';
-        d.innerHTML = `<span class="who">${t.n}</span> ${esc(t.q)}<br><span class="lab">${t.right ? 'right' : 'wrong'}: the person was ${t.personIs}.</span>`;
-        L.appendChild(d);
-      });
-      scrollDown();
-    });
-    typeLine(L, 'THE POLITE CONVENTION', 'big hdr');
-    typeLine(L, M.REPLY[1]);
-    typeLine(L, 'Now that you know who was who: whom do you extend it to, and on what grounds?');
-    then(() => {
-      const cd = $('cands'); cd.innerHTML = '';
-      M.CANDIDATES.forEach(c => {
-        const b = document.createElement('button'); b.className = 'tick' + (c.fixed ? ' fixed' : ''); b.dataset.key = c.key;
-        const draw = () => { const on = c.fixed || extend.indexOf(c.key) >= 0; b.innerHTML = `<span class="bx">[${on ? 'x' : ' '}]</span> ${esc(c.label)}` + (c.note ? ` <span class="nt">(${esc(c.note)})</span>` : ''); };
-        draw(); b.addEventListener('click', () => { const i = extend.indexOf(c.key); if (i >= 0) extend.splice(i, 1); else extend.push(c.key); draw(); });
-        cd.appendChild(b);
-      });
-      const gd = $('grounds'); gd.innerHTML = '';
-      M.GROUNDS.forEach(gr => {
-        const b = document.createElement('button'); b.className = 'tick'; b.dataset.key = gr.key;
-        b.innerHTML = `<span class="bx">( )</span> ${esc(gr.label)}`;
-        b.addEventListener('click', () => { ground = gr.key; [...gd.children].forEach(x => x.innerHTML = `<span class="bx">(${ground === x.dataset.key ? 'x' : ' '})</span> ${esc(M.GROUNDS.find(q => q.key === x.dataset.key).label)}`); $('b-adopt').className = 'btn wide'; });
-        gd.appendChild(b);
-      });
-      $('b-adopt').className = 'btn wide dis'; slow();
-      $('conv').classList.remove('hideit'); $('conv').appendChild(cur); scrollDown();
-    });
-  }
-  $('b-adopt').addEventListener('click', () => {
-    if (!ground) return;
-    pressed($('b-adopt')); slow();
-    const cv = M.convention(extend, ground);
-    $('conv').classList.add('hideit');
-    const L = $('read-log'); L.innerHTML = '';
-    typeLine(L, cv.yours, 'glow hdr');
-    typeLine(L, cv.turing);
-    if (cv.only) typeLine(L, cv.only);
-    typeLine(L, cv.his, 'hdr');
-    typeLine(L, cv.last, 'dim hdr');
+    typeLine(L, s.stages);
+    typeLine(L, s.relative, 'glow');
+    typeLine(L, s.forecast, 'hdr');
+    typeLine(L, s.last, 'dim hdr');
     then(() => { slow(); $('end-btns').classList.remove('hideit'); $('end-btns').appendChild(cur); scrollDown(); });
-  });
+  }
   $('b-again').addEventListener('click', () => beginPlay());
   $('b-begin').addEventListener('click', () => { pressed($('b-begin')); hurry = true; queue.then(() => beginPlay()); });
 

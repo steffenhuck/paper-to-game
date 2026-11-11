@@ -1,6 +1,6 @@
 // Full session in headless Chromium at phone width: fifteen questions judged by a rule of thumb, help opened mid-play,
 // the verdict, the convention adopted, screenshots along the way; then a second game judged the other way round, ending
-// as a solipsist. Fails on any page error or horizontal scroll at 380 px.
+// on a different band of the scale. Fails on any page error or horizontal scroll at 380 px.
 const { chromium } = require('playwright');
 const path = require('path'); const fs = require('fs');
 const main = async () => {
@@ -40,24 +40,19 @@ const main = async () => {
       if (await hscroll()) errors.push('horizontal scroll at question ' + (i + 1));
       await page.click('#b-next'); await page.waitForTimeout(300);
     }
-    await until('#conv'); await hurry(); await page.waitForTimeout(300);
+    await until('#end-btns'); await hurry(); await page.waitForTimeout(300);
     if (shots) { await page.evaluate(() => window.scrollTo(0, 0)); await shot(`${tag}-end-verdict`, false); await shot(`${tag}-end-full`, true); }
     log.push(`${tag} END: ` + await text('#end-log'));
   };
 
   await page.click('#b-begin');
   await playGame('A', (X, Y) => X.length < Y.length ? 'X' : 'Y', true);
-  await page.click('#cands .tick[data-key=B]'); await page.click('#cands .tick[data-key=A]'); await page.click('#grounds .tick[data-key=polite]'); await page.waitForTimeout(100);
-  await shot('A-end-convention-set', true);
-  await page.click('#b-adopt'); await page.waitForTimeout(600); await hurry(); await until('#end-btns'); await shot('A-end-readback', true);
-  log.push('A READBACK: ' + await text('#read-log'));
   if (await hscroll()) errors.push('horizontal scroll at the end');
   await page.click('#b-about'); await page.waitForTimeout(200); await shotOverlay('about', 'about'); await page.click('#b-about-close');
 
   await page.click('#b-again');
   await playGame('B', (X, Y) => X.length >= Y.length ? 'X' : 'Y', false);
-  await page.click('#grounds .tick[data-key=does]'); await page.click('#b-adopt'); await hurry(); await until('#end-btns'); await shot('B-end', true);
-  log.push('B READBACK: ' + await text('#read-log'));
+  await shot('B-end', true);
 
   fs.writeFileSync(path.join(__dirname, 'session-log.txt'), log.join('\n') + '\n\nERRORS: ' + (errors.length ? errors.join('\n') : 'none') + '\n');
   console.log(log.join('\n')); console.log('\nERRORS:', errors.length ? errors : 'none');
