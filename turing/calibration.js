@@ -67,6 +67,16 @@ M.M3.forEach((p, i) => {
   }
   ok(orderOk === 2000, 'every game: modules 1, 2, 3 in order, five distinct pairs from each');
   ok(Object.keys(seen).length === 34, 'every one of the 34 pairs is drawn in 2000 games');
+  let depBad = 0; const freq = {};
+  for (let s = 1; s <= 20000; s++) {
+    const o = M.newGame(s).order.filter(d => d.module === 1).map(d => M.M1[d.item].key); o.forEach(k => freq[k] = (freq[k] || 0) + 1);
+    const b = o.indexOf('bridge'); ['enjoy', 'surprise'].forEach(k => { const e = o.indexOf(k); if (e >= 0 && (b < 0 || b > e)) depBad++; });
+    if (new Set(o).size !== 5) depBad++;
+  }
+  ok(depBad === 0, 'in 20000 games, "enjoy" and "surprise" never appear without the bridge question before them, and the five stay distinct');
+  ok(Object.keys(freq).length === 11 && Math.abs(freq.bridge - 20000 * 5 / 11) < 500 && freq.enjoy < freq.bridge && freq.enjoy > 2000, `module 1 draw frequencies: bridge ${freq.bridge} (an even share is ${Math.round(20000 * 5 / 11)}), enjoy ${freq.enjoy} and surprise ${freq.surprise} (rarer, since they need the bridge), the others about ${Math.round(20000 * 5 / 11)} or a little more`);
+  let runs = 0; for (let s = 1; s <= 20000; s++) { const g = M.newGame(s); for (let mm = 1; mm <= 3; mm++) { const sides = g.order.filter(d => d.module === mm).map(d => d.personIs).join(''); if (/^(X{5}|Y{5})$/.test(sides)) runs++; } }
+  ok(Math.abs(runs / 60000 - 1 / 16) < 0.01, `a whole stage on one side in ${(100 * runs / 60000).toFixed(1)} per cent of stages (a fair coin: 6.25)`);
   ok(Math.abs(x / n - 0.5) < 0.03, `the person is X in ${(100 * x / n).toFixed(1)} per cent of questions`);
 }
 
@@ -113,7 +123,7 @@ const rules = {
   'the one that says "I" is the human': (o) => { const c = t => (t.match(/\bI\b|\bI'/g) || []).length; return c(o.X) > c(o.Y) ? 'X' : c(o.X) < c(o.Y) ? 'Y' : (o.X.length > o.Y.length ? 'X' : 'Y'); },
   'the one with two sentences is the human': (o) => { const c = t => (t.match(/[.?!]/g) || []).length; return c(o.X) > c(o.Y) ? 'X' : c(o.X) < c(o.Y) ? 'Y' : (o.X.length > o.Y.length ? 'X' : 'Y'); },
 };
-out.push('\nPLAY IT IN NUMBERS: rule for judging | right of 5 in Turing's questions / novels / diaries | of 15, averaged over 500 seeds (bar 10)');
+out.push('\nPLAY IT IN NUMBERS: rule for judging | right of 5 in Turing\'s questions / novels / diaries | of 15, averaged over 500 seeds (bar 10)');
 for (const name in rules) {
   const tot = [0, 0, 0]; let all = 0;
   for (let s = 1; s <= 500; s++) { const g = M.newGame(s); for (let i = 0; i < 15; i++) { const o = M.ask(g); const r = M.judge(g, rules[name](o)); if (r.rec.right) { tot[o.module - 1]++; all++; } } }
