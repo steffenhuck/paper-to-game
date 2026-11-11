@@ -6,7 +6,7 @@ const path = require('path');
   const page = await browser.newPage({ viewport: { width: 380, height: 700 }, deviceScaleFactor: 1 }); // a small phone, browser chrome taken off
   const errors = []; page.on('pageerror', e => errors.push(e.message)); page.on('console', m => { if (m.type() === 'error' && !/goatcounter|gc\.zgo|ERR_FAILED/.test(m.text())) errors.push(m.text()); });
   await page.route(/gc\.zgo\.at/, r => r.abort());
-  const url = 'file://' + path.resolve(__dirname, 'leavitts-cloud.html') + '?seed=1912';
+  const url = 'file://' + path.resolve(__dirname, 'blink-with-leavitt.html') + '?seed=1912';
   await page.goto(url); await page.waitForTimeout(800);
   const shot = async (n, full) => page.screenshot({ path: path.join(__dirname, 'screenshot-' + n + '.png'), fullPage: !!full });
   const hscroll = async () => page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);

@@ -1,4 +1,4 @@
-# Generates jevons-noon.html from template.html, mechanism.js (the single source of truth), words.js, about.html and
+# Generates burn-bright-with-jevons.html from template.html, mechanism.js (the single source of truth), words.js, about.html and
 # the embedded fonts, then verifies byte for byte that the embedded mechanism is the file calibration.js ran against.
 import base64, sys, os, subprocess, json
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -16,7 +16,7 @@ for k in ['/*__MECHANISM__*/', '/*__WORDS__*/', '/*__OPTIMUM__*/', '/*__ABOUT__*
     assert t.count(k) == 1, k
 out = (t.replace('/*__FONT_ROMAN__*/', roman).replace('/*__FONT_ITALIC__*/', italic).replace('/*__ABOUT__*/', about)
         .replace('/*__OPTIMUM__*/', optimum).replace('/*__WORDS__*/', words).replace('/*__MECHANISM__*/', mech))
-name = 'jevons-noon.html'
+name = 'burn-bright-with-jevons.html'
 open(name, 'w', encoding='utf-8').write(out)
 built = open(name, encoding='utf-8').read()
 if mech not in built:

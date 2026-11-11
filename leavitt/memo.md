@@ -227,3 +227,8 @@ Steffen, after a full play: the closing line "your black ones are scattered" ref
 - Verdict screen reordered: chart first, then the four parts, then who did the work.
 
 Calibration extended to 49 checks (doubler → shifted, about a quarter too short; halver → shifted, too long; two strays → ragged; off lines carry direction and vary); all pass. Browser session clean.
+
+
+## Renamed (11 November 2026)
+
+Renamed from *Leavitt's Cloud* to *Blink with Leavitt*, at the author's decision to let some titles say what the player does while keeping the name. The game file is `blink-with-leavitt.html`; a one-line page at `leavitts-cloud.html` sends old links to it. Nothing in the mechanism changed.

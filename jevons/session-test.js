@@ -70,7 +70,7 @@ const MARK = { cut: 0.5, stand: 1, slower: 1.5, now: 2, faster: 2.4 };
     await shot(name, true); await noScroll('verdict');
   }
 
-  await page.goto('file://' + path.join(__dirname, 'jevons-noon.html')); await page.waitForTimeout(600);
+  await page.goto('file://' + path.join(__dirname, 'burn-bright-with-jevons.html')); await page.waitForTimeout(600);
   await shot('start', true); await noScroll('start screen');
 
   say('SHEET A: a first-timer');

@@ -1,4 +1,4 @@
-# Leavitt's Cloud — note for the author
+# Blink with Leavitt — note for the author
 
 1. Look first at `screenshot-a-1-wrong.png` and `screenshot-a-1-tuned.png` (the same plates at a wrong beat and at hers), then `screenshot-a-2-written.png` (a beat twice hers: two blinks in each beat, her violet curve over them), `screenshot-a-7-guess-set.png` (the seventh star set from its light alone) and `screenshot-a-end.png`. Then play it once on a phone.
 2. Everything tunable is in `CONFIG` at the top of `mechanism.js`, the only copy of the mechanism: Table I as read off the scan (with her printed residuals, which the check re-derives), the 0.48 and the 1.2, and everything ours (26 plates covering four to six blinks, the eye noise, the light-curve shape, the round order, the dial, the time-lapse, the guess words). Edit, run `node calibration.js` (42 checks), then `python3 build.py`, which refuses to build if the embedded mechanism differs from the file.
