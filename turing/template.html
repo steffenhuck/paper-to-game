@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Turing's Witnesses</title>
 <script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<meta name="description" content="Turing's test, run once more with real witnesses: a person and a machine in the next room, a slow line that carries only words, eleven questions from the paper. Say which answer the person wrote. The score is the machine's, against Turing's 1950 bar.">
+<meta name="description" content="Turing's test, run once more with real witnesses, in three modules: a person and a machine answering the paper's questions blind; novelists against a machine given the premise; and a machine told to imitate, answered by a person. Fifteen judgements; the score is the machine's, against Turing's 1950 bar.">
 <style>
 @font-face{font-family:VT323;font-weight:400;font-style:normal;src:url(data:font/woff2;base64,/*__F_VT323__*/) format('woff2')}
 :root{--black:#070A08;--ph:#49F57A;--dim:#1E8A45;--glow:#C9FFD8;color-scheme:dark}
@@ -84,7 +84,7 @@ body.lock{overflow:hidden}
     <div class="row2"><button class="btn" id="b-pick-x">X IS THE PERSON</button><button class="btn" id="b-pick-y">Y IS THE PERSON</button></div>
   </div>
   <div class="hideit" id="after">
-    <button class="btn wide" id="b-next">NEXT QUESTION</button>
+    <button class="btn wide" id="b-next">NEXT</button>
   </div>
 </div>
 
@@ -107,15 +107,15 @@ body.lock{overflow:hidden}
 
 <div class="ov" id="help"><div class="wrap">
   <h2>HOW TO PLAY</h2>
-  <p>Eleven questions, two answers each. Say which answer the person wrote.</p>
-  <p>Two witnesses sit in the next room. One is a person, Steffen Huck. One is a machine of the kind that built this game. A slow line carries typed words between you and them, and nothing else. You are not told which is which until you have said.</p>
-  <h3>A question</h3>
-  <p>The questions come from Turing's paper, in its order: poetry, sums and mistakes, something new, feeling, what it is made of. Inside each subject the order is drawn, and which witness is X and which is Y is drawn each time; the line number at the top of the log is the draw.</p>
-  <p>Read the question and the two answers, which arrive a character at a time; tap anywhere to hurry them. Then X IS THE PERSON or Y IS THE PERSON. The reveal says RIGHT or WRONG and who wrote which, with a line from the paper.</p>
+  <p>Fifteen times, two sentences: say which one the person wrote.</p>
+  <p>Two witnesses sit in the next room, one a person and one a machine, and a slow line carries typed words between you and them, and nothing else. You are not told which is which until you have said.</p>
+  <h3>Three modules, five questions each</h3>
+  <p>ELEVEN QUESTIONS: questions from Turing's paper, answered blind by a person (Steffen Huck) and by a machine answering as itself, within the person's length. THIRTEEN NOVELS: the first sentence of a novel, against a machine given the year, a one-line premise and the length. TEN DIARY LINES: the machine wrote first, told to pass for a person keeping a diary, and the person answered. Each module begins with a line saying so. Five pairs are drawn from each, and which witness is X is drawn each time; the line number at the top of the log is the draw.</p>
+  <p>Read the two sentences, which arrive a character at a time; tap anywhere to hurry them. Then X IS THE PERSON or Y IS THE PERSON. The reveal says RIGHT or WRONG and who wrote which; in the novels, which novel.</p>
   <h3>The score</h3>
-  <p>The line at the top counts your right and wrong answers. The score is the machine's: Turing forecast that by about 2000 an interrogator would be right no more than 70 times in a hundred, which on eleven questions is seven. Right seven times or fewer, and the machine passes the test he proposed; eight or more, and it fails.</p>
+  <p>The score is the machine's: how often you took it for the person. The line at the top keeps count. Turing forecast that by about 2000 an interrogator would be right no more than 70 times in a hundred; on fifteen questions that is ten. Right ten times or fewer, and the machine has passed the test he proposed. The verdict says, in words, how the machine did.</p>
   <h3>The end</h3>
-  <p>The verdict, the two witnesses named, Turing's reply to the question of whether anyone can ever be sure, and then a question for you: whom do you extend the polite convention to, and on what grounds.</p>
+  <p>The verdict, the three modules side by side, the witnesses named, Turing's reply to the question of whether anyone can ever be sure, and then a question for you: whom do you extend the polite convention to, and on what grounds.</p>
   <button class="btn wide" id="b-help-close">BACK</button>
 </div></div>
 
@@ -181,17 +181,15 @@ body.lock{overflow:hidden}
     const L = $('start-log'); L.innerHTML = '';
     typeLine(L, "TURING'S WITNESSES", 'big', 30);
     typeLine(L, `${C.forecastYear}. Turing proposes a game: an interrogator, two witnesses in another room, a teleprinter, questions. If the interrogator cannot tell the machine from the person, stop asking whether the machine can think. His forecast: by about ${C.forecastYear + C.forecastHorizon}, an average interrogator would be right no more than ${C.forecastPct} times in a hundred.`, '', 90);
-    typeLine(L, `${C.nowYear}. Here the test is run once more, with real witnesses, and you are the interrogator.`, '', 90);
-    typeLine(L, 'Eleven questions, two answers each. Say which answer the person wrote.', 'glow hdr', 90);
-    typeLine(L, `Two witnesses in the next room: a person, who is Steffen Huck, and a machine of the kind that built this game. You will read both answers to each question, tap the one you take for the person's, and be told. Right ${M.words(M.BAR)} times or fewer, and the machine passes Turing's test.`, '', 90);
+    typeLine(L, `${C.nowYear}. Here the test is run once more, with real witnesses, three ways: a person and a machine answering his questions blind; novelists against a machine given the premise; and a machine told to imitate, answered by a person. You are the interrogator.`, '', 90);
+    typeLine(L, 'Fifteen times, two sentences: say which one the person wrote.', 'glow hdr', 90);
+    typeLine(L, `You will read both sentences, tap the one you take for the person's, and be told. The score is the machine's: right ${M.words(M.BAR)} times or fewer, and it has passed Turing's test.`, '', 90);
     cursorTo(L);
   }
 
   // ---------- play ----------
-  function status() {
-    const sc = M.score(g); const o = g.pending;
-    const n = Math.min(sc.asked + 1, C.questions);
-    $('status').innerHTML = `<b>QUESTION</b> ${n} <b>OF</b> ${C.questions}` + (o ? ` <b>·</b> ${o.group}` : '') + `<br><b>RIGHT</b> <i>${sc.right}</i> <b>· WRONG</b> <i>${sc.wrong}</i> <b>· TURING'S BAR</b> ${sc.bar}`;
+  function statusLine(o, sc) {
+    $('status').innerHTML = `<b>MODULE</b> ${o.module} <b>OF</b> ${M.MODULES.length} <b>·</b> ${o.inModule} <b>OF</b> ${o.perModule}<br><b>MACHINE TAKEN FOR THE PERSON:</b> <i>${sc.fooled}</i> <b>OF</b> ${sc.asked}`;
   }
   function beginPlay() {
     slow(); g = M.newGame();
@@ -200,15 +198,15 @@ body.lock{overflow:hidden}
     const L = $('log');
     typeLine(L, `LINE ${g.seed} OPEN.`, 'dim');
     typeLine(L, 'Two witnesses sit in the next room. One is a person. One is a machine. A slow line carries typed words between you and them, and nothing else. You are not told which is which until you have said.');
-    typeLine(L, `Eleven questions. Each time, both witnesses answer, and you say which answer the person wrote. The line at the top counts right and wrong. Turing's bar is ${M.words(M.BAR)}: right that often or less, and the machine passes.`);
+    typeLine(L, `Three modules, five questions each. Each time, two sentences; you say which one the person wrote. The line at the top counts how often the machine was taken for the person. Turing's bar is ${M.words(M.BAR)}: right that often or less, and the machine passes.`);
     then(() => askNext());
   }
   function askNext() {
     slow();
-    const o = g.pending || M.ask(g); status();
+    const o = g.pending || M.ask(g); statusLine(o, M.score(g));
     const L = $('log');
-    if (o.intro) { typeLine(L, `> ${o.group}.`, 'hdr'); typeLine(L, o.intro); }
-    typeLine(L, `> ${o.n} OF ${C.questions}.`, 'dim hdr');
+    if (o.intro) { typeLine(L, `> MODULE ${o.module} OF ${M.MODULES.length}. ${o.moduleName}.`, 'hdr'); typeLine(L, o.intro); }
+    typeLine(L, `> ${o.inModule} OF ${o.perModule}.`, 'dim hdr');
     typeLine(L, 'C: ' + o.q);
     typeLine(L, 'X: ' + o.X);
     typeLine(L, 'Y: ' + o.Y);
@@ -217,12 +215,11 @@ body.lock{overflow:hidden}
   function doPick(side) {
     pressed($(side === 'X' ? 'b-pick-x' : 'b-pick-y')); slow();
     $('pickrow').classList.add('hideit');
-    const r = M.judge(g, side);
+    const o = g.pending; const r = M.judge(g, side);
     const L = $('log');
     typeLine(L, r.reveal, 'glow');
-    typeLine(L, r.paper);
-    then(() => { const sc = M.score(g); $('status').innerHTML = `<b>QUESTION</b> ${r.rec.n} <b>OF</b> ${C.questions} <b>·</b> ${r.rec.group}<br><b>RIGHT</b> <i>${sc.right}</i> <b>· WRONG</b> <i>${sc.wrong}</i> <b>· TURING'S BAR</b> ${sc.bar}`; });
-    then(() => { slow(); $('b-next').textContent = r.last ? 'THE VERDICT' : 'NEXT QUESTION'; $('after').classList.remove('hideit'); $('after').appendChild(cur); scrollDown(); });
+    then(() => statusLine(o, r.score));
+    then(() => { slow(); $('b-next').textContent = r.last ? 'THE VERDICT' : 'NEXT'; $('after').classList.remove('hideit'); $('after').appendChild(cur); scrollDown(); });
   }
   $('b-pick-x').addEventListener('click', () => doPick('X'));
   $('b-pick-y').addEventListener('click', () => doPick('Y'));
@@ -240,8 +237,11 @@ body.lock{overflow:hidden}
     const L = $('end-log'); L.innerHTML = ''; $('read-log').innerHTML = ''; $('conv').classList.add('hideit'); $('end-btns').classList.add('hideit');
     extend = []; ground = null;
     typeLine(L, s.head, 'big');
+    typeLine(L, s.band);
     typeLine(L, s.machine, 'glow');
-    s.lines.forEach(t => typeLine(L, t));
+    typeLine(L, s.yours);
+    s.modules.forEach(t => typeLine(L, t, 'hdr'));
+    s.witnesses.forEach(t => typeLine(L, t, 'dim'));
     s.paper.forEach(t => typeLine(L, t, 'hdr'));
     then(() => {
       s.table.forEach(t => {

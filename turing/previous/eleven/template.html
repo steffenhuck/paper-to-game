@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Turing's Witnesses</title>
+<script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<meta name="description" content="Turing's test, run once more with real witnesses: a person and a machine in the next room, a slow line that carries only words, eleven questions from the paper. Say which answer the person wrote. The score is the machine's, against Turing's 1950 bar.">
+<style>
+@font-face{font-family:VT323;font-weight:400;font-style:normal;src:url(data:font/woff2;base64,/*__F_VT323__*/) format('woff2')}
+:root{--black:#070A08;--ph:#49F57A;--dim:#1E8A45;--glow:#C9FFD8;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--black);color:var(--ph)}
+body{font-family:VT323,'Courier New',monospace;font-size:22px;line-height:1.18;overflow-x:hidden;text-shadow:0 0 3px rgba(73,245,122,.45);min-height:100vh}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;background:repeating-linear-gradient(to bottom,rgba(0,0,0,0) 0 2px,rgba(0,0,0,.26) 2px 3px)}
+body.lock{overflow:hidden}
+.wrap{max-width:440px;margin:0 auto;padding:10px 14px 36px}
+.screen{display:none}.screen.on{display:block}
+.ln{margin:0 0 6px;overflow-wrap:anywhere;white-space:pre-wrap}
+.ln.old{color:var(--dim);text-shadow:none}
+.ln.glow{color:var(--glow)}
+.ln.dim{color:var(--dim);text-shadow:none}
+.ln.big{font-size:30px;line-height:1.05;margin-bottom:10px}
+.ln .who{color:var(--glow)}
+.ln.hdr{margin-top:14px}
+.ln.ans{padding-left:1.2em;text-indent:-1.2em}
+.cur{display:inline-block;width:.55em;height:1em;vertical-align:-.15em;background:var(--ph);animation:blink 1s steps(2,start) infinite;margin-left:1px}
+@keyframes blink{to{visibility:hidden}}
+.btn{display:inline-block;border:0;margin:4px 0;padding:1px 10px;background:var(--ph);color:var(--black);font:inherit;font-size:22px;line-height:1.18;cursor:pointer;text-shadow:none;letter-spacing:.02em}
+.btn.wide{display:block;width:100%;text-align:center;padding:6px 10px;margin:10px 0}
+.btn.off{background:transparent;color:var(--ph);text-shadow:0 0 3px rgba(73,245,122,.45)}
+.btn.off::before{content:"[ "}.btn.off::after{content:" ]"}
+.btn.dis{background:transparent;color:var(--dim);pointer-events:none;text-shadow:none}
+.btn.dis::before{content:"[ "}.btn.dis::after{content:" ]"}
+.btn.press{animation:flick .18s steps(2,start) 1}
+@keyframes flick{to{visibility:hidden}}
+.link{background:transparent;border:0;color:var(--dim);font:inherit;font-size:22px;cursor:pointer;padding:4px 0;text-decoration:underline;text-shadow:none}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:4px 0}
+.row2{display:flex;gap:10px;margin:10px 0}.row2 .btn{flex:1;margin:0;padding:6px 4px;text-align:center}
+.status{position:sticky;top:0;z-index:5;background:var(--black);border-bottom:1px solid var(--dim);padding:8px 0 6px;margin-bottom:10px;display:flex;align-items:baseline;gap:8px}
+.status .st{flex:1;overflow-wrap:anywhere}
+.status .st b{font-weight:400;color:var(--dim)}
+.status .st i{font-style:normal;color:var(--glow)}
+.q{flex:none;background:transparent;border:1px solid var(--dim);color:var(--ph);font:inherit;font-size:20px;width:32px;height:30px;line-height:28px;padding:0;cursor:pointer;text-align:center}
+.form{margin:8px 0 4px}
+.lab{color:var(--dim);text-shadow:none}
+.tick{display:block;width:100%;text-align:left;background:transparent;border:0;color:var(--ph);font:inherit;font-size:22px;line-height:1.18;padding:4px 0;cursor:pointer;text-shadow:0 0 3px rgba(73,245,122,.45);overflow-wrap:anywhere}
+.tick.fixed{color:var(--dim);text-shadow:none;pointer-events:none}
+.tick .bx{color:var(--glow)}
+.tick .nt{color:var(--dim);text-shadow:none}
+.crow{margin:6px 0 10px}
+.cdoes{color:var(--dim);text-shadow:none;margin:2px 0 0;overflow-wrap:anywhere}
+.ov{display:none;position:fixed;inset:0;z-index:20;background:var(--black);overflow-y:auto;-webkit-overflow-scrolling:touch}
+.ov.on{display:block}
+.ov .wrap{padding-top:12px}
+.ov h2{font-weight:400;font-size:30px;margin:4px 0 10px;line-height:1.05}
+.ov h3{font-weight:400;font-size:22px;margin:16px 0 4px;color:var(--glow)}
+.ov p{margin:0 0 9px;overflow-wrap:anywhere}
+.ov ul{margin:0 0 9px;padding-left:18px}.ov li{margin:0 0 5px}
+.ov a{color:var(--glow)}
+.ov .sum{color:var(--dim);text-shadow:none}
+.sig{margin-top:30px;font-style:italic;color:var(--dim);text-shadow:none;font-size:20px}
+.sig a{color:var(--dim);text-decoration:none}
+.foot{margin-top:18px}
+.hideit{display:none!important}
+</style>
+</head>
+<body>
+
+<div class="wrap screen on" id="s-start">
+  <div id="start-log"></div>
+  <div id="start-btns" class="foot">
+    <button class="btn wide" id="b-begin">BEGIN</button>
+    <button class="link" id="b-help-start">How to play</button>
+  </div>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</div>
+
+<div class="wrap screen" id="s-play">
+  <div class="status"><div class="st" id="status"></div><button class="q" id="q-play" aria-label="How to play">?</button></div>
+  <div id="log"></div>
+  <div class="hideit" id="pickrow">
+    <div class="ln"><span class="lab">WHICH ANSWER DID THE PERSON WRITE?</span></div>
+    <div class="row2"><button class="btn" id="b-pick-x">X IS THE PERSON</button><button class="btn" id="b-pick-y">Y IS THE PERSON</button></div>
+  </div>
+  <div class="hideit" id="after">
+    <button class="btn wide" id="b-next">NEXT QUESTION</button>
+  </div>
+</div>
+
+<div class="wrap screen" id="s-end">
+  <div id="end-log"></div>
+  <div class="hideit" id="conv">
+    <div class="ln hdr"><span class="lab">EXTEND IT TO</span></div>
+    <div id="cands"></div>
+    <div class="ln hdr"><span class="lab">ON THE GROUNDS OF</span></div>
+    <div id="grounds"></div>
+    <button class="btn wide dis" id="b-adopt">ADOPT</button>
+  </div>
+  <div id="read-log"></div>
+  <div class="hideit foot" id="end-btns">
+    <button class="btn wide" id="b-again">PLAY AGAIN</button>
+    <div class="row"><button class="link" id="b-help-end">How to play</button><button class="link" id="b-about">About</button></div>
+  </div>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</div>
+
+<div class="ov" id="help"><div class="wrap">
+  <h2>HOW TO PLAY</h2>
+  <p>Eleven questions, two answers each. Say which answer the person wrote.</p>
+  <p>Two witnesses sit in the next room. One is a person, Steffen Huck. One is a machine of the kind that built this game. A slow line carries typed words between you and them, and nothing else. You are not told which is which until you have said.</p>
+  <h3>A question</h3>
+  <p>The questions come from Turing's paper, in its order: poetry, sums and mistakes, something new, feeling, what it is made of. Inside each subject the order is drawn, and which witness is X and which is Y is drawn each time; the line number at the top of the log is the draw.</p>
+  <p>Read the question and the two answers, which arrive a character at a time; tap anywhere to hurry them. Then X IS THE PERSON or Y IS THE PERSON. The reveal says RIGHT or WRONG and who wrote which, with a line from the paper.</p>
+  <h3>The score</h3>
+  <p>The line at the top counts your right and wrong answers. The score is the machine's: Turing forecast that by about 2000 an interrogator would be right no more than 70 times in a hundred, which on eleven questions is seven. Right seven times or fewer, and the machine passes the test he proposed; eight or more, and it fails.</p>
+  <h3>The end</h3>
+  <p>The verdict, the two witnesses named, Turing's reply to the question of whether anyone can ever be sure, and then a question for you: whom do you extend the polite convention to, and on what grounds.</p>
+  <button class="btn wide" id="b-help-close">BACK</button>
+</div></div>
+
+<div class="ov" id="about"><div class="wrap">
+/*__ABOUT__*/
+  <button class="btn wide" id="b-about-close">BACK</button>
+</div></div>
+
+<script>
+/*__MECHANISM__*/
+</script>
+<script>
+(function () {
+  const M = window.TW;
+  const C = M.CONFIG;
+  const $ = id => document.getElementById(id);
+  let g = M.newGame();
+  let hurry = false, queue = Promise.resolve(), typingNow = 0;
+  const cur = document.createElement('span'); cur.className = 'cur';
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  const pressed = b => { b.classList.remove('press'); void b.offsetWidth; b.classList.add('press'); };
+  function scrollDown() { window.scrollTo(0, document.body.scrollHeight); }
+
+  // The slow line: one line typed a character at a time; a tap anywhere hurries everything queued until the next decision.
+  function typeLine(container, text, cls, cps) {
+    const job = async () => {
+      typingNow++;
+      const div = document.createElement('div'); div.className = 'ln' + (cls ? ' ' + cls : '');
+      let prefix = null; let body = text;
+      const m = /^([XYC]): ([\s\S]*)$/.exec(text);
+      if (m) { prefix = m[1] + ': '; body = m[2]; if (m[1] !== 'C') div.classList.add('ans'); }
+      if (prefix) { const w = document.createElement('span'); w.className = 'who'; w.textContent = prefix; div.appendChild(w); }
+      const span = document.createElement('span'); div.appendChild(span); div.appendChild(cur);
+      container.appendChild(div);
+      const speed = 1000 / (cps || C.charsPerSecond);
+      let i = 0;
+      while (i < body.length) {
+        if (hurry) { span.textContent = body; break; }
+        span.textContent += body[i++];
+        if (i % 2 === 0) scrollDown();
+        await wait(speed);
+      }
+      span.textContent = body; scrollDown(); typingNow--;
+    };
+    queue = queue.then(job); return queue;
+  }
+  function then(fn) { queue = queue.then(async () => { fn(); }); return queue; }
+  function slow() { hurry = false; }
+  function cursorTo(container) { then(() => { container.appendChild(cur); }); }
+  document.addEventListener('pointerdown', e => { if (typingNow > 0 && !e.target.closest('button,a')) hurry = true; });
+  function scrollToEl(el) { const top = el.getBoundingClientRect().top + window.scrollY - $('status').parentElement.offsetHeight - 8; window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' }); }
+
+  const screens = ['s-start', 's-play', 's-end'];
+  function show(id) { screens.forEach(s => $(s).classList.toggle('on', s === id)); window.scrollTo(0, 0); }
+  function overlay(id, on) { $(id).classList.toggle('on', on); document.body.classList.toggle('lock', on); if (on) $(id).scrollTop = 0; }
+  ['b-help-start', 'q-play', 'b-help-end'].forEach(id => $(id).addEventListener('click', () => overlay('help', true)));
+  $('b-help-close').addEventListener('click', () => overlay('help', false));
+  $('b-about').addEventListener('click', () => overlay('about', true));
+  $('b-about-close').addEventListener('click', () => overlay('about', false));
+
+  // ---------- start ----------
+  function startScreen() {
+    const L = $('start-log'); L.innerHTML = '';
+    typeLine(L, "TURING'S WITNESSES", 'big', 30);
+    typeLine(L, `${C.forecastYear}. Turing proposes a game: an interrogator, two witnesses in another room, a teleprinter, questions. If the interrogator cannot tell the machine from the person, stop asking whether the machine can think. His forecast: by about ${C.forecastYear + C.forecastHorizon}, an average interrogator would be right no more than ${C.forecastPct} times in a hundred.`, '', 90);
+    typeLine(L, `${C.nowYear}. Here the test is run once more, with real witnesses, and you are the interrogator.`, '', 90);
+    typeLine(L, 'Eleven questions, two answers each. Say which answer the person wrote.', 'glow hdr', 90);
+    typeLine(L, `Two witnesses in the next room: a person, who is Steffen Huck, and a machine of the kind that built this game. You will read both answers to each question, tap the one you take for the person's, and be told. Right ${M.words(M.BAR)} times or fewer, and the machine passes Turing's test.`, '', 90);
+    cursorTo(L);
+  }
+
+  // ---------- play ----------
+  function status() {
+    const sc = M.score(g); const o = g.pending;
+    const n = Math.min(sc.asked + 1, C.questions);
+    $('status').innerHTML = `<b>QUESTION</b> ${n} <b>OF</b> ${C.questions}` + (o ? ` <b>·</b> ${o.group}` : '') + `<br><b>RIGHT</b> <i>${sc.right}</i> <b>· WRONG</b> <i>${sc.wrong}</i> <b>· TURING'S BAR</b> ${sc.bar}`;
+  }
+  function beginPlay() {
+    slow(); g = M.newGame();
+    $('log').innerHTML = ''; ['pickrow', 'after'].forEach(id => $(id).classList.add('hideit'));
+    show('s-play');
+    const L = $('log');
+    typeLine(L, `LINE ${g.seed} OPEN.`, 'dim');
+    typeLine(L, 'Two witnesses sit in the next room. One is a person. One is a machine. A slow line carries typed words between you and them, and nothing else. You are not told which is which until you have said.');
+    typeLine(L, `Eleven questions. Each time, both witnesses answer, and you say which answer the person wrote. The line at the top counts right and wrong. Turing's bar is ${M.words(M.BAR)}: right that often or less, and the machine passes.`);
+    then(() => askNext());
+  }
+  function askNext() {
+    slow();
+    const o = g.pending || M.ask(g); status();
+    const L = $('log');
+    if (o.intro) { typeLine(L, `> ${o.group}.`, 'hdr'); typeLine(L, o.intro); }
+    typeLine(L, `> ${o.n} OF ${C.questions}.`, 'dim hdr');
+    typeLine(L, 'C: ' + o.q);
+    typeLine(L, 'X: ' + o.X);
+    typeLine(L, 'Y: ' + o.Y);
+    then(() => { slow(); $('pickrow').classList.remove('hideit'); $('pickrow').appendChild(cur); scrollDown(); });
+  }
+  function doPick(side) {
+    pressed($(side === 'X' ? 'b-pick-x' : 'b-pick-y')); slow();
+    $('pickrow').classList.add('hideit');
+    const r = M.judge(g, side);
+    const L = $('log');
+    typeLine(L, r.reveal, 'glow');
+    typeLine(L, r.paper);
+    then(() => { const sc = M.score(g); $('status').innerHTML = `<b>QUESTION</b> ${r.rec.n} <b>OF</b> ${C.questions} <b>·</b> ${r.rec.group}<br><b>RIGHT</b> <i>${sc.right}</i> <b>· WRONG</b> <i>${sc.wrong}</i> <b>· TURING'S BAR</b> ${sc.bar}`; });
+    then(() => { slow(); $('b-next').textContent = r.last ? 'THE VERDICT' : 'NEXT QUESTION'; $('after').classList.remove('hideit'); $('after').appendChild(cur); scrollDown(); });
+  }
+  $('b-pick-x').addEventListener('click', () => doPick('X'));
+  $('b-pick-y').addEventListener('click', () => doPick('Y'));
+  $('b-next').addEventListener('click', () => {
+    pressed($('b-next')); $('after').classList.add('hideit');
+    if (M.current(g)) { [...$('log').children].forEach(x => x.classList.add('old')); askNext(); }
+    else endScreen();
+  });
+
+  // ---------- the ending ----------
+  let extend = [], ground = null;
+  function endScreen() {
+    slow(); show('s-end');
+    const s = M.summary(g);
+    const L = $('end-log'); L.innerHTML = ''; $('read-log').innerHTML = ''; $('conv').classList.add('hideit'); $('end-btns').classList.add('hideit');
+    extend = []; ground = null;
+    typeLine(L, s.head, 'big');
+    typeLine(L, s.machine, 'glow');
+    s.lines.forEach(t => typeLine(L, t));
+    s.paper.forEach(t => typeLine(L, t, 'hdr'));
+    then(() => {
+      s.table.forEach(t => {
+        const d = document.createElement('div'); d.className = 'ln';
+        d.innerHTML = `<span class="who">${t.n}</span> ${esc(t.q)}<br><span class="lab">${t.right ? 'right' : 'wrong'}: the person was ${t.personIs}.</span>`;
+        L.appendChild(d);
+      });
+      scrollDown();
+    });
+    typeLine(L, 'THE POLITE CONVENTION', 'big hdr');
+    typeLine(L, M.REPLY[1]);
+    typeLine(L, 'Now that you know who was who: whom do you extend it to, and on what grounds?');
+    then(() => {
+      const cd = $('cands'); cd.innerHTML = '';
+      M.CANDIDATES.forEach(c => {
+        const b = document.createElement('button'); b.className = 'tick' + (c.fixed ? ' fixed' : ''); b.dataset.key = c.key;
+        const draw = () => { const on = c.fixed || extend.indexOf(c.key) >= 0; b.innerHTML = `<span class="bx">[${on ? 'x' : ' '}]</span> ${esc(c.label)}` + (c.note ? ` <span class="nt">(${esc(c.note)})</span>` : ''); };
+        draw(); b.addEventListener('click', () => { const i = extend.indexOf(c.key); if (i >= 0) extend.splice(i, 1); else extend.push(c.key); draw(); });
+        cd.appendChild(b);
+      });
+      const gd = $('grounds'); gd.innerHTML = '';
+      M.GROUNDS.forEach(gr => {
+        const b = document.createElement('button'); b.className = 'tick'; b.dataset.key = gr.key;
+        b.innerHTML = `<span class="bx">( )</span> ${esc(gr.label)}`;
+        b.addEventListener('click', () => { ground = gr.key; [...gd.children].forEach(x => x.innerHTML = `<span class="bx">(${ground === x.dataset.key ? 'x' : ' '})</span> ${esc(M.GROUNDS.find(q => q.key === x.dataset.key).label)}`); $('b-adopt').className = 'btn wide'; });
+        gd.appendChild(b);
+      });
+      $('b-adopt').className = 'btn wide dis'; slow();
+      $('conv').classList.remove('hideit'); $('conv').appendChild(cur); scrollDown();
+    });
+  }
+  $('b-adopt').addEventListener('click', () => {
+    if (!ground) return;
+    pressed($('b-adopt')); slow();
+    const cv = M.convention(extend, ground);
+    $('conv').classList.add('hideit');
+    const L = $('read-log'); L.innerHTML = '';
+    typeLine(L, cv.yours, 'glow hdr');
+    typeLine(L, cv.turing);
+    if (cv.only) typeLine(L, cv.only);
+    typeLine(L, cv.his, 'hdr');
+    typeLine(L, cv.last, 'dim hdr');
+    then(() => { slow(); $('end-btns').classList.remove('hideit'); $('end-btns').appendChild(cur); scrollDown(); });
+  });
+  $('b-again').addEventListener('click', () => beginPlay());
+  $('b-begin').addEventListener('click', () => { pressed($('b-begin')); hurry = true; queue.then(() => beginPlay()); });
+
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  startScreen();
+})();
+</script>
+</body>
+</html>

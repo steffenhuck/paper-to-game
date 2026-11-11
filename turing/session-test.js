@@ -1,4 +1,4 @@
-// Full session in headless Chromium at phone width: eleven questions judged by a rule of thumb, help opened mid-play,
+// Full session in headless Chromium at phone width: fifteen questions judged by a rule of thumb, help opened mid-play,
 // the verdict, the convention adopted, screenshots along the way; then a second game judged the other way round, ending
 // as a solipsist. Fails on any page error or horizontal scroll at 380 px.
 const { chromium } = require('playwright');
@@ -27,15 +27,15 @@ const main = async () => {
   const playGame = async (tag, chooser, shots) => {
     await hurry(); await until('#pickrow'); if (shots) await shot(`${tag}-1-answers`, true);
     log.push(`${tag} PRELUDE: ` + (await newLines()).slice(0, 3).join(' / '));
-    for (let i = 0; i < 11; i++) {
+    for (let i = 0; i < 15; i++) {
       if (i > 0) { await hurry(); await until('#pickrow'); }
-      if (shots && i === 3) { await page.click('#q-play'); await page.waitForTimeout(200); await shotOverlay('help', 'help-mid'); await page.click('#b-help-close'); if (await page.evaluate(() => document.body.classList.contains('lock'))) errors.push('body locked after help'); }
-      if (shots && (i === 1 || i === 6)) await shot(`${tag}-${i + 1}-answers`, true);
+      if (shots && i === 2) { await page.click('#q-play'); await page.waitForTimeout(200); await shotOverlay('help', 'help-mid'); await page.click('#b-help-close'); if (await page.evaluate(() => document.body.classList.contains('lock'))) errors.push('body locked after help'); }
+      if (shots && (i === 5 || i === 10)) await shot(`${tag}-${i + 1}-answers`, true);
       const lines = await newLines(); const X = (lines.find(l => /^X: /.test(l)) || '').slice(3), Y = (lines.find(l => /^Y: /.test(l)) || '').slice(3);
-      log.push(`${tag} Q${i + 1}: status="${await text('#status')}"\n  ` + lines.filter(l => /^[CXY]: /.test(l)).join('\n  ').replace(/\n(?![CXY]: )/g, ' | '));
+      log.push(`${tag} Q${i + 1}: status="${await text('#status')}"\n  ` + lines.filter(l => /^[CXY]: |^> MODULE/.test(l)).join('\n  ').replace(/\n(?![CXY]: |> )/g, ' | '));
       const side = chooser(X, Y);
       await page.click(side === 'X' ? '#b-pick-x' : '#b-pick-y'); await page.waitForTimeout(500); await hurry(); await until('#after');
-      if (shots && (i === 0 || i === 1 || i === 6 || i === 10)) await shot(`${tag}-${i + 1}-reveal`, true);
+      if (shots && (i === 0 || i === 5 || i === 10 || i === 14)) await shot(`${tag}-${i + 1}-reveal`, true);
       const after = await newLines(); log.push('  said ' + side + ' -> ' + after.filter(l => /^(RIGHT|WRONG)\./.test(l)).join(' | ') + '\n  STATUS: ' + await text('#status') + ' | button: ' + await text('#b-next'));
       if (await hscroll()) errors.push('horizontal scroll at question ' + (i + 1));
       await page.click('#b-next'); await page.waitForTimeout(300);
@@ -46,7 +46,7 @@ const main = async () => {
   };
 
   await page.click('#b-begin');
-  await playGame('A', (X, Y) => (/\.$/.test(X) === /\.$/.test(Y)) ? 'X' : (/\.$/.test(X) ? 'Y' : 'X'), true);
+  await playGame('A', (X, Y) => X.length < Y.length ? 'X' : 'Y', true);
   await page.click('#cands .tick[data-key=B]'); await page.click('#cands .tick[data-key=A]'); await page.click('#grounds .tick[data-key=polite]'); await page.waitForTimeout(100);
   await shot('A-end-convention-set', true);
   await page.click('#b-adopt'); await page.waitForTimeout(600); await hurry(); await until('#end-btns'); await shot('A-end-readback', true);
