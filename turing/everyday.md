@@ -10,7 +10,7 @@ Three earlier machine sets were run and not used, and are kept at the end of thi
 
 2. **A Monday morning.**
    Machine: Alarm went at six and I genuinely could not remember what day it was.
-   Person: 
+   Person: The alarm clock woke me at 6 and that on a Monday. I'm dreading this week.
 
 3. **A photograph of someone who has died.**
    Machine: Found the one of Dad at the caravan, still can't look at it for long.
