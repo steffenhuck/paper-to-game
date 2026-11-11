@@ -22,7 +22,7 @@ Three earlier machine sets were run and not used, and are kept at the end of thi
 
 5. **The last day of a holiday.**
    Machine: Packed the case tonight so I don't have to think about it tomorrow.
-   Person: 
+   Person: Decided to pack already today. One more hour of sleep tomorrow.
 
 6. **Money.**
    Machine: Checked the account twice before buying the trainers, which is a bad sign.
