@@ -34,7 +34,7 @@ Three earlier machine sets were run and not used, and are kept at the end of thi
 
 8. **The sea at night.**
    Machine: Walked down after dinner and could hear it before I could see it.
-   Person: 
+   Person: I could smell the sea first, then heared it.
 
 9. **A phone that keeps buzzing during dinner.**
    Machine: Mum's phone kept going off and she kept saying it was nothing.
