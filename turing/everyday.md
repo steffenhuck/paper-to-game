@@ -30,7 +30,7 @@ Three earlier machine sets were run and not used, and are kept at the end of thi
 
 7. **Something done for the first time after the age of forty.**
    Machine: Went to a swimming lesson, forty-three, and the kids there were very kind about it.
-   Person: 
+   Person: My first swimming lesson at the tender age of 43. The kids had a laugh.
 
 8. **The sea at night.**
    Machine: Walked down after dinner and could hear it before I could see it.
