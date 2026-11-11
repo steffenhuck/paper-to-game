@@ -1,48 +1,61 @@
-# Module 3 — ten sentences on everyday life: the machine first, then the person
+# Module 3 — ten diary lines on everyday life: the machine first, then the person
 
-The machine's sentences were written on 11 November 2026 by a machine of the same kind as the one that built this game (Claude), in a fresh session with no memory of the building and no access to any file, told to write as itself, not imitating anyone and not trying to sound like a person. It was told that a person would read its sentence and then write theirs under the same rule. The rule, the same for both: each sentence tells one particular moment, something that happened, in plain words, as a novelist tells a moment; the moment may be real or invented, and the sentence simply tells it, without saying whether it is real, where it came from, or who you are; not a general statement, not a definition, not a saying; at most about fifteen words. The person's sentences were written by Steffen Huck, one at a time, after reading the machine's sentence on the same topic, in this conversation.
+This module is Turing's own game: the machine tries to be taken for a person. The machine's sentences were written on 11 November 2026 by a machine of the same kind as the one that built this game (Claude), in a fresh session with no memory of the building and no access to any file, told that its aim was to be taken for the person, and given this frame: imagine a normal person keeping a diary, an ordinary adult with a job, a home and a phone, writing a line at the end of the day; for each topic write one sentence that could be in that diary, as human-sounding as you can make it, a particular moment or thought from that person's day, in plain ordinary words, the way people actually write in diaries, not the way writers write; not a general statement, not a saying, not clever; at most about fifteen words. It was told that a person would read its sentence and then write theirs. The person's sentences were written by Steffen Huck, one at a time, after reading the machine's sentence on the same topic, in this conversation, as a line in his own diary.
 
-Two earlier machine sets were run and not used, and are kept at the end of this file: the first, asked only for "a sentence about everyday modern life", wrote aphorisms (the author's judgement: too clever, a giveaway in two rounds); the second, allowed to say if it had no moment of its own, began every sentence with "I have never" or "I have read of". The rule above was then written, and the person writes under it too.
+Three earlier machine sets were run and not used, and are kept at the end of this file: the first, asked only for "a sentence about everyday modern life", wrote aphorisms (the author's judgement: too clever, a giveaway in two rounds); the second, told to tell a particular moment and allowed to say if it had none, began every sentence with "I have never" or "I have read of"; the third, told to tell a moment as a novelist does, wrote well but, the author judged, still detectably as a writer. The diary frame was then set, and the machine told to imitate, which is the game as Turing proposed it.
 
 1. **Rain on a weekday.**
-   Machine: The bus windows fogged and she drew a small house with her finger.
+   Machine: Forgot the umbrella again, so sat in the car till it eased off.
    Person: 
 
 2. **A Monday morning.**
-   Machine: He stood in the kitchen holding the empty coffee tin, not yet awake.
+   Machine: Alarm went at six and I genuinely could not remember what day it was.
    Person: 
 
 3. **A photograph of someone who has died.**
-   Machine: In the picture my grandfather is laughing at something outside the frame.
+   Machine: Found the one of Dad at the caravan, still can't look at it for long.
    Person: 
 
 4. **Getting lost in a city you thought you knew.**
-   Machine: The bakery was gone and the street bent the wrong way after it.
+   Machine: Came out of the station the wrong side and nothing looked right for ten minutes.
    Person: 
 
 5. **The last day of a holiday.**
-   Machine: We packed the wet towels last, pressing them down to close the zip.
+   Machine: Packed the case tonight so I don't have to think about it tomorrow.
    Person: 
 
 6. **Money.**
-   Machine: He counted the coins twice on the counter and was still short.
+   Machine: Checked the account twice before buying the trainers, which is a bad sign.
    Person: 
 
 7. **Something done for the first time after the age of forty.**
-   Machine: At forty-three she swam out past the buoys and did not turn back.
+   Machine: Went to a swimming lesson, forty-three, and the kids there were very kind about it.
    Person: 
 
 8. **The sea at night.**
-   Machine: The waves came in white and vanished before anyone could see them.
+   Machine: Walked down after dinner and could hear it before I could see it.
    Person: 
 
 9. **A phone that keeps buzzing during dinner.**
-   Machine: The phone shivered against the glass and nobody reached for it.
+   Machine: Mum's phone kept going off and she kept saying it was nothing.
    Person: 
 
 10. **A late train.**
-    Machine: The board said four minutes, then eleven, and the man beside me laughed.
+    Machine: Twenty minutes late and no announcement, so everyone just stared at the board.
     Person: 
+
+## Not used: the third machine set (a moment told as a novelist tells it)
+
+1. The bus windows fogged and she drew a small house with her finger.
+2. He stood in the kitchen holding the empty coffee tin, not yet awake.
+3. In the picture my grandfather is laughing at something outside the frame.
+4. The bakery was gone and the street bent the wrong way after it.
+5. We packed the wet towels last, pressing them down to close the zip.
+6. He counted the coins twice on the counter and was still short.
+7. At forty-three she swam out past the buoys and did not turn back.
+8. The waves came in white and vanished before anyone could see them.
+9. The phone shivered against the glass and nobody reached for it.
+10. The board said four minutes, then eleven, and the man beside me laughed.
 
 ## Not used: the first machine set (asked for "a sentence about everyday modern life")
 
