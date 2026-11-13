@@ -237,3 +237,7 @@ The newcomer is switched off (`MIGRATION_AFTER: 0`; the code and the paper's rea
 ## 30. Revision 10 (13 Nov 2026): an empty pond ends the game
 
 Steffen emptied the pond in four summers, and then got a fifth summer with nothing in it. An oversight: the game ran out its six summers and the seventh whatever the pond held. Now, when a summer ends with the pond empty, the button reads "See what became of us" and leads straight to the end: "The pond is empty. After 4 summers there is nothing left to fish", the last summer revealed (who went for two, the pond from its start to none), who never cared about the rule and that the others gave up one by one as the pond went down, and the paper's line for the card used most, with one sentence first: the pond was fished out before the seventh summer could be played, the one thing every card was there to prevent. How to play says so. The sweep now follows a village to its early end and checks the screen.
+
+## 31. Revision 11 (13 Nov 2026): the watcher sees everyone
+
+Steffen: under taking turns watching, the row should show what everybody did, not question marks. It showed buckets for two in ten because the watcher saw eight in ten, a number I had chosen and never shown. One of us at the pond all summer sees everyone: `WATCH_SEE: 1`. The card says so. Nothing else changes; the first sanction is still a word, and a grabber told off once now knows for certain that a second grab costs the fish. Over 400 villages the watched village's seventh summer moves from 7.6 to about 8 of ten taking one.

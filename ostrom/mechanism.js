@@ -50,15 +50,16 @@ var CONFIG = {
   SHAME_WATCH: 0.4,               // ours: × norm; being told off in front of the village
   ASSURE_WATCH: 0.5,              // ours: × norm; "with local monitors, conditional cooperators are assured that
                                   // someone is generally checking" (p. 151)
-  WATCH_SEE: 0.8,                 // ours: chance the summer's watcher sees what a villager takes; one of our own, at the pond all
-                                  // summer, knows everybody (design principle 4, p. 151: local monitors)
+  WATCH_SEE: 1,                   // ours: the summer's watcher, one of our own at the pond all summer, sees what everyone takes
+                                  // (design principle 4, p. 151: local monitors; revision 11: was 0.8, which left buckets
+                                  // in a watched summer and read as a bug)
   WATCH_SEE_BELIEF0: 0.3,         // ours: what villagers think that chance is before anyone has been told off
   WATCH_INFO: true,               // p. 151: the first sanction "needs to be considered more as information both to the
                                   // person who is 'caught' and to others": once a telling-off is seen, everyone
                                   // believes the true WATCH_SEE
   // design principle 5, graduated sanctions (p. 151), all in kind so that every sanction is a drawing: first offence seen,
   // a telling-off and nothing else; second, both fish go back into the pond; third and after, both fish back and no fishing
-  // next summer. A grabber who has been told off and grabs again expects GREEDY − WATCH_SEE × GREEDY = 0.4 fish, less
+  // next summer. A grabber who has been told off and grabs again expects GREEDY − WATCH_SEE × GREEDY = 0 fish, less
   // than a sharer's one, which is the differential the imitation rule needs.
   WATCH_BAN_VALUE: 8,             // ours: what a summer without fishing is worth, in fish, when weighing a third offence
   WATCH_LEARN: [0.25, 0.25, 0.25],// ours: how much a sanction from one's own village raises an egoist's norm (p. 151:
@@ -107,7 +108,7 @@ var REGIMES = [
   { key: 'watch', name: 'Take turns watching',
     line: 'One of us sits by the pond all day and watches, instead of fishing.',
     cost: 'Costs us the watcher’s fish.', greedy: 'Seen taking two: the first time, a telling-off. The second time, both fish go back in the pond. The third time, both fish back and no fishing next summer.',
-    knows: 'The watcher sees most of us, but not everyone. Whoever the watcher saw, we know what they took.' },
+    knows: 'The watcher sees everyone. We find out what each of us took.' },
   { key: 'strong', name: 'Ask the town for a policeman',
     line: 'The town sends a policeman. He stands by the pond every day, all summer.',
     cost: 'Costs nothing.', greedy: 'If he catches someone taking two, the fish go back in the pond. We stop telling each other off: that\u2019s his job now.',
@@ -182,7 +183,7 @@ function playSummer(s, regime, test) {
     for (var i = 0; i < C.N; i++) { if (wants[i] >= round && pond > 0) { took[i]++; pond--; } }
   }
   // 3. who is seen, what happens to them, and what the village meeting gets to know. Everyone carries the catch home in a
-  //    bucket: the meeting always learns the pond count, and a name only from the watcher (who sees most villagers, one
+  //    bucket: the meeting always learns the pond count, and a name only from the watcher (who sees everyone, one
   //    fish or two) or from a policeman's catch (he reports only whom he caught). known: 'hidden' | 'one' | 'two' |
   //    'watcher' | 'banned'.
   var seenAny = false;
