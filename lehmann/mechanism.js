@@ -4,9 +4,10 @@
 // the law of refraction at each boundary, total reflection where it applies. Everything the paper gives is
 // here with its page; everything ours (the posts, the ear, the dials' ranges, the words) says so.
 //
-// Paper: Kölbl-Ebert (2001), "Inge Lehmann's paper: 'P′' (1936)", Episodes 24(4):262–267, quoting and
-// summarising Lehmann (1936), "P′", Publ. Bureau Central Séismologique International A14:87–115. Only the
-// Episodes PDF was available; page numbers below are Episodes pages, with Lehmann's own in brackets.
+// Paper: Lehmann (1936), "P′", Publ. Bureau Central Séismologique International A14:87–115, read in full from
+// a scan of the original (revision 4), with Kölbl-Ebert (2001), "Inge Lehmann's paper: 'P′' (1936)", Episodes
+// 24(4):262–267 for what came after. Page numbers are the Episodes pages of the first build, with Lehmann's own
+// in brackets; numbers tagged [p. …] alone were taken from the original.
 //
 // Geometry: a ray leaves the quake at the surface at take-off angle i0 from the downward vertical ("dive").
 // Its ray parameter p = r·sin(i)/v is conserved; in a shell of constant speed the ray is a chord. At a boundary
@@ -39,6 +40,16 @@ var CONFIG = {
     OBS_PPRIME_DOWN_TO: 105,  // P′ observed, smaller, "at smaller distances down to about 105°" (p. 264 [p. 93])
     REAL_FOCAL: 143,          // the real Earth's focal distance, upper limit of the shadow (p. 264 [p. 93])
     GUTENBERG_RICHTER_KM: 1200, // inner core radius two years later (p. 267)
+    TABLE_II: [[14, 144.3], [13, 150.7], [12, 154.7], [11, 157.7], [10, 160.3], [8, 164.8], [5, 170.8], [1, 178.2]], // Lehmann's own table of rays through the inner core: take-off angle, Δ [p. 98]; used by the check only
+    QUAKE_DATE: '16 June 1929', // the Buller earthquake, New Zealand, whose P′3 records are her Figure 3 [p. 95–96]
+    RECORDS: [                  // the three stations of Figure 3, with their distances [p. 96]; upDown and sideways are OURS: rough sizes read off the figure by eye, for a sketch, not measurements
+      { name: 'Irkutsk', deg: 110.8, upDown: 0.3, sideways: 0.14 },
+      { name: 'Sverdlovsk', deg: 135.0, upDown: 1.0, sideways: 0.3 },
+      { name: 'Baku', deg: 137.4, upDown: 0.9, sideways: 0.5 },
+    ],
+    SOLID_PROPOSED: 1940,     // Birch (1940): the inner core proposed to be solid (not in Lehmann's paper, which never says solid)
+    SOLID_SHOWN: 1971,        // Dziewonski & Gilbert (1971), Nature 234:465: solidity from the Earth's ringing after great quakes
+    MODERN_KM: 1220,          // the inner core's radius as measured today, km
   },
 
   // ---- ours: the posts and the ear ------------------------------------------------------------------
@@ -49,12 +60,15 @@ var CONFIG = {
 
   // ---- ours: the dials --------------------------------------------------------------------------------
   WAVES: 12,                  // ours: waves in the first act; after the last the whole fan fires by itself
+  FREE_WAVES: 6,              // ours: after this many waves the first act sets a job: hit one post inside the shadow
+  TARGET_POST: 130,           // ours: that post; no dive reaches it in the two-shell Earth
+  WAVES2: 12,                 // ours: waves in the second act (the same Earth with Lehmann's ball hidden in it); it ends early once the four shadow posts are lit
   DIVE_MIN: 0, DIVE_MAX: 90, DIVE_STEP: 0.1, DIVE_START: 45,   // ours: the dive's resolution (the − and + buttons move one step); the first wave starts at 45°, after that the dial stays where the player left it
   DIVE_SLIDER_STEP: 0.5,      // ours: the slider's own step; finer work is done with − and +
   JUMP_DEG: 15,               // ours: a landing that moves this much for a dive that moved a degree or less is called a jump in the words after the shot
   SAME_DEG: 6,                // ours: a landing within this of the last one, for a dive within a degree, is called the same place
-  SPEED_MIN: 0.75, SPEED_MAX: 1.25, SPEED_STEP: 0.01, SPEED_START: 1.00, // ours: the ball's speed as a multiple of the core's; Lehmann's 8.6/8 = 1.075 is inside
-  QUAKES: 3,                  // ours: quakes in the second act; the third is final. The ball's size is Lehmann's (INNER_FRAC); quake() takes a size for an author who wants the dial back
+  SPEED_MIN: 0.75, SPEED_MAX: 1.25, SPEED_STEP: 0.01, SPEED_START: 1.00, // ours, the author's tool only since revision 4: the range quake() accepts for a ball's speed as a multiple of the core's; Lehmann's 8.6/8 = 1.075 is inside
+  QUAKES: 3,                  // ours, the author's tool only since revision 4: quake() is no longer played; it feeds the size-by-speed table in the check
 
   // ---- ours: words ------------------------------------------------------------------------------------
   MOON_KM: 1737,              // radius of the Moon, km, the yardstick for the ball's size in words
@@ -187,9 +201,9 @@ var MECH = (function () {
   function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
   // ---- the game -----------------------------------------------------------------------------------------
-  function newGame() { return { act: 1, shots: [], heard: {}, quakes: [], done: false }; }
+  function newGame() { return { act: 1, shots: [], heard: {}, shots2: [], lit2: {}, touches: 0, quakes: [], done: false }; }
   var INTRO1 = 'Wave 1 of ' + CONFIG.WAVES + '. Pick a dive: 0° is straight down through the middle, 90° is along the ground; − and + move a tenth of a degree. Then fire, and watch where you come out.';
-  var INTRO2 = 'The ringed ball in the middle is Lehmann’s ball. Choose: do waves run slower in it than in the core around it, the same, or faster? Then fire the quake.';
+  var INTRO2 = 'Wave 1 of ' + CONFIG.WAVES2 + '. The same Earth, the same dial. The four ringed posts are the shadow posts. The clue: they felt a wave that came up steeply, and a wave comes up as steeply as it dived.';
 
   // Act one: fire one wave at dive i0 into Lehmann's two-shell Earth. The dial stays where the player left it.
   function fire(game, i0) {
@@ -197,22 +211,33 @@ var MECH = (function () {
     var ray = trace(i0, twoShell()), hit = postsHeardBy([ray]), posts = Object.keys(hit).map(Number), newPosts = [];
     posts.forEach(function (P) { if (!game.heard[P]) { game.heard[P] = i0; newPosts.push(P); } });
     var prev = game.shots.length ? game.shots[game.shots.length - 1] : null;
+    var T = CONFIG.TARGET_POST, onJob = game.shots.length >= CONFIG.FREE_WAVES; // this wave was fired with the job set
     game.shots.push({ i0: i0, fold: ray.fold, branch: ray.branch, posts: posts });
     var what = 'You dived in at ' + fmtDive(i0) + (ray.branch === 'mantle' ? ', missed the core, ' : ', went through the core and got bent twice, ') +
       (ray.delta > 180 ? 'and came up ' + deg(ray.delta) + ' round the Earth from the quake: that is past the far point, so ' + deg(ray.fold) + ' round the other way.' : 'and came up ' + deg(ray.fold) + ' round the Earth from the quake.');
     var heardLine, steep = null;
     if (posts.length) { heardLine = 'That is right by the post at ' + deg(posts[0]) + ', so it felt you' + (newPosts.length ? '.' : ' again.'); steep = steepSentence(i0); }
     else { var near = nearestPost(ray.fold); heardLine = 'No post is there. The nearest, at ' + deg(near) + ', is ' + fmtGap(Math.abs(near - ray.fold)) + ' away: too far to feel you.'; }
-    var compare = null;
-    if (prev) {
-      var di = Math.abs(i0 - prev.i0), df = Math.abs(ray.fold - prev.fold);
-      if (di <= 1 && di > 0 && df >= CONFIG.JUMP_DEG) compare = 'Only ' + fmtDive(di) + ' away from your last dive, and you came up ' + deg(df) + ' further ' + (ray.fold > prev.fold ? 'round' : 'back') + '. Something big happens between ' + fmtDive(Math.min(i0, prev.i0)) + ' and ' + fmtDive(Math.max(i0, prev.i0)) + '. Try dives in between: − and + move a tenth of a degree.';
-      else if (di <= 1 && df < CONFIG.SAME_DEG) compare = 'Almost the same dive as last time, and almost the same place. Nothing new here: try a very different dive.';
-    }
+    var compare = compareLine(prev, i0, ray.fold, newPosts.length > 0);
     var left = CONFIG.WAVES - game.shots.length;
+    var job = null, jobNow = game.shots.length >= CONFIG.FREE_WAVES && left > 0; // the next wave is fired with the job set
+    if (onJob) job = 'The ringed post at ' + deg(T) + ' is still dark. You came up ' + deg(Math.abs(ray.fold - T)) + (ray.fold < T ? ' short of it.' : ' past it.');
+    else if (jobNow) job = 'Now a job. One post has a ring round it: the post at ' + deg(T) + '. Hit it. You have ' + numberWord(left) + ' waves left.';
     var next = left > 0 ? 'Now wave ' + (game.shots.length + 1) + ' of ' + CONFIG.WAVES + ': set a new dive, then fire.' : 'That was your last wave. Now every dive at once.';
-    return { ray: ray, posts: posts, newPosts: newPosts, heardCount: Object.keys(game.heard).length, left: left, last: left <= 0, words: { what: what, heard: heardLine, steep: steep, compare: compare, next: next }, steep: steepWords(i0), bounce: bounceWords(i0), vertical: verticalShare(i0) };
+    var head = posts.length ? 'You came up at ' + deg(ray.fold) + '. The post at ' + deg(posts[0]) + ' felt you' + (newPosts.length ? '.' : ' again.') : 'You came up at ' + deg(ray.fold) + '. No post felt you.';
+    if (onJob) head = 'You came up at ' + deg(ray.fold) + ': ' + deg(Math.abs(ray.fold - T)) + (ray.fold < T ? ' short of' : ' past') + ' the ringed post.';
+    else if (jobNow) head = 'Now a job: hit the ringed post at ' + deg(T) + '.';
+    return { ray: ray, posts: posts, newPosts: newPosts, heardCount: Object.keys(game.heard).length, left: left, last: left <= 0, target: jobNow ? T : null, words: { head: head, what: what, heard: heardLine, steep: steep, compare: compare, job: job, next: next }, steep: steepWords(i0), bounce: bounceWords(i0), vertical: verticalShare(i0) };
   }
+  // What the game says when two dives close together land far apart, or in the same place. Used in both acts.
+  function compareLine(prev, i0, f, lit) {
+    if (!prev) return null;
+    var di = Math.abs(i0 - prev.i0), df = Math.abs(f - prev.fold);
+    if (di <= 1 && di > 0 && df >= CONFIG.JUMP_DEG) return 'Only ' + fmtDive(di) + ' away from your last dive, and you came up ' + deg(df) + ' further ' + (f > prev.fold ? 'round' : 'back') + '. Something big happens between ' + fmtDive(Math.min(i0, prev.i0)) + ' and ' + fmtDive(Math.max(i0, prev.i0)) + '. Try dives in between: − and + move a tenth of a degree.';
+    if (!lit && di <= 1 && df < CONFIG.SAME_DEG) return 'Almost the same dive as last time, and almost the same place. Nothing new here: try a different dive.';
+    return null;
+  }
+  function numberWord(n) { return ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'][n] || String(n); }
   function fmtGap(g) { var h = Math.ceil(g * 2) / 2; return (h < 1 ? 'under 1' : h.toString().replace(/\.5$/, '½')) + '°'; } // rounded up to the half degree, so a gap of 3.2 reads 3½, never 3
   function nearestPost(f) { var best = CONFIG.POSTS[0]; CONFIG.POSTS.forEach(function (P) { if (Math.abs(P - f) < Math.abs(best - f)) best = P; }); return best; }
   function fmtDive(a) { var r = Math.round(a * 10) / 10; return (Number.isInteger(r) ? r : r.toFixed(1)) + '°'; }
@@ -224,19 +249,84 @@ var MECH = (function () {
     var missedWith = missed.map(function (P) { return { post: P, dive: diveFor(P, earth) }; });
     var cov = coverage(earth), graze = trace(asinDeg(earth.coreFrac), earth, true);
     var lines = [];
+    if (game.shots.length > CONFIG.FREE_WAVES) lines.push('You could not hit the post at ' + deg(CONFIG.TARGET_POST) + '. Nobody can.');
     lines.push('This is every dive at once, from 0° to 90°: the picture Inge Lehmann drew in 1936.');
     lines.push('Look at the right-hand edge. Between ' + deg(cov.mantle[1]) + ' and ' + deg(cov.core[0]) + ' round, no wave comes up at all. The four posts there, at ' + listPosts(shadow) + ', can never feel a quake from here. Lehmann called this band the shadow.');
     lines.push('Why: a wave that just misses the core comes up at ' + deg(cov.mantle[1]) + '. A wave that just catches the core is bent so hard it comes up near the far point, ' + deg(graze.fold) + ' round. Every dive in between lands beyond ' + deg(cov.core[0]) + '. The bend swallows the band.');
-    lines.push('Your ' + game.shots.length + ' waves lit ' + got.length + ' of the ' + reach.length + ' posts that can be lit.' + (missed.length ? ' A dive of ' + fmtDive(missedWith[0].dive) + ' would have lit the post at ' + deg(missed[0]) + '.' : ''));
+    lines.push('Your ' + game.shots.length + ' waves lit ' + got.length + ' of the ' + reach.length + ' posts that can be lit.');
     game.act = 2; game.reveal = { reach: reach, got: got, missed: missedWith, shadow: shadow, coverage: cov };
     return { fan: fan(earth, CONFIG.FAN_STEP_DRAW), reach: reach, got: got, missed: missedWith, shadow: shadow, coverage: cov, lines: lines };
   }
-  var TWIST = [
-    'But in 1936 the posts in the shadow did feel something. Faint, and the ground there bounced mostly up and down, as if a wave had come up steeply.',
-    'Inge Lehmann had an idea: inside the core sits a smaller ball of different stuff, where waves run at a different speed. Build it: choose how fast waves run in the ball. Then a quake fires at every angle at once. Make the four shadow posts feel it.'
-  ];
+  // The card between the acts: what the real posts wrote. Lehmann's Figure 3 [p. 96] and section 7 [p. 95].
+  var RECORDS = {
+    before: [
+      'So much for the drawing. Now the real Earth. On ' + CONFIG.PAPER.QUAKE_DATE + ' a great earthquake shook New Zealand, and listening posts all over the world wrote down what the ground did.',
+      'Three of them stood inside the shadow. They should have felt nothing. This is what they wrote:'
+    ],
+    after: [
+      'They felt it. Not much sideways, but the ground went up and down, and harder the further round the post stood.',
+      'Most scientists shrugged: a little shaking must creep round the edge of the core. Inge Lehmann, in Copenhagen, did not believe it. Ground that goes up and down means a wave that came up steeply. And in this Earth a wave comes up exactly as steeply as it dived.',
+      'So something deep down must be sending steep waves into the shadow. Go back in and find it. ' + cap(numberWord(CONFIG.WAVES2)) + ' more waves: light the four shadow posts.'
+    ],
+    note: 'Sketches after Lehmann’s Figure 3, not the real traces.'
+  };
 
-  // Act two: set the speed in the ball (its size is Lehmann's unless a size is passed) and fire a quake at every angle.
+  // Act two: fire one wave at dive i0 into the same Earth with Lehmann's ball in it. The ball is not drawn: the
+  // wave finds it by being bent where no colour changes. Every touch leaves marks (points on the ball's edge).
+  function fire2(game, i0) {
+    i0 = round(Math.max(CONFIG.DIVE_MIN, Math.min(CONFIG.DIVE_MAX, i0)), CONFIG.DIVE_STEP);
+    var ray = trace(i0, lehmannEarth()), was = trace(i0, twoShell());
+    var shadow = game.reveal ? game.reveal.shadow : shadowPosts(twoShell()), band = CONFIG.PAPER.SHADOW;
+    var hit = postsHeardBy([ray]), posts = Object.keys(hit).map(Number), newLit = [];
+    posts.forEach(function (P) { if (shadow.indexOf(P) >= 0 && !game.lit2[P]) { game.lit2[P] = i0; newLit.push(P); } });
+    var touched = ray.branch === 'reflect' || ray.branch === 'inner', straight = touched && i0 < 0.05;
+    var marks = !touched ? [] : ray.branch === 'reflect' ? [ray.pts[2]] : [ray.pts[2], ray.pts[3]];
+    var first = touched && game.touches === 0; if (touched) game.touches++;
+    var prev = game.shots2.length ? game.shots2[game.shots2.length - 1] : null;
+    game.shots2.push({ i0: i0, fold: ray.fold, branch: ray.branch, posts: posts, touched: touched });
+    var came = 'You came up ' + deg(ray.fold) + ' round.', what;
+    if (ray.branch === 'mantle') what = 'You dived in at ' + fmtDive(i0) + ', missed the core, and came up ' + deg(ray.fold) + ' round, just as in the first Earth. You never went near the middle.';
+    else if (ray.branch === 'core') what = 'You dived in at ' + fmtDive(i0) + ', went through the core, and came up ' + deg(ray.fold) + ' round, just as in the first Earth. Nothing new touched you.';
+    else if (straight) what = 'You dived straight down through the middle. A wave that hits something head-on is not bent, so you came up at the far point, 180° round, as before.';
+    else if (ray.branch === 'reflect') what = 'You dived in at ' + fmtDive(i0) + ', went into the core, and deep inside it you hit something and bounced off it, though the colour never changed. ' + came + ' In the first Earth this dive came up at ' + deg(was.fold) + '.';
+    else what = 'You dived in at ' + fmtDive(i0) + ', went into the core, and deep inside it something bent you away from the middle, going in and again coming out, though the colour never changed. ' + came + ' In the first Earth this dive came up at ' + deg(was.fold) + '.';
+    var found = first ? 'Something is hidden inside the core. Each wave that touches it leaves a white mark where it was bent. Find more of its edge.' : null;
+    var heardLine, steep = null, inBand = ray.fold > band[0] && ray.fold < band[1];
+    if (newLit.length) { heardLine = 'That is right by the shadow post at ' + deg(newLit[0]) + '. It felt you: the first wave ever to reach it.'; steep = steepSentence(i0); }
+    else if (posts.length && shadow.indexOf(posts[0]) >= 0) heardLine = 'That is right by the shadow post at ' + deg(posts[0]) + ', which felt you again.';
+    else if (posts.length) heardLine = 'That is by the post at ' + deg(posts[0]) + ', which is no shadow post.';
+    else { var near = nearestPost(ray.fold); heardLine = (inBand ? 'You came up inside the shadow, where no wave could come up before. But no post is there: the nearest, at ' : 'No post is there. The nearest, at ') + deg(near) + ', is ' + fmtGap(Math.abs(near - ray.fold)) + ' away.'; }
+    var clue = touched ? null : ray.branch === 'mantle' ? 'Remember the clue: the shadow posts felt a wave that came up steeply. This dive is far too flat.' : 'Remember the clue: the shadow posts felt a wave that came up steeply. Try a steeper dive, nearer to straight down.';
+    var compare = compareLine(prev, i0, ray.fold, newLit.length > 0);
+    var lit = shadow.filter(function (P) { return game.lit2[P] !== undefined; }), all = lit.length === shadow.length;
+    var left = CONFIG.WAVES2 - game.shots2.length, last = all || left <= 0;
+    var next = all ? 'All four shadow posts are lit. Now see what you found.' : left <= 0 ? 'That was your last wave. Now see what is in there.' : 'Now wave ' + (game.shots2.length + 1) + ' of ' + CONFIG.WAVES2 + ': set a new dive, then fire.';
+    var head = newLit.length ? 'Shadow post ' + deg(newLit[0]) + ' is lit: ' + lit.length + ' of 4.' : first ? 'Something bent you where no colour changed.' : touched && !straight ? (ray.branch === 'reflect' ? 'You bounced off the hidden thing and came up at ' : 'The hidden thing bent you. You came up at ') + deg(ray.fold) + '.' : 'You came up at ' + deg(ray.fold) + ', as before. Nothing new touched you.';
+    return { ray: ray, posts: posts, newLit: newLit, lit: lit, shadow: shadow, touched: touched, first: first, marks: marks, left: left, last: last, words: { head: head, what: what, found: found, heard: heardLine, steep: steep, clue: clue, compare: compare, next: next }, steep: steepWords(i0), bounce: bounceWords(i0), vertical: verticalShare(i0) };
+  }
+  // The points on the ball's edge that a game's second-act waves touched: [theta, r] pairs, for redrawing.
+  function marksOf(game) {
+    var out = [], E = lehmannEarth();
+    game.shots2.forEach(function (sh) { if (!sh.touched) return; var r = trace(sh.i0, E); out.push(r.pts[2]); if (r.branch === 'inner') out.push(r.pts[3]); });
+    return out;
+  }
+  // Act two ends: the ball is drawn through the marks and the whole fan fires through the three-shell Earth.
+  function reveal2(game) {
+    var E = lehmannEarth(), cov = coverage(E), heard = heardByQuake(E);
+    var shadow = game.reveal ? game.reveal.shadow : shadowPosts(twoShell());
+    var lit = shadow.filter(function (P) { return game.lit2[P] !== undefined; });
+    var km = Math.round(CONFIG.INNER_FRAC * CONFIG.R0_KM / 100) * 100, crit = asinDeg((CONFIG.V_CORE / CONFIG.V_INNER) * Math.sin(CONFIG.PAPER.INNER_GRAZE_I0 * D));
+    var lines = [];
+    lines.push((game.touches > 1 ? 'Your white marks lie on a circle. ' : game.touches === 1 ? 'Your white mark lies on a circle. ' : 'Your waves never touched it, but it is there. ') + 'There is a ball inside the core, about ' + km + ' km from its centre to its edge: ' + sizeWords(CONFIG.INNER_FRAC) + '.');
+    lines.push('This is every dive at once through an Earth of three layers. Any wave that dives steeper than ' + deg(CONFIG.PAPER.INNER_GRAZE_I0) + ' meets the ball. Between ' + deg(CONFIG.PAPER.INNER_GRAZE_I0) + ' and about ' + deg(crit) + ' it bounces off, like a stone skipping on water. Steeper than that it goes in, and is bent away from the middle.');
+    lines.push('The core bent you toward the middle, because waves run slower there. The ball bends you away from it. So in the ball waves run faster again. And every wave it turns aside comes up between ' + deg(cov.inner[0]) + ' and 180° round: right across the shadow.');
+    lines.push(game.touches ? 'Your ' + game.shots2.length + ' waves touched the ball ' + timesWord(game.touches) + ' and lit ' + countPosts(lit.length) + '.' : 'Your ' + game.shots2.length + ' waves never dived steeply enough to touch it.');
+    game.act = 3; game.done = true; game.reveal2 = { lit: lit, heard: heard, coverage: cov };
+    return { fan: fan(E, CONFIG.FAN_STEP_DRAW), heard: heard, lit: lit, shadow: shadow, coverage: cov, lines: lines, marks: marksOf(game) };
+  }
+  function timesWord(n) { return n === 0 ? 'never' : n === 1 ? 'once' : n === 2 ? 'twice' : numberWord(n) + ' times'; }
+
+  // The author's tool (not played since revision 4): a ball of any speed and size, a quake at every angle. Feeds the check's table.
   function quake(game, speedRatio, sizeFrac) {
     sizeFrac = sizeFrac == null ? CONFIG.INNER_FRAC : sizeFrac;
     speedRatio = round(Math.max(CONFIG.SPEED_MIN, Math.min(CONFIG.SPEED_MAX, speedRatio)), CONFIG.SPEED_STEP);
@@ -254,33 +344,23 @@ var MECH = (function () {
     var result = lit.length === 4 ? 'All four shadow posts felt it: ' + listPosts(lit) + '.' : lit.length === 0 ? 'None of the four shadow posts felt anything.' : (lit.length === 1 ? 'Only the post at ' + deg(lit[0]) + ' felt it. ' : 'The posts at ' + listPosts(lit) + ' felt it. ') + 'The ' + (dark.length === 1 ? 'post at ' + deg(dark[0]) + ' felt nothing.' : 'other ' + ['', '', 'two', 'three'][dark.length] + ' shadow posts felt nothing.');
     var q = { n: game.quakes.length + 1, sizeFrac: sizeFrac, speedRatio: speedRatio, heard: heard, lit: lit, coverage: cov };
     game.quakes.push(q);
-    if (game.quakes.length >= CONFIG.QUAKES) game.done = true;
-    var next = game.done ? 'That was the last quake. See the verdict.' : 'Now quake ' + (game.quakes.length + 1) + ' of ' + CONFIG.QUAKES + ': set a new speed, then fire.';
+    var next = '';
     return { quake: q, fan: fan(earth, CONFIG.FAN_STEP_DRAW), heard: heard, lit: lit, shadow: shadow, left: CONFIG.QUAKES - game.quakes.length, words: { ball: 'You made waves run ' + inBall(speedRatio) + '. The quake fired at every angle at once.', result: result, how: how, next: next } };
   }
-  function finish(game) { game.done = true; return verdict(game); }
-
   function verdict(game) {
-    var last = game.quakes[game.quakes.length - 1], shadow = game.reveal ? game.reveal.shadow : shadowPosts(twoShell());
-    var best = game.quakes.reduce(function (b, q) { return !b || q.lit.length > b.lit.length ? q : b; }, null);
-    var L = lehmannEarth(), lCov = coverage(L);
-    var did = 'You were the earthquake. You fired ' + game.shots.length + ' waves into an Earth made of two layers: a mantle, where waves run fast, and a core, where they run slower. Each time you chose the direction, and the listening posts told you where your wave came out. Waves that missed the core came out on your side of the Earth, no further than ' + deg(game.reveal ? game.reveal.coverage.mantle[1] : 112.5) + ' round. Waves that went through the core were bent so hard they came out near the far side. And a band in between, from ' + deg(shadow[0]) + ' to ' + deg(shadow[shadow.length - 1]) + ' round, never got a wave at all: the shadow.';
-    if (last) {
-      did += ' Then you built a smaller ball inside the core where waves run ' + inBall(last.speedRatio) + ', and fired a quake at every angle: ' + countPosts(last.lit.length) + ' felt it.';
-      if (best && best !== last && best.lit.length > last.lit.length) did += ' Your best ball, where waves ran ' + inBall(best.speedRatio) + ', reached ' + countPosts(best.lit.length).replace(' shadow posts', '') + '.';
-    } else did += ' You never built the ball.';
-    var paper = 'In 1936 the posts inside the shadow had felt something after all: weak, but real, and the ground there bounced mostly up and down, the way it does when a wave comes up steeply. Most scientists said the waves had crept round the outside of the core. Inge Lehmann worked out, by hand, that creeping waves could not come up steeply and would not get stronger further round. So she tried another idea: a smaller ball inside the core, ' + sizeWords(CONFIG.INNER_FRAC) + ' (about ' + Math.round(CONFIG.INNER_FRAC * CONFIG.R0_KM / 100) * 100 + ' km from its centre to its edge), where waves run ' + inBall(CONFIG.V_INNER / CONFIG.V_CORE).replace('in the ball', 'in it') + ' around it. A wave that hits faster rock at a glancing angle bounces off it, and her bounced waves come up from about ' + deg(lCov.reflect[0]) + ' round: right inside the shadow, steeply, and stronger the further round they land. That matched what the posts had felt. She wrote that the idea seemed likely, but could not be proved with what she had.';
-    var means = 'She was right. Two years later Gutenberg and Richter worked out the ball\u2019s size from the times the waves took: about ' + CONFIG.PAPER.GUTENBERG_RICHTER_KM + ' km from centre to edge. In 1939 Jeffreys showed that creeping waves could not explain the shadow posts at all. For about twenty years people argued over whether waves really run faster in the ball; they do. By 1946 everyone agreed on the picture we still have: a rocky mantle, a liquid core, and a solid ball in the middle, the inner core. Lehmann found it with cardboard cards, oatmeal boxes and a pencil, in her garden in Copenhagen, in a job where research was not even part of her duties.';
-    var fate;
-    if (!last) fate = 'You found the shadow, and never built the ball.';
-    else if (last.lit.length === 4 && last.speedRatio > 1) fate = 'Your ball does what hers does.';
-    else if (last.lit.length === 4 && last.speedRatio < 1) fate = 'Your ball fills the shadow the wrong way round: waves plunge through it, cross the far point and come back. In this model that works too. But the shadow posts felt waves that came up steeply and got stronger further round, and only a bounce off a faster ball gives that. Later work found the ball faster.';
-    else if (last.lit.length > 0 && last.speedRatio < 1) fate = 'Your ball fills part of the shadow, the wrong way round: waves plunged through it, crossed the far point and came back.';
-    else if (last.lit.length > 0) fate = 'Your ball fills part of the shadow.';
-    else fate = 'Your ball leaves the shadow dark.';
-    return { did: did, fate: fate, paper: paper, means: means, lehmann: { sizeFrac: CONFIG.INNER_FRAC, speedRatio: CONFIG.V_INNER / CONFIG.V_CORE }, last: last, quote: 'We take it that, as before, the Earth consists of a core and a mantle, but that inside the core there is an inner core in which the velocity is larger than in the outer one.' };
+    var shadow = game.reveal ? game.reveal.shadow : shadowPosts(twoShell());
+    var lit = shadow.filter(function (P) { return game.lit2[P] !== undefined; });
+    var L = lehmannEarth(), lCov = coverage(L), km = Math.round(CONFIG.INNER_FRAC * CONFIG.R0_KM / 100) * 100;
+    var crit = asinDeg((CONFIG.V_CORE / CONFIG.V_INNER) * Math.sin(CONFIG.PAPER.INNER_GRAZE_I0 * D));
+    var did = 'You were the earthquake. You fired ' + numberWord(game.shots.length) + ' waves into an Earth of two layers: a mantle, where waves run fast, and a core, where they run slower. Waves that missed the core came out on your own side of the Earth, no further than ' + deg(game.reveal ? game.reveal.coverage.mantle[1] : 112.5) + ' round. Waves that went through the core were bent so hard that they came out near the far side. The band in between, with the posts from ' + deg(shadow[0]) + ' to ' + deg(shadow[shadow.length - 1]) + ', never got a wave at all: the shadow.';
+    if (game.shots2.length) did += ' Then you saw what real posts in the shadow had written, and went back in. ' + (game.touches ? 'Diving steeply, you were bent deep inside the core, where no colour changed: you touched a hidden ball ' + timesWord(game.touches) + ', and lit ' + countPosts(lit.length) + '.' : 'Your ' + numberWord(game.shots2.length) + ' waves never dived steeply enough to touch what is hidden there, and the shadow posts stayed dark.');
+    else did += ' You never went back in.';
+    var paper = 'Inge Lehmann could not ride a wave. She had only what the posts wrote down. After the New Zealand earthquake of ' + CONFIG.PAPER.QUAKE_DATE + ', posts inside the shadow had felt a wave: hardly any sideways push, but a clear up-and-down, and stronger the further round they stood. The usual answer was that a little shaking creeps round the edge of the core. She thought that could hardly be right any more. So she drew the Earth you have just played in, with one speed in the mantle and a slower one in the core, and then put a third layer inside it: a ball about ' + km + ' km from its centre to its edge, ' + sizeWords(CONFIG.INNER_FRAC) + ', where waves run a little faster again. Then she worked out by hand where every dive comes up. Waves steeper than ' + deg(CONFIG.PAPER.INNER_GRAZE_I0) + ' meet the ball. A few bounce off it, faintly. The rest go through, are bent away from the middle, and come up between ' + deg(lCov.inner[0]) + ' and 180° round: steeply, right across the shadow, and stronger the further round they land. That is what the posts had felt. She did not claim more than that. She called the ball a hypothesis that seemed fairly probable but could not be proved from the records she had, and she ended by asking others to look.';
+    var means = 'They looked, and the ball was there. Two years later Gutenberg and Richter worked out its size from the times the waves took: about ' + CONFIG.PAPER.GUTENBERG_RICHTER_KM + ' km from centre to edge. Today it is measured at about ' + CONFIG.PAPER.MODERN_KM + ' km. In 1939 Jeffreys showed that creeping waves could not explain the shadow posts at all. One thing Lehmann never said is that the ball is solid: her paper only says that waves run faster in it. That idea came in ' + CONFIG.PAPER.SOLID_PROPOSED + ', from Francis Birch: iron squeezed so hard that it freezes, inside a core of liquid iron. It was shown to be right only in ' + CONFIG.PAPER.SOLID_SHOWN + ', from the way the whole Earth rings after a great earthquake. So the picture we have now is a rocky mantle, a liquid core, and a solid ball in the middle, the inner core. Lehmann found it by hand, with her records on cardboard cards kept in oatmeal boxes.';
+    var fate = !game.shots2.length ? 'You found the shadow.' : lit.length === shadow.length ? 'You found the ball.' : game.touches ? 'You touched the ball.' : 'The ball stayed hidden.';
+    return { did: did, fate: fate, paper: paper, means: means, lit: lit, touches: game.touches, marks: marksOf(game), lehmann: { sizeFrac: CONFIG.INNER_FRAC, speedRatio: CONFIG.V_INNER / CONFIG.V_CORE }, quote: 'inside the core there is an inner core in which the velocity is larger', quoteBy: 'Lehmann, 1936, on what her hypothesis takes the Earth to be' };
   }
 
-  return { CONFIG: CONFIG, twoShell: twoShell, threeShell: threeShell, lehmannEarth: lehmannEarth, trace: trace, fold: fold, fan: fan, postsHeardBy: postsHeardBy, heardByQuake: heardByQuake, reachablePosts: reachablePosts, shadowPosts: shadowPosts, diveFor: diveFor, coverage: coverage, verticalShare: verticalShare, sizeWords: sizeWords, speedWords: speedWords, steepWords: steepWords, bounceWords: bounceWords, fmtDive: fmtDive, deg: deg, INTRO1: INTRO1, INTRO2: INTRO2, newGame: newGame, fire: fire, reveal: reveal, TWIST: TWIST, quake: quake, finish: finish, verdict: verdict };
+  return { CONFIG: CONFIG, twoShell: twoShell, threeShell: threeShell, lehmannEarth: lehmannEarth, trace: trace, fold: fold, fan: fan, postsHeardBy: postsHeardBy, heardByQuake: heardByQuake, reachablePosts: reachablePosts, shadowPosts: shadowPosts, diveFor: diveFor, coverage: coverage, verticalShare: verticalShare, sizeWords: sizeWords, speedWords: speedWords, steepWords: steepWords, bounceWords: bounceWords, fmtDive: fmtDive, deg: deg, numberWord: numberWord, INTRO1: INTRO1, INTRO2: INTRO2, newGame: newGame, fire: fire, reveal: reveal, RECORDS: RECORDS, fire2: fire2, marksOf: marksOf, reveal2: reveal2, quake: quake, verdict: verdict };
 })();
 if (typeof module !== 'undefined') module.exports = MECH;
