@@ -17,8 +17,8 @@ const path = require('path');
   const picksA = [3, 1, 2, 0, 0];
   for (let k = 0; k < 5; k++) {
     await idle(); await page.waitForTimeout(150);
-    const n = await page.locator('.card').count(); log.push(`Sunday ${k + 1}: ${n} list(s) on offer; ${await say('lists-note')}`);
-    if (k === 0) { await shot('a-1-ready'); if (await page.isEnabled('#b-post')) errors.push('Post enabled before a list is touched'); }
+    const n = await page.locator('button.card').count(); log.push(`Sunday ${k + 1}: ${n} list(s) on offer; ${await say('lists-note')}`);
+    if (k === 0) { await shot('a-1-ready'); if (await page.isEnabled('#b-post')) errors.push('Post enabled before a ranking is touched'); }
     if (k === 0) { await page.click('.card[data-i="2"]'); await page.waitForTimeout(100); await shot('a-1-preview-annas'); }
     if (k === 1) { await page.click('#q-play'); await page.waitForTimeout(150); await shot('help'); await page.click('#b-help-close'); await page.waitForTimeout(100); }
     if (k === 3) await shot('a-4-one-list');
@@ -44,6 +44,14 @@ const path = require('path');
   const ks = await page.evaluate(() => { const c = window.__game().audit.cells; return [c.findIndex(x => x.list && !x.isAnnas && !x.isBeats), c.findIndex(x => x.isAnnas && !x.isBeats), c.map((x, i) => x.list ? -1 : i).filter(i => i >= 0).pop()]; });
   for (const k of ks) { if (k < 0) continue; await page.click('#sq-' + k); await page.waitForTimeout(150); log.push(`square ${k}: ` + await say('read')); }
   await shot('a-check-touched'); await hscroll('check done');
+  // hire a tie-breaker: Clara, Clara with another ballot, then Anna
+  await page.click('#b-tohire'); await page.waitForTimeout(250); await shot('a-hire-empty');
+  if (await page.isVisible('#b-verdict')) errors.push('verdict offered before any tie-breaker was tried');
+  await page.click('#h-C'); await page.waitForTimeout(100); await shot('a-hire-clara-picked');
+  await page.click('#b-hire'); await idle(); await page.waitForTimeout(500); await shot('a-hire-clara'); log.push('HIRE Clara: ' + await say('hire-say') + ' // ' + await say('hread'));
+  await page.click('.chip[data-i="3"]'); await page.waitForTimeout(100); await page.click('#b-hire'); await idle(); await page.waitForTimeout(300); log.push('HIRE Clara, other ballot: ' + await say('hire-say'));
+  await page.click('#q-hire'); await page.waitForTimeout(100); await page.click('#b-help-close');
+  await page.click('#h-A'); await page.click('#b-hire'); await idle(); await page.waitForTimeout(500); await shot('a-hire-anna'); log.push('HIRE Anna: ' + await say('hire-say')); await hscroll('hire');
   await page.click('#b-verdict'); await page.waitForTimeout(300); await shot('a-end'); await shot('view-a-end', false); await hscroll('end');
   log.push('END A: ' + await say('v1') + ' | ' + await say('v2') + ' | ' + await say('v3'));
   await page.click('#b-about1'); await page.waitForTimeout(150); await shot('about'); await page.click('#b-about-close');
@@ -62,6 +70,7 @@ const path = require('path');
   }
   await page.click('#b-check'); await idle(); await shot('b-check-first'); log.push('B check, first: ' + await say('read') + ' // ' + await say('check-say'));
   await page.click('#b-check'); await idle(); await page.waitForTimeout(100); await shot('b-check-done'); log.push('B check, done: ' + await say('check-say'));
+  await page.click('#b-tohire'); await page.waitForTimeout(100); await page.click('#h-A'); await page.click('#b-hire'); await idle(); log.push('B HIRE Anna: ' + await say('hire-say'));
   await page.click('#b-verdict'); await page.waitForTimeout(200); await shot('b-end'); await hscroll('end B');
   log.push('END B: ' + await say('v1') + ' | ' + await say('v2') + ' | ' + await say('v3'));
   // the embedded mechanism answers as the file does

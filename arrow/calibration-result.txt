@@ -19,10 +19,18 @@ PASS  spread of outcomes: at least six different scores are reachable  [{"26":5,
 PASS  robustness: whatever ballots come first, a complete non-dictatorial book fails on at least 2 of 36 Sundays
 PASS  the six books in which a fixed order of the plans wins every disagreement are all among the best without a boss  [best: 18 books at 34; fixed-order books: 34,34,34,34,34,34]
 PASS  every Sunday without a list comes with a chain "a over-or-level b, b over-or-level c, but not a over c" taken from its own pair results
+PASS  a third voter with a fixed ballot and majority of three is the rule book in which her order settles every disagreement (all 6 ballots, all 36 Sundays)
+PASS  each such tie-breaker gives a ranking on 34 of 36 Sundays
+PASS  its two failures are the paradox of voting (p. 329): each plan first on one ballot, second on one, third on one; a circle of 2-1 majorities
+PASS  p. 329 through majorityOfThree: A>B>C, B>C>A, C>A>B gives no ordering, a circle
+PASS  three free voters and a simple majority: 12 of the 216 sets of ballots give no ordering  [12]
+PASS  with two voters, a draw on every disagreement fails on 12 of 36 Sundays
+PASS  a voter as tie-breaker is that voter as dictator
+PASS  a coin can land in a circle on Sunday 1: Fountain over Tower (both), Tower over Tree, Tree over Fountain
 
 Sundays that hold, over all 729 rule books: {"22":12,"23":84,"24":73,"26":126,"27":24,"28":156,"29":72,"30":72,"31":12,"32":30,"33":48,"34":18,"36":2}
 Sundays that hold, over the 135 paths of play (three openings): {"26":5,"27":2,"28":21,"29":19,"30":9,"31":4,"32":17,"33":36,"34":16,"36":6}
 Fates by opening: {"0:patchwork":38,"0:best":3,"0:boss":2,"0:custom":2,"1:patchwork":37,"1:best":4,"1:custom":2,"1:boss":2,"2:patchwork":38,"2:boss":2,"2:custom":2,"2:best":3}
 Books at the best score without a boss (34): ABBAAA BAABAA BAAABA AABABA BABABA ABBABA BBBABA BAABBA BABBBA ABAAAB ABBAAB AAABAB BAABAB ABABAB BBABAB ABBBAB ABBABB BAABBB
 
-21 checks, 0 failed
+29 checks, 0 failed

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Voting with Arrow</title>
 <script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<meta name="description" content="Two voters, three plans, one list every voting Sunday. You are the counting rule. Kenneth Arrow proved in 1950 that you will end in one of two places: a Sunday with no list, or a boss.">
+<meta name="description" content="Voting is the easy part. Counting is where it gets hard. Two voters, three plans, and you break the ties. Kenneth Arrow proved in 1950 where that ends: a Sunday with no ranking, or a boss.">
 <style>
 @font-face{font-family:'Inter Display';font-weight:900;font-style:normal;src:url(data:font/woff2;base64,/*__F_BLACK__*/) format('woff2')}
 @font-face{font-family:'Inter Display';font-weight:700;font-style:normal;src:url(data:font/woff2;base64,/*__F_BOLD__*/) format('woff2')}
@@ -19,7 +19,7 @@ body{font-family:Inter,Helvetica,Arial,sans-serif;font-weight:400;font-size:16px
 body.lock{overflow:hidden}
 .wrap{max-width:420px;margin:0 auto;background:var(--white);min-height:100vh;padding:0 16px 28px;position:relative}
 .screen{display:none}.screen.on{display:block}
-button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;border-radius:0}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;border-radius:0;text-align:inherit}
 h1,h2,h3,p{margin:0}
 b,strong{font-weight:600}
 .band{height:10px;margin:0 -16px;background:linear-gradient(90deg,var(--red) 0 50%,var(--ink) 50% 100%)}
@@ -27,19 +27,19 @@ b,strong{font-weight:600}
 .title{font-family:'Inter Display',Inter,sans-serif;font-weight:900;font-size:60px;line-height:.9;letter-spacing:-.045em;margin:22px 0 10px -2px}
 .title span{display:block}
 .after{font-size:12.5px;color:var(--grey);margin-bottom:16px}
+.hook{font-family:'Inter Display';font-weight:700;font-size:21px;line-height:1.15;margin-bottom:12px}
 .hero{border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:14px 0;display:flex;align-items:center;gap:10px;margin-bottom:16px}
 .hero .arrow{font-family:'Inter Display';font-weight:900;font-size:30px;line-height:1}
 .hero .qm{font-family:'Inter Display';font-weight:900;font-size:22px;color:var(--grey)}
 .lead p{margin-bottom:10px}
 .lab{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;margin:18px 0 8px;border-top:1px solid var(--ink);padding-top:8px}
-.lab i{font-style:normal;background:var(--ink);color:#fff;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;letter-spacing:0}
+.lab i{font-style:normal;background:var(--ink);color:#fff;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;letter-spacing:0;flex:none}
 .aimbox{border:2px solid var(--ink);padding:10px 12px;margin:14px 0 10px}
 .aimbox .k{font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--red);display:block;margin-bottom:2px}
 .aimbox .v{font-family:'Inter Display';font-weight:700;font-size:20px;line-height:1.15;letter-spacing:-.01em}
-.go{display:block;width:100%;background:var(--ink);color:#fff;font-family:'Inter Display';font-weight:700;font-size:15px;letter-spacing:.14em;text-transform:uppercase;padding:17px 12px;margin:14px 0 0;text-align:left;position:relative}
+.go{display:block;width:100%;background:var(--ink);color:#fff;font-family:'Inter Display';font-weight:700;font-size:15px;letter-spacing:.14em;text-transform:uppercase;padding:17px 44px 17px 12px;margin:14px 0 0;text-align:left;position:relative}
 .go::after{content:'\2192';position:absolute;right:14px;top:50%;transform:translateY(-52%);font-size:20px;letter-spacing:0}
 .go:disabled{background:var(--strike);color:#fff;cursor:default}
-.go.red{background:var(--red)}
 .links{display:flex;gap:18px;margin-top:14px;font-size:14px}
 .links button{text-decoration:underline;text-underline-offset:3px}
 .sig{margin-top:26px;font-style:italic;font-size:13px;color:var(--grey)}
@@ -48,7 +48,7 @@ b,strong{font-weight:600}
 .top{display:flex;gap:10px;align-items:flex-start;padding:10px 0 8px;border-bottom:2px solid var(--ink)}
 .top .aim{flex:1;font-size:13px;line-height:1.3}
 .top .aim b{color:var(--red);text-transform:uppercase;font-size:11px;letter-spacing:.09em}
-.q{width:34px;height:34px;border:2px solid var(--ink);font-family:'Inter Display';font-weight:700;font-size:17px;flex:none}
+.q{width:34px;height:34px;border:2px solid var(--ink);font-family:'Inter Display';font-weight:700;font-size:17px;flex:none;text-align:center}
 .sun{display:flex;align-items:flex-end;gap:10px;margin:10px 0 2px}
 .sun .num{font-family:'Inter Display';font-weight:900;font-size:76px;line-height:.8;letter-spacing:-.05em}
 .sun .of{font-family:'Inter Display';font-weight:700;font-size:19px;line-height:1.05;padding-bottom:2px}
@@ -56,7 +56,7 @@ b,strong{font-weight:600}
 /* shapes */
 svg.sh{display:block;flex:none}
 .stack{display:flex;flex-direction:column;align-items:center;gap:3px}
-.tier{display:flex;gap:3px;justify-content:center}
+.tier{display:flex;gap:3px;justify-content:center;align-items:center}
 /* ballots */
 .ballots{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .ballot{border:2px solid var(--ink)}
@@ -65,48 +65,53 @@ svg.sh{display:block;flex:none}
 .ballot ol{list-style:none;margin:0;padding:6px 8px 8px}
 .ballot li{display:flex;align-items:center;gap:8px;padding:3px 0;font-size:14px}
 .ballot li .n{width:14px;color:var(--grey);font-size:12px}
-.note{font-size:13px;color:#444;margin:0 0 8px}
-/* pair rows */
-.prow{display:grid;grid-template-columns:52px 1fr 96px;gap:8px;align-items:center;padding:7px 0;border-top:1px solid var(--strike);min-height:58px;opacity:0;transition:opacity .35s}
+.note{font-size:13.5px;color:#333;margin:0 0 8px}
+/* plan against plan */
+.prow{display:grid;grid-template-columns:62px 1fr 92px;gap:8px;align-items:center;padding:7px 0;border-top:1px solid var(--strike);min-height:58px;opacity:0;transition:opacity .35s}
 .prow.in{opacity:1}
-.prow .pp{display:flex;gap:4px;align-items:center}
+.prow .pp{display:flex;gap:3px;align-items:center;font-size:11px;color:var(--grey)}
 .prow .tx{font-size:13px;line-height:1.3}
-.prow .tx .w{display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-size:12.5px;color:#333}
-.prow .tx .st{font-weight:600}
-.slot{border:1.5px dashed var(--grey);height:46px;display:flex;align-items:center;gap:6px;padding:0 6px 0 0;font-size:11px;line-height:1.15;font-weight:600;position:relative;overflow:hidden}
+.prow .tx .sc{font-family:'Inter Display';font-weight:900;font-size:17px;margin-right:5px}
+.prow .tx .w{display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-size:12.5px;color:#333;margin-top:2px}
+.slot{border:1.5px dashed var(--grey);height:46px;display:flex;align-items:center;gap:6px;padding:0 5px 0 0;font-size:11px;line-height:1.15;font-weight:600;position:relative;overflow:hidden}
 .slot .bar{width:7px;align-self:stretch;background:transparent;flex:none}
 .slot.set{border:1.5px solid var(--ink)}
 .slot.A .bar{background:var(--red)}.slot.B .bar{background:var(--ink)}.slot.E .bar{background:var(--grey)}.slot.U .bar{background:repeating-linear-gradient(180deg,var(--red) 0 6px,var(--ink) 6px 12px)}
 .slot.A .wd{color:var(--red)}.slot.E .wd{color:#666}
 .slot .q0{font-family:'Inter Display';font-weight:900;font-size:20px;color:var(--strike);margin:0 auto}
 .slot.new{background:var(--soft)}
-.colhead{display:grid;grid-template-columns:52px 1fr 96px;gap:8px;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--grey);padding-bottom:4px}
-/* list cards */
+/* ranking cards */
 .cards{display:flex;gap:6px;align-items:stretch;flex-wrap:nowrap}
-.card{width:64.8px;flex:none;border:2px solid var(--ink);background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8px 0 0;min-height:118px}
+.cards.six{gap:5px}.cards.six .card{width:53.8px}
+.card{width:64.8px;flex:none;border:2px solid var(--ink);background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8px 0 0;min-height:122px;position:relative}
 .card .steps{display:flex;flex-direction:column;gap:5px;align-items:center;justify-content:center;flex:1}
-.card .steps .tier{border-bottom:2px solid var(--ink);padding:0 4px 3px;min-width:40px}
-.card .box{align-self:stretch;height:22px;margin:8px 0 0;border-top:2px solid var(--ink);background:var(--page);position:relative;font-size:9.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--grey);display:flex;align-items:center;justify-content:center}
+.card .steps .tier{border-bottom:2px solid var(--ink);padding:0 3px 3px;min-width:38px}
+.card .box{align-self:stretch;height:22px;margin:8px 0 0;border-top:2px solid var(--ink);background:var(--page);font-size:9.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--grey);display:flex;align-items:center;justify-content:center}
 .card .box::before{content:'touch'}
 .card.sel{box-shadow:inset 0 0 0 2px var(--ink)}
 .card.sel .box{background:var(--red);color:#fff}
 .card.sel .box::before{content:'\2715';font-size:13px}
+.card.dead{border:2px dashed var(--grey);cursor:default}
+.card.dead .steps .tier{border-bottom-color:var(--grey)}
+.card.dead .box{border-top:2px dashed var(--grey);color:var(--grey);background:#fff}
+.card.dead .box::before{content:'no'}
+.card.dead::after{content:'';position:absolute;left:-4px;right:-4px;top:46%;height:3px;background:var(--ink);transform:rotate(-58deg)}
 .only{font-size:13.5px;line-height:1.35;padding-left:8px;align-self:center}
 .say{font-size:14px;min-height:40px;margin:9px 0 0}
 .res{border-left:7px solid var(--ink);padding:2px 0 2px 11px;margin:14px 0 0;font-size:14.5px}
 .res p{margin-bottom:7px}.res p:last-child{margin-bottom:0}
 .res .h{font-family:'Inter Display';font-weight:700;font-size:17px}
-/* rule book */
-.book{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.rb{border:1.5px dashed var(--grey);height:50px;display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;line-height:1.15;overflow:hidden}
+/* tie-break book */
+.book{display:flex;flex-direction:column;gap:5px}
+.rb{border:1.5px dashed var(--grey);height:38px;display:flex;align-items:center;gap:6px;font-size:12.5px;line-height:1.15;overflow:hidden}
 .rb .bar{width:7px;align-self:stretch;flex:none}
-.rb .vs{display:flex;align-items:center;gap:3px;color:var(--grey);font-weight:400;font-size:10px}
-.rb .out{margin-left:auto;padding-right:6px;display:flex;align-items:center;gap:5px;text-align:right}
+.rb .vs{display:flex;align-items:center;gap:4px;color:#333}
+.rb .out{margin-left:auto;padding-right:8px;display:flex;align-items:center;gap:6px;font-weight:600}
 .rb.set{border:1.5px solid var(--ink)}
 .rb.A .bar{background:var(--red)}.rb.B .bar{background:var(--ink)}.rb.E .bar{background:var(--grey)}
 .rb.A .out{color:var(--red)}.rb.E .out{color:#666}
 .rb.pop{animation:pop .5s}
-@keyframes pop{0%{transform:scale(1.12);background:var(--soft)}100%{transform:scale(1)}}
+@keyframes pop{0%{transform:scale(1.06);background:var(--soft)}100%{transform:scale(1)}}
 /* check sheet */
 .big{font-family:'Inter Display';font-weight:900;font-size:40px;line-height:.95;letter-spacing:-.035em;margin:14px 0 8px}
 .sheet{display:grid;grid-template-columns:36px repeat(6,52px);grid-auto-rows:52px;margin-top:6px;width:348px}
@@ -121,31 +126,39 @@ svg.sh{display:block;flex:none}
 .sq.cur{outline:3px solid var(--red);outline-offset:-3px;z-index:2}
 .tally{display:flex;gap:16px;font-family:'Inter Display';font-weight:700;font-size:17px;margin:12px 0 4px}
 .tally span b{font-weight:900;font-size:26px}
-.legend{font-size:12.5px;color:#444;display:flex;flex-direction:column;gap:3px;margin:6px 0}
+.legend{font-size:12.5px;color:#333;display:flex;flex-direction:column;gap:3px;margin:6px 0}
 .legend span{display:flex;align-items:center;gap:7px}
 .legend .k{width:16px;height:16px;border:1px solid var(--ink);position:relative;flex:none;background:#fff}
 .legend .k.ta::before{content:'';position:absolute;left:0;top:0;border:4px solid transparent;border-left-color:var(--red);border-top-color:var(--red)}
 .legend .k.tb::before{content:'';position:absolute;right:0;bottom:0;border:4px solid transparent;border-right-color:var(--ink);border-bottom-color:var(--ink)}
 .legend .k.no{background:repeating-linear-gradient(135deg,#fff 0 3px,var(--strike) 3px 5px)}
 .read{border:2px solid var(--ink);padding:10px;margin-top:12px;min-height:120px}
-.read .hd{display:flex;gap:14px;align-items:center;margin-bottom:6px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.read .hd{display:flex;gap:12px;align-items:center;margin-bottom:6px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;flex-wrap:wrap}
 .read .hd span{display:flex;align-items:center;gap:6px}
-.read .hd .a{color:var(--red)}
+.read .hd .a{color:var(--red)}.read .hd .c{color:var(--grey)}
 .read .hd .stack{flex-direction:row}
 .rl{display:flex;align-items:center;gap:8px;padding:5px 0;border-top:1px solid var(--strike);font-size:13.5px;opacity:0;transition:opacity .3s}
 .rl.in{opacity:1}
 .rl .bar{width:6px;height:22px;flex:none}
-.rl.A .bar{background:var(--red)}.rl.B .bar{background:var(--ink)}.rl.E .bar{background:var(--grey)}.rl.U .bar{background:repeating-linear-gradient(180deg,var(--red) 0 5px,var(--ink) 5px 10px)}
+.rl.A .bar{background:var(--red)}.rl.B .bar{background:var(--ink)}.rl.E .bar,.rl.C .bar{background:var(--grey)}.rl.U .bar{background:repeating-linear-gradient(180deg,var(--red) 0 5px,var(--ink) 5px 10px)}
 .rl .why{color:#555;font-size:12.5px;margin-left:auto;text-align:right}
 .rout{border-top:2px solid var(--ink);margin-top:2px;padding-top:8px;font-size:14px;display:flex;gap:10px;align-items:flex-start;opacity:0;transition:opacity .3s}
 .rout.in{opacity:1}
 .rout .h{font-family:'Inter Display';font-weight:700;font-size:17px;display:block}
+/* hire */
+.hire{display:block;width:100%;border:2px solid var(--ink);padding:9px 10px;margin-bottom:6px;font-size:13.5px;line-height:1.3;position:relative}
+.hire .nm{font-family:'Inter Display';font-weight:700;font-size:17px;display:block;margin-bottom:1px}
+.hire.sel{box-shadow:inset 0 0 0 2px var(--ink);background:var(--soft)}
+.hire.sel::after{content:'\2715';position:absolute;right:0;top:0;width:26px;height:26px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px}
+.chips{display:flex;gap:6px;margin:2px 0 8px;align-items:center}
+.chip{border:1.5px solid var(--grey);padding:5px 7px}
+.chip.sel{border:2.5px solid var(--ink);padding:4px 6px;background:var(--soft)}
 /* end */
 .v1{font-family:'Inter Display';font-weight:900;font-size:33px;line-height:1.02;letter-spacing:-.03em;margin:18px 0 12px}
 .v2{font-family:'Inter Display';font-weight:700;font-size:19px;line-height:1.2;margin-bottom:12px}
 .v3{font-size:16px;border-left:7px solid var(--red);padding-left:11px;margin-bottom:6px}
 .poster{display:block;margin:8px 0 6px;width:348px;height:372px}
-.cap{font-size:13.5px;color:#222;margin-bottom:8px}
+.cap{font-size:14px;color:#222;margin-bottom:8px}
 .qa{border-top:1px solid var(--ink);padding:9px 0}
 .qa h3{font-family:'Inter Display';font-weight:700;font-size:16px;margin-bottom:3px}
 .qa p{font-size:14px}
@@ -171,14 +184,15 @@ svg.sh{display:block;flex:none}
   <div class="band"></div>
   <h1 class="title"><span>Voting</span><span>with</span><span>Arrow</span></h1>
   <p class="after">After Kenneth J. Arrow, <i>A Difficulty in the Concept of Social Welfare</i>, 1950</p>
+  <p class="hook">Voting is the easy part. Counting is where it gets hard.</p>
   <div class="hero" id="hero"></div>
   <div class="lead">
-    <p>A Swiss village with two voters, <b style="color:var(--red)">Anna</b> and <b>Beat</b>. Three plans for the village square: a fountain, a tower, a tree.</p>
-    <p>Every voting Sunday each of them hands in a ballot, best plan on top. <b>You are the counting rule.</b> You turn the two ballots into one list for the village.</p>
-    <p>You read two ballots. You touch a list. You post it. What you rule when the two disagree, you must rule again next time.</p>
+    <p>A small Swiss village has two voters, <b style="color:var(--red)">Anna</b> and <b>Beat</b>, and three plans for the village square: a fountain, a tower or a tree. Every voting Sunday each of them hands in a ballot, favourite on top.</p>
+    <p><b>You count.</b> Out of the two ballots you make one ranking for the village. Where the two agree, that is easy. Where they disagree it is one vote each, a tie, and <b>you break it</b>.</p>
+    <p>One rule keeps you fair: the same tie gets the same answer, every Sunday.</p>
   </div>
-  <div class="aimbox"><span class="k">Aim</span><span class="v">Give the village a list on every Sunday that could ever come, without making one voter the boss.</span></div>
-  <p class="note">Arrow proved in 1950 that it cannot be done. Five Sundays, then he checks your rule. See how close you get.</p>
+  <div class="aimbox"><span class="k">Aim</span><span class="v">Give the village a ranking on every Sunday that could ever come, without making one voter the boss.</span></div>
+  <p class="note">A boss is a voter who wins every tie. In 1950 Kenneth Arrow proved that this aim cannot be reached, by anyone, ever. Five Sundays, then he checks your work. See how close you get.</p>
   <button class="go" id="b-begin">Begin</button>
   <div class="links"><button id="b-help0">How to play</button><button id="b-about0">About</button></div>
   <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
@@ -186,49 +200,67 @@ svg.sh{display:block;flex:none}
 
 <!-- ======================= PLAY ======================= -->
 <section class="screen" id="s-play">
-  <div class="top"><div class="aim"><b>Aim</b><br>A list on every Sunday that could ever come, and no voter the boss.</div><button class="q" id="q-play" aria-label="How to play">?</button></div>
+  <div class="top"><div class="aim"><b>Aim</b><br>A ranking on every Sunday that could ever come, and no voter the boss.</div><button class="q" id="q-play" aria-label="How to play">?</button></div>
   <div class="sun"><span class="num" id="sun-n">1</span><span class="of">Sunday<br><span id="sun-of">1 of 5</span><small id="sun-sub"></small></span></div>
 
-  <div class="lab"><i>1</i>The two ballots, best on top</div>
+  <div class="lab"><i>1</i>The two ballots, favourite on top</div>
   <div class="ballots">
     <div class="ballot a"><div class="who">Anna</div><ol id="bal-a"></ol></div>
     <div class="ballot b"><div class="who">Beat</div><ol id="bal-b"></ol></div>
   </div>
 
-  <div class="lab"><i>2</i>The three pairs</div>
-  <p class="note" id="pairs-note">Where both put the same plan higher, the village must too. Where they disagree, <b>you rule</b>: Anna’s way, Beat’s way, or level. A ruling is kept: the same disagreement gets the same answer every Sunday.</p>
-  <div class="colhead"><span>Pair</span><span>Who puts which higher</span><span>The village</span></div>
+  <div class="lab"><i>2</i>Plan against plan</div>
+  <p class="note" id="pairs-note"></p>
   <div id="prows"></div>
 
-  <div class="lab"><i>3</i><span id="lists-lab">The lists you can post</span></div>
+  <div class="lab"><i>3</i><span id="lists-lab">Pick the village’s ranking</span></div>
   <p class="note" id="lists-note"></p>
   <div class="cards" id="cards"></div>
   <p class="say" id="say"></p>
-  <button class="go" id="b-post" disabled>Post the list</button>
+  <button class="go" id="b-post" disabled>Post the ranking</button>
 
   <div class="res hide" id="res"></div>
   <button class="go hide" id="b-next">Next Sunday</button>
 
-  <div class="lab"><i>4</i>Your rule book</div>
-  <p class="note" id="book-note">Six ways the two can disagree. Each box takes one ruling and keeps it.</p>
+  <div class="lab"><i>4</i>Your tie-break book</div>
+  <p class="note" id="book-note"></p>
   <div class="book" id="book"></div>
 </section>
 
 <!-- ======================= CHECK ======================= -->
 <section class="screen" id="s-check">
-  <div class="top"><div class="aim"><b>Aim</b><br>A list on every Sunday that could ever come, and no voter the boss.</div><button class="q" id="q-check" aria-label="How to play">?</button></div>
+  <div class="top"><div class="aim"><b>Aim</b><br>A ranking on every Sunday that could ever come, and no voter the boss.</div><button class="q" id="q-check" aria-label="How to play">?</button></div>
   <h2 class="big">Arrow’s check</h2>
-  <p class="note" id="check-note">Your rule book is full, so it now answers any two ballots without you. Anna can hand in six different ballots and so can Beat: 36 Sundays that could come. One square for each. Arrow tries them all.</p>
+  <p class="note">Your book is full: all six ties are broken, so it can count any Sunday without you. Anna can hand in 6 different ballots and so can Beat. That makes 36 different Sundays that could come, one square each. Arrow tries them all.</p>
   <div class="sheet" id="sheet"></div>
-  <div class="tally hide" id="tally"><span><b id="t-yes">0</b> a list</span><span><b id="t-no">0</b> no list</span></div>
+  <div class="tally hide" id="tally"><span><b id="t-yes">0</b> a ranking</span><span><b id="t-no">0</b> none</span></div>
   <div class="legend hide" id="legend">
-    <span><i class="k no"></i>Struck through: no list can be made that Sunday.</span>
-    <span><i class="k ta"></i>Red corner: the list is the same as Anna’s ballot.</span>
-    <span><i class="k tb"></i>Black corner: the list is the same as Beat’s ballot.</span>
+    <span><i class="k no"></i>Struck through: no ranking can be made that Sunday.</span>
+    <span><i class="k ta"></i>Red corner: the ranking is exactly Anna’s ballot.</span>
+    <span><i class="k tb"></i>Black corner: the ranking is exactly Beat’s ballot.</span>
   </div>
   <div class="read hide" id="read"></div>
   <p class="say" id="check-say"></p>
   <button class="go" id="b-check">Read the first Sunday</button>
+  <button class="go hide" id="b-tohire">Next: hire a tie-breaker</button>
+</section>
+
+<!-- ======================= HIRE ======================= -->
+<section class="screen" id="s-hire">
+  <div class="top"><div class="aim"><b>Aim</b><br>A ranking on every Sunday that could ever come, and no voter the boss.</div><button class="q" id="q-hire" aria-label="How to play">?</button></div>
+  <h2 class="big">Hire a tie-breaker</h2>
+  <p class="note">Maybe the trouble was you. So let somebody else break every tie, always the same way. Pick one, and Arrow checks all 36 Sundays again. Try as many as you like.</p>
+  <button class="hire" id="h-C"><span class="nm">Clara, a third voter</span>She moves to the village and always hands in the same ballot. Now every plan-against-plan vote is 3–0 or 2–1, and the majority wins. No more ties.</button>
+  <div id="clara-pick" class="hide"><p class="note" style="margin:6px 0 4px">Clara’s ballot, favourite on top. Touch another to change it.</p><div class="chips" id="chips"></div></div>
+  <button class="hire" id="h-A"><span class="nm">Anna breaks every tie</span>Whenever the two disagree, Anna’s choice counts.</button>
+  <button class="hire" id="h-B"><span class="nm">Beat breaks every tie</span>Whenever the two disagree, Beat’s choice counts.</button>
+  <button class="go" id="b-hire" disabled>Check all 36 Sundays</button>
+  <div id="hire-out" class="hide">
+    <div class="sheet" id="hsheet" style="margin-top:16px"></div>
+    <div class="tally"><span><b id="ht-yes">0</b> a ranking</span><span><b id="ht-no">0</b> none</span></div>
+    <p class="say" id="hire-say" style="margin-top:4px"></p>
+    <div class="read" id="hread"></div>
+  </div>
   <button class="go hide" id="b-verdict">The verdict</button>
 </section>
 
@@ -238,13 +270,15 @@ svg.sh{display:block;flex:none}
   <p class="v1" id="v1"></p>
   <p class="v2" id="v2"></p>
   <p class="v3" id="v3"></p>
-  <div class="lab"><i>&times;</i>Every rule book there is: 729</div>
-  <svg class="poster" id="poster" viewBox="0 0 348 372" role="img" aria-label="All 729 rule books as small squares"></svg>
+  <div class="lab"><i>&times;</i>Every tie-break book there is: 729</div>
+  <svg class="poster" id="poster" viewBox="0 0 348 372" role="img" aria-label="All 729 tie-break books as small squares"></svg>
   <p class="cap" id="cap1"></p>
   <p class="cap" id="cap2"></p>
-  <div class="qa"><h3>Is a boss just bad luck?</h3><p>No. A list may be the same as Anna’s ballot on one Sunday, and it must be when the two agree. A boss is the voter whose ballot it is on <b>every</b> one of the 36 Sundays, whatever the other one hands in. Arrow’s word is dictator.</p></div>
-  <div class="qa"><h3>Why must a ruling be kept?</h3><p>So that a quarrel about fountain and tower is settled by what people think of fountain and tower, not of the tree. Arrow’s example is an election by points. One plan wins. Then a losing plan is struck off the ballots, nobody changes their mind, and the count is suddenly a tie.</p></div>
-  <div class="qa"><h3>And a simple majority?</h3><p id="qa-maj"></p></div>
+  <div class="qa"><h3>Is a boss just bad luck?</h3><p>No. The ranking may be exactly Anna’s ballot on one Sunday, and it has to be when the two agree on everything. A boss is the voter whose ballot it is on <b>every</b> one of the 36 Sundays, whatever the other one writes. Arrow’s word is dictator.</p></div>
+  <div class="qa"><h3>Why not toss a coin for each tie?</h3><p>Then the same two ballots could give one ranking this Sunday and another the next. And a coin can land in a circle too. On Sunday 1 both put the Fountain above the Tower; let the coin put the Tower above the Tree and the Tree above the Fountain, and there is no ranking.</p></div>
+  <div class="qa"><h3>Would more voters fix it?</h3><p id="qa-more"></p></div>
+  <div class="qa"><h3>Why must the same tie get the same answer?</h3><p>So that the choice between fountain and tower depends on what people think of fountain and tower, and not of the tree. Arrow’s example is an election counted in points. One plan wins. Then a losing plan drops out, nobody changes their mind, and suddenly the count is a tie.</p></div>
+  <div class="qa"><h3>So is voting broken?</h3><p>No. Most Sundays, most ways of counting work fine: look how many squares had a ranking. What Arrow showed is that no way of counting is safe on <i>every</i> possible set of ballots. Each one gives something up. Which one a country uses is a choice, and now that you have the vote it is partly yours.</p></div>
   <button class="go" id="b-again">Play again</button>
   <div class="links"><button id="b-help1">How to play</button><button id="b-about1">About</button></div>
   <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
@@ -255,19 +289,21 @@ svg.sh{display:block;flex:none}
 <div class="over" id="help"><div class="in">
   <div class="close"><button id="b-help-close">Back</button></div>
   <h2>How to play</h2>
-  <p><b>Aim:</b> give the village a list on every Sunday that could ever come, without making one voter the boss.</p>
+  <p><b>Aim:</b> give the village a ranking on every Sunday that could ever come, without making one voter the boss.</p>
   <h3>The ballots</h3>
-  <p>Anna’s ballot is red, Beat’s is black. Each ranks the three plans: a fountain (circle), a tower (square), a tree (triangle). Best on top.</p>
-  <h3>The three pairs</h3>
-  <p>Three plans make three pairs. For each pair the screen shows which plan each voter puts higher. Where both put the same plan higher, the village’s list must do the same. Where they disagree, you rule: Anna’s way, Beat’s way, or level (the village likes both the same).</p>
-  <h3>The lists you can post</h3>
-  <p>The village’s list is drawn in outline: the plan on the top step is first; plans on the same step are level. Only lists that fit the fixed pairs are shown. Touch one, and the open pairs show what it would rule. Then press <b>Post the list</b>.</p>
-  <h3>Your rule book</h3>
-  <p>There are six ways the two can disagree about a pair. Each has a box. Once you rule, the box keeps it, and the same disagreement gets the same answer on every later Sunday. So your choices shrink. When the fixed pairs leave only one list, you post that one, and it writes a ruling you did not choose.</p>
+  <p>Anna’s ballot is red, Beat’s is black. Each ranks the three plans: a fountain (circle), a tower (square), a tree (triangle). Favourite on top.</p>
+  <h3>Plan against plan</h3>
+  <p>Three plans can be compared two at a time in three ways. If both voters prefer the same plan of the two, it is 2–0 and settled. If each prefers a different one, it is 1–1: a tie. You break it. The tie can go to Anna, to Beat, or be called a draw (the village likes both plans the same).</p>
+  <h3>Pick the village’s ranking</h3>
+  <p>The village’s ranking is drawn in outline. The top step is first place; two plans on one step are tied. Only rankings that fit what is already settled are shown. Touch one, and the screen shows which ties it would break and for whom. Then press <b>Post the ranking</b>.</p>
+  <h3>Your tie-break book</h3>
+  <p>Six different ties can happen. Once you break one, your book keeps the answer, and that tie gets the same answer on every later Sunday. So your choices shrink. When only one ranking fits, you post that one, and it breaks a tie in a way you did not choose.</p>
   <h3>Arrow’s check</h3>
-  <p>After five Sundays the rule book is full. Arrow tries all 36 pairs of ballots the two could ever hand in. A square with a list is fine. A square struck through has no list: the pair results contradict each other, and the reading under the sheet says how. A red or black corner means the list is the same as that voter’s ballot. Touch any square to read it.</p>
+  <p>After five Sundays the book is full. Arrow tries all 36 pairs of ballots the two could ever hand in. A square with a ranking is fine. A square struck through has none: the three results contradict each other, and the box under the sheet says how. A red or black corner means the ranking is exactly that voter’s ballot. Touch any square to read it.</p>
+  <h3>Hire a tie-breaker</h3>
+  <p>Then somebody else breaks the ties: Clara, a third voter who always votes the same way, or Anna, or Beat. Pick one and the 36 Sundays are checked again.</p>
   <h3>The verdict</h3>
-  <p>The score is the number of the 36 Sundays that got a list. A boss is a voter whose ballot is the list on all 36.</p>
+  <p>Your score is how many of the 36 Sundays got a ranking from your own book. A boss is a voter whose ballot is the ranking on all 36.</p>
 </div></div>
 
 <!-- ======================= ABOUT ======================= -->
@@ -282,221 +318,273 @@ svg.sh{display:block;flex:none}
 <script>
 (function () {
   'use strict';
-  var M = window.MECH, C = M.CONFIG, P = C.plans, V = C.voters;
+  var M = window.MECH, C = M.CONFIG, P = C.plans;
   var RED = '#DA291C', INK = '#111111', GREY = '#8D8D8A';
   var $ = function (id) { return document.getElementById(id); };
-  var G = { phase: 'start', game: 0, sunday: 0, book: M.emptyBook(), ruledOn: [], forcedCell: [], nb: null, lists: [], sel: -1, busy: false, audit: null, checked: 0, posted: [] };
+  var G = { phase: 'start', game: 0, sunday: 0, book: M.emptyBook(), ruledOn: [], nb: null, lists: [], sel: -1, busy: false, audit: null, posted: [], chk: null, hire: null, hireKind: null, clara: C.clara.slice(), hired: [] };
   window.__game = function () { return G; };
 
   // ---------- drawing ----------
-  // kind: 'a' Anna (solid red), 'b' Beat (solid black), 'v' the village (outline), 'g' grey
+  // kind: 'a' Anna (solid red), 'b' Beat (solid black), 'g' Clara or nobody (solid grey), 'v' the village (outline), 'd' dashed grey outline
   function sh(plan, kind, s) {
-    var sw = kind === 'v' ? Math.max(1.6, s / 9) : 0, fill = kind === 'a' ? RED : kind === 'b' ? INK : kind === 'g' ? GREY : '#fff', st = kind === 'v' ? INK : 'none', h = sw / 2, body;
+    var line = kind === 'v' || kind === 'd', sw = line ? Math.max(1.6, s / 9) : 0, fill = kind === 'a' ? RED : kind === 'b' ? INK : kind === 'g' ? GREY : '#fff', st = kind === 'v' ? INK : kind === 'd' ? GREY : 'none', h = sw / 2, body;
     if (plan === 0) body = '<circle cx="' + s / 2 + '" cy="' + s / 2 + '" r="' + (s / 2 - h - s * .02) + '"/>';
     else if (plan === 1) body = '<rect x="' + (h + s * .07) + '" y="' + (h + s * .07) + '" width="' + (s - sw - s * .14) + '" height="' + (s - sw - s * .14) + '"/>';
-    else body = '<polygon points="' + s / 2 + ',' + (h + s * .04) + ' ' + (s - h - s * .01) + ',' + (s - h - s * .06) + ' ' + (h + s * .01) + ',' + (s - h - s * .06) + '" stroke-linejoin="miter"/>';
-    return '<svg class="sh" width="' + s + '" height="' + s + '" viewBox="0 0 ' + s + ' ' + s + '" fill="' + fill + '" stroke="' + st + '" stroke-width="' + sw + '" aria-label="' + P[plan] + '">' + body + '</svg>';
+    else body = '<polygon points="' + s / 2 + ',' + (h + s * .04) + ' ' + (s - h - s * .01) + ',' + (s - h - s * .06) + ' ' + (h + s * .01) + ',' + (s - h - s * .06) + '"/>';
+    return '<svg class="sh" width="' + s + '" height="' + s + '" viewBox="0 0 ' + s + ' ' + s + '" fill="' + fill + '" stroke="' + st + '" stroke-width="' + sw + '"' + (kind === 'd' ? ' stroke-dasharray="3 2"' : '') + ' aria-label="' + P[plan] + '">' + body + '</svg>';
   }
   function stack(ballot, kind, s) { return '<span class="stack">' + ballot.map(function (x) { return sh(x, kind, s); }).join('') + '</span>'; }
   function tiersHtml(rank, s) { return M.tiers(rank).map(function (t) { return '<span class="tier">' + t.map(function (x) { return sh(x, 'v', s); }).join('') + '</span>'; }).join(''); }
   function listWords(rank) {
     var t = M.tiers(rank), n = function (x) { return P[x]; };
     if (t.length === 3) return n(t[0][0]) + ' first, ' + n(t[1][0]) + ' second, ' + n(t[2][0]) + ' third';
-    if (t.length === 1) return 'all three level';
-    if (t[0].length === 1) return n(t[0][0]) + ' first; ' + n(t[1][0]) + ' and ' + n(t[1][1]) + ' level behind it';
-    return n(t[0][0]) + ' and ' + n(t[0][1]) + ' level in first place; ' + n(t[1][0]) + ' last';
+    if (t.length === 1) return 'all three tied';
+    if (t[0].length === 1) return n(t[0][0]) + ' first; ' + n(t[1][0]) + ' and ' + n(t[1][1]) + ' tied behind it';
+    return n(t[0][0]) + ' and ' + n(t[0][1]) + ' tied for first; ' + n(t[1][0]) + ' last';
   }
-  function wayWord(v) { return v === 'A' ? 'Anna’s way' : v === 'B' ? 'Beat’s way' : 'level'; }
-  // the village's result for a pair: winner over loser, or the two side by side
+  function winWord(v) { return v === 'A' ? 'Anna wins' : v === 'B' ? 'Beat wins' : 'a draw'; }
+  function forWord(v) { return v === 'A' ? 'for Anna' : v === 'B' ? 'for Beat' : 'as a draw'; }
+  // the village's result for two plans: winner over loser, or the two side by side
   function outcomeHtml(a, b, top, s) {
     if (top === -1) return '<span class="tier">' + sh(a, 'v', s) + '<b style="font-size:' + (s - 2) + 'px;line-height:1">=</b>' + sh(b, 'v', s) + '</span>';
     var lo = top === a ? b : a; return '<span class="stack" style="gap:2px">' + sh(top, 'v', s) + sh(lo, 'v', s - 5) + '</span>';
   }
 
   // ---------- screens ----------
-  function show(id) {
-    ['s-start', 's-play', 's-check', 's-end'].forEach(function (s) { $(s).classList.toggle('on', s === id); });
-    window.scrollTo(0, 0);
-  }
+  function show(id) { ['s-start', 's-play', 's-check', 's-hire', 's-end'].forEach(function (s) { $(s).classList.toggle('on', s === id); }); window.scrollTo(0, 0); }
   var wait = function (ms) { return new Promise(function (r) { setTimeout(r, window.__fast ? 0 : ms); }); };
 
-  $('hero').innerHTML = '<span class="stack">' + [0, 1, 2].map(function (x) { return sh(x, 'a', 26); }).join('') + '</span><span style="font-weight:600;font-size:22px">+</span><span class="stack">' + [2, 0, 1].map(function (x) { return sh(x, 'b', 26); }).join('') + '</span><span class="arrow">&rarr;</span><span class="stack">' + [0, 1, 2].map(function () { return '<span style="width:26px;height:26px;border:2px dashed #8D8D8A;display:block"></span>'; }).join('') + '</span><span class="qm">?</span><span style="font-size:13px;line-height:1.3;margin-left:4px">Two ballots in.<br>One list out.<br>Every Sunday.</span>';
+  $('hero').innerHTML = '<span class="stack">' + [0, 1, 2].map(function (x) { return sh(x, 'a', 26); }).join('') + '</span><span style="font-weight:600;font-size:22px">+</span><span class="stack">' + [2, 0, 1].map(function (x) { return sh(x, 'b', 26); }).join('') + '</span><span class="arrow">&rarr;</span><span class="stack">' + [0, 1, 2].map(function () { return '<span style="width:26px;height:26px;border:2px dashed #8D8D8A;display:block"></span>'; }).join('') + '</span><span class="qm">?</span><span style="font-size:13px;line-height:1.3;margin-left:4px">Two ballots in.<br>One ranking out.<br>Every Sunday.</span>';
 
   // ---------- a Sunday ----------
   function startGame() {
-    G.sunday = 0; G.book = M.emptyBook(); G.ruledOn = [null, null, null, null, null, null]; G.forcedCell = [false, false, false, false, false, false]; G.posted = []; G.audit = null; G.checked = 0;
+    G.sunday = 0; G.book = M.emptyBook(); G.ruledOn = [null, null, null, null, null, null]; G.posted = []; G.audit = null; G.hired = []; G.hireKind = null; G.clara = C.clara.slice();
     G.phase = 'play'; show('s-play'); renderSunday();
   }
   function bookHtml(popCells) {
     var h = '';
     for (var p = 0; p < 3; p++) for (var d = 0; d < 2; d++) {
       var cell = 2 * p + d, a = M.PAIRS[p][d === 0 ? 0 : 1], b = M.PAIRS[p][d === 0 ? 1 : 0], v = G.book[cell];
-      var out = v == null ? '<span style="color:#8D8D8A;font-weight:400">open</span>' : (v === 'E' ? outcomeHtml(a, b, -1, 13) : sh(v === 'A' ? a : b, 'v', 16)) + '<span>' + wayWord(v) + '</span>';
-      h += '<div class="rb ' + (v ? 'set ' + v : '') + (popCells && popCells.indexOf(cell) >= 0 ? ' pop' : '') + '" data-cell="' + cell + '"><span class="bar"></span><span class="vs">' + sh(a, 'a', 15) + 'v' + sh(b, 'b', 15) + '</span><span class="out">' + out + '</span></div>';
+      var out = v == null ? '<span style="color:#8D8D8A;font-weight:400">not broken yet</span>' : (v === 'E' ? outcomeHtml(a, b, -1, 13) : sh(v === 'A' ? a : b, 'v', 16)) + '<span>' + winWord(v) + '</span>';
+      h += '<div class="rb ' + (v ? 'set ' + v : '') + (popCells && popCells.indexOf(cell) >= 0 ? ' pop' : '') + '" data-cell="' + cell + '"><span class="bar"></span><span class="vs">Anna ' + sh(a, 'a', 15) + ' Beat ' + sh(b, 'b', 15) + '</span><span class="out">' + out + '</span></div>';
     }
     $('book').innerHTML = h;
   }
   function renderSunday() {
     var t = G.sunday, nb = M.nextBallots(G.book, t, G.game); G.nb = nb; G.lists = M.legalLists(G.book, nb.anna, nb.beat); G.sel = -1;
     $('sun-n').textContent = t + 1; $('sun-of').textContent = (t + 1) + ' of 5';
-    $('sun-sub').textContent = t === 0 ? 'Arrow chooses the ballots.' : t < C.freeSundays ? 'Arrow chooses the ballots. He still leaves you room.' : 'Arrow chooses the ballots where your rulings leave the least room.';
+    $('sun-sub').textContent = t === 0 ? 'Arrow picks which ballots come in.' : t < C.freeSundays ? 'Arrow picks the ballots. He still leaves you room.' : 'Arrow picks the ballots where your book leaves you the least room.';
     var li = function (b, k) { return b.map(function (x, i) { return '<li><span class="n">' + (i + 1) + '.</span>' + sh(x, k, 26) + '<span>' + P[x] + '</span></li>'; }).join(''); };
     $('bal-a').innerHTML = li(nb.anna, 'a'); $('bal-b').innerHTML = li(nb.beat, 'b');
-    // pair rows
+    $('pairs-note').innerHTML = t === 0 ? 'Take the plans two at a time. If both voters prefer the same one, it is <b>2–0</b> and settled. If each prefers a different one, it is <b>1–1</b>: a tie, and you break it. Your book keeps the answer for every later Sunday.'
+      : '<b>2–0</b> is settled. <b>1–1</b> is a tie: yours to break, unless your book has broken it already.';
     var rows = '';
     for (var p = 0; p < 3; p++) {
       var info = M.pairInfo(nb.anna, nb.beat, p), a = M.PAIRS[p][0], b = M.PAIRS[p][1], top = M.pairOutcome(G.book, info), st, slot;
       var who = '<span class="w">Anna ' + sh(info.agree ? info.winner : info.annaFor, 'a', 14) + ' &nbsp;Beat ' + sh(info.agree ? info.winner : info.beatFor, 'b', 14) + '</span>';
-      if (info.agree) { st = 'They agree. Fixed.'; slot = '<div class="slot set U"><span class="bar"></span>' + outcomeHtml(a, b, top, 17) + '<span class="wd">both</span></div>'; }
-      else if (top !== null) { var v = G.book[info.cell]; st = 'They disagree. You ruled this on Sunday ' + G.ruledOn[info.cell] + '. Fixed.'; slot = '<div class="slot set ' + v + '"><span class="bar"></span>' + outcomeHtml(a, b, top, 17) + '<span class="wd">' + wayWord(v) + '</span></div>'; }
-      else { st = 'They disagree. Open: yours to rule.'; slot = '<div class="slot" id="slot-' + p + '"><span class="bar"></span><span class="q0">?</span></div>'; }
-      rows += '<div class="prow" data-p="' + p + '"><span class="pp">' + sh(a, 'v', 20) + sh(b, 'v', 20) + '</span><span class="tx">' + who + '<span class="st">' + st + '</span></span>' + slot + '</div>';
+      if (info.agree) { st = '<span class="sc">2–0</span>Both prefer the ' + P[info.winner] + '. Settled.'; slot = '<div class="slot set U"><span class="bar"></span>' + outcomeHtml(a, b, top, 17) + '<span class="wd">2–0</span></div>'; }
+      else if (top !== null) { var v = G.book[info.cell]; st = '<span class="sc">1–1</span>Your book broke this tie on Sunday ' + G.ruledOn[info.cell] + '. Settled.'; slot = '<div class="slot set ' + v + '"><span class="bar"></span>' + outcomeHtml(a, b, top, 17) + '<span class="wd">' + winWord(v) + '</span></div>'; }
+      else { st = '<span class="sc">1–1</span><b>A tie. Yours to break.</b>'; slot = '<div class="slot" id="slot-' + p + '"><span class="bar"></span><span class="q0">?</span></div>'; }
+      rows += '<div class="prow" data-p="' + p + '"><span class="pp">' + sh(a, 'v', 20) + 'v' + sh(b, 'v', 20) + '</span><span class="tx">' + st + who + '</span>' + slot + '</div>';
     }
     $('prows').innerHTML = rows;
-    $('cards').innerHTML = ''; $('say').textContent = ''; $('lists-note').textContent = '';
+    $('cards').innerHTML = ''; $('cards').className = 'cards'; $('say').textContent = ''; $('lists-note').textContent = '';
     $('res').classList.add('hide'); $('b-next').classList.add('hide'); $('b-post').classList.remove('hide'); $('b-post').disabled = true;
-    $('book-note').textContent = t === 0 ? 'Six ways the two can disagree: for each pair, Anna for one plan (red) and Beat for the other (black), or the other way round. Each box takes one ruling and keeps it.' : 'Rulings so far. Each one is kept.';
+    $('book-note').innerHTML = t === 0 ? 'Six different ties can happen. Each line is one of them: the plan Anna prefers in red, the plan Beat prefers in black. Once you break a tie, the line keeps your answer.' : 'The ties you have broken so far. Each answer is kept.';
     bookHtml();
     G.busy = true;
     var slow = t === 0 ? 900 : 260, rowsEl = $('prows').children;
     (async function () {
-      if (t === 0) { $('lists-note').textContent = 'Arrow reads the ballots one pair at a time…'; }
+      if (t === 0) $('lists-note').textContent = 'Arrow compares the ballots, two plans at a time…';
       for (var k = 0; k < 3; k++) { await wait(k === 0 ? 350 : slow); rowsEl[k].classList.add('in'); }
-      await wait(slow);
-      renderCards(); G.busy = false;
+      await wait(slow); renderCards(); G.busy = false;
     })();
   }
   function renderCards() {
-    var L = G.lists, one = L.length === 1;
-    $('lists-lab').textContent = one ? 'The list you can post' : 'The lists you can post';
-    $('lists-note').innerHTML = one ? '<b>Only one list is left.</b> The fixed pairs allow no other.'
-      : 'These are all the lists that fit the fixed pair' + (G.sunday === 0 ? '' : 's') + '. Top step is first; plans on the same step are level. <b>Touch one</b> to see what it would rule.';
-    var h = L.map(function (r, i) { return '<button class="card" data-i="' + i + '" aria-label="' + listWords(r) + '"><span class="steps">' + tiersHtml(r, 19) + '</span><span class="box"></span></button>'; }).join('');
+    var L = G.lists, one = L.length === 1, first = G.sunday === 0;
+    $('lists-lab').textContent = one ? 'The village’s ranking' : 'Pick the village’s ranking';
+    $('lists-note').innerHTML = one ? '<b>Only one ranking fits.</b> What is already settled leaves no other.'
+      : 'Every ranking that fits what is settled. Top step is first place; two plans on one step are tied. <b>Touch one</b> to see which ties it breaks, and for whom.';
+    var h = L.map(function (r, i) { return '<button class="card" data-i="' + i + '" aria-label="' + listWords(r) + '"><span class="steps">' + tiersHtml(r, 17) + '</span><span class="box"></span></button>'; }).join('');
     if (one) h += '<span class="only">' + whyForced(L[0]) + '</span>';
+    if (first) {
+      // the tempting sixth: leave both ties as draws. Not a ranking (Arrow's eqs. 7-8).
+      var s1 = M.readSunday(M.emptyBook(), G.nb.anna, G.nb.beat), w = s1.pairs.filter(function (q) { return q.agree; })[0], third = 3 - w.winner - w.loser;
+      h += '<div class="card dead" id="dead" aria-label="Both ties left as draws: not a ranking"><span class="steps"><span class="tier">' + sh(w.winner, 'v', 17) + sh(third, 'd', 17) + '</span><span class="tier">' + sh(w.loser, 'v', 17) + sh(third, 'd', 17) + '</span></span><span class="box"></span></div>';
+      $('cards').className = 'cards six';
+      $('lists-note').innerHTML += ' <br><b>Why not call both ties a draw?</b> That is the crossed-out card. The ' + P[third] + ' would have to share a step with the ' + P[w.winner] + ' and with the ' + P[w.loser] + ', and those two are on different steps. So ties have to be broken.';
+    }
     $('cards').innerHTML = h;
-    Array.prototype.forEach.call($('cards').querySelectorAll('.card'), function (c) { c.onclick = function () { if (!G.busy && G.phase === 'play' && $('res').classList.contains('hide')) select(+c.dataset.i); }; });
+    Array.prototype.forEach.call($('cards').querySelectorAll('button.card'), function (c) { c.onclick = function () { if (!G.busy && G.phase === 'play' && $('res').classList.contains('hide')) select(+c.dataset.i); }; });
   }
-  // On a Sunday with one list: the chain that forces the open pair.
+  // On a Sunday with one ranking: the chain that forces the open tie.
   function whyForced(rank) {
     var nr = M.newRulings(G.book, G.nb.anna, G.nb.beat, rank); if (nr.length !== 1) return 'Touch it, then post it.';
     var pr = M.PAIRS[nr[0].pair], u = pr[0], v = pr[1], w = 3 - u - v;
     if (rank[u] > rank[v]) { var x = u; u = v; v = x; }
     if (!(rank[u] <= rank[w] && rank[w] <= rank[v])) return 'Touch it, then post it.';
-    var rel = function (x, y) { return rank[x] < rank[y] ? 'above' : 'level with'; };
-    return P[u] + ' is ' + rel(u, w) + ' ' + P[w] + ', and ' + P[w] + ' is ' + rel(w, v) + ' ' + P[v] + '. So ' + P[u] + ' has to be ' + rel(u, v) + ' ' + P[v] + '. Touch the list, then post it.';
+    var rel = function (x, y) { return rank[x] < rank[y] ? 'above' : 'tied with'; };
+    return 'The ' + P[u] + ' is ' + rel(u, w) + ' the ' + P[w] + ', and the ' + P[w] + ' is ' + rel(w, v) + ' the ' + P[v] + '. So the ' + P[u] + ' has to be ' + rel(u, v) + ' the ' + P[v] + '. The last tie breaks itself. Touch the ranking, then post it.';
   }
   function select(i) {
     G.sel = i; var rank = G.lists[i], nb = G.nb;
-    Array.prototype.forEach.call($('cards').querySelectorAll('.card'), function (c) { c.classList.toggle('sel', +c.dataset.i === i); });
+    Array.prototype.forEach.call($('cards').querySelectorAll('button.card'), function (c) { c.classList.toggle('sel', +c.dataset.i === i); });
     var nr = M.newRulings(G.book, nb.anna, nb.beat, rank);
     nr.forEach(function (r) {
       var a = M.PAIRS[r.pair][0], b = M.PAIRS[r.pair][1], el = $('slot-' + r.pair);
-      el.className = 'slot set new ' + r.value; el.innerHTML = '<span class="bar"></span>' + outcomeHtml(a, b, r.top, 17) + '<span class="wd">' + wayWord(r.value) + '</span>';
+      el.className = 'slot set new ' + r.value; el.innerHTML = '<span class="bar"></span>' + outcomeHtml(a, b, r.top, 17) + '<span class="wd">' + winWord(r.value) + '</span>';
     });
-    $('say').innerHTML = 'This list: <b>' + listWords(rank) + '.</b> It would rule ' + nr.map(function (r) { return P[r.annaFor] + ' against ' + P[r.beatFor] + ' <b>' + wayWord(r.value) + '</b>'; }).join(', and ') + '.';
+    $('say').innerHTML = 'This ranking: <b>' + listWords(rank) + '.</b> It breaks ' + nr.map(function (r) { return P[r.annaFor] + ' v ' + P[r.beatFor] + ' <b>' + forWord(r.value) + '</b>'; }).join(', and ') + '.';
     $('b-post').disabled = false;
   }
   function postList() {
     if (G.sel < 0 || G.busy) return;
     var rank = G.lists[G.sel], nb = G.nb, nr = M.newRulings(G.book, nb.anna, nb.beat, rank), forced = G.lists.length === 1;
     G.book = M.post(G.book, nb.anna, nb.beat, rank);
-    nr.forEach(function (r) { G.ruledOn[r.cell] = G.sunday + 1; G.forcedCell[r.cell] = forced; });
+    nr.forEach(function (r) { G.ruledOn[r.cell] = G.sunday + 1; });
     G.posted.push({ sunday: G.sunday + 1, anna: nb.anna, beat: nb.beat, list: rank, forced: forced });
     bookHtml(nr.map(function (r) { return r.cell; }));
     var c = M.counts(G.book), made = c.A + c.B + c.E, isA = M.sameList(rank, nb.anna), isB = M.sameList(rank, nb.beat);
     var h = '<p class="h">Posted: ' + listWords(rank) + '.</p>';
-    h += '<p>' + nr.map(function (r) { return 'New ruling: when Anna is for the ' + P[r.annaFor] + ' and Beat for the ' + P[r.beatFor] + ', it goes <b>' + wayWord(r.value) + '</b>' + (r.value === 'E' ? '' : ' (' + P[r.top] + ' higher)') + '.'; }).join(' ') + ' Kept from now on.</p>';
-    if (forced) h += '<p><b>You did not choose this ruling.</b> Your earlier rulings and the voters’ agreement chose it for you.</p>';
+    h += '<p>Into your book: ' + nr.map(function (r) { return 'when Anna prefers the ' + P[r.annaFor] + ' and Beat the ' + P[r.beatFor] + ', <b>' + (r.value === 'E' ? 'it is a draw' : winWord(r.value)) + '</b>.'; }).join(' And ') + ' From now on, every time.</p>';
+    if (forced) h += '<p><b>You did not choose this tie-break.</b> What was already settled chose it for you.</p>';
     var nA = G.posted.filter(function (x) { return M.sameList(x.list, x.anna); }).length, nB = G.posted.filter(function (x) { return M.sameList(x.list, x.beat); }).length, t = G.posted.length;
-    var same = function (name, k) { return '<p>This Sunday the village’s list is the same as ' + name + '’s ballot. ' + (k === 1 ? 'One Sunday proves nothing.' : k === t ? 'That makes ' + k + ' Sundays out of ' + t + '.' : 'That makes ' + k + ' of the ' + t + ' Sundays so far.') + '</p>'; };
+    var same = function (name, k) { return '<p>This Sunday the village’s ranking is exactly ' + name + '’s ballot. ' + (k === 1 ? 'Once proves nothing.' : k === t ? 'That makes ' + k + ' Sundays out of ' + t + '.' : 'That makes ' + k + ' of the ' + t + ' Sundays so far.') + '</p>'; };
     if (isA && !isB) h += same('Anna', nA);
     if (isB && !isA) h += same('Beat', nB);
-    h += '<p>Rule book: ' + made + ' of 6 rulings made. Anna’s way ' + c.A + ', Beat’s way ' + c.B + ', level ' + c.E + '.</p>';
+    h += '<p>Your book: ' + made + ' of 6 ties broken. Anna has won ' + c.A + ', Beat ' + c.B + ', draws ' + c.E + '.</p>';
     $('res').innerHTML = h; $('res').classList.remove('hide'); $('b-post').classList.add('hide'); $('say').textContent = '';
-    var last = M.isComplete(G.book);
-    $('b-next').textContent = last ? 'Let Arrow check every Sunday' : 'Next Sunday'; $('b-next').classList.remove('hide');
+    $('b-next').textContent = M.isComplete(G.book) ? 'Let Arrow check every Sunday' : 'Next Sunday'; $('b-next').classList.remove('hide');
     $('res').scrollIntoView({ behavior: window.__fast ? 'auto' : 'smooth', block: 'center' });
   }
-  function next() {
-    if (M.isComplete(G.book)) return startCheck();
-    G.sunday++; window.scrollTo(0, 0); renderSunday();
+  function next() { if (M.isComplete(G.book)) return startCheck(); G.sunday++; window.scrollTo(0, 0); renderSunday(); }
+
+  // ---------- a sheet of 36 Sundays (used by Arrow's check and by the hired tie-breaker) ----------
+  // ctx: { cells, sheet, read, pre, shown, cur, mode: 'book' | 'A' | 'B' | 'C', clara }
+  function buildSheet(ctx) {
+    var h = '<div class="ch corner"><span style="color:#111">Beat &rarr;</span><span style="color:#DA291C">Anna &darr;</span></div>', i, j;
+    for (j = 0; j < 6; j++) h += '<div class="ch">' + stack(M.BALLOTS[j], 'b', 10) + '</div>';
+    for (i = 0; i < 6; i++) { h += '<div class="ch">' + stack(M.BALLOTS[i], 'a', 10) + '</div>'; for (j = 0; j < 6; j++) h += '<button class="sq" id="' + ctx.pre + (i * 6 + j) + '" data-k="' + (i * 6 + j) + '" aria-label="Sunday ' + (i * 6 + j + 1) + '"></button>'; }
+    $(ctx.sheet).innerHTML = h; ctx.shown = []; ctx.cur = -1;
+    Array.prototype.forEach.call($(ctx.sheet).querySelectorAll('.sq'), function (b) { b.onclick = function () { var k = +b.dataset.k; if (!G.busy && ctx.shown[k]) readSquare(ctx, k, false); }; });
+  }
+  function stamp(ctx, k) {
+    var c = ctx.cells[k], el = $(ctx.pre + k); ctx.shown[k] = true;
+    el.className = 'sq done' + (c.list ? '' : ' no') + (c.isAnnas ? ' ta' : '') + (c.isBeats ? ' tb' : '') + (ctx.cur === k ? ' cur' : '');
+    el.innerHTML = c.list ? '<span class="stack" style="gap:2px">' + tiersHtml(c.list, 11) + '</span>' + (c.isBeats ? '<i></i>' : '') : '';
+  }
+  function relWords(a, b, top) { return top === -1 ? P[a] + ' ties with ' + P[b] : P[top] + ' beats ' + P[top === a ? b : a]; }
+  function clashWords(k, whose) {
+    var w = function (r) { return r === '>' ? 'beats' : 'ties with'; };
+    return 'The ' + P[k.a] + ' ' + w(k.ab) + ' the ' + P[k.b] + ', and the ' + P[k.b] + ' ' + w(k.bc) + ' the ' + P[k.c] + '. So the ' + P[k.a] + ' should ' + (k.expect === '>' ? 'beat' : 'tie with') + ' the ' + P[k.c] + '. But ' + whose + ' ' +
+      (k.actual === '<' ? 'the ' + P[k.c] + ' beats the ' + P[k.a] : k.actual === '=' ? 'they tie' : 'the ' + P[k.a] + ' beats the ' + P[k.c]) + '.' + (k.circle ? ' Round in a circle: nobody can be first.' : ' That cannot be put on steps.');
+  }
+  async function readSquare(ctx, k, slow) {
+    var c = ctx.cells[k]; if (ctx.cur >= 0 && $(ctx.pre + ctx.cur)) $(ctx.pre + ctx.cur).classList.remove('cur');
+    ctx.cur = k; $(ctx.pre + k).classList.add('cur');
+    var h = '<div class="hd"><span class="a">Anna ' + stack(c.anna, 'a', 14) + '</span><span>Beat ' + stack(c.beat, 'b', 14) + '</span>' + (ctx.mode === 'C' ? '<span class="c">Clara ' + stack(ctx.clara, 'g', 14) + '</span>' : '') + '</div>';
+    var maj = ctx.mode === 'C' ? M.majorityOfThree(c.anna, c.beat, ctx.clara) : null, names = ['Anna', 'Beat', 'Clara'];
+    c.pairs.forEach(function (info, p) {
+      var a = M.PAIRS[info.pair][0], b = M.PAIRS[info.pair][1], why, cls;
+      if (ctx.mode === 'C') { var m = maj.pairs[p]; why = m.votes === 3 ? '3–0' : '2–1: ' + m.winners.map(function (i) { return names[i]; }).join(' and '); cls = info.agree ? 'U' : 'C'; }
+      else if (info.agree) { why = '2–0'; cls = 'U'; }
+      else { why = '1–1, ' + (ctx.mode === 'book' ? 'your book: ' : 'tie-break: ') + winWord(info.value); cls = info.value; }
+      h += '<div class="rl ' + cls + '"><span class="bar"></span>' + outcomeHtml(a, b, info.top, 14) + '<span>' + relWords(a, b, info.top) + '</span><span class="why">' + why + '</span></div>';
+    });
+    var whose = ctx.mode === 'book' ? 'your book says' : ctx.mode === 'C' ? 'the majority says' : 'the tie-breaker says';
+    h += '<div class="rout">' + (c.list ? '<span class="stack" style="gap:2px">' + tiersHtml(c.list, 15) + '</span><span><span class="h">A ranking.</span>' + listWords(c.list).replace(/^./, function (m) { return m.toUpperCase(); }) + '.' + (c.isAnnas && c.isBeats ? ' The two agree on everything, so it is both their ballots.' : c.isAnnas ? ' Exactly Anna’s ballot.' : c.isBeats ? ' Exactly Beat’s ballot.' : ' Neither voter’s ballot.') + '</span>'
+      : '<span><span class="h">No ranking.</span>' + clashWords(c.clash, whose) + '</span>') + '</div>';
+    $(ctx.read).innerHTML = h; $(ctx.read).classList.remove('hide');
+    var els = $(ctx.read).querySelectorAll('.rl,.rout');
+    for (var i = 0; i < els.length; i++) { if (slow) await wait(i === 0 ? 500 : 950); els[i].classList.add('in'); }
   }
 
-  // ---------- Arrow's check ----------
-  function sqInner(c) { return c.list ? '<span class="stack" style="gap:2px">' + tiersHtml(c.list, 11) + '</span>' + (c.isBeats ? '<i></i>' : '') : ''; }
+  // ---------- Arrow's check of the player's own book ----------
   function startCheck() {
-    G.phase = 'check'; G.audit = M.audit(G.book); G.checked = 0; G.cur = -1; G.shown = [];
-    var h = '<div class="ch corner"><span style="color:#111">Beat &rarr;</span><span style="color:#DA291C">Anna &darr;</span></div>';
-    for (var j = 0; j < 6; j++) h += '<div class="ch">' + stack(M.BALLOTS[j], 'b', 10) + '</div>';
-    for (var i = 0; i < 6; i++) { h += '<div class="ch">' + stack(M.BALLOTS[i], 'a', 10) + '</div>'; for (j = 0; j < 6; j++) h += '<button class="sq" id="sq-' + (i * 6 + j) + '" data-k="' + (i * 6 + j) + '" aria-label="Sunday ' + (i * 6 + j + 1) + '"></button>'; }
-    $('sheet').innerHTML = h;
-    Array.prototype.forEach.call($('sheet').querySelectorAll('.sq'), function (b) { b.onclick = function () { var k = +b.dataset.k; if (!G.busy && G.shown[k]) readSquare(k, false); }; });
-    ['tally', 'legend', 'read', 'b-verdict'].forEach(function (id) { $(id).classList.add('hide'); });
+    G.phase = 'check'; G.audit = M.audit(G.book);
+    G.chk = { cells: G.audit.cells, sheet: 'sheet', read: 'read', pre: 'sq-', mode: 'book' }; buildSheet(G.chk);
+    ['tally', 'legend', 'read', 'b-tohire'].forEach(function (id) { $(id).classList.add('hide'); });
     $('b-check').classList.remove('hide'); $('b-check').textContent = 'Read the first Sunday'; $('b-check').dataset.step = '0'; $('b-check').disabled = false; $('check-say').textContent = '';
     show('s-check');
   }
-  function stamp(k) {
-    var c = G.audit.cells[k], el = $('sq-' + k); G.shown[k] = true;
-    el.className = 'sq done' + (c.list ? '' : ' no') + (c.isAnnas ? ' ta' : '') + (c.isBeats ? ' tb' : '') + (G.cur === k ? ' cur' : ''); el.innerHTML = sqInner(c);
-  }
-  function relWords(a, b, top) { return top === -1 ? P[a] + ' level with ' + P[b] : P[top] + ' above ' + P[top === a ? b : a]; }
-  function clashWords(k) {
-    var w = function (r) { return r === '>' ? 'above' : 'level with'; };
-    return P[k.a] + ' is ' + w(k.ab) + ' ' + P[k.b] + ', and ' + P[k.b] + ' is ' + w(k.bc) + ' ' + P[k.c] + '. So ' + P[k.a] + ' should be ' + w(k.expect) + ' ' + P[k.c] + '. But your rule book ' +
-      (k.actual === '<' ? 'puts ' + P[k.c] + ' above ' + P[k.a] : k.actual === '=' ? 'calls ' + P[k.a] + ' and ' + P[k.c] + ' level' : 'puts ' + P[k.a] + ' above ' + P[k.c]) + '.' + (k.circle ? ' Round in a circle.' : '');
-  }
-  async function readSquare(k, slow) {
-    var c = G.audit.cells[k]; if (G.cur >= 0 && $('sq-' + G.cur)) $('sq-' + G.cur).classList.remove('cur');
-    G.cur = k; $('sq-' + k).classList.add('cur');
-    var h = '<div class="hd"><span class="a">Anna ' + stack(c.anna, 'a', 14) + '</span><span>Beat ' + stack(c.beat, 'b', 14) + '</span></div>';
-    c.pairs.forEach(function (info) {
-      var a = M.PAIRS[info.pair][0], b = M.PAIRS[info.pair][1];
-      h += '<div class="rl ' + (info.agree ? 'U' : info.value) + '"><span class="bar"></span>' + outcomeHtml(a, b, info.top, 14) + '<span>' + relWords(a, b, info.top) + '</span><span class="why">' + (info.agree ? 'both say so' : 'your ruling: ' + wayWord(info.value)) + '</span></div>';
-    });
-    h += '<div class="rout">' + (c.list ? '<span class="stack" style="gap:2px">' + tiersHtml(c.list, 15) + '</span><span><span class="h">A list.</span>' + listWords(c.list).replace(/^./, function (m) { return m.toUpperCase(); }) + '.' + (c.isAnnas && c.isBeats ? ' The two agree on everything, so it is both ballots.' : c.isAnnas ? ' The same as Anna’s ballot.' : c.isBeats ? ' The same as Beat’s ballot.' : ' Neither voter’s ballot.') + '</span>'
-      : '<span><span class="h">No list.</span>' + clashWords(c.clash) + '</span>') + '</div>';
-    $('read').innerHTML = h; $('read').classList.remove('hide');
-    var els = $('read').querySelectorAll('.rl,.rout');
-    for (var i = 0; i < els.length; i++) { if (slow) await wait(i === 0 ? 500 : 950); els[i].classList.add('in'); }
-  }
   async function checkStep() {
-    if (G.busy) return; var a = G.audit;
+    if (G.busy) return; var a = G.audit, ctx = G.chk;
     if ($('b-check').dataset.step === '0') {
       G.busy = true; $('b-check').disabled = true;
-      // the first Sunday read slowly: the first one without a list, or, where there is none, the one where the two want opposite things
+      // read slowly: the first Sunday without a ranking, or, where there is none, the one where the two want opposite things
       var k = -1; a.cells.forEach(function (c, i) { if (k < 0 && !c.list) k = i; }); if (k < 0) k = 5;
-      $('check-say').innerHTML = 'Arrow takes one pair of ballots and looks up each pair of plans in your rule book…';
-      await readSquare(k, true); await wait(400); stamp(k); G.checked = 1;
-      $('check-say').innerHTML = a.cells[k].list ? 'That Sunday has a list. The square gets it.' : '<b>That Sunday has no list.</b> Every line above is your own ruling or the voters’ agreement, and together they cannot be put on steps. The square is struck through.';
+      $('check-say').innerHTML = 'Arrow takes one pair of ballots and looks up each plan-against-plan result in your book…';
+      await readSquare(ctx, k, true); await wait(400); stamp(ctx, k);
+      $('check-say').innerHTML = a.cells[k].list ? 'That Sunday has a ranking. It goes in the square.' : '<b>That Sunday has no ranking.</b> Every line above is either a 2–0 or a tie-break from your own book. Together they contradict each other. The square is struck through.';
       $('b-check').dataset.step = '1'; $('b-check').textContent = 'Check the other 35'; $('b-check').disabled = false; G.busy = false; return;
     }
     G.busy = true; $('b-check').disabled = true; $('tally').classList.remove('hide'); $('check-say').textContent = '';
-    var yes = 0, no = 0; a.cells.forEach(function (c, i) { if (G.shown[i]) { if (c.list) yes++; else no++; } });
-    $('t-yes').textContent = yes; $('t-no').textContent = no;
-    for (var i = 0; i < 36; i++) { if (G.shown[i]) continue; await wait(75); stamp(i); if (a.cells[i].list) yes++; else no++; $('t-yes').textContent = yes; $('t-no').textContent = no; }
-    G.checked = 36; var v = M.verdict(G.book);
-    $('legend').classList.remove('hide');
-    $('check-say').innerHTML = v.boss ? '<b>A list on all 36.</b> Now look at the corners: every square has ' + (v.boss === 'A' ? 'Anna’s red' : 'Beat’s black') + ' corner, and the other colour shows only where the two agree on everything. Touch any square to read it.'
-      : '<b>A list on ' + v.holds + ' of the 36. No list on ' + v.broken + '.</b> Touch any square to read it.';
-    $('b-check').classList.add('hide'); $('b-verdict').classList.remove('hide'); G.busy = false;
+    await runSheet(ctx, 't-yes', 't-no', 75);
+    var v = M.verdict(G.book); $('legend').classList.remove('hide');
+    $('check-say').innerHTML = v.boss ? '<b>A ranking on all 36.</b> Now look at the corners: every square has ' + (v.boss === 'A' ? 'Anna’s red' : 'Beat’s black') + ' corner. The other colour shows only where the two agree on everything. Touch any square to read it.'
+      : '<b>A ranking on ' + v.holds + ' of the 36. None on ' + v.broken + '.</b> Touch any square to read it.';
+    $('b-check').classList.add('hide'); $('b-tohire').classList.remove('hide'); G.busy = false;
+  }
+  async function runSheet(ctx, yesId, noId, ms) {
+    var yes = 0, no = 0; ctx.cells.forEach(function (c, i) { if (ctx.shown[i]) { if (c.list) yes++; else no++; } });
+    $(yesId).textContent = yes; $(noId).textContent = no;
+    for (var i = 0; i < 36; i++) { if (ctx.shown[i]) continue; await wait(ms); stamp(ctx, i); if (ctx.cells[i].list) yes++; else no++; $(yesId).textContent = yes; $(noId).textContent = no; }
+  }
+
+  // ---------- hire a tie-breaker ----------
+  function startHire() {
+    G.phase = 'hire'; G.hireKind = null; G.hire = null;
+    ['h-A', 'h-B', 'h-C'].forEach(function (id) { $(id).classList.remove('sel'); });
+    $('clara-pick').classList.add('hide'); $('hire-out').classList.add('hide'); $('b-hire').disabled = true; $('b-verdict').classList.toggle('hide', !G.hired.length);
+    show('s-hire');
+  }
+  function chipsHtml() {
+    $('chips').innerHTML = M.BALLOTS.map(function (b, i) { return '<button class="chip' + (b.join() === G.clara.join() ? ' sel' : '') + '" data-i="' + i + '" aria-label="Clara votes ' + b.map(function (x) { return P[x]; }).join(', ') + '">' + stack(b, 'g', 15) + '</button>'; }).join('');
+    Array.prototype.forEach.call($('chips').children, function (c) { c.onclick = function () { if (G.busy) return; G.clara = M.BALLOTS[+c.dataset.i].slice(); chipsHtml(); $('hire-out').classList.add('hide'); $('b-hire').disabled = false; }; });
+  }
+  function pickHire(kind) {
+    if (G.busy) return; G.hireKind = kind;
+    ['A', 'B', 'C'].forEach(function (k) { $('h-' + k).classList.toggle('sel', k === kind); });
+    $('clara-pick').classList.toggle('hide', kind !== 'C'); if (kind === 'C') chipsHtml();
+    $('hire-out').classList.add('hide'); $('b-hire').disabled = false;
+  }
+  async function runHire() {
+    if (G.busy || !G.hireKind) return; G.busy = true; $('b-hire').disabled = true;
+    var kind = G.hireKind, book = kind === 'C' ? M.clarasBook(G.clara) : M.voterBook(kind), a = M.audit(book), v = M.verdict(book);
+    G.hire = { cells: a.cells, sheet: 'hsheet', read: 'hread', pre: 'hq-', mode: kind, clara: G.clara.slice(), book: book };
+    buildSheet(G.hire); $('hread').innerHTML = ''; $('hire-say').textContent = ''; $('hire-out').classList.remove('hide');
+    $('hsheet').scrollIntoView({ behavior: window.__fast ? 'auto' : 'smooth', block: 'start' });
+    await runSheet(G.hire, 'ht-yes', 'ht-no', 45);
+    G.hired.push(kind);
+    var mine = book.join('') === G.book.join('');
+    if (kind === 'C') {
+      var k = -1; a.cells.forEach(function (c, i) { if (k < 0 && !c.list) k = i; });
+      $('hire-say').innerHTML = '<b>A ranking on ' + v.holds + ' of the 36. None on ' + v.broken + '.</b> A real majority, no ties left, nobody the boss, and still two Sundays go round in a circle. One is read out below: every plan wins one vote 2–1 and loses one 2–1. Whatever ballot Clara hands in, it is always two.' + (mine ? ' This is the very book you wrote yourself.' : '');
+      await readSquare(G.hire, k, false);
+    } else {
+      var nm = kind === 'A' ? 'Anna' : 'Beat', ot = kind === 'A' ? 'Beat' : 'Anna';
+      $('hire-say').innerHTML = '<b>A ranking on all 36.</b> And every one is ' + nm + '’s ballot: look at the corners. A tie-breaker who is one of the voters wins every tie, so ' + ot + ' might as well stay at home. That is a boss.' + (mine ? ' This is the very book you wrote yourself.' : '');
+      await readSquare(G.hire, kind === 'A' ? 5 : 30, false);
+    }
+    $('b-verdict').classList.remove('hide'); G.busy = false;
   }
 
   // ---------- the verdict ----------
   function endScreen() {
     G.phase = 'end'; var v = M.verdict(G.book), all = M.allBooks(), boss = v.boss === 'A' ? 'Anna' : 'Beat', other = v.boss === 'A' ? 'Beat' : 'Anna';
     if (v.boss) {
-      $('v1').textContent = 'Your rule book never fails. A list on all 36 Sundays.';
-      $('v2').textContent = 'And on all 36 the list is ' + boss + '’s ballot. Every ruling went ' + boss + '’s way. What ' + other + ' writes changes nothing.';
-      $('v3').innerHTML = '<b>Arrow, 1950:</b> that is the only kind of rule book that never fails. His word for ' + boss + ' is <b>dictator</b>.';
+      $('v1').textContent = 'Your book never fails. A ranking on all 36 Sundays.';
+      $('v2').textContent = 'And on all 36 it is ' + boss + '’s ballot. Every tie went to ' + boss + '. What ' + other + ' writes changes nothing.';
+      $('v3').innerHTML = '<b>Arrow, 1950:</b> that is the only kind of book that never fails. His word for ' + boss + ' is <b>dictator</b>.';
     } else {
-      $('v1').textContent = 'A list on ' + v.holds + ' of the 36 Sundays. On ' + v.broken + ' there was none.';
+      $('v1').textContent = 'A ranking on ' + v.holds + ' of the 36 Sundays. On ' + v.broken + ' there was none.';
       var cu = v.custom && v.custom.order;
-      $('v2').textContent = v.fate === 'custom' ? 'Nobody is the boss. In your book one fixed order settles every disagreement, whoever is for what: ' + P[cu[0]] + ' before ' + P[cu[1]] + ' before ' + P[cu[2]] + '. No rule book without a boss does better than ' + v.best + '.'
-        : v.fate === 'best' ? 'Nobody is the boss, and no rule book without a boss does better than ' + v.best + '. You found the edge.'
-        : 'Nobody is the boss. The best any rule book can do without one is ' + v.best + '.';
-      $('v3').innerHTML = '<b>Arrow, 1950:</b> the only rule books that never fail are the two in which one voter wins every disagreement. He called that voter a <b>dictator</b>.';
+      $('v2').textContent = v.fate === 'custom' ? 'Nobody is the boss. Your book breaks every tie by one fixed order: ' + P[cu[0]] + ' before ' + P[cu[1]] + ' before ' + P[cu[2]] + ', whoever wants what. That is exactly what Clara does. No book without a boss does better than ' + v.best + '.'
+        : v.fate === 'best' ? 'Nobody is the boss, and no book without a boss does better than ' + v.best + '. You found the edge.'
+        : 'Nobody is the boss. The best any book can do without one is ' + v.best + '.';
+      $('v3').innerHTML = '<b>Arrow, 1950:</b> the only books that never fail are the two in which one voter wins every tie. He called that voter a <b>dictator</b>.';
     }
-    // the poster: 27 x 27, column = rulings 1-3, row = rulings 4-6, each Anna's way / level / Beat's way
+    // the poster: 27 x 27, column = ties 1-3, row = ties 4-6, each Anna wins / a draw / Beat wins
     var s = 12, x0 = 12, y0 = 24, h = '', px, py;
     for (var n = 0; n < 729; n++) {
       var col = n % 27, row = Math.floor(n / 27), fails = 36 - all.holds[n], x = x0 + col * s, y = y0 + row * s, f;
@@ -506,17 +594,16 @@ svg.sh{display:block;flex:none}
     }
     h += '<rect x="' + (x0 - 3) + '" y="' + (y0 - 3) + '" width="' + (s + 5) + '" height="' + (s + 5) + '" fill="none" stroke="' + RED + '" stroke-width="2"/>';
     h += '<rect x="' + (x0 + 26 * s - 3) + '" y="' + (y0 + 26 * s - 3) + '" width="' + (s + 5) + '" height="' + (s + 5) + '" fill="none" stroke="' + INK + '" stroke-width="2"/>';
-    h += '<text x="' + (x0 + s + 8) + '" y="15" font-family="Inter" font-weight="600" font-size="11.5" fill="' + RED + '">&#8598; Anna wins every disagreement</text>';
-    h += '<text x="' + (x0 + 26 * s - 8) + '" y="' + (y0 + 27 * s + 15) + '" text-anchor="end" font-family="Inter" font-weight="600" font-size="11.5" fill="' + INK + '">Beat wins every disagreement &#8600;</text>';
+    h += '<text x="' + (x0 + s + 8) + '" y="15" font-family="Inter" font-weight="600" font-size="11.5" fill="' + RED + '">&#8598; Anna wins every tie</text>';
+    h += '<text x="' + (x0 + 26 * s - 8) + '" y="' + (y0 + 27 * s + 15) + '" text-anchor="end" font-family="Inter" font-weight="600" font-size="11.5" fill="' + INK + '">Beat wins every tie &#8600;</text>';
     if (!v.boss) {
       h += '<circle cx="' + (px + 5.5) + '" cy="' + (py + 5.5) + '" r="11" fill="none" stroke="#fff" stroke-width="5"/><circle cx="' + (px + 5.5) + '" cy="' + (py + 5.5) + '" r="11" fill="none" stroke="' + RED + '" stroke-width="2.5"/>';
       var right = px < 240; h += '<text x="' + (right ? px + 21 : px - 10) + '" y="' + (py + 10) + '" text-anchor="' + (right ? 'start' : 'end') + '" font-family="Inter Display" font-weight="900" font-size="15" fill="' + INK + '" stroke="#fff" stroke-width="4" paint-order="stroke">yours</text>';
     }
     $('poster').innerHTML = h;
-    $('cap1').innerHTML = 'Each small square is one whole rule book: six rulings, each one Anna’s way, level, or Beat’s way. The darker the square, the more Sundays it leaves without a list. <b>727 fail somewhere. Two never do</b>, and they sit in opposite corners' + (v.boss ? '. Yours is the ' + (v.boss === 'A' ? 'red' : 'black') + ' one.' : '.');
-    $('cap2').innerHTML = 'The best without a boss is ' + v.best + ' of 36. One way there: let one fixed order of the plans settle every disagreement, whoever is for what. Then no voter is the boss, but an old pecking order is. Arrow’s theorem leaves these two ways out, and both give up on counting votes: a result fixed by custom, or a dictator. <span style="color:#666">(The count out of 36 is this game’s; Arrow proved the wall, not the number.)</span>';
-    var maj = M.audit(['E', 'E', 'E', 'E', 'E', 'E']);
-    $('qa-maj').innerHTML = 'With two voters, a majority says “level” whenever they disagree. That is one of the 729, the square in the very middle, and it leaves ' + maj.broken + ' Sundays without a list. With three voters a majority can go round in a circle: A beats B, B beats C, C beats A. Arrow’s paper starts from that old puzzle and shows that no cleverer rule escapes it.';
+    $('cap1').innerHTML = 'Six ties, three answers each (Anna wins, a draw, Beat wins): that makes 729 different books, and each small square is one of them. The darker the square, the more Sundays it leaves without a ranking. <b>727 fail somewhere. Two never do</b>, and they sit in opposite corners' + (v.boss ? '. Yours is the ' + (v.boss === 'A' ? 'red' : 'black') + ' one.' : '.');
+    $('cap2').innerHTML = 'The best without a boss is ' + v.best + ' of 36. Clara gets there: a fixed order that breaks every tie, whoever wants what. Then no voter is the boss, but an old habit is. Those are the two ways out Arrow’s proof leaves, and neither is what we mean by voting: let a habit decide, or let one person decide. <span style="color:#666">(Scoring out of 36 is this game’s idea. What Arrow proved is that nothing but a boss reaches 36.)</span>';
+    $('qa-more').innerHTML = 'No. With an odd number of voters and a simple majority there are no ties at all, and it still goes wrong: you saw it with Clara. If Clara were free to change her ballot there would be 216 possible Sundays instead of 36, and 12 of them would go round in a circle. Arrow proved the result for any number of voters. (With just Anna and Beat, a majority means a draw whenever they disagree: the square in the very middle, which fails on ' + M.audit(M.voterBook('E')).broken + ' Sundays.)';
     show('s-end');
   }
 
@@ -525,11 +612,14 @@ svg.sh{display:block;flex:none}
   $('b-post').onclick = postList;
   $('b-next').onclick = next;
   $('b-check').onclick = checkStep;
+  $('b-tohire').onclick = startHire;
+  ['A', 'B', 'C'].forEach(function (k) { $('h-' + k).onclick = function () { pickHire(k); }; });
+  $('b-hire').onclick = runHire;
   $('b-verdict').onclick = endScreen;
   $('b-again').onclick = function () { G.game++; startGame(); };
   var back = 0;
   function over(id, on) { if (on) back = window.scrollY; $(id).classList.toggle('on', on); document.body.classList.toggle('lock', on); if (on) $(id).scrollTop = 0; else window.scrollTo(0, back); }
-  ['q-play', 'q-check', 'b-help0', 'b-help1'].forEach(function (id) { $(id).onclick = function () { over('help', true); }; });
+  ['q-play', 'q-check', 'q-hire', 'b-help0', 'b-help1'].forEach(function (id) { $(id).onclick = function () { over('help', true); }; });
   ['b-about0', 'b-about1'].forEach(function (id) { $(id).onclick = function () { over('about', true); }; });
   $('b-help-close').onclick = function () { over('help', false); };
   $('b-about-close').onclick = function () { over('about', false); };
