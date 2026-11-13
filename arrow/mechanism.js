@@ -18,9 +18,9 @@
     nPlans: 3,                                // Part III sec. 1 (p. 336): "the total number of alternatives which are conceivable is three"
     // Opening ballots, as [Anna, Beat], each best to worst. The first is Arrow's own last step, eq. (7) (p. 342):
     // individual 1 has x, y, z and individual 2 has z, x, y. The other two are the same pair with the plans renamed
-    // (our choice: so that a second and third game do not open on the same picture).
-    openings: [[[0, 1, 2], [2, 0, 1]], [[1, 2, 0], [0, 1, 2]], [[2, 0, 1], [1, 2, 0]]],
-    freeSundays: 3,                           // our choice: on the first three Sundays Arrow hands out ballots that open one new ruling with the most room; after that, the least room
+    // (our choice: so that a second and third game do not open on the same picture; chosen among the renamings for which three what-ifs always complete the book).
+    openings: [[[0, 1, 2], [2, 0, 1]], [[0, 2, 1], [1, 0, 2]], [[2, 0, 1], [1, 2, 0]]],
+    whatIfs: 3,                               // our choice: three what-ifs, each opening two new ties, complete the six-line book (checked over every path)
     valuesPerRuling: 3,                       // Anna's way, level, Beat's way: P, I, and the reverse P (Definitions 1-2, p. 332)
     clara: [0, 1, 2]                          // our choice: the ballot the hired tie-breaker, a third voter who never changes her mind, starts with
   };
@@ -91,27 +91,45 @@
     var n = 0; for (var p = 0; p < 3; p++) { var i = pairInfo(anna, beat, p); if (!i.agree && book[i.cell] == null) n++; } return n;
   }
 
-  // ---------- Arrow's calendar (ours: which of the 36 pairs of ballots turns up on which Sunday) ----------
-  // Sunday 1: an opening from CONFIG (Arrow's eq. 7 ballots). Later Sundays: among the pairs of ballots that open at least one
-  // new ruling and still allow at least one list, Arrow takes, on the free Sundays, one that opens a single ruling with the most
-  // lists left; after them, the one with the fewest lists left. Ties go to the first in reading order. Returns null when the book is complete.
+  // ---------- Arrow's calendar (ours: which pair of ballots he brings as each what-if) ----------
+  // What-if 1: an opening from CONFIG (Arrow's eq. 7 ballots). After that: among the pairs of ballots that agree on one pair of plans
+  // and open exactly two new ties, the one that leaves the most rankings possible (always five). Ties go to the first in reading order.
+  // Returns null when the book is complete.
   function nextBallots(book, sunday, game) {
     if (sunday === 0) { var o = CONFIG.openings[(game || 0) % CONFIG.openings.length]; return { anna: o[0], beat: o[1] }; }
     if (isComplete(book)) return null;
     var cands = [];
     for (var i = 0; i < 6; i++) for (var j = 0; j < 6; j++) {
       if (i === j) continue;
-      var f = openCount(book, BALLOTS[i], BALLOTS[j]); if (!f) continue;
+      var f = openCount(book, BALLOTS[i], BALLOTS[j]); if (f !== 2) continue;
       var L = legalLists(book, BALLOTS[i], BALLOTS[j]).length; if (!L) continue;
-      cands.push({ i: i, j: j, f: f, L: L });
+      cands.push({ i: i, j: j, L: L });
     }
     if (!cands.length) return null;   // never happens from the openings (calibration checks every path)
-    var free = sunday < CONFIG.freeSundays;
-    cands.sort(function (x, y) {
-      return free ? (x.f - y.f || y.L - x.L || (x.i * 6 + x.j) - (y.i * 6 + y.j)) : (x.L - y.L || x.f - y.f || (x.i * 6 + x.j) - (y.i * 6 + y.j));
-    });
+    cands.sort(function (x, y) { return y.L - x.L || (x.i * 6 + x.j) - (y.i * 6 + y.j); });
     return { anna: BALLOTS[cands[0].i], beat: BALLOTS[cands[0].j] };
   }
+
+  // ---------- Arrow's own argument (pp. 340-342), as a chain of forced what-ifs ----------
+  // Start with one tie given to a voter. Repeatedly bring a pair of ballots that opens exactly one new tie and leaves exactly one
+  // ranking; that ranking gives the new tie to the same voter. After five steps all six ties are that voter's: Definition 5.
+  function chain(voter, cell) {
+    var book = emptyBook(); book[cell] = voter; var steps = [];
+    while (!isComplete(book)) {
+      var found = null;
+      for (var i = 0; i < 6 && !found; i++) for (var j = 0; j < 6 && !found; j++) {
+        if (i === j || openCount(book, BALLOTS[i], BALLOTS[j]) !== 1) continue;
+        var L = legalLists(book, BALLOTS[i], BALLOTS[j]); if (L.length !== 1) continue;
+        var nr = newRulings(book, BALLOTS[i], BALLOTS[j], L[0]);
+        found = { anna: BALLOTS[i], beat: BALLOTS[j], list: L[0], cell: nr[0].cell, value: nr[0].value, annaFor: nr[0].annaFor, beatFor: nr[0].beatFor };
+      }
+      if (!found) return null;
+      book = post(book, found.anna, found.beat, found.list); found.book = book.slice(); steps.push(found);
+    }
+    return { steps: steps, book: book };
+  }
+  // The real Sunday: one of the 36 pairs of ballots, drawn by chance. rnd is a function returning a number in [0, 1).
+  function drawSunday(rnd) { var k = Math.floor(rnd() * 36); if (k > 35) k = 35; return { k: k, anna: BALLOTS[Math.floor(k / 6)], beat: BALLOTS[k % 6] }; }
 
   // ---------- one Sunday read against a complete book ----------
   // Why three pair results make no list: find plans a, b, c with a at least as good as b, b at least as good as c,
@@ -234,7 +252,7 @@
     CONFIG: CONFIG, PAIRS: PAIRS, BALLOTS: BALLOTS, LISTS: LISTS,
     rankOf: rankOf, ballotIndex: ballotIndex, sameList: sameList, tiers: tiers,
     pairInfo: pairInfo, pairOutcome: pairOutcome, legalLists: legalLists, newRulings: newRulings, post: post,
-    emptyBook: emptyBook, isComplete: isComplete, nextBallots: nextBallots,
+    emptyBook: emptyBook, isComplete: isComplete, nextBallots: nextBallots, chain: chain, drawSunday: drawSunday, openCount: openCount,
     readSunday: readSunday, audit: audit, clashOf: clashOf, dictator: dictator, custom: custom, counts: counts,
     bookIndex: bookIndex, bookFromIndex: bookFromIndex, allBooks: allBooks, verdict: verdict,
     voterBook: voterBook, clarasBook: clarasBook, majorityOfThree: majorityOfThree
