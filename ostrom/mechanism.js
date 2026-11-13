@@ -94,22 +94,29 @@ var CONFIG = {
   LEAVER_TYPES: ['CC', 'WP']      // ours: the one who moves away is a norm-user (a loss of those who contribute)
 };
 
+// The five cards. Each says what it is, what it costs, what happens to someone who takes two, and what the village meeting
+// gets to know afterwards (the meeting always learns how many fish left the pond; names only come from a watcher or a catch).
 var REGIMES = [
   { key: 'none', name: 'Leave it be',
-    line: 'Everyone goes fishing. Nobody says anything to anyone.',
-    cost: 'Costs us nothing.', greedy: 'Nothing happens to anyone who takes two.' },
+    line: 'Everyone just goes fishing. Nobody says anything.',
+    cost: 'Costs nothing.', greedy: 'Nothing happens to anyone who takes two.',
+    knows: 'Nobody is at the pond, so we only find out how many fish are gone, not who took them.' },
   { key: 'talk', name: 'Have a talk',
-    line: 'Before fishing we all sit in a circle and promise how many we will take.',
-    cost: 'Costs us nothing.', greedy: 'Anyone who took two gets a telling-off in the circle next summer. Nothing else.' },
+    line: 'Before fishing we all sit in a circle and promise to take one fish each.',
+    cost: 'Costs nothing.', greedy: 'If fish go missing, the circle tells everybody off next summer. Nothing else happens.',
+    knows: 'Nobody is at the pond, so we only find out how many fish are gone, not who broke the promise.' },
   { key: 'watch', name: 'Take turns watching',
-    line: 'One of us sits by the pond all day and watches instead of fishing.',
-    cost: 'Costs us the watcher’s fish.', greedy: 'Seen taking two: first a telling-off; then both fish back in the pond; then both fish back and no fishing next summer.' },
+    line: 'One of us sits by the pond all day and watches, instead of fishing.',
+    cost: 'Costs us the watcher’s fish.', greedy: 'Seen taking two: the first time, a telling-off. The second time, both fish go back in the pond. The third time, both fish back and no fishing next summer.',
+    knows: 'The watcher sees most of us, but not everyone. Whoever the watcher saw, we know what they took.' },
   { key: 'weak', name: 'A policeman now and then',
-    line: 'The town sends a policeman on some days. We never know which.',
-    cost: 'Costs us one fish a summer, paid to the town.', greedy: 'Caught taking two: three fish to the town. We don’t tell each other off; that’s his job now.' },
+    line: 'The town sends a policeman on some days. We never know which days.',
+    cost: 'Costs one fish a summer, paid to the town.', greedy: 'If he catches someone taking two, both fish go to the town. We stop telling each other off: that’s his job now.',
+    knows: 'He only tells us who he caught, and he hardly ever catches anyone.' },
   { key: 'strong', name: 'A policeman every day',
     line: 'The town sends a policeman every day, all summer.',
-    cost: 'Costs us a quarter of everything we catch, paid to the town.', greedy: 'Caught taking two: three fish to the town. We don’t tell each other off; that’s his job now.' }
+    cost: 'Costs a quarter of all the fish we catch, paid to the town.', greedy: 'If he catches someone taking two, both fish go to the town. We stop telling each other off: that’s his job now.',
+    knows: 'He only tells us who he caught, and he catches nearly everyone who takes two.' }
 ];
 var REGIME = {}; REGIMES.forEach(function (r) { REGIME[r.key] = r; });
 
@@ -180,25 +187,35 @@ function playSummer(s, regime, test) {
   for (var round = 1; round <= C.GREEDY; round++) {
     for (var i = 0; i < C.N; i++) { if (wants[i] >= round && pond > 0) { took[i]++; pond--; } }
   }
-  // 3. who is seen, and what happens to them
+  // 3. who is seen, what happens to them, and what the village meeting gets to know. Everyone carries the catch home in a
+  //    bucket: the meeting always learns the pond count, and a name only from the watcher (who sees most villagers, one
+  //    fish or two) or from a policeman's catch (he reports only whom he caught). known: 'hidden' | 'one' | 'two' |
+  //    'watcher' | 'banned'.
   var seenAny = false;
   for (i = 0; i < C.N; i++) {
     var v = V[i];
-    var act = { i: i, name: v.name, wanted: wants[i], took: took[i], grabbed: wants[i] === C.GREEDY, seen: false, sanction: null, fine: 0, banned: v.banned, watcher: watcher === i, ate: took[i] };
-    if (act.grabbed && !test) {
-      if (regime === 'watch' && rng() < C.WATCH_SEE) {
-        act.seen = true; seenAny = true;
-        var k = v.offences; v.offences++;
-        if (k === 0) { act.sanction = 'word'; v.toldOff++; }
-        else { act.sanction = k === 1 ? 'back' : 'ban'; act.fine = act.took; act.ate -= act.fine; rec.finesToPond += act.fine; v.fined++; if (k >= 2) rec.bansNext.push(i); }
-        v.norm = clamp01(v.norm + C.WATCH_LEARN[Math.min(k, C.WATCH_LEARN.length - 1)]);
-      } else if (regime === 'weak' || regime === 'strong') {
-        var see = regime === 'weak' ? C.POLICE_WEAK_SEE : C.POLICE_STRONG_SEE;
-        if (rng() < see) { act.seen = true; act.sanction = 'town'; act.fine = act.took; act.ate -= act.fine; rec.finesToTown += act.fine; v.fined++; }
-      } else if (regime === 'talk') { act.sanction = 'circle'; v.toldOff++; }
-    }
+    var act = { i: i, name: v.name, wanted: wants[i], took: took[i], grabbed: wants[i] === C.GREEDY, seen: false, sanction: null, fine: 0, banned: v.banned, watcher: watcher === i, ate: took[i], known: 'hidden' };
+    if (act.banned) act.known = 'banned';
+    else if (act.watcher) act.known = 'watcher';
+    else if (!test && regime === 'watch') {
+      if (rng() < C.WATCH_SEE) {
+        act.seen = true; act.known = act.grabbed ? 'two' : 'one';
+        if (act.grabbed) {
+          seenAny = true;
+          var k = v.offences; v.offences++;
+          if (k === 0) { act.sanction = 'word'; v.toldOff++; }
+          else { act.sanction = k === 1 ? 'back' : 'ban'; act.fine = act.took; act.ate -= act.fine; rec.finesToPond += act.fine; v.fined++; if (k >= 2) rec.bansNext.push(i); }
+          v.norm = clamp01(v.norm + C.WATCH_LEARN[Math.min(k, C.WATCH_LEARN.length - 1)]);
+        }
+      }
+    } else if (!test && (regime === 'weak' || regime === 'strong')) {
+      var see = regime === 'weak' ? C.POLICE_WEAK_SEE : C.POLICE_STRONG_SEE;
+      if (act.grabbed && rng() < see) { act.seen = true; act.known = 'two'; act.sanction = 'town'; act.fine = act.took; act.ate -= act.fine; rec.finesToTown += act.fine; v.fined++; }
+    } else if (!test && regime === 'talk' && act.grabbed) { act.sanction = 'circle'; v.toldOff++; }
     rec.acts.push(act);
   }
+  rec.seenCount = rec.acts.filter(function (x) { return x.seen; }).length;
+  rec.ranOut = rec.acts.some(function (x) { return !x.banned && !x.watcher && x.took < x.wanted; });
   if (regime === 'watch' && C.WATCH_INFO && seenAny) s.seeBelief = C.WATCH_SEE;
   // 4. fees to the town
   var catchTotal = took.reduce(function (a, b) { return a + b; }, 0);
