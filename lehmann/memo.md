@@ -227,3 +227,21 @@ A rebuild after a long discussion in which Steffen worked out for himself what t
 - **Cut.** The drum and every up-and-down sentence; the records card's sketched traces; the Moon comparison in play; `quake()` and the speed range (the size-by-speed table in the check uses `heardByQuake` directly).
 - **Claim boundary, new.** The records on the posts are ours, a simplification of the paper's "smaller amplitudes" inside the shadow and its Figure 3; the faintness-by-few-waves argument stands for her intensity calculation; and by leaving out diffraction the game makes the choice look easier than it was. All three are said in About.
 - Calibration: 52 checks, all passed. Browser session at 380 × 760 with touch: drag-to-aim (45° and 30°), eight waves with the jump, the fan (14 filled), the card, four waves (miss, through, into the shadow, bounce onto a faint post), the second fan (18 filled), both choices, About, a retry; no errors, no horizontal scroll. Not played by strangers.
+
+## 26. Revision 7 (13 Nov 2026): watch a real earthquake first; light, quiver, dead; no quiz; Read further
+
+Steffen after playing revision 6 ("we are very very close now") and four more rounds of discussion. His notes: only the southernmost faint post could be reached in stage two; the quiz before the end was superfluous; and, more important, the faint posts were flagged with a broken ring from the start as a permanent label, which felt wrong: what is it that they felt, and when? He proposed that the stations should visibly answer (those that feel a strong shake light up, those that feel nothing stay faint, those that feel a small quiver blink). A bundle of waves per go was discussed and rejected by him as too complicated: the game is after the broad gist, that someone learns there must be a core within the core, and may take liberties if they are flagged in an optional read-further part of the debrief. Previous build: `previous/find-your-inner-core-rev6.html`.
+
+The seven beats:
+
+1. **Watch a real earthquake.** The Earth's inside is veiled with a question mark; a ripple leaves the quake and the posts answer one after another round the rim: fourteen light up, four quiver (a pale fill that blinks three times). Those four then carry a small ~ mark for the rest of the game. *Most posts lit up. Four only quivered.*
+2. **One core, eight goes.** As before. Posts start dark; the post where the player comes up lights. Aim: *One core. Can you make the four ~ posts quiver?*
+3. **Every direction at once, one core.** The fan, then the same answering animation: fourteen light, the four ~ posts stay dead. *No match.*
+4. **The card:** Lehmann's idea, three short lines.
+5. **A core within the core, four goes.** A liberty (`fire2`): any wave that comes up inside the shadow makes the nearest ~ post quiver. Aim: *Can you make the ~ posts quiver now?*
+6. **Every direction at once, a core within the core.** The fan, then the answering animation: fourteen light, four quiver: the record exactly (checked: the state equals `record()`). *It matches.*
+7. **The verdict**, three short paragraphs and the two pictures, and under it a closed *Read further: where the game takes liberties* with six short notes: one wave or all of them; why only a quiver; the game is kinder than the Earth (the dives each post really needs); the Earth in the picture is a sketch; there was another explanation; what she did not say.
+
+Also: the quiz and its two buttons are gone; the broken rings are gone; the cue reads *Now choose your next direction.* and the button *Fire · go 3 of 8*; the degree labels at 120° and 150° made way for the ~ marks. Fates: *You found the inner core.* (a ~ post made to quiver) / *The inner core was there all along.*
+
+Calibration: 53 checks, all passed. Browser session at 380 × 760 with touch: the watched earthquake (14 lit, 4 quivering, 4 marks), drag-to-aim, eight goes with the jump, the first fan (14 lit, 4 dead), the card, four goes (two into the shadow, two posts quivering), the second fan (14 lit, 4 quivering), the verdict, Read further opened (six notes), About, a retry from the watched earthquake, and a game with no steep dive; no errors, no horizontal scroll. Not played by strangers.

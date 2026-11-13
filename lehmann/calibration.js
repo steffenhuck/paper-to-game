@@ -80,30 +80,31 @@ function story(label) {
 check('Lehmann’s ball in words: "a bit smaller than the Moon", "a little faster than the core"', M.sizeWords(C.INNER_FRAC) === 'a bit smaller than the Moon' && M.speedWords(C.V_INNER / C.V_CORE) === 'a little faster than the core', M.sizeWords(C.INNER_FRAC) + ' / ' + M.speedWords(C.V_INNER / C.V_CORE));
 check('Gutenberg & Richter’s 1200 km in words: "about half the size of the Moon" (0.69 of the Moon)', M.sizeWords(P.GUTENBERG_RICHTER_KM / C.R0_KM) === 'about half the size of the Moon', M.sizeWords(P.GUTENBERG_RICHTER_KM / C.R0_KM));
 
-// 6. a scripted game runs to a verdict (revision 6: one core, then a core within the core, then the choice)
+// 6. a scripted game runs to a verdict (revision 7: watch, one core, a core within the core)
 {
-  check('the records: the four posts in the one-core shadow are the faint ones', JSON.stringify(M.faintPosts()) === JSON.stringify([120, 130, 140, 150]));
+  check('the record of the real earthquake: fourteen posts light, the four in the one-core shadow only quiver', (() => { const r = M.record(); return JSON.stringify(M.faintPosts()) === '[120,130,140,150]' && C.POSTS.every(p => r[p] === (p >= 120 && p <= 150 ? 'quiver' : 'lit')); })());
   const g = M.newGame();
   let fires = []; [45, 60, 30, 10, 34, 33.5, 33.7, 26].forEach(a => { fires.push(M.fire(g, a)); });
-  check('stage one: the eighth wave is the last; every wave has a one-line headline; no faint post is ever reached', fires[7].last === true && fires[7].left === 0 && fires.every(f => /You came up at/.test(f.words.head)) && M.faintPosts().every(p => g.reached[p] === undefined));
-  check('with one core no dive on the dial comes within the ear of any faint post', M.faintPosts().every(p => M.diveFor(p, two) === null));
+  check('stage one: the eighth go is the last; every go has a one-line headline; no ~ post is ever lit', fires[7].last === true && fires[7].left === 0 && fires.every(f => /You came up at/.test(f.words.head)) && M.faintPosts().every(p => g.reached[p] === undefined));
+  check('with one core no dive on the dial comes within the ear of any ~ post', M.faintPosts().every(p => M.diveFor(p, two) === null));
   check('a dive of 33.5° after 34° is called a jump (60° further round for half a degree), and 33.6° is on the dial', (() => { const h = M.newGame(); M.fire(h, 34); const r = M.fire(h, 33.5); const r2 = M.fire(h, 33.6); return /Something big happens between 33.5° and 34°/.test(r.words.compare) && r2.ray.i0 === 33.6; })());
   const r = M.reveal(g);
-  check('the first fan: 14 posts reached, the 4 faint ones not; the lines say one core cannot be the whole story', r.reach.length === 14 && r.shadow.length === 4 && /faint/.test(r.head) && /cannot be the whole story/.test(r.lines[2]));
-  check('the card names the quake of 16 June 1929, the three posts of Figure 3, and the idea: a core within the core', /16 June 1929/.test(M.CARD[0]) && /Irkutsk, Sverdlovsk and Baku/.test(M.CARD[0]) && /core within the core/i.test(M.CARD[1]));
+  check('one core, every direction at once: 14 posts light, the four ~ posts stay dead; "No match."', C.POSTS.every(p => r.state[p] === (p >= 120 && p <= 150 ? 'off' : 'lit')) && /No match/.test(r.head) && /does not do what the real Earth did/.test(r.lines[2]));
+  check('the card states the idea: a core within the core', /core within the core/i.test(M.CARD.join(' ')) && /Lehmann/.test(M.CARD[0]));
   const a = [25, 10, 14, 15].map(d => M.fire2(g, d));
-  check('stage two: 25° misses the inner core and comes up as with one core; the game says what reaches it', a[0].touched === false && /steeper than 16°/.test(a[0].words.what) && Math.abs(a[0].ray.fold - M.trace(25, two).fold) < 1e-9);
-  check('stage two: 10° goes through the inner core (160°, not the shadow); 14° lands inside the shadow between posts; 15° bounces onto the faint post at 120°', a[1].touched && !a[1].inBand && a[2].inBand && a[2].newFaint.length === 0 && /could not happen/.test(a[2].words.post) && a[3].ray.branch === 'reflect' && JSON.stringify(a[3].newFaint) === '[120]');
-  check('stage two ends after its four waves', a[2].last === false && a[3].last === true);
-  check('any dive from 12.5° to 15.9° lands inside the shadow: a window of more than three degrees', (() => { for (let d = 12.5; d <= 15.9; d += 0.1) { const f = M.trace(d, leh).fold; if (!(f > P.SHADOW[0] && f < P.SHADOW[1])) return false; } return true; })());
-  check('the slider’s half-degree steps hold a dive for each faint post (13, 14.5, 15, 15.5)', [[13, 150], [14.5, 140], [15, 120], [15.5, 130]].every(([d, post]) => Math.abs(M.trace(d, leh).fold - post) <= C.EAR_DEG));
+  check('stage two: 25° misses the inner core and comes up as with one core; the game says what reaches it', a[0].touched === false && a[0].quiver === null && /steeper than 16°/.test(a[0].words.what) && Math.abs(a[0].ray.fold - M.trace(25, two).fold) < 1e-9);
+  check('stage two: 10° goes through the inner core but comes up outside the shadow (160°), and that post lights', a[1].touched && !a[1].inBand && a[1].quiver === null && JSON.stringify(a[1].posts) === '[160]');
+  check('stage two, the liberty: any wave that comes up in the shadow makes the nearest ~ post quiver (14° → 144° → the post at 140°; 15° → 122° → 120°)', a[2].quiver === 140 && a[3].quiver === 120 && JSON.stringify(a[3].quivering) === '[120,140]' && /quivers/.test(a[2].words.head));
+  check('stage two ends after its four goes', a[2].last === false && a[3].last === true);
+  check('any dive from 12.5° to 15.9° comes up inside the shadow: a window of more than three degrees', (() => { for (let d = 12.5; d <= 15.9; d += 0.1) { const f = M.trace(d, leh).fold; if (!(f > P.SHADOW[0] && f < P.SHADOW[1])) return false; } return true; })());
   const r2 = M.reveal2(g);
-  check('the second fan: all 18 posts reached; only a few of the drawn waves land in the shadow (the faintness)', Object.keys(r2.heard).length === 18 && g.reveal2.inBand >= 5 && g.reveal2.inBand <= 9 && g.reveal2.total === 179 && /how few/.test(r2.lines[2]) && r2.options.length === 2, g.reveal2.inBand + ' of ' + g.reveal2.total);
-  const v = M.choose(g, 'two');
-  check('choosing a core within the core: "You found the inner core."; her caution; solidity credited to later work', v.fate === 'You found the inner core.' && /did not say she had proved it/.test(v.paper) && /never said/.test(v.means) && /1971/.test(v.means) && /1220 km/.test(v.means) && v.quote.split(' ').length < 15, v.fate);
+  check('a core within the core, every direction at once: 14 posts light and the four ~ posts quiver, exactly the record; "It matches."', JSON.stringify(r2.state) === JSON.stringify(M.record()) && /It matches/.test(r2.head) && g.reveal2.inBand >= 5 && g.reveal2.inBand <= 9, g.reveal2.inBand + ' of ' + g.reveal2.total + ' drawn waves land in the shadow');
+  const v = M.verdict(g);
+  check('verdict: "You found the inner core."; her caution; solidity credited to later work', v.fate === 'You found the inner core.' && /did not say she had proved it/.test(v.paper) && /never said/.test(v.means) && /1971/.test(v.means) && /1220 km/.test(v.means) && v.quote.split(' ').length < 15, v.fate);
   check('the verdict is short: no paragraph over 110 words', [v.did, v.paper, v.means].every(t => t.split(/\s+/).length <= 110), [v.did, v.paper, v.means].map(t => t.split(/\s+/).length).join(', '));
+  check('Read further names every liberty: one wave at a time, the faintness, the kinder quiver rule, the sketch Earth, the rival explanation, solidity', v.more.length === 6 && /every way at once/.test(v.more[0][1]) && /7 of the 179/.test(v.more[1][1]) && /12\.5° to 13\.6°/.test(v.more[2][1]) && /tenth of a degree/.test(v.more[2][1]) && /105° to 143°/.test(v.more[3][1]) && /crept round/.test(v.more[4][1]) && /1940/.test(v.more[5][1]), v.more.map(m => m[0]).join(' | '));
   const h = M.newGame(); for (let i = 0; i < 8; i++) M.fire(h, 40 + 3 * i); M.reveal(h); for (let i = 0; i < 4; i++) M.fire2(h, 20 + 5 * i); M.reveal2(h);
-  check('choosing one core: "The four faint posts disagree."', M.choose(h, 'one').fate === 'The four faint posts disagree.' && h.touches === 0);
+  check('a player who never dives steeply still reaches the verdict: "The inner core was there all along."', /full picture showed/.test(M.verdict(h).did) && M.verdict(h).fate === 'The inner core was there all along.' && h.touches === 0);
 }
 
 // 7. the play-it-in-numbers table (build.md §3): shadow posts lit by size and speed
