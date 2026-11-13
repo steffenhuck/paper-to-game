@@ -218,7 +218,7 @@ var MECH = (function () {
   var TOTAL1 = CONFIG.WAVES + CONFIG.LAST_TRIES;
   var DATA = {
     aim: 'First the facts: what listening posts recorded after real earthquakes.',
-    before: 'Three real earthquakes, one after another. Each sends waves through the Earth in every direction. The gold lines are the paths everyone agreed on in 1936. Watch them run, and watch what the listening posts round the right-hand edge do.',
+    before: 'You will see three real earthquakes, one at a time. Each sends waves through the Earth in every direction. The gold lines are the paths everyone agreed on in 1936. Watch them run, and watch what the listening posts round the right-hand edge do.',
     head: 'Every time: a strong shake, then a band that only quivers, then a strong shake again.',
     after: ['That band is marked now. Look at the gold lines: not one of them leads into it. And yet, after every big earthquake, the posts in it feel a faint quiver.', 'In 1936 nobody could say how any wave gets there at all. That is the puzzle.']
   };

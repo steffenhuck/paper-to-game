@@ -23,11 +23,18 @@ const path = require('path');
   if (await page.evaluate(() => !document.getElementById('panel1').classList.contains('hide'))) errors.push('no dial while the facts are shown');
   if (await band()) errors.push('the band should not be marked before the three earthquakes have been watched');
   if (await page.evaluate(() => document.querySelectorAll('#records .rrow').length) !== 3) errors.push('three rows should wait for the three earthquakes');
-  await page.waitForTimeout(6500); await shot('d-2-first-quake', false);
-  const heads = new Set(); const t0 = Date.now(); for (let k = 0; k < 140 && (await page.evaluate(() => window.__game().busy)); k++) { heads.add(await text('bigno')); await page.waitForTimeout(400); }
-  if ([...heads].filter(h => /Earthquake \d of 3/.test(h)).length !== 3) errors.push('three earthquakes should be shown, saw: ' + [...heads].join(' | '));
-  if (await page.evaluate(() => document.querySelectorAll('#records .rrow.on').length) !== 3 || await page.evaluate(() => document.querySelectorAll('#records i.quiver').length) !== 12 || await page.evaluate(() => document.querySelectorAll('#records i.lit').length) !== 42) errors.push('each of the three rows should keep 14 lit dots and 4 quivering ones');
-  log.push('stage 0 took about ' + Math.round((Date.now() - t0 + 6800) / 1000) + ' s');
+  for (let k = 1; k <= 3; k++) {
+    if (!new RegExp('show earthquake ' + k + ' of 3', 'i').test(await text('b-next'))) errors.push('the button should offer earthquake ' + k + ', reads ' + await text('b-next'));
+    if (await lit() !== (k === 1 ? 0 : 14)) errors.push('nothing should run before the button is pressed');
+    await page.click('#b-next'); await page.waitForTimeout(2600);
+    if (!new RegExp('earthquake ' + k + ' of 3', 'i').test(await text('aimline'))) errors.push('the top of the screen should read Earthquake ' + k + ' of 3, reads ' + await text('aimline'));
+    const top = await page.evaluate(() => document.getElementById('aimline').getBoundingClientRect().top); if (top > 60) errors.push('the earthquake number should stand at the top of the screen');
+    if (k === 1) await shot('d-2a-waves-running', false);
+    await idle(); await page.waitForTimeout(300);
+    if (k === 1) await shot('d-2b-after-first', false);
+    if (await page.evaluate(() => document.querySelectorAll('#records .rrow.on').length) !== k) errors.push('row ' + k + ' should be kept after earthquake ' + k);
+  }
+  if (await page.evaluate(() => document.querySelectorAll('#records i.quiver').length) !== 12 || await page.evaluate(() => document.querySelectorAll('#records i.lit').length) !== 42) errors.push('each of the three rows should keep 14 lit dots and 4 quivering ones');
   await idle(); await page.waitForTimeout(800); await shot('d-3-after', true); await shot('view-d-3-after', false);
   if (await lit() !== 14 || await quiv() !== 4 || !(await band())) errors.push('after the third earthquake 14 posts are lit, 4 quiver and the band is marked: ' + [await lit(), await quiv(), await band()]);
   log.push('FACTS [' + await text('head') + '] ' + await text('res'));
@@ -85,7 +92,8 @@ const path = require('path');
   await page.click('#b-again'); await page.waitForTimeout(300);
   if (await page.evaluate(() => window.__game().phase) !== 'data') errors.push('a retry should start with the facts again');
   if (await band()) errors.push('on a retry the band should be unmarked until the three earthquakes have been watched');
-  await page.waitForFunction(() => !window.__game().busy, null, { timeout: 60000 }); await page.click('#b-next'); await page.waitForTimeout(300);
+  for (let k = 0; k < 3; k++) { await page.click('#b-next'); await page.waitForTimeout(500); await page.waitForFunction(() => !window.__game().busy, null, { timeout: 60000 }); }
+  await page.click('#b-next'); await page.waitForTimeout(300);
   if (await page.evaluate(() => !document.getElementById('records').classList.contains('hide'))) errors.push('the three rows belong to stage 0 only');
   const ok = await page.evaluate(() => { const g = window.__game(); return g.phase === 'act1' && g.game.shots.length === 0 && document.getElementById('dive').value === '45' && document.querySelector('#plate svg circle[stroke-width="1"][stroke="#EEE3C8"]:not([fill="none"])').classList.contains('hide'); });
   if (!ok || await lit() !== 0) errors.push('retry did not restart cleanly');

@@ -19,3 +19,5 @@ Revision 8 (13 Nov, in chat): built to your outline. Stage 0 shows three real ea
 Revision 9 (13 Nov, in chat): stage 0 is slower and numbered, keeps one row of dots per earthquake, and shows the inner core fading in and out in place of the question mark; in play one post always answers (the nearest one lights, or in the band quivers). Look at `screenshot-d-2-first-quake.png` and `screenshot-view-d-3-after.png`. `node calibration.js` runs 54 checks.
 
 Revision 10 (13 Nov, in chat): in stage 0 the waves are now seen running through the Earth for each of the three earthquakes (only the paths both imagined Earths share; none leads into the band). Look at `screenshot-d-2a-waves-running.png` and `screenshot-d-2b-waves-arrived.png`. `node calibration.js` runs 55 checks.
+
+Revision 11 (13 Nov, in chat): in stage 0 the earthquake's number stands at the top of the screen and each earthquake waits for a press of the gold button.

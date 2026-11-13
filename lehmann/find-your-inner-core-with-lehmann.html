@@ -95,6 +95,7 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
 .rrow .rd i{display:block;width:10px;height:10px;border-radius:50%;box-sizing:border-box;border:1.2px solid var(--slate);transition:background .3s,border-color .3s}
 .rrow .rd i.lit{background:var(--gold);border-color:var(--gold)}
 .rrow .rd i.quiver{background:#6E5A2B;border-color:var(--gold)}
+.aimline.big{color:var(--gold);font-size:23px;line-height:1.1;font-variation-settings:"opsz" 60,"SOFT" 50}
 .bigno{font-weight:700;font-size:21px;line-height:1.15;text-align:center;color:var(--gold);margin:2px 0 0;min-height:26px;font-variation-settings:"opsz" 60,"SOFT" 50}
 .legend .l-on{background:var(--gold)} .legend .l-q{background:#9C7F3A;border:1.5px solid var(--gold)} .legend b{color:var(--gold);font-weight:400;font-size:14px;line-height:1}
 .quiver{animation:quiver .9s ease-in-out 3}
@@ -193,7 +194,7 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
   <p><b>Does the Earth have one core, or a core within the core?</b></p>
   <p>The picture is the Earth cut open. Ochre is the mantle, rock where a wave runs fast. Rust is the core, where a wave runs slower, so going in it bends toward the middle and coming out it bends back. A wave runs straight and bends only where the colour changes. The burst at the top is the earthquake. The dots round the right-hand edge are eighteen listening posts.</p>
   <ol>
-    <li><b>The facts.</b> Three real earthquakes. You see the waves run through the Earth along the paths everyone agreed on, and what the posts recorded each time, kept as three rows of dots. Most light up. One band only quivers. That band is then marked. There is nothing for you to do here but watch.</li>
+    <li><b>The facts.</b> Three real earthquakes, each shown when you press the button. You see the waves run through the Earth along the paths everyone agreed on, and what the posts recorded each time, kept as three rows of dots. Most light up. One band only quivers. That band is then marked. There is nothing for you to do here but watch.</li>
     <li><b>Imagine one core.</b> Now you are the earthquake, in an imagined Earth with one core. Aim by dragging on the picture or sliding the dial: 0° dives straight down through the middle, 90° runs along the ground. The − and + buttons move a tenth of a degree. Fire, and the post nearest to where you come up lights. Try to make the band quiver. Four goes, then one last try.</li>
     <li><b>Every direction at once.</b> The game then fires every direction you could have chosen. This is not a go of yours; just watch.</li>
     <li><b>Imagine a core within the core.</b> Three goes in an imagined Earth with a second, smaller core inside the core. Only a dive steeper than 16° gets that deep. Then every direction at once again, and the verdict.</li>
@@ -455,7 +456,7 @@ var MECH = (function () {
   var TOTAL1 = CONFIG.WAVES + CONFIG.LAST_TRIES;
   var DATA = {
     aim: 'First the facts: what listening posts recorded after real earthquakes.',
-    before: 'Three real earthquakes, one after another. Each sends waves through the Earth in every direction. The gold lines are the paths everyone agreed on in 1936. Watch them run, and watch what the listening posts round the right-hand edge do.',
+    before: 'You will see three real earthquakes, one at a time. Each sends waves through the Earth in every direction. The gold lines are the paths everyone agreed on in 1936. Watch them run, and watch what the listening posts round the right-hand edge do.',
     head: 'Every time: a strong shake, then a band that only quivers, then a strong shake again.',
     after: ['That band is marked now. Look at the gold lines: not one of them leads into it. And yet, after every big earthquake, the posts in it feel a faint quiver.', 'In 1936 nobody could say how any wave gets there at all. That is the puzzle.']
   };
@@ -759,7 +760,7 @@ if (typeof module !== 'undefined') module.exports = MECH;
   }
   // Stage 0: the facts. Three real earthquakes, slowly, one row of posts kept for each. Meanwhile the inside
   // of the Earth alternates between the two pictures the game will try: one core, a core within the core.
-  var wonder = null;
+  var wonder = null, dataNext = null;
   function stopWonder() { if (wonder) { wonder.cancel(); wonder = null; } }
   function newRun() {
     game = MECH.newGame(); phase = 'data'; busy = true;
@@ -772,36 +773,44 @@ if (typeof module !== 'undefined') module.exports = MECH;
     hide('panel1', true); hide('panel-reveal', true); hide('rule1', true); aiming(false); tally();
     var quakes = C.PAPER.QUAKES, rec = MECH.record(), rays = MECH.agreedRays(2);
     $('records').innerHTML = quakes.map(function (q, k) { return '<div class="rrow" id="rrow' + k + '"><span class="ry">' + q.date.slice(-4) + '</span><span class="rd">' + C.POSTS.map(function () { return '<i></i>'; }).join('') + '</span></div>'; }).join('');
-    hide('records', false); hide('bigno', false); $('bigno').textContent = ''; head(''); $('res').innerHTML = para('mu', MECH.DATA.before);
+    hide('records', false); hide('bigno', true); head('Three real earthquakes.'); $('res').innerHTML = para('mu', MECH.DATA.before); $('aimline').classList.remove('big');
     show('s-play');
     var mine = game;
     function alive() { return phase === 'data' && game === mine; }
     function wait(ms) { return new Promise(function (ok) { setTimeout(function () { if (alive()) ok(); }, ms); }); }
-    function one(k) {
+    // Each earthquake waits for the player's press; its number stands at the top of the screen.
+    function offer(k) {
       if (!alive()) return;
-      if (k >= quakes.length) {
-        $('bigno').textContent = ''; hide('bigno', true);
-        C.POSTS.forEach(function (P) { setPost(plate, P, rec[P]); });
-        showBand(plate, true); plate.shadow.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 900, fill: 'forwards' });
-        head(MECH.DATA.head, true); $('res').innerHTML = MECH.DATA.after.map(function (l, i) { return para(i === 1 ? 'lead' : '', l); }).join('');
-        hide('panel-reveal', false); busy = false; return;
-      }
-      C.POSTS.forEach(function (P) { setPost(plate, P, 'off'); });
-      $('bigno').textContent = 'Earthquake ' + (k + 1) + ' of ' + quakes.length; head(quakes[k].place + ', ' + quakes[k].date);
-      clearGroup(plate.fanL); clearGroup(plate.fanR);
-      wait(1500).then(function () { return quakeRun(plate, rays, rec, 3000); }).then(function () {
+      $('b-next').textContent = 'Show earthquake ' + (k + 1) + ' of ' + quakes.length;
+      dataNext = function () { run(k); }; hide('panel-reveal', false); busy = false;
+    }
+    function run(k) {
+      if (!alive()) return;
+      busy = true; hide('panel-reveal', true);
+      C.POSTS.forEach(function (P) { setPost(plate, P, 'off'); }); clearGroup(plate.fanL); clearGroup(plate.fanR);
+      $('aimline').textContent = 'Earthquake ' + (k + 1) + ' of ' + quakes.length; $('aimline').classList.add('big');
+      head(quakes[k].place + ', ' + quakes[k].date); $('res').innerHTML = '';
+      window.scrollTo(0, 0);
+      wait(900).then(function () { return quakeRun(plate, rays, rec, 3400); }).then(function () {
         if (!alive()) return;
         var row = $('rrow' + k); row.classList.add('on');
         [].forEach.call(row.querySelectorAll('i'), function (d, n) { setTimeout(function () { d.className = rec[C.POSTS[n]]; }, 35 * n); });
-        return wait(1700);
-      }).then(function () { one(k + 1); });
+        return wait(900);
+      }).then(function () {
+        if (!alive()) return;
+        if (k + 1 < quakes.length) { $('res').innerHTML = para('mu', 'Most posts lit up. Four only quivered. Its row is kept above.'); offer(k + 1); return; }
+        showBand(plate, true); plate.shadow.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 900, fill: 'forwards' });
+        $('aimline').textContent = 'Three earthquakes, the same thing three times.';
+        head(MECH.DATA.head, true); $('res').innerHTML = MECH.DATA.after.map(function (l, i) { return para(i === 1 ? 'lead' : '', l); }).join('');
+        $('b-next').textContent = 'Next'; dataNext = null; hide('panel-reveal', false); busy = false;
+      });
     }
-    wait(1800).then(function () { one(0); });
+    offer(0);
   }
   // Stage one: imagine one core.
   function stage1() {
     phase = 'act1'; busy = false; game.act = 1;
-    stopWonder(); resetPlate(); plate.veil.classList.add('hide'); showBand(plate, true); hide('records', true); hide('bigno', true); plate.fanR.setAttribute('opacity', '.55'); plate.fanL.setAttribute('opacity', '.42');
+    stopWonder(); resetPlate(); plate.veil.classList.add('hide'); showBand(plate, true); hide('records', true); hide('bigno', true); $('aimline').classList.remove('big'); plate.fanR.setAttribute('opacity', '.55'); plate.fanL.setAttribute('opacity', '.42');
     $('aimline').textContent = MECH.AIM1; plate.cap.textContent = CAP1; $('rule1').innerHTML = RULE1;
     hide('panel1', false); hide('panel-reveal', true); hide('rule1', false);
     $('res').innerHTML = para('mu', MECH.INTRO1); head('Imagine the Earth has one core.');
@@ -859,7 +868,7 @@ if (typeof module !== 'undefined') module.exports = MECH;
   }
   function next() {
     if (busy) return;
-    if (phase === 'data') stage1();
+    if (phase === 'data') { if (dataNext) { var f = dataNext; dataNext = null; f(); } else stage1(); }
     else if (phase === 'reveal') { $('twist-card').innerHTML = MECH.CARD.map(function (l, i) { return para(i === 1 ? 'lead' : '', l); }).join(''); openOv('twist'); }
     else if (phase === 'reveal2') end();
   }
