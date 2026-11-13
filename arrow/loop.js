@@ -20,7 +20,7 @@ Object.keys(strategies).forEach((name, si) => {
   let bk = M.emptyBook(), t = 0, nb;
   while ((nb = M.nextBallots(bk, t, 0))) {
     const L = M.legalLists(bk, nb.anna, nb.beat), w = strategies[name](L, nb, bk), nr = M.newRulings(bk, nb.anna, nb.beat, w);
-    if (si === 3 || si === 0) out.push(`  Sunday ${t + 1}: Anna ${show(nb.anna)} | Beat ${show(nb.beat)} | lists on offer ${L.length}: ${L.map(showList).join('  /  ')}`);
+    if (si === 3 || si === 0) out.push(`  What-if ${t + 1}: Anna ${show(nb.anna)} | Beat ${show(nb.beat)} | lists on offer ${L.length}: ${L.map(showList).join('  /  ')}`);
     if (si === 3 || si === 0) out.push(`     posts ${showList(w)}; new rulings: ${nr.map(r => `${S[r.annaFor]} v ${S[r.beatFor]} -> ${r.value === 'A' ? "Anna's way" : r.value === 'B' ? "Beat's way" : 'level'}`).join('; ')}` + (M.sameList(w, nb.anna) ? '  [the list is Anna\'s ballot]' : '') + (M.sameList(w, nb.beat) ? '  [the list is Beat\'s ballot]' : ''));
     bk = M.post(bk, nb.anna, nb.beat, w); t++;
   }

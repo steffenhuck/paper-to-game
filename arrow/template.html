@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Voting with Arrow</title>
 <script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<meta name="description" content="Voting is the easy part. Counting is where it gets hard. Two voters, three plans, and you break the ties. Kenneth Arrow proved in 1950 where that ends: a Sunday with no ranking, or a boss.">
+<meta name="description" content="Voting is easy. Counting is the hard part. Two voters, three plans, and you break the ties. Kenneth Arrow proved in 1950 where that ends: a vote with no answer, or a boss.">
 <style>
 @font-face{font-family:'Inter Display';font-weight:900;font-style:normal;src:url(data:font/woff2;base64,/*__F_BLACK__*/) format('woff2')}
 @font-face{font-family:'Inter Display';font-weight:700;font-style:normal;src:url(data:font/woff2;base64,/*__F_BOLD__*/) format('woff2')}
@@ -128,19 +128,9 @@ svg.sh{display:block;flex:none}
 .rout{border-top:2px solid var(--ink);margin-top:2px;padding-top:8px;font-size:14px;display:flex;gap:10px;align-items:flex-start;opacity:0;transition:opacity .3s}
 .rout.in{opacity:1}
 .rout .h{font-family:'Inter Display';font-weight:700;font-size:17px;display:block}
-/* hire */
-.hire{display:block;width:100%;border:2px solid var(--ink);padding:9px 10px;margin-bottom:6px;font-size:13.5px;line-height:1.3;position:relative}
-.hire .nm{font-family:'Inter Display';font-weight:700;font-size:17px;display:block;margin-bottom:1px}
-.hire.sel{box-shadow:inset 0 0 0 2px var(--ink);background:var(--soft)}
-.hire.sel::after{content:'\2715';position:absolute;right:0;top:0;width:26px;height:26px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px}
-.chips{display:flex;gap:6px;margin:2px 0 8px;align-items:center}
-.chip{border:1.5px solid var(--grey);padding:5px 7px}
-.chip.sel{border:2.5px solid var(--ink);padding:4px 6px;background:var(--soft)}
-/* end */
 .v1{font-family:'Inter Display';font-weight:900;font-size:33px;line-height:1.02;letter-spacing:-.03em;margin:18px 0 12px}
 .v2{font-family:'Inter Display';font-weight:700;font-size:19px;line-height:1.2;margin-bottom:12px}
 .v3{font-size:16px;border-left:7px solid var(--red);padding-left:11px;margin-bottom:6px}
-.poster{display:block;margin:8px 0 6px;width:348px;height:372px}
 .cap{font-size:14px;color:#222;margin-bottom:8px}
 .qa{border-top:1px solid var(--ink);padding:9px 0}
 .qa h3{font-family:'Inter Display';font-weight:700;font-size:16px;margin-bottom:3px}
@@ -157,6 +147,30 @@ svg.sh{display:block;flex:none}
 .over .close button{font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;border:2px solid var(--ink);padding:7px 12px}
 .over a{color:inherit}
 .hide{display:none!important}
+/* real Sunday */
+.real{border:2px solid var(--ink);padding:12px;margin-top:12px}
+.real .h{font-family:'Inter Display';font-weight:900;font-size:26px;line-height:1.05;letter-spacing:-.02em;margin-bottom:8px}
+/* debrief strip */
+.strip{display:flex;flex-direction:column;gap:14px;margin-top:8px}
+.pic{border:2px solid var(--ink);padding:10px}
+.pic .n{font-family:'Inter Display';font-weight:900;font-size:13px;letter-spacing:.06em;color:var(--red);margin-bottom:4px}
+.pic .t{font-size:14.5px;line-height:1.35;margin-bottom:8px}
+.pic .t b{font-weight:600}
+.pic .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pic .lbl{font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--grey);display:block;margin-bottom:3px}
+.pic .arr{font-family:'Inter Display';font-weight:900;font-size:26px}
+.mbook{display:flex;flex-direction:column;gap:2px}
+.mbook span{display:flex;align-items:center;gap:4px;font-size:10px;height:14px}
+.mbook i{display:block;width:16px;height:12px;background:var(--strike)}
+.mbook i.A{background:var(--red)}.mbook i.B{background:var(--ink)}.mbook i.E{background:var(--grey)}
+.mbook i.new{outline:2px solid var(--ink);outline-offset:1px}
+.minis{display:flex;gap:8px;flex-wrap:wrap}
+.mini{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;text-align:center;flex:1 1 0;min-width:100px}
+.mini svg{display:block}
+.tries{font-family:'Inter Display';font-weight:900;font-size:24px;line-height:1.05;letter-spacing:-.02em;margin:16px 0 6px}
+canvas.all{display:block;width:348px;margin:6px 0}
+.ring{font-size:13px;color:#333;margin-bottom:6px}
+.lastline{font-family:'Inter Display';font-weight:700;font-size:18px;line-height:1.2;margin:10px 0 6px}
 </style>
 </head>
 <body>
@@ -167,15 +181,15 @@ svg.sh{display:block;flex:none}
   <div class="band"></div>
   <h1 class="title"><span>Voting</span><span>with</span><span>Arrow</span></h1>
   <p class="after">After Kenneth J. Arrow, <i>A Difficulty in the Concept of Social Welfare</i>, 1950</p>
-  <p class="hook">Voting is the easy part. Counting is where it gets hard.</p>
+  <p class="hook">Voting is easy. Counting is the hard part.</p>
   <div class="hero" id="hero"></div>
   <div class="lead">
-    <p>A small Swiss village has two voters, <b style="color:var(--red)">Anna</b> and <b>Beat</b>, and three plans for the village square: a fountain, a tower or a tree. Every voting Sunday each of them hands in a ballot, favourite on top.</p>
-    <p><b>You count.</b> Out of the two ballots you make one ranking for the village. Where the two agree, that is easy. Where they disagree it is one vote each, a tie, and <b>you break it</b>.</p>
-    <p>One rule keeps you fair: the same tie gets the same answer, every Sunday.</p>
+    <p>A small Swiss village. Two voters, <b style="color:var(--red)">Anna</b> and <b>Beat</b>. Three plans for the empty square: a fountain, a tower, a tree. Next Sunday they vote. Each writes the three plans on a ballot, favourite on top.</p>
+    <p><b>You count.</b> Where both prefer the same plan, that is settled. Where they disagree it is one vote each, a tie, and you break it.</p>
+    <p>But the rule must be written down <b>before</b> the vote, so nobody can say the count was fixed afterwards. So Arrow brings you “what ifs”: <i>what if Anna writes this and Beat writes that?</i> You answer, and your answers go into a book. Three what-ifs fill it.</p>
   </div>
-  <div class="aimbox"><span class="k">Aim</span><span class="v">Give the village a ranking on every Sunday that could ever come, without making one voter the boss.</span></div>
-  <p class="note">A boss is a voter who wins every tie. In 1950 Kenneth Arrow proved that this aim cannot be reached, by anyone, ever. Five Sundays, then he checks your work. See how close you get.</p>
+  <div class="aimbox"><span class="k">Aim</span><span class="v">Write a book that gives an answer whatever they vote, without making one voter the boss.</span></div>
+  <p class="note">A boss is a voter who wins every tie. Arrow proved in 1950 that this aim cannot be reached. Try anyway, and see what gets in the way.</p>
   <button class="go" id="b-begin">Begin</button>
   <div class="links"><button id="b-help0">How to play</button><button id="b-about0">About</button></div>
   <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
@@ -183,81 +197,88 @@ svg.sh{display:block;flex:none}
 
 <!-- ======================= PLAY ======================= -->
 <section class="screen" id="s-play">
-  <div class="top"><div class="aim"><b>Aim</b><br>A ranking on every Sunday that could ever come, and no voter the boss.</div><button class="q" id="q-play" aria-label="How to play">?</button></div>
-  <div class="sun"><span class="num" id="sun-n">1</span><span class="of">Sunday<br><span id="sun-of">1 of 5</span><small id="sun-sub"></small></span></div>
+  <div class="top"><div class="aim"><b>Aim</b><br>An answer whatever they vote, and no voter the boss.</div><button class="q" id="q-play" aria-label="How to play">?</button></div>
+  <div class="sun"><span class="num" id="sun-n">1</span><span class="of">What if<br><span id="sun-of">1 of 3</span><small id="sun-sub"></small></span></div>
 
-  <div class="lab"><i>1</i>The two ballots, favourite on top</div>
+  <div class="lab"><i>1</i>What if they write this?</div>
   <div class="ballots">
     <div class="ballot a"><div class="who">Anna</div><ol id="bal-a"></ol></div>
     <div class="ballot b"><div class="who">Beat</div><ol id="bal-b"></ol></div>
   </div>
 
-  <div class="lab"><i>2</i><span id="lists-lab">Choose what goes on the square</span></div>
+  <div class="lab"><i>2</i>Then what goes on the square?</div>
   <p class="note" id="lists-note"></p>
   <div class="steps2" id="cards"></div>
   <p class="say" id="say"></p>
-  <button class="go" id="b-post" disabled>Post the ranking</button>
+  <button class="go" id="b-post" disabled>Write it in the book</button>
 
   <div class="res hide" id="res"></div>
-  <button class="go hide" id="b-next">Next Sunday</button>
+  <button class="go hide" id="b-next">Next what-if</button>
 
-  <div class="lab"><i>3</i>Your tie-break book</div>
+  <div class="lab"><i>3</i>Your book</div>
   <p class="note" id="book-note"></p>
   <div class="book" id="book"></div>
 </section>
 
 <!-- ======================= CHECK ======================= -->
 <section class="screen" id="s-check">
-  <div class="top"><div class="aim"><b>Aim</b><br>A ranking on every Sunday that could ever come, and no voter the boss.</div><button class="q" id="q-check" aria-label="How to play">?</button></div>
-  <h2 class="big">Arrow’s check</h2>
-  <p class="note">Your book is full: all six ties are broken, so it can count any Sunday without you. Anna can hand in 6 different ballots and so can Beat. That makes 36 different Sundays that could come, one square each. Arrow tries them all.</p>
+  <div class="top"><div class="aim"><b>Aim</b><br>An answer whatever they vote, and no voter the boss.</div><button class="q" id="q-check" aria-label="How to play">?</button></div>
+  <h2 class="big">Arrow checks the rest</h2>
+  <p class="note">Your book is full: all six ties are broken, so it can count any vote without you. Anna can write her ballot 6 ways, and so can Beat: 36 ways the vote can go. One square each. Arrow tries them all.</p>
   <div class="sheet" id="sheet"></div>
-  <div class="tally hide" id="tally"><span><b id="t-yes">0</b> a ranking</span><span><b id="t-no">0</b> none</span></div>
+  <div class="tally hide" id="tally"><span><b id="t-yes">0</b> an answer</span><span><b id="t-no">0</b> no answer</span></div>
   <div class="legend hide" id="legend">
-    <span><i class="k no"></i>Struck through: no ranking can be made that Sunday.</span>
-    <span><i class="k ta"></i>Red corner: the ranking is exactly Anna’s ballot.</span>
-    <span><i class="k tb"></i>Black corner: the ranking is exactly Beat’s ballot.</span>
+    <span><i class="k no"></i>Struck through: the book has no answer for that vote.</span>
+    <span><i class="k ta"></i>Red corner: the answer is exactly Anna’s ballot.</span>
+    <span><i class="k tb"></i>Black corner: the answer is exactly Beat’s ballot.</span>
   </div>
   <div class="read hide" id="read"></div>
   <p class="say" id="check-say"></p>
-  <button class="go" id="b-check">Read the first Sunday</button>
-  <button class="go hide" id="b-tohire">Next: hire a tie-breaker</button>
+  <button class="go" id="b-check">Read the first one</button>
+  <button class="go hide" id="b-toreal">Sunday. The real vote</button>
 </section>
 
-<!-- ======================= HIRE ======================= -->
-<section class="screen" id="s-hire">
-  <div class="top"><div class="aim"><b>Aim</b><br>A ranking on every Sunday that could ever come, and no voter the boss.</div><button class="q" id="q-hire" aria-label="How to play">?</button></div>
-  <h2 class="big">Hire a tie-breaker</h2>
-  <p class="note">Maybe the trouble was you. So let somebody else break every tie, always the same way. Pick one, and Arrow checks all 36 Sundays again. Try as many as you like.</p>
-  <button class="hire" id="h-C"><span class="nm">Clara, a third voter</span>She moves to the village and always hands in the same ballot. Now every plan-against-plan vote is 3–0 or 2–1, and the majority wins. No more ties.</button>
-  <div id="clara-pick" class="hide"><p class="note" style="margin:6px 0 4px">Clara’s ballot, favourite on top. Touch another to change it.</p><div class="chips" id="chips"></div></div>
-  <button class="hire" id="h-A"><span class="nm">Anna breaks every tie</span>Whenever the two disagree, Anna’s choice counts.</button>
-  <button class="hire" id="h-B"><span class="nm">Beat breaks every tie</span>Whenever the two disagree, Beat’s choice counts.</button>
-  <button class="go" id="b-hire" disabled>Check all 36 Sundays</button>
-  <div id="hire-out" class="hide">
-    <div class="sheet" id="hsheet" style="margin-top:16px"></div>
-    <div class="tally"><span><b id="ht-yes">0</b> a ranking</span><span><b id="ht-no">0</b> none</span></div>
-    <p class="say" id="hire-say" style="margin-top:4px"></p>
-    <div class="read" id="hread"></div>
+<!-- ======================= REAL SUNDAY ======================= -->
+<section class="screen" id="s-real">
+  <div class="top"><div class="aim"><b>Aim</b><br>An answer whatever they vote, and no voter the boss.</div><button class="q" id="q-real" aria-label="How to play">?</button></div>
+  <h2 class="big">Sunday</h2>
+  <p class="note">The real vote. Anna and Beat write their ballots, and your book counts them.</p>
+  <div class="ballots">
+    <div class="ballot a"><div class="who">Anna</div><ol id="real-a"></ol></div>
+    <div class="ballot b"><div class="who">Beat</div><ol id="real-b"></ol></div>
   </div>
-  <button class="go hide" id="b-verdict">The verdict</button>
+  <div class="real hide" id="real-out"></div>
+  <button class="go" id="b-count">Count</button>
+  <button class="go hide" id="b-debrief">What just happened</button>
 </section>
 
-<!-- ======================= END ======================= -->
+<!-- ======================= DEBRIEF ======================= -->
 <section class="screen" id="s-end">
   <div class="band"></div>
   <p class="v1" id="v1"></p>
   <p class="v2" id="v2"></p>
   <p class="v3" id="v3"></p>
-  <div class="lab"><i>&times;</i>Every tie-break book there is: 729</div>
-  <svg class="poster" id="poster" viewBox="0 0 348 372" role="img" aria-label="All 729 tie-break books as small squares"></svg>
-  <p class="cap" id="cap1"></p>
-  <p class="cap" id="cap2"></p>
-  <div class="qa"><h3>Is a boss just bad luck?</h3><p>No. The ranking may be exactly Anna’s ballot on one Sunday, and it has to be when the two agree on everything. A boss is the voter whose ballot it is on <b>every</b> one of the 36 Sundays, whatever the other one writes. Arrow’s word is dictator.</p></div>
-  <div class="qa"><h3>Why not toss a coin for each tie?</h3><p>Then the same two ballots could give one ranking this Sunday and another the next. And a coin can land in a circle too. On Sunday 1 both put the Fountain above the Tower; let the coin put the Tower above the Tree and the Tree above the Fountain, and there is no ranking.</p></div>
+
+  <div class="lab"><i>1</i>Who should break the ties, then?</div>
+  <p class="note">Maybe the trouble was you. Here are three other ways to break every tie, each tried on all 36 ways the vote can go.</p>
+  <div class="minis" id="minis"></div>
+  <p class="note" id="minis-say" style="margin-top:8px"></p>
+
+  <div class="lab"><i>2</i>Arrow’s proof, in pictures</div>
+  <p class="note">Why no book can do it. Read it like a comic strip.</p>
+  <div class="strip" id="strip"></div>
+
+  <div class="lab"><i>3</i>The brute-force check</div>
+  <p class="tries" id="tries"></p>
+  <p class="ring" id="ring"></p>
+  <canvas class="all" id="all" width="696" height="100"></canvas>
+  <p class="lastline" id="lastline"></p>
+
+  <div class="qa"><h3>Is a boss just bad luck?</h3><p>No. The answer may be exactly Anna’s ballot on one vote, and it has to be when the two agree on everything. A boss is the voter whose ballot is the answer on <b>every</b> one of the 36 votes, whatever the other one writes. Arrow’s word is dictator.</p></div>
+  <div class="qa"><h3>Why not toss a coin for each tie?</h3><p>Then the same two ballots could get one answer today and another tomorrow. And a coin can land in a circle too: Fountain above Tower, Tower above Tree, Tree above Fountain, and nobody is first.</p></div>
   <div class="qa"><h3>Would more voters fix it?</h3><p id="qa-more"></p></div>
-  <div class="qa"><h3>Why must the same tie get the same answer?</h3><p>So that the choice between fountain and tower depends on what people think of fountain and tower, and not of the tree. Arrow’s example is an election counted in points. One plan wins. Then a losing plan drops out, nobody changes their mind, and suddenly the count is a tie.</p></div>
-  <div class="qa"><h3>So is voting broken?</h3><p>No. Most Sundays, most ways of counting work fine: look how many squares had a ranking. What Arrow showed is that no way of counting is safe on <i>every</i> possible set of ballots. Each one gives something up. Which one a country uses is a choice, and now that you have the vote it is partly yours.</p></div>
+  <div class="qa"><h3>Why must the same tie get the same answer?</h3><p>So that fountain against tower is decided by what people think of the fountain and the tower, and not of the tree. Arrow’s example: an election counted in points. One plan wins. Then a losing plan drops out, nobody changes their mind, and the count is suddenly a tie.</p></div>
+  <div class="qa"><h3>So is voting broken?</h3><p>No. Look how many squares had an answer. Arrow showed that no way of counting is safe on <i>every</i> possible vote: each one gives something up. Which one a country uses is a choice, and now that you can vote, it is partly yours.</p></div>
   <button class="go" id="b-again">Play again</button>
   <div class="links"><button id="b-help1">How to play</button><button id="b-about1">About</button></div>
   <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
@@ -268,20 +289,21 @@ svg.sh{display:block;flex:none}
 <div class="over" id="help"><div class="in">
   <div class="close"><button id="b-help-close">Back</button></div>
   <h2>How to play</h2>
-  <p><b>Aim:</b> give the village a ranking on every Sunday that could ever come, without making one voter the boss.</p>
-  <h3>The ballots</h3>
-  <p>Anna’s ballot is red, Beat’s is black. Each ranks the three plans: a fountain (circle), a tower (square), a tree (triangle). Favourite on top.</p>
-  <h3>Choose what goes on the square</h3>
-  <p>Take the plans two at a time. If both voters put the same one higher, that is settled, 2–0. If each puts a different one higher, it is 1–1: a tie, and your answer breaks it, for Anna, for Beat, or as a draw (the village likes both the same and will toss a coin).</p>
-  <p>You answer by saying what goes on the square. Then, where more than one answer is still possible, what comes next if that falls through; plans do fall through, and the village should not have to vote again. A question with only one possible answer is not asked. Your answers make the village’s ranking; the line under them says which ties it breaks. Then press <b>Post the ranking</b>.</p>
-  <h3>Your tie-break book</h3>
-  <p>Six different ties can happen. Once you break one, your book keeps the answer, and that tie gets the same answer on every later Sunday. So your choices shrink. When only one answer is left, there is nothing to touch: you post it, and it breaks a tie in a way you did not choose.</p>
-  <h3>Arrow’s check</h3>
-  <p>After five Sundays the book is full. Arrow tries all 36 pairs of ballots the two could ever hand in. A square with a ranking is fine. A square struck through has none: the three results contradict each other, and the box under the sheet says how. A red or black corner means the ranking is exactly that voter’s ballot. Touch any square to read it.</p>
-  <h3>Hire a tie-breaker</h3>
-  <p>Then somebody else breaks the ties: Clara, a third voter who always votes the same way, or Anna, or Beat. Pick one and the 36 Sundays are checked again.</p>
-  <h3>The verdict</h3>
-  <p>Your score is how many of the 36 Sundays got a ranking from your own book. A boss is a voter whose ballot is the ranking on all 36.</p>
+  <p><b>Aim:</b> write a book that gives an answer whatever they vote, without making one voter the boss.</p>
+  <h3>The what-ifs</h3>
+  <p>The vote is next Sunday. Before it, the counting rule has to be written down. Arrow shows you a pair of ballots, Anna’s in red and Beat’s in black, favourite on top, and asks: if they write this, what goes on the square?</p>
+  <h3>Settled and tied</h3>
+  <p>Take the plans two at a time. If both put the same one higher, that is settled, 2–0. If each puts a different one higher, it is 1–1: a tie, and your answer breaks it, for Anna, for Beat, or as a draw (the village likes both the same and will toss a coin).</p>
+  <h3>Answering</h3>
+  <p>Say what goes on the square. Then, if more than one answer is still possible, what comes next if that falls through; plans do fall through, and the village should not have to vote again. A question with only one possible answer is not asked. Then press <b>Write it in the book</b>.</p>
+  <h3>Your book</h3>
+  <p>Six different ties can happen. Once you break one, the book keeps your answer, and that tie gets the same answer whenever it comes up again. Three what-ifs fill the book.</p>
+  <h3>Arrow checks the rest</h3>
+  <p>Arrow tries all 36 ways the vote can go. A square with a ranking means the book has an answer. A square struck through means it has none: the book’s own answers contradict each other, and the box under the sheet says how. A red or black corner means the answer is exactly that voter’s ballot. Touch any square to read it.</p>
+  <h3>Sunday</h3>
+  <p>The real vote, drawn by chance from the 36. Your book counts it.</p>
+  <h3>The debrief</h3>
+  <p>Three lines on what happened, three other tie-breakers tried, Arrow’s proof as a strip of pictures, and every possible book checked.</p>
 </div></div>
 
 <!-- ======================= ABOUT ======================= -->
@@ -299,7 +321,7 @@ svg.sh{display:block;flex:none}
   var M = window.MECH, C = M.CONFIG, P = C.plans;
   var RED = '#DA291C', INK = '#111111', GREY = '#8D8D8A';
   var $ = function (id) { return document.getElementById(id); };
-  var G = { phase: 'start', game: 0, sunday: 0, book: M.emptyBook(), ruledOn: [], nb: null, lists: [], sel: -1, busy: false, audit: null, posted: [], chk: null, hire: null, hireKind: null, clara: C.clara.slice(), hired: [] };
+  var G = { phase: 'start', game: 0, sunday: 0, book: M.emptyBook(), ruledOn: [], nb: null, lists: [], sel: -1, busy: false, audit: null, posted: [], chk: null, real: null };
   window.__game = function () { return G; };
 
   // ---------- drawing ----------
@@ -329,14 +351,14 @@ svg.sh{display:block;flex:none}
   }
 
   // ---------- screens ----------
-  function show(id) { ['s-start', 's-play', 's-check', 's-hire', 's-end'].forEach(function (s) { $(s).classList.toggle('on', s === id); }); window.scrollTo(0, 0); }
+  function show(id) { ['s-start', 's-play', 's-check', 's-real', 's-end'].forEach(function (s) { $(s).classList.toggle('on', s === id); }); window.scrollTo(0, 0); }
   var wait = function (ms) { return new Promise(function (r) { setTimeout(r, window.__fast ? 0 : ms); }); };
 
   $('hero').innerHTML = '<span class="stack">' + [0, 1, 2].map(function (x) { return sh(x, 'a', 26); }).join('') + '</span><span style="font-weight:600;font-size:22px">+</span><span class="stack">' + [2, 0, 1].map(function (x) { return sh(x, 'b', 26); }).join('') + '</span><span class="arrow">&rarr;</span><span class="stack">' + [0, 1, 2].map(function () { return '<span style="width:26px;height:26px;border:2px dashed #8D8D8A;display:block"></span>'; }).join('') + '</span><span class="qm">?</span><span style="font-size:13px;line-height:1.3;margin-left:4px">Two ballots in.<br>One ranking out.<br>Every Sunday.</span>';
 
   // ---------- a Sunday ----------
   function startGame() {
-    G.sunday = 0; G.book = M.emptyBook(); G.ruledOn = [null, null, null, null, null, null]; G.posted = []; G.audit = null; G.hired = []; G.hireKind = null; G.clara = C.clara.slice();
+    G.sunday = 0; G.book = M.emptyBook(); G.ruledOn = [null, null, null, null, null, null]; G.posted = []; G.audit = null;
     G.phase = 'play'; show('s-play'); renderSunday();
   }
   function bookHtml(popCells) {
@@ -350,13 +372,13 @@ svg.sh{display:block;flex:none}
   }
   function renderSunday() {
     var t = G.sunday, nb = M.nextBallots(G.book, t, G.game); G.nb = nb; G.lists = M.legalLists(G.book, nb.anna, nb.beat); G.sel = -1;
-    $('sun-n').textContent = t + 1; $('sun-of').textContent = (t + 1) + ' of 5';
-    $('sun-sub').textContent = t === 0 ? 'Arrow picks which ballots come in.' : t < C.freeSundays ? 'Arrow picks the ballots. He still leaves you room.' : 'Arrow picks the ballots where your book leaves you the least room.';
+    $('sun-n').textContent = t + 1; $('sun-of').textContent = (t + 1) + ' of ' + C.whatIfs;
+    $('sun-sub').textContent = t === 0 ? 'Arrow picks the ballots to ask about.' : 'Arrow picks ballots your book has not settled yet.';
     var li = function (b, k) { return b.map(function (x, i) { return '<li><span class="n">' + (i + 1) + '.</span>' + sh(x, k, 26) + '<span>' + P[x] + '</span></li>'; }).join(''); };
     $('bal-a').innerHTML = li(nb.anna, 'a'); $('bal-b').innerHTML = li(nb.beat, 'b');
     $('cards').innerHTML = ''; G.top = null; G.second = null; $('say').textContent = ''; $('lists-note').textContent = '';
     $('res').classList.add('hide'); $('b-next').classList.add('hide'); $('b-post').classList.remove('hide'); $('b-post').disabled = true;
-    $('book-note').innerHTML = t === 0 ? 'Six different ties can happen. Each line is one of them: the plan Anna prefers in red, the plan Beat prefers in black. Once you break a tie, the line keeps your answer.' : 'The ties you have broken so far. Each answer is kept.';
+    $('book-note').innerHTML = t === 0 ? 'Six different ties can happen. One line each: the plan Anna prefers in red, the plan Beat prefers in black. Once you break a tie, the line keeps your answer, and the same tie gets the same answer whenever it comes up.' : 'The ties you have broken so far. Each answer is kept.';
     bookHtml();
     renderCards();
   }
@@ -366,7 +388,7 @@ svg.sh{display:block;flex:none}
     for (var p = 0; p < 3; p++) {
       var info = M.pairInfo(nb.anna, nb.beat, p), top = M.pairOutcome(G.book, info);
       if (info.agree) out.push('both put the ' + P[info.winner] + ' above the ' + P[info.loser] + ' (2–0)');
-      else if (top !== null) out.push(top === -1 ? 'the ' + P[info.annaFor] + ' and the ' + P[info.beatFor] + ' are a draw (your book, Sunday ' + G.ruledOn[info.cell] + ')' : 'the ' + P[top] + ' is above the ' + P[top === info.annaFor ? info.beatFor : info.annaFor] + ' (your book, Sunday ' + G.ruledOn[info.cell] + ')');
+      else if (top !== null) out.push(top === -1 ? 'the ' + P[info.annaFor] + ' and the ' + P[info.beatFor] + ' are a draw (your book, what-if ' + G.ruledOn[info.cell] + ')' : 'the ' + P[top] + ' is above the ' + P[top === info.annaFor ? info.beatFor : info.annaFor] + ' (your book, what-if ' + G.ruledOn[info.cell] + ')');
     }
     return out;
   }
@@ -378,7 +400,6 @@ svg.sh{display:block;flex:none}
   }
   function renderCards() {
     var L = G.lists, one = L.length === 1, first = G.sunday === 0, settled = settledWords();
-    $('lists-lab').textContent = one ? 'What goes on the square' : 'Choose what goes on the square';
     var tops = []; L.forEach(function (r) { var k = tiersOf(r)[0]; if (tops.indexOf(k) < 0) tops.push(k); });
     var note = '';
     if (first) note += settled.join('; ').replace(/ \(2–0\)/g, '').replace(/^b/, 'B') + ': that is settled, 2–0. Where they disagree it is 1–1, a tie, and your answer breaks it. ';
@@ -428,7 +449,7 @@ svg.sh{display:block;flex:none}
   function select(i) {
     G.sel = i; var rank = G.lists[i], nb = G.nb;
     var nr = M.newRulings(G.book, nb.anna, nb.beat, rank), tie = function (r) { return 'Anna wanted the ' + P[r.annaFor] + ', Beat the ' + P[r.beatFor] + ': <b>' + winWord(r.value) + '</b>'; };
-    $('say').innerHTML = 'So the village’s ranking is <b>' + listWords(rank) + '</b>. ' + (nr.length === 1 ? 'That breaks one tie. ' : 'That breaks ' + nr.length + ' ties. ') + nr.map(tie).join('. ') + '. Post it and your book keeps ' + (nr.length === 1 ? 'that' : 'those') + '.';
+    $('say').innerHTML = 'So the village’s ranking is <b>' + listWords(rank) + '</b>. ' + (nr.length === 1 ? 'That breaks one tie. ' : 'That breaks ' + nr.length + ' ties. ') + nr.map(tie).join('. ') + '. Write it in, and the book keeps ' + (nr.length === 1 ? 'that' : 'those') + '.';
     $('b-post').disabled = false;
   }
   function postList() {
@@ -439,21 +460,21 @@ svg.sh{display:block;flex:none}
     G.posted.push({ sunday: G.sunday + 1, anna: nb.anna, beat: nb.beat, list: rank, forced: forced });
     bookHtml(nr.map(function (r) { return r.cell; }));
     var c = M.counts(G.book), made = c.A + c.B + c.E, isA = M.sameList(rank, nb.anna), isB = M.sameList(rank, nb.beat);
-    var h = '<p class="h">Posted: ' + listWords(rank) + '.</p>';
-    h += '<p>Into your book: ' + nr.map(function (r) { return 'when Anna prefers the ' + P[r.annaFor] + ' and Beat the ' + P[r.beatFor] + ', <b>' + (r.value === 'E' ? 'it is a draw' : winWord(r.value)) + '</b>.'; }).join(' And ') + ' From now on, every time.</p>';
+    var h = '<p class="h">Written down: ' + listWords(rank) + '.</p>';
+    h += '<p>Into your book: ' + nr.map(function (r) { return 'when Anna prefers the ' + P[r.annaFor] + ' and Beat the ' + P[r.beatFor] + ', <b>' + (r.value === 'E' ? 'it is a draw' : winWord(r.value)) + '</b>.'; }).join(' And ') + '</p>';
     if (forced) h += '<p><b>You did not choose this tie-break.</b> What was settled already chose it for you.</p>';
     var nA = G.posted.filter(function (x) { return M.sameList(x.list, x.anna); }).length, nB = G.posted.filter(function (x) { return M.sameList(x.list, x.beat); }).length, t = G.posted.length;
-    var same = function (name, k) { return '<p>This Sunday the village’s ranking is exactly ' + name + '’s ballot. ' + (k === 1 ? 'Once proves nothing.' : k === t ? 'That makes ' + k + ' Sundays out of ' + t + '.' : 'That makes ' + k + ' of the ' + t + ' Sundays so far.') + '</p>'; };
+    var same = function (name, k) { return '<p>Here the answer is exactly ' + name + '’s ballot. ' + (k === 1 ? 'Once proves nothing.' : k === t ? 'That is ' + k + ' times out of ' + t + '.' : 'That is ' + k + ' of ' + t + ' so far.') + '</p>'; };
     if (isA && !isB) h += same('Anna', nA);
     if (isB && !isA) h += same('Beat', nB);
     h += '<p>Your book: ' + made + ' of 6 ties broken. Anna has won ' + c.A + ', Beat ' + c.B + ', draws ' + c.E + '.</p>';
     $('res').innerHTML = h; $('res').classList.remove('hide'); $('b-post').classList.add('hide'); $('say').textContent = '';
-    $('b-next').textContent = M.isComplete(G.book) ? 'Let Arrow check every Sunday' : 'Next Sunday'; $('b-next').classList.remove('hide');
+    $('b-next').textContent = M.isComplete(G.book) ? 'The book is full. Arrow checks the rest' : 'Next what-if'; $('b-next').classList.remove('hide');
     $('res').scrollIntoView({ behavior: window.__fast ? 'auto' : 'smooth', block: 'center' });
   }
   function next() { if (M.isComplete(G.book)) return startCheck(); G.sunday++; window.scrollTo(0, 0); renderSunday(); }
 
-  // ---------- a sheet of 36 Sundays (used by Arrow's check and by the hired tie-breaker) ----------
+  // ---------- a sheet of 36 votes ----------
   // ctx: { cells, sheet, read, pre, shown, cur, mode: 'book' | 'A' | 'B' | 'C', clara }
   function buildSheet(ctx) {
     var h = '<div class="ch corner"><span style="color:#111">Beat &rarr;</span><span style="color:#DA291C">Anna &darr;</span></div>', i, j;
@@ -486,19 +507,20 @@ svg.sh{display:block;flex:none}
       h += '<div class="rl ' + cls + '"><span class="bar"></span>' + outcomeHtml(a, b, info.top, 14) + '<span>' + relWords(a, b, info.top) + '</span><span class="why">' + why + '</span></div>';
     });
     var whose = ctx.mode === 'book' ? 'your book says' : ctx.mode === 'C' ? 'the majority says' : 'the tie-breaker says';
-    h += '<div class="rout">' + (c.list ? '<span class="stack" style="gap:2px">' + tiersHtml(c.list, 15) + '</span><span><span class="h">A ranking.</span>' + listWords(c.list).replace(/^./, function (m) { return m.toUpperCase(); }) + '.' + (c.isAnnas && c.isBeats ? ' The two agree on everything, so it is both their ballots.' : c.isAnnas ? ' Exactly Anna’s ballot.' : c.isBeats ? ' Exactly Beat’s ballot.' : ' Neither voter’s ballot.') + '</span>'
-      : '<span><span class="h">No ranking.</span>' + clashWords(c.clash, whose) + '</span>') + '</div>';
+    h += '<div class="rout">' + (c.list ? '<span class="stack" style="gap:2px">' + tiersHtml(c.list, 15) + '</span><span><span class="h">An answer.</span>' + listWords(c.list).replace(/^./, function (m) { return m.toUpperCase(); }) + '.' + (c.isAnnas && c.isBeats ? ' The two agree on everything, so it is both their ballots.' : c.isAnnas ? ' Exactly Anna’s ballot.' : c.isBeats ? ' Exactly Beat’s ballot.' : ' Neither voter’s ballot.') + '</span>'
+      : '<span><span class="h">No answer.</span>' + clashWords(c.clash, whose) + '</span>') + '</div>';
     $(ctx.read).innerHTML = h; $(ctx.read).classList.remove('hide');
     var els = $(ctx.read).querySelectorAll('.rl,.rout');
     for (var i = 0; i < els.length; i++) { if (slow) await wait(i === 0 ? 500 : 950); els[i].classList.add('in'); }
   }
 
   // ---------- Arrow's check of the player's own book ----------
+  // ---------- Arrow's check of the player's own book ----------
   function startCheck() {
     G.phase = 'check'; G.audit = M.audit(G.book);
     G.chk = { cells: G.audit.cells, sheet: 'sheet', read: 'read', pre: 'sq-', mode: 'book' }; buildSheet(G.chk);
-    ['tally', 'legend', 'read', 'b-tohire'].forEach(function (id) { $(id).classList.add('hide'); });
-    $('b-check').classList.remove('hide'); $('b-check').textContent = 'Read the first Sunday'; $('b-check').dataset.step = '0'; $('b-check').disabled = false; $('check-say').textContent = '';
+    ['tally', 'legend', 'read', 'b-toreal'].forEach(function (id) { $(id).classList.add('hide'); });
+    $('b-check').classList.remove('hide'); $('b-check').textContent = 'Read the first one'; $('b-check').dataset.step = '0'; $('b-check').disabled = false; $('check-say').textContent = '';
     show('s-check');
   }
   async function checkStep() {
@@ -507,17 +529,17 @@ svg.sh{display:block;flex:none}
       G.busy = true; $('b-check').disabled = true;
       // read slowly: the first Sunday without a ranking, or, where there is none, the one where the two want opposite things
       var k = -1; a.cells.forEach(function (c, i) { if (k < 0 && !c.list) k = i; }); if (k < 0) k = 5;
-      $('check-say').innerHTML = 'Arrow takes one pair of ballots and looks up each plan-against-plan result in your book…';
+      $('check-say').innerHTML = 'Arrow takes one way the vote can go and looks up each pair of plans in your book…';
       await readSquare(ctx, k, true); await wait(400); stamp(ctx, k);
-      $('check-say').innerHTML = a.cells[k].list ? 'That Sunday has a ranking. It goes in the square.' : '<b>That Sunday has no ranking.</b> Every line above is either a 2–0 or a tie-break from your own book. Together they contradict each other. The square is struck through.';
+      $('check-say').innerHTML = a.cells[k].list ? 'The book has an answer for that vote. It goes in the square.' : '<b>The book has no answer for that vote.</b> Every line above is a 2–0 or one of your own tie-breaks. Put together, they go round in a circle. The square is struck through.';
       $('b-check').dataset.step = '1'; $('b-check').textContent = 'Check the other 35'; $('b-check').disabled = false; G.busy = false; return;
     }
     G.busy = true; $('b-check').disabled = true; $('tally').classList.remove('hide'); $('check-say').textContent = '';
     await runSheet(ctx, 't-yes', 't-no', 75);
     var v = M.verdict(G.book); $('legend').classList.remove('hide');
-    $('check-say').innerHTML = v.boss ? '<b>A ranking on all 36.</b> Now look at the corners: every square has ' + (v.boss === 'A' ? 'Anna’s red' : 'Beat’s black') + ' corner. The other colour shows only where the two agree on everything. Touch any square to read it.'
-      : '<b>A ranking on ' + v.holds + ' of the 36. None on ' + v.broken + '.</b> Touch any square to read it.';
-    $('b-check').classList.add('hide'); $('b-tohire').classList.remove('hide'); G.busy = false;
+    $('check-say').innerHTML = v.boss ? '<b>An answer on all 36.</b> Now look at the corners: every square has ' + (v.boss === 'A' ? 'Anna’s red' : 'Beat’s black') + ' corner. The other colour shows only where the two agree on everything. Touch any square to read it.'
+      : '<b>An answer on ' + v.holds + ' of the 36. None on ' + v.broken + '.</b> Touch any square to read it.';
+    $('b-check').classList.add('hide'); $('b-toreal').classList.remove('hide'); G.busy = false;
   }
   async function runSheet(ctx, yesId, noId, ms) {
     var yes = 0, no = 0; ctx.cells.forEach(function (c, i) { if (ctx.shown[i]) { if (c.list) yes++; else no++; } });
@@ -525,79 +547,96 @@ svg.sh{display:block;flex:none}
     for (var i = 0; i < 36; i++) { if (ctx.shown[i]) continue; await wait(ms); stamp(ctx, i); if (ctx.cells[i].list) yes++; else no++; $(yesId).textContent = yes; $(noId).textContent = no; }
   }
 
-  // ---------- hire a tie-breaker ----------
-  function startHire() {
-    G.phase = 'hire'; G.hireKind = null; G.hire = null;
-    ['h-A', 'h-B', 'h-C'].forEach(function (id) { $(id).classList.remove('sel'); });
-    $('clara-pick').classList.add('hide'); $('hire-out').classList.add('hide'); $('b-hire').disabled = true; $('b-verdict').classList.toggle('hide', !G.hired.length);
-    show('s-hire');
+
+  // ---------- Sunday: the real vote ----------
+  function startReal() {
+    G.phase = 'real'; G.real = M.drawSunday(Math.random);
+    var li = function (b, k) { return b.map(function (x, i) { return '<li><span class="n">' + (i + 1) + '.</span>' + sh(x, k, 26) + '<span>' + P[x] + '</span></li>'; }).join(''); };
+    $('real-a').innerHTML = li(G.real.anna, 'a'); $('real-b').innerHTML = li(G.real.beat, 'b');
+    $('real-out').classList.add('hide'); $('b-count').classList.remove('hide'); $('b-debrief').classList.add('hide');
+    show('s-real');
   }
-  function chipsHtml() {
-    $('chips').innerHTML = M.BALLOTS.map(function (b, i) { return '<button class="chip' + (b.join() === G.clara.join() ? ' sel' : '') + '" data-i="' + i + '" aria-label="Clara votes ' + b.map(function (x) { return P[x]; }).join(', ') + '">' + stack(b, 'g', 15) + '</button>'; }).join('');
-    Array.prototype.forEach.call($('chips').children, function (c) { c.onclick = function () { if (G.busy) return; G.clara = M.BALLOTS[+c.dataset.i].slice(); chipsHtml(); $('hire-out').classList.add('hide'); $('b-hire').disabled = false; }; });
-  }
-  function pickHire(kind) {
-    if (G.busy) return; G.hireKind = kind;
-    ['A', 'B', 'C'].forEach(function (k) { $('h-' + k).classList.toggle('sel', k === kind); });
-    $('clara-pick').classList.toggle('hide', kind !== 'C'); if (kind === 'C') chipsHtml();
-    $('hire-out').classList.add('hide'); $('b-hire').disabled = false;
-  }
-  async function runHire() {
-    if (G.busy || !G.hireKind) return; G.busy = true; $('b-hire').disabled = true;
-    var kind = G.hireKind, book = kind === 'C' ? M.clarasBook(G.clara) : M.voterBook(kind), a = M.audit(book), v = M.verdict(book);
-    G.hire = { cells: a.cells, sheet: 'hsheet', read: 'hread', pre: 'hq-', mode: kind, clara: G.clara.slice(), book: book };
-    buildSheet(G.hire); $('hread').innerHTML = ''; $('hire-say').textContent = ''; $('hire-out').classList.remove('hide');
-    $('hsheet').scrollIntoView({ behavior: window.__fast ? 'auto' : 'smooth', block: 'start' });
-    await runSheet(G.hire, 'ht-yes', 'ht-no', 45);
-    G.hired.push(kind);
-    var mine = book.join('') === G.book.join('');
-    if (kind === 'C') {
-      var k = -1; a.cells.forEach(function (c, i) { if (k < 0 && !c.list) k = i; });
-      $('hire-say').innerHTML = '<b>A ranking on ' + v.holds + ' of the 36. None on ' + v.broken + '.</b> A real majority, no ties left, nobody the boss, and still two Sundays go round in a circle. One is read out below: every plan wins one vote 2–1 and loses one 2–1. Whatever ballot Clara hands in, it is always two.' + (mine ? ' This is the very book you wrote yourself.' : '');
-      await readSquare(G.hire, k, false);
+  function countReal() {
+    var c = G.audit.cells[G.real.k], h;
+    if (c.list) {
+      var t = M.tiers(c.list), top = t[0];
+      h = '<p class="h">' + (top.length === 1 ? 'The ' + P[top[0]] + ' goes on the square.' : top.length === 2 ? 'A draw between the ' + P[top[0]] + ' and the ' + P[top[1]] + '. The village tosses a coin.' : 'A three-way draw. The village tosses a coin.') + '</p>';
+      h += '<p>Your book says: ' + listWords(c.list) + '.' + (c.isAnnas && c.isBeats ? ' The two agreed on everything.' : c.isAnnas ? ' That is exactly Anna’s ballot.' : c.isBeats ? ' That is exactly Beat’s ballot.' : '') + '</p>';
     } else {
-      var nm = kind === 'A' ? 'Anna' : 'Beat', ot = kind === 'A' ? 'Beat' : 'Anna';
-      $('hire-say').innerHTML = '<b>A ranking on all 36.</b> And every one is ' + nm + '’s ballot: look at the corners. A tie-breaker who is one of the voters wins every tie, so ' + ot + ' might as well stay at home. That is a boss.' + (mine ? ' This is the very book you wrote yourself.' : '');
-      await readSquare(G.hire, kind === 'A' ? 5 : 30, false);
+      h = '<p class="h">Your book has no answer.</p><p>' + clashWords(c.clash, 'your book says') + ' The village stands in the square and argues. This was one of the ' + G.audit.broken + ' votes out of 36 that your book cannot count.</p>';
     }
-    $('b-verdict').classList.remove('hide'); G.busy = false;
+    $('real-out').innerHTML = h; $('real-out').classList.remove('hide'); $('b-count').classList.add('hide'); $('b-debrief').classList.remove('hide');
   }
 
-  // ---------- the verdict ----------
+  // ---------- the debrief ----------
+  function miniSheet(cells, s, ringed) {
+    var h = '<svg width="' + (s * 6 + 2) + '" height="' + (s * 6 + 2) + '" viewBox="0 0 ' + (s * 6 + 2) + ' ' + (s * 6 + 2) + '">';
+    cells.forEach(function (c, k) {
+      var x = 1 + (k % 6) * s, y = 1 + Math.floor(k / 6) * s;
+      h += '<rect x="' + x + '" y="' + y + '" width="' + s + '" height="' + s + '" fill="#fff" stroke="' + INK + '" stroke-width="1"/>';
+      if (!c.list) h += '<line x1="' + (x + 2) + '" y1="' + (y + s - 2) + '" x2="' + (x + s - 2) + '" y2="' + (y + 2) + '" stroke="' + INK + '" stroke-width="2.5"/>';
+      else { if (c.isAnnas) h += '<path d="M' + x + ' ' + y + ' h' + (s * .45) + ' L' + x + ' ' + (y + s * .45) + ' z" fill="' + RED + '"/>'; if (c.isBeats) h += '<path d="M' + (x + s) + ' ' + (y + s) + ' h-' + (s * .45) + ' L' + (x + s) + ' ' + (y + s * .55) + ' z" fill="' + INK + '"/>'; }
+    });
+    if (ringed) h += '<rect x="1" y="1" width="' + (s * 6) + '" height="' + (s * 6) + '" fill="none" stroke="' + ringed + '" stroke-width="3"/>';
+    return h + '</svg>';
+  }
+  function mbook(book, newCell) {
+    var h = '<span class="mbook">';
+    for (var p = 0; p < 3; p++) for (var d = 0; d < 2; d++) { var cell = 2 * p + d, a = M.PAIRS[p][d === 0 ? 0 : 1], b = M.PAIRS[p][d === 0 ? 1 : 0]; h += '<span>' + sh(a, 'a', 10) + sh(b, 'b', 10) + '<i class="' + (book[cell] || '') + (cell === newCell ? ' new' : '') + '"></i></span>'; }
+    return h + '</span>';
+  }
+  function picHtml(n, text, anna, beat, list, book, newCell, noList) {
+    var h = '<div class="pic"><div class="n">' + n + '</div><div class="t">' + text + '</div><div class="row">';
+    if (anna) h += '<span><span class="lbl">If they write</span><span class="row" style="gap:6px">' + stack(anna, 'a', 18) + stack(beat, 'b', 18) + '</span></span><span class="arr">&rarr;</span>';
+    if (list) h += '<span><span class="lbl">The answer</span><span class="stack" style="gap:2px">' + tiersHtml(list, 16) + '</span></span>';
+    if (noList) h += '<span><span class="lbl">The answer</span><span style="font-family:\'Inter Display\';font-weight:900;font-size:22px;line-height:1">none</span></span>';
+    if (book) h += '<span style="margin-left:auto"><span class="lbl">The book</span>' + mbook(book, newCell) + '</span>';
+    return h + '</div></div>';
+  }
+  function agreeWords(anna, beat) { var ag = []; for (var p = 0; p < 3; p++) { var inf = M.pairInfo(anna, beat, p); if (inf.agree) ag.push(P[inf.winner] + ' above ' + P[inf.loser]); } return ag.join(' and '); }
   function endScreen() {
-    G.phase = 'end'; var v = M.verdict(G.book), all = M.allBooks(), boss = v.boss === 'A' ? 'Anna' : 'Beat', other = v.boss === 'A' ? 'Beat' : 'Anna';
+    G.phase = 'end'; var v = M.verdict(G.book), boss = v.boss === 'A' ? 'Anna' : 'Beat', other = v.boss === 'A' ? 'Beat' : 'Anna';
     if (v.boss) {
-      $('v1').textContent = 'Your book never fails. A ranking on all 36 Sundays.';
-      $('v2').textContent = 'And on all 36 it is ' + boss + '’s ballot. Every tie went to ' + boss + '. What ' + other + ' writes changes nothing.';
-      $('v3').innerHTML = '<b>Arrow, 1950:</b> that is the only kind of book that never fails. His word for ' + boss + ' is <b>dictator</b>.';
+      $('v1').textContent = 'Your book has an answer for all 36 votes.';
+      $('v2').textContent = 'And every answer is ' + boss + '’s ballot. Every tie went to ' + boss + '. What ' + other + ' writes changes nothing. Arrow’s word for ' + boss + ' is dictator.';
+      $('v3').innerHTML = '<b>Arrow, 1950:</b> a book that always has an answer always has a boss.';
     } else {
-      $('v1').textContent = 'A ranking on ' + v.holds + ' of the 36 Sundays. On ' + v.broken + ' there was none.';
-      var cu = v.custom && v.custom.order;
-      $('v2').textContent = v.fate === 'custom' ? 'Nobody is the boss. Your book breaks every tie by one fixed order: ' + P[cu[0]] + ' before ' + P[cu[1]] + ' before ' + P[cu[2]] + ', whoever wants what. That is exactly what Clara does. No book without a boss does better than ' + v.best + '.'
-        : v.fate === 'best' ? 'Nobody is the boss, and no book without a boss does better than ' + v.best + '. You found the edge.'
-        : 'Nobody is the boss. The best any book can do without one is ' + v.best + '.';
-      $('v3').innerHTML = '<b>Arrow, 1950:</b> the only books that never fail are the two in which one voter wins every tie. He called that voter a <b>dictator</b>.';
+      $('v1').textContent = 'Your book has an answer for ' + v.holds + ' of the 36 votes. For ' + v.broken + ' it has none.';
+      $('v2').textContent = 'Nobody is the boss. ' + (v.holds === v.best ? 'And no book without a boss does better than ' + v.best + '. You found the edge.' : 'The best any book can do without a boss is ' + v.best + '.');
+      $('v3').innerHTML = '<b>Arrow, 1950:</b> a book that always has an answer has a boss. A book with no boss sometimes has no answer.';
     }
-    // the poster: 27 x 27, column = ties 1-3, row = ties 4-6, each Anna wins / a draw / Beat wins
-    var s = 12, x0 = 12, y0 = 24, h = '', px, py;
+    // 1. three other tie-breakers
+    var cl = M.clarasBook(C.clara), aC = M.audit(cl), aA = M.audit(M.voterBook('A')), aB = M.audit(M.voterBook('B'));
+    $('minis').innerHTML = '<div class="mini">' + miniSheet(aC.cells, 16, null) + '<span><b>Clara</b>, a third voter who always writes ' + P[C.clara[0]] + ', ' + P[C.clara[1]] + ', ' + P[C.clara[2]] + '. Majority of three.<br>' + aC.holds + ' of 36</span></div>' +
+      '<div class="mini">' + miniSheet(aA.cells, 16, RED) + '<span><b>Anna</b> breaks every tie.<br>36 of 36, all hers</span></div>' +
+      '<div class="mini">' + miniSheet(aB.cells, 16, INK) + '<span><b>Beat</b> breaks every tie.<br>36 of 36, all his</span></div>';
+    $('minis-say').innerHTML = 'With Clara there are no ties at all: every pair of plans is 3–0 or 2–1. And still two votes go round in a circle, each plan beating one and losing to one, 2–1 each time. Whatever ballot Clara always writes, it is two. Let one of the voters break the ties and every answer is theirs: a boss.' + (cl.join('') === G.book.join('') ? ' Clara’s book is the one you wrote.' : '');
+    // 2. Arrow's proof as a strip
+    var startCell = 4, ch = M.chain('A', startCell), st = '', b0 = M.emptyBook(); b0[startCell] = 'A';
+    st += picHtml('1', 'Take one tie: Anna wants the ' + P[M.PAIRS[2][0]] + ', Beat wants the ' + P[M.PAIRS[2][1]] + '. Say it goes to <b>Anna</b>.', null, null, null, b0, startCell);
+    ch.steps.forEach(function (s, i) {
+      st += picHtml(String(i + 2), (i === 0 ? 'Now a what-if. ' : '') + (agreeWords(s.anna, s.beat) ? 'They agree on ' + agreeWords(s.anna, s.beat) + ', and the book settles the rest, except one tie.' : 'The book already settles every pair but one tie.') + ' Only one answer fits, and it gives that tie to <b>Anna</b> too.', s.anna, s.beat, s.list, s.book, s.cell);
+    });
+    st += picHtml('7', 'All six ties are Anna’s. Anna is the boss. So that first tie <b>cannot</b> go to Anna. Swap the colours and the same five steps show it cannot go to Beat either.', null, null, null, ch.book, -1);
+    var o = C.openings[0], eq = M.readSunday(M.voterBook('E'), o[0], o[1]), w = eq.pairs.filter(function (q) { return q.agree; })[0];
+    st += picHtml('8', 'So every tie must be a draw. Then take this vote. They agree the ' + P[w.winner] + ' is above the ' + P[w.loser] + '. The other two pairs are ties, so draws. But the ' + P[3 - w.winner - w.loser] + ' cannot be level with both while one is above the other. <b>No answer.</b>', o[0], o[1], null, M.voterBook('E'), -1, true);
+    st += picHtml('9', 'That is the whole proof. Give any tie to a voter and five what-ifs make them the boss. Give none to anyone and some vote has no answer. There is no third way.', null, null, null, null, -1);
+    $('strip').innerHTML = st;
+    // 3. brute force: all 729 books as tiny sheets on a canvas
+    var cv = $('all'), per = 15, cs = 3, gap = 5, sw = cs * 6 + gap, rows = Math.ceil(729 / per), scale = 2;
+    cv.width = 348 * scale; cv.height = (rows * sw + gap) * scale; cv.style.height = (rows * sw + gap) + 'px';
+    var g = cv.getContext('2d'); g.scale(scale, scale); g.fillStyle = '#fff'; g.fillRect(0, 0, 348, rows * sw + gap);
+    var left = (348 - per * sw + gap) / 2;
     for (var n = 0; n < 729; n++) {
-      var col = n % 27, row = Math.floor(n / 27), fails = 36 - all.holds[n], x = x0 + col * s, y = y0 + row * s, f;
-      if (fails === 0) f = n === 0 ? RED : INK; else { var g = Math.round(232 - (fails - 2) * 9.5); f = 'rgb(' + g + ',' + g + ',' + (g - 3) + ')'; }
-      h += '<rect x="' + x + '" y="' + y + '" width="' + (s - 1) + '" height="' + (s - 1) + '" fill="' + f + '"/>';
-      if (n === v.index) { px = x; py = y; }
+      var bk = M.bookFromIndex(n), au = M.audit(bk), x0 = left + (n % per) * sw, y0 = gap + Math.floor(n / per) * sw;
+      au.cells.forEach(function (c, k) { g.fillStyle = c.list ? '#fff' : INK; g.fillRect(x0 + (k % 6) * cs, y0 + Math.floor(k / 6) * cs, cs, cs); });
+      g.strokeStyle = n === 0 ? RED : n === 728 ? INK : '#C9C8C3'; g.lineWidth = (n === 0 || n === 728) ? 2 : 0.5; g.strokeRect(x0 - 0.5, y0 - 0.5, cs * 6 + 1, cs * 6 + 1);
+      if (n === v.index && !v.boss) { g.strokeStyle = RED; g.lineWidth = 2; g.beginPath(); g.arc(x0 + cs * 3, y0 + cs * 3, cs * 3 + 4, 0, Math.PI * 2); g.stroke(); }
     }
-    h += '<rect x="' + (x0 - 3) + '" y="' + (y0 - 3) + '" width="' + (s + 5) + '" height="' + (s + 5) + '" fill="none" stroke="' + RED + '" stroke-width="2"/>';
-    h += '<rect x="' + (x0 + 26 * s - 3) + '" y="' + (y0 + 26 * s - 3) + '" width="' + (s + 5) + '" height="' + (s + 5) + '" fill="none" stroke="' + INK + '" stroke-width="2"/>';
-    h += '<text x="' + (x0 + s + 8) + '" y="15" font-family="Inter" font-weight="600" font-size="11.5" fill="' + RED + '">&#8598; Anna wins every tie</text>';
-    h += '<text x="' + (x0 + 26 * s - 8) + '" y="' + (y0 + 27 * s + 15) + '" text-anchor="end" font-family="Inter" font-weight="600" font-size="11.5" fill="' + INK + '">Beat wins every tie &#8600;</text>';
-    if (!v.boss) {
-      h += '<circle cx="' + (px + 5.5) + '" cy="' + (py + 5.5) + '" r="11" fill="none" stroke="#fff" stroke-width="5"/><circle cx="' + (px + 5.5) + '" cy="' + (py + 5.5) + '" r="11" fill="none" stroke="' + RED + '" stroke-width="2.5"/>';
-      var right = px < 240; h += '<text x="' + (right ? px + 21 : px - 10) + '" y="' + (py + 10) + '" text-anchor="' + (right ? 'start' : 'end') + '" font-family="Inter Display" font-weight="900" font-size="15" fill="' + INK + '" stroke="#fff" stroke-width="4" paint-order="stroke">yours</text>';
-    }
-    $('poster').innerHTML = h;
-    $('cap1').innerHTML = 'Six ties, three answers each (Anna wins, a draw, Beat wins): that makes 729 different books, and each small square is one of them. The darker the square, the more Sundays it leaves without a ranking. <b>727 fail somewhere. Two never do</b>, and they sit in opposite corners' + (v.boss ? '. Yours is the ' + (v.boss === 'A' ? 'red' : 'black') + ' one.' : '.');
-    $('cap2').innerHTML = 'The best without a boss is ' + v.best + ' of 36. Clara gets there: a fixed order that breaks every tie, whoever wants what. Then no voter is the boss, but an old habit is. Those are the two ways out Arrow’s proof leaves, and neither is what we mean by voting: let a habit decide, or let one person decide. <span style="color:#666">(Scoring out of 36 is this game’s idea. What Arrow proved is that nothing but a boss reaches 36.)</span>';
-    $('qa-more').innerHTML = 'No. With an odd number of voters and a simple majority there are no ties at all, and it still goes wrong: you saw it with Clara. If Clara were free to change her ballot there would be 216 possible Sundays instead of 36, and 12 of them would go round in a circle. Arrow proved the result for any number of voters. (With just Anna and Beat, a majority means a draw whenever they disagree: the square in the very middle, which fails on ' + M.audit(M.voterBook('E')).broken + ' Sundays.)';
+    $('tries').textContent = 'Arrow tried all 729 books on all 36 votes. 727 fail somewhere. Two never do.';
+    $('ring').innerHTML = 'Six ties, three answers each: 729 books. Each tiny sheet below is one book, its 36 votes as dots, black where the book has no answer. The clean sheet with a red frame, the very first, is Anna the boss; the clean sheet with a black frame, the very last, is Beat the boss.' + (v.boss ? ' Yours is the ' + (v.boss === 'A' ? 'red' : 'black') + ' one.' : ' Yours is ringed in red.');
+    $('lastline').textContent = 'Argued in nine pictures, and checked 26,244 times. Same answer.';
+    $('qa-more').innerHTML = 'No. With three voters and a plain majority there are no ties at all, and it still goes wrong: you saw it with Clara. Let Clara vote freely and there are 216 ways the vote can go; 12 of them go round in a circle. Arrow proved it for any number of voters. (With just Anna and Beat, a plain majority means a draw on every tie: a book that fails on ' + M.audit(M.voterBook('E')).broken + ' votes.)';
     show('s-end');
   }
 
@@ -606,14 +645,13 @@ svg.sh{display:block;flex:none}
   $('b-post').onclick = postList;
   $('b-next').onclick = next;
   $('b-check').onclick = checkStep;
-  $('b-tohire').onclick = startHire;
-  ['A', 'B', 'C'].forEach(function (k) { $('h-' + k).onclick = function () { pickHire(k); }; });
-  $('b-hire').onclick = runHire;
-  $('b-verdict').onclick = endScreen;
+  $('b-toreal').onclick = startReal;
+  $('b-count').onclick = countReal;
+  $('b-debrief').onclick = endScreen;
   $('b-again').onclick = function () { G.game++; startGame(); };
   var back = 0;
   function over(id, on) { if (on) back = window.scrollY; $(id).classList.toggle('on', on); document.body.classList.toggle('lock', on); if (on) $(id).scrollTop = 0; else window.scrollTo(0, back); }
-  ['q-play', 'q-check', 'q-hire', 'b-help0', 'b-help1'].forEach(function (id) { $(id).onclick = function () { over('help', true); }; });
+  ['q-play', 'q-check', 'q-real', 'b-help0', 'b-help1'].forEach(function (id) { $(id).onclick = function () { over('help', true); }; });
   ['b-about0', 'b-about1'].forEach(function (id) { $(id).onclick = function () { over('about', true); }; });
   $('b-help-close').onclick = function () { over('help', false); };
   $('b-about-close').onclick = function () { over('about', false); };

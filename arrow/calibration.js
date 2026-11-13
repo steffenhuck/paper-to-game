@@ -59,13 +59,13 @@ const hist = {}; let paths = 0, shapeOk = true, stuck = false, ends = {}; const 
 M.CONFIG.openings.forEach((o, g) => {
   (function go(bk, t, opts) {
     const nb = M.nextBallots(bk, t, g);
-    if (!nb) { if (!M.isComplete(bk)) stuck = true; paths++; const v = M.verdict(bk); hist[v.holds] = (hist[v.holds] || 0) + 1; ends[g + ':' + v.fate] = (ends[g + ':' + v.fate] || 0) + 1; optShape[opts.join(',')] = (optShape[opts.join(',')] || 0) + 1; if (t !== 5) shapeOk = false; return; }
+    if (!nb) { if (!M.isComplete(bk)) stuck = true; paths++; const v = M.verdict(bk); hist[v.holds] = (hist[v.holds] || 0) + 1; ends[g + ':' + v.fate] = (ends[g + ':' + v.fate] || 0) + 1; optShape[opts.join(',')] = (optShape[opts.join(',')] || 0) + 1; if (t !== M.CONFIG.whatIfs) shapeOk = false; return; }
     const L = M.legalLists(bk, nb.anna, nb.beat); if (!L.length) { stuck = true; return; }
     L.forEach(w => go(M.post(bk, nb.anna, nb.beat, w), t + 1, opts.concat(L.length)));
   })(M.emptyBook(), 0, []);
 });
-check('every path from every opening is five Sundays long and ends with a complete book (no Sunday without a list during play)', shapeOk && !stuck, paths + ' paths');
-check('lists on offer by Sunday are 5, 3, 3, 1, 1 on every path', Object.keys(optShape).join('|') === '5,3,3,1,1', JSON.stringify(optShape));
+check('every path from every opening is three what-ifs long and ends with a complete book (never a what-if without a ranking)', shapeOk && !stuck, paths + ' paths');
+check('rankings on offer are 5, 5, 5 on every path (two new ties each time)', Object.keys(optShape).join('|') === '5,5,5', JSON.stringify(optShape));
 check('each opening is Arrow\'s eq. (7) pair up to renaming: one pair agreed, two disputed, five lists possible',
   M.CONFIG.openings.every(o => M.legalLists(M.emptyBook(), o[0], o[1]).length === 5) && M.CONFIG.openings[0][0].join('') === '012' && M.CONFIG.openings[0][1].join('') === '201');
 const reach = Object.keys(hist).map(Number);
@@ -83,6 +83,12 @@ check('the six books in which a fixed order of the plans wins every disagreement
 let clashOk = true; for (let i = 0; i < 729; i++) { const a = M.audit(M.bookFromIndex(i)); a.cells.forEach(c => { if (!c.list && (!c.clash || c.clash.actual === c.clash.expect)) clashOk = false; if (c.list && c.clash) clashOk = false; }); }
 check('every Sunday without a list comes with a chain "a over-or-level b, b over-or-level c, but not a over c" taken from its own pair results', clashOk);
 
+// --- Arrow's chain (pp. 340-342) from every possible start: one tie to a voter forces all six to that voter in five forced steps
+{ let ok = true; ['A', 'B'].forEach(v => { for (let c = 0; c < 6; c++) { const ch = M.chain(v, c); if (!ch || ch.steps.length !== 5 || ch.book.join('') !== v.repeat(6) || ch.steps.some(st => st.value !== v)) ok = false; } });
+  check('chain: from any one tie given to a voter, five what-ifs each with one ranking left make that voter the dictator (12 starts)', ok); }
+{ let hist = {}; const rnd = (() => { let x = 12345; return () => { x = (x * 1103515245 + 12345) % 2147483648; return x / 2147483648; }; })();
+  for (let i = 0; i < 36000; i++) { const d = M.drawSunday(rnd); hist[d.k] = (hist[d.k] || 0) + 1; }
+  check('the real Sunday is drawn from all 36 pairs of ballots, each about equally often', Object.keys(hist).length === 36 && Math.max(...Object.values(hist)) < 1300 && Math.min(...Object.values(hist)) > 700); }
 // --- the hired tie-breakers (ours), against the paper's first page
 { let same = true, n34 = true, condorcet = true;
   B.forEach(cl => { const bk = M.clarasBook(cl); const au = M.audit(bk); if (au.holds !== 34) n34 = false;
