@@ -186,3 +186,7 @@ From the conversation after the first build. Steffen: with two voters "it will b
 **Not rebuilt from scratch.** The concept, mechanism core and look are the first build's, so this is a revision in place and nothing moved to `previous/`. Sections 0–19 above describe the first build in its own words ("rule book", "list", "level").
 
 **Session:** the scripted browser run now hires Clara, changes her ballot, hires Anna, and opens help from the new screen; no errors, no horizontal scroll at 380 px. Still the builder's review only.
+
+## 21. Revision 2 (13 Nov 2026): the choice comes straight after the ballots
+
+Steffen, after playing: "it is odd that I make the choice in 3 but can't do anything in 2. so maybe after the ballot comes in simply: choose what to put on the square?" Done. The play screen now runs: 1 the two ballots; 2 *Choose what goes on the square* (the ranking cards); 3 *What that decides, plan against plan* (the 2–0 and 1–1 table, whose open slots fill as a card is touched); *Post the ranking*; 4 the tie-break book. The table no longer plays out before the cards appear, and the sentence about the crossed-out card moved below the cards, so the first thing after the ballots is something to touch. Mechanism and calibration unchanged (29 checks, 0 failed); browser session rerun, no errors.

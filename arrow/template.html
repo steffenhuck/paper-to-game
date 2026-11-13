@@ -209,14 +209,14 @@ svg.sh{display:block;flex:none}
     <div class="ballot b"><div class="who">Beat</div><ol id="bal-b"></ol></div>
   </div>
 
-  <div class="lab"><i>2</i>Plan against plan</div>
-  <p class="note" id="pairs-note"></p>
-  <div id="prows"></div>
-
-  <div class="lab"><i>3</i><span id="lists-lab">Pick the village’s ranking</span></div>
+  <div class="lab"><i>2</i><span id="lists-lab">Choose what goes on the square</span></div>
   <p class="note" id="lists-note"></p>
   <div class="cards" id="cards"></div>
   <p class="say" id="say"></p>
+
+  <div class="lab"><i>3</i>What that decides, plan against plan</div>
+  <p class="note" id="pairs-note"></p>
+  <div id="prows"></div>
   <button class="go" id="b-post" disabled>Post the ranking</button>
 
   <div class="res hide" id="res"></div>
@@ -292,10 +292,10 @@ svg.sh{display:block;flex:none}
   <p><b>Aim:</b> give the village a ranking on every Sunday that could ever come, without making one voter the boss.</p>
   <h3>The ballots</h3>
   <p>Anna’s ballot is red, Beat’s is black. Each ranks the three plans: a fountain (circle), a tower (square), a tree (triangle). Favourite on top.</p>
-  <h3>Plan against plan</h3>
-  <p>Three plans can be compared two at a time in three ways. If both voters prefer the same plan of the two, it is 2–0 and settled. If each prefers a different one, it is 1–1: a tie. You break it. The tie can go to Anna, to Beat, or be called a draw (the village likes both plans the same).</p>
-  <h3>Pick the village’s ranking</h3>
-  <p>The village’s ranking is drawn in outline. The top step is first place; two plans on one step are tied. Only rankings that fit what is already settled are shown. Touch one, and the screen shows which ties it would break and for whom. Then press <b>Post the ranking</b>.</p>
+  <h3>Choose what goes on the square</h3>
+  <p>The village’s ranking is drawn in outline. The top step is first place; two plans on one step are tied. Only rankings that fit what is already settled are shown. Touch one.</p>
+  <h3>What that decides, plan against plan</h3>
+  <p>Three plans can be compared two at a time in three ways. If both voters prefer the same plan of the two, it is 2–0 and settled. If each prefers a different one, it is 1–1: a tie. The ranking you touched breaks it: for Anna, for Beat, or as a draw (the village likes both plans the same). The table shows which. Then press <b>Post the ranking</b>.</p>
   <h3>Your tie-break book</h3>
   <p>Six different ties can happen. Once you break one, your book keeps the answer, and that tie gets the same answer on every later Sunday. So your choices shrink. When only one ranking fits, you post that one, and it breaks a tie in a way you did not choose.</p>
   <h3>Arrow’s check</h3>
@@ -376,15 +376,15 @@ svg.sh{display:block;flex:none}
     $('sun-sub').textContent = t === 0 ? 'Arrow picks which ballots come in.' : t < C.freeSundays ? 'Arrow picks the ballots. He still leaves you room.' : 'Arrow picks the ballots where your book leaves you the least room.';
     var li = function (b, k) { return b.map(function (x, i) { return '<li><span class="n">' + (i + 1) + '.</span>' + sh(x, k, 26) + '<span>' + P[x] + '</span></li>'; }).join(''); };
     $('bal-a').innerHTML = li(nb.anna, 'a'); $('bal-b').innerHTML = li(nb.beat, 'b');
-    $('pairs-note').innerHTML = t === 0 ? 'Take the plans two at a time. If both voters prefer the same one, it is <b>2–0</b> and settled. If each prefers a different one, it is <b>1–1</b>: a tie, and you break it. Your book keeps the answer for every later Sunday.'
-      : '<b>2–0</b> is settled. <b>1–1</b> is a tie: yours to break, unless your book has broken it already.';
+    $('pairs-note').innerHTML = t === 0 ? 'Take the plans two at a time. If both voters prefer the same one, it is <b>2–0</b> and settled. If each prefers a different one, it is <b>1–1</b>: a tie. The ranking you touch breaks the ties, and your book keeps the answers for every later Sunday.'
+      : '<b>2–0</b> is settled. <b>1–1</b> is a tie: your ranking breaks it, unless your book has broken it already.';
     var rows = '';
     for (var p = 0; p < 3; p++) {
       var info = M.pairInfo(nb.anna, nb.beat, p), a = M.PAIRS[p][0], b = M.PAIRS[p][1], top = M.pairOutcome(G.book, info), st, slot;
       var who = '<span class="w">Anna ' + sh(info.agree ? info.winner : info.annaFor, 'a', 14) + ' &nbsp;Beat ' + sh(info.agree ? info.winner : info.beatFor, 'b', 14) + '</span>';
       if (info.agree) { st = '<span class="sc">2–0</span>Both prefer the ' + P[info.winner] + '. Settled.'; slot = '<div class="slot set U"><span class="bar"></span>' + outcomeHtml(a, b, top, 17) + '<span class="wd">2–0</span></div>'; }
       else if (top !== null) { var v = G.book[info.cell]; st = '<span class="sc">1–1</span>Your book broke this tie on Sunday ' + G.ruledOn[info.cell] + '. Settled.'; slot = '<div class="slot set ' + v + '"><span class="bar"></span>' + outcomeHtml(a, b, top, 17) + '<span class="wd">' + winWord(v) + '</span></div>'; }
-      else { st = '<span class="sc">1–1</span><b>A tie. Yours to break.</b>'; slot = '<div class="slot" id="slot-' + p + '"><span class="bar"></span><span class="q0">?</span></div>'; }
+      else { st = '<span class="sc">1–1</span><b>A tie. Your ranking breaks it.</b>'; slot = '<div class="slot" id="slot-' + p + '"><span class="bar"></span><span class="q0">?</span></div>'; }
       rows += '<div class="prow" data-p="' + p + '"><span class="pp">' + sh(a, 'v', 20) + 'v' + sh(b, 'v', 20) + '</span><span class="tx">' + st + who + '</span>' + slot + '</div>';
     }
     $('prows').innerHTML = rows;
@@ -392,19 +392,15 @@ svg.sh{display:block;flex:none}
     $('res').classList.add('hide'); $('b-next').classList.add('hide'); $('b-post').classList.remove('hide'); $('b-post').disabled = true;
     $('book-note').innerHTML = t === 0 ? 'Six different ties can happen. Each line is one of them: the plan Anna prefers in red, the plan Beat prefers in black. Once you break a tie, the line keeps your answer.' : 'The ties you have broken so far. Each answer is kept.';
     bookHtml();
-    G.busy = true;
-    var slow = t === 0 ? 900 : 260, rowsEl = $('prows').children;
-    (async function () {
-      if (t === 0) $('lists-note').textContent = 'Arrow compares the ballots, two plans at a time…';
-      for (var k = 0; k < 3; k++) { await wait(k === 0 ? 350 : slow); rowsEl[k].classList.add('in'); }
-      await wait(slow); renderCards(); G.busy = false;
-    })();
+    renderCards();
+    var rowsEl = $('prows').children;
+    (async function () { for (var k = 0; k < 3; k++) { await wait(k === 0 ? 250 : 220); if (rowsEl[k]) rowsEl[k].classList.add('in'); } })();
   }
   function renderCards() {
     var L = G.lists, one = L.length === 1, first = G.sunday === 0;
-    $('lists-lab').textContent = one ? 'The village’s ranking' : 'Pick the village’s ranking';
-    $('lists-note').innerHTML = one ? '<b>Only one ranking fits.</b> What is already settled leaves no other.'
-      : 'Every ranking that fits what is settled. Top step is first place; two plans on one step are tied. <b>Touch one</b> to see which ties it breaks, and for whom.';
+    $('lists-lab').textContent = one ? 'What goes on the square' : 'Choose what goes on the square';
+    $('lists-note').innerHTML = one ? '<b>Only one ranking fits.</b> What the two agree on and what your book has settled leave no other.'
+      : 'The village needs a ranking: first choice on the top step, then the fallbacks. Two plans on one step are tied. These are all the rankings that respect ' + (first ? 'what the two agree on' : 'what the two agree on and what your book has settled') + '. <b>Touch one.</b>';
     var h = L.map(function (r, i) { return '<button class="card" data-i="' + i + '" aria-label="' + listWords(r) + '"><span class="steps">' + tiersHtml(r, 17) + '</span><span class="box"></span></button>'; }).join('');
     if (one) h += '<span class="only">' + whyForced(L[0]) + '</span>';
     if (first) {
@@ -412,7 +408,7 @@ svg.sh{display:block;flex:none}
       var s1 = M.readSunday(M.emptyBook(), G.nb.anna, G.nb.beat), w = s1.pairs.filter(function (q) { return q.agree; })[0], third = 3 - w.winner - w.loser;
       h += '<div class="card dead" id="dead" aria-label="Both ties left as draws: not a ranking"><span class="steps"><span class="tier">' + sh(w.winner, 'v', 17) + sh(third, 'd', 17) + '</span><span class="tier">' + sh(w.loser, 'v', 17) + sh(third, 'd', 17) + '</span></span><span class="box"></span></div>';
       $('cards').className = 'cards six';
-      $('lists-note').innerHTML += ' <br><b>Why not call both ties a draw?</b> That is the crossed-out card. The ' + P[third] + ' would have to share a step with the ' + P[w.winner] + ' and with the ' + P[w.loser] + ', and those two are on different steps. So ties have to be broken.';
+      $('pairs-note').innerHTML += ' <br><b>Why not call both ties a draw?</b> That is the crossed-out card. The ' + P[third] + ' would have to share a step with the ' + P[w.winner] + ' and with the ' + P[w.loser] + ', and those two are on different steps. So ties have to be broken.';
     }
     $('cards').innerHTML = h;
     Array.prototype.forEach.call($('cards').querySelectorAll('button.card'), function (c) { c.onclick = function () { if (!G.busy && G.phase === 'play' && $('res').classList.contains('hide')) select(+c.dataset.i); }; });
