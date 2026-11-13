@@ -642,10 +642,10 @@ svg.sh{display:block;flex:none}
     $('lists-lab').textContent = one ? 'What goes on the square' : 'Choose what goes on the square';
     var tops = []; L.forEach(function (r) { var k = tiersOf(r)[0]; if (tops.indexOf(k) < 0) tops.push(k); });
     var note = '';
-    if (first) note += 'Where the two agree, it is settled 2–0: ' + settled.join('; ') + '. Where they disagree, it is 1–1, a tie, and your answer breaks it. ';
+    if (first) note += settled.join('; ').replace(/ \(2–0\)/g, '').replace(/^b/, 'B') + ': that is settled, 2–0. Where they disagree it is 1–1, a tie, and your answer breaks it. ';
     else note += 'Settled already: ' + settled.join('; ') + '. ';
     if (one) note = '<b>Only one answer is left.</b> ' + note + whyForced(L[0]);
-    else note += first ? 'Only answers that respect that are offered. And plans fall through (a builder goes bust, the ground is wrong), so the village also needs to know what comes next, without voting again.' : 'Only answers that respect that are offered.';
+    else note += first ? 'Only answers that respect that are offered. Plans fall through (a builder goes bust), so the village also needs to know what comes next.' : 'Only answers that respect that are offered.';
     $('lists-note').innerHTML = note;
     var h = '';
     if (tops.length > 1) h += '<div><div class="stepq">What goes on the square?' + (first ? '<small>Touch one. A draw means the village likes both the same and will toss a coin.</small>' : '') + '</div><div class="opts" id="opts1">' + tops.map(function (k) { return optHtml(k, 1); }).join('') + '</div></div>';
@@ -655,7 +655,7 @@ svg.sh{display:block;flex:none}
     if (tops.length === 1) chooseTop(tops[0]);
     if (first && !one) {
       var s1 = M.readSunday(M.emptyBook(), G.nb.anna, G.nb.beat), w = s1.pairs.filter(function (q) { return q.agree; })[0], third = 3 - w.winner - w.loser;
-      $('lists-note').innerHTML += ' <br><span style="color:#555">Why is there no “all a draw”? The ' + P[third] + ' would then be level with the ' + P[w.winner] + ' and level with the ' + P[w.loser] + ', while the ' + P[w.winner] + ' is above the ' + P[w.loser] + '. That is not a ranking. Ties have to be broken.</span>';
+      $('lists-note').innerHTML += ' <br><span style="color:#555">No “all a draw”? The ' + P[third] + ' cannot be level with both the ' + P[w.winner] + ' and the ' + P[w.loser] + ' while one is above the other. Ties have to be broken.</span>';
     }
   }
   function wireOpts() {
