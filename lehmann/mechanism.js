@@ -49,7 +49,10 @@ var CONFIG = {
 
   // ---- ours: the dials --------------------------------------------------------------------------------
   WAVES: 12,                  // ours: waves in the first act; after the last the whole fan fires by itself
-  DIVE_MIN: 0, DIVE_MAX: 90, DIVE_STEP: 0.5, DIVE_START: 45,   // ours: the dive dial; the first wave starts at 45°, after that the dial stays where the player left it
+  DIVE_MIN: 0, DIVE_MAX: 90, DIVE_STEP: 0.1, DIVE_START: 45,   // ours: the dive's resolution (the − and + buttons move one step); the first wave starts at 45°, after that the dial stays where the player left it
+  DIVE_SLIDER_STEP: 0.5,      // ours: the slider's own step; finer work is done with − and +
+  JUMP_DEG: 15,               // ours: a landing that moves this much for a dive that moved a degree or less is called a jump in the words after the shot
+  SAME_DEG: 6,                // ours: a landing within this of the last one, for a dive within a degree, is called the same place
   SPEED_MIN: 0.75, SPEED_MAX: 1.25, SPEED_STEP: 0.01, SPEED_START: 1.00, // ours: the ball's speed as a multiple of the core's; Lehmann's 8.6/8 = 1.075 is inside
   QUAKES: 3,                  // ours: quakes in the second act; the third is final. The ball's size is Lehmann's (INNER_FRAC); quake() takes a size for an author who wants the dial back
 
@@ -162,6 +165,7 @@ var MECH = (function () {
     if (m < 1.5) return 'bigger than the Moon';
     return 'far bigger than the Moon';
   }
+  function inBall(ratio) { return speedWords(ratio).replace('than the core', 'in the ball than in the core').replace('the same speed as the core', 'the same speed in the ball as in the core'); }
   function speedWords(ratio) {
     if (ratio < 0.85) return 'much slower than the core';
     if (ratio < 0.97) return 'a little slower than the core';
@@ -173,6 +177,10 @@ var MECH = (function () {
     var v = verticalShare(i0);
     return v >= CONFIG.STEEP_STRONG ? 'strong' : v >= CONFIG.STEEP_WEAK ? 'middling' : 'weak';
   }
+  function bounceWords(i0) { return { strong: 'big', middling: 'small', weak: 'hardly any' }[steepWords(i0)]; } // the drum's caption
+  function steepSentence(i0) {
+    return { strong: 'You came up steeply, so the ground there bounced up and down hard.', middling: 'You came up at a slant, so the ground there bounced up and down a little.', weak: 'You came up almost flat, so the ground there hardly bounced up and down at all.' }[steepWords(i0)];
+  }
   function deg(x) { return Math.round(x) + '°'; }
   function listPosts(ps) { return ps.map(deg).join(', ').replace(/, ([^,]*)$/, ' and $1'); }
   function countPosts(n) { return n === 4 ? 'all four shadow posts' : n === 0 ? 'none of the four shadow posts' : ['', 'one', 'two', 'three'][n] + ' of the four shadow posts'; }
@@ -180,39 +188,52 @@ var MECH = (function () {
 
   // ---- the game -----------------------------------------------------------------------------------------
   function newGame() { return { act: 1, shots: [], heard: {}, quakes: [], done: false }; }
+  var INTRO1 = 'Wave 1 of ' + CONFIG.WAVES + '. Pick a dive: 0° is straight down through the middle, 90° is along the ground; − and + move a tenth of a degree. Then fire, and watch where you come out.';
+  var INTRO2 = 'The ringed ball in the middle is Lehmann’s ball. Choose: do waves run slower in it than in the core around it, the same, or faster? Then fire the quake.';
 
   // Act one: fire one wave at dive i0 into Lehmann's two-shell Earth. The dial stays where the player left it.
   function fire(game, i0) {
     i0 = round(Math.max(CONFIG.DIVE_MIN, Math.min(CONFIG.DIVE_MAX, i0)), CONFIG.DIVE_STEP);
     var ray = trace(i0, twoShell()), hit = postsHeardBy([ray]), posts = Object.keys(hit).map(Number), newPosts = [];
     posts.forEach(function (P) { if (!game.heard[P]) { game.heard[P] = i0; newPosts.push(P); } });
+    var prev = game.shots.length ? game.shots[game.shots.length - 1] : null;
     game.shots.push({ i0: i0, fold: ray.fold, branch: ray.branch, posts: posts });
-    var what = 'Dived at ' + fmtDive(i0) + (ray.branch === 'mantle' ? ', missed the core' : ', bent through the core') + ', came up at ' + deg(ray.fold) + (ray.delta > 180 ? ' (past the far point and back round)' : '') + '.';
-    var heardLine;
-    if (posts.length) heardLine = 'Post ' + deg(posts[0]) + ' heard it' + (newPosts.length ? '' : ' again') + '. Up-and-down: ' + steepWords(i0) + '.';
-    else { var near = nearestPost(ray.fold); heardLine = 'Nobody heard it. The nearest post, ' + deg(near) + ', is ' + fmtGap(Math.abs(near - ray.fold)) + ' away.'; }
+    var what = 'You dived in at ' + fmtDive(i0) + (ray.branch === 'mantle' ? ', missed the core, ' : ', went through the core and got bent twice, ') +
+      (ray.delta > 180 ? 'and came up ' + deg(ray.delta) + ' round the Earth from the quake: that is past the far point, so ' + deg(ray.fold) + ' round the other way.' : 'and came up ' + deg(ray.fold) + ' round the Earth from the quake.');
+    var heardLine, steep = null;
+    if (posts.length) { heardLine = 'That is right by the post at ' + deg(posts[0]) + ', so it felt you' + (newPosts.length ? '.' : ' again.'); steep = steepSentence(i0); }
+    else { var near = nearestPost(ray.fold); heardLine = 'No post is there. The nearest, at ' + deg(near) + ', is ' + fmtGap(Math.abs(near - ray.fold)) + ' away: too far to feel you.'; }
+    var compare = null;
+    if (prev) {
+      var di = Math.abs(i0 - prev.i0), df = Math.abs(ray.fold - prev.fold);
+      if (di <= 1 && di > 0 && df >= CONFIG.JUMP_DEG) compare = 'Only ' + fmtDive(di) + ' away from your last dive, and you came up ' + deg(df) + ' further ' + (ray.fold > prev.fold ? 'round' : 'back') + '. Something big happens between ' + fmtDive(Math.min(i0, prev.i0)) + ' and ' + fmtDive(Math.max(i0, prev.i0)) + '. Try dives in between: − and + move a tenth of a degree.';
+      else if (di <= 1 && df < CONFIG.SAME_DEG) compare = 'Almost the same dive as last time, and almost the same place. Nothing new here: try a very different dive.';
+    }
     var left = CONFIG.WAVES - game.shots.length;
-    return { ray: ray, posts: posts, newPosts: newPosts, heardCount: Object.keys(game.heard).length, left: left, last: left <= 0, words: { what: what, heard: heardLine }, steep: steepWords(i0), vertical: verticalShare(i0) };
+    var next = left > 0 ? 'Now wave ' + (game.shots.length + 1) + ' of ' + CONFIG.WAVES + ': set a new dive, then fire.' : 'That was your last wave. Now every dive at once.';
+    return { ray: ray, posts: posts, newPosts: newPosts, heardCount: Object.keys(game.heard).length, left: left, last: left <= 0, words: { what: what, heard: heardLine, steep: steep, compare: compare, next: next }, steep: steepWords(i0), bounce: bounceWords(i0), vertical: verticalShare(i0) };
   }
   function fmtGap(g) { var h = Math.ceil(g * 2) / 2; return (h < 1 ? 'under 1' : h.toString().replace(/\.5$/, '½')) + '°'; } // rounded up to the half degree, so a gap of 3.2 reads 3½, never 3
   function nearestPost(f) { var best = CONFIG.POSTS[0]; CONFIG.POSTS.forEach(function (P) { if (Math.abs(P - f) < Math.abs(best - f)) best = P; }); return best; }
-  function fmtDive(a) { return (Math.round(a * 2) / 2).toString().replace(/\.5$/, '½') + '°'; }
+  function fmtDive(a) { var r = Math.round(a * 10) / 10; return (Number.isInteger(r) ? r : r.toFixed(1)) + '°'; }
 
   // Act one ends after the last wave: the whole fan fires and the shadow is named.
   function reveal(game) {
     var earth = twoShell(), reach = reachablePosts(earth), shadow = shadowPosts(earth);
     var got = reach.filter(function (P) { return game.heard[P]; }), missed = reach.filter(function (P) { return !game.heard[P]; });
     var missedWith = missed.map(function (P) { return { post: P, dive: diveFor(P, earth) }; });
-    var cov = coverage(earth);
+    var cov = coverage(earth), graze = trace(asinDeg(earth.coreFrac), earth, true);
     var lines = [];
-    lines.push('Your ' + game.shots.length + ' waves lit ' + got.length + ' of the ' + reach.length + ' posts a wave can reach.' + (missed.length ? ' A dive of ' + fmtDive(missedWith[0].dive) + ' would have lit ' + deg(missed[0]) + '.' : ''));
-    lines.push('No angle reaches the posts at ' + listPosts(shadow) + '. Waves that miss the core come up no further than ' + deg(cov.mantle[1]) + '; waves bent through it, no nearer than ' + deg(cov.core[0]) + '. Between them lies the shadow.');
+    lines.push('This is every dive at once, from 0° to 90°: the picture Inge Lehmann drew in 1936.');
+    lines.push('Look at the right-hand edge. Between ' + deg(cov.mantle[1]) + ' and ' + deg(cov.core[0]) + ' round, no wave comes up at all. The four posts there, at ' + listPosts(shadow) + ', can never feel a quake from here. Lehmann called this band the shadow.');
+    lines.push('Why: a wave that just misses the core comes up at ' + deg(cov.mantle[1]) + '. A wave that just catches the core is bent so hard it comes up near the far point, ' + deg(graze.fold) + ' round. Every dive in between lands beyond ' + deg(cov.core[0]) + '. The bend swallows the band.');
+    lines.push('Your ' + game.shots.length + ' waves lit ' + got.length + ' of the ' + reach.length + ' posts that can be lit.' + (missed.length ? ' A dive of ' + fmtDive(missedWith[0].dive) + ' would have lit the post at ' + deg(missed[0]) + '.' : ''));
     game.act = 2; game.reveal = { reach: reach, got: got, missed: missedWith, shadow: shadow, coverage: cov };
     return { fan: fan(earth, CONFIG.FAN_STEP_DRAW), reach: reach, got: got, missed: missedWith, shadow: shadow, coverage: cov, lines: lines };
   }
   var TWIST = [
-    'In 1936 the posts in the shadow had heard something anyway: faint, and mostly up-and-down, as if the wave had come up steeply.',
-    'Inge Lehmann’s idea: a second ball, inside the core, in which waves run at a different speed. Build it. A quake fires at every angle at once; make the four shadow posts hear it.'
+    'But in 1936 the posts in the shadow did feel something. Faint, and the ground there bounced mostly up and down, as if a wave had come up steeply.',
+    'Inge Lehmann had an idea: inside the core sits a smaller ball of different stuff, where waves run at a different speed. Build it: choose how fast waves run in the ball. Then a quake fires at every angle at once. Make the four shadow posts feel it.'
   ];
 
   // Act two: set the speed in the ball (its size is Lehmann's unless a size is passed) and fire a quake at every angle.
@@ -221,20 +242,21 @@ var MECH = (function () {
     speedRatio = round(Math.max(CONFIG.SPEED_MIN, Math.min(CONFIG.SPEED_MAX, speedRatio)), CONFIG.SPEED_STEP);
     var earth = threeShell(sizeFrac, speedRatio), heard = heardByQuake(earth);
     var shadow = game.reveal ? game.reveal.shadow : shadowPosts(twoShell());
-    var lit = shadow.filter(function (P) { return heard[P]; });
+    var lit = shadow.filter(function (P) { return heard[P]; }), dark = shadow.filter(function (P) { return !heard[P]; });
     var cov = coverage(earth), how;
     if (speedRatio > 1 + 1e-9) {
-      how = cov.reflect ? 'Waves meeting the ball at a shallow slant bounced off it and came up from ' + deg(cov.reflect[0]) + '; waves going through it bent away from the middle.'
-        : 'Waves going through the ball bent away from the middle and came up from ' + deg(cov.inner[0]) + '.';
+      how = cov.reflect ? 'Waves that hit your ball at a glancing angle bounced off it and came up from ' + deg(cov.reflect[0]) + ' round: inside the shadow. Waves that went through it were bent away from the middle and came up there too.'
+        : 'Waves that went through your ball were bent away from the middle and came up from ' + deg(cov.inner[0]) + ' round.';
     } else if (speedRatio < 1 - 1e-9) {
       var wrapped = fan(earth, CONFIG.FAN_STEP_HEAR).some(function (r) { return r.branch === 'inner' && r.delta > 180 + CONFIG.EAR_DEG; });
-      how = 'Waves going through the ball bent further toward the middle' + (wrapped ? ', crossed the far point and came back round as far as ' + deg(cov.inner[0]) + '.' : ' and came up where waves already came up.');
-    } else how = 'A ball at the same speed as the core bends nothing: every wave went through as if it were not there.';
-    var result = cap(countPosts(lit.length)) + ' heard the quake' + (lit.length ? ': ' + listPosts(lit) + '.' : '.');
+      how = 'Waves that went through your ball were bent even more toward the middle' + (wrapped ? '. They went past the far point and came back round the other side, as far as ' + deg(cov.inner[0]) + '.' : ', and came up where waves already came up.');
+    } else how = 'Waves run the same speed in your ball as around it, so it bends nothing. Every wave went through as if the ball were not there.';
+    var result = lit.length === 4 ? 'All four shadow posts felt it: ' + listPosts(lit) + '.' : lit.length === 0 ? 'None of the four shadow posts felt anything.' : (lit.length === 1 ? 'Only the post at ' + deg(lit[0]) + ' felt it. ' : 'The posts at ' + listPosts(lit) + ' felt it. ') + 'The ' + (dark.length === 1 ? 'post at ' + deg(dark[0]) + ' felt nothing.' : 'other ' + ['', '', 'two', 'three'][dark.length] + ' shadow posts felt nothing.');
     var q = { n: game.quakes.length + 1, sizeFrac: sizeFrac, speedRatio: speedRatio, heard: heard, lit: lit, coverage: cov };
     game.quakes.push(q);
     if (game.quakes.length >= CONFIG.QUAKES) game.done = true;
-    return { quake: q, fan: fan(earth, CONFIG.FAN_STEP_DRAW), heard: heard, lit: lit, shadow: shadow, left: CONFIG.QUAKES - game.quakes.length, words: { ball: 'The ball ran ' + speedWords(speedRatio) + '.', result: result, how: how } };
+    var next = game.done ? 'That was the last quake. See the verdict.' : 'Now quake ' + (game.quakes.length + 1) + ' of ' + CONFIG.QUAKES + ': set a new speed, then fire.';
+    return { quake: q, fan: fan(earth, CONFIG.FAN_STEP_DRAW), heard: heard, lit: lit, shadow: shadow, left: CONFIG.QUAKES - game.quakes.length, words: { ball: 'You made waves run ' + inBall(speedRatio) + '. The quake fired at every angle at once.', result: result, how: how, next: next } };
   }
   function finish(game) { game.done = true; return verdict(game); }
 
@@ -242,23 +264,23 @@ var MECH = (function () {
     var last = game.quakes[game.quakes.length - 1], shadow = game.reveal ? game.reveal.shadow : shadowPosts(twoShell());
     var best = game.quakes.reduce(function (b, q) { return !b || q.lit.length > b.lit.length ? q : b; }, null);
     var L = lehmannEarth(), lCov = coverage(L);
-    var did = 'You fired ' + game.shots.length + ' waves into Lehmann’s Earth of two shells and found the shadow: four posts, from ' + deg(shadow[0]) + ' to ' + deg(shadow[shadow.length - 1]) + ' round from the quake, that no angle could reach.';
+    var did = 'You fired ' + game.shots.length + ' waves into an Earth with two layers, a fast mantle and a slow core, and found the shadow: a band on the far side, from ' + deg(shadow[0]) + ' to ' + deg(shadow[shadow.length - 1]) + ' round, that no wave can reach.';
     if (last) {
-      did += ' Then you put a ball inside the core running ' + speedWords(last.speedRatio) + ', and ' + countPosts(last.lit.length) + ' heard the quake.';
-      if (best && best !== last && best.lit.length > last.lit.length) did += ' Your best ball, ' + speedWords(best.speedRatio) + ', reached ' + countPosts(best.lit.length).replace(' shadow posts', '') + '.';
+      did += ' Then you put a ball inside the core where waves run ' + inBall(last.speedRatio) + ', and ' + countPosts(last.lit.length) + ' felt the quake.';
+      if (best && best !== last && best.lit.length > last.lit.length) did += ' Your best ball, where waves ran ' + inBall(best.speedRatio) + ', reached ' + countPosts(best.lit.length).replace(' shadow posts', '') + '.';
     }
-    var paper = 'Lehmann’s ball was ' + sizeWords(CONFIG.INNER_FRAC) + ' (about ' + Math.round(CONFIG.INNER_FRAC * CONFIG.R0_KM / 100) * 100 + ' km from its centre to its edge) and ran ' + speedWords(CONFIG.V_INNER / CONFIG.V_CORE) + '. Waves bounce off it and come up from about ' + deg(lCov.reflect[0]) + ' round, right inside the shadow, arriving steeply, with a strong up-and-down, and stronger the further round they land: what the posts had recorded. She called it a hypothesis that seemed probable and could not be proved from the data at hand.';
-    var means = 'It held. Two years later Gutenberg and Richter computed an inner core about ' + CONFIG.PAPER.GUTENBERG_RICHTER_KM + ' km from centre to edge; in 1939 Jeffreys showed the creeping-round explanation could not work; by 1946 the inner ball was agreed to be solid. The Earth is a ball inside a ball inside a ball, and the innermost was found with cardboard cards, oatmeal boxes and a pencil.';
+    var paper = 'Lehmann’s ball is ' + sizeWords(CONFIG.INNER_FRAC) + ', about ' + Math.round(CONFIG.INNER_FRAC * CONFIG.R0_KM / 100) * 100 + ' km from its centre to its edge, and waves run ' + inBall(CONFIG.V_INNER / CONFIG.V_CORE).replace('in the ball', 'in it') + '. Waves bounce off it and come up from about ' + deg(lCov.reflect[0]) + ' round: right inside the shadow. They come up steeply, so the ground bounces up and down hard, and they get stronger the further round they land. That is just what the posts in the shadow had felt. She wrote that the idea seemed likely, but could not be proved with what she had.';
+    var means = 'She was right. Two years later Gutenberg and Richter worked out the ball’s size: about ' + CONFIG.PAPER.GUTENBERG_RICHTER_KM + ' km from centre to edge. In 1939 Jeffreys showed that waves creeping round the core could not explain what the shadow posts felt. By 1946 everyone agreed: the Earth has a solid ball in the middle of its liquid core. She found it with cardboard cards, oatmeal boxes and a pencil, in her garden in Copenhagen.';
     var fate;
     if (!last) fate = 'You never built the ball.';
     else if (last.lit.length === 4 && last.speedRatio > 1) fate = 'Your ball does what hers does.';
-    else if (last.lit.length === 4 && last.speedRatio < 1) fate = 'Your ball fills the shadow the other way round: waves plunge through it, cross the far point and come back round. In this model that works; the posts, though, recorded waves arriving stronger the further round they stood, and a bounce off a faster ball gives that where a plunge through a slower one does not. Later work found the ball faster.';
-    else if (last.lit.length > 0 && last.speedRatio < 1) fate = 'Your ball fills part of the shadow from the far side: waves plunged through it, crossed the far point and came back round.';
+    else if (last.lit.length === 4 && last.speedRatio < 1) fate = 'Your ball fills the shadow the wrong way round: waves plunge through it, cross the far point and come back. In this model that works too. But the shadow posts felt waves that came up steeply and got stronger further round, and only a bounce off a faster ball gives that. Later work found the ball faster.';
+    else if (last.lit.length > 0 && last.speedRatio < 1) fate = 'Your ball fills part of the shadow, the wrong way round: waves plunged through it, crossed the far point and came back.';
     else if (last.lit.length > 0) fate = 'Your ball fills part of the shadow.';
     else fate = 'Your ball leaves the shadow dark.';
     return { did: did, fate: fate, paper: paper, means: means, lehmann: { sizeFrac: CONFIG.INNER_FRAC, speedRatio: CONFIG.V_INNER / CONFIG.V_CORE }, last: last, quote: 'We take it that, as before, the Earth consists of a core and a mantle, but that inside the core there is an inner core in which the velocity is larger than in the outer one.' };
   }
 
-  return { CONFIG: CONFIG, twoShell: twoShell, threeShell: threeShell, lehmannEarth: lehmannEarth, trace: trace, fold: fold, fan: fan, postsHeardBy: postsHeardBy, heardByQuake: heardByQuake, reachablePosts: reachablePosts, shadowPosts: shadowPosts, diveFor: diveFor, coverage: coverage, verticalShare: verticalShare, sizeWords: sizeWords, speedWords: speedWords, steepWords: steepWords, fmtDive: fmtDive, deg: deg, newGame: newGame, fire: fire, reveal: reveal, TWIST: TWIST, quake: quake, finish: finish, verdict: verdict };
+  return { CONFIG: CONFIG, twoShell: twoShell, threeShell: threeShell, lehmannEarth: lehmannEarth, trace: trace, fold: fold, fan: fan, postsHeardBy: postsHeardBy, heardByQuake: heardByQuake, reachablePosts: reachablePosts, shadowPosts: shadowPosts, diveFor: diveFor, coverage: coverage, verticalShare: verticalShare, sizeWords: sizeWords, speedWords: speedWords, steepWords: steepWords, bounceWords: bounceWords, fmtDive: fmtDive, deg: deg, INTRO1: INTRO1, INTRO2: INTRO2, newGame: newGame, fire: fire, reveal: reveal, TWIST: TWIST, quake: quake, finish: finish, verdict: verdict };
 })();
 if (typeof module !== 'undefined') module.exports = MECH;

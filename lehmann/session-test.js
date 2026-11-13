@@ -33,6 +33,8 @@ const path = require('path');
   }
   const dialKept = await page.evaluate(() => document.getElementById('dive').value);
   if (dialKept !== '0') errors.push('the dial should stay where the player left it (0), reads ' + dialKept);
+  const nudged = await page.evaluate(() => { const e = document.getElementById('dive'); e.step = 'any'; e.value = 33.5; e.dispatchEvent(new Event('input')); document.getElementById('dive-plus').click(); return document.getElementById('dive-read').innerText; });
+  if (nudged !== '33.6°') errors.push('the + button should move a tenth of a degree, reads ' + nudged);
   await shot('a-reveal', true);
   await page.click('#b-twist'); await page.waitForTimeout(200); await shot('a-twist', true);
   await page.click('#b-build'); await page.waitForTimeout(200); await shot('b-1-ready', true); await shot('view-b-1-ready', false);
