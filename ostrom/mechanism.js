@@ -20,9 +20,12 @@ var CONFIG = {
   // ---- the pond (ours) --------------------------------------------------------------------------------------
   POND_CAP: 50,                   // ours: a full pond holds fifty fish (drawn, countable)
   POND_START: 40,                 // ours: the pond at the start
-  POND_GROWTH: 1.15,              // ours: logistic breeding, growth = rate × S × (1 − S/cap); at 40 fish that is about
-                                  // nine or ten new fish, so ten villagers taking one each hold the pond full; below about
-                                  // eleven fish after fishing, even one fish each is more than the pond can replace
+  POND_BABIES: 12,                // ours: the pond has food for twelve babies a winter: one for each of us and two to spare.
+                                  // The winter's rule, in words a player can check: every fish left can have one baby;
+                                  // never more than POND_BABIES babies; never more fish than POND_CAP. So ten fish out
+                                  // and twelve in fills the pond slowly, and every second fish someone takes beyond
+                                  // that is a fish the pond is short next summer. (Revision 4: this replaced a logistic
+                                  // curve that gave most babies at half full and that no player could verify.)
   FAIR: 1,                        // ours: the fair take, one fish
   GREEDY: 2,                      // ours: the greedy take, two fish; the temptation is the second fish
 
@@ -236,9 +239,9 @@ function playSummer(s, regime, test) {
   // 6. the winter: the fish breed, bans are served and lifted, norms move
   if (!test) {
     var S = rec.pondAfterFishing;
-    var growth = Math.round(C.POND_GROWTH * S * (1 - S / C.POND_CAP));
-    s.pond = Math.max(0, Math.min(C.POND_CAP, S + growth));
-    rec.growth = s.pond - S;
+    var b = babies(S);
+    s.pond = S + b.n;
+    rec.growth = b.n; rec.babyLimit = b.limit;
     V.forEach(function (v) { v.banned = false; });
     rec.bansNext.forEach(function (i) { V[i].banned = true; });
     winter(s, rec, regime);
@@ -299,11 +302,18 @@ function runStrategy(seed, strategy) {
 }
 
 // words for the pond and the bellies (the verdict's second line) — thresholds ours
+// the winter: how many babies, and what held the number down ('food', 'room', 'parents', or 'none' when no fish are left)
+function babies(S) {
+  var C = CONFIG, room = Math.max(0, C.POND_CAP - S), n = Math.max(0, Math.min(S, C.POND_BABIES, room));
+  var limit = S <= 0 ? 'none' : n === room && room < C.POND_BABIES && room <= S ? 'room' : n === S && S < C.POND_BABIES ? 'parents' : 'food';
+  return { n: n, limit: limit };
+}
 function pondWord(fish) {
   var C = CONFIG;
   if (fish <= 0) return 'empty';
   if (fish < C.POND_CAP * 0.3) return 'nearly empty';
   if (fish < C.POND_CAP * 0.7) return 'half full';
+  if (fish < C.POND_CAP * 0.9) return 'nearly full';
   return 'full';
 }
 function belliesWord(eaten) {
@@ -314,5 +324,5 @@ function belliesWord(eaten) {
 }
 function sum(xs) { return xs.reduce(function (a, b) { return a + b; }, 0); }
 
-var M = { CONFIG: CONFIG, REGIMES: REGIMES, REGIME: REGIME, makeRng: makeRng, newVillage: newVillage, migrate: migrate, shareProb: shareProb, playSummer: playSummer, winter: winter, runStrategy: runStrategy, pondWord: pondWord, belliesWord: belliesWord, sum: sum };
+var M = { CONFIG: CONFIG, REGIMES: REGIMES, REGIME: REGIME, makeRng: makeRng, newVillage: newVillage, babies: babies, migrate: migrate, shareProb: shareProb, playSummer: playSummer, winter: winter, runStrategy: runStrategy, pondWord: pondWord, belliesWord: belliesWord, sum: sum };
 if (typeof module !== 'undefined' && module.exports) module.exports = M;
