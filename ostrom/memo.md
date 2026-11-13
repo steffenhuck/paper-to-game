@@ -227,3 +227,9 @@ So: the game is restored as it stood at revision 4 (buckets and what the meeting
 - **Gone:** hunger and empty plates, the policeman's pay in people, the end-screen table, the red flag, the strike-through fish, the fee to the town. "Everyone fed" means the pond lasting: nobody goes hungry unless it runs out.
 
 Six summers against ten moved the crowding-out rate from 0.08 to 0.12 a summer, so that six policed summers still leave a village that grabs: over 400 villages the policeman's seventh summer has 0.9 of ten taking one, leaving it be 2.0, a talk 4.6, watching 7.3. All 41 checks pass; the sensitivity line on crowding out at half stands.
+
+## 29. Revision 9 (13 Nov 2026): no newcomer, and a pond that can be emptied in six summers
+
+Steffen, from a playthrough: the newcomer in summer four is a complication the game does not need; and with six summers the pond could not be run down fast enough, even by leaving it be every time.
+
+The newcomer is switched off (`MIGRATION_AFTER: 0`; the code and the paper's reason for it stay in the mechanism). The pond's food for babies goes from twelve to ten, which also makes the rule simpler to say: everyone takes one, ten out and ten in, the pond stays as it is; every fish beyond that is a fish short next summer. Over 400 villages: leaving it be empties the pond by summer five in every village; a talk ends about a quarter full and empties it in one village in four; watching and the policeman hold it level near forty. The seventh summer is unchanged: watching 7.6, a talk 4.4, leaving it be 1.9, the policeman 0.9. All checks pass; the robustness rows now include the old newcomer setting instead of excluding it.

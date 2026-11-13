@@ -20,12 +20,11 @@ var CONFIG = {
   // ---- the pond (ours) --------------------------------------------------------------------------------------
   POND_CAP: 50,                   // ours: a full pond holds fifty fish (drawn, countable)
   POND_START: 40,                 // ours: the pond at the start
-  POND_BABIES: 12,                // ours: the pond has food for twelve babies a winter: one for each of us and two to spare.
-                                  // The winter's rule, in words a player can check: every fish left can have one baby;
-                                  // never more than POND_BABIES babies; never more fish than POND_CAP. So ten fish out
-                                  // and twelve in fills the pond slowly, and every second fish someone takes beyond
-                                  // that is a fish the pond is short next summer. (Revision 4: this replaced a logistic
-                                  // curve that gave most babies at half full and that no player could verify.)
+  POND_BABIES: 10,                // ours: the pond has food for ten babies a winter, one for each of us. The winter's rule, in
+                                  // words a player can check: every fish left can have one baby; never more than POND_BABIES
+                                  // babies; never more fish than POND_CAP. So ten fish out and ten in keeps the pond as it is,
+                                  // and every fish taken beyond that is a fish the pond is short next summer. (Revision 9:
+                                  // was twelve, which let a village of grabbers last six summers.)
   FAIR: 1,                        // ours: the fair take, one fish
   GREEDY: 2,                      // ours: the greedy take, two fish; the temptation is the second fish
 
@@ -88,7 +87,8 @@ var CONFIG = {
 
   // ---- the threat (p. 153: in-migration "may bring new participants who do not trust others and do not rapidly
   //      learn social norms"; out-migration loses "those who contribute needed resources") ---------------------------
-  MIGRATION_AFTER: 3,             // ours: after three summers one villager moves away and a newcomer moves in
+  MIGRATION_AFTER: 0,             // ours: after this many summers one villager moves away and a newcomer moves in; 0 = never
+                                  // (revision 9: switched off as a complication the six-summer game does not need)
   NEWCOMER: 'Kit',                // ours: the newcomer's name; a rational egoist (norm 0) who has never fished here
   LEAVER_TYPES: ['CC', 'WP']      // ours: the one who moves away is a norm-user (a loss of those who contribute)
 };
@@ -161,7 +161,7 @@ function shareProb(v, s, regime) {
 function playSummer(s, regime, test) {
   var C = CONFIG, rng = s.rng, V = s.villagers;
   var rec = { summer: s.summer + 1, regime: regime, test: !!test, pondBefore: s.pond, acts: [], watcher: null, finesToPond: 0, bansNext: [], migration: null };
-  if (!test && s.summer === C.MIGRATION_AFTER && !s.migrated) rec.migration = migrate(s);
+  if (!test && C.MIGRATION_AFTER && s.summer === C.MIGRATION_AFTER && !s.migrated) rec.migration = migrate(s);
   var banned = V.filter(function (v) { return v.banned; }).map(function (v) { return v.i; });
   var watcher = null;
   if (regime === 'watch') {

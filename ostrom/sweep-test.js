@@ -70,7 +70,7 @@ const fs = require('fs');
       }
       // 4. the pond, the town, the shelf, the books
       const pm = /The pond had (\d+) fish\. We took (\d+)(?: and (\d+) (?:was|were) put back)?, so (\d+|none) (?:was|were) left\./.exec(text), nm = /Now the pond has (\d+)/.exec(text);
-      const S = rec.pondAfterFishing, expectBabies = Math.max(0, Math.min(S, 12, 50 - S));
+      const S = rec.pondAfterFishing, expectBabies = Math.max(0, Math.min(S, 10, 50 - S));
       if (!pm || !nm) err(v, t, 'no pond sentence');
       else {
         if (Number(pm[1]) !== rec.pondBefore || Number(pm[2]) !== took || Number(pm[3] || 0) !== rec.finesToPond || (pm[4] === 'none' ? 0 : Number(pm[4])) !== S || Number(nm[1]) !== rec.pondAfter || rec.pondAfter !== r.pond) err(v, t, `pond text ${pm.slice(1).join('/')}/${nm[1]} vs record ${rec.pondBefore}/${took}/${rec.finesToPond}/${S}/${rec.pondAfter}/${r.pond}`);
@@ -85,7 +85,7 @@ const fs = require('fs');
       if (r.shelf !== 'fish eaten so far: ' + (r.eaten || 'none')) err(v, t, `shelf "${r.shelf}" vs ${r.eaten}`);
       if (r.eaten < 0 || rec.eaten < 0 || rec.acts.some(a => a.took - a.fine < 0 || a.took > 2)) err(v, t, 'negative or impossible fish');
       for (const a of rec.acts) { if ((a.sanction === 'back' || a.sanction === 'ban' || a.sanction === 'police') && a.fine !== a.took) err(v, t, `${a.name}: fine ${a.fine} vs took ${a.took}`); if (a.sanction === 'ban' && !r.bannedNow.includes(a.name)) err(v, t, `${a.name} banned in record but not in state`); }
-      if ((t === 3) !== !!rec.migration) err(v, t, 'migration at the wrong summer');
+      if (rec.migration || r.names.includes('Kit')) err(v, t, 'a newcomer appeared');
       if (rec.migration && !(rec.migration.came === 'Kit' && r.names.includes('Kit') && !r.names.includes(rec.migration.left))) err(v, t, 'migration inconsistent');
       log.push(`village ${v} summer ${t + 1} ${key}: ${text.replace(/\n+/g, ' / ')}`);
       await page.click('#b-next'); await page.waitForTimeout(120);
