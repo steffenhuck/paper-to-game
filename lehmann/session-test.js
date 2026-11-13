@@ -17,17 +17,20 @@ const path = require('path');
   await shot('start', true); await shot('view-start', false);
   const lit = async () => page.evaluate(() => document.querySelectorAll('#plate svg circle[fill="#F2C14E"][filter]').length);
   const quiv = async () => page.evaluate(() => document.querySelectorAll('#plate svg circle[fill="#9C7F3A"]').length);
-  const tildes = async () => page.evaluate(() => [...document.querySelectorAll('#plate svg text')].filter(t => t.textContent === '~' && !t.classList.contains('hide')).length);
-  // beat one: watch a real earthquake
-  await page.click('#b-begin'); await page.waitForTimeout(300); await shot('w-1-before', false);
-  if (await page.evaluate(() => !document.getElementById('panel1').classList.contains('hide'))) errors.push('no dial while the real earthquake is watched');
-  await page.waitForTimeout(2300); await shot('w-2-answering', false);
-  await idle(); await page.waitForTimeout(200); await shot('w-3-after', true); await shot('view-w-3-after', false);
-  if (await lit() !== 14 || await quiv() !== 4 || await tildes() !== 4) errors.push('the real earthquake should light 14 posts, make 4 quiver and mark them ~: ' + [await lit(), await quiv(), await tildes()]);
-  log.push('WATCH [' + await text('head') + '] ' + await text('res'));
+  const band = async () => page.evaluate(() => { const p = document.querySelector('#plate svg path[fill^="url(#hatch"]'); return p && !p.classList.contains('hide'); });
+  // stage 0: the facts. Three real earthquakes, nothing to do but watch
+  await page.click('#b-begin'); await page.waitForTimeout(300); await shot('d-1-before', false);
+  if (await page.evaluate(() => !document.getElementById('panel1').classList.contains('hide'))) errors.push('no dial while the facts are shown');
+  if (await band()) errors.push('the band should not be marked before the three earthquakes have been watched');
+  await page.waitForTimeout(3300); await shot('d-2-first-quake', false);
+  const heads = new Set(); for (let k = 0; k < 40 && (await page.evaluate(() => window.__game().busy)); k++) { heads.add(await text('head')); await page.waitForTimeout(400); }
+  if ([...heads].filter(h => /Earthquake \d of 3/.test(h)).length !== 3) errors.push('three earthquakes should be shown, saw: ' + [...heads].join(' | '));
+  await idle(); await page.waitForTimeout(800); await shot('d-3-after', true); await shot('view-d-3-after', false);
+  if (await lit() !== 14 || await quiv() !== 4 || !(await band())) errors.push('after the third earthquake 14 posts are lit, 4 quiver and the band is marked: ' + [await lit(), await quiv(), await band()]);
+  log.push('FACTS [' + await text('head') + '] ' + await text('res'));
   await page.click('#b-next'); await page.waitForTimeout(300); await shot('a-1-ready', true); await shot('view-1-ready', false);
-  if (!/go 1 of 8/i.test(await text('b-fire'))) errors.push('the gold button should read Fire · go 1 of 8, reads ' + await text('b-fire'));
-  if (await lit() !== 0 || await quiv() !== 0 || await tildes() !== 4) errors.push('stage one should start with every post dark and the four ~ marks showing');
+  if (!/go 1 of 4/i.test(await text('b-fire'))) errors.push('the gold button should read Fire · go 1 of 4, reads ' + await text('b-fire'));
+  if (await lit() !== 0 || await quiv() !== 0 || !(await band())) errors.push('stage one should start with every post dark and the band still marked');
   const fits = await page.evaluate(() => document.getElementById('b-fire').getBoundingClientRect().bottom <= window.innerHeight);
   if (!fits) errors.push('picture, cue, dial and FIRE should fit one 380 x 760 screen');
   await page.click('#q-play'); await page.waitForTimeout(200); await shot('help', true); await page.click('#b-help-close');
@@ -36,59 +39,57 @@ const path = require('path');
   const toScreen = (sx, sy) => [box.x + sx / 360 * box.w, box.y + sy / 380 * box.h];
   let [mx, my] = toScreen(180 + 146, 38 + 146); await page.mouse.move(mx, my); await page.mouse.down(); await page.mouse.up();
   if (await text('dive-read') !== '45°') errors.push('dragging to the right-hand end of the equator should set a dive of 45°, reads ' + await text('dive-read'));
-  [mx, my] = toScreen(180, 300); await page.mouse.move(mx, my); await page.mouse.down(); [mx, my] = toScreen(180 + 100, 38 + 100 / Math.tan(30 * Math.PI / 180)); await page.mouse.move(mx, my, { steps: 5 }); await page.mouse.up();
-  if (await text('dive-read') !== '30°') errors.push('dragging should follow the finger to 30°, reads ' + await text('dive-read'));
-  // stage one: eight goes in an Earth with one core, with the jump at the grazing angle
-  const dives = [45, 60, 30, 10, 34, 33.5, 33.7, 26];
+  // stage one: imagine one core. Four goes, the question, one last try
+  const dives = [45, 30, 34, 33.5, 20];
   for (let k = 0; k < dives.length; k++) {
     await setRange('dive', dives[k]); await page.waitForTimeout(100);
     await page.click('#b-fire'); await page.waitForTimeout(400);
-    if (k === 0) await shot('a-1-travelling', false);
     if (k < dives.length - 1) { await idle(); await page.waitForTimeout(150); log.push(await says()); }
     else { await page.waitForFunction(() => window.__game().phase === 'reveal', null, { timeout: 15000 }); await page.waitForTimeout(900); await shot('a-fan-firing', false); await idle(); await page.waitForTimeout(200); log.push('[' + await text('head') + '] ' + await text('res')); }
-    if (k === 0) { await shot('a-1-result', true); await shot('view-1-result', false); if (!/now choose your next direction/i.test(await text('cue')) || !/go 2 of 8/i.test(await text('b-fire'))) errors.push('after a go the cue should invite the next one, reads: ' + await text('cue') + ' | ' + await text('b-fire')); }
-    if (k === 5) { await shot('a-6-graze-core', true); await shot('view-6-graze-core', false); }
+    if (k === 0) { await shot('a-1-result', true); await shot('view-1-result', false); if (!/now choose your next direction/i.test(await text('cue')) || !/go 2 of 4/i.test(await text('b-fire'))) errors.push('after a go the cue should invite the next one, reads: ' + await text('cue') + ' | ' + await text('b-fire')); if (!/can you make the band quiver/i.test(await text('aimline'))) errors.push('after the first go the aim should be to make the band quiver'); }
+    if (k === 3) { await shot('a-4-what-is-wrong', true); await shot('view-a-4-what-is-wrong', false); if (!/could not make the band quiver/i.test(await text('head')) || !/what is wrong/i.test(await text('cue')) || !/one last try/i.test(await text('cue')) || !/one last try/i.test(await text('b-fire'))) errors.push('after the fourth go the game should ask what is wrong and offer one last try: ' + await text('head') + ' | ' + await text('cue') + ' | ' + await text('b-fire')); }
     if (await hscroll()) errors.push('horizontal scroll after go ' + (k + 1));
   }
   await shot('a-reveal', true); await shot('view-a-reveal', false);
-  if (await lit() !== 14 || await quiv() !== 0) errors.push('one core, every direction at once: 14 posts light and the four ~ posts stay dead, found ' + [await lit(), await quiv()]);
+  if (await lit() !== 14 || await quiv() !== 0) errors.push('one core, every direction at once: 14 posts light and the band stays silent, found ' + [await lit(), await quiv()]);
+  if (!/trap/i.test(await text('head'))) errors.push('the reveal should own up to the trap');
   await page.click('#b-next'); await page.waitForTimeout(300); await shot('a-card', true);
   await page.click('#b-build'); await page.waitForTimeout(1100); await shot('b-1-ready', true); await shot('view-b-1-ready', false);
-  if (!/go 1 of 4/i.test(await text('b-fire'))) errors.push('stage two should open with Fire · go 1 of 4');
-  // stage two: a miss, through the inner core but outside the shadow, then two into the shadow
-  const dives2 = [25, 10, 14, 15];
+  if (!/go 1 of 3/i.test(await text('b-fire'))) errors.push('stage two should open with Fire · go 1 of 3');
+  // stage two: imagine a core within the core. A miss, through but outside the band, then into the band
+  const dives2 = [25, 10, 14];
   for (let k = 0; k < dives2.length; k++) {
     await setRange('dive', dives2[k]); await page.waitForTimeout(100);
     await page.click('#b-fire'); await page.waitForTimeout(400);
     if (k < dives2.length - 1) { await idle(); await page.waitForTimeout(150); log.push(await says()); }
-    else { await page.waitForTimeout(1000); log.push('[' + await text('head') + '] ' + await text('res')); await shot('b-4-bounce', true); await shot('view-b-4-bounce', false); if (await quiv() !== 2) errors.push('two waves in the shadow should leave two ~ posts quivering, found ' + await quiv()); await page.waitForFunction(() => window.__game().phase === 'reveal2', null, { timeout: 15000 }); await page.waitForTimeout(900); await shot('b-fan-firing', false); await idle(); await page.waitForTimeout(300); log.push('[' + await text('head') + '] ' + await text('res')); }
+    else { await page.waitForTimeout(1200); log.push('[' + await text('head') + '] ' + await text('res')); await shot('b-3-band-quivers', true); await shot('view-b-3-band-quivers', false); if (await quiv() !== 1) errors.push('a wave in the band should make one post there quiver, found ' + await quiv()); await page.waitForFunction(() => window.__game().phase === 'reveal2', null, { timeout: 15000 }); await page.waitForTimeout(900); await shot('b-fan-firing', false); await idle(); await page.waitForTimeout(300); log.push('[' + await text('head') + '] ' + await text('res')); }
     if (k === 0) await shot('b-1-miss', true);
-    if (k === 2) { await shot('b-3-into-shadow', true); await shot('view-b-3-into-shadow', false); }
     if (await hscroll()) errors.push('horizontal scroll after stage-two go ' + (k + 1));
   }
   await shot('b-reveal', true); await shot('view-b-reveal', false);
-  if (await lit() !== 14 || await quiv() !== 4) errors.push('a core within the core, every direction at once: 14 posts light and the four ~ posts quiver, found ' + [await lit(), await quiv()]);
+  if (await lit() !== 14 || await quiv() !== 4) errors.push('a core within the core, every direction at once: 14 posts light and the band quivers, found ' + [await lit(), await quiv()]);
   if (!/verdict/i.test(await text('b-next'))) errors.push('the gold button should read See the verdict');
   await page.click('#b-next'); await page.waitForTimeout(400); await shot('end', true); await shot('view-end', false);
-  log.push('VERDICT: ' + await page.evaluate(() => document.querySelector('.verdict').innerText.replace(/\n+/g, ' / ')));
+  log.push('VERDICT: ' + await page.evaluate(() => ['v-fate', 'v-did', 'v-paper', 'v-means'].map(id => document.getElementById(id).innerText).join(' / ')));
   const words = await page.evaluate(() => ['v-did', 'v-paper', 'v-means'].map(id => document.getElementById(id).innerText.split(/\s+/).length));
   if (words.some(w => w > 110)) errors.push('each verdict paragraph should stay short, word counts ' + words);
   if (await page.evaluate(() => document.getElementById('v-more').open)) errors.push('Read further should start closed');
   await page.click('#v-more summary'); await page.waitForTimeout(200); await shot('end-read-further', true);
-  if (await page.evaluate(() => document.querySelectorAll('#v-more-body h4').length) !== 6) errors.push('Read further should hold six notes');
+  if (await page.evaluate(() => document.querySelectorAll('#v-more-body h4').length) !== 7) errors.push('Read further should hold seven notes');
   if (await hscroll()) errors.push('horizontal scroll on the end screen');
   await page.click('#b-about'); await page.waitForTimeout(200); await shot('about', true); await page.click('#b-about-close');
-  // retry, and a player who never dives steeply
+  // retry from the facts, and a player who never dives steeply
   await page.click('#b-again'); await page.waitForTimeout(300);
-  if (await page.evaluate(() => window.__game().phase) !== 'watch') errors.push('a retry should start with the real earthquake again');
+  if (await page.evaluate(() => window.__game().phase) !== 'data') errors.push('a retry should start with the facts again');
+  if (await band()) errors.push('on a retry the band should be unmarked until the three earthquakes have been watched');
   await idle(); await page.click('#b-next'); await page.waitForTimeout(300);
   const ok = await page.evaluate(() => { const g = window.__game(); return g.phase === 'act1' && g.game.shots.length === 0 && document.getElementById('dive').value === '45' && document.querySelector('#plate svg circle[stroke-width="1"][stroke="#EEE3C8"]:not([fill="none"])').classList.contains('hide'); });
   if (!ok || await lit() !== 0) errors.push('retry did not restart cleanly');
   await shot('c-restart', true);
-  for (let k = 0; k < 8; k++) { await setRange('dive', 40 + k * 3); await page.click('#b-fire'); if (k < 7) await idle(); }
+  for (let k = 0; k < 5; k++) { await setRange('dive', 40 + k * 5); await page.click('#b-fire'); if (k < 4) await idle(); }
   await page.waitForFunction(() => window.__game().phase === 'reveal', null, { timeout: 15000 }); await idle();
   await page.click('#b-next'); await page.waitForTimeout(200); await page.click('#b-build');
-  for (let k = 0; k < 4; k++) { await setRange('dive', 20 + k * 5); await page.click('#b-fire'); if (k < 3) await idle(); }
+  for (let k = 0; k < 3; k++) { await setRange('dive', 20 + k * 5); await page.click('#b-fire'); if (k < 2) await idle(); }
   await page.waitForFunction(() => window.__game().phase === 'reveal2', null, { timeout: 15000 }); await idle(); await page.waitForTimeout(300);
   await page.click('#b-next'); await page.waitForTimeout(300); await shot('c-end-never-steep', true);
   log.push('NEVER STEEP: ' + await text('v-fate') + ' / ' + await text('v-did'));

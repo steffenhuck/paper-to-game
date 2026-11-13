@@ -42,6 +42,11 @@ var CONFIG = {
     GUTENBERG_RICHTER_KM: 1200, // inner core radius two years later (p. 267)
     TABLE_II: [[14, 144.3], [13, 150.7], [12, 154.7], [11, 157.7], [10, 160.3], [8, 164.8], [5, 170.8], [1, 178.2]], // Lehmann's own table of rays through the inner core: take-off angle, Δ [p. 98]; used by the check only
     QUAKE_DATE: '16 June 1929', // the Buller earthquake, New Zealand, whose P′3 records are her Figure 3 [p. 95–96]
+    QUAKES: [                   // the three earthquakes whose P′ records the paper discusses [p. 95–96]: the Pacific earthquake of 1924 (Macelwane, Krumbach), Buller 1929 (her own study, Figure 3), Hawke Bay 1931 (Dahm)
+      { place: 'South Pacific', date: '26 June 1924' },
+      { place: 'Buller, New Zealand', date: '16 June 1929' },
+      { place: 'Hawke’s Bay, New Zealand', date: '2 February 1931' },
+    ],
     RECORDS: [                  // the three stations of Figure 3, with their distances [p. 96]; upDown and sideways are OURS: rough sizes read off the figure by eye, for a sketch, not measurements
       { name: 'Irkutsk', deg: 110.8, upDown: 0.3, sideways: 0.14 },
       { name: 'Sverdlovsk', deg: 135.0, upDown: 1.0, sideways: 0.3 },
@@ -59,8 +64,9 @@ var CONFIG = {
   FAN_STEP_DRAW: 0.5,         // ours: take-off step of the fan that is drawn (180 rays a side)
 
   // ---- ours: the dials --------------------------------------------------------------------------------
-  WAVES: 8,                   // ours: waves in the first stage (an Earth with one core); after the last the whole fan fires by itself
-  WAVES2: 4,                  // ours: waves in the second stage (an Earth with a core within the core)
+  WAVES: 4,                   // ours: goes in the first stage (imagine an Earth with one core); then the game asks what is wrong and gives one last try
+  LAST_TRIES: 1,              // ours: that last try; after it every direction fires at once
+  WAVES2: 3,                  // ours: goes in the second stage (imagine an Earth with a core within the core)
   DIVE_MIN: 0, DIVE_MAX: 90, DIVE_STEP: 0.1, DIVE_START: 45,   // ours: the dive's resolution (the − and + buttons move one step); the first wave starts at 45°, after that the dial stays where the player left it
   DIVE_START2: 25,            // ours: where the dial stands when the second stage opens (outside the inner core's reach, so the first move is the player's)
   DIVE_SLIDER_STEP: 0.5,      // ours: the slider's own step; finer work is done with − and +, or by dragging on the picture
@@ -198,23 +204,25 @@ var MECH = (function () {
   function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
   // ---- the game -----------------------------------------------------------------------------------------
-  // Two possibilities, and one record to judge them by. The record (ours, after the paper's observation that
-  // P′ is seen "with smaller amplitudes" inside the shadow [p. 93] and its Figure 3 [p. 96]): in a real
-  // earthquake most posts shake and light up; the posts inside the one-core Earth's shadow only quiver.
-  // The player watches that first, then tries an Earth with ONE CORE, then an Earth with A CORE WITHIN THE CORE.
-  function faintPosts() { return shadowPosts(twoShell()); }
-  // What each post did in the real earthquake the game opens with: 'lit' or 'quiver'.
-  function record() { var f = faintPosts(), out = {}; CONFIG.POSTS.forEach(function (P) { out[P] = f.indexOf(P) >= 0 ? 'quiver' : 'lit'; }); return out; }
-  function startStage1(game) { game.act = 1; return game; }
-  function newGame() { return { act: 0, shots: [], reached: {}, shots2: [], reached2: {}, quivers: {}, inShadow: 0, touches: 0, done: false }; }
-  var WATCH = {
-    before: 'First, watch a real earthquake. Keep your eye on the listening posts round the right-hand edge.',
-    head: 'Most posts lit up. Four only quivered.',
-    after: ['That is what real listening posts recorded: a strong shake almost everywhere, and in one band on the far side only a faint quiver. The four posts that quivered now carry a small ~ mark.', 'Nobody can look inside the Earth. So you will try two Earths and see which one does the same: one with a single core, and one with a core within the core.']
+  // Stage 0 is data: three real earthquakes, and what the posts did each time (ours, a simplified picture of the
+  // paper's observation that P′ is seen "with smaller amplitudes" inside the shadow [p. 93] and of its Figure 3
+  // [p. 96]): most posts shake hard and light up; the posts in one band only quiver. Stages 1 and 2 are
+  // imagined Earths: one core, then a core within the core. In them the player is the earthquake and produces
+  // what that imagined Earth would do. The band is the one-core Earth's shadow.
+  function bandPosts() { return shadowPosts(twoShell()); }
+  function record() { var f = bandPosts(), out = {}; CONFIG.POSTS.forEach(function (P) { out[P] = f.indexOf(P) >= 0 ? 'quiver' : 'lit'; }); return out; }
+  function newGame() { return { act: 0, shots: [], reached: {}, shots2: [], reached2: {}, quivers: {}, inBand: 0, touches: 0, done: false }; }
+  var TOTAL1 = CONFIG.WAVES + CONFIG.LAST_TRIES;
+  var DATA = {
+    aim: 'First the facts: what listening posts recorded after real earthquakes.',
+    before: 'Three real earthquakes. Watch the listening posts round the right-hand edge each time.',
+    head: 'Every time: a strong shake, then a band that only quivers, then a strong shake again.',
+    after: ['That band is marked now. After every big earthquake the posts in it feel only a faint quiver.', 'In 1936 nobody could say how any wave gets there at all. That is the puzzle.']
   };
-  var AIM1 = 'One core. Can you make the four ~ posts quiver?';
-  var AIM2 = 'A core within the core. Can you make the ~ posts quiver now?';
-  var INTRO1 = 'This Earth has one core. Choose your direction and fire. The post where you come up lights.';
+  var AIM1 = 'Imagine the Earth has one core, and you are the earthquake.';
+  var AIM1B = 'Imagine one core. Can you make the band quiver?';
+  var AIM2 = 'Imagine a core within the core. Can you make the band quiver now?';
+  var INTRO1 = 'This is an imagined Earth with one core, as everyone pictured it in 1936. Choose a direction and fire. The post where you come up lights.';
   var INTRO2 = 'The pale ball is the core within the core. Only a steep dive, less than ' + CONFIG.PAPER.INNER_GRAZE_I0 + '°, gets that deep.';
 
   function fmtGap(g) { var h = Math.ceil(g * 2) / 2; return (h < 1 ? 'under 1' : h.toString().replace(/\.5$/, '½')) + '°'; } // rounded up to the half degree, so a gap of 3.2 reads 3½, never 3
@@ -222,112 +230,116 @@ var MECH = (function () {
   function fmtDive(a) { var r = Math.round(a * 10) / 10; return (Number.isInteger(r) ? r : r.toFixed(1)) + '°'; }
   function numberWord(n) { return ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'][n] || String(n); }
   function clampDive(i0) { return round(Math.max(CONFIG.DIVE_MIN, Math.min(CONFIG.DIVE_MAX, i0)), CONFIG.DIVE_STEP); }
-  // What the game says when two dives close together land far apart, or in the same place. Used in both stages.
-  function compareLine(prev, i0, f, lit) {
+  // What the game says when two dives close together land far apart. Used in both stages.
+  function compareLine(prev, i0, f) {
     if (!prev) return null;
     var di = Math.abs(i0 - prev.i0), df = Math.abs(f - prev.fold);
-    if (di <= 1 && di > 0 && df >= CONFIG.JUMP_DEG) return 'Only ' + fmtDive(di) + ' away from your last dive, and you came up ' + deg(df) + ' further ' + (f > prev.fold ? 'round' : 'back') + '. Something big happens between ' + fmtDive(Math.min(i0, prev.i0)) + ' and ' + fmtDive(Math.max(i0, prev.i0)) + '. Try dives in between: − and + move a tenth of a degree.';
-    if (!lit && di <= 1 && df < CONFIG.SAME_DEG) return 'Almost the same dive as last time, and almost the same place. Try a different dive.';
+    if (di <= 1 && di > 0 && df >= CONFIG.JUMP_DEG) return 'Only ' + fmtDive(di) + ' away from your last dive, and you came up ' + deg(df) + ' further ' + (f > prev.fold ? 'round' : 'back') + '. Something big happens between ' + fmtDive(Math.min(i0, prev.i0)) + ' and ' + fmtDive(Math.max(i0, prev.i0)) + '.';
     return null;
   }
-  function postLine(fold, posts, isNew, faint) {
+  function postLine(fold, posts, isNew) {
     if (posts.length) return 'That is right by the post at ' + deg(posts[0]) + (isNew ? ': it lights.' : ', which was lit already.');
     var near = nearestPost(fold); return 'No post is there. The nearest, at ' + deg(near) + ', is ' + fmtGap(Math.abs(near - fold)) + ' away: too far.';
   }
+  function bandGap(fold) { var b = CONFIG.PAPER.SHADOW; return fold <= b[0] ? deg(Math.max(1, b[0] - fold)) + ' short of the band' : deg(Math.max(1, fold - b[1])) + ' past the band'; }
 
-  // Stage one: fire one wave at dive i0 into an Earth with one core (Lehmann's two-shell Earth).
+  // Stage one: imagine one core. Fire one wave at dive i0 into Lehmann's two-shell Earth. Four goes, then the
+  // game asks what is wrong and gives one last try.
   function fire(game, i0) {
     i0 = clampDive(i0);
-    var ray = trace(i0, twoShell()), hit = postsHeardBy([ray]), posts = Object.keys(hit).map(Number), newPosts = [], faint = faintPosts();
+    var ray = trace(i0, twoShell()), hit = postsHeardBy([ray]), posts = Object.keys(hit).map(Number), newPosts = [];
     posts.forEach(function (P) { if (game.reached[P] === undefined) { game.reached[P] = i0; newPosts.push(P); } });
     var prev = game.shots.length ? game.shots[game.shots.length - 1] : null;
     game.shots.push({ i0: i0, fold: ray.fold, branch: ray.branch, posts: posts });
+    var n = game.shots.length, left = TOTAL1 - n;
     var what = 'You dived in at ' + fmtDive(i0) + (ray.branch === 'mantle' ? ', missed the core, ' : ', went through the core and were bent twice, ') +
       (ray.delta > 180 ? 'and came up ' + deg(ray.delta) + ' round the Earth: that is past the far point, so ' + deg(ray.fold) + ' round the other way.' : 'and came up ' + deg(ray.fold) + ' round the Earth.');
-    var head = 'You came up at ' + deg(ray.fold) + '. ' + (posts.length ? 'The post at ' + deg(posts[0]) + (newPosts.length ? ' lights.' : ' lights again.') : 'No post there.');
-    var left = CONFIG.WAVES - game.shots.length;
-    return { ray: ray, posts: posts, newPosts: newPosts, reachedCount: Object.keys(game.reached).length, faintReached: 0, left: left, last: left <= 0, act1: true, words: { head: head, what: what, post: postLine(ray.fold, posts, newPosts.length > 0, faint), compare: compareLine(prev, i0, ray.fold, newPosts.length > 0) } };
+    var gap = bandGap(ray.fold);
+    var head = 'You came up at ' + deg(ray.fold) + ': ' + gap + '.';
+    var band = n === 1 ? 'The band stayed silent. Now try to make it quiver: you came up ' + gap + '.' : 'The band is still silent. You came up ' + gap + '.';
+    var plea = n === CONFIG.WAVES ? 'You could not make the band quiver.' : null; // the cue above the dial then asks: What is wrong? One last try.
+    return { ray: ray, posts: posts, newPosts: newPosts, reachedCount: Object.keys(game.reached).length, n: n, left: left, last: left <= 0, nudge: n === 1, plea: plea, words: { head: head, what: what, post: postLine(ray.fold, posts, newPosts.length > 0), band: band, compare: compareLine(prev, i0, ray.fold) } };
   }
-  // Stage one ends after the last go: every direction at once, and the four ~ posts stay dead.
+  // Stage one ends after the last try: every direction at once, and the band stays silent. The trap is sprung.
   function reveal(game) {
     var earth = twoShell(), reach = reachablePosts(earth), shadow = shadowPosts(earth), cov = coverage(earth);
-    var got = reach.filter(function (P) { return game.reached[P] !== undefined; });
     var lines = [
-      'This is every direction at once through an Earth with one core.',
-      'The core bends the waves so hard that none comes up between ' + deg(cov.mantle[1]) + ' and ' + deg(cov.core[0]) + '. That empty band is called the shadow, and the four ~ posts sit inside it.',
-      'In the real earthquake those four quivered. Here they stay dead. An Earth with one core does not do what the real Earth did.'
+      'This is every direction you could have chosen, all at once.',
+      'The core bends the waves so hard that none of them comes up between ' + deg(cov.mantle[1]) + ' and ' + deg(cov.core[0]) + '. The band sits in a shadow.',
+      'Real earthquakes make the band quiver. An Earth with one core never does. So the Earth cannot have just one core.'
     ];
-    game.act = 2; game.reveal = { reach: reach, got: got, shadow: shadow, coverage: cov };
+    game.act = 2; game.reveal = { reach: reach, shadow: shadow, coverage: cov };
     var state = {}; CONFIG.POSTS.forEach(function (P) { state[P] = shadow.indexOf(P) >= 0 ? 'off' : 'lit'; });
-    return { fan: fan(earth, CONFIG.FAN_STEP_DRAW), reach: reach, got: got, shadow: shadow, coverage: cov, state: state, head: 'One core: the four ~ posts stay dead. No match.', lines: lines };
+    return { fan: fan(earth, CONFIG.FAN_STEP_DRAW), reach: reach, shadow: shadow, coverage: cov, state: state, head: 'Sorry, that was a trap. With one core it cannot be done.', lines: lines };
   }
   // The card between the stages: the idea [p. 97].
   var CARD = [
     'In 1936 Inge Lehmann, in Copenhagen, had an idea. The core is not the innermost thing. Inside it sits a second, smaller core, where waves run faster again.',
-    'A core within the core.',
-    'Try it. ' + cap(numberWord(CONFIG.WAVES2)) + ' goes. Dive steeply and see where you come up.'
+    'Now imagine that: an Earth with a core within the core.',
+    cap(numberWord(CONFIG.WAVES2)) + ' goes. Choose the right direction and the band will quiver.'
   ];
-  function listNames(rs) { return rs.map(function (r) { return r.name; }).join(', ').replace(/, ([^,]*)$/, ' and $1'); }
 
-  // Stage two: fire one wave at dive i0 into an Earth with a core within the core (Lehmann's three-shell Earth).
-  // A liberty, ours, said in Read further: a wave that comes up anywhere inside the shadow makes the nearest ~
-  // post quiver, however far along the band it is. Without it three of the four need a dive right to a tenth of a degree.
+  // Stage two: imagine a core within the core. Fire one wave at dive i0 into Lehmann's three-shell Earth.
+  // A liberty, ours, said in Read further: a wave that comes up anywhere inside the band makes the nearest post
+  // there quiver. With the three-degree ear used elsewhere, three of the four would need a dive right to a tenth of a degree.
   function fire2(game, i0) {
     i0 = clampDive(i0);
-    var ray = trace(i0, lehmannEarth()), was = trace(i0, twoShell()), faint = faintPosts(), band = CONFIG.PAPER.SHADOW;
+    var ray = trace(i0, lehmannEarth()), was = trace(i0, twoShell()), bp = bandPosts(), band = CONFIG.PAPER.SHADOW;
     var touched = ray.branch === 'reflect' || ray.branch === 'inner', straight = touched && i0 < 0.05;
-    var inBand = ray.fold > band[0] && ray.fold < band[1], quiver = null, isNew = false, posts = [], newPosts = [];
-    if (inBand) { quiver = faint[0]; faint.forEach(function (P) { if (Math.abs(P - ray.fold) < Math.abs(quiver - ray.fold)) quiver = P; }); isNew = game.quivers[quiver] === undefined; game.quivers[quiver] = i0; game.inShadow++; }
-    else { posts = Object.keys(postsHeardBy([ray])).map(Number).filter(function (P) { return faint.indexOf(P) < 0; }); posts.forEach(function (P) { if (game.reached2[P] === undefined) { game.reached2[P] = i0; newPosts.push(P); } }); }
+    var inBand = ray.fold > band[0] && ray.fold < band[1], quiver = null, posts = [], newPosts = [];
+    if (inBand) { quiver = bp[0]; bp.forEach(function (P) { if (Math.abs(P - ray.fold) < Math.abs(quiver - ray.fold)) quiver = P; }); game.quivers[quiver] = i0; game.inBand++; }
+    else { posts = Object.keys(postsHeardBy([ray])).map(Number).filter(function (P) { return bp.indexOf(P) < 0; }); posts.forEach(function (P) { if (game.reached2[P] === undefined) { game.reached2[P] = i0; newPosts.push(P); } }); }
     if (touched) game.touches++;
     var prev = game.shots2.length ? game.shots2[game.shots2.length - 1] : null;
     game.shots2.push({ i0: i0, fold: ray.fold, branch: ray.branch, posts: posts, quiver: quiver, touched: touched, inBand: inBand });
-    var before = ' With one core, this dive came up at ' + deg(was.fold) + '.', what, head, post;
+    var before = ' With one core, this same dive came up at ' + deg(was.fold) + '.', what, head, post, bandLine = null;
     if (!touched) what = 'You dived in at ' + fmtDive(i0) + (ray.branch === 'mantle' ? ' and missed both cores. ' : ', went through the core, but passed beside the inner core. ') + 'You came up ' + deg(ray.fold) + ' round, exactly as with one core. Only a dive steeper than ' + CONFIG.PAPER.INNER_GRAZE_I0 + '° meets the inner core.';
     else if (straight) what = 'You dived straight down through the middle of both cores. A wave that hits head-on is not bent, so you came up at the far point, 180° round, as before.';
     else if (ray.branch === 'reflect') what = 'You dived in at ' + fmtDive(i0) + ' and hit the inner core at a glancing angle. You bounced off it, like a stone skipping on water, and came up ' + deg(ray.fold) + ' round.' + before;
     else what = 'You dived in at ' + fmtDive(i0) + ' and went right through the inner core. It bent you away from the middle, and you came up ' + deg(ray.fold) + ' round.' + before;
-    if (inBand) { head = 'You came up in the shadow. The post at ' + deg(quiver) + ' quivers.'; post = 'You came up inside the shadow, where no wave could come up with one core. The ~ post at ' + deg(quiver) + ' quivers' + (isNew ? '.' : ' again.'); }
-    else { head = (touched && !straight ? 'The inner core bent you, but you came up at ' + deg(ray.fold) + ', outside the shadow.' : 'You missed the inner core: up at ' + deg(ray.fold) + ', as before.'); post = postLine(ray.fold, posts, newPosts.length > 0, faint).replace(': reached.', ': it lights.').replace(', which you had reached already.', ', which was lit already.'); }
-    var quivering = faint.filter(function (P) { return game.quivers[P] !== undefined; });
+    if (inBand) { head = 'The band quivers. You came up at ' + deg(ray.fold) + ', inside it.'; post = 'You came up inside the band, and the post at ' + deg(quiver) + ' quivers. With one core no direction could do that.'; }
+    else { head = (touched && !straight ? 'The inner core bent you, but you came up at ' + deg(ray.fold) + ': ' : 'You missed the inner core and came up at ' + deg(ray.fold) + ': ') + bandGap(ray.fold) + '.'; post = postLine(ray.fold, posts, newPosts.length > 0); bandLine = game.inBand ? null : 'The band is still silent. Try a dive between 12° and 16°.'; }
     var left = CONFIG.WAVES2 - game.shots2.length;
-    return { ray: ray, posts: posts, newPosts: newPosts, quiver: quiver, quivering: quivering, touched: touched, inBand: inBand, left: left, last: left <= 0, words: { head: head, what: what, post: post, compare: touched ? compareLine(prev, i0, ray.fold, isNew) : null } };
+    return { ray: ray, posts: posts, newPosts: newPosts, quiver: quiver, quivering: bp.filter(function (P) { return game.quivers[P] !== undefined; }), touched: touched, inBand: inBand, n: game.shots2.length, left: left, last: left <= 0, words: { head: head, what: what, post: post, band: bandLine, compare: touched ? compareLine(prev, i0, ray.fold) : null } };
   }
-  // Stage two ends: every direction at once through three shells. The four ~ posts quiver.
+  // Stage two ends: every direction at once through three shells. The band quivers.
   function reveal2(game) {
-    var E = lehmannEarth(), cov = coverage(E), heard = heardByQuake(E), faint = faintPosts();
+    var E = lehmannEarth(), cov = coverage(E), heard = heardByQuake(E), bp = bandPosts();
     var rays = fan(E, CONFIG.FAN_STEP_DRAW), band = CONFIG.PAPER.SHADOW;
     var inBand = rays.filter(function (r) { return r.fold > band[0] && r.fold < band[1]; }).length;
     var lines = [
-      'This is every direction at once through an Earth with a core within the core.',
-      'The steepest waves now meet the inner core. It bends them away from the middle, or bounces them off, and they come up inside the shadow.',
-      'Only a few waves get there, so the four ~ posts do not light up. They quiver. That is exactly what the real earthquake did.'
+      'This is every direction you could have chosen, all at once.',
+      'The steepest waves meet the inner core. It bends them away from the middle, or bounces them off, and they come up inside the band.',
+      'Only a few waves get there, so the band does not light up. It quivers: just as it did after the three real earthquakes.'
     ];
     game.act = 3; game.done = true; game.reveal2 = { heard: heard, coverage: cov, inBand: inBand, total: rays.length };
-    var state = {}; CONFIG.POSTS.forEach(function (P) { state[P] = faint.indexOf(P) >= 0 ? 'quiver' : 'lit'; });
-    return { fan: rays, heard: heard, faint: faint, coverage: cov, state: state, head: 'A core within the core: the four ~ posts quiver. It matches.', lines: lines };
+    var state = {}; CONFIG.POSTS.forEach(function (P) { state[P] = bp.indexOf(P) >= 0 ? 'quiver' : 'lit'; });
+    return { fan: rays, heard: heard, coverage: cov, state: state, head: 'With a core within the core, the band quivers. That is what the real Earth does.', lines: lines };
   }
 
   function verdict(game) {
-    var faint = faintPosts(), q = faint.filter(function (P) { return game.quivers[P] !== undefined; });
-    var fate = q.length ? 'You found the inner core.' : 'The inner core was there all along.';
-    var did = 'You were the earthquake. In the real earthquake, four posts only quivered. With one core, no direction you chose could make them do anything: they sat in a shadow. With a core within the core, a steep dive is turned into that shadow' + (q.length ? ', and you made ' + (q.length === 1 ? 'one of the four posts' : q.length === faint.length ? 'all four posts' : numberWord(q.length) + ' of the four posts') + ' quiver yourself.' : '. Your own dives did not get there, but the full picture showed the ones that do.') + ' So the Earth with a core within the core is the one that does what the real Earth did.';
-    var paper = 'That is what Inge Lehmann worked out in 1936, by hand, with a pencil. Real listening posts inside the shadow had felt a faint wave. An Earth with one core could not explain it. An Earth with a small core inside the core, where waves run faster, could. She did not say she had proved it. She called it an idea that fitted better, and asked others to check.';
+    var bp = bandPosts(), made = game.inBand > 0;
+    var fate = made ? 'You found the inner core.' : 'The inner core was there all along.';
+    var did = 'After real earthquakes, one band of listening posts only quivers. You imagined an Earth with one core and tried ' + numberWord(game.shots.length) + ' directions: the band stayed silent, and it turned out that no direction can ever make it quiver. Then you imagined an Earth with a core within the core. ' +
+      (made ? (game.inBand === game.shots2.length ? 'Every one of your ' + numberWord(game.shots2.length) + ' dives' : game.inBand === 1 ? 'One of your ' + numberWord(game.shots2.length) + ' dives' : cap(numberWord(game.inBand)) + ' of your ' + numberWord(game.shots2.length) + ' dives') + ' came up in the band and made it quiver.' : game.touches ? 'Your dives met the inner core but came up outside the band. Every direction at once showed the ones that land in it.' : 'Your dives were not steep enough to meet the inner core. Every direction at once showed the ones that do.') +
+      ' Only the second Earth does what the real one does.';
+    var paper = 'That is what Inge Lehmann worked out in 1936, by hand, with a pencil. Real listening posts in that band had felt a faint wave. An Earth with one core could not explain it. An Earth with a small core inside the core, where waves run faster, could. She did not say she had proved it. She called it an idea that fitted better, and asked others to check.';
     var means = 'They checked, and she was right. The inner core is about ' + CONFIG.PAPER.MODERN_KM + ' km from its centre to its edge: smaller than the Moon. Lehmann never said what it is made of. Others worked that out later, and by ' + CONFIG.PAPER.SOLID_SHOWN + ' it was clear: a solid ball of iron, inside a core of liquid iron.';
-    var E = lehmannEarth(), posts = {}; faint.forEach(function (P) { var ds = []; for (var a = 0; a <= 20; a = Math.round((a + CONFIG.DIVE_STEP) * 10) / 10) if (Math.abs(trace(a, E).fold - P) <= CONFIG.EAR_DEG) ds.push(a); posts[P] = ds; });
-    var widest = faint.slice().sort(function (a, b) { return posts[b].length - posts[a].length; })[0];
+    var E = lehmannEarth(), posts = {}; bp.forEach(function (P) { var ds = []; for (var a = 0; a <= 20; a = Math.round((a + CONFIG.DIVE_STEP) * 10) / 10) if (Math.abs(trace(a, E).fold - P) <= CONFIG.EAR_DEG) ds.push(a); posts[P] = ds; });
+    var widest = bp.slice().sort(function (a, b) { return posts[b].length - posts[a].length; })[0];
     var run = [posts[widest][0]]; for (var k = 1; k < posts[widest].length && posts[widest][k] - posts[widest][k - 1] < CONFIG.DIVE_STEP * 1.5; k++) run.push(posts[widest][k]); // the first unbroken stretch of dives
     var more = [
+      ['The three earthquakes.', 'They are real, and they are the ones Lehmann’s paper discusses: ' + CONFIG.PAPER.QUAKES.map(function (q) { return q.place + ', ' + q.date; }).join('; ') + '. What the posts do on screen is a simple picture of what was recorded: real posts in that band felt a faint wave, far weaker than the posts on either side.'],
       ['One wave, or all of them?', 'A real earthquake does not choose a direction. It sends waves every way at once, and each post feels whichever of them arrive there. In the game you follow one wave at a time, because that is the only way to see which direction ends up where. Lehmann did the same with her pencil. “Every direction at once” is the whole earthquake.'],
-      ['Why only a quiver?', 'Many waves come up at most posts, so they shake hard. Only a thin sliver of the steepest waves meets the inner core: in the full picture, about ' + (game.reveal2 ? game.reveal2.inBand + ' of the ' + game.reveal2.total : 'seven of the 179') + ' waves drawn land in the shadow. So the posts there feel little. Lehmann worked this out with formulas; the game only counts waves.'],
-      ['The game is kinder than the Earth.', 'In the game, any wave that comes up in the shadow makes the nearest ~ post quiver. Really a post only feels a wave that comes up right beside it, and that is very hard to do. The post at ' + deg(widest) + ' is the easy one: any dive from ' + fmtDive(run[0]) + ' to ' + fmtDive(run[run.length - 1]) + ' comes up beside it. The other three each need a dive that is right to about a tenth of a degree, because near the edge of the inner core a tiny change of direction swings the wave a long way: 14° comes up at ' + deg(trace(14, E).fold) + ', 15° at ' + deg(trace(15, E).fold) + '.'],
-      ['The Earth in the picture is a sketch.', 'It is the one Lehmann drew on purpose: straight paths, one speed in each layer. In the real Earth the paths curve and the shadow sits a little differently, from about ' + CONFIG.PAPER.OBS_PPRIME_DOWN_TO + '° to ' + CONFIG.PAPER.REAL_FOCAL + '°. Her inner core was about ' + Math.round(CONFIG.INNER_FRAC * CONFIG.R0_KM / 100) * 100 + ' km from centre to edge; today it is measured at ' + CONFIG.PAPER.MODERN_KM + ' km.'],
-      ['There was another explanation.', 'In 1936 most scientists said the faint waves had crept round the edge of the core. Much of Lehmann’s paper argues against that: the real records showed the ground moving strongly up and down, as it does when a wave comes up steeply from deep below, and creeping waves would not do that. The game leaves that argument out and sets only the two Earths side by side.'],
+      ['Why only a quiver?', 'Many waves come up at most posts, so they shake hard. Only a thin sliver of the steepest waves meets the inner core: with every direction drawn, about ' + (game.reveal2 ? game.reveal2.inBand + ' of the ' + game.reveal2.total : 'seven of the 179') + ' waves land in the band. So the posts there feel little. Lehmann worked this out with formulas; the game only counts waves.'],
+      ['The game is kinder than the Earth.', 'In the game, any wave that comes up in the band makes the nearest post there quiver. Really a post only feels a wave that comes up right beside it, and that is very hard to do. The post at ' + deg(widest) + ' is the easy one: any dive from ' + fmtDive(run[0]) + ' to ' + fmtDive(run[run.length - 1]) + ' comes up beside it. The other three each need a dive that is right to about a tenth of a degree, because near the edge of the inner core a tiny change of direction swings the wave a long way: 14° comes up at ' + deg(trace(14, E).fold) + ', 15° at ' + deg(trace(15, E).fold) + '.'],
+      ['The Earth in the picture is a sketch.', 'It is the one Lehmann drew on purpose: straight paths, one speed in each layer. In the real Earth the paths curve and the band sits a little differently, from about ' + CONFIG.PAPER.OBS_PPRIME_DOWN_TO + '° to ' + CONFIG.PAPER.REAL_FOCAL + '°. Her inner core was about ' + Math.round(CONFIG.INNER_FRAC * CONFIG.R0_KM / 100) * 100 + ' km from centre to edge; today it is measured at ' + CONFIG.PAPER.MODERN_KM + ' km.'],
+      ['There was another explanation.', 'In 1936 most scientists said the faint waves had crept round the edge of the core. Much of Lehmann’s paper argues against that: the real records showed the ground moving strongly up and down, as it does when a wave comes up steeply from deep below, and creeping waves would not do that. The game leaves that argument out and sets only the two imagined Earths side by side.'],
       ['What she did not say.', 'Her paper never says the inner core is solid. It gives it one property: waves run faster in it. Francis Birch proposed in ' + CONFIG.PAPER.SOLID_PROPOSED + ' that it is solid iron, and that was shown in ' + CONFIG.PAPER.SOLID_SHOWN + ' from the way the whole Earth rings after a great earthquake.']
     ];
-    return { fate: fate, did: did, paper: paper, means: means, more: more, faint: faint, quote: 'inside the core there is an inner core in which the velocity is larger', quoteBy: 'Inge Lehmann, 1936' };
+    return { fate: fate, did: did, paper: paper, means: means, more: more, made: made, quote: 'inside the core there is an inner core in which the velocity is larger', quoteBy: 'Inge Lehmann, 1936' };
   }
 
-  return { CONFIG: CONFIG, twoShell: twoShell, threeShell: threeShell, lehmannEarth: lehmannEarth, trace: trace, fold: fold, fan: fan, postsHeardBy: postsHeardBy, heardByQuake: heardByQuake, reachablePosts: reachablePosts, shadowPosts: shadowPosts, faintPosts: faintPosts, record: record, diveFor: diveFor, coverage: coverage, verticalShare: verticalShare, sizeWords: sizeWords, speedWords: speedWords, steepWords: steepWords, fmtDive: fmtDive, deg: deg, numberWord: numberWord, WATCH: WATCH, AIM1: AIM1, AIM2: AIM2, INTRO1: INTRO1, INTRO2: INTRO2, newGame: newGame, fire: fire, reveal: reveal, CARD: CARD, fire2: fire2, reveal2: reveal2, verdict: verdict };
+  return { CONFIG: CONFIG, twoShell: twoShell, threeShell: threeShell, lehmannEarth: lehmannEarth, trace: trace, fold: fold, fan: fan, postsHeardBy: postsHeardBy, heardByQuake: heardByQuake, reachablePosts: reachablePosts, shadowPosts: shadowPosts, bandPosts: bandPosts, record: record, diveFor: diveFor, coverage: coverage, verticalShare: verticalShare, sizeWords: sizeWords, speedWords: speedWords, steepWords: steepWords, fmtDive: fmtDive, deg: deg, numberWord: numberWord, TOTAL1: TOTAL1, DATA: DATA, AIM1: AIM1, AIM1B: AIM1B, AIM2: AIM2, INTRO1: INTRO1, INTRO2: INTRO2, newGame: newGame, fire: fire, reveal: reveal, CARD: CARD, fire2: fire2, reveal2: reveal2, verdict: verdict };
 })();
 if (typeof module !== 'undefined') module.exports = MECH;

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Find Your Inner Core with Lehmann</title>
 <script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<meta name="description" content="You are an earthquake. Send waves through the Earth and see which listening posts they reach. Does the Earth have one core, or a core within the core? A game from Inge Lehmann’s 1936 paper “P′”.">
+<meta name="description" content="After every big earthquake one band of listening posts only quivers. Imagine an Earth with one core, then one with a core within the core, and be the earthquake: which Earth makes the band quiver? A game from Inge Lehmann’s 1936 paper “P′”.">
 <style>
 @font-face{font-family:Fraunces;font-weight:400 700;font-style:normal;src:url(data:font/woff2;base64,/*__F_FRAUNCES__*/) format('woff2')}
 @font-face{font-family:Fraunces;font-weight:400;font-style:italic;src:url(data:font/woff2;base64,/*__F_FRAUNCES_I__*/) format('woff2')}
@@ -86,6 +86,7 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
 .legend{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 14px;font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:0 0 6px}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend i{display:inline-block;width:11px;height:11px;border-radius:50%;box-sizing:border-box}
+.legend .l-band{border-radius:0;width:16px;height:9px;border:1px solid var(--gold);background:repeating-linear-gradient(45deg,#5C6670 0 2px,#1B1714 2px 5px)}
 .legend .l-on{background:var(--gold)} .legend .l-q{background:#9C7F3A;border:1.5px solid var(--gold)} .legend b{color:var(--gold);font-weight:400;font-size:14px;line-height:1}
 .quiver{animation:quiver .9s ease-in-out 3}
 @keyframes quiver{0%,100%{opacity:1}25%{opacity:.25}50%{opacity:1}75%{opacity:.25}}
@@ -118,7 +119,7 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
   <div class="plate start-pic" id="start-plate"></div>
   <p>The Earth is a ball. When the ground shakes somewhere, the shaking runs right through the ball and comes out on the far side. You are the earthquake: a wave sent through the ball. Find out how it bends, through your listening posts, which record what comes out on the other side.</p>
   <p>Choose the direction of your wave: does it go straight through the core, just touch it, or pass it by?</p>
-  <p>In 1936 everyone thought the Earth had two layers: a mantle, and one core inside it. But after real earthquakes most listening posts shook hard, and a few only quivered. If an Earth with one core can do the same, it is right. If it can’t, something is missing, and there might be a core within the core.</p>
+  <p>In 1936 everyone thought the Earth had two layers: a mantle, and one core inside it. But after real earthquakes most listening posts shook hard, and one band of them only quivered. If an Earth with one core can do the same, it is right. If it can’t, something is missing, and there might be a core within the core.</p>
   <div class="aim">Does the Earth have one core, or a core within the core?</div>
   <button class="btn pri" id="b-begin">Begin</button>
   <button class="btn link" id="b-help-start">How to play</button>
@@ -128,7 +129,7 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
 <section class="screen" id="s-play">
   <div class="topbar"><div class="aimline" id="aimline"></div><button class="q" id="q-play" aria-label="How to play">?</button></div>
   <div class="plate" id="plate"></div>
-  <div class="legend"><span><i class="l-on"></i>lights: a strong shake</span><span><i class="l-q"></i>quivers: a faint one</span><span><b>~</b>quivered in the real earthquake</span></div>
+  <div class="legend"><span><i class="l-on"></i>lights: a strong shake</span><span><i class="l-q"></i>quivers: a faint one</span><span><i class="l-band"></i>the band that only quivers</span></div>
   <div class="head" id="head"></div>
 
   <div id="panel1">
@@ -153,8 +154,8 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
   <div class="verdict">
     <div class="fate" id="v-fate"></div>
     <div class="pair">
-      <div id="pair-one"><div class="plate" id="end-one"></div><div class="pl"><b>One core</b>four posts stay dead</div></div>
-      <div id="pair-two"><div class="plate" id="end-two"></div><div class="pl"><b>A core within the core</b>four posts quiver, as recorded</div></div>
+      <div id="pair-one"><div class="plate" id="end-one"></div><div class="pl"><b>Imagine one core</b>the band stays silent</div></div>
+      <div id="pair-two"><div class="plate" id="end-two"></div><div class="pl"><b>Imagine a core within the core</b>the band quivers, as recorded</div></div>
     </div>
     <div class="lab">What you did</div><p id="v-did"></p>
     <div class="lab">What Lehmann found</div><p id="v-paper"></p>
@@ -172,20 +173,19 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
 <div class="ov" id="twist"><div class="wrap">
   <div class="caps">1936</div>
   <div class="card" id="twist-card"></div>
-  <button class="btn pri" id="b-build">Try her idea</button>
+  <button class="btn pri" id="b-build">Imagine it</button>
 </div></div>
 
 <div class="ov help" id="help"><div class="wrap">
   <div class="caps">Find Your Inner Core with Lehmann</div>
   <h2>How to play</h2>
   <p><b>Does the Earth have one core, or a core within the core?</b></p>
-  <p>The picture is the Earth cut open. Ochre is the mantle, rock where a wave runs fast. Rust is the core, where a wave runs slower, so going in it bends toward the middle and coming out it bends back. A wave runs straight and bends only where the colour changes. The burst at the top is the earthquake: that is you. The dots round the right-hand edge are eighteen listening posts.</p>
+  <p>The picture is the Earth cut open. Ochre is the mantle, rock where a wave runs fast. Rust is the core, where a wave runs slower, so going in it bends toward the middle and coming out it bends back. A wave runs straight and bends only where the colour changes. The burst at the top is the earthquake. The dots round the right-hand edge are eighteen listening posts.</p>
   <ol>
-    <li><b>Watch.</b> First a real earthquake. Most posts light up; four only quiver. Those four get a small ~ mark.</li>
-    <li><b>One core.</b> Eight goes in an Earth with one core. Aim by dragging on the picture or sliding the dial: 0° dives straight down through the middle, 90° runs along the ground. The − and + buttons move a tenth of a degree. Fire, and the post where you come up lights. Can you make the ~ posts quiver?</li>
-    <li><b>Every direction at once.</b> The whole earthquake in that Earth. Compare the posts with what you watched.</li>
-    <li><b>A core within the core.</b> Four goes in an Earth with a second, smaller core inside the core. Only a dive steeper than 16° gets that deep.</li>
-    <li><b>Every direction at once</b> again, and the verdict.</li>
+    <li><b>The facts.</b> Three real earthquakes, and what the posts recorded each time. Most light up. One band only quivers. That band is then marked. There is nothing for you to do here but watch.</li>
+    <li><b>Imagine one core.</b> Now you are the earthquake, in an imagined Earth with one core. Aim by dragging on the picture or sliding the dial: 0° dives straight down through the middle, 90° runs along the ground. The − and + buttons move a tenth of a degree. Fire, and the post where you come up lights. Try to make the band quiver. Four goes, then one last try.</li>
+    <li><b>Every direction at once.</b> The game then fires every direction you could have chosen. This is not a go of yours; just watch.</li>
+    <li><b>Imagine a core within the core.</b> Three goes in an imagined Earth with a second, smaller core inside the core. Only a dive steeper than 16° gets that deep. Then every direction at once again, and the verdict.</li>
   </ol>
   <button class="btn pri" id="b-help-close">Back</button>
 </div></div>
@@ -204,7 +204,7 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
   var C = MECH.CONFIG, NS = 'http://www.w3.org/2000/svg';
   var CX = 180, CY = 184, R = 146, W = 360, H = 380;
   var D = Math.PI / 180;
-  var FAINT = MECH.faintPosts();
+  var FAINT = MECH.bandPosts();
 
   // ---- drawing the plate --------------------------------------------------------------------------
   function el(tag, attrs, parent) { var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
@@ -239,7 +239,7 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
     el('circle', { cx: CX, cy: CY, r: R * C.CORE_FRAC, fill: 'url(#gc' + small + ')', stroke: '#5A2219', 'stroke-width': '.8' }, svg);
     var ball = el('circle', { cx: CX, cy: CY, r: 0, fill: '#9A4432', stroke: '#EEE3C8', 'stroke-width': '1', 'class': 'hide' }, svg);
     var ghost = el('circle', { cx: CX, cy: CY, r: R * C.INNER_FRAC, fill: 'none', stroke: '#EEE3C8', 'stroke-width': '1.2', 'stroke-dasharray': '3 4', 'class': 'hide' }, svg);
-    var shadow = el('path', { d: arcBand(C.PAPER.SHADOW[0], C.PAPER.SHADOW[1], 1.0, 1.1), fill: 'url(#hatch' + small + ')', stroke: '#8E99A3', 'stroke-width': '.8', 'class': 'hide' }, svg);
+    var shadow = el('path', { d: arcBand(C.PAPER.SHADOW[0], C.PAPER.SHADOW[1], 1.0, 1.1), fill: 'url(#hatch' + small + ')', stroke: '#F2C14E', 'stroke-width': '1.1', 'stroke-opacity': '.75', 'class': 'hide' }, svg);
     var fanL = el('g', { fill: 'none', stroke: '#F2C14E', 'stroke-width': '.7', opacity: '.42', 'stroke-linejoin': 'round' }, svg);
     var fanR = el('g', { fill: 'none', stroke: '#F2C14E', 'stroke-width': '.7', opacity: '.55', 'stroke-linejoin': 'round' }, svg);
     var shots = el('g', { fill: 'none', stroke: '#F2C14E', 'stroke-width': '1', opacity: '.5', 'stroke-linejoin': 'round' }, svg);
@@ -264,7 +264,7 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
       [30, 60, 90].forEach(function (P) { var l = xy(P, 1.17); el('text', { x: l[0], y: l[1] + 3.5, 'text-anchor': 'middle', 'font-family': "'DM Mono',monospace", 'font-size': '10', fill: '#A89F8C' }, svg).textContent = P + '°'; });
       el('text', { x: CX - 13, y: CY + R * 1.075 + 4, 'text-anchor': 'end', 'font-family': "'DM Mono',monospace", 'font-size': '10', fill: '#A89F8C' }, svg).textContent = '180°';
       var ql = xy(0, 1.17); el('text', { x: ql[0], y: ql[1] + 3, 'text-anchor': 'middle', 'font-family': "'DM Mono',monospace", 'font-size': '9.5', fill: '#A89F8C', 'letter-spacing': '1.5' }, svg).textContent = 'QUAKE';
-      var sl = xy(133, 1.2); var st = el('text', { x: sl[0] - 6, y: sl[1] + 3, 'text-anchor': 'end', 'font-family': "'DM Mono',monospace", 'font-size': '9.5', fill: '#A89F8C', 'letter-spacing': '1.5', 'class': 'hide' }, svg); st.textContent = 'SHADOW';
+      var sl = xy(137, 1.19); var st = el('text', { x: sl[0] + 2, y: sl[1] + 8, 'text-anchor': 'start', 'font-family': "'DM Mono',monospace", 'font-size': '9.5', fill: '#F2C14E', 'letter-spacing': '1.5', 'class': 'hide' }, svg); st.textContent = 'THE BAND';
       el('text', { x: 6, y: 14, 'font-family': "'DM Mono',monospace", 'font-size': '9', fill: '#5C6670', 'letter-spacing': '1.5' }, svg).textContent = 'LEFT HALF: MIRRORED';
     }
     var cap = el('text', { x: 6, y: H - 6, 'font-family': "'DM Mono',monospace", 'font-size': '9', fill: '#5C6670', 'letter-spacing': '1.5', 'class': small ? 'hide' : '' }, svg); cap.textContent = 'AN EARTH WITH ONE CORE';
@@ -279,12 +279,12 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
     if (state === 'lit') c.setAttribute('filter', 'url(#' + pl.glowId + ')'); else c.removeAttribute('filter');
     c.classList.remove('quiver'); if (state === 'quiver') { void c.getBoundingClientRect(); c.classList.add('quiver'); }
   }
-  function showTildes(pl, on) { FAINT.forEach(function (P) { if (pl.tildes[P]) pl.tildes[P].setAttribute('class', on ? '' : 'hide'); }); }
+  function showBand(pl, on) { pl.shadow.classList.toggle('hide', !on); if (pl.shadowLabel) pl.shadowLabel.classList.toggle('hide', !on); }
   // A whole earthquake: the posts answer one after another round the rim, each lighting, quivering or staying dark.
-  function answer(pl, state, ms) {
+  function answer(pl, state, ms, hold) {
     return new Promise(function (resolve) {
       C.POSTS.forEach(function (P, k) { setTimeout(function () { setPost(pl, P, state[P]); }, ms * k); });
-      setTimeout(resolve, ms * C.POSTS.length + 2800);
+      setTimeout(resolve, ms * C.POSTS.length + (hold === undefined ? 2800 : hold));
     });
   }
   function clearGroup(g) { while (g.firstChild) g.removeChild(g.firstChild); }
@@ -325,7 +325,7 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
   var game, phase = 'start', busy = false, plate, startPlate, startLoop = null, endOne = null, endTwo = null;
   var RULE1 = '<span class="oc">Ochre</span> is the mantle: rock where a wave runs fast. <span class="ru">Rust</span> is the core: a wave runs slower there, so going in it bends toward the middle, and coming out it bends back. It bends only where the colour changes. A post lights when you come up within 3° of it.';
   var RULE2 = 'The <span class="bo">pale ball</span> is the core within the core. Where rock gets slower, a wave bends toward the middle: that is what the core does. Where it gets faster, a wave bends away from the middle, and a wave that hits at a glancing angle bounces off.';
-  var CAP1 = 'AN EARTH WITH ONE CORE', CAP2 = 'AN EARTH WITH A CORE WITHIN THE CORE';
+  var CAP1 = 'IMAGINE: AN EARTH WITH ONE CORE', CAP2 = 'IMAGINE: A CORE WITHIN THE CORE';
   function show(id) { ['s-start', 's-play', 's-end'].forEach(function (s) { $(s).classList.toggle('on', s === id); }); window.scrollTo(0, 0); }
   function openOv(id) { $(id).classList.add('on'); document.body.classList.add('lock'); $(id).scrollTop = 0; }
   function closeOv(id) { $(id).classList.remove('on'); document.body.classList.remove('lock'); }
@@ -333,50 +333,58 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
   function head(txt, gold) { $('head').textContent = txt || ''; $('head').classList.toggle('gold', !!gold); }
   function hide(id, yes) { $(id).classList.toggle('hide', !!yes); }
   // The cue: what to do now. It sits right above the dial and is repeated on the gold button.
-  function cue(n, of) {
-    var c = $('cue'); c.textContent = n === 1 ? 'Choose your direction, then fire.' : 'Now choose your next direction.';
+  function cue(n, of, lastTry) {
+    var c = $('cue'); c.textContent = lastTry ? 'What is wrong? One last try.' : n === 1 ? 'Choose your direction, then fire.' : 'Now choose your next direction.';
     c.classList.remove('pop'); void c.offsetWidth; c.classList.add('pop');
-    $('b-fire').textContent = 'Fire · go ' + n + ' of ' + of;
+    $('b-fire').textContent = lastTry ? 'Fire · one last try' : 'Fire · go ' + n + ' of ' + of;
   }
   function tally() {
-    if (phase === 'act2' || phase === 'reveal2') { var q = FAINT.filter(function (P) { return game.quivers[P] !== undefined; }).length; $('tally').textContent = '~ posts quivering: ' + q + ' of ' + FAINT.length; }
-    else if (phase === 'watch') $('tally').textContent = '';
-    else $('tally').textContent = Object.keys(game.reached).length + ' of ' + C.POSTS.length + ' posts lit · ~ posts quivering: 0 of ' + FAINT.length;
+    if (phase === 'act2') $('tally').textContent = 'the band: ' + (game.inBand ? 'quivering' : 'silent');
+    else if (phase === 'act1') $('tally').textContent = Object.keys(game.reached).length + ' posts lit · the band: silent';
+    else $('tally').textContent = '';
   }
   function aiming(on) { $('plate').classList.toggle('aim', !!on); }
 
   function resetPlate() {
     clearGroup(plate.shots); clearGroup(plate.live); clearGroup(plate.fanL); clearGroup(plate.fanR); clearGroup(plate.preview);
-    plate.ball.classList.add('hide'); plate.shadow.classList.add('hide'); plate.shadowLabel.classList.add('hide');
+    plate.ball.classList.add('hide');
     C.POSTS.forEach(function (P) { setPost(plate, P, 'off'); });
   }
-  // Beat one: watch a real earthquake. The inside of the Earth is veiled; only the posts answer.
+  // Stage 0: the facts. Three real earthquakes; the inside of the Earth is veiled; only the posts answer.
   function newRun() {
-    game = MECH.newGame(); phase = 'watch'; busy = true;
+    game = MECH.newGame(); phase = 'data'; busy = true;
     if (!plate) { plate = makePlate($('plate'), false); wireAim(plate.svg); }
-    resetPlate(); showTildes(plate, false); plate.veil.classList.remove('hide'); plate.cap.textContent = 'THE REAL EARTH · NOBODY CAN SEE INSIDE';
-    $('aimline').textContent = 'Watch a real earthquake.'; $('rule1').innerHTML = ''; $('b-next').textContent = 'Next';
+    resetPlate(); showBand(plate, false); plate.veil.classList.remove('hide'); plate.cap.textContent = 'THE REAL EARTH · NOBODY CAN SEE INSIDE';
+    $('aimline').textContent = MECH.DATA.aim; $('rule1').innerHTML = ''; $('b-next').textContent = 'Next';
     hide('panel1', true); hide('panel-reveal', true); hide('rule1', true); aiming(false); tally();
-    head(''); $('res').innerHTML = para('mu', MECH.WATCH.before);
+    head(''); $('res').innerHTML = para('mu', MECH.DATA.before);
     show('s-play');
-    var mine = game;
-    setTimeout(function () {
-      if (phase !== 'watch' || game !== mine) return;
-      plate.ripple.animate([{ r: 4, opacity: .9 }, { r: R * 2.1, opacity: 0 }], { duration: 2200, easing: 'ease-out' });
-      answer(plate, MECH.record(), 110).then(function () {
-        if (phase !== 'watch' || game !== mine) return;
-        showTildes(plate, true); head(MECH.WATCH.head, true);
-        $('res').innerHTML = MECH.WATCH.after.map(function (l) { return para('', l); }).join('');
-        hide('panel-reveal', false); busy = false;
-      });
-    }, 900);
+    var mine = game, quakes = C.PAPER.QUAKES, rec = MECH.record();
+    function alive() { return phase === 'data' && game === mine; }
+    function one(k) {
+      if (!alive()) return;
+      if (k >= quakes.length) {
+        showBand(plate, true); plate.shadow.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 700, fill: 'forwards' });
+        head(MECH.DATA.head, true); $('res').innerHTML = MECH.DATA.after.map(function (l, i) { return para(i === 1 ? 'lead' : '', l); }).join('');
+        hide('panel-reveal', false); busy = false; return;
+      }
+      C.POSTS.forEach(function (P) { setPost(plate, P, 'off'); });
+      head('Earthquake ' + (k + 1) + ' of ' + quakes.length + ': ' + quakes[k].place + ', ' + quakes[k].date);
+      setTimeout(function () {
+        if (!alive()) return;
+        plate.ripple.animate([{ r: 4, opacity: .9 }, { r: R * 2.1, opacity: 0 }], { duration: 1700, easing: 'ease-out' });
+        answer(plate, rec, 80, 2300).then(function () { one(k + 1); });
+      }, 500);
+    }
+    setTimeout(function () { one(0); }, 700);
   }
+  // Stage one: imagine one core.
   function stage1() {
     phase = 'act1'; busy = false; game.act = 1;
-    resetPlate(); plate.veil.classList.add('hide'); showTildes(plate, true);
+    resetPlate(); plate.veil.classList.add('hide'); showBand(plate, true);
     $('aimline').textContent = MECH.AIM1; plate.cap.textContent = CAP1; $('rule1').innerHTML = RULE1;
     hide('panel1', false); hide('panel-reveal', true); hide('rule1', false);
-    $('res').innerHTML = para('mu', MECH.INTRO1); head('You are the earthquake.');
+    $('res').innerHTML = para('mu', MECH.INTRO1); head('Imagine the Earth has one core.');
     $('b-fire').classList.remove('dim');
     $('dive').step = C.DIVE_SLIDER_STEP; $('dive').value = C.DIVE_START; readDive();
     cue(1, C.WAVES); tally(); aiming(true); window.scrollTo(0, 0);
@@ -400,32 +408,30 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
     if (busy) return;
     if (phase === 'act1') fire1(); else if (phase === 'act2') fire2();
   }
-  function after(r, n, of, gold, lastFn) {
+  function after(r, lastFn, nextCue) {
     keepShot(plate, r.ray);
-    head(r.words.head, false);
-    $('res').innerHTML = para('', r.words.what) + para('lead', r.words.post) + para('', r.words.compare);
+    head(r.plea || r.words.head, !!r.plea || !!r.inBand);
+    $('res').innerHTML = para('', r.words.what) + para('', r.words.post) + para('lead', r.words.band) + para('', r.words.compare);
     tally();
-    if (r.last) { $('cue').textContent = 'That was your last go.'; setTimeout(lastFn, 1600); return; }
-    cue(n, of); $('b-fire').classList.remove('dim'); busy = false;
+    if (r.last) { $('cue').textContent = 'Now every direction at once.'; setTimeout(lastFn, 1800); return; }
+    nextCue(); $('b-fire').classList.remove('dim'); busy = false;
   }
   function fire1() {
     busy = true; $('b-fire').classList.add('dim'); $('cue').textContent = '';
     var r = MECH.fire(game, parseFloat($('dive').value));
     travel(plate, r.ray).then(function () {
       r.posts.forEach(function (P) { setPost(plate, P, 'lit'); });
-      after(r, game.shots.length + 1, C.WAVES, false, revealNow);
+      if (r.nudge) $('aimline').textContent = MECH.AIM1B;
+      after(r, revealNow, function () { cue(r.n + 1, C.WAVES, !!r.plea); });
     });
   }
   function revealNow() {
     phase = 'reveal'; aiming(false);
-    hide('panel1', true); hide('rule1', true); clearGroup(plate.preview); head('Now every direction at once.');
-    $('aimline').textContent = 'One core: every direction at once.'; $('res').innerHTML = ''; $('tally').textContent = '';
+    hide('panel1', true); hide('rule1', true); clearGroup(plate.preview); head('Every direction you could have chosen, at once.');
+    $('aimline').textContent = 'Imagine one core: every direction at once.'; $('res').innerHTML = ''; $('tally').textContent = '';
     var r = MECH.reveal(game); game.revealState1 = r.state;
     C.POSTS.forEach(function (P) { setPost(plate, P, 'off'); });
-    drawFan(plate, r.fan, 1800).then(function () {
-      plate.shadow.classList.remove('hide'); plate.shadowLabel.classList.remove('hide');
-      return answer(plate, r.state, 90);
-    }).then(function () {
+    drawFan(plate, r.fan, 1800).then(function () { return answer(plate, r.state, 90, 1200); }).then(function () {
       head(r.head, true);
       $('res').innerHTML = r.lines.map(function (l, i) { return para(i === r.lines.length - 1 ? 'lead' : '', l); }).join('');
       hide('panel-reveal', false); busy = false;
@@ -433,7 +439,7 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
   }
   function next() {
     if (busy) return;
-    if (phase === 'watch') stage1();
+    if (phase === 'data') stage1();
     else if (phase === 'reveal') { $('twist-card').innerHTML = MECH.CARD.map(function (l, i) { return para(i === 1 ? 'lead' : '', l); }).join(''); openOv('twist'); }
     else if (phase === 'reveal2') end();
   }
@@ -443,7 +449,7 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
     C.POSTS.forEach(function (P) { setPost(plate, P, 'off'); });
     setBall(plate, C.INNER_FRAC, C.V_INNER / C.V_CORE); plate.ball.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 900, easing: 'ease-out', fill: 'forwards' });
     $('aimline').textContent = MECH.AIM2; plate.cap.textContent = CAP2; $('rule1').innerHTML = RULE2;
-    $('res').innerHTML = para('mu', MECH.INTRO2); head('Only a dive steeper than ' + C.PAPER.INNER_GRAZE_I0 + '° meets the inner core.'); showTildes(plate, true);
+    $('res').innerHTML = para('mu', MECH.INTRO2); head('Imagine a core within the core. Only a steep dive meets it.'); showBand(plate, true);
     hide('panel-reveal', true); hide('panel1', false); hide('rule1', false); $('b-fire').classList.remove('dim');
     $('dive').step = C.DIVE_SLIDER_STEP; $('dive').value = C.DIVE_START2; readDive();
     cue(1, C.WAVES2); tally(); aiming(true); window.scrollTo(0, 0);
@@ -454,13 +460,13 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
     travel(plate, r.ray).then(function () {
       r.posts.forEach(function (P) { setPost(plate, P, 'lit'); });
       if (r.quiver) setPost(plate, r.quiver, 'quiver');
-      after(r, game.shots2.length + 1, C.WAVES2, false, reveal2Now);
+      after(r, reveal2Now, function () { cue(r.n + 1, C.WAVES2); });
     });
   }
   function reveal2Now() {
     phase = 'reveal2'; aiming(false);
-    hide('panel1', true); hide('rule1', true); clearGroup(plate.preview); head('Now every direction at once.');
-    $('aimline').textContent = 'A core within the core: every direction at once.'; $('res').innerHTML = ''; $('tally').textContent = '';
+    hide('panel1', true); hide('rule1', true); clearGroup(plate.preview); head('Every direction you could have chosen, at once.');
+    $('aimline').textContent = 'Imagine a core within the core: every direction at once.'; $('res').innerHTML = ''; $('tally').textContent = '';
     var r = MECH.reveal2(game); game.revealState2 = r.state;
     C.POSTS.forEach(function (P) { setPost(plate, P, 'off'); });
     drawFan(plate, r.fan, 1900).then(function () { return answer(plate, r.state, 90); }).then(function () {
@@ -470,7 +476,7 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
     });
   }
   function drawEnd(pl, earth, state) {
-    clearGroup(pl.fanL); clearGroup(pl.fanR); pl.shadow.classList.remove('hide');
+    clearGroup(pl.fanL); clearGroup(pl.fanR); showBand(pl, true);
     MECH.fan(earth, 2).forEach(function (r) { el('polyline', { points: pointsOf(r.pts, false) }, pl.fanR); el('polyline', { points: pointsOf(r.pts, true) }, pl.fanL); });
     C.POSTS.forEach(function (P) { setPost(pl, P, state[P]); pl.posts[P].classList.remove('quiver'); });
   }
