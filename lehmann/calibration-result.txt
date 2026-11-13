@@ -36,21 +36,17 @@ PASS posts at 5°, 15°, …, 175° instead: the same story (the post at 115° l
 PASS the fan’s step does not decide what is heard (0.5° gives the same posts as 0.05°)
 PASS Lehmann’s ball in words: "a bit smaller than the Moon", "a little faster than the core"  — a bit smaller than the Moon / a little faster than the core
 PASS Gutenberg & Richter’s 1200 km in words: "about half the size of the Moon" (0.69 of the Moon)  — about half the size of the Moon
-PASS scripted act one: the twelfth wave is the last
-PASS the job is set after the sixth wave and names the post at 130°
-PASS during the job each wave says how far short of or past the ringed post it came up  — The ringed post at 130° is still dark. You came up 18° short of it. | The ringed post at 130° is still dark. You came up 45° past it.
-PASS the job cannot be done: no dive on the dial comes within the ear of 130° in the two-shell Earth
+PASS scripted act one: the twelfth wave is the last; every wave has a one-line headline
 PASS a dive of 33.5° after 34° is called a jump (60° further round for half a degree), and 33.6° is on the dial
-PASS scripted act one: 14 reachable posts, 4 in shadow, lines open with the job that could not be done  — 6 got, 8 missed
-PASS the records card names the quake of 16 June 1929 and gives the clue
-PASS act two: a dive of 30° or 20° is untouched and comes up as in the first Earth, with the clue repeated
-PASS act two: the first touch (10°) is announced and leaves two marks on the ball’s edge
+PASS scripted act one: 14 reachable posts, 4 in shadow, lines name the shadow  — 6 got, 8 missed
+PASS the records card names the quake of 16 June 1929 and states Lehmann’s idea outright: a core inside the core
+PASS act two: a dive of 30° misses the inner ball and comes up as in the first Earth; the game says what reaches it
 PASS act two: 13° lights 150°, 14° lands in the shadow between posts, 15° bounces and lights 120°, 14.5° lights 140°, 15.5° lights 130°  — [[150],[],[120],[140],[130]]
 PASS act two ends as soon as the four shadow posts are lit
 PASS the slider’s half-degree steps hold a dive for each shadow post (13, 14.5, 15, 15.5)
-PASS the second reveal: all 18 posts hear the three-shell quake; the lines name the ball, the bounce and the faster speed  — 10 marks
-PASS verdict: "You found the ball."; Lehmann’s caution, 1200 km, and solidity credited to 1940 and 1971, not to her  — You found the ball.
-PASS a player who never dives steeply: act two ends after twelve waves, "The ball stayed hidden."
+PASS the second reveal: all 18 posts feel the three-shell quake; the lines name the bounce and the faster speed
+PASS verdict: "You filled the shadow."; Lehmann’s caution, 1200 km, and solidity credited to 1940 and 1971, not to her  — You filled the shadow.
+PASS a player who never dives steeply: act two ends after its eight waves, "The shadow stayed dark."
 PASS the author’s tool quake(): a ball a little slower lights none of the first three shadow posts; a little faster lights all four  — [[],[120,130,140,150]]
 PASS quake() takes a size for the author: a tiny ball at 1.05 lights fewer
 
@@ -67,4 +63,4 @@ r1\v    0.75   0.8  0.85   0.9  0.95     1  1.05 1.075   1.1  1.15  1.25
 0.45    1234  1234   234    34     4         234  1234  1234  1234  1234
 0.5      234    34     4                       4     4    34  1234  1234
 
-ALL PASSED (55 checks)
+ALL PASSED (51 checks)

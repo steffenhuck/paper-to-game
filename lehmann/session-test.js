@@ -16,7 +16,7 @@ const path = require('path');
   await shot('start', true); await shot('view-start', false);
   await page.click('#b-begin'); await page.waitForTimeout(300); await shot('a-1-ready', true); await shot('view-1-ready', false);
   await page.click('#q-play'); await page.waitForTimeout(200); await shot('help', true); await page.click('#b-help-close');
-  // act one: six free waves, then the job (hit the ringed post at 130°), with the jump at the grazing angle
+  // act one: twelve waves, with the jump at the grazing angle
   const dives = [45, 60, 30, 80, 10, 20, 34, 33.5, 33.7, 26, 22.5, 0];
   for (let k = 0; k < dives.length; k++) {
     await setRange('dive', dives[k]); await page.waitForTimeout(100);
@@ -26,7 +26,7 @@ const path = require('path');
     else { await page.waitForFunction(() => window.__game().phase === 'reveal', null, { timeout: 15000 }); await page.waitForTimeout(600); await shot('a-fan-firing', false); await idle(); await page.waitForTimeout(200); }
     log.push(await says());
     if (k === 0) { await shot('a-1-result', true); await shot('view-1-result', false); }
-    if (k === 5) { await shot('a-6-job', true); await shot('view-6-job', false); const ringed = await page.evaluate(() => document.querySelectorAll('#plate .ring:not(.hide)').length); if (ringed !== 1) errors.push('after the sixth wave exactly one post should be ringed, found ' + ringed); }
+    if (k === 5) { const cue = await page.evaluate(() => document.getElementById('status').innerText); if (!/now wave 7 of 12: choose your next dive/i.test(cue)) errors.push('the cue above the dial should invite the next wave, reads: ' + cue); if (await page.evaluate(() => document.querySelectorAll('#plate .ring:not(.hide)').length) !== 0) errors.push('no post should be ringed in act one'); }
     if (k === 7) { await shot('a-8-graze-core', true); await shot('view-8-graze-core', false); }
     if (await hscroll()) errors.push('horizontal scroll after wave ' + (k + 1));
   }
@@ -39,21 +39,20 @@ const path = require('path');
   if (await page.evaluate(() => document.querySelectorAll('#plate .ring:not(.hide)').length) !== 4) errors.push('act two should ring the four shadow posts');
   const nudged = await page.evaluate(() => { const e = document.getElementById('dive'); e.step = 'any'; e.value = 14.4; e.dispatchEvent(new Event('input')); document.getElementById('dive-plus').click(); return document.getElementById('dive-read').innerText; });
   if (nudged !== '14.5°') errors.push('the + button should move a tenth of a degree, reads ' + nudged);
-  // act two: too flat, the first touch, then the four shadow posts
-  const dives2 = [30, 20, 10, 13, 14, 15, 14.5, 15.5];
+  // act two: the inner ball is drawn; one miss, then the four shadow posts
+  if (!(await page.evaluate(() => !document.querySelector('#plate svg circle[stroke-width="1"][stroke="#EEE3C8"]').classList.contains('hide')))) errors.push('act two should draw the inner ball');
+  const dives2 = [30, 10, 13, 14, 15, 14.5, 15.5];
   for (let k = 0; k < dives2.length; k++) {
     await setRange('dive', dives2[k]); await page.waitForTimeout(100);
     await page.click('#b-fire'); await page.waitForTimeout(400);
     if (k < dives2.length - 1) { await idle(); await page.waitForTimeout(150); }
     else { await page.waitForFunction(() => window.__game().phase === 'reveal2', null, { timeout: 15000 }); await page.waitForTimeout(1500); await shot('b-fan-firing', false); await idle(); await page.waitForTimeout(300); }
     log.push(await says());
-    if (k === 1) await shot('b-2-too-flat', true);
-    if (k === 2) { await shot('b-3-first-touch', true); await shot('view-b-3-first-touch', false); }
-    if (k === 5) { await shot('b-6-bounce', true); await shot('view-b-6-bounce', false); }
+    if (k === 0) await shot('b-1-miss', true);
+    if (k === 2) { await shot('b-3-through', true); await shot('view-b-3-through', false); }
+    if (k === 4) { await shot('b-5-bounce', true); await shot('view-b-5-bounce', false); }
     if (await hscroll()) errors.push('horizontal scroll after act-two wave ' + (k + 1));
   }
-  const marks = await page.evaluate(() => document.querySelectorAll('#plate svg g[fill="#EEE3C8"] circle').length);
-  if (marks < 8) errors.push('touches should leave white marks, found ' + marks);
   await shot('b-reveal', true); await shot('view-b-reveal', false);
   const btn = await page.evaluate(() => document.getElementById('b-next').innerText);
   if (!/verdict/i.test(btn)) errors.push('after the second act the gold button should read See the verdict, reads: ' + btn);
@@ -63,14 +62,14 @@ const path = require('path');
   await page.click('#b-about'); await page.waitForTimeout(200); await shot('about', true); await page.click('#b-about-close');
   // retry
   await page.click('#b-again'); await page.waitForTimeout(300);
-  const ok = await page.evaluate(() => { const g = window.__game(); return g.phase === 'act1' && g.game.shots.length === 0 && document.getElementById('dive').value === '45' && document.querySelectorAll('#plate .ring:not(.hide)').length === 0 && document.querySelectorAll('#plate svg g[fill="#EEE3C8"] circle').length === 0; });
+  const ok = await page.evaluate(() => { const g = window.__game(); return g.phase === 'act1' && g.game.shots.length === 0 && document.getElementById('dive').value === '45' && document.querySelectorAll('#plate .ring:not(.hide)').length === 0; });
   if (!ok) errors.push('retry did not restart cleanly');
   await shot('c-restart', true);
-  // a player who never dives steeply: twelve flat waves in each act, the ball stays hidden, the game still ends
+  // a player who never dives steeply: the shadow stays dark, the game still ends
   for (let k = 0; k < 12; k++) { await setRange('dive', 40 + k * 2); await page.click('#b-fire'); if (k < 11) await idle(); }
   await page.waitForFunction(() => window.__game().phase === 'reveal', null, { timeout: 15000 }); await idle();
   await page.click('#b-next'); await page.waitForTimeout(200); await page.click('#b-build');
-  for (let k = 0; k < 12; k++) { await setRange('dive', 20 + k * 3); await page.click('#b-fire'); if (k < 11) await idle(); }
+  for (let k = 0; k < 8; k++) { await setRange('dive', 20 + k * 3); await page.click('#b-fire'); if (k < 7) await idle(); }
   await page.waitForFunction(() => window.__game().phase === 'reveal2', null, { timeout: 15000 }); await idle(); await page.waitForTimeout(200);
   log.push('HIDDEN: ' + await says()); await shot('c-hidden-reveal', true);
   await page.click('#b-next'); await page.waitForTimeout(300); await shot('c-end-hidden', true);

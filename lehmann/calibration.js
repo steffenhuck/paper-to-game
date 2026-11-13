@@ -81,30 +81,26 @@ function story(label) {
 check('Lehmann’s ball in words: "a bit smaller than the Moon", "a little faster than the core"', M.sizeWords(C.INNER_FRAC) === 'a bit smaller than the Moon' && M.speedWords(C.V_INNER / C.V_CORE) === 'a little faster than the core', M.sizeWords(C.INNER_FRAC) + ' / ' + M.speedWords(C.V_INNER / C.V_CORE));
 check('Gutenberg & Richter’s 1200 km in words: "about half the size of the Moon" (0.69 of the Moon)', M.sizeWords(P.GUTENBERG_RICHTER_KM / C.R0_KM) === 'about half the size of the Moon', M.sizeWords(P.GUTENBERG_RICHTER_KM / C.R0_KM));
 
-// 6. a scripted game runs to a verdict (revision 4: six free waves, the job, the records, the hidden ball)
+// 6. a scripted game runs to a verdict (revision 5: twelve waves, the records and Lehmann's idea, the inner ball drawn in)
 {
   const g = M.newGame();
   let fires = []; [45, 60, 30, 80, 10, 20, 34, 33.5, 33.7, 26, 22.5, 0].forEach(a => { fires.push(M.fire(g, a)); });
-  check('scripted act one: the twelfth wave is the last', fires[11].last === true && fires[11].left === 0);
-  check('the job is set after the sixth wave and names the post at 130°', fires[4].target === null && fires[5].target === 130 && /Now a job/.test(fires[5].words.job) && /130°/.test(fires[5].words.head));
-  check('during the job each wave says how far short of or past the ringed post it came up', /18° short of it/.test(fires[6].words.job) && /45° past it/.test(fires[7].words.job), fires[6].words.job + ' | ' + fires[7].words.job);
-  check('the job cannot be done: no dive on the dial comes within the ear of 130° in the two-shell Earth', M.diveFor(C.TARGET_POST, two) === null);
+  check('scripted act one: the twelfth wave is the last; every wave has a one-line headline', fires[11].last === true && fires[11].left === 0 && fires.every(f => /You came up at/.test(f.words.head)));
   check('a dive of 33.5° after 34° is called a jump (60° further round for half a degree), and 33.6° is on the dial', (() => { const h = M.newGame(); M.fire(h, 34); const r = M.fire(h, 33.5); const r2 = M.fire(h, 33.6); return /Something big happens between 33.5° and 34°/.test(r.words.compare) && r2.ray.i0 === 33.6; })());
   const r = M.reveal(g);
-  check('scripted act one: 14 reachable posts, 4 in shadow, lines open with the job that could not be done', r.reach.length === 14 && r.shadow.length === 4 && /Nobody can/.test(r.lines[0]) && /shadow/.test(r.lines.join(' ')), r.got.length + ' got, ' + r.missed.length + ' missed');
-  check('the records card names the quake of 16 June 1929 and gives the clue', /16 June 1929/.test(M.RECORDS.before.join(' ')) && /as steeply as it dived/.test(M.RECORDS.after.join(' ')) && P.RECORDS.length === 3);
-  const a = [30, 20, 10, 13, 14, 15, 14.5, 15.5].map(d => M.fire2(g, d));
-  check('act two: a dive of 30° or 20° is untouched and comes up as in the first Earth, with the clue repeated', a[0].touched === false && a[1].touched === false && /steeper/.test(a[1].words.clue) && Math.abs(a[1].ray.fold - M.trace(20, two).fold) < 1e-9);
-  check('act two: the first touch (10°) is announced and leaves two marks on the ball’s edge', a[2].first === true && a[2].marks.length === 2 && a[2].marks.every(m => Math.abs(m[1] - C.INNER_FRAC) < 1e-9) && /hidden/.test(a[2].words.found));
-  check('act two: 13° lights 150°, 14° lands in the shadow between posts, 15° bounces and lights 120°, 14.5° lights 140°, 15.5° lights 130°', JSON.stringify(a.slice(3).map(x => x.newLit)) === '[[150],[],[120],[140],[130]]' && a[5].ray.branch === 'reflect' && a[5].marks.length === 1 && /inside the shadow/.test(a[4].words.heard), JSON.stringify(a.slice(3).map(x => x.newLit)));
-  check('act two ends as soon as the four shadow posts are lit', a[6].last === false && a[7].last === true && /All four/.test(a[7].words.next));
+  check('scripted act one: 14 reachable posts, 4 in shadow, lines name the shadow', r.reach.length === 14 && r.shadow.length === 4 && /shadow/.test(r.lines.join(' ')), r.got.length + ' got, ' + r.missed.length + ' missed');
+  check('the records card names the quake of 16 June 1929 and states Lehmann’s idea outright: a core inside the core', /16 June 1929/.test(M.RECORDS.before.join(' ')) && /core inside the core/i.test(M.RECORDS.after.join(' ')) && P.RECORDS.length === 3);
+  const a = [30, 10, 13, 14, 15, 14.5, 15.5].map(d => M.fire2(g, d));
+  check('act two: a dive of 30° misses the inner ball and comes up as in the first Earth; the game says what reaches it', a[0].touched === false && /steeper than 16°/.test(a[0].words.clue) && Math.abs(a[0].ray.fold - M.trace(30, two).fold) < 1e-9);
+  check('act two: 13° lights 150°, 14° lands in the shadow between posts, 15° bounces and lights 120°, 14.5° lights 140°, 15.5° lights 130°', JSON.stringify(a.slice(2).map(x => x.newLit)) === '[[150],[],[120],[140],[130]]' && a[4].ray.branch === 'reflect' && /bounced off/.test(a[4].words.what) && /inside the shadow/.test(a[3].words.heard), JSON.stringify(a.slice(2).map(x => x.newLit)));
+  check('act two ends as soon as the four shadow posts are lit', a[5].last === false && a[6].last === true && /All four/.test(a[6].words.next));
   check('the slider’s half-degree steps hold a dive for each shadow post (13, 14.5, 15, 15.5)', [[13, 150], [14.5, 140], [15, 120], [15.5, 130]].every(([d, post]) => Math.abs(M.trace(d, leh).fold - post) <= C.EAR_DEG));
   const r2 = M.reveal2(g);
-  check('the second reveal: all 18 posts hear the three-shell quake; the lines name the ball, the bounce and the faster speed', Object.keys(r2.heard).length === 18 && /ball inside the core/.test(r2.lines[0]) && /bounces off/.test(r2.lines[1]) && /faster/.test(r2.lines[2]) && r2.marks.length === 10, r2.marks.length + ' marks');
+  check('the second reveal: all 18 posts feel the three-shell quake; the lines name the bounce and the faster speed', Object.keys(r2.heard).length === 18 && /shadow is gone/.test(r2.lines[0]) && /bounces off/.test(r2.lines[1]) && /faster/.test(r2.lines[2]));
   const v = M.verdict(g);
-  check('verdict: "You found the ball."; Lehmann’s caution, 1200 km, and solidity credited to 1940 and 1971, not to her', v.fate === 'You found the ball.' && /could not be proved/.test(v.paper) && /1200 km/.test(v.means) && /never said/.test(v.means) && /1940/.test(v.means) && /1971/.test(v.means) && /inner core/.test(v.quote) && v.quote.split(' ').length < 15, v.fate);
-  const h = M.newGame(); for (let i = 0; i < 12; i++) M.fire(h, 40 + 2 * i); M.reveal(h); let lastH; for (let i = 0; i < 12; i++) lastH = M.fire2(h, 20 + 3 * i);
-  check('a player who never dives steeply: act two ends after twelve waves, "The ball stayed hidden."', lastH.last === true && h.touches === 0 && (M.reveal2(h), M.verdict(h).fate) === 'The ball stayed hidden.');
+  check('verdict: "You filled the shadow."; Lehmann’s caution, 1200 km, and solidity credited to 1940 and 1971, not to her', v.fate === 'You filled the shadow.' && /could not be proved/.test(v.paper) && /1200 km/.test(v.means) && /never said/.test(v.means) && /1940/.test(v.means) && /1971/.test(v.means) && /inner core/.test(v.quote) && v.quote.split(' ').length < 15, v.fate);
+  const h = M.newGame(); for (let i = 0; i < 12; i++) M.fire(h, 40 + 2 * i); M.reveal(h); let lastH; for (let i = 0; i < C.WAVES2; i++) lastH = M.fire2(h, 20 + 3 * i);
+  check('a player who never dives steeply: act two ends after its eight waves, "The shadow stayed dark."', lastH.last === true && h.touches === 0 && (M.reveal2(h), M.verdict(h).fate) === 'The shadow stayed dark.');
   const q1 = M.quake(M.newGame(), 0.95), q2 = M.quake(M.newGame(), 1.08);
   check('the author’s tool quake(): a ball a little slower lights none of the first three shadow posts; a little faster lights all four', q1.lit.filter(p => p < 145).length === 0 && q2.lit.length === 4, JSON.stringify([q1.lit, q2.lit]));
   check('quake() takes a size for the author: a tiny ball at 1.05 lights fewer', M.quake(M.newGame(), 1.05, 0.1).lit.length < 4);
