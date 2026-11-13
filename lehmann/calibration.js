@@ -84,13 +84,14 @@ check('Gutenberg & Richter’s 1200 km in words: "about half the size of the Moo
   const g = M.newGame();
   let lastFire = null; [45, 60, 34, 33.5, 26, 20, 10, 2.5, 70, 80, 50, 40].forEach(a => { lastFire = M.fire(g, a); });
   check('scripted act one: the twelfth wave is the last', lastFire.last === true && lastFire.left === 0);
+  check('a dive of 33.5° after 34° is called a jump (60° further round for half a degree), and 33.6° is on the dial', (() => { const h = M.newGame(); M.fire(h, 34); const r = M.fire(h, 33.5); const r2 = M.fire(h, 33.6); return /Something big happens between 33.5° and 34°/.test(r.words.compare) && r2.ray.i0 === 33.6; })());
   const r = M.reveal(g);
   check('scripted act one: 14 reachable posts, 4 in shadow, lines mention the shadow', r.reach.length === 14 && r.shadow.length === 4 && /shadow/.test(r.lines.join(' ')), r.got.length + ' got, ' + r.missed.length + ' missed');
   const q1 = M.quake(g, 0.95), q2 = M.quake(g, 1.08);
   check('scripted act two (Lehmann’s size): a little slower lights none of the first three; a little faster lights all four', q1.lit.filter(p => p < 145).length === 0 && q2.lit.length === 4, JSON.stringify([q1.lit, q2.lit]));
   check('quake() takes a size for the author: a tiny ball at 1.05 lights fewer', M.quake(M.newGame(), 1.05, 0.1).lit.length < 4);
   const v = M.finish(g);
-  check('verdict: did, fate, paper, means and the quote are all present; "Your ball does what hers does."', v.did && v.fate === 'Your ball does what hers does.' && /probable/.test(v.paper) && /1200 km/.test(v.means) && /inner core/.test(v.quote), v.fate);
+  check('verdict: did, fate, paper, means and the quote are all present; "Your ball does what hers does."', v.did && v.fate === 'Your ball does what hers does.' && /seemed likely/.test(v.paper) && /1200 km/.test(v.means) && /inner core/.test(v.quote), v.fate);
   check('after three quakes the game is done', (() => { const h = M.newGame(); M.fire(h, 45); M.reveal(h); for (let i = 0; i < 3; i++) M.quake(h, 1.1); return h.done; })());
 }
 

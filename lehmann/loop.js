@@ -8,7 +8,7 @@ console.log('aim: Reach every listening post on the far side of the Earth with a
 for (const a of [45, 50, 60, 30, 34, 33.5, 26, 22.5, 10, 2.5, 80, 0]) {
   const r = M.fire(g, a);
   console.log(`\n  dive ${M.fmtDive(a)} → ${r.ray.branch.padEnd(7)} Δ ${r.ray.delta.toFixed(1).padStart(6)} fold ${r.ray.fold.toFixed(1).padStart(6)}  ring ${ring(g.heard)}  ${r.heardCount} of 18 heard`);
-  console.log('  SAYS: ' + r.words.what + '\n        ' + r.words.heard + (r.last ? '\n  (last wave: the fan fires by itself)' : ''));
+  console.log('  SAYS: ' + [r.words.what, r.words.heard, r.words.steep, r.words.compare, r.words.next].filter(Boolean).join('\n        '));
 }
 console.log('\n  [That’s every post I can reach]');
 const rv = M.reveal(g);
@@ -19,7 +19,7 @@ console.log('\nACT TWO  aim: Build the inside of the Earth so the posts in the s
 for (const v of [0.9, 1.0, 1.1]) {
   const q = M.quake(g, v);
   console.log(`\n  ball speed × ${v} → lit ${q.lit.join(' ') || 'none'}   ring ${ring(q.heard)}   quakes left ${q.left}`);
-  console.log('  SAYS: ' + q.words.ball + '\n        ' + q.words.result + '\n        ' + q.words.how);
+  console.log('  SAYS: ' + [q.words.ball, q.words.result, q.words.how, q.words.next].join('\n        '));
 }
 const v = M.verdict(g);
 console.log('\nVERDICT\n  ' + v.fate + '\n  ' + v.did + '\n  --\n  ' + v.paper + '\n  --\n  ' + v.means + '\n  "' + v.quote + '"');
