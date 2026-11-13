@@ -16,7 +16,7 @@ const path = require('path');
   const log = [];
   await shot('start', true); await shot('view-start', false);
   const lit = async () => page.evaluate(() => document.querySelectorAll('#plate svg circle[fill="#F2C14E"][filter]').length);
-  const quiv = async () => page.evaluate(() => document.querySelectorAll('#plate svg circle[fill="#9C7F3A"]').length);
+  const quiv = async () => page.evaluate(() => document.querySelectorAll('#plate svg circle[fill="#8E99A3"]').length);
   const band = async () => page.evaluate(() => { const p = document.querySelector('#plate svg path[fill^="url(#hatch"]'); return p && !p.classList.contains('hide'); });
   // stage 0: the facts. Three real earthquakes, nothing to do but watch
   await page.click('#b-begin'); await page.waitForTimeout(300); await shot('d-1-before', false);
