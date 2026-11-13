@@ -210,14 +210,17 @@ var MECH = (function () {
   // imagined Earths: one core, then a core within the core. In them the player is the earthquake and produces
   // what that imagined Earth would do. The band is the one-core Earth's shadow.
   function bandPosts() { return shadowPosts(twoShell()); }
+  // The paths drawn in stage 0: only the directions on which the two imagined Earths agree, that is, those that
+  // pass beside the place where an inner core would be (dives of more than 16°). Steeper ones are left undrawn.
+  function agreedRays(step) { var E = twoShell(); return fan(E, step).filter(function (r) { return r.i0 > CONFIG.PAPER.INNER_GRAZE_I0 + 1e-9; }).concat([trace(33.4, E), trace(33.7, E)]); } // the two extra dives just catch the core and come up by the far point, so the posts there are reached whatever the step
   function record() { var f = bandPosts(), out = {}; CONFIG.POSTS.forEach(function (P) { out[P] = f.indexOf(P) >= 0 ? 'quiver' : 'lit'; }); return out; }
   function newGame() { return { act: 0, shots: [], reached: {}, shots2: [], reached2: {}, quivers: {}, inBand: 0, touches: 0, done: false }; }
   var TOTAL1 = CONFIG.WAVES + CONFIG.LAST_TRIES;
   var DATA = {
     aim: 'First the facts: what listening posts recorded after real earthquakes.',
-    before: 'Three real earthquakes, one after another. Nobody can look inside the Earth: does it have one core, or a core within the core? Watch what the listening posts round the right-hand edge do each time.',
+    before: 'Three real earthquakes, one after another. Each sends waves through the Earth in every direction. The gold lines are the paths everyone agreed on in 1936. Watch them run, and watch what the listening posts round the right-hand edge do.',
     head: 'Every time: a strong shake, then a band that only quivers, then a strong shake again.',
-    after: ['That band is marked now. After every big earthquake the posts in it feel only a faint quiver.', 'In 1936 nobody could say how any wave gets there at all. That is the puzzle.']
+    after: ['That band is marked now. Look at the gold lines: not one of them leads into it. And yet, after every big earthquake, the posts in it feel a faint quiver.', 'In 1936 nobody could say how any wave gets there at all. That is the puzzle.']
   };
   var AIM1 = 'Imagine the Earth has one core, and you are the earthquake.';
   var AIM1B = 'Imagine one core. Can you make the band quiver?';
@@ -341,6 +344,6 @@ var MECH = (function () {
     return { fate: fate, did: did, paper: paper, means: means, more: more, made: made, quote: 'inside the core there is an inner core in which the velocity is larger', quoteBy: 'Inge Lehmann, 1936' };
   }
 
-  return { CONFIG: CONFIG, twoShell: twoShell, threeShell: threeShell, lehmannEarth: lehmannEarth, trace: trace, fold: fold, fan: fan, postsHeardBy: postsHeardBy, heardByQuake: heardByQuake, reachablePosts: reachablePosts, shadowPosts: shadowPosts, bandPosts: bandPosts, record: record, diveFor: diveFor, coverage: coverage, verticalShare: verticalShare, sizeWords: sizeWords, speedWords: speedWords, steepWords: steepWords, fmtDive: fmtDive, deg: deg, numberWord: numberWord, TOTAL1: TOTAL1, DATA: DATA, AIM1: AIM1, AIM1B: AIM1B, AIM2: AIM2, INTRO1: INTRO1, INTRO2: INTRO2, newGame: newGame, fire: fire, reveal: reveal, CARD: CARD, fire2: fire2, reveal2: reveal2, verdict: verdict };
+  return { CONFIG: CONFIG, twoShell: twoShell, threeShell: threeShell, lehmannEarth: lehmannEarth, trace: trace, fold: fold, fan: fan, postsHeardBy: postsHeardBy, heardByQuake: heardByQuake, reachablePosts: reachablePosts, shadowPosts: shadowPosts, bandPosts: bandPosts, agreedRays: agreedRays, record: record, diveFor: diveFor, coverage: coverage, verticalShare: verticalShare, sizeWords: sizeWords, speedWords: speedWords, steepWords: steepWords, fmtDive: fmtDive, deg: deg, numberWord: numberWord, TOTAL1: TOTAL1, DATA: DATA, AIM1: AIM1, AIM1B: AIM1B, AIM2: AIM2, INTRO1: INTRO1, INTRO2: INTRO2, newGame: newGame, fire: fire, reveal: reveal, CARD: CARD, fire2: fire2, reveal2: reveal2, verdict: verdict };
 })();
 if (typeof module !== 'undefined') module.exports = MECH;

@@ -193,7 +193,7 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
   <p><b>Does the Earth have one core, or a core within the core?</b></p>
   <p>The picture is the Earth cut open. Ochre is the mantle, rock where a wave runs fast. Rust is the core, where a wave runs slower, so going in it bends toward the middle and coming out it bends back. A wave runs straight and bends only where the colour changes. The burst at the top is the earthquake. The dots round the right-hand edge are eighteen listening posts.</p>
   <ol>
-    <li><b>The facts.</b> Three real earthquakes, and what the posts recorded each time, kept as three rows of dots. Most light up. One band only quivers. That band is then marked. There is nothing for you to do here but watch.</li>
+    <li><b>The facts.</b> Three real earthquakes. You see the waves run through the Earth along the paths everyone agreed on, and what the posts recorded each time, kept as three rows of dots. Most light up. One band only quivers. That band is then marked. There is nothing for you to do here but watch.</li>
     <li><b>Imagine one core.</b> Now you are the earthquake, in an imagined Earth with one core. Aim by dragging on the picture or sliding the dial: 0° dives straight down through the middle, 90° runs along the ground. The − and + buttons move a tenth of a degree. Fire, and the post nearest to where you come up lights. Try to make the band quiver. Four goes, then one last try.</li>
     <li><b>Every direction at once.</b> The game then fires every direction you could have chosen. This is not a go of yours; just watch.</li>
     <li><b>Imagine a core within the core.</b> Three goes in an imagined Earth with a second, smaller core inside the core. Only a dive steeper than 16° gets that deep. Then every direction at once again, and the verdict.</li>
@@ -361,6 +361,25 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
     plate.ball.classList.add('hide');
     C.POSTS.forEach(function (P) { setPost(plate, P, 'off'); });
   }
+  // A whole earthquake seen from outside in: every given wave runs from the quake along its path at one speed,
+  // and each post answers when the first wave reaches it (band posts, which no drawn wave reaches, answer last).
+  function quakeRun(pl, rays, state, ms) {
+    return new Promise(function (resolve) {
+      clearGroup(pl.fanL); clearGroup(pl.fanR);
+      var Ls = rays.map(function (r) { return lengthOf(r.pts); }), Lmax = Math.max.apply(null, Ls), when = {};
+      rays.forEach(function (r, k) {
+        var L = Ls[k], dur = ms * L / Lmax;
+        [[pl.fanR, false], [pl.fanL, true]].forEach(function (g) {
+          var p = el('polyline', { points: pointsOf(r.pts, g[1]), 'stroke-dasharray': L, 'stroke-dashoffset': L, 'stroke-width': '1.1' }, g[0]);
+          p.animate([{ strokeDashoffset: L }, { strokeDashoffset: 0 }], { duration: dur, easing: 'linear', fill: 'forwards' });
+        });
+        C.POSTS.forEach(function (P) { if (Math.abs(r.fold - P) <= 5 && (when[P] === undefined || dur < when[P])) when[P] = dur; });
+      });
+      var late = 0;
+      C.POSTS.forEach(function (P) { var t = when[P] !== undefined && state[P] === 'lit' ? when[P] : ms + 250 + 160 * (late++); setTimeout(function () { setPost(pl, P, state[P]); }, t); });
+      setTimeout(resolve, ms + 250 + 160 * late + 2900);
+    });
+  }
   // Stage 0: the facts. Three real earthquakes, slowly, one row of posts kept for each. Meanwhile the inside
   // of the Earth alternates between the two pictures the game will try: one core, a core within the core.
   var wonder = null;
@@ -371,10 +390,10 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
     resetPlate(); showBand(plate, false); plate.veil.classList.add('hide'); stopWonder();
     setBall(plate, C.INNER_FRAC, C.V_INNER / C.V_CORE);
     wonder = plate.ball.animate([{ opacity: 0 }, { opacity: 0, offset: .3 }, { opacity: 1, offset: .5 }, { opacity: 1, offset: .8 }, { opacity: 0 }], { duration: 6400, iterations: Infinity, easing: 'ease-in-out' });
-    plate.cap.textContent = 'INSIDE: ONE CORE? OR A CORE WITHIN THE CORE?';
+    plate.cap.textContent = 'INSIDE: ONE CORE? OR A CORE WITHIN THE CORE?'; plate.fanR.setAttribute('opacity', '.8'); plate.fanL.setAttribute('opacity', '.5');
     $('aimline').textContent = MECH.DATA.aim; $('rule1').innerHTML = ''; $('b-next').textContent = 'Next';
     hide('panel1', true); hide('panel-reveal', true); hide('rule1', true); aiming(false); tally();
-    var quakes = C.PAPER.QUAKES, rec = MECH.record();
+    var quakes = C.PAPER.QUAKES, rec = MECH.record(), rays = MECH.agreedRays(2);
     $('records').innerHTML = quakes.map(function (q, k) { return '<div class="rrow" id="rrow' + k + '"><span class="ry">' + q.date.slice(-4) + '</span><span class="rd">' + C.POSTS.map(function () { return '<i></i>'; }).join('') + '</span></div>'; }).join('');
     hide('records', false); hide('bigno', false); $('bigno').textContent = ''; head(''); $('res').innerHTML = para('mu', MECH.DATA.before);
     show('s-play');
@@ -392,10 +411,8 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
       }
       C.POSTS.forEach(function (P) { setPost(plate, P, 'off'); });
       $('bigno').textContent = 'Earthquake ' + (k + 1) + ' of ' + quakes.length; head(quakes[k].place + ', ' + quakes[k].date);
-      wait(1500).then(function () {
-        plate.ripple.animate([{ r: 4, opacity: .95 }, { r: R * 2.1, opacity: 0 }], { duration: 2400, easing: 'ease-out' });
-        return wait(500);
-      }).then(function () { return answer(plate, rec, 130, 2900); }).then(function () {
+      clearGroup(plate.fanL); clearGroup(plate.fanR);
+      wait(1500).then(function () { return quakeRun(plate, rays, rec, 3000); }).then(function () {
         if (!alive()) return;
         var row = $('rrow' + k); row.classList.add('on');
         [].forEach.call(row.querySelectorAll('i'), function (d, n) { setTimeout(function () { d.className = rec[C.POSTS[n]]; }, 35 * n); });
@@ -407,7 +424,7 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
   // Stage one: imagine one core.
   function stage1() {
     phase = 'act1'; busy = false; game.act = 1;
-    stopWonder(); resetPlate(); plate.veil.classList.add('hide'); showBand(plate, true); hide('records', true); hide('bigno', true);
+    stopWonder(); resetPlate(); plate.veil.classList.add('hide'); showBand(plate, true); hide('records', true); hide('bigno', true); plate.fanR.setAttribute('opacity', '.55'); plate.fanL.setAttribute('opacity', '.42');
     $('aimline').textContent = MECH.AIM1; plate.cap.textContent = CAP1; $('rule1').innerHTML = RULE1;
     hide('panel1', false); hide('panel-reveal', true); hide('rule1', false);
     $('res').innerHTML = para('mu', MECH.INTRO1); head('Imagine the Earth has one core.');

@@ -83,6 +83,7 @@ check('Gutenberg & Richter’s 1200 km in words: "about half the size of the Moo
 // 6. a scripted game runs to a verdict (revision 8: the facts; imagine one core; imagine a core within the core)
 {
   check('stage 0, the facts: three real earthquakes from the paper; each time fourteen posts light and the four in the band only quiver', P.QUAKES.length === 3 && /1924/.test(P.QUAKES[0].date) && /1929/.test(P.QUAKES[1].date) && /1931/.test(P.QUAKES[2].date) && (() => { const r = M.record(); return JSON.stringify(M.bandPosts()) === '[120,130,140,150]' && C.POSTS.every(p => r[p] === (p >= 120 && p <= 150 ? 'quiver' : 'lit')); })());
+  check('the paths drawn in stage 0 are the same in both imagined Earths, none of them comes up in the band, and between them they reach every post outside it', (() => { const rs = M.agreedRays(1); return rs.length > 60 && rs.every(r => Math.abs(M.trace(r.i0, leh).fold - r.fold) < 1e-9 && !(r.fold > P.SHADOW[0] + 1e-6 && r.fold < P.SHADOW[1] - 1e-6)) && C.POSTS.filter(p => p < 120 || p > 150).every(p => rs.some(r => Math.abs(r.fold - p) <= 5)); })());
   const g = M.newGame();
   const f = [45, 30, 34, 33.5, 20].map(a => M.fire(g, a));
   check('stage one: four goes and one last try; the first go brings the nudge, the fourth the question', C.WAVES === 4 && M.TOTAL1 === 5 && f[0].nudge && /Now try to make it quiver/.test(f[0].words.band) && !f[2].plea && /could not make the band quiver/.test(f[3].plea) && f[3].last === false && f[4].last === true);
