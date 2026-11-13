@@ -153,7 +153,7 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
   <p><b>The cards.</b> Each summer, touch a card to see what it does. It is drawn into the picture (a circle on the grass, a watcher on a stool, a policeman with a tall hat), and the box with the green line says what it costs, what happens to someone who takes two, and what we get to find out. <b>Leave it be:</b> nothing happens to anyone, and nobody knows who took two. <b>Have a talk:</b> we all promise to take one; if fish go missing, the circle tells everybody off next summer; nobody knows who broke the promise. <b>Take turns watching:</b> one of us watches instead of fishing and sees most people; seen taking two means a telling-off the first time, both fish back in the pond the second time, and both fish back plus no fishing next summer the third time. <b>Ask the town for a policeman:</b> he stands by the pond every day and catches nearly everyone who takes two; the fish go back in the pond. He tells us only who he caught, and we stop telling each other off.</p>
   <p><b>FISH!</b> Everyone goes to the pond one at a time and comes back with a bucket, or with their fish showing if someone saw them. Under each person it says what happened to them: told off, fish put back, caught, no fishing. Then the pond is counted, the babies come, and the game tells you what the village knows: how many fish came out, how many of us took two, who (if anyone saw), what the pond did, and what we ate. The bones on the shelf are all the fish we have eaten so far.</p>
   <p><b>Next summer.</b> Pick again from all four cards. Nothing is kept from last summer except what the villagers learnt.</p>
-  <p><b>The seventh summer.</b> After six summers there is one more, with no card: nobody watches and nobody talks. Then the game shows you what really happened, which the village itself never saw, and who never cared about the rule from the start.</p>
+  <p><b>The seventh summer.</b> After six summers there is one more, with no card: nobody watches and nobody talks. If the pond is fished out before then, the game ends there instead: with no fish there is nothing to watch and nothing to share. Then the game shows you what really happened, which the village itself never saw, and who never cared about the rule from the start.</p>
   <button class="btn pri" id="b-help-close">Back</button>
 </div></div>
 
@@ -428,7 +428,7 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
       drawPicture($('c-pic'), rec.pondAfter, regime, { babies: rec.growth > 0 ? rec.growth : 0, watcherName: wn, finger: finger });
       drawShelf($('c-shelf'), s.eaten);
       $('result').innerHTML = resultText(rec, regime);
-      $('b-next').textContent = s.summer < C.SUMMERS ? 'Next summer' : 'One more summer';
+      $('b-next').textContent = s.pond <= 0 ? 'See what became of us' : s.summer < C.SUMMERS ? 'Next summer' : 'One more summer';
       show('ph-result'); busy = false;
     });
   }
@@ -480,22 +480,26 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
   }
 
   // ---------------- the verdict ----------------
-  function showEnd() {
-    var t = s.test, hist = s.history, last = hist[hist.length - 1];
-    var head = t.pondBefore <= 0 ? 'The summer nobody watched: the pond was empty. There was nothing to share.' : 'The summer nobody watched: ' + t.shared + ' of ten took one fish.';
+  // the end: after the seventh summer, or early (emptied=true) when the pond has been fished out before then
+  function showEnd(emptied) {
+    var hist = s.history, last = hist[hist.length - 1], t = emptied ? last : s.test, n = hist.length;
+    var head = emptied ? 'The pond is empty. After ' + (n === 1 ? 'one summer' : n + ' summers') + ' there is nothing left to fish.' : t.pondBefore <= 0 ? 'The summer nobody watched: the pond was empty. There was nothing to share.' : 'The summer nobody watched: ' + t.shared + ' of ten took one fish.';
     $('end-head').textContent = head;
-    $('end-lines').innerHTML = '<p>Now you can see what the village never could. Here is who really did what:</p>';
-    var last3 = hist.slice(-3).reduce(function (a, h) { return a + h.eaten; }, 0) / 3 * C.SUMMERS;
+    $('end-lines').innerHTML = emptied ? '<p>Now you can see what the village never could. Here is who really did what in the last summer:</p>' : '<p>Now you can see what the village never could. Here is who really did what:</p>';
+    var last3 = hist.slice(-3).reduce(function (a, h) { return a + h.eaten; }, 0) / Math.min(3, n) * C.SUMMERS;
     var lines = '';
     var grabs = t.acts.filter(function (a) { return a.grabbed; }).map(function (a) { return a.name; });
-    if (t.pondBefore > 0) lines += '<p>' + (grabs.length ? names(grabs) + ' took two' + (t.pondAfter <= 0 ? ', and the pond is empty' : '') + '.' : 'Nobody took two.') + ' The pond: ' + t.pondBefore + ' fish, then ' + t.pondAfter + '.</p>';
+    if (emptied) lines += '<p>' + (grabs.length ? names(grabs) + ' went for two' + (grabs.length === 1 ? '' : ' each') + '.' : 'Nobody went for two.') + ' The pond: ' + t.pondBefore + ' fish at the start of the summer, then none' + (t.ranOut ? ', before everyone had what they wanted' : '') + '.</p>';
+    else if (t.pondBefore > 0) lines += '<p>' + (grabs.length ? names(grabs) + ' took two' + (t.pondAfter <= 0 ? ', and the pond is empty' : '') + '.' : 'Nobody took two.') + ' The pond: ' + t.pondBefore + ' fish, then ' + t.pondAfter + '.</p>';
     var orig = s.villagers.filter(function (v) { return v.type === 'E' && !v.newcomer; }).map(function (v) { return v.name; });
     var kit = s.villagers.filter(function (v) { return v.newcomer; })[0];
     var learnt = s.villagers.filter(function (v) { return v.type === 'E' && !v.newcomer && t.acts[v.i] && !t.acts[v.i].grabbed && !t.acts[v.i].banned; }).map(function (v) { return v.name; });
     var p4 = names(orig) + ' never cared about the rule from the start' + (kit ? ', and ' + kit.name + ' arrived the same way' : '') + '. ';
-    if (t.pondBefore > 0) p4 += learnt.length === orig.length ? 'In the summer nobody watched, all of them took one anyway.' : learnt.length ? 'In the summer nobody watched, ' + names(learnt) + ' took one anyway.' : 'None of them had changed.';
+    if (emptied) p4 += 'The other ' + (C.N - orig.length - (kit ? 1 : 0)) + ' did, and gave up one by one as the pond went down.';
+    else if (t.pondBefore > 0) p4 += learnt.length === orig.length ? 'In the summer nobody watched, all of them took one anyway.' : learnt.length ? 'In the summer nobody watched, ' + names(learnt) + ' took one anyway.' : 'None of them had changed.';
     lines += '<p>' + p4 + '</p>';
-    lines += '<p>After six summers the pond is <b>' + pondWord(last.pondAfter) + '</b> and the village <b>' + belliesWord(last3) + '</b>' + '.</p>';
+    if (emptied) lines += '<p>There was no seventh summer: nothing to watch, and nothing to share.</p>';
+    else lines += '<p>After six summers the pond is <b>' + pondWord(last.pondAfter) + '</b> and the village <b>' + belliesWord(last3) + '</b>' + '.</p>';
     $('end-lines2').innerHTML = lines;
     drawRow($('c-end-row'), s.villagers, t.acts, t.acts.length, 'test', null, true);
     drawPicture($('c-end-pic'), s.pond, 'test', {});
@@ -512,7 +516,7 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
       watch: '<p class="paper"><b>What Ostrom found.</b> This is how the fishing and farming villages that lasted for hundreds of years did it: they watched the pond themselves, and the first punishment was just a word. The telling-off tells everyone that someone is watching; the trust carries on; and in the end hardly any watching is needed. In this game, the grabbers learnt the rule by being caught by their own village.</p>',
       strong: '<p class="paper"><b>What Ostrom found.</b> While the policeman was there, everyone shared, and nobody needed a reason of their own. In an experiment Ostrom writes about, the group with an outside enforcer did well while it lasted and, when it was taken away, shared less than a group that never had one. In this game, every policed summer wore away the village’s own rule; that is what the seventh summer shows, and it depends on how fast people forget a rule they don’t need.</p>'
     };
-    var out = P[dom];
+    var out = (s.pond <= 0 && !s.test ? '<p class="paper">The pond was fished out before the seventh summer could be played: the one thing every card was there to prevent.</p>' : '') + P[dom];
     if (dom !== 'strong' && used('strong') >= 2) out += '<p class="paper">The summers with the policeman worked while he was there and, in this game, wore away the village’s own rule. Ostrom calls that crowding out.</p>';
     if (dom !== 'watch' && used('watch') >= 2 && used('watch') < 4) out += '<p class="paper">The summers of taking turns watching are how the villages that lasted did it: a word first, then the fish back, then no fishing.</p>';
     out += '<p class="small">Elinor Ostrom (2000), Collective Action and the Evolution of Social Norms, <i>Journal of Economic Perspectives</i> 14(3): 137–158. The village, the pond, the buckets and the fish are this game’s; the three kinds of villager, the cards and what they do are the paper’s. About has the rest. Village no. ' + seed + '.</p>';
@@ -525,7 +529,7 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
   function randomSeed() { return 1000 + Math.floor(Math.random() * 9000); }
   $('b-begin').addEventListener('click', function () { newGame(seed || randomSeed()); showScreen('s-play'); });
   $('b-fish').addEventListener('click', function () { if (!chosen) return; fishNow(false); });
-  $('b-next').addEventListener('click', function () { if (busy) return; if (s.summer < C.SUMMERS) showPick(); else showTest(); });
+  $('b-next').addEventListener('click', function () { if (busy) return; if (s.pond <= 0) showEnd(true); else if (s.summer < C.SUMMERS) showPick(); else showTest(); });
   $('b-test').addEventListener('click', function () { fishNow(true); });
   $('b-again').addEventListener('click', function () { seed = randomSeed(); newGame(seed); showScreen('s-play'); });
   ['b-help-start', 'q-play', 'b-help-end'].forEach(function (id) { $(id).addEventListener('click', function () { openOv('help'); }); });
