@@ -1,58 +1,58 @@
 Ostrom's Pond — calibration check, 2026-11-13. 41 checks, 0 failed.
 PASS leave it be, summer 1: share of villagers taking one fish within 40–60% (finding 1)  — 47%
-PASS leave it be: decays by at least fifteen points by the last summer and stays above 10% (finding 2, "well above zero")  — 47% → 21%
-PASS leave it be: the pond is nearly empty or empty by the last summer (the stake)  — 2.97 fish
+PASS leave it be: decays by at least fifteen points by the last summer and stays above 10% (finding 2, "well above zero")  — 47% → 24%
+PASS leave it be: the pond is empty by the last summer in nearly every village (the stake)  — 0.37 fish
 PASS have a talk: at least fifteen points above leave it be in summer 1 (finding 5, "substantial increases")  — 64% vs 47%
-PASS have a talk: sustained (the last summer within ten points of summer 2, through the newcomer)  — 65% → 58%
+PASS have a talk: sustained (the last summer within ten points of summer 2)  — 65% → 67%
 PASS have a talk: egoists unmoved by cheap talk (an egoist shares under talk with probability below 15%)
-PASS take turns watching: rises by at least twenty points to above 85% by the last summer  — 64% → 97%
-PASS take turns watching: the pond is full at the end  — 49.68
+PASS take turns watching: rises by at least twenty points to above 85% by the last summer  — 64% → 99%
+PASS take turns watching: the pond holds (ends no lower than it started, less three)  — 40.50
 PASS a grabber told off once (no fine) is much more likely to take one next summer than one never told off  — 8% → 96%
 PASS the first sanction is a word that costs nothing, and the schedule escalates (a grabber’s chance of sharing rises with each offence)  — 8% → 82% → 100%
 PASS take turns watching: a grabber who was told off and grabs again expects to eat less than a sharer (the differential the imitation rule needs)  — 0.40 vs 1
-PASS take turns watching: from summer 4 on, grabbers out-eat sharers by less than half of what they do under talk  — 0.41 vs 1.00
+PASS take turns watching: from summer 4 on, grabbers out-eat sharers by less than half of what they do under talk  — 0.10 vs 1.00
 PASS have a talk: a grabber eats more than a sharer every summer (cheap talk has no teeth)  — 1.00 fish
-PASS egoists learn the norm under watching and not under talk (Fehr & Gächter, p. 141; Börgers & Sarin, p. 145)  — 0.35 vs 0.00
-PASS seventh summer: watching leaves the most sharers, then talk, then leave it be  — 7.33 > 4.61 > 1.99
-PASS seventh summer: watching leaves at least seven of ten sharing  — 7.33
-PASS the policeman: sharing above 85% in every summer (cooperation enforced)  — 96% 96% 96% 94% 93% 91%
-PASS the policeman: the seventh summer below leave it be’s (Frohlich & Oppenheimer: worse off than those who never had it)  — 0.88 vs 1.99
+PASS egoists learn the norm under watching and not under talk (Fehr & Gächter, p. 141; Börgers & Sarin, p. 145)  — 0.40 vs 0.00
+PASS seventh summer: watching leaves the most sharers, then talk, then leave it be  — 8.21 > 5.64 > 2.44
+PASS seventh summer: watching leaves at least seven of ten sharing  — 8.21
+PASS the policeman: sharing above 85% in every summer (cooperation enforced)  — 96% 96% 96% 95% 94% 91%
+PASS the policeman: the seventh summer below leave it be’s (Frohlich & Oppenheimer: worse off than those who never had it)  — 0.93 vs 2.44
 PASS the policeman costs the village nothing: a caught grabber’s fish go back in the pond, nothing leaves the village
-PASS three policed summers then watching: watching starts lower and ends lower than watching from the start (crowding out carries over)  — 37% vs 64%; 7th 4.30 vs 7.33
+PASS three policed summers then watching: watching starts lower and ends lower than watching from the start (crowding out carries over)  — 42% vs 64%; 7th 4.52 vs 8.21
 PASS all ten take one: the pond after winter never falls below three-quarters full  — 40.00
-PASS the winter’s rule: every fish left can have one baby, never more than twelve, never more fish than fifty
-PASS one fish each fills the pond (ten out, twelve in); twelve fish out holds it; thirteen shrinks it
-PASS all ten take two: the pond is empty within six summers  — empty after summer 4
+PASS the winter’s rule: every fish left can have one baby, never more than ten, never more fish than fifty
+PASS one fish each holds the pond (ten out, ten in); eleven fish out shrinks it; a village of grabbers empties it within six summers
+PASS all ten take two: the pond is empty within six summers  — empty after summer 3
 PASS takes are rationed when the pond is low, never negative, never more than the pond holds; the shelf never goes below zero  — 
 PASS every village has three egoists, five conditional cooperators, two willing punishers; norms stay in [0, 1]
 PASS every name is each type at least once over 400 seeds (the draw is real)
-PASS the newcomer arrives exactly once, in summer four, as an egoist replacing a norm-user  — 400 of 400
+PASS no newcomer: the village is the same ten from the first summer to the seventh  — 400 of 400
 
 Robustness of the seventh summer (watch > talk > none, strong < none), 200 seeds each:
-PASS robustness, crowding out at three-quarters: watch > talk > none  —   crowding out at three-quarters: watch 7.40 talk 4.57 none 1.93 strong 1.59
-PASS robustness, crowding out at three-quarters: the policeman’s seventh summer below leave it be’s  —   crowding out at three-quarters: watch 7.40 talk 4.57 none 1.93 strong 1.59
-PASS robustness, crowding out at half: watch > talk > none  —   crowding out at half: watch 7.40 talk 4.57 none 1.93 strong 2.86
-SENSITIVITY robustness, crowding out at half: the policeman’s seventh summer below leave it be’s does not hold: the Frohlich & Oppenheimer aftermath needs crowding out at least three-quarters of the chosen rate; said on the verdict screen  —  crowding out at half: watch 7.40 talk 4.57 none 1.93 strong 2.86
-PASS robustness, imitation at half: watch > talk > none  —   imitation at half: watch 7.71 talk 5.06 none 2.37 strong 0.89
-PASS robustness, imitation at half: the policeman’s seventh summer below leave it be’s  —   imitation at half: watch 7.71 talk 5.06 none 2.37 strong 0.89
-PASS robustness, imitation doubled: watch > talk > none  —   imitation doubled: watch 6.67 talk 2.89 none 1.36 strong 0.88
-PASS robustness, imitation doubled: the policeman’s seventh summer below leave it be’s  —   imitation doubled: watch 6.67 talk 2.89 none 1.36 strong 0.88
-PASS robustness, four egoists, four conditional cooperators, two punishers: watch > talk > none  —   four egoists, four conditional cooperators, two punishers: watch 6.87 talk 3.10 none 1.54 strong 0.91
-PASS robustness, four egoists, four conditional cooperators, two punishers: the policeman’s seventh summer below leave it be’s  —   four egoists, four conditional cooperators, two punishers: watch 6.87 talk 3.10 none 1.54 strong 0.91
-PASS robustness, two egoists, six conditional cooperators, two punishers: watch > talk > none  —   two egoists, six conditional cooperators, two punishers: watch 7.79 talk 5.63 none 2.64 strong 0.88
-PASS robustness, two egoists, six conditional cooperators, two punishers: the policeman’s seventh summer below leave it be’s  —   two egoists, six conditional cooperators, two punishers: watch 7.79 talk 5.63 none 2.64 strong 0.88
-PASS robustness, no newcomer: watch > talk > none  —   no newcomer: watch 8.21 talk 5.62 none 2.22 strong 0.95
-PASS robustness, no newcomer: the policeman’s seventh summer below leave it be’s  —   no newcomer: watch 8.21 talk 5.62 none 2.22 strong 0.95
+PASS robustness, crowding out at three-quarters: watch > talk > none  —   crowding out at three-quarters: watch 8.21 talk 5.62 none 2.34 strong 1.61
+PASS robustness, crowding out at three-quarters: the policeman’s seventh summer below leave it be’s  —   crowding out at three-quarters: watch 8.21 talk 5.62 none 2.34 strong 1.61
+PASS robustness, crowding out at half: watch > talk > none  —   crowding out at half: watch 8.21 talk 5.62 none 2.34 strong 3.08
+SENSITIVITY robustness, crowding out at half: the policeman’s seventh summer below leave it be’s does not hold: the Frohlich & Oppenheimer aftermath needs crowding out at least three-quarters of the chosen rate; said on the verdict screen  —  crowding out at half: watch 8.21 talk 5.62 none 2.34 strong 3.08
+PASS robustness, imitation at half: watch > talk > none  —   imitation at half: watch 8.41 talk 6.09 none 2.95 strong 0.96
+PASS robustness, imitation at half: the policeman’s seventh summer below leave it be’s  —   imitation at half: watch 8.41 talk 6.09 none 2.95 strong 0.96
+PASS robustness, imitation doubled: watch > talk > none  —   imitation doubled: watch 7.72 talk 3.81 none 1.65 strong 0.94
+PASS robustness, imitation doubled: the policeman’s seventh summer below leave it be’s  —   imitation doubled: watch 7.72 talk 3.81 none 1.65 strong 0.94
+PASS robustness, four egoists, four conditional cooperators, two punishers: watch > talk > none  —   four egoists, four conditional cooperators, two punishers: watch 7.65 talk 4.51 none 1.91 strong 0.96
+PASS robustness, four egoists, four conditional cooperators, two punishers: the policeman’s seventh summer below leave it be’s  —   four egoists, four conditional cooperators, two punishers: watch 7.65 talk 4.51 none 1.91 strong 0.96
+PASS robustness, two egoists, six conditional cooperators, two punishers: watch > talk > none  —   two egoists, six conditional cooperators, two punishers: watch 8.58 talk 6.65 none 3.27 strong 0.91
+PASS robustness, two egoists, six conditional cooperators, two punishers: the policeman’s seventh summer below leave it be’s  —   two egoists, six conditional cooperators, two punishers: watch 8.58 talk 6.65 none 3.27 strong 0.91
+PASS robustness, with a newcomer after three summers (the old setting): watch > talk > none  —   with a newcomer after three summers (the old setting): watch 7.40 talk 4.57 none 2.05 strong 0.89
+PASS robustness, with a newcomer after three summers (the old setting): the policeman’s seventh summer below leave it be’s  —   with a newcomer after three summers (the old setting): watch 7.40 talk 4.57 none 2.05 strong 0.89
 
 Playing it in numbers: strategies over 400 seeds (share of fishers taking one fish per summer; pond after winter; fish eaten in six summers; the seventh summer):
-  leave it be                                                share  47 40 35 27 23 21   pond  37 33 28 20  9  3   eaten   91 (last three summers 13.50 a summer: ate well)   pond at the end   3 (nearly empty)   town   0   seventh summer 1.99 of ten share
-  have a talk                                                share  64 65 67 58 58 58   pond  38 37 36 33 31 29   eaten   98 (last three summers 14.21 a summer: ate well)   pond at the end  29 (half full)   town   0   seventh summer 4.61 of ten share
-  take turns watching                                        share  64 82 93 88 95 97   pond  40 41 44 46 48 50   eaten   73 (last three summers 9.49 a summer: ate well)   pond at the end  50 (full)   town   0   seventh summer 7.33 of ten share
-  ask the town for a policeman                               share  96 96 96 94 93 91   pond  42 45 47 49 50 50   eaten   76 (last three summers 9.40 a summer: ate well)   pond at the end  50 (full)   town   0   seventh summer 0.88 of ten share
-  three policed summers, then watching                       share  96 96 96 37 58 82   pond  42 45 47 44 44 45   eaten   82 (last three summers 12.50 a summer: ate well)   pond at the end  45 (full)   town   0   seventh summer 4.30 of ten share
-  three policed summers, then nothing                        share  96 96 96 26 13 11   pond  42 45 47 42 35 28   eaten  103 (last three summers 18.35 a summer: ate well)   pond at the end  28 (half full)   town   0   seventh summer 1.04 of ten share
-  three of nothing, then watching                            share  47 40 35 45 75 90   pond  37 33 28 25 25 25   eaten   94 (last three summers 11.27 a summer: ate well)   pond at the end  25 (half full)   town   0   seventh summer 6.10 of ten share
-  three of watching, then nothing                            share  64 82 93 63 52 47   pond  40 41 44 42 39 36   eaten   92 (last three summers 14.60 a summer: ate well)   pond at the end  36 (nearly full)   town   0   seventh summer 4.32 of ten share
-  three of talk, then watching                               share  64 65 67 58 81 92   pond  38 37 36 35 36 39   eaten   87 (last three summers 10.95 a summer: ate well)   pond at the end  39 (nearly full)   town   0   seventh summer 6.55 of ten share
-  nothing until the pond is under 25, then the policeman     share  47 40 35 40 67 79   pond  37 33 28 23 19 16   eaten  101 (last three summers 13.23 a summer: ate well)   pond at the end  16 (half full)   town   0   seventh summer 2.71 of ten share
-  nothing until the pond is under 25, then watching          share  47 40 35 30 41 61   pond  37 33 28 21 13  7   eaten   95 (last three summers 13.58 a summer: ate well)   pond at the end   7 (nearly empty)   town   0   seventh summer 4.33 of ten share
+  leave it be                                                share  47 40 35 31 27 24   pond  35 29 22 10  3  0   eaten   76 (last three summers 9.22 a summer: ate well)   pond at the end   0 (nearly empty)   town   0   seventh summer 2.44 of ten share
+  have a talk                                                share  64 65 67 66 67 67   pond  36 33 30 26 23 18   eaten   94 (last three summers 13.30 a summer: ate well)   pond at the end  18 (half full)   town   0   seventh summer 5.64 of ten share
+  take turns watching                                        share  64 82 93 97 98 99   pond  38 37 38 39 40 41   eaten   71 (last three summers 9.11 a summer: ate well)   pond at the end  41 (nearly full)   town   0   seventh summer 8.21 of ten share
+  ask the town for a policeman                               share  96 96 96 95 94 91   pond  40 41 41 41 42 43   eaten   76 (last three summers 9.46 a summer: ate well)   pond at the end  43 (nearly full)   town   0   seventh summer 0.93 of ten share
+  three policed summers, then watching                       share  96 96 96 42 61 81   pond  40 41 41 37 34 34   eaten   81 (last three summers 12.31 a summer: ate well)   pond at the end  34 (half full)   town   0   seventh summer 4.52 of ten share
+  three policed summers, then nothing                        share  96 96 96 30 14 12   pond  40 41 41 34 25 13   eaten   96 (last three summers 18.10 a summer: ate well)   pond at the end  13 (nearly empty)   town   0   seventh summer 1.10 of ten share
+  three of nothing, then watching                            share  47 40 35 52 78 91   pond  35 29 22 16 12 11   eaten   83 (last three summers 9.41 a summer: ate well)   pond at the end  11 (nearly empty)   town   0   seventh summer 6.77 of ten share
+  three of watching, then nothing                            share  64 82 93 70 62 58   pond  38 37 38 35 31 27   eaten   87 (last three summers 13.63 a summer: ate well)   pond at the end  27 (half full)   town   0   seventh summer 5.56 of ten share
+  three of talk, then watching                               share  64 65 67 67 85 93   pond  36 33 30 28 27 28   eaten   85 (last three summers 10.56 a summer: ate well)   pond at the end  28 (half full)   town   0   seventh summer 7.14 of ten share
+  nothing until the pond is under 25, then the policeman     share  47 40 39 80 91 92   pond  35 29 22 20 19 17   eaten   92 (last three summers 10.23 a summer: ate well)   pond at the end  17 (half full)   town   0   seventh summer 2.68 of ten share
+  nothing until the pond is under 25, then watching          share  47 40 36 48 72 87   pond  35 29 22 15 10  7   eaten   84 (last three summers 10.20 a summer: ate well)   pond at the end   7 (nearly empty)   town   0   seventh summer 6.55 of ten share

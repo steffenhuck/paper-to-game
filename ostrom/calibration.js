@@ -28,16 +28,16 @@ const S = {}; M.REGIMES.forEach(r => { S[r.key] = stats(r.key); });
 // 1–2. the lab baseline: findings 1 and 2 (p. 140)
 check('leave it be, summer 1: share of villagers taking one fish within 40–60% (finding 1)', S.none.share[0] >= 0.4 && S.none.share[0] <= 0.6, pct(S.none.share[0]));
 check('leave it be: decays by at least fifteen points by the last summer and stays above 10% (finding 2, "well above zero")', S.none.share[C.SUMMERS - 1] <= S.none.share[0] - 0.15 && S.none.share[C.SUMMERS - 1] > 0.10, pct(S.none.share[0]) + ' → ' + pct(S.none.share[C.SUMMERS - 1]));
-check('leave it be: the pond is nearly empty or empty by the last summer (the stake)', S.none.pondEnd < C.POND_CAP * 0.3, f2(S.none.pondEnd) + ' fish');
+check('leave it be: the pond is empty by the last summer in nearly every village (the stake)', S.none.pondEnd < 1, f2(S.none.pondEnd) + ' fish');
 
 // 3. communication: finding 5 (p. 140)
 check('have a talk: at least fifteen points above leave it be in summer 1 (finding 5, "substantial increases")', S.talk.share[0] >= S.none.share[0] + 0.15, pct(S.talk.share[0]) + ' vs ' + pct(S.none.share[0]));
-check('have a talk: sustained (the last summer within ten points of summer 2, through the newcomer)', Math.abs(S.talk.share[C.SUMMERS - 1] - S.talk.share[1]) <= 0.10, pct(S.talk.share[1]) + ' → ' + pct(S.talk.share[C.SUMMERS - 1]));
+check('have a talk: sustained (the last summer within ten points of summer 2)', Math.abs(S.talk.share[C.SUMMERS - 1] - S.talk.share[1]) <= 0.10, pct(S.talk.share[1]) + ' → ' + pct(S.talk.share[C.SUMMERS - 1]));
 check('have a talk: egoists unmoved by cheap talk (an egoist shares under talk with probability below 15%)', (() => { const s = M.newVillage(1); const e = s.villagers.find(v => v.type === 'E'); return M.shareProb(e, s, 'talk') < 0.15; })());
 
 // 4. local monitoring with graduated sanctions: finding 6, design principles 4–5 (pp. 141, 151–152)
 check('take turns watching: rises by at least twenty points to above 85% by the last summer', S.watch.share[C.SUMMERS - 1] >= S.watch.share[0] + 0.20 && S.watch.share[C.SUMMERS - 1] > 0.85, pct(S.watch.share[0]) + ' → ' + pct(S.watch.share[C.SUMMERS - 1]));
-check('take turns watching: the pond is full at the end', S.watch.pondEnd >= C.POND_CAP * 0.9, f2(S.watch.pondEnd));
+check('take turns watching: the pond holds (ends no lower than it started, less three)', S.watch.pondEnd >= C.POND_START - 3, f2(S.watch.pondEnd));
 (() => { // the first sanction is a word, and it works as information (p. 151)
   const s = M.newVillage(7); const e = s.villagers.find(v => v.type === 'E');
   const fresh = M.shareProb(e, s, 'watch');
@@ -74,8 +74,8 @@ check('three policed summers then watching: watching starts lower and ends lower
   check('all ten take one: the pond after winter never falls below three-quarters full', min >= 0.75 * C.POND_CAP, f2(min));
   s = C.POND_START;
   for (let t = 0; t < 10; t++) { s = Math.max(0, s - C.N * C.GREEDY); s += M.babies(s).n; if (s <= 0 && empty === null) empty = t + 1; }
-  check('the winter\u2019s rule: every fish left can have one baby, never more than twelve, never more fish than fifty', [[25, 12], [30, 12], [6, 6], [0, 0], [45, 5], [50, 0], [12, 12], [39, 11]].every(([S, n]) => M.babies(S).n === n) && M.babies(45).limit === 'room' && M.babies(6).limit === 'parents' && M.babies(25).limit === 'food' && M.babies(0).limit === 'none');
-  check('one fish each fills the pond (ten out, twelve in); twelve fish out holds it; thirteen shrinks it', (() => { const run = (take) => { let p = C.POND_START; for (let t = 0; t < 3; t++) { p -= take; p += M.babies(p).n; } return p; }; return run(10) > C.POND_START && run(12) === C.POND_START && run(13) < C.POND_START; })());
+  check('the winter\u2019s rule: every fish left can have one baby, never more than ten, never more fish than fifty', [[25, 10], [30, 10], [6, 6], [0, 0], [45, 5], [50, 0], [10, 10], [41, 9]].every(([S, n]) => M.babies(S).n === n) && M.babies(45).limit === 'room' && M.babies(6).limit === 'parents' && M.babies(25).limit === 'food' && M.babies(0).limit === 'none');
+  check('one fish each holds the pond (ten out, ten in); eleven fish out shrinks it; a village of grabbers empties it within six summers', (() => { const run = (take, n) => { let p = C.POND_START; for (let t = 0; t < n; t++) { p = Math.max(0, p - take); p += M.babies(p).n; } return p; }; return run(10, 3) === C.POND_START && run(11, 3) < C.POND_START && run(20, 6) === 0; })());
   check('all ten take two: the pond is empty within six summers', empty !== null && empty <= 6, 'empty after summer ' + empty);
 })();
 (() => { // rationing and the books
@@ -101,11 +101,11 @@ check('three policed summers then watching: watching starts lower and ends lower
     const counts = { E: 0, CC: 0, WP: 0 }; v.forEach(x => { counts[x.type]++; seen[x.name + x.type] = true; if (x.norm < 0 || x.norm > 1) ok = false; });
     if (counts.E !== C.TYPES.E || counts.CC !== C.TYPES.CC || counts.WP !== C.TYPES.WP) ok = false;
     r.state.villagers.forEach(x => { if (x.norm < 0 || x.norm > 1) ok = false; });
-    const m = r.recs.filter(x => x.migration).length; if (m === 1 && r.recs[C.MIGRATION_AFTER].migration && r.state.villagers.some(x => x.newcomer && x.type === 'E')) mig++;
+    if (!r.recs.some(x => x.migration) && !r.state.villagers.some(x => x.newcomer)) mig++;
   }
   check('every village has three egoists, five conditional cooperators, two willing punishers; norms stay in [0, 1]', ok);
   check('every name is each type at least once over 400 seeds (the draw is real)', C.NAMES.every(n => seen[n + 'E'] && seen[n + 'CC'] && seen[n + 'WP']));
-  check('the newcomer arrives exactly once, in summer four, as an egoist replacing a norm-user', mig === SEEDS, mig + ' of ' + SEEDS);
+  check('no newcomer: the village is the same ten from the first summer to the seventh', mig === SEEDS, mig + ' of ' + SEEDS);
 })();
 
 // 10. robustness: does the seventh-summer ordering survive other settings of what is ours? (memo, section 16)
@@ -120,7 +120,7 @@ const orderings = [
   ['imitation doubled', { IMITATE: C.IMITATE * 2 }],
   ['four egoists, four conditional cooperators, two punishers', { TYPES: { E: 4, CC: 4, WP: 2 } }],
   ['two egoists, six conditional cooperators, two punishers', { TYPES: { E: 2, CC: 6, WP: 2 } }],
-  ['no newcomer', { MIGRATION_AFTER: 99 }],
+  ['with a newcomer after three summers (the old setting)', { MIGRATION_AFTER: 3 }],
 ];
 out.push('');
 out.push('Robustness of the seventh summer (watch > talk > none, strong < none), 200 seeds each:');
