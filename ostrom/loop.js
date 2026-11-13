@@ -16,7 +16,7 @@ for (let t = 0; t < C.SUMMERS; t++) {
   for (const a of rec.acts) {
     if (a.banned) { console.log(`  ${a.name}: no fishing this summer (banned).`); continue; }
     if (a.watcher) continue;
-    let line = `  ${a.name} takes ${a.took === 0 ? 'nothing (the pond is empty)' : a.took === 1 ? 'one fish' : 'two fish'}`;
+    let line = `  ${a.name} takes ${a.took === 0 ? 'nothing (the pond is empty)' : a.took === 1 ? 'one fish' : 'two fish'}` + (a.known === 'hidden' ? ' (in a bucket: the meeting does not know)' : ' (seen)');
     if (a.grabbed && a.sanction === 'word') line += ' and is told off';
     if (a.grabbed && a.sanction === 'back') line += ' and is seen again: both fish back into the pond';
     if (a.grabbed && a.sanction === 'ban') line += ' and is seen a third time: both fish back into the pond, and no fishing next summer';
