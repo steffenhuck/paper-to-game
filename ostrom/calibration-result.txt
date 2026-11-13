@@ -1,4 +1,4 @@
-Ostrom's Pond — calibration check, 2026-11-13. 50 checks, 0 failed.
+Ostrom's Pond — calibration check, 2026-11-13. 52 checks, 0 failed.
 PASS leave it be, summer 1: share of villagers taking one fish within 40–60% (finding 1)  — 47%
 PASS leave it be: decays by at least ten points by summer 10 and stays above 10% (finding 2, "well above zero")  — 47% → 16%
 PASS leave it be: the pond is nearly empty or empty by summer 10 (the stake)  — 0.00 fish
@@ -15,19 +15,21 @@ PASS have a talk: a grabber eats more than a sharer every summer (cheap talk has
 PASS egoists learn the norm under watching and not under talk (Fehr & Gächter, p. 141; Börgers & Sarin, p. 145)  — 0.50 vs 0.00
 PASS eleventh summer: watching leaves the most sharers, then talk, then leave it be  — 8.43 > 4.88 > 1.68
 PASS eleventh summer: watching leaves at least seven of ten sharing  — 8.43
-PASS policeman now and then: by summer 10 below talk, watching and the daily policeman, and within five points of leave it be (no better than nothing)  — 15% vs none 16%
-PASS policeman now and then: starts above leave it be (a small deterrent is still a deterrent) and ends further below talk than it started  — 59% → 15%
-PASS policeman now and then: the eleventh summer no better than leave it be’s, and the norm gone  — 0.70 vs 1.68
-PASS policeman now and then: the village eats no more than under leave it be and pays the town  — 81.86 vs 93.46, town 17.04
-PASS policeman every day: sharing above 85% in every summer (cooperation enforced)  — 96% 96% 96% 96% 96% 94% 93% 92% 90% 90%
-PASS policeman every day: the eleventh summer below leave it be’s (Frohlich & Oppenheimer: worse off than those who never had it)  — 0.73 vs 1.68
-PASS policeman every day: the village eats less than under watching (the quarter)  — 84.18 vs 108.41
+PASS policeman now and then: by summer 10 below talk, watching and the daily policeman, and within five points of leave it be (no better than nothing)  — 14% vs none 16%
+PASS policeman now and then: starts above leave it be (a small deterrent is still a deterrent) and ends further below talk than it started  — 60% → 14%
+PASS policeman now and then: the eleventh summer no better than leave it be’s, and the norm gone  — 0.73 vs 1.68
+PASS policeman now and then: the village eats no more than under leave it be and pays the town  — 87.67 vs 93.46, town 18.08
+PASS policeman every day: sharing above 85% in every summer (cooperation enforced)  — 96% 95% 95% 96% 95% 95% 93% 91% 91% 90%
+PASS policeman every day: the eleventh summer below leave it be’s (Frohlich & Oppenheimer: worse off than those who never had it)  — 0.77 vs 1.68
+PASS policeman every day: the village eats less than under watching (the quarter)  — 85.72 vs 108.41
 PASS taking turns watching costs one of us a fish each summer (about ten times in ten summers)  — 10.37
-PASS the daily policeman leaves about three or more of us without every summer, at least three times what watching costs  — 35.63 vs 10.37
+PASS the daily policeman leaves three or more of us hungry every summer, at least three times what watching costs  — 33.94 vs 10.37
 PASS a talk costs nobody a fish while the pond lasts  — 0.58
 PASS the village’s own watcher is not out-seen by the occasional policeman, and a watched village ends with at least as many sharing as a policed one  — 100% vs 90%
-PASS watching beats the daily policeman on all three parts of the aim: pond as full, fewer without a fish, more sharing in the eleventh summer  — pond 50.00/49.81, without 10.37/35.63, eleventh 8.43/0.73
-PASS five policed summers then watching: watching starts lower and ends lower than watching from the start (crowding out carries over)  — 33% vs 64%; 11th 5.66 vs 8.43
+PASS watching beats the daily policeman on all three parts of the aim: pond as full, fewer without a fish, more sharing in the eleventh summer  — pond 50.00/49.96, without 10.37/33.94, eleventh 8.43/0.77
+PASS the end screen’s table of how villages usually end up (CONFIG.TYPICAL) matches the mechanism: plates within 2, pond within 3, eleventh summer within 0.6  — none 41.17/0.00/1.68; talk 0.58/18.77/4.88; watch 10.37/50.00/8.43; weak 43.33/0.00/0.73; strong 33.94/49.96/0.77
+PASS the daily policeman costs three of us the summer and a watcher of our own one
+PASS five policed summers then watching: watching starts lower and ends lower than watching from the start (crowding out carries over)  — 32% vs 64%; 11th 5.73 vs 8.43
 PASS all ten take one: the pond after winter never falls below three-quarters full  — 40.00
 PASS the winter’s rule: every fish left can have one baby, never more than twelve, never more fish than fifty
 PASS one fish each fills the pond (ten out, twelve in); twelve fish out holds it; thirteen shrinks it
@@ -38,32 +40,32 @@ PASS every name is each type at least once over 400 seeds (the draw is real)
 PASS the newcomer arrives exactly once, in summer six, as an egoist replacing a norm-user  — 400 of 400
 
 Robustness of the eleventh summer (watch > talk > none, weak <= none, strong < none), 200 seeds each:
-PASS robustness, crowding out at three-quarters: watch > talk > none >= weak  —   crowding out at three-quarters: watch 8.43 talk 4.80 none 1.67 weak 0.70 strong 1.15
-PASS robustness, crowding out at three-quarters: the daily policeman’s eleventh summer below leave it be’s  —   crowding out at three-quarters: watch 8.43 talk 4.80 none 1.67 weak 0.70 strong 1.15
-PASS robustness, crowding out at half: watch > talk > none >= weak  —   crowding out at half: watch 8.43 talk 4.80 none 1.67 weak 0.81 strong 2.41
-SENSITIVITY robustness, crowding out at half: the daily policeman’s eleventh summer below leave it be’s does not hold: the Frohlich & Oppenheimer aftermath needs crowding out at least three-quarters of the chosen rate; said on the verdict screen  —  crowding out at half: watch 8.43 talk 4.80 none 1.67 weak 0.81 strong 2.41
-PASS robustness, imitation at half: watch > talk > none >= weak  —   imitation at half: watch 8.66 talk 5.34 none 2.10 weak 0.67 strong 0.71
-PASS robustness, imitation at half: the daily policeman’s eleventh summer below leave it be’s  —   imitation at half: watch 8.66 talk 5.34 none 2.10 weak 0.67 strong 0.71
-PASS robustness, imitation doubled: watch > talk > none >= weak  —   imitation doubled: watch 7.85 talk 2.02 none 1.22 weak 0.72 strong 0.72
-PASS robustness, imitation doubled: the daily policeman’s eleventh summer below leave it be’s  —   imitation doubled: watch 7.85 talk 2.02 none 1.22 weak 0.72 strong 0.72
-PASS robustness, four egoists, four conditional cooperators, two punishers: watch > talk > none >= weak  —   four egoists, four conditional cooperators, two punishers: watch 8.20 talk 3.46 none 1.37 weak 0.68 strong 0.75
-PASS robustness, four egoists, four conditional cooperators, two punishers: the daily policeman’s eleventh summer below leave it be’s  —   four egoists, four conditional cooperators, two punishers: watch 8.20 talk 3.46 none 1.37 weak 0.68 strong 0.75
-PASS robustness, two egoists, six conditional cooperators, two punishers: watch > talk > none >= weak  —   two egoists, six conditional cooperators, two punishers: watch 8.74 talk 5.91 none 2.12 weak 0.68 strong 0.76
-PASS robustness, two egoists, six conditional cooperators, two punishers: the daily policeman’s eleventh summer below leave it be’s  —   two egoists, six conditional cooperators, two punishers: watch 8.74 talk 5.91 none 2.12 weak 0.68 strong 0.76
-PASS robustness, no newcomer: watch > talk > none >= weak  —   no newcomer: watch 9.04 talk 5.80 none 1.86 weak 0.69 strong 0.70
-PASS robustness, no newcomer: the daily policeman’s eleventh summer below leave it be’s  —   no newcomer: watch 9.04 talk 5.80 none 1.86 weak 0.69 strong 0.70
+PASS robustness, crowding out at three-quarters: watch > talk > none >= weak  —   crowding out at three-quarters: watch 8.43 talk 4.80 none 1.67 weak 0.75 strong 1.14
+PASS robustness, crowding out at three-quarters: the daily policeman’s eleventh summer below leave it be’s  —   crowding out at three-quarters: watch 8.43 talk 4.80 none 1.67 weak 0.75 strong 1.14
+PASS robustness, crowding out at half: watch > talk > none >= weak  —   crowding out at half: watch 8.43 talk 4.80 none 1.67 weak 0.84 strong 2.29
+SENSITIVITY robustness, crowding out at half: the daily policeman’s eleventh summer below leave it be’s does not hold: the Frohlich & Oppenheimer aftermath needs crowding out at least three-quarters of the chosen rate; said on the verdict screen  —  crowding out at half: watch 8.43 talk 4.80 none 1.67 weak 0.84 strong 2.29
+PASS robustness, imitation at half: watch > talk > none >= weak  —   imitation at half: watch 8.66 talk 5.34 none 2.10 weak 0.76 strong 0.77
+PASS robustness, imitation at half: the daily policeman’s eleventh summer below leave it be’s  —   imitation at half: watch 8.66 talk 5.34 none 2.10 weak 0.76 strong 0.77
+PASS robustness, imitation doubled: watch > talk > none >= weak  —   imitation doubled: watch 7.85 talk 2.02 none 1.22 weak 0.75 strong 0.75
+PASS robustness, imitation doubled: the daily policeman’s eleventh summer below leave it be’s  —   imitation doubled: watch 7.85 talk 2.02 none 1.22 weak 0.75 strong 0.75
+PASS robustness, four egoists, four conditional cooperators, two punishers: watch > talk > none >= weak  —   four egoists, four conditional cooperators, two punishers: watch 8.20 talk 3.46 none 1.37 weak 0.77 strong 0.78
+PASS robustness, four egoists, four conditional cooperators, two punishers: the daily policeman’s eleventh summer below leave it be’s  —   four egoists, four conditional cooperators, two punishers: watch 8.20 talk 3.46 none 1.37 weak 0.77 strong 0.78
+PASS robustness, two egoists, six conditional cooperators, two punishers: watch > talk > none >= weak  —   two egoists, six conditional cooperators, two punishers: watch 8.74 talk 5.91 none 2.12 weak 0.74 strong 0.77
+PASS robustness, two egoists, six conditional cooperators, two punishers: the daily policeman’s eleventh summer below leave it be’s  —   two egoists, six conditional cooperators, two punishers: watch 8.74 talk 5.91 none 2.12 weak 0.74 strong 0.77
+PASS robustness, no newcomer: watch > talk > none >= weak  —   no newcomer: watch 9.04 talk 5.80 none 1.86 weak 0.78 strong 0.79
+PASS robustness, no newcomer: the daily policeman’s eleventh summer below leave it be’s  —   no newcomer: watch 9.04 talk 5.80 none 1.86 weak 0.78 strong 0.79
 
 Playing it in numbers: strategies over 400 seeds (share of fishers taking one fish per summer; pond after winter; fish eaten in ten summers; the eleventh summer):
   leave it be                                                share  47 40 35 31 27 22 21 19 18 16   pond  37 33 28 21 11  4  1  0  0  0   eaten   93 (last three summers 0.54 a summer: went hungry)   pond at the end   0 (empty)   town   0   went without  41 times   eleventh summer 1.68 of ten share
   have a talk                                                share  64 65 67 66 67 59 59 59 60 59   pond  38 37 36 34 33 31 29 26 23 19   eaten  149 (last three summers 13.70 a summer: ate well)   pond at the end  19 (half full)   town   0   went without   1 times   eleventh summer 4.88 of ten share
   take turns watching                                        share  64 82 93 97 98 89 96 98 99100   pond  40 41 44 47 49 50 50 50 50 50   eaten  108 (last three summers 9.05 a summer: ate well)   pond at the end  50 (full)   town   0   went without  10 times   eleventh summer 8.43 of ten share
-  policeman now and then                                     share  59 52 42 33 26 18 17 15 14 15   pond  38 35 31 26 17  6  1  0  0  0   eaten   82 (last three summers 0.19 a summer: went hungry)   pond at the end   0 (empty)   town  17   went without  49 times   eleventh summer 0.70 of ten share
-  policeman every day                                        share  96 96 96 96 96 94 93 92 90 90   pond  42 43 45 46 48 49 50 50 50 50   eaten   84 (last three summers 6.22 a summer: ate thinly)   pond at the end  50 (full)   town  41   went without  36 times   eleventh summer 0.73 of ten share
-  five policed summers, then watching                        share  96 96 96 96 96 33 59 82 92 96   pond  42 43 45 46 48 45 45 46 49 50   eaten  104 (last three summers 9.63 a summer: ate well)   pond at the end  50 (full)   town  19   went without  22 times   eleventh summer 5.66 of ten share
-  five policed summers, then nothing                         share  96 96 96 96 96 24 13 11 10  9   pond  42 43 45 46 48 42 36 29 19  4   eaten  129 (last three summers 18.37 a summer: ate well)   pond at the end   4 (nearly empty)   town  19   went without  17 times   eleventh summer 0.85 of ten share
+  policeman now and then                                     share  60 52 44 33 25 18 16 15 15 14   pond  38 36 33 29 22 12  3  0  0  0   eaten   88 (last three summers 0.97 a summer: went hungry)   pond at the end   0 (empty)   town  18   went without  43 times   eleventh summer 0.73 of ten share
+  policeman every day                                        share  96 95 95 96 95 95 93 91 91 90   pond  42 43 45 47 48 50 50 50 50 50   eaten   86 (last three summers 6.45 a summer: ate thinly)   pond at the end  50 (full)   town  38   went without  34 times   eleventh summer 0.77 of ten share
+  five policed summers, then watching                        share  96 95 95 96 95 32 59 82 92 97   pond  42 43 45 47 48 45 45 47 49 50   eaten  104 (last three summers 9.64 a summer: ate well)   pond at the end  50 (full)   town  18   went without  22 times   eleventh summer 5.73 of ten share
+  five policed summers, then nothing                         share  96 95 95 96 95 24 11 10 10 10   pond  42 43 45 47 48 43 36 29 20  5   eaten  130 (last three summers 18.46 a summer: ate well)   pond at the end   5 (nearly empty)   town  18   went without  16 times   eleventh summer 0.86 of ten share
   five of nothing, then watching                             share  47 40 35 31 27 38 53 59 60 60   pond  37 33 28 21 11  6  5  5  5  5   eaten   98 (last three summers 1.71 a summer: went hungry)   pond at the end   5 (nearly empty)   town   0   went without  37 times   eleventh summer 4.14 of ten share
   five of watching, then nothing                             share  64 82 93 97 98 69 61 57 53 51   pond  40 41 44 47 49 48 46 44 41 38   eaten  136 (last three summers 14.62 a summer: ate well)   pond at the end  38 (nearly full)   town   0   went without   5 times   eleventh summer 4.83 of ten share
   five of talk, then watching                                share  64 65 67 66 67 59 81 93 96 98   pond  38 37 36 34 33 32 34 36 39 42   eaten  131 (last three summers 9.24 a summer: ate well)   pond at the end  42 (nearly full)   town   0   went without   5 times   eleventh summer 7.41 of ten share
-  nothing until the pond is under 25, then the daily policeman share  47 40 35 43 69 81 85 88 91 91   pond  37 33 28 23 19 15 12  8  5  3   eaten  104 (last three summers 3.81 a summer: went hungry)   pond at the end   3 (nearly empty)   town  13   went without  29 times   eleventh summer 1.46 of ten share
+  nothing until the pond is under 25, then the daily policeman share  47 40 35 43 68 81 85 88 91 91   pond  37 33 28 23 19 16 12  9  7  4   eaten  106 (last three summers 4.16 a summer: went hungry)   pond at the end   4 (nearly empty)   town  13   went without  28 times   eleventh summer 1.49 of ten share
   nothing until the pond is under 25, then watching          share  47 40 35 34 45 57 72 78 81 84   pond  37 33 28 22 15  9  5  3  2  2   eaten  103 (last three summers 2.39 a summer: went hungry)   pond at the end   2 (nearly empty)   town   0   went without  32 times   eleventh summer 6.14 of ten share
-  three summers of the occasional policeman, then watching   share  59 52 42 33 64 77 89 95 97 98   pond  38 35 31 28 28 28 30 32 35 37   eaten  122 (last three summers 8.57 a summer: ate well)   pond at the end  37 (nearly full)   town   7   went without  15 times   eleventh summer 7.07 of ten share
+  three summers of the occasional policeman, then watching   share  60 52 44 32 63 77 90 95 97 99   pond  38 36 33 30 30 30 33 35 38 41   eaten  123 (last three summers 8.94 a summer: ate well)   pond at the end  41 (nearly full)   town   7   went without  13 times   eleventh summer 6.97 of ten share
