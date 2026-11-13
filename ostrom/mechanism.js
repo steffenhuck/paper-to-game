@@ -12,7 +12,7 @@
 var CONFIG = {
   // ---- the village (ours) -----------------------------------------------------------------------------------
   N: 10,                          // ours: ten villagers, so that a share is a count
-  SUMMERS: 10,                    // ours: ten decided summers, then the eleventh that nobody watches
+  SUMMERS: 6,                     // ours: six decided summers, then a seventh that nobody watches (revision 8: was ten)
   TYPES: { E: 3, CC: 5, WP: 2 },  // our reading of Ahn, Ostrom & Walker (1998), p. 146: 40% rank (C,C) above (D,C),
                                   // 27% indifferent, the rest not; and the text's three types (p. 142)
   NAMES: ['Ada', 'Bo', 'Cyd', 'Dot', 'Eli', 'Fay', 'Gus', 'Hal', 'Ivy', 'Jem'],  // ours
@@ -45,17 +45,14 @@ var CONFIG = {
   // ---- the five arrangements -----------------------------------------------------------------------------------
   // none: the lab baseline (findings 1–2). talk: face-to-face communication (finding 5; Ostrom & Walker 1997).
   // watch: local monitors chosen by the users with graduated sanctions (design principles 4–5, pp. 151–152).
-  // weak: mild external monitoring (p. 147: "the worst of all worlds"; Cardenas, Stranlund & Willis 2000).
-  // strong: strong external monitoring (p. 147: cooperation enforced without norms; Frohlich & Oppenheimer 1996).
+    // strong: strong external monitoring (p. 147: cooperation enforced without norms; Frohlich & Oppenheimer 1996).
   TALK_PROMISE_PULL: 0.5,         // ours: promises pull expectations halfway from last summer's share toward everyone sharing
   SHAME_TALK: 0.6,                // ours: × norm; the "verbal tongue-lashings" (p. 140) a norm-user dreads
   SHAME_WATCH: 0.4,               // ours: × norm; being told off in front of the village
   ASSURE_WATCH: 0.5,              // ours: × norm; "with local monitors, conditional cooperators are assured that
                                   // someone is generally checking" (p. 151)
-  WATCH_SEE: 0.8,                 // ours: chance the summer's watcher sees what a villager takes. One of our own, at the pond
-                                  // all summer, knows everyone: local users monitor one another better and more cheaply
-                                  // than an outside official (design principle 4, p. 151). Revision 5: was 0.6, below the
-                                  // town's policeman, which had the paper upside down.
+  WATCH_SEE: 0.8,                 // ours: chance the summer's watcher sees what a villager takes; one of our own, at the pond all
+                                  // summer, knows everybody (design principle 4, p. 151: local monitors)
   WATCH_SEE_BELIEF0: 0.3,         // ours: what villagers think that chance is before anyone has been told off
   WATCH_INFO: true,               // p. 151: the first sanction "needs to be considered more as information both to the
                                   // person who is 'caught' and to others": once a telling-off is seen, everyone
@@ -69,21 +66,11 @@ var CONFIG = {
                                   // "learns that others basically continue to extend their trust"; Fehr & Gächter,
                                   // p. 141: least trusting "transformed into strong cooperators")
   POLICE_TAKES_CATCH: true,       // ours: the town's flat sanction: a grabber who is caught hands both fish to the policeman (not graduated)
-  POLICE_WEAK_SEE: 0.15,          // ours: "only able to achieve weak monitoring" (p. 147)
-  POLICE_STRONG_SEE: 0.9,         // ours: "strong external monitoring" (p. 147)
-  // The policeman's pay, in the same coin as the watcher's summer: villagers who fish for him instead of for themselves,
-  // by turns, and go hungry (revision 7; before, a quarter of the catch, which no player could see). The sizes are ours;
-  // that outside enforcement is the dear way is the paper's (pp. 148, 150–151: government-run systems, Ray & Williams).
-  POLICE_WEAK_PAYERS: 1,          // ours: the occasional policeman costs one of us the summer
-  POLICE_STRONG_PAYERS: 3,        // ours: the daily policeman costs three of us the summer, three times a watcher of our own
-  WATCHER_FISHES: false,          // ours: the summer's watcher does not fish and goes without (the cost of monitoring: one of
-                                  // us, by turns); a fish is what one villager needs for the year
-  // how a village usually ends up when it uses the same card every summer: empty plates in ten summers, fish in the pond,
-  // villagers taking one in the eleventh summer. From the calibration run over 400 villages (calibration.js checks these
-  // against the mechanism); shown on the end screen beside the player's own village.
-  TYPICAL: { none: { plates: 41, pond: 0, eleventh: 2 }, talk: { plates: 1, pond: 19, eleventh: 5 }, watch: { plates: 10, pond: 50, eleventh: 8 },
-             weak: { plates: 43, pond: 0, eleventh: 1 }, strong: { plates: 34, pond: 50, eleventh: 1 } },
-  NEED: 1,                        // ours: fish a villager needs each summer; anyone ending the summer with none "went without"
+  POLICE_SEE: 0.9,                // ours: "strong external monitoring" (p. 147): the town's policeman catches nine grabbers in ten
+  // The policeman is honest and costs the village nothing (revision 8): a grabber he catches puts the fish back in the pond,
+  // as under the village's own watcher. What differs is the paper's three things: he is a stranger who reports only whom he
+  // caught; while he is there the village stops telling each other off; and sharing enforced by him builds no norm.
+  WATCHER_FISHES: false,          // ours: the day's watcher does not fish (the cost of monitoring, one fish a summer)
 
   // ---- the winter: how norms move (the indirect evolutionary approach, pp. 144–145) --------------------------------
   IMITATE: 0.03,                  // ours: × (fish a grabber ate − fish a sharer ate); "those who were less successful would
@@ -93,9 +80,7 @@ var CONFIG = {
                                   // not under a policeman: enforced sharing builds no norm (p. 147)
   SUCKERED: 0.03,                 // ours: sharing when fewer than half did weakens it ("easily disappointed", p. 142)
   GRABBED: 0.01,                  // ours: grabbing weakens it a little
-  CROWD_WEAK: 0.08,               // ours: every summer the occasional policeman is in charge ("discourages the formation
-                                  // of social norms", p. 147)
-  CROWD_STRONG: 0.08,             // ours: every summer the daily policeman is in charge ("cooperation is enforced without
+  CROWD_STRONG: 0.12,             // ours: every summer the daily policeman is in charge ("cooperation is enforced without
                                   // any need for internal norms to develop", p. 147; Frey 1994 crowding out)
   IMITATE_UP_UNDER_POLICE: false, // ours: under a policeman, sharers who out-earn the caught are showing compliance, not a
                                   // norm, so imitation builds no norm there; it still erodes one when grabbers out-earn
@@ -103,7 +88,7 @@ var CONFIG = {
 
   // ---- the threat (p. 153: in-migration "may bring new participants who do not trust others and do not rapidly
   //      learn social norms"; out-migration loses "those who contribute needed resources") ---------------------------
-  MIGRATION_AFTER: 5,             // ours: after five summers one villager moves away and a newcomer moves in
+  MIGRATION_AFTER: 3,             // ours: after three summers one villager moves away and a newcomer moves in
   NEWCOMER: 'Kit',                // ours: the newcomer's name; a rational egoist (norm 0) who has never fished here
   LEAVER_TYPES: ['CC', 'WP']      // ours: the one who moves away is a norm-user (a loss of those who contribute)
 };
@@ -120,16 +105,12 @@ var REGIMES = [
     cost: 'Costs nothing.', greedy: 'If fish go missing, the circle tells everybody off next summer. Nothing else happens.',
     knows: 'Nobody is at the pond, so we only find out how many fish are gone, not who broke the promise.' },
   { key: 'watch', name: 'Take turns watching',
-    line: 'One of us sits by the pond all summer and watches, instead of fishing. We take turns: a different one of us each summer.',
-    cost: 'Costs one of us the summer: the watcher doesn’t fish, and goes hungry.', greedy: 'Seen taking two: the first time, a telling-off. The second time, both fish go back in the pond. The third time, both fish back and no fishing next summer.',
-    knows: 'The watcher is one of us and knows everybody, so not much gets past. Whoever the watcher saw, we know what they took.' },
-  { key: 'weak', name: 'A policeman now and then',
-    line: 'The town sends a policeman on some days. We never know which days. We take turns paying him.',
-    cost: 'Costs one of us the summer: one of us has to fish for the policeman’s pay, and goes hungry.', greedy: 'If he catches someone taking two, both fish go to the town. We stop telling each other off: that’s his job now.',
-    knows: 'He only tells us who he caught, and he hardly ever catches anyone.' },
-  { key: 'strong', name: 'A policeman every day',
-    line: 'The town sends a policeman every day, all summer. We take turns paying him.',
-    cost: 'Costs three of us the summer: three of us have to fish for the policeman’s pay, and go hungry.', greedy: 'If he catches someone taking two, both fish go to the town. We stop telling each other off: that’s his job now.',
+    line: 'One of us sits by the pond all day and watches, instead of fishing.',
+    cost: 'Costs us the watcher’s fish.', greedy: 'Seen taking two: the first time, a telling-off. The second time, both fish go back in the pond. The third time, both fish back and no fishing next summer.',
+    knows: 'The watcher sees most of us, but not everyone. Whoever the watcher saw, we know what they took.' },
+  { key: 'strong', name: 'Ask the town for a policeman',
+    line: 'The town sends a policeman. He stands by the pond every day, all summer.',
+    cost: 'Costs nothing.', greedy: 'If he catches someone taking two, the fish go back in the pond. We stop telling each other off: that\u2019s his job now.',
     knows: 'He only tells us who he caught, and he catches nearly everyone who takes two.' }
 ];
 var REGIME = {}; REGIMES.forEach(function (r) { REGIME[r.key] = r; });
@@ -156,7 +137,7 @@ function newVillage(seed) {
     return { i: k, name: C.NAMES[k], type: type, norm0: n0, norm: n0, offences: 0, banned: false, eaten: 0, toldOff: 0, fined: 0 };
   });
   return { seed: seed, rng: rng, pond: C.POND_START, summer: 0, villagers: villagers, cHat: C.C_HAT0, seeBelief: C.WATCH_SEE_BELIEF0,
-           eaten: 0, without: 0, paidToTown: 0, history: [], watcherNext: 0, payNext: 0, lastRegime: null };
+           eaten: 0, history: [], watcherNext: 0, lastRegime: null };
 }
 
 // what a villager weighs this summer; returns the probability of taking one fish
@@ -169,8 +150,7 @@ function shareProb(v, s, regime) {
     deter = s.seeBelief * next;
     shame = n * C.SHAME_WATCH;
     assure = n * C.ASSURE_WATCH;
-  } else if (regime === 'weak') { deter = C.POLICE_WEAK_SEE * C.GREEDY; }
-  else if (regime === 'strong') { deter = C.POLICE_STRONG_SEE * C.GREEDY; }
+  } else if (regime === 'strong') { deter = C.POLICE_SEE * C.GREEDY; }
   else if (regime === 'talk') { shame = n * C.SHAME_TALK; }
   var delta = -C.TEMPTATION + n * (C.W_RECIP * cHat + C.G_BASE) + deter + shame + assure;
   return logistic(delta / C.TAU);
@@ -180,7 +160,7 @@ function shareProb(v, s, regime) {
 // Returns the record of what happened, in the order it happened, for the interface to draw.
 function playSummer(s, regime, test) {
   var C = CONFIG, rng = s.rng, V = s.villagers;
-  var rec = { summer: s.summer + 1, regime: regime, test: !!test, pondBefore: s.pond, acts: [], watcher: null, fees: 0, finesToPond: 0, finesToTown: 0, bansNext: [], migration: null };
+  var rec = { summer: s.summer + 1, regime: regime, test: !!test, pondBefore: s.pond, acts: [], watcher: null, finesToPond: 0, bansNext: [], migration: null };
   if (!test && s.summer === C.MIGRATION_AFTER && !s.migrated) rec.migration = migrate(s);
   var banned = V.filter(function (v) { return v.banned; }).map(function (v) { return v.i; });
   var watcher = null;
@@ -189,15 +169,9 @@ function playSummer(s, regime, test) {
     while (V[w].banned && tries < C.N) { w = (w + 1) % C.N; tries++; }
     watcher = w; s.watcherNext = (w + 1) % C.N; rec.watcher = w;
   }
-  // the policeman's pay: this summer's payers fish one fish each for him, not for themselves; we take turns
-  var payers = [], nPay = test ? 0 : regime === 'weak' ? C.POLICE_WEAK_PAYERS : regime === 'strong' ? C.POLICE_STRONG_PAYERS : 0;
-  for (var q = 0, pi = s.payNext % C.N; payers.length < nPay && q < C.N; q++, pi = (pi + 1) % C.N) { if (!V[pi].banned) payers.push(pi); }
-  if (nPay) s.payNext = (payers[payers.length - 1] + 1) % C.N;
-  rec.payers = payers;
   // 1. everyone decides
   var wants = V.map(function (v) {
     if (v.banned) return 0;
-    if (payers.indexOf(v.i) >= 0) return C.FAIR;
     if (watcher !== null && v.i === watcher && !C.WATCHER_FISHES) return 0;
     var p = shareProb(v, s, regime);
     return rng() < p ? C.FAIR : C.GREEDY;
@@ -215,15 +189,12 @@ function playSummer(s, regime, test) {
   for (i = 0; i < C.N; i++) {
     var v = V[i];
     var act = { i: i, name: v.name, wanted: wants[i], took: took[i], grabbed: wants[i] === C.GREEDY, seen: false, sanction: null, fine: 0, banned: v.banned, watcher: watcher === i, ate: took[i], known: 'hidden' };
-    var two = act.took === C.GREEDY;   // a sanction needs two fish actually taken, not just wanted (the pond may have run out)
-    act.payer = payers.indexOf(i) >= 0;
-    if (act.payer) { act.known = 'payer'; act.grabbed = false; act.paid = act.took; act.ate = 0; rec.fees += act.paid; }
-    else if (act.banned) act.known = 'banned';
+    if (act.banned) act.known = 'banned';
     else if (act.watcher) act.known = 'watcher';
     else if (!test && regime === 'watch') {
       if (rng() < C.WATCH_SEE) {
-        act.seen = true; act.known = two ? 'two' : 'one';
-        if (two) {
+        act.seen = true; act.known = act.grabbed ? 'two' : 'one';
+        if (act.grabbed) {
           seenAny = true;
           var k = v.offences; v.offences++;
           if (k === 0) { act.sanction = 'word'; v.toldOff++; }
@@ -231,33 +202,24 @@ function playSummer(s, regime, test) {
           v.norm = clamp01(v.norm + C.WATCH_LEARN[Math.min(k, C.WATCH_LEARN.length - 1)]);
         }
       }
-    } else if (!test && (regime === 'weak' || regime === 'strong')) {
-      var see = regime === 'weak' ? C.POLICE_WEAK_SEE : C.POLICE_STRONG_SEE;
-      if (two && rng() < see) { act.seen = true; act.known = 'two'; act.sanction = 'town'; act.fine = act.took; act.ate -= act.fine; rec.finesToTown += act.fine; v.fined++; }
-    } else if (!test && regime === 'talk' && two) { act.sanction = 'circle'; v.toldOff++; }
+    } else if (!test && regime === 'strong') {
+      if (act.grabbed && rng() < C.POLICE_SEE) { act.seen = true; act.known = 'two'; act.sanction = 'police'; act.fine = act.took; act.ate -= act.fine; rec.finesToPond += act.fine; v.fined++; }
+    } else if (!test && regime === 'talk' && act.grabbed) { act.sanction = 'circle'; v.toldOff++; }
     rec.acts.push(act);
   }
   rec.seenCount = rec.acts.filter(function (x) { return x.seen; }).length;
-  rec.tookTwo = rec.acts.filter(function (x) { return x.took === C.GREEDY; }).length;
   rec.ranOut = rec.acts.some(function (x) { return !x.banned && !x.watcher && x.took < x.wanted; });
-  rec.ownCatch = rec.acts.reduce(function (a, x) { return a + (x.payer ? 0 : x.took); }, 0);   // fish taken by those fishing for themselves
   if (regime === 'watch' && C.WATCH_INFO && seenAny) s.seeBelief = C.WATCH_SEE;
-  // 4. the books (the policeman's pay is already in rec.fees: the payers' fish)
+  // 4. the books
   var catchTotal = took.reduce(function (a, b) { return a + b; }, 0);
   var ate = rec.acts.reduce(function (a, x) { return a + x.ate; }, 0);
   rec.catch = catchTotal;
-  rec.eaten = ate;                               // the fish in hands after sanctions, less the town's fee; never negative
+  rec.eaten = ate;                               // the fish in hands after sanctions; never negative
   s.eaten += ate;
-  // who went hungry this summer (ended it with no fish), and why: the aim's "everyone fed", counted every summer
-  var w = { watcher: 0, banned: 0, back: 0, town: 0, empty: 0, pay: 0 };
-  rec.acts.forEach(function (x) { if (x.ate > 0) return; if (x.payer) w.pay++; else if (x.watcher) w.watcher++; else if (x.banned) w.banned++; else if (x.sanction === 'back' || x.sanction === 'ban') w.back++; else if (x.sanction === 'town') w.town++; else w.empty++; });
-  rec.without = w.watcher + w.banned + w.back + w.town + w.empty + w.pay; rec.withoutWhy = w;
-  if (!test) s.without += rec.without;
-  s.paidToTown += rec.fees + rec.finesToTown;
   rec.acts.forEach(function (x) { V[x.i].eaten += x.ate; });
-  rec.shared = rec.acts.filter(function (x) { return !x.banned && !x.watcher && !x.payer && !x.grabbed; }).length;
+  rec.shared = rec.acts.filter(function (x) { return !x.banned && !x.watcher && !x.grabbed; }).length;
   rec.grabbers = rec.acts.filter(function (x) { return x.grabbed; }).length;
-  rec.fishers = rec.acts.filter(function (x) { return !x.banned && !x.watcher && !x.payer; }).length;   // fishing for themselves
+  rec.fishers = rec.acts.filter(function (x) { return !x.banned && !x.watcher; }).length;
   rec.shareRate = rec.fishers ? rec.shared / rec.fishers : 0;
   rec.pondAfterFishing = pond + rec.finesToPond;
   // 6. the winter: the fish breed, bans are served and lifted, norms move
@@ -295,20 +257,20 @@ function migrate(s) {
 // norms move over the winter
 function winter(s, rec, regime) {
   var C = CONFIG, V = s.villagers;
-  var sharers = rec.acts.filter(function (x) { return !x.grabbed && !x.banned && !x.watcher && !x.payer; });
+  var sharers = rec.acts.filter(function (x) { return !x.grabbed && !x.banned && !x.watcher; });
   var grabbers = rec.acts.filter(function (x) { return x.grabbed; });
   var mean = function (xs) { return xs.reduce(function (a, x) { return a + x.ate; }, 0) / xs.length; };
   var gap = (sharers.length && grabbers.length) ? mean(grabbers) - mean(sharers) : 0;   // fish a grabber ate over a sharer
-  var external = regime === 'weak' || regime === 'strong';
+  var external = regime === 'strong';
   if (external && gap < 0 && !C.IMITATE_UP_UNDER_POLICE) gap = 0;
   rec.acts.forEach(function (a) {
     var v = V[a.i], d = 0;
     d -= C.IMITATE * gap;                                                   // toward whoever ate better
-    if (!a.banned && !a.watcher && !a.payer) {
+    if (!a.banned && !a.watcher) {
       if (!a.grabbed) d += rec.shareRate >= C.HALF ? (external ? 0 : C.REINFORCE) : -C.SUCKERED;  // enforced sharing builds no norm (p. 147)
       else d -= C.GRABBED;
     }
-    if (external) d -= regime === 'weak' ? C.CROWD_WEAK : C.CROWD_STRONG;   // crowding out
+    if (external) d -= C.CROWD_STRONG;   // crowding out
     v.norm = clamp01(v.norm + d);
   });
   rec.gap = gap;
