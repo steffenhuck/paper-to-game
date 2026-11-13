@@ -73,12 +73,12 @@ svg.sh{display:block;flex:none}
 .prow .tx{font-size:13px;line-height:1.3}
 .prow .tx .sc{font-family:'Inter Display';font-weight:900;font-size:17px;margin-right:5px}
 .prow .tx .w{display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-size:12.5px;color:#333;margin-top:2px}
-.slot{border:1.5px dashed var(--grey);height:46px;display:flex;align-items:center;gap:6px;padding:0 5px 0 0;font-size:11px;line-height:1.15;font-weight:600;position:relative;overflow:hidden}
+.slot{border:0;height:46px;display:flex;align-items:center;gap:6px;padding:0 5px 0 0;font-size:11px;line-height:1.15;font-weight:600;position:relative;overflow:hidden}
 .slot .bar{width:7px;align-self:stretch;background:transparent;flex:none}
 .slot.set{border:1.5px solid var(--ink)}
 .slot.A .bar{background:var(--red)}.slot.B .bar{background:var(--ink)}.slot.E .bar{background:var(--grey)}.slot.U .bar{background:repeating-linear-gradient(180deg,var(--red) 0 6px,var(--ink) 6px 12px)}
 .slot.A .wd{color:var(--red)}.slot.E .wd{color:#666}
-.slot .q0{font-family:'Inter Display';font-weight:900;font-size:20px;color:var(--strike);margin:0 auto}
+.slot .q0{font-size:11px;font-weight:400;color:var(--grey);line-height:1.2;text-align:left}
 .slot.new{background:var(--soft)}
 /* ranking cards */
 .steps2{display:flex;flex-direction:column;gap:10px}
@@ -216,7 +216,7 @@ svg.sh{display:block;flex:none}
   <div class="steps2" id="cards"></div>
   <p class="say" id="say"></p>
 
-  <div class="lab"><i>3</i>What that decides, plan against plan</div>
+  <div class="lab"><i>3</i>What your answers decide, plan against plan</div>
   <p class="note" id="pairs-note"></p>
   <div id="prows"></div>
   <button class="go" id="b-post" disabled>Post the ranking</button>
@@ -647,7 +647,7 @@ svg.sh{display:block;flex:none}
       var who = '<span class="w">Anna ' + sh(info.agree ? info.winner : info.annaFor, 'a', 14) + ' &nbsp;Beat ' + sh(info.agree ? info.winner : info.beatFor, 'b', 14) + '</span>';
       if (info.agree) { st = '<span class="sc">2–0</span>Both prefer the ' + P[info.winner] + '. Settled.'; slot = '<div class="slot set U"><span class="bar"></span>' + outcomeHtml(a, b, top, 17) + '<span class="wd">2–0</span></div>'; }
       else if (top !== null) { var v = G.book[info.cell]; st = '<span class="sc">1–1</span>Your book broke this tie on Sunday ' + G.ruledOn[info.cell] + '. Settled.'; slot = '<div class="slot set ' + v + '"><span class="bar"></span>' + outcomeHtml(a, b, top, 17) + '<span class="wd">' + winWord(v) + '</span></div>'; }
-      else { st = '<span class="sc">1–1</span><b>A tie. Your answers break it.</b>'; slot = '<div class="slot" id="slot-' + p + '"><span class="bar"></span><span class="q0">?</span></div>'; }
+      else { st = '<span class="sc">1–1</span><b>A tie. Nothing to press here: your answers above break it.</b>'; slot = '<div class="slot" id="slot-' + p + '"><span class="bar"></span><span class="q0">set by your answers above</span></div>'; }
       rows += '<div class="prow" data-p="' + p + '"><span class="pp">' + sh(a, 'v', 20) + 'v' + sh(b, 'v', 20) + '</span><span class="tx">' + st + who + '</span>' + slot + '</div>';
     }
     $('prows').innerHTML = rows;
@@ -686,7 +686,7 @@ svg.sh{display:block;flex:none}
   function chooseTop(key) {
     G.top = key; G.second = null; G.sel = -1; $('b-post').disabled = true; $('say').textContent = '';
     Array.prototype.forEach.call($('opts1').children, function (c) { c.classList.toggle('sel', c.dataset.key === key); if ($('opts1').children.length === 1) c.classList.add('lone'); });
-    for (var p = 0; p < 3; p++) { var el = $('slot-' + p); if (el) { el.className = 'slot'; el.innerHTML = '<span class="bar"></span><span class="q0">?</span>'; } }
+    for (var p = 0; p < 3; p++) { var el = $('slot-' + p); if (el) { el.className = 'slot'; el.innerHTML = '<span class="bar"></span><span class="q0">set by your answers above</span>'; } }
     var rest = G.lists.filter(function (r) { return tiersOf(r)[0] === key; });
     if (key.split(',').length === 3) { $('step2').classList.add('hide'); return select(G.lists.indexOf(rest[0])); }
     var seconds = []; rest.forEach(function (r) { var k = tiersOf(r)[1]; if (seconds.indexOf(k) < 0) seconds.push(k); });
