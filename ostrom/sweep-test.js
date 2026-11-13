@@ -21,14 +21,14 @@ const fs = require('fs');
     const bias = v % 5;
     for (let t = 0; t < 10; t++) {
       const key = Math.random() < 0.5 ? keys[bias] : keys[Math.floor(Math.random() * keys.length)];
-      const pick = await page.evaluate(() => { const s = window.__game.state; return { summer: s.summer, eaten: s.eaten, heading: document.getElementById('h-summer').innerText, shelf: document.getElementById('l-shelf').innerText, row: window.__game.row }; });
+      const pick = await page.evaluate(() => { const s = window.__game.state; return { summer: s.summer, eaten: s.eaten, without: s.without || 0, heading: document.getElementById('h-summer').innerText, shelf: document.getElementById('l-shelf').innerText, row: window.__game.row }; });
       if (pick.heading !== 'Summer ' + (pick.summer + 1) + ' of 10') err(v, t, `heading "${pick.heading}"`);
-      if (pick.shelf !== 'fish eaten so far: ' + (pick.eaten || 'none')) err(v, t, `shelf label "${pick.shelf}" vs eaten ${pick.eaten}`);
+      if (pick.shelf !== 'times someone had no fish to eat: ' + (pick.without || 'none')) err(v, t, `shelf label "${pick.shelf}" vs without ${pick.without}`);
       if (pick.row.some(r => r.fish || r.bucket)) err(v, t, 'fish or buckets drawn before fishing');
       await page.click(`.card[data-key=${key}]`); await page.waitForTimeout(80);
       const desc = await txt('desc'); if (!desc.includes(key === 'none' ? 'Leave it be' : key === 'talk' ? 'Have a talk' : key === 'watch' ? 'Take turns watching' : key === 'weak' ? 'now and then' : 'every day')) err(v, t, 'desc does not name the card ' + key);
       await page.click('#b-fish'); await waitPhase('ph-result'); await page.waitForTimeout(60);
-      const r = await page.evaluate(() => { const rec = window.__game.rec, s = window.__game.state; return { rec: JSON.parse(JSON.stringify(rec)), names: s.villagers.map(x => x.name), eaten: s.eaten, pond: s.pond, text: document.getElementById('result').innerText, shelf: document.getElementById('l-shelf').innerText, bannedNow: s.villagers.filter(x => x.banned).map(x => x.name), row: window.__game.row }; });
+      const r = await page.evaluate(() => { const rec = window.__game.rec, s = window.__game.state; return { rec: JSON.parse(JSON.stringify(rec)), names: s.villagers.map(x => x.name), eaten: s.eaten, without: s.without || 0, pond: s.pond, text: document.getElementById('result').innerText, shelf: document.getElementById('l-shelf').innerText, bannedNow: s.villagers.filter(x => x.banned).map(x => x.name), row: window.__game.row }; });
       const rec = r.rec, text = r.text; summers++;
       const shared = rec.acts.filter(a => !a.banned && !a.watcher && !a.grabbed), grabbers = rec.acts.filter(a => a.grabbed), banned = rec.acts.filter(a => a.banned), watcher = rec.acts.filter(a => a.watcher);
       const fishers = shared.length + grabbers.length, took = rec.acts.reduce((s, a) => s + a.took, 0);
@@ -42,7 +42,7 @@ const fs = require('fs');
         if (!first.startsWith(expect)) err(v, t, `first sentence "${first}" vs "${expect}"`);
         if (took !== fishers + grabbers.length) err(v, t, 'took does not equal fishers plus grabbers although the pond did not run out');
       }
-      for (const a of watcher) if (!first.includes(a.name + ' was watching')) err(v, t, `watcher ${a.name} not in first sentence`);
+      for (const a of watcher) if (!first.includes('It was ' + a.name + '’s turn to watch')) err(v, t, `watcher ${a.name} not in first sentence`);
       for (const a of banned) if (!first.includes(a.name)) err(v, t, `banned ${a.name} not in first sentence`);
       // 2. names: only what the meeting could know. A hidden grabber's name must not appear anywhere in the text,
       //    unless they are also the watcher or banned (they are not: hidden means they fished unseen).
@@ -54,19 +54,20 @@ const fs = require('fs');
       if (key === 'none' || key === 'talk') { if (rec.acts.some(a => a.seen || (a.known !== 'hidden' && a.known !== 'banned' && a.known !== 'watcher'))) err(v, t, 'someone seen with nobody at the pond'); }
       if (key === 'weak' || key === 'strong') { if (rec.acts.some(a => a.known === 'one')) err(v, t, 'the policeman reported a sharer'); if (rec.acts.some(a => a.known === 'two' && a.sanction !== 'town')) err(v, t, 'known grabber not caught'); }
       if (key === 'watch') { if (rec.watcher === null) err(v, t, 'no watcher'); if (!second.startsWith(rec.acts[rec.watcher].name + ' saw ')) err(v, t, `watch sentence "${second}"`); }
-      const hiddenGrabbers = grabbers.length - rec.acts.filter(a => a.known === 'two').length;
+      const hiddenGrabbers = rec.acts.filter(a => a.took === 2).length - rec.acts.filter(a => a.known === 'two').length;
+      if (rec.acts.some(a => a.sanction && a.took !== 2)) err(v, t, 'a sanction without two fish taken');
       if (hiddenGrabbers > 0 && (key === 'watch' || key === 'weak' || key === 'strong') && !/got away/.test(second)) err(v, t, `${hiddenGrabbers} hidden grabbers but no "got away"`);
       // 3. the row draws what the meeting knows
       for (const a of rec.acts) {
         const d = r.row[a.i];
         if (a.known === 'hidden' && !(d.bucket && d.fish === 0)) err(v, t, `${a.name} hidden but drawn ${JSON.stringify(d)}`);
-        if ((a.known === 'one' || a.known === 'two') && (d.bucket || d.fish !== a.took - a.fine)) err(v, t, `${a.name} known but drawn ${JSON.stringify(d)}`);
+        if ((a.known === 'one' || a.known === 'two') && (d.bucket || d.fish !== a.took - a.fine || d.lost !== a.fine || d.fish + d.lost !== a.took)) err(v, t, `${a.name} known but drawn ${JSON.stringify(d)}`);
         if (a.known === 'banned' && !d.cross) err(v, t, `${a.name} banned without a cross`);
         if (a.known === 'watcher' && !d.stool) err(v, t, `${a.name} watcher without a stool`);
         if (a.sanction === 'word' && d.note !== 'told off') err(v, t, `${a.name} told off, note "${d.note}"`);
-        if (a.sanction === 'back' && d.note !== 'fish back') err(v, t, `${a.name} fish back, note "${d.note}"`);
-        if (a.sanction === 'ban' && !(d.note === 'fish back' && d.note2 === 'no fishing next')) err(v, t, `${a.name} ban, notes "${d.note}/${d.note2}"`);
-        if (a.sanction === 'town' && d.note !== 'fish to town') err(v, t, `${a.name} caught, note "${d.note}"`);
+        if (a.sanction === 'back' && !(d.note === 'seen again' && d.note2 === 'fish put back')) err(v, t, `${a.name} fish back, notes "${d.note}/${d.note2}"`);
+        if (a.sanction === 'ban' && !(d.note === 'fish put back' && d.note2 === 'no fishing next')) err(v, t, `${a.name} ban, notes "${d.note}/${d.note2}"`);
+        if (a.sanction === 'town' && !(d.note === 'caught' && d.note2 === 'to the town')) err(v, t, `${a.name} caught, notes "${d.note}/${d.note2}"`);
       }
       // 4. the pond, the town, the shelf, the books
       const pm = /The pond had (\d+) fish\. We took (\d+)(?: and (\d+) (?:was|were) put back)?, so (\d+|none) (?:was|were) left\./.exec(text), nm = /Now the pond has (\d+)/.exec(text);
@@ -80,11 +81,18 @@ const fs = require('fs');
       }
       if (rec.pondBefore - took + rec.finesToPond !== rec.pondAfterFishing) err(v, t, 'pond arithmetic');
       const inHands = rec.acts.reduce((s, a) => s + (a.took - a.fine), 0);
-      const m = /We ate (\d+) fish/.exec(text); if (!m) err(v, t, 'no "we ate"'); else if (Number(m[1]) !== inHands - rec.fees) err(v, t, `text ate ${m[1]} vs hands ${inHands} − fee ${rec.fees}`);
+      if (rec.eaten !== inHands - rec.fees) err(v, t, `eaten ${rec.eaten} vs hands ${inHands} − fee ${rec.fees}`);
+      // who had no fish to eat: the count in the text equals the people with empty hands plus the policeman's pay
+      const zero = rec.acts.filter(a => a.ate <= 0).length, expectWithout = zero + Math.min(rec.fees, 10 - zero), last = paras[3] || '';
+      if (rec.without !== expectWithout) err(v, t, `without ${rec.without} vs ${expectWithout}`);
+      const saysWithout = /^Everyone had a fish to eat\./.test(last) ? 0 : /^One of us had no fish/.test(last) ? 1 : /^All ten of us had no fish/.test(last) ? 10 : (/^(\d+) of us had no fish/.exec(last) || [0, -1])[1];
+      if (Number(saysWithout) !== rec.without) err(v, t, `"${last}" vs without ${rec.without}`);
+      for (const a of rec.acts) if (a.ate <= 0 && (a.watcher || a.banned || a.sanction) && !last.includes(a.name)) err(v, t, `${a.name} went without but is not named in "${last}"`);
+      for (const n of hiddenNames) if (new RegExp('\\b' + n + '\\b').test(last)) err(v, t, `hidden villager ${n} named in "${last}"`);
       const townTotal = rec.fees + rec.finesToTown;
       if (townTotal && !/The town took/.test(text)) err(v, t, `town took ${townTotal} but text silent`);
       if (!townTotal && /The town took/.test(text)) err(v, t, 'text mentions the town with nothing taken');
-      if (r.shelf !== 'fish eaten so far: ' + (r.eaten || 'none')) err(v, t, `shelf "${r.shelf}" vs ${r.eaten}`);
+      if (r.shelf !== 'times someone had no fish to eat: ' + (r.without || 'none')) err(v, t, `shelf "${r.shelf}" vs ${r.without}`);
       if (r.eaten < 0 || rec.eaten < 0 || rec.acts.some(a => a.took - a.fine < 0 || a.took > 2)) err(v, t, 'negative or impossible fish');
       for (const a of rec.acts) { if ((a.sanction === 'back' || a.sanction === 'ban' || a.sanction === 'town') && a.fine !== a.took) err(v, t, `${a.name}: fine ${a.fine} vs took ${a.took}`); if (a.sanction === 'ban' && !r.bannedNow.includes(a.name)) err(v, t, `${a.name} banned in record but not in state`); }
       if ((t === 5) !== !!rec.migration) err(v, t, 'migration at the wrong summer');

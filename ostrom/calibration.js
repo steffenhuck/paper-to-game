@@ -11,17 +11,17 @@ const SEEDS = 400;
 // run a strategy over many seeds and average what the checks need
 function stats(strategy, seeds) {
   seeds = seeds || SEEDS;
-  const a = { share: Array(C.SUMMERS).fill(0), pond: Array(C.SUMMERS).fill(0), eaten: 0, pondEnd: 0, test: 0, town: 0, normE: 0, normCC: 0, eatE: 0, eatCC: 0, gapLate: 0, gapLateN: 0, last3: 0 };
+  const a = { share: Array(C.SUMMERS).fill(0), pond: Array(C.SUMMERS).fill(0), eaten: 0, without: 0, pondEnd: 0, test: 0, town: 0, normE: 0, normCC: 0, eatE: 0, eatCC: 0, gapLate: 0, gapLateN: 0, last3: 0 };
   for (let seed = 1; seed <= seeds; seed++) {
     const r = M.runStrategy(seed, strategy);
     r.recs.forEach((rec, t) => { a.share[t] += rec.shareRate; a.pond[t] += rec.pondAfter; if (t >= 3) { a.gapLate += rec.gap; a.gapLateN++; } });
-    a.eaten += r.state.eaten; a.pondEnd += r.recs[C.SUMMERS - 1].pondAfter; a.town += r.state.paidToTown; a.test += r.test.shared;
+    a.eaten += r.state.eaten; a.without += r.state.without; a.pondEnd += r.recs[C.SUMMERS - 1].pondAfter; a.town += r.state.paidToTown; a.test += r.test.shared;
     a.last3 += (r.recs[7].eaten + r.recs[8].eaten + r.recs[9].eaten) / 3;
     const E = r.state.villagers.filter(v => v.type === 'E'), N = r.state.villagers.filter(v => v.type !== 'E');
     a.normE += E.reduce((s, v) => s + v.norm, 0) / E.length; a.normCC += N.reduce((s, v) => s + v.norm, 0) / N.length;
     a.eatE += E.reduce((s, v) => s + v.eaten, 0) / E.length; a.eatCC += N.reduce((s, v) => s + v.eaten, 0) / N.length;
   }
-  return { share: a.share.map(x => x / seeds), pond: a.pond.map(x => x / seeds), eaten: a.eaten / seeds, pondEnd: a.pondEnd / seeds, test: a.test / seeds, town: a.town / seeds, normE: a.normE / seeds, normCC: a.normCC / seeds, eatE: a.eatE / seeds, eatCC: a.eatCC / seeds, gapLate: a.gapLate / a.gapLateN, last3: a.last3 / seeds };
+  return { share: a.share.map(x => x / seeds), pond: a.pond.map(x => x / seeds), eaten: a.eaten / seeds, without: a.without / seeds, pondEnd: a.pondEnd / seeds, test: a.test / seeds, town: a.town / seeds, normE: a.normE / seeds, normCC: a.normCC / seeds, eatE: a.eatE / seeds, eatCC: a.eatCC / seeds, gapLate: a.gapLate / a.gapLateN, last3: a.last3 / seeds };
 }
 const S = {}; M.REGIMES.forEach(r => { S[r.key] = stats(r.key); });
 
@@ -69,6 +69,12 @@ check('policeman now and then: the village eats no more than under leave it be a
 check('policeman every day: sharing above 85% in every summer (cooperation enforced)', S.strong.share.every(x => x > 0.85), S.strong.share.map(pct).join(' '));
 check('policeman every day: the eleventh summer below leave it be’s (Frohlich & Oppenheimer: worse off than those who never had it)', S.strong.test < S.none.test, f2(S.strong.test) + ' vs ' + f2(S.none.test));
 check('policeman every day: the village eats less than under watching (the quarter)', S.strong.eaten < S.watch.eaten, f2(S.strong.eaten) + ' vs ' + f2(S.watch.eaten));
+// 7b. what each arrangement costs in the aim's units: times one of us had no fish to eat, in ten summers (revision 5)
+check('taking turns watching costs one of us a fish each summer (about ten times in ten summers)', S.watch.without >= 9 && S.watch.without <= 13, f2(S.watch.without));
+check('the daily policeman leaves about three or more of us without every summer, at least three times what watching costs', S.strong.without >= 30 && S.strong.without >= 3 * S.watch.without, f2(S.strong.without) + ' vs ' + f2(S.watch.without));
+check('a talk costs nobody a fish while the pond lasts', S.talk.without < 3, f2(S.talk.without));
+check('the village\u2019s own watcher is not out-seen by the occasional policeman, and a watched village ends with at least as many sharing as a policed one', C.WATCH_SEE > C.POLICE_WEAK_SEE && S.watch.share[9] >= S.strong.share[9], pct(S.watch.share[9]) + ' vs ' + pct(S.strong.share[9]));
+check('watching beats the daily policeman on all three parts of the aim: pond as full, fewer without a fish, more sharing in the eleventh summer', S.watch.pondEnd >= S.strong.pondEnd - 1 && S.watch.without < S.strong.without && S.watch.test > S.strong.test, `pond ${f2(S.watch.pondEnd)}/${f2(S.strong.pondEnd)}, without ${f2(S.watch.without)}/${f2(S.strong.without)}, eleventh ${f2(S.watch.test)}/${f2(S.strong.test)}`);
 const seq = stats(t => t < 5 ? 'strong' : 'watch');
 check('five policed summers then watching: watching starts lower and ends lower than watching from the start (crowding out carries over)', seq.share[5] < S.watch.share[0] && seq.share[9] < S.watch.share[9] && seq.test < S.watch.test, pct(seq.share[5]) + ' vs ' + pct(S.watch.share[0]) + '; 11th ' + f2(seq.test) + ' vs ' + f2(S.watch.test));
 
@@ -151,7 +157,7 @@ const strategies = [
 ];
 for (const [name, st] of strategies) {
   const r = stats(st);
-  out.push(`  ${name.padEnd(58)} share ${r.share.map(x => String(Math.round(100 * x)).padStart(3)).join('')}   pond ${r.pond.map(x => String(Math.round(x)).padStart(3)).join('')}   eaten ${String(Math.round(r.eaten)).padStart(4)} (last three summers ${f2(r.last3)} a summer: ${M.belliesWord(r.last3 * C.SUMMERS)})   pond at the end ${String(Math.round(r.pondEnd)).padStart(3)} (${M.pondWord(r.pondEnd)})   town ${String(Math.round(r.town)).padStart(3)}   eleventh summer ${f2(r.test)} of ten share`);
+  out.push(`  ${name.padEnd(58)} share ${r.share.map(x => String(Math.round(100 * x)).padStart(3)).join('')}   pond ${r.pond.map(x => String(Math.round(x)).padStart(3)).join('')}   eaten ${String(Math.round(r.eaten)).padStart(4)} (last three summers ${f2(r.last3)} a summer: ${M.belliesWord(r.last3 * C.SUMMERS)})   pond at the end ${String(Math.round(r.pondEnd)).padStart(3)} (${M.pondWord(r.pondEnd)})   town ${String(Math.round(r.town)).padStart(3)}   went without ${String(Math.round(r.without)).padStart(3)} times   eleventh summer ${f2(r.test)} of ten share`);
 }
 
 out.unshift(`Ostrom's Pond — calibration check, ${new Date().toISOString().slice(0, 10)}. ${out.filter(l => /^PASS|^FAIL/.test(l)).length} checks, ${fails} failed.`);
