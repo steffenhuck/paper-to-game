@@ -1,0 +1,28 @@
+PASS  Axioms I-II: there are 13 weak orderings of three alternatives
+PASS  six strict ballots, 36 pairs of ballots
+PASS  729 rule books satisfy Conditions 2-4 by construction
+PASS  exactly two rule books give a weak ordering for all 36 pairs of ballots  [never fail: AAAAAA, BBBBBB]
+PASS  those two are dictatorial by Definition 5: one is voter 1, one is voter 2
+PASS  a rule book is dictatorial if and only if it never fails (727 non-dictatorial books each fail somewhere)
+PASS  Condition 2: in all 729 books, raising x in the ballots never turns "x above y" into anything else
+PASS  Consequence 1 / Condition 4: identical ballots always give that ballot as the list, so no pair is imposed
+PASS  eqs. (7)-(8): all disagreements level, ballots x,y,z / z,x,y: xPy, yIz, xIz, and no ordering  [clash: {"a":0,"b":1,"c":2,"ab":">","bc":"=","expect":">","actual":"=","circle":false,"score":2}]
+PASS  eq. (1) forces eq. (2): one list left on ballots x,y,z / y,z,x, and it rules the x-z disagreement voter 1's way
+PASS  eqs. (1)-(6): on Arrow's five pairs of ballots each list is forced, and the book ends as voter 1 deciding everything  [AAAAAA]
+PASS  p. 329, paradox of voting: majorities prefer A to B, B to C and C to A
+PASS  p. 337-338, rank-order method: x is chosen from four; with y deleted, x and z tie  [{"x":10,"y":7,"z":8,"w":5} -> {"x":10,"z":10,"w":7}]
+PASS  every path from every opening is five Sundays long and ends with a complete book (no Sunday without a list during play)  [135 paths]
+PASS  lists on offer by Sunday are 5, 3, 3, 1, 1 on every path  [{"5,3,3,1,1":135}]
+PASS  each opening is Arrow's eq. (7) pair up to renaming: one pair agreed, two disputed, five lists possible
+PASS  the player can reach both a dictator (36) and the best book without one  [best without a boss = 34]
+PASS  spread of outcomes: at least six different scores are reachable  [{"26":5,"27":2,"28":21,"29":19,"30":9,"31":4,"32":17,"33":36,"34":16,"36":6}]
+PASS  robustness: whatever ballots come first, a complete non-dictatorial book fails on at least 2 of 36 Sundays
+PASS  the six books in which a fixed order of the plans wins every disagreement are all among the best without a boss  [best: 18 books at 34; fixed-order books: 34,34,34,34,34,34]
+PASS  every Sunday without a list comes with a chain "a over-or-level b, b over-or-level c, but not a over c" taken from its own pair results
+
+Sundays that hold, over all 729 rule books: {"22":12,"23":84,"24":73,"26":126,"27":24,"28":156,"29":72,"30":72,"31":12,"32":30,"33":48,"34":18,"36":2}
+Sundays that hold, over the 135 paths of play (three openings): {"26":5,"27":2,"28":21,"29":19,"30":9,"31":4,"32":17,"33":36,"34":16,"36":6}
+Fates by opening: {"0:patchwork":38,"0:best":3,"0:boss":2,"0:custom":2,"1:patchwork":37,"1:best":4,"1:custom":2,"1:boss":2,"2:patchwork":38,"2:boss":2,"2:custom":2,"2:best":3}
+Books at the best score without a boss (34): ABBAAA BAABAA BAAABA AABABA BABABA ABBABA BBBABA BAABBA BABBBA ABAAAB ABBAAB AAABAB BAABAB ABABAB BBABAB ABBBAB ABBABB BAABBB
+
+21 checks, 0 failed
