@@ -21,22 +21,22 @@ const fs = require('fs');
   await shot('start', true);
   if (await hscroll()) errors.push('horizontal scroll on start');
   await page.click('#b-begin'); await page.waitForTimeout(400); await shot('a-1-pick-empty', true);
-  const plan = ['talk', 'talk', 'watch', 'watch', 'watch', 'watch', 'weak', 'watch', 'watch', 'watch'];
+  const plan = ['talk', 'watch', 'watch', 'strong', 'watch', 'watch'];
   for (let i = 0; i < plan.length; i++) {
-    if (i === 0) { for (const k of ['strong', 'none', 'weak', 'watch']) { await page.click(`.card[data-key=${k}]`); await page.waitForTimeout(150); await shot(`a-1-preview-${k}`, false); } }
+    if (i === 0) { for (const k of ['strong', 'none', 'watch']) { await page.click(`.card[data-key=${k}]`); await page.waitForTimeout(150); await shot(`a-1-preview-${k}`, false); } }
     if (i === 2) { await page.click('#q-play'); await page.waitForTimeout(300); await shotOverlay('help', 'help'); await page.click('#b-help-close'); if (await page.evaluate(() => document.body.classList.contains('lock'))) errors.push('body still locked after help'); }
     await page.click(`.card[data-key=${plan[i]}]`); await page.waitForTimeout(200);
-    if (i < 3 || i === 6) await shot(`a-${i + 1}-picked-${plan[i]}`, true);
+    if (i < 4) await shot(`a-${i + 1}-picked-${plan[i]}`, true);
     log.push(`summer ${i + 1} picks ${plan[i]}: ` + await txt('desc'));
-    await page.click('#b-fish'); await page.waitForTimeout(i === 5 ? 2600 : 1600); if (i < 3 || i === 5 || i === 6) await shot(`a-${i + 1}-fishing`, false);
+    await page.click('#b-fish'); await page.waitForTimeout(i === 3 ? 2600 : 1600); if (i < 4) await shot(`a-${i + 1}-fishing`, false);
     await waitPhase('ph-result'); await page.waitForTimeout(300); await shot(`a-${i + 1}-result`, true);
     log.push('  ' + await txt('result'));
     log.push('  shelf: ' + await txt('l-shelf') + ' | heading: ' + await txt('h-summer'));
     if (await hscroll()) errors.push('horizontal scroll in summer ' + (i + 1));
     await page.click('#b-next'); await page.waitForTimeout(400);
   }
-  await shot('a-11-test', true);
-  await page.click('#b-test'); await page.waitForTimeout(1800); await shot('a-11-fishing', false);
+  await shot('a-7-test', true);
+  await page.click('#b-test'); await page.waitForTimeout(1800); await shot('a-7-fishing', false);
   await page.waitForFunction(() => document.getElementById('s-end').classList.contains('on'), null, { timeout: 20000 }); await page.waitForTimeout(400);
   await shot('a-end', true);
   log.push('END: ' + await txt('end-head') + ' | ' + await txt('end-lines') + ' | ' + await txt('end-paper'));
@@ -44,7 +44,7 @@ const fs = require('fs');
   await page.click('#b-about'); await page.waitForTimeout(300); await shotOverlay('about', 'about'); await page.click('#b-about-close');
   // a second village: the daily policeman throughout
   await page.click('#b-again'); await page.waitForTimeout(400);
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 6; i++) {
     await page.click('.card[data-key=strong]'); await page.click('#b-fish'); await waitPhase('ph-result'); await page.waitForTimeout(100);
     if (i === 0) await shot('b-1-result', true);
     await page.click('#b-next'); await page.waitForTimeout(200);
