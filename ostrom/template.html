@@ -150,8 +150,9 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
   <p><b>The babies.</b> Every winter the fish that are left have babies. Three rules: each fish can have one baby; the pond only has food for 12 babies a winter; and the pond never holds more than 50 fish. So if we all take one, 10 come out and 12 go in, and the pond grows by two. If we take 12, it stays the same. Every fish we take beyond that makes the pond one fish smaller next summer. Watch out: if the pond drops below 20, even one each is too many, because fewer than ten fish are left to be parents.</p>
   <p><b>The village.</b> The ten stick people are us, with our names under us. Each summer everyone takes one fish or two. One each is fair. Nobody can tell in advance who will take two.</p>
   <p><b>The buckets.</b> Everyone carries their catch home in a bucket. A bucket with a ? on it means nobody saw what was in it. Fish drawn in someone&rsquo;s hand means somebody saw them take it: the watcher, or the policeman when he caught them. Fish drawn empty with a red line through them were taken away again: put back in the pond, or handed to the policeman. The meeting always finds out how many fish left the pond, so it always knows how many of us took two. It just doesn&rsquo;t always know who.</p>
+  <p><b>The red flag.</b> The first time our own watcher sees someone take two, that person gets a telling-off and a little red flag planted beside them. Nothing else happens. The flag stays, so everyone knows they have had their warning: next time the fish go back.</p>
   <p><b>The plates.</b> Each of us needs one fish a summer. Every time one of us ends a summer with no fish, an empty plate goes on the shelf. The watcher goes without. So does anyone whose fish were taken away, anyone not allowed to fish, and one of us for every fish of the policeman&rsquo;s pay.</p>
-  <p><b>The cards.</b> Each summer, touch a card to see what it does. It is drawn into the picture (a circle on the grass, a watcher on a stool, a policeman with a tall hat), and the box with the green line says what it costs, what happens to someone who takes two, and what we get to find out. <b>Leave it be:</b> nothing happens to anyone, and nobody knows who took two. <b>Have a talk:</b> we all promise to take one; if fish go missing, the circle tells everybody off next summer; nobody knows who broke the promise. <b>Take turns watching:</b> one of us watches all summer instead of fishing, a different one each summer (Ada first, then Bo, then Cyd, and so on). The watcher knows everybody and sees most of what goes on. Seen taking two means a telling-off the first time, both fish back in the pond the second time, and both fish back plus no fishing next summer the third time. <b>A policeman now and then:</b> the town&rsquo;s policeman comes on some days, takes both fish from anyone he catches, costs one fish a summer, and tells us only who he caught; we stop telling each other off. <b>A policeman every day:</b> the same, every day; he catches nearly everyone who takes two, and his pay is a quarter of everything we catch.</p>
+  <p><b>The cards.</b> Each summer, touch a card to see what it does. It is drawn into the picture (a circle on the grass, a watcher on a stool, a policeman with a tall hat), and the box with the green line says what it costs, what happens to someone who takes two, and what we get to find out. <b>Leave it be:</b> nothing happens to anyone, and nobody knows who took two. <b>Have a talk:</b> we all promise to take one; if fish go missing, the circle tells everybody off next summer; nobody knows who broke the promise. <b>Take turns watching:</b> one of us watches all summer instead of fishing, a different one each summer (Ada first, then Bo, then Cyd, and so on). The watcher knows everybody and sees most of what goes on. Seen taking two means a telling-off and a red flag the first time, both fish back in the pond the second time, and both fish back plus no fishing next summer the third time. <b>A policeman now and then:</b> the town&rsquo;s policeman comes on some days, takes both fish from anyone he catches, costs one fish a summer, and tells us only who he caught; we stop telling each other off. <b>A policeman every day:</b> the same, every day; he catches nearly everyone who takes two, and his pay is a quarter of everything we catch.</p>
   <p><b>FISH!</b> Everyone goes to the pond one at a time and comes back with a bucket, or with their fish showing if someone saw them. Under each person it says what happened to them: told off, seen again, caught, no fishing. Then the pond is counted, the babies come, and the game tells you what the village knows: how many fish came out, how many of us took two, who (if anyone saw), what the pond did, and who had no fish to eat.</p>
   <p><b>Next summer.</b> Pick again from all five cards. Nothing is kept from last summer except what the villagers learnt.</p>
   <p><b>The eleventh summer.</b> After ten summers there is one more, with no card: nobody watches and nobody talks. Then the game shows you what really happened, which the village itself never saw, and who never cared about the rule from the start.</p>
@@ -257,6 +258,9 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
       hatch(ctx, bk, COL.yellow, 3, k + 60, 0.7); wline(ctx, bk, COL.ink, 1.8, k + 60, 0.6, true);
       wline(ctx, [[bx - 7, bty], [bx - 5, bty - 6], [bx, bty - 8], [bx + 5, bty - 6], [bx + 7, bty]], COL.ink, 1.6, k + 62, 0.5);
       text(ctx, '?', bx, bty + 12, 14, COL.ink); }
+    if (o.flag) { // the village's first warning: a little red flag planted beside you, and it stays
+      var px = x - h * 0.44, pole = [[px, fy + 1], [px, fy - 27]], tri = [[px, fy - 27], [px + 13, fy - 22], [px, fy - 16]];
+      hatch(ctx, tri, COL.red, 2.4, k + 70, 0.9); wline(ctx, tri, COL.red, 1.6, k + 70, 0.5, true); wline(ctx, pole, COL.ink, 1.8, k + 71, 0.5); }
     if (o.suitcase) { wline(ctx, [[x - h * 0.42, fy - 10], [x - h * 0.2, fy - 10], [x - h * 0.2, fy], [x - h * 0.42, fy]], COL.ink, 1.8, k + 40, 0.6, true); hatch(ctx, [[x - h * 0.42, fy - 10], [x - h * 0.2, fy - 10], [x - h * 0.2, fy], [x - h * 0.42, fy]], COL.yellow, 3, k + 40, 0.7); }
     if (o.cross) { wline(ctx, [[x - r * 1.6, y - 2], [x + r * 1.6, fy + 2]], COL.red, 3, k + 50, 1); wline(ctx, [[x + r * 1.6, y - 2], [x - r * 1.6, fy + 2]], COL.red, 3, k + 51, 1); }
     ctx.restore();
@@ -312,6 +316,10 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
     for (var i = 0; i < villagers.length; i++) {
       var v = villagers[i], col = i % 5, row = Math.floor(i / 5), x = 34 + col * 67, y = 6 + row * 106, o = { name: v.name };
       var a = acts && i < shown ? acts[i] : null;
+      // a villager warned by the village's own watcher keeps a red flag; one warned this summer gets it when their turn is drawn
+      var ownAct = rec && !rec.test && rec.acts[i] && rec.acts[i].name === v.name ? rec.acts[i] : null;
+      var newlyWarned = ownAct && (ownAct.sanction === 'word' || ownAct.sanction === 'back' || ownAct.sanction === 'ban') ? 1 : 0;
+      if (!reveal && (v.offences - newlyWarned >= 1 || (a && newlyWarned))) o.flag = true;
       if (v.banned && !(a && !a.banned)) { o.cross = true; o.note = 'no fishing'; }
       if (watcher === i) { o.stool = true; o.scope = true; o.note = 'watching'; o.noteColor = COL.mute; }
       if (a) {
@@ -330,7 +338,7 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
       }
       if (v.newcomer && rec && rec.migration && rec.migration.slot === i && !rec.test) { o.suitcase = true; if (!o.note) { o.note = 'new here'; o.noteColor = COL.mute; } }
       stick(ctx, x, y, 56, o, k + i * 3 + (v.newcomer ? 500 : 0));
-      state.push({ name: v.name, fish: o.fish || 0, lost: o.lost || 0, bucket: !!o.bucket, note: o.note || '', note2: o.note2 || '', cross: !!o.cross, stool: !!o.stool });
+      state.push({ name: v.name, fish: o.fish || 0, lost: o.lost || 0, bucket: !!o.bucket, flag: !!o.flag, note: o.note || '', note2: o.note2 || '', cross: !!o.cross, stool: !!o.stool });
     }
     lastRow = state;
   }
@@ -468,7 +476,7 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
       var bans = r.acts.filter(function (a) { return a.sanction === 'ban'; }).map(function (a) { return a.name; });
       var parts = [V[r.watcher].name + ' saw ' + (r.seenCount === fishers ? 'everyone' : r.seenCount === 0 ? 'nobody clearly' : r.seenCount + ' of us') + '.'];
       if (seenOne.length) parts.push(names(seenOne) + ' took one.');
-      if (words.length) parts.push(names(words) + ' took two and got a telling-off. Nothing else happened to ' + (words.length > 1 ? 'them' : names(words)) + '.');
+      if (words.length) parts.push(names(words) + ' took two and got a telling-off and a red flag. Nothing else happened to ' + (words.length > 1 ? 'them' : names(words)) + '.');
       if (backs.length) parts.push(names(backs) + ' took two again: both fish back in the pond.');
       if (bans.length) parts.push(names(bans) + ' took two a third time: both fish back in the pond, and no fishing next summer.');
       if (hiddenGrabbers > 0) parts.push((hiddenGrabbers === 1 ? 'One' : hiddenGrabbers) + ' more took two and got away unseen.');

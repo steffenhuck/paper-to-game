@@ -115,7 +115,7 @@ var REGIMES = [
     knows: 'Nobody is at the pond, so we only find out how many fish are gone, not who broke the promise.' },
   { key: 'watch', name: 'Take turns watching',
     line: 'One of us sits by the pond all summer and watches, instead of fishing. We take turns: a different one of us each summer.',
-    cost: 'Costs one fish: the watcher goes without this summer.', greedy: 'Seen taking two: the first time, a telling-off. The second time, both fish go back in the pond. The third time, both fish back and no fishing next summer.',
+    cost: 'Costs one fish: the watcher goes without this summer.', greedy: 'Seen taking two: the first time, a telling-off and a little red flag beside you. The second time, both fish go back in the pond. The third time, both fish back and no fishing next summer.',
     knows: 'The watcher is one of us and knows everybody, so not much gets past. Whoever the watcher saw, we know what they took.' },
   { key: 'weak', name: 'A policeman now and then',
     line: 'The town sends a policeman on some days. We never know which days.',
