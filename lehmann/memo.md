@@ -258,3 +258,12 @@ Steffen after revision 7, in a long exchange. His objection, and the reason the 
 - The ~ marks are gone (the marked band replaces them).
 
 Calibration: 53 checks, all passed. Browser session at 380 × 760 with touch: three earthquakes watched (headlines 1, 2, 3 of 3), the band marked only afterwards, four goes with the nudge and the jump, the question and the last try, the trap, the card, three goes ending with the band quivering, the second fan, the verdict, Read further (seven notes), About, a retry from the facts, and a game with no steep dive ending on the other verdict; no errors, no horizontal scroll. Not played by strangers.
+
+## 28. Revision 9 (13 Nov 2026): a slower stage 0 with three kept rows; one post always answers
+
+Steffen after revision 8: the facts stage ran too fast and it was hard to see that it was about three events; the big question mark was dull and did not prepare for what follows (his idea: an animation that switches slowly between the one-core and the two-core picture); and a go that made no station notice anything sat oddly with a nudge about the band (his idea: one station should always answer). Previous build: `previous/find-your-inner-core-rev8.html`.
+
+- **Stage 0 slowed and numbered.** Each earthquake gets a large *Earthquake 1 of 3* with its place and date, a pause, a slower ripple, the posts answering at 130 ms apiece, a hold, and then its result is copied into a row of eighteen dots labelled with the year. Three rows build up under the picture (1924, 1929, 1931), each the same: fourteen lit, four quivering. About thirty seconds in all. The rows disappear when stage one begins.
+- **The two pictures alternate.** In place of the question mark, the cut-open Earth is shown with its core, and the inner core fades slowly in and out (a 6.4 s cycle), under the caption *INSIDE: ONE CORE? OR A CORE WITHIN THE CORE?*
+- **One post always answers** (`nearestOutside`, ours, said in Read further and About). A wave that comes up outside the band lights the nearest post outside the band; inside the band the nearest band post quivers, as before. The three-degree ear still decides what "every direction at once" reaches and where the band is. The "No post is there" lines are gone.
+- Calibration: 54 checks, all passed. Browser session re-run with the longer stage 0 (three numbered earthquakes, three rows of 14 lit and 4 quivering); no errors, no horizontal scroll.

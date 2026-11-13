@@ -87,6 +87,15 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend i{display:inline-block;width:11px;height:11px;border-radius:50%;box-sizing:border-box}
 .legend .l-band{border-radius:0;width:16px;height:9px;border:1px solid var(--gold);background:repeating-linear-gradient(45deg,#5C6670 0 2px,#1B1714 2px 5px)}
+.records{margin:2px 0 4px}
+.rrow{display:flex;align-items:center;gap:8px;height:19px;opacity:.28;transition:opacity .5s}
+.rrow.on{opacity:1}
+.rrow .ry{flex:none;width:42px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--mute)}
+.rrow .rd{flex:1;display:flex;justify-content:space-between}
+.rrow .rd i{display:block;width:10px;height:10px;border-radius:50%;box-sizing:border-box;border:1.2px solid var(--slate);transition:background .3s,border-color .3s}
+.rrow .rd i.lit{background:var(--gold);border-color:var(--gold)}
+.rrow .rd i.quiver{background:#6E5A2B;border-color:var(--gold)}
+.bigno{font-weight:700;font-size:21px;line-height:1.15;text-align:center;color:var(--gold);margin:2px 0 0;min-height:26px;font-variation-settings:"opsz" 60,"SOFT" 50}
 .legend .l-on{background:var(--gold)} .legend .l-q{background:#9C7F3A;border:1.5px solid var(--gold)} .legend b{color:var(--gold);font-weight:400;font-size:14px;line-height:1}
 .quiver{animation:quiver .9s ease-in-out 3}
 @keyframes quiver{0%,100%{opacity:1}25%{opacity:.25}50%{opacity:1}75%{opacity:.25}}
@@ -130,6 +139,8 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
   <div class="topbar"><div class="aimline" id="aimline"></div><button class="q" id="q-play" aria-label="How to play">?</button></div>
   <div class="plate" id="plate"></div>
   <div class="legend"><span><i class="l-on"></i>lights: a strong shake</span><span><i class="l-q"></i>quivers: a faint one</span><span><i class="l-band"></i>the band that only quivers</span></div>
+  <div class="records hide" id="records"></div>
+  <div class="bigno hide" id="bigno"></div>
   <div class="head" id="head"></div>
 
   <div id="panel1">
@@ -182,8 +193,8 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
   <p><b>Does the Earth have one core, or a core within the core?</b></p>
   <p>The picture is the Earth cut open. Ochre is the mantle, rock where a wave runs fast. Rust is the core, where a wave runs slower, so going in it bends toward the middle and coming out it bends back. A wave runs straight and bends only where the colour changes. The burst at the top is the earthquake. The dots round the right-hand edge are eighteen listening posts.</p>
   <ol>
-    <li><b>The facts.</b> Three real earthquakes, and what the posts recorded each time. Most light up. One band only quivers. That band is then marked. There is nothing for you to do here but watch.</li>
-    <li><b>Imagine one core.</b> Now you are the earthquake, in an imagined Earth with one core. Aim by dragging on the picture or sliding the dial: 0° dives straight down through the middle, 90° runs along the ground. The − and + buttons move a tenth of a degree. Fire, and the post where you come up lights. Try to make the band quiver. Four goes, then one last try.</li>
+    <li><b>The facts.</b> Three real earthquakes, and what the posts recorded each time, kept as three rows of dots. Most light up. One band only quivers. That band is then marked. There is nothing for you to do here but watch.</li>
+    <li><b>Imagine one core.</b> Now you are the earthquake, in an imagined Earth with one core. Aim by dragging on the picture or sliding the dial: 0° dives straight down through the middle, 90° runs along the ground. The − and + buttons move a tenth of a degree. Fire, and the post nearest to where you come up lights. Try to make the band quiver. Four goes, then one last try.</li>
     <li><b>Every direction at once.</b> The game then fires every direction you could have chosen. This is not a go of yours; just watch.</li>
     <li><b>Imagine a core within the core.</b> Three goes in an imagined Earth with a second, smaller core inside the core. Only a dive steeper than 16° gets that deep. Then every direction at once again, and the verdict.</li>
   </ol>
@@ -323,7 +334,7 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
 
   // ---- the game --------------------------------------------------------------------------------------
   var game, phase = 'start', busy = false, plate, startPlate, startLoop = null, endOne = null, endTwo = null;
-  var RULE1 = '<span class="oc">Ochre</span> is the mantle: rock where a wave runs fast. <span class="ru">Rust</span> is the core: a wave runs slower there, so going in it bends toward the middle, and coming out it bends back. It bends only where the colour changes. A post lights when you come up within 3° of it.';
+  var RULE1 = '<span class="oc">Ochre</span> is the mantle: rock where a wave runs fast. <span class="ru">Rust</span> is the core: a wave runs slower there, so going in it bends toward the middle, and coming out it bends back. It bends only where the colour changes. The post nearest to where you come up lights.';
   var RULE2 = 'The <span class="bo">pale ball</span> is the core within the core. Where rock gets slower, a wave bends toward the middle: that is what the core does. Where it gets faster, a wave bends away from the middle, and a wave that hits at a glancing angle bounces off.';
   var CAP1 = 'IMAGINE: AN EARTH WITH ONE CORE', CAP2 = 'IMAGINE: A CORE WITHIN THE CORE';
   function show(id) { ['s-start', 's-play', 's-end'].forEach(function (s) { $(s).classList.toggle('on', s === id); }); window.scrollTo(0, 0); }
@@ -340,7 +351,7 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
   }
   function tally() {
     if (phase === 'act2') $('tally').textContent = 'the band: ' + (game.inBand ? 'quivering' : 'silent');
-    else if (phase === 'act1') $('tally').textContent = Object.keys(game.reached).length + ' posts lit · the band: silent';
+    else if (phase === 'act1') { var nl = Object.keys(game.reached).length; $('tally').textContent = nl + (nl === 1 ? ' post lit' : ' posts lit') + ' · the band: silent'; }
     else $('tally').textContent = '';
   }
   function aiming(on) { $('plate').classList.toggle('aim', !!on); }
@@ -350,38 +361,53 @@ details.more p{font-size:15.5px;color:var(--bone);margin:0 0 6px}
     plate.ball.classList.add('hide');
     C.POSTS.forEach(function (P) { setPost(plate, P, 'off'); });
   }
-  // Stage 0: the facts. Three real earthquakes; the inside of the Earth is veiled; only the posts answer.
+  // Stage 0: the facts. Three real earthquakes, slowly, one row of posts kept for each. Meanwhile the inside
+  // of the Earth alternates between the two pictures the game will try: one core, a core within the core.
+  var wonder = null;
+  function stopWonder() { if (wonder) { wonder.cancel(); wonder = null; } }
   function newRun() {
     game = MECH.newGame(); phase = 'data'; busy = true;
     if (!plate) { plate = makePlate($('plate'), false); wireAim(plate.svg); }
-    resetPlate(); showBand(plate, false); plate.veil.classList.remove('hide'); plate.cap.textContent = 'THE REAL EARTH · NOBODY CAN SEE INSIDE';
+    resetPlate(); showBand(plate, false); plate.veil.classList.add('hide'); stopWonder();
+    setBall(plate, C.INNER_FRAC, C.V_INNER / C.V_CORE);
+    wonder = plate.ball.animate([{ opacity: 0 }, { opacity: 0, offset: .3 }, { opacity: 1, offset: .5 }, { opacity: 1, offset: .8 }, { opacity: 0 }], { duration: 6400, iterations: Infinity, easing: 'ease-in-out' });
+    plate.cap.textContent = 'INSIDE: ONE CORE? OR A CORE WITHIN THE CORE?';
     $('aimline').textContent = MECH.DATA.aim; $('rule1').innerHTML = ''; $('b-next').textContent = 'Next';
     hide('panel1', true); hide('panel-reveal', true); hide('rule1', true); aiming(false); tally();
-    head(''); $('res').innerHTML = para('mu', MECH.DATA.before);
+    var quakes = C.PAPER.QUAKES, rec = MECH.record();
+    $('records').innerHTML = quakes.map(function (q, k) { return '<div class="rrow" id="rrow' + k + '"><span class="ry">' + q.date.slice(-4) + '</span><span class="rd">' + C.POSTS.map(function () { return '<i></i>'; }).join('') + '</span></div>'; }).join('');
+    hide('records', false); hide('bigno', false); $('bigno').textContent = ''; head(''); $('res').innerHTML = para('mu', MECH.DATA.before);
     show('s-play');
-    var mine = game, quakes = C.PAPER.QUAKES, rec = MECH.record();
+    var mine = game;
     function alive() { return phase === 'data' && game === mine; }
+    function wait(ms) { return new Promise(function (ok) { setTimeout(function () { if (alive()) ok(); }, ms); }); }
     function one(k) {
       if (!alive()) return;
       if (k >= quakes.length) {
-        showBand(plate, true); plate.shadow.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 700, fill: 'forwards' });
+        $('bigno').textContent = ''; hide('bigno', true);
+        C.POSTS.forEach(function (P) { setPost(plate, P, rec[P]); });
+        showBand(plate, true); plate.shadow.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 900, fill: 'forwards' });
         head(MECH.DATA.head, true); $('res').innerHTML = MECH.DATA.after.map(function (l, i) { return para(i === 1 ? 'lead' : '', l); }).join('');
         hide('panel-reveal', false); busy = false; return;
       }
       C.POSTS.forEach(function (P) { setPost(plate, P, 'off'); });
-      head('Earthquake ' + (k + 1) + ' of ' + quakes.length + ': ' + quakes[k].place + ', ' + quakes[k].date);
-      setTimeout(function () {
+      $('bigno').textContent = 'Earthquake ' + (k + 1) + ' of ' + quakes.length; head(quakes[k].place + ', ' + quakes[k].date);
+      wait(1500).then(function () {
+        plate.ripple.animate([{ r: 4, opacity: .95 }, { r: R * 2.1, opacity: 0 }], { duration: 2400, easing: 'ease-out' });
+        return wait(500);
+      }).then(function () { return answer(plate, rec, 130, 2900); }).then(function () {
         if (!alive()) return;
-        plate.ripple.animate([{ r: 4, opacity: .9 }, { r: R * 2.1, opacity: 0 }], { duration: 1700, easing: 'ease-out' });
-        answer(plate, rec, 80, 2300).then(function () { one(k + 1); });
-      }, 500);
+        var row = $('rrow' + k); row.classList.add('on');
+        [].forEach.call(row.querySelectorAll('i'), function (d, n) { setTimeout(function () { d.className = rec[C.POSTS[n]]; }, 35 * n); });
+        return wait(1700);
+      }).then(function () { one(k + 1); });
     }
-    setTimeout(function () { one(0); }, 700);
+    wait(1800).then(function () { one(0); });
   }
   // Stage one: imagine one core.
   function stage1() {
     phase = 'act1'; busy = false; game.act = 1;
-    resetPlate(); plate.veil.classList.add('hide'); showBand(plate, true);
+    stopWonder(); resetPlate(); plate.veil.classList.add('hide'); showBand(plate, true); hide('records', true); hide('bigno', true);
     $('aimline').textContent = MECH.AIM1; plate.cap.textContent = CAP1; $('rule1').innerHTML = RULE1;
     hide('panel1', false); hide('panel-reveal', true); hide('rule1', false);
     $('res').innerHTML = para('mu', MECH.INTRO1); head('Imagine the Earth has one core.');
