@@ -33,12 +33,14 @@ const path = require('path');
     await idle(); await page.waitForTimeout(300);
     if (k === 1) await shot('d-2b-after-first', false);
     if (await page.evaluate(() => document.querySelectorAll('#records .rrow.on').length) !== k) errors.push('row ' + k + ' should be kept after earthquake ' + k);
+    const stubs = await page.evaluate(() => [...document.querySelectorAll('#plate svg text')].filter(t => t.textContent === '?' && t.getAttribute('font-size') === '12').length); if (stubs !== 4) errors.push('after earthquake ' + k + ' four question-mark stubs should come up into the band, found ' + stubs);
   }
   if (await page.evaluate(() => document.querySelectorAll('#records i.quiver').length) !== 12 || await page.evaluate(() => document.querySelectorAll('#records i.lit').length) !== 42) errors.push('each of the three rows should keep 14 lit dots and 4 quivering ones');
   await idle(); await page.waitForTimeout(800); await shot('d-3-after', true); await shot('view-d-3-after', false);
   if (await lit() !== 14 || await quiv() !== 4 || !(await band())) errors.push('after the third earthquake 14 posts are lit, 4 quiver and the band is marked: ' + [await lit(), await quiv(), await band()]);
   log.push('FACTS [' + await text('head') + '] ' + await text('res'));
   await page.click('#b-next'); await page.waitForTimeout(300); await shot('a-1-ready', true); await shot('view-1-ready', false);
+  if (await page.evaluate(() => [...document.querySelectorAll('#plate svg text')].filter(t => t.textContent === '?' && t.getAttribute('font-size') === '12').length) !== 0) errors.push('the question-mark stubs belong to stage 0 only');
   if (!/go 1 of 4/i.test(await text('b-fire'))) errors.push('the gold button should read Fire · go 1 of 4, reads ' + await text('b-fire'));
   if (await lit() !== 0 || await quiv() !== 0 || !(await band())) errors.push('stage one should start with every post dark and the band still marked');
   const fits = await page.evaluate(() => document.getElementById('b-fire').getBoundingClientRect().bottom <= window.innerHeight);

@@ -220,7 +220,7 @@ var MECH = (function () {
     aim: 'First the facts: what listening posts recorded after real earthquakes.',
     before: 'You will see three real earthquakes, one at a time. Each sends waves through the Earth in every direction. The gold lines are the paths everyone agreed on in 1936. Watch them run, and watch what the listening posts round the right-hand edge do.',
     head: 'Every time: a strong shake, then a band that only quivers, then a strong shake again.',
-    after: ['That band is marked now. Look at the gold lines: not one of them leads into it. And yet, after every big earthquake, the posts in it feel a faint quiver.', 'In 1936 nobody could say how any wave gets there at all. That is the puzzle.']
+    after: ['That band is marked now. Look at the gold lines: not one of them leads into it. And yet a faint wave comes up there after every big earthquake. The short dotted lines with question marks stand for it.', 'In 1936 nobody could say how any wave gets there at all. That is the puzzle.']
   };
   var AIM1 = 'Imagine the Earth has one core, and you are the earthquake.';
   var AIM1B = 'Imagine one core. Can you make the band quiver?';
@@ -313,7 +313,7 @@ var MECH = (function () {
     var inBand = rays.filter(function (r) { return r.fold > band[0] && r.fold < band[1]; }).length;
     var lines = [
       'This is every direction you could have chosen, all at once.',
-      'The steepest waves meet the inner core. It bends them away from the middle, or bounces them off, and they come up inside the band.',
+      'The steepest waves meet the inner core. It bends them away from the middle, or bounces them off, and they come up inside the band. These are the paths the question marks were asking for.',
       'Only a few waves get there, so the band does not light up. It quivers: just as it did after the three real earthquakes.'
     ];
     game.act = 3; game.done = true; game.reveal2 = { heard: heard, coverage: cov, inBand: inBand, total: rays.length };

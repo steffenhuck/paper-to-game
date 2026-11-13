@@ -21,3 +21,5 @@ Revision 9 (13 Nov, in chat): stage 0 is slower and numbered, keeps one row of d
 Revision 10 (13 Nov, in chat): in stage 0 the waves are now seen running through the Earth for each of the three earthquakes (only the paths both imagined Earths share; none leads into the band). Look at `screenshot-d-2a-waves-running.png` and `screenshot-d-2b-waves-arrived.png`. `node calibration.js` runs 55 checks.
 
 Revision 11 (13 Nov, in chat): in stage 0 the earthquake's number stands at the top of the screen and each earthquake waits for a press of the gold button.
+
+Revision 12 (13 Nov, in chat): in stage 0 a dotted stub with a question mark comes up into each band post as it quivers; both "every direction at once" animations now show the waves running, with posts answering on arrival.
