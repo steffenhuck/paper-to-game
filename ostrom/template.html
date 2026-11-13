@@ -83,7 +83,8 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
   <h1>Ostrom&rsquo;s Pond</h1>
   <div class="pic"><canvas id="c-start" width="336" height="200"></canvas></div>
   <p>This is our village: ten of us and one pond. The pond has 40 fish in it today, and it has room for 50.</p>
-  <p>Every summer we all go fishing. The fair share is one fish each. Over the winter the fish have babies: a full pond makes about ten new fish, one for each of us. So if everyone takes one, the pond stays full. But some of us take two. Then the pond shrinks, and a small pond makes fewer babies.</p>
+  <p>Every summer we all go fishing. The fair share is one fish each. Every winter the fish that are left have babies: each fish can have one baby, but the pond only has food for 12 babies.</p>
+  <p>So if we all take one, 10 fish come out and 12 babies go in, and the pond slowly fills up. But some of us take two. Then more fish come out than go in, and the pond shrinks.</p>
   <p>Everyone carries their catch home in a bucket. So unless somebody was at the pond watching, nobody knows who took two.</p>
   <p>You are the village meeting: all of us, deciding together. Each summer you pick one card. Every card is a way of putting people off taking two: do nothing, have a talk, take turns watching, or get a policeman from the town. Then everyone goes fishing, and you see what the village can see.</p>
   <div class="aim">Keep the pond full and everyone fed for ten summers. Then comes an eleventh summer when nobody is watching. Will they still take one fish each?</div>
@@ -145,7 +146,8 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
 <div class="ov" id="help"><div class="wrap">
   <h2>How to play</h2>
   <p><b>The aim.</b> Keep the pond full and everyone fed for ten summers. Then comes an eleventh summer when nobody is watching. Will they still take one fish each?</p>
-  <p><b>The pond.</b> The blue blob is our pond. Every orange fish in it is a real fish, and the number next to it counts them. We start with 40, and a full pond holds 50. Over the winter the fish have babies: a full pond makes about ten new fish, one for each of us. If we take more than the babies make up for, the pond shrinks. Below about ten fish, it can&rsquo;t even replace one each.</p>
+  <p><b>The pond.</b> The blue blob is our pond. Every orange fish in it is a real fish, and the number next to it counts them. We start with 40, and there is room for 50.</p>
+  <p><b>The babies.</b> Every winter the fish that are left have babies. Three rules: each fish can have one baby; the pond only has food for 12 babies a winter; and the pond never holds more than 50 fish. So if we all take one, 10 come out and 12 go in, and the pond grows by two. If we take 12, it stays the same. Every fish we take beyond that makes the pond one fish smaller next summer. Watch out: if the pond drops below 20, even one each is too many, because fewer than ten fish are left to be parents.</p>
   <p><b>The village.</b> The ten stick people are us, with our names under us. Each summer everyone takes one fish or two. One each is fair. Nobody can tell in advance who will take two.</p>
   <p><b>The buckets.</b> Everyone carries their catch home in a bucket. A bucket with a ? on it means nobody saw what was in it. A fish drawn in someone&rsquo;s hand means somebody saw them take it: the watcher, or the policeman when he caught them. The meeting always finds out how many fish left the pond, so it always knows how many of us took two. It just doesn&rsquo;t always know who.</p>
   <p><b>The cards.</b> Each summer, touch a card to see what it does. It is drawn into the picture (a circle on the grass, a watcher on a stool, a policeman with a tall hat), and the box with the green line says what it costs, what happens to someone who takes two, and what we get to find out. <b>Leave it be:</b> nothing happens to anyone, and nobody knows who took two. <b>Have a talk:</b> we all promise to take one; if fish go missing, the circle tells everybody off next summer; nobody knows who broke the promise. <b>Take turns watching:</b> one of us watches instead of fishing and sees most people; seen taking two means a telling-off the first time, both fish back in the pond the second time, and both fish back plus no fishing next summer the third time. <b>A policeman now and then:</b> the town&rsquo;s policeman comes on some days, takes both fish from anyone he catches, costs one fish a summer, and tells us only who he caught; we stop telling each other off. <b>A policeman every day:</b> the same, every day, for a quarter of everything we catch.</p>
@@ -292,7 +294,7 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
     } else if (regime === 'none' || regime === 'test') {
       text(ctx, 'nobody', ax, ay + 40, 14, COL.mute); text(ctx, 'watching', ax, ay + 56, 14, COL.mute);
     }
-    if (opts.babies) text(ctx, '+' + opts.babies + ' babies!', PX - 30, PY + PRY + 22, 15, COL.ink, 'center');
+    if (opts.babies) text(ctx, '+' + opts.babies + (opts.babies === 1 ? ' baby!' : ' babies!'), PX - 30, PY + PRY + 22, 15, COL.ink, 'center');
     if (opts.town) { stick(ctx, 118, 4, 44, { hat: true }, k + 90); for (var f = 0; f < Math.min(12, opts.town); f++) fish(ctx, 150 + (f % 4) * 17, 14 + Math.floor(f / 4) * 10, 14, k + 91 + f, -1); text(ctx, opts.town + ' fish to the town', 142, 58, 13, COL.mute, 'left'); }
   }
   // the row: ten villagers, two rows of five; acts shown for the first `shown` of them
@@ -440,7 +442,8 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
     var g = r.grabbers, fishers = r.fishers;
     var howMany = function (n, what) { return n === 0 ? 'nobody ' + what : n === 1 ? 'one of us ' + what : n + ' of us ' + what; };
     var line1;
-    if (r.ranOut) line1 = '<b>The pond ran out. Only ' + r.catch + ' fish came out for ' + fishers + ' of us.</b>';
+    if (r.pondBefore <= 0) line1 = '<b>The pond is empty. Nobody caught anything.</b>';
+    else if (r.ranOut) line1 = '<b>The pond ran out. Only ' + r.catch + ' fish came out for ' + fishers + ' of us.</b>';
     else line1 = '<b>' + r.catch + ' fish came out of the pond. ' + fishers + ' of us went fishing, so ' + (g === 0 ? 'everyone took one.' : g === 1 ? 'one of us took two.' : g + ' of us took two.') + '</b>';
     if (r.watcher !== null) line1 += ' ' + V[r.watcher].name + ' was watching and didn’t fish.';
     var bannedNow = r.acts.filter(function (a) { return a.banned; }).map(function (a) { return a.name; });
@@ -471,7 +474,10 @@ footer.sig a{font-family:'Short Stack',cursive;font-style:italic;font-size:14px;
       l2 += ' Nobody told anyone off: that’s his job now.';
     }
     out.push('<p>' + l2 + '</p>');
-    var l3 = 'The pond: ' + r.pondBefore + ' fish, then ' + r.pondAfterFishing + ' after fishing' + (r.finesToPond ? ' (' + r.finesToPond + ' of them put back)' : '') + ', then the babies came: <b>' + r.pondAfter + '</b> (' + pondWord(r.pondAfter) + ').';
+    var left = r.pondAfterFishing, n = r.growth, lim = r.babyLimit;
+    var l3 = 'The pond had ' + r.pondBefore + ' fish. We took ' + r.catch + (r.finesToPond ? ' and ' + r.finesToPond + (r.finesToPond === 1 ? ' was' : ' were') + ' put back' : '') + ', so ' + (left === 0 ? 'none were' : left === 1 ? '1 was' : left + ' were') + ' left. ';
+    l3 += lim === 'none' ? 'With no fish left, no babies were born. ' : lim === 'parents' ? 'Each fish can have only one baby, so only ' + n + (n === 1 ? ' baby was' : ' babies were') + ' born. ' : lim === 'room' ? (n === 0 ? 'The pond was full, so there was no room for babies. ' : 'There was only room for ' + n + (n === 1 ? ' baby. ' : ' babies. ')) : 'Over the winter ' + n + ' babies were born. ';
+    l3 += 'Now the pond has <b>' + r.pondAfter + '</b> (' + pondWord(r.pondAfter) + ').';
     if (r.fees) l3 += ' The town took ' + r.fees + ' fish for the policeman' + (r.finesToTown ? ' and ' + r.finesToTown + ' from the ones he caught' : '') + '.';
     else if (r.finesToTown) l3 += ' The town took ' + r.finesToTown + ' fish from the ones he caught.';
     l3 += ' We ate ' + r.eaten + ' fish.';

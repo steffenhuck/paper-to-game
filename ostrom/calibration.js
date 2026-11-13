@@ -75,10 +75,12 @@ check('five policed summers then watching: watching starts lower and ends lower 
 // 8. the pond
 (() => {
   let s = C.POND_START, min = s, empty = null;
-  for (let t = 0; t < 10; t++) { s -= C.N * C.FAIR; s = Math.max(0, Math.min(C.POND_CAP, s + Math.round(C.POND_GROWTH * s * (1 - s / C.POND_CAP)))); min = Math.min(min, s); }
+  for (let t = 0; t < 10; t++) { s -= C.N * C.FAIR; s += M.babies(s).n; min = Math.min(min, s); }
   check('all ten take one: the pond after winter never falls below three-quarters full', min >= 0.75 * C.POND_CAP, f2(min));
   s = C.POND_START;
-  for (let t = 0; t < 10; t++) { s -= C.N * C.GREEDY; s = Math.max(0, Math.min(C.POND_CAP, s + Math.round(C.POND_GROWTH * s * (1 - s / C.POND_CAP)))); if (s <= 0 && empty === null) empty = t + 1; }
+  for (let t = 0; t < 10; t++) { s = Math.max(0, s - C.N * C.GREEDY); s += M.babies(s).n; if (s <= 0 && empty === null) empty = t + 1; }
+  check('the winter\u2019s rule: every fish left can have one baby, never more than twelve, never more fish than fifty', [[25, 12], [30, 12], [6, 6], [0, 0], [45, 5], [50, 0], [12, 12], [39, 11]].every(([S, n]) => M.babies(S).n === n) && M.babies(45).limit === 'room' && M.babies(6).limit === 'parents' && M.babies(25).limit === 'food' && M.babies(0).limit === 'none');
+  check('one fish each fills the pond (ten out, twelve in); twelve fish out holds it; thirteen shrinks it', (() => { const run = (take) => { let p = C.POND_START; for (let t = 0; t < 3; t++) { p -= take; p += M.babies(p).n; } return p; }; return run(10) > C.POND_START && run(12) === C.POND_START && run(13) < C.POND_START; })());
   check('all ten take two: the pond is empty within six summers', empty !== null && empty <= 6, 'empty after summer ' + empty);
 })();
 (() => { // rationing and the books

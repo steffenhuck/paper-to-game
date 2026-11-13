@@ -35,7 +35,8 @@ const fs = require('fs');
       if (shared.length + grabbers.length + banned.length + watcher.length !== 10) err(v, t, 'acts do not add to ten');
       // 1. the first sentence: the count the meeting can work out from the pond
       const paras = text.split(/\n+/); const first = paras[0];
-      if (rec.ranOut) { if (!first.startsWith(`The pond ran out. Only ${took} fish came out for ${fishers} of us.`)) err(v, t, `ran-out sentence "${first}"`); }
+      if (rec.pondBefore <= 0) { if (!first.startsWith('The pond is empty. Nobody caught anything.')) err(v, t, `empty-pond sentence "${first}"`); }
+      else if (rec.ranOut) { if (!first.startsWith(`The pond ran out. Only ${took} fish came out for ${fishers} of us.`)) err(v, t, `ran-out sentence "${first}"`); }
       else {
         const expect = `${took} fish came out of the pond. ${fishers} of us went fishing, so ` + (grabbers.length === 0 ? 'everyone took one.' : grabbers.length === 1 ? 'one of us took two.' : `${grabbers.length} of us took two.`);
         if (!first.startsWith(expect)) err(v, t, `first sentence "${first}" vs "${expect}"`);
@@ -68,9 +69,15 @@ const fs = require('fs');
         if (a.sanction === 'town' && d.note !== 'fish to town') err(v, t, `${a.name} caught, note "${d.note}"`);
       }
       // 4. the pond, the town, the shelf, the books
-      const pm = /The pond: (\d+) fish, then (\d+) after fishing.*?babies came: (\d+)/.exec(text);
-      if (!pm) err(v, t, 'no pond sentence');
-      else if (Number(pm[1]) !== rec.pondBefore || Number(pm[2]) !== rec.pondAfterFishing || Number(pm[3]) !== rec.pondAfter || rec.pondAfter !== r.pond) err(v, t, `pond text ${pm.slice(1).join('/')} vs record ${rec.pondBefore}/${rec.pondAfterFishing}/${rec.pondAfter}/${r.pond}`);
+      const pm = /The pond had (\d+) fish\. We took (\d+)(?: and (\d+) (?:was|were) put back)?, so (\d+|none) (?:was|were) left\./.exec(text), nm = /Now the pond has (\d+)/.exec(text);
+      const S = rec.pondAfterFishing, expectBabies = Math.max(0, Math.min(S, 12, 50 - S));
+      if (!pm || !nm) err(v, t, 'no pond sentence');
+      else {
+        if (Number(pm[1]) !== rec.pondBefore || Number(pm[2]) !== took || Number(pm[3] || 0) !== rec.finesToPond || (pm[4] === 'none' ? 0 : Number(pm[4])) !== S || Number(nm[1]) !== rec.pondAfter || rec.pondAfter !== r.pond) err(v, t, `pond text ${pm.slice(1).join('/')}/${nm[1]} vs record ${rec.pondBefore}/${took}/${rec.finesToPond}/${S}/${rec.pondAfter}/${r.pond}`);
+        if (rec.growth !== expectBabies || S + rec.growth !== rec.pondAfter) err(v, t, `babies ${rec.growth} vs rule ${expectBabies}`);
+        if (rec.growth > 0 && !new RegExp('\\b' + rec.growth + ' bab').test(text)) err(v, t, `babies ${rec.growth} not stated in "${text.split(/\n+/)[2]}"`);
+        if (rec.growth === 0 && !/no babies were born|no room for babies/.test(text)) err(v, t, 'zero babies not explained');
+      }
       if (rec.pondBefore - took + rec.finesToPond !== rec.pondAfterFishing) err(v, t, 'pond arithmetic');
       const inHands = rec.acts.reduce((s, a) => s + (a.took - a.fine), 0);
       const m = /We ate (\d+) fish/.exec(text); if (!m) err(v, t, 'no "we ate"'); else if (Number(m[1]) !== inHands - rec.fees) err(v, t, `text ate ${m[1]} vs hands ${inHands} − fee ${rec.fees}`);
