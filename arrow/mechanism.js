@@ -21,7 +21,8 @@
     // (our choice: so that a second and third game do not open on the same picture).
     openings: [[[0, 1, 2], [2, 0, 1]], [[1, 2, 0], [0, 1, 2]], [[2, 0, 1], [1, 2, 0]]],
     freeSundays: 3,                           // our choice: on the first three Sundays Arrow hands out ballots that open one new ruling with the most room; after that, the least room
-    valuesPerRuling: 3                        // Anna's way, level, Beat's way: P, I, and the reverse P (Definitions 1-2, p. 332)
+    valuesPerRuling: 3,                       // Anna's way, level, Beat's way: P, I, and the reverse P (Definitions 1-2, p. 332)
+    clara: [0, 1, 2]                          // our choice: the ballot the hired tie-breaker, a third voter who never changes her mind, starts with
   };
 
   // ---------- the paper's objects ----------
@@ -203,12 +204,39 @@
     return { holds: a.holds, broken: a.broken, of: 36, boss: d, custom: cu, counts: c, fate: fate, best: all.bestWithoutBoss, index: bookIndex(book), annas: a.annas, beats: a.beats };
   }
 
+  // ---------- hired tie-breakers (ours: the second act) ----------
+  // A tie-breaker is a rule book. If Anna or Beat breaks every tie, the book is that voter's six times over.
+  // If Clara, a third voter whose ballot never changes, joins and each pair goes to the majority of three, then Anna and Beat
+  // win where they agree (2 of 3) and Clara's ballot decides where they do not: the book in which her order settles every disagreement.
+  function voterBook(v) { return [v, v, v, v, v, v]; }
+  function clarasBook(clara) {
+    var r = rankOf(clara), b = [];
+    for (var p = 0; p < 3; p++) {
+      var first = PAIRS[p][0], second = PAIRS[p][1], w = r[first] < r[second] ? first : second;
+      b.push(w === first ? 'A' : 'B'); b.push(w === second ? 'A' : 'B');
+    }
+    return b;
+  }
+  // One Sunday counted as a plain majority of three ballots, pair by pair (the method of the paper's first page, p. 329).
+  function majorityOfThree(anna, beat, clara) {
+    var ballots = [anna, beat, clara], ranks = ballots.map(rankOf), pairs = [], top = [];
+    for (var p = 0; p < 3; p++) {
+      var a = PAIRS[p][0], b = PAIRS[p][1], forA = [], forB = [];
+      ranks.forEach(function (r, i) { (r[a] < r[b] ? forA : forB).push(i); });
+      var w = forA.length > forB.length ? a : b;
+      pairs.push({ pair: p, top: w, votes: Math.max(forA.length, forB.length), winners: forA.length > forB.length ? forA : forB }); top.push(w);
+    }
+    var lists = LISTS.filter(function (rank) { return relIn(rank, 0) === top[0] && relIn(rank, 1) === top[1] && relIn(rank, 2) === top[2]; });
+    return { pairs: pairs, list: lists.length ? lists[0] : null, clash: lists.length ? null : clashOf(top) };
+  }
+
   root.MECH = {
     CONFIG: CONFIG, PAIRS: PAIRS, BALLOTS: BALLOTS, LISTS: LISTS,
     rankOf: rankOf, ballotIndex: ballotIndex, sameList: sameList, tiers: tiers,
     pairInfo: pairInfo, pairOutcome: pairOutcome, legalLists: legalLists, newRulings: newRulings, post: post,
     emptyBook: emptyBook, isComplete: isComplete, nextBallots: nextBallots,
     readSunday: readSunday, audit: audit, clashOf: clashOf, dictator: dictator, custom: custom, counts: counts,
-    bookIndex: bookIndex, bookFromIndex: bookFromIndex, allBooks: allBooks, verdict: verdict
+    bookIndex: bookIndex, bookFromIndex: bookFromIndex, allBooks: allBooks, verdict: verdict,
+    voterBook: voterBook, clarasBook: clarasBook, majorityOfThree: majorityOfThree
   };
 })(typeof module !== 'undefined' && module.exports ? module.exports : this);

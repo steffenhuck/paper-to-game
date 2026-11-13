@@ -83,6 +83,22 @@ check('the six books in which a fixed order of the plans wins every disagreement
 let clashOk = true; for (let i = 0; i < 729; i++) { const a = M.audit(M.bookFromIndex(i)); a.cells.forEach(c => { if (!c.list && (!c.clash || c.clash.actual === c.clash.expect)) clashOk = false; if (c.list && c.clash) clashOk = false; }); }
 check('every Sunday without a list comes with a chain "a over-or-level b, b over-or-level c, but not a over c" taken from its own pair results', clashOk);
 
+// --- the hired tie-breakers (ours), against the paper's first page
+{ let same = true, n34 = true, condorcet = true;
+  B.forEach(cl => { const bk = M.clarasBook(cl); const au = M.audit(bk); if (au.holds !== 34) n34 = false;
+    au.cells.forEach(c => { const m = M.majorityOfThree(c.anna, c.beat, cl);
+      if (m.pairs.some((q, p) => q.top !== c.pairs[p].top) || (!!m.list) !== (!!c.list)) same = false;
+      if (!c.list) { const pos = [0, 1, 2].map(x => [c.anna, c.beat, cl].map(o => o.indexOf(x)).sort().join('')); if (pos.some(s => s !== '012') || !m.clash.circle || m.pairs.some(q => q.votes !== 2)) condorcet = false; } }); });
+  check('a third voter with a fixed ballot and majority of three is the rule book in which her order settles every disagreement (all 6 ballots, all 36 Sundays)', same);
+  check('each such tie-breaker gives a ranking on 34 of 36 Sundays', n34);
+  check('its two failures are the paradox of voting (p. 329): each plan first on one ballot, second on one, third on one; a circle of 2-1 majorities', condorcet); }
+{ const m = M.majorityOfThree([0, 1, 2], [1, 2, 0], [2, 0, 1]); check('p. 329 through majorityOfThree: A>B>C, B>C>A, C>A>B gives no ordering, a circle', m.list === null && m.clash.circle); }
+{ let n = 0; B.forEach(a => B.forEach(b => B.forEach(c => { if (!M.majorityOfThree(a, b, c).list) n++; }))); check('three free voters and a simple majority: 12 of the 216 sets of ballots give no ordering', n === 12, String(n)); }
+check('with two voters, a draw on every disagreement fails on 12 of 36 Sundays', M.audit(M.voterBook('E')).broken === 12);
+check('a voter as tie-breaker is that voter as dictator', M.dictator(M.voterBook('A')) === 'A' && M.dictator(M.voterBook('B')) === 'B');
+{ const o = M.CONFIG.openings[0], s = M.readSunday(M.emptyBook(), o[0], o[1]); // a coin on Sunday 1: Tower over Tree (Anna's side) and Tree over Fountain (Beat's side)
+  check('a coin can land in a circle on Sunday 1: Fountain over Tower (both), Tower over Tree, Tree over Fountain', M.clashOf([0, 1, 2]).circle && s.pairs[0].agree && s.pairs[0].winner === 0 && !s.pairs[1].agree && !s.pairs[2].agree); }
+
 out.push('');
 out.push('Sundays that hold, over all 729 rule books: ' + JSON.stringify(all.hist));
 out.push('Sundays that hold, over the ' + paths + ' paths of play (three openings): ' + JSON.stringify(hist));

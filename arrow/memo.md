@@ -163,3 +163,26 @@ The spread is ten values wide and the decisions matter. The simple rule that win
 - **Full session in headless Chromium** (`session-test.js`, `session-log.txt`): a fair-minded game (34 of 36, a fixed-order book), help opened and closed mid-play and during the check, three squares touched, the verdict, About, then a second game on the second opening that makes Anna the boss. It caught one bug: the check button stayed disabled in a second game. No errors, no horizontal scroll at 380 px.
 - **Self-review from the screenshots.** Aim from the start screen alone: yes. Discovery from the top of the end screen alone: yes. Does it look like a game in the table? The nearest is *Who Started It?*; this is white, red and black with boxes and a struck-through sheet, no circles overprinting, no lowercase headlines.
 - **Not done:** play by a real stranger; a measured session length; the DOI and the JSTOR link could not be opened from the session (doi.org refused the request) and are given from memory.
+
+## 20. Revision 1 (13 Nov 2026): tie-breaks, Clara, and a first-time voter
+
+From the conversation after the first build. Steffen: with two voters "it will be extremely difficult to understand that the problem is not in the missing tie break"; then, "perhaps we could have a third player who is always voting for option A"; then, "this should be understandable to any 16 year old who just got franchise". (An idea to reduce the game to two options was raised and withdrawn: Condorcet already needs three.)
+
+**The observation the revision rests on.** A third voter whose ballot never changes, plus a simple majority, is one of the 729 books: Anna and Beat win where they agree (two of three), and where they disagree her ballot decides, always the same way. That is the fixed-order book, 34 of 36. Its two failures are exactly the paradox of voting of the paper's first page: three ballots on which each plan is first once, second once and third once, and a circle of 2–1 majorities. So the missing tie-break is not missing: every tie-break that is kept is a way of filling the six boxes, and the game had not said so.
+
+**What changed.**
+
+- **The spine is now the tie.** A disagreement is "1–1, a tie"; an agreement is "2–0"; a ruling is a tie-break; the rule book is "your tie-break book"; "level" is "a draw"; a list is a ranking. The start screen opens on "Voting is the easy part. Counting is where it gets hard."
+- **Sunday 1 shows the tempting sixth card**, both ties left as draws, crossed out, with one sentence on why it is not a ranking (the Tree would have to share a step with the Fountain and with the Tower). This is eqs. (7)–(8), and it is why ties have to be broken at all.
+- **A new act after Arrow's check: Hire a tie-breaker.** Clara (a third voter, any of six fixed ballots), Anna, or Beat. The 36 Sundays run again. Clara: 34, and one of her two circles is read out with three ballots and three 2–1 votes. Anna or Beat: 36 and a boss. As many tries as the player likes; the verdict is offered after the first.
+- **The tie-break book** is six full-width lines in words instead of six small boxes.
+- **The verdict's questions** are now five: is a boss bad luck; why not toss a coin; would more voters fix it; why must the same tie get the same answer; so is voting broken. The last one says what Arrow did not show (that voting usually fails) and what he did.
+- **Mechanism:** `voterBook`, `clarasBook`, `majorityOfThree`, and `CONFIG.clara`. **Calibration: 29 checks, 0 failed**; the new ones: Clara with a majority of three equals her book on all 36 Sundays for all six ballots; each gives 34; her failures are Condorcet triples with 2–1 circles; p. 329 through `majorityOfThree`; three free voters give 12 circles in 216; a draw on every tie fails on 12 of 36; a coin can land in a circle on Sunday 1.
+
+**Claim boundaries, added.** Clara is ours: her ballot is fixed where Arrow's individuals are free, so the act is not his theorem for three voters. The screen says so in the answer to "Would more voters fix it?", and the About screen says it again.
+
+**Kept against the first build's doubt.** Sundays 4 and 5 stay forced; the line under the single card now ends "The last tie breaks itself."
+
+**Not rebuilt from scratch.** The concept, mechanism core and look are the first build's, so this is a revision in place and nothing moved to `previous/`. Sections 0–19 above describe the first build in its own words ("rule book", "list", "level").
+
+**Session:** the scripted browser run now hires Clara, changes her ballot, hires Anna, and opens help from the new screen; no errors, no horizontal scroll at 380 px. Still the builder's review only.
