@@ -19,8 +19,16 @@ const path = require('path');
     await idle(); await page.waitForTimeout(150);
     const n = await page.evaluate(() => window.__game().lists.length); log.push(`Sunday ${k + 1}: ${n} list(s) on offer; ${await say('lists-note')}`);
     if (k === 0) { await shot('a-1-ready'); if (await page.isEnabled('#b-post')) errors.push('Post enabled before a ranking is touched'); }
-    const pickList = async (i) => { const keys = await page.evaluate((i) => { const M = window.MECH, r = window.__game().lists[i]; return M.tiers(r).map(t => t.slice().sort().join(',')); }, i); await page.click(`#opts1 .opt[data-key="${keys[0]}"]`); await page.waitForTimeout(80); if (keys[1] !== undefined && await page.isVisible('#step2')) { await page.click(`#opts2 .opt[data-key="${keys[1]}"]`); await page.waitForTimeout(80); } };
-    if (k === 0) { await pickList(2); await page.waitForTimeout(100); await shot('a-1-preview-annas'); }
+    const pickList = async (i) => { const keys = await page.evaluate((i) => { const M = window.MECH, r = window.__game().lists[i]; return M.tiers(r).map(t => t.slice().sort().join(',')); }, i);
+      if (await page.locator('#opts1').count()) { await page.click(`#opts1 .opt[data-key="${keys[0]}"]`); await page.waitForTimeout(80); }
+      if (keys[1] !== undefined && await page.isVisible('#step2')) { await page.click(`#opts2 .opt[data-key="${keys[1]}"]`); await page.waitForTimeout(80); }
+      const sel = await page.evaluate(() => window.__game().sel); if (sel !== i) errors.push('wanted ranking ' + i + ', got ' + sel + ' on Sunday ' + (window.__k)); };
+    await page.evaluate((k) => { window.__k = k + 1; }, k);
+    if (k === 0) { await pickList(2); await page.waitForTimeout(100); await shot('a-1-preview-annas');
+      // a draw at the top: the second question must not be asked
+      await pickList(0); if (await page.isVisible('#step2')) errors.push('second question shown after a draw at the top'); await shot('a-1-draw');
+      if (!(await page.isEnabled('#b-post'))) errors.push('Post not enabled after a draw at the top'); }
+    if (k === 3 && await page.locator('#opts1').count()) errors.push('a question with one answer is shown on Sunday 4');
     if (k === 1) { await page.click('#q-play'); await page.waitForTimeout(150); await shot('help'); await page.click('#b-help-close'); await page.waitForTimeout(100); }
     if (k === 3) await shot('a-4-one-list');
     await pickList(Math.min(picksA[k], n - 1)); await page.waitForTimeout(100);
@@ -65,7 +73,7 @@ const path = require('path');
     await idle(); await page.waitForTimeout(80);
     const i = await page.evaluate(() => { const g = window.__game(), M = window.MECH; let best = 0, bs = -1; g.lists.forEach((w, i) => { const s = M.newRulings(g.book, g.nb.anna, g.nb.beat, w).filter(r => r.value === 'A').length; if (s > bs) { bs = s; best = i; } }); return best; });
     if (k === 0) await shot('b-1-ready');
-    { const keys = await page.evaluate((i) => { const M = window.MECH, r = window.__game().lists[i]; return M.tiers(r).map(t => t.slice().sort().join(',')); }, i); await page.click(`#opts1 .opt[data-key="${keys[0]}"]`); if (keys[1] !== undefined && await page.isVisible('#step2')) await page.click(`#opts2 .opt[data-key="${keys[1]}"]`); }
+    { const keys = await page.evaluate((i) => { const M = window.MECH, r = window.__game().lists[i]; return M.tiers(r).map(t => t.slice().sort().join(',')); }, i); if (await page.locator('#opts1').count()) await page.click(`#opts1 .opt[data-key="${keys[0]}"]`); if (keys[1] !== undefined && await page.isVisible('#step2')) await page.click(`#opts2 .opt[data-key="${keys[1]}"]`); }
     await page.click('#b-post'); await page.waitForTimeout(80);
     log.push(`B Sunday ${k + 1}: ` + await say('res'));
     if (k === 4) await shot('b-5-posted');

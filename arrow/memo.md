@@ -198,3 +198,11 @@ Steffen: "if there is an immediate choice it would not be about a ranking but ab
 ## 23. Revision 4 (13 Nov 2026): nothing in the table looks pressable
 
 Steffen: the plan-against-plan table still looked like a place to choose. The open result slots were dashed boxes with a question mark; they are now plain grey text, "set by your answers above", with no border, and the tie line says "Nothing to press here: your answers above break it." The section is headed "What your answers decide, plan against plan." The table is a readout only, which it always was.
+
+## 24. Revision 5 (13 Nov 2026): the table goes; only real questions are asked
+
+Steffen: "I'm still struggling with the plan against plan. what does it do for the game?" and "I let chance decide in my first round and then got 'If that falls through, what then?' … if chance decides it just decides. please do a full rigorous sweep."
+
+- **The plan-against-plan table is gone.** It was a readout of what the chosen ranking writes into the book, and the book and the posted line already say that. What it carried that mattered, which pairs are settled before the player answers, is now one sentence above the questions: "Both put the Fountain above the Tower: that is settled, 2–0. Where they disagree it is 1–1, a tie, and your answer breaks it." On later Sundays the sentence lists the 2–0s and the ties the book has broken, with their Sunday. Pairs still appear where they are needed, in Arrow's check, where the circle has to be read pair by pair.
+- **A question with one possible answer is not asked.** After a draw at the top, the third plan is the only fallback, so the second question no longer appears; after "any of the three" nothing follows; on a forced Sunday neither question appears, only the sentence that says why and the ranking it leaves. The line under the answers states the ranking and which ties it breaks ("Anna wanted the Tower, Beat the Tree: Beat wins").
+- **Sweep.** Template searched for every element and word of the earlier versions (cards, the crossed-out card, slots, table rows, "lone" options, "touch the ranking"): none left. Help page rewritten to match. The browser session now also checks that no second question follows a draw at the top and that no question is shown on Sunday 4; no errors.
