@@ -18,7 +18,7 @@ const fs = require('fs');
   await page.goto('file://' + path.resolve(__dirname, 'ostroms-pond.html') + '#v=777'); await page.waitForTimeout(600);
   await page.click('#b-begin'); await page.waitForTimeout(300);
   for (let v = 0; v < villages; v++) {
-    const bias = v % 4;
+    const bias = v % 4; let emptied = false;
     for (let t = 0; t < 6; t++) {
       const key = Math.random() < 0.5 ? keys[bias] : keys[Math.floor(Math.random() * keys.length)];
       const pick = await page.evaluate(() => { const s = window.__game.state; return { summer: s.summer, eaten: s.eaten, heading: document.getElementById('h-summer').innerText, shelf: document.getElementById('l-shelf').innerText, row: window.__game.row }; });
@@ -88,9 +88,24 @@ const fs = require('fs');
       if (rec.migration || r.names.includes('Kit')) err(v, t, 'a newcomer appeared');
       if (rec.migration && !(rec.migration.came === 'Kit' && r.names.includes('Kit') && !r.names.includes(rec.migration.left))) err(v, t, 'migration inconsistent');
       log.push(`village ${v} summer ${t + 1} ${key}: ${text.replace(/\n+/g, ' / ')}`);
+      const nextLabel = await txt('b-next');
+      if (r.pond <= 0) { if (nextLabel !== 'See what became of us') err(v, t, `pond empty but button says "${nextLabel}"`); emptied = true; await page.click('#b-next'); await page.waitForTimeout(200); break; }
+      if (nextLabel !== (t < 5 ? 'Next summer' : 'One more summer')) err(v, t, `button says "${nextLabel}"`);
       await page.click('#b-next'); await page.waitForTimeout(120);
     }
-    // the seventh summer and the reveal
+    // the seventh summer and the reveal, or the early end when the pond was fished out
+    if (emptied) {
+      if (!(await page.evaluate(() => document.getElementById('s-end').classList.contains('on')))) errors.push(`village ${v}: pond empty but no end screen`);
+      const ee = await page.evaluate(() => ({ head: document.getElementById('end-head').innerText, lines: document.getElementById('end-lines2').innerText, paper: document.getElementById('end-paper').innerText, n: window.__game.state.history.length, test: window.__game.state.test }));
+      if (!/^The pond is empty\. After (one summer|\d summers) there is nothing left to fish\.$/.test(ee.head)) errors.push(`village ${v}: early-end head "${ee.head}"`);
+      if (ee.test) errors.push(`village ${v}: a seventh summer was played after the pond emptied`);
+      if (!/no seventh summer/.test(ee.lines) || !/fished out before the seventh summer/.test(ee.paper)) errors.push(`village ${v}: early-end lines missing`);
+      log.push(`village ${v} EARLY END after ${ee.n}: ${ee.head} / ${ee.lines.replace(/\n+/g, ' / ')}`);
+      await page.click('#b-again'); await page.waitForTimeout(300);
+      const fresh0 = await page.evaluate(() => { const s = window.__game.state; return { summer: s.summer, heading: document.getElementById('h-summer').innerText }; });
+      if (fresh0.summer !== 0 || fresh0.heading !== 'Summer 1 of 6') errors.push(`village ${v + 1}: not fresh after an early end`);
+      continue;
+    }
     if (!(await page.evaluate(() => document.getElementById('ph-test').style.display !== 'none'))) errors.push(`village ${v}: no seventh summer`);
     await page.click('#b-test');
     await page.waitForFunction(() => document.getElementById('s-end').classList.contains('on'), null, { timeout: 30000 }); await page.waitForTimeout(100);
