@@ -95,8 +95,8 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
   <div class="caps">A game from Inge Lehmann’s paper “P′” (1936)</div>
   <h1>Lehmann’s Shadow</h1>
   <div class="plate start-pic" id="start-plate"></div>
-  <p>The Earth is a ball. When the ground shakes somewhere, the shaking runs right through the ball and comes out on the far side, where listening posts feel it. You are that shaking: one wave.</p>
-  <p>Choose how steeply to dive in, fire, and see where you come out: the stuff inside the Earth bends you on the way. Twelve waves to light as many posts as you can. Then a puzzle: some posts can never be reached, unless something is hidden in the middle. That is what Inge Lehmann found in 1936.</p>
+  <p>The Earth is a ball. When the ground shakes somewhere, the shaking runs right through the ball and comes out on the far side. You are the earthquake: a wave sent through the ball. Find out how it bends, through your listening posts, which record what comes out on the other side.</p>
+  <p>Choose the direction of your wave: does it go straight through the middle, through the core, just touch it, or pass it by? Each time, the listening posts tell you what they recorded. Pay attention to it, and you will learn how the Earth is made up, right down to its inner core. Twelve waves; then a puzzle, and what Inge Lehmann found in 1936.</p>
   <div class="aim">Light as many listening posts as you can with twelve waves.</div>
   <button class="btn pri" id="b-begin">Begin</button>
   <button class="btn link" id="b-help-start">How to play</button>
@@ -143,9 +143,9 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
     <div class="lab">What you did</div><p id="v-did"></p>
     <div class="plate" id="end-plate"></div>
     <p class="small" id="v-ghost"></p>
-    <div class="lab">What Lehmann said</div><p id="v-paper"></p>
+    <div class="lab">What Lehmann found</div><p id="v-paper"></p>
     <div class="quote" id="v-quote"></div>
-    <div class="lab">What that means</div><p id="v-means"></p>
+    <div class="lab">What happened next</div><p id="v-means"></p>
   </div>
   <button class="btn pri" id="b-again">Play again</button>
   <div class="row2"><button class="btn" id="b-help-end">How to play</button><button class="btn" id="b-about">About</button></div>
@@ -474,15 +474,15 @@ var MECH = (function () {
     var last = game.quakes[game.quakes.length - 1], shadow = game.reveal ? game.reveal.shadow : shadowPosts(twoShell());
     var best = game.quakes.reduce(function (b, q) { return !b || q.lit.length > b.lit.length ? q : b; }, null);
     var L = lehmannEarth(), lCov = coverage(L);
-    var did = 'You fired ' + game.shots.length + ' waves into an Earth with two layers, a fast mantle and a slow core, and found the shadow: a band on the far side, from ' + deg(shadow[0]) + ' to ' + deg(shadow[shadow.length - 1]) + ' round, that no wave can reach.';
+    var did = 'You were the earthquake. You fired ' + game.shots.length + ' waves into an Earth made of two layers: a mantle, where waves run fast, and a core, where they run slower. Each time you chose the direction, and the listening posts told you where your wave came out. Waves that missed the core came out on your side of the Earth, no further than ' + deg(game.reveal ? game.reveal.coverage.mantle[1] : 112.5) + ' round. Waves that went through the core were bent so hard they came out near the far side. And a band in between, from ' + deg(shadow[0]) + ' to ' + deg(shadow[shadow.length - 1]) + ' round, never got a wave at all: the shadow.';
     if (last) {
-      did += ' Then you put a ball inside the core where waves run ' + inBall(last.speedRatio) + ', and ' + countPosts(last.lit.length) + ' felt the quake.';
+      did += ' Then you built a smaller ball inside the core where waves run ' + inBall(last.speedRatio) + ', and fired a quake at every angle: ' + countPosts(last.lit.length) + ' felt it.';
       if (best && best !== last && best.lit.length > last.lit.length) did += ' Your best ball, where waves ran ' + inBall(best.speedRatio) + ', reached ' + countPosts(best.lit.length).replace(' shadow posts', '') + '.';
-    }
-    var paper = 'Lehmann’s ball is ' + sizeWords(CONFIG.INNER_FRAC) + ', about ' + Math.round(CONFIG.INNER_FRAC * CONFIG.R0_KM / 100) * 100 + ' km from its centre to its edge, and waves run ' + inBall(CONFIG.V_INNER / CONFIG.V_CORE).replace('in the ball', 'in it') + '. Waves bounce off it and come up from about ' + deg(lCov.reflect[0]) + ' round: right inside the shadow. They come up steeply, so the ground bounces up and down hard, and they get stronger the further round they land. That is just what the posts in the shadow had felt. She wrote that the idea seemed likely, but could not be proved with what she had.';
-    var means = 'She was right. Two years later Gutenberg and Richter worked out the ball’s size: about ' + CONFIG.PAPER.GUTENBERG_RICHTER_KM + ' km from centre to edge. In 1939 Jeffreys showed that waves creeping round the core could not explain what the shadow posts felt. By 1946 everyone agreed: the Earth has a solid ball in the middle of its liquid core. She found it with cardboard cards, oatmeal boxes and a pencil, in her garden in Copenhagen.';
+    } else did += ' You never built the ball.';
+    var paper = 'In 1936 the posts inside the shadow had felt something after all: weak, but real, and the ground there bounced mostly up and down, the way it does when a wave comes up steeply. Most scientists said the waves had crept round the outside of the core. Inge Lehmann worked out, by hand, that creeping waves could not come up steeply and would not get stronger further round. So she tried another idea: a smaller ball inside the core, ' + sizeWords(CONFIG.INNER_FRAC) + ' (about ' + Math.round(CONFIG.INNER_FRAC * CONFIG.R0_KM / 100) * 100 + ' km from its centre to its edge), where waves run ' + inBall(CONFIG.V_INNER / CONFIG.V_CORE).replace('in the ball', 'in it') + ' around it. A wave that hits faster rock at a glancing angle bounces off it, and her bounced waves come up from about ' + deg(lCov.reflect[0]) + ' round: right inside the shadow, steeply, and stronger the further round they land. That matched what the posts had felt. She wrote that the idea seemed likely, but could not be proved with what she had.';
+    var means = 'She was right. Two years later Gutenberg and Richter worked out the ball\u2019s size from the times the waves took: about ' + CONFIG.PAPER.GUTENBERG_RICHTER_KM + ' km from centre to edge. In 1939 Jeffreys showed that creeping waves could not explain the shadow posts at all. For about twenty years people argued over whether waves really run faster in the ball; they do. By 1946 everyone agreed on the picture we still have: a rocky mantle, a liquid core, and a solid ball in the middle, the inner core. Lehmann found it with cardboard cards, oatmeal boxes and a pencil, in her garden in Copenhagen, in a job where research was not even part of her duties.';
     var fate;
-    if (!last) fate = 'You never built the ball.';
+    if (!last) fate = 'You found the shadow, and never built the ball.';
     else if (last.lit.length === 4 && last.speedRatio > 1) fate = 'Your ball does what hers does.';
     else if (last.lit.length === 4 && last.speedRatio < 1) fate = 'Your ball fills the shadow the wrong way round: waves plunge through it, cross the far point and come back. In this model that works too. But the shadow posts felt waves that came up steeply and got stronger further round, and only a bounce off a faster ball gives that. Later work found the ball faster.';
     else if (last.lit.length > 0 && last.speedRatio < 1) fate = 'Your ball fills part of the shadow, the wrong way round: waves plunged through it, crossed the far point and came back.';
