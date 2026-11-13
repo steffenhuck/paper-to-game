@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Lehmann’s Shadow</title>
+<title>Find Your Inner Core with Lehmann</title>
 <script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<meta name="description" content="You are an earthquake wave. Choose how steeply you dive into Inge Lehmann’s 1936 model Earth, watch yourself bend at the core, and find the band of the far side no wave can reach. Then go back in and find what is hidden in the middle.">
+<meta name="description" content="You are an earthquake. Send waves through the Earth and see which listening posts they reach. Does the Earth have one core, or a core within the core? A game from Inge Lehmann’s 1936 paper “P′”.">
 <style>
 @font-face{font-family:Fraunces;font-weight:400 700;font-style:normal;src:url(data:font/woff2;base64,/*__F_FRAUNCES__*/) format('woff2')}
 @font-face{font-family:Fraunces;font-weight:400;font-style:italic;src:url(data:font/woff2;base64,/*__F_FRAUNCES_I__*/) format('woff2')}
@@ -43,8 +43,6 @@ i{font-style:italic}
 .plate{position:relative;margin:4px 0 2px}
 .plate svg{display:block;width:100%;height:auto}
 /* the drum */
-.drum{margin:2px 0 6px}
-.drum svg{display:block;width:100%;height:auto}
 /* dials */
 .dial{margin:4px 0 2px}
 .dial .dl{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px}
@@ -64,15 +62,10 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
 .rule{font-size:15px;line-height:1.38;color:var(--mute);margin:6px 0 4px}
 .rule b{color:var(--bone);font-weight:400}
 .rule .oc{color:var(--ochre)} .rule .ru{color:#C2634F} .rule .bo{color:var(--bone)} .rule .go{color:var(--gold)}
-.head{font-weight:700;font-size:16.5px;line-height:1.25;text-align:center;min-height:42px;display:flex;align-items:center;justify-content:center;margin:2px 0 0;color:var(--bone)}
-.head.gold{color:var(--gold)}
-.tally{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);text-align:center;margin:0 0 2px}
-.status{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);text-align:center;margin:4px 0 2px}
 .result{border-left:2px solid var(--gold);padding:6px 0 6px 12px;margin:10px 0 8px}
 .result p{margin:0 0 6px}.result p:last-child{margin:0}
 .result .lead{font-weight:700}
 .result .mu{color:var(--mute)}
-.result .next{font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-top:8px}
 /* overlays */
 .ov{position:fixed;inset:0;background:var(--basalt);overflow-y:auto;display:none;z-index:9}
 .ov.on{display:block}
@@ -86,15 +79,27 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
 .sig{text-align:center;margin:22px 0 4px;font-style:italic;font-size:14px}
 .sig a{color:var(--mute);text-decoration:none;text-transform:lowercase}
 .start-pic{margin:0 -4px}
-.rec{margin:8px 0}
-.rec svg{display:block;width:100%;height:auto}
-.ring{animation:ringpulse 1.6s ease-in-out infinite}
-@keyframes ringpulse{0%,100%{opacity:1}50%{opacity:.3}}
-@media (prefers-reduced-motion:reduce){.ring{animation:none}}
-.result .found{color:var(--gold);font-weight:700}
 .hide{display:none!important}
 .help p,.help li{font-size:16px}
 .help ol{padding-left:20px}
+.plate.aim svg{touch-action:none;cursor:crosshair}
+.legend{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 14px;font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:0 0 6px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:50%;box-sizing:border-box}
+.legend .l-rec{border:1.5px solid var(--bone)} .legend .l-faint{border:1.5px dashed var(--gold)} .legend .l-on{background:var(--gold)}
+.head{font-weight:700;font-size:17px;line-height:1.25;text-align:center;min-height:44px;display:flex;align-items:center;justify-content:center;margin:0;color:var(--bone)}
+.head.gold{color:var(--gold)}
+.cue{font-weight:700;font-size:21px;line-height:1.15;text-align:center;color:var(--gold);margin:4px 0 6px;font-variation-settings:"opsz" 60,"SOFT" 50}
+.cue.pop{animation:pop .5s ease-out}
+@keyframes pop{0%{transform:scale(.86);opacity:.2}60%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+@media (prefers-reduced-motion:reduce){.cue.pop{animation:none}}
+.tally{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);text-align:center;margin:6px 0 2px}
+.choice{font-weight:700;font-size:21px;line-height:1.2;text-align:center;margin:14px 0 8px}
+.pair{display:flex;gap:8px;margin:10px 0 4px}
+.pair>div{flex:1;min-width:0}
+.pair .pl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);text-align:center;line-height:1.35;margin-top:2px}
+.pair .pl b{display:block;color:var(--bone);font-weight:400}
+.pair .picked{outline:1px solid var(--gold);outline-offset:3px}
 </style>
 </head>
 <body>
@@ -102,50 +107,54 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
 
 <section class="screen on" id="s-start">
   <div class="caps">A game from Inge Lehmann’s paper “P′” (1936)</div>
-  <h1>Lehmann’s Shadow</h1>
+  <h1>Find Your Inner Core with Lehmann</h1>
   <div class="plate start-pic" id="start-plate"></div>
   <p>The Earth is a ball. When the ground shakes somewhere, the shaking runs right through the ball and comes out on the far side. You are the earthquake: a wave sent through the ball. Find out how it bends, through your listening posts, which record what comes out on the other side.</p>
-  <p>Choose the direction of your wave: does it go straight through the middle, through the core, just touch it, or pass it by? Each time, the listening posts tell you what they recorded. Pay attention to it, and you will learn how the Earth is made up, right down to its inner core. Twelve waves; then a puzzle, and what Inge Lehmann found in 1936.</p>
-  <div class="aim">Light as many listening posts as you can with twelve waves.</div>
+  <p>Choose the direction of your wave: does it go straight through the core, just touch it, or pass it by?</p>
+  <p>In 1936 everyone thought the Earth had two layers: a mantle, and one core inside it. But the listening posts had recorded something odd. Every post felt the big earthquakes, four of them only faintly. If your waves can reach all the posts, the Earth with one core is right. If they can’t, something is missing, and there might be a core within the core.</p>
+  <div class="aim">Does the Earth have one core, or a core within the core?</div>
   <button class="btn pri" id="b-begin">Begin</button>
   <button class="btn link" id="b-help-start">How to play</button>
   <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
 </section>
 
 <section class="screen" id="s-play">
-  <div class="topbar"><div class="aimline" id="aimline">Light as many listening posts as you can with twelve waves.</div><button class="q" id="q-play" aria-label="How to play">?</button></div>
+  <div class="topbar"><div class="aimline" id="aimline"></div><button class="q" id="q-play" aria-label="How to play">?</button></div>
   <div class="plate" id="plate"></div>
-  <div class="drum" id="drum"></div>
+  <div class="legend"><span><i class="l-rec"></i>felt the quake</span><span><i class="l-faint"></i>felt it faintly</span><span><i class="l-on"></i>your wave reaches it</span></div>
   <div class="head" id="head"></div>
-  <div class="status" id="status">Wave 1 of 12</div>
-  <div class="tally" id="tally"></div>
 
   <div id="panel1">
+    <div class="cue" id="cue"></div>
     <div class="dial">
       <div class="dl"><span class="name">Dive</span><span class="nudge"><button class="nb" id="dive-minus" aria-label="a tenth of a degree less">−</button><span class="read" id="dive-read">45°</span><button class="nb" id="dive-plus" aria-label="a tenth of a degree more">+</button></span></div>
       <input type="range" id="dive" min="0" max="90" step="0.5" value="45">
       <div class="ends"><span>0° straight down</span><span>90° along the ground</span></div>
     </div>
-    <button class="btn pri" id="b-fire">Fire the wave</button>
+    <button class="btn pri" id="b-fire">Fire</button>
   </div>
+  <div class="tally" id="tally"></div>
   <div class="result" id="res"></div>
-  <div id="panel-rule">
-    <p class="rule" id="rule1"><span class="oc">Ochre</span> is the mantle: rock where a wave runs fast. <span class="ru">Rust</span> is the core: a wave runs slower there, so going in it bends toward the middle, and coming out it bends back. It bends only where the colour changes. Each <span class="bo">dot</span> on the right is a listening post; a post feels a wave that comes up within 3° of it.</p>
-  </div>
-
   <div id="panel-reveal" class="hide">
     <button class="btn pri" id="b-next">Next</button>
   </div>
-
+  <div id="panel-choice" class="hide">
+    <div class="choice" id="choice-q"></div>
+    <button class="btn pri" id="b-pick-one">One core</button>
+    <button class="btn pri" id="b-pick-two">A core within the core</button>
+  </div>
+  <p class="rule" id="rule1"></p>
 </section>
 
 <section class="screen" id="s-end">
   <div class="caps">The verdict</div>
   <div class="verdict">
     <div class="fate" id="v-fate"></div>
+    <div class="pair">
+      <div id="pair-one"><div class="plate" id="end-one"></div><div class="pl"><b>One core</b>four posts never reached</div></div>
+      <div id="pair-two"><div class="plate" id="end-two"></div><div class="pl"><b>A core within the core</b>every post reached, four faintly</div></div>
+    </div>
     <div class="lab">What you did</div><p id="v-did"></p>
-    <div class="plate" id="end-plate"></div>
-    <p class="small" id="v-ghost"></p>
     <div class="lab">What Lehmann found</div><p id="v-paper"></p>
     <div class="quote" id="v-quote"></div>
     <div class="lab">What happened next</div><p id="v-means"></p>
@@ -158,24 +167,24 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
 </div>
 
 <div class="ov" id="twist"><div class="wrap">
-  <div class="caps" id="twist-cap">16 June 1929</div>
+  <div class="caps">1936</div>
   <div class="card" id="twist-card"></div>
-  <button class="btn pri" id="b-build">Dive again</button>
+  <button class="btn pri" id="b-build">Try her idea</button>
 </div></div>
 
 <div class="ov help" id="help"><div class="wrap">
-  <div class="caps">Lehmann’s Shadow</div>
+  <div class="caps">Find Your Inner Core with Lehmann</div>
   <h2>How to play</h2>
-  <p><b>Light as many listening posts as you can with twelve waves. Then try Lehmann’s idea: a core inside the core.</b></p>
-  <p>The Earth is a ball. When the ground shakes somewhere, the shaking runs right through the ball and comes out on the far side. You are that shaking: one wave. The picture is the Earth cut open, as Inge Lehmann drew it in 1936. Ochre is the mantle, rock where a wave runs fast. Rust is the core, where a wave runs slower, so going in it bends toward the middle and coming out it bends back. A wave runs straight and bends only where something changes. The burst at the top is the quake, where you start. The dots round the right-hand edge are eighteen listening posts, one every ten degrees round from the quake. A post feels a wave that comes up within three degrees of it, and lights up.</p>
+  <p><b>Does the Earth have one core, or a core within the core? Your waves decide.</b></p>
+  <p>The picture is the Earth cut open. Ochre is the mantle, rock where a wave runs fast. Rust is the core, where a wave runs slower, so going in it bends toward the middle and coming out it bends back. A wave runs straight and bends only where the colour changes. The burst at the top is the earthquake: that is you.</p>
+  <p>The dots round the right-hand edge are eighteen listening posts. Their rings show what real posts recorded: a whole ring felt the earthquake, a broken ring felt it only faintly. A post fills with gold when one of your waves comes up within three degrees of it.</p>
   <ol>
-    <li><b>Dive.</b> Slide the dial: 0° dives straight down through the middle, 90° runs along the ground. The − and + buttons move a tenth of a degree, for dives very close together. A dotted stub at the quake shows the direction. The dial stays where you leave it.</li>
-    <li><b>Fire the wave.</b> Watch yourself run, bend and come up. The box under the Earth says where you came up, whether a post felt you, and how the ground there bounced; the strip above it draws that bounce. A steep wave makes the ground bounce up and down hard; a flat one hardly at all.</li>
-    <li>After the twelfth wave, every dive fires at once, and you see the band on the far side where no wave comes up: the shadow.</li>
-    <li><b>The real posts.</b> A card shows what three real listening posts inside the shadow wrote down in 1929. They felt a wave. Inge Lehmann’s idea: there is a second, smaller core inside the core, where waves run faster again.</li>
-    <li><b>Try her idea.</b> The next Earth has that inner ball drawn in. Eight waves, the same dial. Only a dive steeper than 16° reaches the ball. Send waves at it and light the four ringed shadow posts.</li>
+    <li><b>Aim.</b> Drag on the picture, or slide the dial: 0° dives straight down through the middle, 90° runs along the ground. The − and + buttons move a tenth of a degree. The dotted line shows where you are heading, as far as the core.</li>
+    <li><b>Fire.</b> Watch yourself run, bend and come up. The line under the picture says where you came up and whether you reached a post.</li>
+    <li><b>One core.</b> Eight waves into an Earth with one core. Try to reach every post, the four faint ones too. Then every dive fires at once.</li>
+    <li><b>A core within the core.</b> Four waves into an Earth with a second, smaller core inside the core. Only a dive steeper than 16° gets that deep. Then every dive fires at once.</li>
+    <li><b>Choose.</b> Which Earth fits what the posts recorded?</li>
   </ol>
-  <p>The verdict says what you found, what Inge Lehmann found, and what became of her idea.</p>
   <button class="btn pri" id="b-help-close">Back</button>
 </div></div>
 
@@ -193,6 +202,7 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
   var C = MECH.CONFIG, NS = 'http://www.w3.org/2000/svg';
   var CX = 180, CY = 184, R = 146, W = 360, H = 380;
   var D = Math.PI / 180;
+  var FAINT = MECH.faintPosts();
 
   // ---- drawing the plate --------------------------------------------------------------------------
   function el(tag, attrs, parent) { var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
@@ -233,18 +243,16 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
     var shots = el('g', { fill: 'none', stroke: '#F2C14E', 'stroke-width': '1', opacity: '.5', 'stroke-linejoin': 'round' }, svg);
     var live = el('g', { fill: 'none', stroke: '#F2C14E', 'stroke-width': '2.4', 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, svg);
     var preview = el('g', { fill: 'none', stroke: '#F2C14E', 'stroke-width': '1.6', 'stroke-dasharray': '3 3', 'stroke-linecap': 'round' }, svg);
-    var marks = el('g', { fill: '#EEE3C8', stroke: '#1B1714', 'stroke-width': '.8' }, svg);
     // the quake
     var q = xy(0, 1); var burst = el('g', { transform: 'translate(' + q[0] + ',' + q[1] + ')' }, svg);
     for (var k = 0; k < 8; k++) { var a = k * 45 * D; el('line', { x1: Math.cos(a) * 5, y1: Math.sin(a) * 5, x2: Math.cos(a) * (k % 2 ? 9 : 12), y2: Math.sin(a) * (k % 2 ? 9 : 12), stroke: '#EEE3C8', 'stroke-width': '1.4', 'stroke-linecap': 'round' }, burst); }
     el('circle', { r: 3, fill: '#F2C14E' }, burst);
     // the posts
-    small = small_; var posts = {}, rings = {}, pg = el('g', {}, svg);
+    small = small_; var posts = {}, pg = el('g', {}, svg);
     C.POSTS.forEach(function (P) {
       var o = xy(P, 1.0), i = xy(P, 1.035), c = xy(P, 1.075);
       el('line', { x1: o[0], y1: o[1], x2: i[0], y2: i[1], stroke: '#EEE3C8', 'stroke-width': '1', opacity: '.6' }, pg);
-      rings[P] = el('circle', { cx: c[0], cy: c[1], r: 10, fill: 'none', stroke: '#F2C14E', 'stroke-width': '1.6', 'class': 'ring hide' }, pg);
-      posts[P] = el('circle', { cx: c[0], cy: c[1], r: small ? 4 : 5.5, fill: '#1B1714', stroke: '#5C6670', 'stroke-width': '1.5' }, pg);
+      posts[P] = el('circle', { cx: c[0], cy: c[1], r: small ? 4.6 : 5.5, fill: '#1B1714', 'stroke-width': small ? '1.8' : '1.5' }, pg);
     });
     if (!small) {
       [30, 60, 90, 120, 150].forEach(function (P) { var l = xy(P, 1.17); el('text', { x: l[0], y: l[1] + 3.5, 'text-anchor': 'middle', 'font-family': "'DM Mono',monospace", 'font-size': '10', fill: '#A89F8C' }, svg).textContent = P + '°'; });
@@ -253,14 +261,26 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
       var sl = xy(133, 1.2); var st = el('text', { x: sl[0] - 6, y: sl[1] + 3, 'text-anchor': 'end', 'font-family': "'DM Mono',monospace", 'font-size': '9.5', fill: '#A89F8C', 'letter-spacing': '1.5', 'class': 'hide' }, svg); st.textContent = 'SHADOW';
       el('text', { x: 6, y: 14, 'font-family': "'DM Mono',monospace", 'font-size': '9', fill: '#5C6670', 'letter-spacing': '1.5' }, svg).textContent = 'LEFT HALF: MIRRORED';
     }
-    var cap = el('text', { x: 6, y: H - 6, 'font-family': "'DM Mono',monospace", 'font-size': '9', fill: '#5C6670', 'letter-spacing': '1.5', 'class': small ? 'hide' : '' }, svg); cap.textContent = 'LEHMANN’S EARTH, 1936 · TWO SHELLS';
-    return { svg: svg, ball: ball, ghost: ghost, shadow: shadow, shadowLabel: st, fanL: fanL, fanR: fanR, shots: shots, live: live, preview: preview, marks: marks, posts: posts, rings: rings, cap: cap, glowId: 'glow' + uid };
+    var cap = el('text', { x: 6, y: H - 6, 'font-family': "'DM Mono',monospace", 'font-size': '9', fill: '#5C6670', 'letter-spacing': '1.5', 'class': small ? 'hide' : '' }, svg); cap.textContent = 'AN EARTH WITH ONE CORE';
+    return { svg: svg, ball: ball, ghost: ghost, shadow: shadow, shadowLabel: st, fanL: fanL, fanR: fanR, shots: shots, live: live, preview: preview, posts: posts, cap: cap, glowId: 'glow' + uid };
   }
-  function litPost(pl, P, on) { var c = pl.posts[P]; if (!c) return; c.setAttribute('fill', on ? '#F2C14E' : '#1B1714'); c.setAttribute('stroke', on ? '#F2C14E' : '#5C6670'); if (on) c.setAttribute('filter', 'url(#' + pl.glowId + ')'); else c.removeAttribute('filter'); }
-  function ringPost(pl, P, on) { var c = pl.rings[P]; if (c) c.setAttribute('class', on ? 'ring' : 'ring hide'); }
-  function addMarks(pl, pts) { pts.forEach(function (p) { [false, true].forEach(function (m) { var q = xy(p[0], p[1], m); el('circle', { cx: q[0].toFixed(2), cy: q[1].toFixed(2), r: 2.6, opacity: m ? '.55' : '1' }, pl.marks); }); }); }
+  // A post shows what was recorded there (a whole ring: felt the quake; a broken gold ring: felt it faintly)
+  // and whether a wave of the Earth in the picture reaches it (filled; a faint post fills pale).
+  function setPost(pl, P, on) {
+    var c = pl.posts[P]; if (!c) return; var faint = FAINT.indexOf(P) >= 0;
+    c.setAttribute('stroke', faint ? '#F2C14E' : on ? '#F2C14E' : '#EEE3C8');
+    if (faint) c.setAttribute('stroke-dasharray', '2.6 2.2'); else c.removeAttribute('stroke-dasharray');
+    c.setAttribute('fill', !on ? '#1B1714' : faint ? '#9C7F3A' : '#F2C14E');
+    if (on && !faint) c.setAttribute('filter', 'url(#' + pl.glowId + ')'); else c.removeAttribute('filter');
+  }
   function clearGroup(g) { while (g.firstChild) g.removeChild(g.firstChild); }
-  function setPreview(pl, i0) { clearGroup(pl.preview); var q = xy(0, 1), len = 44, t = i0 * D; var x2 = q[0] + len * Math.sin(t), y2 = q[1] + len * Math.cos(t); el('line', { x1: q[0], y1: q[1], x2: x2, y2: y2 }, pl.preview); el('line', { x1: 2 * CX - q[0], y1: q[1], x2: 2 * CX - x2, y2: y2, opacity: '.4' }, pl.preview); var hx = x2 + 5 * Math.sin(t), hy = y2 + 5 * Math.cos(t); el('circle', { cx: hx, cy: hy, r: 2, fill: '#F2C14E', stroke: 'none' }, pl.preview); }
+  function setPreview(pl, i0) {
+    clearGroup(pl.preview); var q = xy(0, 1), t = i0 * D, s = Math.sin(t), rc = C.CORE_FRAC;
+    var len = R * (s < rc ? Math.cos(t) - Math.sqrt(rc * rc - s * s) : Math.cos(t)); len = Math.max(len, 16); // to the core's edge, or to the deepest point of a wave that misses it
+    var x2 = q[0] + len * Math.sin(t), y2 = q[1] + len * Math.cos(t);
+    el('line', { x1: q[0], y1: q[1], x2: x2, y2: y2 }, pl.preview); el('line', { x1: 2 * CX - q[0], y1: q[1], x2: 2 * CX - x2, y2: y2, opacity: '.35' }, pl.preview);
+    el('circle', { cx: x2, cy: y2, r: 3.2, fill: '#F2C14E', stroke: '#1B1714', 'stroke-width': '1', 'stroke-dasharray': 'none' }, pl.preview);
+  }
   function setBall(pl, frac, ratio) { pl.ball.classList.remove('hide'); pl.ball.setAttribute('r', R * frac); pl.ball.setAttribute('fill', ballColour(ratio)); }
   // the wave travels: a polyline drawn from the quake to the rim; resolves when it arrives
   function travel(pl, ray, speedPxPerSec) {
@@ -287,183 +307,143 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
     });
   }
 
-  // ---- the drum ------------------------------------------------------------------------------------
-  function makeDrum(container) {
-    var svg = el('svg', { viewBox: '0 0 360 54' }); container.appendChild(svg);
-    el('rect', { x: .5, y: .5, width: 359, height: 53, fill: '#241E19', stroke: '#5C6670', 'stroke-width': '1' }, svg);
-    for (var x = 92; x < 352; x += 20) el('line', { x1: x, y1: 6, x2: x, y2: 48, stroke: '#3A332C', 'stroke-width': '.6' }, svg);
-    var lab = el('text', { x: 10, y: 24, 'font-family': "'DM Mono',monospace", 'font-size': '10', fill: '#A89F8C', 'letter-spacing': '1.5' }, svg); lab.textContent = 'THE GROUND';
-    var lab2 = el('text', { x: 10, y: 38, 'font-family': "'DM Mono',monospace", 'font-size': '10', fill: '#A89F8C', 'letter-spacing': '1.5' }, svg); lab2.textContent = 'AT NO POST';
-    var trace = el('path', { d: 'M92,27 L350,27', fill: 'none', stroke: '#F2C14E', 'stroke-width': '1.6', 'stroke-linejoin': 'round', opacity: '.7' }, svg);
-    var cap = el('text', { x: 350, y: 12, 'text-anchor': 'end', 'font-family': "'DM Mono',monospace", 'font-size': '9', fill: '#A89F8C', 'letter-spacing': '1.5' }, svg); cap.textContent = 'NOTHING FELT';
-    return { svg: svg, lab2: lab2, trace: trace, cap: cap };
-  }
-  function drumWrite(dr, post, vertical, steepWord) {
-    if (post === null) { dr.lab2.textContent = 'AT NO POST'; dr.trace.setAttribute('d', 'M92,27 L350,27'); dr.trace.setAttribute('opacity', '.4'); dr.cap.textContent = 'NOTHING FELT'; return; }
-    dr.lab2.textContent = 'AT POST ' + post + '°';
-    var A = 3 + 19 * vertical, d = 'M92,27 L150,27';
-    for (var x = 150; x <= 290; x += 2) { var t = (x - 150) / 140, env = Math.exp(-3.2 * t) * (t < .08 ? t / .08 : 1); d += ' L' + x + ',' + (27 - A * env * Math.sin(t * 46)).toFixed(2); }
-    d += ' L350,27';
-    dr.trace.setAttribute('d', d); dr.trace.setAttribute('opacity', '.95');
-    var L = dr.trace.getTotalLength(); dr.trace.setAttribute('stroke-dasharray', L); dr.trace.setAttribute('stroke-dashoffset', L);
-    dr.trace.animate([{ strokeDashoffset: L }, { strokeDashoffset: 0 }], { duration: 900, easing: 'linear', fill: 'forwards' });
-    dr.cap.textContent = 'UP-AND-DOWN BOUNCE: ' + steepWord.toUpperCase();
-  }
-
-  // ---- the records card: what three real posts wrote (sketches after Lehmann's Figure 3) ---------------
-  function wiggle(y, A, x0, x1) { var d = 'M' + x0 + ',' + y + ' L' + (x0 + 40) + ',' + y; for (var x = x0 + 40; x <= x1 - 30; x += 2) { var t = (x - x0 - 40) / (x1 - x0 - 70), env = Math.exp(-2.4 * t) * (t < .1 ? t / .1 : 1); d += ' L' + x + ',' + (y - A * env * Math.sin(t * 40)).toFixed(2); } return d + ' L' + x1 + ',' + y; }
-  function makeRecord(container, rec, delay) {
-    var box = document.createElement('div'); box.className = 'rec'; container.appendChild(box);
-    var svg = el('svg', { viewBox: '0 0 360 74', role: 'img', 'aria-label': 'What the post at ' + rec.name + ' wrote' }); box.appendChild(svg);
-    el('rect', { x: .5, y: .5, width: 359, height: 73, fill: '#241E19', stroke: '#5C6670', 'stroke-width': '1' }, svg);
-    var mono = { 'font-family': "'DM Mono',monospace", 'letter-spacing': '1.5' };
-    var t = el('text', Object.assign({ x: 10, y: 15, 'font-size': '10.5', fill: '#EEE3C8' }, mono), svg); t.textContent = rec.name.toUpperCase() + ' · ' + rec.deg.toFixed(1) + '° ROUND';
-    [['UP-DOWN', 34, rec.upDown], ['SIDEWAYS', 58, rec.sideways]].forEach(function (row) {
-      var l = el('text', Object.assign({ x: 10, y: row[1] + 3.5, 'font-size': '9', fill: '#A89F8C' }, mono), svg); l.textContent = row[0];
-      var p = el('path', { d: wiggle(row[1], 12 * row[2], 84, 350), fill: 'none', stroke: '#F2C14E', 'stroke-width': '1.5', 'stroke-linejoin': 'round' }, svg);
-      var L = p.getTotalLength(); p.setAttribute('stroke-dasharray', L); p.setAttribute('stroke-dashoffset', L);
-      p.animate([{ strokeDashoffset: L }, { strokeDashoffset: 0 }], { duration: 1100, delay: delay, easing: 'linear', fill: 'forwards' });
-    });
-  }
-
   // ---- the game --------------------------------------------------------------------------------------
-  var game, phase = 'start', busy = false, plate, drum, startPlate, startLoop = null, endPlate = null;
-  var AIM1 = 'Light as many listening posts as you can with twelve waves.', AIM2 = 'A core inside the core: send waves at it and light the four ringed posts.';
-  var RULE1 = '<span class="oc">Ochre</span> is the mantle: rock where a wave runs fast. <span class="ru">Rust</span> is the core: a wave runs slower there, so going in it bends toward the middle, and coming out it bends back. It bends only where the colour changes. Each <span class="bo">dot</span> on the right is a listening post; a post feels a wave that comes up within 3° of it.';
-  var RULE2 = 'The <span class="bo">pale ball</span> is Lehmann’s idea: a second core inside the core, where waves run faster again. Where rock gets slower, a wave bends toward the middle: that is what the core does. Where it gets faster, a wave bends away from the middle, and a wave that hits at a glancing angle bounces off.';
-  var CAP1 = 'LEHMANN’S EARTH, 1936 · TWO SHELLS', CAP2 = 'LEHMANN’S IDEA · A CORE INSIDE THE CORE', CAP3 = 'LEHMANN’S EARTH, 1936 · THREE SHELLS';
+  var game, phase = 'start', busy = false, plate, startPlate, startLoop = null, endOne = null, endTwo = null;
+  var RULE1 = '<span class="oc">Ochre</span> is the mantle: rock where a wave runs fast. <span class="ru">Rust</span> is the core: a wave runs slower there, so going in it bends toward the middle, and coming out it bends back. It bends only where the colour changes. A post is reached when a wave comes up within 3° of it.';
+  var RULE2 = 'The <span class="bo">pale ball</span> is the core within the core. Where rock gets slower, a wave bends toward the middle: that is what the core does. Where it gets faster, a wave bends away from the middle, and a wave that hits at a glancing angle bounces off.';
+  var CAP1 = 'AN EARTH WITH ONE CORE', CAP2 = 'AN EARTH WITH A CORE WITHIN THE CORE';
   function show(id) { ['s-start', 's-play', 's-end'].forEach(function (s) { $(s).classList.toggle('on', s === id); }); window.scrollTo(0, 0); }
   function openOv(id) { $(id).classList.add('on'); document.body.classList.add('lock'); $(id).scrollTop = 0; }
   function closeOv(id) { $(id).classList.remove('on'); document.body.classList.remove('lock'); }
-  function head(txt, gold) { $('head').textContent = txt || ''; $('head').classList.toggle('gold', !!gold); }
   function para(cls, txt) { return txt ? '<p' + (cls ? ' class="' + cls + '"' : '') + '>' + txt + '</p>' : ''; }
+  function head(txt, gold) { $('head').textContent = txt || ''; $('head').classList.toggle('gold', !!gold); }
+  function hide(id, yes) { $(id).classList.toggle('hide', !!yes); }
+  // The cue: what to do now. It sits right above the dial and is repeated on the gold button.
+  function cue(n, of) {
+    var c = $('cue'); c.textContent = n === 1 ? 'Choose your dive, then fire.' : 'Now choose your next dive.';
+    c.classList.remove('pop'); void c.offsetWidth; c.classList.add('pop');
+    $('b-fire').textContent = 'Fire wave ' + n + ' of ' + of;
+  }
+  function tally() {
+    if (phase === 'act1' || phase === 'reveal') { var n = Object.keys(game.reached).length; $('tally').textContent = n + ' of ' + C.POSTS.length + ' posts reached · faint posts: 0 of ' + FAINT.length; }
+    else { var f = FAINT.filter(function (P) { return game.reached2[P] !== undefined; }).length; $('tally').textContent = 'faint posts reached: ' + f + ' of ' + FAINT.length; }
+  }
+  function aiming(on) { $('plate').classList.toggle('aim', !!on); }
 
   function newRun() {
     game = MECH.newGame(); phase = 'act1'; busy = false;
-    if (!plate) { plate = makePlate($('plate'), false); drum = makeDrum($('drum')); }
-    clearGroup(plate.shots); clearGroup(plate.live); clearGroup(plate.fanL); clearGroup(plate.fanR); clearGroup(plate.marks);
-    plate.ball.classList.add('hide'); plate.ghost.classList.add('hide'); plate.shadow.classList.add('hide'); plate.shadowLabel.classList.add('hide');
-    C.POSTS.forEach(function (P) { litPost(plate, P, false); ringPost(plate, P, false); });
-    drumWrite(drum, null);
-    $('aimline').textContent = AIM1; plate.cap.textContent = CAP1; $('rule1').innerHTML = RULE1;
-    $('panel1').classList.remove('hide'); $('panel-reveal').classList.add('hide');
-    $('res').innerHTML = para('mu', MECH.INTRO1); head('You are the earthquake.'); $('panel-rule').classList.remove('hide');
-    $('b-fire').classList.remove('dim');
+    if (!plate) { plate = makePlate($('plate'), false); wireAim(plate.svg); }
+    clearGroup(plate.shots); clearGroup(plate.live); clearGroup(plate.fanL); clearGroup(plate.fanR);
+    plate.ball.classList.add('hide'); plate.shadow.classList.add('hide'); plate.shadowLabel.classList.add('hide');
+    C.POSTS.forEach(function (P) { setPost(plate, P, false); });
+    $('aimline').textContent = MECH.AIM1; plate.cap.textContent = CAP1; $('rule1').innerHTML = RULE1;
+    hide('panel1', false); hide('panel-reveal', true); hide('panel-choice', true); hide('rule1', false);
+    $('res').innerHTML = para('mu', MECH.INTRO1); head('You are the earthquake.');
+    $('b-fire').classList.remove('dim'); $('b-next').textContent = 'Next';
     $('dive').step = C.DIVE_SLIDER_STEP; $('dive').value = C.DIVE_START; readDive();
-    status1();
+    cue(1, C.WAVES); tally(); aiming(true);
     show('s-play');
   }
-  function cue(n, of) { return n === 1 ? 'Wave 1 of ' + of + ': choose your dive, then fire' : 'Now wave ' + n + ' of ' + of + ': choose your next dive'; }
-  function status1() { var n = Object.keys(game.heard).length, done = game.shots.length >= C.WAVES; $('status').textContent = done ? C.WAVES + ' waves fired' : cue(game.shots.length + 1, C.WAVES); $('tally').textContent = n + ' of ' + C.POSTS.length + ' posts lit'; }
-  function status2(lit, done) { $('status').textContent = done ? game.shots2.length + ' waves fired' : cue(game.shots2.length + 1, C.WAVES2); $('tally').textContent = lit + ' of 4 shadow posts lit'; }
   function readDive() { var v = parseFloat($('dive').value); $('dive-read').textContent = MECH.fmtDive(v); setPreview(plate, v); }
+  function setDive(v) { v = Math.max(C.DIVE_MIN, Math.min(C.DIVE_MAX, Math.round(v * 10) / 10)); $('dive').step = 'any'; $('dive').value = v; readDive(); }
+  // Aim by dragging on the picture: the dive is the angle between straight down and the line from the quake to the finger.
+  function wireAim(svg) {
+    var down = false;
+    function at(ev) {
+      var pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY; var m = svg.getScreenCTM(); if (!m) return; var p = pt.matrixTransform(m.inverse());
+      var q = xy(0, 1), dx = Math.abs(p.x - q[0]), dy = p.y - q[1]; if (dy < 2 && dx < 2) return;
+      setDive(Math.round(Math.atan2(dx, Math.max(dy, 0)) / D * 2) / 2);
+    }
+    svg.addEventListener('pointerdown', function (ev) { if (busy || (phase !== 'act1' && phase !== 'act2')) return; down = true; try { svg.setPointerCapture(ev.pointerId); } catch (e) {} at(ev); ev.preventDefault(); });
+    svg.addEventListener('pointermove', function (ev) { if (down && !busy) at(ev); });
+    ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (n) { svg.addEventListener(n, function () { down = false; }); });
+  }
 
   function fire() {
     if (busy) return;
     if (phase === 'act1') fire1(); else if (phase === 'act2') fire2();
   }
+  function after(r, n, of, gold, lastFn) {
+    keepShot(plate, r.ray);
+    head(r.words.head, false);
+    $('res').innerHTML = para('', r.words.what) + para('lead', r.words.post) + para('', r.words.compare);
+    tally();
+    if (r.last) { $('cue').textContent = 'That was your last wave.'; setTimeout(lastFn, 1300); return; }
+    cue(n, of); $('b-fire').classList.remove('dim'); busy = false;
+  }
   function fire1() {
-    busy = true; $('b-fire').classList.add('dim');
-    var i0 = parseFloat($('dive').value), r = MECH.fire(game, i0);
+    busy = true; $('b-fire').classList.add('dim'); $('cue').textContent = '';
+    var r = MECH.fire(game, parseFloat($('dive').value));
     travel(plate, r.ray).then(function () {
-      keepShot(plate, r.ray);
-      r.posts.forEach(function (P) { litPost(plate, P, true); });
-      drumWrite(drum, r.posts.length ? r.posts[0] : null, r.vertical, r.bounce);
-      $('res').innerHTML = para('', r.words.what) + para('lead', r.words.heard + (r.words.steep ? ' ' + r.words.steep : '')) + para('', r.words.compare);
-      head(r.words.head, r.posts.length > 0);
-      status1();
-      if (r.last) { setTimeout(revealNow, 900); return; }
-      $('b-fire').classList.remove('dim'); busy = false;
+      r.posts.forEach(function (P) { setPost(plate, P, true); });
+      after(r, game.shots.length + 1, C.WAVES, r.newPosts.length > 0, revealNow);
     });
   }
   function revealNow() {
-    phase = 'reveal';
-    $('panel1').classList.add('hide'); $('panel-rule').classList.add('hide'); clearGroup(plate.preview); head('Every dive at once.');
+    phase = 'reveal'; aiming(false);
+    hide('panel1', true); hide('rule1', true); clearGroup(plate.preview); head('Now every dive at once.');
+    $('aimline').textContent = 'Every dive at once, with one core.'; $('res').innerHTML = '';
     var r = MECH.reveal(game);
-    $('aimline').textContent = 'Every dive at once.';
-    $('status').textContent = 'Every dive at once'; $('tally').textContent = '';
     drawFan(plate, r.fan, 1800).then(function () {
-      r.reach.forEach(function (P) { litPost(plate, P, true); });
-      C.POSTS.forEach(function (P) { ringPost(plate, P, false); });
+      r.reach.forEach(function (P) { setPost(plate, P, true); });
       plate.shadow.classList.remove('hide'); plate.shadowLabel.classList.remove('hide');
-      head('No wave reaches the hatched band: the shadow.', true);
-      $('status').textContent = 'Every dive at once'; $('tally').textContent = r.shadow.length + ' posts in the shadow';
-      $('res').innerHTML = r.lines.map(function (l, i) { return para(i === 0 && r.lines.length > 4 ? 'lead' : '', l); }).join('');
-      $('panel-reveal').classList.remove('hide'); busy = false;
+      head(r.head, true); $('tally').textContent = r.reach.length + ' of ' + C.POSTS.length + ' posts reached · faint posts: 0 of ' + FAINT.length;
+      $('res').innerHTML = r.lines.map(function (l, i) { return para(i === r.lines.length - 1 ? 'lead' : '', l); }).join('');
+      hide('panel-reveal', false); busy = false;
     });
   }
-  function next() {
-    if (busy) return;
-    if (phase === 'reveal') records(); else if (phase === 'reveal2') end();
-  }
-  function records() {
-    var card = $('twist-card'); card.innerHTML = MECH.RECORDS.before.map(function (l) { return para('', l); }).join('');
-    $('twist-cap').textContent = C.PAPER.QUAKE_DATE;
-    openOv('twist');
-    C.PAPER.RECORDS.forEach(function (rec, k) { makeRecord(card, rec, 500 + 700 * k); });
-    card.insertAdjacentHTML('beforeend', para('small', MECH.RECORDS.note) + MECH.RECORDS.after.map(function (l) { return para('', l); }).join(''));
-  }
+  function next() { if (!busy && phase === 'reveal') { $('twist-card').innerHTML = MECH.CARD.map(function (l) { return para('', l); }).join(''); openOv('twist'); } }
   function build() {
     closeOv('twist'); phase = 'act2';
-    clearGroup(plate.shots); clearGroup(plate.fanL); clearGroup(plate.fanR); clearGroup(plate.live); clearGroup(plate.marks);
-    var shadow = game.reveal.shadow;
-    C.POSTS.forEach(function (P) { var dark = shadow.indexOf(P) >= 0; litPost(plate, P, !dark); ringPost(plate, P, dark); });
-    drumWrite(drum, null);
-    $('aimline').textContent = AIM2; plate.cap.textContent = CAP2; $('rule1').innerHTML = RULE2;
-    $('res').innerHTML = para('mu', MECH.INTRO2); head('Only a dive steeper than ' + C.PAPER.INNER_GRAZE_I0 + '° reaches the inner ball.'); $('panel-rule').classList.remove('hide');
+    clearGroup(plate.shots); clearGroup(plate.fanL); clearGroup(plate.fanR); clearGroup(plate.live);
+    C.POSTS.forEach(function (P) { setPost(plate, P, FAINT.indexOf(P) < 0); });
     setBall(plate, C.INNER_FRAC, C.V_INNER / C.V_CORE); plate.ball.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 900, easing: 'ease-out', fill: 'forwards' });
-    $('panel-reveal').classList.add('hide'); $('panel1').classList.remove('hide'); $('b-fire').classList.remove('dim');
-    $('dive').step = C.DIVE_SLIDER_STEP; $('dive').value = C.DIVE_START; readDive();
-    status2(0, false); window.scrollTo(0, 0);
+    $('aimline').textContent = MECH.AIM2; plate.cap.textContent = CAP2; $('rule1').innerHTML = RULE2;
+    $('res').innerHTML = para('mu', MECH.INTRO2); head('Only a dive steeper than ' + C.PAPER.INNER_GRAZE_I0 + '° meets the inner core.');
+    hide('panel-reveal', true); hide('panel1', false); hide('rule1', false); $('b-fire').classList.remove('dim');
+    $('dive').step = C.DIVE_SLIDER_STEP; $('dive').value = C.DIVE_START2; readDive();
+    cue(1, C.WAVES2); tally(); aiming(true); window.scrollTo(0, 0);
   }
   function fire2() {
-    busy = true; $('b-fire').classList.add('dim');
-    var i0 = parseFloat($('dive').value), r = MECH.fire2(game, i0);
+    busy = true; $('b-fire').classList.add('dim'); $('cue').textContent = '';
+    var r = MECH.fire2(game, parseFloat($('dive').value));
     travel(plate, r.ray).then(function () {
-      keepShot(plate, r.ray);
-      r.newLit.forEach(function (P) { litPost(plate, P, true); ringPost(plate, P, false); });
-      drumWrite(drum, r.posts.length ? r.posts[0] : null, r.vertical, r.bounce);
-      $('res').innerHTML = para('', r.words.what) + para('lead', r.words.heard + (r.words.steep ? ' ' + r.words.steep : '')) + para('', r.words.clue) + para('', r.words.compare);
-      head(r.words.head, r.newLit.length > 0);
-      status2(r.lit.length, r.last);
-      if (r.last) { setTimeout(reveal2Now, 1100); return; }
-      $('b-fire').classList.remove('dim'); busy = false;
+      r.newFaint.forEach(function (P) { setPost(plate, P, true); });
+      after(r, game.shots2.length + 1, C.WAVES2, r.inBand, reveal2Now);
     });
   }
   function reveal2Now() {
-    phase = 'reveal2';
-    $('panel1').classList.add('hide'); $('panel-rule').classList.add('hide'); clearGroup(plate.preview); head('Every dive at once.');
+    phase = 'reveal2'; aiming(false);
+    hide('panel1', true); hide('rule1', true); clearGroup(plate.preview); head('Now every dive at once.');
+    $('aimline').textContent = 'Every dive at once, with a core within the core.'; $('res').innerHTML = '';
     var r = MECH.reveal2(game);
-    $('aimline').textContent = 'Every dive at once, with a core inside the core.'; plate.cap.textContent = CAP3;
-    $('status').textContent = 'Every dive at once'; $('tally').textContent = '';
-    setTimeout(function () {
-      drawFan(plate, r.fan, 1900).then(function () {
-        C.POSTS.forEach(function (P, k) { ringPost(plate, P, false); setTimeout(function () { litPost(plate, P, !!r.heard[P]); }, 40 * k); });
-        head('A core inside the core fills the shadow.', true);
-        $('tally').textContent = 'all ' + C.POSTS.length + ' posts lit';
-        $('res').innerHTML = r.lines.map(function (l, i) { return para(i === 0 ? 'lead' : '', l); }).join('');
-        $('b-next').textContent = 'See the verdict';
-        $('panel-reveal').classList.remove('hide'); busy = false;
-      });
-    }, 300);
+    drawFan(plate, r.fan, 1900).then(function () {
+      C.POSTS.forEach(function (P, k) { setTimeout(function () { setPost(plate, P, !!r.heard[P]); }, 40 * k); });
+      head(r.head, true); $('tally').textContent = C.POSTS.length + ' of ' + C.POSTS.length + ' posts reached · faint posts: ' + FAINT.length + ' of ' + FAINT.length;
+      $('res').innerHTML = r.lines.map(function (l, i) { return para(i === r.lines.length - 1 ? 'lead' : '', l); }).join('');
+      $('choice-q').textContent = r.question; hide('panel-choice', false); busy = false;
+    });
   }
-  function end() {
-    var v = MECH.verdict(game); phase = 'end';
+  function drawEnd(pl, earth, heard) {
+    clearGroup(pl.fanL); clearGroup(pl.fanR); pl.shadow.classList.remove('hide');
+    MECH.fan(earth, 2).forEach(function (r) { el('polyline', { points: pointsOf(r.pts, false) }, pl.fanR); el('polyline', { points: pointsOf(r.pts, true) }, pl.fanL); });
+    C.POSTS.forEach(function (P) { setPost(pl, P, !!heard[P]); });
+  }
+  function pick(which) {
+    if (busy || phase !== 'reveal2') return;
+    var v = MECH.choose(game, which); phase = 'end';
     $('v-fate').textContent = v.fate; $('v-did').textContent = v.did; $('v-paper').textContent = v.paper; $('v-means').textContent = v.means;
     $('v-quote').textContent = '“… ' + v.quote + ' …” ' + v.quoteBy + '.';
-    if (!endPlate) endPlate = makePlate($('end-plate'), true);
-    clearGroup(endPlate.fanL); clearGroup(endPlate.fanR); clearGroup(endPlate.marks);
-    setBall(endPlate, C.INNER_FRAC, C.V_INNER / C.V_CORE); endPlate.shadow.classList.remove('hide');
-    MECH.fan(MECH.lehmannEarth(), 1.5).forEach(function (r) { el('polyline', { points: pointsOf(r.pts, false) }, endPlate.fanR); el('polyline', { points: pointsOf(r.pts, true) }, endPlate.fanL); });
-    C.POSTS.forEach(function (P) { litPost(endPlate, P, true); });
-    $('v-ghost').textContent = 'Lehmann’s Earth of three layers, with every dive drawn through it. The hatched band is the old shadow.';
-    $('b-next').textContent = 'Next';
+    if (!endOne) { endOne = makePlate($('end-one'), true); endTwo = makePlate($('end-two'), true); setBall(endTwo, C.INNER_FRAC, C.V_INNER / C.V_CORE); }
+    drawEnd(endOne, MECH.twoShell(), MECH.heardByQuake(MECH.twoShell())); drawEnd(endTwo, MECH.lehmannEarth(), MECH.heardByQuake(MECH.lehmannEarth()));
+    $('pair-one').classList.toggle('picked', v.pick === 'one'); $('pair-two').classList.toggle('picked', v.pick === 'two');
     show('s-end');
   }
 
   // ---- the start screen's loop: a wave fired every few seconds --------------------------------------
   function startAnimation() {
     if (!startPlate) startPlate = makePlate($('start-plate'), false);
+    C.POSTS.forEach(function (P) { setPost(startPlate, P, false); });
     var dives = [50, 30, 20, 40, 34, 10, 60, 26], k = 0, alive = true;
     startLoop = function () { alive = false; };
     function next() {
@@ -473,7 +453,7 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
       travel(startPlate, ray, 220).then(function () {
         if (!alive) return;
         keepShot(startPlate, ray);
-        var hit = MECH.postsHeardBy([ray]); Object.keys(hit).forEach(function (P) { litPost(startPlate, +P, true); });
+        var hit = MECH.postsHeardBy([ray]); Object.keys(hit).forEach(function (P) { setPost(startPlate, +P, true); });
         if (startPlate.shots.childNodes.length > 10) { startPlate.shots.removeChild(startPlate.shots.firstChild); startPlate.shots.removeChild(startPlate.shots.firstChild); }
         setTimeout(next, 700);
       });
@@ -485,14 +465,15 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
   $('b-begin').addEventListener('click', function () { if (startLoop) startLoop(); newRun(); });
   $('dive').addEventListener('input', readDive);
   $('dive').step = C.DIVE_SLIDER_STEP;
-  var nudge = function (d) { var v = Math.round((parseFloat($('dive').value) + d) * 10) / 10; v = Math.max(C.DIVE_MIN, Math.min(C.DIVE_MAX, v)); $('dive').step = 'any'; $('dive').value = v; readDive(); };
-  $('dive-minus').addEventListener('click', function () { nudge(-C.DIVE_STEP); });
-  $('dive-plus').addEventListener('click', function () { nudge(C.DIVE_STEP); });
+  $('dive-minus').addEventListener('click', function () { setDive(parseFloat($('dive').value) - C.DIVE_STEP); });
+  $('dive-plus').addEventListener('click', function () { setDive(parseFloat($('dive').value) + C.DIVE_STEP); });
   $('dive').addEventListener('pointerdown', function () { $('dive').step = C.DIVE_SLIDER_STEP; });
   $('b-fire').addEventListener('click', fire);
   $('b-next').addEventListener('click', next);
   $('b-build').addEventListener('click', build);
-  $('b-again').addEventListener('click', function () { $('b-next').textContent = 'Next'; newRun(); });
+  $('b-pick-one').addEventListener('click', function () { pick('one'); });
+  $('b-pick-two').addEventListener('click', function () { pick('two'); });
+  $('b-again').addEventListener('click', function () { newRun(); });
   ['b-help-start', 'q-play', 'b-help-end'].forEach(function (id) { $(id).addEventListener('click', function () { openOv('help'); }); });
   $('b-help-close').addEventListener('click', function () { closeOv('help'); });
   $('b-about').addEventListener('click', function () { openOv('about'); });
