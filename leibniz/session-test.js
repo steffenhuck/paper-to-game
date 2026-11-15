@@ -40,23 +40,21 @@ const { chromium } = require('playwright'); const path = require('path'); const 
   await tap(w3.big); await shot('a-3-big-out'); await tap(w3.big); await tap(w3.key); await shot('a-3-key-out');
   for (const id of w3.ids) if (await status(2, id) === 'wait' && id !== w3.key) await tap(id);
   await shot('a-3-full'); await letItBe('a-3-let'); await best('a-3-best'); await next();
-  // the lamp
-  await page.waitForTimeout(400); await shot('a-4-dark'); await hscroll('lamp');
-  const jfits = await page.evaluate(() => document.getElementById('b-leave').getBoundingClientRect().bottom <= 700); log.push('lamp: buttons within 700 px: ' + jfits); if (!jfits) errors.push('lamp buttons below 700 px');
+  // the torch
+  await page.waitForTimeout(400); await shot('a-4-dark'); await hscroll('torch');
+  const jfits = await page.evaluate(() => document.getElementById('b-leave').getBoundingClientRect().bottom <= 700); log.push('torch: buttons within 700 px: ' + jfits); if (!jfits) errors.push('torch buttons below 700 px');
   const sb = await (await page.$('#jsky')).boundingBox(); const sx = (x) => sb.x + sb.width * x / 320, sy = (y) => sb.y + sb.height * y / 300;
-  const J0 = await page.evaluate(() => { const s = window.__game.judge.skies[0]; const b = s.stars.find(x => x.id === s.big); return { x: b.x, y: b.y, r: 9 + 2.6 * b.w, full: s.full }; });
-  await page.mouse.move(sx(J0.x + J0.r + 30), sy(J0.y)); await page.mouse.down();
-  for (let a = 0; a <= 24; a++) { const th = a / 24 * Math.PI * 2; await page.mouse.move(sx(J0.x + (J0.r + 30) * Math.cos(th)), sy(J0.y + (J0.r + 30) * Math.sin(th)), { steps: 2 }); }
-  await page.mouse.move(sx(Math.min(310, J0.x + 140)), sy(J0.y), { steps: 8 }); await page.mouse.up(); await page.waitForTimeout(300);
-  await shot('a-4-lamp'); log.push('LAMP: ' + await page.$eval('#jkey', e => e.textContent));
-  await page.click('#b-out'); await page.waitForTimeout(600); await page.evaluate(() => window.scrollTo(0, 0)); await shot('a-4-lifted', true); log.push('LAMP 1 (full=' + J0.full + '): ' + await page.$eval('#jsay', e => e.textContent));
+  const J0 = await page.evaluate(() => { const s = window.__game.judge.skies[0]; const b = s.stars.find(x => x.id === s.big); return { x: b.x, y: b.y, full: s.full }; });
+  await page.mouse.click(sx(J0.x), sy(J0.y)); await page.waitForTimeout(600); await shot('a-4-torch'); log.push('TORCH: ' + await page.$eval('#jkey', e => e.textContent));
+  await page.waitForTimeout(3200); await shot('a-4-torch-out'); log.push('TORCH OUT: ' + await page.$eval('#jkey', e => e.textContent));
+  await page.click('#b-out'); await page.waitForTimeout(600); await page.evaluate(() => window.scrollTo(0, 0)); await shot('a-4-lifted', true); log.push('TORCH 1 (full=' + J0.full + '): ' + await page.$eval('#jsay', e => e.textContent));
   await page.click('#b-jnext'); await page.waitForTimeout(400); await shot('a-4-dark-2');
-  await page.click('#b-leave'); await page.waitForTimeout(600); await page.evaluate(() => window.scrollTo(0, 0)); await shot('a-4-lifted-2', true); log.push('LAMP 2: ' + await page.$eval('#jsay', e => e.textContent) + ' / ' + await page.$eval('#jresult h3', e => e.textContent));
+  await page.click('#b-leave'); await page.waitForTimeout(600); await page.evaluate(() => window.scrollTo(0, 0)); await shot('a-4-lifted-2', true); log.push('TORCH 2: ' + await page.$eval('#jsay', e => e.textContent) + ' / ' + await page.$eval('#jresult h3', e => e.textContent));
   await page.click('#b-jnext'); await page.waitForTimeout(400); await shot('a-end', true); await hscroll('end');
   log.push('VERDICT: ' + await page.$eval('#s-end', e => e.innerText.replace(/\n+/g, ' / ').slice(0, 1600)));
   await page.click('#b-about'); await page.waitForTimeout(300); await shotOverlay('about', 'about'); await page.click('#b-about-close'); await page.waitForTimeout(200);
 
-  // a second draw: heaviest-first everywhere, nothing with the lamp
+  // a second draw: heaviest-first everywhere, no torch
   await page.goto('file://' + path.resolve(__dirname, 'leibnizs-worlds.html') + '?seed=43'); await page.waitForTimeout(500); await page.click('#b-begin'); await page.waitForTimeout(400);
   for (let k = 0; k < 3; k++) {
     const w = await W(k); const order = w.ids.slice().sort((a, b) => w.w[b] - w.w[a]);

@@ -36,11 +36,13 @@ var CONFIG = {
     // World 4, the lamp: Leibniz's covered picture (p. 4–5: "cover up all but a small part ... a confused chaos of
     // colours"; the men in the salt mines of Sarmatia who take their torchlight for all the light there is). Two worlds
     // already made, on the same sky: a small lit star holds a big dark one down. In one the big one is also held by
-    // holders worth more together; in the other nothing but the small one holds it. The lamp is dragged; it burns oil
-    // by distance; then the player puts the small one out, or leaves the world.
+    // holders worth more together; in the other nothing but the small one holds it. The player strikes one torch where
+    // they choose and sees faintly for a moment; then puts the small one out, or leaves the world.
     lamp: { n: [7, 8], small: [1, 3], big: [7, 9], holders: [2, 3], holderW: [3, 5], otherW: [2, 6], dist: [80, 110] }
   },
-  LAMP: { radius: 48, oil: 520 },   // px of light around the finger; px of travel before it goes out. Ours.
+  // The torch (design, 15 Nov, his): one tap places it; for a few seconds the stars and lines inside its glow show
+  // faintly, then it dies. radius in px; seconds it burns; how bright the lines and rings show (1 = as in daylight). Ours.
+  TORCH: { radius: 115, seconds: 3, lineLight: 0.3, starLight: 0.35 },
   // Words for how much of the best world's light a world lacks (memo §3: direction first, rough size). Ours.
   SHORT_WORDS: [[0, 'as full as it can be'], [0.12, 'a little short'], [0.2, 'about a sixth short'], [0.29, 'about a quarter short'],
     [0.4, 'about a third short'], [0.6, 'about half short'], [1.01, 'mostly dark']]
@@ -306,19 +308,21 @@ function genLamp(rng) {
 function makeLampWorld(spec) {
   var stars = spec.stars.map(function (s, i) { return { id: s.id, w: s.w, x: s.x, y: s.y, i: i, status: spec.lit.indexOf(s.id) >= 0 ? 'lit' : 'wait', by: [], known: false }; });
   var w = { k: 3, stars: stars, pairs: spec.pairs.map(function (p) { return p.slice(); }), ended: false, full: spec.full, small: spec.small, big: spec.big,
-    path: [], oil: CONFIG.LAMP.oil, act: null, before: 0, after: 0, stepsBack: 0, putOut: [], acted: 0, knownPairs: [], prefilled: true };
+    torch: null, act: null, before: 0, after: 0, stepsBack: 0, putOut: [], acted: 0, knownPairs: [], prefilled: true };
   settle(w); w.best = solve(w); w.before = light(w); return w;
 }
-function newJudge(rng) { var g = genLamp(rng); if (!g) return null; return { kind: 'lamp', skies: g.skies.map(makeLampWorld), radius: CONFIG.LAMP.radius, oilMax: CONFIG.LAMP.oil }; }
-// The lamp: a point of the drag path. Burns oil by distance; returns false once the oil is gone.
-function lampMove(J, j, x, y) {
-  var s = J.skies[j]; if (s.act || s.oil <= 0) return false;
-  var last = null; for (var i = s.path.length - 1; i >= 0; i--) { if (s.path[i].pen < 0) break; last = s.path[i]; break; }
-  if (last) { var d = Math.hypot(x - last.x, y - last.y); if (d < 2) return true; if (d > s.oil) { var f = s.oil / d; x = last.x + (x - last.x) * f; y = last.y + (y - last.y) * f; d = s.oil; } s.oil -= d; }
-  s.path.push({ x: x, y: y, pen: last ? 1 : 0 });
-  return s.oil > 0;
+function newJudge(rng) { var g = genLamp(rng); if (!g) return null; return { kind: 'torch', skies: g.skies.map(makeLampWorld), radius: CONFIG.TORCH.radius, seconds: CONFIG.TORCH.seconds }; }
+// Strike the one torch at (x, y). Returns false if it has been struck already or the world is decided.
+function strike(J, j, x, y) {
+  var s = J.skies[j]; if (s.act || s.torch) return false;
+  s.torch = { x: x, y: y }; return true;
 }
-function lampLift(J, j) { var s = J.skies[j]; if (s.path.length && s.path[s.path.length - 1].pen >= 0) s.path.push({ x: 0, y: 0, pen: -1 }); }
+// Whether the torch, struck where it was, lit any of the lines from the big star to its holders (not the small one).
+function torchSawHolders(J, j) {
+  var s = J.skies[j]; if (!s.torch) return false;
+  var bg = star(s, s.big);
+  return conflicts(s, s.big).filter(function (id) { return id !== s.small; }).some(function (id) { var o = star(s, id); return segDist(s.torch, bg, o) <= J.radius; });
+}
 // Decide: 'out' puts the small star out and lets the big one be if nothing else holds it; 'leave' leaves the world.
 function decide(J, j, act) {
   var s = J.skies[j]; if (s.act) return null;
@@ -332,7 +336,7 @@ function lampReveal(J, j) {
   var holders = conflicts(s, s.big).filter(function (id) { return id !== s.small; }).map(function (id) { return star(s, id).w; });
   var whole = s.full ? 'The whole: the ' + bg.w + ' was held down by the ' + sm.w + ' and by ' + holders.length + ' more things worth ' + holders.join(' + ') + ' together. Without it the sky holds ' + s.before + '; with it, less. This world was as full as it can be.'
     : 'The whole: nothing but the ' + sm.w + ' held the ' + bg.w + ' down. With the ' + sm.w + ' out and the ' + bg.w + ' in, the sky holds ' + s.best.light + ' instead of ' + s.before + '. This world was ' + (s.best.light - s.before) + ' short.';
-  var spent = J.oilMax - s.oil, used = spent === 0 ? 'You did not light the lamp.' : spent < J.oilMax ? 'You spent ' + (spent < J.oilMax / 2 ? 'some' : 'most') + ' of the lamp.' : 'You burnt the lamp to the end.';
+  var used = !s.torch ? 'You struck no torch.' : torchSawHolders(J, j) ? 'Your torch lit the lines that mattered, for a moment.' : (s.full ? 'Your torch burned where the lines that mattered were not.' : 'Your torch showed no line to the big one but the one you knew; there was none.');
   var line = s.act === 'out' ? (s.came.length ? 'You put the ' + sm.w + ' out, and the ' + bg.w + ' came in: ' + (s.after - s.before) + ' more light than before.'
       : 'You put the ' + sm.w + ' out, and the ' + bg.w + ' stayed dark: ' + (s.before - s.after) + ' less light than before.')
     : (s.full ? 'You left it, and it holds all it could.' : 'You left it, and it holds ' + s.after + ' where it could hold ' + s.best.light + '.');
@@ -389,22 +393,22 @@ function verdict(game) {
   });
   var J = game.judge;
   var jl = J.skies.map(function (s, j) {
-    var spent = J.oilMax - s.oil, looked = spent === 0 ? 'without lighting the lamp' : spent < J.oilMax ? 'after some lamplight' : 'after burning the lamp out';
+    var looked = !s.torch ? 'without a torch' : 'by torchlight';
     var what = s.act === 'out' ? 'put the small one out' : 'left it';
     var got = s.act === 'out' ? (s.came.length ? 'and the big one came in' : 'and the big one stayed dark') : (s.full ? 'and it was as full as it can be' : 'and it stayed short');
     return 'in the ' + (j === 0 ? 'first' : 'second') + ', ' + looked + ', you ' + what + ', ' + got;
   });
-  found.push('World 4: the same small star holding the same big one down; ' + jl[0] + '; ' + jl[1] + '.');
+  found.push('World 4: the same small star holding the same big one down in both; ' + jl[0] + '; ' + jl[1] + '.');
   var part = W.map(function (w, k) { return light(w) < w.best.light ? 'world ' + (k + 1) + ' (' + (w.best.light - light(w)) + ' of light short)' : null; }).filter(Boolean);
   var where = part.length ? 'On ' + list(part) + ', the best possible world holds more than yours.' : 'Nowhere among the skies you made. On every one, yours holds all that could be.';
   var stood = part.length ? 'A world with less in it than there could have been. Leibniz says that cannot be the one that exists: the possibles push, and the fullest set is what comes through, the way weights settle.' : 'Yours is the one Leibniz says exists: the fullest set of things that can be together.';
-  var cover = 'Leibniz: take a very beautiful picture and cover all but a small part. What you see is a confused chaos of colours, and the closer you look the worse it gets. Lift the cover and the whole is the work of a master. Every dark star in the best world is the price of a brighter sky; but a dark star in a world that is not the best is just a mistake, and the two look the same by lamplight.';
+  var cover = 'Leibniz: take a very beautiful picture and cover all but a small part. What you see is a confused chaos of colours, and the closer you look the worse it gets. Lift the cover and the whole is the work of a master. Every dark star in the best world is the price of a brighter sky; but a dark star in a world that is not the best is just a mistake, and the two look the same by torchlight.';
   return { head: head, says: says, found: found, where: where, stood: stood, cover: cover, full: full };
 }
 
 var M = { CONFIG: CONFIG, newGame: newGame, makeWorld: makeWorld, makeLampWorld: makeLampWorld, genWorld1: genWorld1, genWorld2: genWorld2, genWorld3: genWorld3, genLamp: genLamp,
   mulberry32: mulberry32, letBe: letBe, putOut: putOut, letItBe: letItBe, canEnd: canEnd, result: result, verdict: verdict, solve: solve, solveWith: solveWith,
   light: light, total: total, lit: lit, star: star, conflicts: conflicts, name: name, list: list, biggest: biggest, shortWords: shortWords, pairKnown: pairKnown,
-  layoutOk: layoutOk, playGreedy: playGreedy, playRandom: playRandom, playBest: playBest, lampMove: lampMove, lampLift: lampLift, decide: decide, lampReveal: lampReveal };
+  layoutOk: layoutOk, playGreedy: playGreedy, playRandom: playRandom, playBest: playBest, strike: strike, torchSawHolders: torchSawHolders, decide: decide, lampReveal: lampReveal, segDist: segDist };
 if (typeof module !== 'undefined' && module.exports) module.exports = M; else root.LeibnizMechanism = M;
 })(typeof window !== 'undefined' ? window : this);

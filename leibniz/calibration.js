@@ -60,7 +60,7 @@ check('solver exact on every drawn sky (' + SEEDS * 5 + ' skies)', games.every(f
   out.push('     star counts (w1/w2/w3), first eight games: ' + sizes.slice(0, 8).join('  '));
 })();
 
-// 4. the lamp world
+// 4. the torch world
 (function () {
   var bad = [];
   games.forEach(function (g) {
@@ -75,15 +75,17 @@ check('solver exact on every drawn sky (' + SEEDS * 5 + ' skies)', games.every(f
     if (M.conflicts(A, A.big).length < 3 || M.conflicts(B, B.big).length !== 1) bad.push(g.seed + ': holders wrong');
     var lits = M.lit(A).map(function (s) { return s.id; });
     var a2 = M.makeLampWorld({ stars: A.stars, pairs: A.pairs, lit: lits, small: A.small, big: A.big, full: true });
-    M.decide({ skies: [a2], oilMax: C.LAMP.oil }, 0, 'out'); if (a2.came.length || a2.after !== a2.before - sm.w) bad.push(g.seed + ': in the full sky, putting the small one out should lose it and gain nothing');
+    M.decide({ skies: [a2], radius: C.TORCH.radius }, 0, 'out'); if (a2.came.length || a2.after !== a2.before - sm.w) bad.push(g.seed + ': in the full sky, putting the small one out should lose it and gain nothing');
     var b2 = M.makeLampWorld({ stars: B.stars, pairs: B.pairs, lit: lits, small: B.small, big: B.big, full: false });
-    M.decide({ skies: [b2], oilMax: C.LAMP.oil }, 0, 'out'); if (b2.came.length !== 1 || b2.after !== b2.best.light) bad.push(g.seed + ': in the short sky, putting the small one out should let the big one in and reach the best');
+    M.decide({ skies: [b2], radius: C.TORCH.radius }, 0, 'out'); if (b2.came.length !== 1 || b2.after !== b2.best.light) bad.push(g.seed + ': in the short sky, putting the small one out should let the big one in and reach the best');
+    // a torch struck on the big star lights at least one holder line in the full sky
+    var a3 = M.makeLampWorld({ stars: A.stars, pairs: A.pairs, lit: lits, small: A.small, big: A.big, full: true }), J3 = { skies: [a3], radius: C.TORCH.radius };
+    var bg3 = M.star(a3, a3.big); M.strike(J3, 0, bg3.x, bg3.y); if (!M.torchSawHolders(J3, 0)) bad.push(g.seed + ': a torch on the big star does not reach its holders\' lines');
   });
-  check('lamp world on every draw: same opening, one sky the fullest, the other short by exactly the big star less the small, the hand works', bad.length === 0, bad.slice(0, 3).join('; '));
+  check('torch world on every draw: same opening, one sky the fullest, the other short by exactly the big star less the small, the hand works, a torch on the big one lights a holder line', bad.length === 0, bad.slice(0, 3).join('; '));
   var J = games[0].judge, s0 = J.skies[0];
-  var on = true; for (var i = 0; i < 100 && on; i++) on = M.lampMove(J, 0, 160 + i * 8, 150);
-  check('the lamp burns by distance and goes out at ' + C.LAMP.oil + ' px', s0.oil <= 0 && !on && s0.path.length > 10, 'oil ' + s0.oil + ' after ' + s0.path.length + ' points');
-  M.lampLift(J, 0); check('decide after the lamp is out still works', M.decide(J, 0, 'leave') !== null);
+  check('one torch only', M.strike(J, 0, 10, 10) && !M.strike(J, 0, 20, 20) && !!s0.torch);
+  check('decide after the torch still works', M.decide(J, 0, 'leave') !== null);
 })();
 
 // 5. robustness: claim = weight^k, how far the world-2 and world-3 lessons survive, over the draws
@@ -126,9 +128,9 @@ check('solver exact on every drawn sky (' + SEEDS * 5 + ' skies)', games.every(f
 (function () {
   check('words: full', M.shortWords(21, 21) === 'as full as it can be');
   check('words: 12 of 19 is about a third short', M.shortWords(12, 19) === 'about a third short', M.shortWords(12, 19));
-  var g = M.newGame(3); M.playGreedy(g.worlds[0]); M.playGreedy(g.worlds[1]); M.letItBe(g.worlds[2]); M.decide(g.judge, 0, 'out'); M.decide(g.judge, 1, 'leave');
+  var g = M.newGame(3); M.playGreedy(g.worlds[0]); M.playGreedy(g.worlds[1]); M.letItBe(g.worlds[2]); M.strike(g.judge, 0, 100, 100); M.decide(g.judge, 0, 'out'); M.decide(g.judge, 1, 'leave');
   var v = M.verdict(g);
-  check('verdict has four found lines and a world-4 line about the lamp', v.found.length === 4 && /World 4: .*lamp/.test(v.found[3]), v.found[3]);
+  check('verdict has four found lines and a world-4 line about the torch', v.found.length === 4 && /World 4: .*torch/.test(v.found[3]), v.found[3]);
   var g3 = M.newGame(4); M.playBest(g3.worlds[0]); M.playBest(g3.worlds[1]); M.playBest(g3.worlds[2]); M.decide(g3.judge, 0, 'leave'); M.decide(g3.judge, 1, 'leave');
   check('verdict head for the best player', M.verdict(g3).head === 'All three of your skies are as full as they can be.', M.verdict(g3).head);
   check('no sky has two stars of one colour', games.every(function (g) { return g.worlds.concat(g.judge.skies).every(function (w) { var ids = w.stars.map(function (s) { return s.id; }); return ids.length === new Set(ids).size; }); }));
