@@ -27,7 +27,7 @@ Asked together, in the first reply, before the paper is opened, and skipped wher
 
 1. **Is this one of yours?** Yes: the game carries Steffen's signature and counter (build.md, section 7). No: it is a gift for someone else; the beta line is the footer, and the recipient's name, if given, goes in the author-note.
 2. **Should the title name the author, or the substance?** Author: the title carries the author's name and a thing from the game (build.md, section 6). Substance: the title names a thing or an idea from the game and no author at all, so no co-author is left out. If the prompt does not say and the question goes unanswered, a game of Steffen's names the author and a gift names the substance.
-3. **Any specific ideas for this one?** Whatever comes back (a look, a player position, a device, a title, a thing to avoid) is recorded as the memo's first section, *Given*, and binds the design: it outranks the precedent rule (section 5) where the two conflict, and the memo says where it did. "No" leaves every choice to the engine.
+3. **Any specific ideas for this one?** Whatever comes back (a look, a player position, a device, a title, a thing to avoid) is recorded as the memo's first section, *Given*, and binds the design: it outranks the precedent rule (section 5) where the two conflict, and the memo says where it did. It outranks precedent, not the walkthrough: a concept the Given asks for is written out and tested like any other, and if it fails, if the player would only be told what the paper found, the memo says so and builds the nearest concept that passes, keeping everything else the Given asked for. "No" leaves every choice to the engine.
 
 ---
 
@@ -77,6 +77,14 @@ Where the paper hands over two quantities it keeps apart (two clocks, two margin
 
 A bet on the paper's result can open a game or close it, where it supplies anticipation. It is not the spine. A game whose main loop is guessing the paper's numbers is built only when the memo shows that the agent, controller and experimenter concepts were each written out and each failed the walkthrough.
 
+### The record comes first; the discovery is produced, not announced
+
+Where the paper's discovery is read off a record (observations, measurements, the results of an experiment, a text), the game shows the record before the player does anything, in the game's own picture, and keeps it in view. Whatever the player then builds, sets or moves is judged against that record, on screen, by the player's own eye. A stage in which the player acts inside a world the paper rejects says so every time it is shown and names it as imagined; the real record stays beside it or returns the moment the stage ends. The finding is never a sentence the builder wrote: if the only way the game can deliver its discovery is to state it, the concept has not yet found the player's act. Where the paper's claim is about the world and the world can be put on screen (real data, real text, real measurements), it is, and the player meets it.
+
+### A rule the player can check
+
+Every rule of the world that moves something on screen is one the player can state and verify: in a sentence, and, where it is a number, as a sum the screen shows after the move. A rule the screen cannot state is simplified until it can be, or taken off the screen; a parameter the player meets only as an unexplained outcome is a defect, however faithful to the paper. The same holds for what the player's role can know: the screen shows what that role could see and no more, and says so. Where a draw is random, the screen says so where it happens; a player who is not told reads a run as design.
+
 ### Commitment before the outcome
 
 The player commits before the outcome is shown. The strong form is a consequential action — a setting, a sorting, an allocation, a move — whose consequences the player then lives with. The screen where the player commits does not preview the payoff: the paper's instruments may be read before acting, the score may not, or the decision becomes reading. And a control that keeps the previous round's setting looks like advice; every round starts from the same place. Free exploration counts when it builds knowledge the player later uses. A bare prediction is the weak form, used sparingly. The player need not be wrong: an intuition that turns out right is rewarding, one that turns out wrong is instructive, and both work if the commitment was real. The sensible choice fails only where the paper says it fails. Where the paper proves that every attempt must fail (a diagonal argument, an impossibility result), the game may let every attempt fail, and then the failing is shown as the result, named as such at the moment it happens, not disguised as a puzzle with an answer the player has not found.
@@ -93,13 +101,15 @@ Direction first, then rough size: about half, roughly double, a few points, almo
 
 ### Minimal controls, simple loop
 
-The fewest controls that preserve the paper's central mechanism. One is the default. Two or more are right when their *interaction* is the finding — severity and probability of punishment, price and quality, effort and luck. A choice offered to the player has at least three live options or a continuous control, unless binary is the paper's own variable. The loop stays simple: act → mechanism → visible result → where you stand. Every format has an **aim** the player can repeat and a **verdict** at the end.
+The fewest controls that preserve the paper's central mechanism. One is the default. Two or more are right when their *interaction* is the finding — severity and probability of punishment, price and quality, effort and luck. A choice offered to the player has at least three live options or a continuous control, unless binary is the paper's own variable. An option is live only if some sensible way of playing takes it; an option no reasonable player would choose makes the choice a quiz with one answer, and either the option goes or the choice does. The stretch of play reaches the point where the paper's trade-off bites: where the cost of a path lies beyond the last screen, the player has seen only its benefit, and the game has shown half the paper. The loop stays simple: act → mechanism → visible result → where you stand. Every format has an **aim** the player can repeat and a **verdict** at the end.
 
 ### The ending
 
 A game ends. Where there are rounds, there is a last one, and no retry past it; the verdict is a screen the player reaches once. What the verdict says depends on the game: where the paper gives a quantity to score against, a number against the best possible and a fate in words ("you die a comfortable man"); where it does not, something qualitative, what the player found and what the paper says. A tally is never the verdict.
 
 A score needs an objective, and an objective picks a side. Where the paper sets two values against each other and does not rank them (Benjamin's cult value against exhibition value), the game does not rank them either: no number, no best path, no "could have done". The verdict says what became of things on the path the player took, in the paper's own terms, and the player judges. The arithmetic stays underneath, unseen, so that the pictures and the lines agree with each other; nothing is shown as a quantity. Such a game is replayed to see the other fates, not to beat a number, and the aim is phrased as a decision ("decide who sees the face, and how"), not a maximum.
+
+The verdict compares the player with the paper, in words: what the paper found; what the player found; where the two part; and, where the game can say it, what would have followed had the player's result stood. It does not replay the rounds: a table of every round is a record, not a verdict.
 
 A game ends when its discovery has landed. A paper's second half, a corollary, an epilogue, a moral, is read on the verdict screen, not played, unless it holds a second mystery the player can act on with a real outcome at stake. A last choice with nothing at stake is a reading dressed as a decision, and the verdict is not the place for one.
 
@@ -188,7 +198,7 @@ If no concept survives the walkthrough, say so: explain why the paper resists pl
 
 ### The shape
 
-One long round or several short; how many screens; presets or none; score or none. Presets are the paper's own regimes — baseline, comparative statics, the counterintuitive corner, subgroups, experimental conditions. Order them for the player, not as the paper orders them: the discovery arrives early. Five to eight minutes is the default target, not a minimum; some discoveries land best in ninety seconds and are left that short.
+One long round or several short; how many screens; presets or none; score or none. The number of rounds is the number of distinct things there are to find out, plus one or two to practise; a round that teaches nothing the round before it did not is cut. First builds run long, and the fix has always been fewer stages, each carrying one new thing. Presets are the paper's own regimes — baseline, comparative statics, the counterintuitive corner, subgroups, experimental conditions. Order them for the player, not as the paper orders them: the discovery arrives early. Five to eight minutes is the default target, not a minimum; some discoveries land best in ninety seconds and are left that short.
 
 ---
 
@@ -224,7 +234,7 @@ Written in full and shown to the user before the build, as a record, not a quest
 4. **The core narrative** — one paragraph that almost anybody could follow.
 5. **Who lives in the paper** — the candidate players and what each controls.
 6. **Precedent** — the last three games' position, format, device and chassis; what this game does differently on each.
-7. **The aim and the verdict** — the aim as the sentence the player will read; the verdict as the lines the end screen leads with (what you did; what the paper says; what that means), in words.
+7. **The aim and the verdict** — the aim as the sentence the player will read; the verdict as the lines the end screen leads with (what the paper found; what you found; where you part; what would have followed had yours stood), in words.
 8. **Three concepts** — each with position, format, controls, deliberation, discovery moment, sources of fun, replayability; the reckless one marked.
 9. **The first five minutes** for the pick and the runner-up.
 10. **The pick, and why**; runner-up and switch condition; the author test; what the reckless concept would have given if it was not picked.
