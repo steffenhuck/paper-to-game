@@ -200,14 +200,15 @@ canvas.all{display:block;width:348px;margin:6px 0}
   <div class="top"><div class="aim"><b>Aim</b><br>An answer whatever they vote, and no voter the boss.</div><button class="q" id="q-book" aria-label="How to play">?</button></div>
   <h2 class="big">Your book</h2>
   <div class="lead">
-    <p>Anna can write her ballot six ways, and so can Bruno. So 36 different votes can come in next Sunday, and you will write a book with an answer for every one.</p>
+    <p>Anna can write her ballot six ways, and so can Bruno. So 36 different votes can come in next Sunday, and you will write a book that can be consulted for every one.</p>
     <p>Where Anna and Bruno fill in the ballot the same way, it is easy: that is the answer. Where they differ, your book must choose.</p>
     <p>You might be tempted to count points: 3 for a first place, 2 for a second, 1 for a third, add them up, highest wins. But that assumes something you do not know: that the step from first to second matters as much as the step from second to third, and as much to Anna as to Bruno. A ballot only says what is above what. <b>So no points.</b></p>
-    <p>What is left is this. You will see three what-ifs, three of the 36 votes, and make two decisions for each: what goes on the square, and what if that falls through, for whatever reason. For each decision you pick one plan, or call it a draw and the village tosses a coin. Sometimes the second decision is already made by the first, and the game says so. And these six decisions will fill your book for all 36 cases.</p>
+    <p>What is left is this. You will see three what-ifs, three of the 36 votes, and make two decisions for each: what goes on the square, and what if that falls through, for whatever reason. For each decision you pick one plan, or call it a draw and the village tosses a coin. Sometimes the second decision is already made by the first, and the game says so. And these six decisions fill all six lines of your book.</p>
     <p><b>Sounds like magic? Almost.</b> Here is the thing. Take the plans two at a time. Fountain or tower? If both put the same one higher, that settles it. If not, it is a tie, and your book says who gets their way, or calls it a draw. The same for the other two pairs. Three pairs, two ways to disagree about each: six ties, six lines.</p>
   </div>
   <div class="book" id="book0"></div>
-  <p class="note" style="margin-top:10px">The three what-ifs are chosen so that between them you break every one of the six. That is all it takes to be ready for the real Sunday, when Anna and Bruno actually vote.</p>
+  <p class="note" style="margin-top:10px">The three what-ifs are chosen so that between them you break every one of the six. Then your book can be consulted on any vote: fountain or tower, tower or tree, tree or fountain, three results.</p>
+  <div class="lead"><p><b>One thing you cannot choose</b>, because it is what a ranking is: if the fountain is above the tower, and the tower above the tree, then the fountain is above the tree. Sounds obvious, but it is tricky. Your book answers the three pairs separately, and three separate answers can contradict each other. Then nothing can go on the square. <b>Try to avoid decisions that contradict each other.</b> Arrow will check.</p></div>
   <button class="go" id="b-start">Start the what-ifs</button>
 </section>
 
@@ -240,11 +241,11 @@ canvas.all{display:block;width:348px;margin:6px 0}
 <section class="screen" id="s-check">
   <div class="top"><div class="aim"><b>Aim</b><br>An answer whatever they vote, and no voter the boss.</div><button class="q" id="q-check" aria-label="How to play">?</button></div>
   <h2 class="big">Arrow checks the rest</h2>
-  <p class="note">Your book is full: all six ties are broken, so it can count any vote without you. Anna can write her ballot 6 ways, and so can Bruno: 36 ways the vote can go. One square each. Arrow tries them all.</p>
+  <p class="note">Your book is full: all six ties are broken. So for any vote it gives three results, one per pair of plans. Anna can write her ballot 6 ways, and so can Bruno: 36 ways the vote can go, one square each. Arrow checks, on every one, whether the three results fit together into a ranking.</p>
   <div class="sheet" id="sheet"></div>
-  <div class="tally hide" id="tally"><span><b id="t-yes">0</b> an answer</span><span><b id="t-no">0</b> no answer</span></div>
+  <div class="tally hide" id="tally"><span><b id="t-yes">0</b> fit together</span><span><b id="t-no">0</b> contradict</span></div>
   <div class="legend hide" id="legend">
-    <span><i class="k no"></i>Struck through: the book has no answer for that vote.</span>
+    <span><i class="k no"></i>Struck through: for that vote, the book’s three results contradict each other.</span>
     <span><i class="k ta"></i>Red corner: the answer is exactly Anna’s ballot.</span>
     <span><i class="k tb"></i>Black corner: the answer is exactly Bruno’s ballot.</span>
   </div>
@@ -313,7 +314,7 @@ canvas.all{display:block;width:348px;margin:6px 0}
   <h2>How to play</h2>
   <p><b>Aim:</b> write a book that gives an answer whatever they vote, without making one voter the boss.</p>
   <h3>Your book</h3>
-  <p>36 votes can come in, but a tie is always about two plans: Anna puts one higher, Bruno the other. Three pairs of plans, two ways round: six ties, six lines in the book. No counting points: a ballot says only what is above what, not by how much.</p>
+  <p>36 votes can come in, but a tie is always about two plans: Anna puts one higher, Bruno the other. Three pairs of plans, two ways round: six ties, six lines in the book. No counting points: a ballot says only what is above what, not by how much. And a ranking must hang together: if the fountain is above the tower and the tower above the tree, the fountain is above the tree. Three separate answers can break that.</p>
   <h3>The what-ifs</h3>
   <p>The vote is next Sunday. Before it, the counting rule has to be written down. Arrow shows you a pair of ballots, Anna’s in red and Bruno’s in black, favourite on top, and asks: if they write this, what goes on the square?</p>
   <h3>Settled and tied</h3>
@@ -323,7 +324,7 @@ canvas.all{display:block;width:348px;margin:6px 0}
   <h3>Your book</h3>
   <p>Six different ties can happen. Once you break one, the book keeps your answer, and that tie gets the same answer whenever it comes up again. Three what-ifs fill the book.</p>
   <h3>Arrow checks the rest</h3>
-  <p>Arrow tries all 36 ways the vote can go. A square with a ranking means the book has an answer. A square struck through means it has none: the book’s own answers contradict each other, and the box under the sheet says how. A red or black corner means the answer is exactly that voter’s ballot. Touch any square to read it.</p>
+  <p>Arrow tries all 36 ways the vote can go. For each, the book gives three results, one per pair of plans. A square with a ranking means the three fit together. A square struck through means they contradict each other (fountain above tower, tower above tree, but tower above fountain), and the box under the sheet says how. The book is still used on Sunday; on that vote it just cannot put anything on the square. A red or black corner means the ranking is exactly that voter’s ballot. Touch any square to read it.</p>
   <h3>Sunday</h3>
   <p>The real vote, drawn by chance from the 36. Your book counts it.</p>
   <h3>The debrief</h3>
@@ -527,11 +528,11 @@ canvas.all{display:block;width:348px;margin:6px 0}
     el.className = 'sq done' + (c.list ? '' : ' no') + (c.isAnnas ? ' ta' : '') + (c.isBeats ? ' tb' : '') + (ctx.cur === k ? ' cur' : '');
     el.innerHTML = c.list ? '<span class="stack" style="gap:2px">' + tiersHtml(c.list, 11) + '</span>' + (c.isBeats ? '<i></i>' : '') : '';
   }
-  function relWords(a, b, top) { return top === -1 ? P[a] + ' ties with ' + P[b] : P[top] + ' beats ' + P[top === a ? b : a]; }
+  function relWords(a, b, top) { return top === -1 ? P[a] + ' level with ' + P[b] : P[top] + ' above ' + P[top === a ? b : a]; }
   function clashWords(k, whose) {
-    var w = function (r) { return r === '>' ? 'beats' : 'ties with'; };
-    return 'The ' + P[k.a] + ' ' + w(k.ab) + ' the ' + P[k.b] + ', and the ' + P[k.b] + ' ' + w(k.bc) + ' the ' + P[k.c] + '. So the ' + P[k.a] + ' should ' + (k.expect === '>' ? 'beat' : 'tie with') + ' the ' + P[k.c] + '. But ' + whose + ' ' +
-      (k.actual === '<' ? 'the ' + P[k.c] + ' beats the ' + P[k.a] : k.actual === '=' ? 'they tie' : 'the ' + P[k.a] + ' beats the ' + P[k.c]) + '.' + (k.circle ? ' Round in a circle: nobody can be first.' : ' That cannot be put on steps.');
+    var w = function (r) { return r === '>' ? 'above' : 'level with'; };
+    return 'The ' + P[k.a] + ' is ' + w(k.ab) + ' the ' + P[k.b] + ', and the ' + P[k.b] + ' is ' + w(k.bc) + ' the ' + P[k.c] + ', so the ' + P[k.a] + ' must be ' + (k.expect === '>' ? 'above' : 'level with') + ' the ' + P[k.c] + '. But ' + whose + ' ' +
+      (k.actual === '<' ? 'the ' + P[k.c] + ' is above the ' + P[k.a] : k.actual === '=' ? 'they are level' : 'the ' + P[k.a] + ' is above the ' + P[k.c]) + '.' + (k.circle ? ' Round in a circle: nothing can be first.' : '');
   }
   async function readSquare(ctx, k, slow) {
     var c = ctx.cells[k]; if (ctx.cur >= 0 && $(ctx.pre + ctx.cur)) $(ctx.pre + ctx.cur).classList.remove('cur');
@@ -547,7 +548,7 @@ canvas.all{display:block;width:348px;margin:6px 0}
     });
     var whose = ctx.mode === 'book' ? 'your book says' : ctx.mode === 'C' ? 'the majority says' : 'the tie-breaker says';
     h += '<div class="rout">' + (c.list ? '<span class="stack" style="gap:2px">' + tiersHtml(c.list, 15) + '</span><span><span class="h">An answer.</span>' + listWords(c.list).replace(/^./, function (m) { return m.toUpperCase(); }) + '.' + (c.isAnnas && c.isBeats ? ' The two agree on everything, so it is both their ballots.' : c.isAnnas ? ' Exactly Anna’s ballot.' : c.isBeats ? ' Exactly Bruno’s ballot.' : ' Neither voter’s ballot.') + '</span>'
-      : '<span><span class="h">No answer.</span>' + clashWords(c.clash, whose) + '</span>') + '</div>';
+      : '<span><span class="h">Three results that contradict each other.</span>' + clashWords(c.clash, whose) + (ctx.mode === 'book' ? ' Each line is fine on its own, and your book is still fine for Sunday. But if this vote comes in, nothing can go on the square.' : '') + '</span>') + '</div>';
     $(ctx.read).innerHTML = h; $(ctx.read).classList.remove('hide');
     var els = $(ctx.read).querySelectorAll('.rl,.rout');
     for (var i = 0; i < els.length; i++) { if (slow) await wait(i === 0 ? 500 : 950); els[i].classList.add('in'); }
@@ -570,14 +571,14 @@ canvas.all{display:block;width:348px;margin:6px 0}
       var k = -1; a.cells.forEach(function (c, i) { if (k < 0 && !c.list) k = i; }); if (k < 0) k = 5;
       $('check-say').innerHTML = 'Arrow takes one way the vote can go and looks up each pair of plans in your book…';
       await readSquare(ctx, k, true); await wait(400); stamp(ctx, k);
-      $('check-say').innerHTML = a.cells[k].list ? 'The book has an answer for that vote. It goes in the square.' : '<b>The book has no answer for that vote.</b> Every line above is a 2–0 or one of your own tie-breaks. Put together, they go round in a circle. The square is struck through.';
+      $('check-say').innerHTML = a.cells[k].list ? 'For that vote the three results fit together. The ranking goes in the square.' : '<b>For that vote the three results contradict each other.</b> Every line above is a 2–0 or one of your own tie-breaks, and each is fine on its own. Together they go round in a circle. The square is struck through.';
       $('b-check').dataset.step = '1'; $('b-check').textContent = 'Check the other 35'; $('b-check').disabled = false; G.busy = false; return;
     }
     G.busy = true; $('b-check').disabled = true; $('tally').classList.remove('hide'); $('check-say').textContent = '';
     await runSheet(ctx, 't-yes', 't-no', 75);
     var v = M.verdict(G.book); $('legend').classList.remove('hide');
-    $('check-say').innerHTML = v.boss ? '<b>An answer on all 36.</b> Now look at the corners: every square has ' + (v.boss === 'A' ? 'Anna’s red' : 'Bruno’s black') + ' corner. The other colour shows only where the two agree on everything. Touch any square to read it.'
-      : '<b>An answer on ' + v.holds + ' of the 36. None on ' + v.broken + '.</b> Touch any square to read it.';
+    $('check-say').innerHTML = v.boss ? '<b>The results fit together on all 36.</b> Now look at the corners: every square has ' + (v.boss === 'A' ? 'Anna’s red' : 'Bruno’s black') + ' corner. The other colour shows only where the two agree on everything. Touch any square to read it.'
+      : '<b>The results fit together on ' + v.holds + ' of the 36. On ' + v.broken + ' they contradict each other.</b> Your book is still fine for Sunday: every line stands. Touch any square to read it.';
     $('b-check').classList.add('hide'); $('b-toreal').classList.remove('hide'); G.busy = false;
   }
   async function runSheet(ctx, yesId, noId, ms) {
@@ -607,7 +608,7 @@ canvas.all{display:block;width:348px;margin:6px 0}
       var t = M.tiers(c.list), top = t[0];
       h += '<div class="rout"><span class="stack" style="gap:2px">' + tiersHtml(c.list, 15) + '</span><span><span class="h">' + (top.length === 1 ? 'The ' + P[top[0]] + ' goes on the square.' : top.length === 2 ? 'A draw between the ' + P[top[0]] + ' and the ' + P[top[1]] + '. The village tosses a coin.' : 'A three-way draw. The village tosses a coin.') + '</span>Put together: ' + listWords(c.list) + '.' + (c.isAnnas && c.isBeats ? ' The two agreed on everything.' : c.isAnnas ? ' That is exactly Anna’s ballot.' : c.isBeats ? ' That is exactly Bruno’s ballot.' : '') + '</span></div>';
     } else {
-      h += '<div class="rout"><span><span class="h">Your book has no answer.</span>Put together: ' + clashWords(c.clash, 'your book says') + ' The village stands in the square and argues. This was one of the ' + G.audit.broken + ' votes out of 36 that your book cannot count.</span></div>';
+      h += '<div class="rout"><span><span class="h">The three results contradict each other.</span>' + clashWords(c.clash, 'your book says') + ' Nothing can go on the square. The village stands there and argues. This was one of the ' + G.audit.broken + ' votes out of 36 on which your book contradicts itself.</span></div>';
     }
     $('real-out').innerHTML = h; $('real-out').classList.remove('hide'); $('b-count').classList.add('hide');
     var els = $('real-out').querySelectorAll('.rl,.rout');
@@ -644,13 +645,13 @@ canvas.all{display:block;width:348px;margin:6px 0}
   function endScreen() {
     G.phase = 'end'; var v = M.verdict(G.book), boss = v.boss === 'A' ? 'Anna' : 'Bruno', other = v.boss === 'A' ? 'Bruno' : 'Anna';
     if (v.boss) {
-      $('v1').textContent = 'Your book has an answer for all 36 votes.';
+      $('v1').textContent = 'Your book never contradicts itself. A ranking on all 36 votes.';
       $('v2').textContent = 'And every answer is ' + boss + '’s ballot. Every tie went to ' + boss + '. What ' + other + ' writes changes nothing. Arrow’s word for ' + boss + ' is dictator.';
-      $('v3').innerHTML = '<b>Arrow, 1950:</b> a book that always has an answer always has a boss.';
+      $('v3').innerHTML = '<b>Arrow, 1950:</b> a book that never contradicts itself always has a boss.';
     } else {
-      $('v1').textContent = 'Your book has an answer for ' + v.holds + ' of the 36 votes. For ' + v.broken + ' it has none.';
+      $('v1').textContent = 'Your book answered every pair. On ' + v.broken + ' of the 36 votes the three answers contradict each other.';
       $('v2').textContent = 'Nobody is the boss. ' + (v.holds === v.best ? 'And no book without a boss does better than ' + v.best + '. You found the edge.' : 'The best any book can do without a boss is ' + v.best + '.');
-      $('v3').innerHTML = '<b>Arrow, 1950:</b> a book that always has an answer has a boss. A book with no boss sometimes has no answer.';
+      $('v3').innerHTML = '<b>Arrow, 1950:</b> a book that never contradicts itself has a boss. A book with no boss contradicts itself somewhere.';
     }
     // 1. three other tie-breakers
     var cl = M.clarasBook(C.clara), aC = M.audit(cl), aA = M.audit(M.voterBook('A')), aB = M.audit(M.voterBook('B'));
@@ -686,8 +687,8 @@ canvas.all{display:block;width:348px;margin:6px 0}
       g.strokeStyle = n === 0 ? RED : n === 728 ? INK : '#C9C8C3'; g.lineWidth = (n === 0 || n === 728) ? 2 : 0.5; g.strokeRect(x0 - 0.5, y0 - 0.5, cs * 6 + 1, cs * 6 + 1);
       if (n === v.index && !v.boss) { g.strokeStyle = RED; g.lineWidth = 2; g.beginPath(); g.arc(x0 + cs * 3, y0 + cs * 3, cs * 3 + 4, 0, Math.PI * 2); g.stroke(); }
     }
-    $('tries').textContent = 'Arrow tried all 729 books on all 36 votes. 727 fail somewhere. Two never do.';
-    $('ring').innerHTML = 'Six ties, three answers each: 729 books. Each tiny sheet below is one book, its 36 votes as dots, black where the book has no answer. The clean sheet with a red frame, the very first, is Anna the boss; the clean sheet with a black frame, the very last, is Bruno the boss.' + (v.boss ? ' Yours is the ' + (v.boss === 'A' ? 'red' : 'black') + ' one.' : ' Yours is ringed in red.');
+    $('tries').textContent = 'Arrow tried all 729 books on all 36 votes. 727 contradict themselves somewhere. Two never do.';
+    $('ring').innerHTML = 'Six ties, three answers each: 729 books. Each tiny sheet below is one book, its 36 votes as dots, black where the book contradicts itself. The clean sheet with a red frame, the very first, is Anna the boss; the clean sheet with a black frame, the very last, is Bruno the boss.' + (v.boss ? ' Yours is the ' + (v.boss === 'A' ? 'red' : 'black') + ' one.' : ' Yours is ringed in red.');
     $('lastline').textContent = 'Argued in nine pictures, and checked 26,244 times. Same answer.';
     $('qa-more').innerHTML = 'No. With three voters and a plain majority there are no ties at all, and it still goes wrong: you saw it with Clara. Let Clara vote freely and there are 216 ways the vote can go; 12 of them go round in a circle. Arrow proved it for any number of voters. (With just Anna and Bruno, a plain majority means a draw on every tie: a book that fails on ' + M.audit(M.voterBook('E')).broken + ' votes.)';
     show('s-end');
