@@ -69,11 +69,13 @@ var CONFIG = {
   // World 4: the window (p. 4–5: men "in the subterranean salt mines of Sarmatia" judge the world by their torchlight;
   // "look at a very beautiful picture, then cover up all but a small part ... a confused chaos of colours"). Two worlds,
   // the same stars in the same places, each already made; through the window the player sees the same thing in both:
-  // a lit 2, a dark 9, a red line between them. In the first the 9 is also shut out by three 4s, and the world is as full
-  // as it can be; in the second nothing but the 2 holds the 9 down, and the world is 7 short. The player judges each
-  // from the window, then the cover lifts. Stars, pairs and the window are ours.
+  // a lit 2, a dark 9, a red line between them. The player may light a torch TORCHES times, anywhere, to see more, and
+  // then either puts the 2 out (so that the 9 may be) or leaves the world as it is. In the first world the 9 is also
+  // held down by three 4s, so putting the 2 out gains nothing and loses 2; in the second nothing but the 2 holds the 9,
+  // and putting it out lets the 9 in. Stars, pairs, the window and the torch are ours.
   JUDGE: {
-    windows: [{ x: 90, y: 95, w: 140, h: 110 }, { x: 90, y: 60, w: 230, h: 180 }],
+    window: { x: 90, y: 95, w: 140, h: 110 },
+    TORCHES: 2, TORCH_RADIUS: 62,
     stars: [
       { id: 'ice', w: 2, x: 115, y: 150 },
       { id: 'coral', w: 9, x: 205, y: 150 },
@@ -86,11 +88,11 @@ var CONFIG = {
     lit: ['ice', 'mint', 'azure', 'lilac', 'rose', 'amber'],
     skies: [
       { pairs: [['coral', 'ice'], ['coral', 'mint'], ['coral', 'azure'], ['coral', 'lilac']], full: true,
-        whole: 'The whole: the 9 was being held down by the 2 and by three 4s. Without it the sky holds 22; with it, 17. This world is as full as it can be.' },
+        whole: 'The whole: the 9 was being held down by the 2 and by three 4s. Without it the sky holds 22; with it, at most 17. This world was as full as it can be.' },
       { pairs: [['coral', 'ice']], full: false,
-        whole: 'The whole: nothing but the 2 was holding the 9 down. Put the 2 out and let the 9 be, and the sky holds 29 instead of 22. This world is 7 short.' }
+        whole: 'The whole: nothing but the 2 was holding the 9 down. With the 2 out and the 9 in, the sky holds 29 instead of 22. This world was 7 short.' }
     ],
-    lesson: 'The same window, two worlds. From a part you cannot tell whether a world is well made; only the whole can tell you.'
+    lesson: 'The same window, two worlds. In one the dark 9 was the price of a fuller sky; in the other it was a mistake. Nothing in the window told them apart. Only more light could, and you had to go and get it.'
   },
   // Star colours by id (memo §13: existence is light). Our choice.
   COLOURS: { coral: '#FF5C5C', amber: '#FFB830', mint: '#2FE3A3', azure: '#4F9DFF', lilac: '#B48CFF', rose: '#FF7AB6', ice: '#9FE8FF' },
@@ -132,23 +134,35 @@ function newWorld(k) {
 function judgeSky(j) {
   var J = CONFIG.JUDGE, S = J.skies[j];
   var stars = J.stars.map(function (s, i) { return { id: s.id, w: s.w, x: s.x, y: s.y, i: i, status: J.lit.indexOf(s.id) >= 0 ? 'lit' : 'wait', by: [], known: true }; });
-  var world = { k: 3, j: j, stars: stars, pairs: S.pairs.slice(), ended: true, full: S.full, whole: S.whole, answers: [] };
-  settle(world); world.best = solve(world); return world;
+  var world = { k: 3, j: j, stars: stars, pairs: S.pairs.slice(), ended: false, full: S.full, whole: S.whole, torches: [], act: null, before: 0, after: 0, stepsBack: 0, putOut: [], history: [], rushed: [] };
+  settle(world); world.best = solve(world); world.before = light(world); return world;
 }
-function newJudge() { return { kind: 'judge', skies: [judgeSky(0), judgeSky(1)], lesson: CONFIG.JUDGE.lesson, windows: CONFIG.JUDGE.windows }; }
-// The player's judgement of a sky through window `stage` (0: small, 1: wide): 'full', 'short' or 'unsure'. Records it.
-function judge(J, j, stage, answer) {
-  var s = J.skies[j]; s.answers[stage] = answer;
-  return { answer: answer };
+function newJudge() { return { kind: 'judge', skies: [judgeSky(0), judgeSky(1)], lesson: CONFIG.JUDGE.lesson, window: CONFIG.JUDGE.window, torches: CONFIG.JUDGE.TORCHES, radius: CONFIG.JUDGE.TORCH_RADIUS }; }
+// Light a torch at (x, y) in sky j: a circle of the cover lifts there. Returns false when no torch is left.
+function look(J, j, x, y) {
+  var s = J.skies[j]; if (s.act || s.torches.length >= J.torches) return false;
+  s.torches.push({ x: x, y: y }); return true;
 }
-function answerWord(a) { return a === 'full' ? 'full' : a === 'short' ? 'short' : "couldn't tell"; }
-// What the game says when the cover lifts on sky j, given the two answers.
+// Decide: 'out' puts the 2 out and lets whatever then can be come in; 'leave' leaves the world. Ends the sky.
+function decide(J, j, act) {
+  var s = J.skies[j]; if (s.act) return null;
+  s.act = act;
+  var came = [];
+  if (act === 'out') { putOut(s, 'ice'); came = rushIn(s); }
+  s.ended = true; s.after = light(s); s.came = came;
+  return judgeReveal(J, j);
+}
+// What the game says when the cover lifts on sky j.
 function judgeReveal(J, j) {
-  var s = J.skies[j], a = s.answers;
-  var truth = s.full ? 'as full as it can be' : '7 short';
-  var said = 'Through the small window you said ' + answerWord(a[0]) + '; through the wide one, ' + answerWord(a[1]) + '.';
-  var right1 = (a[1] === 'full') === s.full;
-  return { line: s.whole + ' ' + said + (right1 ? ' With the wider window you had it.' : ' Even the wider window did not settle it for you.'), truth: truth };
+  var s = J.skies[j], line;
+  var looked = s.torches.length === 0 ? 'You lit no torch.' : s.torches.length === 1 ? 'You lit one torch.' : 'You lit ' + s.torches.length + ' torches.';
+  if (s.act === 'out') {
+    line = s.came.length ? 'You put the 2 out, and the 9 came in: the sky holds ' + s.after + ' now, ' + (s.after - s.before) + ' more than it did.'
+      : 'You put the 2 out, and nothing came in: the 9 stayed dark. The sky holds ' + s.after + ' now, ' + (s.before - s.after) + ' less than it did.';
+  } else {
+    line = s.full ? 'You left it, and it holds ' + s.after + ': all it could.' : 'You left it, and it holds ' + s.after + ' where it could hold ' + s.best.light + '.';
+  }
+  return { line: s.whole + ' ' + looked + ' ' + line, good: s.after === s.best.light };
 }
 function newGame() { return { worlds: [newWorld(0), newWorld(1), newWorld(2)], judge: newJudge(), current: 0 }; }
 function star(world, id) { for (var i = 0; i < world.stars.length; i++) if (world.stars[i].id === id) return world.stars[i]; return null; }
@@ -316,10 +330,13 @@ function verdict(game) {
     if (k === 1) { var big = biggest(w); return 'World 2: ' + (star(w, big.id).status === 'lit' ? 'you kept ' + name(big) + ', the grandest thing, and your world was ' + shortWords(L, B) + '.' : 'you left ' + name(big) + ' out, and your world ' + (L === B ? 'was full.' : 'was ' + shortWords(L, B) + '.')); }
     if (k === 2) return 'World 3: ' + (w.stepsBack === 0 ? 'you put nothing out, and the world stayed as weight had made it.' : 'you stepped back ' + (w.stepsBack === 1 ? 'once' : w.stepsBack === 2 ? 'twice' : w.stepsBack + ' times') + ', and the world ended ' + (L === B ? 'full: the step back was the way forward.' : shortWords(L, B) + '.'));
   });
-  var J = game.judge, A = J.skies.map(function (s) { return s.answers; });
-  var changed = A.filter(function (a) { return a[0] !== a[1]; }).length;
-  found.push('World 4: through the small window, the same in both worlds, you said ' + answerWord(A[0][0]) + ' and ' + answerWord(A[1][0]) + '; through the wide one, ' + answerWord(A[0][1]) + ' and ' + answerWord(A[1][1]) +
-    '. The first world was as full as it can be; the second was 7 short. ' + (changed === 2 ? 'Your judgement changed with the light both times.' : changed === 1 ? 'Once your judgement changed with the light.' : 'More light did not change what you said.'));
+  var J = game.judge;
+  var jl = J.skies.map(function (s, j) {
+    var what = s.act === 'out' ? 'put the 2 out' : 'left it';
+    var got = s.act === 'out' ? (s.came.length ? 'and the 9 came in: 7 gained' : 'and nothing came in: 2 lost') : (s.full ? 'and it was as full as it can be' : 'and it stayed 7 short');
+    return 'in the ' + (j === 0 ? 'first' : 'second') + ' you ' + (s.torches.length ? 'lit ' + (s.torches.length === 1 ? 'a torch' : s.torches.length + ' torches') + ' and ' : '') + what + ', ' + got;
+  });
+  found.push('World 4: through the same window, ' + jl[0] + '; ' + jl[1] + '.');
   var part = W.map(function (w, k) { return light(w) < w.best.light ? 'world ' + (k + 1) + ' (' + (w.best.light - light(w)) + ' of light short)' : null; }).filter(Boolean);
   var where = part.length ? 'On ' + list(part) + ', the best possible world holds more than yours.' : 'Nowhere. On every world, yours holds all that could be.';
   var stood = part.length ? 'A world with less in it than there could have been. Leibniz says that cannot be the one that exists: the possibles push, and the fullest set is what comes through, the way weights settle.' : 'Yours is the one Leibniz says exists: the fullest set of things that can be together.';
@@ -345,7 +362,7 @@ function playBest(world) {
   return letItBe(world);
 }
 
-var M = { CONFIG: CONFIG, newGame: newGame, newWorld: newWorld, newJudge: newJudge, judge: judge, judgeReveal: judgeReveal, pairKnown: pairKnown, answerWord: answerWord, letBe: letBe, putOut: putOut, letItBe: letItBe, result: result, verdict: verdict,
+var M = { CONFIG: CONFIG, newGame: newGame, newWorld: newWorld, newJudge: newJudge, look: look, decide: decide, judgeReveal: judgeReveal, pairKnown: pairKnown, letBe: letBe, putOut: putOut, letItBe: letItBe, result: result, verdict: verdict,
   solve: solve, solveWith: solveWith, light: light, total: total, lit: lit, star: star, conflicts: conflicts, name: name, list: list,
   shortWords: shortWords, playGreedy: playGreedy, playRandom: playRandom, playBest: playBest, rushIn: rushIn };
 if (typeof module !== 'undefined' && module.exports) module.exports = M; else root.LeibnizMechanism = M;

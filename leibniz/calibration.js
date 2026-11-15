@@ -60,32 +60,33 @@ g.worlds.forEach(function (w, i) { check('sky ' + (i + 1) + ' total wanting to b
   check('sky 2: put the coral star out and let it be = best', r.light === w.best.light, r.light);
 })();
 
-// 2b. the window world: two windows, the small one showing the same thing in both skies; the wide one showing what holds
-// the 9 down in the first and not in the second
+// 2b. the window world: the same view in both skies; the torch; the hand
 (function () {
-  var J = M.newJudge(), WS = M.CONFIG.JUDGE.windows;
+  var J = M.newJudge(), W = M.CONFIG.JUDGE.window;
   J.skies.forEach(function (s, j) {
     check('window world ' + (j + 1) + ': lit ' + E.judgeLit[j], M.light(s) === E.judgeLit[j], M.light(s));
     check('window world ' + (j + 1) + ': best ' + E.judgeBest[j], s.best.light === E.judgeBest[j], s.best.light);
     check('window world ' + (j + 1) + ': ' + (s.full ? 'is' : 'is not') + ' as full as it can be', (M.light(s) === s.best.light) === s.full);
   });
-  function inWin(W) { return function (s) { return s.x >= W.x && s.x <= W.x + W.w && s.y >= W.y && s.y <= W.y + W.h; }; }
-  var W0 = WS[0], W1 = WS[1];
-  var seen = J.skies.map(function (s) { return s.stars.filter(inWin(W0)).map(function (x) { return x.id + ':' + x.status; }).sort().join(' '); });
-  check('small window shows the same stars in the same states in both', seen[0] === seen[1], seen[0]);
-  var pairsIn = J.skies.map(function (s) { return s.pairs.filter(function (p) { return inWin(W0)(M.star(s, p[0])) && inWin(W0)(M.star(s, p[1])); }).map(function (p) { return p.join('-'); }).sort().join(' '); });
-  check('small window shows the same lines in both', pairsIn[0] === pairsIn[1], pairsIn[0]);
-  var wide = J.skies.map(function (s) { return s.pairs.filter(function (p) { return inWin(W1)(M.star(s, p[0])) && inWin(W1)(M.star(s, p[1])); }).length; });
-  check('wide window shows the three 4s holding the 9 in the first world and not in the second', wide[0] === 4 && wide[1] === 1, wide.join(','));
-  check('the three 4s are inside the wide window and outside the small', ['mint', 'azure', 'lilac'].every(function (id) { var s = M.star(J.skies[0], id); return inWin(W1)(s) && !inWin(W0)(s); }));
-  check('the 3 and the 5 are outside both windows', ['rose', 'amber'].every(function (id) { var s = M.star(J.skies[0], id); return !inWin(W1)(s); }));
+  function inWin(s) { return s.x >= W.x && s.x <= W.x + W.w && s.y >= W.y && s.y <= W.y + W.h; }
+  var seen = J.skies.map(function (s) { return s.stars.filter(inWin).map(function (x) { return x.id + ':' + x.status; }).sort().join(' '); });
+  check('the window shows the same stars in the same states in both', seen[0] === seen[1], seen[0]);
+  var pairsIn = J.skies.map(function (s) { return s.pairs.filter(function (p) { return inWin(M.star(s, p[0])) && inWin(M.star(s, p[1])); }).map(function (p) { return p.join('-'); }).sort().join(' '); });
+  check('the window shows the same lines in both', pairsIn[0] === pairsIn[1], pairsIn[0]);
   var c = M.star(J.skies[0], 'coral'), r = M.CONFIG.radius(c.w), ok = true;
-  J.skies[0].pairs.forEach(function (p) { var o = M.star(J.skies[0], p[0] === 'coral' ? p[1] : p[0]); if (inWin(W0)(o)) return; var dx = o.x - c.x, dy = o.y - c.y; var tt = (W0.x + W0.w - c.x) / dx; var y = c.y + tt * dy; var d = Math.sqrt(Math.pow(W0.x + W0.w - c.x, 2) + Math.pow(y - c.y, 2)); if (d > r) ok = false; });
-  check('no line stub from the 9 shows inside the small window', ok);
-  M.judge(J, 0, 0, 'short'); M.judge(J, 0, 1, 'full'); M.judge(J, 1, 0, 'short'); M.judge(J, 1, 1, 'short');
-  check('reveal says the wide window settled the first world', /you had it/.test(M.judgeReveal(J, 0).line), M.judgeReveal(J, 0).line);
-  var g2 = M.newGame(); M.judge(g2.judge, 0, 0, 'unsure'); M.judge(g2.judge, 0, 1, 'full'); M.judge(g2.judge, 1, 0, 'unsure'); M.judge(g2.judge, 1, 1, 'short');
-  check('verdict carries the window line', /World 4: .*small window/.test(M.verdict(g2).found[3]), M.verdict(g2).found[3]);
+  J.skies[0].pairs.forEach(function (p) { var o = M.star(J.skies[0], p[0] === 'coral' ? p[1] : p[0]); if (inWin(o)) return; var dx = o.x - c.x, dy = o.y - c.y; var tt = (W.x + W.w - c.x) / dx; var y = c.y + tt * dy; var d = Math.sqrt(Math.pow(W.x + W.w - c.x, 2) + Math.pow(y - c.y, 2)); if (d > r) ok = false; });
+  check('no line stub from the 9 shows inside the window', ok);
+  check('a torch on the 4s reveals them (they sit within one torch radius of a point right of the 9)', ['mint', 'azure', 'lilac'].every(function (id) { var s = M.star(J.skies[0], id); return Math.hypot(s.x - 290, s.y - 150) <= M.CONFIG.JUDGE.TORCH_RADIUS + M.CONFIG.radius(s.w); }));
+  check('torches: two, then none', M.look(J, 0, 290, 150) && M.look(J, 0, 60, 60) && !M.look(J, 0, 1, 1));
+  var r0 = M.decide(J, 0, 'out');
+  check('world 1, put the 2 out: nothing comes in, 2 lost', J.skies[0].after === 20 && J.skies[0].came.length === 0, r0.line);
+  var r1 = M.decide(J, 1, 'out');
+  check('world 2, put the 2 out: the 9 comes in, 29', J.skies[1].after === 29 && J.skies[1].came.join(',') === 'coral', r1.line);
+  check('deciding twice is refused', M.decide(J, 1, 'leave') === null);
+  var J2 = M.newJudge(); M.decide(J2, 0, 'leave'); M.decide(J2, 1, 'leave');
+  check('leave: world 1 stays 22 (all it could), world 2 stays 22 (7 short)', J2.skies[0].after === 22 && J2.skies[1].after === 22 && /all it could/.test(M.judgeReveal(J2, 0).line) && /could hold 29/.test(M.judgeReveal(J2, 1).line));
+  var g2 = M.newGame(); M.decide(g2.judge, 0, 'leave'); M.decide(g2.judge, 1, 'out');
+  check('verdict carries the window line', /World 4: .*left it.*put the 2 out/.test(M.verdict(g2).found[3]), M.verdict(g2).found[3]);
 })();
 
 // 2c. what is found, not given
@@ -134,11 +135,11 @@ g.worlds.forEach(function (w, i) { check('sky ' + (i + 1) + ' total wanting to b
   check('words: full', M.shortWords(21, 21) === 'as full as it can be');
   check('words: 12 of 19 is about a third short', M.shortWords(12, 19) === 'about a third short', M.shortWords(12, 19));
   check('words: 19 of 24 is about a quarter short', M.shortWords(19, 24) === 'about a quarter short', M.shortWords(19, 24));
-  var g2 = M.newGame(); M.playGreedy(g2.worlds[0]); M.playGreedy(g2.worlds[1]); M.letItBe(g2.worlds[2]); M.judge(g2.judge, 0, 0, 'full'); M.judge(g2.judge, 0, 1, 'full'); M.judge(g2.judge, 1, 0, 'full'); M.judge(g2.judge, 1, 1, 'full');
+  var g2 = M.newGame(); M.playGreedy(g2.worlds[0]); M.playGreedy(g2.worlds[1]); M.letItBe(g2.worlds[2]); M.decide(g2.judge, 0, 'out'); M.decide(g2.judge, 1, 'out');
   var v = M.verdict(g2);
   check('verdict head for the heaviest-first player', v.head === 'One of your three worlds is as full as it can be.', v.head);
   check('verdict found lines are four', v.found.length === 4);
-  var g3 = M.newGame(); M.playBest(g3.worlds[0]); M.playBest(g3.worlds[1]); M.playBest(g3.worlds[2]); M.judge(g3.judge, 0, 0, 'full'); M.judge(g3.judge, 0, 1, 'full'); M.judge(g3.judge, 1, 0, 'short'); M.judge(g3.judge, 1, 1, 'short');
+  var g3 = M.newGame(); M.playBest(g3.worlds[0]); M.playBest(g3.worlds[1]); M.playBest(g3.worlds[2]); M.decide(g3.judge, 0, 'leave'); M.decide(g3.judge, 1, 'out');
   check('verdict head for the best player', M.verdict(g3).head === 'All three of your worlds are as full as they can be.', M.verdict(g3).head);
   check('every star has a colour', g.worlds.every(function (w) { return w.stars.every(function (s) { return !!C.COLOURS[s.id]; }); }));
   check('no sky has two stars of one colour', g.worlds.every(function (w) { var ids = w.stars.map(function (s) { return s.id; }); return ids.length === new Set(ids).size; }));

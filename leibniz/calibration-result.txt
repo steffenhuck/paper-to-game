@@ -33,14 +33,16 @@ PASS window world 1: is as full as it can be
 PASS window world 2: lit 22  — 22
 PASS window world 2: best 29  — 29
 PASS window world 2: is not as full as it can be
-PASS small window shows the same stars in the same states in both  — coral:dark ice:lit
-PASS small window shows the same lines in both  — coral-ice
-PASS wide window shows the three 4s holding the 9 in the first world and not in the second  — 4,1
-PASS the three 4s are inside the wide window and outside the small
-PASS the 3 and the 5 are outside both windows
-PASS no line stub from the 9 shows inside the small window
-PASS reveal says the wide window settled the first world  — The whole: the 9 was being held down by the 2 and by three 4s. Without it the sky holds 22; with it, 17. This world is as full as it can be. Through the small window you said short; through the wide one, full. With the wider window you had it.
-PASS verdict carries the window line  — World 4: through the small window, the same in both worlds, you said couldn't tell and couldn't tell; through the wide one, full and short. The first world was as full as it can be; the second was 7 short. Your judgement changed with the light both times.
+PASS the window shows the same stars in the same states in both  — coral:dark ice:lit
+PASS the window shows the same lines in both  — coral-ice
+PASS no line stub from the 9 shows inside the window
+PASS a torch on the 4s reveals them (they sit within one torch radius of a point right of the 9)
+PASS torches: two, then none
+PASS world 1, put the 2 out: nothing comes in, 2 lost  — The whole: the 9 was being held down by the 2 and by three 4s. Without it the sky holds 22; with it, at most 17. This world was as full as it can be. You lit 2 torches. You put the 2 out, and nothing came in: the 9 stayed dark. The sky holds 20 now, 2 less than it did.
+PASS world 2, put the 2 out: the 9 comes in, 29  — The whole: nothing but the 2 was holding the 9 down. With the 2 out and the 9 in, the sky holds 29 instead of 22. This world was 7 short. You lit no torch. You put the 2 out, and the 9 came in: the sky holds 29 now, 7 more than it did.
+PASS deciding twice is refused
+PASS leave: world 1 stays 22 (all it could), world 2 stays 22 (7 short)
+PASS verdict carries the window line  — World 4: through the same window, in the first you left it, and it was as full as it can be; in the second you put the 2 out, and the 9 came in: 7 gained.
 PASS sky 2: no line is known before anything is lit
 PASS sky 2: no number is known before anything is lit
 PASS sky 2: letting the 9 be reveals its four lines and its number  — amber|coral,coral|mint,azure|coral,coral|lilac
