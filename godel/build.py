@@ -1,4 +1,4 @@
-# Generates godels-loophole.html from template.html, mechanism.js (the single source of truth), about.html and the
+# Generates godels-endgame.html from template.html, mechanism.js (the single source of truth), about.html and the
 # embedded fonts, then verifies byte for byte that the embedded mechanism is the file calibration.js ran against.
 import base64, sys, os, subprocess
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -11,14 +11,16 @@ about = open('about.html', encoding='utf-8').read()
 def font(f): return base64.b64encode(open('fonts/' + f, 'rb').read()).decode()
 t = open('template.html', encoding='utf-8').read()
 subs = {
-    '/*__F_K400__*/': font('kalam-400.woff2'),
-    '/*__F_K700__*/': font('kalam-700.woff2'),
+    '/*__F_J400__*/': font('josefin-sans-latin-400-normal.woff2'),
+    '/*__F_J700__*/': font('josefin-sans-latin-700-normal.woff2'),
+    '/*__F_C400__*/': font('courier-prime-latin-400-normal.woff2'),
+    '/*__F_C700__*/': font('courier-prime-latin-700-normal.woff2'),
     '/*__ABOUT__*/': about,
     '/*__MECHANISM__*/': mech,
 }
 for k in subs: assert t.count(k) == 1, k
 for k, v in subs.items(): t = t.replace(k, v)
-name = 'godels-loophole.html'
+name = 'godels-endgame.html'
 open(name, 'w', encoding='utf-8').write(t)
 built = open(name, encoding='utf-8').read()
 if mech not in built:

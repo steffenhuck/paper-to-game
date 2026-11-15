@@ -1,44 +1,30 @@
-PASS shapes 1–3 settle every number 1–13 as arithmetic says  — 
-PASS shapes 4 and 5 (about the rulebook) settle for every fill 1–5 and agree with the ledger  — 
-PASS composer sweep: 432 sentences, every one terminates
-PASS exactly one sentence is unsettled: Gödel’s (does not prove, □, □) filled with 6  — -,hole,hole,6
-PASS exactly one sentence is proved by referring to itself: the self-praising one (proves, □, □) filled with 6  — +,hole,hole,6
-PASS with any shape 6 on the board, shapes 1–5 still settle (except shape 5 filled with 6, which quotes the loophole)
-PASS longest working is 13 lines (fits a phone board)  — 13
-PASS Proposition VI: 17 Gen r is not provable (unsettled, not proved)
-PASS Proposition VI: Neg(17 Gen r) is not provable (unsettled, not refuted)
-PASS the loophole is true: the rulebook does not prove it, which is what it says
-PASS the working names the self-reference and ends with the loop mark
-PASS c + G: the loophole sentence is now proved by rule
-PASS c + G: a new shape about Rulebook 2 appears as shape 7
-PASS c + G: shape 7 filled with 7 is Rulebook 2’s loophole
-PASS c + G: shape 7 filled with 6 is refuted (Rulebook 2 proves shape 6 filled with 6)
-PASS c + G: shape 7 filled with 1–5 settles
-PASS editions 3, 4, 5: each proves every earlier loophole and has a new one of its own
-PASS c + ¬G: the loophole sentence is refuted by rule, and the rule says a page proves it
-PASS c + ¬G: every page of the ledger (4 pages, and all after) is refuted as a proof: ω-inconsistent
-PASS c + ¬G: consistent in the toy: every other sentence keeps Rulebook 1’s verdict, and the new rule settles only the one Rulebook 1 left open
-PASS Proposition XI: Wid(c) is unsettled, and the chain passes through 17 Gen r
-PASS Proposition XI for c + G: Rulebook 2 cannot certify itself either (the chain passes through shape 7)
-PASS robustness (a1): board of 5 other shapes: the loopholes in the composer are -,hole,hole,6, the diagonal fill only  — -,hole,hole,6
-PASS robustness (a2): board of 3 other shapes: the loopholes in the composer are -,hole,hole,4, the diagonal fill only  — -,hole,hole,4
-PASS robustness (a3): board of 7 other shapes: the loopholes in the composer are -,7,hole,8 and -,hole,hole,8 (the second through the board’s own self-praising shape)  — -,7,hole,8 | -,hole,hole,8
-PASS robustness (b): under the paper’s weaker rulebook the loophole is still unsettled and the self-praising sentence still proved
-PASS robustness (b): the weaker rulebook leaves more fixed sentences unsettled (7 of 10), so the toy is generous to the rulebook, as the memo says
-
-Heuristics (build.md §3): ways of playing the composer
-  number facts only (never writes shape 6)            no loophole in 0 runs       
-  shape 6 points at fixed shapes                      no loophole in 6 runs       
-  self-praise first, then flips                       loophole on run 2           
-  Gödel’s shape, filled with 1 to 5 before 6          loophole on run 6           
-  Gödel’s shape, filled with 6                        loophole on run 1           
-  random composer (500 players, 6 runs each)          1% find the loophole        
-
-PASS heuristics: the number-only and fixed-target players never find it; the player who makes the shape look at itself does; the wrong-number player finds it on the 6th run
-PASS heuristics: random composing finds it rarely (1%), so the budget is not a lottery
-PASS shape texts show the hole as □
-PASS a filled sentence reads in words
-PASS verdict has the four parts in words, no digits beyond the shape numbers
-PASS after six composer runs Gödel writes shape 6 and the player’s fill of 6 still loops
-
+PASS no TWICE: no box makes the sentence talk about itself — 127 boxes up to 6 keys
+PASS no TWICE: the thing talked about is always shorter
+PASS no TWICE: no answer exists to show
+PASS twiceA: exactly one answer among 31 boxes — [NOT]
+PASS twiceA: the shown answer is that answer
+PASS twiceB: exactly one answer among 31 boxes — [NOT P1]
+PASS twiceB: the shown answer is that answer
+PASS self1: exactly one answer among 121 boxes — [NOT P1 TWICE]
+PASS self1: the shown answer is that answer
+PASS self2: exactly one answer among 341 boxes — [NOT P2 TWICE]
+PASS self2: the shown answer is that answer
+PASS diagonal: self-reference iff TWICE and box = front — 2728 sentences, 8 fronts
+PASS G is the Gödel kind — NOT PRINTS TWICE [NOT PRINTS TWICE]
+PASS door "prints it": the sentence is false and the machine not honest
+PASS door "never prints it": the sentence is true and the machine honest
+PASS the self-praising sentence is the other kind, not settled by the doors
+PASS Machine II: its own sentence is the Gödel kind — NOT PRINTS II TWICE [NOT PRINTS II TWICE]
+PASS Machine II: its sentence is not Machine I's
+PASS Machine II: the old box gives a false sentence (it prints the old one now) — NOT PRINTS II TWICE [NOT PRINTS TWICE]
+PASS Machine II cannot print its certificate either
+PASS mirror: all pieces match exactly when the sentence talks about itself
+PASS G has 8 signs — 2^5 x 3^17 x 5^19 x 7^11 x 11^5 x 13^17 x 17^19 x 19^13
+PASS G's number is large — 97 digits, begins 218296395479
+INFO G = NOT PRINTS TWICE [NOT PRINTS TWICE] ; number has 97 digits, begins 218296395479..., ends ...500000
+TABLE self1, random boxes (1000 players): median 87 tries, within 6 tries: 8.3%
+TABLE self1, copy the front into the box: 1 try
+TABLE self1, carry over twiceB's answer [NOT PRINTS]: miss — talks about NOT PRINTS [NOT PRINTS], one key short
+TABLE self1, put TWICE alone or first: miss — the subject starts with TWICE, the sentence with NOT
+PASS random filling rarely finds it inside the show-me budget (it is a puzzle, not a lottery)
 all checks passed
