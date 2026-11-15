@@ -857,7 +857,7 @@ canvas.all{display:block;width:348px;margin:6px 0}
       h += '<div class="rl ' + cls + '"><span class="bar"></span>' + outcomeHtml(a, b, info.top, 14) + '<span>' + relWords(a, b, info.top) + '</span><span class="why">' + why + '</span></div>';
     });
     var whose = ctx.mode === 'book' ? 'your book says' : ctx.mode === 'C' ? 'the majority says' : 'the tie-breaker says';
-    h += '<div class="rout">' + (c.list ? '<span class="stack" style="gap:2px">' + tiersHtml(c.list, 15) + '</span><span><span class="h">An answer.</span>' + listWords(c.list).replace(/^./, function (m) { return m.toUpperCase(); }) + '.' + (c.isAnnas && c.isBeats ? ' The two agree on everything, so it is both their ballots.' : c.isAnnas ? ' Exactly Anna’s ballot.' : c.isBeats ? ' Exactly Bruno’s ballot.' : ' Neither voter’s ballot.') + '</span>'
+    h += '<div class="rout">' + (c.list ? '<span class="stack" style="gap:2px">' + tiersHtml(c.list, 15) + '</span><span><span class="h">They fit together.</span>' + listWords(c.list).replace(/^./, function (m) { return m.toUpperCase(); }) + '.' + (c.isAnnas && c.isBeats ? ' The two agree on everything, so it is both their ballots.' : c.isAnnas ? ' Exactly Anna’s ballot.' : c.isBeats ? ' Exactly Bruno’s ballot.' : ' Neither voter’s ballot.') + '</span>'
       : '<span><span class="h">Three results that contradict each other.</span>' + clashWords(c.clash, whose) + (ctx.mode === 'book' ? ' Each line is fine on its own, and your book is still fine for Sunday. But if this vote comes in, nothing can go on the square.' : '') + '</span>') + '</div>';
     $(ctx.read).innerHTML = h; $(ctx.read).classList.remove('hide');
     var els = $(ctx.read).querySelectorAll('.rl,.rout');
@@ -877,8 +877,8 @@ canvas.all{display:block;width:348px;margin:6px 0}
     if (G.busy) return; var a = G.audit, ctx = G.chk;
     if ($('b-check').dataset.step === '0') {
       G.busy = true; $('b-check').disabled = true;
-      // read slowly: the first Sunday without a ranking, or, where there is none, the one where the two want opposite things
-      var k = -1; a.cells.forEach(function (c, i) { if (k < 0 && !c.list) k = i; }); if (k < 0) k = 5;
+      // read slowly: a vote whose three results fit together (one that is neither voter's ballot, where there is one); the contradictions come with the run
+      var k = -1; a.cells.forEach(function (c, i) { if (k < 0 && c.list && !c.isAnnas && !c.isBeats) k = i; }); if (k < 0) a.cells.forEach(function (c, i) { if (k < 0 && c.list) k = i; }); if (k < 0) k = 0;
       $('check-say').innerHTML = 'Arrow takes one way the vote can go and looks up each pair of plans in your book…';
       await readSquare(ctx, k, true); await wait(400); stamp(ctx, k);
       $('check-say').innerHTML = a.cells[k].list ? 'For that vote the three results fit together. The ranking goes in the square.' : '<b>For that vote the three results contradict each other.</b> Every line above is a 2–0 or one of your own tie-breaks, and each is fine on its own. Together they go round in a circle. The square is struck through.';
@@ -887,8 +887,10 @@ canvas.all{display:block;width:348px;margin:6px 0}
     G.busy = true; $('b-check').disabled = true; $('tally').classList.remove('hide'); $('check-say').textContent = '';
     await runSheet(ctx, 't-yes', 't-no', 75);
     var v = M.verdict(G.book); $('legend').classList.remove('hide');
+    var kNo = -1; a.cells.forEach(function (c, i) { if (kNo < 0 && !c.list) kNo = i; });
+    if (kNo >= 0) { await wait(300); await readSquare(ctx, kNo, false); }
     $('check-say').innerHTML = v.boss ? '<b>The results fit together on all 36.</b> Now look at the corners: every square has ' + (v.boss === 'A' ? 'Anna’s red' : 'Bruno’s black') + ' corner. The other colour shows only where the two agree on everything. Touch any square to read it.'
-      : '<b>The results fit together on ' + v.holds + ' of the 36. On ' + v.broken + ' they contradict each other.</b> Your book is still fine for Sunday: every line stands. Touch any square to read it.';
+      : '<b>The results fit together on ' + v.holds + ' of the 36. On ' + v.broken + ' they contradict each other.</b> The first of those is read out above. Your book is still fine for Sunday: every line stands. Touch any square to read it.';
     $('b-check').classList.add('hide'); $('b-toreal').classList.remove('hide'); G.busy = false;
   }
   async function runSheet(ctx, yesId, noId, ms) {
