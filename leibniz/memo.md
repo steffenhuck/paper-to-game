@@ -42,6 +42,10 @@ His notes: the torch could not be seen as an instrument (it was invisible until 
 
 His note: the second world of round 4 was odd, there was nothing meaningful to do (both torches spent, a coin toss), and should it have its own number. Cut: round 4 is one world, one torch, the full sequence; after the cover lifts, *The twin* is shown beside it, the other world with the same opening, and the line says which kind each was and that only a torch could have told them apart. Which of the two is played is drawn at random. Four worlds, no fifth. He will send the game to Strickland before it goes on the page.
 
+## 2h. Revision, 15 Nov 2026, night (after he played the one-world-and-twin build)
+
+His note: round 4 still a little trivial and too random; his suggestion, "naughty", to put the answer where the torch did not shine. Built instead as one-sided evidence, which gets the effect honestly: three lines leave the big star in both worlds, stubs in view from the start, ends beyond the torch's reach from the big star and spread in direction; in the full world two of the three ends are lit holders worth more than the big one together and the third a dark thing shut out by a lit other; in the short world all three ends are dark. A torch can show a lit end (held, certain) and never prove the big one free. The reading becomes *Did you see the big star held? Yes, held / Nothing held it / Couldn't tell*; he asked whether the reading is superfluous; kept for now as the inference step, a one-line cut if not. Unlit star discs are now opaque so that lines do not show through them in the opening.
+
 ## 3. The discovery, and its kind
 
 **A mechanism made intelligible**, with a **counterintuitive corner**. The mechanism: "best of all possible worlds" is an argmax, the fullest set of things that can exist together. The corner: the fullest world need not contain the grandest single thing; the way from a decent world to the best one can run through destroying a part that was fine. Three things to find out, one per world; the paper names all three.

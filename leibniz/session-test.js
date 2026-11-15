@@ -44,12 +44,12 @@ const { chromium } = require('playwright'); const path = require('path'); const 
   await page.waitForTimeout(400); await shot('a-4-dark'); await hscroll('torch');
   const jfits = await page.evaluate(() => document.getElementById('b-leave').getBoundingClientRect().bottom <= 700); log.push('torch: buttons within 700 px: ' + jfits); if (!jfits) errors.push('torch buttons below 700 px');
   const sb = await (await page.$('#jsky')).boundingBox(); const sx = (x) => sb.x + sb.width * x / 320, sy = (y) => sb.y + sb.height * y / 300;
-  const J0 = await page.evaluate(() => { const s = window.__game.judge.skies[0]; const b = s.stars.find(x => x.id === s.big); return { x: b.x, y: b.y, full: s.full }; });
+  const J0 = await page.evaluate(() => { const s = window.__game.judge.skies[0]; const e = s.stars.find(x => x.id === s.ends[0]); return { x: e.x, y: e.y, full: s.full }; });
   const fl = await page.evaluate(() => { const m = /translate\(([\d.]+) ([\d.]+)\)/.exec(document.querySelector('#jsky .flame').getAttribute('transform')); return { x: +m[1], y: +m[2] }; });
   await page.mouse.move(sx(fl.x), sy(fl.y)); await page.mouse.down(); await page.mouse.move(sx(J0.x), sy(J0.y), { steps: 8 }); await page.mouse.up(); await page.waitForTimeout(800);
   await shot('a-4-torch'); log.push('TORCH: ' + await page.$eval('#jkey', e => e.textContent));
   await page.waitForTimeout(6500); await shot('a-4-torch-out'); log.push('TORCH OUT: ' + await page.$eval('#jkey', e => e.textContent));
-  await page.click('#b-done'); await page.waitForTimeout(300); await shot('a-4-read', true); await page.click('#b-r-lines'); await page.waitForTimeout(300); await shot('a-4-choose', true);
+  await page.click('#b-done'); await page.waitForTimeout(300); await shot('a-4-read', true); await page.click('#b-r-held'); await page.waitForTimeout(300); await shot('a-4-choose', true);
   await page.click('#b-other'); await page.waitForTimeout(1800); await shot('a-4-consequence', true); log.push('CONSEQUENCE: ' + await page.$eval('#jsay', e => e.textContent));
   await page.click('#b-lift'); await page.waitForTimeout(1500); await shot('a-4-lifting'); await page.waitForTimeout(2800); await page.evaluate(() => window.scrollTo(0, 0)); await shot('a-4-lifted', true); log.push('TORCH 1 (full=' + J0.full + '): ' + await page.$eval('#jsay', e => e.textContent));
   await page.click('#b-twin'); await page.waitForTimeout(400); await page.evaluate(() => window.scrollTo(0, 0)); await shot('a-4-twin', true); log.push('TWIN: ' + await page.$eval('#jresult .lesson', e => e.textContent));
@@ -65,7 +65,7 @@ const { chromium } = require('playwright'); const path = require('path'); const 
     await letItBe('b-' + (k + 1) + '-let'); await best('b-' + (k + 1) + '-best'); await next();
   }
   await page.waitForTimeout(400);
-  await page.click('#b-done'); await page.waitForTimeout(300); await page.click('#b-r-none'); await page.waitForTimeout(300); await page.click('#b-leave'); await page.waitForTimeout(1200); await page.click('#b-lift'); await page.waitForTimeout(4200); await page.click('#b-twin'); await page.waitForTimeout(400); await page.click('#b-jnext'); await page.waitForTimeout(400);
+  await page.click('#b-done'); await page.waitForTimeout(300); await page.click('#b-r-free'); await page.waitForTimeout(300); await page.click('#b-leave'); await page.waitForTimeout(1200); await page.click('#b-lift'); await page.waitForTimeout(4200); await page.click('#b-twin'); await page.waitForTimeout(400); await page.click('#b-jnext'); await page.waitForTimeout(400);
   await shot('b-end', true);
   log.push('VERDICT B: ' + await page.$eval('#s-end', e => e.innerText.replace(/\n+/g, ' / ').slice(0, 900)));
 

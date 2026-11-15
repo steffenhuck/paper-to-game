@@ -33,14 +33,14 @@ var CONFIG = {
     // A sky filled by weight, heaviest first; exactly one lit star whose putting-out opens the way to the best, and it is
     // not the biggest; putting the biggest out opens nothing.
     world3: { n: [7, 8], weights: [2, 8], pairs: [4, 6], minDark: 3 },
-    // World 4, the lamp: Leibniz's covered picture (p. 4–5: "cover up all but a small part ... a confused chaos of
+    // World 4, the torch: Leibniz's covered picture (p. 4–5: "cover up all but a small part ... a confused chaos of
     // colours"; the men in the salt mines of Sarmatia who take their torchlight for all the light there is). Two worlds
-    // already made, on the same sky: a small lit star holds a big dark one down. In one the big one is also held by
-    // holders worth more together; in the other nothing but the small one holds it. One of the two is played (drawn at
-    // random): the player strikes one torch where they choose and sees faintly for a moment; says what they saw; then
-    // chooses the other star, or leaves the world; sees what that did, in the dark; then the cover lifts; then the other
-    // world, the twin, is shown beside it: the same opening, the other truth.
-    lamp: { n: [7, 8], small: [1, 3], big: [7, 9], holders: [2, 3], holderW: [3, 5], otherW: [2, 6], dist: [80, 110] }
+    // on one sky, one played, the other its twin: a small lit star holds a big dark one down, and three lines leave the
+    // big star, their stubs in view, their far ends beyond the torch's reach from it. In one world two of the ends are
+    // lit holders worth more than the big one together and the third is a dark thing, shut out by something else; in the
+    // other all three ends are dark. The torch can show a lit end (the big one is held, for certain) or a dark one (one
+    // line holds nothing; the rest unknown): a torch can prove a thing held and never prove it free (design, 15 Nov).
+    lamp: { others: [2, 3], small: [1, 3], big: [7, 9], ends: 3, endW: [4, 6], otherW: [5, 7], dist: [80, 110], endDist: [150, 205], spread: 65, stub: 30 }
   },
   // The torch (design, 15 Nov, his): one tap places it; for a few seconds the stars and lines inside its glow show
   // faintly, then it dies. radius in px; seconds it burns; how bright the lines and rings show (1 = as in daylight). Ours.
@@ -277,39 +277,61 @@ function genWorld3(rng) {
   }
   return null;
 }
-// The lamp world: two worlds on one sky. Returns { skies: [specA, specB] } in random order, each spec carrying `full`.
+// The torch world: two worlds on one sky. Returns { skies: [specPlayed, specTwin] }, each spec carrying `full`.
 function genLamp(rng) {
-  var G = CONFIG.GEN.lamp, S = CONFIG.SKY;
-  for (var t = 0; t < 600; t++) {
-    var n = rint(rng, G.n[0], G.n[1]), h = rint(rng, G.small[0], G.small[1]), B = rint(rng, G.big[0], G.big[1]), nh = rint(rng, G.holders[0], G.holders[1]);
+  var G = CONFIG.GEN.lamp, S = CONFIG.SKY, R = CONFIG.radius, T = CONFIG.TORCH;
+  for (var t = 0; t < 1500; t++) {
+    var no = rint(rng, G.others[0], G.others[1]), n = 2 + G.ends + no;
+    var h = rint(rng, G.small[0], G.small[1]), B = rint(rng, G.big[0], G.big[1]);
     var ids = colours(rng, n), ws = [h, B];
-    for (var i = 0; i < nh; i++) ws.push(rint(rng, G.holderW[0], G.holderW[1]));
-    for (i = 2 + nh; i < n; i++) ws.push(rint(rng, G.otherW[0], G.otherW[1]));
-    var holdSum = ws.slice(2, 2 + nh).reduce(function (a, b) { return a + b; }, 0); if (holdSum <= B) continue;
-    if (ws.slice(2).some(function (x) { return x >= B; })) continue;
-    // the two opening stars near the middle, a set distance apart, at a random angle
-    var ang = rng() * Math.PI * 2, d = rint(rng, G.dist[0], G.dist[1]);
-    var cx = S.W / 2 + (rng() - .5) * 40, cy = S.H / 2 + (rng() - .5) * 30;
-    var fixed = {}; fixed[ids[0]] = { x: Math.round(cx - Math.cos(ang) * d / 2), y: Math.round(cy - Math.sin(ang) * d / 2) };
-    fixed[ids[1]] = { x: Math.round(cx + Math.cos(ang) * d / 2), y: Math.round(cy + Math.sin(ang) * d / 2) };
-    var pairsA = [[ids[1], ids[0]]]; for (i = 0; i < nh; i++) pairsA.push([ids[1], ids[2 + i]]);
-    var pairsB = [[ids[1], ids[0]]];
+    for (var i = 0; i < G.ends; i++) ws.push(rint(rng, G.endW[0], G.endW[1]));
+    for (i = 0; i < no; i++) ws.push(rint(rng, G.otherW[0], G.otherW[1]));
+    var SM = ids[0], BG = ids[1], E = ids.slice(2, 2 + G.ends), O = ids.slice(2 + G.ends);
+    // the big star near the middle; the small one at a set distance; the three ends beyond the torch's reach in spread directions
+    var bx = Math.round(S.W / 2 + (rng() - .5) * 30), by = Math.round(S.H / 2 + (rng() - .5) * 24);
+    var ha = rng() * Math.PI * 2, hd = rint(rng, G.dist[0], G.dist[1]);
+    var fixed = {}; fixed[BG] = { x: bx, y: by }; fixed[SM] = { x: Math.round(bx + Math.cos(ha) * hd), y: Math.round(by + Math.sin(ha) * hd) };
+    var angs = [], ok = true;
+    for (i = 0; i < G.ends && ok; i++) {
+      var found = false;
+      for (var a = 0; a < 40 && !found; a++) {
+        var ang = rng() * Math.PI * 2, far = angs.concat([ha]).every(function (q) { var d = Math.abs(((ang - q) % (2 * Math.PI) + 3 * Math.PI) % (2 * Math.PI) - Math.PI); return d >= G.spread * Math.PI / 180; });
+        if (!far) continue;
+        var ed = rint(rng, G.endDist[0], G.endDist[1]), ex = Math.round(bx + Math.cos(ang) * ed), ey = Math.round(by + Math.sin(ang) * ed), er = R(ws[2 + i]);
+        if (ex - er < S.margin || ex + er > S.W - S.margin || ey - er < S.margin || ey + er > S.H - S.margin) continue;
+        if (ed - er <= T.radius + 12) continue; // a torch on the big star must not reach the end
+        angs.push(ang); fixed[E[i]] = { x: ex, y: ey }; found = true;
+      }
+      if (!found) ok = false;
+    }
+    if (!ok) continue;
+    // holders: two or three of the ends in the full world, worth more than the big one together; decoys: dark ends,
+    // each shut out by a lit other that outweighs it
+    var nh = rint(rng, 2, G.ends), holders = shuffle(rng, E).slice(0, nh), decoysFull = E.filter(function (id) { return holders.indexOf(id) < 0; });
+    var wOf = {}; ids.forEach(function (id, j) { wOf[id] = ws[j]; });
+    if (holders.reduce(function (s, id) { return s + wOf[id]; }, 0) <= B) continue;
+    var shutter = {}, bad = false;
+    E.forEach(function (id) { var cands = O.filter(function (o) { return wOf[o] > wOf[id]; }); if (!cands.length) bad = true; else shutter[id] = pick(rng, cands); });
+    if (bad) continue;
+    var base = [[BG, SM]].concat(E.map(function (id) { return [BG, id]; }));
+    var pairsFull = base.concat(decoysFull.map(function (id) { return [id, shutter[id]]; }));
+    var pairsShort = base.concat(E.map(function (id) { return [id, shutter[id]]; }));
     var stars = ids.map(function (id, j) { return { id: id, w: ws[j] }; });
-    var pos = layout(rng, stars, pairsA, fixed); if (!pos) continue;
-    var R = CONFIG.radius; if (pos.some(function (s) { return s.x - R(s.w) < 2 || s.x + R(s.w) > S.W - 2 || s.y - R(s.w) < 2 || s.y + R(s.w) > S.H - 2; })) continue;
-    var litIds = ids.filter(function (id) { return id !== ids[1]; });
-    var mk = function (pairs, full) { return { k: 3, stars: pos, pairs: pairs, lit: litIds, small: ids[0], big: ids[1], full: full }; };
-    var A = makeLampWorld(mk(pairsA, true)), Bw = makeLampWorld(mk(pairsB, false));
+    var pos = layout(rng, stars, pairsShort.concat(pairsFull.filter(function (p) { return !pairsShort.some(function (q) { return pairKey(q[0], q[1]) === pairKey(p[0], p[1]); }); })), fixed, 80); if (!pos) continue;
+    var litFull = [SM].concat(holders, O), litShort = [SM].concat(O);
+    var mk = function (pairs, litIds, full) { return { k: 3, stars: pos, pairs: pairs, lit: litIds, small: SM, big: BG, ends: E, holders: full ? holders : [], full: full }; };
+    var A = makeLampWorld(mk(pairsFull, litFull, true)), Bw = makeLampWorld(mk(pairsShort, litShort, false));
     if (light(A) !== A.best.light || !A.best.unique) continue;
-    if (light(Bw) >= Bw.best.light || !Bw.best.unique || Bw.best.ids.indexOf(ids[1]) < 0 || Bw.best.light - light(Bw) !== B - h) continue;
-    var skies = rng() < .5 ? [mk(pairsA, true), mk(pairsB, false)] : [mk(pairsB, false), mk(pairsA, true)];
+    if (!Bw.best.unique || Bw.best.ids.indexOf(BG) < 0 || Bw.best.light - light(Bw) !== B - h) continue;
+    if (A.stars.some(function (s) { return s.status === 'wait'; }) || Bw.stars.some(function (s) { return s.status === 'wait'; })) continue;
+    var skies = rng() < .5 ? [mk(pairsFull, litFull, true), mk(pairsShort, litShort, false)] : [mk(pairsShort, litShort, false), mk(pairsFull, litFull, true)];
     return { skies: skies };
   }
   return null;
 }
 function makeLampWorld(spec) {
   var stars = spec.stars.map(function (s, i) { return { id: s.id, w: s.w, x: s.x, y: s.y, i: i, status: spec.lit.indexOf(s.id) >= 0 ? 'lit' : 'wait', by: [], known: false }; });
-  var w = { k: 3, stars: stars, pairs: spec.pairs.map(function (p) { return p.slice(); }), ended: false, full: spec.full, small: spec.small, big: spec.big,
+  var w = { k: 3, stars: stars, pairs: spec.pairs.map(function (p) { return p.slice(); }), ended: false, full: spec.full, small: spec.small, big: spec.big, ends: spec.ends || [], holders: spec.holders || [],
     torches: [], reading: null, act: null, before: 0, after: 0, stepsBack: 0, putOut: [], acted: 0, knownPairs: [], prefilled: true };
   settle(w); w.best = solve(w); w.before = light(w); return w;
 }
@@ -320,14 +342,16 @@ function strike(J, j, x, y) {
   var s = J.skies[j]; if (s.reading || s.act || J.torchesLeft <= 0) return false;
   s.torches.push({ x: x, y: y }); J.torchesLeft--; return true;
 }
-// Whether any torch struck in sky j lit a line from the big star to one of its holders (not the small one).
-function torchSawHolders(J, j) {
-  var s = J.skies[j], bg = star(s, s.big);
-  return s.torches.some(function (tc) { return conflicts(s, s.big).filter(function (id) { return id !== s.small; }).some(function (id) { return segDist(tc, bg, star(s, id)) <= J.radius; }); });
+// What the torch reached: a lit holder at the end of one of the big star's lines, or a dark end, or neither.
+function torchSaw(J, j) {
+  var s = J.skies[j], held = false, dark = false;
+  s.torches.forEach(function (tc) { s.ends.forEach(function (id) { var e = star(s, id); if (Math.hypot(tc.x - e.x, tc.y - e.y) <= J.radius + CONFIG.radius(e.w) * 0.5) { if (e.status === 'lit') held = true; else dark = true; } }); });
+  return { held: held, dark: dark };
 }
+function torchSawHolders(J, j) { return torchSaw(J, j).held; }
 // What the player says they saw: 'lines', 'none' or 'unsure'. Ends the looking.
 function read(J, j, answer) { var s = J.skies[j]; if (s.reading || s.act) return false; s.reading = answer; return true; }
-function readingWord(a) { return a === 'lines' ? 'you saw lines' : a === 'none' ? 'you saw none' : "you couldn't tell"; }
+function readingWord(a) { return a === 'held' ? 'you saw it held' : a === 'free' ? 'you saw nothing holding it' : "you couldn't tell"; }
 // Decide: 'other' chooses the other star (the small one goes out; the big one comes in if nothing else holds it);
 // 'leave' leaves the world. A reading must have been given first.
 function decide(J, j, act) {
@@ -345,16 +369,16 @@ function consequence(J, j) {
 }
 function lampReveal(J, j) {
   var s = J.skies[j], sm = star(s, s.small), bg = star(s, s.big);
-  var holders = conflicts(s, s.big).filter(function (id) { return id !== s.small; }).map(function (id) { return star(s, id).w; });
-  var whole = s.full ? 'The whole: the ' + bg.w + ' was held down by the ' + sm.w + ' and by ' + holders.length + ' more things worth ' + holders.join(' + ') + ' together. Without it the sky holds ' + s.before + '; with it, less. This world was as full as it can be.'
-    : 'The whole: nothing but the ' + sm.w + ' held the ' + bg.w + ' down. With the ' + sm.w + ' out and the ' + bg.w + ' in, the sky holds ' + s.best.light + ' instead of ' + s.before + '. This world was ' + (s.best.light - s.before) + ' short.';
-  var n = s.torches.length;
-  var used = (n === 0 ? 'You struck no torch here.' : (n === 1 ? 'Your torch ' : 'Your torches ') + (torchSawHolders(J, j) ? 'lit the lines that mattered, for a moment.' : (s.full ? 'burned where the lines that mattered were not.' : 'showed no line to the big one but the one you knew; there was none.'))) +
-    ' You said ' + readingWord(s.reading) + (s.reading === 'lines' ? (s.full ? ', and there were.' : ', but there were none.') : s.reading === 'none' ? (s.full ? ', but there were.' : ', and there were none.') : '.');
+  var holders = s.holders.map(function (id) { return star(s, id).w; }), nDark = s.ends.length - holders.length;
+  var whole = s.full ? 'The whole: the ' + bg.w + ' was held down by the ' + sm.w + ' and by ' + holders.length + ' lit things at the ends of its lines, worth ' + holders.join(' + ') + ' together' + (nDark ? '; the other line led to a dark thing and held nothing' : '') + '. This world was as full as it can be.'
+    : 'The whole: all three lines from the ' + bg.w + ' led to dark things, and dark things hold nothing. Nothing but the ' + sm.w + ' held it down. With the ' + sm.w + ' out and the ' + bg.w + ' in, the sky holds ' + s.best.light + ' instead of ' + s.before + '. This world was ' + (s.best.light - s.before) + ' short.';
+  var saw = torchSaw(J, j), n = s.torches.length;
+  var used = n === 0 ? 'You struck no torch.' : saw.held ? 'Your torch reached a lit star at the end of a line: the big one was held, and that could be known.' : saw.dark ? 'Your torch reached a dark end: that line held nothing, and the others stayed unknown.' : 'Your torch reached no end of any line.';
+  var said = ' You said ' + readingWord(s.reading) + (s.reading === 'held' ? (s.full ? ', and it was.' : ', but it was not.') : s.reading === 'free' ? (s.full ? ', but it was held, out of the light.' : ', and nothing did.') : '.');
   var line = s.act === 'other' ? (s.came.length ? 'You chose the other star: the ' + sm.w + ' went out and the ' + bg.w + ' came in, ' + (s.after - s.before) + ' more light than before.'
       : 'You chose the other star: the ' + sm.w + ' went out and the ' + bg.w + ' stayed dark, ' + (s.before - s.after) + ' less light than before.')
     : (s.full ? 'You left it, and it holds all it could.' : 'You left it, and it holds ' + s.after + ' where it could hold ' + s.best.light + '.');
-  return { line: whole + ' ' + used + ' ' + line, good: s.after === s.best.light };
+  return { line: whole + ' ' + used + said + ' ' + line, good: s.after === s.best.light };
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -409,7 +433,7 @@ function verdict(game) {
   var looked = (s4.torches.length === 0 ? 'without a torch' : 'by torchlight') + ' (' + readingWord(s4.reading) + ')';
   var what = s4.act === 'other' ? 'chose the other star' : 'left it';
   var got = s4.act === 'other' ? (s4.came.length ? 'and the big one came in' : 'and the big one stayed dark') : (s4.full ? 'and it was as full as it can be' : 'and it stayed short');
-  found.push('World 4: a small star holding a big one down; ' + looked + ' you ' + what + ', ' + got + '. Its twin, with the same opening, was the other kind of world: ' + (s4.full ? 'short, with nothing but the small star in the way.' : 'as full as it can be, the big one held by others.'));
+  found.push('World 4: a small star holding a big one down, three lines leading into the dark; ' + looked + ' you ' + what + ', ' + got + '. Its twin, with the same opening, was the other kind of world: ' + (s4.full ? 'short, with nothing but the small star in the way.' : 'as full as it can be, the big one held at the end of its lines.'));
   var part = W.map(function (w, k) { return light(w) < w.best.light ? 'world ' + (k + 1) + ' (' + (w.best.light - light(w)) + ' of light short)' : null; }).filter(Boolean);
   var where = part.length ? 'On ' + list(part) + ', the best possible world holds more than yours.' : 'Nowhere among the skies you made. On every one, yours holds all that could be.';
   var stood = part.length ? 'A world with less in it than there could have been. Leibniz says that cannot be the one that exists: the possibles push, and the fullest set is what comes through, the way weights settle.' : 'Yours is the one Leibniz says exists: the fullest set of things that can be together.';
@@ -420,6 +444,6 @@ function verdict(game) {
 var M = { CONFIG: CONFIG, newGame: newGame, makeWorld: makeWorld, makeLampWorld: makeLampWorld, genWorld1: genWorld1, genWorld2: genWorld2, genWorld3: genWorld3, genLamp: genLamp,
   mulberry32: mulberry32, letBe: letBe, putOut: putOut, letItBe: letItBe, canEnd: canEnd, result: result, verdict: verdict, solve: solve, solveWith: solveWith,
   light: light, total: total, lit: lit, star: star, conflicts: conflicts, name: name, list: list, biggest: biggest, shortWords: shortWords, pairKnown: pairKnown,
-  layoutOk: layoutOk, playGreedy: playGreedy, playRandom: playRandom, playBest: playBest, strike: strike, torchSawHolders: torchSawHolders, read: read, readingWord: readingWord, decide: decide, consequence: consequence, lampReveal: lampReveal, segDist: segDist };
+  layoutOk: layoutOk, playGreedy: playGreedy, playRandom: playRandom, playBest: playBest, strike: strike, torchSawHolders: torchSawHolders, torchSaw: torchSaw, read: read, readingWord: readingWord, decide: decide, consequence: consequence, lampReveal: lampReveal, segDist: segDist };
 if (typeof module !== 'undefined' && module.exports) module.exports = M; else root.LeibnizMechanism = M;
 })(typeof window !== 'undefined' ? window : this);

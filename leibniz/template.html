@@ -130,7 +130,7 @@ b,strong{font-weight:700}
   <p class="key" id="jkey"></p>
   <p class="say" id="jsay"></p>
   <div id="jlook"><button class="btn" id="b-done">Done looking</button></div>
-  <div id="jread" class="hid"><p class="cap" style="text-align:left;margin-bottom:6px">Did anything else hold the big star down?</p><div class="row2"><button class="btn solid" id="b-r-lines">I saw lines</button><button class="btn solid" id="b-r-none">I saw none</button><button class="btn" id="b-r-unsure">Couldn't tell</button></div></div>
+  <div id="jread" class="hid"><p class="cap" style="text-align:left;margin-bottom:6px">Did you see the big star held by something lit, at the end of one of its lines?</p><div class="row2"><button class="btn solid" id="b-r-held">Yes, held</button><button class="btn solid" id="b-r-free">Nothing held it</button><button class="btn" id="b-r-unsure">Couldn't tell</button></div></div>
   <div id="jchoose" class="hid"><p class="cap" style="text-align:left;margin-bottom:6px">Choose the other star: the small one goes out, and the big one comes in if nothing else holds it.</p><div class="row2"><button class="btn solid" id="b-other">Choose the other star</button><button class="btn solid" id="b-leave">Leave it</button></div></div>
   <div id="jlift" class="hid"><button class="btn solid" id="b-lift">Lift the cover</button></div>
   <div class="result hid" id="jresult"></div>
@@ -160,7 +160,7 @@ b,strong{font-weight:700}
   <p><b>Tap a ring</b> to let that thing be. It lights up. Anything it cannot be with goes dark, with a red line to the thing that shut it out; the line stays, so you know that pair from then on. <b>Tap a lit star</b> to put it out again: a step back. Whatever it was holding down can be again.</p>
   <p>The bar under the sky shows how much light your world holds. <b>Let it be</b> ends the world: it holds exactly what you lit, nothing more. Then the best possible world appears next to yours, the fullest set of things that can be together, with every line and every number shown.</p>
   <p>The third sky arrives already filled, heaviest first, and nothing left can be. Making it fuller means putting something out, then letting in what that frees.</p>
-  <p>The fourth world is not yours to make. A world already made, in the dark: a small star lit, a big one dark, a line between them. One torch lies in the dark: drag it to where you want it struck, and for a few seconds the stars and lines around it show, faintly, before it dies. When you are done looking, say what you saw. Then choose: the other star (the small one goes out, and the big one comes in if nothing else holds it), or leave it. You see what that did, in the dark; then the cover lifts; then you see the twin, another world with exactly the same opening and the other truth.</p>
+  <p>The fourth world is not yours to make. A world already made, in the dark: a small star lit, a big one dark, a line between them, and three more lines leading from the big one into the dark. Whatever is at their ends is what decides: a lit star there holds the big one down; a dark thing there holds nothing. One torch lies in the dark: drag it to where you want it struck, and for a few seconds the stars and lines around it show, faintly, before it dies. It cannot reach the ends from the big star; you have to pick a line. When you are done looking, say what you saw. Then choose: the other star (the small one goes out, and the big one comes in if nothing else holds it), or leave it. You see what that did, in the dark; then the cover lifts; then you see the twin, another world with exactly the same opening and the other truth.</p>
   <button class="btn solid" id="b-help-close">Back</button>
 </div></div>
 
@@ -208,8 +208,8 @@ function drawSky(svg, w, opts) {
     var r = C.radius(s.w), col = C.COLOURS[s.id], S = st(s);
     h += '<g class="star ' + S + '" data-id="' + s.id + '">';
     if (S === 'lit') h += '<circle cx="' + s.x + '" cy="' + s.y + '" r="' + (r * 1.7) + '" fill="' + col + '" opacity=".16"/><circle cx="' + s.x + '" cy="' + s.y + '" r="' + r + '" fill="' + col + '"/>';
-    else if (S === 'wait') h += '<circle cx="' + s.x + '" cy="' + s.y + '" r="' + r + '" fill="rgba(14,16,22,.6)" stroke="' + col + '" stroke-width="1.6"/>';
-    else h += '<circle cx="' + s.x + '" cy="' + s.y + '" r="' + r + '" fill="rgba(14,16,22,.6)" stroke="' + col + '" stroke-opacity=".28" stroke-width="1.6"/>';
+    else if (S === 'wait') h += '<circle cx="' + s.x + '" cy="' + s.y + '" r="' + r + '" fill="#0E1016" stroke="' + col + '" stroke-width="1.6"/>';
+    else h += '<circle cx="' + s.x + '" cy="' + s.y + '" r="' + r + '" fill="#0E1016" stroke="' + col + '" stroke-opacity=".28" stroke-width="1.6"/>';
     if (opts.numbers && !opts.small) h += '<text x="' + s.x + '" y="' + (s.y + 5.4) + '" text-anchor="middle" font-size="15" font-weight="700" fill="' + (S === 'lit' ? '#0E1016' : col) + '" fill-opacity="' + (S === 'dark' ? '.35' : '1') + '" font-family="Space Grotesk,system-ui,sans-serif">' + s.w + '</text>';
     if (opts.interactive) h += '<circle cx="' + s.x + '" cy="' + s.y + '" r="' + Math.max(r, 24) + '" fill="transparent" class="hit" data-id="' + s.id + '"/>';
     h += '</g>';
@@ -237,7 +237,10 @@ function drawSky(svg, w, opts) {
         '<path d="M0 -14 C 7 -6, 9 2, 4 9 C 2 12, -2 12, -4 9 C -9 2, -7 -6, 0 -14 Z" fill="#FFB830"/><path d="M0 -5 C 3 -1, 3 4, 0 7 C -3 4, -3 -1, 0 -5 Z" fill="#FFE8A0"/>' +
         '<rect x="-2.5" y="8" width="5" height="12" rx="2" fill="#8F95A8"/><circle r="30" fill="transparent"/></g>';
     });
-    h = '<defs>' + defs + '</defs>' + h + '<rect x="0" y="0" width="320" height="300" fill="#171A23" mask="url(#cover)"/>' + torchLayer + flames;
+    // the stubs of the big star's other lines: in view from the start, the same whatever lies at their ends
+    var stubs = '', bg = M.star(w, T.openLine[1]), L = C.GEN.lamp.stub;
+    M.conflicts(w, bg.id).forEach(function (id) { if (id === T.openLine[0]) return; var e = M.star(w, id), dx = e.x - bg.x, dy = e.y - bg.y, dd = Math.hypot(dx, dy), r0 = C.radius(bg.w); stubs += '<line x1="' + (bg.x + dx / dd * r0) + '" y1="' + (bg.y + dy / dd * r0) + '" x2="' + (bg.x + dx / dd * (r0 + L)) + '" y2="' + (bg.y + dy / dd * (r0 + L)) + '" stroke="#8F95A8" stroke-opacity=".7" stroke-width="1.6" stroke-linecap="round"/>'; });
+    h = '<defs>' + defs + '</defs>' + h + '<rect x="0" y="0" width="320" height="300" fill="#171A23" mask="url(#cover)"/>' + (T.lift === undefined ? stubs : '') + torchLayer + flames;
   }
   svg.innerHTML = h;
 }
@@ -309,7 +312,7 @@ function showResult(res) {
 }
 
 // ---- the torches
-var JINTRO = ['A world already made, in the dark. A small star lit, a big one dark, a line between them. Your torch lies in the dark: drag it to where you want it struck.'];
+var JINTRO = ['A world already made, in the dark. A small star lit, a big one dark, a line between them, and three more lines leading from the big one into the dark. Your torch lies in the dark: drag it to where you want it struck.'];
 function flameSpots(s, n) {
   // where unused torches lie: the corners farthest from the two opening stars
   var cands = [{ x: 44, y: 44 }, { x: 276, y: 44 }, { x: 44, y: 256 }, { x: 276, y: 256 }, { x: 160, y: 36 }, { x: 160, y: 264 }];
@@ -353,10 +356,10 @@ function startJudge(j) {
   var reading = function (a) {
     if (!M.read(J, j, a)) return;
     $('jread').classList.add('hid'); $('jchoose').classList.remove('hid'); draw(null);
-    $('jnow').textContent = 'Would you change this?'; $('jsay').textContent = 'The small star holds the big one down. Nothing else is in view.';
+    $('jnow').textContent = 'Would you change this?'; $('jsay').textContent = 'The small star holds the big one down. Three lines lead from the big one into the dark; what is at their ends, you saw or you did not.';
     $('jchoose').scrollIntoView({ block: 'end', behavior: 'smooth' });
   };
-  $('b-r-lines').onclick = function () { reading('lines'); }; $('b-r-none').onclick = function () { reading('none'); }; $('b-r-unsure').onclick = function () { reading('unsure'); };
+  $('b-r-held').onclick = function () { reading('held'); }; $('b-r-free').onclick = function () { reading('free'); }; $('b-r-unsure').onclick = function () { reading('unsure'); };
   var decide = function (act) {
     var r = M.decide(J, j, act); if (!r) return;
     $('jchoose').classList.add('hid');
@@ -387,11 +390,10 @@ function startJudge(j) {
       drawSky($('jsky-mine'), s, { small: true, all: true }); drawSky($('jsky-best'), s, { lit: s.best.ids, small: true, all: true });
       $('b-twin').addEventListener('click', function () {
         var tw = J.skies[1];
-        ra.innerHTML = '<h3>The twin.</h3><p class="lesson">Another world with exactly the same opening: the same small star holding the same big one down. ' + (tw.full ? 'In this one the big star is held by others too, and the dark is the price of a fuller sky.' : 'In this one nothing but the small star holds the big one, and the dark is a mistake.') + ' You could not have told the two apart from the opening. A torch in the right place could.</p>' +
+        ra.innerHTML = '<h3>The twin.</h3><p class="lesson">Another world with exactly the same opening: the same small star holding the same big one down, the same three lines leading into the dark. ' + (tw.full ? 'In this one two of the lines end in lit stars that hold the big one, and the dark is the price of a fuller sky.' : 'In this one all three lines end in dark things, nothing but the small star holds the big one, and the dark is a mistake.') + ' You could not have told the two apart from the opening. A torch at the right end of the right line could, one way: it can show a thing held, never a thing free.</p>' +
           '<div class="pair"><div class="one"><div class="lab">Yours &middot; ' + (s.full ? 'the fullest' : 'short') + '</div><div class="skybox"><svg class="sky" id="jsky-a" viewBox="0 0 320 300"></svg></div></div>' +
           '<div class="one"><div class="lab">Its twin &middot; ' + (tw.full ? 'the fullest' : 'short') + '</div><div class="skybox"><svg class="sky" id="jsky-b" viewBox="0 0 320 300"></svg></div></div></div>' +
           '<button class="btn solid" id="b-jnext">The verdict</button>';
-        var litA = s.stars.filter(function (x) { return x.status === 'lit' && x.id !== s.big; }).map(function (x) { return x.id; }).concat(s.act === 'other' && !s.came.length ? [] : []);
         drawSky($('jsky-a'), s, { small: true, all: true }); drawSky($('jsky-b'), tw, { small: true, all: true });
         $('b-jnext').addEventListener('click', endGame);
         ra.scrollIntoView({ block: 'end', behavior: 'smooth' });
