@@ -38,8 +38,8 @@ var CONFIG = {
         { id: 'mint', w: 4, x: 260, y: 70 },
         { id: 'azure', w: 4, x: 60, y: 235 },
         { id: 'lilac', w: 4, x: 260, y: 235 },
-        { id: 'rose', w: 3, x: 160, y: 40 },
-        { id: 'ice', w: 2, x: 160, y: 265 }
+        { id: 'rose', w: 3, x: 100, y: 32 },
+        { id: 'ice', w: 2, x: 225, y: 32 }
       ],
       pairs: [['coral', 'amber'], ['coral', 'mint'], ['coral', 'azure'], ['coral', 'lilac'], ['rose', 'ice']],
       prefill: false,
@@ -53,9 +53,9 @@ var CONFIG = {
         { id: 'amber', w: 6, x: 215, y: 90 },
         { id: 'mint', w: 4, x: 275, y: 180 },
         { id: 'azure', w: 4, x: 240, y: 260 },
-        { id: 'lilac', w: 3, x: 150, y: 245 },
-        { id: 'rose', w: 5, x: 60, y: 230 },
-        { id: 'ice', w: 5, x: 150, y: 165 }
+        { id: 'lilac', w: 3, x: 175, y: 262 },
+        { id: 'rose', w: 5, x: 60, y: 235 },
+        { id: 'ice', w: 5, x: 140, y: 160 }
       ],
       pairs: [['amber', 'mint'], ['amber', 'azure'], ['amber', 'lilac'], ['rose', 'ice']],
       prefill: true,
