@@ -1,0 +1,50 @@
+PASS Solver equals brute force on 60 random small instances (3–4 by 3–4, 3–4 pieces of up to 4 cells)  — 0 mismatches
+PASS Each shape has the expected number of distinct quarter turns (no reflections)  — 
+PASS World 1: tray holds 19 cells for a board of 16 (more than fits: the paper's "forced to leave more spaces empty")  — expected 19
+PASS World 1: best possible world lights 16 (memo §11 says 16)
+PASS World 1: the stored best placement is a legal packing (no overlaps, inside the board)
+PASS World 2: tray holds 45 cells for a board of 36 (more than fits: the paper's "forced to leave more spaces empty")  — expected 45
+PASS World 2: best possible world lights 36 (memo §11 says 36)
+PASS World 2: the stored best placement is a legal packing (no overlaps, inside the board)
+PASS World 3: tray holds 44 cells for a board of 36 (more than fits: the paper's "forced to leave more spaces empty")  — expected 44
+PASS World 3: best possible world lights 36 (memo §11 says 36)
+PASS World 3: the stored best placement is a legal packing (no overlaps, inside the board)
+PASS World 1: the best world is full (16 of 16) and still leaves 2 possible(s) out: the bar of two and the single
+PASS World 2: with the big square on the board, the most that can be lit over all its 16 positions is 29 (memo: 29, "a fifth dark")
+PASS World 2: without the big square the land is full
+PASS World 2: heaviest first, first fit lights 29 (memo: 29)
+PASS World 2: so every full world leaves the grandest thing out (the paper's point: the maximum is of the whole)
+PASS World 2: 29 of 36 reads as "about a fifth dark"
+PASS World 3: filled by weight, 31 lit, 3 waiting (memo: 31 and 3)
+PASS World 3: none of the waiting shapes (the rectangle, the thin bar and the L) fits anywhere as the board stands
+PASS World 3: pull the long bar (2×4) and the most is 36 (memo: 36, full)
+PASS World 3: pull the big square instead and the most is 32 (memo: 32; the lesson of world 2 misapplied)
+PASS World 3: pull the longest bar and the most is 31; pull the thin bar and the most is 31 (memo: 31, 31)
+PASS World 3: the best possible world leaves out exactly the long bar (what was destroyed is not rebuilt; three humbler things stand there)
+PASS World 1 setup: 2×3 at (0,0)
+PASS World 1 setup: bar of two upright at (0,3)
+PASS World 1 setup: small square at (2,0)
+PASS World 1 setup: L at (2,2)
+PASS World 1 setup: 15 lit, one dark, the single and the bar of three waiting
+PASS Let it be: the single still fits, so it comes to be; the bar of three does not
+PASS Let it be: the first line says so in the game's voice  — The single still fitted, and nothing stopped it, so it came to be.
+PASS Let it be: a world cannot be changed after it ends
+PASS World 3 untouched: Let it be rushes nothing (nothing fits) and the world stays at 31
+PASS World 3 untouched: the line says the player never stepped back
+PASS World 2, square only then Let it be: the rush comes heaviest first (the long bar, the long bar, the small square) and ends at 29
+PASS World 2 under essence = cells^k: the big square enters the best world once k reaches about 2.55 (at k = 1, Leibniz's own criterion of spaces filled, it is out)  — reported on About: the lesson rests on the paper's criterion
+PASS World 3 under essence = cells^k: a fuller world than the one made by weight exists for every k below about 4+ (the step back survives weighting size more than proportionally)
+PASS World 1 numbers: heaviest first and random play both leave something out, and full is reachable
+PASS World 2 numbers: heaviest first ends a fifth dark (29), random play on average well short of full, and full is reachable  — random mean 25.5
+PASS World 3 numbers: never stepping back stays at 31; one pull is enough for 36; the wrong pulls give 31 or 32
+TABLE World 1 (best 16): heaviest first, first fit 16; lightest first at random spots mean 9.9 (min 9, max 13); random order, random spots mean 12.7 (min 9, max 16, reaches 16 in 35 of 300)
+TABLE World 2 (best 36): heaviest first, first fit 29; lightest first at random spots mean 22.7 (min 12, max 36); random order, random spots mean 25.5 (min 12, max 36, reaches 36 in 6 of 300)
+TABLE World 3 (best 36): never step back 31; the longest bar then the best play: 31; the big square then the best play: 32; the long bar then the best play: 36; the thin bar then the best play: 31; pull the long bar then random spots mean 30.9 (min 26, max 36); pull the long bar then Let it be (the rush alone) 31
+PASS Full game (heavy): every line is words with no decimals; verdict matched 1 of 3  — One of your three worlds is as full as it can be.
+PASS Full game (heavy): the heaviest-first player is told the best world is full and the big square is not in it
+PASS Full game (best): every line is words with no decimals; verdict matched 3 of 3  — You packed every world as full as it can be.
+PASS Full game (best): the player who matches every world is told theirs is the one Leibniz says exists
+PASS Full game (mixed): every line is words with no decimals; verdict matched 2 of 3  — Two of your three worlds are as full as they can be.
+PASS Dark words: 0 → full; 1 → one cell; 7 of 36 → about a fifth; 5 of 36 → about a tenth; 4 of 16 → about a quarter  — about a tenth dark / about a quarter dark
+PASS Names: two long bars and the single  — two long bars and the single
+46 checks, 0 failing

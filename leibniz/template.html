@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Leibniz's Tiles</title>
+<script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<meta name="description" content="Leibniz, 1697: the world that exists is the arrangement of possible things that fits the most together, like tiles on a board. Three boards. Bring as much into existence as will fit.">
+<style>
+@font-face{font-family:'Space Grotesk';font-weight:300 700;font-style:normal;src:url(data:font/woff2;base64,/*__F_SG__*/) format('woff2')}
+:root{--night:#0E1016;--slab:#171A23;--void:#07080C;--chalk:#F3F4F8;--mute:#8F95A8;--line:#262A36;--coral:#FF5C5C;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--night);color:var(--chalk)}
+body{font-family:'Space Grotesk',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-size:16px;line-height:1.4;overflow-x:hidden;font-weight:400}
+body.lock{overflow:hidden}
+.wrap{max-width:420px;margin:0 auto;min-height:100vh;padding:14px 16px 28px;position:relative}
+.screen{display:none}.screen.on{display:block}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:inherit;touch-action:manipulation}
+h1,h2,h3,p{margin:0}
+b,strong{font-weight:700}
+.mute{color:var(--mute)}
+.small{font-size:13px;line-height:1.35}
+/* pills */
+.btn{display:block;width:100%;border:1.5px solid rgba(243,244,248,.35);border-radius:999px;padding:14px 18px;text-align:center;font-size:16px;font-weight:500;margin-top:10px;min-height:52px;color:var(--chalk);transition:transform .12s,background .2s}
+.btn:active{transform:scale(.985)}
+.btn.solid{background:var(--chalk);color:var(--night);border-color:var(--chalk)}
+.btn.solid:disabled{opacity:.3}
+.btn.dim{opacity:.55}
+.row2{display:flex;gap:10px}.row2 .btn{flex:1}
+#trayarea .row2 .btn{margin-top:6px;min-height:48px;padding:11px 16px}
+.cap{font-size:12.5px;color:var(--mute);text-align:center;margin-top:6px;line-height:1.3}
+.sig{text-align:center;font-style:italic;font-size:13px;margin-top:26px;color:var(--mute)}
+.sig a{color:inherit;text-decoration:none}
+/* start */
+.title{font-size:54px;line-height:.95;font-weight:700;letter-spacing:-.03em;margin:14px 0 6px}
+.kicker{font-size:14px;color:var(--mute);letter-spacing:.02em;margin-bottom:12px}
+.motif{display:block;margin:6px auto 14px;width:100%;height:auto}
+.lead p{margin-bottom:10px;font-size:15.5px}
+.acts{font-size:19px;line-height:1.3;font-weight:500;margin:16px 0 8px}
+.aimbox{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:12px 2px;margin:12px 0 14px;font-weight:700;font-size:18px;letter-spacing:-.01em}
+.credit{font-size:12.5px;color:var(--mute);text-align:center;margin-top:18px;line-height:1.35}
+.credit a{color:inherit}
+/* play */
+.top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.top .aim{flex:1;font-size:12.5px;line-height:1.25;font-weight:700;padding-top:6px}
+.q{width:34px;height:34px;border:1.5px solid rgba(243,244,248,.35);border-radius:999px;font-size:16px;font-weight:700;text-align:center;flex:none;line-height:31px}
+.where{font-size:13px;color:var(--mute);letter-spacing:.02em}
+.do{font-size:24px;font-weight:700;letter-spacing:-.02em;line-height:1.1;margin:0 0 6px}
+.intro{font-size:14px;line-height:1.3;color:var(--chalk);min-height:36px;margin-bottom:6px}
+.boardwrap{background:var(--slab);border-radius:18px;padding:8px;margin:0 auto;position:relative;touch-action:none}
+.boardwrap svg{display:block}
+.cell{fill:var(--void)}
+.cell.ok{fill-opacity:.45}
+.cell.no{fill:none;stroke:var(--coral);stroke-width:2.5;stroke-opacity:.9}
+g.piece{cursor:pointer}
+g.piece.land{animation:land .32s cubic-bezier(.2,1.4,.4,1);transform-box:fill-box;transform-origin:center}
+@keyframes land{0%{opacity:.3;transform:scale(1.07)}100%{opacity:1;transform:scale(1)}}
+g.piece.rush{animation:land .4s cubic-bezier(.2,1.4,.4,1);transform-box:fill-box;transform-origin:center}
+.say{font-size:14.5px;line-height:1.3;margin:6px 0 2px;min-height:19px}
+.stat{font-size:13px;color:var(--mute);margin-bottom:2px;letter-spacing:.01em}
+.stat b{color:var(--chalk);font-weight:700}
+.tray{display:flex;flex-wrap:wrap;gap:8px 14px;justify-content:center;align-items:center;min-height:70px;padding:2px 4px;touch-action:none}
+.tray svg{display:block;cursor:grab}
+.tray .tp{padding:3px;border-radius:10px}
+.tray .tp.sel{background:rgba(243,244,248,.06)}
+.tray .tp.ghost{opacity:.22}
+.trayline{font-size:12.5px;color:var(--mute);text-align:center;margin-top:0}
+.ghost{position:fixed;left:0;top:0;pointer-events:none;z-index:50;will-change:transform;filter:drop-shadow(0 6px 14px rgba(0,0,0,.5))}
+.result{margin-top:8px}
+.result p{font-size:15px;line-height:1.38;margin-bottom:7px}
+.pair{display:flex;gap:12px;justify-content:center;align-items:flex-start;margin:4px 0 2px}
+.pair .half{flex:1;text-align:center}
+.pair .half .lab{font-size:12px;color:var(--mute);margin-bottom:4px;letter-spacing:.04em;text-transform:uppercase}
+.pair .boardwrap{padding:5px;border-radius:12px}
+/* end */
+.fate{font-size:30px;font-weight:700;letter-spacing:-.025em;line-height:1.08;margin:8px 0 14px}
+.vlab{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin:14px 0 4px}
+.vp{font-size:15.5px;line-height:1.4}
+.vp + .vp{margin-top:5px}
+.cover{position:relative;margin:10px auto 0}
+.cover .mask{position:absolute;inset:0;border-radius:18px;background:transparent;overflow:hidden;transition:opacity .9s ease}
+.cover .mask.off{opacity:0;pointer-events:none}
+.cover .win{position:absolute;background:transparent;box-shadow:0 0 0 2000px var(--void);border-radius:4px}
+.trio{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.trio .pair .half .lab{font-size:11px}
+/* overlays */
+.ov{display:none;position:fixed;inset:0;background:var(--night);z-index:100;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.ov.on{display:block}
+.ov .in{max-width:420px;margin:0 auto;padding:16px 16px 30px}
+.ov h2{font-size:30px;font-weight:700;letter-spacing:-.025em;margin:6px 0 12px}
+.ov h3{font-size:16px;font-weight:700;margin:16px 0 4px}
+.ov p{font-size:15px;line-height:1.42;margin-bottom:9px}
+.ov li{font-size:15px;line-height:1.42;margin-bottom:5px}
+.ov ul{padding-left:20px;margin:0 0 8px}
+.ov a{color:var(--chalk)}
+.about .ovlist{font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<section class="screen on" id="s-start">
+  <p class="kicker">Leibniz, 23 November 1697</p>
+  <h1 class="title">Leibniz's<br>Tiles</h1>
+  <svg class="motif" id="motif" viewBox="0 0 388 120" aria-hidden="true"></svg>
+  <div class="lead">
+    <p>Leibniz asked why there is a world at all, and why this one. Looking back in time never answers it: every state of the world is copied from the one before, for ever.</p>
+    <p>So he looked at what wants to exist. Every possible thing pushes to be, as hard as there is of it. Not all of them fit together.</p>
+    <p>The world that exists, he says, is the arrangement that fits the most. He called it a game of tiles.</p>
+  </div>
+  <p class="acts">Drag shapes onto a board.<br>Turn them. Pull one out again.</p>
+  <div class="aimbox">Bring as much into existence as will fit.</div>
+  <button class="btn solid" id="b-begin">Begin</button>
+  <button class="btn" id="b-help-start">How to play</button>
+  <p class="credit">Built on Lloyd Strickland's translation of <i>On the ultimate origination of things</i> (2014), <a href="https://www.leibniz-translations.com/origination.htm">leibniz-translations.com</a>.</p>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+
+<section class="screen" id="s-play">
+  <div class="top"><p class="aim">Bring as much into existence as will fit.</p><button class="q" id="q-play" aria-label="How to play">?</button></div>
+  <p class="where" id="where">World 1 of 3</p>
+  <h2 class="do" id="do">Fill the land.</h2>
+  <p class="intro" id="intro"></p>
+  <div id="boardarea"></div>
+  <p class="say" id="say"></p>
+  <p class="stat" id="stat"></p>
+  <div id="trayarea">
+    <div class="tray" id="tray"></div>
+    <p class="trayline" id="trayline">Drag a shape onto the board · tap one to turn it</p>
+    <div class="row2"><button class="btn" id="b-turn">Turn</button><button class="btn solid" id="b-let">Let it be</button></div>
+    <p class="cap" id="letcap">Let it be: stop here. Whatever still fits comes in on its own, and the world is judged.</p>
+  </div>
+  <div id="resultarea" class="result" style="display:none"></div>
+</section>
+
+<section class="screen" id="s-end">
+  <p class="where">The verdict</p>
+  <h2 class="fate" id="fate"></h2>
+  <p class="vlab">What Leibniz says</p><p class="vp" id="v-paper"></p>
+  <p class="vlab">What you found</p><div id="v-found"></div>
+  <p class="vlab">Where you part</p><p class="vp" id="v-part"></p>
+  <p class="vlab">Had yours stood</p><p class="vp" id="v-stood"></p>
+  <p class="vlab">The covered picture</p>
+  <p class="vp" id="coverline">Leibniz: take a very beautiful picture and cover all but a small part. What you see is a confused chaos of colours, and the closer you look the worse it gets. This is the best possible world of your third board, covered.</p>
+  <div class="cover" id="cover"></div>
+  <button class="btn" id="b-lift">Lift the cover</button>
+  <p class="vlab">Your three worlds beside the best</p>
+  <div class="trio" id="trio"></div>
+  <button class="btn solid" id="b-again">Play again</button>
+  <div class="row2"><button class="btn" id="b-help-end">How to play</button><button class="btn" id="b-about">About</button></div>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+
+</div>
+
+<div class="ov" id="help"><div class="in">
+  <h2>How to play</h2>
+  <p><b>Bring as much into existence as will fit.</b></p>
+  <p>There are three boards, one after another. Each board is a piece of land: its dark cells are land with nothing in it. Under the board are shapes, drawn as thin outlines: things that could exist, each wanting to be on the board. The only rule of the world is that two things cannot be in the same place. A shape on the board is lit; a shape off the board is dim.</p>
+  <h3>Your hands</h3>
+  <ul>
+    <li><b>Drag</b> a shape from the row below onto the board. While you hold it, the board shows where it would land: its colour where it fits, a red outline where it does not. Let go to put it there.</li>
+    <li><b>Tap</b> a shape in the row to turn it a quarter. <b>Turn</b> does the same for the shape you last touched.</li>
+    <li><b>Tap</b> a shape on the board to pull it out. It goes back to the row, dim, and the land under it goes dark. Leibniz's phrase for this is stepping back for a better leap.</li>
+    <li><b>Let it be</b> ends the board. Whatever still fits comes in on its own, heaviest first (nothing stops it, so it comes to be). Then the game says what your world holds, what was left out, and shows the best possible world: the fullest arrangement there could be.</li>
+  </ul>
+  <h3>What to expect</h3>
+  <p>The shapes under each board add up to more than the land can hold, so something is always left out, even in the best possible world. Under the board, a line counts what is lit and what is dark; that is the whole score. The third board starts already filled by weight, with nothing left that fits; there the move is to pull something out.</p>
+  <p>At the end: what Leibniz says, what you found, where the two part, and his covered picture.</p>
+  <button class="btn solid" id="b-help-close">Back</button>
+</div></div>
+
+<div class="ov about" id="about"><div class="in">
+  /*__ABOUT__*/
+  <button class="btn solid" id="b-about-close">Back</button>
+</div></div>
+
+<script>
+/*__MECHANISM__*/
+</script>
+<script>
+(function(){
+'use strict';
+var M = window.LeibnizMechanism, C = M.CONFIG;
+var $ = function(id){ return document.getElementById(id); };
+var game, w, sel = null, drag = null, lastWhereHelp = null;
+var GAP = 4, boardPx = Math.min(300, window.innerWidth - 48);
+
+function show(id){ ['s-start','s-play','s-end'].forEach(function(s){ $(s).classList.toggle('on', s === id); }); window.scrollTo(0, 0); }
+function openOv(id){ $(id).classList.add('on'); document.body.classList.add('lock'); $(id).scrollTop = 0; }
+function closeOv(id){ $(id).classList.remove('on'); document.body.classList.remove('lock'); }
+
+// ---- geometry ----
+function cellSize(world, px){ return (px - GAP * (world.W + 1)) / world.W; }
+function piecePath(cells, cell, gap, inset){
+  // outline of a set of cells as one polygon. Edges are built on the lattice of cell corners (only edges not shared
+  // with another cell of the piece), chained into loops, then mapped to pixels so that the piece reaches the middle of
+  // the gap between cells: cells of one piece join into one flat shape.
+  var set = {}; cells.forEach(function(c){ set[c[0] + ',' + c[1]] = 1; });
+  var edges = {}, order = [];
+  function add(a, b){ var k = a.join(','); if (!edges[k]) { edges[k] = []; order.push(k); } edges[k].push(b); }
+  cells.forEach(function(c){
+    var r = c[0], k = c[1];
+    if (!set[(r - 1) + ',' + k]) add([k, r], [k + 1, r]);
+    if (!set[r + ',' + (k + 1)]) add([k + 1, r], [k + 1, r + 1]);
+    if (!set[(r + 1) + ',' + k]) add([k + 1, r + 1], [k, r + 1]);
+    if (!set[r + ',' + (k - 1)]) add([k, r + 1], [k, r]);
+  });
+  var step = cell + gap, px = function(p){ return (p[0] * step + gap / 2).toFixed(1) + ' ' + (p[1] * step + gap / 2).toFixed(1); };
+  var d = '', i;
+  for (i = 0; i < order.length; i++){
+    var k0 = order[i]; if (!edges[k0] || !edges[k0].length) continue;
+    var cur = k0.split(',').map(Number), pts = [];
+    while (edges[cur.join(',')] && edges[cur.join(',')].length){ pts.push(cur); cur = edges[cur.join(',')].shift(); }
+    if (pts.length > 2) d += 'M' + pts.map(px).join('L') + 'Z';
+  }
+  return d;
+}
+function svgEl(tag, attrs){ var el = document.createElementNS('http://www.w3.org/2000/svg', tag); for (var a in attrs) el.setAttribute(a, attrs[a]); return el; }
+function drawBoard(world, px, opts){
+  // returns an svg of the board: cells, then placed pieces
+  opts = opts || {};
+  var cell = cellSize(world, px), step = cell + GAP, svg = svgEl('svg', { viewBox: '0 0 ' + px + ' ' + px, width: px, height: px });
+  var r, c, rx = Math.max(4, cell * 0.14);
+  for (r = 0; r < world.H; r++) for (c = 0; c < world.W; c++) svg.appendChild(svgEl('rect', { 'class': 'cell', 'data-k': r * world.W + c, x: c * step + GAP, y: r * step + GAP, width: cell, height: cell, rx: rx }));
+  var pieces = opts.placement ? opts.placement.map(function(pl){ var p = world.pieces[pl.id]; return { id: p.id, colour: p.colour, cells: p.rots[pl.ri].cells.map(function(cc){ return [cc[0] + pl.r, cc[1] + pl.c]; }) }; })
+    : world.pieces.filter(function(p){ return p.placed; }).map(function(p){ return { id: p.id, colour: p.colour, rushed: p.rushed, cells: p.rots[p.ri].cells.map(function(cc){ return [cc[0] + p.placed.r, cc[1] + p.placed.c]; }) }; });
+  pieces.forEach(function(p){
+    var g = svgEl('g', { 'class': 'piece', 'data-id': p.id });
+    var path = svgEl('path', { d: piecePath(p.cells, cell, GAP, 0), fill: p.colour, stroke: 'var(--slab)', 'stroke-width': 3, 'stroke-linejoin': 'round' });
+    g.appendChild(path);
+    // faint cell lines inside the piece, so that a thing's size can be counted
+    p.cells.forEach(function(cc){ g.appendChild(svgEl('rect', { x: cc[1] * step + GAP, y: cc[0] * step + GAP, width: cell, height: cell, fill: 'none', stroke: 'rgba(14,16,22,.22)', 'stroke-width': 1.5 })); });
+    if (opts.hideRushed && p.rushed) g.style.visibility = 'hidden';
+    svg.appendChild(g);
+  });
+  return svg;
+}
+function drawTrayPiece(p, cell){
+  var R = p.rots[p.ri], gap = Math.max(2, cell * 0.08), pw = R.w * cell + (R.w + 1) * gap, ph = R.h * cell + (R.h + 1) * gap;
+  var svg = svgEl('svg', { viewBox: '0 0 ' + pw + ' ' + ph, width: pw, height: ph });
+  var path = svgEl('path', { d: piecePath(R.cells, cell, gap, 0), fill: p.colour, 'fill-opacity': 0.08, stroke: p.colour, 'stroke-width': 2, 'stroke-linejoin': 'round' });
+  svg.appendChild(path);
+  var step = cell + gap;
+  R.cells.forEach(function(cc){ svg.appendChild(svgEl('rect', { x: cc[1] * step + gap, y: cc[0] * step + gap, width: cell, height: cell, fill: 'none', stroke: p.colour, 'stroke-opacity': 0.28, 'stroke-width': 1 })); });
+  return svg;
+}
+
+// ---- play screen ----
+var INTRO = [
+  'Dark cells are empty land. The shapes below could exist there, but two things cannot share a cell.',
+  'Bigger land, seven shapes, same rule. The big square is worth the most cells; there is one of it.',
+  'Filled by weight: heaviest first, wherever it fit. Nothing left fits. Tap a lit tile to pull it out.'
+];
+var DO = ['Fill the land.', 'Fill the land.', 'Make this world fuller.'];
+function startWorld(){
+  w = game.worlds[game.at]; sel = null;
+  $('where').textContent = 'World ' + (game.at + 1) + ' of 3';
+  $('do').textContent = DO[game.at];
+  $('intro').textContent = INTRO[game.at];
+  $('trayarea').style.display = ''; $('resultarea').style.display = 'none'; $('resultarea').innerHTML = '';
+  $('say').textContent = game.at === 2 ? 'None of the three waiting shapes fits anywhere.' : (game.at === 0 ? 'Nothing exists yet: no cell is lit.' : 'Nothing exists yet.');
+  renderBoard(); renderTray(); renderStat();
+  show('s-play');
+}
+function renderBoard(opts){
+  var area = $('boardarea'); area.innerHTML = '';
+  var wrap = document.createElement('div'); wrap.className = 'boardwrap'; wrap.style.width = (boardPx + 16) + 'px'; wrap.id = 'board';
+  var svg = drawBoard(w, boardPx, opts); wrap.appendChild(svg); area.appendChild(wrap);
+  if (!w.ended) svg.querySelectorAll('g.piece').forEach(function(g){ g.addEventListener('click', function(){ onPull(+g.getAttribute('data-id')); }); });
+}
+function renderTray(){
+  var tray = $('tray'); tray.innerHTML = '';
+  var cell = Math.round(cellSize(w, boardPx) * (w.W === 4 ? 0.3 : 0.33));
+  w.pieces.filter(function(p){ return !p.placed; }).forEach(function(p){
+    var d = document.createElement('div'); d.className = 'tp' + (sel === p.id ? ' sel' : '') + (p.ghost ? ' ghost' : ''); d.setAttribute('data-id', p.id);
+    d.appendChild(drawTrayPiece(p, cell)); tray.appendChild(d);
+    if (!w.ended) d.addEventListener('pointerdown', onTrayDown);
+  });
+  if (w.ended) $('trayline').textContent = '';
+  else $('trayline').textContent = w.pieces.some(function(p){ return !p.placed; }) ? (game.at === 2 ? 'Nothing here fits yet. Tap a lit tile to pull it out.' : 'Drag a shape onto the board · tap one to turn it') : 'Everything is on the board.';
+}
+function renderStat(){
+  var st = M.status(w);
+  $('stat').innerHTML = 'Lit <b>' + st.lit + '</b> of ' + st.total + ' · Dark <b>' + st.dark + '</b> · Waiting <b>' + st.waiting + '</b>';
+}
+function say(t){ $('say').textContent = t; }
+
+// drag from the tray
+function onTrayDown(e){
+  if (w.ended) return;
+  var id = +e.currentTarget.getAttribute('data-id'), p = w.pieces[id];
+  e.preventDefault();
+  sel = id; renderTray();
+  drag = { id: id, x0: e.clientX, y0: e.clientY, moved: false, ghost: null, foot: null, pid: e.pointerId };
+  window.addEventListener('pointermove', onMove); window.addEventListener('pointerup', onUp); window.addEventListener('pointercancel', onUp);
+}
+function makeGhost(p){
+  var cell = cellSize(w, boardPx), R = p.rots[p.ri], pw = R.w * cell + (R.w + 1) * GAP, ph = R.h * cell + (R.h + 1) * GAP;
+  var svg = svgEl('svg', { viewBox: '0 0 ' + pw + ' ' + ph, width: pw, height: ph, 'class': 'ghost' });
+  svg.appendChild(svgEl('path', { d: piecePath(R.cells, cell, GAP, 0), fill: p.colour, 'fill-opacity': 0.92, stroke: 'var(--slab)', 'stroke-width': 3, 'stroke-linejoin': 'round' }));
+  document.body.appendChild(svg); return { el: svg, pw: pw, ph: ph };
+}
+function footprint(p, clientX, clientY){
+  var rect = $('board').querySelector('svg').getBoundingClientRect(), cell = cellSize(w, boardPx), step = cell + GAP, R = p.rots[p.ri];
+  var pw = R.w * cell + (R.w - 1) * GAP, ph = R.h * cell + (R.h - 1) * GAP;
+  var x = clientX - rect.left - pw / 2, y = clientY - rect.top - ph / 2;
+  var c0 = Math.round((x - GAP) / step), r0 = Math.round((y - GAP) / step);
+  if (clientX < rect.left - cell || clientX > rect.right + cell || clientY < rect.top - cell || clientY > rect.bottom + cell) return null;
+  return { r: r0, c: c0, fits: M.fits(w, p, p.ri, r0, c0) };
+}
+function paintFoot(p, f){
+  var svg = $('board').querySelector('svg');
+  svg.querySelectorAll('rect.cell').forEach(function(rc){ rc.classList.remove('ok', 'no'); rc.style.fill = ''; });
+  if (!f) return;
+  var R = p.rots[p.ri];
+  R.cells.forEach(function(cc){ var r = f.r + cc[0], c = f.c + cc[1]; if (r < 0 || c < 0 || r >= w.H || c >= w.W) return; var rc = svg.querySelector('rect.cell[data-k="' + (r * w.W + c) + '"]'); if (!rc) return; if (f.fits){ rc.classList.add('ok'); rc.style.fill = p.colour; } else rc.classList.add('no'); });
+}
+function onMove(e){
+  if (!drag) return;
+  var p = w.pieces[drag.id];
+  if (!drag.moved && Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 7) return;
+  if (!drag.moved){ drag.moved = true; drag.ghost = makeGhost(p); }
+  drag.ghost.el.style.transform = 'translate(' + (e.clientX - drag.ghost.pw / 2) + 'px,' + (e.clientY - drag.ghost.ph / 2) + 'px)';
+  drag.foot = footprint(p, e.clientX, e.clientY); paintFoot(p, drag.foot);
+}
+function onUp(e){
+  if (!drag) return;
+  window.removeEventListener('pointermove', onMove); window.removeEventListener('pointerup', onUp); window.removeEventListener('pointercancel', onUp);
+  var p = w.pieces[drag.id], d = drag; drag = null;
+  if (d.ghost) d.ghost.el.remove();
+  paintFoot(p, null);
+  if (!d.moved){ onTurn(p.id); return; }
+  if (d.foot && d.foot.fits){
+    var before = M.status(w).lit, res = M.place(w, p.id, d.foot.r, d.foot.c);
+    if (res.ok){ renderBoard(); var g = $('board').querySelector('g.piece[data-id="' + p.id + '"]'); if (g) g.classList.add('land'); renderTray(); renderStat();
+      var st = M.status(w); say(cap(p.name) + ' is on the board: ' + p.area + ' more lit.' + (st.dark === 0 ? ' The land is full.' : st.waiting === 0 ? ' Everything is on the board.' : (w.placesByHand === 1 && game.at === 0 ? ' Tap it to pull it out again.' : ''))); }
+  } else { say(cap(p.name) + ' went back: it does not fit there.'); }
+}
+function onTurn(id){
+  if (id === null || id === undefined){ if (sel === null || w.pieces[sel].placed){ var first = w.pieces.filter(function(p){ return !p.placed; })[0]; if (!first){ say('Nothing left to turn.'); return; } sel = first.id; } id = sel; }
+  var p = w.pieces[id]; if (p.rots.length === 1){ sel = id; renderTray(); say(cap(p.name) + ' looks the same whichever way it turns.'); return; }
+  M.turn(w, id); sel = id; renderTray(); say(cap(p.name) + ' turned.');
+}
+function onPull(id){
+  if (w.ended) return;
+  var p = w.pieces[id], res = M.pull(w, id);
+  if (!res.ok) return;
+  sel = id; renderBoard(); renderTray(); renderStat();
+  var st = M.status(w), fitsNow = w.pieces.filter(function(q){ return !q.placed && q.id !== id && M.anyFit(w, q); }).length;
+  say('A step back: ' + p.name + ' is off the board, and ' + p.area + ' cells went dark.' + (game.at === 2 ? (fitsNow ? ' Now ' + (fitsNow === 1 ? 'one of the waiting shapes fits' : fitsNow + ' of the waiting shapes fit') + ' somewhere.' : ' Still nothing else fits.') : ''));
+}
+function cap(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+
+// Let it be
+function onLet(){
+  if (w.ended) return;
+  var res = M.letItBe(w);
+  $('b-let').disabled = true;
+  renderBoard({ hideRushed: true }); renderTray(); renderStat();
+  var rushed = res.rushed.slice(), i = 0;
+  say(rushed.length ? 'Whatever still fits comes in on its own, heaviest first.' : 'Nothing that is waiting fits anywhere.');
+  function next(){
+    if (i < rushed.length){ var g = $('board').querySelector('g.piece[data-id="' + rushed[i].id + '"]'); if (g){ g.style.visibility = ''; g.classList.add('rush'); } i++; renderStat(); setTimeout(next, 420); return; }
+    setTimeout(showResult, rushed.length ? 300 : 150);
+  }
+  setTimeout(next, rushed.length ? 500 : 50);
+}
+function showResult(){
+  var res = w.result, area = $('resultarea');
+  $('trayarea').style.display = 'none'; $('b-let').disabled = false;
+  $('do').textContent = 'This world has ended.';
+  say(''); renderBoard();
+  area.innerHTML = '';
+  var lines = res.lines.slice(0, 2); // what came in; what the world holds
+  lines.forEach(function(l){ var p = document.createElement('p'); p.textContent = l; area.appendChild(p); });
+  var b = document.createElement('button'); b.className = 'btn solid'; b.textContent = 'Show the best possible world'; area.appendChild(b);
+  var cp = document.createElement('p'); cp.className = 'cap'; cp.textContent = 'The best possible world: the fullest arrangement of these shapes there could be.'; area.appendChild(cp);
+  area.style.display = '';
+  b.addEventListener('click', function(){ showBest(); });
+}
+function showBest(){
+  var res = w.result, area = $('resultarea');
+  // two boards side by side: yours, best
+  var half = Math.floor((boardPx - 12) / 2);
+  var pair = document.createElement('div'); pair.className = 'pair';
+  var mk = function(label, opts){ var h = document.createElement('div'); h.className = 'half'; var lab = document.createElement('p'); lab.className = 'lab'; lab.textContent = label; h.appendChild(lab); var bw = document.createElement('div'); bw.className = 'boardwrap'; bw.style.width = (half + 10) + 'px'; bw.appendChild(drawBoard(w, half, opts)); h.appendChild(bw); return h; };
+  pair.appendChild(mk('Yours · ' + res.lit + ' of ' + res.total, {}));
+  pair.appendChild(mk('Best possible · ' + res.best + ' of ' + res.total, { placement: w.best.placement }));
+  $('boardarea').innerHTML = ''; $('boardarea').appendChild(pair);
+  // light the best one piece by piece
+  var gs = pair.querySelectorAll('.half')[1].querySelectorAll('g.piece'); gs.forEach(function(g){ g.style.visibility = 'hidden'; });
+  var i = 0; (function step(){ if (i < gs.length){ gs[i].style.visibility = ''; gs[i].classList.add('rush'); i++; setTimeout(step, 260); } })();
+  $('intro').textContent = w.lesson;
+  area.innerHTML = '';
+  res.lines.slice(2).forEach(function(l){ var p = document.createElement('p'); p.textContent = l; area.appendChild(p); });
+  var b = document.createElement('button'); b.className = 'btn solid'; b.textContent = game.at < 2 ? 'Next world' : 'See the verdict'; area.appendChild(b);
+  b.addEventListener('click', function(){ if (game.at < 2){ M.nextWorld(game); startWorld(); } else { M.nextWorld(game); showEnd(); } });
+}
+
+// ---- end ----
+function showEnd(){
+  var v = M.verdict(game);
+  $('fate').textContent = v.fate; $('v-paper').textContent = v.paper;
+  $('v-found').innerHTML = ''; v.found.forEach(function(l){ var p = document.createElement('p'); p.className = 'vp'; p.textContent = l; $('v-found').appendChild(p); });
+  $('v-part').textContent = v.part; $('v-stood').textContent = v.stood;
+  // covered picture: the best world of world 3, masked but for a 2x2 window
+  var w3 = game.worlds[2], cover = $('cover'); cover.innerHTML = ''; cover.style.width = (boardPx + 16) + 'px';
+  var bw = document.createElement('div'); bw.className = 'boardwrap'; bw.style.width = (boardPx + 16) + 'px'; bw.appendChild(drawBoard(w3, boardPx, { placement: w3.best.placement })); cover.appendChild(bw);
+  var mask = document.createElement('div'); mask.className = 'mask'; mask.id = 'mask';
+  var cell = cellSize(w3, boardPx), step = cell + GAP;
+  var win = document.createElement('div'); win.className = 'win';
+  var wr = 3, wc = 4; // rows 3-4, cols 4-5 of the 6x6: where the rectangle, the thin bar and the L meet
+  win.style.left = (8 + wc * step + GAP - 2) + 'px'; win.style.top = (8 + wr * step + GAP - 2) + 'px'; win.style.width = (2 * step - GAP + 4) + 'px'; win.style.height = (2 * step - GAP + 4) + 'px';
+  mask.style.overflow = 'hidden'; mask.appendChild(win); cover.appendChild(mask);
+  $('b-lift').style.display = ''; $('b-lift').textContent = 'Lift the cover';
+  $('coverline').textContent = 'Leibniz: take a very beautiful picture and cover all but a small part. What you see is a confused chaos of colours, and the closer you look the worse it gets. This is the best possible world of your third board, covered.';
+  // the three pairs
+  var trio = $('trio'); trio.innerHTML = '';
+  var small = Math.floor((boardPx - 12) / 2);
+  game.worlds.forEach(function(ww, i){
+    var pair = document.createElement('div'); pair.className = 'pair';
+    var mk = function(label, opts){ var h = document.createElement('div'); h.className = 'half'; var lab = document.createElement('p'); lab.className = 'lab'; lab.textContent = label; h.appendChild(lab); var b2 = document.createElement('div'); b2.className = 'boardwrap'; b2.style.width = (small + 10) + 'px'; b2.appendChild(drawBoard(ww, small, opts)); h.appendChild(b2); return h; };
+    pair.appendChild(mk('World ' + (i + 1) + ' · yours · ' + ww.result.lit + ' of ' + ww.result.total, {}));
+    pair.appendChild(mk('best possible · ' + ww.best.lit + ' of ' + ww.result.total, { placement: ww.best.placement }));
+    trio.appendChild(pair);
+  });
+  show('s-end');
+}
+$('b-lift').addEventListener('click', function(){
+  var mask = $('mask'); if (!mask) return;
+  if (!mask.classList.contains('off')){ mask.classList.add('off'); $('b-lift').textContent = 'Cover it again';
+    $('coverline').textContent = 'Leibniz: lift the cover and stand at the right distance, and what seemed smeared on without art was done with the greatest skill. This is the fullest arrangement there could be. Up close, a corner of it was three colours meeting at odd angles and nothing more.'; }
+  else { mask.classList.remove('off'); $('b-lift').textContent = 'Lift the cover';
+    $('coverline').textContent = 'Leibniz: take a very beautiful picture and cover all but a small part. What you see is a confused chaos of colours, and the closer you look the worse it gets. This is the best possible world of your third board, covered.'; }
+});
+
+// ---- wiring ----
+function begin(){ game = M.newGame(); startWorld(); }
+$('b-begin').addEventListener('click', begin);
+$('b-again').addEventListener('click', begin);
+$('b-turn').addEventListener('click', function(){ onTurn(null); });
+$('b-let').addEventListener('click', onLet);
+$('b-help-start').addEventListener('click', function(){ openOv('help'); });
+$('b-help-end').addEventListener('click', function(){ openOv('help'); });
+$('q-play').addEventListener('click', function(){ openOv('help'); });
+$('b-help-close').addEventListener('click', function(){ closeOv('help'); });
+$('b-about').addEventListener('click', function(){ openOv('about'); });
+$('b-about-close').addEventListener('click', function(){ closeOv('about'); });
+
+// start-screen motif: a small lit-and-dark strip (the best world of world 2 beside a dark corner), drawn from the mechanism
+(function(){
+  var mw = M.makeWorld(C.WORLDS[1], 1), svg = $('motif'), cell = 20, gap = 4, step = cell + gap, ox = 0;
+  mw.best.placement.forEach(function(pl){ var p = mw.pieces[pl.id]; var cells = p.rots[pl.ri].cells.map(function(c){ return [c[0] + pl.r, c[1] + pl.c]; }); var g = svgEl('g', {}); g.appendChild(svgEl('path', { d: piecePath(cells, cell, gap, 0), fill: p.colour, stroke: '#0E1016', 'stroke-width': 3, 'stroke-linejoin': 'round' })); g.setAttribute('transform', 'translate(' + (194 - 3 * step) + ',' + (60 - 3 * step) + ') scale(0.8)'); svg.appendChild(g); });
+  // dim outlines of the two shapes left out of the world, at the sides
+  var left = [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2]];
+  var g1 = svgEl('g', { transform: 'translate(20,18) scale(0.55)' }); g1.appendChild(svgEl('path', { d: piecePath(left, cell, gap, 0), fill: '#FF5C5C', 'fill-opacity': 0.08, stroke: '#FF5C5C', 'stroke-width': 3 })); svg.appendChild(g1);
+  var g2 = svgEl('g', { transform: 'translate(306,40) scale(0.55)' }); g2.appendChild(svgEl('path', { d: piecePath([[0, 0], [1, 0], [1, 1]], cell, gap, 0), fill: '#2FE3A3', 'fill-opacity': 0.08, stroke: '#2FE3A3', 'stroke-width': 3 })); svg.appendChild(g2);
+})();
+window.__game = { get state(){ return game; }, get world(){ return w; }, M: M, place: function(id, r, c){ var p = w.pieces[id]; var before = M.status(w).lit; var res = M.place(w, id, r, c); if (res.ok){ renderBoard(); renderTray(); renderStat(); say(cap(p.name) + ' is on the board: ' + p.area + ' more lit.'); } return res; }, turn: function(id){ onTurn(id); }, pull: onPull, letItBe: onLet, showBest: showBest };
+})();
+</script>
+</body>
+</html>
