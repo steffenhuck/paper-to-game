@@ -875,7 +875,7 @@ canvas.all{display:block;width:348px;margin:6px 0}
       h += '<div class="rl ' + cls + '"><span class="bar"></span>' + outcomeHtml(a, b, info.top, 14) + '<span>' + relWords(a, b, info.top) + '</span><span class="why">' + why + '</span></div>';
     });
     var whose = ctx.mode === 'book' ? 'your book says' : 'the tie-breaker says';
-    h += '<div class="rout">' + (c.list ? '<span class="stack" style="gap:2px">' + tiersHtml(c.list, 15) + '</span><span><span class="h">They fit together.</span>' + listWords(c.list).replace(/^./, function (m) { return m.toUpperCase(); }) + '.'</span>'
+    h += '<div class="rout">' + (c.list ? '<span class="stack" style="gap:2px">' + tiersHtml(c.list, 15) + '</span><span><span class="h">They fit together.</span>' + listWords(c.list).replace(/^./, function (m) { return m.toUpperCase(); }) + '.</span>'
       : '<span><span class="h">The village decides: ' + decideWords(c) + '</span>But the three results contradict each other. ' + clashWords(c.clash, whose) + (ctx.mode === 'book' ? ' Each line is fine on its own; together, on this vote, they clash. The vote does not count as fair.' : '') + '</span>') + '</div>';
     $(ctx.read).innerHTML = h; $(ctx.read).classList.remove('hide');
     var els = $(ctx.read).querySelectorAll('.rl,.rout');
