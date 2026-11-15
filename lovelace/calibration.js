@@ -1,4 +1,4 @@
-// Calibration check for Lovelace's Cards. Run: node calibration.js  (writes calibration-result.txt)
+// Calibration check for Weave with Lovelace. Run: node calibration.js  (writes calibration-result.txt)
 // The mechanism is PORTED: an interpreter for the card language of the Memoir and the Notes. It is checked against the paper's own
 // programs and counts (pages are the 63-page typeset PDF's):
 //   (B)   Note B, pp. 29–31: with a = 5, n = 7, x = 98 the chains for a·n·x (2(×)), a/n·x (÷, ×), a+n+x (2(+)) and ax^n (7(×)) print the values
@@ -183,6 +183,6 @@ const rint = (lo, hi) => lo + Math.floor(rnd() * (hi - lo + 1));
   const words = [].concat(tour.steps.map(x => x.say), cd.steps.map(x => x.say), ...C.TASKS.map(t => M.solution(t).map(c => M.cardSentence(c, M.makeCols(t)))));
   check('S  narration and card sentences carry no decimals', words.every(w => !/\d\.\d/.test(w)), words.length + ' lines');
 }
-out.unshift(`Calibration of Lovelace's Cards: ${pass} passed, ${fail} failed.`);
+out.unshift(`Calibration of Weave with Lovelace: ${pass} passed, ${fail} failed.`);
 fs.writeFileSync('calibration-result.txt', out.join('\n') + '\n'); console.log(out.join('\n'));
 process.exit(fail ? 1 : 0);

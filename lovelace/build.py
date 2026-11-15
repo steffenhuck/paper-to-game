@@ -1,4 +1,4 @@
-# Generates lovelaces-cards.html from template.html, mechanism.js (used for the coda: Lovelace's Bernoulli chain) and the embedded fonts,
+# Generates weave-with-lovelace.html from template.html, mechanism.js (used for the coda: Lovelace's Bernoulli chain) and the embedded fonts,
 # then checks that the embedded mechanism is byte for byte the file calibration.js ran against.
 import base64, sys, os
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -27,7 +27,7 @@ for k in keys:
 out = (t.replace('/*__FONT_ABRIL__*/', font('AbrilFatface-400.woff2')).replace('/*__FONT_OLD__*/', font('OldStandardTT-400.woff2'))
         .replace('/*__FONT_OLD_I__*/', font('OldStandardTT-400-italic.woff2')).replace('/*__FONT_OLD_B__*/', font('OldStandardTT-700.woff2'))
         .replace('/*__ABOUT__*/', about).replace('/*__MECHANISM__*/', mech).replace('/*__LOOM__*/', loom).replace('/*__PUZZLES__*/', puz))
-name = 'lovelaces-cards.html'
+name = 'weave-with-lovelace.html'
 open(name, 'w', encoding='utf-8').write(out)
 if mech not in open(name, encoding='utf-8').read():
     sys.exit('BUILD FAILED: embedded mechanism differs from mechanism.js')

@@ -1,4 +1,4 @@
-# Lovelace's Cards: rebuild memo (1 Nov 2026)
+# Weave with Lovelace: rebuild memo (1 Nov 2026)
 
 The first build (in `previous/`, with its full memo) had the player compose cards from an operation sign and three named columns (`a × 1 → R`) and write a loop (`BACK 2 WHILE n ≠ 0`). It was faithful to Note B's card language and unplayable for a stranger: four abstractions before anything happened on screen. This rebuild starts from Note A's own image instead (the Engine weaves algebraical patterns as the Jacquard loom weaves flowers and leaves) and keeps Note G as the spine.
 

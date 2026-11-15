@@ -1,4 +1,4 @@
-// Lovelace's Cards — the loom. The only copy: solve.js runs it in Node to compute every puzzle's par, build.py inlines it.
+// Weave with Lovelace — the loom. The only copy: solve.js runs it in Node to compute every puzzle's par, build.py inlines it.
 // The machine counts the way the Notes say an Engine counts: with numbers in the Store and cards that operate on them.
 //   - A wheel (A, B or C) is a number in the Store. Every wheel starts at 0.
 //   - A stitch card weaves one stitch.

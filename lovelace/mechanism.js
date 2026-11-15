@@ -1,4 +1,4 @@
-// Lovelace's Cards — the mechanism. The only copy: calibration.js runs this file in Node, build.py inlines it verbatim into the HTML.
+// Weave with Lovelace — the mechanism. The only copy: calibration.js runs this file in Node, build.py inlines it verbatim into the HTML.
 // PORTED from Menabrea (1842) / Lovelace (1843), Scientific Memoirs 3: the Store of columns (Note B), cards that put the mill into a
 // state and name the columns it reads and writes (Notes B, D), the prism that revolves backwards so that cards do duty again (Note C, E),
 // the contingent course felt by a subtraction (Note G, Operation 7; Memoir p. 12), the bell (Memoir p. 12), and the Numbers of
