@@ -1,0 +1,54 @@
+SEED 7. AIM: Find out whether it is the water: set a crape door beside a door without, and know what each drinks.
+Battersea (thinly peopled, comparatively genteel; Battersea Fields are marsh): crape on 6 doors
+     .- .- X- .- X- X- 
+     .- .- X- X- .- X- 
+
+Waterloo Road (crowded, dirty, and very poor; by the river): crape on 1 doors
+     .- .- .- .- .- .- 
+     .- .- .- .- .- X- 
+
+DOCTOR: "Here is a pair for nothing: Mr Haggis's (crape, Battersea) says brown; Mr Quick's (Waterloo Road, no crape) says blue." Card: {"street":true,"water":"unknown","kind":"muddled"}. [Take it] [No]
+   -> declined
+PAIR: Mrs Teale (crape, Battersea) against Mrs Marsh (Battersea), by ask
+   Mrs Teale: "the Lambeth"; Mrs Marsh: could not say. CARD: open (same street; water unknown)
+   WINDOW: {"crapeBrown":0,"crapeBlue":1,"liveBrown":0,"liveBlue":0,"crapeUnknown":0,"liveUnknown":1,"byWord":2,"byGlass":0,"pairs":1}
+   LINE: In the same street, 1 pair. Of the crape doors, all blue; of the doors beside them, 1 not known. They cannot yet say how much more often a brown door wears crape than a blue one.
+   knocks left 7
+PAIR: Mrs Cope (crape, Battersea) against Mr Penn (Battersea), by glass
+   Mrs Cope: MILKY (Battersea water); Mr Penn: MILKY (Battersea water). CARD: nothing (same street; water same)
+   WINDOW: {"crapeBrown":1,"crapeBlue":1,"liveBrown":1,"liveBlue":0,"crapeUnknown":0,"liveUnknown":1,"byWord":2,"byGlass":2,"pairs":2}
+   LINE: In the same street, 2 pairs. Of the crape doors, 1 brown, 1 blue; of the doors beside them, 1 brown, 1 not known. A brown door wears crape less often than a blue one.
+   knocks left 5
+PAIR: Mrs Hollis (crape, Waterloo Road) against Mr Pryor (Waterloo Road), by glass
+   Mrs Hollis: MILKY (Battersea water); Mr Pryor: CLEAR (Thames Ditton water). CARD: clean (same street; water different)
+   WINDOW: {"crapeBrown":2,"crapeBlue":1,"liveBrown":1,"liveBlue":1,"crapeUnknown":0,"liveUnknown":1,"byWord":2,"byGlass":4,"pairs":3}
+   LINE: In the same street, 3 pairs. Of the crape doors, 2 brown, 1 blue; of the doors beside them, 1 brown, 1 blue, 1 not known. A brown door wears crape about one and a half times as often as a blue one.
+   knocks left 3
+DOCTOR: "Three more pairs for nothing." [Take all three] [No]
+   -> declined
+CHECK: Mrs Teale's word (blue) with the glass
+   -> MILKY; the word was wrong
+   WINDOW: {"crapeBrown":3,"crapeBlue":0,"liveBrown":1,"liveBlue":1,"crapeUnknown":0,"liveUnknown":1,"byWord":1,"byGlass":5,"pairs":3}
+   LINE: In the same street, 3 pairs. Of the crape doors, all brown; of the doors beside them, 1 brown, 1 blue, 1 not known. No blue door in these pairs wears crape: as far as they go, it is the brown water.
+   knocks left 2
+PAIR: Mr Haggis (crape, Battersea) against Mr Rudd (Battersea), by ask
+   Mr Haggis: "Southwark and Vauxhall"; Mr Rudd: "Southwark and Vauxhall". CARD: nothing (same street; water same)
+   WINDOW: {"crapeBrown":4,"crapeBlue":0,"liveBrown":2,"liveBlue":1,"crapeUnknown":0,"liveUnknown":1,"byWord":3,"byGlass":5,"pairs":4}
+   LINE: In the same street, 4 pairs. Of the crape doors, all brown; of the doors beside them, 2 brown, 1 blue, 1 not known. No blue door in these pairs wears crape: as far as they go, it is the brown water.
+   knocks left 1
+CLOSE THE BOOK: true
+
+VERDICT (agree)
+  SNOW: On the same streets, a house on the town’s water lost someone about seven times as often as a house on the upriver water in these seven weeks, and fourteen times as often in the first four. Marsh or hill, crowded or genteel: once the water was known, the parish made no difference. And he knew the water by the rate-book and the glass, not by what people said at the door.
+  YOU: You wrote: “It is the Southwark and Vauxhall Company’s water.” Your book has 4 pairs in the same street: 1 pair different in the water alone, two different in nothing. No blue door in these pairs wears crape: as far as they go, it is the brown water.
+  PART: Your sentence is his, and your book can carry it: in the same street, with the same air and the same people, the crape was behind the brown doors.
+  WORDS: The words you took and did not check were all right this time. One time in seven they are not, and at a crape door a wrong word nearly always moves a death from the brown water to the blue. You checked one door with the glass, and one of the words was wrong.
+  HAD: Had it been answered from the companies’ lists instead of at the door, as the Board of Health answered it, the gap would have shrunk to three and a half to one, because with deaths six times as common behind one company’s doors, five mistakes in six move a death from the guilty water to the innocent one. Yours was answered at the door, with the glass.
+Battersea
+     .- .? XB .B XB Xb 
+     .b .- X- X- .- X- 
+
+Waterloo Road
+     .- .- .- .- .- .- 
+     .- .- .- .- .U XB 
+

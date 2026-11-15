@@ -1,19 +1,20 @@
-// Snow's Cloudy Glass (third build) — mechanism. The single source of truth: plain functions, no DOM; every rule that
-// affects an outcome (the map, the deaths, a test, the evidence, the doctor's line, the sentence, the verdict's bands and
-// words) lives here. Runs unchanged in Node (module.exports) and in the browser (window.SNOW).
+// Snow's Cloudy Glass (fourth build) — mechanism. The single source of truth: plain functions, no DOM; every rule that
+// affects an outcome (the map, the deaths, a test, the evidence and its states, the doctor's line and his concession, the
+// sentence, the verdict's judgements and words, the benchmark strategies) lives here. Runs unchanged in Node
+// (module.exports) and in the browser (window.SNOW).
 //
 // Mechanism kind: RECONSTRUCTED. The map is six real subdistricts of John Snow (1856), "Cholera and the Water Supply in
 // the South Districts of London in 1854", ordered from the river inland, six houses each; each row's share of houses on
 // the Southwark & Vauxhall Company's water is the row's in Table I or II, the pipes are placed at random within the row,
 // and each house wears crape at the paper's deaths-over-houses rate for its water (Table I totals, first seven weeks),
-// drawn ten times as thick. The tests, the doctor, the floors and the sentence are ours and tagged as such. Source: the
-// Project Gutenberg transcription of the typeset text (eBook 66507).
+// drawn ten times as thick. The tests, the doctor, the floors, the count and the sentence are ours and tagged as such.
+// Source: the Project Gutenberg transcription of the typeset text (eBook 66507).
 (function (root) {
   'use strict';
 
   var CONFIG = {
     PER_ROW: 6,            // our choice: houses per street; six rows of six fit a phone
-    TESTS: 8,              // our choice: a morning's tests
+    TESTS: 10,             // our choice: the most glasses in a morning (the cap; the count is the score)
     COMPRESSION: 10,       // our choice: deaths drawn ten times as thick as the seven-week rates
     DEATHS_BROWN: 507, HOUSES_BROWN: 16038, // Table I totals: Southwark & Vauxhall, first seven weeks, twenty-one mixed subdistricts
     DEATHS_BLUE: 98, HOUSES_BLUE: 20554,    // Table I totals: Lambeth Co.
@@ -36,7 +37,9 @@
       next3: { ratio: 8 }, last10: { perBrown: 916, perBlue: 180 }, whole: { perBrown: 160, perBlue: 27 }, board: { perBrown: 125, perBlue: 37 }, // pp. 4–7
       saltBrown: 40, saltBlue: 0.95 // p. 3, grains of common salt per gallon
     },
-    AGREE_LO: 3.5 // our choice: a same-row ratio at least this counts as the paper's gap (Snow's subdistrict ratios run 3.4 to 32)
+    AGREE_LO: 3.5,         // our choice: a same-street ratio at least this (or no blue crape at all) is the paper's gap and the doctor concedes
+    BEST_PLAN: { lo: 2, hi: 3 }, // from the strategy table (memo §18): the anchor-and-hunt plan concedes at the second or third glass in most games
+    CRAPE_PLAN: 9          // from the strategy table: testing where the crape is takes nine glasses or more, when it gets there at all
   };
   var C = CONFIG;
 
@@ -69,7 +72,7 @@
       ok = opts.noFloors || (crape >= C.CRAPE_MIN && crape <= C.CRAPE_MAX && inland > river && cleanRow);
       tries++;
     } while (!ok && tries < 2000);
-    return { seed: seed, rows: rows, tests: C.TESTS, log: [], sentence: null, redraws: tries - 1 };
+    return { seed: seed, rows: rows, tests: C.TESTS, used: 0, log: [], sentence: null, concededAt: null, redraws: tries - 1 };
   }
   function house(g, r, i) { return g.rows[r][i]; }
 
@@ -78,8 +81,10 @@
     var h = house(g, r, i); if (!h) return { ok: false, why: 'no such house' };
     if (g.sentence !== null) return { ok: false, why: 'the book is closed' };
     if (g.tests <= 0) return { ok: false, why: 'no tests left' }; if (h.tested) return { ok: false, why: 'already tested' };
-    h.tested = true; g.tests--; g.log.push({ r: r, i: i, water: h.water, crape: h.crape });
-    return { ok: true, house: h, milky: h.water === 'brown', rowTally: rowTally(g, r) };
+    h.tested = true; g.tests--; g.used++; g.log.push({ r: r, i: i, water: h.water, crape: h.crape });
+    var e = evidence(g), conceded = false;
+    if (g.concededAt === null && e.state === 'clean') { g.concededAt = g.used; conceded = true; }
+    return { ok: true, house: h, milky: h.water === 'brown', rowTally: rowTally(g, r), state: e.state, conceded: conceded };
   }
   function rowTally(g, r) {
     var t = { brown: 0, brownCrape: 0, blue: 0, blueCrape: 0 };
@@ -118,6 +123,7 @@
 
   // ---------------- words ----------------
   function numberWord(n) { var W = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty']; if (n <= 20) return W[n]; if (n < 30) return 'twenty-' + W[n - 20]; return String(n); }
+  function ordinal(n) { return ['zeroth', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth', 'eleventh', 'twelfth'][n] || (n + 'th'); }
   function timesWord(r) {
     if (r >= 10) return 'more than ten times as often as'; if (r >= 1.75) return 'about ' + numberWord(Math.round(r)) + ' times as often as';
     if (r >= 1.25) return 'about one and a half times as often as'; if (r >= 0.8) return 'about as often as'; return 'less often than';
@@ -140,82 +146,87 @@
   // the doctor, after each test
   function doctor(g) {
     var e = evidence(g);
+    if (g.concededAt !== null) return 'I conceded at your ' + ordinal(g.concededAt) + ' glass: same street, same air, and the crape at the brown door. I have nothing more to say.';
     if (e.state === 'none') return 'Look where the crape is. Inland, away from the river. Something in the inland air; that is what does it.';
     if (e.state === 'oneColour') return e.all.blue === 0 ? 'Every house you have tested is on the town’s water. So is nearly every house inland. You have found nothing the map did not show.' : 'Every house you have tested is on the upriver water. So is nearly every house by the river. Test inland and you will find the town’s water there, and the crape, and the air.';
     if (e.state === 'confounded') return 'Your brown houses are ' + (e.brownMostlyInland ? 'inland' : 'on one side') + ' and your blue houses ' + (e.blueMostlyRiver ? 'by the river' : 'on the other') + ', just like the map. Inland is where the crape is. The water and the side of town go together, so you cannot tell which of them does it.';
     if (e.state === 'nocrape') return 'Both waters in one street, I grant you, but none of those houses has crape. Nothing to compare.';
-    if (e.state === 'clean') return 'In the same street you have a brown house and a blue house, the same air at both doors, and the crape is at the brown one. I have nothing to say to that.';
     if (e.state === 'weak') return 'Same street, same air, and the brown houses only a little worse. I call that chance.';
     return 'Same street, same air, and no difference between the two waters. There you are: it is not the water.';
   }
 
   // ---------------- the sentence and the verdict ----------------
-  function canWrite(g) { return g.sentence === null && g.tests === 0; }
+  function canWrite(g) { return g.sentence === null && g.used >= 1; }
   function writeSentence(g, s) { if (!canWrite(g) || ['air', 'water', 'cannot'].indexOf(s) < 0) return false; g.sentence = s; return true; }
   function verdict(g) {
-    var e = evidence(g), s = g.sentence;
-    var snow = 'Snow compared houses on the same streets, where the only thing different was the pipe. The town’s water killed about seven times as often as the upriver water in these seven weeks, and fourteen times as often in the first four. And once the water was known, whether a street was by the river or inland, crowded or genteel, made no difference at all.';
+    var e = evidence(g), s = g.sentence, identified = g.concededAt !== null;
+    // 1. identification: the headline and what the tests show
+    var head, ident;
+    if (identified) { head = 'The water stands alone.'; ident = 'In the same street, where the side of town is the same for both: ' + countWords(e.same) + (e.ratioSame === Infinity ? '. No blue house there wears crape; the brown ones do.' : isFinite(e.ratioSame) ? '. A brown house wears crape ' + timesWord(e.ratioSame) + ' a blue one.' : '.') + ' The doctor cannot answer that with the air, because the air is the same at both doors. That is identification: the one thing that differs between the two houses is the one thing that can explain the difference between them.'; }
+    else if (e.state === 'weak') { head = 'Nearly: a gap, but a small one.'; ident = 'In the same street, ' + countWords(e.same) + ': the brown houses did worse, but not by enough to shut the doctor up. ' + numberWord(e.tested) + ' tests are few.'; }
+    else if (e.state === 'flat') { head = 'Still tangled.'; ident = 'In the same street, ' + countWords(e.same) + ': no gap between the waters this time. A blue house that happened to die is sitting in your comparison; with so few houses that is enough to hide the water.'; }
+    else if (e.state === 'nocrape') { head = 'Still tangled.'; ident = 'You tested both waters in the same street, but none of those houses had crape, so there was nothing to compare. A comparison needs the dead as well as the living.'; }
+    else if (e.state === 'confounded') { head = 'Still tangled.'; ident = 'Over all your tests, ' + countWords(e.all) + '; but your brown houses were ' + (e.brownMostlyInland ? 'inland' : 'on one side') + ' and your blue houses ' + (e.blueMostlyRiver ? 'by the river' : 'on the other') + ', like the map itself. Whatever the crape did, the doctor can say it was the side of town, and nothing in your tests can answer him.'; }
+    else if (e.state === 'oneColour') { head = 'Still tangled.'; ident = 'Every house you tested was on the same water, so there was nothing to set it against.'; }
+    else { head = 'Nothing tested.'; ident = 'You tested no house.'; }
+    // 2. the sentence, judged against the tests, not against the answer
     var sent = { air: 'It is the inland air.', water: 'It is the Southwark and Vauxhall Company’s water.', cannot: 'These tests cannot say.' }[s] || '(no sentence)';
-    var you = 'You wrote: “' + sent + '” ';
-    if (e.tested === 0) you += 'You tested no house.';
-    else {
-      you += 'Over all your tests: ' + countWords(e.all) + '. ';
-      if (e.state === 'oneColour') you += 'Every house you tested was on the same water, so there was nothing to compare it with.';
-      else if (e.state === 'confounded') you += 'But your brown houses were ' + (e.brownMostlyInland ? 'mostly inland' : 'on one side') + ' and your blue houses ' + (e.blueMostlyRiver ? 'mostly by the river' : 'on the other') + ', like the map itself, so those tests cannot tell the water from the side of town.';
-      else if (e.state === 'nocrape') you += 'In the streets where you tested both waters, none of the houses you tested had crape, so they could not compare anything.';
-      else you += sameRowSays(e).replace('Same street, both waters', 'In the same street, where the side of town is the same for both');
-    }
-    var part;
-    if (s === 'water' && e.state === 'clean') part = 'Your sentence is his, and your tests can carry it: in the same street, with the same air at both doors, the crape was at the houses on the town’s water.';
-    else if (s === 'water' && e.state === 'weak') part = 'Your sentence is his, but your same-street tests show only a small gap. Eight tests are few; his were six hundred and fifty-eight deaths.';
-    else if (s === 'water' && e.state === 'flat') part = 'Your sentence is his, but your same-street tests do not show it this time: the houses you happened to test on the upriver water died too. Eight tests are few; his were six hundred and fifty-eight deaths.';
-    else if (s === 'water' && e.state === 'nocrape') part = 'Your sentence is his, but your tests cannot carry it: where you tested both waters there was no crape to compare. Snow\u2019s answer was a crape door and the door beside it, on the same street, on the other pipe.';
-    else if (s === 'water') part = 'Your sentence is his, but your tests cannot carry it: the Board can answer that your brown houses were inland and inland is where the crape is. Snow’s answer was a brown house and a blue house in the same street.';
-    else if (s === 'air') part = e.state === 'clean' ? 'You wrote the air, and your own tests say otherwise: in the same street, the same air at both doors, the crape was at the brown houses.' : 'You wrote the air. Snow tested houses in the same street, where the air was the same, and the crape followed the pipe. ' + (e.state === 'confounded' ? 'Your tests never put a brown house and a blue house in the same street.' : 'Your tests could not have told you.');
-    else part = e.state === 'clean' ? 'You wrote that the tests cannot say. Yours could: in the same street the crape was at the brown houses.' : 'You wrote that the tests cannot say. Snow’s could, because he compared neighbours.';
+    var sentence = 'You wrote: “' + sent + '” ';
+    if (s === 'water' && identified) sentence += 'Right, and your tests carry it.';
+    else if (s === 'water') sentence += 'Right, but nothing in your tests says so. A right answer is not identification; the Board wanted the proof, not the guess.';
+    else if (s === 'air' && identified) sentence += 'Wrong, and your own tests say so: in the same street, with the same air, the crape was at the brown doors.';
+    else if (s === 'air') sentence += 'Wrong, and your tests could not have told you otherwise; that is the trouble with them.';
+    else if (identified) sentence += 'Too modest: your tests could say, and did.';
+    else sentence += 'True of these tests, and honest. Snow’s could say, because he compared neighbours.';
+    // 3. speed
+    var speed;
+    if (identified) speed = 'The doctor conceded at your ' + ordinal(g.concededAt) + ' glass' + (g.used > g.concededAt ? ', and you used ' + numberWord(g.used) + ' in all' : '') + '. The quickest plan, a crape door in a street where the pipes are mixed and then its neighbours until one comes up clear, gets there at the second or third glass in most games. Testing where the crape is takes nine or more, when it gets there at all.';
+    else speed = 'You used ' + numberWord(g.used) + ' glass' + (g.used === 1 ? '' : 'es') + ' and he never conceded. The quickest plan, a crape door in a street where the pipes are mixed and then its neighbours until one comes up clear, gets there at the second or third glass in most games.';
+    // 4. Snow, and had yours stood
+    var snow = 'Snow compared houses on the same streets, where the only thing different was the pipe. The town’s water killed about seven times as often as the upriver water in these seven weeks, and fourteen times as often in the first four. And once the water was known, whether a street was by the river or inland, crowded or genteel, made no difference at all.';
     var had;
     if (s === 'air') had = 'Had your sentence stood, the air would have kept the blame a while longer, and the Southwark and Vauxhall Company would have gone on pumping from the sewers’ reach.';
-    else if (s === 'water' && e.state !== 'clean' && e.state !== 'weak') had = 'Had your tests stood for the proof, the Board would have answered that inland houses differ from riverside ones in a hundred ways, and the air would have kept its share of the blame. The proof that stood was the one from the same street.';
+    else if (s === 'water' && !identified) had = 'Had your tests stood for the proof, the Board would have answered that inland houses differ from riverside ones in a hundred ways, and the air would have kept its share of the blame. The proof that stood was the one from the same street.';
     else if (s === 'cannot') had = 'Had it been left there, the air would have kept the blame. The tests that could say were the ones on the same street.';
     else had = 'Had the question been answered from lists instead of at the door, as the Board of Health answered it, the gap would have shrunk to three and a half to one, because with deaths six times as common behind one company’s doors, five mistakes in six move a death from the guilty water to the innocent one. Yours was answered at the door, with the glass, in the same street.';
-    var sideLine = '';
-    var sd = e.side;
+    var sideLine = '', sd = e.side;
     if (sd.brownInland >= 2 && sd.brownRiver >= 2) {
       var ri = sd.brownInlandCrape / sd.brownInland, rr = sd.brownRiverCrape / sd.brownRiver;
       sideLine = 'Among the brown houses you tested, inland ' + sd.brownInlandCrape + ' of ' + sd.brownInland + ' had crape and by the river ' + sd.brownRiverCrape + ' of ' + sd.brownRiver + ': ' + (Math.abs(ri - rr) <= 0.34 ? 'about alike. Once the water is known, the side of town does not matter.' : 'different this time, with so few houses; Snow found no difference once the water was known.');
     }
     var later = 'As the epidemic went on the gap narrowed: fourteen to one in the first four weeks, eight to one in the next three, five to one in the last ten, as other ways of catching it, from hand to mouth in crowded rooms, joined the water. And it was not dirt in general: thousands drank from foul cisterns that summer unharmed. It was the specific matter of the disease in the specific water.';
-    var band = s === 'water' ? (e.state === 'clean' ? 'agree' : e.state === 'weak' ? 'weak' : e.state === 'flat' ? 'flat' : 'unsupported') : s;
-    return { band: band, state: e.state, sentence: s, snow: snow, you: you, part: part, had: had, sideLine: sideLine, later: later, evidence: e };
+    var band = identified ? (s === 'water' ? 'identified' : s === 'air' ? 'identifiedWroteAir' : 'identifiedWroteCannot') : (s === 'water' ? 'guessed' : s === 'air' ? 'air' : 'cannot');
+    return { band: band, identified: identified, concededAt: g.concededAt, used: g.used, state: e.state, sentence: s, head: head, ident: ident, sentenceLine: sentence, speed: speed, snow: snow, had: had, sideLine: sideLine, later: later, evidence: e };
   }
 
   // ---------------- strategies, for the numbers table and the checks ----------------
-  // 'crapeOnly': the crape houses, inland first, then anywhere; 'sides': inland crape houses against riverside houses
-  // without crape, write air (the doctor's comparison); 'random': anywhere; 'column': one house per street, then random;
-  // 'middle': crape houses in the middle streets first, then the rest of those streets; 'pairs': a crape house in a middle
-  // street, then the houses beside it, then the next. All write water except 'sides' (air).
-  function runStrategy(seed, key, opts) {
-    var g = makeMap(seed, opts), rng = makeRng(seed * 7 + 3), order = [];
-    var all = [].concat.apply([], g.rows);
-    var pick = function (hs) { return shuffle(rng, hs); };
-    if (key === 'crapeOnly') order = pick(all.filter(function (h) { return h.crape; })).sort(function (a, b) { return b.r - a.r; }).concat(pick(all));
-    else if (key === 'sides') { var ic = pick(all.filter(function (h) { return isInland(h.r) && h.crape; })), rl = pick(all.filter(function (h) { return isRiver(h.r) && !h.crape; })); for (var q = 0; q < 4; q++) { if (ic[q]) order.push(ic[q]); if (rl[q]) order.push(rl[q]); } order = order.concat(pick(all)); }
-    else if (key === 'random') order = pick(all);
-    else if (key === 'middle') { var mid = all.filter(function (h) { return C.ROWS[h.r].side === 'middle'; }); order = pick(mid.filter(function (h) { return h.crape; })).concat(pick(mid.filter(function (h) { return !h.crape; })), pick(all)); }
-    else if (key === 'pairs') {
-      var cr = pick(all.filter(function (h) { return h.crape && C.ROWS[h.r].side === 'middle'; })).concat(pick(all.filter(function (h) { return h.crape && C.ROWS[h.r].side !== 'middle'; })));
-      cr.forEach(function (h) { order.push(h); [h.i - 1, h.i + 1].forEach(function (j) { if (j >= 0 && j < C.PER_ROW) order.push(g.rows[h.r][j]); }); });
-      order = order.concat(pick(all));
-    } else { // column
-      for (var r = 0; r < C.ROWS.length; r++) order.push(g.rows[r][Math.floor(rng() * C.PER_ROW)]);
-      order = order.concat(pick(all));
+  // Each is adaptive: a function (map, rng) -> the next house. Play stops at the concession (the count is the score) or at the cap.
+  var untested = function (g, pred) { return [].concat.apply([], g.rows).filter(function (h) { return !h.tested && (!pred || pred(h)); }); };
+  var pickOne = function (rng, xs) { return xs[Math.floor(rng() * xs.length)]; };
+  var STRATEGIES = {
+    random: function (g, rng) { return pickOne(rng, untested(g)); },
+    crapeFirst: function (g, rng) { var c = untested(g, function (h) { return h.crape; }); return c.length ? pickOne(rng, c) : pickOne(rng, untested(g)); },
+    // the doctor's comparison: inland crape houses against riverside houses without crape, turn about
+    sides: function (g, rng) { var k = g.used % 2 === 0; var c = untested(g, function (h) { return k ? (isInland(h.r) && h.crape) : (isRiver(h.r) && !h.crape); }); return c.length ? pickOne(rng, c) : pickOne(rng, untested(g)); },
+    // one house per street, from the river up, then random
+    column: function (g, rng) { for (var r = 0; r < C.ROWS.length; r++) { if (!g.rows[r].some(function (h) { return h.tested; })) return pickOne(rng, g.rows[r]); } return pickOne(rng, untested(g)); },
+    // anchor and hunt: a crape door in a mixed street; then the doors without crape in that street until one comes up blue; then the next street
+    anchorHunt: function (g, rng) {
+      var pref = [2, 3, 4, 1, 0, 5];
+      for (var a = 0; a < pref.length; a++) { var r = pref[a], hs = g.rows[r]; if (hs.some(function (h) { return h.tested && h.crape && h.water === 'brown'; }) && !hs.some(function (h) { return h.tested && h.water === 'blue'; })) { var c = hs.filter(function (h) { return !h.tested && !h.crape; }); if (c.length) return pickOne(rng, c); } }
+      for (var b = 0; b < pref.length; b++) { var r2 = pref[b], hs2 = g.rows[r2]; if (hs2.some(function (h) { return h.tested; })) continue; var c2 = hs2.filter(function (h) { return h.crape && !h.tested; }); if (c2.length) return pickOne(rng, c2); }
+      for (var d = 0; d < pref.length; d++) { var c3 = g.rows[pref[d]].filter(function (h) { return !h.tested; }); if (c3.length) return pickOne(rng, c3); }
+      return pickOne(rng, untested(g));
     }
-    for (var k = 0; k < order.length && g.tests > 0; k++) test(g, order[k].r, order[k].i);
+  };
+  function runStrategy(seed, key, opts) {
+    var g = makeMap(seed, opts), rng = makeRng(seed * 7 + 3), f = STRATEGIES[key];
+    while (g.tests > 0 && g.concededAt === null) { var h = f(g, rng); if (!h) break; test(g, h.r, h.i); }
     writeSentence(g, key === 'sides' ? 'air' : 'water');
     return { game: g, verdict: verdict(g) };
   }
 
   var API = { CONFIG: CONFIG, makeRng: makeRng, rate: rate, perHouseProb: perHouseProb, brownCount: brownCount, isInland: isInland, isRiver: isRiver, makeMap: makeMap, house: house, test: test, rowTally: rowTally,
-    ratioOf: ratioOf, evidence: evidence, numberWord: numberWord, timesWord: timesWord, countWords: countWords, line: line, doctor: doctor, canWrite: canWrite, writeSentence: writeSentence, verdict: verdict, runStrategy: runStrategy };
+    ratioOf: ratioOf, evidence: evidence, numberWord: numberWord, ordinal: ordinal, timesWord: timesWord, countWords: countWords, line: line, doctor: doctor, canWrite: canWrite, writeSentence: writeSentence, verdict: verdict, STRATEGIES: STRATEGIES, runStrategy: runStrategy };
   if (typeof module !== 'undefined' && module.exports) module.exports = API; else root.SNOW = API;
 })(typeof window !== 'undefined' ? window : this);
