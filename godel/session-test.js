@@ -13,7 +13,7 @@ const path = require('path'), fs = require('fs');
     await page.goto('file://' + path.resolve('godels-endgame.html'));
     const shot = async n => { await page.waitForTimeout(350); await page.screenshot({ path: `screenshot-${tag}-${n}.png`, fullPage: true }); };
     const key = async label => { await page.click(`#p-keys .key[data-k="${label}"]`); await page.waitForTimeout(80); };
-    const type = async text => { await page.fill('#p-in', text); await page.waitForTimeout(80); };
+    const type = async text => { await page.fill('#p-in', text); await page.keyboard.press('Enter'); await page.waitForTimeout(80); };
     const within = async sel => {
       const b = await page.$eval(sel, e => { const r = e.getBoundingClientRect(); return { top: r.top + window.scrollY, h: r.height, vis: e.offsetParent !== null }; });
       return b.vis && b.top + b.h <= 700;
