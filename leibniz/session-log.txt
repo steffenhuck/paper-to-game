@@ -1,46 +1,48 @@
 no page errors, no horizontal scroll
 
 sky 1: Let it be within 700 px without scrolling: true
-tap amber: the amber star exists. It shut out the mint star. | Light 4 of 18 that wants to be · Dark 1 · Waiting 4
-tap mint: the mint star cannot be: the amber star shut it out. Put it out first. | Light 4 of 18 that wants to be · Dark 1 · Waiting 4
-tap amber: You put the amber star out: a step back. Now the mint star can be. | Light 0 of 18 that wants to be · Dark 0 · Waiting 6
-tap mint: the mint star exists. It shut out the amber star. | Light 3 of 18 that wants to be · Dark 1 · Waiting 4
-tap coral: the coral star exists. It shut out the azure star. | Light 8 of 18 that wants to be · Dark 2 · Waiting 2
-tap rose: the rose star exists. It shut out the lilac star. | Light 10 of 18 that wants to be · Dark 3 · Waiting 0
-LET IT BE: Whatever could still be has come in. Now see the best possible world. / Show the best possible world
-BEST: YOURS · 10 / BEST POSSIBLE · 11 / Yours holds 10. The best holds 11. / Not everything that could exist can exist together. / Your world holds 10 of light. The best possible world holds 11. / Left out of yours: the amber star, the azure star and the lilac star. / Even the best possible world leaves something out: not everything that could exist can exist together. / Next world
+seed: 42
+sky 1: Let it be disabled before any tap: true
+tap lilac: the lilac star exists. It shut out the gold star. | Light 1 of 22 that wants to be · Dark 1 · Waiting 4
+tap gold: the gold star cannot be: the lilac star shut it out. Put it out first. | Light 1 of 22 that wants to be · Dark 1 · Waiting 4
+tap lilac: You put the lilac star out: a step back. Now the gold star can be. | Light 0 of 22 that wants to be · Dark 0 · Waiting 6
+tap gold: the gold star exists. It shut out the lilac star. | Light 2 of 22 that wants to be · Dark 1 · Waiting 4
+tap coral: the coral star exists. It shut out the rose star. | Light 9 of 22 that wants to be · Dark 2 · Waiting 2
+tap mint: the mint star exists. It shut nothing out. | Light 12 of 22 that wants to be · Dark 2 · Waiting 1
+tap amber: the amber star exists. It shut nothing out. | Light 17 of 22 that wants to be · Dark 2 · Waiting 0
+LET IT BE: It holds what you lit. Every line and every number is shown now.
+BEST: YOURS · 17 / BEST POSSIBLE · 17 / As full as it can be. / Not everything that could exist can exist together. / Your world holds 17 of light. The best possible world holds 17. / Left out of yours: the rose star and the lilac star. / Yours is as full as a world can be, and it still leaves 2 things dark: not everything that could exist can exist together. / Next world
 sky 2: Let it be within 700 px without scrolling: true
-tap coral: the coral star exists. It shut out the amber star, the mint star, the azure star and the lilac star. | Light 9 of 30 that wants to be · Dark 4 · Waiting 2
-tap rose: the rose star exists. It shut out the ice star. | Light 12 of 30 that wants to be · Dark 5 · Waiting 0
-tap ice: the ice star cannot be: the rose star shut it out. Put it out first. | Light 12 of 30 that wants to be · Dark 5 · Waiting 0
-LET IT BE: Whatever could still be has come in. Now see the best possible world. / Show the best possible world
-BEST: YOURS · 12 / BEST POSSIBLE · 19 / Yours holds 12. The best holds 19. / The grandest thing need not be in the best world. / Your world holds 12 of light. The best possible world holds 19. / The best possible world is full, and the coral star, the most of anything, is not in it. / You kept the grandest thing, and it is what left the sky dark: it shut out the amber star, the mint star, the azure star and the lilac star. / Next world
+tap gold: the gold star exists. It shut out the rose star, the coral star, the ice star, the amber star and the azure star. | Light 9 of 33 that wants to be · Dark 5 · Waiting 2
+tap mint: the mint star exists. It shut nothing out. | Light 12 of 33 that wants to be · Dark 5 · Waiting 1
+tap lilac: the lilac star exists. It shut nothing out. | Light 14 of 33 that wants to be · Dark 5 · Waiting 0
+LET IT BE: It holds what you lit. Every line and every number is shown now.
+BEST: YOURS · 14 / BEST POSSIBLE · 22 / Yours holds 14. The best holds 22. / The grandest thing need not be in the best world. / Your world holds 14 of light. The best possible world holds 22. / The best possible world does not hold the gold star, the most of anything. / You kept the grandest thing, and it is what left the sky dark: it shut out the rose star, the coral star, the ice star, the amber star and the azure star. / Next world
 sky 3: Let it be within 700 px without scrolling: true
-tap coral: You put the coral star out: a step back. Nothing new can be. | Light 11 of 35 that wants to be · Dark 4 · Waiting 1
-tap coral: the coral star exists. It shut nothing out. | Light 19 of 35 that wants to be · Dark 4 · Waiting 0
-tap amber: You put the amber star out: a step back. Now the mint star, the azure star and the lilac star can be. | Light 13 of 35 that wants to be · Dark 1 · Waiting 4
-tap mint: the mint star exists. It shut out the amber star. | Light 17 of 35 that wants to be · Dark 2 · Waiting 2
-LET IT BE: Whatever could still be has come in. Now see the best possible world. / Show the best possible world
-BEST: YOURS · 24 / BEST POSSIBLE · 24 / As full as it can be. / A step back can be the way to a fuller world. / Your world holds 24 of light. The best possible world holds 24. / You stepped back twice. Putting the amber star out let three lesser things in, and the world is full. / Next world
-window: buttons within 700 px: true
-TORCH: Torches left: 1. Tap the dark again, or decide.
-TORCH 3 (none left): No torch left. Put the 2 out, or leave it.
-WINDOW 1: The whole: the 9 was being held down by the 2 and by three 4s. Without it the sky holds 22; with it, at most 17. This world was as full as it can be. You lit 2 torches. You put the 2 out, and nothing came in: the 9 stayed dark. The sky holds 20 now, 2 less than it did.
-WINDOW 2: The whole: nothing but the 2 was holding the 9 down. With the 2 out and the 9 in, the sky holds 29 instead of 22. This world was 7 short. You lit no torch. You put the 2 out, and the 9 came in: the sky holds 29 now, 7 more than it did. / The same window, two worlds. In one the dark 9 was the price of a fuller sky; in the other it was a mistake. Nothing in the window told them apart. Only more light could, and you had to go and get it.
-VERDICT: The verdict / One of your three worlds is as full as it can be. / WHAT LEIBNIZ SAYS / Leibniz: the world that exists is the set of possible things that holds the most together. Not everything possible can exist; the grandest thing need not be in the best world; a step back can be the way to a fuller world; and from a part you cannot tell whether the whole is well made. / WHAT YOU FOUND / World 1: your world held 10 of light and left out the amber star, the azure star and the lilac star. / World 2: you kept the coral star, the grandest thing, and your world was about a third short. / World 3: you stepped back twice, and the world ended full: the step back was the way forward. / World 4: through the same window, in the first you lit 2 torches and put the 2 out, and nothing came in: 2 lost; in the second you put the 2 out, and the 9 came in: 7 gained. / WHERE YOU PART / On world 1 (1 of light short) and world 2 (7 of light short), the best possible world holds more than yours. / HAD YOURS STOOD / A world with less in it than there could have been. Leibniz says that cannot be the one that exists: the possibles push, and the fullest set is what comes through, the way weights settle. / THE COVERED PICTURE / Leibniz: take a very beautiful picture and cover all but a small part. What you see is a confused chaos of colours, and the closer you look the worse it gets. Lift the cover and the whole is the work of a master. Every dark star in the best world is the price of a brighter sky; 
-tap coral: the coral star exists. It shut out the azure star. | Light 5 of 18 that wants to be · Dark 1 · Waiting 4
-tap amber: the amber star exists. It shut out the mint star. | Light 9 of 18 that wants to be · Dark 2 · Waiting 2
-tap rose: the rose star exists. It shut out the lilac star. | Light 11 of 18 that wants to be · Dark 3 · Waiting 0
-LET IT BE: Whatever could still be has come in. Now see the best possible world. / Show the best possible world
-BEST: YOURS · 11 / BEST POSSIBLE · 11 / As full as it can be. / Not everything that could exist can exist together. / Your world holds 11 of light. The best possible world holds 11. / Left out of yours: the mint star, the azure star and the lilac star. / Yours is as full as a world can be, and it still leaves something out: not everything that could exist can exist together. / Next world
-tap amber: the amber star exists. It shut out the coral star. | Light 4 of 30 that wants to be · Dark 1 · Waiting 5
-tap mint: the mint star exists. It shut nothing out. | Light 8 of 30 that wants to be · Dark 1 · Waiting 4
-tap azure: the azure star exists. It shut nothing out. | Light 12 of 30 that wants to be · Dark 1 · Waiting 3
-tap lilac: the lilac star exists. It shut nothing out. | Light 16 of 30 that wants to be · Dark 1 · Waiting 2
-tap rose: the rose star exists. It shut out the ice star. | Light 19 of 30 that wants to be · Dark 2 · Waiting 0
-LET IT BE: Whatever could still be has come in. Now see the best possible world. / Show the best possible world
-BEST: YOURS · 19 / BEST POSSIBLE · 19 / As full as it can be. / The grandest thing need not be in the best world. / Your world holds 19 of light. The best possible world holds 19. / The best possible world is full, and the coral star, the most of anything, is not in it. / You left the grandest thing out, and four lesser things lit more than it ever could. / Next world
-tap amber: You put the amber star out: a step back. Now the mint star, the azure star and the lilac star can be. | Light 13 of 35 that wants to be · Dark 1 · Waiting 4
-LET IT BE: Whatever could still be has come in. Now see the best possible world. / Show the best possible world
-BEST: YOURS · 24 / BEST POSSIBLE · 24 / As full as it can be. / A step back can be the way to a fuller world. / Your world holds 24 of light. The best possible world holds 24. / You stepped back once. Putting the amber star out let three lesser things in, and the world is full. / Next world
-VERDICT B: The verdict / All three of your worlds are as full as they can be. / WHAT LEIBNIZ SAYS / Leibniz: the world that exists is the set of possible things that holds the most together. Not everything possible can exist; the grandest thing need not be in the best world; a step back can be the way to a fuller world; and from a part you cannot tell whether the whole is well made. / WHAT YOU FOUND / World 1: your world held 11 of light, as much as it could, and left out the mint star, the azure star and the lilac star. / World 2: you left the coral star out, and your world was full. / World 3: you stepped back once, and the world ended full: the step back was the way forward. / World 4: through the same window, in the first you left it, and it was as full as it can be; in the second you put the 2 o
+tap ice: You put the ice star out: a step back. Nothing new can be. | Light 18 of 40 that wants to be · Dark 3 · Waiting 1
+tap ice: the ice star exists. It shut nothing out. | Light 26 of 40 that wants to be · Dark 3 · Waiting 0
+tap azure: You put the azure star out: a step back. Now the mint star and the rose star can be. | Light 19 of 40 that wants to be · Dark 1 · Waiting 3
+tap mint: the mint star exists. It shut out the azure star. | Light 22 of 40 that wants to be · Dark 2 · Waiting 1
+tap rose: the rose star exists. It shut nothing out. | Light 28 of 40 that wants to be · Dark 2 · Waiting 0
+LET IT BE: It holds what you lit. Every line and every number is shown now.
+BEST: YOURS · 28 / BEST POSSIBLE · 28 / As full as it can be. / A step back can be the way to a fuller world. / Your world holds 28 of light. The best possible world holds 28. / You stepped back twice. Putting the azure star out opened the way, and the world is full. / Next world
+lamp: buttons within 700 px: true
+LAMP: Oil left: 15%. Drag on, or decide.
+LAMP 1 (full=false): The whole: nothing but the 1 held the 7 down. With the 1 out and the 7 in, the sky holds 28 instead of 22. This world was 6 short. You spent most of the lamp. You put the 1 out, and the 7 came in: 6 more light than before.
+LAMP 2: The whole: the 7 was held down by the 1 and by 3 more things worth 3 + 3 + 5 together. Without it the sky holds 22; with it, less. This world was as full as it can be. You did not light the lamp. You left it, and it holds all it could. / The same beginning, two worlds. In one the dark star was the price of a fuller sky; in the other it was a mistake. Only more light could tell them apart, and the lamp was yours to spend.
+VERDICT: The verdict / Two of your three skies are as full as they can be. / WHAT LEIBNIZ SAYS / Leibniz: the world that exists is the set of possible things that holds the most together. Not everything possible can exist; the grandest thing need not be in the best world; a step back can be the way to a fuller world; and from a part you cannot tell whether the whole is well made. / WHAT YOU FOUND / World 1: your world held 17 of light, as much as it could, and left out the rose star and the lilac star. / World 2: you kept the gold star, the grandest thing, and your world was about a third short. / World 3: you stepped back twice, and the world ended full: the step back was the way forward. / World 4: the same small star holding the same big one down; in the first, after some lamplight, you put the small one out, and the big one came in; in the second, without lighting the lamp, you left it, and it was as full as it can be. / WHERE YOU PART / On world 2 (8 of light short), the best possible world holds more than yours. / HAD YOURS STOOD / A world with less in it than there could have been. Leibniz says that cannot be the one that exists: the possibles push, and the fullest set is what comes through, the way weights settle. / THE COVERED PICTURE / Leibniz: take a very beautiful picture and cover all but a small part. What you see is a confused chaos of colours, and the closer you look the worse it gets. Lift the cover and the whole is the work of a master. Every dark star in the best world is the price of a brighter sky; but a dark star in a world that is not the best is just a mistak
+tap mint: the mint star exists. It shut nothing out. | Light 7 of 28 that wants to be · Dark 0 · Waiting 6
+tap lilac: the lilac star exists. It shut out the ice star. | Light 13 of 28 that wants to be · Dark 1 · Waiting 4
+tap coral: the coral star exists. It shut nothing out. | Light 18 of 28 that wants to be · Dark 1 · Waiting 3
+tap amber: the amber star exists. It shut out the rose star. | Light 22 of 28 that wants to be · Dark 2 · Waiting 1
+tap azure: the azure star exists. It shut nothing out. | Light 25 of 28 that wants to be · Dark 2 · Waiting 0
+LET IT BE: It holds what you lit. Every line and every number is shown now.
+BEST: YOURS · 25 / BEST POSSIBLE · 25 / As full as it can be. / Not everything that could exist can exist together. / Your world holds 25 of light. The best possible world holds 25. / Left out of yours: the rose star and the ice star. / Yours is as full as a world can be, and it still leaves 2 things dark: not everything that could exist can exist together. / Next world
+tap ice: the ice star exists. It shut out the gold star, the lilac star, the coral star, the azure star and the amber star. | Light 9 of 33 that wants to be · Dark 5 · Waiting 2
+tap mint: the mint star exists. It shut nothing out. | Light 13 of 33 that wants to be · Dark 5 · Waiting 1
+tap rose: the rose star exists. It shut nothing out. | Light 17 of 33 that wants to be · Dark 5 · Waiting 0
+LET IT BE: It holds what you lit. Every line and every number is shown now.
+BEST: YOURS · 17 / BEST POSSIBLE · 22 / Yours holds 17. The best holds 22. / The grandest thing need not be in the best world. / Your world holds 17 of light. The best possible world holds 22. / The best possible world does not hold the ice star, the most of anything. / You kept the grandest thing, and it is what left the sky dark: it shut out the gold star, the lilac star, the coral star, the azure star and the amber star. / Next world
+LET IT BE: It holds what you lit. Every line and every number is shown now.
+BEST: YOURS · 12 / BEST POSSIBLE · 14 / Yours holds 12. The best holds 14. / A step back can be the way to a fuller world. / Your world holds 12 of light. The best possible world holds 14. / You put nothing out, so nothing could come in. A step back can be the way to a fuller world. / Next world
+VERDICT B: The verdict / One of your three skies is as full as it can be. / WHAT LEIBNIZ SAYS / Leibniz: the world that exists is the set of possible things that holds the most together. Not everything possible can exist; the grandest thing need not be in the best world; a step back can be the way to a fuller world; and from a part you cannot tell whether the whole is well made. / WHAT YOU FOUND / World 1: your world held 25 of light, as much as it could, and left out the rose star and the ice star. / World 2: you kept the ice star, the grandest thing, and your world was about a quarter short. / World 3: you put nothing out, and the world stayed as weight had made it. / World 4: the same small star holding the same big one down; in the first, without lighting the lamp, you left it, and it was as full as it can be; in the second, without lighting the lamp, you put the small one out, and the big one 

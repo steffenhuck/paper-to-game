@@ -26,6 +26,9 @@ b,strong{font-weight:700}
 .aim{font-size:18px;font-weight:700;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0;margin:8px 0 14px}
 .btn{display:block;width:100%;min-height:52px;border-radius:999px;border:1.5px solid rgba(243,244,248,.35);font-weight:500;font-size:17px;text-align:center;padding:12px 16px;margin:8px 0}
 .btn.solid{background:var(--chalk);color:var(--night);border-color:var(--chalk)}
+.btn.dim{opacity:.35}
+.sky.lamp{touch-action:none;cursor:crosshair}
+.bar.oil{margin-top:8px}.bar.oil .fill{background:#FFB830}
 .row2{display:flex;gap:8px}.row2 .btn{flex:1;padding-left:8px;padding-right:8px}
 .cred{font-size:13px;color:var(--mute);text-align:center;margin-top:14px;line-height:1.35}
 .cred a{color:inherit}
@@ -94,7 +97,7 @@ b,strong{font-weight:700}
     <p>So he looked at what wants to exist. Every possible thing pushes to be, as hard as there is of it. Not all of them can be together.</p>
     <p>The world that exists, he says, is the set of things that holds the most.</p>
   </div>
-  <p class="acts">Tap a thing to let it be.<br>Tap it again to put it out.<br>Then judge a world through a window.</p>
+  <p class="acts">Tap a thing to let it be.<br>Tap it again to put it out.<br>Then take a lamp into a world already made.</p>
   <p class="aim">Bring as much into existence as will fit.</p>
   <button class="btn solid" id="b-begin">Begin</button>
   <button class="btn" id="b-help-start">How to play</button>
@@ -104,7 +107,7 @@ b,strong{font-weight:700}
 
 <section class="screen" id="s-play">
   <div class="top"><div class="aimline">Bring as much into existence as will fit.</div><button class="qm" id="b-help-play" aria-label="How to play">?</button></div>
-  <div class="wno" id="wno">World 1 of 3</div>
+  <div class="wno" id="wno">World 1 of 4</div>
   <h2 class="now" id="now">Light up the sky.</h2>
   <p class="intro" id="intro"></p>
   <div class="skybox"><svg class="sky" id="sky" viewBox="0 0 320 300"></svg></div>
@@ -114,7 +117,7 @@ b,strong{font-weight:700}
   <p class="stat" id="stat"></p>
   <div id="controls">
     <button class="btn solid" id="b-let">Let it be</button>
-    <p class="cap">Let it be: stop here. Whatever still can be comes in on its own; what you put out stays out. Then the world is judged.</p>
+    <p class="cap" id="cap">Let it be: stop here. The world is what you lit, no more; then it is judged.</p>
   </div>
   <div class="result hid" id="resultarea"></div>
 </section>
@@ -124,10 +127,11 @@ b,strong{font-weight:700}
   <div class="wno" id="jno">World 4 of 4</div>
   <h2 class="now" id="jnow">Would you change this?</h2>
   <p class="intro" id="jintro"></p>
-  <div class="skybox"><svg class="sky" id="jsky" viewBox="0 0 320 300"></svg></div>
+  <div class="skybox"><svg class="sky lamp" id="jsky" viewBox="0 0 320 300"></svg></div>
+  <div class="bar oil"><div class="fill" id="oil"></div></div>
   <p class="key" id="jkey"></p>
   <p class="say" id="jsay"></p>
-  <div id="jcontrols"><div class="row2"><button class="btn solid" id="b-out">Put the 2 out</button><button class="btn solid" id="b-leave">Leave it</button></div></div>
+  <div id="jcontrols"><div class="row2"><button class="btn solid" id="b-out">Put the small one out</button><button class="btn solid" id="b-leave">Leave it</button></div></div>
   <div class="result hid" id="jresult"></div>
 </section>
 
@@ -139,7 +143,7 @@ b,strong{font-weight:700}
   <div class="vlab">Where you part</div><div class="vtext" id="vwhere"></div>
   <div class="vlab">Had yours stood</div><div class="vtext" id="vstood"></div>
   <div class="vlab">The covered picture</div><div class="vtext" id="vcover"></div>
-  <div class="vlab">Your three worlds beside the best</div>
+  <div class="vlab">Your three skies beside the best</div>
   <div class="three" id="three"></div>
   <button class="btn solid" id="b-again">Play again</button>
   <div class="row2"><button class="btn" id="b-help-end">How to play</button><button class="btn" id="b-about">About</button></div>
@@ -151,13 +155,11 @@ b,strong{font-weight:700}
 <div class="ov" id="help"><div class="in">
   <h2>How to play</h2>
   <p><b>Bring as much into existence as will fit.</b></p>
-  <p>There are four worlds, one after another; in the first three you make the sky. Each ring in a sky is a thing that could exist. The bigger the ring, the more there is of it; its number shows once it has been lit. Some pairs cannot both exist, and nothing tells you which in advance: you find out by letting things be.</p>
+  <p>Four worlds, drawn fresh every game. In the first three you make the sky. Each ring is a thing that could exist; the bigger the ring, the more there is of it. Some pairs cannot both exist, and nothing tells you which in advance: you find out by letting things be.</p>
   <p><b>Tap a ring</b> to let that thing be. It lights up. Anything it cannot be with goes dark, with a red line to the thing that shut it out; the line stays, so you know that pair from then on. <b>Tap a lit star</b> to put it out again: a step back. Whatever it was holding down can be again.</p>
-  <p>The bar under the sky shows how much light your world holds. More light is a fuller world.</p>
-  <p><b>Let it be</b> ends the world. Whatever can still be comes in on its own, heaviest first; what you put out stays out. Then the best possible world appears next to yours: the fullest set of things that can be together.</p>
-  <p>The third sky arrives already filled, heaviest first, and nothing left can be. Making it fuller means putting something out.</p>
-  <p>The fourth world is not yours to make. You see a world already made, through a small window: a small thing lit and a big thing dark, which looks wrong. You have two torches: tap the dark to light one and see a little more. Then decide: put the small thing out, so the big one may be, or leave the world as it is. The cover lifts and you see what you did. Then a second world, through the same window.</p>
-  <p>At the end: what Leibniz says, what you found, and your three skies beside the best.</p>
+  <p>The bar under the sky shows how much light your world holds. <b>Let it be</b> ends the world: it holds exactly what you lit, nothing more. Then the best possible world appears next to yours, the fullest set of things that can be together, with every line and every number shown.</p>
+  <p>The third sky arrives already filled, heaviest first, and nothing left can be. Making it fuller means putting something out, then letting in what that frees.</p>
+  <p>The fourth world is not yours to make. A world already made, in the dark: a small thing lit, a big thing dark, a line between them. You have a lamp: drag your finger over the sky and it lights what it passes, and it burns oil as it goes. Then decide: put the small thing out, so the big one may be, or leave the world as it is. The cover lifts and you see what you did. Then a second world, which opens the same way.</p>
   <button class="btn solid" id="b-help-close">Back</button>
 </div></div>
 
@@ -168,28 +170,28 @@ b,strong{font-weight:700}
   <p>Why is there a world at all, and why this one? Not because of anything in the world: every state is copied from the one before, like a geometry textbook copied from an earlier copy, and however far back you go you never reach a reason why there are books at all. So the reason lies outside the series, in something that exists of necessity. Then the part this game plays: how that reason picks a world. Every possible thing has a claim to exist, a push, in proportion to how much reality there is in it. Not all possibles can exist together. What exists is the combination through which the greatest total of reality comes to be: "there is always in things a principle of determination which must be sought in maximum and minimum". Leibniz says this in the words of a game: "certain games where all the spaces on the board are to be filled according to certain rules, and where, unless you use some skill, you will in the end be excluded from certain spaces and forced to leave more spaces empty than you could have or wished to". He adds the picture of heavy bodies that settle into the arrangement of greatest total descent.</p>
   <p>From the maximum follows his answer to the oldest objection, that the world is full of suffering and waste. The best whole is not the sum of the best parts. Cover all but a corner of a beautiful painting and you see "a confused chaos of colours"; dissonances make the music better; bitter things should be mixed in with the sweet. Afflictions are "stepping back in order to make a leap forward with greater force" (he writes the French <i>reculer pour mieux sauter</i> in the margin); when a part of the world is destroyed, "this very destruction and oppression is useful for achieving something greater, so that in a way we profit from our very loss". And since there is always more that is possible than has been made, progress never ends. He also tells the story of an ape that carried the infant King Christian of Denmark to the edge of a roof and, when everyone was frightened, put him back in his cradle laughing: we enjoy the danger for the restoring.</p>
   <h3>What the game does</h3>
-  <p>It takes Leibniz's rule, not his board. Leibniz's possibles fail to exist together because of what they are, not because they overlap; so there is no board, and nothing is placed. A sky holds the things that could exist; each has a weight, how much there is of it, shown by its size; some pairs cannot both be. Nothing tells you which pairs, or the exact weights, in advance: a line appears once one thing has shut another out, and a number once a thing has been lit. You decide what exists, and you find out what that costs by doing it. On the first sky, more wants to be than can be together, so even the best world leaves three things dark. On the second, the grandest thing is the trap: it cannot be with four lesser things that together hold more than it does; whoever lets it be first ends with a sky a third short. On the third, the sky comes already filled by weight, heaviest first, and nothing left can be; the only way to a fuller world is to put something out, and when the right thing goes, three lesser things come in where it was, while putting the grandest thing out gains nothing. When you let a world be, whatever still can be comes in on its own, heaviest first: in the paper, "even if nothing further is determined, there exists as much as is possible". What you put out stays out. After each sky the best possible world is shown next to yours, found by an exact search over every set. The fourth world is Leibniz's covered picture played: two worlds already made, seen through the same small window, in which the same lit 2 holds down the same dark 9. You may light a torch twice, anywhere, to see more; then you put the 2 out so that the 9 may be, or leave the world as it is; then the cover lifts. In the first world the 9 is also held down by three 4s, so putting the 2 out gains nothing and loses 2; in the second nothing but the 2 holds the 9, and putting it out lets it in. The window could not have told you which world you were in; a torch in the right place could. The verdict is in words.</p>
+  <p>It takes Leibniz's rule, not his board. Leibniz's possibles fail to exist together because of what they are, not because they overlap; so there is no board, and nothing is placed. A sky holds the things that could exist; each has a weight, how much there is of it, shown by its size; some pairs cannot both be. Nothing tells you which pairs in advance: a line appears once one thing has shut another out, and the numbers appear only when a world has ended. You decide what exists, and a world holds exactly what you lit, nothing more. Every sky is drawn fresh for each game, and each draw is checked before it is shown for the one thing its world is there to show. On the first sky, more wants to be than can be together, so even the best world leaves things dark. On the second, the grandest thing is the trap: it cannot be with several lesser things that together hold more than it does. On the third, the sky comes already filled by weight, heaviest first, and nothing left can be; the only way to a fuller world is to put something out and let in what that frees, and the thing to put out is never the biggest. After each sky the best possible world is shown next to yours, found by an exact search over every set. The fourth world is Leibniz's covered picture played: two worlds already made, in the dark, which open the same way, a small lit star holding a big dark one down. You have a lamp: drag it and it lights what it passes, burning oil as it goes. Then you put the small one out so that the big one may be, or leave the world; then the cover lifts. In one world the big one was also held by other things worth more together, so putting the small one out loses it and gains nothing; in the other nothing but the small one held it, and putting it out lets the big one in. The opening could not have told you which; the lamp, spent in the right place, could.</p>
   <h3>What kind of mechanism this is</h3>
-  <p><b>Toy.</b> The game runs a model built to illustrate the paper's argument, and where the argument had to be made exact, the toy chose: a thing's reality is a number (Leibniz: "perfection is nothing other than quantity of essence"); the only incompatibility is a listed pair that cannot both exist; the three skies, their weights and their pairs are ours, chosen so that each world holds one of the paper's points, and the headless check proves that it does.</p>
+  <p><b>Toy.</b> The game runs a model built to illustrate the paper's argument, and where the argument had to be made exact, the toy chose: a thing's reality is a number (Leibniz: "perfection is nothing other than quantity of essence"); the only incompatibility is a listed pair that cannot both exist; the skies, their weights and their pairs are drawn by a generator of ours, each draw proved by the headless check to hold the one point its world is there to show, over hundreds of draws.</p>
   <ul class="ovlist">
-    <li><b>What the game demonstrates:</b> that under a rule of this kind the fullest set must leave something out, can leave the grandest thing out, and can be reached from a decent set only by removing a thing that was fine; and that a part of a world can look the same whether the whole is the fullest or not. These follow from the four worlds as built and from the paper's own criterion: the most reality together.</li>
-    <li><b>What the game assumes:</b> everything in the paragraph above, and in particular that a thing's claim is proportional to its weight. The headless check weights more than proportionally (weight to a power) and finds that the grandest thing stays out of the best second world until the exponent is about one and three quarters, and that the third sky's step back still pays up to a little over two; so the lessons do not hang on the exact criterion, but they are lessons about these skies.</li>
+    <li><b>What the game demonstrates:</b> that under a rule of this kind the fullest set must leave something out, can leave the grandest thing out, and can be reached from a decent set only by removing a thing that was fine; and that a part of a world can look the same whether the whole is the fullest or not. These follow from the worlds as drawn and from the paper's own criterion: the most reality together.</li>
+    <li><b>What the game assumes:</b> everything in the paragraph above, and in particular that a thing's claim is proportional to its weight. The headless check weights more than proportionally (weight to a power) over many draws and finds that the grandest thing stays out of the best second world, and the third sky's step back still pays, at least up to an exponent of about one and a third on every draw tried; so the lessons do not hang on the exact criterion, but they are lessons about these skies.</li>
     <li><b>What the paper establishes:</b> an argument. It does not prove that reality has a quantity, or that the actual world is the fullest; it argues that if possibles have claims in proportion to their reality and not all are compatible, then what exists is the maximum, and that a maximum of the whole need not look best in every part. The game shows the second half of that sentence happening in a sky. It is not evidence for the first.</li>
   </ul>
   <h3>What is cut, and where the game departs</h3>
-  <p>The first argument (the copied books and the necessary being) is three lines on the start screen. The equilateral triangle, the shortest path, the sphere, the laws of motion, the commonwealth of minds and the law of justice are not played; the covered picture is the fourth world. Leibniz's possibles do not get chosen by a hand; the game gives you the hand and then shows the maximum, and lets the striving act without a hand twice: when a world is let be, and in the third sky's filling by weight. The order in which waiting things come in (heaviest first) is ours, from his "in proportion to their reality". "Best possible world", "possible", "step back" are his words; "light", "lit", "dark", "waiting", "Let it be" are the game's.</p>
+  <p>The first argument (the copied books and the necessary being) is three lines on the start screen. The equilateral triangle, the shortest path, the sphere, the laws of motion, the commonwealth of minds and the law of justice are not played; the covered picture is the fourth world. Leibniz's possibles do not get chosen by a hand; the game gives you the hand and then shows the maximum, and lets weight act without a hand once, in the third sky's filling (heaviest first, our picture of his heavy bodies). Nothing else is ever chosen for you. "Best possible world", "possible", "step back" are his words; "light", "lit", "dark", "waiting", "Let it be", the lamp and its oil are the game's.</p>
   <h3>Making of</h3>
-  <p>Built with Claude under the paper-to-game skill, November 2026; a first build packed shapes on a board and was replaced by this one. Every number the game uses, and the three skies, sit in a commented block at the top of <code>mechanism.js</code>, with the headless check that proves the skies' properties (<code>calibration.js</code>). The design memo is in the repository. Type: Space Grotesk (Florian Karsten, SIL Open Font License), embedded.</p>
+  <p>Built with Claude under the paper-to-game skill, November 2026; a first build packed shapes on a board and was replaced by this one. Every number the game uses, and the generator's ranges, sit in a commented block at the top of <code>mechanism.js</code>, with the headless check that proves the lessons over two hundred draws (<code>calibration.js</code>). The design memo is in the repository. Type: Space Grotesk (Florian Karsten, SIL Open Font License), embedded.</p>
 
   <button class="btn solid" id="b-about-close">Back</button>
 </div></div>
 
 <script>
 // Leibniz's Worlds: the mechanism, headless and the only copy. Runs unchanged in Node (module.exports) and in the
-// browser (window.LeibnizMechanism). Everything that moves an outcome lives here: the three worlds, letting a thing be,
-// putting it out, the striving at "Let it be" (the rush-in), the exact solver that finds the best possible world, the
-// heuristics the calibration check plays, and the words of the per-world lines and the verdict. The interface only
-// passes actions in and draws what comes back.
+// browser (window.LeibnizMechanism). Everything that moves an outcome lives here: the generator that draws the four
+// worlds for a game (seeded, so a draw can be replayed), the solver that proves each draw carries its lesson, letting
+// a thing be, putting it out, ending a world, the lamp, and the words of the per-world lines and the verdict. The
+// interface only passes actions in and draws what comes back.
 (function (root) {
 'use strict';
 
@@ -198,189 +200,91 @@ b,strong{font-weight:700}
 // numbers are the PDF's) or with the design reason. The paper has no numbers; the toy's numbers are all ours and say so.
 // ---------------------------------------------------------------------------------------------------------------
 var CONFIG = {
-  // A world is a set of possibles. Each possible has a weight (p. 2: possibles "strive with equal right for existence in
+  // A world is a set of possibles. Each has a weight (p. 2: possibles "strive with equal right for existence in
   // proportion to their quantity of essence or reality"), and some pairs cannot both exist (p. 2: not all possibles are
-  // compossible; "unless you use some skill, you will in the end be excluded from certain spaces"). The weights, the
-  // pairs and the three worlds are ours, chosen so that each world holds exactly one thing to find out; the calibration
-  // check proves the properties stated here. Colours name the stars on screen; x, y place them in a 320 x 300 sky.
-  WORLDS: [
-    { title: 'Light up the sky.',
-      stars: [
-        { id: 'coral', w: 5, x: 80, y: 80 },
-        { id: 'amber', w: 4, x: 240, y: 80 },
-        { id: 'mint', w: 3, x: 262, y: 205 },
-        { id: 'azure', w: 3, x: 62, y: 215 },
-        { id: 'rose', w: 2, x: 160, y: 150 },
-        { id: 'lilac', w: 1, x: 165, y: 262 }
-      ],
-      pairs: [['coral', 'azure'], ['amber', 'mint'], ['rose', 'lilac']],
-      prefill: false,
-      // 18 of light wants to be; the best world holds 11 and leaves three things dark (p. 2, not all possibles are
-      // compossible: "forced to leave more spaces empty than you could have or wished to").
-      lesson: 'Not everything that could exist can exist together.' },
-    { title: 'Light up the sky.',
-      stars: [
-        { id: 'coral', w: 9, x: 160, y: 150 },
-        { id: 'amber', w: 4, x: 60, y: 70 },
-        { id: 'mint', w: 4, x: 260, y: 70 },
-        { id: 'azure', w: 4, x: 60, y: 235 },
-        { id: 'lilac', w: 4, x: 260, y: 235 },
-        { id: 'rose', w: 3, x: 100, y: 32 },
-        { id: 'ice', w: 2, x: 225, y: 32 }
-      ],
-      pairs: [['coral', 'amber'], ['coral', 'mint'], ['coral', 'azure'], ['coral', 'lilac'], ['rose', 'ice']],
-      prefill: false,
-      // 30 of light wants to exist. With the coral star (the most of anything) the most a world can hold is 12; without it
-      // the four it shuts out light 16, and with the rose star the world holds 19. The heaviest-first player ends
-      // at 12 (p. 2, "unless you use some skill").
-      lesson: 'The grandest thing need not be in the best world.' },
-    { title: 'Make this world fuller.',
-      stars: [
-        { id: 'coral', w: 8, x: 75, y: 95 },
-        { id: 'amber', w: 6, x: 215, y: 90 },
-        { id: 'mint', w: 4, x: 275, y: 180 },
-        { id: 'azure', w: 4, x: 240, y: 260 },
-        { id: 'lilac', w: 3, x: 175, y: 262 },
-        { id: 'rose', w: 5, x: 60, y: 235 },
-        { id: 'ice', w: 5, x: 140, y: 160 }
-      ],
-      pairs: [['amber', 'mint'], ['amber', 'azure'], ['amber', 'lilac'], ['rose', 'ice']],
-      prefill: true,
-      // 35 of light wants to exist. Filled by weight, heaviest first (our picture of "heavy bodies ... in proportion to
-      // their weight", p. 3): coral, amber and rose are lit, 19; mint, azure, lilac and ice are shut out; nothing left
-      // can be. Put the amber star out and the three it shut out come in: 24, the best possible world (p. 6, "stepping
-      // back in order to make a leap forward with greater force"). Put the coral star out and nothing comes in; put the
-      // rose star out and the ice star takes its place, no fuller.
-      lesson: 'A step back can be the way to a fuller world.' }
-  ],
-  // World 4: the window (p. 4–5: men "in the subterranean salt mines of Sarmatia" judge the world by their torchlight;
-  // "look at a very beautiful picture, then cover up all but a small part ... a confused chaos of colours"). Two worlds,
-  // the same stars in the same places, each already made; through the window the player sees the same thing in both:
-  // a lit 2, a dark 9, a red line between them. The player may light a torch TORCHES times, anywhere, to see more, and
-  // then either puts the 2 out (so that the 9 may be) or leaves the world as it is. In the first world the 9 is also
-  // held down by three 4s, so putting the 2 out gains nothing and loses 2; in the second nothing but the 2 holds the 9,
-  // and putting it out lets the 9 in. Stars, pairs, the window and the torch are ours.
-  JUDGE: {
-    window: { x: 90, y: 95, w: 140, h: 110 },
-    TORCHES: 2, TORCH_RADIUS: 62,
-    stars: [
-      { id: 'ice', w: 2, x: 115, y: 150 },
-      { id: 'coral', w: 9, x: 205, y: 150 },
-      { id: 'mint', w: 4, x: 298, y: 88 },
-      { id: 'azure', w: 4, x: 300, y: 150 },
-      { id: 'lilac', w: 4, x: 298, y: 212 },
-      { id: 'rose', w: 3, x: 48, y: 45 },
-      { id: 'amber', w: 5, x: 50, y: 255 }
-    ],
-    lit: ['ice', 'mint', 'azure', 'lilac', 'rose', 'amber'],
-    skies: [
-      { pairs: [['coral', 'ice'], ['coral', 'mint'], ['coral', 'azure'], ['coral', 'lilac']], full: true,
-        whole: 'The whole: the 9 was being held down by the 2 and by three 4s. Without it the sky holds 22; with it, at most 17. This world was as full as it can be.' },
-      { pairs: [['coral', 'ice']], full: false,
-        whole: 'The whole: nothing but the 2 was holding the 9 down. With the 2 out and the 9 in, the sky holds 29 instead of 22. This world was 7 short.' }
-    ],
-    lesson: 'The same window, two worlds. In one the dark 9 was the price of a fuller sky; in the other it was a mistake. Nothing in the window told them apart. Only more light could, and you had to go and get it.'
-  },
-  // Star colours by id (memo §13: existence is light). Our choice.
-  COLOURS: { coral: '#FF5C5C', amber: '#FFB830', mint: '#2FE3A3', azure: '#4F9DFF', lilac: '#B48CFF', rose: '#FF7AB6', ice: '#9FE8FF' },
-  // Star size on screen: radius in px for weight w (memo §13; the eye reads area, so weight 9 is three times the radius of
-  // weight 1). Our choice.
+  // compossible; "unless you use some skill, you will in the end be excluded from certain spaces"). The worlds are drawn
+  // fresh for every game by the generator below (design, 15 Nov: a fixed arrangement gives its answer away on the second
+  // play), each draw checked by the solver for the one thing its world is there to show.
+  SKY: { W: 320, H: 300, margin: 10, gap: 16 },        // the sky in px; gap: least space between two stars' edges
+  COLOURS: { coral: '#FF5C5C', amber: '#FFB830', mint: '#2FE3A3', azure: '#4F9DFF', lilac: '#B48CFF', rose: '#FF7AB6', ice: '#9FE8FF', gold: '#F6E27A' },
+  // Star size on screen: radius in px for weight w (memo §13; weight 9 is three times the radius of weight 1). Our choice.
   radius: function (w) { return 9 + 2.6 * w; },
-  // What the player is shown (design, 15 Nov): a pair's line appears only once one of the two has shut the other out, and
-  // a star's number only once it has been lit; before that, a ring and its size. The possibles' claims and exclusions
-  // are found by letting things be, not read off the screen. The best possible world, once shown, shows everything.
-  SHOWN: 'lines and numbers are found, not given',
-  // The striving at "Let it be": whatever still can exist comes to be, heaviest first, ties by order in the sky (p. 2,
-  // possibles "strive with equal right for existence in proportion to their quantity of essence"; p. 3, "even if nothing
-  // further is determined, there exists as much as is possible"). The order is ours. A thing the player put out stays
-  // out: "Let it be" means the player's decisions stand and only the undecided come in (design; otherwise the step back
-  // of world 3 would be undone by the striving the moment the world ends).
-  RUSH_ORDER: 'heaviest first; what the player put out stays out',
-  // What the calibration check expects (memo §11 and §17); the solver is what establishes them.
-  EXPECT: { best: [11, 19, 24], totals: [18, 30, 35], judgeLit: [22, 22], judgeBest: [22, 29], world2WithCoralMax: 12, world2GreedyLit: 12,
-    world3PrefillLit: 19, world3PutOutAmber: 24, world3PutOutCoral: 11, world3PutOutRose: 19 },
-  // Words for how much of the best world's light a world lacks (memo §3 "Numbers on screen": direction first, rough
-  // size). Fractions of the best. Our choice.
+  // Generator ranges (all ours). Each world's lesson, from the paper, is the condition the solver checks on every draw.
+  GEN: {
+    // World 1: more wants to be than can be together; even the best world leaves things out (p. 2, "forced to leave
+    // more spaces empty than you could have or wished to"). n stars, m disjoint pairs; the best leaves at least minOut out.
+    world1: { n: [5, 7], pairs: [2, 3], minOut: 2 },
+    // World 2: the grandest thing need not be in the best world (p. 4–5, the best whole is not the sum of the best
+    // parts). One big star that cannot be with k lesser ones worth more together, plus a few others; the heaviest-first
+    // player ends at least `gap` below the best.
+    world2: { big: [8, 9], k: [3, 5], small: [2, 4], extra: [1, 3], extraW: [1, 4], gap: 4 },
+    // World 3: a step back can be the way to a fuller world (p. 6, "stepping back in order to make a leap forward").
+    // A sky filled by weight, heaviest first; exactly one lit star whose putting-out opens the way to the best, and it is
+    // not the biggest; putting the biggest out opens nothing.
+    world3: { n: [7, 8], weights: [2, 8], pairs: [4, 6], minDark: 3 },
+    // World 4, the lamp: Leibniz's covered picture (p. 4–5: "cover up all but a small part ... a confused chaos of
+    // colours"; the men in the salt mines of Sarmatia who take their torchlight for all the light there is). Two worlds
+    // already made, on the same sky: a small lit star holds a big dark one down. In one the big one is also held by
+    // holders worth more together; in the other nothing but the small one holds it. The lamp is dragged; it burns oil
+    // by distance; then the player puts the small one out, or leaves the world.
+    lamp: { n: [7, 8], small: [1, 3], big: [7, 9], holders: [2, 3], holderW: [3, 5], otherW: [2, 6], dist: [80, 110] }
+  },
+  LAMP: { radius: 48, oil: 520 },   // px of light around the finger; px of travel before it goes out. Ours.
+  // Words for how much of the best world's light a world lacks (memo §3: direction first, rough size). Ours.
   SHORT_WORDS: [[0, 'as full as it can be'], [0.12, 'a little short'], [0.2, 'about a sixth short'], [0.29, 'about a quarter short'],
     [0.4, 'about a third short'], [0.6, 'about half short'], [1.01, 'mostly dark']]
 };
 
 // ---------------------------------------------------------------------------------------------------------------
-// State. A game is three worlds played in order; a world is the stars with a status each: 'lit' (exists), 'dark'
-// (shut out by a lit star), 'wait' (could exist, does not yet).
+// Random numbers (seeded, so a game can be replayed and the check can run many draws).
 // ---------------------------------------------------------------------------------------------------------------
-function newWorld(k) {
-  var w = CONFIG.WORLDS[k];
-  var stars = w.stars.map(function (s, i) { return { id: s.id, w: s.w, x: s.x, y: s.y, i: i, status: 'wait', by: [], known: false }; });
-  var world = { k: k, title: w.title, lesson: w.lesson, stars: stars, pairs: w.pairs.slice(), ended: false, stepsBack: 0,
-    putOut: [], history: [], prefilled: !!w.prefill, best: null, rushed: [], knownPairs: [] };
-  if (w.prefill) prefillByWeight(world);
+function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function rint(rng, lo, hi) { return lo + Math.floor(rng() * (hi - lo + 1)); }
+function shuffle(rng, a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(rng() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+function pick(rng, a) { return a[Math.floor(rng() * a.length)]; }
+
+// ---------------------------------------------------------------------------------------------------------------
+// Worlds. A world: stars [{id, w, x, y, i, status, by, known}], pairs [[id, id]], and bookkeeping.
+// status: 'lit' (exists), 'dark' (shut out by a lit star), 'wait' (could exist, does not yet).
+// ---------------------------------------------------------------------------------------------------------------
+var TITLES = ['Light up the sky.', 'Light up the sky.', 'Make this world fuller.'];
+var LESSONS = ['Not everything that could exist can exist together.', 'The grandest thing need not be in the best world.', 'A step back can be the way to a fuller world.'];
+function pairKey(a, b) { return a < b ? a + '|' + b : b + '|' + a; }
+function makeWorld(spec) {
+  var stars = spec.stars.map(function (s, i) { return { id: s.id, w: s.w, x: s.x, y: s.y, i: i, status: 'wait', by: [], known: false }; });
+  var world = { k: spec.k, title: spec.title || TITLES[spec.k], lesson: spec.lesson || LESSONS[spec.k], stars: stars, pairs: spec.pairs.map(function (p) { return p.slice(); }),
+    ended: false, stepsBack: 0, putOut: [], acted: 0, prefilled: !!spec.prefill, best: null, knownPairs: [], key: spec.key || null };
+  if (spec.prefill) fillByWeight(world);
   world.best = solve(world);
   return world;
 }
-function judgeSky(j) {
-  var J = CONFIG.JUDGE, S = J.skies[j];
-  var stars = J.stars.map(function (s, i) { return { id: s.id, w: s.w, x: s.x, y: s.y, i: i, status: J.lit.indexOf(s.id) >= 0 ? 'lit' : 'wait', by: [], known: true }; });
-  var world = { k: 3, j: j, stars: stars, pairs: S.pairs.slice(), ended: false, full: S.full, whole: S.whole, torches: [], act: null, before: 0, after: 0, stepsBack: 0, putOut: [], history: [], rushed: [] };
-  settle(world); world.best = solve(world); world.before = light(world); return world;
-}
-function newJudge() { return { kind: 'judge', skies: [judgeSky(0), judgeSky(1)], lesson: CONFIG.JUDGE.lesson, window: CONFIG.JUDGE.window, torches: CONFIG.JUDGE.TORCHES, radius: CONFIG.JUDGE.TORCH_RADIUS }; }
-// Light a torch at (x, y) in sky j: a circle of the cover lifts there. Returns false when no torch is left.
-function look(J, j, x, y) {
-  var s = J.skies[j]; if (s.act || s.torches.length >= J.torches) return false;
-  s.torches.push({ x: x, y: y }); return true;
-}
-// Decide: 'out' puts the 2 out and lets whatever then can be come in; 'leave' leaves the world. Ends the sky.
-function decide(J, j, act) {
-  var s = J.skies[j]; if (s.act) return null;
-  s.act = act;
-  var came = [];
-  if (act === 'out') { putOut(s, 'ice'); came = rushIn(s); }
-  s.ended = true; s.after = light(s); s.came = came;
-  return judgeReveal(J, j);
-}
-// What the game says when the cover lifts on sky j.
-function judgeReveal(J, j) {
-  var s = J.skies[j], line;
-  var looked = s.torches.length === 0 ? 'You lit no torch.' : s.torches.length === 1 ? 'You lit one torch.' : 'You lit ' + s.torches.length + ' torches.';
-  if (s.act === 'out') {
-    line = s.came.length ? 'You put the 2 out, and the 9 came in: the sky holds ' + s.after + ' now, ' + (s.after - s.before) + ' more than it did.'
-      : 'You put the 2 out, and nothing came in: the 9 stayed dark. The sky holds ' + s.after + ' now, ' + (s.before - s.after) + ' less than it did.';
-  } else {
-    line = s.full ? 'You left it, and it holds ' + s.after + ': all it could.' : 'You left it, and it holds ' + s.after + ' where it could hold ' + s.best.light + '.';
-  }
-  return { line: s.whole + ' ' + looked + ' ' + line, good: s.after === s.best.light };
-}
-function newGame() { return { worlds: [newWorld(0), newWorld(1), newWorld(2)], judge: newJudge(), current: 0 }; }
 function star(world, id) { for (var i = 0; i < world.stars.length; i++) if (world.stars[i].id === id) return world.stars[i]; return null; }
-function conflicts(world, id) {
-  var out = [];
-  world.pairs.forEach(function (p) { if (p[0] === id) out.push(p[1]); else if (p[1] === id) out.push(p[0]); });
-  return out;
-}
-// Recompute who is shut out by whom from the lit set alone (so putting a star out frees exactly what only it held down).
-function pairKey(a, b) { return a < b ? a + '|' + b : b + '|' + a; }
+function conflicts(world, id) { var out = []; world.pairs.forEach(function (p) { if (p[0] === id) out.push(p[1]); else if (p[1] === id) out.push(p[0]); }); return out; }
 function settle(world) {
   world.stars.forEach(function (s) { if (s.status !== 'lit') { s.status = 'wait'; s.by = []; } else s.known = true; });
   world.stars.forEach(function (s) {
     if (s.status !== 'lit') return;
-    conflicts(world, s.id).forEach(function (o) { var t = star(world, o); if (t.status !== 'lit') { t.status = 'dark'; t.by.push(s.id); var k = pairKey(s.id, o); if (world.knownPairs && world.knownPairs.indexOf(k) < 0) world.knownPairs.push(k); } });
+    conflicts(world, s.id).forEach(function (o) { var t = star(world, o); if (t.status !== 'lit') { t.status = 'dark'; t.by.push(s.id); var k = pairKey(s.id, o); if (world.knownPairs.indexOf(k) < 0) world.knownPairs.push(k); } });
   });
 }
-function pairKnown(world, p) { return !world.knownPairs || world.knownPairs.indexOf(pairKey(p[0], p[1])) >= 0; }
+function pairKnown(world, p) { return world.knownPairs.indexOf(pairKey(p[0], p[1])) >= 0; }
 function lit(world) { return world.stars.filter(function (s) { return s.status === 'lit'; }); }
 function light(world) { return lit(world).reduce(function (a, s) { return a + s.w; }, 0); }
 function total(world) { return world.stars.reduce(function (a, s) { return a + s.w; }, 0); }
 function name(s) { return 'the ' + s.id + ' star'; }
-function list(names) {
-  if (names.length === 0) return 'nothing';
-  if (names.length === 1) return names[0];
-  return names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1];
+function list(names) { if (names.length === 0) return 'nothing'; if (names.length === 1) return names[0]; return names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1]; }
+function biggest(world) { return world.stars.slice().sort(function (a, b) { return b.w - a.w || a.i - b.i; })[0]; }
+// Fill by weight: heaviest first, whatever can still be (our picture of "heavy bodies ... in proportion to their weight",
+// p. 3). Used only to make world 3's starting sky; the player's own worlds hold exactly what the player lit.
+function fillByWeight(world) {
+  for (;;) {
+    var c = world.stars.filter(function (s) { return s.status === 'wait'; }); if (!c.length) break;
+    c.sort(function (a, b) { return b.w - a.w || a.i - b.i; }); c[0].status = 'lit'; settle(world);
+  }
 }
 
 // ---------------------------------------------------------------------------------------------------------------
-// Actions. Each returns { ok, line } where line is the sentence the game says, before anything else, about what the
-// move did (build.md §4: the result of a move stated by the game itself).
+// Actions. Each returns { ok, line }: the sentence the game says first about what the move did.
 // ---------------------------------------------------------------------------------------------------------------
 function letBe(world, id) {
   var s = star(world, id);
@@ -388,58 +292,35 @@ function letBe(world, id) {
   if (s.status === 'lit') return putOut(world, id);
   if (s.status === 'dark') {
     var holders = s.by.map(function (b) { return name(star(world, b)); });
-    return { ok: false, line: name(s) + ' cannot be: ' + list(holders) + (s.by.length > 1 ? ' shut it out. Put them out first.' : ' shut it out. Put it out first.') };
+    return { ok: false, line: name(s) + ' cannot be: ' + list(holders) + ' shut it out. Put ' + (s.by.length > 1 ? 'them' : 'it') + ' out first.' };
   }
-  s.status = 'lit'; s.by = []; s.out = false;
+  s.status = 'lit'; s.by = [];
   var before = world.stars.filter(function (t) { return t.status === 'dark'; }).map(function (t) { return t.id; });
-  settle(world);
+  settle(world); world.acted++;
   var shut = world.stars.filter(function (t) { return t.status === 'dark' && before.indexOf(t.id) < 0; }).map(name);
-  world.history.push({ act: 'let', id: id, shut: shut.length });
-  var line = name(s) + ' exists.';
-  if (shut.length) line += ' It shut out ' + list(shut) + '.';
-  else line += ' It shut nothing out.';
-  return { ok: true, line: line };
+  return { ok: true, line: name(s) + ' exists.' + (shut.length ? ' It shut out ' + list(shut) + '.' : ' It shut nothing out.') };
 }
 function putOut(world, id) {
   var s = star(world, id);
   if (world.ended || !s || s.status !== 'lit') return { ok: false, line: '' };
-  s.status = 'wait'; s.by = []; s.out = true;
+  s.status = 'wait'; s.by = [];
   var before = world.stars.filter(function (t) { return t.status === 'wait'; }).map(function (t) { return t.id; });
-  settle(world);
+  settle(world); world.acted++;
   var freed = world.stars.filter(function (t) { return t.status === 'wait' && before.indexOf(t.id) < 0 && t.id !== id; }).map(name);
   world.stepsBack++; world.putOut.push(id);
-  world.history.push({ act: 'out', id: id, freed: freed.length });
-  var line = 'You put ' + name(s) + ' out: a step back.';
-  if (freed.length) line += ' Now ' + list(freed) + (freed.length > 1 ? ' can be.' : ' can be.');
-  else line += ' Nothing new can be.';
-  return { ok: true, line: line };
+  return { ok: true, line: 'You put ' + name(s) + ' out: a step back.' + (freed.length ? ' Now ' + list(freed) + ' can be.' : ' Nothing new can be.') };
 }
-// The striving: whatever still can exist comes to be, heaviest first. Returns the ids that rushed in, in order.
-function rushIn(world) {
-  var came = [];
-  for (;;) {
-    var cands = world.stars.filter(function (s) { return s.status === 'wait' && !s.out; });
-    if (!cands.length) break;
-    cands.sort(function (a, b) { return b.w - a.w || a.i - b.i; });
-    cands[0].status = 'lit'; cands[0].by = []; came.push(cands[0].id);
-    settle(world);
-  }
-  return came;
-}
-function prefillByWeight(world) { rushIn(world); }
-function letItBe(world) {
-  if (world.ended) return null;
-  world.rushed = rushIn(world);
-  world.ended = true;
-  return result(world);
-}
+// Let it be: the world is what you lit, no more (design, 15 Nov: nothing is chosen for the player). In the first two
+// skies it needs at least one thing lit by hand; in the third, leaving the sky as weight made it is itself the decision.
+function canEnd(world) { return !world.ended && (world.prefilled || world.acted > 0); }
+function letItBe(world) { if (!canEnd(world)) return null; world.ended = true; return result(world); }
 
 // ---------------------------------------------------------------------------------------------------------------
-// The solver: exact maximum of total weight over sets with no excluded pair (brute force over every subset; the worlds
-// have at most seven stars, so 128 sets). Returns { light, ids }.
+// The solver: exact maximum of total weight over sets with no excluded pair (every subset; at most 2^8). Returns
+// { light, ids, unique } where unique says no other set reaches the maximum.
 // ---------------------------------------------------------------------------------------------------------------
 function solve(world, weightOf) {
-  var n = world.stars.length, best = { light: -1, ids: [] };
+  var n = world.stars.length, best = { light: -1, ids: [], unique: true };
   var wf = weightOf || function (s) { return s.w; };
   var idx = {}; world.stars.forEach(function (s, i) { idx[s.id] = i; });
   var bad = world.pairs.map(function (p) { return [idx[p[0]], idx[p[1]]]; });
@@ -449,109 +330,271 @@ function solve(world, weightOf) {
     if (!ok) continue;
     var L = 0, ids = [];
     for (var i = 0; i < n; i++) if (m >> i & 1) { L += wf(world.stars[i]); ids.push(world.stars[i].id); }
-    if (L > best.light) best = { light: L, ids: ids };
+    if (L > best.light + 1e-9) best = { light: L, ids: ids, unique: true }; else if (Math.abs(L - best.light) < 1e-9) best.unique = false;
   }
   return best;
 }
-// The most a world can hold with a given star forced in.
 function solveWith(world, id) {
-  var n = world.stars.length, best = -1;
-  var idx = {}; world.stars.forEach(function (s, i) { idx[s.id] = i; });
+  var n = world.stars.length, best = -1, idx = {}; world.stars.forEach(function (s, i) { idx[s.id] = i; });
   var bad = world.pairs.map(function (p) { return [idx[p[0]], idx[p[1]]]; });
   for (var m = 0; m < (1 << n); m++) {
     if (!(m >> idx[id] & 1)) continue;
-    var ok = true;
-    for (var b = 0; b < bad.length; b++) if ((m >> bad[b][0] & 1) && (m >> bad[b][1] & 1)) { ok = false; break; }
+    var ok = true; for (var b = 0; b < bad.length; b++) if ((m >> bad[b][0] & 1) && (m >> bad[b][1] & 1)) { ok = false; break; }
     if (!ok) continue;
     var L = 0; for (var i = 0; i < n; i++) if (m >> i & 1) L += world.stars[i].w;
     if (L > best) best = L;
   }
   return best;
 }
+// Heaviest-first play by hand: let the heaviest waiting star be until nothing waits; never step back.
+function playGreedy(world) { for (;;) { var c = world.stars.filter(function (s) { return s.status === 'wait'; }); if (!c.length) break; c.sort(function (a, b) { return b.w - a.w || a.i - b.i; }); letBe(world, c[0].id); } return letItBe(world); }
+function playBest(world) { lit(world).forEach(function (s) { if (world.best.ids.indexOf(s.id) < 0) putOut(world, s.id); }); world.best.ids.forEach(function (id) { if (star(world, id).status !== 'lit') letBe(world, id); }); return letItBe(world); }
+function playRandom(world, rnd) { var n = 3 + Math.floor(rnd() * 5); for (var t = 0; t < n; t++) { var c = world.stars.filter(function (s) { return s.status !== 'dark'; }); if (!c.length) break; letBe(world, c[Math.floor(rnd() * c.length)].id); } if (!canEnd(world)) letBe(world, world.stars[0].id); return letItBe(world); }
+
+// ---------------------------------------------------------------------------------------------------------------
+// Layout: stars placed at random in the sky so that no two touch, no line passes through a third star's glow, and no
+// two lines cross (the eye reads a line through a star as that star's line; design, 15 Nov). Returns positions or null.
+// ---------------------------------------------------------------------------------------------------------------
+function segDist(p, a, b) { var dx = b.x - a.x, dy = b.y - a.y; var tt = Math.max(0, Math.min(1, ((p.x - a.x) * dx + (p.y - a.y) * dy) / (dx * dx + dy * dy || 1))); return Math.hypot(p.x - (a.x + tt * dx), p.y - (a.y + tt * dy)); }
+function segCross(a, b, c, d) { var o = function (p, q, r) { return Math.sign((q.x - p.x) * (r.y - p.y) - (q.y - p.y) * (r.x - p.x)); }; return o(a, b, c) !== o(a, b, d) && o(c, d, a) !== o(c, d, b); }
+function layoutOk(stars, pairs) {
+  var R = CONFIG.radius, idx = {}; stars.forEach(function (s, i) { idx[s.id] = i; });
+  for (var i = 0; i < stars.length; i++) for (var j = i + 1; j < stars.length; j++) if (Math.hypot(stars[i].x - stars[j].x, stars[i].y - stars[j].y) < R(stars[i].w) + R(stars[j].w) + CONFIG.SKY.gap) return false;
+  var P = pairs.map(function (p) { return [stars[idx[p[0]]], stars[idx[p[1]]]]; });
+  for (i = 0; i < P.length; i++) {
+    for (j = 0; j < stars.length; j++) { var s = stars[j]; if (s === P[i][0] || s === P[i][1]) continue; if (segDist(s, P[i][0], P[i][1]) < R(s.w) * 1.7 + 6) return false; }
+    for (j = i + 1; j < P.length; j++) { var a = P[i][0], b = P[i][1], c = P[j][0], d = P[j][1]; if (a !== c && a !== d && b !== c && b !== d && segCross(a, b, c, d)) return false; }
+  }
+  return true;
+}
+// fixed: {id: {x, y}} positions to keep (the lamp world's two opening stars).
+function layout(rng, stars, pairs, fixed, tries) {
+  var S = CONFIG.SKY, R = CONFIG.radius;
+  for (var t = 0; t < (tries || 120); t++) {
+    var placed = [], ok = true;
+    for (var i = 0; i < stars.length && ok; i++) {
+      var s = stars[i], r = R(s.w), done = false;
+      if (fixed && fixed[s.id]) { placed.push({ id: s.id, w: s.w, x: fixed[s.id].x, y: fixed[s.id].y }); continue; }
+      for (var a = 0; a < 60 && !done; a++) {
+        var x = S.margin + r + rng() * (S.W - 2 * (S.margin + r)), y = S.margin + r + rng() * (S.H - 2 * (S.margin + r));
+        var clear = placed.every(function (q) { return Math.hypot(q.x - x, q.y - y) >= R(q.w) + r + S.gap; });
+        if (clear) { placed.push({ id: s.id, w: s.w, x: Math.round(x), y: Math.round(y) }); done = true; }
+      }
+      if (!done) ok = false;
+    }
+    if (ok && layoutOk(placed, pairs)) return placed;
+  }
+  return null;
+}
+function colours(rng, n) { return shuffle(rng, Object.keys(CONFIG.COLOURS)).slice(0, n); }
+
+// ---------------------------------------------------------------------------------------------------------------
+// The generator. Each function draws until a draw passes its lesson's test (rejection sampling); the test is what the
+// calibration check re-runs over many seeds.
+// ---------------------------------------------------------------------------------------------------------------
+function genWorld1(rng) {
+  var G = CONFIG.GEN.world1;
+  for (var t = 0; t < 400; t++) {
+    var n = rint(rng, G.n[0], G.n[1]), m = rint(rng, G.pairs[0], G.pairs[1]);
+    var ws = shuffle(rng, [1, 2, 3, 4, 5, 6, 7]).slice(0, n), ids = colours(rng, n);
+    var order = shuffle(rng, ids), pairs = [];
+    for (var i = 0; i < m && 2 * i + 1 < n; i++) pairs.push([order[2 * i], order[2 * i + 1]]);
+    var stars = ids.map(function (id, j) { return { id: id, w: ws[j] }; });
+    var pos = layout(rng, stars, pairs); if (!pos) continue;
+    var spec = { k: 0, title: 'Light up the sky.', lesson: 'Not everything that could exist can exist together.', stars: pos, pairs: pairs };
+    var w = makeWorld(spec);
+    if (w.stars.length - w.best.ids.length < G.minOut || !w.best.unique) continue;
+    return spec;
+  }
+  return null;
+}
+function genWorld2(rng) {
+  var G = CONFIG.GEN.world2;
+  for (var t = 0; t < 400; t++) {
+    var B = rint(rng, G.big[0], G.big[1]), k = rint(rng, G.k[0], G.k[1]), e = rint(rng, G.extra[0], G.extra[1]);
+    var n = 1 + k + e; if (n > 8) continue;
+    var ids = colours(rng, n), ws = [B];
+    for (var i = 0; i < k; i++) ws.push(rint(rng, G.small[0], G.small[1]));
+    for (i = 0; i < e; i++) ws.push(rint(rng, G.extraW[0], G.extraW[1]));
+    var smallSum = ws.slice(1, 1 + k).reduce(function (a, b) { return a + b; }, 0); if (smallSum < B + 3) continue;
+    var pairs = []; for (i = 1; i <= k; i++) pairs.push([ids[0], ids[i]]);
+    // one or two pairs among the others, or from an other to a small, so the big one is not the only thing to find
+    var others = ids.slice(1 + k), extraPairs = rint(rng, 1, Math.min(2, Math.max(1, others.length)));
+    for (i = 0; i < extraPairs; i++) { var a = pick(rng, others), b = pick(rng, ids.slice(1)); if (a !== b && !pairs.some(function (p) { return pairKey(p[0], p[1]) === pairKey(a, b); })) pairs.push([a, b]); }
+    var stars = ids.map(function (id, j) { return { id: id, w: ws[j] }; });
+    var pos = layout(rng, stars, pairs); if (!pos) continue;
+    var spec = { k: 1, title: 'Light up the sky.', lesson: 'The grandest thing need not be in the best world.', stars: pos, pairs: pairs };
+    var w = makeWorld(spec);
+    if (w.best.ids.indexOf(ids[0]) >= 0 || !w.best.unique) continue;
+    if (biggest(w).id !== ids[0] || w.stars.filter(function (s) { return s.w === B; }).length !== 1) continue;
+    var g = playGreedy(makeWorld(spec)); if (g.light > w.best.light - G.gap) continue;
+    return spec;
+  }
+  return null;
+}
+function genWorld3(rng) {
+  var G = CONFIG.GEN.world3;
+  for (var t = 0; t < 2000; t++) {
+    var n = rint(rng, G.n[0], G.n[1]), m = rint(rng, G.pairs[0], G.pairs[1]);
+    var ids = colours(rng, n), ws = [];
+    for (var i = 0; i < n; i++) ws.push(rint(rng, G.weights[0], G.weights[1]));
+    var mx = Math.max.apply(null, ws); if (ws.filter(function (x) { return x === mx; }).length !== 1) continue;
+    var all = []; for (i = 0; i < n; i++) for (var j = i + 1; j < n; j++) all.push([ids[i], ids[j]]);
+    var pairs = shuffle(rng, all).slice(0, m);
+    var stars = ids.map(function (id, j) { return { id: id, w: ws[j] }; });
+    var spec = { k: 2, title: 'Make this world fuller.', lesson: 'A step back can be the way to a fuller world.', stars: stars, pairs: pairs, prefill: true };
+    var w = makeWorld(spec);
+    if (!w.best.unique || light(w) >= w.best.light) continue;
+    if (w.stars.filter(function (s) { return s.status === 'dark'; }).length < G.minDark) continue;
+    // exactly one lit star whose putting-out frees exactly the stars that, lit, make the best world
+    var keys = [], bigOpens = false, big = biggest(w);
+    lit(w).forEach(function (s) {
+      var w2 = makeWorld(spec); putOut(w2, s.id);
+      var freed = w2.stars.filter(function (x) { return x.status === 'wait' && x.id !== s.id; }).map(function (x) { return x.id; });
+      if (s.id === big.id && freed.length) bigOpens = true;
+      var set = lit(w2).map(function (x) { return x.id; }).concat(freed).sort().join(',');
+      if (set === w.best.ids.slice().sort().join(',')) keys.push(s.id);
+    });
+    if (keys.length !== 1 || keys[0] === big.id || star(w, big.id).status !== 'lit' || bigOpens) continue;
+    var pos = layout(rng, stars, pairs); if (!pos) continue;
+    spec.stars = pos; spec.key = keys[0];
+    return spec;
+  }
+  return null;
+}
+// The lamp world: two worlds on one sky. Returns { skies: [specA, specB] } in random order, each spec carrying `full`.
+function genLamp(rng) {
+  var G = CONFIG.GEN.lamp, S = CONFIG.SKY;
+  for (var t = 0; t < 600; t++) {
+    var n = rint(rng, G.n[0], G.n[1]), h = rint(rng, G.small[0], G.small[1]), B = rint(rng, G.big[0], G.big[1]), nh = rint(rng, G.holders[0], G.holders[1]);
+    var ids = colours(rng, n), ws = [h, B];
+    for (var i = 0; i < nh; i++) ws.push(rint(rng, G.holderW[0], G.holderW[1]));
+    for (i = 2 + nh; i < n; i++) ws.push(rint(rng, G.otherW[0], G.otherW[1]));
+    var holdSum = ws.slice(2, 2 + nh).reduce(function (a, b) { return a + b; }, 0); if (holdSum <= B) continue;
+    if (ws.slice(2).some(function (x) { return x >= B; })) continue;
+    // the two opening stars near the middle, a set distance apart, at a random angle
+    var ang = rng() * Math.PI * 2, d = rint(rng, G.dist[0], G.dist[1]);
+    var cx = S.W / 2 + (rng() - .5) * 40, cy = S.H / 2 + (rng() - .5) * 30;
+    var fixed = {}; fixed[ids[0]] = { x: Math.round(cx - Math.cos(ang) * d / 2), y: Math.round(cy - Math.sin(ang) * d / 2) };
+    fixed[ids[1]] = { x: Math.round(cx + Math.cos(ang) * d / 2), y: Math.round(cy + Math.sin(ang) * d / 2) };
+    var pairsA = [[ids[1], ids[0]]]; for (i = 0; i < nh; i++) pairsA.push([ids[1], ids[2 + i]]);
+    var pairsB = [[ids[1], ids[0]]];
+    var stars = ids.map(function (id, j) { return { id: id, w: ws[j] }; });
+    var pos = layout(rng, stars, pairsA, fixed); if (!pos) continue;
+    var R = CONFIG.radius; if (pos.some(function (s) { return s.x - R(s.w) < 2 || s.x + R(s.w) > S.W - 2 || s.y - R(s.w) < 2 || s.y + R(s.w) > S.H - 2; })) continue;
+    var litIds = ids.filter(function (id) { return id !== ids[1]; });
+    var mk = function (pairs, full) { return { k: 3, stars: pos, pairs: pairs, lit: litIds, small: ids[0], big: ids[1], full: full }; };
+    var A = makeLampWorld(mk(pairsA, true)), Bw = makeLampWorld(mk(pairsB, false));
+    if (light(A) !== A.best.light || !A.best.unique) continue;
+    if (light(Bw) >= Bw.best.light || !Bw.best.unique || Bw.best.ids.indexOf(ids[1]) < 0 || Bw.best.light - light(Bw) !== B - h) continue;
+    var skies = rng() < .5 ? [mk(pairsA, true), mk(pairsB, false)] : [mk(pairsB, false), mk(pairsA, true)];
+    return { skies: skies };
+  }
+  return null;
+}
+function makeLampWorld(spec) {
+  var stars = spec.stars.map(function (s, i) { return { id: s.id, w: s.w, x: s.x, y: s.y, i: i, status: spec.lit.indexOf(s.id) >= 0 ? 'lit' : 'wait', by: [], known: false }; });
+  var w = { k: 3, stars: stars, pairs: spec.pairs.map(function (p) { return p.slice(); }), ended: false, full: spec.full, small: spec.small, big: spec.big,
+    path: [], oil: CONFIG.LAMP.oil, act: null, before: 0, after: 0, stepsBack: 0, putOut: [], acted: 0, knownPairs: [], prefilled: true };
+  settle(w); w.best = solve(w); w.before = light(w); return w;
+}
+function newJudge(rng) { var g = genLamp(rng); if (!g) return null; return { kind: 'lamp', skies: g.skies.map(makeLampWorld), radius: CONFIG.LAMP.radius, oilMax: CONFIG.LAMP.oil }; }
+// The lamp: a point of the drag path. Burns oil by distance; returns false once the oil is gone.
+function lampMove(J, j, x, y) {
+  var s = J.skies[j]; if (s.act || s.oil <= 0) return false;
+  var last = null; for (var i = s.path.length - 1; i >= 0; i--) { if (s.path[i].pen < 0) break; last = s.path[i]; break; }
+  if (last) { var d = Math.hypot(x - last.x, y - last.y); if (d < 2) return true; if (d > s.oil) { var f = s.oil / d; x = last.x + (x - last.x) * f; y = last.y + (y - last.y) * f; d = s.oil; } s.oil -= d; }
+  s.path.push({ x: x, y: y, pen: last ? 1 : 0 });
+  return s.oil > 0;
+}
+function lampLift(J, j) { var s = J.skies[j]; if (s.path.length && s.path[s.path.length - 1].pen >= 0) s.path.push({ x: 0, y: 0, pen: -1 }); }
+// Decide: 'out' puts the small star out and lets the big one be if nothing else holds it; 'leave' leaves the world.
+function decide(J, j, act) {
+  var s = J.skies[j]; if (s.act) return null;
+  s.act = act; s.came = [];
+  if (act === 'out') { putOut(s, s.small); var b = star(s, s.big); if (b.status === 'wait') { letBe(s, s.big); s.came = [s.big]; } }
+  s.ended = true; s.after = light(s);
+  return lampReveal(J, j);
+}
+function lampReveal(J, j) {
+  var s = J.skies[j], sm = star(s, s.small), bg = star(s, s.big);
+  var holders = conflicts(s, s.big).filter(function (id) { return id !== s.small; }).map(function (id) { return star(s, id).w; });
+  var whole = s.full ? 'The whole: the ' + bg.w + ' was held down by the ' + sm.w + ' and by ' + holders.length + ' more things worth ' + holders.join(' + ') + ' together. Without it the sky holds ' + s.before + '; with it, less. This world was as full as it can be.'
+    : 'The whole: nothing but the ' + sm.w + ' held the ' + bg.w + ' down. With the ' + sm.w + ' out and the ' + bg.w + ' in, the sky holds ' + s.best.light + ' instead of ' + s.before + '. This world was ' + (s.best.light - s.before) + ' short.';
+  var spent = J.oilMax - s.oil, used = spent === 0 ? 'You did not light the lamp.' : spent < J.oilMax ? 'You spent ' + (spent < J.oilMax / 2 ? 'some' : 'most') + ' of the lamp.' : 'You burnt the lamp to the end.';
+  var line = s.act === 'out' ? (s.came.length ? 'You put the ' + sm.w + ' out, and the ' + bg.w + ' came in: ' + (s.after - s.before) + ' more light than before.'
+      : 'You put the ' + sm.w + ' out, and the ' + bg.w + ' stayed dark: ' + (s.before - s.after) + ' less light than before.')
+    : (s.full ? 'You left it, and it holds all it could.' : 'You left it, and it holds ' + s.after + ' where it could hold ' + s.best.light + '.');
+  return { line: whole + ' ' + used + ' ' + line, good: s.after === s.best.light };
+}
+
+// ---------------------------------------------------------------------------------------------------------------
+// A game: three skies and the lamp, drawn from a seed.
+// ---------------------------------------------------------------------------------------------------------------
+function newGame(seed) {
+  if (seed === undefined || seed === null) seed = Math.floor(Math.random() * 1e9);
+  var rng = mulberry32(seed);
+  var specs = [genWorld1(rng), genWorld2(rng), genWorld3(rng)];
+  if (specs.some(function (s) { return !s; })) return newGame(seed + 7919);
+  var judge = newJudge(rng); if (!judge) return newGame(seed + 7919);
+  return { seed: seed, worlds: specs.map(makeWorld), judge: judge, current: 0 };
+}
 
 // ---------------------------------------------------------------------------------------------------------------
 // Words: the per-world result and the verdict.
 // ---------------------------------------------------------------------------------------------------------------
-function shortWords(L, best) {
-  var gap = best > 0 ? (best - L) / best : 0;
-  for (var i = 0; i < CONFIG.SHORT_WORDS.length; i++) if (gap <= CONFIG.SHORT_WORDS[i][0] + 1e-9) return CONFIG.SHORT_WORDS[i][1];
-  return CONFIG.SHORT_WORDS[CONFIG.SHORT_WORDS.length - 1][1];
-}
-function biggest(world) { return world.stars.slice().sort(function (a, b) { return b.w - a.w || a.i - b.i; })[0]; }
+function shortWords(L, best) { var gap = best > 0 ? (best - L) / best : 0; for (var i = 0; i < CONFIG.SHORT_WORDS.length; i++) if (gap <= CONFIG.SHORT_WORDS[i][0] + 1e-9) return CONFIG.SHORT_WORDS[i][1]; return CONFIG.SHORT_WORDS[CONFIG.SHORT_WORDS.length - 1][1]; }
 function result(world) {
-  var L = light(world), B = world.best.light;
-  var out = world.stars.filter(function (s) { return s.status !== 'lit'; }).map(name);
-  var big = biggest(world), bigIn = world.best.ids.indexOf(big.id) >= 0, bigLit = star(world, big.id).status === 'lit';
-  var lines = [];
-  var rushed = world.rushed.map(function (id) { return name(star(world, id)); });
-  if (rushed.length) lines.push('Nothing stopped ' + list(rushed) + ', so ' + (rushed.length > 1 ? 'they' : 'it') + ' came to be.');
-  var heads = ['Your world holds ' + L + ' of light. The best possible world holds ' + B + '.'];
+  var L = light(world), B = world.best.light, out = world.stars.filter(function (s) { return s.status !== 'lit'; }).map(name);
+  var lines = ['Your world holds ' + L + ' of light. The best possible world holds ' + B + '.'];
   if (world.k === 0) {
+    var bestOut = world.stars.length - world.best.ids.length;
     lines.push('Left out of yours: ' + list(out) + '.');
-    lines.push(L === B ? 'Yours is as full as a world can be, and it still leaves something out: ' + world.lesson.toLowerCase()
-      : 'Even the best possible world leaves something out: ' + world.lesson.toLowerCase());
+    lines.push((L === B ? 'Yours is as full as a world can be, and it still leaves ' : 'Even the best possible world leaves ') + (bestOut === 1 ? 'one thing' : bestOut + ' things') + ' dark: ' + world.lesson.toLowerCase());
   } else if (world.k === 1) {
-    lines.push('The best possible world is ' + (bigIn ? 'built around ' : 'full, and ') + name(big) + (bigIn ? '.' : ', the most of anything, is not in it.'));
-    if (bigLit) lines.push('You kept the grandest thing, and it is what left the sky dark: it shut out ' + list(conflicts(world, big.id).map(function (o) { return name(star(world, o)); })) + '.');
-    else if (L === B) lines.push('You left the grandest thing out, and four lesser things lit more than it ever could.');
+    var big = biggest(world), bigLit = star(world, big.id).status === 'lit', held = conflicts(world, big.id).map(function (o) { return name(star(world, o)); });
+    lines.push('The best possible world does not hold ' + name(big) + ', the most of anything.');
+    if (bigLit) lines.push('You kept the grandest thing, and it is what left the sky dark: it shut out ' + list(held) + '.');
+    else if (L === B) lines.push('You left the grandest thing out, and the lesser things it would have shut out lit more than it ever could.');
     else lines.push('You left the grandest thing out, but something else stayed dark: ' + list(out) + '.');
   } else {
+    var key = star(world, world.key), stepped = world.putOut.indexOf(world.key) >= 0;
     if (world.stepsBack === 0) lines.push('You put nothing out, so nothing could come in. ' + world.lesson);
-    else {
-      var amber = world.putOut.indexOf('amber') >= 0;
-      lines.push('You stepped back ' + (world.stepsBack === 1 ? 'once' : world.stepsBack === 2 ? 'twice' : world.stepsBack + ' times') + '.' +
-        (L === B ? ' Putting ' + name(star(world, 'amber')) + ' out let three lesser things in, and the world is full.' :
-          amber ? ' The world got fuller, but something was lost on the way.' : ' Nothing you put out let more in than it took away.'));
-    }
+    else lines.push('You stepped back ' + (world.stepsBack === 1 ? 'once' : world.stepsBack === 2 ? 'twice' : world.stepsBack + ' times') + '.' +
+      (L === B ? ' Putting ' + name(key) + ' out opened the way, and the world is full.' : stepped ? ' Putting ' + name(key) + ' out opened the way, but not everything it freed was lit.' : ' Nothing you put out opened more than it closed. Putting ' + name(key) + ' out would have.'));
   }
-  return { light: L, best: B, lines: heads.concat(lines), words: shortWords(L, B), leftOut: out, lit: lit(world).map(function (s) { return s.id; }) };
+  return { light: L, best: B, lines: lines, words: shortWords(L, B), leftOut: out, lit: lit(world).map(function (s) { return s.id; }) };
 }
 function verdict(game) {
   var W = game.worlds, full = W.filter(function (w) { return light(w) === w.best.light; }).length;
-  var head = full === 3 ? 'All three of your worlds are as full as they can be.' : full === 0 ? 'None of your worlds is as full as it could be.' :
-    (full === 1 ? 'One' : 'Two') + ' of your three worlds ' + (full === 1 ? 'is' : 'are') + ' as full as ' + (full === 1 ? 'it' : 'they') + ' can be.';
+  var head = full === 3 ? 'All three of your skies are as full as they can be.' : full === 0 ? 'None of your skies is as full as it could be.' :
+    (full === 1 ? 'One' : 'Two') + ' of your three skies ' + (full === 1 ? 'is' : 'are') + ' as full as ' + (full === 1 ? 'it' : 'they') + ' can be.';
   var says = 'Leibniz: the world that exists is the set of possible things that holds the most together. Not everything possible can exist; the grandest thing need not be in the best world; a step back can be the way to a fuller world; and from a part you cannot tell whether the whole is well made.';
   var found = W.map(function (w, k) {
     var L = light(w), B = w.best.light, out = w.stars.filter(function (s) { return s.status !== 'lit'; }).map(name);
     if (k === 0) return 'World 1: your world held ' + L + ' of light' + (L === B ? ', as much as it could,' : '') + ' and left out ' + list(out) + '.';
     if (k === 1) { var big = biggest(w); return 'World 2: ' + (star(w, big.id).status === 'lit' ? 'you kept ' + name(big) + ', the grandest thing, and your world was ' + shortWords(L, B) + '.' : 'you left ' + name(big) + ' out, and your world ' + (L === B ? 'was full.' : 'was ' + shortWords(L, B) + '.')); }
-    if (k === 2) return 'World 3: ' + (w.stepsBack === 0 ? 'you put nothing out, and the world stayed as weight had made it.' : 'you stepped back ' + (w.stepsBack === 1 ? 'once' : w.stepsBack === 2 ? 'twice' : w.stepsBack + ' times') + ', and the world ended ' + (L === B ? 'full: the step back was the way forward.' : shortWords(L, B) + '.'));
+    return 'World 3: ' + (w.stepsBack === 0 ? 'you put nothing out, and the world stayed as weight had made it.' : 'you stepped back ' + (w.stepsBack === 1 ? 'once' : w.stepsBack === 2 ? 'twice' : w.stepsBack + ' times') + ', and the world ended ' + (L === B ? 'full: the step back was the way forward.' : shortWords(L, B) + '.'));
   });
   var J = game.judge;
   var jl = J.skies.map(function (s, j) {
-    var what = s.act === 'out' ? 'put the 2 out' : 'left it';
-    var got = s.act === 'out' ? (s.came.length ? 'and the 9 came in: 7 gained' : 'and nothing came in: 2 lost') : (s.full ? 'and it was as full as it can be' : 'and it stayed 7 short');
-    return 'in the ' + (j === 0 ? 'first' : 'second') + ' you ' + (s.torches.length ? 'lit ' + (s.torches.length === 1 ? 'a torch' : s.torches.length + ' torches') + ' and ' : '') + what + ', ' + got;
+    var spent = J.oilMax - s.oil, looked = spent === 0 ? 'without lighting the lamp' : spent < J.oilMax ? 'after some lamplight' : 'after burning the lamp out';
+    var what = s.act === 'out' ? 'put the small one out' : 'left it';
+    var got = s.act === 'out' ? (s.came.length ? 'and the big one came in' : 'and the big one stayed dark') : (s.full ? 'and it was as full as it can be' : 'and it stayed short');
+    return 'in the ' + (j === 0 ? 'first' : 'second') + ', ' + looked + ', you ' + what + ', ' + got;
   });
-  found.push('World 4: through the same window, ' + jl[0] + '; ' + jl[1] + '.');
+  found.push('World 4: the same small star holding the same big one down; ' + jl[0] + '; ' + jl[1] + '.');
   var part = W.map(function (w, k) { return light(w) < w.best.light ? 'world ' + (k + 1) + ' (' + (w.best.light - light(w)) + ' of light short)' : null; }).filter(Boolean);
-  var where = part.length ? 'On ' + list(part) + ', the best possible world holds more than yours.' : 'Nowhere. On every world, yours holds all that could be.';
+  var where = part.length ? 'On ' + list(part) + ', the best possible world holds more than yours.' : 'Nowhere among the skies you made. On every one, yours holds all that could be.';
   var stood = part.length ? 'A world with less in it than there could have been. Leibniz says that cannot be the one that exists: the possibles push, and the fullest set is what comes through, the way weights settle.' : 'Yours is the one Leibniz says exists: the fullest set of things that can be together.';
-  var cover = 'Leibniz: take a very beautiful picture and cover all but a small part. What you see is a confused chaos of colours, and the closer you look the worse it gets. Lift the cover and the whole is the work of a master. Every dark star in the best world is the price of a brighter sky; but a dark star in a world that is not the best is just a mistake, and the two look the same up close.';
+  var cover = 'Leibniz: take a very beautiful picture and cover all but a small part. What you see is a confused chaos of colours, and the closer you look the worse it gets. Lift the cover and the whole is the work of a master. Every dark star in the best world is the price of a brighter sky; but a dark star in a world that is not the best is just a mistake, and the two look the same by lamplight.';
   return { head: head, says: says, found: found, where: where, stood: stood, cover: cover, full: full };
 }
 
-// ---------------------------------------------------------------------------------------------------------------
-// Heuristics the calibration check plays (build.md §3): heaviest-first, random, and the best play.
-// ---------------------------------------------------------------------------------------------------------------
-function playGreedy(world) { // let the heaviest waiting star be until nothing waits; never step back
-  for (;;) { var c = world.stars.filter(function (s) { return s.status === 'wait'; }); if (!c.length) break; c.sort(function (a, b) { return b.w - a.w || a.i - b.i; }); letBe(world, c[0].id); }
-  return letItBe(world);
-}
-function playRandom(world, rnd) {
-  var n = 3 + Math.floor(rnd() * 5);
-  for (var t = 0; t < n; t++) { var c = world.stars.filter(function (s) { return s.status !== 'dark'; }); if (!c.length) break; var s = c[Math.floor(rnd() * c.length)]; letBe(world, s.id); }
-  return letItBe(world);
-}
-function playBest(world) {
-  lit(world).forEach(function (s) { if (world.best.ids.indexOf(s.id) < 0) putOut(world, s.id); });
-  world.best.ids.forEach(function (id) { if (star(world, id).status !== 'lit') letBe(world, id); });
-  return letItBe(world);
-}
-
-var M = { CONFIG: CONFIG, newGame: newGame, newWorld: newWorld, newJudge: newJudge, look: look, decide: decide, judgeReveal: judgeReveal, pairKnown: pairKnown, letBe: letBe, putOut: putOut, letItBe: letItBe, result: result, verdict: verdict,
-  solve: solve, solveWith: solveWith, light: light, total: total, lit: lit, star: star, conflicts: conflicts, name: name, list: list,
-  shortWords: shortWords, playGreedy: playGreedy, playRandom: playRandom, playBest: playBest, rushIn: rushIn };
+var M = { CONFIG: CONFIG, newGame: newGame, makeWorld: makeWorld, makeLampWorld: makeLampWorld, genWorld1: genWorld1, genWorld2: genWorld2, genWorld3: genWorld3, genLamp: genLamp,
+  mulberry32: mulberry32, letBe: letBe, putOut: putOut, letItBe: letItBe, canEnd: canEnd, result: result, verdict: verdict, solve: solve, solveWith: solveWith,
+  light: light, total: total, lit: lit, star: star, conflicts: conflicts, name: name, list: list, biggest: biggest, shortWords: shortWords, pairKnown: pairKnown,
+  layoutOk: layoutOk, playGreedy: playGreedy, playRandom: playRandom, playBest: playBest, lampMove: lampMove, lampLift: lampLift, decide: decide, lampReveal: lampReveal };
 if (typeof module !== 'undefined' && module.exports) module.exports = M; else root.LeibnizMechanism = M;
 })(typeof window !== 'undefined' ? window : this);
 
@@ -561,25 +604,26 @@ if (typeof module !== 'undefined' && module.exports) module.exports = M; else ro
 'use strict';
 var M = window.LeibnizMechanism, C = M.CONFIG;
 var $ = function (id) { return document.getElementById(id); };
-var game, world, lastFrom = null;
-var INTRO = [
-  'Six things could exist; bigger means more of it. Some pairs cannot both be. Find out which.',
-  'Seven things want to be. The big one is the most of anything.',
-  'Filled by weight: heaviest first, whatever could still be. Nothing left can be now.'
-];
+var game, world;
 var NOW0 = ['Light up the sky.', 'Light up the sky.', 'Make this world fuller.'];
 var NOW1 = ['Tap a ring to let it be.', 'Tap a ring to let it be.', 'Tap a lit star to put it out.'];
-
+function intro(k) {
+  var n = world.stars.length;
+  if (k === 0) return n + ' things could exist; bigger means more of it. Some pairs cannot both be. Find out which.';
+  if (k === 1) return n + ' things want to be. The big one is the most of anything.';
+  return 'Filled by weight: heaviest first, whatever could still be. Nothing left can be now.';
+}
 function show(id) { ['s-start', 's-play', 's-judge', 's-end'].forEach(function (s) { $(s).classList.toggle('on', s === id); }); window.scrollTo(0, 0); }
 function openOv(id) { $(id).classList.add('on'); document.body.classList.add('lock'); $(id).scrollTop = 0; }
 function closeOv(id) { $(id).classList.remove('on'); document.body.classList.remove('lock'); }
 
-// Draw a sky. opts: { lit: set of ids to show lit (default: the world's status), small: bool, interactive: bool }
+// Draw a sky. opts: lit (ids to show lit instead of the status), small, interactive, all (every line), numbers,
+// lamp: { path, radius, open: [ids whose discs are open], openLine: [a, b] } for the covered sky.
 function drawSky(svg, w, opts) {
   opts = opts || {};
   var litIds = opts.lit || null;
-  function st(s) { if (litIds) return litIds.indexOf(s.id) >= 0 ? 'lit' : (shutBy(s) ? 'dark' : 'wait'); return s.status; }
   function shutBy(s) { var c = M.conflicts(w, s.id); for (var i = 0; i < c.length; i++) if (litIds.indexOf(c[i]) >= 0) return c[i]; return null; }
+  function st(s) { if (litIds) return litIds.indexOf(s.id) >= 0 ? 'lit' : (shutBy(s) ? 'dark' : 'wait'); return s.status; }
   var h = '';
   w.pairs.forEach(function (p) {
     if (!opts.all && !M.pairKnown(w, p)) return;
@@ -593,18 +637,21 @@ function drawSky(svg, w, opts) {
     if (S === 'lit') h += '<circle cx="' + s.x + '" cy="' + s.y + '" r="' + (r * 1.7) + '" fill="' + col + '" opacity=".16"/><circle cx="' + s.x + '" cy="' + s.y + '" r="' + r + '" fill="' + col + '"/>';
     else if (S === 'wait') h += '<circle cx="' + s.x + '" cy="' + s.y + '" r="' + r + '" fill="rgba(14,16,22,.6)" stroke="' + col + '" stroke-width="1.6"/>';
     else h += '<circle cx="' + s.x + '" cy="' + s.y + '" r="' + r + '" fill="rgba(14,16,22,.6)" stroke="' + col + '" stroke-opacity=".28" stroke-width="1.6"/>';
-    var fs = 15;
-    if (!opts.small && (opts.all || s.known)) h += '<text x="' + s.x + '" y="' + (s.y + fs * .36) + '" text-anchor="middle" font-size="' + fs + '" font-weight="700" fill="' + (S === 'lit' ? '#0E1016' : col) + '" fill-opacity="' + (S === 'dark' ? '.35' : '1') + '" font-family="Space Grotesk,system-ui,sans-serif">' + s.w + '</text>';
+    if (opts.numbers && !opts.small) h += '<text x="' + s.x + '" y="' + (s.y + 5.4) + '" text-anchor="middle" font-size="15" font-weight="700" fill="' + (S === 'lit' ? '#0E1016' : col) + '" fill-opacity="' + (S === 'dark' ? '.35' : '1') + '" font-family="Space Grotesk,system-ui,sans-serif">' + s.w + '</text>';
     if (opts.interactive) h += '<circle cx="' + s.x + '" cy="' + s.y + '" r="' + Math.max(r, 24) + '" fill="transparent" class="hit" data-id="' + s.id + '"/>';
     h += '</g>';
   });
-  if (opts.window) {
-    var W = opts.window, holes = '<rect x="' + W.x + '" y="' + W.y + '" width="' + W.w + '" height="' + W.h + '" fill="black"/>';
-    (opts.torches || []).forEach(function (c) { holes += '<circle cx="' + c.x + '" cy="' + c.y + '" r="' + opts.radius + '" fill="black"/>'; });
+  if (opts.lamp) {
+    var L = opts.lamp, holes = '';
+    L.open.forEach(function (id) { var s = M.star(w, id); holes += '<circle cx="' + s.x + '" cy="' + s.y + '" r="' + (C.radius(s.w) * (s.status === 'lit' ? 1.7 : 1) + 1) + '" fill="black"/>'; });
+    var a = M.star(w, L.openLine[0]), b = M.star(w, L.openLine[1]);
+    holes += '<line x1="' + a.x + '" y1="' + a.y + '" x2="' + b.x + '" y2="' + b.y + '" stroke="black" stroke-width="10" stroke-linecap="round"/>';
+    var d = '', pen = false;
+    L.path.forEach(function (q) { if (q.pen < 0) { pen = false; return; } d += (pen ? 'L' : 'M') + q.x.toFixed(1) + ' ' + q.y.toFixed(1) + ' '; if (!pen) d += 'l0.01 0 '; pen = true; });
+    if (d) holes += '<path d="' + d + '" fill="none" stroke="black" stroke-width="' + (2 * L.radius) + '" stroke-linecap="round" stroke-linejoin="round"/>';
     h = '<defs><mask id="cover"><rect x="0" y="0" width="320" height="300" fill="white"/>' + holes + '</mask></defs>' + h +
-      '<rect x="0" y="0" width="320" height="300" fill="#171A23" mask="url(#cover)"/>' +
-      '<rect x="' + W.x + '" y="' + W.y + '" width="' + W.w + '" height="' + W.h + '" fill="none" stroke="#8F95A8" stroke-width="1" stroke-dasharray="3 3"/>';
-    (opts.torches || []).forEach(function (c) { h += '<circle cx="' + c.x + '" cy="' + c.y + '" r="' + opts.radius + '" fill="none" stroke="#FFB830" stroke-opacity=".45" stroke-width="1"/>'; });
+      '<rect x="0" y="0" width="320" height="300" fill="#171A23" mask="url(#cover)"/>';
+    if (L.cursor) h += '<circle cx="' + L.cursor.x + '" cy="' + L.cursor.y + '" r="' + L.radius + '" fill="none" stroke="#FFB830" stroke-opacity=".5" stroke-width="1"/>';
   }
   svg.innerHTML = h;
 }
@@ -614,16 +661,18 @@ function status() {
   var dark = world.stars.filter(function (s) { return s.status === 'dark'; }).length, wait = world.stars.filter(function (s) { return s.status === 'wait'; }).length;
   $('fill').style.width = (100 * L / T) + '%';
   $('stat').innerHTML = 'Light <b>' + L + '</b> of ' + T + ' that wants to be &middot; Dark <b>' + dark + '</b> &middot; Waiting <b>' + wait + '</b>';
+  $('b-let').disabled = !M.canEnd(world); $('b-let').classList.toggle('dim', !M.canEnd(world));
 }
-function render() { drawSky($('sky'), world, { interactive: !world.ended, all: world.ended }); status(); }
+function render() { drawSky($('sky'), world, { interactive: !world.ended, all: world.ended, numbers: world.ended }); status(); }
 
 function startWorld(k) {
   world = game.worlds[k]; game.current = k;
   $('wno').textContent = 'World ' + (k + 1) + ' of 4';
   $('now').textContent = NOW0[k];
-  $('intro').textContent = INTRO[k];
+  $('intro').textContent = intro(k);
   $('say').textContent = NOW1[k];
   $('mark').style.display = 'none';
+  $('cap').textContent = k < 2 ? 'Let it be: stop here. The world is what you lit, no more; then it is judged. It wakes once you have lit something.' : 'Let it be: stop here. The world is what is lit, no more; then it is judged. Leaving it as it is counts.';
   $('controls').classList.remove('hid'); $('resultarea').classList.add('hid'); $('resultarea').innerHTML = '';
   render(); show('s-play');
 }
@@ -635,35 +684,26 @@ $('sky').addEventListener('click', function (e) {
   var r = s.status === 'lit' ? M.putOut(world, id) : M.letBe(world, id);
   $('say').textContent = r.line;
   render();
-  if (r.ok) $('now').textContent = world.k === 2 ? (M.light(world) === world.best.light ? 'The sky is as full as it can be. Let it be.' : 'Put out, let be, or let it be.') : 'Keep going, or let it be.';
+  if (r.ok) $('now').textContent = world.k === 2 ? 'Put out, let be, or let it be.' : 'Keep going, or let it be.';
 });
 
 $('b-let').addEventListener('click', function () {
-  if (world.ended) return;
-  var before = M.lit(world).map(function (s) { return s.id; });
-  var res = M.letItBe(world);
+  var res = M.letItBe(world); if (!res) return;
   $('controls').classList.add('hid');
   $('now').textContent = 'This world has ended.';
-  $('say').textContent = res.lines[1] && world.rushed.length ? res.lines[1] : 'Nothing more could be.';
-  // animate the rush-in
-  var seq = before.slice(), i = 0;
-  function step() {
-    if (i < world.rushed.length) { seq.push(world.rushed[i]); i++; drawSky($('sky'), world, { lit: seq, all: true }); var L = seq.reduce(function (a, id) { return a + M.star(world, id).w; }, 0); $('fill').style.width = (100 * L / M.total(world)) + '%'; setTimeout(step, 420); }
-    else { render(); showResult(res); }
-  }
-  setTimeout(step, 300);
+  $('say').textContent = 'It holds what you lit. Every line and every number is shown now.';
+  render(); showResult(res);
 });
 
 function showResult(res) {
-  var T = M.total(world);
-  var ra = $('resultarea');
-  ra.innerHTML = '<p class="lesson">Whatever could still be has come in. Now see the best possible world.</p><button class="btn solid" id="b-best">Show the best possible world</button>';
+  var T = M.total(world), ra = $('resultarea');
+  ra.innerHTML = '<button class="btn solid" id="b-best">Show the best possible world</button>';
   ra.classList.remove('hid');
   $('b-best').addEventListener('click', function () {
     ra.innerHTML = '<div class="pair"><div class="one"><div class="lab">Yours &middot; ' + res.light + '</div><div class="skybox"><svg class="sky" id="sky-mine" viewBox="0 0 320 300"></svg></div></div>' +
       '<div class="one"><div class="lab" id="lab-best">Best possible</div><div class="skybox"><svg class="sky" id="sky-best" viewBox="0 0 320 300"></svg></div></div></div>' +
       '<div id="after" class="hid"><h3>' + (res.light === res.best ? 'As full as it can be.' : 'Yours holds ' + res.light + '. The best holds ' + res.best + '.') + '</h3><p class="lesson">' + world.lesson + '</p>' +
-      '<div class="lines">' + res.lines.filter(function (l, i) { return !(i === 1 && world.rushed.length); }).map(function (l) { return '<p>' + l + '</p>'; }).join('') + '</div>' +
+      '<div class="lines">' + res.lines.map(function (l) { return '<p>' + l + '</p>'; }).join('') + '</div>' +
       '<button class="btn solid" id="b-next">Next world</button></div>';
     drawSky($('sky-mine'), world, { small: true, all: true });
     var seq = [], ids = world.best.ids.slice().sort(function (a, b) { return M.star(world, b).w - M.star(world, a).w; }), i = 0;
@@ -682,31 +722,31 @@ function showResult(res) {
   ra.scrollIntoView({ block: 'end', behavior: 'smooth' });
 }
 
-var JINTRO = ['A world already made, and this is all of it you can see. A small thing lit, a big thing dark. Tap the dark to light a torch there; then decide.',
-  'Another world, already made, through the same window. The same view. Tap the dark to light a torch; then decide.'];
+// ---- the lamp
+var JINTRO = ['A world already made, in the dark. A small thing lit, a big thing dark. Drag the lamp to see more; then decide.',
+  'Another world, already made. It opens the same way. Drag the lamp; then decide.'];
 function startJudge(j) {
-  var J = game.judge, s = J.skies[j];
+  var J = game.judge, s = J.skies[j], svg = $('jsky'), cursor = null, dragging = false;
   $('jintro').textContent = JINTRO[j];
   $('jnow').textContent = 'Would you change this?';
-  $('jsay').textContent = j === 0 ? 'Leibniz: men born in a salt mine take their torchlight for all the light there is.' : 'Is it the same world? The window cannot tell you.';
+  $('jsay').textContent = j === 0 ? 'Leibniz: men born in a salt mine take their torchlight for all the light there is.' : 'The same small star holds the same big one down. Is it the same world? Only the lamp can tell you.';
   $('jcontrols').classList.remove('hid'); $('jresult').classList.add('hid'); $('jresult').innerHTML = '';
-  function torchKey() { var left = J.torches - s.torches.length; $('jkey').textContent = left === 0 ? 'No torch left. Put the 2 out, or leave it.' : (left === J.torches ? 'Torches: ' + left + '. Tap the dark to see more.' : 'Torches left: ' + left + '. Tap the dark again, or decide.'); }
-  function draw() { drawSky($('jsky'), s, { window: J.window, torches: s.torches, radius: J.radius, all: true }); torchKey(); }
+  function oilKey() { var f = s.oil / J.oilMax; $('oil').style.width = (100 * f) + '%'; $('jkey').textContent = s.oil <= 0 ? 'The lamp is out. Put the small one out, or leave it.' : f === 1 ? 'The lamp: drag over the sky to light it. It burns as it moves.' : 'Oil left: ' + Math.round(100 * f) + '%. Drag on, or decide.'; }
+  function draw() { drawSky(svg, s, { all: true, lamp: { path: s.path, radius: J.radius, open: [s.small, s.big], openLine: [s.small, s.big], cursor: cursor } }); oilKey(); }
   draw(); show('s-judge');
-  $('jsky').onclick = function (e) {
-    if (s.act) return;
-    var pt = $('jsky').createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; var q = pt.matrixTransform($('jsky').getScreenCTM().inverse());
-    if (M.look(J, j, Math.round(q.x), Math.round(q.y))) { draw(); $('jsay').textContent = 'A torch. You see a little more of the same world.'; }
-  };
+  function pt(e) { var p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; var q = p.matrixTransform(svg.getScreenCTM().inverse()); return { x: Math.max(0, Math.min(320, q.x)), y: Math.max(0, Math.min(300, q.y)) }; }
+  svg.onpointerdown = function (e) { if (s.act || s.oil <= 0) return; dragging = true; svg.setPointerCapture(e.pointerId); var q = pt(e); M.lampMove(J, j, q.x, q.y); cursor = q; draw(); e.preventDefault(); };
+  svg.onpointermove = function (e) { if (!dragging || s.act) return; var q = pt(e); var on = M.lampMove(J, j, q.x, q.y); cursor = on ? q : null; draw(); if (!on) { dragging = false; M.lampLift(J, j); } e.preventDefault(); };
+  svg.onpointerup = svg.onpointercancel = function (e) { if (!dragging) return; dragging = false; cursor = null; M.lampLift(J, j); draw(); };
   var decide = function (act) {
     var r = M.decide(J, j, act); if (!r) return;
     $('jcontrols').classList.add('hid');
     $('jnow').textContent = 'The cover lifts.';
     $('jkey').textContent = '';
-    drawSky($('jsky'), s, { all: true });
+    cursor = null; drawSky(svg, s, { all: true, numbers: true });
     $('jsay').textContent = r.line;
     var ra = $('jresult');
-    ra.innerHTML = (j === 1 ? '<h3>' + J.lesson + '</h3>' : '') +
+    ra.innerHTML = (j === 1 ? '<h3>The same beginning, two worlds. In one the dark star was the price of a fuller sky; in the other it was a mistake. Only more light could tell them apart, and the lamp was yours to spend.</h3>' : '') +
       '<div class="pair"><div class="one"><div class="lab">This world &middot; ' + M.light(s) + '</div><div class="skybox"><svg class="sky" id="jsky-mine" viewBox="0 0 320 300"></svg></div></div>' +
       '<div class="one"><div class="lab">Best possible &middot; ' + s.best.light + '</div><div class="skybox"><svg class="sky" id="jsky-best" viewBox="0 0 320 300"></svg></div></div></div>' +
       '<button class="btn solid" id="b-jnext">' + (j === 0 ? 'The second world' : 'The verdict') + '</button>';
@@ -718,6 +758,7 @@ function startJudge(j) {
   $('b-out').onclick = function () { decide('out'); };
   $('b-leave').onclick = function () { decide('leave'); };
 }
+
 function endGame() {
   var v = M.verdict(game);
   $('vhead').textContent = v.head;
@@ -736,13 +777,13 @@ function endGame() {
   show('s-end');
 }
 
-function begin() { game = M.newGame(); window.__game = game; startWorld(0); }
+function begin() {
+  var m = /[?&]seed=(\d+)/.exec(location.search);
+  game = M.newGame(m ? parseInt(m[1], 10) : undefined); window.__game = game; startWorld(0);
+}
 $('b-begin').addEventListener('click', begin);
 $('b-again').addEventListener('click', begin);
-$('b-help-start').addEventListener('click', function () { openOv('help'); });
-$('b-help-play').addEventListener('click', function () { openOv('help'); });
-$('b-help-judge').addEventListener('click', function () { openOv('help'); });
-$('b-help-end').addEventListener('click', function () { openOv('help'); });
+['b-help-start', 'b-help-play', 'b-help-judge', 'b-help-end'].forEach(function (id) { $(id).addEventListener('click', function () { openOv('help'); }); });
 $('b-help-close').addEventListener('click', function () { closeOv('help'); });
 $('b-about').addEventListener('click', function () { openOv('about'); });
 $('b-about-close').addEventListener('click', function () { closeOv('about'); });

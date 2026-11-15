@@ -1,73 +1,27 @@
-PASS solver exact on sky 1  — 11 vs 11
-PASS solver exact on sky 2  — 19 vs 19
-PASS solver exact on sky 3  — 24 vs 24
-PASS sky 1 total wanting to be = 18  — 18
-PASS sky 1 best = 11  — 11
-PASS sky 2 total wanting to be = 30  — 30
-PASS sky 2 best = 19  — 19
-PASS sky 3 total wanting to be = 35  — 35
-PASS sky 3 best = 24  — 24
-PASS sky 1: best leaves three things out  — left out: mint,azure,lilac
-PASS sky 2: the grandest thing is the coral star
-PASS sky 2: best world does not contain it  — amber,mint,azure,lilac,rose
-PASS sky 2: most with coral forced in = 12  — 12
-PASS sky 2: the four it shuts out hold more than it
-PASS sky 2: heaviest-first play ends at 12  — 12
-PASS sky 3: filled by weight lights 19  — 19 (coral,amber,rose)
-PASS sky 3: nothing left can be
-PASS sky 3: filled by weight is not the best  — 19 < 24
-PASS sky 3: put out amber, let it be = 24 (best)  — 24
-PASS sky 3: three things came in for it  — mint,azure,lilac
-PASS sky 3: put out coral (the grandest), let it be = 11  — 11
-PASS sky 3: nothing came in for it
-PASS sky 3: put out rose, let it be = 19 (no fuller)  — 19
-PASS sky 3: the right thing to put out is not the grandest
-PASS sky 1: let it be with nothing done fills by weight to 11  — coral,amber,rose
-PASS a dark thing cannot be let be  — the mint star cannot be: the amber star shut it out. Put it out first.
-PASS after the step back it can  — the mint star exists. It shut out the amber star.
-PASS what the player put out stays out at let it be  — 10
-PASS sky 2: put the coral star out and let it be = best  — 19
-PASS window world 1: lit 22  — 22
-PASS window world 1: best 22  — 22
-PASS window world 1: is as full as it can be
-PASS window world 2: lit 22  — 22
-PASS window world 2: best 29  — 29
-PASS window world 2: is not as full as it can be
-PASS the window shows the same stars in the same states in both  — coral:dark ice:lit
-PASS the window shows the same lines in both  — coral-ice
-PASS no line stub from the 9 shows inside the window
-PASS a torch on the 4s reveals them (they sit within one torch radius of a point right of the 9)
-PASS torches: two, then none
-PASS world 1, put the 2 out: nothing comes in, 2 lost  — The whole: the 9 was being held down by the 2 and by three 4s. Without it the sky holds 22; with it, at most 17. This world was as full as it can be. You lit 2 torches. You put the 2 out, and nothing came in: the 9 stayed dark. The sky holds 20 now, 2 less than it did.
-PASS world 2, put the 2 out: the 9 comes in, 29  — The whole: nothing but the 2 was holding the 9 down. With the 2 out and the 9 in, the sky holds 29 instead of 22. This world was 7 short. You lit no torch. You put the 2 out, and the 9 came in: the sky holds 29 now, 7 more than it did.
-PASS deciding twice is refused
-PASS leave: world 1 stays 22 (all it could), world 2 stays 22 (7 short)
-PASS verdict carries the window line  — World 4: through the same window, in the first you left it, and it was as full as it can be; in the second you put the 2 out, and the 9 came in: 7 gained.
-PASS sky 2: no line is known before anything is lit
-PASS sky 2: no number is known before anything is lit
-PASS sky 2: letting the 9 be reveals its four lines and its number  — amber|coral,coral|mint,azure|coral,coral|lilac
-PASS sky 2: the lines stay known after the step back
-PASS sky 3: filled by weight, every pair with a lit star is known and the dark things' numbers are not
-PASS layout: no line through a star, no crossing lines, no touching stars  — 
-PASS sky 2 lesson holds for claim = weight^k up to k ≈ 1.75  — coral enters the best world at k = 1.75
-PASS sky 3 lesson (a fuller world than weight made exists) holds up to k ≈ 2.30  — step back stops paying at k = 2.30
-     sky 1: heaviest-first 11 · random mean 9.2 [5, 11] · best play 11 · best 11
-PASS sky 1: best play reaches the best
-PASS sky 1: random play never beats the best
-     sky 2: heaviest-first 12 · random mean 15.7 [9, 19] · best play 19 · best 19
-PASS sky 2: best play reaches the best
-PASS sky 2: random play never beats the best
-     sky 3: heaviest-first 19 · random mean 17.4 [6, 24] · best play 24 · best 24
-PASS sky 3: best play reaches the best
-PASS sky 3: random play never beats the best
-PASS sky 2: heaviest-first is beaten by best play
+     200 games drawn in 257 ms; 0 needed a reseed
+PASS solver exact on every drawn sky (1000 skies)
+PASS world 1 on every draw: the best leaves at least two out, is unique, and nothing can be ended unlit  — 
+PASS world 2 on every draw: the big one is out of the best, its holders outweigh it, heaviest-first falls short  — 
+PASS world 3 on every draw: filled by weight is short, one key star (not the biggest) opens the way, the biggest opens nothing  — 
+PASS nothing is chosen for the player: Let it be ends a world with exactly what was lit
+PASS layout on every drawn sky: no line through a star, no crossing lines, no touching stars  — 0 bad
+     star counts (w1/w2/w3), first eight games: 6/7/8  7/7/7  7/8/8  7/6/7  7/8/8  6/7/7  5/6/7  5/6/7
+PASS lamp world on every draw: same opening, one sky the fullest, the other short by exactly the big star less the small, the hand works  — 
+PASS the lamp burns by distance and goes out at 520 px  — oil 0 after 66 points
+PASS decide after the lamp is out still works
+PASS world 2 lesson holds for claim = weight^k up to at least k ≈ 1.35 on every draw tried  — least k where the big one enters the best: 1.35
+PASS world 3 lesson holds for claim = weight^k up to at least k ≈ 1.30 on every draw tried  — least k where the step back stops paying: 1.30
+     world 1, as a share of the best: heaviest-first 1.00 · random 0.46 · best play 1.00
+PASS world 1: best play reaches the best on every draw; random play never beats it
+     world 2, as a share of the best: heaviest-first 0.68 · random 0.43 · best play 1.00
+PASS world 2: best play reaches the best on every draw; random play never beats it
+     world 3, as a share of the best: heaviest-first 0.89 · random 0.51 · best play 1.00
+PASS world 3: best play reaches the best on every draw; random play never beats it
+PASS world 2: heaviest-first is beaten by best play on every draw
 PASS words: full
 PASS words: 12 of 19 is about a third short  — about a third short
-PASS words: 19 of 24 is about a quarter short  — about a quarter short
-PASS verdict head for the heaviest-first player  — One of your three worlds is as full as it can be.
-PASS verdict found lines are four
-PASS verdict head for the best player  — All three of your worlds are as full as they can be.
-PASS every star has a colour
+PASS verdict has four found lines and a world-4 line about the lamp  — World 4: the same small star holding the same big one down; in the first, without lighting the lamp, you put the small one out, and the big one came in; in the second, without lighting the lamp, you left it, and it was as full as it can be.
+PASS verdict head for the best player  — All three of your skies are as full as they can be.
 PASS no sky has two stars of one colour
 
 ALL PASSED

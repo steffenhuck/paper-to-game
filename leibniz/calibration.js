@@ -1,163 +1,137 @@
 // Calibration check for Leibniz's Worlds (memo §17). The mechanism is a toy built from the paper's argument, so there are
-// no reported numbers to hit; what is checked is (1) that the solver is exact, against an independent search; (2) that
-// each sky has the property the memo claims for it; (3) the striving at "Let it be" and the step back; (4) robustness of
-// the two discoveries to the toy's one big assumption, claim = weight; (5) the heuristics table of build.md §3;
-// (6) the words. Run: node calibration.js  (exit code 1 on any failure)
-var M = require('./mechanism.js'), C = M.CONFIG, E = C.EXPECT;
+// no reported numbers to hit; what is checked, over many seeds, is (1) that the solver is exact; (2) that every drawn
+// world carries the lesson it is there to show, and that nothing is chosen for the player; (3) the layout rule (no line
+// through a star, no crossing lines, no touching stars); (4) the lamp world: the same opening in both skies, one the
+// fullest and one short by exactly the big star less the small; (5) robustness of the lessons to the toy's one big
+// assumption, claim = weight; (6) the heuristics table; (7) the words. Run: node calibration.js  (exit 1 on failure)
+var M = require('./mechanism.js'), C = M.CONFIG;
 var fails = 0, out = [];
 function check(name, ok, detail) { out.push((ok ? 'PASS ' : 'FAIL ') + name + (detail !== undefined ? '  — ' + detail : '')); if (!ok) fails++; }
-function rng(seed) { var s = seed >>> 0; return function () { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }; }
+var SEEDS = 200, games = [];
+var t0 = Date.now(); for (var s = 1; s <= SEEDS; s++) games.push(M.newGame(s)); var dt = Date.now() - t0;
+out.push('     ' + SEEDS + ' games drawn in ' + dt + ' ms; ' + games.filter(function (g, i) { return g.seed !== i + 1; }).length + ' needed a reseed');
 
-// 1. the solver is exact: an independent recursive branch-and-bound over the same worlds
-function indep(world, k) {
+// 1. the solver is exact: independent recursion
+function indep(world) {
   var n = world.stars.length, best = 0;
   function ok(set, i) { var id = world.stars[i].id; return set.every(function (j) { return !world.pairs.some(function (p) { return (p[0] === id && p[1] === world.stars[j].id) || (p[1] === id && p[0] === world.stars[j].id); }); }); }
-  function rec(i, set, L) { if (L > best) best = L; if (i === n) return; rec(i + 1, set, L); if (ok(set, i)) rec(i + 1, set.concat([i]), L + Math.pow(world.stars[i].w, k || 1)); }
+  function rec(i, set, L) { if (L > best) best = L; if (i === n) return; rec(i + 1, set, L); if (ok(set, i)) rec(i + 1, set.concat([i]), L + world.stars[i].w); }
   rec(0, [], 0); return best;
 }
-var g = M.newGame();
-g.worlds.forEach(function (w, i) { check('solver exact on sky ' + (i + 1), Math.abs(w.best.light - indep(w)) < 1e-9, w.best.light + ' vs ' + indep(w)); });
-g.worlds.forEach(function (w, i) { check('sky ' + (i + 1) + ' total wanting to be = ' + E.totals[i], M.total(w) === E.totals[i], M.total(w)); check('sky ' + (i + 1) + ' best = ' + E.best[i], w.best.light === E.best[i], w.best.light); });
+check('solver exact on every drawn sky (' + SEEDS * 5 + ' skies)', games.every(function (g) { return g.worlds.concat(g.judge.skies).every(function (w) { return w.best.light === indep(w); }); }));
 
-// 2. the properties
+// 2. the lessons, on every draw
 (function () {
-  var w = M.newWorld(0);
-  check('sky 1: best leaves three things out', w.stars.length - w.best.ids.length === 3, 'left out: ' + w.stars.filter(function (s) { return w.best.ids.indexOf(s.id) < 0; }).map(function (s) { return s.id; }));
-  w = M.newWorld(1);
-  var big = w.stars.slice().sort(function (a, b) { return b.w - a.w; })[0];
-  check('sky 2: the grandest thing is the coral star', big.id === 'coral');
-  check('sky 2: best world does not contain it', w.best.ids.indexOf('coral') < 0, w.best.ids.join(','));
-  check('sky 2: most with coral forced in = ' + E.world2WithCoralMax, M.solveWith(w, 'coral') === E.world2WithCoralMax, M.solveWith(w, 'coral'));
-  check('sky 2: the four it shuts out hold more than it', M.conflicts(w, 'coral').reduce(function (a, id) { return a + M.star(w, id).w; }, 0) > big.w);
-  var r = M.playGreedy(M.newWorld(1));
-  check('sky 2: heaviest-first play ends at ' + E.world2GreedyLit, r.light === E.world2GreedyLit, r.light);
-  w = M.newWorld(2);
-  check('sky 3: filled by weight lights ' + E.world3PrefillLit, M.light(w) === E.world3PrefillLit, M.light(w) + ' (' + M.lit(w).map(function (s) { return s.id; }) + ')');
-  check('sky 3: nothing left can be', w.stars.every(function (s) { return s.status !== 'wait'; }));
-  check('sky 3: filled by weight is not the best', M.light(w) < w.best.light, M.light(w) + ' < ' + w.best.light);
-  var w3 = M.newWorld(2); M.putOut(w3, 'amber'); var r3 = M.letItBe(w3);
-  check('sky 3: put out amber, let it be = ' + E.world3PutOutAmber + ' (best)', r3.light === E.world3PutOutAmber && r3.light === w3.best.light, r3.light);
-  check('sky 3: three things came in for it', w3.rushed.length === 3, w3.rushed.join(','));
-  w3 = M.newWorld(2); M.putOut(w3, 'coral'); r3 = M.letItBe(w3);
-  check('sky 3: put out coral (the grandest), let it be = ' + E.world3PutOutCoral, r3.light === E.world3PutOutCoral, r3.light);
-  check('sky 3: nothing came in for it', w3.rushed.length === 0);
-  w3 = M.newWorld(2); M.putOut(w3, 'rose'); r3 = M.letItBe(w3);
-  check('sky 3: put out rose, let it be = ' + E.world3PutOutRose + ' (no fuller)', r3.light === E.world3PutOutRose, r3.light);
-  check('sky 3: the right thing to put out is not the grandest', 'amber' !== big.id && M.star(M.newWorld(2), 'amber').w < M.star(M.newWorld(2), 'coral').w);
-})();
-
-// 3. the striving and the step back
-(function () {
-  var w = M.newWorld(0); var r = M.letItBe(w);
-  check('sky 1: let it be with nothing done fills by weight to ' + r.light, r.light === 11 && w.rushed.length === 3, w.rushed.join(','));
-  w = M.newWorld(0); M.letBe(w, 'amber'); var a = M.letBe(w, 'mint');
-  check('a dark thing cannot be let be', a.ok === false && /cannot be/.test(a.line), a.line);
-  M.putOut(w, 'amber'); a = M.letBe(w, 'mint');
-  check('after the step back it can', a.ok === true, a.line);
-  r = M.letItBe(w);
-  check('what the player put out stays out at let it be', M.star(w, 'amber').status !== 'lit' && r.light === 10, r.light);
-  w = M.newWorld(1); M.letBe(w, 'coral'); M.putOut(w, 'coral'); r = M.letItBe(w);
-  check('sky 2: put the coral star out and let it be = best', r.light === w.best.light, r.light);
-})();
-
-// 2b. the window world: the same view in both skies; the torch; the hand
-(function () {
-  var J = M.newJudge(), W = M.CONFIG.JUDGE.window;
-  J.skies.forEach(function (s, j) {
-    check('window world ' + (j + 1) + ': lit ' + E.judgeLit[j], M.light(s) === E.judgeLit[j], M.light(s));
-    check('window world ' + (j + 1) + ': best ' + E.judgeBest[j], s.best.light === E.judgeBest[j], s.best.light);
-    check('window world ' + (j + 1) + ': ' + (s.full ? 'is' : 'is not') + ' as full as it can be', (M.light(s) === s.best.light) === s.full);
+  var bad = [];
+  games.forEach(function (g) {
+    var w1 = g.worlds[0], w2 = g.worlds[1], w3 = g.worlds[2];
+    if (w1.stars.length - w1.best.ids.length < C.GEN.world1.minOut) bad.push(g.seed + ': w1 best leaves too little out');
+    if (!w1.best.unique) bad.push(g.seed + ': w1 best not unique');
+    if (M.letItBe(M.makeWorld({ k: 0, stars: w1.stars, pairs: w1.pairs }))) bad.push(g.seed + ': w1 can be ended with nothing lit');
+    var big = M.biggest(w2);
+    if (w2.best.ids.indexOf(big.id) >= 0) bad.push(g.seed + ': w2 best holds the big one');
+    if (M.conflicts(w2, big.id).reduce(function (a, id) { return a + M.star(w2, id).w; }, 0) <= big.w) bad.push(g.seed + ': w2 holders not worth more than the big one');
+    var gr = M.playGreedy(M.makeWorld({ k: 1, stars: w2.stars, pairs: w2.pairs }));
+    if (gr.light > w2.best.light - C.GEN.world2.gap) bad.push(g.seed + ': w2 heaviest-first too close to best');
+    if (M.light(w3) >= w3.best.light) bad.push(g.seed + ': w3 filled by weight is already best');
+    if (w3.stars.some(function (x) { return x.status === 'wait'; })) bad.push(g.seed + ': w3 something still waits');
+    if (!w3.key || M.star(w3, w3.key).status !== 'lit' || w3.key === M.biggest(w3).id) bad.push(g.seed + ': w3 key missing or is the biggest');
+    var spec = { k: 2, stars: w3.stars, pairs: w3.pairs, prefill: true, key: w3.key };
+    var c = M.makeWorld(spec); M.putOut(c, w3.key); c.stars.filter(function (x) { return x.status === 'wait' && x.id !== w3.key; }).forEach(function (x) { M.letBe(c, x.id); });
+    if (M.light(c) !== w3.best.light) bad.push(g.seed + ': w3 putting the key out and lighting what it frees is not the best');
+    var cb = M.makeWorld(spec); M.putOut(cb, M.biggest(w3).id);
+    if (cb.stars.some(function (x) { return x.status === 'wait' && x.id !== M.biggest(w3).id; })) bad.push(g.seed + ': w3 putting the biggest out frees something');
+    var keys = M.lit(M.makeWorld(spec)).filter(function (st) { var w = M.makeWorld(spec); M.putOut(w, st.id); var set = M.lit(w).map(function (x) { return x.id; }).concat(w.stars.filter(function (x) { return x.status === 'wait' && x.id !== st.id; }).map(function (x) { return x.id; })).sort().join(','); return set === w3.best.ids.slice().sort().join(','); });
+    if (keys.length !== 1) bad.push(g.seed + ': w3 has ' + keys.length + ' keys');
   });
-  function inWin(s) { return s.x >= W.x && s.x <= W.x + W.w && s.y >= W.y && s.y <= W.y + W.h; }
-  var seen = J.skies.map(function (s) { return s.stars.filter(inWin).map(function (x) { return x.id + ':' + x.status; }).sort().join(' '); });
-  check('the window shows the same stars in the same states in both', seen[0] === seen[1], seen[0]);
-  var pairsIn = J.skies.map(function (s) { return s.pairs.filter(function (p) { return inWin(M.star(s, p[0])) && inWin(M.star(s, p[1])); }).map(function (p) { return p.join('-'); }).sort().join(' '); });
-  check('the window shows the same lines in both', pairsIn[0] === pairsIn[1], pairsIn[0]);
-  var c = M.star(J.skies[0], 'coral'), r = M.CONFIG.radius(c.w), ok = true;
-  J.skies[0].pairs.forEach(function (p) { var o = M.star(J.skies[0], p[0] === 'coral' ? p[1] : p[0]); if (inWin(o)) return; var dx = o.x - c.x, dy = o.y - c.y; var tt = (W.x + W.w - c.x) / dx; var y = c.y + tt * dy; var d = Math.sqrt(Math.pow(W.x + W.w - c.x, 2) + Math.pow(y - c.y, 2)); if (d > r) ok = false; });
-  check('no line stub from the 9 shows inside the window', ok);
-  check('a torch on the 4s reveals them (they sit within one torch radius of a point right of the 9)', ['mint', 'azure', 'lilac'].every(function (id) { var s = M.star(J.skies[0], id); return Math.hypot(s.x - 290, s.y - 150) <= M.CONFIG.JUDGE.TORCH_RADIUS + M.CONFIG.radius(s.w); }));
-  check('torches: two, then none', M.look(J, 0, 290, 150) && M.look(J, 0, 60, 60) && !M.look(J, 0, 1, 1));
-  var r0 = M.decide(J, 0, 'out');
-  check('world 1, put the 2 out: nothing comes in, 2 lost', J.skies[0].after === 20 && J.skies[0].came.length === 0, r0.line);
-  var r1 = M.decide(J, 1, 'out');
-  check('world 2, put the 2 out: the 9 comes in, 29', J.skies[1].after === 29 && J.skies[1].came.join(',') === 'coral', r1.line);
-  check('deciding twice is refused', M.decide(J, 1, 'leave') === null);
-  var J2 = M.newJudge(); M.decide(J2, 0, 'leave'); M.decide(J2, 1, 'leave');
-  check('leave: world 1 stays 22 (all it could), world 2 stays 22 (7 short)', J2.skies[0].after === 22 && J2.skies[1].after === 22 && /all it could/.test(M.judgeReveal(J2, 0).line) && /could hold 29/.test(M.judgeReveal(J2, 1).line));
-  var g2 = M.newGame(); M.decide(g2.judge, 0, 'leave'); M.decide(g2.judge, 1, 'out');
-  check('verdict carries the window line', /World 4: .*left it.*put the 2 out/.test(M.verdict(g2).found[3]), M.verdict(g2).found[3]);
+  var f = function (re) { return bad.filter(function (b) { return re.test(b); }); };
+  check('world 1 on every draw: the best leaves at least two out, is unique, and nothing can be ended unlit', f(/w1/).length === 0, f(/w1/).slice(0, 3).join('; '));
+  check('world 2 on every draw: the big one is out of the best, its holders outweigh it, heaviest-first falls short', f(/w2/).length === 0, f(/w2/).slice(0, 3).join('; '));
+  check('world 3 on every draw: filled by weight is short, one key star (not the biggest) opens the way, the biggest opens nothing', f(/w3/).length === 0, f(/w3/).slice(0, 3).join('; '));
+  var g0 = games[0], w = M.makeWorld({ k: 0, stars: g0.worlds[0].stars, pairs: g0.worlds[0].pairs });
+  check('nothing is chosen for the player: Let it be ends a world with exactly what was lit', (function () { M.letBe(w, w.stars[0].id); var r = M.letItBe(w); return r.light === w.stars[0].w && M.lit(w).length === 1; })());
 })();
 
-// 2c. what is found, not given
+// 3. layout on every draw
 (function () {
-  var w = M.newWorld(1);
-  check('sky 2: no line is known before anything is lit', w.knownPairs.length === 0);
-  check('sky 2: no number is known before anything is lit', w.stars.every(function (s) { return !s.known; }));
-  M.letBe(w, 'coral');
-  check('sky 2: letting the 9 be reveals its four lines and its number', w.knownPairs.length === 4 && M.star(w, 'coral').known && !M.star(w, 'rose').known, w.knownPairs.join(','));
-  M.putOut(w, 'coral');
-  check('sky 2: the lines stay known after the step back', w.knownPairs.length === 4);
-  var w3 = M.newWorld(2);
-  check('sky 3: filled by weight, every pair with a lit star is known and the dark things\' numbers are not', w3.knownPairs.length === 4 && !M.star(w3, 'mint').known && M.star(w3, 'amber').known);
+  var bad = 0; games.forEach(function (g) { g.worlds.concat(g.judge.skies).forEach(function (w) { if (!M.layoutOk(w.stars, w.pairs)) bad++; }); });
+  check('layout on every drawn sky: no line through a star, no crossing lines, no touching stars', bad === 0, bad + ' bad');
+  var sizes = games.map(function (g) { return g.worlds.map(function (w) { return w.stars.length; }).join('/'); });
+  out.push('     star counts (w1/w2/w3), first eight games: ' + sizes.slice(0, 8).join('  '));
 })();
 
-// 3b. layout: no line passes through a third star's glow, no two lines cross, no two stars touch (the eye reads a line
-// through a star as that star's line)
+// 4. the lamp world
 (function () {
-  var g = M.newGame(), R = M.CONFIG.radius, bad = [];
-  function seg(a, b, c, d) { var o = function (p, q, r) { return Math.sign((q.x - p.x) * (r.y - p.y) - (q.y - p.y) * (r.x - p.x)); }; return o(a, b, c) !== o(a, b, d) && o(c, d, a) !== o(c, d, b); }
-  function dist(p, a, b) { var dx = b.x - a.x, dy = b.y - a.y; var tt = Math.max(0, Math.min(1, ((p.x - a.x) * dx + (p.y - a.y) * dy) / (dx * dx + dy * dy))); return Math.hypot(p.x - (a.x + tt * dx), p.y - (a.y + tt * dy)); }
-  g.worlds.concat(g.judge.skies).forEach(function (w, k) {
-    var P = w.pairs.map(function (p) { return [M.star(w, p[0]), M.star(w, p[1])]; });
-    P.forEach(function (ab) { w.stars.forEach(function (s) { if (s === ab[0] || s === ab[1]) return; if (dist(s, ab[0], ab[1]) < R(s.w) * 1.7 + 6) bad.push('world ' + (k + 1) + ': line ' + ab[0].id + '-' + ab[1].id + ' through ' + s.id); }); });
-    for (var i = 0; i < P.length; i++) for (var j = i + 1; j < P.length; j++) { var a = P[i][0], b = P[i][1], c = P[j][0], d = P[j][1]; if (a !== c && a !== d && b !== c && b !== d && seg(a, b, c, d)) bad.push('world ' + (k + 1) + ': lines cross'); }
-    for (i = 0; i < w.stars.length; i++) for (j = i + 1; j < w.stars.length; j++) { var s1 = w.stars[i], s2 = w.stars[j]; if (Math.hypot(s1.x - s2.x, s1.y - s2.y) < R(s1.w) + R(s2.w) + 14) bad.push('world ' + (k + 1) + ': ' + s1.id + ' and ' + s2.id + ' touch'); }
+  var bad = [];
+  games.forEach(function (g) {
+    var J = g.judge, A = J.skies.filter(function (s) { return s.full; })[0], B = J.skies.filter(function (s) { return !s.full; })[0];
+    if (!A || !B) { bad.push(g.seed + ': not one full and one short'); return; }
+    if (M.light(A) !== A.best.light) bad.push(g.seed + ': full sky not best');
+    if (M.light(B) >= B.best.light) bad.push(g.seed + ': short sky is best');
+    var sm = M.star(B, B.small), bg = M.star(B, B.big);
+    if (B.best.light - M.light(B) !== bg.w - sm.w) bad.push(g.seed + ': short sky not short by big less small');
+    if (M.light(A) !== M.light(B)) bad.push(g.seed + ': the two skies open with different light');
+    if (A.stars.map(function (s) { return s.id + s.x + s.y + s.status; }).join() !== B.stars.map(function (s) { return s.id + s.x + s.y + s.status; }).join()) bad.push(g.seed + ': the two skies differ in what is lit or where');
+    if (M.conflicts(A, A.big).length < 3 || M.conflicts(B, B.big).length !== 1) bad.push(g.seed + ': holders wrong');
+    var lits = M.lit(A).map(function (s) { return s.id; });
+    var a2 = M.makeLampWorld({ stars: A.stars, pairs: A.pairs, lit: lits, small: A.small, big: A.big, full: true });
+    M.decide({ skies: [a2], oilMax: C.LAMP.oil }, 0, 'out'); if (a2.came.length || a2.after !== a2.before - sm.w) bad.push(g.seed + ': in the full sky, putting the small one out should lose it and gain nothing');
+    var b2 = M.makeLampWorld({ stars: B.stars, pairs: B.pairs, lit: lits, small: B.small, big: B.big, full: false });
+    M.decide({ skies: [b2], oilMax: C.LAMP.oil }, 0, 'out'); if (b2.came.length !== 1 || b2.after !== b2.best.light) bad.push(g.seed + ': in the short sky, putting the small one out should let the big one in and reach the best');
   });
-  check('layout: no line through a star, no crossing lines, no touching stars', bad.length === 0, bad.join('; '));
+  check('lamp world on every draw: same opening, one sky the fullest, the other short by exactly the big star less the small, the hand works', bad.length === 0, bad.slice(0, 3).join('; '));
+  var J = games[0].judge, s0 = J.skies[0];
+  var on = true; for (var i = 0; i < 100 && on; i++) on = M.lampMove(J, 0, 160 + i * 8, 150);
+  check('the lamp burns by distance and goes out at ' + C.LAMP.oil + ' px', s0.oil <= 0 && !on && s0.path.length > 10, 'oil ' + s0.oil + ' after ' + s0.path.length + ' points');
+  M.lampLift(J, 0); check('decide after the lamp is out still works', M.decide(J, 0, 'leave') !== null);
 })();
 
-// 4. robustness: claim = weight^k. At what k does the coral star enter the best second sky, and the step back stop paying?
+// 5. robustness: claim = weight^k, how far the world-2 and world-3 lessons survive, over the draws
 (function () {
-  var kIn = null, kStep = null;
-  for (var k = 1; k <= 4.001; k += 0.05) {
-    var w = M.newWorld(1), b = M.solve(w, function (s) { return Math.pow(s.w, k); });
-    if (kIn === null && b.ids.indexOf('coral') >= 0) kIn = k;
-    var w3 = M.newWorld(2); // filled by weight is the same set for any k>0 (order by weight is unchanged)
-    var Lw = M.lit(w3).reduce(function (a, s) { return a + Math.pow(s.w, k); }, 0), b3 = M.solve(w3, function (s) { return Math.pow(s.w, k); });
-    if (kStep === null && b3.light <= Lw + 1e-9) kStep = k;
-  }
-  check('sky 2 lesson holds for claim = weight^k up to k ≈ ' + (kIn ? kIn.toFixed(2) : '>4'), kIn === null || kIn > 1.4, 'coral enters the best world at k = ' + (kIn ? kIn.toFixed(2) : 'never'));
-  check('sky 3 lesson (a fuller world than weight made exists) holds up to k ≈ ' + (kStep ? kStep.toFixed(2) : '>4'), kStep === null || kStep > 1.9, 'step back stops paying at k = ' + (kStep ? kStep.toFixed(2) : 'never'));
-})();
-
-// 5. heuristics (build.md §3): greedy, random, best, on each sky
-(function () {
-  var R = rng(7);
-  [0, 1, 2].forEach(function (k) {
-    var gr = M.playGreedy(M.newWorld(k)).light, be = M.playBest(M.newWorld(k)).light;
-    var rs = []; for (var t = 0; t < 200; t++) rs.push(M.playRandom(M.newWorld(k), R).light);
-    var mean = rs.reduce(function (a, b) { return a + b; }, 0) / rs.length, min = Math.min.apply(null, rs), max = Math.max.apply(null, rs);
-    out.push('     sky ' + (k + 1) + ': heaviest-first ' + gr + ' · random mean ' + mean.toFixed(1) + ' [' + min + ', ' + max + '] · best play ' + be + ' · best ' + M.newWorld(k).best.light);
-    check('sky ' + (k + 1) + ': best play reaches the best', be === M.newWorld(k).best.light);
-    check('sky ' + (k + 1) + ': random play never beats the best', max <= M.newWorld(k).best.light);
+  var kIn = [], kStep = [];
+  games.slice(0, 60).forEach(function (g) {
+    var w2 = g.worlds[1], w3 = g.worlds[2], big = M.biggest(w2), a = null, b = null;
+    for (var k = 1; k <= 4.001; k += 0.05) {
+      if (a === null && M.solve(w2, function (s) { return Math.pow(s.w, k); }).ids.indexOf(big.id) >= 0) a = k;
+      var Lw = M.lit(w3).reduce(function (acc, s) { return acc + Math.pow(s.w, k); }, 0);
+      if (b === null && M.solve(w3, function (s) { return Math.pow(s.w, k); }).light <= Lw + 1e-9) b = k;
+    }
+    kIn.push(a === null ? 4 : a); kStep.push(b === null ? 4 : b);
   });
-  check('sky 2: heaviest-first is beaten by best play', M.playGreedy(M.newWorld(1)).light < M.playBest(M.newWorld(1)).light);
+  var minIn = Math.min.apply(null, kIn), minStep = Math.min.apply(null, kStep);
+  check('world 2 lesson holds for claim = weight^k up to at least k ≈ ' + minIn.toFixed(2) + ' on every draw tried', minIn > 1.1, 'least k where the big one enters the best: ' + minIn.toFixed(2));
+  check('world 3 lesson holds for claim = weight^k up to at least k ≈ ' + minStep.toFixed(2) + ' on every draw tried', minStep > 1.1, 'least k where the step back stops paying: ' + minStep.toFixed(2));
 })();
 
-// 6. words
+// 6. heuristics (build.md §3): heaviest-first, random, best, averaged over draws
+(function () {
+  var R = M.mulberry32(7), agg = [[], [], []];
+  games.slice(0, 50).forEach(function (g) {
+    [0, 1, 2].forEach(function (k) {
+      var w = g.worlds[k], spec = { k: k, stars: w.stars, pairs: w.pairs, prefill: k === 2, key: w.key };
+      var gr = M.playGreedy(M.makeWorld(spec)).light, be = M.playBest(M.makeWorld(spec)).light, rs = [];
+      for (var t = 0; t < 20; t++) rs.push(M.playRandom(M.makeWorld(spec), R).light);
+      agg[k].push({ gr: gr / w.best.light, be: be / w.best.light, rnd: rs.reduce(function (a, b) { return a + b; }, 0) / rs.length / w.best.light, max: Math.max.apply(null, rs) <= w.best.light });
+    });
+  });
+  agg.forEach(function (a, k) {
+    var mean = function (f) { return (a.reduce(function (x, y) { return x + f(y); }, 0) / a.length).toFixed(2); };
+    out.push('     world ' + (k + 1) + ', as a share of the best: heaviest-first ' + mean(function (y) { return y.gr; }) + ' · random ' + mean(function (y) { return y.rnd; }) + ' · best play ' + mean(function (y) { return y.be; }));
+    check('world ' + (k + 1) + ': best play reaches the best on every draw; random play never beats it', a.every(function (y) { return y.be === 1 && y.max; }));
+  });
+  check('world 2: heaviest-first is beaten by best play on every draw', agg[1].every(function (y) { return y.gr < 1; }));
+})();
+
+// 7. words
 (function () {
   check('words: full', M.shortWords(21, 21) === 'as full as it can be');
   check('words: 12 of 19 is about a third short', M.shortWords(12, 19) === 'about a third short', M.shortWords(12, 19));
-  check('words: 19 of 24 is about a quarter short', M.shortWords(19, 24) === 'about a quarter short', M.shortWords(19, 24));
-  var g2 = M.newGame(); M.playGreedy(g2.worlds[0]); M.playGreedy(g2.worlds[1]); M.letItBe(g2.worlds[2]); M.decide(g2.judge, 0, 'out'); M.decide(g2.judge, 1, 'out');
-  var v = M.verdict(g2);
-  check('verdict head for the heaviest-first player', v.head === 'One of your three worlds is as full as it can be.', v.head);
-  check('verdict found lines are four', v.found.length === 4);
-  var g3 = M.newGame(); M.playBest(g3.worlds[0]); M.playBest(g3.worlds[1]); M.playBest(g3.worlds[2]); M.decide(g3.judge, 0, 'leave'); M.decide(g3.judge, 1, 'out');
-  check('verdict head for the best player', M.verdict(g3).head === 'All three of your worlds are as full as they can be.', M.verdict(g3).head);
-  check('every star has a colour', g.worlds.every(function (w) { return w.stars.every(function (s) { return !!C.COLOURS[s.id]; }); }));
-  check('no sky has two stars of one colour', g.worlds.every(function (w) { var ids = w.stars.map(function (s) { return s.id; }); return ids.length === new Set(ids).size; }));
+  var g = M.newGame(3); M.playGreedy(g.worlds[0]); M.playGreedy(g.worlds[1]); M.letItBe(g.worlds[2]); M.decide(g.judge, 0, 'out'); M.decide(g.judge, 1, 'leave');
+  var v = M.verdict(g);
+  check('verdict has four found lines and a world-4 line about the lamp', v.found.length === 4 && /World 4: .*lamp/.test(v.found[3]), v.found[3]);
+  var g3 = M.newGame(4); M.playBest(g3.worlds[0]); M.playBest(g3.worlds[1]); M.playBest(g3.worlds[2]); M.decide(g3.judge, 0, 'leave'); M.decide(g3.judge, 1, 'leave');
+  check('verdict head for the best player', M.verdict(g3).head === 'All three of your skies are as full as they can be.', M.verdict(g3).head);
+  check('no sky has two stars of one colour', games.every(function (g) { return g.worlds.concat(g.judge.skies).every(function (w) { var ids = w.stars.map(function (s) { return s.id; }); return ids.length === new Set(ids).size; }); }));
 })();
 
 console.log(out.join('\n'));
