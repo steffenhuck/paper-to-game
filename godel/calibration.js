@@ -1,114 +1,63 @@
-// Calibration check for Gödel's Endgame. Run: node calibration.js. Exit code 1 on any failure.
+// Calibration check for Gödel's Endgame (three acts). Run: node calibration.js. Exit code 1 on any failure.
 var M = require('./mechanism.js'), C = M.GODEL_CONFIG;
 var fails = 0, out = [];
 function check(name, ok, detail) { out.push((ok ? 'PASS ' : 'FAIL ') + name + (detail ? ' — ' + detail : '')); if (!ok) fails++; }
+function T(s) { return s.split(' '); }
 
-function boxes(keys, max) {
-  var all = [[]], layer = [[]];
-  for (var n = 1; n <= max; n++) {
-    var next = [];
-    layer.forEach(function (b) { keys.forEach(function (k) { next.push(b.concat([k])); }); });
-    all = all.concat(next); layer = next;
-  }
-  return all;
-}
-
-// 1. Without TWICE no sentence can talk about itself: what it talks about is always shorter than the sentence.
-(function () {
-  var P = C.puzzles.nothis, bs = boxes(P.keys, P.maxBox), self = 0, shorter = 0;
-  bs.forEach(function (b) {
-    var s = M.gStr(P.front, b), t = M.gSubject(s);
-    if (M.gSelf(s)) self++;
-    if (M.gPieces(t) < M.gPieces(s)) shorter++;
-  });
-  check('no TWICE: no box makes the sentence talk about itself', self === 0, bs.length + ' boxes up to ' + P.maxBox + ' keys');
-  check('no TWICE: the thing talked about is always shorter', shorter === bs.length);
-  check('no TWICE: no answer exists to show', M.gAnswer('nothis') === null);
-})();
-
-// 2. Each puzzle has exactly one answer within its box size, and it is the one gAnswer gives.
-['twiceA', 'twiceB', 'self1', 'self2'].forEach(function (id) {
-  var P = C.puzzles[id], bs = boxes(P.keys, P.maxBox);
-  var hits = bs.filter(function (b) { return M.gHit(id, b); });
-  check(id + ': exactly one answer among ' + bs.length + ' boxes', hits.length === 1,
-    hits.map(function (b) { return '[' + b.join(' ') + ']'; }).join(', '));
-  check(id + ': the shown answer is that answer', hits.length === 1 && hits[0].join(' ') === M.gAnswer(id).join(' '));
+// 1. Grammar.
+[['1 + 1 = 2', true], ['NOT 5 = 6', true], ['NOT NOT 2 = 2', true], ['1 2 = 3 × 4', true], ['0 = 0', true],
+ ['1 + 1', false], ['= 2', false], ['2 = 2 = 2', false], ['2 + = 4', false], ['2 = NOT 2', false], ['0 1 = 1', false],
+ ['+ 2 = 2', false], ['2 × = 2', false]
+].forEach(function (c) {
+  var p = M.gParse(T(c[0]));
+  check('grammar: "' + c[0] + '" ' + (c[1] ? 'is' : 'is not') + ' a sentence', p.ok === c[1], p.ok ? '' : p.why);
 });
 
-// 3. The diagonal, in general: for every front of the grammar and every box up to 3 keys,
-//    the sentence talks about itself exactly when the front has TWICE and the box repeats the front.
+// 2. Truth, with x before +.
+[['1 + 1 = 2', true], ['2 + 2 × 3 = 8', true], ['2 + 2 × 3 = 1 2', false], ['NOT 5 = 6', true], ['NOT NOT 3 = 3', true],
+ ['1 2 = 3 × 4', true], ['7 + 7 = 1 5', false]
+].forEach(function (c) { check('truth: ' + c[0], M.gTrue(T(c[0])) === c[1]); });
+check('first sentence is a true sentence', M.gTrue(C.firstSentence) === true);
+check('every dealt sentence is a sentence', C.dealt.every(function (t) { return M.gTrue(t) !== null; }));
+check('dealt sentences need both buttons', C.dealt.some(function (t) { return M.gRightButton(t) === 'print'; }) && C.dealt.some(function (t) { return M.gRightButton(t) === 'not'; }));
+
+// 3. Act 1 in numbers: every sentence the keypad can make up to 5 symbols is either not a sentence, or settled
+//    by exactly one button. (Hilbert's promise holds for all of them.)
 (function () {
-  var fronts = [];
-  [false, true].forEach(function (neg) { ['P1', 'P2'].forEach(function (m) { [false, true].forEach(function (tw) {
-    var f = []; if (neg) f.push('NOT'); f.push(m); if (tw) f.push('TWICE'); fronts.push(f);
-  }); }); });
-  var bad = 0, n = 0;
-  fronts.forEach(function (f) { boxes(['NOT', 'P1', 'P2', 'TWICE'], 4).forEach(function (b) {
-    n++;
-    var s = M.gStr(f, b), expect = f.indexOf('TWICE') >= 0 && b.join(' ') === f.join(' ');
-    if (M.gSelf(s) !== expect) bad++;
-  }); });
-  check('diagonal: self-reference iff TWICE and box = front', bad === 0, n + ' sentences, 8 fronts');
+  var keys = C.keypad, n = 0, sentences = 0, bad = 0;
+  (function rec(t) {
+    if (t.length) { n++; var v = M.gTrue(t); if (v !== null) { sentences++; if (['print', 'not'].indexOf(M.gRightButton(t)) < 0) bad++; } }
+    if (t.length < 5) keys.forEach(function (k) { rec(t.concat([k])); });
+  })([]);
+  check('Act 1: every keypad sentence up to 5 symbols is settled by exactly one button', bad === 0, n + ' strings, ' + sentences + ' sentences');
 })();
 
-// 4. The doors, for Machine I's sentence.
+// 4. Act 2: packing and unpacking.
 (function () {
-  var G = M.gStr(C.puzzles.self1.front, M.gAnswer('self1'));
-  check('G is the Gödel kind', M.gStatus(G) === 'goedel', M.gText(G));
-  var a = M.gDoor(G, true), b = M.gDoor(G, false);
-  check('door "prints it": the sentence is false and the machine not honest', !a.sentenceTrue && !a.honest);
-  check('door "never prints it": the sentence is true and the machine honest', b.sentenceTrue && b.honest);
-  var praise = M.gStr(['P1', 'TWICE'], ['P1', 'TWICE']);
-  check('the self-praising sentence is the other kind, not settled by the doors', M.gStatus(praise) === 'praise' && M.gDoor(praise, true) === null);
+  var steps = M.gPackSteps(C.packSentence), num = M.gPack(C.packSentence);
+  check('pack 1+1=2', num === '11530778490', steps.map(function (s) { return s.prime + '^' + s.code + '=' + s.value; }).join(', '));
+  check('unpack returns 1+1=2', M.gUnpack(num).join(' ') === C.packSentence.join(' '));
+  var u = M.gPack(C.unpackSentence);
+  check('the unpack puzzle number', u === '72900', u);
+  check('unpack 72900 = 2 = 2', M.gUnpack(u).join(' ') === '2 = 2');
+  // every string over the code symbols up to length 4 round-trips
+  var syms = Object.keys(C.codes), bad = 0, n = 0;
+  (function rec(t) { if (t.length) { n++; if ((M.gUnpack(M.gPack(t)) || []).join(' ') !== t.join(' ')) bad++; } if (t.length < 4) syms.forEach(function (s) { rec(t.concat([s])); }); })([]);
+  check('every string up to 4 symbols packs and unpacks to itself', bad === 0, n + ' strings');
+  check('a number with a gap in its primes is not a packed sentence', M.gUnpack('10') === null);
+  check('division steps: 72900 / 2 = 36450', M.gDivide('72900', 2) === '36450' && M.gDivide('729', 2) === null);
 })();
 
-// 5. Machine II.
+// 5. Act 3: exactly one gap choice makes the sentence talk about itself, and it is the frame's own opening words.
 (function () {
-  var G1 = C.machine2Rule, G2 = M.gStr(C.puzzles.self2.front, M.gAnswer('self2'));
-  check('Machine II: its own sentence is the Gödel kind', M.gStatus(G2) === 'goedel', M.gText(G2));
-  check('Machine II: its sentence is not Machine I\'s', !M.gSame(G1, G2));
-  var old = M.gStr(['NOT', 'P2', 'TWICE'], ['NOT', 'P1', 'TWICE']);
-  check('Machine II: the old box gives a false sentence (it prints the old one now)', M.gStatus(old) === 'ruleFalse', M.gText(old));
-  check('Machine II cannot print its certificate either', M.gCertificatePrintable() === false);
-})();
-
-// 6. Mirror: the screen's piece-by-piece comparison agrees with gSelf.
-(function () {
-  var bad = 0;
-  boxes(['NOT', 'P1', 'TWICE'], 4).forEach(function (b) {
-    var s = M.gStr(['NOT', 'P1', 'TWICE'], b), m = M.gMirror(s);
-    var allSame = m.sentence.length === m.subject.length && m.sentence.every(function (x) { return x.same; });
-    if (allSame !== m.equal) bad++;
-  });
-  check('mirror: all pieces match exactly when the sentence talks about itself', bad === 0);
-})();
-
-// 7. Gödel numbers.
-(function () {
-  var G = M.gStr(C.puzzles.self1.front, M.gAnswer('self1')), g = M.gNumber(G);
-  check('G has 8 signs', g.factors.length === 8, g.factors.map(function (f) { return f.p + '^' + f.e; }).join(' x '));
-  check('G\'s number is large', g.digits > 50, g.digits + ' digits, begins ' + g.lead);
-  out.push('INFO G = ' + M.gText(G) + ' ; number has ' + g.digits + ' digits, begins ' + g.lead + '..., ends ...' + g.tail);
-})();
-
-// 8. Playing it in numbers: ways of filling the box in the self1 puzzle, tries to the answer.
-(function () {
-  var P = C.puzzles.self1, bs = boxes(P.keys, P.maxBox).filter(function (b) { return b.length; });
-  function rnd(seed) { return function () { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; }; }
-  var r = rnd(7), tries = [];
-  for (var i = 0; i < 1000; i++) {
-    var t = 0, hit = false;
-    while (!hit && t < 200) { t++; hit = M.gHit('self1', bs[Math.floor(r() * bs.length)]); }
-    tries.push(t);
-  }
-  tries.sort(function (a, b) { return a - b; });
-  out.push('TABLE self1, random boxes (1000 players): median ' + tries[500] + ' tries, within ' + P.showAfter + ' tries: ' +
-    tries.filter(function (t) { return t <= P.showAfter; }).length / 10 + '%');
-  out.push('TABLE self1, copy the front into the box: 1 try');
-  out.push('TABLE self1, carry over twiceB\'s answer [NOT PRINTS]: miss — talks about NOT PRINTS [NOT PRINTS], one key short');
-  out.push('TABLE self1, put TWICE alone or first: miss — the subject starts with TWICE, the sentence with NOT');
-  check('random filling rarely finds it inside the show-me budget (it is a puzzle, not a lottery)',
-    tries.filter(function (t) { return t <= P.showAfter; }).length < 200);
+  var hits = C.gapChoices.filter(function (x) { return M.gSelf(C.frame, x); });
+  check('Act 3: exactly one gap choice talks about itself', hits.length === 1, hits[0]);
+  check('Act 3: it is the frame itself', hits[0] === C.frame);
+  check('Act 3: the recipe of the frame gives the whole sentence back', M.gDouble(C.frame) === M.gSentence(C.frame, C.frame));
+  check('Act 4: same for Machine II', M.gSelf(C.frame2, C.frame2) && !M.gSelf(C.frame2, C.frame));
+  ['print', 'not'].forEach(function (c) { var d = M.gDilemma(c); check('dilemma: "' + c + '" prints a false slip', d.slipTrue === false && d.honest === false); });
+  var d = M.gDilemma('neither');
+  check('dilemma: "neither" leaves the sentence true and breaks the promise', d.sentenceTrue && d.honest && d.promiseKept === false);
 })();
 
 out.push(fails ? fails + ' FAILED' : 'all checks passed');

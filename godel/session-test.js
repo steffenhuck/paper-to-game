@@ -1,122 +1,88 @@
-// Full session in a headless browser at 380 x 760. Run: node session-test.js (needs playwright).
+// Full sessions in a headless browser at 380 x 760, clicks only. Run: node session-test.js (needs playwright).
 const { chromium } = require('playwright');
 const path = require('path'), fs = require('fs');
 (async () => {
   const browser = await chromium.launch({ executablePath: '/usr/bin/google-chrome' });
   const log = [];
-  async function run(tag, plan) {
-    const page = await browser.newPage({ viewport: { width: 380, height: 760 }, deviceScaleFactor: 1 });
+  async function run(tag, vp, plan) {
+    const page = await browser.newPage({ viewport: vp, deviceScaleFactor: 1 });
     const errors = [];
     page.on('pageerror', e => errors.push(String(e)));
-    page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
     await page.route('**/*', r => r.request().url().startsWith('file:') ? r.continue() : r.abort());
     await page.goto('file://' + path.resolve('godels-endgame.html'));
-    const shot = async n => { await page.waitForTimeout(350); await page.screenshot({ path: `screenshot-${tag}-${n}.png`, fullPage: true }); };
-    const W = { NOT: 'NOT', PRINTS: 'P1', 'PRINTS II': 'P2', TWICE: 'TWICE', P1: 'P1', P2: 'P2' };
-    const key = async label => { if (label === 'RUB') await page.click('#w-back'); else await page.click('#w-' + (W[label] || label)); await page.waitForTimeout(80); };
-    const type = async text => {
-      await page.click('#w-clear').catch(() => {}); await page.waitForTimeout(40);
-      const ws = text.toUpperCase().replace(/PRINTS II/g, 'P2').split(/\s+/).filter(Boolean);
-      for (const w of ws) { if (await page.$eval('#w-NOT', e => e.disabled)) break; await key(w === 'PRINTS' ? 'P1' : w); }
-    };
-    const within = async sel => {
-      const b = await page.$eval(sel, e => { const r = e.getBoundingClientRect(); return { top: r.top + window.scrollY, h: r.height, vis: e.offsetParent !== null }; });
-      return b.vis && b.top + b.h <= 700;
-    };
-    const hscroll = async () => page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
-    const now = async () => page.$eval('.screen.on', s => (s.querySelector('h2') || {}).innerText || s.id);
-    await plan({ page, shot, key, type, within, hscroll, now, log: s => log.push(tag + ': ' + s) });
-    log.push(tag + ': errors: ' + (errors.length ? errors.join(' | ') : 'none') + '; horizontal scroll: ' + (await hscroll()));
+    const shot = async n => { await page.waitForTimeout(400); await page.screenshot({ path: `screenshot-${tag}-${n}.png`, fullPage: true }); };
+    const k = async t => { await page.click(`#a1-write .k[data-t="${t}"]`); };
+    const text = async sel => (await page.$eval(sel, e => e.innerText)).replace(/\n+/g, ' / ');
+    const within = async sel => page.$eval(sel, e => { const r = e.getBoundingClientRect(); return r.top + window.scrollY + r.height <= 700; });
+    await plan({ page, shot, k, text, within, log: s => log.push(tag + ': ' + s) });
+    const hs = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
+    log.push(tag + ': page errors: ' + (errors.join(' | ') || 'none') + '; horizontal scroll: ' + hs);
     await page.close();
   }
+  const phone = { width: 380, height: 760 };
 
-  // A: a plausible player who gets things right after some trying
-  await run('a', async ({ page, shot, key, type, within, now, log }) => {
+  await run('a', phone, async ({ page, shot, k, text, within, log }) => {
     await shot('0-start');
-    await page.click('#b-begin');
-    await shot('1-empty');
-    log('step 1 button within 700: ' + await within('#b-nest'));
-    log('step 1 pad hidden: ' + await page.$eval('#p-pad', e => e.classList.contains('hide')));
-    await page.click('#b-nest'); await shot('1-once');
-    await page.click('#b-nest'); await page.click('#b-nest');
-    await shot('1-nest');
-    await page.click('#b-next');
-    log('-> ' + await now());
-    await shot('2a-empty');
-    log('step 2a pad within 700: ' + await within('#w-clear'));
-    await type('prints'); await shot('2a-miss');
-    await type('not');
-    log('2a after rub: ' + await page.$eval('#p-says', e => e.innerText));
-    await shot('2a-hit');
-    await page.click('#b-next');
-    await type('NOT'); await shot('2b-partial');
-    await type('NOT PRINTS'); await shot('2b-hit');
-    // help mid-play and back
-    await page.click('#b-next');
-    await page.click('#s-play .qbtn'); await shot('help');
-    await page.click('#b-help-back');
-    log('back from help: ' + await now());
-    log('step 3 pad within 700: ' + await within('#w-clear'));
-    await type('not prints'); await shot('3-miss');
-    await type('prints'); await type('twice');
-    await shot('3-hint');
-    log('3 hint: ' + await page.$eval('#p-msg', e => e.innerText));
-    await type('not prints twice');
-    await shot('3-hit');
-    log('3 hit: ' + await page.$eval('#p-says', e => e.innerText));
-    await page.click('#b-next');
-    await shot('4-doors');
-    log('doors buttons within 700: ' + await within('#b-no'));
-    await page.click('#b-no'); await page.waitForTimeout(1300);
-    await shot('4-never');
-    await page.click('#b-d-next');
-    await shot('5-empty');
-    log('step 5 pad within 700: ' + await within('#w-clear'));
-    await type('NOT PRINTS TWICE');
-    await shot('5-old');
-    log('5 old box: ' + await page.$eval('#p-msg', e => e.innerText));
-    await type('not prints ii twice');
-    await shot('5-hit');
-    await page.click('#b-next');
-    await shot('6-cert');
-    await page.click('#b-c-yes'); await page.waitForTimeout(500);
-    await shot('6-why');
-    await page.click('#b-c-next');
-    await shot('7-nums');
-    await page.click('#b-n-turn'); await page.waitForTimeout(1800);
-    await shot('7-turned');
-    await page.click('#b-n-next');
-    await shot('end');
-    log('VERDICT: ' + (await page.$eval('#e-vd', e => e.innerText)).replace(/\n+/g, ' / '));
-    await page.click('#b-about'); await shot('about');
+    await page.click('#b-begin'); await shot('1-first');
+    log('act 1 hand button within 700: ' + await within('#a1-hand'));
+    await page.click('#a1-hand'); await shot('1-judge');
+    await page.click('#a1-print'); await shot('1-printed');
+    await page.click('#a1-next');
+    // nonsense
+    await k('2'); await k('+'); await k('='); await k('4'); await page.click('#a1-hand'); await shot('1-nonsense');
+    log('nonsense: ' + await text('#a1-msg'));
+    await page.click('#k-clear');
+    await k('3'); await k('×'); await k('3'); await k('='); await k('1'); await k('0'); await page.click('#a1-hand');
+    await page.click('#a1-print'); await shot('1-wrong');
+    log('wrong button: ' + await text('#a1-msg'));
+    await page.click('#a1-not'); await page.click('#a1-next');
+    await page.click('#k-deal'); await page.click('#a1-hand');
+    const right = await page.evaluate(() => gRightButton(window.__G.state().current));
+    await page.click(right === 'print' ? '#a1-print' : '#a1-not'); await shot('1-done');
+    log('after 3: ' + await text('#a1-msg'));
+    await page.click('#a1-next'); await shot('2-codes');
+    for (let i = 0; i < 5; i++) { await page.click(`#a2-tiles .tile[data-i="${i}"]`); if (i === 1) await shot('2-packing'); }
+    log('packed: ' + await text('#a2-num'));
+    await shot('2-packed');
+    await page.click('#a2-to-unpack'); await shot('2-unpack');
+    for (const p of [2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 5, 5]) { const b = await page.$(`#a2-cols button[data-p="${p}"]:not([disabled])`); if (b) await b.click(); if (await page.$eval('#a2-unum', e => e.innerText) === '1') break; }
+    await shot('2-unpacked');
+    log('unpacked: ' + await text('#a2-unpack-msg'));
+    await page.click('#a2-to-punch'); await page.click('#a2-print'); await shot('2-punch');
+    log('punch: ' + await text('#a2-punch-msg'));
+    await page.click('#a2-next'); await shot('3-gap');
+    await page.click('#a3-choices .btn[data-i="0"]'); await shot('3-miss');
+    await page.click('#a3-choices .btn[data-i="2"]'); await shot('3-hint');
+    log('hint: ' + await text('#a3-msg'));
+    await page.click('#a3-choices .btn[data-i="3"]'); await shot('3-hit');
+    await page.click('#a3-feed'); await shot('4-dilemma');
+    log('dilemma buttons within 700: ' + await within('#a3-not'));
+    await page.click('#a3-print'); await shot('4-print');
+    await page.click('#a3-not'); await shot('4-not');
+    await page.click('#a3-neither'); await shot('4-neither');
+    await page.click('#a3-repair'); await shot('5-repair');
+    await page.click('#r-next'); await shot('end');
+    log('VERDICT: ' + await text('#e-vd'));
+    await page.click('#b-about'); await shot('about'); await page.click('#b-about-back');
+    await page.click('#s-end [data-help]'); await shot('help');
   });
 
-  // B: a player who gets stuck, uses Show me, and says "prints it" at the doors
-  await run('b', async ({ page, shot, key, type, now, log }) => {
-    await page.click('#b-begin');
-    await page.click('#b-nest'); await page.click('#b-nest'); await page.click('#b-nest'); await page.click('#b-next');
-    for (let i = 0; i < 5; i++) await key('PRINTS');
-    log('full: ' + await page.$eval('#p-msg', e => e.innerText));
-    await page.click('#w-clear');
-    for (let i = 0; i < 4; i++) { await key('P1'); await key('RUB'); }
-    await shot('2a-show');
-    log('show button visible: ' + await page.$eval('#b-show', e => !e.classList.contains('hide')));
-    await page.click('#b-show'); await page.click('#b-next');
-    for (let i = 0; i < 4; i++) { await key('NOT'); await key('RUB'); }
-    await page.click('#b-show'); await page.click('#b-next');
-    for (let i = 0; i < 6; i++) { await key('TWICE'); await key('RUB'); }
-    await page.click('#b-show'); await shot('3-shown'); await page.click('#b-next');
-    await page.click('#b-yes'); await page.waitForTimeout(1900);
-    await shot('4-prints');
-    await page.click('#b-d-next');
-    for (let i = 0; i < 4; i++) { await key('P2'); await key('RUB'); }
-    await page.click('#b-show'); await page.click('#b-next');
-    await page.click('#b-c-no'); await page.waitForTimeout(400); await page.click('#b-c-next');
-    await page.click('#b-n-turn'); await page.waitForTimeout(1800); await page.click('#b-n-next');
+  await run('b', { width: 1280, height: 640 }, async ({ page, shot, text, log }) => {
+    await page.click('#b-begin'); await page.click('#a1-hand'); await page.click('#a1-print'); await page.click('#a1-next');
+    for (let r = 0; r < 2; r++) {
+      await page.click('#k-deal'); await page.click('#a1-hand');
+      const right = await page.evaluate(() => gRightButton(window.__G.state().current));
+      await page.click(right === 'print' ? '#a1-print' : '#a1-not'); await page.click('#a1-next');
+    }
+    for (let i = 0; i < 5; i++) await page.click(`#a2-tiles .tile[data-i="${i}"]`);
+    await page.click('#a2-to-unpack');
+    for (let i = 0; i < 20; i++) { const b = await page.$('#a2-cols button:not([disabled])'); if (!b) break; await b.click(); }
+    await page.click('#a2-to-punch'); await page.click('#a2-not'); await page.click('#a2-print'); await page.click('#a2-next');
+    await page.click('#a3-choices .btn[data-i="3"]'); await page.click('#a3-feed'); await page.click('#a3-not');
+    await page.click('#a3-neither'); await page.click('#a3-repair'); await page.click('#r-next');
     await shot('end');
-    log('VERDICT: ' + (await page.$eval('#e-vd', e => e.innerText)).replace(/\n+/g, ' / '));
-    await page.click('#b-again');
-    log('play again -> ' + await now());
+    log('VERDICT: ' + await text('#e-vd'));
+    await page.click('#b-again'); log('play again -> ' + await page.$eval('.screen.on', e => e.id));
   });
 
   fs.writeFileSync('session-log.txt', log.join('\n') + '\n');

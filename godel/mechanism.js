@@ -1,163 +1,153 @@
 // Gödel's Endgame — mechanism. The single source of truth: build.py inlines this file verbatim into the game,
 // and calibration.js runs against it. No DOM. Runs unchanged in Node and in the browser.
 //
-// The world (a toy, built to illustrate the paper's argument; see memo.md section 16):
-// Hilbert's machine prints sentences typed from four keys: NOT, PRINTS, TWICE and a box [ ].
-//   PRINTS [X]        says: the machine prints X.
-//   PRINTS TWICE [X]  says: the machine prints "X [X]" (X, then a box with X in it).
-//   NOT in front      turns "prints" into "never prints".
-// The machine is honest: it never prints a false sentence.
-// TWICE is the paper's substitution: a sentence with a hole, filled with its own name ([R(n); n], p. 175).
+// The world (a toy, built to illustrate the paper's argument; see memo.md):
+//   Act 1  Hilbert's promise. Sentences about whole numbers with + and x. A grammar decides what is a sentence.
+//          For every sentence, the honest machine prints it or prints its NOT.
+//   Act 2  The filing trick (the paper's section 2): every symbol has a code, a string of symbols is packed into one
+//          number as 2^code1 x 3^code2 x 5^code3 ..., and unpacked again by dividing out the primes. So "the machine
+//          has printed sentence number N" is itself a sentence about numbers.
+//   Act 3  The sentence: "The machine never prints the following words, written twice, the second time in quotes:
+//          "...""  with one gap. Filled with its own opening words, it talks about itself (the paper's [R(q); q]).
+//          The honest machine can print neither it nor its NOT.
 
 var GODEL_CONFIG = {
-  // Keys. label = what is printed on the key; code = the number the paper's coding gives the sign.
-  // NOT is the paper's ~ (5) and the box is the paper's brackets (11, 13). PRINTS and TWICE are not signs in the
-  // paper but long formulas (Bew and Sb, built from definitions 1-46); they get the next free odd primes, 17 and 19,
-  // and PRINTS II gets 23. Source: the sign table of section 2 of the paper.
-  keys: {
-    NOT:   { label: 'NOT',       code: 5 },
-    P1:    { label: 'PRINTS',    code: 17, machine: 1 },
-    P2:    { label: 'PRINTS II', code: 23, machine: 2 },
-    TWICE: { label: 'TWICE',     code: 19 }
-  },
-  boxOpen: 11, boxClose: 13,
-  // The puzzles, in order. front = the keys already typed and fixed; keys = what the player may put in the box;
-  // target = 'self' (make the sentence talk about itself) or a string to hit. maxBox = keys the box holds.
-  // hintAfter / showAfter = wrong tries before the game points at the fronts / offers to show the answer
-  // (ours, so that nobody is stuck; they move nothing in the mechanism).
-  puzzles: {
-    nothis: { front: ['NOT', 'P1'],          keys: ['NOT', 'P1'],               target: 'self', maxBox: 6, hintAfter: 99, showAfter: 99 },
-    twiceA: { front: ['P1', 'TWICE'],        keys: ['NOT', 'P1'],               target: { front: ['NOT'], box: ['NOT'] }, maxBox: 4, hintAfter: 2, showAfter: 4 },
-    twiceB: { front: ['NOT', 'P1', 'TWICE'], keys: ['NOT', 'P1'],               target: { front: ['NOT', 'P1'], box: ['NOT', 'P1'] }, maxBox: 4, hintAfter: 2, showAfter: 4 },
-    self1:  { front: ['NOT', 'P1', 'TWICE'], keys: ['NOT', 'P1', 'TWICE'],      target: 'self', maxBox: 4, hintAfter: 3, showAfter: 6 },
-    self2:  { front: ['NOT', 'P2', 'TWICE'], keys: ['NOT', 'P1', 'P2', 'TWICE'], target: 'self', maxBox: 4, hintAfter: 2, showAfter: 4 }
-  },
-  // Machine II = Machine I plus one new rule: it prints Machine I's sentence (the paper's c + 17 Gen r, p. 190).
-  machine2Rule: { front: ['NOT', 'P1', 'TWICE'], box: ['NOT', 'P1', 'TWICE'] }
+  // Act 1. The keypad, the first sentence Hilbert hands over, and the sentences "Give me one" deals.
+  keypad: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '+', '×', '=', 'NOT'],
+  maxTokens: 14,
+  firstSentence: ['1', '+', '1', '=', '2'],
+  dealt: [
+    ['2', '×', '3', '=', '6'], ['3', '+', '4', '=', '8'], ['NOT', '5', '=', '6'], ['2', '×', '2', '×', '2', '=', '8'],
+    ['9', '=', '3', '×', '3'], ['7', '+', '7', '=', '1', '5'], ['1', '2', '=', '3', '×', '4'], ['NOT', '2', '+', '2', '=', '4']
+  ],
+  roundsToSettle: 3,               // sentences settled before Act 2 opens (ours; the paper has no rounds)
+  // Act 2. Symbol codes. The paper gives each basic sign an odd number (0 -> 1, f -> 3, ~ -> 5, ...); the game uses
+  // small codes for its own symbols so that the numbers stay readable. Source of the method: section 2 of the paper.
+  codes: { '1': 1, '2': 2, '3': 3, '+': 4, '×': 5, '=': 6, 'NOT': 7 },
+  packSentence: ['1', '+', '1', '=', '2'],   // Hilbert's first sentence, printed in Act 1
+  unpackSentence: ['2', '=', '2'],
+  // Act 3. The frame and the choices for its gap.
+  frame: 'The machine never prints the following words, written twice, the second time in quotes:',
+  gapChoices: [
+    '1 + 1 = 2',
+    'the following words',
+    'The machine never prints',
+    'The machine never prints the following words, written twice, the second time in quotes:'
+  ],
+  hintAfter: 2,                     // wrong gap choices before the game points at the opening words (ours)
+  // Act 4. Hilbert's repair.
+  frame2: 'Machine II never prints the following words, written twice, the second time in quotes:'
 };
 
-// ---------- strings and sentences ----------
-// A string is { front: [keys], box: [keys] | null }. A sentence is a string whose front parses.
-
-function gStr(front, box) { return { front: front.slice(), box: box == null ? null : box.slice() }; }
-
-function gSame(a, b) {
-  if (!a || !b) return false;
-  if (a.front.join(' ') !== b.front.join(' ')) return false;
-  if ((a.box == null) !== (b.box == null)) return false;
-  return a.box == null || a.box.join(' ') === b.box.join(' ');
-}
-
-function gPieces(s) { return s.front.length + (s.box ? s.box.length : 0); }
-
-function gText(s) {
-  var K = GODEL_CONFIG.keys, f = s.front.map(function (k) { return K[k].label; }).join(' ');
-  if (s.box == null) return f;
-  return (f ? f + ' ' : '') + '[' + s.box.map(function (k) { return K[k].label; }).join(' ') + ']';
-}
-
-// Front grammar: [NOT] (PRINTS | PRINTS II) [TWICE]. Returns null if the front is not a sentence's front.
-function gParse(front) {
-  var i = 0, neg = false, twice = false, machine = 0;
-  if (front[i] === 'NOT') { neg = true; i++; }
-  if (front[i] === 'P1') machine = 1; else if (front[i] === 'P2') machine = 2; else return null;
-  i++;
-  if (front[i] === 'TWICE') { twice = true; i++; }
-  if (i !== front.length) return null;
-  return { neg: neg, machine: machine, twice: twice };
-}
-
-// What the sentence talks about. PRINTS [X] talks about X; PRINTS TWICE [X] talks about X [X].
-function gSubject(s) {
-  var p = gParse(s.front);
-  if (!p || s.box == null) return null;
-  return p.twice ? gStr(s.box, s.box) : gStr(s.box, null);
-}
-
-function gSelf(s) { var t = gSubject(s); return !!t && gSame(t, s); }
-
-// The status of a sentence, as far as the toy can say it.
-//   goedel     — talks about itself and says it is never printed: true and never printed by an honest machine.
-//   praise     — talks about itself and says it is printed: honesty alone does not settle it (see memo, Löb 1955).
-//   ruleTrue   — "Machine II prints" Machine I's sentence: true, by Machine II's new rule.
-//   ruleFalse  — "Machine II never prints" Machine I's sentence: false, by the same rule.
-//   other      — talks about some other string.
-function gStatus(s) {
-  var p = gParse(s.front), t = gSubject(s);
-  if (!p || !t) return 'none';
-  if (gSame(t, s)) return p.neg ? 'goedel' : 'praise';
-  if (p.machine === 2 && gSame(t, GODEL_CONFIG.machine2Rule)) return p.neg ? 'ruleFalse' : 'ruleTrue';
-  return 'other';
-}
-
-// Compare the sentence with what it talks about, piece by piece, for the screen's "mirror".
-// Returns { sentence: [..], subject: [..] } where each piece is { k, inBox, same }.
-function gMirror(s) {
-  var t = gSubject(s);
-  function flat(x) {
-    var out = x.front.map(function (k) { return { k: k, inBox: false }; });
-    if (x.box) x.box.forEach(function (k) { out.push({ k: k, inBox: true }); });
-    return out;
-  }
-  var a = flat(s), b = t ? flat(t) : [];
-  a.forEach(function (x, i) { x.same = !!b[i] && b[i].k === x.k && b[i].inBox === x.inBox; });
-  b.forEach(function (x, i) { x.same = !!a[i] && a[i].k === x.k && a[i].inBox === x.inBox; });
-  return { sentence: a, subject: b, equal: gSelf(s) };
-}
-
-// Did the player's box hit the puzzle's target?
-function gHit(puzzleId, box) {
-  var P = GODEL_CONFIG.puzzles[puzzleId], s = gStr(P.front, box);
-  if (P.target === 'self') return gSelf(s);
-  return gSame(gSubject(s), P.target);
-}
-
-// The answer, for "show me".
-function gAnswer(puzzleId) {
-  var P = GODEL_CONFIG.puzzles[puzzleId];
-  if (P.target === 'self') return gParse(P.front).twice ? P.front.slice() : null; // no TWICE: there is none
-  return P.target.front.slice();
-}
-
-// ---------- the doors: what an honest machine can do with the sentence ----------
-// Suppose the machine prints G. G says it never prints G. Then it printed a false sentence: not honest.
-// So an honest machine never prints G; and then what G says is so: G is true.
-function gDoor(s, printed) {
-  var st = gStatus(s);
-  if (st !== 'goedel') return null;
-  var saysPrinted = !gParse(s.front).neg; // G says "never printed"
-  var gTrue = (saysPrinted === printed);
-  return { printed: printed, sentenceTrue: gTrue, honest: !(printed && !gTrue) };
-}
-
-// ---------- the certificate (Proposition XI) ----------
-// "Machine I never prints a false sentence." If the machine could print that, it could follow the four steps of
-// the doors (all of them are steps a machine can follow) and print G. It never prints G. So it cannot print it.
-function gCertificatePrintable() { return false; }
-
-// ---------- Gödel numbering ----------
-function gPrimes(n) { var p = [], k = 2; while (p.length < n) { if (p.every(function (q) { return k % q; })) p.push(k); k++; } return p; }
-
-function gSigns(s) {
-  var out = s.front.map(function (k) { return { label: GODEL_CONFIG.keys[k].label, code: GODEL_CONFIG.keys[k].code }; });
-  if (s.box != null) {
-    out.push({ label: '[', code: GODEL_CONFIG.boxOpen });
-    s.box.forEach(function (k) { out.push({ label: GODEL_CONFIG.keys[k].label, code: GODEL_CONFIG.keys[k].code }); });
-    out.push({ label: ']', code: GODEL_CONFIG.boxClose });
-  }
+// ---------- Act 1: grammar and truth ----------
+// sentence := NOT* expr '=' expr ;  expr := num (('+' | '×') num)* ;  num := digit+ (no leading zero unless "0")
+function gTokensToText(t) {
+  var out = '';
+  t.forEach(function (x, i) {
+    var isDigit = /^[0-9]$/.test(x), prevDigit = i > 0 && /^[0-9]$/.test(t[i - 1]);
+    out += (i === 0 || (isDigit && prevDigit)) ? x : ' ' + x;
+  });
   return out;
 }
 
-// The paper's coding of a string of signs: 2^(first sign) x 3^(second) x 5^(third) ... (p. 179).
-function gNumber(s) {
-  var signs = gSigns(s), ps = gPrimes(signs.length), n = BigInt(1);
-  var factors = signs.map(function (g, i) { n = n * (BigInt(ps[i]) ** BigInt(g.code)); return { p: ps[i], e: g.code, label: g.label }; });
-  var str = n.toString();
-  return { factors: factors, digits: str.length, lead: str.slice(0, 12), tail: str.slice(-6) };
+function gParse(t) {
+  var i = 0, nots = 0;
+  if (!t.length) return { ok: false, why: 'Nothing written yet.' };
+  while (t[i] === 'NOT') { nots++; i++; }
+  if (t.slice(i).indexOf('NOT') >= 0) return { ok: false, why: 'NOT can only go at the front.' };
+  var eq = t.filter(function (x) { return x === '='; }).length;
+  if (eq === 0) return { ok: false, why: 'A sentence needs an = sign: it has to claim that two things are equal.' };
+  if (eq > 1) return { ok: false, why: 'Only one = sign: a sentence makes one claim.' };
+  function expr(from, to) {
+    var parts = [], cur = '', ops = [];
+    for (var j = from; j < to; j++) {
+      var x = t[j];
+      if (/^[0-9]$/.test(x)) cur += x;
+      else if (x === '+' || x === '×') {
+        if (!cur) return { ok: false, why: 'Two signs in a row, or a sign with no number before it.' };
+        parts.push(cur); ops.push(x); cur = '';
+      } else return { ok: false, why: 'That is not a symbol of the machine.' };
+    }
+    if (!cur) return { ok: false, why: 'Each side of = has to end with a number.' };
+    parts.push(cur);
+    for (var k = 0; k < parts.length; k++) if (parts[k].length > 1 && parts[k][0] === '0') return { ok: false, why: 'A number cannot start with 0.' };
+    return { ok: true, nums: parts, ops: ops };
+  }
+  var e = t.indexOf('=', i), L = expr(i, e), R = expr(e + 1, t.length);
+  if (!L.ok) return L;
+  if (!R.ok) return R;
+  return { ok: true, nots: nots, left: L, right: R };
+}
+
+function gValue(ex) { // x before +
+  var sum = BigInt(0), prod = BigInt(ex.nums[0]);
+  for (var k = 0; k < ex.ops.length; k++) {
+    if (ex.ops[k] === '×') prod = prod * BigInt(ex.nums[k + 1]);
+    else { sum = sum + prod; prod = BigInt(ex.nums[k + 1]); }
+  }
+  return sum + prod;
+}
+
+// Is the sentence true? (null if it is not a sentence)
+function gTrue(t) {
+  var p = gParse(t);
+  if (!p.ok) return null;
+  var eq = gValue(p.left) === gValue(p.right);
+  return (p.nots % 2 === 0) ? eq : !eq;
+}
+
+// The honest machine: which button settles it. 'print' = print it; 'not' = print its NOT.
+function gRightButton(t) { var v = gTrue(t); return v === null ? null : (v ? 'print' : 'not'); }
+
+// ---------- Act 2: the filing trick ----------
+function gPrimes(n) { var p = [], k = 2; while (p.length < n) { if (p.every(function (q) { return k % q; })) p.push(k); k++; } return p; }
+
+// Pack step by step: returns the running number after each symbol.
+function gPackSteps(t) {
+  var ps = gPrimes(t.length), n = BigInt(1), steps = [];
+  t.forEach(function (x, i) {
+    var c = GODEL_CONFIG.codes[x];
+    n = n * (BigInt(ps[i]) ** BigInt(c));
+    steps.push({ symbol: x, code: c, prime: ps[i], value: n.toString() });
+  });
+  return steps;
+}
+function gPack(t) { var s = gPackSteps(t); return s[s.length - 1].value; }
+
+// Unpack: divide out 2, 3, 5, ... in turn; the number of times each divides is the code.
+function gUnpack(numStr) {
+  var n = BigInt(numStr), ps = gPrimes(20), out = [], byCode = {};
+  Object.keys(GODEL_CONFIG.codes).forEach(function (s) { byCode[GODEL_CONFIG.codes[s]] = s; });
+  for (var i = 0; i < ps.length && n > BigInt(1); i++) {
+    var p = BigInt(ps[i]), c = 0;
+    while (n % p === BigInt(0)) { n = n / p; c++; }
+    if (c === 0) return null;            // a gap in the primes: not a packed sentence
+    out.push(byCode[c] || '?');
+  }
+  return n === BigInt(1) ? out : null;
+}
+
+// One division, for the player's buttons: can p divide n? returns the new number or null.
+function gDivide(numStr, p) { var n = BigInt(numStr), q = BigInt(p); return n % q === BigInt(0) ? (n / q).toString() : null; }
+
+// ---------- Act 3: the recipe and the sentence about itself ----------
+function gDouble(x) { return x + ' “' + x + '”'; }                         // X, then X in quotes
+function gSentence(frame, x) { return frame + ' “' + x + '”'; }           // the frame with its gap filled
+function gTalksAbout(frame, x) { return gDouble(x); }                                // what the filled sentence is about
+function gSelf(frame, x) { return gTalksAbout(frame, x) === gSentence(frame, x); }  // true iff x is the frame itself
+
+// The dilemma. The machine is honest: it never prints a false sentence.
+//   print : the slip says the machine never prints it, and it has just printed it -> a false slip.
+//   not   : the NOT says the machine does print it; it printed the NOT instead -> a false slip.
+//   neither: nothing printed; what the sentence says is so -> true, and the promise "it or its NOT" is broken.
+function gDilemma(choice) {
+  if (choice === 'print') return { printed: 'it', slipTrue: false, honest: false };
+  if (choice === 'not') return { printed: 'its NOT', slipTrue: false, honest: false };
+  return { printed: 'nothing', sentenceTrue: true, honest: true, promiseKept: false };
 }
 
 if (typeof module !== 'undefined') module.exports = {
-  GODEL_CONFIG: GODEL_CONFIG, gStr: gStr, gSame: gSame, gPieces: gPieces, gText: gText, gParse: gParse,
-  gSubject: gSubject, gSelf: gSelf, gStatus: gStatus, gMirror: gMirror, gHit: gHit, gAnswer: gAnswer,
-  gDoor: gDoor, gCertificatePrintable: gCertificatePrintable, gNumber: gNumber, gSigns: gSigns
+  GODEL_CONFIG: GODEL_CONFIG, gTokensToText: gTokensToText, gParse: gParse, gValue: gValue, gTrue: gTrue,
+  gRightButton: gRightButton, gPrimes: gPrimes, gPackSteps: gPackSteps, gPack: gPack, gUnpack: gUnpack,
+  gDivide: gDivide, gDouble: gDouble, gSentence: gSentence, gTalksAbout: gTalksAbout, gSelf: gSelf, gDilemma: gDilemma
 };

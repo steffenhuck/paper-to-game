@@ -1,0 +1,30 @@
+PASS no TWICE: no box makes the sentence talk about itself — 127 boxes up to 6 keys
+PASS no TWICE: the thing talked about is always shorter
+PASS no TWICE: no answer exists to show
+PASS twiceA: exactly one answer among 31 boxes — [NOT]
+PASS twiceA: the shown answer is that answer
+PASS twiceB: exactly one answer among 31 boxes — [NOT P1]
+PASS twiceB: the shown answer is that answer
+PASS self1: exactly one answer among 121 boxes — [NOT P1 TWICE]
+PASS self1: the shown answer is that answer
+PASS self2: exactly one answer among 341 boxes — [NOT P2 TWICE]
+PASS self2: the shown answer is that answer
+PASS diagonal: self-reference iff TWICE and box = front — 2728 sentences, 8 fronts
+PASS G is the Gödel kind — NOT PRINTS TWICE [NOT PRINTS TWICE]
+PASS door "prints it": the sentence is false and the machine not honest
+PASS door "never prints it": the sentence is true and the machine honest
+PASS the self-praising sentence is the other kind, not settled by the doors
+PASS Machine II: its own sentence is the Gödel kind — NOT PRINTS II TWICE [NOT PRINTS II TWICE]
+PASS Machine II: its sentence is not Machine I's
+PASS Machine II: the old box gives a false sentence (it prints the old one now) — NOT PRINTS II TWICE [NOT PRINTS TWICE]
+PASS Machine II cannot print its certificate either
+PASS mirror: all pieces match exactly when the sentence talks about itself
+PASS G has 8 signs — 2^5 x 3^17 x 5^19 x 7^11 x 11^5 x 13^17 x 17^19 x 19^13
+PASS G's number is large — 97 digits, begins 218296395479
+INFO G = NOT PRINTS TWICE [NOT PRINTS TWICE] ; number has 97 digits, begins 218296395479..., ends ...500000
+TABLE self1, random boxes (1000 players): median 87 tries, within 6 tries: 8.3%
+TABLE self1, copy the front into the box: 1 try
+TABLE self1, carry over twiceB's answer [NOT PRINTS]: miss — talks about NOT PRINTS [NOT PRINTS], one key short
+TABLE self1, put TWICE alone or first: miss — the subject starts with TWICE, the sentence with NOT
+PASS random filling rarely finds it inside the show-me budget (it is a puzzle, not a lottery)
+all checks passed

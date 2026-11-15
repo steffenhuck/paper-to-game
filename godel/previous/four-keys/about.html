@@ -1,0 +1,17 @@
+<h2 class="now" style="margin-top:12px">About this game</h2>
+<p><b>The paper.</b> Kurt Gödel, “Über formal unentscheidbare Sätze der <i>Principia Mathematica</i> und verwandter Systeme I”, <i>Monatshefte für Mathematik und Physik</i> 38 (1931): 173–198. DOI <a href="https://doi.org/10.1007/BF01700692">10.1007/BF01700692</a>. The game was built from B. Meltzer's English translation (1962). The paper can also be read in Gödel's <i>Collected Works</i>, vol. I (Oxford, 1986). Game built from this paper; the paper is the authority where the two disagree.</p>
+
+<h3>What the paper does</h3>
+<p>Hilbert hoped that a rulebook for whole numbers could be written down that settles every question about them. Gödel showed that no rulebook of that kind can. First he gives every sign a number, so that “this string of signs is a proof” becomes a fact about numbers, which the rulebook itself can state. Then he takes a sentence with a gap, fills the gap with the sentence's own number, and gets a sentence that says of itself that it cannot be proved. If the rulebook never contradicts itself, it can prove neither that sentence nor its opposite, and the sentence is true. Adding it as a new rule only makes a new rulebook with a new such sentence. And the rulebook cannot prove that it never contradicts itself.</p>
+
+<h3>How the game tells it</h3>
+<p>The rulebook is a machine that prints sentences, and “proved” is “printed”. The paper's long construction of “provable” and of filling a gap with a number becomes two keys, PRINTS and TWICE. The machine is assumed honest (it prints nothing false), which is more than Gödel assumed; Read further on the end screen says what he did assume. The four-key machine is the logician Raymond Smullyan's way of telling the argument. The numbers screen at the end uses the paper's own codes where the paper has them: 5 for “not”, 11 and 13 for the brackets, and a string of signs as 2 to the first code, times 3 to the second, times 5 to the third, and so on. PRINTS and TWICE are long formulas in the paper, not single signs, so the game gives them 17 and 19.</p>
+
+<h3>The mechanism</h3>
+<p><b>A toy.</b> The game runs a small model built to illustrate the paper's argument, not the paper's formal system. A sentence is a front ([NOT] PRINTS [TWICE]) and a box. It talks about the box's contents, or with TWICE about the contents followed by a box holding them. The game checks whether the two are the same, piece by piece.</p>
+<ul>
+<li><b>Demonstrates:</b> that without a copying step no sentence can talk about itself; that with it exactly one filling does; that an honest machine never prints that sentence and the sentence is true; that a machine taught the sentence has a new one; that a machine which printed its own honesty would print the sentence.</li>
+<li><b>Assumes:</b> a machine that is honest, and keys that do in one tap what the paper builds from forty-six definitions.</li>
+<li><b>The paper establishes:</b> these results for <i>Principia Mathematica</i> and every system like it whose rules can be listed, assuming only that the system never contradicts itself (in Gödel's slightly stronger form). Nothing about systems whose rules cannot be listed.</li>
+</ul>
+<p>Type: Josefin Sans (Santiago Orozco) and Courier Prime (Alan Dague-Greene), both under the SIL Open Font License.</p>

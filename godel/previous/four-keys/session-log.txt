@@ -1,0 +1,19 @@
+a: step 1 button within 700: true
+a: step 1 pad hidden: true
+a: -> Make the sentence talk about NOT [NOT].
+a: step 2a pad within 700: true
+a: 2a after rub: It says: the machine prints NOT [NOT]
+a: back from help: Make the sentence talk about itself.
+a: step 3 pad within 700: true
+a: 3 hint: 
+a: 3 hit: It says: the machine never prints this very sentence.
+a: doors buttons within 700: true
+a: step 5 pad within 700: true
+a: 5 old box: This one talks about your old sentence, and Machine II prints that now. So this one is false. Look for one about itself.
+a: VERDICT: The verdict / WHAT THE PAPER FOUND / Any honest machine that settles sentences about whole numbers by fixed rules leaves out a true sentence: the one that says the machine never prints it. Teach it that sentence, and the new machine has one of its own. And no such machine can print that it is honest. / WHAT YOU FOUND / You typed the sentence that talks about itself, after 3 rub-outs: NOT PRINTS TWICE [NOT PRINTS TWICE]. At the doors you said the machine would never print it. You beat Machine II, after first trying the old box, which gave a false sentence. You thought Machine I could vouch for itself. / WHERE YOU PART / At the last request. You expected the machine to vouch for itself. The paper's last proposition is that it cannot. / HAD YOURS STOOD / Had Machine I printed that it never prints a false sentence, it would have gone on to print your sentence, and that would have been false: the only machine that vouches for itself is one that lies. / YOUR TWO SENTENCES / NOTPRINTSTWICENOTPRINTSTWICE / NOTPRINTS IITWICENOTPRINTS IITWICE / THE PAPER / Kurt Gödel, “On formally undecidable propositions of Principia Mathematica and related systems I”, Monatshefte für Mathematik und Physik 38 (1931): 173–198. doi.org/10.1007/BF01700692. Game built from this paper; the paper is the authority where the two disagree.
+a: errors: Failed to load resource: net::ERR_FAILED; horizontal scroll: false
+b: full: The brackets are full (4 words). Take a word out first.
+b: show button visible: true
+b: VERDICT: The verdict / WHAT THE PAPER FOUND / Any honest machine that settles sentences about whole numbers by fixed rules leaves out a true sentence: the one that says the machine never prints it. Teach it that sentence, and the new machine has one of its own. And no such machine can print that it is honest. / WHAT YOU FOUND / You let the game show you the box for your sentence. At the doors you said the machine could print it. Machine II's sentence was shown to you. You saw that Machine I could not vouch for itself. / WHERE YOU PART / At the doors. You expected the machine to print your sentence. An honest machine can't: it would be printing a lie. / HAD YOURS STOOD / Had the machine printed your sentence, it would have printed a false one. A machine that prints every true sentence and no false one cannot exist: Hilbert's bet was lost before it was made. / YOUR TWO SENTENCES / NOTPRINTSTWICENOTPRINTSTWICE / NOTPRINTS IITWICENOTPRINTS IITWICE / THE PAPER / Kurt Gödel, “On formally undecidable propositions of Principia Mathematica and related systems I”, Monatshefte für Mathematik und Physik 38 (1931): 173–198. doi.org/10.1007/BF01700692. Game built from this paper; the paper is the authority where the two disagree.
+b: play again -> s-start
+b: errors: Failed to load resource: net::ERR_FAILED; horizontal scroll: false
