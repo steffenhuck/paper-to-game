@@ -1,5 +1,5 @@
-// Calibration check for Snow's Cloudy Glass (third build): runs mechanism.js headless against the paper's reported
-// numbers, the shape of the map, the rules of a test, the evidence, the strategies and the words (memo, section 17).
+// Calibration check for Snow's Cloudy Glass (fourth build): runs mechanism.js headless against the paper's reported
+// numbers, the shape of the map, the rules of a test and the concession, the evidence, the strategies and the words.
 const M = require('./mechanism.js');
 const C = M.CONFIG;
 let fails = 0, out = [];
@@ -18,17 +18,14 @@ const f4b = P.first4.deathsBrown / P.first4.popBrown * 100000, f4l = P.first4.de
 check('First four weeks: 107 and 8 per 100,000; "between thirteen and fourteen times" (p. 4)', Math.round(f4b) === 107 && Math.round(f4l) === 8 && f4b / f4l > 13 && f4b / f4l < 14, f1(f4b / f4l));
 check('Next three weeks eight to one, last ten more than five, whole epidemic six to one, the Board three and a half (pp. 4–7)', P.next3.ratio === 8 && P.last10.perBrown / P.last10.perBlue > 5 && Math.round(P.whole.perBrown / P.whole.perBlue) === 6 && Math.abs(P.board.perBrown / P.board.perBlue - 3.5) < 0.15);
 (function () {
-  const DS = 4267, DL = 473, popS = 266516, popL = 173748; // Table V, non-ascertained distributed; Registrar-General's populations
+  const DS = 4267, DL = 473, popS = 266516, popL = 173748;
   const obs = e => ((DS * (1 - e) + DL * e) / popS) / ((DL * (1 - e) + DS * e) / popL);
   let e = 0; while (obs(e) > 3.5 && e < 0.5) e += 0.0005;
   check('A list error of about one death in fourteen turns six to one into three and a half to one, nine mistakes in ten moving a death off the Southwark company (p. 7)', e > 0.06 && e < 0.08 && DS / (DS + DL) > 0.83, 'e = ' + pct(e));
 })();
 check('Salt: forty grains a gallon against one (p. 3)', P.saltBrown === 40 && P.saltBlue === 0.95);
-const shares = [0.23, 0.16, 0.55, 0.57, 0.85, 0.98]; // Tables I and II, houses supplied
-C.ROWS.forEach((row, r) => {
-  const share = row.housesBrown / (row.housesBrown + row.housesBlue);
-  check(row.name + ': share of houses on the town\'s water ' + pct(shares[r]) + ' from the row\'s houses supplied; ' + M.brownCount(row) + ' of 6 on the map', Math.abs(share - shares[r]) < 0.01 && Math.abs(M.brownCount(row) / 6 - share) < 0.1, pct(share));
-});
+const shares = [0.23, 0.16, 0.55, 0.57, 0.85, 0.98];
+C.ROWS.forEach((row, r) => { const share = row.housesBrown / (row.housesBrown + row.housesBlue); check(row.name + ': share of houses on the town\'s water ' + pct(shares[r]) + ' from the row\'s houses supplied; ' + M.brownCount(row) + ' of 6 on the map', Math.abs(share - shares[r]) < 0.01 && Math.abs(M.brownCount(row) / 6 - share) < 0.1, pct(share)); });
 check('Riverside rows mostly on the upriver water, inland rows mostly on the town\'s water (p. 7), the middle rows mixed', M.brownCount(C.ROWS[0]) <= 2 && M.brownCount(C.ROWS[1]) <= 2 && M.brownCount(C.ROWS[4]) >= 4 && M.brownCount(C.ROWS[5]) >= 5 && M.brownCount(C.ROWS[2]) === 3 && M.brownCount(C.ROWS[3]) === 3);
 
 // 2. the map over many seeds
@@ -50,48 +47,62 @@ check('Riverside rows mostly on the upriver water, inland rows mostly on the tow
   check('Position is real: a crape house in a middle street has a neighbour on the other pipe in at least two cases in three', mixedNeighbourMiddle / middleCrape >= 0.66, pct(mixedNeighbourMiddle / middleCrape));
 })();
 
-// 3. the rules of a test, the evidence, the sentence
+// 3. the rules of a test, the concession, the evidence, the sentence
 (function () {
   const g = M.makeMap(42);
   check('Same seed, same map', JSON.stringify(M.makeMap(42).rows) === JSON.stringify(g.rows));
-  const r1 = M.test(g, 2, 0); check('A test spends one of eight, paints the door, and clouds the glass for the town\'s water only', r1.ok && g.tests === 7 && g.rows[2][0].tested && r1.milky === (g.rows[2][0].water === 'brown'));
+  const r1 = M.test(g, 2, 0); check('A test spends one of ten, paints the door, and clouds the glass for the town\'s water only', r1.ok && g.tests === 9 && g.used === 1 && g.rows[2][0].tested && r1.milky === (g.rows[2][0].water === 'brown'));
   check('The same house cannot be tested twice', M.test(g, 2, 0).ok === false);
-  check('No sentence before the tests are spent; then one, once', !M.canWrite(g) && !M.writeSentence(g, 'water') && (() => { for (let i = 1; i < 6; i++) M.test(g, 2, i); M.test(g, 3, 0); M.test(g, 3, 1); return g.tests === 0 && M.canWrite(g) && M.writeSentence(g, 'water') && !M.writeSentence(g, 'air') && !M.test(g, 3, 2).ok; })());
-  const e = M.evidence(g); check('Evidence: all tests counted; same-street rows counted only where both colours were tested', e.tested === 8 && e.same.rows === g.rows.filter((hs, r) => M.rowTally(g, r).both).length);
-  check('ratioOf: one colour untested cannot be told; no blue crape is beyond count; otherwise deaths over houses by colour', isNaN(M.ratioOf({ brown: 3, brownCrape: 1, blue: 0, blueCrape: 0 })) && M.ratioOf({ brown: 3, brownCrape: 1, blue: 2, blueCrape: 0 }) === Infinity && Math.abs(M.ratioOf({ brown: 4, brownCrape: 2, blue: 4, blueCrape: 1 }) - 2) < 1e-9);
-  const h = M.makeMap(42); check('Evidence states: none; one colour; confounded (both colours, no shared street); clean (shared street, brown worse)', (() => {
+  check('A sentence can be written after the first glass, once, and then no more tests', M.canWrite(g) && !M.writeSentence(g, 'nonsense') && M.writeSentence(g, 'water') && !M.writeSentence(g, 'air') && !M.test(g, 2, 1).ok);
+  check('No sentence before the first glass', !M.canWrite(M.makeMap(42)));
+  const h = M.makeMap(42);
+  const seq = (() => {
     const s0 = M.evidence(h).state; const bi = [].concat.apply([], h.rows).filter(x => x.water === 'brown' && M.isInland(x.r))[0]; M.test(h, bi.r, bi.i); const s1 = M.evidence(h).state;
-    const br = [].concat.apply([], h.rows).filter(x => x.water === 'blue' && M.isRiver(x.r))[0]; M.test(h, br.r, br.i); const s2 = M.evidence(h).state;
-    const row = h.rows.find(hs => hs.some(x => x.crape && x.water === 'brown') && hs.some(x => !x.crape && x.water === 'blue')); const a = row.find(x => x.crape && x.water === 'brown'), b = row.find(x => !x.crape && x.water === 'blue'); M.test(h, a.r, a.i); M.test(h, b.r, b.i); const s3 = M.evidence(h).state;
-    return s0 === 'none' && s1 === 'oneColour' && s2 === 'confounded' && s3 === 'clean'; })());
-  check('The doctor objects to the confounded state with the side of town and concedes the clean one', M.doctor(h).indexOf('nothing to say') >= 0 && (() => { const k = M.makeMap(42); const bi = [].concat.apply([], k.rows).filter(x => x.water === 'brown' && M.isInland(x.r))[0]; M.test(k, bi.r, bi.i); const br = [].concat.apply([], k.rows).filter(x => x.water === 'blue' && M.isRiver(x.r))[0]; M.test(k, br.r, br.i); return M.doctor(k).indexOf('cannot tell') >= 0; })());
+    const br = [].concat.apply([], h.rows).filter(x => x.water === 'blue' && M.isRiver(x.r))[0]; M.test(h, br.r, br.i); const s2 = M.evidence(h).state; const c2 = h.concededAt;
+    const row = h.rows.find(hs => hs.some(x => x.crape && x.water === 'brown') && hs.some(x => !x.crape && x.water === 'blue')); const a = row.find(x => x.crape && x.water === 'brown'), b = row.find(x => !x.crape && x.water === 'blue'); M.test(h, a.r, a.i); const r = M.test(h, b.r, b.i);
+    return { s0, s1, s2, c2, s3: M.evidence(h).state, conceded: r.conceded, at: h.concededAt };
+  })();
+  check('Evidence states in sequence: none; one colour; confounded (both colours, no shared street); clean (shared street, crape at the brown)', seq.s0 === 'none' && seq.s1 === 'oneColour' && seq.s2 === 'confounded' && seq.s3 === 'clean', JSON.stringify(seq));
+  check('The doctor concedes at the glass that makes the evidence clean, and the count is fixed there', seq.c2 === null && seq.at !== null && seq.at >= 3 && seq.at <= 4, JSON.stringify({ at: seq.at }));
+  check('The doctor objects to the confounded state with the side of town', (() => { const k = M.makeMap(42); const bi = [].concat.apply([], k.rows).filter(x => x.water === 'brown' && M.isInland(x.r))[0]; M.test(k, bi.r, bi.i); const br = [].concat.apply([], k.rows).filter(x => x.water === 'blue' && M.isRiver(x.r))[0]; M.test(k, br.r, br.i); return M.doctor(k).indexOf('cannot tell') >= 0; })());
+  check('After the concession the doctor says so, and more tests do not move the count', (() => { const at = h.concededAt; let n = 0; [].concat.apply([], h.rows).forEach(x => { if (!x.tested && h.tests > 0 && n < 3) { M.test(h, x.r, x.i); n++; } }); return M.doctor(h).indexOf('conceded') >= 0 && h.concededAt === at && h.used === at + 3; })());
+  check('ratioOf: one colour untested cannot be told; no blue crape is beyond count; otherwise deaths over houses by colour', isNaN(M.ratioOf({ brown: 3, brownCrape: 1, blue: 0, blueCrape: 0 })) && M.ratioOf({ brown: 3, brownCrape: 1, blue: 2, blueCrape: 0 }) === Infinity && Math.abs(M.ratioOf({ brown: 4, brownCrape: 2, blue: 4, blueCrape: 1 }) - 2) < 1e-9);
 })();
 
-// 4. the strategies (the numbers table, build.md §3)
+// 4. the verdict judges the tests, not the answer
 (function () {
-  const N = 600, res = {};
-  ['crapeOnly', 'sides', 'random', 'column', 'middle', 'pairs'].forEach(k => { const bands = {}, states = {}; for (let seed = 1; seed <= N; seed++) { const v = M.runStrategy(seed, k).verdict; bands[v.band] = (bands[v.band] || 0) + 1; states[v.state] = (states[v.state] || 0) + 1; } res[k] = { bands, states }; });
-  const sh = (k, b) => (res[k].bands[b] || 0) / N, st = (k, s) => (res[k].states[s] || 0) / N;
-  check('The doctor\'s comparison (inland crape against riverside houses) and the air: wrong in every game, and unable to answer him (confounded, or no crape where both waters met) in at least nine in ten', sh('sides', 'air') === 1 && st('sides', 'confounded') + st('sides', 'nocrape') + st('sides', 'oneColour') >= 0.9, JSON.stringify(res.sides.states));
-  check('Testing the crape houses only: the sentence unsupported in at least two games in five (nothing to compare with, or confounded)', sh('crapeOnly', 'unsupported') >= 0.4, JSON.stringify(res.crapeOnly.bands));
-  check('A crape house in a middle street and its neighbours: agrees with Snow in at least seven games in ten', sh('pairs', 'agree') >= 0.7, JSON.stringify(res.pairs.bands));
-  check('The middle streets at random: agrees in at least six games in ten', sh('middle', 'agree') >= 0.6, JSON.stringify(res.middle.bands));
-  check('Where you test matters: the middle streets agree at least twice as often as houses anywhere at random, and three times as often as one house per street', sh('middle', 'agree') >= 2 * sh('random', 'agree') && sh('middle', 'agree') >= 3 * sh('column', 'agree'), pct(sh('middle', 'agree')) + ' vs random ' + pct(sh('random', 'agree')) + ' vs column ' + pct(sh('column', 'agree')));
-  check('A same-street comparison finds the upriver water the worse in fewer than 5% of games (flat, with crape at the blue houses only)', (() => { let n = 0; for (let seed = 1; seed <= N; seed++) { const v = M.runStrategy(seed, 'middle').verdict; if (v.state === 'flat' && v.evidence.ratioSame < 1) n++; } return n / N < 0.05; })());
+  const right = M.runStrategy(3, 'anchorHunt').verdict; check('Identified and wrote the water: band identified, headline "stands alone", sentence carried', right.identified && right.band === 'identified' && right.head.indexOf('stands alone') >= 0 && right.sentenceLine.indexOf('carry it') >= 0);
+  let guessed = null; for (let seed = 1; seed <= 200 && !guessed; seed++) { const v = M.runStrategy(seed, 'crapeFirst').verdict; if (!v.identified) guessed = v; }
+  check('Wrote the water without identification: band guessed, and the sentence line says a right answer is not identification', guessed && guessed.band === 'guessed' && guessed.sentenceLine.indexOf('not identification') >= 0 && guessed.head.indexOf('tangled') >= 0);
+  let air = null; for (let seed = 1; seed <= 200 && !air; seed++) { const g = M.runStrategy(seed, 'anchorHunt').game; if (g.concededAt) { g.sentence = null; g.sentence = 'air'; const v = M.verdict(g); air = v; } }
+  check('Identified but wrote the air: band identifiedWroteAir; own tests say otherwise', air && air.band === 'identifiedWroteAir' && air.sentenceLine.indexOf('your own tests say so') >= 0);
+  check('Speed names the glass of concession', right.speed.indexOf(M.ordinal(right.concededAt)) >= 0);
 })();
 
-// 5. robustness of the discovery to the designer's choices
+// 5. the strategies (the numbers table, build.md §3)
+(function () {
+  const N = 1000, res = {};
+  Object.keys(M.STRATEGIES).forEach(k => { const by = Array(C.TESTS + 1).fill(0); let never = 0; for (let seed = 1; seed <= N; seed++) { const v = M.runStrategy(seed, k).verdict; if (v.identified) { for (let t = v.concededAt; t <= C.TESTS; t++) by[t]++; } else never++; } res[k] = { by: by.map(x => x / N), never: never / N }; });
+  check('Anchor and hunt (a crape door in a mixed street, then its street until a blue): conceded by the third glass in at least four games in five, by the fourth in nine in ten', res.anchorHunt.by[3] >= 0.8 && res.anchorHunt.by[4] >= 0.9, pct(res.anchorHunt.by[3]) + ' / ' + pct(res.anchorHunt.by[4]));
+  check('Anchor and hunt: never fails within ten in more than 2% of games', res.anchorHunt.never <= 0.02, pct(res.anchorHunt.never));
+  check('The crape doors first: conceded by the fourth glass in fewer than 5% of games, and never within ten in more than half', res.crapeFirst.by[4] < 0.05 && res.crapeFirst.never > 0.5, pct(res.crapeFirst.by[4]) + ' / never ' + pct(res.crapeFirst.never));
+  check('The doctor\'s comparison (inland crape against riverside houses): never conceded within ten in at least nine games in ten', res.sides.never >= 0.9, pct(res.sides.never));
+  check('Random placement: never within ten in at least half the games; one house per street likewise', res.random.never >= 0.5 && res.column.never >= 0.5, pct(res.random.never) + ' / ' + pct(res.column.never));
+  check('The benchmarks the verdict quotes hold: best plan at the second or third glass in most games; crape first at nine or more when at all', res.anchorHunt.by[3] >= 0.8 && res.crapeFirst.by[8] < 0.3, pct(res.crapeFirst.by[8]) + ' of crape-first games conceded by the eighth');
+})();
+
+// 6. robustness of the discovery to the designer's choices
 (function () {
   const N = 300;
-  [5, 20].forEach(k => { let pairs = 0, col = 0; for (let seed = 1; seed <= N; seed++) { if (M.runStrategy(seed, 'pairs', { compression: k, noFloors: true }).verdict.band === 'agree') pairs++; if (M.runStrategy(seed, 'column', { compression: k, noFloors: true }).verdict.band === 'agree') col++; } check('Compression ' + k + ', no floors: the neighbour strategy still agrees with Snow more often than one house per street', pairs > col, pct(pairs / N) + ' vs ' + pct(col / N)); });
-  [6, 12].forEach(t => { const save = C.TESTS; C.TESTS = t; let mid = 0, rnd = 0; for (let seed = 1; seed <= N; seed++) { if (M.runStrategy(seed, 'middle').verdict.band === 'agree') mid++; if (M.runStrategy(seed, 'random').verdict.band === 'agree') rnd++; } C.TESTS = save; check(t + ' tests: the middle streets still beat random placement', mid > rnd, pct(mid / N) + ' vs ' + pct(rnd / N)); });
+  [5, 20].forEach(k => { let ah = 0, cf = 0; for (let seed = 1; seed <= N; seed++) { if (M.runStrategy(seed, 'anchorHunt', { compression: k, noFloors: true }).verdict.identified) ah++; if (M.runStrategy(seed, 'crapeFirst', { compression: k, noFloors: true }).verdict.identified) cf++; } check('Compression ' + k + ', no floors: anchor and hunt still identifies far more often than the crape doors first', ah >= cf + N * 0.3, pct(ah / N) + ' vs ' + pct(cf / N)); });
+  [6, 14].forEach(t => { const save = C.TESTS; C.TESTS = t; let ah = 0, rd = 0; for (let seed = 1; seed <= N; seed++) { if (M.runStrategy(seed, 'anchorHunt').verdict.identified) ah++; if (M.runStrategy(seed, 'random').verdict.identified) rd++; } C.TESTS = save; check('Cap of ' + t + ' glasses: anchor and hunt still beats random placement by thirty points', ah >= rd + N * 0.3, pct(ah / N) + ' vs ' + pct(rd / N)); });
 })();
 
-// 6. words
+// 7. words
 (function () {
   let bad = 0, n = 0;
-  for (let seed = 1; seed <= 200; seed++) ['crapeOnly', 'sides', 'random', 'column', 'middle', 'pairs'].forEach(k => { const r = M.runStrategy(seed, k); const v = r.verdict; [v.snow, v.you, v.part, v.had, v.sideLine, v.later, M.line(r.game), M.doctor(r.game)].forEach(t => { n++; if (/\d\.\d/.test(t) || /NaN|undefined|Infinity/.test(t)) { bad++; if (bad < 3) out.push('   bad line: ' + t); } }); });
-  check('No decimal, NaN, Infinity or undefined in any verdict, map line or doctor\'s line over 1200 games', bad === 0, n + ' lines');
+  for (let seed = 1; seed <= 200; seed++) Object.keys(M.STRATEGIES).forEach(k => { const r = M.runStrategy(seed, k); const v = r.verdict; [v.head, v.ident, v.sentenceLine, v.speed, v.snow, v.had, v.sideLine, v.later, M.line(r.game), M.doctor(r.game)].forEach(t => { n++; if (/\d\.\d/.test(t) || /NaN|undefined|Infinity/.test(t)) { bad++; if (bad < 3) out.push('   bad line: ' + t); } }); });
+  check('No decimal, NaN, Infinity or undefined in any verdict, map line or doctor\'s line over 1000 games', bad === 0, n + ' lines');
 })();
 
 const summary = (fails === 0 ? 'ALL PASSED' : fails + ' FAILED') + ' (' + out.filter(l => /^(PASS|FAIL)/.test(l)).length + ' checks)';

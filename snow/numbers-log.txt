@@ -1,21 +1,28 @@
-crapeOnly  | bands {"unsupported":337,"weak":18,"flat":141,"agree":104} | evidence {"oneColour":166,"weak":18,"confounded":163,"flat":141,"clean":104,"nocrape":8} | same-street rows 0.5 | no blue crape in same street 104 | median finite same-street ratio 1.0
-sides      | bands {"air":600} | evidence {"confounded":308,"nocrape":255,"clean":14,"flat":16,"weak":7} | same-street rows 0.5 | no blue crape in same street 14 | median finite same-street ratio 1.0
-random     | bands {"unsupported":368,"agree":190,"flat":36,"weak":6} | evidence {"nocrape":228,"clean":190,"confounded":138,"flat":36,"oneColour":2,"weak":6} | same-street rows 1.0 | no blue crape in same street 190 | median finite same-street ratio 0.0
-column     | bands {"unsupported":456,"agree":125,"flat":18,"weak":1} | evidence {"nocrape":194,"confounded":261,"clean":125,"flat":18,"oneColour":1,"weak":1} | same-street rows 0.7 | no blue crape in same street 125 | median finite same-street ratio 0.0
-middle     | bands {"agree":437,"weak":76,"flat":53,"unsupported":34} | evidence {"clean":437,"weak":76,"flat":53,"nocrape":34} | same-street rows 1.9 | no blue crape in same street 434 | median finite same-street ratio 1.5
-pairs      | bands {"agree":440,"weak":92,"flat":55,"unsupported":13} | evidence {"clean":440,"weak":92,"flat":55,"oneColour":12,"confounded":1} | same-street rows 1.6 | no blue crape in same street 430 | median finite same-street ratio 1.5
-crape per map: mean 7.2 min 5 max 10 | inland 4.0 riverside 1.0 | some floor bound in 28% of seeds
-Waterloo Road   brown 1 of 6 | crape mean 0.5
-Lambeth Church  brown 1 of 6 | crape mean 0.4
-Trinity         brown 3 of 6 | crape mean 1.1
-Borough Road    brown 3 of 6 | crape mean 1.1
-Kennington      brown 5 of 6 | crape mean 1.8
-Clapham         brown 6 of 6 | crape mean 2.2
-per-house chance of crape: brown 32% blue 5%
+Bayes before a test, by street:
+  Waterloo Road   P(brown | crape) 0.57   P(blue | no crape) 0.87
+  Lambeth Church  P(brown | crape) 0.57   P(blue | no crape) 0.87
+  Trinity         P(brown | crape) 0.87   P(blue | no crape) 0.58
+  Borough Road    P(brown | crape) 0.87   P(blue | no crape) 0.58
+  Kennington      P(brown | crape) 0.97   P(blue | no crape) 0.22
+  Clapham         P(brown | crape) 1.00   P(blue | no crape) 0.00
 
-SEED 7 pairs: agree 
- YOU: You wrote: “It is the Southwark and Vauxhall Company’s water.” Over all your tests: brown 4 of 7 with crape, blue 0 of 1. In the same street, where the side of town is the same for both (one street): brown 1 of 2 with crape, blue 0 of 1. No blue house in the same street wears crape; the brown ones do. 
- PART: Your sentence is his, and your tests can carry it: in the same street, with the same air at both doors, the crape was at the houses on the town’s water. 
- SIDE:  
- HAD: Had the question been answered from lists instead of at the door, as the Board of Health answered it, the gap would have shrunk to three and a half to one, because with deaths six times as common behind one company’s doors, five mistakes in six move a death from the guilty water to the innocent one. Yours was answered at the door, with the glass, in the same street. 
- DOCTOR: In the same street you have a brown house and a blue house, the same air at both doors, and the crape is at the brown one. I have nothing to say to that.
+strategy      | conceded by glass 2 / 3 / 4 / 6 / 10 | never within 10 | median glass of concession | identified & wrote water
+random        | 2% / 5% / 9% / 19% / 44% | 56% | 7 | 44%
+crapeFirst    | 0% / 0% / 0% / 2% / 39% | 61% | 9 | 39%
+sides         | 0% / 0% / 0% / 0% / 6% | 94% | 9 | 0%
+column        | 0% / 0% / 0% / 0% / 38% | 62% | 8 | 38%
+anchorHunt    | 56% / 87% / 96% / 99% / 100% | 0% | 2 | 100%
+
+crape per map (600 seeds): mean 7.2 min 5 max 10 | inland 4.0 riverside 1.0 | some floor bound in 28% of seeds
+  Waterloo Road   brown 1 of 6 | crape mean 0.5
+  Lambeth Church  brown 1 of 6 | crape mean 0.4
+  Trinity         brown 3 of 6 | crape mean 1.1
+  Borough Road    brown 3 of 6 | crape mean 1.1
+  Kennington      brown 5 of 6 | crape mean 1.8
+  Clapham         brown 6 of 6 | crape mean 2.2
+
+SEED 7 anchorHunt: identified 
+ HEAD: The water stands alone. 
+ IDENT: In the same street, where the side of town is the same for both: brown 1 of 2 with crape, blue 0 of 1. No blue house there wears crape; the brown ones do. The doctor cannot answer that with the air, because the air is the same at both doors. That is identification: the one thing that differs between the two houses is the one thing that can explain the difference between them. 
+ SENTENCE: You wrote: “It is the Southwark and Vauxhall Company’s water.” Right, and your tests carry it. 
+ SPEED: The doctor conceded at your third glass. The quickest plan, a crape door in a street where the pipes are mixed and then its neighbours until one comes up clear, gets there at the second or third glass in most games. Testing where the crape is takes nine or more, when it gets there at all.

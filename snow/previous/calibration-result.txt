@@ -1,56 +1,39 @@
-PASS Battersea: Southwark & Vauxhall rate 66.9 per 10,000 from 42 deaths among 6276 (within 0.3; Snow's own rounding puts Waterloo Road at 25.6 where the division gives 25.4)  — 66.92
-PASS Battersea: Lambeth rate not reported (no deaths among 270); the mixed-subdistrict figure 98 of 20,554 is used
-PASS Battersea: the supplied population is houses times one constant for both companies (so deaths over houses carries the row's ratio)  — 6.00 / 5.87 (printed 6)
-PASS Battersea: 11 of 12 houses on the town's water (row share 96%)  — 92%
-PASS Battersea: per-house odds ratio equals the row's deaths-over-houses ratio (8.4)  — 8.4
-PASS Battersea: per-house probabilities under one at compression 10  — 40% / 5%
-PASS Waterloo Road: Southwark & Vauxhall rate 25.6 per 10,000 from 9 deaths among 3548 (within 0.3; Snow's own rounding puts Waterloo Road at 25.6 where the division gives 25.4)  — 25.37
-PASS Waterloo Road: Lambeth rate 0.8 per 10,000 from 1 deaths among 11939  — 0.84
-PASS Waterloo Road: the supplied population is houses times one constant for both companies (so deaths over houses carries the row's ratio)  — 8.10 / 8.10 (printed 8.1)
-PASS Waterloo Road: 3 of 12 houses on the town's water (row share 23%)  — 25%
-PASS Waterloo Road: per-house odds ratio equals the row's deaths-over-houses ratio (30.3)  — 30.3
-PASS Waterloo Road: per-house probabilities under one at compression 10  — 21% / 1%
-PASS Waterloo Road is the mixed street (a quarter of its houses on the town's water) and Battersea nearly all on it (p. 3, p. 7)
-PASS Table I totals: 47.2 and 6.8 per 10,000 from 507 of 107,290 and 98 of 143,901  — 47.3 / 6.8
-PASS Table I totals: "about seven times" (the verdict's word for these seven weeks)  — 6.9
-PASS First four weeks: 107 and 8 per 100,000 from 286 of 266,516 and 14 of 173,748; "between thirteen and fourteen times" (p. 4)  — 13.3
-PASS Next three weeks "nearly eight times", last ten "more than five times" (pp. 4–5)  — 5.1
-PASS Whole epidemic: 160 against 27 per 10,000 is "six to one"; the Board's 125 against 37 is "three and a half to one" (p. 7)  — 5.9 / 3.38
-PASS A list error of about one death in fourteen turns six to one into three and a half to one; nine mistakes in ten move a death off the Southwark company (p. 7: "five would transfer a death from the former company to the latter")  — e = 7%; share of deaths behind S&V doors 90%
-PASS Residents' wrong-word rate is that error doubled, within rounding (our choice)  — 0.14 vs 0.14
-PASS Salt: Southwark & Vauxhall water about forty grains a gallon, Lambeth under one (p. 3)
-PASS Battersea: realised rate ratio over 3000 unconstrained streets within 20% of 8.4  — 8.2
-PASS Battersea: crape doors within floor 3 and cap 7 over 3000 seeds  — 3–7, mean 4.9; some floor bound in 66% of seeds
-PASS Waterloo Road: realised rate ratio over 3000 unconstrained streets within 20% of 30.3  — 28.3
-PASS Waterloo Road: crape doors within floor 1 and cap 2 over 3000 seeds  — 1–2, mean 1.3; some floor bound in 54% of seeds
-PASS Every game has at least one Battersea crape door with a wrong word (the floor, so the drift can be met)  — 100%
-PASS Residents: about one in four cannot say; of those who can, about one in seven is wrong (unconstrained)  — 25% / 14%
-PASS Position is real: a Waterloo Road crape door has a neighbour on the other pipe in at least three games in four; a Battersea one in fewer than one in four  — 97% / 17%
-PASS Same seed, same streets
-PASS The doctor's first offer: one pair, a Battersea crape door against a Waterloo Road living door
-PASS His pair's card: different in the street
-PASS A pair needs a crape door first and a door without crape second
-PASS A glass pair costs two knocks, knows both doors by the glass, and its card reads clean when the waters differ
-PASS An asked pair costs one knock and knows the doors by word
-PASS Same-street same-water pair reads nothing (by the glass)
-PASS A check needs a door known by word and costs one knock; afterwards the door is known by the glass
-PASS The second offer comes once four knocks are spent, three pairs across the streets
-PASS The book closes after two pairs or at no knocks; a sentence needs a closed book
-PASS The doctor's pairs stay out of the window (same-street pairs only)
-PASS Knocks cannot go below zero
-PASS ratioOf: all brown cannot be told; no blue crape is beyond count; a mixed window gives deaths over doors by colour
-PASS A wrong word at a crape door narrows the window: one brown crape door called blue turns "beyond count" into "about twice"  — 1.5
-PASS The doctor's way (his pairs, across the streets, by the word; the marsh): wrong for the paper's reason in every game, with no pair that can choose  — {"air":600}
-PASS Next door by the word: the window drifts to a narrower gap than Snow's in at least four games in five (the Board's reason)  — {"narrow":569,"agree":30,"unsupported":1}; wrong words at crape doors per game 1.4
-PASS Next door by the glass: agrees with Snow in at least seven games in ten  — {"agree":529,"unsupported":26,"narrow":45}
-PASS The gap between word and glass is wide: glass agrees at least three times as often as the word  — 88% vs 5%
-PASS Checking the words with the glass recovers most of it  — {"agree":430,"unsupported":83,"narrow":87}
-PASS Pairs on Battersea alone (every door brown) cannot carry the sentence in at least two games in five: where you compare matters  — {"unsupported":311,"agree":270,"narrow":19}
-PASS Random play lands in every band  — {"narrow":57,"cannot":197,"air":203,"unsupported":79,"agree":64}
-PASS Compression 5, no floors: the glass agrees with Snow more often than the word, and the word drifts at least twice as often as the glass (the size of the gap depends on the word floor and the thickness; its direction does not)  — glass agree 39% word agree 29%; word narrow 29% glass narrow 7%
-PASS Compression 20, no floors: the glass agrees with Snow more often than the word, and the word drifts at least twice as often as the glass (the size of the gap depends on the word floor and the thickness; its direction does not)  — glass agree 82% word agree 39%; word narrow 53% glass narrow 11%
-PASS 6 knocks: the glass agrees in more than half the games and the word drifts in more than half  — 89% / 92%
-PASS 10 knocks: the glass agrees in more than half the games and the word drifts in more than half  — 88% / 94%
-PASS No decimal, NaN, Infinity or undefined in any verdict or window line over 1200 games  — 8400 lines
-PASS Number words to twenty-nine
-ALL PASSED (55 checks)
+PASS Rates: 507 of 16,038 houses and 98 of 20,554 (Table I totals, first seven weeks), about seven to one  — 6.6
+PASS Table I totals: 47.2 and 6.8 per 10,000 from the same deaths over the supplied population  — 47.3 / 6.8
+PASS Per-house chance of crape at compression 10: about a third for the town's water, about one in twenty for the upriver water  — 32% / 5%
+PASS First four weeks: 107 and 8 per 100,000; "between thirteen and fourteen times" (p. 4)  — 13.3
+PASS Next three weeks eight to one, last ten more than five, whole epidemic six to one, the Board three and a half (pp. 4–7)
+PASS A list error of about one death in fourteen turns six to one into three and a half to one, nine mistakes in ten moving a death off the Southwark company (p. 7)  — e = 7%
+PASS Salt: forty grains a gallon against one (p. 3)
+PASS Waterloo Road: share of houses on the town's water 23% from the row's houses supplied; 1 of 6 on the map  — 23%
+PASS Lambeth Church: share of houses on the town's water 16% from the row's houses supplied; 1 of 6 on the map  — 16%
+PASS Trinity: share of houses on the town's water 55% from the row's houses supplied; 3 of 6 on the map  — 55%
+PASS Borough Road: share of houses on the town's water 57% from the row's houses supplied; 3 of 6 on the map  — 57%
+PASS Kennington: share of houses on the town's water 85% from the row's houses supplied; 5 of 6 on the map  — 85%
+PASS Clapham: share of houses on the town's water 98% from the row's houses supplied; 6 of 6 on the map  — 98%
+PASS Riverside rows mostly on the upriver water, inland rows mostly on the town's water (p. 7), the middle rows mixed
+PASS Realised rate ratio over 3000 unconstrained maps within 10% of the paper's 6.6  — 6.7
+PASS Unconstrained: more crape inland than by the river in at least four maps in five (the doctor's pattern is the tables', not the floors')  — 86%
+PASS Unconstrained: a street with a brown crape house and a blue house without exists in at least nine maps in ten  — 99%
+PASS Crape within floors 5–10 over 3000 seeds  — 5–10, mean 7.2; some floor bound in 30% of seeds
+PASS Position is real: a crape house in a middle street has a neighbour on the other pipe in at least two cases in three  — 80%
+PASS Same seed, same map
+PASS A test spends one of eight, paints the door, and clouds the glass for the town's water only
+PASS The same house cannot be tested twice
+PASS No sentence before the tests are spent; then one, once
+PASS Evidence: all tests counted; same-street rows counted only where both colours were tested
+PASS ratioOf: one colour untested cannot be told; no blue crape is beyond count; otherwise deaths over houses by colour
+PASS Evidence states: none; one colour; confounded (both colours, no shared street); clean (shared street, brown worse)
+PASS The doctor objects to the confounded state with the side of town and concedes the clean one
+PASS The doctor's comparison (inland crape against riverside houses) and the air: wrong in every game, and unable to answer him (confounded, or no crape where both waters met) in at least nine in ten  — {"confounded":308,"nocrape":255,"clean":14,"flat":16,"weak":7}
+PASS Testing the crape houses only: the sentence unsupported in at least two games in five (nothing to compare with, or confounded)  — {"unsupported":337,"weak":18,"flat":141,"agree":104}
+PASS A crape house in a middle street and its neighbours: agrees with Snow in at least seven games in ten  — {"agree":440,"weak":92,"flat":55,"unsupported":13}
+PASS The middle streets at random: agrees in at least six games in ten  — {"agree":437,"weak":76,"flat":53,"unsupported":34}
+PASS Where you test matters: the middle streets agree at least twice as often as houses anywhere at random, and three times as often as one house per street  — 73% vs random 32% vs column 21%
+PASS A same-street comparison finds the upriver water the worse in fewer than 5% of games (flat, with crape at the blue houses only)
+PASS Compression 5, no floors: the neighbour strategy still agrees with Snow more often than one house per street  — 59% vs 11%
+PASS Compression 20, no floors: the neighbour strategy still agrees with Snow more often than one house per street  — 64% vs 34%
+PASS 6 tests: the middle streets still beat random placement  — 70% vs 22%
+PASS 12 tests: the middle streets still beat random placement  — 75% vs 54%
+PASS No decimal, NaN, Infinity or undefined in any verdict, map line or doctor's line over 1200 games  — 9600 lines
+ALL PASSED (38 checks)

@@ -1,4 +1,4 @@
-SEED 7. AIM: Find out what does it, the water or the side of town: test houses so that the doctor cannot say "that is just the inland air".
+SEED 7. AIM: Make the water stand alone: test houses so that the doctor cannot say "that is just the inland air", with as few glasses as you can.
    Clapham        X- .- .- X- X- .-   {brown:0,brownCrape:0,blue:0,blueCrape:0,both:false}
    Kennington     X- .- .- X- X- .-   {brown:0,brownCrape:0,blue:0,blueCrape:0,both:false}
    Borough Road   .- .- .- .- .- .-   {brown:0,brownCrape:0,blue:0,blueCrape:0,both:false}
@@ -8,57 +8,29 @@ SEED 7. AIM: Find out what does it, the water or the side of town: test houses s
    ~~~~~ the river ~~~~~
 
 DOCTOR: Look where the crape is. Inland, away from the river. Something in the inland air; that is what does it.
-TEST Kennington no. 1 (crape) [Add the silver drops]
+GLASS 1: Kennington no. 1 (crape) [Add the silver drops]
    -> MILKY: Battersea water. Kennington: {brown:1,brownCrape:1,blue:0,blueCrape:0,both:false}
    LINE: All tests: brown 1 of 1 with crape, blue 0 of 0. You have not yet tested a brown house and a blue house in the same street.
    DOCTOR: Every house you have tested is on the town’s water. So is nearly every house inland. You have found nothing the map did not show.
-   tests left 7
-TEST Kennington no. 4 (crape) [Add the silver drops]
-   -> MILKY: Battersea water. Kennington: {brown:2,brownCrape:2,blue:0,blueCrape:0,both:false}
-   LINE: All tests: brown 2 of 2 with crape, blue 0 of 0. You have not yet tested a brown house and a blue house in the same street.
-   DOCTOR: Every house you have tested is on the town’s water. So is nearly every house inland. You have found nothing the map did not show.
-   tests left 6
-TEST Waterloo Road no. 3 (no crape) [Add the silver drops]
+GLASS 2: Waterloo Road no. 3 (no crape) [Add the silver drops]
    -> MILKY: Battersea water. Waterloo Road: {brown:1,brownCrape:0,blue:0,blueCrape:0,both:false}
-   LINE: All tests: brown 2 of 3 with crape, blue 0 of 0. You have not yet tested a brown house and a blue house in the same street.
+   LINE: All tests: brown 1 of 2 with crape, blue 0 of 0. You have not yet tested a brown house and a blue house in the same street.
    DOCTOR: Every house you have tested is on the town’s water. So is nearly every house inland. You have found nothing the map did not show.
-   tests left 5
-TEST Trinity no. 5 (crape) [Add the silver drops]
-   -> MILKY: Battersea water. Trinity: {brown:1,brownCrape:1,blue:0,blueCrape:0,both:false}
-   LINE: All tests: brown 3 of 4 with crape, blue 0 of 0. You have not yet tested a brown house and a blue house in the same street.
-   DOCTOR: Every house you have tested is on the town’s water. So is nearly every house inland. You have found nothing the map did not show.
-   tests left 4
-TEST Trinity no. 4 (no crape) [Add the silver drops]
-   -> MILKY: Battersea water. Trinity: {brown:2,brownCrape:1,blue:0,blueCrape:0,both:false}
-   LINE: All tests: brown 3 of 5 with crape, blue 0 of 0. You have not yet tested a brown house and a blue house in the same street.
-   DOCTOR: Every house you have tested is on the town’s water. So is nearly every house inland. You have found nothing the map did not show.
-   tests left 3
-TEST Borough Road no. 1 (no crape) [Add the silver drops]
-   -> MILKY: Battersea water. Borough Road: {brown:1,brownCrape:0,blue:0,blueCrape:0,both:false}
-   LINE: All tests: brown 3 of 6 with crape, blue 0 of 0. You have not yet tested a brown house and a blue house in the same street.
-   DOCTOR: Every house you have tested is on the town’s water. So is nearly every house inland. You have found nothing the map did not show.
-   tests left 2
-TEST Borough Road no. 2 (no crape) [Add the silver drops]
-   -> CLEAR: Thames Ditton water. Borough Road: {brown:1,brownCrape:0,blue:1,blueCrape:0,both:true}
-   LINE: All tests: brown 3 of 6 with crape, blue 0 of 1. Same street, both waters (one street): brown 0 of 1 with crape, blue 0 of 1. None of these houses has crape, so there is nothing to compare yet.
-   DOCTOR: Both waters in one street, I grant you, but none of those houses has crape. Nothing to compare.
-   tests left 1
-TEST Borough Road no. 3 (no crape) [Add the silver drops]
-   -> CLEAR: Thames Ditton water. Borough Road: {brown:1,brownCrape:0,blue:2,blueCrape:0,both:true}
-   LINE: All tests: brown 3 of 6 with crape, blue 0 of 2. Same street, both waters (one street): brown 0 of 1 with crape, blue 0 of 2. None of these houses has crape, so there is nothing to compare yet.
-   DOCTOR: Both waters in one street, I grant you, but none of those houses has crape. Nothing to compare.
-   tests left 0
+GLASS 3: Kennington no. 2 (no crape) [Add the silver drops]
+   -> CLEAR: Thames Ditton water. Kennington: {brown:1,brownCrape:1,blue:1,blueCrape:0,both:true}   *** THE DOCTOR CONCEDES ***
+   LINE: All tests: brown 1 of 2 with crape, blue 0 of 1. Same street, both waters (one street): brown 1 of 1 with crape, blue 0 of 1. No blue house in the same street wears crape; the brown ones do.
+   DOCTOR: I conceded at your third glass: same street, same air, and the crape at the brown door. I have nothing more to say.
    Clapham        X- .- .- X- X- .-   {brown:0,brownCrape:0,blue:0,blueCrape:0,both:false}
-   Kennington     XB .- .- XB X- .-   {brown:2,brownCrape:2,blue:0,blueCrape:0,both:false}
-   Borough Road   .B .U .U .- .- .-   {brown:1,brownCrape:0,blue:2,blueCrape:0,both:true}
-   Trinity        .- .- .- .B XB .-   {brown:2,brownCrape:1,blue:0,blueCrape:0,both:false}
+   Kennington     XB .U .- X- X- .-   {brown:1,brownCrape:1,blue:1,blueCrape:0,both:true}
+   Borough Road   .- .- .- .- .- .-   {brown:0,brownCrape:0,blue:0,blueCrape:0,both:false}
+   Trinity        .- .- .- .- X- .-   {brown:0,brownCrape:0,blue:0,blueCrape:0,both:false}
    Lambeth Church .- .- .- .- .- .-   {brown:0,brownCrape:0,blue:0,blueCrape:0,both:false}
    Waterloo Road  .- .- .B .- .- .-   {brown:1,brownCrape:0,blue:0,blueCrape:0,both:false}
    ~~~~~ the river ~~~~~
 
-VERDICT (unsupported)
-  SNOW: Snow compared houses on the same streets, where the only thing different was the pipe. The town’s water killed about seven times as often as the upriver water in these seven weeks, and fourteen times as often in the first four. And once the water was known, whether a street was by the river or inland, crowded or genteel, made no difference at all.
-  YOU: You wrote: “It is the Southwark and Vauxhall Company’s water.” Over all your tests: brown 3 of 6 with crape, blue 0 of 2. In the streets where you tested both waters, none of the houses you tested had crape, so they could not compare anything.
-  PART: Your sentence is his, but your tests cannot carry it: where you tested both waters there was no crape to compare. Snow’s answer was a crape door and the door beside it, on the same street, on the other pipe.
-  SIDE: 
-  HAD: Had your tests stood for the proof, the Board would have answered that inland houses differ from riverside ones in a hundred ways, and the air would have kept its share of the blame. The proof that stood was the one from the same street.
+VERDICT (identified)
+  HEAD: The water stands alone.
+  IDENT: In the same street, where the side of town is the same for both: brown 1 of 1 with crape, blue 0 of 1. No blue house there wears crape; the brown ones do. The doctor cannot answer that with the air, because the air is the same at both doors. That is identification: the one thing that differs between the two houses is the one thing that can explain the difference between them.
+  SENTENCE: You wrote: “It is the Southwark and Vauxhall Company’s water.” Right, and your tests carry it.
+  SPEED: The doctor conceded at your third glass. The quickest plan, a crape door in a street where the pipes are mixed and then its neighbours until one comes up clear, gets there at the second or third glass in most games. Testing where the crape is takes nine or more, when it gets there at all.
+  HAD: Had the question been answered from lists instead of at the door, as the Board of Health answered it, the gap would have shrunk to three and a half to one, because with deaths six times as common behind one company’s doors, five mistakes in six move a death from the guilty water to the innocent one. Yours was answered at the door, with the glass, in the same street.

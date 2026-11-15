@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Snow's Cloudy Glass</title>
+<script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<meta name="description" content="London, 1854. Two waters run down the same street and one of them is killing people. Choose what to compare and how to know, as John Snow did: a crape door beside the door next to it, and a glass from each tap.">
+<style>
+@font-face{font-family:'Abril Fatface';font-weight:400;font-style:normal;src:url(data:font/woff2;base64,/*__F_ABRIL__*/) format('woff2')}
+@font-face{font-family:'Libre Caslon Text';font-weight:400;font-style:normal;src:url(data:font/woff2;base64,/*__F_CASLON__*/) format('woff2')}
+@font-face{font-family:'Libre Caslon Text';font-weight:700;font-style:normal;src:url(data:font/woff2;base64,/*__F_CASLON_B__*/) format('woff2')}
+@font-face{font-family:'Libre Caslon Text';font-weight:400;font-style:italic;src:url(data:font/woff2;base64,/*__F_CASLON_I__*/) format('woff2')}
+:root{--straw:#EDE0BC;--ink:#1A1710;--brown:#8C5A2B;--blue:#2C6E8A;--milk:#F6F1E6;color-scheme:light}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--straw);color:var(--ink)}
+body{font-family:'Libre Caslon Text',Georgia,'Times New Roman',serif;font-size:15.5px;line-height:1.4;overflow-x:hidden}
+body.lock{overflow:hidden}
+.wrap{max-width:420px;margin:0 auto;min-height:100vh;padding:10px 12px 26px;position:relative}
+.bill{border:3px double var(--ink);padding:12px 12px 16px;min-height:calc(100vh - 36px);position:relative}
+.screen{display:none}.screen.on{display:block}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;border-radius:0;text-align:inherit}
+h1,h2,h3,p{margin:0}
+b,strong{font-weight:700}
+.fat{font-family:'Abril Fatface',Georgia,serif;font-weight:400}
+.sc{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase}
+.flowers{text-align:center;font-size:13px;letter-spacing:.5em;line-height:1;margin:2px 0 8px;overflow:hidden;white-space:nowrap}
+.rule{border-top:1px solid var(--ink);margin:10px 0}.rule.thick{border-top-width:3px}
+.btn{display:block;width:100%;border:1px solid var(--ink);outline:3px solid var(--ink);outline-offset:-5px;padding:10px 10px;text-align:center;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-top:7px;min-height:44px}
+.btn.solid{background:var(--ink);color:var(--straw);outline-color:var(--straw)}
+.btn:disabled{opacity:.35}
+.btn .hand{font-size:17px;margin-right:6px;vertical-align:-1px}
+.btn small{display:block;font-size:10px;letter-spacing:.1em;opacity:.8;margin-top:2px}
+.row2{display:flex;gap:8px}.row2 .btn{flex:1}
+.sig{text-align:center;font-style:italic;font-size:13px;margin-top:22px;opacity:.6}.sig a{color:inherit;text-decoration:none}
+/* start */
+.title{font-size:58px;line-height:.92;text-align:center;margin:6px 0 10px;letter-spacing:-.01em}.title span{display:block}.title .small{font-size:34px;letter-spacing:.02em}
+.who{text-align:center;font-size:13px;margin-bottom:6px}
+.glass-hero{display:block;margin:4px auto 8px;width:110px;height:120px}
+.lead p{margin-bottom:9px}
+.acts{text-align:center;font-size:20px;line-height:1.3;margin:10px 0 8px}
+.aimbox{border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);padding:9px 4px;margin:10px 0 12px;text-align:center;font-weight:700;font-size:16px}
+.lab{font-size:11px;letter-spacing:.16em;text-transform:uppercase;text-align:center;margin:12px 0 4px}
+/* play */
+.top{display:flex;align-items:flex-start;gap:8px;margin-bottom:4px}
+.top .aim{flex:1;font-size:12px;line-height:1.22;font-weight:700}
+.q{width:34px;height:34px;border:1px solid var(--ink);outline:2px solid var(--ink);outline-offset:-4px;font-size:17px;text-align:center;flex:none;font-weight:700}
+.window{display:block;width:100%;height:auto}
+.wline{font-size:11.5px;line-height:1.22;margin:2px 0 1px;min-height:14px}
+.dline{font-size:11.5px;line-height:1.2;margin:0 0 4px;font-style:italic;min-height:14px}
+.sthead{display:flex;align-items:baseline;gap:8px;margin-top:2px}
+.sthead .nm{font-size:18px;line-height:1}
+.sthead .ph{font-style:italic;font-size:10.5px;line-height:1.1;flex:1}
+.street{display:block;width:100%;height:auto}
+.street g.house{cursor:pointer}
+.panel{margin-top:6px}
+.do{border:1px solid var(--ink);padding:7px 10px;font-size:14px;line-height:1.3}
+.do b.fat{font-size:18px;display:block;line-height:1.1;margin-bottom:3px;text-align:center}
+.do .kn{display:block;text-align:center;font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-top:5px}
+.doc{border:1px solid var(--ink);padding:8px 10px;font-size:14px;line-height:1.3}
+.doc i.who{display:block;font-style:italic;font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px;text-align:left}
+.card{display:flex;gap:8px;align-items:stretch;margin:5px 0 3px}
+.card .door{flex:1;border:1px solid var(--ink);padding:4px 6px 3px;text-align:center;font-size:12px;line-height:1.2}
+.card .door svg{display:block;margin:0 auto 2px;width:38px;height:44px}
+.card .door .nm{font-weight:700;display:block}
+.diff{font-size:13.5px;line-height:1.3;border-top:1px solid var(--ink);padding-top:5px;margin-top:4px}
+.diff b{font-weight:700}
+.say{font-size:13.5px;line-height:1.3;margin-top:4px}
+.state.brown{color:var(--brown);font-weight:700}.state.blue{color:var(--blue);font-weight:700}
+.glasses{display:flex;gap:10px;justify-content:center;margin:4px 0}
+.glasses .g{text-align:center;font-size:11.5px;line-height:1.2;width:100px}
+.glasses svg{width:64px;height:92px;display:block;margin:0 auto 2px}
+.g-milk{opacity:0;transition:opacity 1.1s ease-in}.g-milk.on{opacity:.96}
+.g-drop{opacity:0}.g-drop.go{animation:drop .55s ease-in forwards}.g-drop.go.d2{animation-delay:.15s}.g-drop.go.d3{animation-delay:.3s}
+@keyframes drop{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(46px)}}
+.g-ring{opacity:0}.g-ring.go{animation:ring 1s ease-out .5s forwards}
+@keyframes ring{0%{opacity:.9;transform:scale(.3)}100%{opacity:0;transform:scale(1.4)}}
+/* sentence */
+.sent{border:1px solid var(--ink);padding:10px 12px;margin-top:8px;font-size:16px;line-height:1.3;display:block;width:100%}
+.sent.on{outline:3px solid var(--ink);outline-offset:-5px;font-weight:700}
+/* end */
+.vh{font-size:40px;text-align:center;line-height:1;margin:4px 0 6px}
+.vl{margin:10px 0 0}.vl .sc{display:block;margin-bottom:2px;font-weight:700}.vl p{font-size:15px;line-height:1.38}.vl.big p{font-size:16.5px}
+.wins{margin:12px 0 4px}.wins .sc{display:block;text-align:center;margin-bottom:3px}.wins svg{width:100%;height:auto;display:block}
+.small{font-size:13px;line-height:1.35;margin-top:8px}
+.seedline{font-size:12px;text-align:center;opacity:.7;margin-top:10px}
+/* overlays */
+.ov{display:none;position:fixed;inset:0;background:var(--straw);z-index:10;overflow-y:auto;-webkit-overflow-scrolling:touch}.ov.on{display:block}
+.ov .in{max-width:420px;margin:0 auto;padding:12px 12px 30px}.ov .bill{min-height:0}
+.ov h2{font-size:30px;line-height:1.05;margin:4px 0 8px;text-align:center}
+.ov h3{font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin:14px 0 4px}
+.ov p{margin:0 0 8px;font-size:15px;line-height:1.4}.ov li{margin-bottom:6px;font-size:15px}.ov ul,.ov ol{padding-left:20px;margin:0 0 8px}
+.swatch{display:inline-block;width:12px;height:12px;vertical-align:-1px;margin-right:3px;border:1px solid var(--ink)}.swatch.brown{background:var(--brown)}.swatch.blue{background:var(--blue)}
+.swatch.ob{border:3px solid var(--brown);background:var(--straw)}
+</style>
+</head>
+<body>
+<div class="wrap"><div class="bill">
+
+<!-- ================= START ================= -->
+<section class="screen on" id="s-start">
+  <div class="flowers">❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧</div>
+  <p class="who sc">London · July 1854</p>
+  <h1 class="title fat"><span>Snow’s</span><span class="small">Cloudy Glass</span></h1>
+  <svg class="glass-hero" viewBox="0 0 110 120" aria-hidden="true">
+    <defs><clipPath id="hc"><path d="M22 14 L88 14 L80 112 L30 112 Z"/></clipPath></defs>
+    <g clip-path="url(#hc)"><rect x="0" y="48" width="110" height="80" fill="var(--milk)"/><path d="M0 50 Q 28 42 55 52 T 110 48 L110 128 L0 128Z" fill="var(--milk)"/><path d="M26 60 q14 -6 28 2 t28 -2" fill="none" stroke="var(--brown)" stroke-width="1.2" opacity=".55"/><path d="M28 76 q18 -5 30 3 t26 -3" fill="none" stroke="var(--brown)" stroke-width="1.2" opacity=".4"/></g>
+    <path d="M22 14 L88 14 L80 112 L30 112 Z" fill="none" stroke="var(--ink)" stroke-width="3"/><path d="M22 14 L88 14" stroke="var(--ink)" stroke-width="4"/><circle cx="55" cy="4" r="3" fill="var(--ink)"/>
+  </svg>
+  <div class="lead">
+    <p>Two water companies pipe the same streets of south London, so that one house drinks from one and the house next door from the other. The <b>Southwark and Vauxhall Company</b> pumps from the Thames at Battersea, inside the town, where the sewers run in and the tide brings salt up from the sea. The <b>Lambeth Company</b> moved its works upriver to Thames Ditton in 1852, above both.</p>
+    <p>Cholera came in July. Where someone has died, black cloth hangs on the door: <b>crape</b>. The parish doctor blames the air. Dr John Snow wants two houses that are different in one thing only.</p>
+    <p>You have a morning’s knocks. At a door you can ask whose water it is, which is cheap and sometimes wrong; or draw a glass and add a few drops of silver, which turn salt water milky. The town’s water is salt with the tide; the upriver water is not. The glass is never wrong.</p>
+  </div>
+  <p class="lab">What your hands will do</p>
+  <p class="acts fat">Pick a crape door.<br>Set a door against it.<br>Ask, or draw a glass.</p>
+  <p class="aimbox">Find out whether it is the water: set a crape door beside a door without, and know what each drinks.</p>
+  <button class="btn solid" id="b-begin"><span class="hand">☞</span>Begin</button>
+  <button class="btn" id="b-help-start">How to play</button>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+
+<!-- ================= PLAY ================= -->
+<section class="screen" id="s-play">
+  <div class="top"><p class="aim">Find out whether it is the water: set a crape door beside a door without, and know what each drinks.</p><button class="q" id="q-play" aria-label="How to play">?</button></div>
+  <div id="winbox"></div>
+  <p class="wline" id="wline"></p>
+  <p class="dline" id="dline"></p>
+  <div id="streets"></div>
+  <div class="panel" id="panel"></div>
+</section>
+
+<!-- ================= SENTENCE ================= -->
+<section class="screen" id="s-sentence">
+  <div class="flowers">❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧</div>
+  <h2 class="vh fat" style="font-size:32px">One sentence for the Board</h2>
+  <div id="sentwin"></div>
+  <p class="wline" id="sentline"></p>
+  <p style="margin-top:10px;font-size:15px">The Board of Health asks what did it. Tap the sentence you will send; your book goes with it.</p>
+  <button class="sent" data-s="air">It is the marsh air of Battersea Fields.</button>
+  <button class="sent" data-s="water">It is the Southwark and Vauxhall Company’s water.</button>
+  <button class="sent" data-s="cannot">These doors cannot say.</button>
+  <button class="btn solid" id="b-send" disabled><span class="hand">☞</span>Send it</button>
+</section>
+
+<!-- ================= END ================= -->
+<section class="screen" id="s-end">
+  <div class="flowers">❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧</div>
+  <h2 class="vh fat">The Verdict</h2>
+  <div id="verdict"></div>
+  <div class="rule thick"></div>
+  <p class="seedline" id="seedline"></p>
+  <button class="btn solid" id="b-again"><span class="hand">☞</span>Another morning</button>
+  <div class="row2"><button class="btn" id="b-help-end">How to play</button><button class="btn" id="b-about">About</button></div>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+
+</div></div>
+
+<!-- ================= HELP ================= -->
+<div class="ov" id="help"><div class="in"><div class="bill">
+  <div class="flowers">❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧</div>
+  <h2 class="fat">How to play</h2>
+  <p><b>Find out whether it is the water: set a crape door beside a door without, and know what each drinks.</b></p>
+  <h3>The two streets</h3>
+  <p>Twelve houses each. Where someone has died of cholera, black cloth hangs over the door: <b>crape</b>. Battersea is thinly peopled and genteel, and Battersea Fields are marsh. Waterloo Road is crowded, poor and by the river. Every house is on one of two pipes, and you cannot see which. <span class="swatch brown"></span><b>Battersea water</b> is the Southwark and Vauxhall Company’s, pumped from the river inside the town. <span class="swatch blue"></span><b>Thames Ditton water</b> is the Lambeth Company’s, from above the town.</p>
+  <h3>A pair</h3>
+  <ol>
+    <li>Tap a door with crape. Then tap a door without crape to set against it: the door next to it, or any door on either street.</li>
+    <li>Under the two doors a card says what is <b>different</b> between them. Two doors on different streets differ in the street (the air, the people) as well as the water, so whatever happens, you cannot say which did it. Two doors on the same street differ in the water alone, if their water differs; or in nothing.</li>
+    <li>Choose how to know their water. <b>Ask at both doors</b> costs one knock: the people say which company they think they are on, and one time in seven they are wrong, and one time in four they cannot say. <b>Draw a glass at each</b> costs two knocks: salt water turns milky with the silver drops, so <b>milky</b> means Battersea water and <b>clear</b> means Thames Ditton water, and the glass is never wrong.</li>
+    <li>Each door is painted the colour of its water: <span class="swatch brown"></span> solid where the glass said it, <span class="swatch ob"></span> an outline where only the word did. Tap an outlined door to check its word with the glass, for one knock.</li>
+  </ol>
+  <h3>The window</h3>
+  <p>Four panes, built from pairs made in the same street. The top row holds the crape doors, the bottom row the doors set against them; brown on the left, blue on the right; outlined where known only by word. The line under it says what the pairs say so far. Pairs made across the two streets are counted on their own line, because they cannot choose between the street and the water.</p>
+  <h3>The parish doctor</h3>
+  <p>He offers pairs for nothing: a crape door in Battersea against a living door in Waterloo Road, by what the people told him. You may take them or not.</p>
+  <h3>The book and the Board</h3>
+  <p>You have eight knocks. Once two pairs are in the book, or when the knocks are gone, close it and send the Board one sentence: the marsh air, the town’s water, or that these doors cannot say. The verdict reads your sentence against your own book and against Snow.</p>
+  <button class="btn solid" id="b-help-close"><span class="hand">☞</span>Back</button>
+</div></div></div>
+
+<!-- ================= ABOUT ================= -->
+<div class="ov" id="about"><div class="in"><div class="bill">
+  <div class="flowers">❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧ ❧</div>
+  <h2 class="fat">About</h2>
+  /*__ABOUT__*/
+  <button class="btn solid" id="b-about-close"><span class="hand">☞</span>Back</button>
+</div></div></div>
+
+<script>
+/*__MECHANISM__*/
+</script>
+<script>
+(function () {
+  'use strict';
+  var M = window.SNOW, C = M.CONFIG;
+  var $ = function (id) { return document.getElementById(id); };
+  var g = null, seed = null, phase = 'offer', sel = { a: null, b: null }, busy = false, lastRec = null, lastCheck = null, offerWhich = 'first', chosenSentence = null;
+  var COLS = 6, HW = 56, HH = 42, W = 348;
+
+  // ---------------- drawing: houses ----------------
+  function colourOf(h) { var k = M.knownWater(h); return k === 'brown' ? 'var(--brown)' : k === 'blue' ? 'var(--blue)' : null; }
+  function doorFill(h) { if (h.known === 'glass') return colourOf(h); return 'var(--straw)'; }
+  function doorStroke(h) { if (h.known === 'word' && colourOf(h)) return colourOf(h); return 'var(--ink)'; }
+  function houseSVG(h, kind, x, y, state) {
+    var s = '', door = { x: x + 21, y: y + 22, w: 14, h: 18 };
+    s += '<g class="house" data-s="' + h.s + '" data-i="' + h.i + '">';
+    s += '<rect x="' + (x - 1) + '" y="' + (y - 2) + '" width="' + (HW + 2) + '" height="' + (HH + 6) + '" fill="transparent"/>';
+    s += '<rect x="' + (x + 5) + '" y="' + (y + 12) + '" width="' + (HW - 10) + '" height="' + (HH - 12) + '" fill="var(--straw)" stroke="var(--ink)" stroke-width="1.5"/>';
+    s += '<path d="M' + (x + 2) + ' ' + (y + 12) + ' L' + (x + HW / 2) + ' ' + (y + 2) + ' L' + (x + HW - 2) + ' ' + (y + 12) + ' Z" fill="var(--ink)"/>';
+    s += '<rect x="' + (x + HW - 16) + '" y="' + y + '" width="5" height="8" fill="var(--ink)"/>';
+    if (kind === 'crowded') {
+      s += '<rect x="' + (x + 9) + '" y="' + (y + 16) + '" width="7" height="8" fill="none" stroke="var(--ink)" stroke-width="1.2"/><rect x="' + (x + HW - 16) + '" y="' + (y + 16) + '" width="7" height="8" fill="none" stroke="var(--ink)" stroke-width="1.2"/>';
+      s += '<line x1="' + (x + 8) + '" y1="' + (y + 29) + '" x2="' + (x + 19) + '" y2="' + (y + 31) + '" stroke="var(--ink)" stroke-width="1"/><rect x="' + (x + 11) + '" y="' + (y + 30) + '" width="3" height="5" fill="var(--ink)"/>';
+    } else {
+      s += '<rect x="' + (x + 9) + '" y="' + (y + 16) + '" width="9" height="9" fill="none" stroke="var(--ink)" stroke-width="1.2"/><rect x="' + (x + HW - 18) + '" y="' + (y + 16) + '" width="9" height="9" fill="none" stroke="var(--ink)" stroke-width="1.2"/>';
+      for (var r = 0; r < 4; r++) s += '<line x1="' + (x + 8 + r * 3) + '" y1="' + (y + 32) + '" x2="' + (x + 8 + r * 3) + '" y2="' + (y + HH) + '" stroke="var(--ink)" stroke-width="1"/><line x1="' + (x + HW - 8 - r * 3) + '" y1="' + (y + 32) + '" x2="' + (x + HW - 8 - r * 3) + '" y2="' + (y + HH) + '" stroke="var(--ink)" stroke-width="1"/>';
+    }
+    var stroke = doorStroke(h), sw = h.known === 'word' && colourOf(h) ? 3 : 1.5;
+    s += '<rect x="' + door.x + '" y="' + door.y + '" width="' + door.w + '" height="' + door.h + '" fill="' + doorFill(h) + '" stroke="' + stroke + '" stroke-width="' + sw + '"/>';
+    if (h.known === 'word' && !colourOf(h)) s += '<text x="' + (door.x + door.w / 2) + '" y="' + (door.y + 15) + '" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">?</text>';
+    if (h.known === null) s += '<circle cx="' + (door.x + door.w - 3.5) + '" cy="' + (door.y + door.h / 2) + '" r="1.2" fill="var(--ink)"/>';
+    if (h.crape) {
+      s += '<path d="M' + (door.x - 5) + ' ' + (door.y - 3) + ' Q' + (door.x + door.w / 2) + ' ' + (door.y + 8) + ' ' + (door.x + door.w + 5) + ' ' + (door.y - 3) + ' L' + (door.x + door.w + 5) + ' ' + (door.y + 1) + ' Q' + (door.x + door.w / 2) + ' ' + (door.y + 12) + ' ' + (door.x - 5) + ' ' + (door.y + 1) + ' Z" fill="var(--ink)"/>';
+      s += '<path d="M' + (door.x - 5) + ' ' + (door.y - 3) + ' l-2 13 l4 -2 Z M' + (door.x + door.w + 5) + ' ' + (door.y - 3) + ' l2 13 l-4 -2 Z" fill="var(--ink)"/>';
+    }
+    if (state.tag) {
+      s += '<rect x="' + (x + 1) + '" y="' + (y - 1) + '" width="' + (HW - 2) + '" height="' + (HH + 4) + '" fill="none" stroke="var(--ink)" stroke-width="3"/>';
+      s += '<rect x="' + (x + HW - 17) + '" y="' + (y + HH - 14) + '" width="16" height="16" fill="var(--ink)"/><text x="' + (x + HW - 9) + '" y="' + (y + HH - 2) + '" text-anchor="middle" font-size="12" font-weight="700" fill="var(--straw)">' + state.tag + '</text>';
+    }
+    s += '</g>';
+    return s;
+  }
+  function streetSVG(st) {
+    var rows = 2, h = rows * (HH + 8) + 2;
+    var s = '<svg class="street" viewBox="0 0 ' + W + ' ' + h + '" xmlns="http://www.w3.org/2000/svg" aria-label="' + st.name + '">';
+    for (var r = 0; r < rows; r++) {
+      var y = 1 + r * (HH + 8);
+      s += '<line x1="0" y1="' + (y + HH + 3) + '" x2="' + W + '" y2="' + (y + HH + 3) + '" stroke="var(--ink)" stroke-width="1.2"/>';
+      for (var c = 0; c < COLS; c++) {
+        var hh = st.houses[r * COLS + c], x = c * (HW + 2) + 1, tag = null;
+        if (sel.a && sel.a.s === st.idx && sel.a.i === hh.i) tag = 'A'; if (sel.b && sel.b.s === st.idx && sel.b.i === hh.i) tag = 'B';
+        s += houseSVG(hh, st.kind, x, y, { tag: tag });
+      }
+    }
+    return s + '</svg>';
+  }
+  function tinyHouse(x, y, col, outline) { return '<path d="M' + x + ' ' + (y + 4) + ' l5 -4 l5 4 v6 h-10 Z" fill="' + (outline ? 'none' : col) + '" stroke="' + col + '" stroke-width="' + (outline ? 1.6 : 0) + '"/>'; }
+  function windowSVG(items, opts) {
+    // items: {crapeBrown:[outline...], crapeBlue, liveBrown, liveBlue, crapeUnknown, liveUnknown} as arrays of booleans (outline?) or counts
+    opts = opts || {}; items = items || {}; var WW = 348, WH = 86, px = 54, pw = (WW - px - 4) / 2, py = 15, ph = (WH - py - 4) / 2;
+    var s = '<svg class="window" viewBox="0 0 ' + WW + ' ' + WH + '" xmlns="http://www.w3.org/2000/svg" aria-label="the window">';
+    s += '<rect x="1" y="1" width="' + (WW - 2) + '" height="' + (WH - 2) + '" fill="var(--straw)" stroke="var(--ink)" stroke-width="2"/>';
+    s += '<text x="' + (px + pw / 2) + '" y="12" text-anchor="middle" font-size="9.5" letter-spacing=".8" font-weight="700" fill="var(--brown)">BATTERSEA WATER</text>';
+    s += '<text x="' + (px + pw + 2 + pw / 2) + '" y="12" text-anchor="middle" font-size="9.5" letter-spacing=".8" font-weight="700" fill="var(--blue)">THAMES DITTON WATER</text>';
+    s += '<text x="6" y="' + (py + ph / 2 + 4) + '" font-size="10" letter-spacing="1" font-weight="700" fill="var(--ink)">CRAPE</text>';
+    s += '<text x="6" y="' + (py + ph + 2 + ph / 2 + 4) + '" font-size="10" letter-spacing="1" font-weight="700" fill="var(--ink)">BESIDE</text>';
+    var panes = [['crapeBrown', 0, 0, 'var(--brown)'], ['crapeBlue', 1, 0, 'var(--blue)'], ['liveBrown', 0, 1, 'var(--brown)'], ['liveBlue', 1, 1, 'var(--blue)']];
+    panes.forEach(function (p) {
+      var x = px + p[1] * (pw + 2), y = py + p[2] * (ph + 2);
+      s += '<rect x="' + x + '" y="' + y + '" width="' + pw + '" height="' + ph + '" fill="var(--milk)" stroke="var(--ink)" stroke-width="2"/>';
+      if (opts.numbers) s += '<text x="' + (x + pw / 2) + '" y="' + (y + ph / 2 + 7) + '" text-anchor="middle" font-family="Abril Fatface, Georgia, serif" font-size="20" fill="' + p[3] + '">' + opts.numbers[p[0]] + '</text>';
+      else { var arr = items[p[0]] || [], per = 11; for (var i = 0; i < arr.length && i < 22; i++) s += tinyHouse(x + 5 + (i % per) * 13, y + 5 + Math.floor(i / per) * 13, p[3], arr[i]); }
+    });
+    // unknown doors: a question mark house at the pane border
+    var unk = (items.crapeUnknown || 0) + (items.liveUnknown || 0);
+    if (unk) s += '<text x="' + (WW - 6) + '" y="' + (WH - 5) + '" text-anchor="end" font-size="9" fill="var(--ink)">' + unk + ' door' + (unk === 1 ? '' : 's') + ' not known</text>';
+    return s + '</svg>';
+  }
+  function windowItems() {
+    var it = { crapeBrown: [], crapeBlue: [], liveBrown: [], liveBlue: [], crapeUnknown: 0, liveUnknown: 0 };
+    g.pairs.forEach(function (p) {
+      if (p.a.s !== p.b.s) return;
+      [[p.a, 'crape'], [p.b, 'live']].forEach(function (q) {
+        var h = M.house(g, q[0]), k = M.knownWater(h);
+        if (k === 'brown') it[q[1] + 'Brown'].push(h.known === 'word'); else if (k === 'blue') it[q[1] + 'Blue'].push(h.known === 'word'); else it[q[1] + 'Unknown']++;
+      });
+    });
+    return it;
+  }
+  function glassSVG(id) {
+    return '<svg viewBox="0 0 78 112" xmlns="http://www.w3.org/2000/svg" aria-label="a glass of water">' +
+      '<defs><clipPath id="gc' + id + '"><path d="M14 22 L64 22 L58 106 L20 106 Z"/></clipPath></defs>' +
+      '<g clip-path="url(#gc' + id + ')"><rect x="0" y="44" width="78" height="90" fill="var(--blue)" opacity=".18"/>' +
+      '<rect id="g-milk-' + id + '" class="g-milk" x="0" y="40" width="78" height="80" fill="var(--milk)"/>' +
+      '<circle id="g-ring-' + id + '" class="g-ring" cx="39" cy="60" r="12" fill="none" stroke="var(--ink)" stroke-width="1.2" style="transform-origin:39px 60px"/></g>' +
+      '<path d="M14 22 L64 22 L58 106 L20 106 Z" fill="none" stroke="var(--ink)" stroke-width="2.4"/><path d="M14 22 L64 22" stroke="var(--ink)" stroke-width="3.2"/>' +
+      '<g><circle class="g-drop d1 dr-' + id + '" cx="35" cy="8" r="2.2" fill="var(--ink)"/><circle class="g-drop d2 dr-' + id + '" cx="40" cy="5" r="2.2" fill="var(--ink)"/><circle class="g-drop d3 dr-' + id + '" cx="44" cy="9" r="2.2" fill="var(--ink)"/></g></svg>';
+  }
+  function doorIcon(h, forceUnknown) {
+    var k = forceUnknown ? null : M.knownWater(h), col = k === 'brown' ? 'var(--brown)' : k === 'blue' ? 'var(--blue)' : null;
+    var fill = (!forceUnknown && h.known === 'glass' && col) ? col : 'var(--straw)', stroke = (!forceUnknown && h.known === 'word' && col) ? col : 'var(--ink)', sw = (!forceUnknown && h.known === 'word' && col) ? 4 : 2;
+    var s = '<svg viewBox="0 0 44 52"><rect x="10" y="6" width="24" height="44" fill="' + fill + '" stroke="' + stroke + '" stroke-width="' + sw + '"/>';
+    if (!col) s += '<text x="22" y="34" text-anchor="middle" font-size="18" font-weight="700" fill="var(--ink)">?</text>';
+    if (h.crape) s += '<path d="M4 4 Q22 16 40 4 L40 9 Q22 21 4 9 Z" fill="var(--ink)"/>';
+    return s + '</svg>';
+  }
+  function cardHTML(a, b, forceUnknown) {
+    var A = M.house(g, a), B = M.house(g, b), c = M.card(g, a, b);
+    var html = '<div class="card"><div class="door">' + doorIcon(A, forceUnknown) + '<span class="nm">' + A.name + '</span>' + g.streets[a.s].name + ', crape</div><div class="door">' + doorIcon(B, forceUnknown) + '<span class="nm">' + B.name + '</span>' + g.streets[b.s].name + (a.s === b.s && Math.abs(a.i - b.i) === 1 && Math.floor(a.i / 6) === Math.floor(b.i / 6) ? ', next door' : ', no crape') + '</div></div>';
+    var diff;
+    if (c.street) diff = '<b>Different:</b> the street (' + g.streets[a.s].air + ' against ' + g.streets[b.s].air + ')' + (forceUnknown || c.water === 'unknown' ? ', and the water, not yet known' : c.water === 'different' ? ', and the water' : '; the water is the same') + '.';
+    else diff = '<b>Different:</b> ' + (forceUnknown || c.water === 'unknown' ? 'the same street, the same air; the water, not yet known.' : c.water === 'different' ? 'the water, and nothing else.' : 'nothing. Same street, same water.');
+    return html + '<p class="diff">' + diff + '</p>';
+  }
+
+  // ---------------- screens ----------------
+  function showScreen(id) { ['s-start', 's-play', 's-sentence', 's-end'].forEach(function (k) { $(k).classList.toggle('on', k === id); }); window.scrollTo(0, 0); }
+  function newGame(sd) { seed = sd; g = M.newGame(sd); phase = 'offer'; offerWhich = 'first'; sel = { a: null, b: null }; chosenSentence = null; location.hash = 'v=' + sd; renderAll(); }
+  function wordText(h) { return h.word === null ? '“The water? Couldn’t say.”' : h.word === 'brown' ? '“The Southwark and Vauxhall, I think.”' : '“The Lambeth, I think.”'; }
+  function waterLine(h, how) {
+    if (how === 'glass') return h.water === 'brown' ? '<span class="state brown">milky: Battersea water</span>' : '<span class="state blue">clear: Thames Ditton water</span>';
+    return h.word === null ? 'could not say' : h.word === 'brown' ? '<span class="state brown">says Battersea water</span>' : '<span class="state blue">says Thames Ditton water</span>';
+  }
+  function renderAll() { renderWindow(); renderStreets(); renderPanel(); }
+  function renderWindow() {
+    $('winbox').innerHTML = windowSVG(windowItems());
+    $('wline').textContent = M.line(g);
+    var d = g.doctor.length;
+    $('dline').textContent = d ? 'Across the two streets, the doctor’s: ' + M.plural(d, 'pair') + ', different in the street as well as the water.' : '';
+  }
+  function renderStreets() {
+    var html = '';
+    g.streets.forEach(function (st) { html += '<div class="sthead"><span class="nm fat">' + st.name + '</span><span class="ph">' + st.phrase + '</span></div>' + streetSVG(st); });
+    $('streets').innerHTML = html;
+    Array.prototype.forEach.call($('streets').querySelectorAll('g.house'), function (el) { el.addEventListener('click', function () { onHouse({ s: Number(el.getAttribute('data-s')), i: Number(el.getAttribute('data-i')) }); }); });
+  }
+  function knocksWord() { return '<span class="kn">' + M.plural(g.knocks, 'knock') + ' left</span>'; }
+  function onHouse(ref) {
+    if (busy || g.closed) return; var h = M.house(g, ref);
+    if (phase === 'pick') {
+      if (h.known === 'word') { sel = { a: ref, b: null }; phase = 'checkHow'; }
+      else if (h.crape) { sel = { a: ref, b: null }; phase = 'against'; }
+      else return;
+      renderStreets(); renderPanel();
+    } else if (phase === 'against') {
+      if (h.crape) { sel = { a: ref, b: null }; renderStreets(); renderPanel(); return; }
+      sel.b = ref; phase = 'how'; renderStreets(); renderPanel();
+    } else if (phase === 'how') {
+      if (h.crape) { sel = { a: ref, b: null }; phase = 'against'; } else { sel.b = ref; }
+      renderStreets(); renderPanel();
+    } else if (phase === 'checkHow') {
+      if (h.known === 'word') { sel = { a: ref, b: null }; } else if (h.crape) { sel = { a: ref, b: null }; phase = 'against'; } else return;
+      renderStreets(); renderPanel();
+    }
+  }
+  function renderPanel() {
+    var P = $('panel'), html = '';
+    if (phase === 'offer') {
+      var pairs = g.offers[offerWhich];
+      if (offerWhich === 'first') {
+        var o = pairs[0], A = M.house(g, o.a), B = M.house(g, o.b);
+        html = '<div class="doc"><i class="who">The parish doctor</i>“' + M.numberWord(g.streets[0].crape).replace(/^./, function (c) { return c.toUpperCase(); }) + ' crape door' + (g.streets[0].crape === 1 ? '' : 's') + ' in Battersea against ' + M.numberWord(g.streets[1].crape) + ' in Waterloo Road. Battersea Fields are marsh; the mist does it. Here is a pair for your book, for nothing. I asked at both doors.”' +
+          cardHTML(o.a, o.b) + '<p class="say">' + A.name + ', crape: ' + waterLine(A, 'word') + '. ' + B.name + ', no crape: ' + waterLine(B, 'word') + '.</p></div>' +
+          '<button class="btn solid" id="b-take"><span class="hand">☞</span>Take it, for nothing</button><button class="btn" id="b-decline">No. I’ll pick my own two doors</button>';
+      } else {
+        html = '<div class="doc"><i class="who">The parish doctor</i>“Half your morning gone. Here are three more pairs for nothing, Battersea crape against Waterloo Road living, by what they told me.”';
+        pairs.forEach(function (o) { var A2 = M.house(g, o.a), B2 = M.house(g, o.b); html += '<p class="say">' + A2.name + ', crape: ' + waterLine(A2, 'word') + '. ' + B2.name + ', no crape: ' + waterLine(B2, 'word') + '.</p>'; });
+        html += '<p class="diff"><b>Different</b> in each: the street (' + g.streets[0].air + ' against ' + g.streets[1].air + '), and the water as they said it.</p></div>' +
+          '<button class="btn solid" id="b-take"><span class="hand">☞</span>Take all three, for nothing</button><button class="btn" id="b-decline">No</button>';
+      }
+      P.innerHTML = html;
+      $('b-take').addEventListener('click', function () { M.acceptOffer(g, offerWhich); afterOffer(); });
+      $('b-decline').addEventListener('click', function () { M.declineOffer(g, offerWhich); afterOffer(); });
+    } else if (phase === 'pick') {
+      var anyWord = g.streets.some(function (st) { return st.houses.some(function (h) { return h.known === 'word'; }); });
+      if (g.knocks === 0) html = '<div class="do"><b class="fat">No knocks left.</b>Close the book and write to the Board.' + knocksWord() + '</div>';
+      else html = '<div class="do"><b class="fat">Pick a door with crape.</b>Tap one, on either street. You will set a door without crape against it, and then choose how to know what each drinks.' + (anyWord ? ' Or tap an outlined door to check its word with the glass, for one knock.' : '') + knocksWord() + '</div>';
+      if (M.canClose(g)) html += '<button class="btn' + (g.knocks === 0 ? ' solid' : '') + '" id="b-close">' + (g.knocks === 0 ? '<span class="hand">☞</span>' : '') + 'Close the book' + (g.knocks > 0 ? '<small>' + M.plural(g.knocks, 'knock') + ' unspent</small>' : '') + '</button>';
+      P.innerHTML = html; if ($('b-close')) $('b-close').addEventListener('click', function () { M.closeBook(g); showSentence(); });
+    } else if (phase === 'against') {
+      var A3 = M.house(g, sel.a);
+      P.innerHTML = '<div class="do"><b class="fat">Set a door against it.</b><b>A</b> is ' + A3.name + '’s, with crape, in ' + g.streets[sel.a.s].name + '. Tap a door without crape for <b>B</b>: the door next to it, or any door on either street. The card will say what is different between the two.' + knocksWord() + '</div>';
+    } else if (phase === 'how') {
+      var ok = M.canPair(g, sel.a, sel.b);
+      P.innerHTML = '<div class="do"><b class="fat">How will you know?</b>' + cardHTML(sel.a, sel.b, true) + knocksWord() + '</div>' +
+        '<div class="row2"><button class="btn solid" id="b-ask"' + (ok || g.knocks < C.COST_ASK ? ' disabled' : '') + '><span class="hand">☞</span>Ask at both<small>1 knock · the word</small></button><button class="btn solid" id="b-glass"' + (ok || g.knocks < C.COST_GLASS ? ' disabled' : '') + '><span class="hand">☞</span>Glass at each<small>2 knocks · never wrong</small></button></div>' +
+        '<button class="btn" id="b-change">Change the doors</button>';
+      $('b-ask').addEventListener('click', function () { doPair('ask'); }); $('b-glass').addEventListener('click', function () { doPair('glass'); });
+      $('b-change').addEventListener('click', function () { sel = { a: null, b: null }; phase = 'pick'; renderStreets(); renderPanel(); });
+    } else if (phase === 'result') {
+      var r = lastRec, A4 = M.house(g, r.a), B4 = M.house(g, r.b), c = r.card;
+      var stmt;
+      if (c.kind === 'muddled') stmt = 'The two doors are on different streets, so they differ in the street as well as the water. Whatever the water, this pair cannot say which did it. The doctor reads it as the street.';
+      else if (c.kind === 'clean') stmt = 'Same street, same air, same people. The two doors differ in one thing only: the water. The crape is behind the ' + (M.knownWater(A4) === 'brown' ? 'brown' : 'blue') + ' one.';
+      else if (c.kind === 'nothing') stmt = 'Same street, same water. One died and one did not; that happens. This pair says nothing about the water.';
+      else stmt = 'One of the two doors could not say, so this pair cannot say yet. Tap an outlined door later to check it with the glass.';
+      var gl = r.how === 'glass';
+      html = '<div class="do"><b class="fat">' + (c.kind === 'clean' ? 'One thing different.' : c.kind === 'nothing' ? 'Nothing different.' : c.kind === 'muddled' ? 'Two things different.' : 'Not yet known.') + '</b>';
+      if (gl) html += '<div class="glasses"><div class="g">' + glassSVG('a') + A4.name + '<br>' + waterLine(A4, 'glass') + '</div><div class="g">' + glassSVG('b') + B4.name + '<br>' + waterLine(B4, 'glass') + '</div></div>';
+      else html += '<p class="say"><i>' + A4.name + ', crape: ' + wordText(A4) + '</i> ' + waterLine(A4, 'word') + '.<br><i>' + B4.name + ': ' + wordText(B4) + '</i> ' + waterLine(B4, 'word') + '.<br>By their word only: one word in seven is wrong.</p>';
+      html += cardHTML(r.a, r.b) + '<p class="say">' + stmt + '</p>' + (c.kind !== 'muddled' ? '<p class="say">Both doors go into the window' + (gl ? ', solid' : ', outlined') + '.</p>' : '') + knocksWord() + '</div>';
+      html += '<button class="btn solid" id="b-next"><span class="hand">☞</span>' + (g.knocks > 0 ? 'Next pair' : 'Close the book') + '</button>' + (M.canClose(g) && g.knocks > 0 ? '<button class="btn" id="b-close">Close the book<small>' + M.plural(g.knocks, 'knock') + ' unspent</small></button>' : '');
+      P.innerHTML = html;
+      $('b-next').addEventListener('click', function () { if (g.knocks === 0) { M.closeBook(g); showSentence(); } else nextStep(); });
+      if ($('b-close')) $('b-close').addEventListener('click', function () { M.closeBook(g); showSentence(); });
+    } else if (phase === 'checkHow') {
+      var H = M.house(g, sel.a);
+      P.innerHTML = '<div class="do"><b class="fat">Check the word?</b>' + H.name + '’s door' + (H.crape ? ', with crape' : '') + ', in ' + g.streets[sel.a.s].name + ': ' + (H.word === null ? 'could not say' : H.word === 'brown' ? 'said Battersea water' : 'said Thames Ditton water') + '. A glass from the tap will settle it.' + knocksWord() + '</div>' +
+        '<button class="btn solid" id="b-check"' + (g.knocks < C.COST_CHECK ? ' disabled' : '') + '><span class="hand">☞</span>Draw a glass<small>1 knock</small></button>' + (H.crape ? '<button class="btn" id="b-asA">Set a door against it instead</button>' : '') + '<button class="btn" id="b-change">Not now</button>';
+      $('b-check').addEventListener('click', doCheck); $('b-change').addEventListener('click', function () { sel = { a: null, b: null }; phase = 'pick'; renderStreets(); renderPanel(); });
+      if ($('b-asA')) $('b-asA').addEventListener('click', function () { phase = 'against'; renderStreets(); renderPanel(); });
+    } else if (phase === 'checkResult') {
+      var ck = lastCheck, H2 = ck.house;
+      html = '<div class="do"><b class="fat">' + (ck.wasWrong ? 'The word was wrong.' : ck.wasUnsure ? 'Now it is known.' : 'The word was right.') + '</b><div class="glasses"><div class="g">' + glassSVG('a') + H2.name + '<br>' + waterLine(H2, 'glass') + '</div></div>' +
+        '<p class="say">' + H2.name + ' ' + (ck.wordWas === null ? 'could not say' : ck.wordWas === 'brown' ? 'said Battersea water' : 'said Thames Ditton water') + '; the glass says ' + (ck.milky ? 'Battersea water' : 'Thames Ditton water') + '. The door is painted solid' + (ck.wasWrong && H2.crape ? ', and a crape door has moved from the ' + (ck.wordWas === 'brown' ? 'brown' : 'blue') + ' pane to the ' + (ck.milky ? 'brown' : 'blue') + '.' : '.') + '</p>' + knocksWord() + '</div>' +
+        '<button class="btn solid" id="b-next"><span class="hand">☞</span>' + (g.knocks > 0 ? 'Carry on' : 'Close the book') + '</button>';
+      P.innerHTML = html;
+      $('b-next').addEventListener('click', function () { if (g.knocks === 0) { M.closeBook(g); showSentence(); } else nextStep(); });
+    }
+  }
+  function afterOffer() { if (offerWhich === 'first') { phase = 'pick'; } else { phase = 'pick'; } sel = { a: null, b: null }; renderAll(); }
+  function nextStep() {
+    sel = { a: null, b: null };
+    if (g.offers.second && g.offers.secondTaken === undefined) { phase = 'offer'; offerWhich = 'second'; } else phase = 'pick';
+    renderAll(); window.scrollTo(0, 0);
+  }
+  function animateGlasses(ids, milky, done) {
+    ids.forEach(function (id, k) {
+      Array.prototype.forEach.call(document.querySelectorAll('.dr-' + id), function (d) { d.classList.add('go'); });
+      setTimeout(function () { if (milky[k]) $('g-milk-' + id).classList.add('on'); else $('g-ring-' + id).classList.add('go'); }, 650);
+    });
+    setTimeout(done, 1700);
+  }
+  function doPair(how) {
+    if (busy || phase !== 'how') return;
+    var r = M.makePair(g, sel.a, sel.b, how); if (!r.ok) return;
+    busy = true; lastRec = r.rec; phase = 'result';
+    renderPanel();
+    if (how === 'glass') {
+      // the glasses are drawn clear first, then the drops fall and the water turns or stays
+      $('g-milk-a').classList.remove('on'); $('g-milk-b').classList.remove('on');
+      animateGlasses(['a', 'b'], [r.rec.milkyA, r.rec.milkyB], function () { busy = false; renderWindow(); renderStreets(); });
+    } else { busy = false; renderWindow(); renderStreets(); }
+  }
+  function doCheck() {
+    if (busy || phase !== 'checkHow') return;
+    var r = M.check(g, sel.a); if (!r.ok) return;
+    busy = true; lastCheck = r; phase = 'checkResult'; renderPanel();
+    $('g-milk-a').classList.remove('on');
+    animateGlasses(['a'], [r.milky], function () { busy = false; renderWindow(); renderStreets(); });
+  }
+  function showSentence() {
+    $('sentwin').innerHTML = windowSVG(windowItems()); $('sentline').textContent = M.line(g) + (g.doctor.length ? ' Across the two streets, the doctor’s: ' + M.plural(g.doctor.length, 'pair') + '.' : '');
+    chosenSentence = null; Array.prototype.forEach.call(document.querySelectorAll('.sent'), function (b) { b.classList.remove('on'); }); $('b-send').disabled = true;
+    showScreen('s-sentence');
+  }
+  function showEnd() {
+    var v = M.verdict(g), T = C.PAPER.table1, html = '';
+    html += '<div class="vl big"><span class="sc">What Snow found</span><p>' + v.snow + '</p></div>';
+    html += '<div class="vl big"><span class="sc">What you found</span><p>' + v.you + '</p></div>';
+    html += '<div class="vl"><span class="sc">Where you part</span><p>' + v.part + '</p></div>';
+    if (v.words) html += '<div class="vl"><span class="sc">At the door</span><p>' + v.words + '</p></div>';
+    html += '<div class="vl"><span class="sc">Had yours stood</span><p>' + v.had + '</p></div>';
+    html += '<div class="wins"><span class="sc">Your window, by what you knew</span>' + windowSVG(windowItems()) + '</div>';
+    html += '<div class="wins"><span class="sc">Snow’s window, first seven weeks, twenty-one subdistricts</span>' + windowSVG(null, { numbers: { crapeBrown: T.deathsBrown.toLocaleString('en-GB'), crapeBlue: T.deathsBlue.toLocaleString('en-GB'), liveBrown: (T.housesBrown - T.deathsBrown).toLocaleString('en-GB'), liveBlue: (T.housesBlue - T.deathsBlue).toLocaleString('en-GB') } }) + '</div>';
+    html += '<p class="small">His top row is deaths in houses on each water; his bottom row is the other houses each company supplied, from the return made to Parliament. Five hundred and seven against ninety-eight, in sixteen thousand houses against twenty thousand.</p>';
+    html += '<div class="vl"><span class="sc">Later in the epidemic</span><p>' + v.later + '</p></div>';
+    html += '<p class="small">John Snow (1856), Cholera and the Water Supply in the South Districts of London in 1854, <i>Journal of Public Health</i>, October 1856. The streets, the knocks, the doctor, the pair card and the window are this game’s; the houses, the deaths and the two waters are his tables. About has the rest.</p>';
+    $('verdict').innerHTML = html; $('seedline').textContent = 'Morning no. ' + seed + '.';
+    showScreen('s-end');
+  }
+
+  // ---------------- wiring ----------------
+  function openOv(id) { $(id).classList.add('on'); document.body.classList.add('lock'); $(id).scrollTop = 0; }
+  function closeOv(id) { $(id).classList.remove('on'); document.body.classList.remove('lock'); }
+  function randomSeed() { return 1000 + Math.floor(Math.random() * 9000); }
+  $('b-begin').addEventListener('click', function () { newGame(seed || randomSeed()); showScreen('s-play'); });
+  $('b-again').addEventListener('click', function () { newGame(randomSeed()); showScreen('s-play'); });
+  Array.prototype.forEach.call(document.querySelectorAll('.sent'), function (b) { b.addEventListener('click', function () { chosenSentence = b.getAttribute('data-s'); Array.prototype.forEach.call(document.querySelectorAll('.sent'), function (x) { x.classList.toggle('on', x === b); }); $('b-send').disabled = false; }); });
+  $('b-send').addEventListener('click', function () { if (!chosenSentence) return; M.writeSentence(g, chosenSentence); showEnd(); });
+  ['b-help-start', 'q-play', 'b-help-end'].forEach(function (id) { $(id).addEventListener('click', function () { openOv('help'); }); });
+  $('b-help-close').addEventListener('click', function () { closeOv('help'); });
+  $('b-about').addEventListener('click', function () { openOv('about'); });
+  $('b-about-close').addEventListener('click', function () { closeOv('about'); });
+  var m = /v=(\d+)/.exec(location.hash || ''); if (m) seed = Number(m[1]);
+  window.__game = { get state() { return g; }, get phase() { return phase; }, get sel() { return sel; }, newGame: newGame };
+})();
+</script>
+</body>
+</html>

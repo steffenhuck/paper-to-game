@@ -18,22 +18,28 @@ PASS Unconstrained: a street with a brown crape house and a blue house without e
 PASS Crape within floors 5–10 over 3000 seeds  — 5–10, mean 7.2; some floor bound in 30% of seeds
 PASS Position is real: a crape house in a middle street has a neighbour on the other pipe in at least two cases in three  — 80%
 PASS Same seed, same map
-PASS A test spends one of eight, paints the door, and clouds the glass for the town's water only
+PASS A test spends one of ten, paints the door, and clouds the glass for the town's water only
 PASS The same house cannot be tested twice
-PASS No sentence before the tests are spent; then one, once
-PASS Evidence: all tests counted; same-street rows counted only where both colours were tested
+PASS A sentence can be written after the first glass, once, and then no more tests
+PASS No sentence before the first glass
+PASS Evidence states in sequence: none; one colour; confounded (both colours, no shared street); clean (shared street, crape at the brown)  — {"s0":"none","s1":"oneColour","s2":"confounded","c2":null,"s3":"clean","at":3}
+PASS The doctor concedes at the glass that makes the evidence clean, and the count is fixed there  — {"at":3}
+PASS The doctor objects to the confounded state with the side of town
+PASS After the concession the doctor says so, and more tests do not move the count
 PASS ratioOf: one colour untested cannot be told; no blue crape is beyond count; otherwise deaths over houses by colour
-PASS Evidence states: none; one colour; confounded (both colours, no shared street); clean (shared street, brown worse)
-PASS The doctor objects to the confounded state with the side of town and concedes the clean one
-PASS The doctor's comparison (inland crape against riverside houses) and the air: wrong in every game, and unable to answer him (confounded, or no crape where both waters met) in at least nine in ten  — {"confounded":308,"nocrape":255,"clean":14,"flat":16,"weak":7}
-PASS Testing the crape houses only: the sentence unsupported in at least two games in five (nothing to compare with, or confounded)  — {"unsupported":337,"weak":18,"flat":141,"agree":104}
-PASS A crape house in a middle street and its neighbours: agrees with Snow in at least seven games in ten  — {"agree":440,"weak":92,"flat":55,"unsupported":13}
-PASS The middle streets at random: agrees in at least six games in ten  — {"agree":437,"weak":76,"flat":53,"unsupported":34}
-PASS Where you test matters: the middle streets agree at least twice as often as houses anywhere at random, and three times as often as one house per street  — 73% vs random 32% vs column 21%
-PASS A same-street comparison finds the upriver water the worse in fewer than 5% of games (flat, with crape at the blue houses only)
-PASS Compression 5, no floors: the neighbour strategy still agrees with Snow more often than one house per street  — 59% vs 11%
-PASS Compression 20, no floors: the neighbour strategy still agrees with Snow more often than one house per street  — 64% vs 34%
-PASS 6 tests: the middle streets still beat random placement  — 70% vs 22%
-PASS 12 tests: the middle streets still beat random placement  — 75% vs 54%
-PASS No decimal, NaN, Infinity or undefined in any verdict, map line or doctor's line over 1200 games  — 9600 lines
-ALL PASSED (38 checks)
+PASS Identified and wrote the water: band identified, headline "stands alone", sentence carried
+PASS Wrote the water without identification: band guessed, and the sentence line says a right answer is not identification
+PASS Identified but wrote the air: band identifiedWroteAir; own tests say otherwise
+PASS Speed names the glass of concession
+PASS Anchor and hunt (a crape door in a mixed street, then its street until a blue): conceded by the third glass in at least four games in five, by the fourth in nine in ten  — 87% / 96%
+PASS Anchor and hunt: never fails within ten in more than 2% of games  — 0%
+PASS The crape doors first: conceded by the fourth glass in fewer than 5% of games, and never within ten in more than half  — 0% / never 60%
+PASS The doctor's comparison (inland crape against riverside houses): never conceded within ten in at least nine games in ten  — 94%
+PASS Random placement: never within ten in at least half the games; one house per street likewise  — 58% / 62%
+PASS The benchmarks the verdict quotes hold: best plan at the second or third glass in most games; crape first at nine or more when at all  — 19% of crape-first games conceded by the eighth
+PASS Compression 5, no floors: anchor and hunt still identifies far more often than the crape doors first  — 87% vs 46%
+PASS Compression 20, no floors: anchor and hunt still identifies far more often than the crape doors first  — 100% vs 2%
+PASS Cap of 6 glasses: anchor and hunt still beats random placement by thirty points  — 99% vs 20%
+PASS Cap of 14 glasses: anchor and hunt still beats random placement by thirty points  — 99% vs 59%
+PASS No decimal, NaN, Infinity or undefined in any verdict, map line or doctor's line over 1000 games  — 10000 lines
+ALL PASSED (44 checks)

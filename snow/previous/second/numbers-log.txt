@@ -1,0 +1,15 @@
+doctor          | bands {"air":600} | evidence {"none":600} | median finite ratio by record NaN | infinite 0 | median true NaN | same-street pairs 0.0 | clean 0.0 | nothing 0.0 | muddled 12.0 | wrong words 0.0 | at crape doors 0.0
+askNext         | bands {"narrow":569,"agree":30,"unsupported":1} | evidence {"narrow":569,"water":30,"none":1} | median finite ratio by record 1.3 | infinite 4 | median true 1.6 | same-street pairs 8.0 | clean 2.3 | nothing 2.5 | muddled 0.0 | wrong words 2.0 | at crape doors 1.4
+askThenCheck    | bands {"agree":430,"unsupported":83,"narrow":87} | evidence {"water":430,"none":83,"narrow":87} | median finite ratio by record 1.6 | infinite 428 | median true 1.7 | same-street pairs 5.8 | clean 1.7 | nothing 2.6 | muddled 0.0 | wrong words 0.6 | at crape doors 0.1
+glassNext       | bands {"agree":529,"unsupported":26,"narrow":45} | evidence {"water":529,"none":26,"narrow":45} | median finite ratio by record 1.8 | infinite 529 | median true 1.8 | same-street pairs 4.0 | clean 1.5 | nothing 2.5 | muddled 0.0 | wrong words 0.0 | at crape doors 0.0
+glassBattersea  | bands {"unsupported":311,"agree":270,"narrow":19} | evidence {"none":311,"water":270,"narrow":19} | median finite ratio by record 0.4 | infinite 270 | median true 0.4 | same-street pairs 4.0 | clean 0.6 | nothing 3.4 | muddled 0.0 | wrong words 0.0 | at crape doors 0.0
+random          | bands {"narrow":57,"cannot":197,"air":203,"unsupported":79,"agree":64} | evidence {"narrow":196,"water":175,"none":229} | median finite ratio by record 1.0 | infinite 174 | median true 1.0 | same-street pairs 2.8 | clean 0.7 | nothing 1.4 | muddled 2.8 | wrong words 0.5 | at crape doors 0.3
+Battersea | brown 11 of 12 | p brown 40.2% blue 4.8% | crape mean 4.9 min 3 max 7 | floor, cap or word floor bound in 65% of seeds
+Waterloo Road | brown 3 of 12 | p brown 20.5% blue 0.7% | crape mean 1.3 min 1 max 2 | floor, cap or word floor bound in 52% of seeds
+Battersea crape doors with a wrong word: mean 1.3
+
+SEED 7 askThenCheck: agree 
+ YOU: You wrote: “It is the Southwark and Vauxhall Company’s water.” Your book has 5 pairs in the same street: 1 pair different in the water alone, two different in nothing. No blue door in these pairs wears crape: as far as they go, it is the brown water. 
+ PART: Your sentence is his, and your book can carry it: in the same street, with the same air and the same people, the crape was behind the brown doors. 
+ WORDS: The words you took and did not check were all right this time. One time in seven they are not, and at a crape door a wrong word nearly always moves a death from the brown water to the blue. You checked three doors with the glass, and two of the words were wrong. 
+ HAD: Had it been answered from the companies’ lists instead of at the door, as the Board of Health answered it, the gap would have shrunk to three and a half to one, because with deaths six times as common behind one company’s doors, five mistakes in six move a death from the guilty water to the innocent one. Yours was answered at the door, with the glass.
