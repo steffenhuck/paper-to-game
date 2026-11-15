@@ -102,7 +102,22 @@ g.worlds.forEach(function (w, i) { check('sky ' + (i + 1) + ' total wanting to b
   check('sky 3: filled by weight, every pair with a lit star is known and the dark things\' numbers are not', w3.knownPairs.length === 4 && !M.star(w3, 'mint').known && M.star(w3, 'amber').known);
 })();
 
-// 4. robustness// 4. robustness: claim = weight^k. At what k does the coral star enter the best second sky, and the step back stop paying?
+// 3b. layout: no line passes through a third star's glow, no two lines cross, no two stars touch (the eye reads a line
+// through a star as that star's line)
+(function () {
+  var g = M.newGame(), R = M.CONFIG.radius, bad = [];
+  function seg(a, b, c, d) { var o = function (p, q, r) { return Math.sign((q.x - p.x) * (r.y - p.y) - (q.y - p.y) * (r.x - p.x)); }; return o(a, b, c) !== o(a, b, d) && o(c, d, a) !== o(c, d, b); }
+  function dist(p, a, b) { var dx = b.x - a.x, dy = b.y - a.y; var tt = Math.max(0, Math.min(1, ((p.x - a.x) * dx + (p.y - a.y) * dy) / (dx * dx + dy * dy))); return Math.hypot(p.x - (a.x + tt * dx), p.y - (a.y + tt * dy)); }
+  g.worlds.concat(g.judge.skies).forEach(function (w, k) {
+    var P = w.pairs.map(function (p) { return [M.star(w, p[0]), M.star(w, p[1])]; });
+    P.forEach(function (ab) { w.stars.forEach(function (s) { if (s === ab[0] || s === ab[1]) return; if (dist(s, ab[0], ab[1]) < R(s.w) * 1.7 + 6) bad.push('world ' + (k + 1) + ': line ' + ab[0].id + '-' + ab[1].id + ' through ' + s.id); }); });
+    for (var i = 0; i < P.length; i++) for (var j = i + 1; j < P.length; j++) { var a = P[i][0], b = P[i][1], c = P[j][0], d = P[j][1]; if (a !== c && a !== d && b !== c && b !== d && seg(a, b, c, d)) bad.push('world ' + (k + 1) + ': lines cross'); }
+    for (i = 0; i < w.stars.length; i++) for (j = i + 1; j < w.stars.length; j++) { var s1 = w.stars[i], s2 = w.stars[j]; if (Math.hypot(s1.x - s2.x, s1.y - s2.y) < R(s1.w) + R(s2.w) + 14) bad.push('world ' + (k + 1) + ': ' + s1.id + ' and ' + s2.id + ' touch'); }
+  });
+  check('layout: no line through a star, no crossing lines, no touching stars', bad.length === 0, bad.join('; '));
+})();
+
+// 4. robustness: claim = weight^k. At what k does the coral star enter the best second sky, and the step back stop paying?
 (function () {
   var kIn = null, kStep = null;
   for (var k = 1; k <= 4.001; k += 0.05) {
