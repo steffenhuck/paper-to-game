@@ -44,14 +44,16 @@ const path = require('path');
   const kNo = await page.evaluate(() => window.__game().audit.cells.findIndex(x => !x.list));
   if (kNo >= 0) { await page.click('#sq-' + kNo); await page.waitForTimeout(150); log.push('square ' + kNo + ': ' + await say('read')); await shot('a-check-touched'); }
   await hscroll('check done');
-  // Sunday, the real vote
-  await page.click('#b-toreal'); await page.waitForTimeout(250); await shot('a-sunday'); await hscroll('sunday');
+  // Arrow's offer: look, then keep my own book
+  await page.click('#b-toreal'); await page.waitForTimeout(250); await shot('a-offer'); log.push('OFFER: ' + await say('offer-ask'));
+  await page.click('#b-offer-yes'); await idle(); await page.waitForTimeout(300); await shot('a-offer-shown'); log.push('OFFER shown: ' + await say('offer-say')); await hscroll('offer');
+  await page.click('#b-keep'); await page.waitForTimeout(250); await shot('a-sunday'); await hscroll('sunday');
   await page.click('#b-count'); await idle(); await page.waitForTimeout(200); await shot('a-sunday-counted'); log.push('SUNDAY: ' + await say('real-out'));
   // force the other outcome for a screenshot
   const other = await page.evaluate(() => { const g = window.__game(), c = g.audit.cells; const want = c[g.real.k].list ? c.findIndex(x => !x.list) : c.findIndex(x => x.list); return want; });
   if (other >= 0) { await page.evaluate((k) => { const g = window.__game(); g.real = { k: k, anna: window.MECH.BALLOTS[Math.floor(k / 6)], beat: window.MECH.BALLOTS[k % 6] }; document.getElementById('b-count').click(); }, other); await idle(); await page.waitForTimeout(100); log.push('SUNDAY (other case): ' + await say('real-out')); await shot('a-sunday-other'); }
   await page.click('#b-debrief'); await page.waitForTimeout(600); await shot('a-end'); await shot('view-a-end', false); await hscroll('end');
-  log.push('END A: ' + await say('v1') + ' | ' + await say('v2') + ' | ' + await say('v3'));
+  log.push('END A: ' + await say('v1') + ' | ' + await say('v2') + ' | ' + await say('v3') + ' | ' + await say('v4'));
   log.push('SCORE: ' + await say('score') + ' // WHY2: ' + await say('why2'));
   log.push('STRIP: ' + await say('strip'));
   log.push('POINTS: ' + await say('pstrip'));
@@ -68,9 +70,17 @@ const path = require('path');
     await page.click('#b-next'); await page.waitForTimeout(80);
   }
   await page.click('#b-check'); await idle(); await page.click('#b-check'); await idle(); await page.waitForTimeout(100); await shot('b-check-done'); log.push('B check: ' + await say('check-say'));
-  await page.click('#b-toreal'); await page.waitForTimeout(100); await page.click('#b-count'); await idle(); await page.waitForTimeout(100); log.push('B SUNDAY: ' + await say('real-out'));
+  await page.click('#b-toreal'); await page.waitForTimeout(100); if (await page.isVisible('#s-offer')) errors.push('offer shown to a boss'); await page.click('#b-count'); await idle(); await page.waitForTimeout(100); log.push('B SUNDAY: ' + await say('real-out'));
   await page.click('#b-debrief'); await page.waitForTimeout(400); await shot('b-end'); await hscroll('end B');
   log.push('END B: ' + await say('v1') + ' | ' + await say('v2') + ' | ' + await say('v3'));
+  // game C: a fair book, then Arrow's offer adopted
+  await page.click('#b-again'); await page.waitForTimeout(200);
+  for (let k = 0; k < 3; k++) { await idle(); const i = await page.evaluate(() => { const g = window.__game(), M = window.MECH; const c = M.counts(g.book); const want = c.A <= c.B ? 'A' : 'B'; let best = 0, bs = -1; g.lists.forEach((w, i) => { const s = M.newRulings(g.book, g.nb.anna, g.nb.beat, w).filter(r => r.value === want).length; if (s > bs) { bs = s; best = i; } }); return best; }); await pickList(i); await page.click('#b-post'); await page.waitForTimeout(80); await page.click('#b-next'); await page.waitForTimeout(80); }
+  await page.click('#b-check'); await idle(); await page.click('#b-check'); await idle(); await page.waitForTimeout(100);
+  await page.click('#b-toreal'); await page.waitForTimeout(100); await page.click('#b-offer-yes'); await idle(); await page.waitForTimeout(100); await page.click('#b-adopt'); await page.waitForTimeout(200);
+  await page.click('#b-count'); await idle(); await page.waitForTimeout(100); log.push('C SUNDAY (adopted): ' + await say('real-out'));
+  await page.click('#b-debrief'); await page.waitForTimeout(400); await shot('c-end'); await hscroll('end C');
+  log.push('END C: ' + await say('score') + ' | ' + await say('v1') + ' | ' + await say('v4'));
   const emb = await page.evaluate(() => JSON.stringify(window.MECH.allBooks().hist)); const file = JSON.stringify(require('./mechanism.js').MECH.allBooks().hist);
   if (emb !== file) errors.push('embedded mechanism disagrees with mechanism.js');
   log.push('', errors.length ? 'ERRORS: ' + errors.join(' ; ') : 'no errors, no horizontal scroll at 380 px');
