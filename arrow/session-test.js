@@ -17,7 +17,8 @@ const path = require('path');
     if (keys[1] !== undefined && await page.isVisible('#step2')) { await page.click(`#opts2 .opt[data-key="${keys[1]}"]`); await page.waitForTimeout(80); }
     const sel = await page.evaluate(() => window.__game().sel); if (sel !== i) errors.push('wanted ranking ' + i + ', got ' + sel); };
   await shot('start'); await hscroll('start');
-  await page.click('#b-begin'); await page.waitForTimeout(300);
+  await page.click('#b-begin'); await page.waitForTimeout(300); await shot('book'); await hscroll('book');
+  await page.click('#b-start'); await page.waitForTimeout(300);
   // game A: a stranger who tries to be fair: one tie each way, then whatever balances
   const picksA = [3, 1, 2];
   for (let k = 0; k < 3; k++) {
@@ -45,14 +46,15 @@ const path = require('path');
   await hscroll('check done');
   // Sunday, the real vote
   await page.click('#b-toreal'); await page.waitForTimeout(250); await shot('a-sunday'); await hscroll('sunday');
-  await page.click('#b-count'); await page.waitForTimeout(200); await shot('a-sunday-counted'); log.push('SUNDAY: ' + await say('real-out'));
+  await page.click('#b-count'); await idle(); await page.waitForTimeout(200); await shot('a-sunday-counted'); log.push('SUNDAY: ' + await say('real-out'));
   // force the other outcome for a screenshot
   const other = await page.evaluate(() => { const g = window.__game(), c = g.audit.cells; const want = c[g.real.k].list ? c.findIndex(x => !x.list) : c.findIndex(x => x.list); return want; });
-  if (other >= 0) { await page.evaluate((k) => { const g = window.__game(); g.real = { k: k, anna: window.MECH.BALLOTS[Math.floor(k / 6)], beat: window.MECH.BALLOTS[k % 6] }; document.getElementById('b-count').click(); }, other); await page.waitForTimeout(100); log.push('SUNDAY (other case): ' + await say('real-out')); await shot('a-sunday-other'); }
+  if (other >= 0) { await page.evaluate((k) => { const g = window.__game(); g.real = { k: k, anna: window.MECH.BALLOTS[Math.floor(k / 6)], beat: window.MECH.BALLOTS[k % 6] }; document.getElementById('b-count').click(); }, other); await idle(); await page.waitForTimeout(100); log.push('SUNDAY (other case): ' + await say('real-out')); await shot('a-sunday-other'); }
   await page.click('#b-debrief'); await page.waitForTimeout(600); await shot('a-end'); await shot('view-a-end', false); await hscroll('end');
   log.push('END A: ' + await say('v1') + ' | ' + await say('v2') + ' | ' + await say('v3'));
   log.push('MINIS: ' + await say('minis-say'));
   log.push('STRIP: ' + await say('strip'));
+  log.push('POINTS: ' + await say('pstrip'));
   log.push('TRIES: ' + await say('tries') + ' / ' + await say('ring'));
   await page.click('#b-about1'); await page.waitForTimeout(150); await shot('about'); await page.click('#b-about-close');
   // game B: everything Anna's way, second opening
@@ -66,7 +68,7 @@ const path = require('path');
     await page.click('#b-next'); await page.waitForTimeout(80);
   }
   await page.click('#b-check'); await idle(); await page.click('#b-check'); await idle(); await page.waitForTimeout(100); await shot('b-check-done'); log.push('B check: ' + await say('check-say'));
-  await page.click('#b-toreal'); await page.waitForTimeout(100); await page.click('#b-count'); await page.waitForTimeout(100); log.push('B SUNDAY: ' + await say('real-out'));
+  await page.click('#b-toreal'); await page.waitForTimeout(100); await page.click('#b-count'); await idle(); await page.waitForTimeout(100); log.push('B SUNDAY: ' + await say('real-out'));
   await page.click('#b-debrief'); await page.waitForTimeout(400); await shot('b-end'); await hscroll('end B');
   log.push('END B: ' + await say('v1') + ' | ' + await say('v2') + ' | ' + await say('v3'));
   const emb = await page.evaluate(() => JSON.stringify(window.MECH.allBooks().hist)); const file = JSON.stringify(require('./mechanism.js').MECH.allBooks().hist);

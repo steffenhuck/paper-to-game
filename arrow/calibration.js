@@ -89,6 +89,21 @@ check('every Sunday without a list comes with a chain "a over-or-level b, b over
 { let hist = {}; const rnd = (() => { let x = 12345; return () => { x = (x * 1103515245 + 12345) % 2147483648; return x / 2147483648; }; })();
   for (let i = 0; i < 36000; i++) { const d = M.drawSunday(rnd); hist[d.k] = (hist[d.k] || 0) + 1; }
   check('the real Sunday is drawn from all 36 pairs of ballots, each about equally often', Object.keys(hist).length === 36 && Math.max(...Object.values(hist)) < 1300 && Math.min(...Object.values(hist)) > 700); }
+// --- the rank-order method (pp. 337-338) inside the game
+{ const b1 = M.borda([0, 1, 2], [1, 2, 0]), b2 = M.borda([0, 2, 1], [1, 2, 0]);
+  check('points 3-2-1: fountain,tower,tree v tower,tree,fountain puts the tower above the fountain; move only the tree on the first ballot and it is a three-way draw',
+    b1.rank[1] < b1.rank[0] && b2.rank.join('') === '000', JSON.stringify([b1.points, b2.points])); }
+{ let legalOnEmpty = true, blockedSomewhere = 0, pathsN = 0;
+  B.forEach(a => B.forEach(b => { if (a !== b && !M.legalLists(M.emptyBook(), a, b).some(r => r.join() === M.borda(a, b).rank.join())) legalOnEmpty = false; }));
+  M.CONFIG.openings.forEach((o, g) => { (function go(bk, t) { const nb = M.nextBallots(bk, t, g); if (!nb) { pathsN++; return; }
+    const L = M.legalLists(bk, nb.anna, nb.beat), br = M.borda(nb.anna, nb.beat).rank; if (!L.some(r => r.join() === br.join())) blockedSomewhere++;
+    L.forEach(w => go(M.post(bk, nb.anna, nb.beat, w), t + 1)); })(M.emptyBook(), 0); });
+  check('the points ranking always respects what the two agree on (so it is never blocked on an empty book)', legalOnEmpty);
+  check('the book never blocks the points ranking during the three what-ifs (each opens only new ties), so the clash shows in the check, not in play', blockedSomewhere === 0, blockedSomewhere + ' blocked what-ifs across ' + pathsN + ' paths');
+  // a player who counts points on all three what-ifs: the book then disagrees with points on some of the 36 votes
+  let worst = 0, best = 99; M.CONFIG.openings.forEach((o, g) => { let bk = M.emptyBook(), t = 0, nb; while ((nb = M.nextBallots(bk, t, g))) { bk = M.post(bk, nb.anna, nb.beat, M.borda(nb.anna, nb.beat).rank); t++; }
+    let dis = 0; M.audit(bk).cells.forEach(c => { const br = M.borda(c.anna, c.beat).rank; if (!c.list || c.list.join() !== br.join()) dis++; }); worst = Math.max(worst, dis); best = Math.min(best, dis); });
+  check('counting points on all three what-ifs gives a book that disagrees with points on some of the 36 votes (Condition 3 bites in the check)', best > 0, best + ' to ' + worst + ' votes differ, by opening'); }
 // --- the hired tie-breakers (ours), against the paper's first page
 { let same = true, n34 = true, condorcet = true;
   B.forEach(cl => { const bk = M.clarasBook(cl); const au = M.audit(bk); if (au.holds !== 34) n34 = false;

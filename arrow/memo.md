@@ -222,3 +222,16 @@ From a long conversation after Steffen's playthroughs. His objections, in order:
 **Language.** "What if they write this?", "Then what goes on the square?", "Write it in the book", "Arrow checks the rest", "Sunday", "What just happened". "Ranking" only where the thing on screen is one; otherwise "answer".
 
 **Calibration: 31 checks, 0 failed**, now including the chain from all twelve starts and the draw over 36,000 trials. Browser session rewritten for the new flow: a fair game to the debrief with both Sunday outcomes shown, then a boss game; no errors, no horizontal scroll at 380 px. Still the builder's review only.
+
+## 26. Revision 7 (15 Nov 2026): Bruno, the book explained first, and why no points
+
+From Steffen's playthrough of revision 6 and the conversation after it.
+
+- **Bruno** replaces Beat, which read as the verb in "x beats y".
+- **A second opening screen, "Your book"**, in Steffen's own words, before the first what-if: 36 votes can come in; where the two write the same ballot it is easy; the temptation to count points, and why not (a ballot says only what is above what, not by how much); three what-ifs with two decisions each fill the book; and the reason that is enough: ties are about two plans, three pairs, two ways round, six lines, drawn empty under the text. The start screen itself is now short.
+- **On each what-if**, the line Steffen asked for: when you answer, you decide three small things at once, fountain against tower, tower against tree, tree against fountain; one is decided already by the voters, the other two are ties your answer breaks.
+- **The real Sunday is counted line by line**: each pair of plans looked up in turn, labelled "they agree, 2–0" or "a tie: line n of your book", then put together into the answer, or the circle. The check's readings name the book line too.
+- **The debrief has a new section, "Why no points"**: the spoiler, computed from the mechanism (`borda`): fountain, tower, tree against tower, tree, fountain gives the tower 5 points to the fountain's 4; move the tree on Anna's ballot alone and it is 4–4–4, a draw, though nobody changed their mind about the fountain and the tower. Then the three doors: a third plan decides, a boss decides, or some votes get no answer; Arrow proved there is no fourth.
+- **Finding from the calibration:** the points ranking always respects what the two agree on, and each what-if opens only new ties, so the book never blocks the points method during play; the clash appears in the check, where a book written by counting points disagrees with points on 24 to 26 of the 36 votes. So the in-play warning that was planned is not needed, and the explanation lives at the start and on the debrief.
+
+Calibration: 35 checks, 0 failed. Browser session rerun with the new screen and the line-by-line Sunday: no errors, no horizontal scroll at 380 px. Builder's review only.

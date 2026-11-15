@@ -12,7 +12,7 @@
   'use strict';
 
   var CONFIG = {
-    voters: ['Anna', 'Beat'],                 // our choice: names for Arrow's individuals 1 and 2 (p. 340)
+    voters: ['Anna', 'Bruno'],                // our choice: names for Arrow's individuals 1 and 2 (p. 340)
     plans: ['Fountain', 'Tower', 'Tree'],     // our choice: names for Arrow's alternatives x, y, z (p. 340); drawn as circle, square, triangle
     nVoters: 2,                               // Part III sec. 1 (p. 336): "the society under study contains only two individuals"
     nPlans: 3,                                // Part III sec. 1 (p. 336): "the total number of alternatives which are conceivable is three"
@@ -22,7 +22,8 @@
     openings: [[[0, 1, 2], [2, 0, 1]], [[0, 2, 1], [1, 0, 2]], [[2, 0, 1], [1, 2, 0]]],
     whatIfs: 3,                               // our choice: three what-ifs, each opening two new ties, complete the six-line book (checked over every path)
     valuesPerRuling: 3,                       // Anna's way, level, Beat's way: P, I, and the reverse P (Definitions 1-2, p. 332)
-    clara: [0, 1, 2]                          // our choice: the ballot the hired tie-breaker, a third voter who never changes her mind, starts with
+    clara: [0, 1, 2],                         // our choice: the ballot of Clara, a third voter who never changes her mind (the debrief)
+    points: [3, 2, 1]                         // the rank-order method of p. 337: points for first, second, third place (3-2-1 as the game's text says; the paper's example uses 4-3-2-1 for four)
   };
 
   // ---------- the paper's objects ----------
@@ -127,6 +128,15 @@
       book = post(book, found.anna, found.beat, found.list); found.book = book.slice(); steps.push(found);
     }
     return { steps: steps, book: book };
+  }
+  // The rank-order method (pp. 337-338): points for places, added up, as a weak ordering. It violates Condition 3, which is why the
+  // book can block it: borda(anna, beat) need not be among legalLists(book, anna, beat) once the book has lines in it.
+  function borda(anna, beat) {
+    var pts = [0, 0, 0], w = CONFIG.points;
+    [anna, beat].forEach(function (b) { b.forEach(function (plan, place) { pts[plan] += w[place]; }); });
+    var order = [0, 1, 2].sort(function (x, y) { return pts[y] - pts[x]; }), rank = [], step = 0;
+    order.forEach(function (plan, i) { if (i > 0 && pts[plan] < pts[order[i - 1]]) step++; rank[plan] = step; });
+    return { rank: rank, points: pts };
   }
   // The real Sunday: one of the 36 pairs of ballots, drawn by chance. rnd is a function returning a number in [0, 1).
   function drawSunday(rnd) { var k = Math.floor(rnd() * 36); if (k > 35) k = 35; return { k: k, anna: BALLOTS[Math.floor(k / 6)], beat: BALLOTS[k % 6] }; }
@@ -252,7 +262,7 @@
     CONFIG: CONFIG, PAIRS: PAIRS, BALLOTS: BALLOTS, LISTS: LISTS,
     rankOf: rankOf, ballotIndex: ballotIndex, sameList: sameList, tiers: tiers,
     pairInfo: pairInfo, pairOutcome: pairOutcome, legalLists: legalLists, newRulings: newRulings, post: post,
-    emptyBook: emptyBook, isComplete: isComplete, nextBallots: nextBallots, chain: chain, drawSunday: drawSunday, openCount: openCount,
+    emptyBook: emptyBook, isComplete: isComplete, nextBallots: nextBallots, chain: chain, drawSunday: drawSunday, openCount: openCount, borda: borda,
     readSunday: readSunday, audit: audit, clashOf: clashOf, dictator: dictator, custom: custom, counts: counts,
     bookIndex: bookIndex, bookFromIndex: bookFromIndex, allBooks: allBooks, verdict: verdict,
     voterBook: voterBook, clarasBook: clarasBook, majorityOfThree: majorityOfThree
