@@ -147,6 +147,20 @@ svg.sh{display:block;flex:none}
 .over .close button{font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;border:2px solid var(--ink);padding:7px 12px}
 .over a{color:inherit}
 .hide{display:none!important}
+/* screen 2 figures */
+.fig{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);padding:10px 0;margin:4px 0 12px}
+.fig .cap{font-size:12px;color:#444;margin:0;flex:1 1 120px}
+.fig .big36{font-family:'Inter Display';font-weight:900;font-size:40px;line-height:1;letter-spacing:-.03em}
+.fig .six{display:flex;gap:3px}
+.fig .six .stack{gap:1px}
+.fig .pts{display:flex;flex-direction:column;gap:2px;position:relative;padding:4px 6px;border:2px solid var(--ink)}
+.fig .pts span{display:flex;align-items:center;gap:6px;font-family:'Inter Display';font-weight:700;font-size:15px}
+.fig .pts::after{content:'';position:absolute;left:-6px;right:-6px;top:50%;height:4px;background:var(--red);transform:rotate(-30deg)}
+.fig .qq{display:flex;flex-direction:column;gap:4px;font-size:12.5px}
+.fig .qq b{font-family:'Inter Display';font-weight:700;font-size:13px}
+.fig .pair{display:flex;align-items:center;gap:4px;border:1.5px solid var(--ink);padding:5px 7px;font-size:11px;font-weight:600}
+.fig .pair.tie{border-style:dashed}
+.fig .loop{display:grid;grid-template-columns:auto auto auto;align-items:center;gap:2px 6px;font-size:18px;font-weight:600}
 /* real Sunday */
 .real{border:2px solid var(--ink);padding:12px;margin-top:12px}
 .real .h{font-family:'Inter Display';font-weight:900;font-size:26px;line-height:1.05;letter-spacing:-.02em;margin-bottom:8px}
@@ -200,14 +214,19 @@ canvas.all{display:block;width:348px;margin:6px 0}
   <div class="top"><div class="aim"><b>Aim</b><br>An answer whatever they vote, and no voter the boss.</div><button class="q" id="q-book" aria-label="How to play">?</button></div>
   <h2 class="big">Your book</h2>
   <div class="lead">
+    <div class="fig" id="fig-36"></div>
     <p>Anna can write her ballot six ways, and so can Bruno. So 36 different votes can come in next Sunday, and you will write a book that can be consulted for every one.</p>
     <p>Where Anna and Bruno fill in the ballot the same way, it is easy: that is the answer. Where they differ, your book must choose.</p>
+    <div class="fig" id="fig-points"></div>
     <p>You might be tempted to count points: 3 for a first place, 2 for a second, 1 for a third, add them up, highest wins. But that assumes something you do not know: that the step from first to second matters as much as the step from second to third, and as much to Anna as to Bruno. A ballot only says what is above what. <b>So no points.</b></p>
+    <div class="fig" id="fig-two"></div>
     <p>What is left is this. You will see three what-ifs, three of the 36 votes, and make two decisions for each: what goes on the square, and what if that falls through, for whatever reason. For each decision you pick one plan, or call it a draw and the village tosses a coin. Sometimes the second decision is already made by the first, and the game says so. And these six decisions fill all six lines of your book.</p>
+    <div class="fig" id="fig-pairs"></div>
     <p><b>Sounds like magic? Almost.</b> Here is the thing. Take the plans two at a time. Fountain or tower? If both put the same one higher, that settles it. If not, it is a tie, and your book says who gets their way, or calls it a draw. The same for the other two pairs. Three pairs, two ways to disagree about each: six ties, six lines.</p>
   </div>
   <div class="book" id="book0"></div>
   <p class="note" style="margin-top:10px">The three what-ifs are chosen so that between them you break every one of the six. Then your book can be consulted on any vote: fountain or tower, tower or tree, tree or fountain, three results.</p>
+  <div class="fig" id="fig-circle" style="margin-top:14px"></div>
   <div class="lead"><p><b>One thing you cannot choose</b>, because it is what a ranking is: if the fountain is above the tower, and the tower above the tree, then the fountain is above the tree. Sounds obvious, but it is tricky. Your book answers the three pairs separately, and three separate answers can contradict each other. Then nothing can go on the square. <b>Try to avoid decisions that contradict each other.</b> Arrow will check.</p></div>
   <button class="go" id="b-start">Start the what-ifs</button>
 </section>
@@ -986,7 +1005,15 @@ canvas.all{display:block;width:348px;margin:6px 0}
   }
 
   // ---------- wiring ----------
-  $('b-begin').onclick = function () { $('book0').innerHTML = emptyBookHtml(); show('s-book'); };
+  function figures() {
+    var A = function (b) { return stack(b, 'a', 9); }, Bn = function (b) { return stack(b, 'b', 9); };
+    $('fig-36').innerHTML = '<span class="six">' + M.BALLOTS.map(A).join('') + '</span><span style="font-size:18px;font-weight:600">×</span><span class="six">' + M.BALLOTS.map(Bn).join('') + '</span><span style="font-size:18px;font-weight:600">=</span><span class="big36">36</span><span class="cap">Six ballots Anna could write, six for Bruno: 36 votes.</span>';
+    $('fig-points').innerHTML = '<span class="pts"><span>' + sh(0, 'a', 16) + '3</span><span>' + sh(1, 'a', 16) + '2</span><span>' + sh(2, 'a', 16) + '1</span></span><span class="cap">No points. A ballot says what is above what, not by how much.</span>';
+    $('fig-two').innerHTML = '<span class="qq"><b>1. On the square?</b><span class="row" style="display:flex;gap:4px">' + sh(0, 'v', 22) + '</span></span><span style="font-family:\'Inter Display\';font-weight:900;font-size:22px">&rarr;</span><span class="qq"><b>2. If it falls through?</b><span style="display:flex;gap:4px;align-items:center">' + sh(1, 'v', 22) + '<span style="font-size:11px;color:#8D8D8A">or</span>' + sh(2, 'v', 22) + '<span style="font-size:11px;color:#8D8D8A">or a draw</span></span></span><span class="cap">Two decisions per what-if.</span>';
+    $('fig-pairs').innerHTML = '<span class="pair">' + sh(0, 'v', 16) + 'v' + sh(1, 'v', 16) + '&nbsp;2–0</span><span class="pair tie">' + sh(1, 'v', 16) + 'v' + sh(2, 'v', 16) + '&nbsp;1–1 tie</span><span class="pair tie">' + sh(0, 'v', 16) + 'v' + sh(2, 'v', 16) + '&nbsp;1–1 tie</span><span class="cap">Three pairs. 2–0 is settled; 1–1 is a line of your book.</span>';
+    $('fig-circle').innerHTML = '<span class="loop">' + sh(0, 'v', 20) + '<span>above</span>' + sh(1, 'v', 20) + sh(1, 'v', 20) + '<span>above</span>' + sh(2, 'v', 20) + sh(2, 'v', 20) + '<span style="color:#DA291C">above?!</span>' + sh(0, 'v', 20) + '</span><span class="cap">Fountain above tower, tower above tree, so the fountain is above the tree. Three answers that say otherwise contradict each other.</span>';
+  }
+  $('b-begin').onclick = function () { $('book0').innerHTML = emptyBookHtml(); figures(); show('s-book'); };
   $('b-start').onclick = startGame;
   $('b-post').onclick = postList;
   $('b-next').onclick = next;
