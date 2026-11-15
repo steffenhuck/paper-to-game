@@ -1,4 +1,4 @@
-     200 games drawn in 429 ms; 0 needed a reseed
+     200 games drawn in 445 ms; 0 needed a reseed
 PASS solver exact on every drawn sky (1000 skies)
 PASS world 1 on every draw: the best leaves at least two out, is unique, and nothing can be ended unlit  — 
 PASS world 2 on every draw: the big one is out of the best, its holders outweigh it, heaviest-first falls short  — 
@@ -8,8 +8,8 @@ PASS layout on every drawn sky: no line through a star, no crossing lines, no to
      star counts (w1/w2/w3), first eight games: 6/7/8  7/7/7  7/8/8  7/6/7  7/8/8  6/7/7  5/6/7  5/6/7
 PASS torch world on every draw: same opening with three lines into the dark, ends beyond the torch, one sky the fullest (two lit holders), the other short with all ends dark, the hand works, the torch sees what it reaches  — 
 PASS one torch, no more
-PASS no decision before a reading
-PASS no second reading, no second decision
+PASS no decision before done looking
+PASS no second decision
 PASS the consequence is said in the dark
 PASS world 2 lesson holds for claim = weight^k up to at least k ≈ 1.35 on every draw tried  — least k where the big one enters the best: 1.35
 PASS world 3 lesson holds for claim = weight^k up to at least k ≈ 1.30 on every draw tried  — least k where the step back stops paying: 1.30
@@ -22,8 +22,8 @@ PASS world 3: best play reaches the best on every draw; random play never beats 
 PASS world 2: heaviest-first is beaten by best play on every draw
 PASS words: full
 PASS words: 12 of 19 is about a third short  — about a third short
-PASS verdict has four found lines and a world-4 line about the torch and the twin  — World 4: a small star holding a big one down, three lines leading into the dark; by torchlight (you saw it held) you chose the other star, and the big one came in. Its twin, with the same opening, was the other kind of world: as full as it can be, the big one held at the end of its lines.
+FAIL verdict has four found lines and a world-4 line about the torch and the twin  — World 4: a small star holding a big one down, three lines leading into the dark; having seen one line end in the dark you chose the other star, and the big one came in. Its twin, with the same opening, was the other kind of world: as full as it can be, the big one held at the end of its lines.
 PASS verdict head for the best player  — All three of your skies are as full as they can be.
 PASS no sky has two stars of one colour
 
-ALL PASSED
+1 FAILED

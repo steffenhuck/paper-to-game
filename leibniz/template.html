@@ -130,7 +130,6 @@ b,strong{font-weight:700}
   <p class="key" id="jkey"></p>
   <p class="say" id="jsay"></p>
   <div id="jlook"><button class="btn" id="b-done">Done looking</button></div>
-  <div id="jread" class="hid"><p class="cap" style="text-align:left;margin-bottom:6px">Did you see the big star held by something lit, at the end of one of its lines?</p><div class="row2"><button class="btn solid" id="b-r-held">Yes, held</button><button class="btn solid" id="b-r-free">Nothing held it</button><button class="btn" id="b-r-unsure">Couldn't tell</button></div></div>
   <div id="jchoose" class="hid"><p class="cap" style="text-align:left;margin-bottom:6px">Choose the other star: the small one goes out, and the big one comes in if nothing else holds it.</p><div class="row2"><button class="btn solid" id="b-other">Choose the other star</button><button class="btn solid" id="b-leave">Leave it</button></div></div>
   <div id="jlift" class="hid"><button class="btn solid" id="b-lift">Lift the cover</button></div>
   <div class="result hid" id="jresult"></div>
@@ -160,7 +159,7 @@ b,strong{font-weight:700}
   <p><b>Tap a ring</b> to let that thing be. It lights up. Anything it cannot be with goes dark, with a red line to the thing that shut it out; the line stays, so you know that pair from then on. <b>Tap a lit star</b> to put it out again: a step back. Whatever it was holding down can be again.</p>
   <p>The bar under the sky shows how much light your world holds. <b>Let it be</b> ends the world: it holds exactly what you lit, nothing more. Then the best possible world appears next to yours, the fullest set of things that can be together, with every line and every number shown.</p>
   <p>The third sky arrives already filled, heaviest first, and nothing left can be. Making it fuller means putting something out, then letting in what that frees.</p>
-  <p>The fourth world is not yours to make. A world already made, in the dark: a small star lit, a big one dark, a line between them, and three more lines leading from the big one into the dark. Whatever is at their ends is what decides: a lit star there holds the big one down; a dark thing there holds nothing. One torch lies in the dark: drag it to where you want it struck, and for a few seconds the stars and lines around it show, faintly, before it dies. It cannot reach the ends from the big star; you have to pick a line. When you are done looking, say what you saw. Then choose: the other star (the small one goes out, and the big one comes in if nothing else holds it), or leave it. You see what that did, in the dark; then the cover lifts; then you see the twin, another world with exactly the same opening and the other truth.</p>
+  <p>The fourth world is not yours to make. A world already made, in the dark: a small star lit, a big one dark, a line between them, and three more lines leading from the big one into the dark. Whatever is at their ends is what decides: a lit star there holds the big one down; a dark thing there holds nothing. One torch lies in the dark: drag it to where you want it struck, and for a few seconds the stars and lines around it show, faintly, before it dies. It cannot reach the ends from the big star; you have to pick a line. When you are done looking, choose: the other star (the small one goes out, and the big one comes in if nothing else holds it), or leave it. You see what that did, in the dark; then the cover lifts; then you see the twin, another world with exactly the same opening and the other truth.</p>
   <button class="btn solid" id="b-help-close">Back</button>
 </div></div>
 
@@ -325,7 +324,7 @@ function startJudge(j) {
   $('jintro').textContent = JINTRO[0];
   $('jnow').textContent = 'A world already made.';
   $('jsay').textContent = 'Leibniz: men born in a salt mine take their torchlight for all the light there is. You have one.';
-  ['jlook', 'jread', 'jchoose', 'jlift', 'jresult'].forEach(function (id) { $(id).classList.add('hid'); }); $('jlook').classList.remove('hid'); $('jresult').innerHTML = '';
+  ['jlook', 'jchoose', 'jlift', 'jresult'].forEach(function (id) { $(id).classList.add('hid'); }); $('jlook').classList.remove('hid'); $('jresult').innerHTML = '';
   function key() {
     if (burning) $('jkey').textContent = 'The torch burns. Look.';
     else if (s.reading) $('jkey').textContent = '';
@@ -352,14 +351,12 @@ function startJudge(j) {
       if (el < full + fade) requestAnimationFrame(tick); else { burning = false; draw(null); }
     })(t0);
   };
-  $('b-done').onclick = function () { if (burning) return; $('jlook').classList.add('hid'); $('jread').classList.remove('hid'); $('jnow').textContent = 'What did you see?'; $('jsay').textContent = 'The torchlight is gone. Say what you made out.'; $('jread').scrollIntoView({ block: 'end', behavior: 'smooth' }); };
-  var reading = function (a) {
-    if (!M.read(J, j, a)) return;
-    $('jread').classList.add('hid'); $('jchoose').classList.remove('hid'); draw(null);
-    $('jnow').textContent = 'Would you change this?'; $('jsay').textContent = 'The small star holds the big one down. Three lines lead from the big one into the dark; what is at their ends, you saw or you did not.';
+  $('b-done').onclick = function () {
+    if (burning || !M.read(J, j)) return;
+    $('jlook').classList.add('hid'); $('jchoose').classList.remove('hid'); draw(null);
+    $('jnow').textContent = 'Would you change this?'; $('jsay').textContent = 'The small star holds the big one down. Three lines lead from the big one into the dark; what is at their ends, you saw or you did not. A lit star there holds the big one; a dark thing there holds nothing.';
     $('jchoose').scrollIntoView({ block: 'end', behavior: 'smooth' });
   };
-  $('b-r-held').onclick = function () { reading('held'); }; $('b-r-free').onclick = function () { reading('free'); }; $('b-r-unsure').onclick = function () { reading('unsure'); };
   var decide = function (act) {
     var r = M.decide(J, j, act); if (!r) return;
     $('jchoose').classList.add('hid');

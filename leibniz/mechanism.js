@@ -349,9 +349,8 @@ function torchSaw(J, j) {
   return { held: held, dark: dark };
 }
 function torchSawHolders(J, j) { return torchSaw(J, j).held; }
-// What the player says they saw: 'lines', 'none' or 'unsure'. Ends the looking.
-function read(J, j, answer) { var s = J.skies[j]; if (s.reading || s.act) return false; s.reading = answer; return true; }
-function readingWord(a) { return a === 'held' ? 'you saw it held' : a === 'free' ? 'you saw nothing holding it' : "you couldn't tell"; }
+// Done looking: ends the torch step (design, 15 Nov, late: the reading question went; the choice says what was believed).
+function read(J, j) { var s = J.skies[j]; if (s.reading || s.act) return false; s.reading = 'done'; return true; }
 // Decide: 'other' chooses the other star (the small one goes out; the big one comes in if nothing else holds it);
 // 'leave' leaves the world. A reading must have been given first.
 function decide(J, j, act) {
@@ -374,7 +373,7 @@ function lampReveal(J, j) {
     : 'The whole: all three lines from the ' + bg.w + ' led to dark things, and dark things hold nothing. Nothing but the ' + sm.w + ' held it down. With the ' + sm.w + ' out and the ' + bg.w + ' in, the sky holds ' + s.best.light + ' instead of ' + s.before + '. This world was ' + (s.best.light - s.before) + ' short.';
   var saw = torchSaw(J, j), n = s.torches.length;
   var used = n === 0 ? 'You struck no torch.' : saw.held ? 'Your torch reached a lit star at the end of a line: the big one was held, and that could be known.' : saw.dark ? 'Your torch reached a dark end: that line held nothing, and the others stayed unknown.' : 'Your torch reached no end of any line.';
-  var said = ' You said ' + readingWord(s.reading) + (s.reading === 'held' ? (s.full ? ', and it was.' : ', but it was not.') : s.reading === 'free' ? (s.full ? ', but it was held, out of the light.' : ', and nothing did.') : '.');
+  var said = s.act === 'other' ? (s.full ? ' You bet that nothing held it, and something did, out of the light.' : ' You bet that nothing held it, and nothing did.') : (s.full ? ' You let it stand, and it was held.' : ' You let it stand, and nothing was holding it but the small star.');
   var line = s.act === 'other' ? (s.came.length ? 'You chose the other star: the ' + sm.w + ' went out and the ' + bg.w + ' came in, ' + (s.after - s.before) + ' more light than before.'
       : 'You chose the other star: the ' + sm.w + ' went out and the ' + bg.w + ' stayed dark, ' + (s.before - s.after) + ' less light than before.')
     : (s.full ? 'You left it, and it holds all it could.' : 'You left it, and it holds ' + s.after + ' where it could hold ' + s.best.light + '.');
@@ -430,7 +429,7 @@ function verdict(game) {
     return 'World 3: ' + (w.stepsBack === 0 ? 'you put nothing out, and the world stayed as weight had made it.' : 'you stepped back ' + (w.stepsBack === 1 ? 'once' : w.stepsBack === 2 ? 'twice' : w.stepsBack + ' times') + ', and the world ended ' + (L === B ? 'full: the step back was the way forward.' : shortWords(L, B) + '.'));
   });
   var J = game.judge, s4 = J.skies[0];
-  var looked = (s4.torches.length === 0 ? 'without a torch' : 'by torchlight') + ' (' + readingWord(s4.reading) + ')';
+  var sw = torchSaw(J, 0), looked = s4.torches.length === 0 ? 'without a torch' : sw.held ? 'having seen it held' : sw.dark ? 'having seen one line end in the dark' : 'with a torch that reached no end';
   var what = s4.act === 'other' ? 'chose the other star' : 'left it';
   var got = s4.act === 'other' ? (s4.came.length ? 'and the big one came in' : 'and the big one stayed dark') : (s4.full ? 'and it was as full as it can be' : 'and it stayed short');
   found.push('World 4: a small star holding a big one down, three lines leading into the dark; ' + looked + ' you ' + what + ', ' + got + '. Its twin, with the same opening, was the other kind of world: ' + (s4.full ? 'short, with nothing but the small star in the way.' : 'as full as it can be, the big one held at the end of its lines.'));
@@ -444,6 +443,6 @@ function verdict(game) {
 var M = { CONFIG: CONFIG, newGame: newGame, makeWorld: makeWorld, makeLampWorld: makeLampWorld, genWorld1: genWorld1, genWorld2: genWorld2, genWorld3: genWorld3, genLamp: genLamp,
   mulberry32: mulberry32, letBe: letBe, putOut: putOut, letItBe: letItBe, canEnd: canEnd, result: result, verdict: verdict, solve: solve, solveWith: solveWith,
   light: light, total: total, lit: lit, star: star, conflicts: conflicts, name: name, list: list, biggest: biggest, shortWords: shortWords, pairKnown: pairKnown,
-  layoutOk: layoutOk, playGreedy: playGreedy, playRandom: playRandom, playBest: playBest, strike: strike, torchSawHolders: torchSawHolders, torchSaw: torchSaw, read: read, readingWord: readingWord, decide: decide, consequence: consequence, lampReveal: lampReveal, segDist: segDist };
+  layoutOk: layoutOk, playGreedy: playGreedy, playRandom: playRandom, playBest: playBest, strike: strike, torchSawHolders: torchSawHolders, torchSaw: torchSaw, read: read, decide: decide, consequence: consequence, lampReveal: lampReveal, segDist: segDist };
 if (typeof module !== 'undefined' && module.exports) module.exports = M; else root.LeibnizMechanism = M;
 })(typeof window !== 'undefined' ? window : this);

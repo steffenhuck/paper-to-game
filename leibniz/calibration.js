@@ -83,9 +83,9 @@ check('solver exact on every drawn sky (' + SEEDS * 5 + ' skies)', games.every(f
     var lits = function (s) { return M.lit(s).map(function (x) { return x.id; }); };
     var mkJ = function (sky) { return { skies: [sky], torchesLeft: 1, radius: C.TORCH.radius }; };
     var a2 = M.makeLampWorld({ stars: A.stars, pairs: A.pairs, lit: lits(A), small: A.small, big: A.big, ends: A.ends, holders: A.holders, full: true }), Ja = mkJ(a2);
-    M.read(Ja, 0, 'unsure'); M.decide(Ja, 0, 'other'); if (a2.came.length || a2.after !== a2.before - sm.w) bad.push(g.seed + ': in the full sky, choosing the other star should lose the small one and gain nothing');
+    M.read(Ja, 0); M.decide(Ja, 0, 'other'); if (a2.came.length || a2.after !== a2.before - sm.w) bad.push(g.seed + ': in the full sky, choosing the other star should lose the small one and gain nothing');
     var b2 = M.makeLampWorld({ stars: B.stars, pairs: B.pairs, lit: lits(B), small: B.small, big: B.big, ends: B.ends, holders: [], full: false }), Jb = mkJ(b2);
-    M.read(Jb, 0, 'unsure'); M.decide(Jb, 0, 'other'); if (b2.came.length !== 1 || b2.after !== b2.best.light) bad.push(g.seed + ': in the short sky, choosing the other star should let the big one in and reach the best');
+    M.read(Jb, 0); M.decide(Jb, 0, 'other'); if (b2.came.length !== 1 || b2.after !== b2.best.light) bad.push(g.seed + ': in the short sky, choosing the other star should let the big one in and reach the best');
     // a torch on the big star reaches no end; a torch on a lit holder sees it held; on a dark end sees a dark end
     var a3 = M.makeLampWorld({ stars: A.stars, pairs: A.pairs, lit: lits(A), small: A.small, big: A.big, ends: A.ends, holders: A.holders, full: true }), J3 = mkJ(a3);
     M.strike(J3, 0, bg.x, bg.y); var sw = M.torchSaw(J3, 0); if (sw.held || sw.dark) bad.push(g.seed + ': a torch on the big star reaches an end');
@@ -95,8 +95,8 @@ check('solver exact on every drawn sky (' + SEEDS * 5 + ' skies)', games.every(f
   check('torch world on every draw: same opening with three lines into the dark, ends beyond the torch, one sky the fullest (two lit holders), the other short with all ends dark, the hand works, the torch sees what it reaches', bad.length === 0, bad.slice(0, 3).join('; '));
   var J = games[0].judge;
   check('one torch, no more', M.strike(J, 0, 10, 10) && !M.strike(J, 0, 30, 30) && J.torchesLeft === 0);
-  check('no decision before a reading', M.decide(J, 0, 'leave') === null && M.read(J, 0, 'free') && M.decide(J, 0, 'leave') !== null);
-  check('no second reading, no second decision', !M.read(J, 0, 'held') && M.decide(J, 0, 'other') === null);
+  check('no decision before done looking', M.decide(J, 0, 'leave') === null && M.read(J, 0) && M.decide(J, 0, 'leave') !== null);
+  check('no second decision', !M.read(J, 0) && M.decide(J, 0, 'other') === null);
   check('the consequence is said in the dark', /stays as it was/.test(M.consequence(J, 0)));
 })();
 
@@ -140,10 +140,10 @@ check('solver exact on every drawn sky (' + SEEDS * 5 + ' skies)', games.every(f
 (function () {
   check('words: full', M.shortWords(21, 21) === 'as full as it can be');
   check('words: 12 of 19 is about a third short', M.shortWords(12, 19) === 'about a third short', M.shortWords(12, 19));
-  var g = M.newGame(3); M.playGreedy(g.worlds[0]); M.playGreedy(g.worlds[1]); M.letItBe(g.worlds[2]); M.strike(g.judge, 0, 100, 100); M.read(g.judge, 0, 'held'); M.decide(g.judge, 0, 'other');
+  var g = M.newGame(3); M.playGreedy(g.worlds[0]); M.playGreedy(g.worlds[1]); M.letItBe(g.worlds[2]); M.strike(g.judge, 0, 100, 100); M.read(g.judge, 0); M.decide(g.judge, 0, 'other');
   var v = M.verdict(g);
   check('verdict has four found lines and a world-4 line about the torch and the twin', v.found.length === 4 && /World 4: .*torch.*twin/.test(v.found[3]), v.found[3]);
-  var g3 = M.newGame(4); M.playBest(g3.worlds[0]); M.playBest(g3.worlds[1]); M.playBest(g3.worlds[2]); M.read(g3.judge, 0, 'free'); M.decide(g3.judge, 0, 'leave');
+  var g3 = M.newGame(4); M.playBest(g3.worlds[0]); M.playBest(g3.worlds[1]); M.playBest(g3.worlds[2]); M.read(g3.judge, 0); M.decide(g3.judge, 0, 'leave');
   check('verdict head for the best player', M.verdict(g3).head === 'All three of your skies are as full as they can be.', M.verdict(g3).head);
   check('no sky has two stars of one colour', games.every(function (g) { return g.worlds.concat(g.judge.skies).every(function (w) { var ids = w.stars.map(function (s) { return s.id; }); return ids.length === new Set(ids).size; }); }));
 })();
