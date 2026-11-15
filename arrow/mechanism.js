@@ -22,7 +22,8 @@
     openings: [[[0, 1, 2], [2, 0, 1]], [[0, 2, 1], [1, 0, 2]], [[2, 0, 1], [1, 2, 0]]],
     whatIfs: 3,                               // our choice: three what-ifs, each opening two new ties, complete the six-line book (checked over every path)
     valuesPerRuling: 3,                       // Anna's way, level, Beat's way: P, I, and the reverse P (Definitions 1-2, p. 332)
-    clara: [0, 1, 2],                         // our choice: the ballot of Clara, a third voter who never changes her mind (the debrief)
+    bestOrder: [0, 1, 2],                     // our choice: the fixed order used on the debrief to show why the best score has two contradictions
+    scoreTop: 34,                             // our choice: 34 of 36 votes without a contradiction is the best any non-dictatorial book does (checked), and scores 100
     points: [3, 2, 1]                         // the rank-order method of p. 337: points for first, second, third place (3-2-1 as the game's text says; the paper's example uses 4-3-2-1 for four)
   };
 
@@ -232,31 +233,40 @@
     return { holds: a.holds, broken: a.broken, of: 36, boss: d, custom: cu, counts: c, fate: fate, best: all.bestWithoutBoss, index: bookIndex(book), annas: a.annas, beats: a.beats };
   }
 
-  // ---------- hired tie-breakers (ours: the second act) ----------
-  // A tie-breaker is a rule book. If Anna or Beat breaks every tie, the book is that voter's six times over.
-  // If Clara, a third voter whose ballot never changes, joins and each pair goes to the majority of three, then Anna and Beat
-  // win where they agree (2 of 3) and Clara's ballot decides where they do not: the book in which her order settles every disagreement.
-  function voterBook(v) { return [v, v, v, v, v, v]; }
-  function clarasBook(clara) {
-    var r = rankOf(clara), b = [];
-    for (var p = 0; p < 3; p++) {
-      var first = PAIRS[p][0], second = PAIRS[p][1], w = r[first] < r[second] ? first : second;
-      b.push(w === first ? 'A' : 'B'); b.push(w === second ? 'A' : 'B');
+  // ---------- what the village does with three results (ours) ----------
+  // The plan that no other plan is above goes on the square. If there is none (a circle) or more than one (a draw), a coin
+  // among them. Then the same among the plans left, for the fallbacks. When the three results fit together this is just the ranking.
+  function decide(top) {   // top[p] = plan on top for pair p, or -1 level; returns steps: [{plans:[...], coin:bool}, ...]
+    function above(a, b) { for (var p = 0; p < 3; p++) { var q = PAIRS[p]; if ((q[0] === a && q[1] === b) || (q[0] === b && q[1] === a)) return top[p] === a; } }
+    var left = [0, 1, 2], steps = [];
+    while (left.length) {
+      var free = left.filter(function (x) { return !left.some(function (y) { return y !== x && above(y, x); }); });
+      if (!free.length) free = left.slice();
+      steps.push({ plans: free, coin: free.length > 1 });
+      left = left.filter(function (x) { return free.indexOf(x) < 0; });
     }
+    return steps;
+  }
+  function pickWith(steps, rnd) { return steps.map(function (st) { return st.coin ? st.plans[Math.min(st.plans.length - 1, Math.floor(rnd() * st.plans.length))] : st.plans[0]; }); }
+  // The score (ours): votes counted fairly = the 36 votes less those where the book contradicts itself, and 0 if one voter is the boss;
+  // then as a share of the best any book without a boss can do (CONFIG.scoreTop), 0 to 100.
+  function score(book) {
+    var a = audit(book), d = dictator(book), fair = d ? 0 : a.holds;
+    return { fair: fair, broken: a.broken, boss: d, points: d ? 0 : Math.round(100 * fair / CONFIG.scoreTop) };
+  }
+  // A book in which a fixed order of the plans wins every tie, whoever is for what; and the two votes on which it contradicts
+  // itself: both voters put the order's last plan above its first, and the order wins the other two pairs (the paradox of voting, p. 329).
+  function fixedOrderBook(order) {
+    var r = rankOf(order), b = [];
+    for (var p = 0; p < 3; p++) { var first = PAIRS[p][0], second = PAIRS[p][1], w = r[first] < r[second] ? first : second; b.push(w === first ? 'A' : 'B'); b.push(w === second ? 'A' : 'B'); }
     return b;
   }
-  // One Sunday counted as a plain majority of three ballots, pair by pair (the method of the paper's first page, p. 329).
-  function majorityOfThree(anna, beat, clara) {
-    var ballots = [anna, beat, clara], ranks = ballots.map(rankOf), pairs = [], top = [];
-    for (var p = 0; p < 3; p++) {
-      var a = PAIRS[p][0], b = PAIRS[p][1], forA = [], forB = [];
-      ranks.forEach(function (r, i) { (r[a] < r[b] ? forA : forB).push(i); });
-      var w = forA.length > forB.length ? a : b;
-      pairs.push({ pair: p, top: w, votes: Math.max(forA.length, forB.length), winners: forA.length > forB.length ? forA : forB }); top.push(w);
-    }
-    var lists = LISTS.filter(function (rank) { return relIn(rank, 0) === top[0] && relIn(rank, 1) === top[1] && relIn(rank, 2) === top[2]; });
-    return { pairs: pairs, list: lists.length ? lists[0] : null, clash: lists.length ? null : clashOf(top) };
+  function paradoxVotes(order) {
+    var out = [], bk = fixedOrderBook(order);
+    for (var i = 0; i < 6; i++) for (var j = 0; j < 6; j++) { if (i === j) continue; var s = readSunday(bk, BALLOTS[i], BALLOTS[j]); if (!s.list) out.push({ anna: BALLOTS[i], beat: BALLOTS[j], sunday: s }); }
+    return out;
   }
+  function voterBook(v) { return [v, v, v, v, v, v]; }
 
   root.MECH = {
     CONFIG: CONFIG, PAIRS: PAIRS, BALLOTS: BALLOTS, LISTS: LISTS,
@@ -265,6 +275,6 @@
     emptyBook: emptyBook, isComplete: isComplete, nextBallots: nextBallots, chain: chain, drawSunday: drawSunday, openCount: openCount, borda: borda,
     readSunday: readSunday, audit: audit, clashOf: clashOf, dictator: dictator, custom: custom, counts: counts,
     bookIndex: bookIndex, bookFromIndex: bookFromIndex, allBooks: allBooks, verdict: verdict,
-    voterBook: voterBook, clarasBook: clarasBook, majorityOfThree: majorityOfThree
+    voterBook: voterBook, fixedOrderBook: fixedOrderBook, paradoxVotes: paradoxVotes, decide: decide, pickWith: pickWith, score: score
   };
 })(typeof module !== 'undefined' && module.exports ? module.exports : this);
