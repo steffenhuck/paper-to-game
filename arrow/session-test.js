@@ -14,7 +14,7 @@ const path = require('path');
   const keysOf = (i) => page.evaluate((i) => { const M = window.MECH, r = window.__game().lists[i]; return M.tiers(r).map(t => t.slice().sort().join(',')); }, i);
   const pickList = async (i) => { const keys = await keysOf(i);
     if (await page.locator('#opts1').count()) { await page.click(`#opts1 .opt[data-key="${keys[0]}"]`); await page.waitForTimeout(80); }
-    if (keys[1] !== undefined && await page.isVisible('#step2')) { await page.click(`#opts2 .opt[data-key="${keys[1]}"]`); await page.waitForTimeout(80); }
+    if (keys[1] !== undefined && await page.locator(`#opts2 .opt[data-key="${keys[1]}"]`).count()) { await page.click(`#opts2 .opt[data-key="${keys[1]}"]`); await page.waitForTimeout(80); }
     const sel = await page.evaluate(() => window.__game().sel); if (sel !== i) errors.push('wanted ranking ' + i + ', got ' + sel); };
   await shot('start'); await hscroll('start');
   await page.click('#b-begin'); await page.waitForTimeout(300); await shot('book'); await hscroll('book');
@@ -26,13 +26,13 @@ const path = require('path');
     const n = await page.evaluate(() => window.__game().lists.length); log.push(`What-if ${k + 1}: ${n} rankings possible; ${await say('lists-note')}`);
     if (n !== 5) errors.push('expected 5 rankings on what-if ' + (k + 1) + ', got ' + n);
     if (k === 0) { if (await page.isEnabled('#b-post')) errors.push('Write enabled before an answer');
-      await pickList(0); if (await page.isVisible('#step2')) errors.push('second question shown after a draw at the top'); await shot('a-1-draw');
+      await pickList(0); if (await page.locator('#opts2 .opt').count()) errors.push('second question has buttons after a draw at the top'); if (!(await page.isVisible('#step2'))) errors.push('second decision not shown after a draw at the top'); await shot('a-1-draw');
       await pickList(2); await shot('a-1-annas'); }
     if (k === 1) { await page.click('#q-play'); await page.waitForTimeout(150); await shot('help'); await page.click('#b-help-close'); await page.waitForTimeout(100); }
     await pickList(picksA[k]); await page.waitForTimeout(100); log.push('   answered: ' + await say('say'));
     if (k === 0) await shot('a-1-answered');
     await page.click('#b-post'); await page.waitForTimeout(600); log.push('   ' + await say('res'));
-    if (k === 0) await shot('a-1-written'); if (k === 2) await shot('a-3-written');
+    if (k === 0) await shot('a-1-written'); if (k === 1) await shot('a-2-answered-pre'); if (k === 2) await shot('a-3-written');
     await hscroll('what-if ' + (k + 1));
     await page.click('#b-next'); await page.waitForTimeout(250);
   }

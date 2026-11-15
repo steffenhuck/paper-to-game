@@ -203,7 +203,7 @@ canvas.all{display:block;width:348px;margin:6px 0}
     <p>Anna can write her ballot six ways, and so can Bruno. So 36 different votes can come in next Sunday, and you will write a book with an answer for every one.</p>
     <p>Where Anna and Bruno fill in the ballot the same way, it is easy: that is the answer. Where they differ, your book must choose.</p>
     <p>You might be tempted to count points: 3 for a first place, 2 for a second, 1 for a third, add them up, highest wins. But that assumes something you do not know: that the step from first to second matters as much as the step from second to third, and as much to Anna as to Bruno. A ballot only says what is above what. <b>So no points.</b></p>
-    <p>What is left is this. You will see three what-ifs, three of the 36 votes, and make two decisions for each: what goes on the square, and what if that falls through, for whatever reason. For each decision you pick one plan, or call it a draw and the village tosses a coin. And these six decisions will fill your book for all 36 cases.</p>
+    <p>What is left is this. You will see three what-ifs, three of the 36 votes, and make two decisions for each: what goes on the square, and what if that falls through, for whatever reason. For each decision you pick one plan, or call it a draw and the village tosses a coin. Sometimes the second decision is already made by the first, and the game says so. And these six decisions will fill your book for all 36 cases.</p>
     <p><b>Sounds like magic? Almost.</b> Here is the thing. Take the plans two at a time. Fountain or tower? If both put the same one higher, that settles it. If not, it is a tie, and your book says who gets their way, or calls it a draw. The same for the other two pairs. Three pairs, two ways to disagree about each: six ties, six lines.</p>
   </div>
   <div class="book" id="book0"></div>
@@ -319,7 +319,7 @@ canvas.all{display:block;width:348px;margin:6px 0}
   <h3>Settled and tied</h3>
   <p>Take the plans two at a time. If both put the same one higher, that is settled, 2–0. If each puts a different one higher, it is 1–1: a tie, and your answer breaks it, for Anna, for Bruno, or as a draw (the village likes both the same and will toss a coin).</p>
   <h3>Answering</h3>
-  <p>Say what goes on the square. Then, if more than one answer is still possible, what comes next if that falls through; plans do fall through, and the village should not have to vote again. A question with only one possible answer is not asked. Then press <b>Write it in the book</b>.</p>
+  <p>Say what goes on the square. Then, if more than one answer is still possible, what comes next if that falls through; plans do fall through, and the village should not have to vote again. When the second decision is already made by the first, the game says so instead of asking. Then press <b>Write it in the book</b>.</p>
   <h3>Your book</h3>
   <p>Six different ties can happen. Once you break one, the book keeps your answer, and that tie gets the same answer whenever it comes up again. Three what-ifs fill the book.</p>
   <h3>Arrow checks the rest</h3>
@@ -455,8 +455,18 @@ canvas.all{display:block;width:348px;margin:6px 0}
     if ($('opts1')) Array.prototype.forEach.call($('opts1').children, function (c) { c.classList.toggle('sel', c.dataset.key === key); });
     var rest = G.lists.filter(function (r) { return tiersOf(r)[0] === key; });
     var seconds = []; rest.forEach(function (r) { var k = tiersOf(r)[1]; if (k !== undefined && seconds.indexOf(k) < 0) seconds.push(k); });
-    if (seconds.length <= 1) { $('step2').classList.add('hide'); G.second = seconds[0]; return select(G.lists.indexOf(rest[0])); }
+    if (seconds.length === 0) { $('step2').classList.add('hide'); return select(G.lists.indexOf(rest[0])); }
     $('step2').classList.remove('hide');
+    if (seconds.length === 1) {
+      // nothing to choose: say what is decided already, and why
+      var left = seconds[0].split(',').map(Number), topPlans = key.split(',').map(Number), why;
+      if (topPlans.length === 2) why = 'the only plan left';
+      else { var o = 3 - topPlans[0] - left[0], hi = left.length === 1 ? left[0] : null;
+        if (hi === null) why = 'your book says they are level'; else { var info = M.pairInfo(G.nb.anna, G.nb.beat, M.PAIRS.findIndex(function (q) { return (q[0] === hi && q[1] === o) || (q[0] === o && q[1] === hi); }));
+          why = info.agree ? 'both put the ' + P[hi] + ' above the ' + P[o] : 'line ' + (info.cell + 1) + ' of your book puts the ' + P[hi] + ' above the ' + P[o]; } }
+      $('opts2').innerHTML = '<div class="only" style="padding:0"><b>' + (left.length === 1 ? 'The ' + P[left[0]] : P[left[0]] + ' or ' + P[left[1]] + ', a draw') + '.</b> Decided already: ' + why + '.</div>';
+      G.second = seconds[0]; return select(G.lists.indexOf(rest[0]));
+    }
     $('opts2').innerHTML = seconds.map(function (k) { return optHtml(k, 2); }).join('');
     wireOpts();
   }
