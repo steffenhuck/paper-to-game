@@ -1,129 +1,54 @@
-SEED 7. AIM: Find out whether the water makes the difference between the doors with crape and the doors without.
+SEED 7. AIM: Find out whether it is the water: set a crape door beside a door without, and know what each drinks.
+Battersea (thinly peopled, comparatively genteel; Battersea Fields are marsh): crape on 6 doors
+     .- .- X- .- X- X- 
+     .- .- X- X- .- X- 
 
-STREET 1 of 4: Trinity, Newington — a street where the two companies’ pipes run side by side. Crape on 2 doors. Knock at a door. 7 knocks left.
-   .? .? X? .? .? .? 
-   .? .? .? .? .? .? 
-   .? .? .? .? X? .? 
+Waterloo Road (crowded, dirty, and very poor; by the river): crape on 1 doors
+     .- .- .- .- .- .- 
+     .- .- .- .- .- X- 
 
-   tap door 3 (crape): Mrs Nye says: the Lambeth, I think. A glass is drawn. [Add the silver drops]
-   -> The glass turned MILKY: Battersea water, from the river inside the town. (Mrs Nye was wrong.) Door marked brown. 6 knocks left.
-   WINDOW  crape: brown 1 blue 0 | living: brown 0 blue 0
-   Crape doors tried: 1, of them 1 brown. Living doors tried: none yet.
-   tap door 17 (crape): Mr Tolley says: Southwark and Vauxhall, I think. A glass is drawn. [Add the silver drops]
-   -> The glass turned MILKY: Battersea water, from the river inside the town. Door marked brown. 5 knocks left.
-   WINDOW  crape: brown 2 blue 0 | living: brown 0 blue 0
-   Crape doors tried: 2, of them 2 brown. Living doors tried: none yet.
-   tap door 1 (no crape): Mr Quick says: Southwark and Vauxhall, I think. A glass is drawn. [Add the silver drops]
-   -> The glass turned MILKY: Battersea water, from the river inside the town. Door marked brown. 4 knocks left.
-   WINDOW  crape: brown 2 blue 0 | living: brown 1 blue 0
-   Crape doors tried: 2, of them 2 brown. Living doors tried: 1, of them 1 brown.
-   tap door 2 (no crape): Mrs Ford says: could not say. A glass is drawn. [Add the silver drops]
-   -> The glass turned MILKY: Battersea water, from the river inside the town. Door marked brown. 3 knocks left.
-   WINDOW  crape: brown 2 blue 0 | living: brown 2 blue 0
-   Crape doors tried: 2, of them 2 brown. Living doors tried: 2, of them 2 brown.
-   tap door 4 (no crape): Mrs Bevan says: could not say. A glass is drawn. [Add the silver drops]
-   -> The glass stayed CLEAR: Thames Ditton water, from above the town. Door marked blue. 2 knocks left.
-   WINDOW  crape: brown 2 blue 0 | living: brown 2 blue 1
-   Crape doors tried: 2, of them 2 brown. Living doors tried: 3, of them 2 brown.
-   tap door 5 (no crape): Mr Vokes says: the Lambeth, I think. A glass is drawn. [Add the silver drops]
-   -> The glass stayed CLEAR: Thames Ditton water, from above the town. Door marked blue. 1 knocks left.
-   WINDOW  crape: brown 2 blue 0 | living: brown 2 blue 2
-   Crape doors tried: 2, of them 2 brown. Living doors tried: 4, of them 2 brown.
-   tap door 6 (no crape): Mrs Cope says: Southwark and Vauxhall, I think. A glass is drawn. [Add the silver drops]
-   -> The glass turned MILKY: Battersea water, from the river inside the town. Door marked brown. 0 knocks left.
-   WINDOW  crape: brown 2 blue 0 | living: brown 3 blue 2
-   Crape doors tried: 2, of them 2 brown. Living doors tried: 5, of them 3 brown.
-   STREET DONE: on Trinity, Newington you knocked at 7 doors: 2 with crape (2 brown), 5 without (3 brown). [Next street]
+DOCTOR: "Here is a pair for nothing: Mr Haggis's (crape, Battersea) says brown; Mr Quick's (Waterloo Road, no crape) says blue." Card: {"street":true,"water":"unknown","kind":"muddled"}. [Take it] [No]
+   -> declined
+PAIR: Mrs Teale (crape, Battersea) against Mrs Marsh (Battersea), by ask
+   Mrs Teale: "the Lambeth"; Mrs Marsh: could not say. CARD: open (same street; water unknown)
+   WINDOW: {"crapeBrown":0,"crapeBlue":1,"liveBrown":0,"liveBlue":0,"crapeUnknown":0,"liveUnknown":1,"byWord":2,"byGlass":0,"pairs":1}
+   LINE: In the same street, 1 pair. Of the crape doors, all blue; of the doors beside them, 1 not known. They cannot yet say how much more often a brown door wears crape than a blue one.
+   knocks left 7
+PAIR: Mrs Cope (crape, Battersea) against Mr Penn (Battersea), by glass
+   Mrs Cope: MILKY (Battersea water); Mr Penn: MILKY (Battersea water). CARD: nothing (same street; water same)
+   WINDOW: {"crapeBrown":1,"crapeBlue":1,"liveBrown":1,"liveBlue":0,"crapeUnknown":0,"liveUnknown":1,"byWord":2,"byGlass":2,"pairs":2}
+   LINE: In the same street, 2 pairs. Of the crape doors, 1 brown, 1 blue; of the doors beside them, 1 brown, 1 not known. A brown door wears crape less often than a blue one.
+   knocks left 5
+PAIR: Mrs Hollis (crape, Waterloo Road) against Mr Pryor (Waterloo Road), by glass
+   Mrs Hollis: MILKY (Battersea water); Mr Pryor: CLEAR (Thames Ditton water). CARD: clean (same street; water different)
+   WINDOW: {"crapeBrown":2,"crapeBlue":1,"liveBrown":1,"liveBlue":1,"crapeUnknown":0,"liveUnknown":1,"byWord":2,"byGlass":4,"pairs":3}
+   LINE: In the same street, 3 pairs. Of the crape doors, 2 brown, 1 blue; of the doors beside them, 1 brown, 1 blue, 1 not known. A brown door wears crape about one and a half times as often as a blue one.
+   knocks left 3
+DOCTOR: "Three more pairs for nothing." [Take all three] [No]
+   -> declined
+CHECK: Mrs Teale's word (blue) with the glass
+   -> MILKY; the word was wrong
+   WINDOW: {"crapeBrown":3,"crapeBlue":0,"liveBrown":1,"liveBlue":1,"crapeUnknown":0,"liveUnknown":1,"byWord":1,"byGlass":5,"pairs":3}
+   LINE: In the same street, 3 pairs. Of the crape doors, all brown; of the doors beside them, 1 brown, 1 blue, 1 not known. No blue door in these pairs wears crape: as far as they go, it is the brown water.
+   knocks left 2
+PAIR: Mr Haggis (crape, Battersea) against Mr Rudd (Battersea), by ask
+   Mr Haggis: "Southwark and Vauxhall"; Mr Rudd: "Southwark and Vauxhall". CARD: nothing (same street; water same)
+   WINDOW: {"crapeBrown":4,"crapeBlue":0,"liveBrown":2,"liveBlue":1,"crapeUnknown":0,"liveUnknown":1,"byWord":3,"byGlass":5,"pairs":4}
+   LINE: In the same street, 4 pairs. Of the crape doors, all brown; of the doors beside them, 2 brown, 1 blue, 1 not known. No blue door in these pairs wears crape: as far as they go, it is the brown water.
+   knocks left 1
+CLOSE THE BOOK: true
 
-STREET 2 of 4: Battersea — “thinly peopled, comparatively genteel” (Snow). Crape on 7 doors. Knock at a door. 7 knocks left.
-   .? .? X? .? X? X? 
-   .? .? .? .? X? .? 
-   X? .? X? .? X? .? 
+VERDICT (agree)
+  SNOW: On the same streets, a house on the town’s water lost someone about seven times as often as a house on the upriver water in these seven weeks, and fourteen times as often in the first four. Marsh or hill, crowded or genteel: once the water was known, the parish made no difference. And he knew the water by the rate-book and the glass, not by what people said at the door.
+  YOU: You wrote: “It is the Southwark and Vauxhall Company’s water.” Your book has 4 pairs in the same street: 1 pair different in the water alone, two different in nothing. No blue door in these pairs wears crape: as far as they go, it is the brown water.
+  PART: Your sentence is his, and your book can carry it: in the same street, with the same air and the same people, the crape was behind the brown doors.
+  WORDS: The words you took and did not check were all right this time. One time in seven they are not, and at a crape door a wrong word nearly always moves a death from the brown water to the blue. You checked one door with the glass, and one of the words was wrong.
+  HAD: Had it been answered from the companies’ lists instead of at the door, as the Board of Health answered it, the gap would have shrunk to three and a half to one, because with deaths six times as common behind one company’s doors, five mistakes in six move a death from the guilty water to the innocent one. Yours was answered at the door, with the glass.
+Battersea
+     .- .? XB .B XB Xb 
+     .b .- X- X- .- X- 
 
-   tap door 3 (crape): Mr Quick says: Southwark and Vauxhall, I think. A glass is drawn. [Add the silver drops]
-   -> The glass turned MILKY: Battersea water, from the river inside the town. Door marked brown. 6 knocks left.
-   WINDOW  crape: brown 3 blue 0 | living: brown 3 blue 2
-   Crape doors tried: 3, of them 3 brown. Living doors tried: 5, of them 3 brown.
-   tap door 5 (crape): Mr Sillitoe says: Southwark and Vauxhall, I think. A glass is drawn. [Add the silver drops]
-   -> The glass turned MILKY: Battersea water, from the river inside the town. Door marked brown. 5 knocks left.
-   WINDOW  crape: brown 4 blue 0 | living: brown 3 blue 2
-   Crape doors tried: 4, of them 4 brown. Living doors tried: 5, of them 3 brown.
-   tap door 6 (crape): Mr Lacey says: Southwark and Vauxhall, I think. A glass is drawn. [Add the silver drops]
-   -> The glass turned MILKY: Battersea water, from the river inside the town. Door marked brown. 4 knocks left.
-   WINDOW  crape: brown 5 blue 0 | living: brown 3 blue 2
-   Crape doors tried: 5, of them 5 brown. Living doors tried: 5, of them 3 brown.
-   tap door 11 (crape): Mrs Ford says: Southwark and Vauxhall, I think. A glass is drawn. [Add the silver drops]
-   -> The glass turned MILKY: Battersea water, from the river inside the town. Door marked brown. 3 knocks left.
-   WINDOW  crape: brown 6 blue 0 | living: brown 3 blue 2
-   Crape doors tried: 6, of them 6 brown. Living doors tried: 5, of them 3 brown.
-   tap door 13 (crape): Mrs Hollis says: Southwark and Vauxhall, I think. A glass is drawn. [Add the silver drops]
-   -> The glass turned MILKY: Battersea water, from the river inside the town. Door marked brown. 2 knocks left.
-   WINDOW  crape: brown 7 blue 0 | living: brown 3 blue 2
-   Crape doors tried: 7, of them 7 brown. Living doors tried: 5, of them 3 brown.
-   tap door 15 (crape): Mrs Agnew says: the Lambeth, I think. A glass is drawn. [Add the silver drops]
-   -> The glass turned MILKY: Battersea water, from the river inside the town. (Mrs Agnew was wrong.) Door marked brown. 1 knocks left.
-   WINDOW  crape: brown 8 blue 0 | living: brown 3 blue 2
-   Crape doors tried: 8, of them 8 brown. Living doors tried: 5, of them 3 brown.
-   tap door 17 (crape): Mrs Pike says: could not say. A glass is drawn. [Add the silver drops]
-   -> The glass turned MILKY: Battersea water, from the river inside the town. Door marked brown. 0 knocks left.
-   WINDOW  crape: brown 9 blue 0 | living: brown 3 blue 2
-   Crape doors tried: 9, of them 9 brown. Living doors tried: 5, of them 3 brown.
-   STREET DONE: on Battersea you knocked at 7 doors: 7 with crape (7 brown), 0 without (0 brown). [Next street]
+Waterloo Road
+     .- .- .- .- .- .- 
+     .- .- .- .- .U XB 
 
-STREET 3 of 4: Lambeth Church, part 1 — “crowded, dirty, and very poor”, by the river (Snow). Crape on 1 doors. Knock at a door. 7 knocks left.
-   .? .? .? .? .? .? 
-   .? .? .? .? .? .? 
-   .? .? X? .? .? .? 
-
-   tap door 15 (crape): Mr Pryor says: Southwark and Vauxhall, I think. A glass is drawn. [Add the silver drops]
-   -> The glass turned MILKY: Battersea water, from the river inside the town. Door marked brown. 6 knocks left.
-   WINDOW  crape: brown 10 blue 0 | living: brown 3 blue 2
-   Crape doors tried: 10, of them 10 brown. Living doors tried: 5, of them 3 brown.
-   tap door 1 (no crape): Mrs Hollis says: the Lambeth, I think. A glass is drawn. [Add the silver drops]
-   -> The glass stayed CLEAR: Thames Ditton water, from above the town. Door marked blue. 5 knocks left.
-   WINDOW  crape: brown 10 blue 0 | living: brown 3 blue 3
-   Crape doors tried: 10, of them 10 brown. Living doors tried: 6, of them 3 brown.
-   tap door 2 (no crape): Mr Haggis says: the Lambeth, I think. A glass is drawn. [Add the silver drops]
-   -> The glass stayed CLEAR: Thames Ditton water, from above the town. Door marked blue. 4 knocks left.
-   WINDOW  crape: brown 10 blue 0 | living: brown 3 blue 4
-   Crape doors tried: 10, of them 10 brown. Living doors tried: 7, of them 3 brown.
-   tap door 3 (no crape): Mrs Marsh says: the Lambeth, I think. A glass is drawn. [Add the silver drops]
-   -> The glass stayed CLEAR: Thames Ditton water, from above the town. Door marked blue. 3 knocks left.
-   WINDOW  crape: brown 10 blue 0 | living: brown 3 blue 5
-   Crape doors tried: 10, of them 10 brown. Living doors tried: 8, of them 3 brown.
-   tap door 4 (no crape): Mr Rudd says: the Lambeth, I think. A glass is drawn. [Add the silver drops]
-   -> The glass stayed CLEAR: Thames Ditton water, from above the town. Door marked blue. 2 knocks left.
-   WINDOW  crape: brown 10 blue 0 | living: brown 3 blue 6
-   Crape doors tried: 10, of them 10 brown. Living doors tried: 9, of them 3 brown.
-   tap door 5 (no crape): Mr Vokes says: the Lambeth, I think. A glass is drawn. [Add the silver drops]
-   -> The glass stayed CLEAR: Thames Ditton water, from above the town. Door marked blue. 1 knocks left.
-   WINDOW  crape: brown 10 blue 0 | living: brown 3 blue 7
-   Crape doors tried: 10, of them 10 brown. Living doors tried: 10, of them 3 brown.
-   tap door 6 (no crape): Mrs Catchpole says: the Lambeth, I think. A glass is drawn. [Add the silver drops]
-   -> The glass stayed CLEAR: Thames Ditton water, from above the town. Door marked blue. 0 knocks left.
-   WINDOW  crape: brown 10 blue 0 | living: brown 3 blue 8
-   Crape doors tried: 10, of them 10 brown. Living doors tried: 11, of them 3 brown.
-   STREET DONE: on Lambeth Church, part 1 you knocked at 7 doors: 1 with crape (1 brown), 6 without (0 brown). [Next street]
-
-STREET 4 of 4: Borough Road — with the companies’ books open. Every doorstep is brown or blue. Mark the five doors you think will wear crape by the end of the month.
-   .U .U XB XB .B .B 
-   .B XU .B .U .U .U 
-   XB .U .U XB .B XB 
-
-   marks placed: 5 of 5. [Come back in a month]
-   .U .U X* X* .* .* 
-   .* XU .B .U .U .U 
-   XB .U .U XB .B XB 
-
-   -> Crape came to 6 doors: 5 brown, 1 blue. Of your five marks, 2 wear crape. [The verdict]
-
-VERDICT (band: high)
-  SNOW: On the same streets, a house on Battersea water lost someone about seven times as often as a house on Thames Ditton water in these seven weeks, and fourteen times as often in the first four. Crowded or genteel, by the river or on the hill: once the water was known, the parish made no difference.
-  YOU: Behind the crape doors you tried, nearly all drank Battersea water; behind the living doors, a few. By your knocks, a house on Battersea water wore crape and no house on Thames Ditton water wore it at all, so the gap is wider than your knocks can count.
-  PART: Your knocks found the gap even wider than his. Three streets are few; his were six hundred and fifty-eight deaths, and a death behind a blue door turns up about once in fifteen.
-  HAD: Had the question been answered from the companies’ lists instead of at the door, as the Board of Health answered it, the gap would have shrunk to three and a half to one: with deaths six times as common behind one company’s doors, five mistakes in six move a death from the guilty company to the innocent one. Your knocks were made at the door.
-  PARISH: Battersea, airy and well-to-do, had crape on seven doors; Lambeth Church, crowded and poor by the river, on one. The parish did not decide it. The pipe did.
-  PREDICTION: On Borough Road, with the books open, crape came to five of the ten brown doors and one of the eight blue. You marked five brown and no blue; crape came to two of your five.
-  RESIDENTS: Of the twenty-one doors you knocked at, three could not say whose water they drank, and of those who named one, two were wrong. Snow did not rest content with the reply: he asked for the water-rate receipt, and he carried the silver drops.
-  LATER: As the epidemic went on the gap narrowed: fourteen to one in the first four weeks, eight to one in the next three, five to one in the last ten, as other ways of catching it, from hand to mouth in crowded rooms, joined the water. And it was not dirt in general: thousands drank from foul cisterns that summer unharmed. It was the specific matter of the disease in the specific water.
-  truth on the three streets: brown 10 of 30, blue 0 of 24
