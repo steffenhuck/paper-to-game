@@ -94,6 +94,8 @@ svg.sh{display:block;flex:none}
 .rb.A .bar{background:var(--red)}.rb.B .bar{background:var(--ink)}.rb.E .bar{background:var(--grey)}
 .rb.A .out{color:var(--red)}.rb.E .out{color:#666}
 .rb.pop{animation:pop .5s}
+.rb.chg{background:#FDEDEB}
+.rb .tag{background:var(--red);color:#fff;font-size:9.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 6px;margin-right:6px;flex:none}
 @keyframes pop{0%{transform:scale(1.06);background:var(--soft)}100%{transform:scale(1)}}
 /* check sheet */
 .big{font-family:'Inter Display';font-weight:900;font-size:40px;line-height:.95;letter-spacing:-.035em;margin:14px 0 8px}
@@ -277,7 +279,27 @@ canvas.all{display:block;width:348px;margin:6px 0}
   <div class="read hide" id="read"></div>
   <p class="say" id="check-say"></p>
   <button class="go" id="b-check">Read the first one</button>
-  <button class="go hide" id="b-toreal">Sunday. The real vote</button>
+  <button class="go hide" id="b-toreal">Next</button>
+</section>
+
+<!-- ======================= ARROW'S OFFER ======================= -->
+<section class="screen" id="s-offer">
+  <div class="top"><div class="aim"><b>Aim</b><br>Never contradict yourself, and nobody the boss.</div><button class="q" id="q-offer" aria-label="How to play">?</button></div>
+  <h2 class="big">Arrow’s offer</h2>
+  <p class="lead" id="offer-ask"></p>
+  <button class="go" id="b-offer-yes">Yes, show me</button>
+  <button class="go" id="b-offer-no" style="background:#fff;color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)">No thanks, on to Sunday</button>
+  <div id="offer-show" class="hide">
+    <div class="lab"><i>1</i>The rewritten book</div>
+    <p class="note" id="offer-note"></p>
+    <div class="book" id="book-offer"></div>
+    <div class="lab"><i>2</i>Arrow checks it</div>
+    <div class="sheet" id="osheet"></div>
+    <div class="tally"><span><b id="ot-yes">0</b> fit together</span><span><b id="ot-no">0</b> contradict</span></div>
+    <p class="say" id="offer-say"></p>
+    <button class="go" id="b-adopt" disabled>Adopt this book for Sunday</button>
+    <button class="go" id="b-keep" disabled style="background:#fff;color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)">Keep my own book</button>
+  </div>
 </section>
 
 <!-- ======================= REAL SUNDAY ======================= -->
@@ -301,6 +323,7 @@ canvas.all{display:block;width:348px;margin:6px 0}
   <p class="v1" id="v1"></p>
   <p class="v2" id="v2"></p>
   <p class="v3" id="v3"></p>
+  <p class="v2 hide" id="v4"></p>
 
   <div class="lab"><i>1</i>Why the best is 34 and not 36</div>
   <div class="strip" id="why2"></div>
@@ -325,6 +348,7 @@ canvas.all{display:block;width:348px;margin:6px 0}
   <div class="qa"><h3>Why not toss a coin for each tie?</h3><p>Then the same two ballots could get one answer today and another tomorrow. And a coin can land in a circle too: Fountain above Tower, Tower above Tree, Tree above Fountain, and nobody is first.</p></div>
   <div class="qa"><h3>Would more voters fix it?</h3><p id="qa-more"></p></div>
   <div class="qa"><h3>Why must the same tie get the same answer?</h3><p>So that fountain against tower is decided by what people think of the fountain and the tower, and not of the tree. Arrow’s example: an election counted in points. One plan wins. Then a losing plan drops out, nobody changes their mind, and the count is suddenly a tie.</p></div>
+  <p class="lastline" style="border-top:2px solid var(--ink);padding-top:12px;margin-top:14px">Arrow’s theorem is not that voting is broken. It is that a democracy has to live with small imperfections. Get rid of every one of them and you end up with a dictator.</p>
   <div class="qa"><h3>So is voting broken?</h3><p>No. Look how many squares had an answer. Arrow showed that no way of counting is safe on <i>every</i> possible vote: each one gives something up. Which one a country uses is a choice, and now that you can vote, it is partly yours.</p></div>
   <button class="go" id="b-again">Play again</button>
   <div class="links"><button id="b-help1">How to play</button><button id="b-about1">About</button></div>
@@ -349,6 +373,8 @@ canvas.all{display:block;width:348px;margin:6px 0}
   <p>Six different ties can happen. Once you break one, the book keeps your answer, and that tie gets the same answer whenever it comes up again. Three what-ifs fill the book.</p>
   <h3>Arrow checks the rest</h3>
   <p>Arrow tries all 36 ways the vote can go. For each, the book gives three results, one per pair of plans. A square with a ranking means the three fit together. A red hatched square means they contradict each other (fountain above tower, tower above tree, but tower above fountain); the village still decides, by the plan nothing is above or by a coin, but the vote does not count as fair, and the box under the sheet says why. A red or black corner means the ranking is exactly that voter’s ballot. Touch any square to read it.</p>
+  <h3>Arrow’s offer</h3>
+  <p>If your book contradicts itself anywhere, Arrow offers you a rewritten book with no clash at all. Look at it before you adopt it. If you adopt it, Sunday is counted with the new book, and the debrief shows what your own book would have scored.</p>
   <h3>Sunday</h3>
   <p>The real vote, drawn by chance from the 36. Your book counts it, line by line, and something goes on the square.</p>
   <h3>The debrief</h3>
@@ -701,14 +727,14 @@ canvas.all{display:block;width:348px;margin:6px 0}
   }
 
   // ---------- screens ----------
-  function show(id) { ['s-start', 's-book', 's-play', 's-check', 's-real', 's-end'].forEach(function (s) { $(s).classList.toggle('on', s === id); }); window.scrollTo(0, 0); }
+  function show(id) { ['s-start', 's-book', 's-play', 's-check', 's-offer', 's-real', 's-end'].forEach(function (s) { $(s).classList.toggle('on', s === id); }); window.scrollTo(0, 0); }
   var wait = function (ms) { return new Promise(function (r) { setTimeout(r, window.__fast ? 0 : ms); }); };
 
   $('hero').innerHTML = '<span class="stack">' + [0, 1, 2].map(function (x) { return sh(x, 'a', 26); }).join('') + '</span><span style="font-weight:600;font-size:22px">+</span><span class="stack">' + [2, 0, 1].map(function (x) { return sh(x, 'b', 26); }).join('') + '</span><span class="arrow">&rarr;</span><span class="stack">' + [0, 1, 2].map(function () { return '<span style="width:26px;height:26px;border:2px dashed #8D8D8A;display:block"></span>'; }).join('') + '</span><span class="qm">?</span><span style="font-size:13px;line-height:1.3;margin-left:4px">Two ballots in.<br>One ranking out.<br>Every Sunday.</span>';
 
   // ---------- a Sunday ----------
   function startGame() {
-    G.sunday = 0; G.book = M.emptyBook(); G.ruledOn = [null, null, null, null, null, null]; G.posted = []; G.audit = null;
+    G.sunday = 0; G.offered = false; G.adopted = false; G.ownBook = null; G.book = M.emptyBook(); G.ruledOn = [null, null, null, null, null, null]; G.posted = []; G.audit = null;
     G.phase = 'play'; show('s-play'); renderSunday();
   }
   function emptyBookHtml() {
@@ -716,14 +742,14 @@ canvas.all{display:block;width:348px;margin:6px 0}
     for (var p = 0; p < 3; p++) for (var d = 0; d < 2; d++) { var a = M.PAIRS[p][d === 0 ? 0 : 1], b = M.PAIRS[p][d === 0 ? 1 : 0]; h += '<div class="rb"><span class="bar"></span><span class="vs">Anna ' + sh(a, 'a', 15) + ' Bruno ' + sh(b, 'b', 15) + '</span><span class="out"><span style="color:#8D8D8A;font-weight:400">not broken yet</span></span></div>'; }
     return h;
   }
-  function bookHtml(popCells) {
-    var h = '';
+  function bookHtml(popCells, book, into) {
+    var h = ''; book = book || G.book;
     for (var p = 0; p < 3; p++) for (var d = 0; d < 2; d++) {
-      var cell = 2 * p + d, a = M.PAIRS[p][d === 0 ? 0 : 1], b = M.PAIRS[p][d === 0 ? 1 : 0], v = G.book[cell];
+      var cell = 2 * p + d, a = M.PAIRS[p][d === 0 ? 0 : 1], b = M.PAIRS[p][d === 0 ? 1 : 0], v = book[cell];
       var out = v == null ? '<span style="color:#8D8D8A;font-weight:400">not broken yet</span>' : (v === 'E' ? outcomeHtml(a, b, -1, 13) : sh(v === 'A' ? a : b, 'v', 16)) + '<span>' + winWord(v) + '</span>';
       h += '<div class="rb ' + (v ? 'set ' + v : '') + (popCells && popCells.indexOf(cell) >= 0 ? ' pop' : '') + '" data-cell="' + cell + '"><span class="bar"></span><span class="vs">Anna ' + sh(a, 'a', 15) + ' Bruno ' + sh(b, 'b', 15) + '</span><span class="out">' + out + '</span></div>';
     }
-    $('book').innerHTML = h;
+    $(into || 'book').innerHTML = h;
   }
   function renderSunday() {
     var t = G.sunday, nb = M.nextBallots(G.book, t, G.game); G.nb = nb; G.lists = M.legalLists(G.book, nb.anna, nb.beat); G.sel = -1;
@@ -910,7 +936,7 @@ canvas.all{display:block;width:348px;margin:6px 0}
     var sc = M.score(G.book);
     $('check-say').innerHTML = v.boss ? '<b>No clash on any of the 36.</b> But look at the corners: every square has ' + (v.boss === 'A' ? 'Anna’s red' : 'Bruno’s black') + ' corner. ' + (v.boss === 'A' ? 'Anna' : 'Bruno') + ' is the boss, so none of the 36 counts as fair. <b>Score 0.</b> Touch any square to read it.'
       : '<b>' + v.holds + ' of the 36 votes count as fair. On ' + v.broken + ' the results clash.</b> The first of those is read out above. Nobody is the boss. <b>Score ' + sc.points + '</b> (34 fair votes would be 100). Touch any square to read it.';
-    $('b-check').classList.add('hide'); $('b-toreal').classList.remove('hide'); G.busy = false;
+    $('b-toreal').textContent = v.boss ? 'Sunday. The real vote' : 'Next'; $('b-check').classList.add('hide'); $('b-toreal').classList.remove('hide'); G.busy = false;
   }
   async function runSheet(ctx, yesId, noId, ms) {
     var yes = 0, no = 0; ctx.cells.forEach(function (c, i) { if (ctx.shown[i]) { if (c.list) yes++; else no++; } });
@@ -920,6 +946,30 @@ canvas.all{display:block;width:348px;margin:6px 0}
 
 
   // ---------- Sunday: the real vote ----------
+  // ---------- Arrow's offer (ours): a book with no clash, which is a boss ----------
+  function afterCheck() { if (M.dictator(G.book) || G.offered) return startReal(); startOffer(); }
+  function startOffer() {
+    G.phase = 'offer'; G.offered = true; G.ownBook = G.book.slice(); G.adopted = false;
+    var sc = M.score(G.book), c = M.counts(G.book); G.offerVoter = c.B > c.A ? 'B' : 'A';
+    $('offer-ask').innerHTML = 'Your book contradicts itself on <b>' + sc.broken + ' of the 36 votes</b>. There is a way to make that <b>0</b>: every clash gone, a clean sheet. Want to see it?';
+    $('offer-show').classList.add('hide'); ['b-offer-yes', 'b-offer-no'].forEach(function (id) { $(id).classList.remove('hide'); });
+    show('s-offer');
+  }
+  async function showOffer() {
+    if (G.busy) return; G.busy = true; ['b-offer-yes', 'b-offer-no'].forEach(function (id) { $(id).classList.add('hide'); });
+    var nb = M.voterBook(G.offerVoter), name = G.offerVoter === 'A' ? 'Anna' : 'Bruno', changed = []; nb.forEach(function (v, i) { if (G.book[i] !== v) changed.push(i); });
+    $('offer-note').innerHTML = 'Lines marked <b>changed</b> are the ones Arrow rewrote. The others already said this.';
+    bookHtml(null, nb, 'book-offer');
+    changed.forEach(function (i) { var el = $('book-offer').querySelector('[data-cell="' + i + '"]'); el.classList.add('chg'); el.insertAdjacentHTML('beforeend', '<span class="tag">changed</span>'); });
+    $('offer-say').textContent = ''; $('b-adopt').disabled = true; $('b-keep').disabled = true;
+    G.off = { cells: M.audit(nb).cells, sheet: 'osheet', read: 'read', pre: 'oq-', mode: 'book' }; buildSheet(G.off);
+    $('offer-show').classList.remove('hide'); $('book-offer').scrollIntoView({ behavior: window.__fast ? 'auto' : 'smooth', block: 'start' });
+    await wait(600); await runSheet(G.off, 'ot-yes', 'ot-no', 45);
+    $('offer-say').innerHTML = (changed.length === 0 ? 'No line changed.' : changed.length + ' of your 6 lines changed.') + ' Every tie now goes to ' + name + '. No clash anywhere: a clean sheet. Look at the book and at the corners, and decide.';
+    $('b-adopt').disabled = false; $('b-keep').disabled = false; G.busy = false;
+  }
+  function adoptOffer() { if (G.busy) return; G.book = M.voterBook(G.offerVoter); G.adopted = true; G.audit = M.audit(G.book); startReal(); }
+  function keepOwn() { if (G.busy) return; G.adopted = false; startReal(); }
   function startReal() {
     G.phase = 'real'; G.real = M.drawSunday(Math.random);
     var li = function (b, k) { return b.map(function (x, i) { return '<li><span class="n">' + (i + 1) + '.</span>' + sh(x, k, 26) + '<span>' + P[x] + '</span></li>'; }).join(''); };
@@ -977,6 +1027,9 @@ canvas.all{display:block;width:348px;margin:6px 0}
   function endScreen() {
     G.phase = 'end'; var v = M.verdict(G.book), sc = M.score(G.book), boss = v.boss === 'A' ? 'Anna' : 'Bruno', other = v.boss === 'A' ? 'Bruno' : 'Anna';
     $('score').innerHTML = '<small>Score</small>' + sc.points;
+    $('v4').classList.add('hide');
+    if (G.offered && G.adopted) { var own = M.score(G.ownBook); $('v4').textContent = 'You took Arrow’s offer. With your own book, 10 clashes and all, you would have scored ' + own.points + '.'; $('v4').textContent = $('v4').textContent.replace('10 clashes and all', own.broken + ' clashes and all'); $('v4').classList.remove('hide'); }
+    else if (G.offered) { $('v4').textContent = 'You were offered a clean sheet and turned it down. It would have made ' + (G.offerVoter === 'A' ? 'Anna' : 'Bruno') + ' the boss, and scored 0.'; $('v4').classList.remove('hide'); }
     if (v.boss) {
       $('v1').textContent = 'No clash anywhere. But ' + boss + ' is the boss, so not one of the 36 votes counts as fair.';
       $('v2').textContent = 'Every tie went to ' + boss + ', so every answer is ' + boss + '’s ballot. What ' + other + ' writes changes nothing. Arrow’s word for ' + boss + ' is dictator.';
@@ -1044,13 +1097,17 @@ canvas.all{display:block;width:348px;margin:6px 0}
   $('b-post').onclick = postList;
   $('b-next').onclick = next;
   $('b-check').onclick = checkStep;
-  $('b-toreal').onclick = startReal;
+  $('b-toreal').onclick = afterCheck;
+  $('b-offer-yes').onclick = showOffer;
+  $('b-offer-no').onclick = function () { if (!G.busy) startReal(); };
+  $('b-adopt').onclick = adoptOffer;
+  $('b-keep').onclick = keepOwn;
   $('b-count').onclick = countReal;
   $('b-debrief').onclick = endScreen;
   $('b-again').onclick = function () { G.game++; startGame(); };
   var back = 0;
   function over(id, on) { if (on) back = window.scrollY; $(id).classList.toggle('on', on); document.body.classList.toggle('lock', on); if (on) $(id).scrollTop = 0; else window.scrollTo(0, back); }
-  ['q-book', 'q-play', 'q-check', 'q-real', 'b-help0', 'b-help1'].forEach(function (id) { $(id).onclick = function () { over('help', true); }; });
+  ['q-book', 'q-play', 'q-check', 'q-offer', 'q-real', 'b-help0', 'b-help1'].forEach(function (id) { $(id).onclick = function () { over('help', true); }; });
   ['b-about0', 'b-about1'].forEach(function (id) { $(id).onclick = function () { over('about', true); }; });
   $('b-help-close').onclick = function () { over('help', false); };
   $('b-about-close').onclick = function () { over('about', false); };
