@@ -21,6 +21,10 @@ PASS  the six books in which a fixed order of the plans wins every disagreement 
 PASS  every Sunday without a list comes with a chain "a over-or-level b, b over-or-level c, but not a over c" taken from its own pair results
 PASS  chain: from any one tie given to a voter, five what-ifs each with one ranking left make that voter the dictator (12 starts)
 PASS  the real Sunday is drawn from all 36 pairs of ballots, each about equally often
+PASS  points 3-2-1: fountain,tower,tree v tower,tree,fountain puts the tower above the fountain; move only the tree on the first ballot and it is a three-way draw  [[[4,5,3],[4,4,4]]]
+PASS  the points ranking always respects what the two agree on (so it is never blocked on an empty book)
+PASS  the book never blocks the points ranking during the three what-ifs (each opens only new ties), so the clash shows in the check, not in play  [0 blocked what-ifs across 375 paths]
+PASS  counting points on all three what-ifs gives a book that disagrees with points on some of the 36 votes (Condition 3 bites in the check)  [24 to 26 votes differ, by opening]
 PASS  a third voter with a fixed ballot and majority of three is the rule book in which her order settles every disagreement (all 6 ballots, all 36 Sundays)
 PASS  each such tie-breaker gives a ranking on 34 of 36 Sundays
 PASS  its two failures are the paradox of voting (p. 329): each plan first on one ballot, second on one, third on one; a circle of 2-1 majorities
@@ -35,4 +39,4 @@ Sundays that hold, over the 375 paths of play (three openings): {"23":9,"24":22,
 Fates by opening: {"0:patchwork":112,"0:custom":3,"0:best":8,"0:boss":2,"1:patchwork":112,"1:custom":3,"1:best":8,"1:boss":2,"2:patchwork":114,"2:best":6,"2:boss":2,"2:custom":3}
 Books at the best score without a boss (34): ABBAAA BAABAA BAAABA AABABA BABABA ABBABA BBBABA BAABBA BABBBA ABAAAB ABBAAB AAABAB BAABAB ABABAB BBABAB ABBBAB ABBABB BAABBB
 
-31 checks, 0 failed
+35 checks, 0 failed
