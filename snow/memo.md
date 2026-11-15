@@ -79,3 +79,7 @@ Before any test, Bayes on a door: in a mixed street a crape door is brown with p
 5. Session in headless Chromium at 380 × 760, seed 7 (`session-test.js` → `session-log.txt`): the stranger's game with help mid-play, a glass after the concession, About; then the doctor's way to the cap and a right guess, judged as a guess. No errors, no horizontal scroll.
 6. Self-review from the screenshots as before; the type checked at phone width and at 600 px.
 7. Session length not measured by a person: two to five minutes by the number of taps.
+
+## 20. Revision 1 (15 Nov 2026): one slope, consistent headings, one meaning per mark
+
+After the author's play of the fourth build. (1) The river band read as a stage marker, so the map's foot is now a wavy Thames in the water colour and its head "higher ground, inland" in the same style: one slope, not two stages; the author's question whether to split the experiments was answered no, because the lesson needs the side of town and the water to run together across one map. (2) The row headings were inconsistent (a tally where tests existed, the street's phrase elsewhere, and the same on the revealed map): now the right-hand side is always the tally during play ("no glass yet" where none) and always the whole street's truth on the revealed map; the phrases moved to a legend under the map. (3) The revealed map drew untested doors pale, which read as a third and fourth colour: now every door is in the full colour of its water and a ring marks the doors the player tested, so colour means water and nothing else.
