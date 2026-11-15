@@ -1,0 +1,52 @@
+no page errors, no horizontal scroll
+
+board: #b-run within 700 px without scrolling: true
+run 2:5: #b-run within 700 px without scrolling: true
+run 2:5 → 5 is a prime: proved / Act 1 · every sentence so far settled | 5 divides by nothing but 1 and 5. Proved. / Proved / Another sentence
+run 4:3: #b-run within 700 px without scrolling: true
+run 4:3 → Rulebook 1 proves shape 1 filled with 3: refuted / Act 1 · every sentence so far settled | Shape 1 filled with 3 is: 3 is even. / 3 = 2 × 1 + 1, so 3 is odd. Refuted. / So Rulebook 1 does not prove shape 1 filled with 3. / Refuted / Another sentence
+run 5:5: #b-run within 700 px without scrolling: true
+run 5:5 → Rulebook 1 does not prove shape 5 filled with 3: refuted / Act 1 · three sentences, three settled. Now write shape 6 | Shape 5 filled with 3 is: Rulebook 1 does not prove shape 3 filled with 3. / Shape 3 filled with 3 is: 3 is bigger than 3. / 3 is not bigger than itself. Refuted. / So Rulebook 1 does not prove shape 3 filled with 3. / P
+composer: #b-write within 700 px without scrolling: true
+run 6:6: #b-run within 700 px without scrolling: true
+run 6:6 → Rulebook 1 proves shape 6 filled with 6: proved / Act 1 · every sentence so far settled | Shape 6 filled with 6 is: this very sentence. / If I prove it, it says I prove it: true. Proved. / Proved / Rewrite shape 6 / Another sentence
+run 6:6: #b-run within 700 px without scrolling: true
+run 6:6 → A loophole / Act 1 · a sentence Rulebook 1 can neither prove nor refute | Shape 6 filled with 6 is: this very sentence. / If I prove it, it says I do not: I would have proved a false sentence. / If I refute it, I am saying that I prove it: false too. / Neither. / Unsettled / Rulebook 1 can nei
+run 7:7: #b-run within 700 px without scrolling: true
+run 7:7 → Rulebook 2 has a loophole too / Act 2 · found by you | Shape 7 filled with 7 is: this very sentence. / If I prove it, it says I do not: I would have proved a false sentence. / If I refute it, I am saying that I prove it: false too. / Neither. / Unsettled / Rulebook 2 can nei
+page 1 → Page 1: refuted as a proof / Act 2 · and the rule still says a page exists
+page 2 → Page 2: refuted as a proof / Act 2 · and the rule still says a page exists
+page 3 → Page 3: refuted as a proof / Act 2 · and the rule still says a page exists
+page 4 → Page 4: refuted as a proof / Act 2 · and the rule still says a page exists
+page 5 → A page exists, and every page is refuted / Act 2 · the paper’s word: ω-inconsistent
+certificate: #b-runcert within 700 px without scrolling: true
+cert → The certificate is unsettled / Act 2 · not what you bet
+VERDICT A: The verdict / WHAT THE PAPER FOUND / Any rulebook for whole numbers that works by fixed rules has a sentence it can neither prove nor refute, and that sentence is true. Add it as a rule and the new rulebook has a loophole of its own. Add its opposite and the rulebook says a page proves it and refutes every page. And no such rulebook can certify that it never contradicts itself. / WHAT YOU FOUND / You found Rulebook 1’s loophole yourself, on your 5th sentence: shape 6 filled with 6. You tried the sentence that only says it is proved, and the rulebook proved it: a cheap tick. You added the loophole sentence first: Rulebook 2 got a shape of its own, and you found its loophole at once. You bet that Rulebook 1 would prove its own certificate. It did not. / WHERE YOU PART / You expected the rulebook to vouch for itself. The paper’s last proposition is that it cannot. / HAD YOURS STOOD / Had Rulebook 1 proved its own certificate, it would have proved the loophole sentence too, and a rulebook that proves a sentence saying it does not prove it contradicts itself: the only rulebook that certifies itself is a broken one. / THE LOOPHOLE / Rulebook 1 does not prove shape 6 filled with 6 / THE THREE REPAIRS / Add it as a rule: Rulebook 2 proves it outright, gets a line of its own, and shape 7 filled with 7 is the new loophole, which you found. / Add its opposite: Rulebook 2′ proves that a page of the ledger proves it and refutes every page you showed it. ω-inconsistent. / Ask for the certificate: unsettled, because the certificate would prove the loophole. You bet it would. / THE PAPER /
+run 1:4: #b-run within 700 px without scrolling: true
+run 1:4 → 4 is even: proved / Act 1 · every sentence so far settled | 4 = 2 × 2. Proved. / Proved / Another sentence
+run 1:3: #b-run within 700 px without scrolling: true
+run 1:3 → 3 is even: refuted / Act 1 · every sentence so far settled | 3 = 2 × 1 + 1, so 3 is odd. Refuted. / Refuted / Another sentence
+run 3:2: #b-run within 700 px without scrolling: true
+run 3:2 → 2 is bigger than 3: refuted / Act 1 · three sentences, three settled. Now write shape 6 | 2 comes before 3. Refuted. / Refuted / Write shape 6 / Another sentence
+run 6:1: #b-run within 700 px without scrolling: true
+run 6:1 → Rulebook 1 proves shape 1 filled with 2: proved / Act 1 · every sentence so far settled | Shape 1 filled with 2 is: 2 is even. / 2 = 2 × 1. Proved. / So Rulebook 1 proves shape 1 filled with 2. / Proved / Rewrite shape 6 / Another sentence
+run 6:6: #b-run within 700 px without scrolling: true
+run 6:6 → Rulebook 1 does not prove shape 2 filled with 5: refuted / Act 1 · every sentence so far settled | Shape 2 filled with 5 is: 5 is a prime. / 5 divides by nothing but 1 and 5. Proved. / So Rulebook 1 proves shape 2 filled with 5. / Refuted / Rewrite shape 6 / Another sentence
+run 6:6: #b-run within 700 px without scrolling: true
+run 6:6 → Rulebook 1 proves shape 6 filled with 3: refuted / Act 1 · every sentence so far settled | Shape 6 filled with 3 is: Rulebook 1 proves shape 3 filled with 3. / Shape 3 filled with 3 is: 3 is bigger than 3. / 3 is not bigger than itself. Refuted. / So Rulebook 1 does not prove shape 3 filled with 3. / Refuted. 
+run 6:6: #b-run within 700 px without scrolling: true
+run 6:6 → Rulebook 1 does not prove shape 5 filled with 6: refuted / Act 1 · every sentence so far settled | Shape 5 filled with 6 is: Rulebook 1 does not prove shape 6 filled with 3. / Shape 6 filled with 3 is: Rulebook 1 does not prove shape 5 filled with 3. / Shape 5 filled with 3 is: Rulebook 1 does not prove shape 3 filled
+run 6:5: #b-run within 700 px without scrolling: true
+run 6:5 → Rulebook 1 does not prove shape 5 filled with 5: proved / Act 1 · every sentence so far settled | Shape 5 filled with 5 is: Rulebook 1 does not prove shape 5 filled with 3. / Shape 5 filled with 3 is: Rulebook 1 does not prove shape 3 filled with 3. / Shape 3 filled with 3 is: 3 is bigger than 3. / 3 is not bigger th
+run 6:6: #b-run within 700 px without scrolling: true
+run 6:6 → Six sentences, all settled / Act 1 · Gödel’s chalk takes over | Shape 4 filled with 6 is: Rulebook 1 proves shape 1 filled with 6. / Shape 1 filled with 6 is: 6 is even. / 6 = 2 × 3. Proved. / So Rulebook 1 proves shape 1 filled with 6. / Proved. / So Rulebook 1 proves shape 4 filled
+run 6:6: #b-run within 700 px without scrolling: true
+run 6:6 → A loophole / Act 1 · a sentence Rulebook 1 can neither prove nor refute | Shape 6 filled with 6 is: this very sentence. / If I prove it, it says I do not: I would have proved a false sentence. / If I refute it, I am saying that I prove it: false too. / Neither. / Unsettled / Rulebook 1 can nei
+run 7:2: #b-run within 700 px without scrolling: true
+run 7:2 → Rulebook 2 does not prove shape 2 filled with 2: refuted / Act 2 · settled | Shape 2 filled with 2 is: 2 is a prime. / 2 divides by nothing but 1 and 2. Proved. / So Rulebook 2 proves shape 2 filled with 2. / Refuted / Another sentence
+run 6:6: #b-run within 700 px without scrolling: true
+run 6:6 → Rulebook 1 does not prove shape 6 filled with 6: proved / Act 2 · settled | Rule 3 of Rulebook 2 settles it outright: proved. / Proved / Another sentence
+run 7:6: #b-run within 700 px without scrolling: true
+run 7:6 → Rulebook 2 has a loophole too / Act 2 · filled by Gödel | Shape 6 filled with 6 is: Rulebook 1 does not prove shape 6 filled with 6. / Rule 3 of Rulebook 2 settles it outright: proved. / So Rulebook 2 proves shape 6 filled with 6. / Refuted / Three runs and every one settled. G
+rb2 godel → Rulebook 2 has a loophole too / Act 2 · filled by Gödel
+VERDICT B: The verdict / WHAT THE PAPER FOUND / Any rulebook for whole numbers that works by fixed rules has a sentence it can neither prove nor refute, and that sentence is true. Add it as a rule and the new rulebook has a loophole of its own. Add its opposite and the rulebook says a page proves it and refutes every page. And no such rulebook can certify that it never contradicts itself. / WHAT YOU FOUND / You ran 10 sentences, and Gödel’s chalk wrote shape 6 for you; you filled it with its own number and watched the loop. You added the opposite first: Rulebook 2′ proved that a page of the ledger proves the sentence and refuted every page you showed it. You bet that Rulebook 1 would not prove its own certificate. It did not: your bet stood. / WHERE YOU PART / Gödel found the shape in 1930 with no parts to choose from; you had the parts and the budget ran out. The idea the paper adds to the parts: a shape cannot name its own number, so leave the number as a hole and fill the hole with the shape’s line. / HAD YOURS STOOD / Had a rule closed the loophole for good, Hilbert would have been right and the paper would not exist: every rule you added gave the chalk a new sentence to write. / THE LOOP
