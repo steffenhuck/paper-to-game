@@ -58,6 +58,7 @@ h2.now{font-size:22px;line-height:1.18;margin:.15em 0 .3em;font-weight:700}
 .keys{display:flex;flex-wrap:wrap;gap:9px;margin:10px 0 4px;justify-content:center;position:sticky;bottom:0;background:var(--paper);padding:8px 0 10px;z-index:3}
 .keys:empty{display:none}
 #err{display:none;background:#b3262e;color:#fff;padding:8px 12px;font-size:14px;margin-bottom:8px}
+#dbg{display:none;position:fixed;left:0;right:0;top:0;z-index:99;background:#111;color:#9f9;font:12px/1.35 ui-monospace,monospace;padding:6px 8px;max-height:40vh;overflow:auto;white-space:pre-wrap}
 .key{min-width:76px;height:50px;padding:0 12px;background:var(--ink);color:var(--slip);font-family:'Courier Prime',monospace;font-weight:700;font-size:16px;border-radius:12px;box-shadow:0 0 0 3px var(--gold),0 4px 0 3px #6d5420;transition:transform .06s}
 .key:active,.key.hit{transform:translateY(3px);box-shadow:0 0 0 3px var(--gold),0 1px 0 3px #6d5420}
 .key.rub{font-family:system-ui,sans-serif;font-size:24px;font-weight:400;background:var(--paper);color:var(--ink);box-shadow:0 0 0 2px var(--ink),0 4px 0 2px #9a907f;min-width:64px}
@@ -115,6 +116,7 @@ details li{margin:.45em 0}
 <body>
 <div class="wrap">
 <div id="err"></div>
+<div id="dbg"></div>
 
 <!-- START -->
 <section class="screen on" id="s-start">
@@ -259,6 +261,21 @@ details li{margin:.45em 0}
 
 </div>
 <script>
+(function(){
+  if (location.search.indexOf('debug') < 0) return;
+  var d = document.getElementById('dbg'), n = 0; d.style.display = 'block';
+  function line(t) { n++; d.textContent = (n + ' ' + t + '\n' + d.textContent).slice(0, 4000); }
+  function tag(e) { if (!e) return '-'; var t = e.tagName; if (e.id) t += '#' + e.id; if (e.className && e.className.baseVal === undefined) t += '.' + String(e.className).split(' ').join('.'); if (e.getAttribute && e.getAttribute('data-k')) t += '[' + e.getAttribute('data-k') + ']'; return t; }
+  line('DEBUG ' + navigator.userAgent + ' | viewport ' + innerWidth + 'x' + innerHeight + ' | zoom ' + (devicePixelRatio) + ' | fonts ' + (document.fonts ? document.fonts.status : '?'));
+  ['pointerdown','mousedown','touchstart','click','keydown'].forEach(function (ev) {
+    document.addEventListener(ev, function (e) {
+      var t = e.target, p = e.touches && e.touches[0] ? e.touches[0] : e;
+      var at = (p.clientX !== undefined) ? ' at ' + Math.round(p.clientX) + ',' + Math.round(p.clientY) + ' top=' + tag(document.elementFromPoint(p.clientX, p.clientY)) : '';
+      line(ev + ' on ' + tag(t) + (e.key ? ' key=' + e.key : '') + at + ' | screen=' + (document.querySelector('.screen.on') || {}).id + ' box=' + (window.__G ? JSON.stringify(window.__G.state().box) : '?'));
+    }, true);
+  });
+  window.addEventListener('error', function (e) { line('ERROR ' + e.message + ' line ' + e.lineno); });
+})();
 window.onerror=function(m,u,l){var e=document.getElementById('err');if(e){e.style.display='block';e.textContent='Something went wrong in the game\'s code: '+m+' (line '+l+'). Please tell steffen.huck@gmail.com which browser you use.';}};
 </script>
 <script>
