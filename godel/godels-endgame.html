@@ -34,7 +34,7 @@ h2.now{font-size:22px;line-height:1.18;margin:.15em 0 .3em;font-weight:700}
 .machine{position:relative;padding:9px;background:repeating-conic-gradient(var(--ink) 0 25%,var(--paper) 0 50%) 0 0/12px 12px;margin:8px 0 6px}
 .machine .inner{background:var(--paper);border:2px solid var(--ink);padding:10px 10px 12px;position:relative;overflow:hidden}
 .plate{display:inline-block;background:var(--gold);color:var(--ink);font-weight:700;font-size:11.5px;letter-spacing:.16em;padding:4px 9px 2px;text-transform:uppercase}
-.platen{background:var(--slip);border:1px solid #d6cdb9;margin-top:9px;padding:10px 10px 9px;min-height:50px;font-family:'Courier Prime',monospace;font-size:18px;font-weight:700;line-height:1.5;word-break:break-word}
+.platen{margin-top:9px;padding:8px 0 4px;min-height:40px;font-family:'Courier Prime',monospace;font-size:18px;font-weight:700;line-height:1.5;word-break:break-word}
 .lbl{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin:8px 0 2px;font-weight:700}
 .lbl b{color:var(--ink)}
 /* tokens and boxes */
@@ -54,8 +54,8 @@ h2.now{font-size:22px;line-height:1.18;margin:.15em 0 .3em;font-weight:700}
 .bx .tk:last-child{margin-right:0}
 @keyframes blink{50%{opacity:0}}
 .tk.same{border-bottom-color:var(--violet)}
-.row{font-family:'Courier Prime',monospace;font-weight:700;font-size:16.5px;line-height:1.55;background:var(--slip);border:1px solid #d6cdb9;padding:5px 8px;min-height:36px;word-break:break-word}
-.row.eq{border-color:var(--violet);box-shadow:inset 0 0 0 2px var(--violet)}
+.row{font-family:'Courier Prime',monospace;font-weight:700;font-size:16.5px;line-height:1.55;padding:2px 0 2px 10px;border-left:3px solid #d6cdb9;min-height:30px;word-break:break-word}
+.row.eq{border-left-color:var(--violet);background:var(--violetlt)}
 .row .none{font-family:'Josefin';font-weight:400;color:var(--mute);font-size:14.5px}
 .says{font-size:15.5px;margin:9px 0 2px;min-height:1.4em}
 .says .ty{font-weight:700}
@@ -509,8 +509,8 @@ if (typeof module !== 'undefined') module.exports = {
   var STEPS = {
     nothis: {
       kick: 'Step 1 of 6 · Can a sentence hold itself?',
-      now: 'Put the whole sentence into its own gold box.',
-      expl: 'A sentence talks about whatever is in its box. You will get stuck here, and that is the point: watch why.',
+      now: 'Nothing to type yet. Just press the button.',
+      expl: 'A sentence talks about whatever is inside its brackets. The button puts the whole sentence inside its own brackets. Watch what happens.',
       plate: 'Hilbert\'s machine · I'
     },
     twiceA: {
@@ -528,7 +528,7 @@ if (typeof module !== 'undefined') module.exports = {
     self1: {
       kick: 'Step 3 of 6 · The sentence',
       now: 'Make the sentence talk about <i>itself</i>.',
-      expl: 'Fill the box until the two lines below are the same. You have the TWICE key now.',
+      expl: 'Type into the gold field until the two lines below are the same. You have the TWICE key now.',
       plate: 'Hilbert\'s machine · I'
     },
     self2: {
@@ -557,6 +557,7 @@ if (typeof module !== 'undefined') module.exports = {
     kh += '<button class="key rub" data-k="RUB" aria-label="Rub out">⌫</button>';
     $('p-front').textContent = P.front.map(function (k) { return K[k].label; }).join(' ');
     $('p-inwrap').classList.remove('hide'); $('p-sentence').classList.add('hide');
+    ['p-lbl-a','p-row-a','p-lbl-b','p-row-b'].forEach(function (id) { $(id).classList.remove('hide'); });
     var inp = $('p-in'); inp.value = ''; inp.disabled = false; $('p-bad').textContent = '';
     if (window.matchMedia && matchMedia('(hover:hover)').matches) setTimeout(function () { inp.focus(); }, 50);
     $('p-keys').innerHTML = kh;
@@ -626,7 +627,7 @@ if (typeof module !== 'undefined') module.exports = {
     var p = gParse(P.front);
     var verb = (p.neg ? 'never prints' : 'prints');
     var who = p.machine === 2 ? 'Machine II' : 'the machine';
-    if (!S.box.length) says = 'It says: ' + who + ' ' + verb + ' <span class="ty"><b>…</b></span> (the field is empty)';
+    if (!S.box.length) says = 'It says: ' + who + ' ' + verb + ' <span class="ty"><b>…</b></span> (the gold field is empty)';
     else if (gSelf(s)) says = 'It says: <b>' + who + ' ' + verb + ' this very sentence.</b>';
     else says = 'It says: ' + who + ' ' + verb + ' <span class="ty"><b>' + gText(sub) + '</b></span>';
     $('p-says').innerHTML = says;
@@ -636,14 +637,14 @@ if (typeof module !== 'undefined') module.exports = {
       $('p-lbl-a').innerHTML = 'Your sentence' + (id === 'nothis' ? ' · <b>' + gPieces(s) + ' keys</b>' : '');
       $('p-row-a').innerHTML = drawString(s, mir.sentence);
       $('p-lbl-b').innerHTML = 'It talks about' + (id === 'nothis' ? ' · <b>' + (S.box.length ? gPieces(sub) : 0) + ' keys</b>' : '');
-      $('p-row-b').innerHTML = S.box.length ? drawString(sub, mir.subject) : '<span class="none">nothing yet: type into the gold field</span>';
+      $('p-row-b').innerHTML = S.box.length ? drawString(sub, mir.subject) : '<span class="none">nothing yet</span>';
     } else {
       // target puzzles: target on top, what it talks about below, matched piece by piece
       var t = P.target, ma = gMirrorPair(t, sub);
       $('p-lbl-a').innerHTML = 'The target';
       $('p-row-a').innerHTML = drawString(t, ma.a);
       $('p-lbl-b').innerHTML = 'Your sentence talks about';
-      $('p-row-b').innerHTML = S.box.length ? drawString(sub, ma.b) : '<span class="none">nothing yet: type into the gold field</span>';
+      $('p-row-b').innerHTML = S.box.length ? drawString(sub, ma.b) : '<span class="none">nothing yet</span>';
     }
     $('p-row-a').classList.toggle('eq', !!hit);
     $('p-row-b').classList.toggle('eq', !!hit);
@@ -698,18 +699,15 @@ if (typeof module !== 'undefined') module.exports = {
   function drawNothis() {
     var L = S.level;
     $('p-sentence').innerHTML = nestHtml(L);
-    $('p-says').innerHTML = L === 0 ? 'It says: the machine never prints <span class="ty"><b>…</b></span> (the field is empty)'
-      : 'It says: the machine never prints <span class="ty"><b>' + nestText(L - 1) + '</b></span>';
-    $('p-lbl-a').innerHTML = 'Your sentence · <b>' + (2 * L + 2) + ' keys</b>';
-    $('p-row-a').innerHTML = nestHtml(L);
-    $('p-lbl-b').innerHTML = 'It talks about · <b>' + (2 * L) + ' keys</b>';
-    $('p-row-b').innerHTML = L === 0 ? '<span class="none">nothing yet: the box is empty</span>' : nestHtml(L - 1);
-    $('p-row-a').classList.remove('eq'); $('p-row-b').classList.remove('eq');
+    ['p-lbl-a','p-row-a','p-lbl-b','p-row-b'].forEach(function (id) { $(id).classList.add('hide'); $(id).innerHTML = ''; });
+    $('p-says').innerHTML = L === 0
+      ? 'Your sentence has <b>2 keys</b>. Its brackets are empty, so it talks about nothing yet.'
+      : 'Your sentence has <b>' + (2 * L + 2) + ' keys</b>. It talks about <span class="ty"><b>' + nestText(L - 1) + '</b></span>, which has <b>' + (2 * L) + '</b>.';
     var msgs = [
       '',
-      'Now it talks about <span class="ty"><b>NOT PRINTS [ ]</b></span>: the sentence you had a moment ago. Not this one: this one is longer. Put it in again.',
-      'Again it talks about the sentence before. Each time you put the sentence in, the sentence around it grows by two keys.',
-      '<b>It never closes.</b> Whatever goes in the box, the sentence around it is longer. With these keys no sentence can talk about itself.'
+      'That is the sentence you had a moment ago, not this one. This one is two keys longer. Press again.',
+      'Again it talks about the sentence before, and again the sentence around it is two keys longer.',
+      '<b>It never closes.</b> Whatever goes inside, the sentence around it is longer. With these keys no sentence can talk about itself.'
     ];
     $('p-msg').innerHTML = L ? '<div class="note' + (L === 3 ? ' v' : '') + '">' + msgs[L] + '</div>' : '';
     if (L === 3) {
@@ -717,10 +715,8 @@ if (typeof module !== 'undefined') module.exports = {
       var b = $('b-next'); b.textContent = 'Give me another key'; b.classList.remove('hide');
       b.onclick = function () { startPuzzle('twiceA'); };
       setTimeout(function () { b.scrollIntoView({ behavior: 'smooth', block: 'end' }); }, 100);
-    } else if (L) {
-      $('b-nest').textContent = 'Put it in again';
     } else {
-      $('b-nest').textContent = 'Put the sentence in its own box';
+      $('b-nest').textContent = L ? 'Press again: put it inside its own brackets' : 'Press: put the sentence inside its own brackets';
     }
   }
   function doNest() { if (S.level < 3) { S.level++; drawNothis(); } }
