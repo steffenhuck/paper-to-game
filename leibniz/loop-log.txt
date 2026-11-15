@@ -1,0 +1,223 @@
+=== WORLD 1 of 3 — Fill the land. Not all of these will fit. ===
+> the board as the stranger first sees it
+....
+....
+....
+....
+Lit 0 of 16. Dark 16. Waiting 6 [A=2x3 B=2x2 C=L3 D=1x3 E=1x2 F=1x1]
+
+> drag the rectangle (A) to the top-left
+AAA.
+AAA.
+....
+....
+Lit 6 of 16. Dark 10. Waiting 5 [B=2x2 C=L3 D=1x3 E=1x2 F=1x1]
+
+> drag the small square (B) under it
+AAA.
+AAA.
+BB..
+BB..
+Lit 10 of 16. Dark 6. Waiting 4 [C=L3 D=1x3 E=1x2 F=1x1]
+
+> tap the bar of two (E): it turns (rotation 1)
+> drag the upright bar of two (E) to the right edge
+AAAE
+AAAE
+BB..
+BB..
+Lit 12 of 16. Dark 4. Waiting 3 [C=L3 D=1x3 F=1x1]
+
+> try the bar of three (D) at (2,2): does not fit there: does not fit there
+> drag the L (C) into the bottom-right
+AAAE
+AAAE
+BBC.
+BBCC
+Lit 15 of 16. Dark 1. Waiting 2 [D=1x3 F=1x1]
+
+> LET IT BE — rushed in: the single
+AAAE
+AAAE
+BBCF
+BBCC
+Lit 16 of 16. Dark 0. Waiting 1 [D=1x3]
+
+  game: The single still fitted, and nothing stopped it, so it came to be.
+  game: Your world holds 16 of 16: full. Left out: the bar of three.
+  game: The best possible world is full, and it also leaves something out (the bar of two and the single): not everything that could exist can exist together.
+  game: Yours holds as much as any world can.
+
+=== WORLD 2 of 3 — the stranger takes the big square first ===
+> the board as first seen
+......
+......
+......
+......
+......
+......
+Lit 0 of 36. Dark 36. Waiting 7 [A=3x3 B=2x4 C=2x4 D=2x4 E=2x2 F=2x2 G=2x2]
+
+> drag the big square (A) to the top-left corner
+AAA...
+AAA...
+AAA...
+......
+......
+......
+Lit 9 of 36. Dark 27. Waiting 6 [B=2x4 C=2x4 D=2x4 E=2x2 F=2x2 G=2x2]
+
+> long bar (B) at (0,3) horizontal: no
+> turn the long bar (B) upright and drag it to the right of the square
+AAABB.
+AAABB.
+AAABB.
+...BB.
+......
+......
+Lit 17 of 36. Dark 19. Waiting 5 [C=2x4 D=2x4 E=2x2 F=2x2 G=2x2]
+
+> turn the second long bar (C) upright, drag it to the far right
+AAABB.
+AAABB.
+AAABB.
+...BB.
+......
+......
+Lit 17 of 36. Dark 19. Waiting 5 [C=2x4 D=2x4 E=2x2 F=2x2 G=2x2]
+
+> two small squares (E, F) under the big square
+AAABB.
+AAABB.
+AAABB.
+EE.BB.
+EE....
+......
+Lit 21 of 36. Dark 15. Waiting 4 [C=2x4 D=2x4 F=2x2 G=2x2]
+
+> third long bar (D) flat along the bottom: does not fit there
+> third long bar (D) upright at (4,2): does not fit there
+> the last small square (G) at (4,4)
+AAABB.
+AAABB.
+AAABB.
+EE.BB.
+EE..GG
+....GG
+Lit 25 of 36. Dark 11. Waiting 3 [C=2x4 D=2x4 F=2x2]
+
+> the stranger stares: 29 lit, 7 dark, one long bar waiting. Pull the big square? (This is the decision.)
+> this stranger lets it be.
+> LET IT BE — rushed in: the small square
+AAABB.
+AAABB.
+AAABB.
+EE.BB.
+EEFFGG
+..FFGG
+Lit 29 of 36. Dark 7. Waiting 2 [C=2x4 D=2x4]
+
+  game: The small square still fitted, and nothing stopped it, so it came to be.
+  game: Your world holds 29 of 36: about a fifth dark. Left out: two long bars.
+  game: The best possible world is full, and the big square is not in it.
+  game: Yours holds 7 less than the best possible world.
+  game: You kept the grandest thing, and it is what left the land dark.
+  best possible world:
+BBBBCC
+BBBBCC
+DDDDCC
+DDDDCC
+EEFFGG
+EEFFGG
+
+
+=== WORLD 3 of 3 — a world made by weight; nothing left fits; make it fuller ===
+> the board as first seen (A longest bar, B big square, C long bar, D thin bar placed by weight)
+AAAAAD
+AAAAAD
+BBBCCD
+BBBCCD
+BBBCC.
+...CC.
+Lit 31 of 36. Dark 5. Waiting 3 [E=2x3 F=1x4 G=L3]
+
+> each waiting shape, does it fit anywhere? 2x3:no 1x4:no L3:no
+> tap the big square (B): it comes out — a step back
+AAAAAD
+AAAAAD
+...CCD
+...CCD
+...CC.
+...CC.
+Lit 22 of 36. Dark 14. Waiting 4 [B=3x3 E=2x3 F=1x4 G=L3]
+
+> now: 3x3:fits 2x3:fits 1x4:fits L3:fits
+> put the big square back where it was
+AAAAAD
+AAAAAD
+BBBCCD
+BBBCCD
+BBBCC.
+...CC.
+Lit 31 of 36. Dark 5. Waiting 3 [E=2x3 F=1x4 G=L3]
+
+> tap the long bar (C) instead: a bigger hole, 13 dark
+AAAAAD
+AAAAAD
+BBB..D
+BBB..D
+BBB...
+......
+Lit 23 of 36. Dark 13. Waiting 4 [C=2x4 E=2x3 F=1x4 G=L3]
+
+> turn the rectangle (E) upright, drag it into the hole at (2,3)
+AAAAAD
+AAAAAD
+BBBEED
+BBBEED
+BBBEE.
+......
+Lit 29 of 36. Dark 7. Waiting 3 [C=2x4 F=1x4 G=L3]
+
+> the thin bar (F) along the bottom-left
+AAAAAD
+AAAAAD
+BBBEED
+BBBEED
+BBBEE.
+FFFF..
+Lit 33 of 36. Dark 3. Waiting 2 [C=2x4 G=L3]
+
+> turn the L (G) twice and drag it into the bottom-right
+AAAAAD
+AAAAAD
+BBBEED
+BBBEED
+BBBEE.
+FFFF..
+Lit 33 of 36. Dark 3. Waiting 2 [C=2x4 G=L3]
+
+> the long bar (C) is waiting and nowhere fits it: the stranger lets it be.
+> LET IT BE
+AAAAAD
+AAAAAD
+BBBEED
+BBBEED
+BBBEEG
+FFFFGG
+Lit 36 of 36. Dark 0. Waiting 1 [C=2x4]
+
+  game: The L still fitted, and nothing stopped it, so it came to be.
+  game: Your world holds 36 of 36: full. Left out: the long bar.
+  game: The best possible world is full; it leaves out the long bar.
+  game: Yours holds as much as any world can.
+  game: You pulled something out, and more came to be where it was: the step back was the way forward.
+
+=== VERDICT ===
+Two of your three worlds are as full as they can be.
+Leibniz: the world that exists is the arrangement of possible things that fits the most together, like tiles filling a board. Not everything possible can exist; the grandest thing need not be in the best world; the small, awkward things are; and a step back can be the way to a fuller world.
+World 1: your world was full, with the bar of three left out.
+World 2: you kept the big square, and your world was about a fifth dark.
+World 3: you stepped back two times, and the world ended full: the step back was the way forward.
+On world 2 (7 cells short), the best possible world holds more than yours.
+A world with less in it than there could have been. Leibniz says that cannot be the one that exists: the possibles push, and the fullest arrangement is what comes through, the way weights settle.
