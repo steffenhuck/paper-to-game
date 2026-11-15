@@ -1,4 +1,4 @@
-// Augustine's Clock (second rebuild): the mechanism run headless, through the functions the browser calls.
+// Wait for Augustine (second rebuild): the mechanism run headless, through the functions the browser calls.
 // Run: node calibration.js   (calibration-result.txt is the saved output)
 const A = require('./mechanism.js');
 const C = A.CONFIG, out = [], say = s => { out.push(s); console.log(s); };

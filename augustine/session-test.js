@@ -79,13 +79,13 @@ const out = []; const say = s => { out.push(s); console.log(s); };
     await S('end'); if (opts.shots) await shot(`${tag.toLowerCase()}-end-full`, true); await noScroll('last page');
   }
 
-  await page.goto('file://' + path.join(__dirname, 'augustines-clock.html'));
+  await page.goto('file://' + path.join(__dirname, 'wait-for-augustine.html'));
   await shot('start'); await noScroll('start');
   await page.click('[data-about]'); await page.waitForTimeout(200); await shot('about', true); await noScroll('about'); await page.click('#aboutback'); await page.waitForTimeout(200);
   await evening('A', 'first-timer', { shots: true, help: true });
   const seedA = (await G()).seed;
   await evening('B', 'steady', { again: true, shots: false });
-  await page.goto('about:blank'); await page.goto('file://' + path.join(__dirname, 'augustines-clock.html') + '#e=' + seedA); await page.waitForTimeout(300);
+  await page.goto('about:blank'); await page.goto('file://' + path.join(__dirname, 'wait-for-augustine.html') + '#e=' + seedA); await page.waitForTimeout(300);
   await evening('C', 'hasty', { shots: false });
   say(`\nevening C used evening A's number (${seedA}) by its address: ${(await G()).seed === seedA}`);
   say('page errors: ' + (errs.length ? errs.join(' | ') : 'none'));

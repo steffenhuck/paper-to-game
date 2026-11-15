@@ -1,4 +1,4 @@
-// Augustine's Clock — the mechanism (second rebuild, 6 Nov 2026). The only copy: build.py inlines this file verbatim into
+// Wait for Augustine — the mechanism (second rebuild, 6 Nov 2026). The only copy: build.py inlines this file verbatim into
 // the HTML and refuses to build if the embedded copy differs. Plain functions, no DOM; runs unchanged in Node and in the browser.
 //
 // Kind: TOY, built to illustrate the argument of Augustine, Confessions, Book XI, chs. XIII–XXIX (with Book X, chs.
