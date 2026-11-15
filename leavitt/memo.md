@@ -232,3 +232,7 @@ Calibration extended to 49 checks (doubler → shifted, about a quarter too shor
 ## Renamed (11 November 2026)
 
 Renamed from *Leavitt's Cloud* to *Blink with Leavitt*, at the author's decision to let some titles say what the player does while keeping the name. The game file is `blink-with-leavitt.html`; a one-line page at `leavitts-cloud.html` sends old links to it. Nothing in the mechanism changed.
+
+## Renamed back (15 November 2026)
+
+Back to *Leavitt's Cloud*, so that three titles in a row on the Pantheon page do not all end "with". The game file is `leavitts-cloud.html` again; `blink-with-leavitt.html` now sends links to it. Nothing in the mechanism changed.
