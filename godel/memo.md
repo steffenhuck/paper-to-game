@@ -42,7 +42,7 @@ Hilbert has an honest machine that prints sentences, some about itself, and bets
 
 ## 8. The shape
 
-1. **No "this" on the keyboard** (NOT PRINTS [ ], keys NOT, PRINTS): the box always holds fewer keys than the sentence (counts on screen); *Put the whole sentence in its own box* animates four nested boxes that never close.
+1. **Can a sentence hold itself?** No keys: one button, *Put the sentence in its own box*, pressed three times. Each press puts the sentence inside its own box; the sentence then talks about the one before, two keys shorter (counts on screen); after the third the game says it never closes. (Revision 1: the first build had free typing here, an impossible task with no warning, and an empty box that looked like a text field.)
 2. **TWICE** on two targets: NOT [NOT] (PRINTS TWICE [NOT]) and NOT PRINTS [NOT PRINTS] (NOT PRINTS TWICE [NOT PRINTS]).
 3. **The sentence:** NOT PRINTS TWICE [ ? ], keys NOT, PRINTS, TWICE; one answer in 121 boxes.
 4. **The doors:** "It prints it" / "It never prints it"; the chosen branch plays (a slip stamped *False, yet printed*, or an empty slot stamped *True: never printed*), then both are shown and the game says it: true, never printed, Hilbert loses. One line separating it from the liar.
@@ -89,4 +89,5 @@ The wrong ways fail for the paper's reason: the gap must be filled with the sent
 - Rebuilt in chat, 15 Nov 2026. Mechanism headless first (`mechanism.js`), calibration, then the screens; `build.py` refuses to build on a failed check and verifies the mechanism is embedded verbatim.
 - Browser sessions at 380 × 760 (`session-test.js`, `session-log.txt`): a player who works it out (with a rub-out hint at step 3, the old box at step 5, "it can" at the certificate) and a player who uses *Show me* everywhere and says "prints it" at the doors. No page errors (the counter script is blocked in the test), no horizontal scroll; keys within 700 px on steps 1–3, step 5 just past it with the Machine II note showing.
 - Fixed on the screenshots: stamps overlapping the typed text (now set below it), the rub-out glyph too small, the nesting animation below the keys, the step 1 ending off screen.
+- Revision 1, 15 Nov, after his first play ("a little lost in round 1 … I have to enter a string of two characters but can't"): step 1 rebuilt as three presses of one button with the reason said up front; the empty box now reads *tap the keys below* instead of showing a cursor; on a computer the letter keys N, P, T, 2 and Backspace work too.
 - Not measured: session length.

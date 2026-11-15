@@ -29,10 +29,9 @@ const path = require('path'), fs = require('fs');
     await shot('0-start');
     await page.click('#b-begin');
     await shot('1-empty');
-    log('step 1 keys within 700: ' + await within('#p-keys'));
-    await key('NOT'); await key('P1'); await key('NOT');
-    await shot('1-typed');
-    await page.click('#b-nest'); await page.waitForTimeout(2600);
+    log('step 1 button within 700: ' + await within('#b-nest'));
+    await page.click('#b-nest'); await shot('1-once');
+    await page.click('#b-nest'); await page.click('#b-nest');
     await shot('1-nest');
     await page.click('#b-next');
     log('-> ' + await now());
@@ -90,9 +89,10 @@ const path = require('path'), fs = require('fs');
   // B: a player who gets stuck, uses Show me, and says "prints it" at the doors
   await run('b', async ({ page, shot, key, now, log }) => {
     await page.click('#b-begin');
-    await key('P1'); await key('P1'); await key('P1'); await key('P1'); await key('P1'); await key('P1'); await key('P1');
-    log('box full msg: ' + await page.$eval('#p-msg', e => e.innerText));
-    await page.click('#b-nest'); await page.waitForTimeout(2600); await page.click('#b-next');
+    await page.click('#b-nest'); await page.click('#b-nest'); await page.click('#b-nest'); await page.click('#b-next');
+    await page.keyboard.press('p'); await page.keyboard.press('p'); await page.keyboard.press('p'); await page.keyboard.press('p'); await page.keyboard.press('p');
+    log('box full msg (typed on keyboard): ' + await page.$eval('#p-msg', e => e.innerText));
+    for (let i = 0; i < 4; i++) await page.keyboard.press('Backspace');
     for (let i = 0; i < 4; i++) { await key('P1'); await key('RUB'); }
     await shot('2a-show');
     log('show button visible: ' + await page.$eval('#b-show', e => !e.classList.contains('hide')));
