@@ -320,4 +320,4 @@ Two measurements added at Steffen's prompting, to make the most of the ratio sca
 
 ## Renamed (15 November 2026)
 
-Renamed from *Augustine's Clock* to *Wait for Augustine*, to break a run of five "X's Y" titles on the Pantheon page; waiting is expectation, one of Book XI's three tenses of the mind. The game file is `wait-for-augustine.html`; `augustines-clock.html` now sends links to it. Nothing in the mechanism changed.
+Renamed from *Augustine's Clock* to *Waiting for Augustine* (briefly *Wait for Augustine*), to break a run of five "X's Y" titles on the Pantheon page; waiting is expectation, one of Book XI's three tenses of the mind. The game file is `waiting-for-augustine.html`; `augustines-clock.html` and `wait-for-augustine.html` send links to it. Nothing in the mechanism changed.
