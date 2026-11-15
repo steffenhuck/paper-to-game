@@ -772,11 +772,13 @@ canvas.all{display:block;width:348px;margin:6px 0}
     for (var n = 0; n < 729; n++) {
       var bk = M.bookFromIndex(n), au = M.audit(bk), x0 = left + (n % per) * sw, y0 = gap + Math.floor(n / per) * sw;
       au.cells.forEach(function (c, k) { g.fillStyle = c.list ? '#fff' : INK; g.fillRect(x0 + (k % 6) * cs, y0 + Math.floor(k / 6) * cs, cs, cs); });
-      g.strokeStyle = n === 0 ? RED : n === 728 ? INK : '#C9C8C3'; g.lineWidth = (n === 0 || n === 728) ? 2 : 0.5; g.strokeRect(x0 - 0.5, y0 - 0.5, cs * 6 + 1, cs * 6 + 1);
-      if (n === v.index && !v.boss) { g.strokeStyle = RED; g.lineWidth = 2; g.beginPath(); g.arc(x0 + cs * 3, y0 + cs * 3, cs * 3 + 4, 0, Math.PI * 2); g.stroke(); }
+      var isBoss = (n === 0 || n === 728), best = au.holds === C.scoreTop;
+      g.strokeStyle = isBoss ? RED : '#C9C8C3'; g.lineWidth = isBoss ? 2.5 : 0.5; g.strokeRect(x0 - 0.5, y0 - 0.5, cs * 6 + 1, cs * 6 + 1);
+      if (best) { g.strokeStyle = INK; g.lineWidth = 1.2; g.beginPath(); g.arc(x0 + cs * 3, y0 + cs * 3, cs * 3 + 3, 0, Math.PI * 2); g.stroke(); }
+      if (n === v.index) { g.strokeStyle = RED; g.lineWidth = 2.5; g.beginPath(); g.arc(x0 + cs * 3, y0 + cs * 3, cs * 3 + 5, 0, Math.PI * 2); g.stroke(); }
     }
     $('tries').textContent = 'Arrow tried all 729 books on all 36 votes. 727 contradict themselves somewhere. Two never do, and both are bosses.';
-    $('ring').innerHTML = 'Six ties, three answers each: 729 books. Each tiny sheet below is one book, its 36 votes as dots, black where the book contradicts itself. The clean sheet with a red frame, the very first, is Anna the boss, score 0; the clean sheet with a black frame, the very last, is Bruno the boss, score 0. The best sheets have two black dots: score 100.' + (v.boss ? ' Yours is the ' + (v.boss === 'A' ? 'red' : 'black') + ' one.' : ' Yours is ringed in red.');
+    $('ring').innerHTML = 'Six ties, three answers each: 729 books. Each tiny sheet below is one book, its 36 votes as dots, black where the book contradicts itself. The two clean sheets, framed in red, are the bosses: Anna first of all, Bruno last of all, score 0. The eighteen ringed in black have two black dots, the fewest possible: score 100. Yours is ringed in red.';
     $('lastline').textContent = 'Argued in nine pictures, and checked 26,244 times. Same answer.';
     $('qa-more').innerHTML = 'No. Add a third voter who votes freely and let a plain majority decide each pair: no ties at all, and still 12 of the 216 possible votes go round in a circle. Arrow proved it for any number of voters. (With just Anna and Bruno, a plain majority means a draw on every tie: a book that fails on ' + M.audit(M.voterBook('E')).broken + ' votes.)';
     show('s-end');
