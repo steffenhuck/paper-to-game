@@ -55,7 +55,9 @@ h2.now{font-size:22px;line-height:1.18;margin:.15em 0 .3em;font-weight:700}
 .note{font-size:15px;margin:6px 0;padding:6px 9px;border-left:4px solid var(--gold);background:#ece5d3}
 .note.v{border-left-color:var(--violet);background:var(--violetlt)}
 /* keys */
-.keys{display:flex;flex-wrap:wrap;gap:9px;margin:10px 0 4px;justify-content:center}
+.keys{display:flex;flex-wrap:wrap;gap:9px;margin:10px 0 4px;justify-content:center;position:sticky;bottom:0;background:var(--paper);padding:8px 0 10px;z-index:3}
+.keys:empty{display:none}
+#err{display:none;background:#b3262e;color:#fff;padding:8px 12px;font-size:14px;margin-bottom:8px}
 .key{min-width:76px;height:50px;padding:0 12px;background:var(--ink);color:var(--slip);font-family:'Courier Prime',monospace;font-weight:700;font-size:16px;border-radius:12px;box-shadow:0 0 0 3px var(--gold),0 4px 0 3px #6d5420;transition:transform .06s}
 .key:active,.key.hit{transform:translateY(3px);box-shadow:0 0 0 3px var(--gold),0 1px 0 3px #6d5420}
 .key.rub{font-family:system-ui,sans-serif;font-size:24px;font-weight:400;background:var(--paper);color:var(--ink);box-shadow:0 0 0 2px var(--ink),0 4px 0 2px #9a907f;min-width:64px}
@@ -112,6 +114,7 @@ details li{margin:.45em 0}
 </head>
 <body>
 <div class="wrap">
+<div id="err"></div>
 
 <!-- START -->
 <section class="screen on" id="s-start">
@@ -272,6 +275,9 @@ details li{margin:.45em 0}
 </section>
 
 </div>
+<script>
+window.onerror=function(m,u,l){var e=document.getElementById('err');if(e){e.style.display='block';e.textContent='Something went wrong in the game\'s code: '+m+' (line '+l+'). Please tell steffen.huck@gmail.com which browser you use.';}};
+</script>
 <script>
 // Gödel's Endgame — mechanism. The single source of truth: build.py inlines this file verbatim into the game,
 // and calibration.js runs against it. No DOM. Runs unchanged in Node and in the browser.
