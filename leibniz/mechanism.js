@@ -36,14 +36,15 @@ var CONFIG = {
     // World 4, the lamp: Leibniz's covered picture (p. 4–5: "cover up all but a small part ... a confused chaos of
     // colours"; the men in the salt mines of Sarmatia who take their torchlight for all the light there is). Two worlds
     // already made, on the same sky: a small lit star holds a big dark one down. In one the big one is also held by
-    // holders worth more together; in the other nothing but the small one holds it. The player has two torches for the
-    // two worlds, strikes them where they choose and sees faintly for a moment; says what they saw; then chooses the other
-    // star, or leaves the world; sees what that did, in the dark; then the cover lifts.
+    // holders worth more together; in the other nothing but the small one holds it. One of the two is played (drawn at
+    // random): the player strikes one torch where they choose and sees faintly for a moment; says what they saw; then
+    // chooses the other star, or leaves the world; sees what that did, in the dark; then the cover lifts; then the other
+    // world, the twin, is shown beside it: the same opening, the other truth.
     lamp: { n: [7, 8], small: [1, 3], big: [7, 9], holders: [2, 3], holderW: [3, 5], otherW: [2, 6], dist: [80, 110] }
   },
   // The torch (design, 15 Nov, his): one tap places it; for a few seconds the stars and lines inside its glow show
   // faintly, then it dies. radius in px; seconds it burns; how bright the lines and rings show (1 = as in daylight). Ours.
-  TORCH: { count: 2, radius: 115, full: 3, fade: 3, lineLight: 0.3, starLight: 0.35 },   // two torches for the two worlds; seconds at full strength, seconds fading
+  TORCH: { count: 1, radius: 115, full: 3, fade: 3, lineLight: 0.3, starLight: 0.35 },   // one torch; seconds at full strength, seconds fading
   // Words for how much of the best world's light a world lacks (memo §3: direction first, rough size). Ours.
   SHORT_WORDS: [[0, 'as full as it can be'], [0.12, 'a little short'], [0.2, 'about a sixth short'], [0.29, 'about a quarter short'],
     [0.4, 'about a third short'], [0.6, 'about half short'], [1.01, 'mostly dark']]
@@ -312,6 +313,7 @@ function makeLampWorld(spec) {
     torches: [], reading: null, act: null, before: 0, after: 0, stepsBack: 0, putOut: [], acted: 0, knownPairs: [], prefilled: true };
   settle(w); w.best = solve(w); w.before = light(w); return w;
 }
+// skies[0] is played; skies[1] is its twin, shown at the end.
 function newJudge(rng) { var g = genLamp(rng); if (!g) return null; return { kind: 'torch', skies: g.skies.map(makeLampWorld), torchesLeft: CONFIG.TORCH.count, radius: CONFIG.TORCH.radius, full: CONFIG.TORCH.full, fade: CONFIG.TORCH.fade }; }
 // Strike a torch at (x, y) in sky j. Torches are shared across the two skies. Returns false if none is left or the sky is past looking.
 function strike(J, j, x, y) {
@@ -403,14 +405,11 @@ function verdict(game) {
     if (k === 1) { var big = biggest(w); return 'World 2: ' + (star(w, big.id).status === 'lit' ? 'you kept ' + name(big) + ', the grandest thing, and your world was ' + shortWords(L, B) + '.' : 'you left ' + name(big) + ' out, and your world ' + (L === B ? 'was full.' : 'was ' + shortWords(L, B) + '.')); }
     return 'World 3: ' + (w.stepsBack === 0 ? 'you put nothing out, and the world stayed as weight had made it.' : 'you stepped back ' + (w.stepsBack === 1 ? 'once' : w.stepsBack === 2 ? 'twice' : w.stepsBack + ' times') + ', and the world ended ' + (L === B ? 'full: the step back was the way forward.' : shortWords(L, B) + '.'));
   });
-  var J = game.judge;
-  var jl = J.skies.map(function (s, j) {
-    var looked = (s.torches.length === 0 ? 'without a torch' : s.torches.length === 1 ? 'by one torch' : 'by two torches') + ' (' + readingWord(s.reading) + ')';
-    var what = s.act === 'other' ? 'chose the other star' : 'left it';
-    var got = s.act === 'other' ? (s.came.length ? 'and the big one came in' : 'and the big one stayed dark') : (s.full ? 'and it was as full as it can be' : 'and it stayed short');
-    return 'in the ' + (j === 0 ? 'first' : 'second') + ', ' + looked + ', you ' + what + ', ' + got;
-  });
-  found.push('World 4: the same small star holding the same big one down in both; ' + jl[0] + '; ' + jl[1] + '.');
+  var J = game.judge, s4 = J.skies[0];
+  var looked = (s4.torches.length === 0 ? 'without a torch' : 'by torchlight') + ' (' + readingWord(s4.reading) + ')';
+  var what = s4.act === 'other' ? 'chose the other star' : 'left it';
+  var got = s4.act === 'other' ? (s4.came.length ? 'and the big one came in' : 'and the big one stayed dark') : (s4.full ? 'and it was as full as it can be' : 'and it stayed short');
+  found.push('World 4: a small star holding a big one down; ' + looked + ' you ' + what + ', ' + got + '. Its twin, with the same opening, was the other kind of world: ' + (s4.full ? 'short, with nothing but the small star in the way.' : 'as full as it can be, the big one held by others.'));
   var part = W.map(function (w, k) { return light(w) < w.best.light ? 'world ' + (k + 1) + ' (' + (w.best.light - light(w)) + ' of light short)' : null; }).filter(Boolean);
   var where = part.length ? 'On ' + list(part) + ', the best possible world holds more than yours.' : 'Nowhere among the skies you made. On every one, yours holds all that could be.';
   var stood = part.length ? 'A world with less in it than there could have been. Leibniz says that cannot be the one that exists: the possibles push, and the fullest set is what comes through, the way weights settle.' : 'Yours is the one Leibniz says exists: the fullest set of things that can be together.';

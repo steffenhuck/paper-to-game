@@ -38,6 +38,10 @@ His diagnosis: with enough oil the lamp turns the dark world into a lit one, and
 
 His notes: the torch could not be seen as an instrument (it was invisible until used); "put the small one out" too Claude-ish; and after the choice everything came at once, a frustrating moment. Built: the torches lie in the dark as flames and are dragged to where they are struck; two torches for the two worlds (his open question, my call: a second torch is worth having only at a price, and the price is the next world's only look); the torch burns three seconds full and three fading; "Done looking" leads to a reading, *Did anything else hold the big star down?* (I saw lines / I saw none / Couldn't tell), which is the second decision; then *Choose the other star* / *Leave it* (his words); then the consequence in the dark (the small star goes out; the big one lights, or stays dark and "something else is holding it"); then *Lift the cover*, a circle of light growing from the big star over three and a half seconds; then the account and the best world beside.
 
+## 2g. Revision, 15 Nov 2026, late evening (after he played the two-torch build)
+
+His note: the second world of round 4 was odd, there was nothing meaningful to do (both torches spent, a coin toss), and should it have its own number. Cut: round 4 is one world, one torch, the full sequence; after the cover lifts, *The twin* is shown beside it, the other world with the same opening, and the line says which kind each was and that only a torch could have told them apart. Which of the two is played is drawn at random. Four worlds, no fifth. He will send the game to Strickland before it goes on the page.
+
 ## 3. The discovery, and its kind
 
 **A mechanism made intelligible**, with a **counterintuitive corner**. The mechanism: "best of all possible worlds" is an argmax, the fullest set of things that can exist together. The corner: the fullest world need not contain the grandest single thing; the way from a decent world to the best one can run through destroying a part that was fine. Three things to find out, one per world; the paper names all three.

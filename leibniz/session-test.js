@@ -52,8 +52,7 @@ const { chromium } = require('playwright'); const path = require('path'); const 
   await page.click('#b-done'); await page.waitForTimeout(300); await shot('a-4-read', true); await page.click('#b-r-lines'); await page.waitForTimeout(300); await shot('a-4-choose', true);
   await page.click('#b-other'); await page.waitForTimeout(1800); await shot('a-4-consequence', true); log.push('CONSEQUENCE: ' + await page.$eval('#jsay', e => e.textContent));
   await page.click('#b-lift'); await page.waitForTimeout(1500); await shot('a-4-lifting'); await page.waitForTimeout(2800); await page.evaluate(() => window.scrollTo(0, 0)); await shot('a-4-lifted', true); log.push('TORCH 1 (full=' + J0.full + '): ' + await page.$eval('#jsay', e => e.textContent));
-  await page.click('#b-jnext'); await page.waitForTimeout(400); await shot('a-4-dark-2');
-  await page.click('#b-done'); await page.waitForTimeout(300); await page.click('#b-r-unsure'); await page.waitForTimeout(300); await page.click('#b-leave'); await page.waitForTimeout(900); await page.click('#b-lift'); await page.waitForTimeout(4500); await page.evaluate(() => window.scrollTo(0, 0)); await shot('a-4-lifted-2', true); log.push('TORCH 2: ' + await page.$eval('#jsay', e => e.textContent) + ' / ' + await page.$eval('#jresult h3', e => e.textContent));
+  await page.click('#b-twin'); await page.waitForTimeout(400); await page.evaluate(() => window.scrollTo(0, 0)); await shot('a-4-twin', true); log.push('TWIN: ' + await page.$eval('#jresult .lesson', e => e.textContent));
   await page.click('#b-jnext'); await page.waitForTimeout(400); await shot('a-end', true); await hscroll('end');
   log.push('VERDICT: ' + await page.$eval('#s-end', e => e.innerText.replace(/\n+/g, ' / ').slice(0, 1600)));
   await page.click('#b-about'); await page.waitForTimeout(300); await shotOverlay('about', 'about'); await page.click('#b-about-close'); await page.waitForTimeout(200);
@@ -66,7 +65,7 @@ const { chromium } = require('playwright'); const path = require('path'); const 
     await letItBe('b-' + (k + 1) + '-let'); await best('b-' + (k + 1) + '-best'); await next();
   }
   await page.waitForTimeout(400);
-  for (const act of ['#b-leave', '#b-other']) { await page.click('#b-done'); await page.waitForTimeout(300); await page.click('#b-r-none'); await page.waitForTimeout(300); await page.click(act); await page.waitForTimeout(1800); await page.click('#b-lift'); await page.waitForTimeout(4200); await page.click('#b-jnext'); await page.waitForTimeout(400); }
+  await page.click('#b-done'); await page.waitForTimeout(300); await page.click('#b-r-none'); await page.waitForTimeout(300); await page.click('#b-leave'); await page.waitForTimeout(1200); await page.click('#b-lift'); await page.waitForTimeout(4200); await page.click('#b-twin'); await page.waitForTimeout(400); await page.click('#b-jnext'); await page.waitForTimeout(400);
   await shot('b-end', true);
   log.push('VERDICT B: ' + await page.$eval('#s-end', e => e.innerText.replace(/\n+/g, ' / ').slice(0, 900)));
 
