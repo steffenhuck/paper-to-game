@@ -52,7 +52,7 @@ const path = require('path');
   if (other >= 0) { await page.evaluate((k) => { const g = window.__game(); g.real = { k: k, anna: window.MECH.BALLOTS[Math.floor(k / 6)], beat: window.MECH.BALLOTS[k % 6] }; document.getElementById('b-count').click(); }, other); await idle(); await page.waitForTimeout(100); log.push('SUNDAY (other case): ' + await say('real-out')); await shot('a-sunday-other'); }
   await page.click('#b-debrief'); await page.waitForTimeout(600); await shot('a-end'); await shot('view-a-end', false); await hscroll('end');
   log.push('END A: ' + await say('v1') + ' | ' + await say('v2') + ' | ' + await say('v3'));
-  log.push('MINIS: ' + await say('minis-say'));
+  log.push('SCORE: ' + await say('score') + ' // WHY2: ' + await say('why2'));
   log.push('STRIP: ' + await say('strip'));
   log.push('POINTS: ' + await say('pstrip'));
   log.push('TRIES: ' + await say('tries') + ' / ' + await say('ring'));

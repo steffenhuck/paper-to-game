@@ -25,12 +25,10 @@ PASS  points 3-2-1: fountain,tower,tree v tower,tree,fountain puts the tower abo
 PASS  the points ranking always respects what the two agree on (so it is never blocked on an empty book)
 PASS  the book never blocks the points ranking during the three what-ifs (each opens only new ties), so the clash shows in the check, not in play  [0 blocked what-ifs across 375 paths]
 PASS  counting points on all three what-ifs gives a book that disagrees with points on some of the 36 votes (Condition 3 bites in the check)  [24 to 26 votes differ, by opening]
-PASS  a third voter with a fixed ballot and majority of three is the rule book in which her order settles every disagreement (all 6 ballots, all 36 Sundays)
-PASS  each such tie-breaker gives a ranking on 34 of 36 Sundays
-PASS  its two failures are the paradox of voting (p. 329): each plan first on one ballot, second on one, third on one; a circle of 2-1 majorities
-PASS  p. 329 through majorityOfThree: A>B>C, B>C>A, C>A>B gives no ordering, a circle
-PASS  three free voters and a simple majority: 12 of the 216 sets of ballots give no ordering  [12]
-PASS  with two voters, a draw on every disagreement fails on 12 of 36 Sundays
+PASS  a fixed order of the plans breaking every tie contradicts itself on exactly 2 of 36 votes, for all 6 orders
+PASS  those two votes are the paradox of voting (p. 329) with the order as third ballot: both voters put its last plan above its first, and the results go round in a circle
+PASS  the village always decides: every plan placed once; where the results fit together the decision is the ranking itself; a circle always ends in a coin
+PASS  score: a boss scores 0; without a boss the score runs from 65 to 100, and 100 is reached only by the 18 books with two contradictions  [{"0":2,"65":12,"68":84,"71":73,"76":126,"79":24,"82":156,"85":72,"88":72,"91":12,"94":30,"97":48,"100":18}]
 PASS  a voter as tie-breaker is that voter as dictator
 PASS  a coin can land in a circle on Sunday 1: Fountain over Tower (both), Tower over Tree, Tree over Fountain
 
@@ -39,4 +37,4 @@ Sundays that hold, over the 375 paths of play (three openings): {"23":9,"24":22,
 Fates by opening: {"0:patchwork":112,"0:custom":3,"0:best":8,"0:boss":2,"1:patchwork":112,"1:custom":3,"1:best":8,"1:boss":2,"2:patchwork":114,"2:best":6,"2:boss":2,"2:custom":3}
 Books at the best score without a boss (34): ABBAAA BAABAA BAAABA AABABA BABABA ABBABA BBBABA BAABBA BABBBA ABAAAB ABBAAB AAABAB BAABAB ABABAB BBABAB ABBBAB ABBABB BAABBB
 
-35 checks, 0 failed
+33 checks, 0 failed
