@@ -44,7 +44,8 @@ var CONFIG = {
   },
   // The torch (design, 15 Nov, his): one tap places it; for a few seconds the stars and lines inside its glow show
   // faintly, then it dies. radius in px; seconds it burns; how bright the lines and rings show (1 = as in daylight). Ours.
-  TORCH: { count: 1, radius: 115, full: 3, fade: 3, lineLight: 0.3, starLight: 0.35 },   // one torch; seconds at full strength, seconds fading
+  TORCH: { count: 1, radius: 115, full: 3, fade: 3, lineLight: 0.3, starLight: 0.35 },   // one torch per salt-mine round; seconds at full strength, seconds fading
+  SALT: { rounds: 2 },   // salt-mine rounds (design, 15 Nov: the skies have three, the salt mine two)
   // Words for how much of the best world's light a world lacks (memo §3: direction first, rough size). Ours.
   SHORT_WORDS: [[0, 'as full as it can be'], [0.12, 'a little short'], [0.2, 'about a sixth short'], [0.29, 'about a quarter short'],
     [0.4, 'about a third short'], [0.6, 'about half short'], [1.01, 'mostly dark']]
@@ -299,7 +300,7 @@ function genLamp(rng) {
         if (!far) continue;
         var ed = rint(rng, G.endDist[0], G.endDist[1]), ex = Math.round(bx + Math.cos(ang) * ed), ey = Math.round(by + Math.sin(ang) * ed), er = R(ws[2 + i]);
         if (ex - er < S.margin || ex + er > S.W - S.margin || ey - er < S.margin || ey + er > S.H - S.margin) continue;
-        if (ed - er <= T.radius + 12) continue; // a torch on the big star must not reach the end
+        if (Math.hypot(ex - bx, ey - by) - er <= T.radius + 14) continue; // a torch on the big star must not reach the end
         angs.push(ang); fixed[E[i]] = { x: ex, y: ey }; found = true;
       }
       if (!found) ok = false;
@@ -335,12 +336,19 @@ function makeLampWorld(spec) {
     torches: [], reading: null, act: null, before: 0, after: 0, stepsBack: 0, putOut: [], acted: 0, knownPairs: [], prefilled: true };
   settle(w); w.best = solve(w); w.before = light(w); return w;
 }
-// skies[0] is played; skies[1] is its twin, shown at the end.
-function newJudge(rng) { var g = genLamp(rng); if (!g) return null; return { kind: 'torch', skies: g.skies.map(makeLampWorld), torchesLeft: CONFIG.TORCH.count, radius: CONFIG.TORCH.radius, full: CONFIG.TORCH.full, fade: CONFIG.TORCH.fade }; }
-// Strike a torch at (x, y) in sky j. Torches are shared across the two skies. Returns false if none is left or the sky is past looking.
+// Two salt-mine rounds (design, 15 Nov, his: the skies have three rounds, the salt mine two). Each round is a fresh draw
+// with its own torch: skies[0] is played, skies[1] is its twin, shown at the end of the round. J.rounds[r].
+function newJudge(rng) {
+  var rounds = [];
+  for (var r = 0; r < CONFIG.SALT.rounds; r++) { var g = genLamp(rng); if (!g) return null; rounds.push({ skies: g.skies.map(makeLampWorld), torchesLeft: CONFIG.TORCH.count }); }
+  return { kind: 'torch', rounds: rounds, skies: rounds[0].skies, torchesLeft: rounds[0].torchesLeft, radius: CONFIG.TORCH.radius, full: CONFIG.TORCH.full, fade: CONFIG.TORCH.fade };
+}
+// Select round r: J.skies and J.torchesLeft then refer to it (the interface and the check work on one round at a time).
+function selectRound(J, r) { J.torchesLeft = J.rounds[J.current === undefined ? 0 : J.current].torchesLeft; if (J.rounds[J.current || 0]) J.rounds[J.current || 0].torchesLeft = J.torchesLeft; J.current = r; J.skies = J.rounds[r].skies; J.torchesLeft = J.rounds[r].torchesLeft; return J; }
+// Strike a torch at (x, y) in sky j of the current round. Returns false if none is left or the sky is past looking.
 function strike(J, j, x, y) {
   var s = J.skies[j]; if (s.reading || s.act || J.torchesLeft <= 0) return false;
-  s.torches.push({ x: x, y: y }); J.torchesLeft--; return true;
+  s.torches.push({ x: x, y: y }); J.torchesLeft--; if (J.rounds) J.rounds[J.current || 0].torchesLeft = J.torchesLeft; return true;
 }
 // What the torch reached: a lit holder at the end of one of the big star's lines, or a dark end, or neither.
 function torchSaw(J, j) {
@@ -417,32 +425,48 @@ function result(world) {
   }
   return { light: L, best: B, lines: lines, words: shortWords(L, B), leftOut: out, lit: lit(world).map(function (s) { return s.id; }) };
 }
+function shareWords(a, b) {
+  var f = b > 0 ? a / b : 1;
+  if (f >= 1) return 'all of it'; if (f >= .95) return 'all but a little'; if (f >= .88) return 'about nine parts in ten'; if (f >= .78) return 'about four parts in five';
+  if (f >= .7) return 'about three parts in four'; if (f >= .6) return 'about two parts in three'; if (f >= .45) return 'about half'; if (f >= .3) return 'about a third'; return 'less than a third';
+}
+// The score: the light the player's worlds hold over the light the best possible worlds hold, all five rounds (p. 2:
+// the world through which "the greatest amount of essence" is brought into existence; the criterion is the paper's).
+function score(game) {
+  var mine = 0, best = 0;
+  game.worlds.forEach(function (w) { mine += light(w); best += w.best.light; });
+  game.judge.rounds.forEach(function (r) { var s = r.skies[0]; mine += s.ended ? s.after : light(s); best += s.best.light; });
+  return { mine: mine, best: best, words: shareWords(mine, best) };
+}
 function verdict(game) {
-  var W = game.worlds, full = W.filter(function (w) { return light(w) === w.best.light; }).length;
-  var head = full === 3 ? 'All three of your skies are as full as they can be.' : full === 0 ? 'None of your skies is as full as it could be.' :
-    (full === 1 ? 'One' : 'Two') + ' of your three skies ' + (full === 1 ? 'is' : 'are') + ' as full as ' + (full === 1 ? 'it' : 'they') + ' can be.';
+  var W = game.worlds, sc = score(game);
+  var head = 'Your five worlds hold ' + sc.mine + ' of the ' + sc.best + ' of light there could have been: ' + sc.words + '.';
   var says = 'Leibniz: the world that exists is the set of possible things that holds the most together. Not everything possible can exist; the grandest thing need not be in the best world; a step back can be the way to a fuller world; and from a part you cannot tell whether the whole is well made.';
+  var halves = 'Two halves. In the skies you could see everything, and even then the best world was hard to find and left things dark. In the salt mine you stood inside a world already made, with one torch, and what you took it for was mostly guesswork. Leibniz would agree with both. From inside, he says, you cannot tell; the men in the salt mine take their torchlight for all the light there is. But he does not conclude that you cannot know. He says the first half settles it: the possibles push, the fullest set comes through, and this is it, whatever the torch showed you. Whether that follows is the question his readers have argued about ever since.';
   var found = W.map(function (w, k) {
     var L = light(w), B = w.best.light, out = w.stars.filter(function (s) { return s.status !== 'lit'; }).map(name);
-    if (k === 0) return 'World 1: your world held ' + L + ' of light' + (L === B ? ', as much as it could,' : '') + ' and left out ' + list(out) + '.';
-    if (k === 1) { var big = biggest(w); return 'World 2: ' + (star(w, big.id).status === 'lit' ? 'you kept ' + name(big) + ', the grandest thing, and your world was ' + shortWords(L, B) + '.' : 'you left ' + name(big) + ' out, and your world ' + (L === B ? 'was full.' : 'was ' + shortWords(L, B) + '.')); }
-    return 'World 3: ' + (w.stepsBack === 0 ? 'you put nothing out, and the world stayed as weight had made it.' : 'you stepped back ' + (w.stepsBack === 1 ? 'once' : w.stepsBack === 2 ? 'twice' : w.stepsBack + ' times') + ', and the world ended ' + (L === B ? 'full: the step back was the way forward.' : shortWords(L, B) + '.'));
+    if (k === 0) return 'Sky 1: your world held ' + L + ' of light' + (L === B ? ', as much as it could,' : ' of a possible ' + B + ',') + ' and left out ' + list(out) + '.';
+    if (k === 1) { var big = biggest(w); return 'Sky 2: ' + (star(w, big.id).status === 'lit' ? 'you kept ' + name(big) + ', the grandest thing, and your world was ' + shortWords(L, B) + '.' : 'you left ' + name(big) + ' out, and your world ' + (L === B ? 'was full.' : 'was ' + shortWords(L, B) + '.')); }
+    return 'Sky 3: ' + (w.stepsBack === 0 ? 'you put nothing out, and the world stayed as weight had made it.' : 'you stepped back ' + (w.stepsBack === 1 ? 'once' : w.stepsBack === 2 ? 'twice' : w.stepsBack + ' times') + ', and the world ended ' + (L === B ? 'full: the step back was the way forward.' : shortWords(L, B) + '.'));
   });
-  var J = game.judge, s4 = J.skies[0];
-  var sw = torchSaw(J, 0), looked = s4.torches.length === 0 ? 'without a torch' : sw.held ? 'having seen it held' : sw.dark ? 'having seen one line end in the dark' : 'with a torch that reached no end';
-  var what = s4.act === 'other' ? 'chose the other star' : 'left it';
-  var got = s4.act === 'other' ? (s4.came.length ? 'and the big one came in' : 'and the big one stayed dark') : (s4.full ? 'and it was as full as it can be' : 'and it stayed short');
-  found.push('World 4: a small star holding a big one down, three lines leading into the dark; ' + looked + ' you ' + what + ', ' + got + '. Its twin, with the same opening, was the other kind of world: ' + (s4.full ? 'short, with nothing but the small star in the way.' : 'as full as it can be, the big one held at the end of its lines.'));
-  var part = W.map(function (w, k) { return light(w) < w.best.light ? 'world ' + (k + 1) + ' (' + (w.best.light - light(w)) + ' of light short)' : null; }).filter(Boolean);
-  var where = part.length ? 'On ' + list(part) + ', the best possible world holds more than yours.' : 'Nowhere among the skies you made. On every one, yours holds all that could be.';
+  game.judge.rounds.forEach(function (r, i) {
+    var s4 = r.skies[0], Jr = { skies: r.skies, radius: game.judge.radius };
+    var sw = torchSaw(Jr, 0), looked = s4.torches.length === 0 ? 'without a torch' : sw.held ? 'having seen it held' : sw.dark ? 'having seen one line end in the dark' : 'with a torch that reached no end';
+    var what = s4.act === 'other' ? 'chose the other star' : 'left it';
+    var got = s4.act === 'other' ? (s4.came.length ? 'and the big one came in' : 'and the big one stayed dark') : (s4.full ? 'and it was as full as it can be' : 'and it stayed short');
+    found.push('Salt mine ' + (i + 1) + ': ' + looked + ' you ' + what + ', ' + got + '. Its twin, with the same opening, was the other kind of world: ' + (s4.full ? 'short, with nothing but the small star in the way.' : 'as full as it can be, the big one held at the end of its lines.'));
+  });
+  var part = W.map(function (w, k) { return light(w) < w.best.light ? 'sky ' + (k + 1) + ' (' + (w.best.light - light(w)) + ' of light short)' : null; }).filter(Boolean)
+    .concat(game.judge.rounds.map(function (r, i) { var s = r.skies[0]; return s.after < s.best.light ? 'salt mine ' + (i + 1) + ' (' + (s.best.light - s.after) + ' short)' : null; }).filter(Boolean));
+  var where = part.length ? 'On ' + list(part) + ', the best possible world holds more than yours.' : 'Nowhere. On every world, yours holds all that could be.';
   var stood = part.length ? 'A world with less in it than there could have been. Leibniz says that cannot be the one that exists: the possibles push, and the fullest set is what comes through, the way weights settle.' : 'Yours is the one Leibniz says exists: the fullest set of things that can be together.';
   var cover = 'Leibniz: take a very beautiful picture and cover all but a small part. What you see is a confused chaos of colours, and the closer you look the worse it gets. Lift the cover and the whole is the work of a master. Every dark star in the best world is the price of a brighter sky; but a dark star in a world that is not the best is just a mistake, and the two look the same by torchlight.';
-  return { head: head, says: says, found: found, where: where, stood: stood, cover: cover, full: full };
+  return { head: head, score: sc, says: says, halves: halves, found: found, where: where, stood: stood, cover: cover };
 }
 
 var M = { CONFIG: CONFIG, newGame: newGame, makeWorld: makeWorld, makeLampWorld: makeLampWorld, genWorld1: genWorld1, genWorld2: genWorld2, genWorld3: genWorld3, genLamp: genLamp,
   mulberry32: mulberry32, letBe: letBe, putOut: putOut, letItBe: letItBe, canEnd: canEnd, result: result, verdict: verdict, solve: solve, solveWith: solveWith,
   light: light, total: total, lit: lit, star: star, conflicts: conflicts, name: name, list: list, biggest: biggest, shortWords: shortWords, pairKnown: pairKnown,
-  layoutOk: layoutOk, playGreedy: playGreedy, playRandom: playRandom, playBest: playBest, strike: strike, torchSawHolders: torchSawHolders, torchSaw: torchSaw, read: read, decide: decide, consequence: consequence, lampReveal: lampReveal, segDist: segDist };
+  layoutOk: layoutOk, playGreedy: playGreedy, playRandom: playRandom, playBest: playBest, strike: strike, torchSawHolders: torchSawHolders, torchSaw: torchSaw, read: read, decide: decide, selectRound: selectRound, score: score, shareWords: shareWords, consequence: consequence, lampReveal: lampReveal, segDist: segDist };
 if (typeof module !== 'undefined' && module.exports) module.exports = M; else root.LeibnizMechanism = M;
 })(typeof window !== 'undefined' ? window : this);

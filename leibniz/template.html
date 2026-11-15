@@ -96,7 +96,7 @@ b,strong{font-weight:700}
     <p>So he looked at what wants to exist. Every possible thing pushes to be, as hard as there is of it. Not all of them can be together.</p>
     <p>The world that exists, he says, is the set of things that holds the most.</p>
   </div>
-  <p class="acts">Tap a thing to let it be.<br>Tap it again to put it out.<br>Then take one torch into a world already made.</p>
+  <p class="acts">Tap a thing to let it be.<br>Tap it again to put it out.<br>Then take a torch into worlds already made.</p>
   <p class="aim">Bring as much into existence as will fit.</p>
   <button class="btn solid" id="b-begin">Begin</button>
   <button class="btn" id="b-help-start">How to play</button>
@@ -106,7 +106,7 @@ b,strong{font-weight:700}
 
 <section class="screen" id="s-play">
   <div class="top"><div class="aimline">Bring as much into existence as will fit.</div><button class="qm" id="b-help-play" aria-label="How to play">?</button></div>
-  <div class="wno" id="wno">World 1 of 4</div>
+  <div class="wno" id="wno">The skies &middot; 1 of 3</div>
   <h2 class="now" id="now">Light up the sky.</h2>
   <p class="intro" id="intro"></p>
   <div class="skybox"><svg class="sky" id="sky" viewBox="0 0 320 300"></svg></div>
@@ -123,7 +123,7 @@ b,strong{font-weight:700}
 
 <section class="screen" id="s-judge">
   <div class="top"><div class="aimline">Bring as much into existence as will fit.</div><button class="qm" id="b-help-judge" aria-label="How to play">?</button></div>
-  <div class="wno" id="jno">World 4 of 4</div>
+  <div class="wno" id="jno">The salt mine &middot; 1 of 2</div>
   <h2 class="now" id="jnow">A world already made.</h2>
   <p class="intro" id="jintro"></p>
   <div class="skybox"><svg class="sky lamp" id="jsky" viewBox="0 0 320 300"></svg></div>
@@ -138,7 +138,10 @@ b,strong{font-weight:700}
 <section class="screen" id="s-end">
   <div class="kicker">The verdict</div>
   <h2 class="vhead" id="vhead"></h2>
+  <div class="bar"><div class="fill" id="vfill"></div></div>
+  <p class="stat" id="vstat"></p>
   <div class="vlab">What Leibniz says</div><div class="vtext" id="vsays"></div>
+  <div class="vlab">The two halves</div><div class="vtext" id="vhalves"></div>
   <div class="vlab">What you found</div><div class="vtext" id="vfound"></div>
   <div class="vlab">Where you part</div><div class="vtext" id="vwhere"></div>
   <div class="vlab">Had yours stood</div><div class="vtext" id="vstood"></div>
@@ -155,11 +158,12 @@ b,strong{font-weight:700}
 <div class="ov" id="help"><div class="in">
   <h2>How to play</h2>
   <p><b>Bring as much into existence as will fit.</b></p>
-  <p>Four worlds, drawn fresh every game. In the first three you make the sky. Each ring is a thing that could exist; the bigger the ring, the more there is of it. Some pairs cannot both exist, and nothing tells you which in advance: you find out by letting things be.</p>
+  <p>Five worlds, drawn fresh every game, in two halves: the skies, where you make the world, and the salt mine, where you stand inside one already made. In the three skies Each ring is a thing that could exist; the bigger the ring, the more there is of it. Some pairs cannot both exist, and nothing tells you which in advance: you find out by letting things be.</p>
   <p><b>Tap a ring</b> to let that thing be. It lights up. Anything it cannot be with goes dark, with a red line to the thing that shut it out; the line stays, so you know that pair from then on. <b>Tap a lit star</b> to put it out again: a step back. Whatever it was holding down can be again.</p>
   <p>The bar under the sky shows how much light your world holds. <b>Let it be</b> ends the world: it holds exactly what you lit, nothing more. Then the best possible world appears next to yours, the fullest set of things that can be together, with every line and every number shown.</p>
   <p>The third sky arrives already filled, heaviest first, and nothing left can be. Making it fuller means putting something out, then letting in what that frees.</p>
-  <p>The fourth world is not yours to make. A world already made, in the dark: a small star lit, a big one dark, a line between them, and three more lines leading from the big one into the dark. Whatever is at their ends is what decides: a lit star there holds the big one down; a dark thing there holds nothing. One torch lies in the dark: drag it to where you want it struck, and for a few seconds the stars and lines around it show, faintly, before it dies. It cannot reach the ends from the big star; you have to pick a line. When you are done looking, choose: the other star (the small one goes out, and the big one comes in if nothing else holds it), or leave it. You see what that did, in the dark; then the cover lifts; then you see the twin, another world with exactly the same opening and the other truth.</p>
+  <p>The fourth world is not yours to make. A world already made, in the dark: a small star lit, a big one dark, a line between them, and three more lines leading from the big one into the dark. Whatever is at their ends is what decides: a lit star there holds the big one down; a dark thing there holds nothing. One torch lies in the dark: drag it to where you want it struck, and for a few seconds the stars and lines around it show, faintly, before it dies. It cannot reach the ends from the big star; you have to pick a line. When you are done looking, choose: the other star (the small one goes out, and the big one comes in if nothing else holds it), or leave it. You see what that did, in the dark; then the cover lifts; then you see the twin, another world with exactly the same opening and the other truth. The salt mine has two rounds, each a fresh world with its own torch.</p>
+  <p>At the end, your score in Leibniz's own measure: the light your five worlds hold, against the light the five best possible worlds hold.</p>
   <button class="btn solid" id="b-help-close">Back</button>
 </div></div>
 
@@ -255,7 +259,7 @@ function render() { drawSky($('sky'), world, { interactive: !world.ended, all: w
 
 function startWorld(k) {
   world = game.worlds[k]; game.current = k;
-  $('wno').textContent = 'World ' + (k + 1) + ' of 4';
+  $('wno').textContent = 'The skies \u00b7 ' + (k + 1) + ' of 3';
   $('now').textContent = NOW0[k];
   $('intro').textContent = intro(k);
   $('say').textContent = NOW1[k];
@@ -319,11 +323,12 @@ function flameSpots(s, n) {
   cands.sort(function (p, q) { var dp = Math.min(Math.hypot(p.x - sm.x, p.y - sm.y), Math.hypot(p.x - bg.x, p.y - bg.y)), dq = Math.min(Math.hypot(q.x - sm.x, q.y - sm.y), Math.hypot(q.x - bg.x, q.y - bg.y)); return dq - dp; });
   return cands.slice(0, n);
 }
-function startJudge(j) {
-  var J = game.judge, s = J.skies[j], svg = $('jsky'), burning = false, flames = flameSpots(s, J.torchesLeft), drag = null;
-  $('jintro').textContent = JINTRO[0];
+function startJudge(r) {
+  var J = M.selectRound(game.judge, r), j = 0, s = J.skies[0], svg = $('jsky'), burning = false, flames = flameSpots(s, J.torchesLeft), drag = null;
+  $('jno').textContent = 'The salt mine \u00b7 ' + (r + 1) + ' of 2';
+  $('jintro').textContent = r === 0 ? JINTRO[0] : 'Another world already made, in the dark, drawn afresh. It opens the same way: a small star lit, a big one dark, three lines into the dark. A new torch lies in the dark.';
   $('jnow').textContent = 'A world already made.';
-  $('jsay').textContent = 'Leibniz: men born in a salt mine take their torchlight for all the light there is. You have one.';
+  $('jsay').textContent = r === 0 ? 'Leibniz: men born in a salt mine take their torchlight for all the light there is. You have one.' : 'Whatever this world is, its opening cannot say. You have one torch again.';
   ['jlook', 'jchoose', 'jlift', 'jresult'].forEach(function (id) { $(id).classList.add('hid'); }); $('jlook').classList.remove('hid'); $('jresult').innerHTML = '';
   function key() {
     if (burning) $('jkey').textContent = 'The torch burns. Look.';
@@ -358,13 +363,13 @@ function startJudge(j) {
     $('jchoose').scrollIntoView({ block: 'end', behavior: 'smooth' });
   };
   var decide = function (act) {
-    var r = M.decide(J, j, act); if (!r) return;
+    var res = M.decide(J, j, act); if (!res) return;
     $('jchoose').classList.add('hid');
     $('jnow').textContent = act === 'other' ? 'The other star, then.' : 'Left as it is.';
     $('jsay').textContent = '';
     // the consequence, in the dark: the small star goes out, then the big one answers
     var steps = act === 'other' ? [function () { drawSky(svg, s, { all: true, torch: { open: [s.small, s.big], openLine: [s.small, s.big], at: null, radius: J.radius } }); }] : [];
-    setTimeout(function () { $('jsay').textContent = r.consequence; $('jlift').classList.remove('hid'); $('jlift').scrollIntoView({ block: 'end', behavior: 'smooth' }); }, act === 'other' ? 1400 : 500);
+    setTimeout(function () { $('jsay').textContent = res.consequence; $('jlift').classList.remove('hid'); $('jlift').scrollIntoView({ block: 'end', behavior: 'smooth' }); }, act === 'other' ? 1400 : 500);
     if (steps.length) setTimeout(steps[0], 500);
     $('b-lift').onclick = function () {
       $('jlift').classList.add('hid'); $('jnow').textContent = 'The cover lifts.';
@@ -378,7 +383,7 @@ function startJudge(j) {
     function finish() {
       drawSky(svg, s, { all: true, numbers: true });
       s.torches.forEach(function (tc) { svg.innerHTML += '<circle cx="' + tc.x + '" cy="' + tc.y + '" r="' + J.radius + '" fill="none" stroke="#FFB830" stroke-opacity=".45" stroke-width="1" stroke-dasharray="3 4"/>'; });
-      $('jsay').textContent = r.reveal.line;
+      $('jsay').textContent = res.reveal.line;
       var ra = $('jresult');
       ra.innerHTML = '<div class="pair"><div class="one"><div class="lab">This world &middot; ' + M.light(s) + '</div><div class="skybox"><svg class="sky" id="jsky-mine" viewBox="0 0 320 300"></svg></div></div>' +
         '<div class="one"><div class="lab">Best possible &middot; ' + s.best.light + '</div><div class="skybox"><svg class="sky" id="jsky-best" viewBox="0 0 320 300"></svg></div></div></div>' +
@@ -390,9 +395,9 @@ function startJudge(j) {
         ra.innerHTML = '<h3>The twin.</h3><p class="lesson">Another world with exactly the same opening: the same small star holding the same big one down, the same three lines leading into the dark. ' + (tw.full ? 'In this one two of the lines end in lit stars that hold the big one, and the dark is the price of a fuller sky.' : 'In this one all three lines end in dark things, nothing but the small star holds the big one, and the dark is a mistake.') + ' You could not have told the two apart from the opening. A torch at the right end of the right line could, one way: it can show a thing held, never a thing free.</p>' +
           '<div class="pair"><div class="one"><div class="lab">Yours &middot; ' + (s.full ? 'the fullest' : 'short') + '</div><div class="skybox"><svg class="sky" id="jsky-a" viewBox="0 0 320 300"></svg></div></div>' +
           '<div class="one"><div class="lab">Its twin &middot; ' + (tw.full ? 'the fullest' : 'short') + '</div><div class="skybox"><svg class="sky" id="jsky-b" viewBox="0 0 320 300"></svg></div></div></div>' +
-          '<button class="btn solid" id="b-jnext">The verdict</button>';
+          '<button class="btn solid" id="b-jnext">' + (r === 0 ? 'The second salt mine' : 'The verdict') + '</button>';
         drawSky($('jsky-a'), s, { small: true, all: true }); drawSky($('jsky-b'), tw, { small: true, all: true });
-        $('b-jnext').addEventListener('click', endGame);
+        $('b-jnext').addEventListener('click', function () { if (r === 0) startJudge(1); else endGame(); });
         ra.scrollIntoView({ block: 'end', behavior: 'smooth' });
       });
       ra.scrollIntoView({ block: 'end', behavior: 'smooth' });
@@ -405,14 +410,17 @@ function startJudge(j) {
 function endGame() {
   var v = M.verdict(game);
   $('vhead').textContent = v.head;
+  $('vfill').style.width = (100 * v.score.mine / v.score.best) + '%';
+  $('vstat').innerHTML = 'Light <b>' + v.score.mine + '</b> of <b>' + v.score.best + '</b>, the five best worlds together';
   $('vsays').innerHTML = '<p>' + v.says + '</p>';
+  $('vhalves').innerHTML = '<p>' + v.halves + '</p>';
   $('vfound').innerHTML = v.found.map(function (l) { return '<p>' + l + '</p>'; }).join('');
   $('vwhere').innerHTML = '<p>' + v.where + '</p>';
   $('vstood').innerHTML = '<p>' + v.stood + '</p>';
   $('vcover').innerHTML = '<p>' + v.cover + '</p>';
   var h = '';
   game.worlds.forEach(function (w, k) {
-    h += '<div class="pair"><div class="one"><div class="lab">World ' + (k + 1) + ' &middot; yours ' + M.light(w) + '</div><div class="skybox"><svg class="sky" id="e-mine-' + k + '" viewBox="0 0 320 300"></svg></div></div>' +
+    h += '<div class="pair"><div class="one"><div class="lab">Sky ' + (k + 1) + ' &middot; yours ' + M.light(w) + '</div><div class="skybox"><svg class="sky" id="e-mine-' + k + '" viewBox="0 0 320 300"></svg></div></div>' +
       '<div class="one"><div class="lab">Best possible ' + w.best.light + '</div><div class="skybox"><svg class="sky" id="e-best-' + k + '" viewBox="0 0 320 300"></svg></div></div></div>';
   });
   $('three').innerHTML = h;
