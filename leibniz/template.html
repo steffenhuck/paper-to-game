@@ -26,7 +26,7 @@ b,strong{font-weight:700}
 .aim{font-size:18px;font-weight:700;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0;margin:8px 0 14px}
 .btn{display:block;width:100%;min-height:52px;border-radius:999px;border:1.5px solid rgba(243,244,248,.35);font-weight:500;font-size:17px;text-align:center;padding:12px 16px;margin:8px 0}
 .btn.solid{background:var(--chalk);color:var(--night);border-color:var(--chalk)}
-.row2{display:flex;gap:8px}.row2 .btn{flex:1}
+.row2{display:flex;gap:8px}.row2 .btn{flex:1;padding-left:8px;padding-right:8px}
 .cred{font-size:13px;color:var(--mute);text-align:center;margin-top:14px;line-height:1.35}
 .cred a{color:inherit}
 .sig{text-align:center;font-style:italic;font-size:13px;margin-top:22px;color:var(--mute)}.sig a{color:inherit;text-decoration:none}
@@ -39,7 +39,7 @@ b,strong{font-weight:700}
 .intro{font-size:15px;color:var(--chalk);margin-bottom:8px;min-height:21px}
 .skybox{background:var(--slab);border-radius:18px;padding:6px;position:relative}
 .sky{display:block;width:100%;height:auto;touch-action:manipulation}
-.key{font-size:12.5px;color:var(--mute);text-align:center;margin-top:6px}
+.key{font-size:11.5px;color:var(--mute);text-align:center;margin-top:6px}
 .say{font-size:15.5px;margin:8px 0 6px;min-height:42px;line-height:1.35}
 .bar{height:10px;border-radius:999px;background:var(--void);position:relative;overflow:visible;margin:4px 0 4px}
 .bar .fill{height:100%;border-radius:999px;background:var(--chalk);width:0;transition:width .4s}
@@ -108,7 +108,7 @@ b,strong{font-weight:700}
   <h2 class="now" id="now">Light up the sky.</h2>
   <p class="intro" id="intro"></p>
   <div class="skybox"><svg class="sky" id="sky" viewBox="0 0 320 300"></svg></div>
-  <p class="key">ring: could be &middot; lit: exists &middot; faded: shut out by a lit one</p>
+  <p class="key">ring: could be &middot; lit: exists &middot; faded: shut out &middot; line: cannot both be</p>
   <p class="say" id="say"></p>
   <div class="bar"><div class="fill" id="fill"></div><div class="mark" id="mark"></div></div>
   <p class="stat" id="stat"></p>
@@ -126,7 +126,7 @@ b,strong{font-weight:700}
   <p class="intro" id="jintro"></p>
   <div class="skybox"><svg class="sky" id="jsky" viewBox="0 0 320 300"></svg></div>
   <p class="say" id="jsay"></p>
-  <div id="jcontrols"><div class="row2"><button class="btn solid" id="b-full">As full as can be</button><button class="btn solid" id="b-short">Short</button></div></div>
+  <div id="jcontrols"><div class="row2"><button class="btn solid" id="b-full">As full as can be</button><button class="btn solid" id="b-short">Short</button><button class="btn" id="b-unsure">Can't tell</button></div></div>
   <div class="result hid" id="jresult"></div>
 </section>
 
@@ -150,12 +150,12 @@ b,strong{font-weight:700}
 <div class="ov" id="help"><div class="in">
   <h2>How to play</h2>
   <p><b>Bring as much into existence as will fit.</b></p>
-  <p>There are four worlds, one after another; in the first three you make the sky. Each ring in a sky is a thing that could exist. The bigger the ring, the more there is of it; the number inside says how much. A line between two rings means they cannot both exist.</p>
-  <p><b>Tap a ring</b> to let that thing be. It lights up. Anything it cannot be with goes dark, with a red line to the thing that shut it out. <b>Tap a lit star</b> to put it out again: a step back. Whatever it was holding down can be again.</p>
+  <p>There are four worlds, one after another; in the first three you make the sky. Each ring in a sky is a thing that could exist. The bigger the ring, the more there is of it; its number shows once it has been lit. Some pairs cannot both exist, and nothing tells you which in advance: you find out by letting things be.</p>
+  <p><b>Tap a ring</b> to let that thing be. It lights up. Anything it cannot be with goes dark, with a red line to the thing that shut it out; the line stays, so you know that pair from then on. <b>Tap a lit star</b> to put it out again: a step back. Whatever it was holding down can be again.</p>
   <p>The bar under the sky shows how much light your world holds. More light is a fuller world.</p>
   <p><b>Let it be</b> ends the world. Whatever can still be comes in on its own, heaviest first; what you put out stays out. Then the best possible world appears next to yours: the fullest set of things that can be together.</p>
   <p>The third sky arrives already filled, heaviest first, and nothing left can be. Making it fuller means putting something out.</p>
-  <p>The fourth world is not yours to make. You see a world already made, through a small window, and say whether it is as full as it can be. Then the cover lifts and you see the whole. Then a second world, through the same window.</p>
+  <p>The fourth world is not yours to make. You see a world already made, through a small window, and say whether it is as full as it can be, short, or whether you cannot tell. The window widens and you say again. Then the cover lifts and you see the whole. Then a second world, through the same two windows.</p>
   <p>At the end: what Leibniz says, what you found, and your three skies beside the best.</p>
   <button class="btn solid" id="b-help-close">Back</button>
 </div></div>
@@ -175,8 +175,8 @@ var M = window.LeibnizMechanism, C = M.CONFIG;
 var $ = function (id) { return document.getElementById(id); };
 var game, world, lastFrom = null;
 var INTRO = [
-  'Six things could exist. Each ring is one; bigger means more of it. A line between two means they cannot both be.',
-  'Seven things want to be. The coral star is the most of anything, and it cannot be with four of the others.',
+  'Six things could exist; bigger means more of it. Some pairs cannot both be. Find out which.',
+  'Seven things want to be. The big one is the most of anything.',
   'Filled by weight: heaviest first, whatever could still be. Nothing left can be now.'
 ];
 var NOW0 = ['Light up the sky.', 'Light up the sky.', 'Make this world fuller.'];
@@ -194,6 +194,7 @@ function drawSky(svg, w, opts) {
   function shutBy(s) { var c = M.conflicts(w, s.id); for (var i = 0; i < c.length; i++) if (litIds.indexOf(c[i]) >= 0) return c[i]; return null; }
   var h = '';
   w.pairs.forEach(function (p) {
+    if (!opts.all && !M.pairKnown(w, p)) return;
     var a = M.star(w, p[0]), b = M.star(w, p[1]), sa = st(a), sb = st(b);
     var hot = (sa === 'lit' && sb !== 'lit') || (sb === 'lit' && sa !== 'lit');
     h += '<line x1="' + a.x + '" y1="' + a.y + '" x2="' + b.x + '" y2="' + b.y + '" stroke="' + (hot ? 'rgba(255,92,92,.55)' : '#3a3f4d') + '" stroke-width="' + (opts.small ? 1.2 : 1.6) + '"' + (hot ? ' stroke-dasharray="5 4"' : '') + '/>';
@@ -205,7 +206,7 @@ function drawSky(svg, w, opts) {
     else if (S === 'wait') h += '<circle cx="' + s.x + '" cy="' + s.y + '" r="' + r + '" fill="rgba(14,16,22,.6)" stroke="' + col + '" stroke-width="1.6"/>';
     else h += '<circle cx="' + s.x + '" cy="' + s.y + '" r="' + r + '" fill="rgba(14,16,22,.6)" stroke="' + col + '" stroke-opacity=".28" stroke-width="1.6"/>';
     var fs = 15;
-    if (!opts.small) h += '<text x="' + s.x + '" y="' + (s.y + fs * .36) + '" text-anchor="middle" font-size="' + fs + '" font-weight="700" fill="' + (S === 'lit' ? '#0E1016' : col) + '" fill-opacity="' + (S === 'dark' ? '.35' : '1') + '" font-family="Space Grotesk,system-ui,sans-serif">' + s.w + '</text>';
+    if (!opts.small && (opts.all || s.known)) h += '<text x="' + s.x + '" y="' + (s.y + fs * .36) + '" text-anchor="middle" font-size="' + fs + '" font-weight="700" fill="' + (S === 'lit' ? '#0E1016' : col) + '" fill-opacity="' + (S === 'dark' ? '.35' : '1') + '" font-family="Space Grotesk,system-ui,sans-serif">' + s.w + '</text>';
     if (opts.interactive) h += '<circle cx="' + s.x + '" cy="' + s.y + '" r="' + Math.max(r, 24) + '" fill="transparent" class="hit" data-id="' + s.id + '"/>';
     h += '</g>';
   });
@@ -219,7 +220,7 @@ function status() {
   $('fill').style.width = (100 * L / T) + '%';
   $('stat').innerHTML = 'Light <b>' + L + '</b> of ' + T + ' that wants to be &middot; Dark <b>' + dark + '</b> &middot; Waiting <b>' + wait + '</b>';
 }
-function render() { drawSky($('sky'), world, { interactive: !world.ended }); status(); }
+function render() { drawSky($('sky'), world, { interactive: !world.ended, all: world.ended }); status(); }
 
 function startWorld(k) {
   world = game.worlds[k]; game.current = k;
@@ -252,7 +253,7 @@ $('b-let').addEventListener('click', function () {
   // animate the rush-in
   var seq = before.slice(), i = 0;
   function step() {
-    if (i < world.rushed.length) { seq.push(world.rushed[i]); i++; drawSky($('sky'), world, { lit: seq }); var L = seq.reduce(function (a, id) { return a + M.star(world, id).w; }, 0); $('fill').style.width = (100 * L / M.total(world)) + '%'; setTimeout(step, 420); }
+    if (i < world.rushed.length) { seq.push(world.rushed[i]); i++; drawSky($('sky'), world, { lit: seq, all: true }); var L = seq.reduce(function (a, id) { return a + M.star(world, id).w; }, 0); $('fill').style.width = (100 * L / M.total(world)) + '%'; setTimeout(step, 420); }
     else { render(); showResult(res); }
   }
   setTimeout(step, 300);
@@ -271,44 +272,52 @@ function showResult(res) {
       '<div class="one"><div class="lab">Best possible &middot; ' + res.best + '</div><div class="skybox"><svg class="sky" id="sky-best" viewBox="0 0 320 300"></svg></div></div></div>' +
       '<div class="lines">' + res.lines.filter(function (l, i) { return !(i === 1 && world.rushed.length); }).map(function (l) { return '<p>' + l + '</p>'; }).join('') + '</div>' +
       '<button class="btn solid" id="b-next">Next world</button>';
-    drawSky($('sky-mine'), world, { small: true });
+    drawSky($('sky-mine'), world, { small: true, all: true });
     var seq = [], ids = world.best.ids.slice().sort(function (a, b) { return M.star(world, b).w - M.star(world, a).w; }), i = 0;
-    drawSky($('sky-best'), world, { lit: [], small: true });
-    (function step() { if (i < ids.length) { seq.push(ids[i]); i++; drawSky($('sky-best'), world, { lit: seq, small: true }); setTimeout(step, 380); } })();
+    drawSky($('sky-best'), world, { lit: [], small: true, all: true });
+    (function step() { if (i < ids.length) { seq.push(ids[i]); i++; drawSky($('sky-best'), world, { lit: seq, small: true, all: true }); setTimeout(step, 380); } })();
     $('b-next').addEventListener('click', function () { if (world.k < 2) startWorld(world.k + 1); else startJudge(0); });
     $('b-next').scrollIntoView({ block: 'end', behavior: 'smooth' });
   });
   ra.scrollIntoView({ block: 'end', behavior: 'smooth' });
 }
 
-var JINTRO = ['A world already made, seen through a window. Judge it; then the cover lifts.',
-  'Another world, already made, seen through the same window. Judge it again.'];
+var JINTRO = ['A world already made, seen through a window. Judge it; the window will widen; then the cover lifts.',
+  'Another world, already made, seen through the same windows. Judge it again.'];
+var JSAY = [['This is all of the world you can see. Leibniz: men born in a salt mine take their torchlight for all the light there is.', 'More light. The window has widened: more of the same world. Judge it again.'],
+  ['The small window looks just as it did. Is the world the same?', 'The wide window. Look for what holds the big one down.']];
 function startJudge(j) {
-  var J = game.judge, s = J.skies[j];
+  var J = game.judge, s = J.skies[j], stage = 0;
   $('jintro').textContent = JINTRO[j];
-  $('jnow').textContent = 'As full as it can be?';
-  $('jsay').textContent = j === 0 ? 'This is all of the world you can see. Leibniz: men born in a salt mine take their torchlight for all the light there is.' : 'The window looks the same. Is the world?';
   $('jcontrols').classList.remove('hid'); $('jresult').classList.add('hid'); $('jresult').innerHTML = '';
-  drawSky($('jsky'), s, { window: J.window });
-  show('s-judge');
+  function showStage() {
+    $('jnow').textContent = stage === 0 ? 'As full as it can be?' : 'And now?';
+    $('jsay').textContent = JSAY[j][stage];
+    drawSky($('jsky'), s, { window: J.windows[stage], all: true });
+    window.scrollTo(0, 0);
+  }
+  showStage(); show('s-judge');
   var answer = function (a) {
-    var r = M.judge(J, j, a);
+    M.judge(J, j, stage, a);
+    if (stage === 0) { stage = 1; showStage(); return; }
+    var r = M.judgeReveal(J, j);
     $('jcontrols').classList.add('hid');
     $('jnow').textContent = 'The cover lifts.';
-    drawSky($('jsky'), s, {});
+    drawSky($('jsky'), s, { all: true });
     $('jsay').textContent = r.line;
     var ra = $('jresult');
     ra.innerHTML = (j === 1 ? '<h3>' + J.lesson + '</h3>' : '') +
       '<div class="pair"><div class="one"><div class="lab">This world &middot; ' + M.light(s) + '</div><div class="skybox"><svg class="sky" id="jsky-mine" viewBox="0 0 320 300"></svg></div></div>' +
       '<div class="one"><div class="lab">Best possible &middot; ' + s.best.light + '</div><div class="skybox"><svg class="sky" id="jsky-best" viewBox="0 0 320 300"></svg></div></div></div>' +
-      '<button class="btn solid" id="b-jnext">' + (j === 0 ? 'The second window' : 'The verdict') + '</button>';
+      '<button class="btn solid" id="b-jnext">' + (j === 0 ? 'The second world' : 'The verdict') + '</button>';
     ra.classList.remove('hid');
-    drawSky($('jsky-mine'), s, { small: true }); drawSky($('jsky-best'), s, { lit: s.best.ids, small: true });
+    drawSky($('jsky-mine'), s, { small: true, all: true }); drawSky($('jsky-best'), s, { lit: s.best.ids, small: true, all: true });
     $('b-jnext').addEventListener('click', function () { if (j === 0) startJudge(1); else endGame(); });
     ra.scrollIntoView({ block: 'end', behavior: 'smooth' });
   };
   $('b-full').onclick = function () { answer('full'); };
   $('b-short').onclick = function () { answer('short'); };
+  $('b-unsure').onclick = function () { answer('unsure'); };
 }
 function endGame() {
   var v = M.verdict(game);
@@ -324,7 +333,7 @@ function endGame() {
       '<div class="one"><div class="lab">Best possible ' + w.best.light + '</div><div class="skybox"><svg class="sky" id="e-best-' + k + '" viewBox="0 0 320 300"></svg></div></div></div>';
   });
   $('three').innerHTML = h;
-  game.worlds.forEach(function (w, k) { drawSky($('e-mine-' + k), w, { small: true }); drawSky($('e-best-' + k), w, { lit: w.best.ids, small: true }); });
+  game.worlds.forEach(function (w, k) { drawSky($('e-mine-' + k), w, { small: true, all: true }); drawSky($('e-best-' + k), w, { lit: w.best.ids, small: true, all: true }); });
   show('s-end');
 }
 

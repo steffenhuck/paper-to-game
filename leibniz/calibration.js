@@ -60,30 +60,48 @@ g.worlds.forEach(function (w, i) { check('sky ' + (i + 1) + ' total wanting to b
   check('sky 2: put the coral star out and let it be = best', r.light === w.best.light, r.light);
 })();
 
-// 2b. the window world
+// 2b. the window world: two windows, the small one showing the same thing in both skies; the wide one showing what holds
+// the 9 down in the first and not in the second
 (function () {
-  var J = M.newJudge(), W = M.CONFIG.JUDGE.window;
+  var J = M.newJudge(), WS = M.CONFIG.JUDGE.windows;
   J.skies.forEach(function (s, j) {
-    check('window ' + (j + 1) + ': lit ' + E.judgeLit[j], M.light(s) === E.judgeLit[j], M.light(s));
-    check('window ' + (j + 1) + ': best ' + E.judgeBest[j], s.best.light === E.judgeBest[j], s.best.light);
-    check('window ' + (j + 1) + ': ' + (s.full ? 'is' : 'is not') + ' as full as it can be', (M.light(s) === s.best.light) === s.full);
+    check('window world ' + (j + 1) + ': lit ' + E.judgeLit[j], M.light(s) === E.judgeLit[j], M.light(s));
+    check('window world ' + (j + 1) + ': best ' + E.judgeBest[j], s.best.light === E.judgeBest[j], s.best.light);
+    check('window world ' + (j + 1) + ': ' + (s.full ? 'is' : 'is not') + ' as full as it can be', (M.light(s) === s.best.light) === s.full);
   });
-  function inWin(s) { return s.x >= W.x && s.x <= W.x + W.w && s.y >= W.y && s.y <= W.y + W.h; }
-  var seen = J.skies.map(function (s) { return s.stars.filter(inWin).map(function (x) { return x.id + ':' + x.status; }).sort().join(' '); });
-  check('both windows show the same stars in the same states', seen[0] === seen[1], seen[0]);
-  var pairsIn = J.skies.map(function (s) { return s.pairs.filter(function (p) { return inWin(M.star(s, p[0])) && inWin(M.star(s, p[1])); }).map(function (p) { return p.join('-'); }).sort().join(' '); });
-  check('both windows show the same lines', pairsIn[0] === pairsIn[1], pairsIn[0]);
-  // lines from the 9 to stars outside the window must leave through the hidden part of its disc, else a stub would show
+  function inWin(W) { return function (s) { return s.x >= W.x && s.x <= W.x + W.w && s.y >= W.y && s.y <= W.y + W.h; }; }
+  var W0 = WS[0], W1 = WS[1];
+  var seen = J.skies.map(function (s) { return s.stars.filter(inWin(W0)).map(function (x) { return x.id + ':' + x.status; }).sort().join(' '); });
+  check('small window shows the same stars in the same states in both', seen[0] === seen[1], seen[0]);
+  var pairsIn = J.skies.map(function (s) { return s.pairs.filter(function (p) { return inWin(W0)(M.star(s, p[0])) && inWin(W0)(M.star(s, p[1])); }).map(function (p) { return p.join('-'); }).sort().join(' '); });
+  check('small window shows the same lines in both', pairsIn[0] === pairsIn[1], pairsIn[0]);
+  var wide = J.skies.map(function (s) { return s.pairs.filter(function (p) { return inWin(W1)(M.star(s, p[0])) && inWin(W1)(M.star(s, p[1])); }).length; });
+  check('wide window shows the three 4s holding the 9 in the first world and not in the second', wide[0] === 4 && wide[1] === 1, wide.join(','));
+  check('the three 4s are inside the wide window and outside the small', ['mint', 'azure', 'lilac'].every(function (id) { var s = M.star(J.skies[0], id); return inWin(W1)(s) && !inWin(W0)(s); }));
+  check('the 3 and the 5 are outside both windows', ['rose', 'amber'].every(function (id) { var s = M.star(J.skies[0], id); return !inWin(W1)(s); }));
   var c = M.star(J.skies[0], 'coral'), r = M.CONFIG.radius(c.w), ok = true;
-  J.skies[0].pairs.forEach(function (p) { var o = M.star(J.skies[0], p[0] === 'coral' ? p[1] : p[0]); if (inWin(o)) return; var dx = o.x - c.x, dy = o.y - c.y; var tt = (W.x + W.w - c.x) / dx; var y = c.y + tt * dy; var d = Math.sqrt(Math.pow(W.x + W.w - c.x, 2) + Math.pow(y - c.y, 2)); if (d > r) ok = false; });
-  check('no line stub from the 9 shows inside the window', ok);
-  var a = M.judge(J, 0, 'full'), b = M.judge(J, 1, 'short');
-  check('judging: full then short is right twice', a.right && b.right);
-  var g2 = M.newGame(); M.judge(g2.judge, 0, 'short'); M.judge(g2.judge, 1, 'short');
-  check('verdict carries the window line', /World 4: .*window/.test(M.verdict(g2).found[3]), M.verdict(g2).found[3]);
+  J.skies[0].pairs.forEach(function (p) { var o = M.star(J.skies[0], p[0] === 'coral' ? p[1] : p[0]); if (inWin(W0)(o)) return; var dx = o.x - c.x, dy = o.y - c.y; var tt = (W0.x + W0.w - c.x) / dx; var y = c.y + tt * dy; var d = Math.sqrt(Math.pow(W0.x + W0.w - c.x, 2) + Math.pow(y - c.y, 2)); if (d > r) ok = false; });
+  check('no line stub from the 9 shows inside the small window', ok);
+  M.judge(J, 0, 0, 'short'); M.judge(J, 0, 1, 'full'); M.judge(J, 1, 0, 'short'); M.judge(J, 1, 1, 'short');
+  check('reveal says the wide window settled the first world', /you had it/.test(M.judgeReveal(J, 0).line), M.judgeReveal(J, 0).line);
+  var g2 = M.newGame(); M.judge(g2.judge, 0, 0, 'unsure'); M.judge(g2.judge, 0, 1, 'full'); M.judge(g2.judge, 1, 0, 'unsure'); M.judge(g2.judge, 1, 1, 'short');
+  check('verdict carries the window line', /World 4: .*small window/.test(M.verdict(g2).found[3]), M.verdict(g2).found[3]);
 })();
 
-// 4. robustness: claim = weight^k. At what k does the coral star enter the best second sky, and the step back stop paying?
+// 2c. what is found, not given
+(function () {
+  var w = M.newWorld(1);
+  check('sky 2: no line is known before anything is lit', w.knownPairs.length === 0);
+  check('sky 2: no number is known before anything is lit', w.stars.every(function (s) { return !s.known; }));
+  M.letBe(w, 'coral');
+  check('sky 2: letting the 9 be reveals its four lines and its number', w.knownPairs.length === 4 && M.star(w, 'coral').known && !M.star(w, 'rose').known, w.knownPairs.join(','));
+  M.putOut(w, 'coral');
+  check('sky 2: the lines stay known after the step back', w.knownPairs.length === 4);
+  var w3 = M.newWorld(2);
+  check('sky 3: filled by weight, every pair with a lit star is known and the dark things\' numbers are not', w3.knownPairs.length === 4 && !M.star(w3, 'mint').known && M.star(w3, 'amber').known);
+})();
+
+// 4. robustness// 4. robustness: claim = weight^k. At what k does the coral star enter the best second sky, and the step back stop paying?
 (function () {
   var kIn = null, kStep = null;
   for (var k = 1; k <= 4.001; k += 0.05) {
@@ -114,13 +132,13 @@ g.worlds.forEach(function (w, i) { check('sky ' + (i + 1) + ' total wanting to b
 // 6. words
 (function () {
   check('words: full', M.shortWords(21, 21) === 'as full as it can be');
-  check('words: 14 of 21 is about a third short', M.shortWords(14, 21) === 'about a third short', M.shortWords(14, 21));
+  check('words: 12 of 19 is about a third short', M.shortWords(12, 19) === 'about a third short', M.shortWords(12, 19));
   check('words: 19 of 24 is about a quarter short', M.shortWords(19, 24) === 'about a quarter short', M.shortWords(19, 24));
-  var g2 = M.newGame(); M.playGreedy(g2.worlds[0]); M.playGreedy(g2.worlds[1]); M.letItBe(g2.worlds[2]); M.judge(g2.judge, 0, 'full'); M.judge(g2.judge, 1, 'full');
+  var g2 = M.newGame(); M.playGreedy(g2.worlds[0]); M.playGreedy(g2.worlds[1]); M.letItBe(g2.worlds[2]); M.judge(g2.judge, 0, 0, 'full'); M.judge(g2.judge, 0, 1, 'full'); M.judge(g2.judge, 1, 0, 'full'); M.judge(g2.judge, 1, 1, 'full');
   var v = M.verdict(g2);
   check('verdict head for the heaviest-first player', v.head === 'One of your three worlds is as full as it can be.', v.head);
   check('verdict found lines are four', v.found.length === 4);
-  var g3 = M.newGame(); M.playBest(g3.worlds[0]); M.playBest(g3.worlds[1]); M.playBest(g3.worlds[2]); M.judge(g3.judge, 0, 'full'); M.judge(g3.judge, 1, 'short');
+  var g3 = M.newGame(); M.playBest(g3.worlds[0]); M.playBest(g3.worlds[1]); M.playBest(g3.worlds[2]); M.judge(g3.judge, 0, 0, 'full'); M.judge(g3.judge, 0, 1, 'full'); M.judge(g3.judge, 1, 0, 'short'); M.judge(g3.judge, 1, 1, 'short');
   check('verdict head for the best player', M.verdict(g3).head === 'All three of your worlds are as full as they can be.', M.verdict(g3).head);
   check('every star has a colour', g.worlds.every(function (w) { return w.stars.every(function (s) { return !!C.COLOURS[s.id]; }); }));
   check('no sky has two stars of one colour', g.worlds.every(function (w) { var ids = w.stars.map(function (s) { return s.id; }); return ids.length === new Set(ids).size; }));

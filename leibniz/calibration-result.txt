@@ -1,18 +1,18 @@
 PASS solver exact on sky 1  — 11 vs 11
-PASS solver exact on sky 2  — 21 vs 21
+PASS solver exact on sky 2  — 19 vs 19
 PASS solver exact on sky 3  — 24 vs 24
 PASS sky 1 total wanting to be = 18  — 18
 PASS sky 1 best = 11  — 11
 PASS sky 2 total wanting to be = 30  — 30
-PASS sky 2 best = 21  — 21
+PASS sky 2 best = 19  — 19
 PASS sky 3 total wanting to be = 35  — 35
 PASS sky 3 best = 24  — 24
 PASS sky 1: best leaves three things out  — left out: mint,azure,lilac
 PASS sky 2: the grandest thing is the coral star
-PASS sky 2: best world does not contain it  — amber,mint,azure,lilac,rose,ice
-PASS sky 2: most with coral forced in = 14  — 14
+PASS sky 2: best world does not contain it  — amber,mint,azure,lilac,rose
+PASS sky 2: most with coral forced in = 12  — 12
 PASS sky 2: the four it shuts out hold more than it
-PASS sky 2: heaviest-first play ends at 14  — 14
+PASS sky 2: heaviest-first play ends at 12  — 12
 PASS sky 3: filled by weight lights 19  — 19 (coral,amber,rose)
 PASS sky 3: nothing left can be
 PASS sky 3: filled by weight is not the best  — 19 < 24
@@ -26,24 +26,32 @@ PASS sky 1: let it be with nothing done fills by weight to 11  — coral,amber,r
 PASS a dark thing cannot be let be  — the mint star cannot be: the amber star shut it out. Put it out first.
 PASS after the step back it can  — the mint star exists. It shut out the amber star.
 PASS what the player put out stays out at let it be  — 10
-PASS sky 2: put the coral star out and let it be = best  — 21
-PASS window 1: lit 22  — 22
-PASS window 1: best 22  — 22
-PASS window 1: is as full as it can be
-PASS window 2: lit 22  — 22
-PASS window 2: best 29  — 29
-PASS window 2: is not as full as it can be
-PASS both windows show the same stars in the same states  — coral:dark ice:lit
-PASS both windows show the same lines  — coral-ice
-PASS no line stub from the 9 shows inside the window
-PASS judging: full then short is right twice
-PASS verdict carries the window line  — World 4: through the same window you called the first world short and the second short. The first was as full as it can be; the second was 7 short. One right, one wrong, and the window was the same.
+PASS sky 2: put the coral star out and let it be = best  — 19
+PASS window world 1: lit 22  — 22
+PASS window world 1: best 22  — 22
+PASS window world 1: is as full as it can be
+PASS window world 2: lit 22  — 22
+PASS window world 2: best 29  — 29
+PASS window world 2: is not as full as it can be
+PASS small window shows the same stars in the same states in both  — coral:dark ice:lit
+PASS small window shows the same lines in both  — coral-ice
+PASS wide window shows the three 4s holding the 9 in the first world and not in the second  — 4,1
+PASS the three 4s are inside the wide window and outside the small
+PASS the 3 and the 5 are outside both windows
+PASS no line stub from the 9 shows inside the small window
+PASS reveal says the wide window settled the first world  — The whole: the 9 was being held down by the 2 and by three 4s. Without it the sky holds 22; with it, 17. This world is as full as it can be. Through the small window you said short; through the wide one, full. With the wider window you had it.
+PASS verdict carries the window line  — World 4: through the small window, the same in both worlds, you said couldn't tell and couldn't tell; through the wide one, full and short. The first world was as full as it can be; the second was 7 short. Your judgement changed with the light both times.
+PASS sky 2: no line is known before anything is lit
+PASS sky 2: no number is known before anything is lit
+PASS sky 2: letting the 9 be reveals its four lines and its number  — amber|coral,coral|mint,azure|coral,coral|lilac
+PASS sky 2: the lines stay known after the step back
+PASS sky 3: filled by weight, every pair with a lit star is known and the dark things' numbers are not
 PASS sky 2 lesson holds for claim = weight^k up to k ≈ 1.75  — coral enters the best world at k = 1.75
 PASS sky 3 lesson (a fuller world than weight made exists) holds up to k ≈ 2.30  — step back stops paying at k = 2.30
      sky 1: heaviest-first 11 · random mean 9.2 [5, 11] · best play 11 · best 11
 PASS sky 1: best play reaches the best
 PASS sky 1: random play never beats the best
-     sky 2: heaviest-first 14 · random mean 17.1 [9, 21] · best play 21 · best 21
+     sky 2: heaviest-first 12 · random mean 15.7 [9, 19] · best play 19 · best 19
 PASS sky 2: best play reaches the best
 PASS sky 2: random play never beats the best
      sky 3: heaviest-first 19 · random mean 17.4 [6, 24] · best play 24 · best 24
@@ -51,7 +59,7 @@ PASS sky 3: best play reaches the best
 PASS sky 3: random play never beats the best
 PASS sky 2: heaviest-first is beaten by best play
 PASS words: full
-PASS words: 14 of 21 is about a third short  — about a third short
+PASS words: 12 of 19 is about a third short  — about a third short
 PASS words: 19 of 24 is about a quarter short  — about a quarter short
 PASS verdict head for the heaviest-first player  — One of your three worlds is as full as it can be.
 PASS verdict found lines are four
