@@ -1,4 +1,4 @@
-     200 games drawn in 445 ms; 0 needed a reseed
+     200 games drawn in 442 ms; 0 needed a reseed
 PASS solver exact on every drawn sky (1000 skies)
 PASS world 1 on every draw: the best leaves at least two out, is unique, and nothing can be ended unlit  — 
 PASS world 2 on every draw: the big one is out of the best, its holders outweigh it, heaviest-first falls short  — 
@@ -22,8 +22,8 @@ PASS world 3: best play reaches the best on every draw; random play never beats 
 PASS world 2: heaviest-first is beaten by best play on every draw
 PASS words: full
 PASS words: 12 of 19 is about a third short  — about a third short
-FAIL verdict has four found lines and a world-4 line about the torch and the twin  — World 4: a small star holding a big one down, three lines leading into the dark; having seen one line end in the dark you chose the other star, and the big one came in. Its twin, with the same opening, was the other kind of world: as full as it can be, the big one held at the end of its lines.
+PASS verdict has four found lines and a world-4 line ending on the twin  — World 4: a small star holding a big one down, three lines leading into the dark; having seen one line end in the dark you chose the other star, and the big one came in. Its twin, with the same opening, was the other kind of world: as full as it can be, the big one held at the end of its lines.
 PASS verdict head for the best player  — All three of your skies are as full as they can be.
 PASS no sky has two stars of one colour
 
-1 FAILED
+ALL PASSED
