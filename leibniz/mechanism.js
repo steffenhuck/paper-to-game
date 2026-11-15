@@ -36,13 +36,14 @@ var CONFIG = {
     // World 4, the lamp: Leibniz's covered picture (p. 4–5: "cover up all but a small part ... a confused chaos of
     // colours"; the men in the salt mines of Sarmatia who take their torchlight for all the light there is). Two worlds
     // already made, on the same sky: a small lit star holds a big dark one down. In one the big one is also held by
-    // holders worth more together; in the other nothing but the small one holds it. The player strikes one torch where
-    // they choose and sees faintly for a moment; then puts the small one out, or leaves the world.
+    // holders worth more together; in the other nothing but the small one holds it. The player has two torches for the
+    // two worlds, strikes them where they choose and sees faintly for a moment; says what they saw; then chooses the other
+    // star, or leaves the world; sees what that did, in the dark; then the cover lifts.
     lamp: { n: [7, 8], small: [1, 3], big: [7, 9], holders: [2, 3], holderW: [3, 5], otherW: [2, 6], dist: [80, 110] }
   },
   // The torch (design, 15 Nov, his): one tap places it; for a few seconds the stars and lines inside its glow show
   // faintly, then it dies. radius in px; seconds it burns; how bright the lines and rings show (1 = as in daylight). Ours.
-  TORCH: { radius: 115, seconds: 3, lineLight: 0.3, starLight: 0.35 },
+  TORCH: { count: 2, radius: 115, full: 3, fade: 3, lineLight: 0.3, starLight: 0.35 },   // two torches for the two worlds; seconds at full strength, seconds fading
   // Words for how much of the best world's light a world lacks (memo §3: direction first, rough size). Ours.
   SHORT_WORDS: [[0, 'as full as it can be'], [0.12, 'a little short'], [0.2, 'about a sixth short'], [0.29, 'about a quarter short'],
     [0.4, 'about a third short'], [0.6, 'about half short'], [1.01, 'mostly dark']]
@@ -308,37 +309,48 @@ function genLamp(rng) {
 function makeLampWorld(spec) {
   var stars = spec.stars.map(function (s, i) { return { id: s.id, w: s.w, x: s.x, y: s.y, i: i, status: spec.lit.indexOf(s.id) >= 0 ? 'lit' : 'wait', by: [], known: false }; });
   var w = { k: 3, stars: stars, pairs: spec.pairs.map(function (p) { return p.slice(); }), ended: false, full: spec.full, small: spec.small, big: spec.big,
-    torch: null, act: null, before: 0, after: 0, stepsBack: 0, putOut: [], acted: 0, knownPairs: [], prefilled: true };
+    torches: [], reading: null, act: null, before: 0, after: 0, stepsBack: 0, putOut: [], acted: 0, knownPairs: [], prefilled: true };
   settle(w); w.best = solve(w); w.before = light(w); return w;
 }
-function newJudge(rng) { var g = genLamp(rng); if (!g) return null; return { kind: 'torch', skies: g.skies.map(makeLampWorld), radius: CONFIG.TORCH.radius, seconds: CONFIG.TORCH.seconds }; }
-// Strike the one torch at (x, y). Returns false if it has been struck already or the world is decided.
+function newJudge(rng) { var g = genLamp(rng); if (!g) return null; return { kind: 'torch', skies: g.skies.map(makeLampWorld), torchesLeft: CONFIG.TORCH.count, radius: CONFIG.TORCH.radius, full: CONFIG.TORCH.full, fade: CONFIG.TORCH.fade }; }
+// Strike a torch at (x, y) in sky j. Torches are shared across the two skies. Returns false if none is left or the sky is past looking.
 function strike(J, j, x, y) {
-  var s = J.skies[j]; if (s.act || s.torch) return false;
-  s.torch = { x: x, y: y }; return true;
+  var s = J.skies[j]; if (s.reading || s.act || J.torchesLeft <= 0) return false;
+  s.torches.push({ x: x, y: y }); J.torchesLeft--; return true;
 }
-// Whether the torch, struck where it was, lit any of the lines from the big star to its holders (not the small one).
+// Whether any torch struck in sky j lit a line from the big star to one of its holders (not the small one).
 function torchSawHolders(J, j) {
-  var s = J.skies[j]; if (!s.torch) return false;
-  var bg = star(s, s.big);
-  return conflicts(s, s.big).filter(function (id) { return id !== s.small; }).some(function (id) { var o = star(s, id); return segDist(s.torch, bg, o) <= J.radius; });
+  var s = J.skies[j], bg = star(s, s.big);
+  return s.torches.some(function (tc) { return conflicts(s, s.big).filter(function (id) { return id !== s.small; }).some(function (id) { return segDist(tc, bg, star(s, id)) <= J.radius; }); });
 }
-// Decide: 'out' puts the small star out and lets the big one be if nothing else holds it; 'leave' leaves the world.
+// What the player says they saw: 'lines', 'none' or 'unsure'. Ends the looking.
+function read(J, j, answer) { var s = J.skies[j]; if (s.reading || s.act) return false; s.reading = answer; return true; }
+function readingWord(a) { return a === 'lines' ? 'you saw lines' : a === 'none' ? 'you saw none' : "you couldn't tell"; }
+// Decide: 'other' chooses the other star (the small one goes out; the big one comes in if nothing else holds it);
+// 'leave' leaves the world. A reading must have been given first.
 function decide(J, j, act) {
-  var s = J.skies[j]; if (s.act) return null;
+  var s = J.skies[j]; if (s.act || !s.reading) return null;
   s.act = act; s.came = [];
-  if (act === 'out') { putOut(s, s.small); var b = star(s, s.big); if (b.status === 'wait') { letBe(s, s.big); s.came = [s.big]; } }
+  if (act === 'other') { putOut(s, s.small); var b = star(s, s.big); if (b.status === 'wait') { letBe(s, s.big); s.came = [s.big]; } }
   s.ended = true; s.after = light(s);
-  return lampReveal(J, j);
+  return { consequence: consequence(J, j), reveal: lampReveal(J, j) };
+}
+// What the act did, said in the dark, before the cover lifts.
+function consequence(J, j) {
+  var s = J.skies[j];
+  if (s.act === 'leave') return 'You left it. The world stays as it was.';
+  return s.came.length ? 'The small star went out, and the big one came in. Nothing else was holding it.' : 'The small star went out. The big one stayed dark: something else is holding it.';
 }
 function lampReveal(J, j) {
   var s = J.skies[j], sm = star(s, s.small), bg = star(s, s.big);
   var holders = conflicts(s, s.big).filter(function (id) { return id !== s.small; }).map(function (id) { return star(s, id).w; });
   var whole = s.full ? 'The whole: the ' + bg.w + ' was held down by the ' + sm.w + ' and by ' + holders.length + ' more things worth ' + holders.join(' + ') + ' together. Without it the sky holds ' + s.before + '; with it, less. This world was as full as it can be.'
     : 'The whole: nothing but the ' + sm.w + ' held the ' + bg.w + ' down. With the ' + sm.w + ' out and the ' + bg.w + ' in, the sky holds ' + s.best.light + ' instead of ' + s.before + '. This world was ' + (s.best.light - s.before) + ' short.';
-  var used = !s.torch ? 'You struck no torch.' : torchSawHolders(J, j) ? 'Your torch lit the lines that mattered, for a moment.' : (s.full ? 'Your torch burned where the lines that mattered were not.' : 'Your torch showed no line to the big one but the one you knew; there was none.');
-  var line = s.act === 'out' ? (s.came.length ? 'You put the ' + sm.w + ' out, and the ' + bg.w + ' came in: ' + (s.after - s.before) + ' more light than before.'
-      : 'You put the ' + sm.w + ' out, and the ' + bg.w + ' stayed dark: ' + (s.before - s.after) + ' less light than before.')
+  var n = s.torches.length;
+  var used = (n === 0 ? 'You struck no torch here.' : (n === 1 ? 'Your torch ' : 'Your torches ') + (torchSawHolders(J, j) ? 'lit the lines that mattered, for a moment.' : (s.full ? 'burned where the lines that mattered were not.' : 'showed no line to the big one but the one you knew; there was none.'))) +
+    ' You said ' + readingWord(s.reading) + (s.reading === 'lines' ? (s.full ? ', and there were.' : ', but there were none.') : s.reading === 'none' ? (s.full ? ', but there were.' : ', and there were none.') : '.');
+  var line = s.act === 'other' ? (s.came.length ? 'You chose the other star: the ' + sm.w + ' went out and the ' + bg.w + ' came in, ' + (s.after - s.before) + ' more light than before.'
+      : 'You chose the other star: the ' + sm.w + ' went out and the ' + bg.w + ' stayed dark, ' + (s.before - s.after) + ' less light than before.')
     : (s.full ? 'You left it, and it holds all it could.' : 'You left it, and it holds ' + s.after + ' where it could hold ' + s.best.light + '.');
   return { line: whole + ' ' + used + ' ' + line, good: s.after === s.best.light };
 }
@@ -393,9 +405,9 @@ function verdict(game) {
   });
   var J = game.judge;
   var jl = J.skies.map(function (s, j) {
-    var looked = !s.torch ? 'without a torch' : 'by torchlight';
-    var what = s.act === 'out' ? 'put the small one out' : 'left it';
-    var got = s.act === 'out' ? (s.came.length ? 'and the big one came in' : 'and the big one stayed dark') : (s.full ? 'and it was as full as it can be' : 'and it stayed short');
+    var looked = (s.torches.length === 0 ? 'without a torch' : s.torches.length === 1 ? 'by one torch' : 'by two torches') + ' (' + readingWord(s.reading) + ')';
+    var what = s.act === 'other' ? 'chose the other star' : 'left it';
+    var got = s.act === 'other' ? (s.came.length ? 'and the big one came in' : 'and the big one stayed dark') : (s.full ? 'and it was as full as it can be' : 'and it stayed short');
     return 'in the ' + (j === 0 ? 'first' : 'second') + ', ' + looked + ', you ' + what + ', ' + got;
   });
   found.push('World 4: the same small star holding the same big one down in both; ' + jl[0] + '; ' + jl[1] + '.');
@@ -409,6 +421,6 @@ function verdict(game) {
 var M = { CONFIG: CONFIG, newGame: newGame, makeWorld: makeWorld, makeLampWorld: makeLampWorld, genWorld1: genWorld1, genWorld2: genWorld2, genWorld3: genWorld3, genLamp: genLamp,
   mulberry32: mulberry32, letBe: letBe, putOut: putOut, letItBe: letItBe, canEnd: canEnd, result: result, verdict: verdict, solve: solve, solveWith: solveWith,
   light: light, total: total, lit: lit, star: star, conflicts: conflicts, name: name, list: list, biggest: biggest, shortWords: shortWords, pairKnown: pairKnown,
-  layoutOk: layoutOk, playGreedy: playGreedy, playRandom: playRandom, playBest: playBest, strike: strike, torchSawHolders: torchSawHolders, decide: decide, lampReveal: lampReveal, segDist: segDist };
+  layoutOk: layoutOk, playGreedy: playGreedy, playRandom: playRandom, playBest: playBest, strike: strike, torchSawHolders: torchSawHolders, read: read, readingWord: readingWord, decide: decide, consequence: consequence, lampReveal: lampReveal, segDist: segDist };
 if (typeof module !== 'undefined' && module.exports) module.exports = M; else root.LeibnizMechanism = M;
 })(typeof window !== 'undefined' ? window : this);

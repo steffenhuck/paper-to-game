@@ -1,4 +1,4 @@
-     200 games drawn in 334 ms; 0 needed a reseed
+     200 games drawn in 327 ms; 0 needed a reseed
 PASS solver exact on every drawn sky (1000 skies)
 PASS world 1 on every draw: the best leaves at least two out, is unique, and nothing can be ended unlit  — 
 PASS world 2 on every draw: the big one is out of the best, its holders outweigh it, heaviest-first falls short  — 
@@ -7,8 +7,10 @@ PASS nothing is chosen for the player: Let it be ends a world with exactly what 
 PASS layout on every drawn sky: no line through a star, no crossing lines, no touching stars  — 0 bad
      star counts (w1/w2/w3), first eight games: 6/7/8  7/7/7  7/8/8  7/6/7  7/8/8  6/7/7  5/6/7  5/6/7
 PASS torch world on every draw: same opening, one sky the fullest, the other short by exactly the big star less the small, the hand works, a torch on the big one lights a holder line  — 
-PASS one torch only
-PASS decide after the torch still works
+PASS two torches for the two worlds, no more
+PASS no decision before a reading
+PASS no second reading, no second decision
+PASS the consequence is said in the dark
 PASS world 2 lesson holds for claim = weight^k up to at least k ≈ 1.35 on every draw tried  — least k where the big one enters the best: 1.35
 PASS world 3 lesson holds for claim = weight^k up to at least k ≈ 1.30 on every draw tried  — least k where the step back stops paying: 1.30
      world 1, as a share of the best: heaviest-first 1.00 · random 0.46 · best play 1.00
@@ -20,7 +22,7 @@ PASS world 3: best play reaches the best on every draw; random play never beats 
 PASS world 2: heaviest-first is beaten by best play on every draw
 PASS words: full
 PASS words: 12 of 19 is about a third short  — about a third short
-PASS verdict has four found lines and a world-4 line about the torch  — World 4: the same small star holding the same big one down in both; in the first, by torchlight, you put the small one out, and the big one came in; in the second, without a torch, you left it, and it was as full as it can be.
+PASS verdict has four found lines and a world-4 line about the torch  — World 4: the same small star holding the same big one down in both; in the first, by one torch (you saw lines), you chose the other star, and the big one came in; in the second, without a torch (you couldn't tell), you left it, and it was as full as it can be.
 PASS verdict head for the best player  — All three of your skies are as full as they can be.
 PASS no sky has two stars of one colour
 
