@@ -111,6 +111,7 @@ b,strong{font-weight:700}
   <div class="top"><p class="aim">Make the water stand alone: test houses so that the doctor cannot say “that is just the inland air”, with as few glasses as you can.</p><button class="q" id="q-play" aria-label="How to play">?</button></div>
   <div class="panel" id="panel"></div>
   <div id="mapbox"></div>
+  <p class="small" style="margin-top:2px;font-style:italic">Six streets, from the Thames up to the higher ground inland. The two by the river are crowded and poor; the two inland are thinly peopled and genteel.</p>
 </section>
 
 <!-- ================= SENTENCE ================= -->
@@ -448,7 +449,8 @@ b,strong{font-weight:700}
       s += '<rect x="' + (x + 8) + '" y="' + (y + 13) + '" width="8" height="8" fill="none" stroke="var(--ink)" stroke-width="1.1"/><rect x="' + (x + HW - 16) + '" y="' + (y + 13) + '" width="8" height="8" fill="none" stroke="var(--ink)" stroke-width="1.1"/>';
     }
     var fill = (h.tested || state.reveal) ? (h.water === 'brown' ? 'var(--brown)' : 'var(--blue)') : 'var(--straw)';
-    s += '<rect x="' + door.x + '" y="' + door.y + '" width="' + door.w + '" height="' + door.h + '" fill="' + fill + '" stroke="var(--ink)" stroke-width="1.4"' + (state.reveal && !h.tested ? ' opacity=".45"' : '') + '/>';
+    s += '<rect x="' + door.x + '" y="' + door.y + '" width="' + door.w + '" height="' + door.h + '" fill="' + fill + '" stroke="var(--ink)" stroke-width="1.4"/>';
+    if (state.reveal && h.tested) s += '<rect x="' + (door.x - 3.5) + '" y="' + (door.y - 3.5) + '" width="' + (door.w + 7) + '" height="' + (door.h + 7) + '" fill="none" stroke="var(--ink)" stroke-width="2.4"/>';
     if (!h.tested && !state.reveal) s += '<circle cx="' + (door.x + door.w - 3.5) + '" cy="' + (door.y + door.h / 2) + '" r="1.1" fill="var(--ink)"/>';
     if (h.crape) {
       s += '<path d="M' + (door.x - 5) + ' ' + (door.y - 3) + ' Q' + (door.x + door.w / 2) + ' ' + (door.y + 7) + ' ' + (door.x + door.w + 5) + ' ' + (door.y - 3) + ' L' + (door.x + door.w + 5) + ' ' + (door.y + 1) + ' Q' + (door.x + door.w / 2) + ' ' + (door.y + 11) + ' ' + (door.x - 5) + ' ' + (door.y + 1) + ' Z" fill="var(--ink)"/>';
@@ -459,22 +461,27 @@ b,strong{font-weight:700}
     return s;
   }
   function tallyText(t) { var p = []; if (t.brown) p.push('brown ' + t.brownCrape + ' of ' + t.brown + ' with crape'); if (t.blue) p.push('blue ' + t.blueCrape + ' of ' + t.blue); return p.join(' · ') || 'nothing tested'; }
+  function truthTally(r) { var t = { brown: 0, brownCrape: 0, blue: 0, blueCrape: 0 }; g.rows[r].forEach(function (h) { if (h.water === 'brown') { t.brown++; if (h.crape) t.brownCrape++; } else { t.blue++; if (h.crape) t.blueCrape++; } }); return t; }
   function mapSVG(opts) {
     opts = opts || {}; var n = C.ROWS.length, rowH = HEAD + HH + 6, h = n * rowH + 24;
     var s = '<svg class="map" viewBox="0 0 ' + W + ' ' + h + '" xmlns="http://www.w3.org/2000/svg" aria-label="the map">';
-    s += '<text x="' + (W / 2) + '" y="10" text-anchor="middle" font-size="10" letter-spacing="2" font-weight="700" fill="var(--ink)">INLAND</text>';
+    s += '<text x="' + (W / 2) + '" y="10" text-anchor="middle" font-size="9.5" letter-spacing="1.5" font-weight="700" fill="var(--ink)">HIGHER GROUND, INLAND</text>';
     for (var k = 0; k < n; k++) {
       var r = n - 1 - k, row = C.ROWS[r], y0 = 13 + k * rowH, t = M.rowTally(g, r);
       s += '<text x="' + LEFT + '" y="' + (y0 + 10) + '" font-size="11.5" font-weight="700" fill="var(--ink)">' + row.name + '</text>';
-      if (t.brown + t.blue > 0) s += '<text x="' + W + '" y="' + (y0 + 10) + '" text-anchor="end" font-size="10.5" font-weight="700" fill="var(--ink)">' + tallyText(t) + '</text>';
-      else s += '<text x="' + W + '" y="' + (y0 + 10) + '" text-anchor="end" font-size="9.5" font-style="italic" fill="var(--ink)">' + row.phrase + '</text>';
+      if (opts.reveal) s += '<text x="' + W + '" y="' + (y0 + 10) + '" text-anchor="end" font-size="10.5" font-weight="700" fill="var(--ink)">' + tallyText(truthTally(r)) + '</text>';
+      else if (t.brown + t.blue > 0) s += '<text x="' + W + '" y="' + (y0 + 10) + '" text-anchor="end" font-size="10.5" font-weight="700" fill="var(--ink)">' + tallyText(t) + '</text>';
+      else s += '<text x="' + W + '" y="' + (y0 + 10) + '" text-anchor="end" font-size="10" font-style="italic" fill="var(--ink)">no glass yet</text>';
       for (var c = 0; c < COLS; c++) {
         var hh = g.rows[r][c], x = LEFT + c * (HW + 6) + 1;
         s += houseSVG(hh, row.kind, x, y0 + HEAD, { selected: sel && sel.r === r && sel.i === c, reveal: opts.reveal });
       }
       s += '<line x1="0" y1="' + (y0 + HEAD + HH + 3) + '" x2="' + W + '" y2="' + (y0 + HEAD + HH + 3) + '" stroke="var(--ink)" stroke-width="1"/>';
     }
-    s += '<rect x="0" y="' + (h - 10) + '" width="' + W + '" height="10" fill="var(--blue)" opacity=".8"/><text x="' + (W / 2) + '" y="' + (h - 2) + '" text-anchor="middle" font-size="8.5" letter-spacing="2" font-weight="700" fill="var(--straw)">THE RIVER</text>';
+    var yw = h - 11;
+    s += '<path d="M0 ' + (yw + 3) + ' q8 -3 16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0" fill="none" stroke="var(--blue)" stroke-width="1.6"/>';
+    s += '<path d="M0 ' + (yw + 9) + ' q8 -3 16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0" fill="none" stroke="var(--blue)" stroke-width="1.6"/>';
+    s += '<text x="' + (W / 2) + '" y="' + (yw + 7) + '" text-anchor="middle" font-size="9.5" letter-spacing="1.5" font-weight="700" fill="var(--blue)" style="paint-order:stroke" stroke="var(--straw)" stroke-width="4">THE THAMES</text>';
     return s + '</svg>';
   }
   function tinyHouse(x, y, col, hollow) { return '<path d="M' + x + ' ' + (y + 4) + ' l5.5 -4.5 l5.5 4.5 v7 h-11 Z" fill="' + (hollow ? 'none' : col) + '" stroke="' + col + '" stroke-width="' + (hollow ? 1.8 : 0) + '"/>'; }
@@ -575,7 +582,7 @@ b,strong{font-weight:700}
     if (v.sideLine) html += '<div class="vl"><span class="sc">The side of town</span><p>' + v.sideLine + '</p></div>';
     html += '<div class="vl"><span class="sc">Had yours stood</span><p>' + v.had + '</p></div>';
     html += '<div class="wins"><span class="sc">The map with every pipe revealed</span><div id="endmap"></div></div>';
-    html += '<p class="small">The town’s water is inland and the upriver water by the river, mixed in the middle streets; the crape follows the pipe, not the side. Pale doors are the houses you did not test.</p>';
+    html += '<p class="small">Every door in the colour of its water: the town’s water inland, the upriver water by the river, mixed in the middle streets; the crape follows the pipe, not the side. A ring marks a door you tested. The two inland streets are thinly peopled and genteel; the two by the river are crowded and poor.</p>';
     html += '<div class="wins"><span class="sc">Your window</span>' + windowSVG(windowItems()) + '</div>';
     html += '<div class="wins"><span class="sc">Snow’s window, first seven weeks, twenty-one subdistricts</span>' + windowSVG(null, { numbers: { cb: T.deathsBrown.toLocaleString('en-GB'), cl: T.deathsBlue.toLocaleString('en-GB'), lb: (T.housesBrown - T.deathsBrown).toLocaleString('en-GB'), ll: (T.housesBlue - T.deathsBlue).toLocaleString('en-GB') } }) + '</div>';
     html += '<p class="small">His top row is deaths in houses on each water; his bottom row the other houses each company supplied, from the return made to Parliament: five hundred and seven against ninety-eight, in sixteen thousand houses against twenty thousand, all on the same streets.</p>';
