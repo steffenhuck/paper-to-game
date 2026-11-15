@@ -42,9 +42,16 @@ h2.now{font-size:22px;line-height:1.18;margin:.15em 0 .3em;font-weight:700}
 .tk.fixed{color:var(--ink)}
 .tk.new{animation:strike .28s ease-out}
 @keyframes strike{0%{transform:translateY(-6px) scale(1.25);opacity:.2}100%{transform:none;opacity:1}}
-.bx{display:inline-block;border:2.5px solid var(--gold);padding:0 5px 0 6px;min-width:46px;min-height:1.45em;vertical-align:middle;margin:1px 2px}
+.bx{display:inline;padding:0 1px}.bx::before{content:'[ ';color:var(--mute)}.bx::after{content:' ]';color:var(--mute)}
+.platen .bx::before,.platen .bx::after{color:var(--ink)}
+/* the one input */
+.inwrap{margin-top:8px}.inline{display:flex;align-items:center;gap:6px}
+.brk{font-size:24px;color:var(--ink)}
+.in{flex:1;min-width:0;width:100%;font-family:'Courier Prime',monospace;font-weight:700;font-size:18px;text-transform:uppercase;color:var(--ink);background:#fff;border:3px solid var(--gold);border-radius:4px;padding:8px 10px;outline:none;-webkit-appearance:none;appearance:none}
+.in:focus{border-color:var(--violet)}.in::placeholder{color:#a79e8f;text-transform:none;font-family:'Josefin',sans-serif;font-weight:400;font-size:15px}
+.in[disabled]{background:var(--slip);color:var(--mute)}
+.bad{color:#b3262e;font-size:14.5px;margin-top:4px}
 .bx .tk:last-child{margin-right:0}
-.platen .bx.empty:not(.nohint)::after{content:'tap the keys below';font-family:'Josefin',sans-serif;font-weight:400;font-size:13px;color:var(--mute);padding:0 4px}
 @keyframes blink{50%{opacity:0}}
 .tk.same{border-bottom-color:var(--violet)}
 .row{font-family:'Courier Prime',monospace;font-weight:700;font-size:16.5px;line-height:1.55;background:var(--slip);border:1px solid #d6cdb9;padding:5px 8px;min-height:36px;word-break:break-word}
@@ -55,13 +62,14 @@ h2.now{font-size:22px;line-height:1.18;margin:.15em 0 .3em;font-weight:700}
 .note{font-size:15px;margin:6px 0;padding:6px 9px;border-left:4px solid var(--gold);background:#ece5d3}
 .note.v{border-left-color:var(--violet);background:var(--violetlt)}
 /* keys */
-.keys{display:flex;flex-wrap:wrap;gap:9px;margin:10px 0 4px;justify-content:center;position:sticky;bottom:0;background:var(--paper);padding:8px 0 10px;z-index:3}
+.keys{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 4px;justify-content:flex-start;align-items:center}
+.keys .kl{font-size:13px;color:var(--mute);margin-right:2px}
 .keys:empty{display:none}
 #err{display:none;background:#b3262e;color:#fff;padding:8px 12px;font-size:14px;margin-bottom:8px}
 #dbg{display:none;position:fixed;left:0;right:0;top:0;z-index:99;background:#111;color:#9f9;font:12px/1.35 ui-monospace,monospace;padding:6px 8px;max-height:40vh;overflow:auto;white-space:pre-wrap}
-.key{min-width:76px;height:50px;padding:0 12px;background:var(--ink);color:var(--slip);font-family:'Courier Prime',monospace;font-weight:700;font-size:16px;border-radius:12px;box-shadow:0 0 0 3px var(--gold),0 4px 0 3px #6d5420;transition:transform .06s}
-.key:active,.key.hit{transform:translateY(3px);box-shadow:0 0 0 3px var(--gold),0 1px 0 3px #6d5420}
-.key.rub{font-family:system-ui,sans-serif;font-size:24px;font-weight:400;background:var(--paper);color:var(--ink);box-shadow:0 0 0 2px var(--ink),0 4px 0 2px #9a907f;min-width:64px}
+.key{min-width:64px;height:40px;padding:0 12px;background:var(--ink);color:var(--slip);font-family:'Courier Prime',monospace;font-weight:700;font-size:15px;border-radius:8px;box-shadow:0 0 0 2px var(--gold);transition:transform .06s}
+.key:active,.key.hit{transform:translateY(2px)}
+.key.rub{font-family:system-ui,sans-serif;font-size:22px;font-weight:400;background:var(--paper);color:var(--ink);box-shadow:0 0 0 2px var(--ink);min-width:52px}
 .key[disabled]{opacity:.35;pointer-events:none}
 /* buttons */
 .btn{display:block;width:100%;margin:10px 0 0;padding:13px 10px 11px;font-weight:700;font-size:17.5px;text-align:center;border:2.5px solid var(--ink)}
@@ -142,6 +150,8 @@ details li{margin:.45em 0}
   <div class="machine"><div class="inner">
     <span class="plate" id="p-plate">Hilbert's machine · I</span>
     <div class="platen" id="p-sentence"></div>
+    <div class="inwrap" id="p-inwrap"><div id="p-front" class="ty" style="font-weight:700;font-size:18px;margin-bottom:4px"></div><div class="inline"><span class="brk">[</span><input class="in" id="p-in" type="text" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" placeholder="type the keys here"><span class="brk">]</span></div></div>
+    <div class="bad" id="p-bad"></div>
     <div id="p-stamp"></div>
   </div></div>
   <div class="says" id="p-says"></div>
@@ -243,7 +253,7 @@ details li{margin:.45em 0}
   <p><span class="ty"><b>PRINTS [X]</b></span> says: the machine prints X.<br>
   <span class="ty"><b>NOT</b></span> in front turns “prints” into “never prints”.<br>
   <span class="ty"><b>TWICE [X]</b></span> stands for X, then a box with X inside. So <span class="ty"><b>PRINTS TWICE [NOT]</b></span> says: the machine prints <span class="ty"><b>NOT [NOT]</b></span>.<br>
-  The <b>box</b> is the gold frame. The keys you tap go into it. <span class="ty"><b>⌫</b></span> rubs out the last one. On a computer you can also type N, P, T (2 for PRINTS II) and Backspace.</p>
+  The <b>box</b> is the gold field under the machine: type the keys into it as words, with spaces (for example <span class="ty"><b>NOT PRINTS</b></span>), or tap the black chips, which type for you. <span class="ty"><b>⌫</b></span> takes the last word out.</p>
   <h3>The two lines</h3>
   <p>Under the machine, the game shows what your sentence talks about. Pieces that match are underlined in violet. When the two lines are the same, the sentence talks about itself.</p>
   <h3>The six steps</h3>
@@ -326,7 +336,7 @@ window.onerror=function(m,u,l){var e=document.getElementById('err');if(e){e.styl
     twiceA: {
       kick: 'Step 2 of 6 · A new key: TWICE',
       now: 'Make the sentence talk about <span class="ty">NOT [NOT]</span>.',
-      expl: '<b>TWICE</b> copies the box: <span class="ty"><b>TWICE [X]</b></span> stands for X, then a box with X inside.',
+      expl: '<b>TWICE</b> copies the box: <span class="ty"><b>TWICE [X]</b></span> stands for X, then a box with X inside. Type into the gold field.',
       plate: 'Hilbert\'s machine · I'
     },
     twiceB: {
@@ -351,7 +361,7 @@ window.onerror=function(m,u,l){var e=document.getElementById('err');if(e){e.styl
 
   function startPuzzle(id) {
     if (id === 'nothis') return startNothis();
-    S.puzzle = id; S.box = []; S.rubs = 0; S.typed = 0; S.nested = false; S.done = false;
+    S.puzzle = id; S.box = []; S.rubs = 0; S.typed = 0; S.nested = false; S.done = false; S.lastLen = 0;
     var T = STEPS[id], P = C.puzzles[id];
     $('p-kick').textContent = T.kick;
     $('p-now').innerHTML = T.now;
@@ -363,8 +373,12 @@ window.onerror=function(m,u,l){var e=document.getElementById('err');if(e){e.styl
     $('b-nest').classList.add('hide');
     $('b-show').classList.add('hide');
     $('b-next').classList.add('hide');
-    var kh = P.keys.map(function (k) { return '<button class="key" data-k="' + k + '">' + K[k].label + '</button>'; }).join('');
+    var kh = '<span class="kl">or tap:</span>' + P.keys.map(function (k) { return '<button class="key" data-k="' + k + '">' + K[k].label + '</button>'; }).join('');
     kh += '<button class="key rub" data-k="RUB" aria-label="Rub out">⌫</button>';
+    $('p-front').textContent = P.front.map(function (k) { return K[k].label; }).join(' ');
+    $('p-inwrap').classList.remove('hide'); $('p-sentence').classList.add('hide');
+    var inp = $('p-in'); inp.value = ''; inp.disabled = false; $('p-bad').textContent = '';
+    if (window.matchMedia && matchMedia('(hover:hover)').matches) setTimeout(function () { inp.focus(); }, 50);
     $('p-keys').innerHTML = kh;
     $('p-keys').querySelectorAll('.key').forEach(function (b) {
       b.addEventListener('click', function () { press(b.getAttribute('data-k'), b); });
@@ -376,23 +390,48 @@ window.onerror=function(m,u,l){var e=document.getElementById('err');if(e){e.styl
     render(false);
   }
 
+  // The input is the one source of the box. Keys only edit its text.
+  function readInput() {
+    var raw = $('p-in').value.toUpperCase().replace(/\s+/g, ' ').trim();
+    var words = raw ? raw.split(' ') : [], box = [], bad = [];
+    for (var i = 0; i < words.length; i++) {
+      var w = words[i];
+      if (w === 'NOT') box.push('NOT');
+      else if (w === 'TWICE') box.push('TWICE');
+      else if (w === 'PRINTS' && (words[i + 1] === 'II' || words[i + 1] === '2')) { box.push('P2'); i++; }
+      else if (w === 'PRINTS') box.push('P1');
+      else if (w === 'PRINTS2' || w === 'PRINTSII' || w === 'PRINTS-II') box.push('P2');
+      else bad.push(w);
+    }
+    return { box: box, bad: bad };
+  }
+  function onInput() {
+    if (S.done) return;
+    var P = C.puzzles[S.puzzle], r = readInput();
+    var allowed = P.keys;
+    r.bad = r.bad.concat(r.box.filter(function (k) { return allowed.indexOf(k) < 0; }).map(function (k) { return K[k].label; }));
+    if (r.bad.length) {
+      $('p-bad').textContent = 'Not a key: ' + r.bad.join(', ') + '. The keys are ' + allowed.map(function (k) { return K[k].label; }).join(', ') + '.';
+      S.box = r.box.filter(function (k) { return allowed.indexOf(k) >= 0; });
+    } else if (r.box.length > P.maxBox) {
+      $('p-bad').textContent = 'Too many: the box holds at most ' + P.maxBox + ' keys.';
+      S.box = r.box.slice(0, P.maxBox);
+    } else {
+      $('p-bad').textContent = '';
+      S.box = r.box;
+    }
+    if (S.box.length < S.lastLen) { S.rubs++; S.tries[S.puzzle] = S.rubs; }
+    S.lastLen = S.box.length; S.typed++;
+    render(true);
+  }
+  function setInput(box) { $('p-in').value = box.map(function (k) { return K[k].label; }).join(' '); onInput(); }
   function press(k, btn) {
     if (S.done) return;
-    var P = C.puzzles[S.puzzle];
     btn.classList.add('hit'); setTimeout(function () { btn.classList.remove('hit'); }, 90);
-    if (k === 'RUB') {
-      if (!S.box.length) return;
-      S.box.pop(); S.rubs++;
-      S.tries[S.puzzle] = S.rubs;
-      render(false);
-      return;
-    }
-    if (S.box.length >= P.maxBox) {
-      flashMsg('The box is full. Rub out with ⌫.');
-      return;
-    }
-    S.box.push(k); S.typed++;
-    render(true);
+    var r = readInput(), box = r.box;
+    if (k === 'RUB') { if (!box.length) return; box.pop(); }
+    else box.push(k);
+    setInput(box);
   }
 
   function flashMsg(t) { $('p-msg').innerHTML = '<div class="note">' + t + '</div>'; }
@@ -402,13 +441,12 @@ window.onerror=function(m,u,l){var e=document.getElementById('err');if(e){e.styl
     var s = gStr(P.front, S.box), sub = gSubject(s), mir = gMirror(s);
     var hit = S.box.length && gHit(id, S.box);
     // the sentence on the machine
-    $('p-sentence').innerHTML = drawString(s, null, { newLast: newLast, fixed: true });
     // what it says
     var says = '';
     var p = gParse(P.front);
     var verb = (p.neg ? 'never prints' : 'prints');
     var who = p.machine === 2 ? 'Machine II' : 'the machine';
-    if (!S.box.length) says = 'It says: ' + who + ' ' + verb + ' <span class="ty"><b>…</b></span> (the box is empty)';
+    if (!S.box.length) says = 'It says: ' + who + ' ' + verb + ' <span class="ty"><b>…</b></span> (the field is empty)';
     else if (gSelf(s)) says = 'It says: <b>' + who + ' ' + verb + ' this very sentence.</b>';
     else says = 'It says: ' + who + ' ' + verb + ' <span class="ty"><b>' + gText(sub) + '</b></span>';
     $('p-says').innerHTML = says;
@@ -418,14 +456,14 @@ window.onerror=function(m,u,l){var e=document.getElementById('err');if(e){e.styl
       $('p-lbl-a').innerHTML = 'Your sentence' + (id === 'nothis' ? ' · <b>' + gPieces(s) + ' keys</b>' : '');
       $('p-row-a').innerHTML = drawString(s, mir.sentence);
       $('p-lbl-b').innerHTML = 'It talks about' + (id === 'nothis' ? ' · <b>' + (S.box.length ? gPieces(sub) : 0) + ' keys</b>' : '');
-      $('p-row-b').innerHTML = S.box.length ? drawString(sub, mir.subject) : '<span class="none">nothing yet: fill the box</span>';
+      $('p-row-b').innerHTML = S.box.length ? drawString(sub, mir.subject) : '<span class="none">nothing yet: type into the gold field</span>';
     } else {
       // target puzzles: target on top, what it talks about below, matched piece by piece
       var t = P.target, ma = gMirrorPair(t, sub);
       $('p-lbl-a').innerHTML = 'The target';
       $('p-row-a').innerHTML = drawString(t, ma.a);
       $('p-lbl-b').innerHTML = 'Your sentence talks about';
-      $('p-row-b').innerHTML = S.box.length ? drawString(sub, ma.b) : '<span class="none">nothing yet: fill the box</span>';
+      $('p-row-b').innerHTML = S.box.length ? drawString(sub, ma.b) : '<span class="none">nothing yet: type into the gold field</span>';
     }
     $('p-row-a').classList.toggle('eq', !!hit);
     $('p-row-b').classList.toggle('eq', !!hit);
@@ -471,6 +509,7 @@ window.onerror=function(m,u,l){var e=document.getElementById('err');if(e){e.styl
     $('p-kick').textContent = T.kick; $('p-now').innerHTML = T.now; $('p-expl').innerHTML = T.expl;
     $('p-plate').textContent = T.plate; $('p-stamp').innerHTML = ''; $('p-msg').innerHTML = '';
     $('p-keys').innerHTML = ''; $('p-nest').classList.add('hide');
+    $('p-inwrap').classList.add('hide'); $('p-sentence').classList.remove('hide'); $('p-bad').textContent = '';
     $('b-show').classList.add('hide'); $('b-next').classList.add('hide');
     $('b-nest').classList.remove('hide');
     show('s-play');
@@ -479,7 +518,7 @@ window.onerror=function(m,u,l){var e=document.getElementById('err');if(e){e.styl
   function drawNothis() {
     var L = S.level;
     $('p-sentence').innerHTML = nestHtml(L);
-    $('p-says').innerHTML = L === 0 ? 'It says: the machine never prints <span class="ty"><b>…</b></span> (the box is empty)'
+    $('p-says').innerHTML = L === 0 ? 'It says: the machine never prints <span class="ty"><b>…</b></span> (the field is empty)'
       : 'It says: the machine never prints <span class="ty"><b>' + nestText(L - 1) + '</b></span>';
     $('p-lbl-a').innerHTML = 'Your sentence · <b>' + (2 * L + 2) + ' keys</b>';
     $('p-row-a').innerHTML = nestHtml(L);
@@ -510,6 +549,7 @@ window.onerror=function(m,u,l){var e=document.getElementById('err');if(e){e.styl
     S.done = true;
     var id = S.puzzle;
     $('p-keys').querySelectorAll('.key').forEach(function (b) { b.setAttribute('disabled', ''); });
+    $('p-in').disabled = true; $('p-in').blur();
     $('b-show').classList.add('hide');
     var stamp = '', msg = '', next = '', go;
     if (id === 'twiceA') {
@@ -539,8 +579,7 @@ window.onerror=function(m,u,l){var e=document.getElementById('err');if(e){e.styl
 
   function showAnswer() {
     S.shown[S.puzzle] = true;
-    S.box = gAnswer(S.puzzle);
-    render(true);
+    setInput(gAnswer(S.puzzle));
   }
 
   // ---------- step 4: the doors ----------
@@ -676,13 +715,8 @@ window.onerror=function(m,u,l){var e=document.getElementById('err');if(e){e.styl
   $('b-help-back').onclick = function () { show(back); };
   $('b-about').onclick = function () { back = 's-end'; show('s-about'); };
   $('b-about-back').onclick = function () { show(back); };
-  document.addEventListener('keydown', function (e) {
-    if (!$('s-play').classList.contains('on')) return;
-    var map = { n: 'NOT', p: 'P1', t: 'TWICE', '2': 'P2', backspace: 'RUB' };
-    var k = map[e.key.toLowerCase()]; if (!k) return;
-    var b = document.querySelector('#p-keys .key[data-k="' + k + '"]');
-    if (b && !b.disabled) { e.preventDefault(); b.click(); }
-  });
+  $('p-in').addEventListener('input', onInput);
+  $('p-in').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); onInput(); } });
   S = fresh();
   window.__G = { state: function () { return S; } };
 })();

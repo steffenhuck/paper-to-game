@@ -13,19 +13,20 @@ const path = require('path'), fs = require('fs');
     await page.goto('file://' + path.resolve('godels-endgame.html'));
     const shot = async n => { await page.waitForTimeout(350); await page.screenshot({ path: `screenshot-${tag}-${n}.png`, fullPage: true }); };
     const key = async label => { await page.click(`#p-keys .key[data-k="${label}"]`); await page.waitForTimeout(80); };
+    const type = async text => { await page.fill('#p-in', text); await page.waitForTimeout(80); };
     const within = async sel => {
       const b = await page.$eval(sel, e => { const r = e.getBoundingClientRect(); return { top: r.top + window.scrollY, h: r.height, vis: e.offsetParent !== null }; });
       return b.vis && b.top + b.h <= 700;
     };
     const hscroll = async () => page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
     const now = async () => page.$eval('.screen.on', s => (s.querySelector('h2') || {}).innerText || s.id);
-    await plan({ page, shot, key, within, hscroll, now, log: s => log.push(tag + ': ' + s) });
+    await plan({ page, shot, key, type, within, hscroll, now, log: s => log.push(tag + ': ' + s) });
     log.push(tag + ': errors: ' + (errors.length ? errors.join(' | ') : 'none') + '; horizontal scroll: ' + (await hscroll()));
     await page.close();
   }
 
   // A: a plausible player who gets things right after some trying
-  await run('a', async ({ page, shot, key, within, now, log }) => {
+  await run('a', async ({ page, shot, key, type, within, now, log }) => {
     await shot('0-start');
     await page.click('#b-begin');
     await shot('1-empty');
@@ -37,25 +38,26 @@ const path = require('path'), fs = require('fs');
     log('-> ' + await now());
     await shot('2a-empty');
     log('step 2a keys within 700: ' + await within('#p-keys'));
-    await key('P1'); await shot('2a-miss');
-    await key('RUB'); await key('NOT');
+    await type('prints'); await shot('2a-miss');
+    await type('not');
     log('2a after rub: ' + await page.$eval('#p-says', e => e.innerText));
     await shot('2a-hit');
     await page.click('#b-next');
-    await key('NOT'); await shot('2b-partial');
-    await key('P1'); await shot('2b-hit');
+    await type('NOT'); await shot('2b-partial');
+    await type('NOT PRINTS'); await shot('2b-hit');
     // help mid-play and back
     await page.click('#b-next');
     await page.click('#s-play .qbtn'); await shot('help');
     await page.click('#b-help-back');
     log('back from help: ' + await now());
     log('step 3 keys within 700: ' + await within('#p-keys'));
-    await key('NOT'); await key('P1'); await shot('3-miss');
-    await key('RUB'); await key('RUB');
-    await key('P1'); await key('RUB'); await key('RUB');
+    await type('not prints'); await shot('3-miss');
+    await type(''); await type('prints'); await type(''); await type('x'); await shot('3-bad');
+    log('3 bad word: ' + await page.$eval('#p-bad', e => e.innerText));
+    await type('');
     await shot('3-hint');
     log('3 hint: ' + await page.$eval('#p-msg', e => e.innerText));
-    await key('NOT'); await key('P1'); await key('TWICE');
+    await type('not prints twice');
     await shot('3-hit');
     log('3 hit: ' + await page.$eval('#p-says', e => e.innerText));
     await page.click('#b-next');
@@ -66,11 +68,10 @@ const path = require('path'), fs = require('fs');
     await page.click('#b-d-next');
     await shot('5-empty');
     log('step 5 keys within 700: ' + await within('#p-keys'));
-    await key('NOT'); await key('P1'); await key('TWICE');
+    await type('NOT PRINTS TWICE');
     await shot('5-old');
     log('5 old box: ' + await page.$eval('#p-msg', e => e.innerText));
-    await key('RUB'); await key('RUB'); await key('RUB');
-    await key('NOT'); await key('P2'); await key('TWICE');
+    await type('not prints ii twice');
     await shot('5-hit');
     await page.click('#b-next');
     await shot('6-cert');
@@ -87,12 +88,12 @@ const path = require('path'), fs = require('fs');
   });
 
   // B: a player who gets stuck, uses Show me, and says "prints it" at the doors
-  await run('b', async ({ page, shot, key, now, log }) => {
+  await run('b', async ({ page, shot, key, type, now, log }) => {
     await page.click('#b-begin');
     await page.click('#b-nest'); await page.click('#b-nest'); await page.click('#b-nest'); await page.click('#b-next');
-    await page.keyboard.press('p'); await page.keyboard.press('p'); await page.keyboard.press('p'); await page.keyboard.press('p'); await page.keyboard.press('p');
-    log('box full msg (typed on keyboard): ' + await page.$eval('#p-msg', e => e.innerText));
-    for (let i = 0; i < 4; i++) await page.keyboard.press('Backspace');
+    await page.fill('#p-in', 'prints prints prints prints prints');
+    log('too many: ' + await page.$eval('#p-bad', e => e.innerText));
+    await page.fill('#p-in', '');
     for (let i = 0; i < 4; i++) { await key('P1'); await key('RUB'); }
     await shot('2a-show');
     log('show button visible: ' + await page.$eval('#b-show', e => !e.classList.contains('hide')));
