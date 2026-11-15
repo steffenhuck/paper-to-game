@@ -235,3 +235,7 @@ From Steffen's playthrough of revision 6 and the conversation after it.
 - **Finding from the calibration:** the points ranking always respects what the two agree on, and each what-if opens only new ties, so the book never blocks the points method during play; the clash appears in the check, where a book written by counting points disagrees with points on 24 to 26 of the 36 votes. So the in-play warning that was planned is not needed, and the explanation lives at the start and on the debrief.
 
 Calibration: 35 checks, 0 failed. Browser session rerun with the new screen and the line-by-line Sunday: no errors, no horizontal scroll at 380 px. Builder's review only.
+
+## 27. Revision 8 (15 Nov 2026): the second decision is always shown
+
+Steffen, on what-if 2: "now I only have one choice to be made. I'm confused." The second decision was there but already made by the first (the two plans left were ones the voters agree about, or the book had settled them), and revision 5 hid questions with one answer. Since the "Your book" screen promises two decisions per what-if, the second is now always shown: as buttons where there is a choice, and otherwise as a settled line with its reason ("The Tower. Decided already: both put the Tower above the Tree", or "line 3 of your book puts…", or "the only plan left" after a draw at the top). The opening text and the help page say that the second decision is sometimes made by the first.
