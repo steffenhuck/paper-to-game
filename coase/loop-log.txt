@@ -1,11 +1,11 @@
-strategy | per quarrel (yours / best) | total / possible | share
-the fair instinct: make the harmer pay, every time | 14/14 10/10 14/16 30/30 210/230 300/300 | 578/600 | 96% | the farmer and the rancher both send you a card. so does the railway.
-let them carry on, every time | 14/14 10/10 16/16 20/30 230/230 150/300 | 440/600 | 86% | the valley is doing all right, and nobody is sure whose fault that is.
-ban the harmful thing, every time | 8/14 2/10 8/16 15/30 210/230 300/300 | 543/600 | 61% | the cows have asked for a new judge.
-pay in the farm, let the big ones spark | 14/14 10/10 14/16 20/30 230/230 150/300 | 438/600 | 84% | the valley is doing all right, and nobody is sure whose fault that is.
-Coase overlearned: pay until the lawyer, then let them be | 14/14 10/10 16/16 20/30 230/230 150/300 | 440/600 | 86% | the valley is doing all right, and nobody is sure whose fault that is.
-the paper's reading (best ruling each time) | 14/14 10/10 16/16 30/30 230/230 300/300 | 600/600 | 100% | the valley paints your face on the signpost.
-ruling by coin (seed 1) | 14/14 2/10 14/16 20/30 210/230 300/300 | 560/600 | 78% | the valley is doing all right, and nobody is sure whose fault that is.
+strategy | per quarrel (yours / best) | total / possible | found | fate
+the fair instinct: make the harmer pay, every time | 14/14 10/10 14/16 23/30 210/230 300/300 | 571/600 | found 3 of 6 | the valley is doing all right, and nobody is sure whose fault that is.
+let them carry on, every time | 14/14 10/10 16/16 30/30 230/230 150/300 | 450/600 | found 5 of 6 | the farmer and the rancher both send you a card. so does the railway.
+ban the harmful thing, every time | 8/14 2/10 8/16 15/30 210/230 300/300 | 543/600 | found 1 of 6 | the cows have asked for a new judge.
+pay in the farm, let the big ones spark | 14/14 10/10 14/16 30/30 230/230 150/300 | 448/600 | found 4 of 6 | the valley is doing all right, and nobody is sure whose fault that is.
+Coase overlearned: pay until the lawyer, then let them be | 14/14 10/10 16/16 30/30 230/230 150/300 | 450/600 | found 5 of 6 | the farmer and the rancher both send you a card. so does the railway.
+the paper's reading (best ruling each time) | 14/14 10/10 16/16 30/30 230/230 300/300 | 600/600 | found 6 of 6 | the valley paints your face on the signpost.
+ruling by coin (seed 1) | 14/14 2/10 14/16 30/30 210/230 300/300 | 570/600 | found 3 of 6 | the valley is doing all right, and nobody is sure whose fault that is.
 
 --- loop on placeholder graphics: a stranger's run (pay, roam, roam, pay, pay, pay) ---
 
@@ -18,6 +18,10 @@ ruling by coin (seed 1) | 14/14 2/10 14/16 20/30 210/230 300/300 | 560/600 | 78%
   ruling 1: the corn is protected: the rancher pays for what the cows eat  -> sign "corn protected"
   ruling 2: no cows on this side of the brook  -> sign "no cows"
   > player taps ruling 1; sign reads "corn protected"; presses rule
+  > the year after: player taps ruling 2
+  compare: this year you banned the cows: no cows, the corn, $8. the ban cost the valley $6 of meat.
+  compare: the other year you did not, and the valley came to $14 with two cows: the rancher paid the farmer $3 for the corn.
+  compare: the sign you did not try ends the same way, two cows and $14, with the money running the other way: the farmer paid the rancher $2 to keep a cow at home. when the neighbours can talk for free, the ruling moves money and nothing else.
     beat: the sign goes up: corn protected.   [picture: level 3 ["main"]]
     beat: the farmer plants the corn: whatever the cows eat, the rancher will pay for.   [picture: level 3 ["main"]]
     beat: the rancher counts: a third cow would bring $1 and eat $3 of corn. he keeps two cows.   [picture: level 2 ["main"]]
@@ -25,7 +29,7 @@ ruling by coin (seed 1) | 14/14 2/10 14/16 20/30 210/230 300/300 | 560/600 | 78%
     beat: the valley is worth $14.   [picture: level 2 ["main"]]
   purses: the rancher $6, the farmer $8 | valley $14 of $14
   result: that is the most any ruling could get.
-  result: had the cows been let roam, the farmer would have paid the rancher to send one home. same herd, money the other way.
+  result: next year, try the other sign and watch the cows.
   ghost: "cows welcome": two cows, corn; the farmer pays the rancher $2; valley $14
   ghost: "no cows": no cows, corn; valley $8
 
@@ -40,7 +44,7 @@ ruling by coin (seed 1) | 14/14 2/10 14/16 20/30 210/230 300/300 | 560/600 | 78%
   > player taps ruling 0; sign reads "cows welcome"; presses rule
     beat: the sign goes up: cows welcome.   [picture: level 3 ["main"]]
     beat: the rancher owes nothing for corn. he keeps three cows, the most that pay, and they wander where they like.   [picture: level 3 ["main"]]
-    beat: the farmer looks at $2 of corn and $6 of cows eating it, and does not plant. the strip stays grass.   [picture: level 3 ["none"]]
+    beat: the farmer looks at $2 of corn and three cows that would eat $6 of it, and does not plant. the strip stays grass.   [picture: level 3 ["none"]]
     beat: the valley is worth $10.   [picture: level 3 ["none"]]
   purses: the rancher $10, the farmer $0 | valley $10 of $10
   result: that is the most any ruling could get.
@@ -69,8 +73,8 @@ ruling by coin (seed 1) | 14/14 2/10 14/16 20/30 210/230 300/300 | 560/600 | 78%
 
 [quarrel 4 of 6: the chimney]  sign: (blank)  picture: smoke scene level 1
   fact (works): running the works brings $20
-  fact (houses): a hundred houses hang out $15 of washing and fresh paint between them. the smoke spoils all of it
-  fact (filter): a filter on the chimney costs $5 and stops the smoke. only the works can fit it
+  fact (houses): a hundred houses hang out $15 of white washing between them. the smoke turns all of it grey
+  fact (fixes): two things keep the washing white. a filter on the chimney: $12, and only the works can fit it. or a clothes horse indoors in every house: a few cents each, $5 across the town
   fact (crowd): a hundred households cannot agree on a deal with anyone. no deal is possible
   ruling 0: the works may smoke  -> sign "smoke allowed"
   ruling 1: the houses are protected: the works pays for what the smoke spoils  -> sign "houses protected"
@@ -78,12 +82,13 @@ ruling by coin (seed 1) | 14/14 2/10 14/16 20/30 210/230 300/300 | 560/600 | 78%
   > player taps ruling 1; sign reads "houses protected"; presses rule
     beat: the sign goes up: houses protected.   [picture: level 1 ["main"]]
     beat: the hundred houses hang out their washing: whatever the smoke spoils, the works will pay for.   [picture: level 1 ["main"]]
-    beat: the works counts: paying for the smoke costs more than a filter. it fits the filter for $5 and runs.   [picture: level 1 ["main"] device]
-    beat: the valley is worth $30.   [picture: level 1 ["main"] device]
-  purses: the works $15, the hundred houses $15 | valley $30 of $30
-  result: that is the most any ruling could get.
-  result: a hundred houses cannot club together for a filter. the works can fit one. the ruling that puts the cost on the one who can fix it cheaply gets the filter fitted.
-  ghost: "smoke allowed": the works running, smoke and all; valley $20
+    beat: the works counts: $15 for the smoke, every year, or a $12 filter. it fits the filter and runs.   [picture: level 1 ["main"] device]
+    beat: the works would gladly pay for a hundred clothes horses, $5, rather than a $12 filter. but a hundred houses cannot sign one deal. the filter stays.   [picture: level 1 ["main"] device]
+    beat: the valley is worth $23.   [picture: level 1 ["main"] device]
+  purses: the works $8, the hundred houses $15 | valley $23 of $30
+  result: the most any ruling could get was $30. yours fell $7 short.
+  result: the washing is white, but it cost $12 when $5 of clothes horses would have done. the houses did not buy them because, protected, they had no reason to; and the works could not pay them to, because a hundred houses cannot sign one deal. making the works pay put the fix on the dear side.
+  ghost: "smoke allowed": the works running, the washing indoors on $5 of clothes horses; valley $30
   ghost: "no smoke": the works shut; valley $15
 
 [quarrel 5 of 6: sparks]  sign: (blank)  picture: rail scene level 2
@@ -127,13 +132,14 @@ ruling by coin (seed 1) | 14/14 2/10 14/16 20/30 210/230 300/300 | 560/600 | 78%
   ghost: "no trains": no trains, the orchards standing; valley $300
 
 [verdict]
-  your six valleys came to $580 of the $600 they could be: valley by valley, nearly all of what was possible.
+  you found the best ruling in four of the six quarrels. in dollars, your valleys came to $573 of the $600 they could be.
+  in the chimney and sparks, the ruling that felt fair was the wrong one. making the works pay bought a $12 filter where $5 of clothes horses would have done; making the railway pay got the strip planted and stopped the trains.
   when neighbours can talk for free, a ruling changes who pays whom and nothing else. when they cannot, the ruling decides what the valley is worth, and the ruling that feels fair, make the one who did the harm pay, can leave everyone poorer.
   there is no culprit to find. there are two neighbours, and the question is which harm is the smaller. the right ruling counts the whole valley.
-  fate: the farmer and the rancher both send you a card. so does the railway.
-  the cows and the corn: you made the rancher pay: two cows, corn; the rancher pays the farmer $3. ($14 of $14)
+  fate: the valley is doing all right, and nobody is sure whose fault that is.
+  the cows and the corn: year one, you made the rancher pay: two cows, corn; the rancher pays the farmer $3. year two, you banned the cows: no cows, corn. ($14 of $14)
   the strip by the brook: you let the rancher carry on: three cows, the strip bare. ($10 of $10)
   the lawyer: you let the rancher carry on: three cows, turnips. ($16 of $16)
-  the chimney: you made the works pay: the works running with a filter. ($30 of $30)
+  the chimney: you made the works pay: the works running with a $12 filter. ($23 of $30)
   sparks: you made the railway pay: no trains, the strip planted. ($210 of $230)
   the orchard: you made the railway pay: no trains, the orchards standing. ($300 of $300)

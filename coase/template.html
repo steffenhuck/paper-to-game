@@ -51,6 +51,11 @@ p { margin: 0 0 10px; }
 .fate { font-size: 26px; font-weight: 900; line-height: 1.15; margin: 6px 0 16px; }
 .signs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 0 0 14px; }
 .signs svg { display: block; width: 100%; height: auto; }
+.years { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 0 10px; }
+.years svg { display: block; width: 100%; height: auto; }
+.years .yl { font-size: 14px; font-weight: 800; text-align: center; margin: 0 0 2px; }
+.frame.ruling:disabled { opacity: 0.4; cursor: default; background: var(--page); }
+.signs .miss text { opacity: 0.55; }
 .did { font-size: 15px; font-weight: 700; margin: 0 0 14px; }
 .did p { margin: 0 0 6px; }
 .overlay { display: none; position: fixed; inset: 0; background: var(--page); overflow: auto; z-index: 10; }
@@ -76,7 +81,7 @@ p { margin: 0 0 10px; }
   <svg class="cover" viewBox="0 0 348 190" id="cover"></svg>
   <h1>coase's cows</h1>
   <p>a farmer, a rancher, a brook between them, and cows that do not care about brooks.</p>
-  <p class="acts">hear six quarrels between neighbours. tap a ruling. watch what the neighbours do with it.</p>
+  <p class="acts">hear six quarrels between neighbours. tap a ruling. watch what the neighbours do with it. the first quarrel comes back the year after, so you can try another sign.</p>
   <p class="aim">rule on six quarrels so the valley is worth the most.</p>
   <button class="frame go" id="b-begin">begin</button>
   <button class="frame" id="b-help-start">how to play</button>
@@ -103,9 +108,10 @@ p { margin: 0 0 10px; }
     <div class="purses" id="purses"></div>
     <div class="bar"><div class="fill" id="bar-fill"></div><div class="best" id="bar-best"></div></div>
     <p class="barlabel" id="p-barlabel"></p>
+    <div class="years" id="years" style="display:none"></div>
     <div class="result" id="p-result"></div>
-    <p class="lead">the other two rulings would have ended with:</p>
-    <div id="ghosts"></div>
+    <div id="c-ghosts"><p class="lead" id="p-ghostlead">the other two rulings would have ended with:</p>
+    <div id="ghosts"></div></div>
     <button class="frame go" id="b-nextq">next quarrel</button>
   </div>
 </section>
@@ -114,6 +120,7 @@ p { margin: 0 0 10px; }
   <h2>the verdict</h2>
   <div class="verdict-lines">
     <p id="v-did"></p>
+    <p id="v-miss"></p>
     <p id="v-paper"></p>
     <p id="v-means"></p>
   </div>
@@ -132,19 +139,19 @@ p { margin: 0 0 10px; }
 <div id="s-help" class="overlay"><div class="inner">
   <h2>how to play</h2>
   <p class="aim">rule on six quarrels so the valley is worth the most.</p>
-  <p>six quarrels come to you, one at a time. each is two neighbours and a harm: cows that eat corn, a chimney that spoils washing, a railway whose sparks burn fields. you are the judge.</p>
+  <p>six quarrels come to you, one at a time. each is two neighbours and a harm: cows that eat corn, a chimney that spoils washing, a railway whose sparks burn fields. you are the judge. the first quarrel comes back a year later, and you rule on it again with a different sign: that second year is for seeing what changes, and it does not count.</p>
   <h3>the picture</h3>
   <p>the valley is drawn at the top. the one doing the harm is on the right (the rancher, the works, the railway); the one harmed is on the left (the farmer, the houses, the farms). the signpost on the bank is where your ruling will stand.</p>
   <h3>the facts</h3>
-  <p>four cards under the picture say what each thing is worth: what each cow brings in, what the corn is worth and how much of it the cows eat, what a fence or a filter costs, and whether the neighbours can talk, for free, through a lawyer, or not at all. you need these to rule well: the valley's worth is what both neighbours produce, less what the harm spoils and what any fence, filter or lawyer costs.</p>
+  <p>four cards under the picture say what each thing is worth: what each cow brings in, what the corn is worth and how much of it the cows eat, what a fence, a filter or a clothes horse costs, and whether the neighbours can talk, for free, through a lawyer, or not at all. you need these to rule well: the valley's worth is what both neighbours produce, less what the harm spoils and what any fence, filter, clothes horse or lawyer costs.</p>
   <h3>the ruling</h3>
   <p>three rulings, every time: the harmer may carry on; the harmer must pay for the harm; the harmful thing is banned here. touch one and the sign on the bank shows it, with a line saying what each neighbour now owes or holds. nothing yet says what they will do with it. press rule to commit.</p>
   <h3>what happens</h3>
   <p>press next to watch the neighbours act on your ruling, one step at a time: who plants what, who keeps how many cows, who pays whom, whether a deal is struck. a deal can only be struck if the neighbours can talk and the deal is worth more than talking costs.</p>
   <h3>the tally</h3>
-  <p>three money bags: the harmed neighbour's purse, the harmer's purse, and the valley's chest, which is both together less any fee. the bar shows the valley's worth against the most any ruling could have got for this quarrel. the two rulings you did not give are shown as dashed cards, with what they would have ended in.</p>
+  <p>three money bags: the harmed neighbour's purse, the harmer's purse, and the valley's chest, which is both together less any fee. the bar shows the valley's worth against the most any ruling could have got for this quarrel. the rulings you did not give are shown as dashed cards, with what they would have ended in.</p>
   <h3>the end</h3>
-  <p>after six quarrels, the verdict: what your valleys came to against what they could have, valley by valley; what the paper says; and what that means. then rule again, and try the other rulings.</p>
+  <p>after six quarrels, the verdict: in how many quarrels your ruling got the most any ruling could, and where it did not, why; what the paper says; and what that means. then rule again, and try the other rulings.</p>
   <button class="frame go" id="b-help-close">back</button>
 </div></div>
 
@@ -241,6 +248,14 @@ function shirt(x, y, id) {
     '<path d="M' + (x - 8) + ' ' + y + ' h16 l4 6 -4 2 v12 h-16 v-12 l-4 -2 z" fill="' + WHT + '" ' + SW3 + ' stroke-width="2.5"/>' +
     '<g class="dirt" style="opacity:0"><circle cx="' + (x - 3) + '" cy="' + (y + 8) + '" r="2" fill="' + INK + '"/><circle cx="' + (x + 4) + '" cy="' + (y + 13) + '" r="2.4" fill="' + INK + '"/><circle cx="' + (x - 1) + '" cy="' + (y + 16) + '" r="1.6" fill="' + INK + '"/></g></g>';
 }
+function horse(x, y, id) {
+  // a clothes horse in the doorway of a house: an x of two sticks with a small shirt on it; feet at y
+  return '<g id="' + id + '" style="opacity:0">' +
+    '<rect x="' + (x - 11) + '" y="' + (y - 21) + '" width="22" height="21" fill="' + WHT + '"/>' +
+    '<path d="M' + (x - 10) + ' ' + y + ' L' + (x + 8) + ' ' + (y - 19) + ' M' + (x + 10) + ' ' + y + ' L' + (x - 8) + ' ' + (y - 19) + '" ' + SW3 + ' stroke-width="2.5"/>' +
+    '<path d="M' + (x - 6) + ' ' + (y - 14) + ' h12 l2 3 -2 1 v7 h-12 v-7 l-2 -1 z" fill="' + WHT + '" ' + SW3 + ' stroke-width="2"/>' +
+    '</g>';
+}
 function engine(x, y, id) {
   // rails at y; engine about 70 wide
   return '<g id="' + id + '" style="transform-box:fill-box;transform-origin:center">' +
@@ -296,6 +311,7 @@ function buildSmoke(q) {
   for (var i = 0; i < 5; i++) s += house(xs[i], 118, 28, 26, 12);
   s += '<path d="M12 164 H190" ' + SW3 + ' stroke-width="2.5"/>';
   for (var j = 0; j < 5; j++) s += shirt(xs[j], 164, 'shirt' + j);
+  for (var h = 0; h < 5; h++) s += horse(xs[h], 118, 'horse' + h);
   s += '<path d="M12 150 V230 M190 150 V230" ' + SW3 + ' stroke-width="2.5"/>';
   s += '<text x="100" y="222" text-anchor="middle" font-family="Nunito" font-weight="800" font-size="13" fill="' + INK + '">a hundred houses</text>';
   s += signpost(282, 228);
@@ -357,9 +373,9 @@ function applyState(st, sign, fresh) {
     }
     setOpacity('fence', st.device ? 1 : 0);
   } else if (kind === 'smoke') {
-    var washing = st.choices[0] === 'main', running = st.level > 0, smoky = running && !st.device;
-    setOpacity('smoke', smoky ? 1 : 0); setOpacity('filter', st.device ? 1 : 0);
-    for (i = 0; i < 5; i++) { var sh = $('shirt' + i); sh.style.opacity = washing ? 1 : 0; sh.querySelector('.dirt').style.opacity = (washing && smoky) ? 1 : 0; }
+    var washing = st.choices[0] === 'main', running = st.level > 0, smoky = running && st.device !== 'A', indoors = st.device === 'B';
+    setOpacity('smoke', smoky ? 1 : 0); setOpacity('filter', st.device === 'A' ? 1 : 0);
+    for (i = 0; i < 5; i++) { var sh = $('shirt' + i); sh.style.opacity = (washing && !indoors) ? 1 : 0; sh.querySelector('.dirt').style.opacity = (washing && !indoors && smoky && !fresh) ? 1 : 0; setOpacity('horse' + i, indoors ? 1 : 0); }
   } else {
     var orchard = q.b.plots.length === 1;
     for (i = 0; i < 2; i++) { var tr = $('train' + i); var on = i < st.level; tr.style.opacity = on ? 1 : 0; tr.style.transform = on ? 'translate(0,0)' : 'translate(-120px,0)'; tr.querySelector('.sparks').style.opacity = on ? 1 : 0; }
@@ -414,6 +430,7 @@ function icon(kind) {
     case 'lawyer': v += '<circle cx="18" cy="12" r="8" fill="' + WHT + '" ' + SW3 + '/><circle cx="16" cy="11" r="1.2" fill="' + INK + '"/><circle cx="20" cy="11" r="1.2" fill="' + INK + '"/><rect x="8" y="22" width="20" height="18" rx="4" fill="' + INK + '"/><rect x="26" y="26" width="16" height="12" rx="3" fill="' + YEL + '" ' + SW3 + '/><text x="34" y="35" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="9" fill="' + INK + '">$</text>'; break;
     case 'works': v += '<rect x="6" y="18" width="32" height="20" fill="' + BLU + '" ' + SW3 + '/><rect x="28" y="4" width="8" height="16" fill="' + BRN + '" ' + SW3 + '/><rect x="11" y="24" width="6" height="6" fill="' + YEL + '"/><rect x="21" y="24" width="6" height="6" fill="' + YEL + '"/>'; break;
     case 'houses': v += '<rect x="4" y="20" width="12" height="14" fill="' + WHT + '" ' + SW3 + '/><path d="M2 20 L10 12 L18 20 Z" fill="' + RED + '" ' + SW3 + '/><rect x="18" y="20" width="12" height="14" fill="' + WHT + '" ' + SW3 + '/><path d="M16 20 L24 12 L32 20 Z" fill="' + RED + '" ' + SW3 + '/><rect x="32" y="20" width="10" height="14" fill="' + WHT + '" ' + SW3 + '/><path d="M30 20 L37 12 L44 20 Z" fill="' + RED + '" ' + SW3 + '/>'; break;
+    case 'fixes': v += '<rect x="6" y="18" width="8" height="22" fill="' + BRN + '" ' + SW3 + '/><rect x="2" y="8" width="16" height="10" rx="3" fill="' + GRN + '" ' + SW3 + '/><path d="M24 40 L40 22 M42 40 L26 22" ' + SW3 + '/><path d="M28 24 h10 l2 3 -2 1 v7 h-10 v-7 l-2 -1 z" fill="' + WHT + '" ' + SW3 + ' stroke-width="2"/>'; break;
     case 'filter': v += '<rect x="18" y="16" width="10" height="24" fill="' + BRN + '" ' + SW3 + '/><rect x="12" y="6" width="22" height="12" rx="4" fill="' + GRN + '" ' + SW3 + '/>'; break;
     case 'crowd': v += '<circle cx="9" cy="14" r="5" fill="' + WHT + '" ' + SW3 + ' stroke-width="2"/><circle cx="22" cy="12" r="5" fill="' + WHT + '" ' + SW3 + ' stroke-width="2"/><circle cx="35" cy="14" r="5" fill="' + WHT + '" ' + SW3 + ' stroke-width="2"/><circle cx="15" cy="28" r="5" fill="' + WHT + '" ' + SW3 + ' stroke-width="2"/><circle cx="29" cy="28" r="5" fill="' + WHT + '" ' + SW3 + ' stroke-width="2"/><path d="M4 40 H40" ' + SW3 + '/>'; break;
     case 'train': v += '<rect x="4" y="18" width="26" height="12" rx="3" fill="' + RED + '" ' + SW3 + '/><rect x="26" y="12" width="12" height="18" rx="2" fill="' + RED + '" ' + SW3 + '/><rect x="8" y="10" width="6" height="8" fill="' + INK + '"/><circle cx="10" cy="34" r="4" fill="' + INK + '"/><circle cx="22" cy="34" r="4" fill="' + INK + '"/><circle cx="33" cy="34" r="4" fill="' + INK + '"/>'; break;
@@ -432,25 +449,27 @@ function signSmall(text, line) {
 }
 
 // ---------------------------------------------------------------------------------------------- game loop
-var G, Q = M.quarrels(), chosen = null, res = null, beatIdx = 0, phase = 'start', helpFrom = null;
+var G, Q = M.quarrels(), chosen = null, res = null, beatIdx = 0, phase = 'start', helpFrom = null, yearTwo = false;
 function show(id) { ['s-start', 's-play', 's-verdict'].forEach(function (s) { $(s).classList.toggle('on', s === id); }); window.scrollTo(0, 0); }
-function startGame() { G = M.newGame(); showQuarrel(); show('s-play'); }
+function startGame() { G = M.newGame(); yearTwo = false; showQuarrel(); show('s-play'); }
 function showQuarrel() {
-  var q = Q[G.rulings.length]; chosen = null; res = null; beatIdx = 0; phase = 'choose';
-  $('p-sub').textContent = 'quarrel ' + q.n + ' of 6: ' + q.title;
-  buildValley(q); applyState({ level: q.scene.level, choices: q.scene.choices, device: false }, '', true);
-  $('p-lead').textContent = q.kind === 'farm' ? 'the farmer, left, and the rancher, right. the cows cross the brook and eat the corn. the sign on the bank will say your ruling.' :
+  var q = Q[yearTwo ? 0 : G.rulings.length]; chosen = null; res = null; beatIdx = 0; phase = 'choose';
+  var last = yearTwo ? G.rulings[0] : null;
+  $('p-sub').textContent = 'quarrel ' + q.n + ' of 6' + (yearTwo ? ', the year after' : '') + ': ' + q.title;
+  buildValley(q); applyState({ level: q.scene.level, choices: q.scene.choices, device: null }, '', true);
+  $('p-lead').textContent = yearTwo ? 'a year on. the same farmer, the same rancher, the same cows and the same corn. they ask you to rule again. last year\'s sign is greyed out: choose another, and watch what changes.' :
+    q.kind === 'farm' ? 'the farmer, left, and the rancher, right. the cows cross the brook and eat the corn. the sign on the bank will say your ruling.' :
     q.kind === 'smoke' ? 'a hundred houses, left, and the works, right. its smoke spoils their washing. the sign will say your ruling.' :
     (q.b.plots.length > 1 ? 'the farms along the line, and the railway. its sparks burn the crops. the sign will say your ruling.' : 'the orchards along the line, and the railway. its sparks burn the trees. the sign will say your ruling.');
   $('facts').innerHTML = q.facts.map(function (f) { return '<div class="fact">' + icon(f.icon) + f.text + '</div>'; }).join('');
-  $('rulings').innerHTML = q.rulings.map(function (t, i) { return '<button class="frame ruling" data-r="' + i + '">' + t + '</button>'; }).join('');
+  $('rulings').innerHTML = q.rulings.map(function (t, i) { return '<button class="frame ruling" data-r="' + i + '"' + (i === last ? ' disabled' : '') + '>' + t + (i === last ? ' (last year)' : '') + '</button>'; }).join('');
   $('p-preview').textContent = '';
   $('b-rule').disabled = true;
   $('c-choose').style.display = ''; $('c-beats').style.display = 'none'; $('c-tally').style.display = 'none';
-  Array.prototype.forEach.call(document.querySelectorAll('.ruling'), function (b) { b.addEventListener('click', function () { choose(+b.getAttribute('data-r')); }); });
+  Array.prototype.forEach.call(document.querySelectorAll('.ruling'), function (b) { b.addEventListener('click', function () { if (!b.disabled) choose(+b.getAttribute('data-r')); }); });
 }
 function choose(r) {
-  var q = Q[G.rulings.length]; chosen = r;
+  var q = Q[yearTwo ? 0 : G.rulings.length]; chosen = r;
   Array.prototype.forEach.call(document.querySelectorAll('.ruling'), function (b, i) { b.classList.toggle('chosen', i === r); });
   $('signtext').textContent = q.signs[r]; $('signboard').setAttribute('fill', YEL);
   $('p-preview').textContent = q.means[r];
@@ -458,7 +477,7 @@ function choose(r) {
 }
 function doRule() {
   if (chosen === null) return;
-  res = M.rule(G, chosen); beatIdx = 0; phase = 'beats';
+  res = yearTwo ? M.ruleAgain(G, chosen) : M.rule(G, chosen); if (!res) return; beatIdx = 0; phase = 'beats';
   $('c-choose').style.display = 'none'; $('c-beats').style.display = '';
   showBeat();
 }
@@ -488,15 +507,28 @@ function showTally() {
   setTimeout(function () { $('bar-fill').style.width = (100 * o.total / scale) + '%'; }, 50);
   $('p-barlabel').textContent = 'the valley is worth ' + M.dollars(o.total) + '. the black mark is the most any ruling could get: ' + M.dollars(res.bestTotal) + '.';
   $('p-result').innerHTML = res.result.map(function (l) { return '<p>' + l + '</p>'; }).join('');
+  // year one of the first quarrel keeps its other rulings to itself: the year after is for finding them out
+  $('c-ghosts').style.display = res.again ? 'none' : '';
+  $('p-ghostlead').textContent = res.others.length === 1 ? 'the sign you did not try would have ended with:' : 'the other two rulings would have ended with:';
   $('ghosts').innerHTML = res.others.map(function (g) { return '<div class="ghost"><b>' + g.sign + '</b>: ' + g.summary.text + '. the valley ' + M.dollars(g.summary.total) + '.</div>'; }).join('');
-  $('b-nextq').textContent = G.done ? 'the verdict' : 'next quarrel';
+  if (res.first) {
+    $('years').style.display = '';
+    $('years').innerHTML = '<div><p class="yl">last year</p>' + signSmall(q.signs[res.first.ruling], 'the valley ' + M.dollars(res.first.outcome.total)) + '</div>' +
+      '<div><p class="yl">this year</p>' + signSmall(q.signs[res.second.ruling], 'the valley ' + M.dollars(res.second.outcome.total)) + '</div>';
+  } else { $('years').style.display = 'none'; $('years').innerHTML = ''; }
+  $('b-nextq').textContent = res.again ? 'next year' : G.done ? 'the verdict' : 'next quarrel';
 }
-function nextQuarrel() { if (G.done) showVerdict(); else { showQuarrel(); window.scrollTo(0, 0); } }
+function nextQuarrel() {
+  if (res && res.again) { yearTwo = true; showQuarrel(); window.scrollTo(0, 0); return; }
+  yearTwo = false;
+  if (G.done) showVerdict(); else { showQuarrel(); window.scrollTo(0, 0); }
+}
 function showVerdict() {
   phase = 'verdict';
   var v = M.verdict(G);
-  $('v-did').textContent = v.didText; $('v-paper').textContent = v.paper; $('v-means').textContent = v.means; $('v-fate').textContent = v.fate;
-  $('v-signs').innerHTML = v.did.map(function (d) { return signSmall(d.sign, M.dollars(d.total) + ' of ' + M.dollars(d.best)); }).join('');
+  $('v-did').textContent = v.didText; $('v-miss').textContent = v.missText; $('v-miss').style.display = v.missText ? '' : 'none';
+  $('v-paper').textContent = v.paper; $('v-means').textContent = v.means; $('v-fate').textContent = v.fate;
+  $('v-signs').innerHTML = v.did.map(function (d) { return '<div' + (d.hit ? '' : ' class="miss"') + '>' + signSmall(d.sign, d.hit ? M.dollars(d.total) + ': the most' : M.dollars(d.total) + ' of ' + M.dollars(d.best)) + '</div>'; }).join('');
   $('v-list').innerHTML = v.did.map(function (d) { return '<p><b>' + d.title + '.</b> ' + d.line + '</p>'; }).join('');
   show('s-verdict');
 }
@@ -534,7 +566,7 @@ $('b-about-close').addEventListener('click', function () { $('s-about').classLis
   $('cover').innerHTML = s;
 })();
 
-window.__game = function () { return { game: G, phase: phase, chosen: chosen, res: res, beat: beatIdx }; };
+window.__game = function () { return { game: G, phase: phase, chosen: chosen, res: res, beat: beatIdx, yearTwo: yearTwo }; };
 })();
 </script>
 </body>
