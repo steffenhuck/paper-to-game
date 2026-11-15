@@ -8,4 +8,4 @@ Your question about the dictator is answered in the game three times: the line a
 
 Revisions 1 to 5 (13 Nov): ties as the language of the game, the Clara act, the choice as an action, the pair table removed. Revision 6 (13 Nov): three what-ifs before one real vote, the real Sunday, the debrief as a strip. Revision 7 (15 Nov): Bruno, the "Your book" screen, the Sunday counted line by line, why no points. Revisions 8 to 11: the second decision always shown, contradictions explained and counted, the village always decides, two rules and a score from 0 to 100, Clara gone; see the memo, sections 20 to 30.
 
-This game has had the builder's review only: screenshots and a scripted browser session at 380 px. It has not been played by real strangers, and its length has not been measured.
+This game has had the builder's review (screenshots and a scripted browser session at 380 px) and the author's: Steffen played every revision on 13 and 15 November 2026, and revisions 1 to 11 came from that play. It has not yet been played by a stranger, ideally one who has just got the vote, and its length has not been measured. Beta as of 15 November 2026.
