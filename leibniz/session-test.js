@@ -21,21 +21,26 @@ const { chromium } = require('playwright'); const path = require('path'); const 
 
   await shot('start', true); await hscroll('start');
   await page.click('#b-begin'); await page.waitForTimeout(500); await shot('a-1-sky'); await hscroll('sky 1'); await fits700('sky 1');
-  await tap('amber'); await shot('a-1-amber'); await tap('mint'); await shot('a-1-dark'); await tap('amber'); await shot('a-1-back'); await tap('mint'); await tap('coral'); await tap('azure');
+  await tap('amber'); await shot('a-1-amber'); await tap('mint'); await shot('a-1-dark'); await tap('amber'); await shot('a-1-back'); await tap('mint'); await tap('coral'); await tap('rose');
   await page.click('#b-help-play'); await page.waitForTimeout(300); await shotOverlay('help', 'help'); await page.click('#b-help-close'); await page.waitForTimeout(200);
   await letItBe('a-1-let'); await best('a-1-best'); await next();
   await shot('a-2-sky'); await fits700('sky 2'); await tap('coral'); await shot('a-2-coral'); await tap('rose'); await tap('ice'); await shot('a-2-stuck'); await letItBe('a-2-let'); await best('a-2-best'); await next();
   await shot('a-3-sky'); await fits700('sky 3'); await tap('coral'); await shot('a-3-coral-out'); await tap('coral'); await tap('amber'); await shot('a-3-amber-out'); await tap('mint'); await shot('a-3-mint'); await letItBe('a-3-let'); await best('a-3-best'); await next();
-  await page.waitForTimeout(400); await shot('a-end', true); await hscroll('end');
+  await page.waitForTimeout(400); await shot('a-4-window'); await hscroll('window 1');
+  const jfits = await page.evaluate(() => document.getElementById('b-short').getBoundingClientRect().bottom <= 700); log.push('window: buttons within 700 px: ' + jfits); if (!jfits) errors.push('window buttons below 700 px');
+  await page.click('#b-short'); await page.waitForTimeout(600); await page.evaluate(() => window.scrollTo(0, 0)); await shot('a-4-lifted', true); log.push('WINDOW 1: ' + await page.$eval('#jsay', e => e.textContent));
+  await page.click('#b-jnext'); await page.waitForTimeout(400); await shot('a-4-window-2');
+  await page.click('#b-full'); await page.waitForTimeout(600); await page.evaluate(() => window.scrollTo(0, 0)); await shot('a-4-lifted-2', true); log.push('WINDOW 2: ' + await page.$eval('#jsay', e => e.textContent) + ' / ' + await page.$eval('#jresult h3', e => e.textContent));
+  await page.click('#b-jnext'); await page.waitForTimeout(400); await shot('a-end', true); await hscroll('end');
   log.push('VERDICT: ' + await page.$eval('#s-end', e => e.innerText.replace(/\n+/g, ' / ').slice(0, 1500)));
   await page.click('#b-about'); await page.waitForTimeout(300); await shotOverlay('about', 'about'); await page.click('#b-about-close'); await page.waitForTimeout(200);
 
   // best play on every sky
   await page.click('#b-again'); await page.waitForTimeout(500);
-  await tap('coral'); await tap('amber'); await tap('azure'); await tap('lilac'); await letItBe('b-1-let'); await best('b-1-best'); await next();
+  await tap('coral'); await tap('amber'); await tap('rose'); await letItBe('b-1-let'); await best('b-1-best'); await next();
   await tap('amber'); await tap('mint'); await tap('azure'); await tap('lilac'); await tap('rose'); await tap('ice'); await shot('b-2-full'); await letItBe('b-2-let'); await best('b-2-best'); await next();
   await tap('amber'); await letItBe('b-3-let'); await best('b-3-best'); await next();
-  await page.waitForTimeout(400); await shot('b-end', true);
+  await page.waitForTimeout(400); await page.click('#b-full'); await page.waitForTimeout(500); await page.click('#b-jnext'); await page.waitForTimeout(400); await page.click('#b-short'); await page.waitForTimeout(500); await page.click('#b-jnext'); await page.waitForTimeout(400); await shot('b-end', true);
   log.push('VERDICT B: ' + await page.$eval('#s-end', e => e.innerText.replace(/\n+/g, ' / ').slice(0, 800)));
 
   fs.writeFileSync(path.join(__dirname, 'session-log.txt'), (errors.length ? 'ERRORS:\n' + errors.join('\n') + '\n\n' : 'no page errors, no horizontal scroll\n\n') + log.join('\n') + '\n');

@@ -14,6 +14,10 @@ G. W. Leibniz, *De rerum originatione radicali* (On the ultimate origination of 
 
 An **argument** (primary), in two movements. First: no state of the world explains why there is a world at all, because every state is copied from the one before it; so the reason lies outside the series, in something necessary. Second, the part the game runs: *how* that reason picks a world. Every possible thing strives to exist with a force in proportion to how much reality it contains; not all possibles can exist together; what exists is the combination through which the greatest total of essence comes into being. Leibniz illustrates this with a board game (secondary), but the rule is not spatial: possibles are incompossible because of what they are. Then the theodicy follows from the maximum: the best whole is not the sum of the best parts; a part seen alone is "a confused chaos of colours"; afflictions are "stepping back in order to make a leap forward with greater force" (*reculer pour mieux sauter* in the margin); destruction "is useful for achieving something greater, so that in a way we profit from our very loss".
 
+## 2a. Revision, 15 Nov 2026 (after the author played the sky build)
+
+Two notes from him: the shut-out stars read as matter that blocks rather than as things gone out (fixed: a shut-out star keeps its own ring and number, faded, with a key line under the sky); and a wish for many more rounds, which turned into the question what the player is to learn. Answer, worked backwards: *"best possible world" means the fullest set of things that can exist together, not everything; it leaves things out, can leave the grandest thing out, is sometimes reached only by putting a good thing out, and from a part you cannot tell whether a world is that set.* Four clauses, four worlds, no rounds beyond the lessons and nothing after the verdict (his call). World 1 reworked so the first clause is felt (six things, three pairs, the best leaves three dark). World 4 added: the covered picture played, two worlds through one window, the same lit 2 and dark 9 in each, one world the fullest and one seven short; the player judges from the window, then the cover lifts.
+
 ## 3. The discovery, and its kind
 
 **A mechanism made intelligible**, with a **counterintuitive corner**. The mechanism: "best of all possible worlds" is an argmax, the fullest set of things that can exist together. The corner: the fullest world need not contain the grandest single thing; the way from a decent world to the best one can run through destroying a part that was fine. Three things to find out, one per world; the paper names all three.
@@ -58,7 +62,7 @@ The Sky plays the paper's rule rather than its illustration, and its one thought
 
 ## 11. The shape
 
-Three worlds, one Let it be each, then the verdict. World 1: five stars (5, 4, 3, 2, 1), one pair (4–3); best 12, the 3 left out. World 2: a 9 that cannot be with four 4s; a free 3 and 2; best 21 without the 9; heaviest-first ends at 14. World 3: filled by weight to 19 (8 free; 6 excluding 4, 4, 3; 5 excluding 5); put the 6 out and three come in: 24, the best; put the 8 out: 11; put the 5 out: 19. No presets; worlds fixed, best worlds exact. Score: the bar of light only; verdict in words.
+Three skies, one Let it be each, then the window, then the verdict. World 1: six stars (5, 4, 3, 3, 2, 1), three pairs (5–3, 4–3, 2–1); best 11, three left dark. World 2: a 9 that cannot be with four 4s; a free 3 and 2; best 21 without the 9; heaviest-first ends at 14. World 3: filled by weight to 19 (8 free; 6 excluding 4, 4, 3; 5 excluding 5); put the 6 out and three come in: 24, the best; put the 8 out: 11; put the 5 out: 19. World 4: two made worlds, the same seven stars in the same places, lit alike (22); through the window (a rectangle holding only the lit 2, the dark 9 and the line between them) they are identical; in the first the 9 is also held down by three 4s and 22 is the best; in the second only the 2 holds it and the best is 29. The player answers "as full as can be" or "short" for each; the cover lifts; the second reveal carries the lesson. No presets; worlds fixed, best worlds exact. Score: the bar of light only; verdict in words.
 
 ## 12. Controls, mechanism, feedback, moment
 
@@ -86,7 +90,7 @@ The regress (three lines on the start screen); the triangle, the sphere, the law
 
 ## 17. Calibration plan and result
 
-`node calibration.js`: solver exact against an independent search; the three worlds' totals and maxima; the properties of each world (best leaves something out; the 9 out of the best second world, 14 with it forced in, heaviest-first 14; world 3 filled to 19, put out the 6 → 24, the 8 → 11, the 5 → 19); the striving and the step back; robustness in k; heuristics (heaviest-first, random, best play); the words. 47 checks, all pass; see `calibration-result.txt`.
+`node calibration.js` (now 57 checks, incl. the window: both windows show the same stars in the same states and the same lines, no line stub from the 9 inside the window): solver exact against an independent search; the three worlds' totals and maxima; the properties of each world (best leaves something out; the 9 out of the best second world, 14 with it forced in, heaviest-first 14; world 3 filled to 19, put out the 6 → 24, the 8 → 11, the 5 → 19); the striving and the step back; robustness in k; heuristics (heaviest-first, random, best play); the words. 47 checks, all pass; see `calibration-result.txt`.
 
 ## 18. Build log
 

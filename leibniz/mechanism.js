@@ -19,15 +19,16 @@ var CONFIG = {
   WORLDS: [
     { title: 'Light up the sky.',
       stars: [
-        { id: 'coral', w: 5, x: 95, y: 90 },
-        { id: 'amber', w: 4, x: 225, y: 85 },
-        { id: 'mint', w: 3, x: 240, y: 215 },
-        { id: 'azure', w: 2, x: 80, y: 210 },
-        { id: 'lilac', w: 1, x: 165, y: 160 }
+        { id: 'coral', w: 5, x: 80, y: 80 },
+        { id: 'amber', w: 4, x: 240, y: 80 },
+        { id: 'mint', w: 3, x: 262, y: 205 },
+        { id: 'azure', w: 3, x: 62, y: 215 },
+        { id: 'rose', w: 2, x: 160, y: 150 },
+        { id: 'lilac', w: 1, x: 165, y: 262 }
       ],
-      pairs: [['amber', 'mint']],
+      pairs: [['coral', 'azure'], ['amber', 'mint'], ['rose', 'lilac']],
       prefill: false,
-      // 15 of light wants to exist; the best world holds 12 and leaves the mint star out (p. 2, not all possibles are
+      // 18 of light wants to be; the best world holds 11 and leaves three things dark (p. 2, not all possibles are
       // compossible: "forced to leave more spaces empty than you could have or wished to").
       lesson: 'Not everything that could exist can exist together.' },
     { title: 'Light up the sky.',
@@ -65,6 +66,32 @@ var CONFIG = {
       // rose star out and the ice star takes its place, no fuller.
       lesson: 'A step back can be the way to a fuller world.' }
   ],
+  // World 4: the window (p. 4–5: men "in the subterranean salt mines of Sarmatia" judge the world by their torchlight;
+  // "look at a very beautiful picture, then cover up all but a small part ... a confused chaos of colours"). Two worlds,
+  // the same stars in the same places, each already made; through the window the player sees the same thing in both:
+  // a lit 2, a dark 9, a red line between them. In the first the 9 is also shut out by three 4s, and the world is as full
+  // as it can be; in the second nothing but the 2 holds the 9 down, and the world is 7 short. The player judges each
+  // from the window, then the cover lifts. Stars, pairs and the window are ours.
+  JUDGE: {
+    window: { x: 70, y: 95, w: 160, h: 110 },
+    stars: [
+      { id: 'ice', w: 2, x: 115, y: 150 },
+      { id: 'coral', w: 9, x: 205, y: 150 },
+      { id: 'mint', w: 4, x: 298, y: 88 },
+      { id: 'azure', w: 4, x: 300, y: 150 },
+      { id: 'lilac', w: 4, x: 298, y: 212 },
+      { id: 'rose', w: 3, x: 48, y: 45 },
+      { id: 'amber', w: 5, x: 50, y: 255 }
+    ],
+    lit: ['ice', 'mint', 'azure', 'lilac', 'rose', 'amber'],
+    skies: [
+      { pairs: [['coral', 'ice'], ['coral', 'mint'], ['coral', 'azure'], ['coral', 'lilac']], full: true,
+        whole: 'The whole: the 9 was being held down by the 2 and by three 4s. Without it the sky holds 22; with it, 17. This world is as full as it can be.' },
+      { pairs: [['coral', 'ice']], full: false,
+        whole: 'The whole: nothing but the 2 was holding the 9 down. Put the 2 out and let the 9 be, and the sky holds 29 instead of 22. This world is 7 short.' }
+    ],
+    lesson: 'The same window, two worlds. From a part you cannot tell whether a world is well made; only the whole can tell you.'
+  },
   // Star colours by id (memo §13: existence is light). Our choice.
   COLOURS: { coral: '#FF5C5C', amber: '#FFB830', mint: '#2FE3A3', azure: '#4F9DFF', lilac: '#B48CFF', rose: '#FF7AB6', ice: '#9FE8FF' },
   // Star size on screen: radius in px for weight w (memo §13; the eye reads area, so weight 9 is three times the radius of
@@ -77,7 +104,7 @@ var CONFIG = {
   // of world 3 would be undone by the striving the moment the world ends).
   RUSH_ORDER: 'heaviest first; what the player put out stays out',
   // What the calibration check expects (memo §11 and §17); the solver is what establishes them.
-  EXPECT: { best: [12, 21, 24], totals: [15, 30, 35], world2WithCoralMax: 14, world2GreedyLit: 14,
+  EXPECT: { best: [11, 21, 24], totals: [18, 30, 35], judgeLit: [22, 22], judgeBest: [22, 29], world2WithCoralMax: 14, world2GreedyLit: 14,
     world3PrefillLit: 19, world3PutOutAmber: 24, world3PutOutCoral: 11, world3PutOutRose: 19 },
   // Words for how much of the best world's light a world lacks (memo §3 "Numbers on screen": direction first, rough
   // size). Fractions of the best. Our choice.
@@ -98,7 +125,20 @@ function newWorld(k) {
   world.best = solve(world);
   return world;
 }
-function newGame() { return { worlds: [newWorld(0), newWorld(1), newWorld(2)], current: 0 }; }
+function judgeSky(j) {
+  var J = CONFIG.JUDGE, S = J.skies[j];
+  var stars = J.stars.map(function (s, i) { return { id: s.id, w: s.w, x: s.x, y: s.y, i: i, status: J.lit.indexOf(s.id) >= 0 ? 'lit' : 'wait', by: [] }; });
+  var world = { k: 3, j: j, stars: stars, pairs: S.pairs.slice(), ended: true, full: S.full, whole: S.whole, answer: null };
+  settle(world); world.best = solve(world); return world;
+}
+function newJudge() { return { kind: 'judge', skies: [judgeSky(0), judgeSky(1)], lesson: CONFIG.JUDGE.lesson, window: CONFIG.JUDGE.window }; }
+// The player's judgement of a window: 'full' or 'short'. Returns the line the game says when the cover lifts.
+function judge(J, j, answer) {
+  var s = J.skies[j]; s.answer = answer;
+  var right = (answer === 'full') === s.full;
+  return { right: right, line: s.whole + ' You said ' + (answer === 'full' ? 'it was as full as it can be' : 'it was short') + (right ? ': right' : ': wrong') + (j === 0 ? '.' : '. The window looked the same both times.') };
+}
+function newGame() { return { worlds: [newWorld(0), newWorld(1), newWorld(2)], judge: newJudge(), current: 0 }; }
 function star(world, id) { for (var i = 0; i < world.stars.length; i++) if (world.stars[i].id === id) return world.stars[i]; return null; }
 function conflicts(world, id) {
   var out = [];
@@ -255,17 +295,20 @@ function verdict(game) {
   var W = game.worlds, full = W.filter(function (w) { return light(w) === w.best.light; }).length;
   var head = full === 3 ? 'All three of your worlds are as full as they can be.' : full === 0 ? 'None of your worlds is as full as it could be.' :
     (full === 1 ? 'One' : 'Two') + ' of your three worlds ' + (full === 1 ? 'is' : 'are') + ' as full as ' + (full === 1 ? 'it' : 'they') + ' can be.';
-  var says = 'Leibniz: the world that exists is the set of possible things that holds the most together. Not everything possible can exist; the grandest thing need not be in the best world; and a step back can be the way to a fuller world.';
+  var says = 'Leibniz: the world that exists is the set of possible things that holds the most together. Not everything possible can exist; the grandest thing need not be in the best world; a step back can be the way to a fuller world; and from a part you cannot tell whether the whole is well made.';
   var found = W.map(function (w, k) {
     var L = light(w), B = w.best.light, out = w.stars.filter(function (s) { return s.status !== 'lit'; }).map(name);
     if (k === 0) return 'World 1: your world held ' + L + ' of light' + (L === B ? ', as much as it could,' : '') + ' and left out ' + list(out) + '.';
     if (k === 1) { var big = biggest(w); return 'World 2: ' + (star(w, big.id).status === 'lit' ? 'you kept ' + name(big) + ', the grandest thing, and your world was ' + shortWords(L, B) + '.' : 'you left ' + name(big) + ' out, and your world ' + (L === B ? 'was full.' : 'was ' + shortWords(L, B) + '.')); }
-    return 'World 3: ' + (w.stepsBack === 0 ? 'you put nothing out, and the world stayed as weight had made it.' : 'you stepped back ' + (w.stepsBack === 1 ? 'once' : w.stepsBack === 2 ? 'twice' : w.stepsBack + ' times') + ', and the world ended ' + (L === B ? 'full: the step back was the way forward.' : shortWords(L, B) + '.'));
+    if (k === 2) return 'World 3: ' + (w.stepsBack === 0 ? 'you put nothing out, and the world stayed as weight had made it.' : 'you stepped back ' + (w.stepsBack === 1 ? 'once' : w.stepsBack === 2 ? 'twice' : w.stepsBack + ' times') + ', and the world ended ' + (L === B ? 'full: the step back was the way forward.' : shortWords(L, B) + '.'));
   });
+  var J = game.judge, a = J.skies.map(function (s) { return s.answer; });
+  found.push('World 4: through the same window you called the first world ' + (a[0] === 'full' ? 'full' : 'short') + ' and the second ' + (a[1] === 'full' ? 'full' : 'short') +
+    '. The first was as full as it can be; the second was 7 short. ' + (a[0] === 'full' && a[1] === 'short' ? 'Both right, and nothing in the window told you so.' : a[0] !== 'full' && a[1] !== 'short' ? 'Both wrong, and nothing in the window could have told you.' : 'One right, one wrong, and the window was the same.'));
   var part = W.map(function (w, k) { return light(w) < w.best.light ? 'world ' + (k + 1) + ' (' + (w.best.light - light(w)) + ' of light short)' : null; }).filter(Boolean);
   var where = part.length ? 'On ' + list(part) + ', the best possible world holds more than yours.' : 'Nowhere. On every world, yours holds all that could be.';
   var stood = part.length ? 'A world with less in it than there could have been. Leibniz says that cannot be the one that exists: the possibles push, and the fullest set is what comes through, the way weights settle.' : 'Yours is the one Leibniz says exists: the fullest set of things that can be together.';
-  var cover = 'Leibniz: take a very beautiful picture and cover all but a small part. What you see is a confused chaos of colours, and the closer you look the worse it gets. Lift the cover and the whole is the work of a master. The best world looks wrong wherever you look at only a part of it: every dark star in it is the price of a brighter sky.';
+  var cover = 'Leibniz: take a very beautiful picture and cover all but a small part. What you see is a confused chaos of colours, and the closer you look the worse it gets. Lift the cover and the whole is the work of a master. Every dark star in the best world is the price of a brighter sky; but a dark star in a world that is not the best is just a mistake, and the two look the same up close.';
   return { head: head, says: says, found: found, where: where, stood: stood, cover: cover, full: full };
 }
 
@@ -287,7 +330,7 @@ function playBest(world) {
   return letItBe(world);
 }
 
-var M = { CONFIG: CONFIG, newGame: newGame, newWorld: newWorld, letBe: letBe, putOut: putOut, letItBe: letItBe, result: result, verdict: verdict,
+var M = { CONFIG: CONFIG, newGame: newGame, newWorld: newWorld, newJudge: newJudge, judge: judge, letBe: letBe, putOut: putOut, letItBe: letItBe, result: result, verdict: verdict,
   solve: solve, solveWith: solveWith, light: light, total: total, lit: lit, star: star, conflicts: conflicts, name: name, list: list,
   shortWords: shortWords, playGreedy: playGreedy, playRandom: playRandom, playBest: playBest, rushIn: rushIn };
 if (typeof module !== 'undefined' && module.exports) module.exports = M; else root.LeibnizMechanism = M;
