@@ -1,7 +1,8 @@
-// Full session in headless Chromium at phone width: the walkthrough's strategy (crape doors first, the rest on living
-// doors), help opened mid-play and closed, the fourth street with five brown marks, the verdict, About; then a second
-// game knocking only at crape doors, to its verdict. Screenshots along the way; errors and horizontal scroll are
-// recorded in session-log.txt.
+// Full session in headless Chromium at phone width: the walkthrough (decline the doctor; a Battersea pair by word; a
+// Battersea pair by glass; help opened and closed mid-play; the Waterloo Road crape door against its neighbour by glass;
+// the doctor's second offer declined; a check of a word; a last asked pair if knocks remain; close the book; the water),
+// the verdict, About; then a second morning the doctor's way (take both offers, pairs across the streets by word, the
+// marsh) to its verdict. Screenshots along the way; errors and horizontal scroll are recorded in session-log.txt.
 const { chromium } = require('playwright');
 const path = require('path');
 const fs = require('fs');
@@ -17,62 +18,64 @@ const fs = require('fs');
   const hscroll = async () => page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
   const log = [];
   const txt = async (sel) => page.evaluate(sel => (document.querySelector(sel) || { innerText: '' }).innerText.replace(/\n+/g, ' / '), sel);
-  const houses = async () => page.evaluate(() => { const g = window.__game.state; const s = g.streets[g.at]; return s.houses.map(h => ({ i: h.i, crape: h.crape, tested: h.tested, water: h.water })); });
-  const tap = async (i) => { await page.click(`g.house[data-i="${i}"]`); await page.waitForTimeout(250); };
+  const state = async () => page.evaluate(() => { const g = window.__game.state; return { knocks: g.knocks, phase: window.__game.phase, streets: g.streets.map(s => s.houses.map(h => ({ i: h.i, crape: h.crape, water: h.water, known: h.known, word: h.word }))) }; });
+  const tap = async (s, i) => { await page.click(`g.house[data-s="${s}"][data-i="${i}"]`); await page.waitForTimeout(250); };
+  const nb = (houses, i) => { const c = [i - 1, i + 1].filter(k => Math.floor(k / 6) === Math.floor(i / 6) && k >= 0 && k < 12 && !houses[k].crape); return c.length ? c[0] : houses.findIndex(h => !h.crape); };
+  const panelFits = async () => page.evaluate(() => { const r = document.getElementById('panel').getBoundingClientRect(); return r.bottom <= window.innerHeight; });
+  const pair = async (s, a, b, how, tag) => {
+    await tap(s, a); if (tag) await shot(tag + '-a', false);
+    await tap(s, b); if (tag) await shot(tag + '-how', false);
+    log.push(`pair ${tag || ''}: ` + await txt('#panel .diff'));
+    await page.click(how === 'glass' ? '#b-glass' : '#b-ask'); await page.waitForTimeout(how === 'glass' ? 2000 : 400);
+    if (tag) await shot(tag + '-result', true);
+    log.push('   => ' + await txt('#panel .do') + ' | ' + await txt('#wline'));
+    if (await hscroll()) errors.push('horizontal scroll after pair ' + tag);
+    await page.click('#b-next'); await page.waitForTimeout(400);
+    if ((await state()).phase === 'offer') { log.push('   doctor again: ' + await txt('#panel .doc')); await shot('a-offer-2', true); await page.click('#b-decline'); await page.waitForTimeout(300); }
+  };
   await shot('start', true);
   if (await hscroll()) errors.push('horizontal scroll on start');
-  await page.click('#b-begin'); await page.waitForTimeout(500); await shot('a-1-street', false);
-  if (await hscroll()) errors.push('horizontal scroll on street 1');
-  const panelFits = await page.evaluate(() => { const r = document.getElementById('panel').getBoundingClientRect(); return r.bottom <= window.innerHeight; });
-  log.push('street 1: panel bottom within 760 px without scrolling: ' + panelFits);
-  let shotsDone = { drawn: false, milky: false, clear: false };
-  for (let si = 0; si < 3; si++) {
-    const hs = await houses();
-    const order = hs.filter(h => h.crape).map(h => h.i).concat(hs.filter(h => !h.crape).map(h => h.i));
-    let k = 0;
-    for (const i of order) {
-      const left = await page.evaluate(() => window.__game.state.streets[window.__game.state.at].knocksLeft); if (left === 0) break;
-      if (si === 1 && k === 2) { await page.click('#q-play'); await page.waitForTimeout(300); await shotOverlay('help', 'help'); await page.click('#b-help-close'); if (await page.evaluate(() => document.body.classList.contains('lock'))) errors.push('body still locked after help'); }
-      await tap(i);
-      if (!shotsDone.drawn) { await shot(`a-${si + 1}-drawn`, false); shotsDone.drawn = true; }
-      const say = await txt('.knockp .say');
-      await page.click('#b-drops'); await page.waitForTimeout(2000);
-      const res = await txt('.knockp .say');
-      const w = await txt('#wline');
-      log.push(`street ${si + 1} door ${i + 1} (${hs[i].crape ? 'crape' : 'no crape'}): ${say} => ${res} | ${w}`);
-      const milky = res.indexOf('milky') >= 0;
-      if (milky && !shotsDone.milky) { await shot(`a-${si + 1}-milky`, false); shotsDone.milky = true; }
-      if (!milky && !shotsDone.clear) { await shot(`a-${si + 1}-clear`, false); shotsDone.clear = true; }
-      const leftNow = await page.evaluate(() => window.__game.state.streets[window.__game.state.at].knocksLeft);
-      if (leftNow === 0) { await shot(`a-${si + 1}-done`, true); await page.click('#b-next'); await page.waitForTimeout(400); break; }
-      await page.click('#b-next'); await page.waitForTimeout(400);
-      k++;
-    }
-    if (await hscroll()) errors.push('horizontal scroll on street ' + (si + 2));
-    if (si < 2) await shot(`a-${si + 2}-street`, false);
-  }
-  await shot('a-4-books', false);
-  const hs4 = await houses(); const brown = hs4.filter(h => h.water === 'brown').slice(0, 5);
-  for (const h of brown) await tap(h.i);
-  await shot('a-4-marked', false);
-  const marked = await page.evaluate(() => window.__game.state.streets[3].houses.filter(h => h.marked).length);
-  log.push('street 4: marks placed ' + marked);
-  await page.click('#b-month'); await page.waitForTimeout(1400); await shot('a-4-month', true);
-  log.push('street 4: ' + await txt('#panel .do'));
-  await page.click('#b-verdict'); await page.waitForTimeout(500); await shot('a-end', true);
-  log.push('END: ' + await txt('#verdict'));
+  await page.click('#b-begin'); await page.waitForTimeout(500); await shot('a-offer-1', true);
+  log.push('offer 1: ' + await txt('#panel .doc'));
+  log.push('offer panel fits within 760: ' + await panelFits());
+  await page.click('#b-decline'); await page.waitForTimeout(300); await shot('a-pick', false);
+  log.push('pick panel fits within 760: ' + await panelFits());
+  let st = await state(); const B = st.streets[0], Wt = st.streets[1];
+  const crB = B.filter(h => h.crape).map(h => h.i), crW = Wt.filter(h => h.crape).map(h => h.i);
+  await pair(0, crB[0], nb(B, crB[0]), 'ask', 'a-1');
+  await page.click('#q-play'); await page.waitForTimeout(300); await shotOverlay('help', 'help'); await page.click('#b-help-close'); if (await page.evaluate(() => document.body.classList.contains('lock'))) errors.push('body still locked after help');
+  await pair(0, crB[1], nb(B, crB[1]), 'glass', 'a-2');
+  await pair(1, crW[0], nb(Wt, crW[0]), 'glass', 'a-3');
+  st = await state();
+  const wordy = st.streets[0].find(h => h.known === 'word' && h.crape) || st.streets[0].find(h => h.known === 'word');
+  if (wordy && st.knocks >= 1) { await tap(0, wordy.i); await shot('a-check-how', false); log.push('check: ' + await txt('#panel .do')); await page.click('#b-check'); await page.waitForTimeout(2000); await shot('a-check-result', true); log.push('   => ' + await txt('#panel .do') + ' | ' + await txt('#wline')); await page.click('#b-next'); await page.waitForTimeout(400); if ((await state()).phase === 'offer') { await page.click('#b-decline'); await page.waitForTimeout(300); } }
+  st = await state();
+  if (st.knocks >= 1 && crB[2] !== undefined) await pair(0, crB[2], nb(st.streets[0], crB[2]), 'ask', 'a-4');
+  st = await state();
+  if (st.phase === 'pick') { await shot('a-close', false); await page.click('#b-close'); await page.waitForTimeout(400); }
+  await shot('a-sentence', true);
+  log.push('sentence screen: ' + await txt('#sentline'));
+  await page.click('.sent[data-s="water"]'); await page.waitForTimeout(200); await page.click('#b-send'); await page.waitForTimeout(500);
+  await shot('a-end', true);
+  log.push('END A: ' + await txt('#verdict'));
   if (await hscroll()) errors.push('horizontal scroll at the end');
   await page.click('#b-about'); await page.waitForTimeout(300); await shotOverlay('about', 'about'); await page.click('#b-about-close');
-  // a second game: crape doors only, then unused knocks on nothing is impossible (the street ends only when knocks are spent),
-  // so this player spends the leftover knocks at random living doors on street one only and at crape doors elsewhere
+  // the doctor's way
   await page.click('#b-again'); await page.waitForTimeout(500);
-  for (let si = 0; si < 3; si++) {
-    const hs = await houses();
-    const order = hs.filter(h => h.crape).map(h => h.i).concat(hs.filter(h => !h.crape).map(h => h.i));
-    for (const i of order) { await tap(i); await page.click('#b-drops'); await page.waitForTimeout(1900); const leftNow = await page.evaluate(() => window.__game.state.streets[window.__game.state.at].knocksLeft); await page.click('#b-next'); await page.waitForTimeout(200); if (leftNow === 0) break; }
+  await page.click('#b-take'); await page.waitForTimeout(300); await shot('b-taken', false);
+  log.push('B after taking: ' + await txt('#dline'));
+  st = await state();
+  const crB2 = st.streets[0].filter(h => h.crape).map(h => h.i), liW2 = st.streets[1].filter(h => !h.crape).map(h => h.i);
+  for (let k = 0; k < 8; k++) {
+    st = await state(); if (st.phase === 'offer') { await page.click('#b-take'); await page.waitForTimeout(300); }
+    st = await state(); if (st.knocks === 0 || st.phase !== 'pick') break;
+    await tap(0, crB2[k % crB2.length]); if (await page.$('#b-asA')) { await page.click('#b-asA'); await page.waitForTimeout(200); } await tap(1, liW2[k % liW2.length]);
+    if (k === 0) { await shot('b-1-how', false); }
+    await page.click('#b-ask'); await page.waitForTimeout(400); if (k === 0) { await shot('b-1-result', true); log.push('B pair 1: ' + await txt('#panel .do')); }
+    await page.click('#b-next'); await page.waitForTimeout(300);
   }
-  const hsB = await houses(); for (const h of hsB.filter(h => h.water === 'blue').slice(0, 5)) await tap(h.i);
-  await page.click('#b-month'); await page.waitForTimeout(1200); await page.click('#b-verdict'); await page.waitForTimeout(400); await shot('b-end', true);
+  st = await state(); if (st.phase === 'pick') { await page.click('#b-close'); await page.waitForTimeout(300); }
+  await page.click('.sent[data-s="air"]'); await page.click('#b-send'); await page.waitForTimeout(500); await shot('b-end', true);
   log.push('END B: ' + await txt('#verdict'));
   fs.writeFileSync(path.join(__dirname, 'session-log.txt'), log.join('\n') + '\n\nERRORS: ' + (errors.length ? errors.join('\n') : 'none') + '\n');
   console.log(log.join('\n')); console.log('\nERRORS:', errors.length ? errors : 'none');

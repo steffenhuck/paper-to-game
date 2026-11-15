@@ -1,8 +1,7 @@
-// Full session in headless Chromium at phone width: the walkthrough (decline the doctor; a Battersea pair by word; a
-// Battersea pair by glass; help opened and closed mid-play; the Waterloo Road crape door against its neighbour by glass;
-// the doctor's second offer declined; a check of a word; a last asked pair if knocks remain; close the book; the water),
-// the verdict, About; then a second morning the doctor's way (take both offers, pairs across the streets by word, the
-// marsh) to its verdict. Screenshots along the way; errors and horizontal scroll are recorded in session-log.txt.
+// Full session in headless Chromium at phone width: the walkthrough (two inland crape doors, a riverside house, help
+// opened and closed mid-play, a middle-street crape house and its neighbour, the rest of that street), the sentence,
+// the verdict, About; then a second map tested inland only and written as the air, to its verdict. Screenshots along
+// the way; errors and horizontal scroll are recorded in session-log.txt.
 const { chromium } = require('playwright');
 const path = require('path');
 const fs = require('fs');
@@ -18,63 +17,43 @@ const fs = require('fs');
   const hscroll = async () => page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
   const log = [];
   const txt = async (sel) => page.evaluate(sel => (document.querySelector(sel) || { innerText: '' }).innerText.replace(/\n+/g, ' / '), sel);
-  const state = async () => page.evaluate(() => { const g = window.__game.state; return { knocks: g.knocks, phase: window.__game.phase, streets: g.streets.map(s => s.houses.map(h => ({ i: h.i, crape: h.crape, water: h.water, known: h.known, word: h.word }))) }; });
-  const tap = async (s, i) => { await page.click(`g.house[data-s="${s}"][data-i="${i}"]`); await page.waitForTimeout(250); };
-  const nb = (houses, i) => { const c = [i - 1, i + 1].filter(k => Math.floor(k / 6) === Math.floor(i / 6) && k >= 0 && k < 12 && !houses[k].crape); return c.length ? c[0] : houses.findIndex(h => !h.crape); };
-  const panelFits = async () => page.evaluate(() => { const r = document.getElementById('panel').getBoundingClientRect(); return r.bottom <= window.innerHeight; });
-  const pair = async (s, a, b, how, tag) => {
-    await tap(s, a); if (tag) await shot(tag + '-a', false);
-    await tap(s, b); if (tag) await shot(tag + '-how', false);
-    log.push(`pair ${tag || ''}: ` + await txt('#panel .diff'));
-    await page.click(how === 'glass' ? '#b-glass' : '#b-ask'); await page.waitForTimeout(how === 'glass' ? 2000 : 400);
+  const rows = async () => page.evaluate(() => window.__game.state.rows.map(hs => hs.map(h => ({ r: h.r, i: h.i, crape: h.crape, water: h.water, tested: h.tested }))));
+  const side = async (r) => page.evaluate(r => window.SNOW.CONFIG.ROWS[r].side, r);
+  const panelFits = async () => page.evaluate(() => { const b = document.querySelector('#panel .btn') || document.getElementById('panel'); const r = b.getBoundingClientRect(); return r.bottom <= window.innerHeight; });
+  let n = 0;
+  const testHouse = async (r, i, tag) => {
+    await page.click(`g.house[data-r="${r}"][data-i="${i}"]`); await page.waitForTimeout(250);
+    if (tag) { await shot(tag + '-drawn', false); log.push(tag + ' drawn panel fits within 760: ' + await panelFits()); }
+    await page.click('#b-drops'); await page.waitForTimeout(1950); n++;
     if (tag) await shot(tag + '-result', true);
-    log.push('   => ' + await txt('#panel .do') + ' | ' + await txt('#wline'));
-    if (await hscroll()) errors.push('horizontal scroll after pair ' + tag);
-    await page.click('#b-next'); await page.waitForTimeout(400);
-    if ((await state()).phase === 'offer') { log.push('   doctor again: ' + await txt('#panel .doc')); await shot('a-offer-2', true); await page.click('#b-decline'); await page.waitForTimeout(300); }
+    log.push(`test ${n} (row ${r}, no. ${i + 1}): ` + await txt('#panel .say') + ' | ' + await txt('#wline') + ' | ' + await txt('#dline'));
+    if (await hscroll()) errors.push('horizontal scroll after test ' + n);
+    await page.click('#b-next'); await page.waitForTimeout(350);
   };
-  await shot('start', true);
-  if (await hscroll()) errors.push('horizontal scroll on start');
-  await page.click('#b-begin'); await page.waitForTimeout(500); await shot('a-offer-1', true);
-  log.push('offer 1: ' + await txt('#panel .doc'));
-  log.push('offer panel fits within 760: ' + await panelFits());
-  await page.click('#b-decline'); await page.waitForTimeout(300); await shot('a-pick', false);
-  log.push('pick panel fits within 760: ' + await panelFits());
-  let st = await state(); const B = st.streets[0], Wt = st.streets[1];
-  const crB = B.filter(h => h.crape).map(h => h.i), crW = Wt.filter(h => h.crape).map(h => h.i);
-  await pair(0, crB[0], nb(B, crB[0]), 'ask', 'a-1');
+  await shot('start', true); if (await hscroll()) errors.push('horizontal scroll on start');
+  await page.click('#b-begin'); await page.waitForTimeout(500); await shot('a-map', false);
+  log.push('map: ' + await txt('#dline') + ' | pick panel fits: ' + await panelFits());
+  let R = await rows(); const all = [].concat(...R);
+  const inlandCrape = []; for (const h of all) if (h.crape && (await side(h.r)) === 'inland') inlandCrape.push(h);
+  await testHouse(inlandCrape[0].r, inlandCrape[0].i, 'a-1');
+  if (inlandCrape[1]) await testHouse(inlandCrape[1].r, inlandCrape[1].i, 'a-2');
+  await testHouse(0, 2, 'a-3');
   await page.click('#q-play'); await page.waitForTimeout(300); await shotOverlay('help', 'help'); await page.click('#b-help-close'); if (await page.evaluate(() => document.body.classList.contains('lock'))) errors.push('body still locked after help');
-  await pair(0, crB[1], nb(B, crB[1]), 'glass', 'a-2');
-  await pair(1, crW[0], nb(Wt, crW[0]), 'glass', 'a-3');
-  st = await state();
-  const wordy = st.streets[0].find(h => h.known === 'word' && h.crape) || st.streets[0].find(h => h.known === 'word');
-  if (wordy && st.knocks >= 1) { await tap(0, wordy.i); await shot('a-check-how', false); log.push('check: ' + await txt('#panel .do')); await page.click('#b-check'); await page.waitForTimeout(2000); await shot('a-check-result', true); log.push('   => ' + await txt('#panel .do') + ' | ' + await txt('#wline')); await page.click('#b-next'); await page.waitForTimeout(400); if ((await state()).phase === 'offer') { await page.click('#b-decline'); await page.waitForTimeout(300); } }
-  st = await state();
-  if (st.knocks >= 1 && crB[2] !== undefined) await pair(0, crB[2], nb(st.streets[0], crB[2]), 'ask', 'a-4');
-  st = await state();
-  if (st.phase === 'pick') { await shot('a-close', false); await page.click('#b-close'); await page.waitForTimeout(400); }
-  await shot('a-sentence', true);
-  log.push('sentence screen: ' + await txt('#sentline'));
+  const midCrape = []; for (const h of all) if (h.crape && (await side(h.r)) === 'middle') midCrape.push(h);
+  let other = 2;
+  if (midCrape.length) { const h = midCrape[0]; await testHouse(h.r, h.i, 'a-4'); await testHouse(h.r, h.i > 0 ? h.i - 1 : h.i + 1, 'a-5'); other = h.r === 2 ? 3 : 2; }
+  R = await rows();
+  for (let i = 0; i < 6; i++) { const left = await page.evaluate(() => window.__game.state.tests); if (left === 0) break; if (!R[other][i].tested) await testHouse(other, i, left === 1 ? 'a-last' : null); }
+  await shot('a-sentence', true); log.push('sentence: ' + await txt('#sentline') + ' | ' + await txt('#sentdoc'));
   await page.click('.sent[data-s="water"]'); await page.waitForTimeout(200); await page.click('#b-send'); await page.waitForTimeout(500);
-  await shot('a-end', true);
-  log.push('END A: ' + await txt('#verdict'));
+  await shot('a-end', true); log.push('END A: ' + await txt('#verdict'));
   if (await hscroll()) errors.push('horizontal scroll at the end');
   await page.click('#b-about'); await page.waitForTimeout(300); await shotOverlay('about', 'about'); await page.click('#b-about-close');
-  // the doctor's way
-  await page.click('#b-again'); await page.waitForTimeout(500);
-  await page.click('#b-take'); await page.waitForTimeout(300); await shot('b-taken', false);
-  log.push('B after taking: ' + await txt('#dline'));
-  st = await state();
-  const crB2 = st.streets[0].filter(h => h.crape).map(h => h.i), liW2 = st.streets[1].filter(h => !h.crape).map(h => h.i);
-  for (let k = 0; k < 8; k++) {
-    st = await state(); if (st.phase === 'offer') { await page.click('#b-take'); await page.waitForTimeout(300); }
-    st = await state(); if (st.knocks === 0 || st.phase !== 'pick') break;
-    await tap(0, crB2[k % crB2.length]); if (await page.$('#b-asA')) { await page.click('#b-asA'); await page.waitForTimeout(200); } await tap(1, liW2[k % liW2.length]);
-    if (k === 0) { await shot('b-1-how', false); }
-    await page.click('#b-ask'); await page.waitForTimeout(400); if (k === 0) { await shot('b-1-result', true); log.push('B pair 1: ' + await txt('#panel .do')); }
-    await page.click('#b-next'); await page.waitForTimeout(300);
-  }
-  st = await state(); if (st.phase === 'pick') { await page.click('#b-close'); await page.waitForTimeout(300); }
+  // the doctor's way: inland only
+  await page.click('#b-again'); await page.waitForTimeout(500); n = 0;
+  R = await rows(); const inl = [];
+  for (const h of [].concat(...R)) if ((await side(h.r)) === 'inland') inl.push(h);
+  for (let k = 0; k < 8; k++) await testHouse(inl[k].r, inl[k].i, k === 3 ? 'b-4' : null);
   await page.click('.sent[data-s="air"]'); await page.click('#b-send'); await page.waitForTimeout(500); await shot('b-end', true);
   log.push('END B: ' + await txt('#verdict'));
   fs.writeFileSync(path.join(__dirname, 'session-log.txt'), log.join('\n') + '\n\nERRORS: ' + (errors.length ? errors.join('\n') : 'none') + '\n');
