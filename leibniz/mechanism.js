@@ -1,4 +1,4 @@
-// Leibniz's Worlds: the mechanism, headless and the only copy. Runs unchanged in Node (module.exports) and in the
+// Leibniz's Fullest World: the mechanism, headless and the only copy. Runs unchanged in Node (module.exports) and in the
 // browser (window.LeibnizMechanism). Everything that moves an outcome lives here: the generator that draws the four
 // worlds for a game (seeded, so a draw can be replayed), the solver that proves each draw carries its lesson, letting
 // a thing be, putting it out, ending a world, the lamp, and the words of the per-world lines and the verdict. The

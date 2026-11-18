@@ -10,7 +10,7 @@ const { chromium } = require('playwright'); const path = require('path'); const 
   const page = await browser.newPage({ viewport: { width: 380, height: 760 }, deviceScaleFactor: 1 });
   const errors = [], log = [];
   page.on('pageerror', e => errors.push(e.message)); page.on('console', m => { if (m.type() === 'error' && m.text().indexOf('Failed to load resource') < 0) errors.push(m.text()); });
-  await page.goto('file://' + path.resolve(__dirname, 'leibnizs-worlds.html') + '?seed=42'); await page.waitForTimeout(700);
+  await page.goto('file://' + path.resolve(__dirname, 'leibnizs-fullest-world.html') + '?seed=42'); await page.waitForTimeout(700);
   const shot = (n, full) => page.screenshot({ path: path.join(__dirname, 'screenshot-' + n + '.png'), fullPage: !!full });
   const shotOverlay = async (id, n) => { await page.evaluate(id => { const o = document.getElementById(id); o.style.position = 'absolute'; o.style.inset = 'auto'; o.style.top = '0'; o.style.left = '0'; o.style.right = '0'; document.querySelector('body > .wrap').style.visibility = 'hidden'; }, id); await page.evaluate(() => window.scrollTo(0, 0)); await shot(n, true); await page.evaluate(id => { const o = document.getElementById(id); o.style.position = ''; o.style.inset = ''; o.style.top = ''; o.style.left = ''; o.style.right = ''; document.querySelector('body > .wrap').style.visibility = ''; }, id); };
   const hscroll = async (where) => { if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) errors.push('horizontal scroll at ' + where); };
@@ -60,7 +60,7 @@ const { chromium } = require('playwright'); const path = require('path'); const 
   await page.click('#b-about'); await page.waitForTimeout(300); await shotOverlay('about', 'about'); await page.click('#b-about-close'); await page.waitForTimeout(200);
 
   // a second draw: heaviest-first everywhere, no torch
-  await page.goto('file://' + path.resolve(__dirname, 'leibnizs-worlds.html') + '?seed=43'); await page.waitForTimeout(500); await page.click('#b-begin'); await page.waitForTimeout(400);
+  await page.goto('file://' + path.resolve(__dirname, 'leibnizs-fullest-world.html') + '?seed=43'); await page.waitForTimeout(500); await page.click('#b-begin'); await page.waitForTimeout(400);
   for (let k = 0; k < 3; k++) {
     const w = await W(k); const order = w.ids.slice().sort((a, b) => w.w[b] - w.w[a]);
     for (const id of order) if (await status(k, id) === 'wait') await tap(id);

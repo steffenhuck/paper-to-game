@@ -1,4 +1,4 @@
-// Calibration check for Leibniz's Worlds (memo §17). The mechanism is a toy built from the paper's argument, so there are
+// Calibration check for Leibniz's Fullest World (memo §17). The mechanism is a toy built from the paper's argument, so there are
 // no reported numbers to hit; what is checked, over many seeds, is (1) that the solver is exact; (2) that every drawn
 // world carries the lesson it is there to show, and that nothing is chosen for the player; (3) the layout rule (no line
 // through a star, no crossing lines, no touching stars); (4) the lamp world: the same opening in both skies, one the

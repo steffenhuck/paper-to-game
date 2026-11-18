@@ -1,4 +1,4 @@
-# Leibniz's Worlds — design memo
+# Leibniz's Fullest World — design memo
 
 This is the second build for this paper. The first, *Leibniz's Tiles* (in `previous/`), played Leibniz's own analogy literally: shapes dragged onto a board, essence as area, compossibility as non-overlap. Its author found it "too Tetris" and rejected the activity, not the look. This build keeps the rule and drops the board; the look carries over.
 
