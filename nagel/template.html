@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zoom Out with Nagel</title>
+<script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<style>
+@font-face { font-family: 'Baloo'; font-weight: 800; src: url(data:font/woff2;base64,/*__F_DISP__*/) format('woff2'); }
+@font-face { font-family: 'Varela'; font-weight: 400; src: url(data:font/woff2;base64,/*__F_BODY__*/) format('woff2'); }
+:root { --card:#F4ECDC; --ink:#3A2A1F; --red:#E2402F; --orange:#F0902A; --yellow:#F2C53D; --green:#3F9C5B; --blue:#2F6FB5; --grey:#B8AD9C; --white:#FFFDF8; --tint:#F7DFC0; --paper:#FFF9EC; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; background: var(--card); color: var(--ink); font-family: 'Varela', 'Varela Round', system-ui, sans-serif; font-size: 16px; line-height: 1.4; }
+body { background: var(--card); }
+.wrap { max-width: 440px; margin: 0 auto; padding: 12px 14px 28px; }
+h1, h2, h3, .disp, button, .tag, .stops span { font-family: 'Baloo', 'Varela', system-ui, sans-serif; font-weight: 800; }
+h1 { font-size: 40px; line-height: 1; margin: 10px 0 6px; letter-spacing: -0.5px; }
+h2 { font-size: 24px; line-height: 1.1; margin: 14px 0 6px; }
+h3 { font-size: 17px; margin: 14px 0 4px; }
+p { margin: 6px 0; }
+.stripe { height: 10px; border-radius: 6px; background: linear-gradient(90deg, var(--red) 0 20%, var(--orange) 20% 40%, var(--yellow) 40% 60%, var(--green) 60% 80%, var(--blue) 80% 100%); }
+.screen { display: none; } .screen.on { display: block; }
+button { border: 0; border-radius: 999px; background: var(--orange); color: var(--ink); font-size: 19px; padding: 12px 22px; cursor: pointer; line-height: 1.1; }
+button:active { filter: brightness(.92); }
+button.big { width: 100%; font-size: 23px; padding: 12px 20px; }
+button.quiet { background: transparent; color: var(--ink); font-family: 'Varela', system-ui, sans-serif; font-weight: 400; font-size: 15px; text-decoration: underline; padding: 8px 10px; }
+button.answer { width: 100%; text-align: left; font-family: 'Varela', system-ui, sans-serif; font-weight: 400; font-size: 16.5px; background: var(--white); border: 2px solid var(--ink); border-radius: 16px; padding: 12px 14px; margin: 8px 0; }
+button:disabled { opacity: .45; cursor: default; }
+.aim { font-size: 13px; color: #6E5A4A; margin: 0 0 4px; line-height: 1.25; }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 2px; }
+.top .disp { font-size: 22px; }
+.help-btn { width: 36px; height: 36px; padding: 0; font-size: 20px; border-radius: 50%; background: var(--white); border: 2px solid var(--ink); flex: 0 0 auto; }
+.now { font-size: 18px; margin: 2px 0 6px; font-family: 'Baloo', system-ui, sans-serif; line-height: 1.15; }
+.reader { display: flex; gap: 8px; align-items: center; background: var(--white); border-radius: 16px; padding: 6px 8px; border: 2px solid var(--ink); }
+.reader .portrait { width: 54px; height: 54px; flex: 0 0 54px; }
+.reader .portrait svg { width: 100%; height: 100%; display: block; }
+.reader .rtext { flex: 1 1 auto; min-width: 0; font-size: 13px; line-height: 1.25; }
+.reader .rtext b { font-family: 'Baloo', system-ui, sans-serif; font-size: 16px; display: inline; line-height: 1.1; margin-right: 4px; }
+.reader .rtext .no { color: #8C7A68; }
+.reader .thing { width: 58px; flex: 0 0 58px; text-align: center; font-size: 10.5px; line-height: 1.1; }
+.reader .thing svg { width: 42px; height: 42px; display: block; margin: 0 auto 2px; }
+.bubble { position: relative; background: var(--white); border: 2px solid var(--ink); border-radius: 14px; padding: 6px 12px; margin: 7px 0 6px 18px; font-size: 15.5px; }
+.bubble:before { content: ''; position: absolute; left: -12px; top: 12px; border: 7px solid transparent; border-right-color: var(--ink); border-left: 0; }
+.bubble:after { content: ''; position: absolute; left: -8px; top: 14px; border: 5px solid transparent; border-right-color: var(--white); border-left: 0; }
+.bubble.reply { border-color: var(--blue); }
+.bubble.reply:before { border-right-color: var(--blue); }
+.vf { position: relative; border: 5px solid var(--ink); border-radius: 14px; overflow: hidden; background: var(--white); margin: 4px auto 0; max-width: 324px; }
+.vf svg.frame { display: block; width: 100%; height: auto; }
+.under { display: flex; justify-content: space-between; align-items: center; gap: 6px; margin: 4px auto 0; max-width: 324px; }
+.under .tag { background: var(--ink); color: var(--card); font-size: 13px; padding: 2px 10px; border-radius: 999px; white-space: nowrap; }
+.under .needs { color: var(--ink); font-size: 13px; padding: 2px 8px; border-radius: 999px; border: 1.5px solid var(--ink); background: var(--white); white-space: nowrap; }
+.vf.print { border-color: #FFFFFF; box-shadow: 0 3px 0 #D9CFBC, 0 10px 18px rgba(58,42,31,.18); border-bottom-width: 26px; border-radius: 6px; }
+.vf .develop { position: absolute; inset: 0; background: #4E443B; opacity: 0; pointer-events: none; }
+.vf.developing .develop { opacity: 1; transition: none; }
+.vf.print .develop { opacity: 0; transition: opacity 2.2s ease; }
+.vf .blankv { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; color: #6E5A4A; background: repeating-linear-gradient(135deg, #EDE4D2 0 7px, #F8F2E6 7px 14px); opacity: 0; transition: opacity .6s ease 1.6s; pointer-events: none; }
+.vf.print.unread .blankv { opacity: 1; }
+.says { font-size: 13px; color: #5A4838; margin: 3px 2px 0; min-height: 30px; line-height: 1.25; }
+.ringbox { margin-top: 6px; }
+.ringbox .lbl { display: flex; justify-content: space-between; font-size: 12px; color: #6E5A4A; margin: 0 2px 0; }
+input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 30px; margin: 0; background: transparent; }
+input[type=range]::-webkit-slider-runnable-track { height: 30px; border-radius: 999px; border: 2px solid var(--ink); background: repeating-linear-gradient(90deg, #FFFDF8 0 4px, #CDBFA8 4px 6px); }
+input[type=range]::-moz-range-track { height: 30px; border-radius: 999px; border: 2px solid var(--ink); background: repeating-linear-gradient(90deg, #FFFDF8 0 4px, #CDBFA8 4px 6px); }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 44px; height: 30px; margin-top: -2px; border-radius: 999px; background: var(--orange); border: 2px solid var(--ink); cursor: pointer; }
+input[type=range]::-moz-range-thumb { width: 40px; height: 26px; border-radius: 999px; background: var(--orange); border: 2px solid var(--ink); cursor: pointer; }
+.stops { display: flex; justify-content: space-between; margin-top: 2px; }
+.stops span { font-size: 14px; padding: 4px 8px; border-radius: 999px; cursor: pointer; color: #6E5A4A; }
+.stops span.on { background: var(--ink); color: var(--card); }
+.sendrow { margin-top: 8px; }
+.line { font-size: 16px; margin-top: 10px; }
+.rule { background: var(--paper); border-left: 6px solid var(--orange); border-radius: 0 12px 12px 0; padding: 8px 12px; margin-top: 8px; font-size: 15px; }
+.fade { opacity: 0; transition: opacity .5s ease; } .fade.in { opacity: 1; }
+.cam { width: 220px; margin: 6px auto 0; display: block; }
+.start-lines { font-size: 17px; }
+.acts { font-size: 17px; margin: 10px 0 4px; }
+.aimline { font-family: 'Baloo', system-ui, sans-serif; font-size: 21px; line-height: 1.15; margin: 8px 0 14px; }
+.links { display: flex; gap: 6px; justify-content: center; margin-top: 6px; flex-wrap: wrap; }
+footer.sig { margin-top: 26px; text-align: center; font-style: italic; color: #8C7A68; font-size: 14px; }
+footer.sig a { color: inherit; text-decoration: none; }
+.overlay { position: fixed; inset: 0; background: var(--card); overflow: auto; z-index: 10; display: none; }
+.overlay.on { display: block; }
+.overlay .wrap { padding-bottom: 40px; }
+.overlay p, .overlay li { font-size: 15.5px; }
+.end .head { font-size: 28px; line-height: 1.1; margin: 8px 0 10px; }
+.end ul { padding-left: 20px; margin: 4px 0; }
+.end li { margin: 4px 0; font-size: 15.5px; }
+.prints { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
+.prints .mini { background: #fff; padding: 4px 4px 18px; box-shadow: 0 2px 0 #D9CFBC; border-radius: 3px; position: relative; }
+.prints .mini svg.frame { width: 100%; height: auto; display: block; border-radius: 2px; }
+.prints .mini .mi { position: absolute; right: 3px; bottom: 1px; width: 20px; height: 20px; }
+.prints .mini .cap { font-size: 10px; position: absolute; left: 5px; bottom: 2px; color: #5A4838; }
+.qrow { display: flex; justify-content: space-between; gap: 4px; margin: 8px 0; }
+.qrow .thing { text-align: center; font-size: 10px; flex: 1; }
+.qrow .thing svg { width: 40px; height: 40px; display: block; margin: 0 auto; }
+.ic-full .f { fill: var(--c); } .ic-full .s { stroke: var(--c); }
+.ic-part .f { fill: var(--c); fill-opacity: .28; } .ic-part .s { stroke: var(--c); stroke-dasharray: none; }
+.ic-none .f { fill: none; } .ic-none .s { stroke: var(--grey); stroke-dasharray: 3 3; }
+.ic-wait .f { fill: none; } .ic-wait .s { stroke: var(--ink); stroke-dasharray: 3 3; }
+@media (min-width: 700px) { .wrap { max-width: 480px; } html { font-size: 17px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<section id="start" class="screen on">
+  <div class="stripe"></div>
+  <svg class="cam" viewBox="0 0 220 150" aria-hidden="true">
+    <rect x="18" y="30" width="184" height="96" rx="14" fill="#3A2A1F"/>
+    <rect x="26" y="38" width="168" height="80" rx="10" fill="#F4ECDC"/>
+    <rect x="26" y="70" width="168" height="6" fill="#E2402F"/><rect x="26" y="76" width="168" height="6" fill="#F0902A"/><rect x="26" y="82" width="168" height="6" fill="#F2C53D"/><rect x="26" y="88" width="168" height="6" fill="#3F9C5B"/><rect x="26" y="94" width="168" height="6" fill="#2F6FB5"/>
+    <circle cx="110" cy="78" r="32" fill="#3A2A1F"/><circle cx="110" cy="78" r="24" fill="#6E5A4A"/><circle cx="110" cy="78" r="15" fill="#1A1210"/><circle cx="104" cy="71" r="5" fill="#FFFDF8" opacity=".8"/>
+    <rect x="150" y="44" width="30" height="18" rx="4" fill="#FFFDF8"/><rect x="40" y="44" width="22" height="12" rx="3" fill="#E2402F"/>
+    <rect x="60" y="22" width="40" height="12" rx="4" fill="#3A2A1F"/>
+    <rect x="30" y="126" width="160" height="6" rx="3" fill="#1A1210"/>
+    <rect x="56" y="130" width="108" height="18" fill="#FFFFFF"/><rect x="62" y="134" width="96" height="10" fill="#F0902A"/>
+  </svg>
+  <h1>Zoom Out with Nagel</h1>
+  <p class="start-lines">A camera whose zoom ring steps back from your own eyes. Six readers want to know about six things, and most of them do not have your senses.</p>
+  <p class="acts">Turn the zoom ring. Look at what is in the frame. Press Send.</p>
+  <p class="aimline">Get as much of each thing across to its reader as you can.</p>
+  <button class="big" id="b-start">Start</button>
+  <div class="links"><button class="quiet" data-open="help">How to play</button><button class="quiet" data-open="about">About</button></div>
+  <p style="font-size:13px;color:#8C7A68;margin-top:10px">Built from Thomas Nagel, "What Is It Like to Be a Bat?", <i>The Philosophical Review</i>, 1974.</p>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+
+<section id="play" class="screen">
+  <div class="top"><div class="disp" id="roundno">Round 1 of 6</div><button class="help-btn" data-open="help" aria-label="How to play">?</button></div>
+  <div class="aim">Aim: get as much of each thing across to its reader as you can.</div>
+  <div class="now" id="now"></div>
+  <div class="reader" id="reader"></div>
+  <div class="bubble" id="ask"></div>
+  <div class="vf" id="vf"><div id="framehost"></div><div class="develop" id="develop"></div><div class="blankv" id="blankv">Nothing: this frame cannot be read.</div></div>
+  <div class="under"><span class="tag" id="tag"></span><span class="needs" id="needs"></span></div>
+  <div class="says" id="says"></div>
+  <div class="ringbox" id="ringbox">
+    <input type="range" id="ring" min="0" max="2" step="1" value="0" aria-label="Zoom ring">
+    <div class="stops" id="stops"><span data-i="0" class="on">From inside</span><span data-i="1">The shape</span><span data-i="2">The physics</span></div>
+  </div>
+  <div class="sendrow" id="sendrow"><button class="big" id="b-send">Send</button></div>
+  <div id="result" style="display:none">
+    <div class="line fade" id="line"></div>
+    <div class="rule fade" id="why"></div>
+    <div class="bubble reply fade" id="reply"></div>
+    <div class="sendrow fade" id="nextrow"><button class="big" id="b-next">Next</button></div>
+  </div>
+</section>
+
+<section id="question" class="screen">
+  <div class="top"><div class="disp">The question</div><button class="help-btn" data-open="help" aria-label="How to play">?</button></div>
+  <div class="reader" id="qreader"></div>
+  <p class="now" id="qtext"></p>
+  <p style="font-size:14px;color:#6E5A4A;margin:0 0 4px">Your own prints are the evidence: how much of each thing got across.</p>
+  <div class="qrow" id="qrow"></div>
+  <div id="answers"></div>
+</section>
+
+<section id="end" class="screen end">
+  <div class="stripe"></div>
+  <div class="head" id="ehead"></div>
+  <h3>What Nagel says</h3><ul id="enagel"></ul>
+  <h3>What you found</h3><ul id="efound"></ul>
+  <h3>Where you part</h3><p id="epart"></p>
+  <h3>Had yours stood</h3><p id="estood"></p>
+  <h3>Your prints</h3><div class="prints" id="prints"></div>
+  <h3>Read further</h3>
+  <p style="font-size:15px">Nagel does not conclude that mind is not brain. He says we are like someone told that a caterpillar locked in a safe became the butterfly found there weeks later: we may have good reason to believe it without any idea of how it could be so. "The pain is this firing" is a sentence we may one day learn to read; what the bat shows is that no amount of stepping back from the point of view will teach us. His proposal is to go the other way: an objective phenomenology that describes the structure of an experience, as the shape frames did, in terms a creature that cannot have it could follow, knowing one reaches a blank wall eventually.</p>
+  <div class="sendrow"><button class="big" id="b-again">Play again</button></div>
+  <div class="links"><button class="quiet" data-open="help">How to play</button><button class="quiet" data-open="about">About</button></div>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+
+</div>
+
+<div class="overlay" id="help"><div class="wrap">
+  <div class="top"><h2 style="margin:4px 0">How to play</h2><button class="help-btn" data-close="help" aria-label="Back">&times;</button></div>
+  <p><b>Get as much of each thing across to its reader as you can.</b></p>
+  <p>Each round a reader asks about a thing. The reader's card says which senses they have and which they lack.</p>
+  <p>The viewfinder shows the frame at the zoom ring's stop. <b>From inside</b> holds the thing exactly as it is for you; it can be read only with the sense it was taken with (eyes, ears, a body that feels, sonar). <b>The shape</b> holds the outline of the thing, where it sits among its neighbours and what it makes you do; it can be read with a mind. <b>The physics</b> holds what any instrument would find; it can be read with instruments and sums. The tag on the frame says which.</p>
+  <p>Turn the ring and the frame changes. Look at it and ask two things: is the thing in this frame? Can this reader read this frame? Then press <b>Send</b>.</p>
+  <p>The frame becomes a print at the reader's side. The small drawing beside the reader fills by how much of the thing arrived: solid is all of it, pale is a part, a dotted outline is none. The game says what crossed and why, in one rule; the reader answers in blue. Press <b>Next</b>.</p>
+  <p>Six rounds; every round the ring starts from inside. In the last round the bat holds the camera and you are the reader. Then one question about the frame you could not read, and the verdict.</p>
+  <div class="sendrow"><button class="big" data-close="help">Back</button></div>
+</div></div>
+
+<div class="overlay" id="about"><div class="wrap">
+  <div class="top"><h2 style="margin:4px 0">About</h2><button class="help-btn" data-close="about" aria-label="Back">&times;</button></div>
+  <div id="abouttext">/*__ABOUT__*/</div>
+  <div class="sendrow"><button class="big" data-close="about">Back</button></div>
+</div></div>
+
+<script>
+/*__MECHANISM__*/
+</script>
+<script>
+(function () {
+'use strict';
+var M = window.NagelMechanism, C = M.CONFIG;
+function cap(x) { return x.charAt(0).toUpperCase() + x.slice(1); }
+var INK = '#3A2A1F', TINT = '#F7DFC0', WHITE = '#FFFDF8';
+var FS = 'font-family:Varela,system-ui,sans-serif;font-size:11px;fill:' + INK;
+function t(x, y, s, extra) { return '<text x="' + x + '" y="' + y + '" style="' + FS + (extra || '') + '">' + s + '</text>'; }
+function svgFrame(inner) { return '<svg class="frame" viewBox="0 0 320 190" xmlns="http://www.w3.org/2000/svg">' + inner + '</svg>'; }
+var white = '<rect width="320" height="190" fill="' + WHITE + '"/>';
+var arrowDef = '<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="' + INK + '"/></marker></defs>';
+// ---------------------------------------------------------------- the frames: colour is the point of view
+var FRAMES = {
+  sunset: {
+    inside: function () { return '<defs><linearGradient id="gsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4E2F86"/><stop offset=".45" stop-color="#E86A8A"/><stop offset=".8" stop-color="#F6A23A"/><stop offset="1" stop-color="#FBD36A"/></linearGradient><linearGradient id="gsea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E88A5A"/><stop offset="1" stop-color="#3C2E6E"/></linearGradient></defs><rect width="320" height="190" fill="url(#gsky)"/><circle cx="205" cy="124" r="27" fill="#FFE07A"/><rect y="124" width="320" height="66" fill="url(#gsea)"/><path d="M175 130h60M165 142h80M180 154h50" stroke="#FFD27A" stroke-width="3" opacity=".75"/><rect x="0" y="150" width="150" height="9" fill="#2A1A2E"/><rect x="22" y="159" width="7" height="31" fill="#2A1A2E"/><rect x="78" y="159" width="7" height="31" fill="#2A1A2E"/><rect x="134" y="159" width="7" height="31" fill="#2A1A2E"/><circle cx="105" cy="127" r="7" fill="#2A1A2E"/><rect x="99" y="134" width="12" height="17" rx="3" fill="#2A1A2E"/>'; },
+    shape: function () { var b = ''; for (var i = 0; i < 6; i++) b += '<rect x="0" y="' + (i * 20) + '" width="320" height="20" fill="' + TINT + '" opacity="' + (0.1 + i * 0.17).toFixed(2) + '"/>'; return white + b + '<line x1="0" y1="120" x2="320" y2="120" stroke="' + INK + '" stroke-width="2"/>' + arrowDef + '<circle cx="205" cy="108" r="22" fill="none" stroke="' + INK + '" stroke-width="2.5"/><line x1="205" y1="132" x2="205" y2="166" stroke="' + INK + '" stroke-width="2.5" marker-end="url(#ah)"/><path d="M0 140h320M0 158h320M0 176h320" stroke="' + INK + '" stroke-width="1" opacity=".5"/>' + t(10, 18, 'cool at the top') + t(10, 112, 'warm at the bottom') + t(216, 146, 'the sun: a disc,', ';font-size:10px') + t(216, 158, 'dropping', ';font-size:10px') + t(10, 134, 'the sea, darker than the sky', ';font-size:10px') + '<path d="M120 10 v100" stroke="' + INK + '" stroke-width="1.5" stroke-dasharray="3 3"/>' + t(126, 60, 'a slow fade,', ';font-size:10px') + t(126, 72, 'the whole sky at once', ';font-size:10px'); },
+    physics: function () { return white + arrowDef + '<circle cx="160" cy="440" r="320" fill="none" stroke="' + INK + '" stroke-width="2"/><line x1="20" y1="120" x2="300" y2="120" stroke="' + INK + '" stroke-width="1" stroke-dasharray="4 3"/><circle cx="160" cy="120" r="4" fill="' + INK + '"/><circle cx="34" cy="146" r="11" fill="none" stroke="' + INK + '" stroke-width="2"/><path d="M45 142 L156 121" stroke="' + INK + '" stroke-width="1.5"/><path d="M44 150 L158 123" stroke="' + INK + '" stroke-width="1.5"/>' + t(166, 112, 'you, on the ground') + t(14, 178, 'the sun, 2° below the line') + t(70, 100, '300 km of air', ';font-size:10px') + '<path d="M90 135 l6 -12 M110 132 l6 -12 M130 128 l6 -12" stroke="' + INK + '" stroke-width="1.2" marker-end="url(#ah)"/>' + t(200, 142, 'short waves scattered out', ';font-size:10px') + t(200, 154, 'long waves left', ';font-size:10px') + '<path d="M200 30 q10 -8 20 0 t20 0 t20 0" fill="none" stroke="' + INK + '" stroke-width="1.5"/>' + t(200, 50, 'the light', ';font-size:10px'); }
+  },
+  lightning: {
+    inside: function () { return '<defs><linearGradient id="gst" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1E1030"/><stop offset="1" stop-color="#4A2C78"/></linearGradient></defs><rect width="320" height="190" fill="url(#gst)"/><polyline points="150,0 170,55 148,62 190,120 176,124 210,190" fill="none" stroke="#C9B8FF" stroke-width="11" opacity=".45" stroke-linejoin="round"/><polyline points="150,0 170,55 148,62 190,120 176,124 210,190" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round"/><polyline points="148,62 120,90 128,110" fill="none" stroke="#FFFFFF" stroke-width="2.5"/><rect y="162" width="320" height="28" fill="#120A1A"/><circle cx="60" cy="128" r="8" fill="#120A1A"/><rect x="52" y="136" width="16" height="26" rx="4" fill="#120A1A"/><path d="M52 142 L36 126 M68 142 L84 128" stroke="#120A1A" stroke-width="5" stroke-linecap="round"/><path d="M20 20 l-4 14 M40 60 l-4 14 M280 30 l-4 14 M300 90 l-4 14 M250 140 l-4 14" stroke="#9C8AD0" stroke-width="1.5" opacity=".6"/>'; },
+    shape: function () { return white + arrowDef + '<rect x="0" y="0" width="320" height="60" fill="' + TINT + '"/><polyline points="160,8 172,50 154,58 182,110 170,114 196,165" fill="none" stroke="' + INK + '" stroke-width="3.5" stroke-linejoin="round"/><polyline points="154,58 128,86 134,104" fill="none" stroke="' + INK + '" stroke-width="2"/><polyline points="182,110 206,128 200,146" fill="none" stroke="' + INK + '" stroke-width="2"/><line x1="160" y1="8" x2="160" y2="165" stroke="' + INK + '" stroke-width="1" stroke-dasharray="2 4" opacity=".5"/>' + t(10, 80, 'a branching line,') + t(10, 94, 'top to bottom') + t(10, 112, 'there and gone', ';font-size:10px') + '<path d="M236 60 l8 -14 l4 14 l10 -10 l-2 14 l12 -4 l-8 10 l12 4 l-14 2 l6 12 l-10 -8 l-2 14 l-6 -12 l-10 8 l4 -14 l-14 2 l12 -6 l-10 -8 z" fill="none" stroke="' + INK + '" stroke-width="1.5"/>' + t(222, 100, 'then a bang,') + t(222, 114, 'later the further', ';font-size:10px') + t(222, 126, 'away you are', ';font-size:10px') + '<line x1="200" y1="150" x2="300" y2="150" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/>' + t(206, 170, 'time between flash and bang', ';font-size:10px'); },
+    physics: function () { return white + arrowDef + '<path d="M60 50 q-20 -30 10 -36 q10 -24 40 -14 q24 -20 50 0 q30 -6 34 20 q20 10 2 30 z" fill="none" stroke="' + INK + '" stroke-width="2"/>' + t(80, 36, '− − − − −', ';font-size:14px') + t(150, 24, 'cloud', ';font-size:10px') + '<line x1="0" y1="168" x2="320" y2="168" stroke="' + INK + '" stroke-width="2"/>' + t(80, 184, '+ + + + +', ';font-size:14px') + t(10, 160, 'ground', ';font-size:10px') + '<line x1="118" y1="52" x2="118" y2="166" stroke="' + INK + '" stroke-width="1.5"/><line x1="130" y1="52" x2="130" y2="166" stroke="' + INK + '" stroke-width="1.5"/><line x1="124" y1="60" x2="124" y2="150" stroke="' + INK + '" stroke-width="2" marker-end="url(#ah)"/>' + t(142, 90, 'a channel of air torn open') + t(142, 106, '30,000 amps down it') + t(142, 122, 'air heated white-hot,', ';font-size:10px') + t(142, 134, 'in a flash', ';font-size:10px') + t(210, 60, 'charge piled up', ';font-size:10px'); }
+  },
+  red: {
+    inside: function () { var p = '<rect width="320" height="190" fill="#D7261E"/>'; var pts = [[40, 50, 26], [120, 30, 20], [210, 60, 28], [290, 24, 18], [70, 130, 30], [160, 110, 22], [250, 140, 30], [300, 100, 16], [20, 170, 18], [140, 170, 20]]; pts.forEach(function (q) { p += '<circle cx="' + q[0] + '" cy="' + q[1] + '" r="' + q[2] + '" fill="#F04A2E"/><circle cx="' + (q[0] - q[2] * .25) + '" cy="' + (q[1] - q[2] * .25) + '" r="' + (q[2] * .5) + '" fill="#FF6A3C" opacity=".6"/><circle cx="' + q[0] + '" cy="' + q[1] + '" r="' + (q[2] * .22) + '" fill="#2A0A0A"/>'; }); return p; },
+    shape: function () { var s = white + arrowDef; var cx = 110, cy = 95, r1 = 42, r2 = 72; for (var i = 0; i < 8; i++) { var a0 = (i / 8) * Math.PI * 2 - Math.PI / 2, a1 = ((i + 1) / 8) * Math.PI * 2 - Math.PI / 2; var p = function (r, a) { return (cx + r * Math.cos(a)).toFixed(1) + ' ' + (cy + r * Math.sin(a)).toFixed(1); }; s += '<path d="M' + p(r1, a0) + ' L' + p(r2, a0) + ' A' + r2 + ' ' + r2 + ' 0 0 1 ' + p(r2, a1) + ' L' + p(r1, a1) + ' A' + r1 + ' ' + r1 + ' 0 0 0 ' + p(r1, a0) + ' z" fill="' + TINT + '" stroke="' + INK + '" stroke-width="' + (i === 0 ? 3.5 : 1.2) + '"/>'; } s += t(cx - 14, cy + 4, 'colours', ';font-size:10px') + t(96, 10, 'here', ';font-size:12px') + '<line x1="122" y1="12" x2="130" y2="30" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/>' + t(186, 46, 'orange', ';font-size:10px') + t(186, 98, 'yellow', ';font-size:10px') + t(60, 184, 'green: far from it', ';font-size:10px') + t(6, 98, 'violet', ';font-size:10px') + t(8, 52, 'next to it', ';font-size:10px') + '<path d="M196 60 q30 -40 60 -10" fill="none" stroke="' + INK + '" stroke-width="1" stroke-dasharray="3 3"/>' + t(224, 18, 'the warm end', ';font-size:10px'); s += '<circle cx="236" cy="110" r="12" fill="none" stroke="' + INK + '" stroke-width="1.5"/><path d="M236 98 q4 -8 8 -6" fill="none" stroke="' + INK + '" stroke-width="1.5"/>' + t(252, 114, 'ripe fruit', ';font-size:10px') + '<path d="M236 136 q-9 14 0 20 q9 -6 0 -20z" fill="none" stroke="' + INK + '" stroke-width="1.5"/>' + t(252, 150, 'blood', ';font-size:10px') + '<path d="M232 164 h8 l6 6 v8 l-6 6 h-8 l-6 -6 v-8 z" fill="none" stroke="' + INK + '" stroke-width="1.5"/>' + t(252, 178, 'a stop sign', ';font-size:10px'); return s; },
+    physics: function () { var w = 'M10 70'; for (var x = 10; x <= 200; x += 4) w += ' L' + x + ' ' + (70 - 24 * Math.sin((x - 10) / 60 * Math.PI * 2)).toFixed(1); return white + arrowDef + '<path d="' + w + '" fill="none" stroke="' + INK + '" stroke-width="2"/><line x1="10" y1="110" x2="70" y2="110" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/><line x1="70" y1="110" x2="10" y2="110" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/>' + t(10, 130, 'one wave: 700 nanometres') + t(10, 146, 'light, long waves', ';font-size:10px') + '<path d="M230 40 l34 0 l20 60 l-10 50 l-10 0 l-10 -50 z" fill="none" stroke="' + INK + '" stroke-width="2"/><path d="M240 60 h26 M242 72 h24 M246 86 h20" stroke="' + INK + '" stroke-width="1" opacity=".6"/>' + t(222, 30, 'a cone cell', ';font-size:10px') + t(150, 170, 'the long-wave cones in the eye', ';font-size:10px') + t(150, 182, 'fire more than the others', ';font-size:10px') + '<path d="M204 100 l20 0" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/>'; }
+  },
+  trumpet: {
+    inside: function () { return '<rect width="320" height="190" fill="#FBE7B5"/><path d="M40 100 h120 v-14 h14 v14 h16 l60 -40 v94 l-60 -40 h-16 v14 h-14 v-14 h-120 z" fill="#E3A62B" stroke="#8A5A12" stroke-width="2"/><rect x="60" y="86" width="80" height="12" rx="6" fill="#F6C955"/><rect x="120" y="70" width="8" height="18" fill="#8A5A12"/><rect x="134" y="70" width="8" height="18" fill="#8A5A12"/><rect x="148" y="70" width="8" height="18" fill="#8A5A12"/><path d="M252 78 q24 22 0 44" fill="none" stroke="#E2402F" stroke-width="5" stroke-linecap="round"/><path d="M268 64 q40 36 0 72" fill="none" stroke="#F0902A" stroke-width="5" stroke-linecap="round"/><path d="M284 48 q58 52 0 104" fill="none" stroke="#F2C53D" stroke-width="5" stroke-linecap="round"/><path d="M24 100 h16" stroke="#8A5A12" stroke-width="6" stroke-linecap="round"/>'; },
+    shape: function () { return white + arrowDef + '<path d="M20 150 L34 40 L170 40 L210 70 L250 60" fill="none" stroke="' + INK + '" stroke-width="3"/><path d="M20 150 L34 40 L170 40 L210 70 L250 60 L250 150 z" fill="' + TINT + '"/><line x1="20" y1="150" x2="270" y2="150" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/>' + t(40, 170, 'time', ';font-size:10px') + t(6, 26, 'sharp at the start', ';font-size:10px') + t(112, 30, 'steady', ';font-size:10px') + t(206, 90, 'then bent', ';font-size:10px') + t(60, 100, 'loud, bright, brassy') + '<g transform="translate(280 20)">' + [0, 1, 2, 3, 4, 5, 6, 7].map(function (i) { return '<line x1="0" y1="' + (i * 18) + '" x2="22" y2="' + (i * 18) + '" stroke="' + INK + '" stroke-width="' + (i === 3 ? 4 : 1.2) + '"/>'; }).join('') + '<line x1="2" y1="0" x2="2" y2="126" stroke="' + INK + '" stroke-width="1.2"/><line x1="20" y1="0" x2="20" y2="126" stroke="' + INK + '" stroke-width="1.2"/></g>' + t(222, 174, 'one note of the scale', ';font-size:9px'); },
+    physics: function () { var w = 'M10 70'; for (var x = 10; x <= 300; x += 3) { var ph = (x - 10) / 44 * Math.PI * 2; w += ' L' + x + ' ' + (70 - 18 * Math.sin(ph) - 9 * Math.sin(2 * ph) - 5 * Math.sin(3 * ph)).toFixed(1); } return white + arrowDef + '<path d="' + w + '" fill="none" stroke="' + INK + '" stroke-width="1.8"/>' + t(10, 118, 'the air shaking 440 times a second,') + t(10, 134, 'with the overtones piled on', ';font-size:10px') + '<rect x="20" y="150" width="180" height="22" fill="none" stroke="' + INK + '" stroke-width="1.5"/><path d="M40 161 h30 M90 161 h30 M140 161 h30" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/>' + t(210, 166, 'a column of air', ';font-size:10px'); }
+  },
+  pain: {
+    inside: function () { return '<rect width="320" height="190" fill="#F6B26B"/><circle cx="220" cy="120" r="62" fill="#3A3A3A"/><circle cx="220" cy="120" r="50" fill="#555"/><rect x="276" y="112" width="44" height="14" rx="6" fill="#222"/><path d="M60 110 q-30 30 0 60 h50 q30 0 34 -30 l6 -40 q0 -10 -10 -10 q-10 0 -10 10 l-4 20 l-2 -36 q0 -10 -10 -10 q-10 0 -10 10 v34 l-6 -40 q0 -10 -10 -10 q-10 0 -10 10 v44 l-6 -26 q-2 -10 -12 -8 q-8 2 -6 12 z" fill="#E9B98B" stroke="#B5805A" stroke-width="2"/><path d="M160 88 l18 -30 l6 24 l22 -16 l-6 26 l26 -4 l-18 16 l22 12 l-26 2 l10 22 l-20 -14 l-4 24 l-10 -22 l-18 12 l6 -22 z" fill="#E2402F" opacity=".92"/><path d="M150 40 l-10 -14 M176 30 l0 -16 M204 36 l10 -14" stroke="#E2402F" stroke-width="4" stroke-linecap="round"/>'; },
+    shape: function () { return white + arrowDef + '<circle cx="70" cy="34" r="16" fill="none" stroke="' + INK + '" stroke-width="2"/><path d="M70 50 v60 M70 70 l-30 30 M70 70 l34 -22 M70 110 l-18 60 M70 110 l18 60" fill="none" stroke="' + INK + '" stroke-width="2.5" stroke-linecap="round"/><path d="M104 48 l12 -16 l4 10 l10 -8 l-2 12 l12 2 l-10 8 l8 10 l-12 -4 l0 12 l-8 -10 l-8 8 l2 -12 l-12 0 l8 -8 z" fill="' + TINT + '" stroke="' + INK + '" stroke-width="1.5"/>' + t(140, 30, 'here, in the hand') + t(140, 46, 'sharp, not dull', ';font-size:10px') + '<path d="M118 36 q-30 40 -70 40" fill="none" stroke="' + INK + '" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#ah)"/>' + t(100, 86, 'it makes the hand pull back') + '<line x1="140" y1="150" x2="300" y2="150" stroke="' + INK + '" stroke-width="2"/>' + t(136, 170, 'an itch', ';font-size:10px') + t(270, 170, 'a burn', ';font-size:10px') + '<line x1="276" y1="138" x2="276" y2="162" stroke="' + INK + '" stroke-width="4"/>' + t(190, 136, 'worse than an itch, like a burn', ';font-size:9px'); },
+    physics: function () { return white + arrowDef + '<path d="M40 70 q-20 -50 40 -56 q40 -16 70 10 q30 6 24 40 q-8 30 -50 30 h-40 q-30 0 -44 -24 z" fill="none" stroke="' + INK + '" stroke-width="2"/><path d="M60 40 q20 -10 30 10 q10 -16 30 -4 M70 70 q16 -8 30 6" fill="none" stroke="' + INK + '" stroke-width="1.2"/><path d="M110 40 l12 12 M104 48 l12 12 M98 56 l12 12 M116 34 l12 12" stroke="' + INK + '" stroke-width="1.5"/><ellipse cx="114" cy="52" rx="22" ry="16" fill="none" stroke="' + INK + '" stroke-width="2"/>' + t(194, 40, 'a region lights up', ';font-size:10px') + '<path d="M100 94 q60 40 120 60 L260 170" fill="none" stroke="' + INK + '" stroke-width="2"/><path d="M250 164 l-16 -8" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/><path d="M200 136 l-16 -8" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/>' + t(190, 120, 'a signal up the arm', ';font-size:10px') + '<path d="M262 176 h30 l8 -20 M270 176 l-6 10" fill="none" stroke="' + INK + '" stroke-width="2"/>' + t(176, 186, 'heat at the skin', ';font-size:9px') + '<path d="M150 150 l20 -4" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/>' + t(104, 160, 'the muscles fire', ';font-size:10px'); }
+  },
+  bat: {
+    inside: function () { return '<rect width="320" height="190" fill="#F3EBDC"/><defs><pattern id="hatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="12" stroke="#CDBFA8" stroke-width="5"/></pattern></defs><rect width="320" height="190" fill="url(#hatch)"/><rect x="60" y="72" width="200" height="46" rx="8" fill="#F3EBDC" opacity=".92"/>' + t(76, 92, 'no picture', ';font-size:14px;fill:#6E5A4A') + t(76, 108, 'taken from where you cannot stand', ';font-size:10px;fill:#6E5A4A'); },
+    shape: function () { return white + arrowDef + '<path d="M20 95 l40 -25 M20 95 l40 25" stroke="' + INK + '" stroke-width="0" /><path d="M60 95 L320 20 L320 170 z" fill="' + TINT + '"/><path d="M28 86 q6 -14 18 -2 q6 -8 12 0 l-2 10 q-4 8 -10 6 q-6 8 -16 2 q-8 -4 -2 -16z" fill="' + INK + '"/><path d="M24 84 l-14 -10 q8 -2 14 2 M50 84 l14 -10 q-8 -2 -14 2" stroke="' + INK + '" stroke-width="2" fill="none"/><path d="M70 60 q20 35 0 70" fill="none" stroke="' + INK + '" stroke-width="1.5" stroke-dasharray="3 3"/><path d="M90 50 q30 45 0 90" fill="none" stroke="' + INK + '" stroke-width="1.5" stroke-dasharray="3 3"/><circle cx="130" cy="90" r="6" fill="' + INK + '"/><path d="M124 90 l-6 -6 M136 90 l6 -6" stroke="' + INK + '" stroke-width="1.5"/>' + t(118, 114, 'a moth, near', ';font-size:10px') + '<path d="M200 40 q10 40 0 110" fill="none" stroke="' + INK + '" stroke-width="3"/>' + t(206, 160, 'a branch', ';font-size:10px') + '<rect x="296" y="30" width="20" height="130" fill="none" stroke="' + INK + '" stroke-width="2"/>' + t(254, 180, 'a wall, far', ';font-size:10px') + t(100, 32, 'forward, in three dimensions') + t(100, 46, 'distance, size, shape, texture, motion', ';font-size:9px') + t(20, 140, 'read off the echoes', ';font-size:10px') + t(20, 152, 'of its own shrieks', ';font-size:10px'); },
+    physics: function () { var w = 'M110 70'; for (var x = 110; x <= 200; x += 2) w += ' L' + x + ' ' + (70 - 8 * Math.sin((x - 110) / 7 * Math.PI * 2)).toFixed(1); return white + arrowDef + '<path d="M40 80 q-12 -40 10 -50 l10 20 q14 -6 28 0 l10 -20 q22 10 10 50 q-14 20 -34 20 q-20 0 -34 -20 z" fill="none" stroke="' + INK + '" stroke-width="2"/><circle cx="58" cy="76" r="3" fill="' + INK + '"/><circle cx="84" cy="76" r="3" fill="' + INK + '"/><path d="M62 92 q8 6 16 0" fill="none" stroke="' + INK + '" stroke-width="1.5"/>' + t(28, 122, 'the throat: a shriek', ';font-size:10px') + '<path d="' + w + '" fill="none" stroke="' + INK + '" stroke-width="1.5"/>' + t(124, 52, '50,000 a second', ';font-size:10px') + '<line x1="110" y1="90" x2="250" y2="90" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/><line x1="250" y1="104" x2="104" y2="104" stroke="' + INK + '" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#ah)"/><circle cx="268" cy="97" r="9" fill="none" stroke="' + INK + '" stroke-width="2"/>' + t(254, 124, 'a moth', ';font-size:10px') + t(150, 120, 'the echo back', ';font-size:10px') + '<line x1="110" y1="150" x2="250" y2="150" stroke="' + INK + '" stroke-width="1.5"/><line x1="110" y1="144" x2="110" y2="156" stroke="' + INK + '" stroke-width="1.5"/><line x1="250" y1="144" x2="250" y2="156" stroke="' + INK + '" stroke-width="1.5"/>' + t(120, 170, 'the brain times the gap: distance', ';font-size:10px') + t(28, 136, 'the ears: the echo', ';font-size:10px'); }
+  }
+};
+// ---------------------------------------------------------------- the things (icons) and the readers (portraits)
+var ICONS = {
+  sunset: { c: '#F0902A', svg: '<circle class="f s" cx="24" cy="26" r="11" stroke-width="2"/><path class="s" d="M24 6v6M8 12l4 4M40 12l-4 4M4 28h5M39 28h5" stroke-width="2.5" stroke-linecap="round" fill="none"/><path class="s" d="M6 42h36" stroke-width="2.5" fill="none"/>' },
+  lightning: { c: '#5B3A8C', svg: '<polygon class="f s" points="27,3 10,27 22,27 17,45 38,19 26,19 32,3" stroke-width="2" stroke-linejoin="round"/>' },
+  red: { c: '#D7261E', svg: '<circle class="f s" cx="24" cy="24" r="18" stroke-width="2"/>' },
+  trumpet: { c: '#D9A226', svg: '<path class="f s" d="M4 22h18v-4h4v4h4l14 -10v24l-14 -10h-4v4h-4v-4H4z" stroke-width="2" stroke-linejoin="round"/>' },
+  pain: { c: '#E86A1F', svg: '<path class="f s" d="M24 4c2 10 12 12 12 24a12 12 0 0 1 -24 0c0 -6 4 -8 4 -12c4 2 6 6 6 8c2 -6 0 -14 2 -20z" stroke-width="2" stroke-linejoin="round"/>' },
+  bat: { c: '#3A2A1F', svg: '<path class="f s" d="M24 14c-3 -6 -8 -8 -8 -8l2 6c-6 -2 -14 2 -16 10c6 -2 10 0 12 4c3 -2 6 0 7 4c1 -4 4 -6 7 -4c2 -4 6 -6 12 -4c-2 -8 -10 -12 -16 -10l2 -6s-5 2 -8 8z" stroke-width="2" stroke-linejoin="round"/>' }
+};
+function icon(id, state) { var ic = ICONS[id]; return '<svg viewBox="0 0 48 48" class="' + state + '" style="--c:' + ic.c + '" xmlns="http://www.w3.org/2000/svg">' + ic.svg + '</svg>'; }
+var PORTRAITS = {
+  sam: '<circle cx="32" cy="34" r="22" fill="#E9B98B" stroke="' + INK + '" stroke-width="2"/><path d="M12 30 q6 -22 24 -20 q18 -2 22 18 q-10 -8 -22 -6 q-12 -2 -24 8z" fill="' + INK + '"/><circle cx="24" cy="34" r="2.5" fill="' + INK + '"/><circle cx="40" cy="34" r="2.5" fill="' + INK + '"/><path d="M24 44 q8 6 16 0" fill="none" stroke="' + INK + '" stroke-width="2" stroke-linecap="round"/>',
+  martian: '<ellipse cx="32" cy="36" rx="18" ry="24" fill="#8ED08A" stroke="' + INK + '" stroke-width="2"/><path d="M22 14 l-6 -10 M42 14 l6 -10" stroke="' + INK + '" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="4" r="3" fill="' + INK + '"/><circle cx="48" cy="4" r="3" fill="' + INK + '"/><path d="M26 46 h12" stroke="' + INK + '" stroke-width="2" stroke-linecap="round"/>',
+  ada: '<circle cx="32" cy="34" r="22" fill="#C98B5E" stroke="' + INK + '" stroke-width="2"/><path d="M10 36 q0 -28 22 -28 q22 0 22 28 q-4 -14 -22 -14 q-18 0 -22 14z" fill="' + INK + '"/><path d="M19 36 q5 4 10 0 M35 36 q5 4 10 0" fill="none" stroke="' + INK + '" stroke-width="2" stroke-linecap="round"/><path d="M24 46 q8 6 16 0" fill="none" stroke="' + INK + '" stroke-width="2" stroke-linecap="round"/>',
+  physiologist: '<ellipse cx="26" cy="34" rx="16" ry="22" fill="#8ED08A" stroke="' + INK + '" stroke-width="2"/><path d="M18 14 l-6 -10 M34 14 l6 -10" stroke="' + INK + '" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="4" r="3" fill="' + INK + '"/><circle cx="40" cy="4" r="3" fill="' + INK + '"/><path d="M20 44 h10" stroke="' + INK + '" stroke-width="2" stroke-linecap="round"/><rect x="40" y="26" width="22" height="18" rx="2" fill="' + WHITE + '" stroke="' + INK + '" stroke-width="2"/><path d="M44 36 q4 -6 8 0 q4 6 8 0" fill="none" stroke="' + INK + '" stroke-width="1.5"/>',
+  bat: '<path d="M32 26c-4 -8 -10 -10 -10 -10l3 8c-8 -3 -19 3 -21 14c8 -3 13 0 16 5c4 -3 8 0 10 5c2 -5 6 -8 10 -5c3 -5 8 -8 16 -5c-2 -11 -13 -17 -21 -14l3 -8s-6 2 -10 10z" fill="' + INK + '"/><circle cx="29" cy="30" r="1.5" fill="' + WHITE + '"/><circle cx="35" cy="30" r="1.5" fill="' + WHITE + '"/>'
+};
+function portrait(id) { return '<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">' + PORTRAITS[id] + '</svg>'; }
+function senseList(arr) { return arr.map(function (s) { return C.SENSES[s]; }).join(', '); }
+function noList(arr) { return arr.map(function (s) { return C.NO_SENSE[s]; }).join(', no '); }
+// ---------------------------------------------------------------- state and screens
+var G = { k: 0, stop: 'inside', sends: [], answer: null, sent: false };
+window.__game = G;
+function $(id) { return document.getElementById(id); }
+function show(id) { ['start', 'play', 'question', 'end'].forEach(function (s) { $(s).classList.toggle('on', s === id); }); window.scrollTo(0, 0); }
+var STOPS = C.STOPS.map(function (s) { return s.id; });
+function readerCard(r, iconState, iconId, you) {
+  var has = you ? 'You have: ' + senseList(r.reader.has) + '.' : 'Has: ' + senseList(r.reader.has) + '.';
+  var no = r.reader.lacks.length ? (you ? ' No ' : ' No ') + noList(r.reader.lacks) + '.' : '';
+  var pid = you ? 'bat' : r.reader.id, name = you ? 'The bat' : cap(r.reader.name), who = you ? 'holds the camera; you receive' : r.reader.who;
+  return '<div class="portrait">' + portrait(pid) + '</div><div class="rtext"><b>' + name + '</b>' + who + '<br>' + has + '<span class="no">' + no + '</span></div><div class="thing" id="thingbox">' + icon(iconId, iconState) + '<span id="thingcap">' + (you ? 'for you to get' : 'to get across') + '</span></div>';
+}
+function renderRound() {
+  var r = M.round(G.k); G.stop = 'inside'; G.sent = false;
+  $('roundno').textContent = 'Round ' + (G.k + 1) + ' of ' + C.ROUNDS.length;
+  $('now').textContent = r.id === 'bat' ? 'The bat holds the camera now. Choose a stop and ask for the bat’s world.' : 'Choose a stop and send ' + r.short + ' to ' + r.reader.name + '.';
+  $('reader').innerHTML = readerCard(r, 'ic-wait', r.id, r.id === 'bat');
+  $('ask').textContent = r.ask;
+  $('ring').value = 0;
+  $('vf').className = 'vf';
+  $('says').style.display = ''; $('ringbox').style.display = ''; $('sendrow').style.display = ''; $('result').style.display = 'none';
+  ['line', 'why', 'reply', 'nextrow'].forEach(function (id) { $(id).classList.remove('in'); });
+  renderFrame();
+  show('play');
+}
+function renderFrame() {
+  var r = M.round(G.k), s = G.stop, i = STOPS.indexOf(s);
+  $('framehost').innerHTML = svgFrame(FRAMES[r.id][s]());
+  $('tag').textContent = C.STOPS[i].label;
+  $('needs').textContent = 'Read with: ' + M.needsLabel(G.k, s);
+  $('says').textContent = r.frames[s].says;
+  var sp = $('stops').children; for (var j = 0; j < sp.length; j++) sp[j].classList.toggle('on', j === i);
+}
+function setStop(i) { if (G.sent) return; G.stop = STOPS[i]; $('ring').value = i; renderFrame(); }
+function doSend() {
+  if (G.sent) return; G.sent = true;
+  var res = M.send(G.k, G.stop); G.sends.push(res);
+  var r = M.round(G.k);
+  $('ringbox').style.display = 'none'; $('sendrow').style.display = 'none'; $('says').style.display = 'none';
+  var vf = $('vf'); vf.className = 'vf developing'; void vf.offsetWidth;
+  requestAnimationFrame(function () { requestAnimationFrame(function () { vf.className = 'vf print' + (res.readable ? '' : ' unread'); }); });
+  var state = !res.readable || res.arrived === 0 ? 'ic-none' : res.arrived >= 1 ? 'ic-full' : 'ic-part';
+  var cap = !res.readable ? 'nothing arrived' : res.arrived >= 1 ? 'all of it' : res.arrived > 0 ? 'a part of it' : 'none of it';
+  $('now').textContent = r.id === 'bat' ? 'The print develops in your hand.' : 'The print develops at ' + r.reader.name + '’s side.';
+  $('line').textContent = res.line;
+  $('why').textContent = res.why ? res.why : (r.id === 'bat' ? 'A frame can be read only with the sense it was taken with. This one was taken with sonar.' : 'A frame can be read only with the sense it was taken with.');
+  $('reply').textContent = res.reply;
+  $('result').style.display = '';
+  setTimeout(function () { $('thingbox').innerHTML = icon(r.id, state) + '<span id="thingcap">' + cap + '</span>'; $('line').classList.add('in'); }, 1400);
+  setTimeout(function () { $('why').classList.add('in'); }, 2200);
+  setTimeout(function () { $('reply').classList.add('in'); }, 2900);
+  setTimeout(function () { $('nextrow').classList.add('in'); $('now').textContent = (res.readable ? res.words + ' of ' + r.short + ' arrived. ' : 'Nothing arrived. ') + 'Press Next.'; }, 3200);
+}
+function next() { G.k++; if (G.k >= C.ROUNDS.length) renderQuestion(); else renderRound(); }
+function renderQuestion() {
+  var r = M.round(5);
+  $('qreader').innerHTML = '<div class="portrait">' + portrait('bat') + '</div><div class="rtext"><b>The bat</b>sent you its world. Its inside frame came to you blank.</div>';
+  $('qtext').textContent = C.QUESTION;
+  $('qrow').innerHTML = G.sends.map(function (s) { var rr = M.round(s.round); var st = !s.readable || s.arrived === 0 ? 'ic-none' : s.arrived >= 1 ? 'ic-full' : 'ic-part'; return '<div class="thing">' + icon(rr.id, st) + rr.short + '</div>'; }).join('');
+  $('answers').innerHTML = C.ANSWERS.map(function (a) { return '<button class="answer" data-a="' + a.id + '">' + a.label + '</button>'; }).join('');
+  show('question');
+}
+function renderEnd(v) {
+  $('ehead').textContent = v.head;
+  $('enagel').innerHTML = v.nagel.map(function (l) { return '<li>' + l + '</li>'; }).join('');
+  $('efound').innerHTML = v.found.map(function (l) { return '<li>' + l + '</li>'; }).join('');
+  $('epart').textContent = v.part; $('estood').textContent = v.stood;
+  $('prints').innerHTML = G.sends.map(function (s) { var rr = M.round(s.round); var st = !s.readable || s.arrived === 0 ? 'ic-none' : s.arrived >= 1 ? 'ic-full' : 'ic-part'; return '<div class="mini">' + (s.readable ? svgFrame(FRAMES[rr.id][s.stop]()) : svgFrame('<rect width="320" height="190" fill="#EDE4D2"/>' + t(100, 100, 'unread', ';font-size:22px;fill:#8C7A68'))) + '<span class="cap">' + rr.short + '</span><span class="mi">' + icon(rr.id, st) + '</span></div>'; }).join('');
+  show('end');
+}
+function reset() { G.k = 0; G.sends = []; G.answer = null; renderRound(); }
+// ---------------------------------------------------------------- wiring
+$('b-start').addEventListener('click', reset);
+$('b-again').addEventListener('click', reset);
+$('b-send').addEventListener('click', doSend);
+$('b-next').addEventListener('click', next);
+$('ring').addEventListener('input', function () { setStop(+this.value); });
+$('ring').addEventListener('change', function () { setStop(+this.value); });
+Array.prototype.forEach.call($('stops').children, function (el) { el.addEventListener('click', function () { setStop(+el.getAttribute('data-i')); }); });
+$('answers').addEventListener('click', function (e) { var b = e.target.closest('button[data-a]'); if (!b) return; G.answer = b.getAttribute('data-a'); renderEnd(M.verdict(G.sends, G.answer)); });
+document.addEventListener('click', function (e) {
+  var o = e.target.closest('[data-open]'); if (o) { $(o.getAttribute('data-open')).classList.add('on'); $(o.getAttribute('data-open')).scrollTop = 0; return; }
+  var c = e.target.closest('[data-close]'); if (c) { $(c.getAttribute('data-close')).classList.remove('on'); }
+});
+window.__api = { setStop: setStop, doSend: doSend, next: next, renderRound: renderRound, FRAMES: FRAMES };
+})();
+</script>
+</body>
+</html>
