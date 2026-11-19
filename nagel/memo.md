@@ -176,3 +176,15 @@ After Steffen played revision 2. His findings: the camera changing hands to the 
 Mechanism: `NIGHTS`, `grade(n, chosen)` (status per piece: kept, faded, missed, left; words; the line), `nightLine`; the verdict takes the grades. 55 checks, all passing: three nights of six pieces with three to five in, every light-piece out and every sound, echo, smell and warmth piece in; all-chosen, none-chosen and the right set graded as expected; a line per night in the verdict; the words. Browser session: the turn, three windows built with a plausible mix (one miss and one wrong piece on the first, one wrong on the second, clean on the third), the settling, the blank, a window panel from the question, the steps; the reductionist takes every piece and the naked-eye player none; no errors, no horizontal scroll; *That's my bat* within 760 px on every night (610–623 px).
 
 Least sure about: the sly pieces (the sun's disc out, the white crack in as a bare flash, the dark coming in) are calls a bat biologist might argue with; the window's idiom is pretty rather than informative at the settled stage, and the list under it carries the reasons; a player who takes every piece is told so in words and not punished, which is as it should be, but the screen gives them no reason to think before tapping beyond the question itself.
+
+---
+
+# Revision 4 (19 November 2026): the question goes
+
+Steffen, after revision 3: the night half is right; the question after it is a letdown. Agreed: with the blank carrying the ending, three sentences to choose from were a reading dressed as a decision, which the rules name as a failure. Built:
+
+- The blank's *Go on* leads straight to the verdict. The question screen and the three answers are gone, and with them the verdict's branches.
+- The verdict's headline is what the player did: "You built the shape of a bat's evening three times, each time whole, and the inside stayed blank" (or how many times whole). The three Nagel steps with their pictures, and "what you found" with the prints and the windows, stay.
+- "Where you part" and "Had yours stood" are replaced by one last step, *Three ways to read the blank*: nothing is there; only the physics is there; something is there that cannot be read, which is Nagel's, each with one or two sentences on what Nagel says of it. The paper's closing argument stays on the screen as reading, not as a choice.
+
+Mechanism: `READINGS` replaces `QUESTION`, `ANSWERS` and `NAGEL_ANSWER`; `verdict(sends, grades)` has no answer argument. 52 checks, all passing. Browser session: the blank goes to the verdict, five steps, the readings counted, a window opened from the end screen.

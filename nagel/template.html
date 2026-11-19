@@ -220,14 +220,6 @@ html.night #eline2 { color: #9FB0C6; }
   </div>
 </section>
 
-<section id="question" class="screen">
-  <div class="top"><div class="disp">The question</div><button class="help-btn" data-open="help" aria-label="How to play">?</button></div>
-  <p class="now" id="qtext"></p>
-  <div class="wins" id="qwins"></div>
-  <p class="aim">Your three windows, and the blank one stop further in. Tap a window to see its pieces again.</p>
-  <div id="answers"></div>
-</section>
-
 <section id="end" class="screen end">
   <div class="stripe"></div>
   <div class="head" id="ehead"></div>
@@ -268,7 +260,7 @@ html.night #eline2 { color: #9FB0C6; }
   <p>The picture is what your camera sees. Turn the ring under it and watch: the camera steps back from your own eyes, the colour drains, things leave the frame and other things come in. The ring turns freely, but the shutter fires at only three stops, and the ring settles on the nearest when you let go. <b>Naked eye</b> is the thing exactly as it is for you; it can be read only with the sense it was taken with (eyes, sonar). <b>The shape</b> is the outline of the thing, where it sits among its neighbours; it can be read with a mind. <b>The physics</b> is what any instrument would find; it can be read with instruments and sums. The tag under the picture says which stop you are at and what it takes to read it; the blue marks above the ring show which stops this reader can read.</p>
   <p>Look at the picture and ask: is the thing still in it? Then press <b>Send</b>.</p>
   <p>The picture becomes a print at the reader's side. The small drawing beside the reader fills by how much of the thing arrived: solid is all of it, pale is a part, a dotted outline is none. One line says what crossed. <b>What that means</b> opens the same stop drawn with its labels, what left the picture on the way there, the rule, and the reader's answer. <b>Next</b> goes on.</p>
-  <p>Three rounds; every round the ring starts at the naked eye. Then night falls and the camera turns on a bat. Three windows, one for each thing: under the window is a tray of pieces of your own evening, storm and field. Tap the ones you think the bat has; they go into the window. Press <b>That’s my bat</b>: the pieces a bat has turn into the bat’s own idiom, echoes and loud waves and warmth, the pieces it does not have fade, and the ones you missed appear dashed, so the window ends as the shape of the bat’s evening. A line under each piece says why. After the third window the camera goes one stop further in, and the window is blank. Then one question about that blank frame, and the verdict in steps; press Go on.</p>
+  <p>Three rounds; every round the ring starts at the naked eye. Then night falls and the camera turns on a bat. Three windows, one for each thing: under the window is a tray of pieces of your own evening, storm and field. Tap the ones you think the bat has; they go into the window. Press <b>That’s my bat</b>: the pieces a bat has turn into the bat’s own idiom, echoes and loud waves and warmth, the pieces it does not have fade, and the ones you missed appear dashed, so the window ends as the shape of the bat’s evening. A line under each piece says why. After the third window the camera goes one stop further in, and the window is blank. Then the verdict in steps; press Go on.</p>
   <div class="sendrow"><button class="big" data-close="help">Back</button></div>
 </div></div>
 
@@ -411,7 +403,7 @@ var SCENES = {
 var G = { k: 0, z: 0, sends: [], answer: null, sent: false, n: 0, chosen: [], grades: [], built: false };
 window.__game = G;
 function $(id) { return document.getElementById(id); }
-function show(id) { ['start', 'play', 'turn', 'nightscr', 'question', 'end'].forEach(function (s) { $(s).classList.toggle('on', s === id); }); document.documentElement.classList.toggle('night', id === 'turn' || id === 'nightscr' || id === 'question'); window.scrollTo(0, 0); }
+function show(id) { ['start', 'play', 'turn', 'nightscr', 'end'].forEach(function (s) { $(s).classList.toggle('on', s === id); }); document.documentElement.classList.toggle('night', id === 'turn' || id === 'nightscr'); window.scrollTo(0, 0); }
 var STOPS = C.STOPS.map(function (s) { return s.id; });
 function stopOfZ(z) { return z < 0.25 ? 0 : z < 0.75 ? 1 : 2; }
 function readerCard(r, iconState, iconId, you) {
@@ -503,12 +495,6 @@ function openEvidence(k) {
   $('evidence').classList.add('on'); $('evidence').scrollTop = 0;
 }
 function evidenceRow() { return G.sends.map(function (sd) { var rr = M.round(sd.round); return '<button class="thing" data-ev="' + sd.round + '">' + icon(rr.id, iconState(sd)) + rr.short + '</button>'; }).join(''); }
-function renderQuestion() {
-  $('qtext').textContent = C.QUESTION;
-  $('qwins').innerHTML = [0, 1, 2].map(function (n) { return miniWindow(n, M.night(n).name); }).join('');
-  $('answers').innerHTML = C.ANSWERS.map(function (a) { return '<button class="answer" data-a="' + a.id + '">' + a.label + '</button>'; }).join('');
-  show('question');
-}
 var STEPS = [], stepAt = 0;
 function pair(leftSvg, leftCap, rightSvg, rightCap) { return '<div class="pair"><div class="pr">' + leftSvg + '<span class="cap">' + leftCap + '</span></div><div class="pr">' + rightSvg + '<span class="cap">' + rightCap + '</span></div></div>'; }
 function renderEnd(v) {
@@ -519,7 +505,7 @@ function renderEnd(v) {
     '<div class="step"><p>' + v.nagel[1] + '</p>' + pair(F('red', 'inside'), 'red, naked eye', F('red', 'physics'), 'red, the physics') + '</div>',
     '<div class="step"><p>' + v.nagel[2] + '</p><div class="pair"><div class="pr dark">' + windowSvg(0, G.grades[0] ? G.grades[0].pieces.filter(function (p) { return p.chosen; }).map(function (p) { return p.id; }) : [], !!G.grades[0], { still: true }) + '<span class="cap">the bat\u2019s evening, as you built it</span></div><div class="pr dark">' + windowSvg(0, [], false, { still: true, blank: true }) + '<span class="cap">one stop further in</span></div></div></div>',
     '<div class="step"><div class="stitle">What you found</div><ul>' + v.found.map(function (l) { return '<li>' + l + '</li>'; }).join('') + '</ul><div class="prints">' + G.sends.map(function (sd) { var rr = M.round(sd.round); return '<div class="mini" data-ev="' + sd.round + '">' + printOf(sd) + '<span class="cap">' + rr.short + ', ' + C.STOPS[M.stopIndex(sd.stop)].label.toLowerCase() + '</span><span class="mi">' + icon(rr.id, iconState(sd)) + '</span></div>'; }).join('') + '</div><div class="wins">' + [0, 1, 2].map(function (n) { return miniWindow(n, M.night(n).name); }).join('') + '</div><p style="font-size:13px;color:#6E5A4A">Tap a print or a window to see it again.</p></div>',
-    '<div class="step"><div class="stitle">Where you part</div><p>' + v.part + '</p><div class="stitle">Had yours stood</div><p>' + v.stood + '</p></div>'
+    '<div class="step"><div class="stitle">Three ways to read the blank</div>' + v.readings.map(function (r) { return '<p><b>' + r.label + '</b> ' + r.says + '</p>'; }).join('') + '</div>'
   ];
   stepAt = 0; $('steps').innerHTML = ''; $('goon').style.display = ''; $('endtail').style.display = 'none'; $('further').style.display = 'none';
   goOn();
@@ -647,13 +633,12 @@ $('b-goon').addEventListener('click', goOn);
 $('b-night').addEventListener('click', function () { renderNight(0); });
 $('b-bat').addEventListener('click', thatsMyBat);
 $('b-nightnext').addEventListener('click', nightNext);
-$('b-blanknext').addEventListener('click', renderQuestion);
+$('b-blanknext').addEventListener('click', function () { renderEnd(M.verdict(G.sends, G.grades)); });
 $('tray').addEventListener('click', function (e) { var b = e.target.closest('button[data-piece]'); if (b) togglePiece(b.getAttribute('data-piece')); });
 $('b-further').addEventListener('click', function () { var f = $('further'); f.style.display = f.style.display === 'none' ? '' : 'none'; });
 $('b-send').addEventListener('click', doSend);
 $('b-next').addEventListener('click', next);
 $('b-means').addEventListener('click', openMeans);
-$('answers').addEventListener('click', function (e) { var b = e.target.closest('button[data-a]'); if (!b) return; G.answer = b.getAttribute('data-a'); renderEnd(M.verdict(G.sends, G.grades, G.answer)); });
 document.addEventListener('click', function (e) {
   var ev = e.target.closest('[data-ev]'); if (ev) { openEvidence(+ev.getAttribute('data-ev')); return; }
   var wn = e.target.closest('[data-win]'); if (wn) { openWindowPanel(+wn.getAttribute('data-win')); return; }
