@@ -1,7 +1,8 @@
-// Full session in headless Chromium at phone width (build.md §4.6): the best play (sunset inside, lightning physics,
-// red shape, trumpet inside, pain shape, bat shape) with the third answer; every frame at every stop screenshotted on
-// the way; help opened and returned from mid-play; a second session by the reductionist (always physics) with the
-// second answer, and a third with the first answer. Errors and horizontal scroll go to session-log.txt.
+// Full session in headless Chromium at phone width (build.md §4.6), revision 1: the best play (naked eye, physics, shape,
+// shape) with the third answer; every scene screenshotted at five ring positions on the way (0, 25, 50, 75, 100 %);
+// What that means opened after each send; help opened and closed mid-round; a real drag on the ring with a snap; then
+// the reductionist (always the physics, second answer) and the player who stays at the naked eye (first answer); a
+// laptop window last. Errors and horizontal scroll go to session-log.txt.
 const { chromium } = require('playwright'); const path = require('path'); const fs = require('fs');
 (async () => {
   const browser = await chromium.launch();
@@ -13,42 +14,44 @@ const { chromium } = require('playwright'); const path = require('path'); const 
   const hscroll = async (where) => { if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) errors.push('horizontal scroll at ' + where); };
   const fits = async (where) => { const b = await page.evaluate(() => document.getElementById('b-send').getBoundingClientRect().bottom); log.push(where + ': Send bottom at ' + Math.round(b) + ' px (within 700: ' + (b <= 700) + ')'); if (b > 700) errors.push('Send below 700 px at ' + where); };
   const now = () => page.$eval('#now', e => e.textContent);
-  const stops = ['inside', 'shape', 'physics'];
-  const plan = ['inside', 'physics', 'shape', 'inside', 'shape', 'shape'];
-  const ids = ['sunset', 'lightning', 'red', 'trumpet', 'pain', 'bat'];
+  const plan = [0, 2, 1, 1], ids = ['sunset', 'lightning', 'red', 'bat'];
 
   await shot('start', true); await hscroll('start');
   await page.click('#b-start'); await page.waitForTimeout(400);
-  for (let k = 0; k < 6; k++) {
+  for (let k = 0; k < 4; k++) {
     await hscroll('round ' + (k + 1)); await fits('round ' + (k + 1));
-    log.push('round ' + (k + 1) + ': ' + await now() + ' | ask: ' + await page.$eval('#ask', e => e.textContent));
-    for (let i = 0; i < 3; i++) {
-      await page.evaluate(i => window.__api.setStop(i), i); await page.waitForTimeout(150);
-      await shot('a-' + (k + 1) + '-' + ids[k] + '-' + stops[i]);
-      log.push('  stop ' + stops[i] + ': tag=' + await page.$eval('#tag', e => e.textContent) + ' · ' + await page.$eval('#needs', e => e.textContent));
+    log.push('round ' + (k + 1) + ': ' + await now() + ' | ask: ' + await page.$eval('#ask', e => e.textContent) + ' | reach: ' + await page.$$eval('#ring .reach', es => es.map(e => e.className).join(',')));
+    for (const z of [0, 0.25, 0.5, 0.75, 1]) { await page.evaluate(z => window.__api.setZ(z), z); await page.waitForTimeout(120); await shot('a-' + (k + 1) + '-' + ids[k] + '-' + Math.round(z * 100)); log.push('  z=' + z + ': tag=' + await page.$eval('#tag', e => e.textContent) + ' · ' + await page.$eval('#needs', e => e.textContent)); }
+    if (k === 0) { // a real drag on the ring, released at 38 %, which must snap to the middle detent
+      const rc = await page.$eval('#ring', e => { const r = e.getBoundingClientRect(); return { x: r.left, y: r.top + r.height / 2, w: r.width }; });
+      await page.mouse.move(rc.x + rc.w * 0.1, rc.y); await page.mouse.down(); await page.mouse.move(rc.x + rc.w * 0.3, rc.y, { steps: 6 }); await page.mouse.move(rc.x + rc.w * (0.06 + 0.88 * 0.38), rc.y, { steps: 6 }); await page.mouse.up(); await page.waitForTimeout(400);
+      const z = await page.evaluate(() => window.__game.z); log.push('  drag released at 38 %: ring settled at z=' + z); if (Math.abs(z - 0.5) > 0.001) errors.push('ring did not snap to the middle detent (z=' + z + ')');
+      await page.click('#stops span[data-i="0"]'); await page.waitForTimeout(400); log.push('  tap "Naked eye": z=' + await page.evaluate(() => window.__game.z));
     }
-    if (k === 2) { await page.click('.help-btn'); await page.waitForTimeout(300); await shot('help', true); await page.click('#help [data-close]'); await page.waitForTimeout(200); log.push('  help opened and closed mid-round; stop still ' + await page.$eval('#tag', e => e.textContent)); }
-    const pi = stops.indexOf(plan[k]); await page.evaluate(i => window.__api.setStop(i), pi); await page.waitForTimeout(150);
-    await page.click('#b-send'); await page.waitForTimeout(600); await shot('a-' + (k + 1) + '-' + ids[k] + '-developing');
-    await page.waitForTimeout(3100); await shot('a-' + (k + 1) + '-' + ids[k] + '-sent', true);
-    log.push('  SENT ' + plan[k] + ': ' + await page.$eval('#line', e => e.textContent)); log.push('  rule: ' + await page.$eval('#why', e => e.textContent)); log.push('  reply: ' + await page.$eval('#reply', e => e.textContent)); log.push('  now: ' + await now() + ' | icon: ' + await page.$eval('#thingbox svg', e => e.getAttribute('class')) + ' ' + await page.$eval('#thingcap', e => e.textContent));
+    if (k === 2) { await page.click('.help-btn'); await page.waitForTimeout(300); await shot('help', true); await page.click('#help [data-close]'); await page.waitForTimeout(200); log.push('  help opened and closed mid-round; z still ' + await page.evaluate(() => window.__game.z)); }
+    await page.evaluate(i => window.__api.setStop(i), plan[k]); await page.waitForTimeout(150);
+    await page.click('#b-send'); await page.waitForTimeout(500); await shot('a-' + (k + 1) + '-' + ids[k] + '-developing');
+    await page.waitForTimeout(2600); await shot('a-' + (k + 1) + '-' + ids[k] + '-sent', true);
+    log.push('  SENT stop ' + plan[k] + ': ' + await page.$eval('#line', e => e.textContent)); log.push('  now: ' + await now() + ' | icon: ' + await page.$eval('#thingbox svg', e => e.getAttribute('class')) + ' ' + await page.$eval('#thingcap', e => e.textContent));
     const nb = await page.evaluate(() => document.getElementById('b-next').getBoundingClientRect().bottom); log.push('  Next bottom at ' + Math.round(nb) + ' px');
+    await page.click('#b-means'); await page.waitForTimeout(300); await shot('a-' + (k + 1) + '-' + ids[k] + '-means', true);
+    log.push('  MEANS: ' + await page.$eval('#mtitle', e => e.textContent) + ' | ' + await page.$eval('#mleft', e => e.textContent) + ' | ' + await page.$eval('#mwhy', e => e.textContent) + ' | ' + await page.$eval('#mreply', e => e.textContent));
+    await page.click('#means [data-close]'); await page.waitForTimeout(200);
     await page.click('#b-next'); await page.waitForTimeout(400);
   }
   await hscroll('question'); await shot('a-question', true); log.push('question: ' + await page.$eval('#qtext', e => e.textContent));
   await page.click('button[data-a="something"]'); await page.waitForTimeout(400); await hscroll('end'); await shot('a-end', true);
   log.push('END: ' + await page.$eval('#ehead', e => e.textContent)); log.push('found: ' + await page.$eval('#efound', e => e.innerText.replace(/\n+/g, ' / ')));
   await page.click('#end [data-open="about"]'); await page.waitForTimeout(300); await shot('about', true); await page.click('#about [data-close]'); await page.waitForTimeout(200);
-  // session B: the reductionist, always physics, second answer
+  // session B: the reductionist
   await page.click('#b-again'); await page.waitForTimeout(300);
-  for (let k = 0; k < 6; k++) { await page.evaluate(() => window.__api.setStop(2)); await page.waitForTimeout(100); await page.click('#b-send'); await page.waitForTimeout(3500); if (k === 2 || k === 4) await shot('b-' + (k + 1) + '-' + ids[k] + '-physics-sent', true); log.push('B round ' + (k + 1) + ' physics: ' + await page.$eval('#line', e => e.textContent)); await page.click('#b-next'); await page.waitForTimeout(300); }
+  for (let k = 0; k < 4; k++) { await page.evaluate(() => window.__api.setStop(2)); await page.waitForTimeout(100); await page.click('#b-send'); await page.waitForTimeout(3000); if (k === 2) await shot('b-3-red-physics-sent', true); log.push('B round ' + (k + 1) + ' physics: ' + await page.$eval('#line', e => e.textContent)); await page.click('#b-next'); await page.waitForTimeout(300); }
   await page.click('button[data-a="physics"]'); await page.waitForTimeout(300); await shot('b-end', true); log.push('B END: ' + await page.$eval('#ehead', e => e.textContent));
-  // session C: always inside, first answer
+  // session C: the naked eye throughout
   await page.click('#b-again'); await page.waitForTimeout(300);
-  for (let k = 0; k < 6; k++) { await page.click('#b-send'); await page.waitForTimeout(3500); if (k === 1 || k === 5) await shot('c-' + (k + 1) + '-' + ids[k] + '-inside-sent', true); log.push('C round ' + (k + 1) + ' inside: ' + await page.$eval('#line', e => e.textContent)); await page.click('#b-next'); await page.waitForTimeout(300); }
+  for (let k = 0; k < 4; k++) { await page.click('#b-send'); await page.waitForTimeout(3000); if (k === 1 || k === 3) await shot('c-' + (k + 1) + '-' + ids[k] + '-eye-sent', true); log.push('C round ' + (k + 1) + ' naked eye: ' + await page.$eval('#line', e => e.textContent)); await page.click('#b-next'); await page.waitForTimeout(300); }
   await page.click('button[data-a="nothing"]'); await page.waitForTimeout(300); await shot('c-end', true); log.push('C END: ' + await page.$eval('#ehead', e => e.textContent));
-  // laptop width
-  await page.setViewportSize({ width: 1280, height: 720 }); await page.click('#b-again'); await page.waitForTimeout(300); await shot('laptop-round1'); await hscroll('laptop');
+  await page.setViewportSize({ width: 1280, height: 720 }); await page.click('#b-again'); await page.waitForTimeout(300); await page.evaluate(() => window.__api.setZ(0.5)); await page.waitForTimeout(120); await shot('laptop-round1'); await hscroll('laptop');
   log.push('errors: ' + (errors.length ? errors.join(' | ') : 'none'));
   fs.writeFileSync(path.join(__dirname, 'session-log.txt'), log.join('\n') + '\n');
   console.log(log.join('\n'));
