@@ -214,10 +214,6 @@ html.night #eline2 { color: #9FB0C6; }
     <div class="grades fade" id="grades"></div>
     <div class="sendrow fade" id="nightnext"><button class="big" id="b-nightnext">Next night</button></div>
   </div>
-  <div id="blankpart" style="display:none">
-    <div class="nightline fade" id="blankline"></div>
-    <div class="sendrow fade" id="blanknext"><button class="big" id="b-blanknext">Go on</button></div>
-  </div>
 </section>
 
 <section id="end" class="screen end">
@@ -260,7 +256,7 @@ html.night #eline2 { color: #9FB0C6; }
   <p>The picture is what your camera sees. Turn the ring under it and watch: the camera steps back from your own eyes, the colour drains, things leave the frame and other things come in. The ring turns freely, but the shutter fires at only three stops, and the ring settles on the nearest when you let go. <b>Naked eye</b> is the thing exactly as it is for you; it can be read only with the sense it was taken with (eyes, sonar). <b>The shape</b> is the outline of the thing, where it sits among its neighbours; it can be read with a mind. <b>The physics</b> is what any instrument would find; it can be read with instruments and sums. The tag under the picture says which stop you are at and what it takes to read it; the blue marks above the ring show which stops this reader can read.</p>
   <p>Look at the picture and ask: is the thing still in it? Then press <b>Send</b>.</p>
   <p>The picture becomes a print at the reader's side. The small drawing beside the reader fills by how much of the thing arrived: solid is all of it, pale is a part, a dotted outline is none. One line says what crossed. <b>What that means</b> opens the same stop drawn with its labels, what left the picture on the way there, the rule, and the reader's answer. <b>Next</b> goes on.</p>
-  <p>Three rounds; every round the ring starts at the naked eye. Then night falls and the camera turns on a bat. Three windows, one for each thing: under the window is a tray of pieces of your own evening, storm and field. Tap the ones you think the bat has; they go into the window. Press <b>That’s my bat</b>: the pieces a bat has turn into the bat’s own idiom, echoes and loud waves and warmth, the pieces it does not have fade, and the ones you missed appear dashed, so the window ends as the shape of the bat’s evening. A line under each piece says why. After the third window the camera goes one stop further in, and the window is blank. Then the verdict in steps; press Go on.</p>
+  <p>Three rounds; every round the ring starts at the naked eye. Then night falls and the camera turns on a bat. Three windows, one for each thing: under the window is a tray of pieces of your own evening, storm and field. Tap the ones you think the bat has; they go into the window. Press <b>That’s my bat</b>: the pieces a bat has turn into the bat’s own idiom, echoes and loud waves and warmth, the pieces it does not have fade, and the ones you missed appear dashed, so the window ends as the shape of the bat’s evening. A line under each piece says why. After the third window, the verdict in steps; press Go on. Its third step shows your window beside the frame one stop further in, which is blank.</p>
   <div class="sendrow"><button class="big" data-close="help">Back</button></div>
 </div></div>
 
@@ -503,7 +499,7 @@ function renderEnd(v) {
   STEPS = [
     '<div class="step"><div class="stitle">What Nagel says, in three steps</div><p>' + v.nagel[0] + '</p>' + pair(F('lightning', 'inside'), 'lightning, naked eye', F('lightning', 'physics'), 'lightning, the physics') + '</div>',
     '<div class="step"><p>' + v.nagel[1] + '</p>' + pair(F('red', 'inside'), 'red, naked eye', F('red', 'physics'), 'red, the physics') + '</div>',
-    '<div class="step"><p>' + v.nagel[2] + '</p><div class="pair"><div class="pr dark">' + windowSvg(0, G.grades[0] ? G.grades[0].pieces.filter(function (p) { return p.chosen; }).map(function (p) { return p.id; }) : [], !!G.grades[0], { still: true }) + '<span class="cap">the bat\u2019s evening, as you built it</span></div><div class="pr dark">' + windowSvg(0, [], false, { still: true, blank: true }) + '<span class="cap">one stop further in</span></div></div></div>',
+    '<div class="step"><p>' + v.nagel[2] + '</p><div class="pair"><div class="pr dark">' + windowSvg(0, G.grades[0] ? G.grades[0].pieces.filter(function (p) { return p.chosen; }).map(function (p) { return p.id; }) : [], !!G.grades[0], { still: true }) + '<span class="cap">the bat\u2019s evening, as you built it</span></div><div class="pr dark">' + windowSvg(0, [], false, { still: true, blank: true }) + '<span class="cap">one stop further in</span></div></div><p>' + C.BLANK_LINE + '</p></div>',
     '<div class="step"><div class="stitle">What you found</div><ul>' + v.found.map(function (l) { return '<li>' + l + '</li>'; }).join('') + '</ul><div class="prints">' + G.sends.map(function (sd) { var rr = M.round(sd.round); return '<div class="mini" data-ev="' + sd.round + '">' + printOf(sd) + '<span class="cap">' + rr.short + ', ' + C.STOPS[M.stopIndex(sd.stop)].label.toLowerCase() + '</span><span class="mi">' + icon(rr.id, iconState(sd)) + '</span></div>'; }).join('') + '</div><div class="wins">' + [0, 1, 2].map(function (n) { return miniWindow(n, M.night(n).name); }).join('') + '</div><p style="font-size:13px;color:#6E5A4A">Tap a print or a window to see it again.</p></div>',
     '<div class="step"><div class="stitle">Three ways to read the blank</div>' + v.readings.map(function (r) { return '<p><b>' + r.label + '</b> ' + r.says + '</p>'; }).join('') + '</div>'
   ];
@@ -584,8 +580,8 @@ function renderNight(n) {
   $('nightnow').textContent = N.ask + ' Tap the pieces a bat has.';
   $('win').innerHTML = windowSvg(n, [], false, {});
   $('tray').innerHTML = N.pieces.map(function (p) { return '<button class="tile" data-piece="' + p.id + '">' + pieceIcon(p.id) + p.label + '</button>'; }).join('');
-  $('batrow').style.display = ''; $('nightresult').style.display = 'none'; $('blankpart').style.display = 'none';
-  ['nightline', 'grades', 'nightnext', 'blankline', 'blanknext'].forEach(function (id) { $(id).classList.remove('in'); });
+  $('batrow').style.display = ''; $('nightresult').style.display = 'none';
+  ['nightline', 'grades', 'nightnext'].forEach(function (id) { $(id).classList.remove('in'); });
   show('nightscr');
 }
 function togglePiece(id) {
@@ -604,18 +600,11 @@ function thatsMyBat() {
   $('nightresult').style.display = '';
   setTimeout(function () { $('nightline').classList.add('in'); $('nightnow').textContent = g.words + ' the shape of ' + N.name + ' is in your window.'; }, 1500);
   setTimeout(function () { $('grades').classList.add('in'); }, 2100);
-  setTimeout(function () { $('nightnext').classList.add('in'); $('b-nightnext').textContent = G.n + 1 < C.NIGHTS.length ? 'Next night' : 'One stop further in'; }, 2600);
+  setTimeout(function () { $('nightnext').classList.add('in'); $('b-nightnext').textContent = G.n + 1 < C.NIGHTS.length ? 'Next night' : 'Go on'; }, 2600);
 }
 function nightNext() {
   if (G.n + 1 < C.NIGHTS.length) { renderNight(G.n + 1); return; }
-  // the blank: the window zooms one stop further in and goes blank
-  $('nightresult').style.display = 'none'; $('tray').style.display = 'none'; $('nightnow').textContent = 'The camera goes one stop further in.';
-  $('win').innerHTML = windowSvg(G.n, G.chosen, true, { still: true, blank: true });
-  requestAnimationFrame(function () { requestAnimationFrame(function () { $('win').querySelector('.zoomg').style.transform = 'scale(1.5)'; $('win').querySelector('.blankv2').style.opacity = 1; }); });
-  $('blankpart').style.display = ''; $('blankline').textContent = C.BLANK_LINE;
-  setTimeout(function () { $('blankline').classList.add('in'); $('nightnow').textContent = 'Blank.'; }, 1800);
-  setTimeout(function () { $('blanknext').classList.add('in'); }, 2400);
-  window.scrollTo(0, 0);
+  renderEnd(M.verdict(G.sends, G.grades));
 }
 function miniWindow(n, caption) { var g = G.grades[n]; return '<div class="w" data-win="' + n + '">' + windowSvg(n, g ? g.pieces.filter(function (p) { return p.chosen; }).map(function (p) { return p.id; }) : [], !!g, { still: true }) + '<div class="cap">' + caption + '</div></div>'; }
 function blankWindow(caption) { return '<div class="w">' + windowSvg(2, [], false, { still: true, blank: true }) + '<div class="cap">' + caption + '</div></div>'; }
@@ -626,14 +615,13 @@ function openWindowPanel(n) {
   $('eline').textContent = g.line; $('eline2').textContent = C.BLANK_LINE;
   $('evidence').classList.add('on'); $('evidence').scrollTop = 0;
 }
-function reset() { G.k = 0; G.sends = []; G.grades = []; G.answer = null; $('tray').style.display = ''; renderRound(); }
+function reset() { G.k = 0; G.sends = []; G.grades = []; renderRound(); }
 $('b-start').addEventListener('click', reset);
 $('b-again').addEventListener('click', reset);
 $('b-goon').addEventListener('click', goOn);
 $('b-night').addEventListener('click', function () { renderNight(0); });
 $('b-bat').addEventListener('click', thatsMyBat);
 $('b-nightnext').addEventListener('click', nightNext);
-$('b-blanknext').addEventListener('click', function () { renderEnd(M.verdict(G.sends, G.grades)); });
 $('tray').addEventListener('click', function (e) { var b = e.target.closest('button[data-piece]'); if (b) togglePiece(b.getAttribute('data-piece')); });
 $('b-further').addEventListener('click', function () { var f = $('further'); f.style.display = f.style.display === 'none' ? '' : 'none'; });
 $('b-send').addEventListener('click', doSend);
