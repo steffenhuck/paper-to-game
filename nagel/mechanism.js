@@ -78,29 +78,57 @@ var CONFIG = {
         physics: { says: 'Light of about 700 nanometres; the long-wave cones in the eye firing more than the others.' }
       },
       reply: { inside: '', shape: 'Next to orange, the warm end, blood. So I know where it sits. And what is it like? Say it in sound and I would have it; I hear.',
-               physics: 'Seven hundred nanometres. A number. And what is it like?', unread: 'I have never seen. This frame is nothing to me.' } },
-    { id: 'bat', thing: 'the bat’s world, as it is for the bat', short: 'the bat’s world', kind: 'experience', sense: 'sonar',
-      // pp. 438-440: sonar as "three-dimensional forward perception"; the intelligent bat as our mirror
-      reader: { id: 'you', name: 'you', pron: 'you', who: 'the bat is sending; you receive', has: ['eyes', 'ears', 'body', 'mind', 'sums'], lacks: ['sonar'] },
-      ask: 'What is my world like? Which frame do you want?',
-      frames: {
-        inside:  { says: 'No picture. This frame is taken from where you cannot stand.' },
-        shape:   { says: 'Forward, in three dimensions; distance, size, shape, texture, motion, read off the echoes of its own shrieks.' },
-        physics: { says: 'A shriek at 50,000 times a second from the throat; the echo back to the ears; the brain timing the gap.' }
-      },
-      reply: { inside: '', shape: 'Forward, in three dimensions. The shape of it. What is it like? You have no idea.',
-               physics: 'A shriek, an echo, a gap. All of it. What is it like? You have no idea.', unread: 'You have no sonar. This frame is nothing to you.' } }
+               physics: 'Seven hundred nanometres. A number. And what is it like?', unread: 'I have never seen. This frame is nothing to me.' } }
   ],
   // What left the picture on the way to each stop, as the player saw it happen on the ring (revision 1; ours).
   LEFT: {
     sunset:    { inside: 'Nothing has left yet: this is the evening as you had it.', shape: 'On the way here the figure on the pier went out of the frame, then the colour; the sun stayed, as a disc going down.', physics: 'On the way here the figure went, then the colour, then the sun as you saw it; the camera pulled back until the earth was a ball and the evening was a sun two degrees under a line.' },
     lightning: { inside: 'Nothing has left yet: the flash as you had it, and the flinch.', shape: 'On the way here you went out of the frame, then the colour; the bolt stayed, as a branching line, and the bang took its place after it.', physics: 'On the way here you went, then the colour; the bolt stayed in the middle and gained what made it: the cloud, the ground, the charge, the channel.' },
-    red:       { inside: 'Nothing has left yet: the field, red to the edges.', shape: 'On the way here the red went out of the poppies and a ring of colours came in with one slot marked; the red is the slot, not the colour.', physics: 'On the way here the red went, then the field; the eye that saw it shrank to the corner and the frame filled with the light that caused it.' },
-    bat:       { inside: 'Nothing could be shown: this frame is taken from where you cannot stand.', shape: 'On the way here the blank gave way to a cone in front of a bat, with things in it at distances.', physics: 'On the way here the blank gave way to a cone, then the cone to a throat, two ears and a clock.' }
+    red:       { inside: 'Nothing has left yet: the field, red to the edges.', shape: 'On the way here the red went out of the poppies and a ring of colours came in with one slot marked; the red is the slot, not the colour.', physics: 'On the way here the red went, then the field; the eye that saw it shrank to the corner and the frame filled with the light that caused it.' }
   },
+  // The second half (revision 3): the camera turns on the bat and the player builds, from pieces of their own evening,
+  // storm and field, what the bat has of each. The grading is the SHAPE of a bat's world, built as a biologist would
+  // build it from structure and behaviour (Nagel p. 439: "we may ascribe general types of experience on the basis of the
+  // animal's structure and behavior"). Which pieces are in rests on bat biology the paper does not contain, summarised
+  // from general references (Neuweiler, The Biology of Bats, 2000; Fenton & Simmons, Bats: A World of Science and
+  // Mystery, 2015): most small bats have poor eyesight that tells light from dark and no colour, hearing far sharper
+  // than ours, sonar as the main sense, and a good nose; they feel warmth and cold as we do, and fly at dusk. The pieces,
+  // their idiom in the window, and the lines are ours.
+  NIGHTS: [
+    { id: 'evening', thing: 'the sunset', name: 'the bat\u2019s evening', ask: 'How does the bat have the sunset?',
+      pieces: [
+        { id: 'colour', label: 'the colour of the sky', idiom: 'light', in: false, why: 'A bat\u2019s eyes tell light from dark and no colour, and sonar carries no light. The colour is not in there.' },
+        { id: 'disc', label: 'the sun\u2019s disc', idiom: 'light', in: false, why: 'A bat\u2019s eyes make no disc of it; at most a brightness, going.' },
+        { id: 'warm', label: 'the warmth of the air', idiom: 'warm', in: true, why: 'A bat\u2019s skin feels the warm air as yours does.' },
+        { id: 'sea', label: 'the sound of the sea', idiom: 'sound', in: true, why: 'A bat\u2019s hearing is far sharper than yours. The sea is loud in there.' },
+        { id: 'moths', label: 'the moths rising', idiom: 'echo', in: true, why: 'Every moth answers a shriek. This is what the evening is for.' },
+        { id: 'dark', label: 'the dark coming', idiom: 'dark', in: true, why: 'Dark from light is what a bat\u2019s eyes are for, and dusk is when it wakes.' }
+      ] },
+    { id: 'storm', thing: 'lightning', name: 'the bat\u2019s storm', ask: 'How does the bat have the lightning?',
+      pieces: [
+        { id: 'crack', label: 'the white crack', idiom: 'flash', in: true, why: 'A flash of brightness, yes: a bat\u2019s eyes can tell that much. The shape of it, no.' },
+        { id: 'purple', label: 'the purple sky', idiom: 'light', in: false, why: 'No colour. The sky is not purple in there, or any colour.' },
+        { id: 'bang', label: 'the bang', idiom: 'sound', in: true, why: 'Enormous. A bat\u2019s ears are made for faint echoes; thunder fills them.' },
+        { id: 'rain', label: 'the rain on the leaves', idiom: 'echo', in: true, why: 'Every drop answers a shriek. The air fills with clutter.' },
+        { id: 'flinch', label: 'the flinch', idiom: 'self', in: false, why: 'That was yours. It came with the sight of the crack, and the sight is not in there.' },
+        { id: 'petrichor', label: 'the smell of rain', idiom: 'smell', in: true, why: 'A bat has a good nose. The wet earth is in there.' }
+      ] },
+    { id: 'field', thing: 'red', name: 'the bat\u2019s field', ask: 'How does the bat have the red?',
+      pieces: [
+        { id: 'red', label: 'the red', idiom: 'light', in: false, why: 'No colour vision, and sonar carries no light. The red is not in there at all.' },
+        { id: 'shapes', label: 'the shape of the poppies', idiom: 'echo', in: true, why: 'By echo: a soft clutter of stalks and cups, each answering a shriek.' },
+        { id: 'smell', label: 'the smell of the field', idiom: 'smell', in: true, why: 'A good nose. The field is in there as a smell before anything else.' },
+        { id: 'rustle', label: 'the rustle of the stalks', idiom: 'sound', in: true, why: 'Sharp ears. The rustle is loud in there.' },
+        { id: 'warmend', label: 'the warm end of the colours', idiom: 'light', in: false, why: 'There is no ring of colours in a bat, so nothing has a warm end.' },
+        { id: 'bees', label: 'the bees humming', idiom: 'echo', in: true, why: 'Heard, and echoed: small, fast, near.' }
+      ] }
+  ],
+  // Words for how much of the shape the player built (ours; no tally on screen).
+  BUILT_WORDS: [[1, 'All of'], [0.74, 'Most of'], [0.4, 'About half of'], [0.01, 'A little of'], [0, 'None of']],
+  BLANK_LINE: 'One stop further in, and the window is blank. This is as far in as anyone\u2019s camera goes: what it is like for the bat to have this is the stop nobody reaches.',
   // The closing question (p. 440: bats or Martians trying to conceive of us "would be wrong to conclude that there is
   // not anything precise that it is like to be us"; pp. 446-447: physicalism not shown false, the "is" not understood).
-  QUESTION: 'The bat’s naked-eye frame came to you blank. What is in it?',
+  QUESTION: 'Three times the window went blank one stop further in. What is in that frame?',
   ANSWERS: [
     { id: 'nothing', label: 'Nothing. There is nothing it is like to be a bat.' },
     { id: 'physics', label: 'Only what the physics frame shows. The bat’s world is that shriek and that echo.' },
@@ -161,12 +189,30 @@ function best(k) {
 }
 
 // ---------------------------------------------------------------------------------------------------------------
+// The nights: grading a built window. `chosen` is an array of piece ids.
+// ---------------------------------------------------------------------------------------------------------------
+function night(n) { return CONFIG.NIGHTS[n]; }
+function builtWords(f) { for (var i = 0; i < CONFIG.BUILT_WORDS.length; i++) if (f >= CONFIG.BUILT_WORDS[i][0]) return CONFIG.BUILT_WORDS[i][1]; return 'None of'; }
+function grade(n, chosen) {
+  var N = night(n), inCount = 0, found = 0, wrong = [], pieces = N.pieces.map(function (p) {
+    var c = chosen.indexOf(p.id) >= 0; if (p.in) inCount++; if (p.in && c) found++; if (!p.in && c) wrong.push(p.label);
+    return { id: p.id, label: p.label, idiom: p.idiom, chosen: c, in: p.in, why: p.why, status: c && p.in ? 'kept' : c && !p.in ? 'faded' : !c && p.in ? 'missed' : 'left' };
+  });
+  var f = found / inCount, w = builtWords(f);
+  var NUM = ['no', 'one', 'two', 'three', 'four', 'five', 'six'];
+  var line = w + ' the shape of ' + N.name + ' is in your window' + (found === inCount ? '' : ', ' + NUM[inCount - found] + ' of its pieces missing') + (wrong.length ? ', and ' + joinList(wrong) + (wrong.length > 1 ? ' are' : ' is') + ' in it that a bat does not have.' : ', and nothing that a bat does not have.');
+  return { night: n, pieces: pieces, found: found, inCount: inCount, wrong: wrong, fraction: f, words: w, line: line };
+}
+function joinList(a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; }
+function nightLine(g) { var N = night(g.night); return cap(N.name) + ': ' + g.words.toLowerCase() + ' its shape' + (g.wrong.length ? ', with ' + joinList(g.wrong) + ' in it that ' + (g.wrong.length > 1 ? 'do' : 'does') + ' not belong' : '') + '; the inside, blank.'; }
+
+// ---------------------------------------------------------------------------------------------------------------
 // The verdict. `sends` is an array of six results from send(); `answer` is one of CONFIG.ANSWERS ids.
 // ---------------------------------------------------------------------------------------------------------------
 var NAGEL_SAYS = [
   'Step back from your eyes and a thing in the world stays in view and gets clearer: lightning is what it does, not how it looks.',
   'Step back from your eyes and an experience drops out of the frame: red is a way of seeing, not a thing seen, so the far frame holds its cause and not it.',
-  'A frame you cannot read is not an empty one: Ada could not read your red, and the red was there. The bat\u2019s frame is blank to you the same way.'
+  'What a bat\u2019s evening holds can be built from its structure and behaviour, as you built it; what it is like for the bat is the stop nobody reaches. And a frame you cannot read is not an empty one: Ada could not read your red, and the red was there.'
 ];
 // The evidence panel (revision 2): for a round, which frame the reader could not read, and the line under it.
 function evidence(k) {
@@ -184,7 +230,7 @@ function foundLine(s) {
   if (s.arrived > 0) return cap(r.short) + ' ' + stopPhrase(s.stop) + ': ' + (r.kind === 'experience' ? 'the shape of it reached ' + who + ', not the thing.' : 'a part of it reached ' + who + '.');
   return cap(r.short) + ' ' + stopPhrase(s.stop) + ': ' + 'the cause of it reached ' + who + ', and none of the thing.';
 }
-function verdict(sends, answer) {
+function verdict(sends, grades, answer) {
   var head, part, stood;
   if (answer === 'nothing') {
     head = 'You called the blank frame empty.';
@@ -199,7 +245,7 @@ function verdict(sends, answer) {
     part = 'That is Nagel\u2019s answer. We can say what sort of thing is there, forward, in three dimensions, read off echoes, and believe it as rich as our own, and still have no way to read it. This does not make physicalism false; it means nobody yet understands what would make it true.';
     stood = 'Had yours stood, and it does: there are facts about what it is like to be a bat, beyond our concepts; the bat is in the same position about us; and the science of its brain, which we can have in full, does not reach them.';
   }
-  return { head: head, nagel: NAGEL_SAYS, found: sends.map(foundLine), part: part, stood: stood, nagelAnswer: CONFIG.NAGEL_ANSWER, answer: answer };
+  return { head: head, nagel: NAGEL_SAYS, found: sends.map(foundLine).concat((grades || []).map(nightLine)), part: part, stood: stood, nagelAnswer: CONFIG.NAGEL_ANSWER, answer: answer };
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -219,6 +265,6 @@ var STRATEGIES = {
   'best': function (k) { return best(k).stop; }
 };
 
-var api = { CONFIG: CONFIG, evidence: evidence, round: round, needs: needs, needsLabel: needsLabel, canRead: canRead, holds: holds, send: send, best: best, verdict: verdict, play: play, STRATEGIES: STRATEGIES, arrivedWords: arrivedWords, stopIndex: stopIndex, NAGEL_SAYS: NAGEL_SAYS };
+var api = { CONFIG: CONFIG, evidence: evidence, night: night, grade: grade, nightLine: nightLine, builtWords: builtWords, round: round, needs: needs, needsLabel: needsLabel, canRead: canRead, holds: holds, send: send, best: best, verdict: verdict, play: play, STRATEGIES: STRATEGIES, arrivedWords: arrivedWords, stopIndex: stopIndex, NAGEL_SAYS: NAGEL_SAYS };
 if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.NagelMechanism = api;
 })(typeof window !== 'undefined' ? window : this);

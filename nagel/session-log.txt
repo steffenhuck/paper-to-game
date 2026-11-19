@@ -35,33 +35,37 @@ round 3: Turn the ring, then send red to Ada. | ask: What is red like? | reach: 
   now: A part of red arrived. What that means, or Next. | icon: ic-part a part of it
   Next bottom at 627 px
   MEANS: The shape: red | On the way here the red went out of the poppies and a ring of colours came in with one slot marked; the red is the slot, not the colour. | The shape of it crossed: where it sits among its neighbours and what it makes you do. The thing itself stayed in the first frame. | Next to orange, the warm end, blood. So I know where it sits. And what is it like? Say it in sound and I would have it; I hear.
-round 4: Send bottom at 675 px (within 700: true)
-round 4: The bat holds the camera now. Turn the ring and ask for the bat’s world. | ask: What is my world like? Which frame do you want? | reach: reach off,reach,reach
-  z=0: tag=Naked eye · Read with: sonar
-  z=0.25: tag=The shape · Read with: a mind
-  z=0.5: tag=The shape · Read with: a mind
-  z=0.75: tag=The physics · Read with: instruments and sums
-  z=1: tag=The physics · Read with: instruments and sums
-  SENT stop 1: You asked for the bat’s world as the shape. You have a mind; you read it. A part of the bat’s world arrived.
-  now: A part of the bat’s world arrived. What that means, or Next. | icon: ic-part a part of it
-  Next bottom at 687 px
-  MEANS: The shape: the bat’s world | On the way here the blank gave way to a cone in front of a bat, with things in it at distances. | The shape of it crossed: where it sits among its neighbours and what it makes you do. The thing itself stayed in the first frame. | Forward, in three dimensions. The shape of it. What is it like? You have no idea.
-question: The bat’s naked-eye frame came to you blank. What is in it?
-  evidence sunset: The sunset | What Sam got: naked eye | Sam could read every frame. All of the sunset arrived.
-  evidence lightning: Lightning | What the Martian got: the physics / What the Martian could not read | The Martian could not read this frame. You can. It holds the look of the thing, not the thing. All of lightning arrived.
-  evidence red: Red | What Ada got: the shape / What Ada could not read | Ada could not read this frame. You can. It was full. A part of red arrived: the shape of it, not the thing.
-  evidence bat: The bat’s world | What you got: the shape / What you could not read | You could not read this frame. The bat can. A part of the bat’s world arrived: the shape of it, not the thing.
+turn: The camera turns on a bat. It wakes at dusk in the attic over the pier, over the storm, over the field.
+night 1: How does the bat have the sunset? Tap the pieces a bat has. | That’s my bat bottom at 623 px
+  chosen: colour,warm,sea,moths
+  GRADED: Most of the shape of the bat’s evening is in your window, one of its pieces missing, and the colour of the sky is in it that a bat does not have.
+  grades: outThe colour of the sky (you put it in). A bat’s eyes tell  / outThe sun’s disc (you left it out). A bat’s eyes make no di / inThe warmth of the air (you had it). A bat’s skin feels the / inThe sound of the sea (you had it). A bat’s hearing is far  / inThe moths rising (you had it). Every moth answers a shriek / inThe dark coming (you left it out). Dark from light is what
+night 2: How does the bat have the lightning? Tap the pieces a bat has. | That’s my bat bottom at 610 px
+  chosen: crack,bang,rain,flinch,petrichor
+  GRADED: All of the shape of the bat’s storm is in your window, and the flinch is in it that a bat does not have.
+  grades: inThe white crack (you had it). A flash of brightness, yes:  / outThe purple sky (you left it out). No colour. The sky is n / inThe bang (you had it). Enormous. A bat’s ears are made for / inThe rain on the leaves (you had it). Every drop answers a  / outThe flinch (you put it in). That was yours. It came with  / inThe smell of rain (you had it). A bat has a good nose. The
+night 3: How does the bat have the red? Tap the pieces a bat has. | That’s my bat bottom at 623 px
+  chosen: shapes,smell,rustle,bees
+  GRADED: All of the shape of the bat’s field is in your window, and nothing that a bat does not have.
+  grades: outThe red (you left it out). No colour vision, and sonar ca / inThe shape of the poppies (you had it). By echo: a soft clu / inThe smell of the field (you had it). A good nose. The fiel / inThe rustle of the stalks (you had it). Sharp ears. The rus / outThe warm end of the colours (you left it out). There is n / inThe bees humming (you had it). Heard, and echoed: small, f
+blank: One stop further in, and the window is blank. This is as far in as anyone’s camera goes: what it is like for the bat to have this is the stop nobody reaches.
+question: Three times the window went blank one stop further in. What is in that frame?
+window panel: The bat’s evening | Most of the shape of the bat’s evening is in your window, one of its pieces missing, and the colour of the sky is in it that a bat does not have.
 END: You called the blank frame full of something you cannot read.
 steps shown: 5; Go on hidden: true
-end print tapped: The bat’s world
+end print tapped: Red
 B round 1 physics: You sent the sunset as the physics. Sam has instruments and sums; he read it. None of the sunset arrived.
 B round 2 physics: You sent lightning as the physics. The Martian has instruments and sums; it read it. All of lightning arrived.
 B round 3 physics: You sent red as the physics. Ada has instruments and sums; she read it. None of red arrived.
-B round 4 physics: You asked for the bat’s world as the physics. You have instruments and sums; you read it. None of the bat’s world arrived.
+B night 1 all pieces: All of the shape of the bat’s evening is in your window, and the colour of the sky and the sun’s disc are in it that a bat does not have.
+B night 2 all pieces: All of the shape of the bat’s storm is in your window, and the purple sky and the flinch are in it that a bat does not have.
+B night 3 all pieces: All of the shape of the bat’s field is in your window, and the red and the warm end of the colours are in it that a bat does not have.
 B END: You called the blank frame the physics frame over again.
 C round 1 naked eye: You sent the sunset from the naked eye. Sam has eyes; he read it. All of the sunset arrived.
 C round 2 naked eye: You sent lightning from the naked eye. The Martian has no eyes, and that frame can be read only with eyes. Nothing arrived.
 C round 3 naked eye: You sent red from the naked eye. Ada has no eyes, and that frame can be read only with eyes. Nothing arrived.
-C round 4 naked eye: You asked for the bat’s world from the naked eye. You have no sonar, and that frame can be read only with sonar. Nothing arrived.
+C night 1 no pieces: None of the shape of the bat’s evening is in your window, four of its pieces missing, and nothing that a bat does not have.
+C night 2 no pieces: None of the shape of the bat’s storm is in your window, four of its pieces missing, and nothing that a bat does not have.
+C night 3 no pieces: None of the shape of the bat’s field is in your window, four of its pieces missing, and nothing that a bat does not have.
 C END: You called the blank frame empty.
 errors: none
