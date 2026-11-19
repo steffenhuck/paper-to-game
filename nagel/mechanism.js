@@ -125,13 +125,24 @@ var CONFIG = {
   ],
   // Words for how much of the shape the player built (ours; no tally on screen).
   BUILT_WORDS: [[1, 'All of'], [0.74, 'Most of'], [0.4, 'About half of'], [0.01, 'A little of'], [0, 'None of']],
-  BLANK_LINE: 'One stop further in than the shape you built, the window is blank. That is as far in as anyone\u2019s camera goes: what it is like for the bat to have this is the stop nobody reaches.',
-  // The three readings of the blank (p. 440: a sceptical conclusion would be wrong; pp. 446-447: physicalism not
+  // The verdict's opening (revision 7): one phrase per round and stop, joined into a sentence; every one of the 27
+  // first-half paths is three of these. Ours; checked over all 27 in calibration.js.
+  PHRASES: {
+    sunset:    { inside: 'the sunset to Sam whole', shape: 'a sketch of the sunset to Sam', physics: 'a sky-chart to Sam and none of his evening' },
+    lightning: { physics: 'lightning to the Martian whole', shape: 'an outline of lightning to the Martian', inside: 'a picture of lightning the Martian had no eyes for' },
+    red:       { shape: 'where red sits to Ada, not the red', physics: 'a wavelength to Ada, not the red', inside: 'a picture of red Ada had never seen and could not' }
+  },
+  // The kinds of thing a bat gets, in the order they are listed, by the idiom of the pieces the player had right; and
+  // what to call a wrong piece. Ours.
+  KINDS: [['sound', 'the sounds'], ['echo', 'the things it finds by echo'], ['warm', 'the warmth'], ['smell', 'the smells'], ['dark', 'the dark'], ['flash', 'the flash']],
+  WRONG_WORDS: { colour: 'colour', purple: 'colour', red: 'colour', warmend: 'colour', disc: 'the sun\u2019s disc', flinch: 'your flinch' },
+  OPENING_HEAD: 'What your camera got across, and what it could not.',
+  // The three answers to the paper\u2019s question (p. 440: a sceptical conclusion would be wrong; pp. 446-447: physicalism not
   // shown false, the "is" not understood). Read on the end screen, not chosen (revision 4).
   READINGS: [
-    { id: 'nothing', label: 'Nothing is there: there is nothing it is like to be a bat.', says: 'Nagel says this would be wrong: a frame you cannot read is not an empty one. Ada could not read your red, and the red was there; a physiologist with your whole brain on screen would find none of it, and it would be there.' },
-    { id: 'physics', label: 'Only the physics is there: the bat\u2019s world is that shriek and that echo.', says: 'Nagel does not call this false. He says nobody can yet read it, like \u201Cmatter is energy\u201D said two thousand years early: the physics of your red could arrive whole, and the red was not in it. The same question is asked today of machines.' },
-    { id: 'something', label: 'Something is there that you have no way to read.', says: 'This is Nagel\u2019s. We can build the shape, as you did, and believe the inside as rich as our own, and still have no way in, because every frame we take is taken from where we stand.' }
+    { id: 'nothing', label: 'Nothing. There is nothing it is like to be a bat.', says: 'Nagel says this is wrong. A picture you cannot read is not an empty one: Ada could not read your red, and the red was there. A scientist with your whole brain on a screen would find none of your red either, and it would still be there.' },
+    { id: 'physics', label: 'Only the physics: the shriek and the echo, and nothing more.', says: 'Nagel does not call this false. He says nobody yet knows how to read it, like \u201Cmatter is energy\u201D said two thousand years early. Your own red showed the gap: the physics of red could get across whole, and the red was not in it. People ask the same question about machines today.' },
+    { id: 'something', label: 'Something, which nobody can read.', says: 'This is Nagel\u2019s answer. You can work out what a bat gets, as you did, and believe its evening is as rich as yours, and still have no way in, because every picture you take is taken from where you stand.' }
   ]
 };
 
@@ -155,10 +166,10 @@ function arrivedWords(f) { for (var i = 0; i < CONFIG.ARRIVED_WORDS.length; i++)
 function why(k, stop) {
   var r = round(k), exp = r.kind === 'experience';
   if (exp) {
-    if (stop === 'inside') return 'It lives in this frame: how it is from where you stand.';
-    if (stop === 'shape') return 'The shape of it crossed: where it sits among its neighbours and what it makes you do. The thing itself stayed in the first frame.';
+    if (stop === 'inside') return 'It lives in this picture: how it is from where you stand.';
+    if (stop === 'shape') return 'The shape of it crossed: where it sits among its neighbours and what it makes you do. The thing itself stayed in the first picture.';
     if (r.id === 'bat') return 'The cause of it crossed, not the thing. The bat\u2019s world lives in the frame you cannot read.';
-    return 'The cause of it crossed, not the thing. Step back from your senses and a thing in your sensing drops out of the frame.';
+    return 'What causes it crossed, not the thing. Step back from your senses, and anything that lives in your senses drops out of the picture.';
   }
   if (stop === 'inside') return 'Only how it looks crossed. ' + cap(r.short) + ' is more than its look.';
   if (stop === 'shape') return 'Its outline crossed. Step back further and more of it comes into view.';
@@ -201,16 +212,16 @@ function grade(n, chosen) {
   var line = w + ' the shape of ' + N.name + ' is in your window' + (found === inCount ? '' : ', ' + NUM[inCount - found] + ' of its pieces missing') + (wrong.length ? ', and ' + joinList(wrong) + (wrong.length > 1 ? ' are' : ' is') + ' in it that a bat does not have.' : ', and nothing that a bat does not have.');
   return { night: n, pieces: pieces, found: found, inCount: inCount, wrong: wrong, fraction: f, words: w, line: line };
 }
-function joinList(a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; }
-function nightLine(g) { var N = night(g.night); return cap(N.name) + ': ' + g.words.toLowerCase() + ' its shape' + (g.wrong.length ? ', with ' + joinList(g.wrong) + ' in it that ' + (g.wrong.length > 1 ? 'do' : 'does') + ' not belong' : '') + '; the inside, blank.'; }
+function joinList(a) { return a.length < 2 ? a.join('') : a.length === 2 ? a[0] + ' and ' + a[1] : a.slice(0, -1).join(', ') + ', and ' + a[a.length - 1]; }
+function nightLine(g) { var N = night(g.night); return cap(N.name) + ': ' + g.words.toLowerCase() + ' its shape' + (g.wrong.length ? ', with ' + joinList(g.wrong) + ' in it that ' + (g.wrong.length > 1 ? 'do' : 'does') + ' not belong' : '') + '.'; }
 
 // ---------------------------------------------------------------------------------------------------------------
 // The verdict. `sends` is an array of six results from send(); `answer` is one of CONFIG.ANSWERS ids.
 // ---------------------------------------------------------------------------------------------------------------
 var NAGEL_SAYS = [
   'Step back from your eyes and a thing in the world stays in view and gets clearer: lightning is what it does, not how it looks.',
-  'Step back from your eyes and an experience drops out of the frame: red is a way of seeing, not a thing seen, so the far frame holds its cause and not it.',
-  'What a bat\u2019s evening holds can be built from its structure and behaviour, as you built it; what it is like for the bat is the stop nobody reaches. And a frame you cannot read is not an empty one: Ada could not read your red, and the red was there.'
+  'Step back from your eyes and an experience drops out of the picture: red is a way of seeing, not a thing seen, so the far picture holds what causes red and not the red.',
+  'What a bat gets of an evening can be worked out from what bats are and do, as you did. What it is like to be the bat cannot. And a picture you cannot read is not an empty one: Ada could not read your red, and the red was there.'
 ];
 // The evidence panel (revision 2): for a round, which frame the reader could not read, and the line under it.
 function evidence(k) {
@@ -228,10 +239,24 @@ function foundLine(s) {
   if (s.arrived > 0) return cap(r.short) + ' ' + stopPhrase(s.stop) + ': ' + (r.kind === 'experience' ? 'the shape of it reached ' + who + ', not the thing.' : 'a part of it reached ' + who + '.');
   return cap(r.short) + ' ' + stopPhrase(s.stop) + ': ' + 'the cause of it reached ' + who + ', and none of the thing.';
 }
+function opening(sends, grades) {
+  var s1 = 'You sent ' + joinList(sends.map(function (s) { return CONFIG.PHRASES[round(s.round).id][s.stop]; })) + '.';
+  var g = grades || [], found = 0, inCount = 0, kinds = [], wrong = [], lightWrong = false;
+  g.forEach(function (x) { found += x.found; inCount += x.inCount; x.pieces.forEach(function (p) {
+    if (p.status === 'kept' && kinds.indexOf(p.idiom) < 0) kinds.push(p.idiom);
+    if (p.status === 'faded') { var w = CONFIG.WRONG_WORDS[p.id] || p.label; if (wrong.indexOf(w) < 0) wrong.push(w); if (w === 'colour') lightWrong = true; }
+  }); });
+  var ORDER = ['colour', 'the sun\u2019s disc', 'your flinch']; wrong.sort(function (a, b) { return ORDER.indexOf(a) - ORDER.indexOf(b); });
+  var kindWords = CONFIG.KINDS.filter(function (k) { return kinds.indexOf(k[0]) >= 0; }).map(function (k) { return k[1]; });
+  var w = inCount ? builtWords(found / inCount).toLowerCase() : 'none of';
+  var s2 = 'At night you found ' + w + ' what a bat gets of an evening, a storm and a field';
+  if (found === 0) s2 += wrong.length ? ', and you gave it ' + joinList(wrong) + ', which it does not have.' : '.';
+  else s2 += ': ' + joinList(kindWords) + (lightWrong ? '' : ', and no colour') + (wrong.length ? '; but you also gave it ' + joinList(wrong) + ', which it does not have.' : '.');
+  var s3 = 'What it is like to be the bat' + (found > 0 ? ', with all of that,' : ',') + ' nobody can get.';
+  return [s1, s2, s3];
+}
 function verdict(sends, grades) {
-  var g = grades || [], clean = g.filter(function (x) { return x.found === x.inCount && x.wrong.length === 0; }).length;
-  var head = g.length ? 'You built the shape of a bat\u2019s evening ' + ['', 'once', 'twice', 'three times'][g.length] + (clean === g.length ? ', each time whole' : clean ? ', ' + ['', 'once', 'twice'][clean] + ' whole' : '') + ', and the frame one stop further in stayed blank.' : 'The frame one stop further in stayed blank.';
-  return { head: head, nagel: NAGEL_SAYS, found: sends.map(foundLine).concat(g.map(nightLine)), readings: CONFIG.READINGS };
+  return { head: CONFIG.OPENING_HEAD, opening: opening(sends, grades), nagel: NAGEL_SAYS, found: sends.map(foundLine).concat((grades || []).map(nightLine)), readings: CONFIG.READINGS };
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -251,6 +276,6 @@ var STRATEGIES = {
   'best': function (k) { return best(k).stop; }
 };
 
-var api = { CONFIG: CONFIG, evidence: evidence, night: night, grade: grade, nightLine: nightLine, builtWords: builtWords, round: round, needs: needs, needsLabel: needsLabel, canRead: canRead, holds: holds, send: send, best: best, verdict: verdict, play: play, STRATEGIES: STRATEGIES, arrivedWords: arrivedWords, stopIndex: stopIndex, NAGEL_SAYS: NAGEL_SAYS };
+var api = { CONFIG: CONFIG, evidence: evidence, opening: opening, night: night, grade: grade, nightLine: nightLine, builtWords: builtWords, round: round, needs: needs, needsLabel: needsLabel, canRead: canRead, holds: holds, send: send, best: best, verdict: verdict, play: play, STRATEGIES: STRATEGIES, arrivedWords: arrivedWords, stopIndex: stopIndex, NAGEL_SAYS: NAGEL_SAYS };
 if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.NagelMechanism = api;
 })(typeof window !== 'undefined' ? window : this);

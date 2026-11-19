@@ -73,10 +73,30 @@ check('the verdict carries one line per night after the three prints', M.verdict
 console.log('== the words');
 var bad = [], lines = [];
 R.forEach(function (r, k) { C.STOPS.forEach(function (s) { var x = M.send(k, s.id); lines.push(x.line, x.reply, x.why || '', x.frame, x.left, M.evidence(k).line); check(r.id + ' ' + s.id + ': a line, a reply, and a rule when read', x.line.length > 20 && x.reply.length > 5 && (!x.readable || x.why.length > 10)); }); });
-var v = M.verdict(M.play(M.STRATEGIES.best).sends, [M.grade(0, []), M.grade(1, []), M.grade(2, [])]); lines.push(v.head); lines = lines.concat(v.found, v.nagel); C.READINGS.forEach(function (r) { lines.push(r.label, r.says); });
-check('verdict: a head, six found lines, three readings', v.head.length > 10 && v.found.length === 6 && v.readings.length === 3);
+var v = M.verdict(M.play(M.STRATEGIES.best).sends, [M.grade(0, []), M.grade(1, []), M.grade(2, [])]); lines.push(v.head); lines = lines.concat(v.found, v.nagel, v.opening); C.READINGS.forEach(function (r) { lines.push(r.label, r.says); });
+check('verdict: a head, three opening sentences, six found lines, three readings', v.head.length > 10 && v.opening.length === 3 && v.found.length === 6 && v.readings.length === 3);
+
+console.log('== the verdict\u2019s opening over every path');
+// Every first-half path: 27 sentences, printed in full for the memo.
+var stops = ['inside', 'shape', 'physics'], firstHalf = [], badSent = [];
+function wellFormed(s) { return /^[A-Z].*\.$/.test(s) && !/,,|, ,|,\.|: \.|;\.|  |\band and\b|\bthe the\b|undefined|NaN|\d/.test(s) && !/, and\.|:$/.test(s); }
+stops.forEach(function (a) { stops.forEach(function (b) { stops.forEach(function (d) { var o = M.opening([M.send(0, a), M.send(1, b), M.send(2, d)], []); firstHalf.push(o[0]); if (!wellFormed(o[0])) badSent.push(o[0]); }); }); });
+firstHalf.forEach(function (s) { console.log('   ' + s); });
+check('all 27 first-half sentences are well formed', badSent.length === 0, badSent.join(' | '));
+check('every first-half sentence ends with the red not crossing', firstHalf.every(function (s) { return /not the red\.$|could not\.$/.test(s); }));
+// Every way of filling the three windows: 2^18 night sentences, each checked; twenty printed, spread across the range.
+var N = C.NIGHTS, ids = N.map(function (n) { return n.pieces.map(function (p) { return p.id; }); }), total = 1 << 18, badNight = [], seen = {}, printed = 0;
+var sends = M.play(M.STRATEGIES.best).sends;
+for (var mask = 0; mask < total; mask++) {
+  var grades = [0, 1, 2].map(function (n) { var ch = []; for (var i = 0; i < 6; i++) if (mask & (1 << (n * 6 + i))) ch.push(ids[n][i]); return M.grade(n, ch); });
+  var o = M.opening(sends, grades);
+  if (!wellFormed(o[1]) || !wellFormed(o[2])) { if (badNight.length < 5) badNight.push(o[1] + ' || ' + o[2]); }
+  var key = o[1]; if (!seen[key]) seen[key] = o[2];
+}
+var distinct = Object.keys(seen); for (var q = 0; q < 20; q++) { var pick = distinct[Math.floor(q * (distinct.length - 1) / 19)]; console.log('   ' + pick + ' ' + seen[pick]); }
+check('all ' + total + ' night sentences are well formed (' + Object.keys(seen).length + ' distinct)', badNight.length === 0, badNight.join(' | '));
+check('the colour praise appears only when no colour piece was put in', (function () { var g = [M.grade(0, ['warm']), M.grade(1, []), M.grade(2, [])]; var h = [M.grade(0, ['warm', 'colour']), M.grade(1, []), M.grade(2, [])]; return /and no colour\./.test(M.opening(sends, g)[1]) && !/no colour/.test(M.opening(sends, h)[1]) && /gave it colour/.test(M.opening(sends, h)[1]); })());
 C.NIGHTS.forEach(function (N, n) { [[], N.pieces.map(function (p) { return p.id; }), [N.pieces[0].id, N.pieces[2].id]].forEach(function (ch) { var g = M.grade(n, ch); lines.push(g.line, M.nightLine(g)); g.pieces.forEach(function (p) { lines.push(p.why); }); }); });
-lines.push(C.BLANK_LINE);
 lines.forEach(function (l) { if (/undefined|NaN|Infinity|\d\.\d/.test(l)) bad.push(l); });
 check('no decimal, NaN, undefined or Infinity in ' + lines.length + ' lines', bad.length === 0, bad.join(' | '));
 check('no "no a body"', !lines.some(function (l) { return /no a /.test(l); }));
