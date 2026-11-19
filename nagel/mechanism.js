@@ -1,4 +1,4 @@
-// Zoom Out with Nagel (revision 1, four rounds): the mechanism, headless and the only copy. Runs unchanged in Node (module.exports) and in the
+// Nagel’s Camera (formerly Zoom Out with Nagel): the mechanism, headless and the only copy. Runs unchanged in Node (module.exports) and in the
 // browser (window.NagelMechanism). Everything that moves an outcome lives here: the six rounds (thing, reader, the three
 // frames and how much of the thing each holds), the rule that says whether a reader can read a frame, the result of a
 // send, the closing question and the verdict's words. The interface only passes actions in and draws what comes back.
@@ -230,7 +230,7 @@ function foundLine(s) {
 }
 function verdict(sends, grades) {
   var g = grades || [], clean = g.filter(function (x) { return x.found === x.inCount && x.wrong.length === 0; }).length;
-  var head = g.length ? 'You built the shape of a bat\u2019s evening ' + ['', 'once', 'twice', 'three times'][g.length] + (clean === g.length ? ', each time whole' : clean ? ', ' + ['', 'once', 'twice'][clean] + ' whole' : '') + ', and the inside stayed blank.' : 'The inside stayed blank.';
+  var head = g.length ? 'You built the shape of a bat\u2019s evening ' + ['', 'once', 'twice', 'three times'][g.length] + (clean === g.length ? ', each time whole' : clean ? ', ' + ['', 'once', 'twice'][clean] + ' whole' : '') + ', and the frame one stop further in stayed blank.' : 'The frame one stop further in stayed blank.';
   return { head: head, nagel: NAGEL_SAYS, found: sends.map(foundLine).concat(g.map(nightLine)), readings: CONFIG.READINGS };
 }
 

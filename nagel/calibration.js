@@ -1,4 +1,4 @@
-// Calibration check for Zoom Out with Nagel (build.md §2-3). The mechanism is a toy of an argument with no numbers in
+// Calibration check for Nagel’s Camera (formerly Zoom Out with Nagel) (build.md §2-3). The mechanism is a toy of an argument with no numbers in
 // it, so the check tests the properties the paper states (direction only), the rules the screen states, the strategy
 // table, the robustness of the best stop to every fraction we chose, and the words. Run: node calibration.js
 var M = require('./mechanism.js'); var C = M.CONFIG;

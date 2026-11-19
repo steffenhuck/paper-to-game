@@ -1,4 +1,4 @@
-# Generates zoom-out-with-nagel.html from template.html, mechanism.js (the single source of truth), about.html and the
+# Generates nagels-camera.html from template.html, mechanism.js (the single source of truth), about.html and the
 # embedded fonts, then verifies byte for byte that the embedded mechanism is the file calibration.js ran against.
 import base64, sys, os, subprocess
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -18,7 +18,7 @@ subs = {
 }
 for k in subs: assert t.count(k) == 1, k
 for k, v in subs.items(): t = t.replace(k, v)
-name = 'zoom-out-with-nagel.html'
+name = 'nagels-camera.html'
 open(name, 'w', encoding='utf-8').write(t)
 built = open(name, encoding='utf-8').read()
 if mech not in built:

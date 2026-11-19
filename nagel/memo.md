@@ -194,3 +194,9 @@ Mechanism: `READINGS` replaces `QUESTION`, `ANSWERS` and `NAGEL_ANSWER`; `verdic
 # Revision 5 (19 November 2026): the blank screen goes
 
 Steffen, after revision 4: the screen after the third window, where the picture zooms one stop further in and goes blank, looked like a leftover. On reflection it was a reveal with nothing for the player to do, dressed as a page they had landed on, and the only way to give it a decision was the prediction we had just cut. Agreed to cut the screen: the second half now ends on the third window settling, the player's own act, and the blank appears in the verdict's third step beside the player's window, with its line. `BLANK_LINE` reworded to say where the blank is relative to the shape the player built. The third window's button reads *Go on*. 52 checks, all passing; the browser session walks from the third window into the five steps; no errors.
+
+---
+
+# Revision 6 (19 November 2026): the title, and the frame one stop further in
+
+Steffen: with the blank screen gone, "Three ways to read the blank" pointed at a thing the player never met as a stage; and was *Zoom Out with Nagel* still the right title now that the ring turns both ways? Built: the verdict's last step is *Three ways to read the frame one stop further in*, the frame the third step has just shown beside the player's window; the headline says the frame one stop further in stayed blank. Title settled as **Nagel's Camera**, the thing the player holds all game, pointed first at their own evening and then at the bat; the file is `nagels-camera.html` (the old address had not been shared, so no redirect). 52 checks, all passing; the session re-run on the renamed file; no errors.
