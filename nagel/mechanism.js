@@ -126,15 +126,13 @@ var CONFIG = {
   // Words for how much of the shape the player built (ours; no tally on screen).
   BUILT_WORDS: [[1, 'All of'], [0.74, 'Most of'], [0.4, 'About half of'], [0.01, 'A little of'], [0, 'None of']],
   BLANK_LINE: 'One stop further in, and the window is blank. This is as far in as anyone\u2019s camera goes: what it is like for the bat to have this is the stop nobody reaches.',
-  // The closing question (p. 440: bats or Martians trying to conceive of us "would be wrong to conclude that there is
-  // not anything precise that it is like to be us"; pp. 446-447: physicalism not shown false, the "is" not understood).
-  QUESTION: 'Three times the window went blank one stop further in. What is in that frame?',
-  ANSWERS: [
-    { id: 'nothing', label: 'Nothing. There is nothing it is like to be a bat.' },
-    { id: 'physics', label: 'Only what the physics frame shows. The bat’s world is that shriek and that echo.' },
-    { id: 'something', label: 'Something. I have no way to read it.' }
-  ],
-  NAGEL_ANSWER: 'something'
+  // The three readings of the blank (p. 440: a sceptical conclusion would be wrong; pp. 446-447: physicalism not
+  // shown false, the "is" not understood). Read on the end screen, not chosen (revision 4).
+  READINGS: [
+    { id: 'nothing', label: 'Nothing is there: there is nothing it is like to be a bat.', says: 'Nagel says this would be wrong: a frame you cannot read is not an empty one. Ada could not read your red, and the red was there; a physiologist with your whole brain on screen would find none of it, and it would be there.' },
+    { id: 'physics', label: 'Only the physics is there: the bat\u2019s world is that shriek and that echo.', says: 'Nagel does not call this false. He says nobody can yet read it, like \u201Cmatter is energy\u201D said two thousand years early: the physics of your red could arrive whole, and the red was not in it. The same question is asked today of machines.' },
+    { id: 'something', label: 'Something is there that you have no way to read.', says: 'This is Nagel\u2019s. We can build the shape, as you did, and believe the inside as rich as our own, and still have no way in, because every frame we take is taken from where we stand.' }
+  ]
 };
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -230,22 +228,10 @@ function foundLine(s) {
   if (s.arrived > 0) return cap(r.short) + ' ' + stopPhrase(s.stop) + ': ' + (r.kind === 'experience' ? 'the shape of it reached ' + who + ', not the thing.' : 'a part of it reached ' + who + '.');
   return cap(r.short) + ' ' + stopPhrase(s.stop) + ': ' + 'the cause of it reached ' + who + ', and none of the thing.';
 }
-function verdict(sends, grades, answer) {
-  var head, part, stood;
-  if (answer === 'nothing') {
-    head = 'You called the blank frame empty.';
-    part = 'Nagel parts from you here. Ada could not read your red, and the red was there. The bat\u2019s frame is blank to you for the same reason, and no other.';
-    stood = 'Had yours stood, a physiologist with your whole brain on screen would be right to say there is nothing it is like to be you. You know that is false. So does the bat about itself.';
-  } else if (answer === 'physics') {
-    head = 'You called the blank frame the physics frame over again.';
-    part = 'Nagel does not call this false. He says nobody can yet read it, like \u201Cmatter is energy\u201D said two thousand years early. Your red round showed the gap: the physics could arrive whole, and the red was not in it.';
-    stood = 'Had yours stood, a physiologist with your brain on screen would have had your red in front of him and could not have found it. Something in the sentence is still missing. The same question is asked today of machines.';
-  } else {
-    head = 'You called the blank frame full of something you cannot read.';
-    part = 'That is Nagel\u2019s answer. We can say what sort of thing is there, forward, in three dimensions, read off echoes, and believe it as rich as our own, and still have no way to read it. This does not make physicalism false; it means nobody yet understands what would make it true.';
-    stood = 'Had yours stood, and it does: there are facts about what it is like to be a bat, beyond our concepts; the bat is in the same position about us; and the science of its brain, which we can have in full, does not reach them.';
-  }
-  return { head: head, nagel: NAGEL_SAYS, found: sends.map(foundLine).concat((grades || []).map(nightLine)), part: part, stood: stood, nagelAnswer: CONFIG.NAGEL_ANSWER, answer: answer };
+function verdict(sends, grades) {
+  var g = grades || [], clean = g.filter(function (x) { return x.found === x.inCount && x.wrong.length === 0; }).length;
+  var head = g.length ? 'You built the shape of a bat\u2019s evening ' + ['', 'once', 'twice', 'three times'][g.length] + (clean === g.length ? ', each time whole' : clean ? ', ' + ['', 'once', 'twice'][clean] + ' whole' : '') + ', and the inside stayed blank.' : 'The inside stayed blank.';
+  return { head: head, nagel: NAGEL_SAYS, found: sends.map(foundLine).concat(g.map(nightLine)), readings: CONFIG.READINGS };
 }
 
 // ---------------------------------------------------------------------------------------------------------------

@@ -73,10 +73,10 @@ check('the verdict carries one line per night after the three prints', M.verdict
 console.log('== the words');
 var bad = [], lines = [];
 R.forEach(function (r, k) { C.STOPS.forEach(function (s) { var x = M.send(k, s.id); lines.push(x.line, x.reply, x.why || '', x.frame, x.left, M.evidence(k).line); check(r.id + ' ' + s.id + ': a line, a reply, and a rule when read', x.line.length > 20 && x.reply.length > 5 && (!x.readable || x.why.length > 10)); }); });
-C.ANSWERS.forEach(function (a) { var v = M.verdict(M.play(M.STRATEGIES.best).sends, [], a.id); lines.push(v.head, v.part, v.stood); lines = lines.concat(v.found, v.nagel); check('verdict for "' + a.id + '": head, three found lines, where you part, had yours stood', v.head.length > 10 && v.found.length === 3 && v.part.length > 40 && v.stood.length > 40); });
-check('Nagel’s answer is the third', C.NAGEL_ANSWER === 'something' && C.ANSWERS[2].id === 'something');
+var v = M.verdict(M.play(M.STRATEGIES.best).sends, [M.grade(0, []), M.grade(1, []), M.grade(2, [])]); lines.push(v.head); lines = lines.concat(v.found, v.nagel); C.READINGS.forEach(function (r) { lines.push(r.label, r.says); });
+check('verdict: a head, six found lines, three readings', v.head.length > 10 && v.found.length === 6 && v.readings.length === 3);
 C.NIGHTS.forEach(function (N, n) { [[], N.pieces.map(function (p) { return p.id; }), [N.pieces[0].id, N.pieces[2].id]].forEach(function (ch) { var g = M.grade(n, ch); lines.push(g.line, M.nightLine(g)); g.pieces.forEach(function (p) { lines.push(p.why); }); }); });
-lines.push(C.BLANK_LINE, C.QUESTION);
+lines.push(C.BLANK_LINE);
 lines.forEach(function (l) { if (/undefined|NaN|Infinity|\d\.\d/.test(l)) bad.push(l); });
 check('no decimal, NaN, undefined or Infinity in ' + lines.length + ' lines', bad.length === 0, bad.join(' | '));
 check('no "no a body"', !lines.some(function (l) { return /no a /.test(l); }));

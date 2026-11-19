@@ -56,12 +56,12 @@ const { chromium } = require('playwright'); const path = require('path'); const 
   }
   await page.waitForTimeout(2400); await shot('n-blank', true); log.push('blank: ' + await page.$eval('#blankline', e => e.textContent)); await hscroll('blank');
   await page.click('#b-blanknext'); await page.waitForTimeout(400);
-  await hscroll('question'); await shot('a-question', true); log.push('question: ' + await page.$eval('#qtext', e => e.textContent));
-  await page.click('#qwins .w[data-win="0"]'); await page.waitForTimeout(300); await shot('a-window-panel', true); log.push('window panel: ' + await page.$eval('#etitle', e => e.textContent) + ' | ' + await page.$eval('#eline', e => e.textContent)); await page.click('#evidence [data-close]'); await page.waitForTimeout(200);
-  await page.click('button[data-a="something"]'); await page.waitForTimeout(400); await hscroll('end'); await shot('a-end-1', true);
+  await hscroll('end'); await shot('a-end-1', true);
+  await page.click('#steps .w[data-win="0"]').catch(() => {});
   log.push('END: ' + await page.$eval('#ehead', e => e.textContent));
   for (let i = 2; i <= 5; i++) { await page.click('#b-goon'); await page.waitForTimeout(500); if (i === 3 || i === 5) await shot('a-end-' + i, true); }
-  log.push('steps shown: ' + await page.$$eval('#steps .step', es => es.length) + '; Go on hidden: ' + await page.$eval('#goon', e => e.style.display === 'none'));
+  log.push('steps shown: ' + await page.$$eval('#steps .step', es => es.length) + '; Go on hidden: ' + await page.$eval('#goon', e => e.style.display === 'none') + '; readings: ' + await page.$$eval('#steps .step:last-child p b', es => es.length));
+  await page.click('#steps .w[data-win="0"]'); await page.waitForTimeout(300); await shot('a-window-panel', true); log.push('window panel: ' + await page.$eval('#etitle', e => e.textContent) + ' | ' + await page.$eval('#eline', e => e.textContent)); await page.click('#evidence [data-close]'); await page.waitForTimeout(200);
   await page.click('#steps .mini[data-ev="2"]'); await page.waitForTimeout(300); log.push('end print tapped: ' + await page.$eval('#etitle', e => e.textContent)); await page.click('#evidence [data-close]'); await page.waitForTimeout(200);
   await page.click('#b-further'); await page.waitForTimeout(300); await shot('a-end-further', true);
   await page.click('#end [data-open="about"]'); await page.waitForTimeout(300); await shot('about', true); await page.click('#about [data-close]'); await page.waitForTimeout(200);
@@ -71,14 +71,14 @@ const { chromium } = require('playwright'); const path = require('path'); const 
   await page.click('#b-night'); await page.waitForTimeout(300);
   for (let n = 0; n < 3; n++) { await page.$$eval('#tray button', bs => bs.forEach(b => b.click())); await page.waitForTimeout(150); await page.click('#b-bat'); await page.waitForTimeout(2900); log.push('B night ' + (n + 1) + ' all pieces: ' + await page.$eval('#nightline', e => e.textContent)); await page.click('#b-nightnext'); await page.waitForTimeout(300); }
   await page.waitForTimeout(2500); await page.click('#b-blanknext'); await page.waitForTimeout(300);
-  await page.click('button[data-a="physics"]'); await page.waitForTimeout(300); for (let i = 2; i <= 5; i++) { await page.click('#b-goon'); await page.waitForTimeout(150); } await shot('b-end', true); log.push('B END: ' + await page.$eval('#ehead', e => e.textContent));
+  for (let i = 2; i <= 5; i++) { await page.click('#b-goon'); await page.waitForTimeout(150); } await shot('b-end', true); log.push('B END: ' + await page.$eval('#ehead', e => e.textContent));
   // session C: the naked eye throughout
   await page.click('#b-again'); await page.waitForTimeout(300);
   for (let k = 0; k < 3; k++) { await page.click('#b-send'); await page.waitForTimeout(3000); if (k === 1) await shot('c-' + (k + 1) + '-' + ids[k] + '-eye-sent', true); log.push('C round ' + (k + 1) + ' naked eye: ' + await page.$eval('#line', e => e.textContent)); await page.click('#b-next'); await page.waitForTimeout(300); }
   await page.click('#b-night'); await page.waitForTimeout(300);
   for (let n = 0; n < 3; n++) { await page.click('#b-bat'); await page.waitForTimeout(2900); log.push('C night ' + (n + 1) + ' no pieces: ' + await page.$eval('#nightline', e => e.textContent)); await page.click('#b-nightnext'); await page.waitForTimeout(300); }
   await page.waitForTimeout(2500); await page.click('#b-blanknext'); await page.waitForTimeout(300);
-  await page.click('button[data-a="nothing"]'); await page.waitForTimeout(300); for (let i = 2; i <= 5; i++) { await page.click('#b-goon'); await page.waitForTimeout(150); } await shot('c-end', true); log.push('C END: ' + await page.$eval('#ehead', e => e.textContent));
+  for (let i = 2; i <= 5; i++) { await page.click('#b-goon'); await page.waitForTimeout(150); } await shot('c-end', true); log.push('C END: ' + await page.$eval('#ehead', e => e.textContent));
   await page.setViewportSize({ width: 1280, height: 720 }); await page.click('#b-again'); await page.waitForTimeout(300); await page.evaluate(() => window.__api.setZ(0.5)); await page.waitForTimeout(120); await shot('laptop-round1'); await hscroll('laptop');
   log.push('errors: ' + (errors.length ? errors.join(' | ') : 'none'));
   fs.writeFileSync(path.join(__dirname, 'session-log.txt'), log.join('\n') + '\n');
