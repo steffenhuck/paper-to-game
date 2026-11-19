@@ -1,0 +1,1 @@
+Revision 2 (19 Nov 2026): four rounds, the bat holding the camera in the fourth, tappable evidence prints, the stepped debrief. Its memo sections are in ../../memo.md under "Revision 1" and "Revision 2".

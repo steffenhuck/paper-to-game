@@ -109,6 +109,40 @@ footer.sig a { color: inherit; text-decoration: none; }
 .step .stitle { font-family: 'Baloo', system-ui, sans-serif; font-size: 17px; margin: 4px 0; }
 .step p { font-size: 15.5px; margin: 4px 0; }
 .step .prints .mini { cursor: pointer; }
+html.night, html.night body { background: #0B1626; color: #E8EEF5; }
+html.night .reader, html.night .bubble, html.night button.answer { background: #13223A; border-color: #5FE3C8; color: #E8EEF5; }
+html.night .bubble:before { border-right-color: #5FE3C8; } html.night .bubble:after { border-right-color: #13223A; }
+html.night .aim, html.night .reader .rtext .no { color: #9FB0C6; }
+html.night .help-btn { background: #13223A; color: #E8EEF5; border-color: #5FE3C8; }
+html.night .rule { background: #13223A; border-left-color: #5FE3C8; }
+html.night button.pale { background: #13223A; color: #E8EEF5; border-color: #5FE3C8; }
+html.night footer.sig { color: #9FB0C6; }
+html.night .overlay { background: #0B1626; }
+html.night .overlay .help-btn { background: #13223A; color: #E8EEF5; border-color: #5FE3C8; }
+html.night .pair .pr { background: #13223A; } html.night .pair .pr .cap { color: #C9D4E3; }
+html.night #eline2 { color: #9FB0C6; }
+.winwrap { max-width: 324px; margin: 6px auto 0; }
+.winwrap svg { display: block; width: 100%; height: auto; }
+.tray { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px auto 0; max-width: 324px; }
+.tray button.tile { background: #13223A; border: 2px solid #3A5578; border-radius: 14px; padding: 6px 4px 5px; color: #E8EEF5; font-family: 'Varela', system-ui, sans-serif; font-weight: 400; font-size: 11.5px; line-height: 1.15; }
+.tray button.tile svg { width: 40px; height: 40px; display: block; margin: 0 auto 3px; }
+.tray button.tile.on { border-color: #F0902A; background: #1C2F4E; box-shadow: 0 0 0 2px #F0902A inset; }
+.tray button.tile:disabled { opacity: .9; }
+.grades { margin: 10px auto 0; max-width: 324px; }
+.grades .g { display: flex; gap: 8px; align-items: flex-start; font-size: 13.5px; margin: 6px 0; line-height: 1.3; }
+.grades .g .mk { flex: 0 0 22px; height: 22px; border-radius: 50%; margin-top: 1px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-family: 'Baloo', system-ui, sans-serif; }
+.grades .g.in .mk { background: #5FE3C8; color: #0B1626; } .grades .g.out .mk { border: 2px solid #5A6F8C; color: #9FB0C6; }
+.grades .g b { font-weight: 400; color: #5FE3C8; } .grades .g.out b { color: #9FB0C6; }
+.grades .g .you { color: #F0902A; }
+.nightline { font-size: 16px; margin: 10px auto 0; max-width: 324px; }
+.wins { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 8px 0; }
+.wins .w svg { width: 100%; height: auto; display: block; border-radius: 10px; }
+.wins .w .cap { font-size: 11px; text-align: center; margin-top: 2px; }
+.pair .pr.dark { background: #13223A; } .pair .pr.dark .cap { color: #C9D4E3; }
+@keyframes pop { from { transform: scale(.2); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.winwrap .badge { animation: pop .35s ease-out both; transform-box: fill-box; transform-origin: center; }
+.winwrap .fadeout { transition: opacity 1.2s ease; }
+.winwrap .glyph { transition: opacity 1.2s ease .4s; }
 .ic-full .f { fill: var(--c); } .ic-full .s { stroke: var(--c); }
 .ic-part .f { fill: var(--c); fill-opacity: .28; } .ic-part .s { stroke: var(--c); stroke-dasharray: none; }
 .ic-none .f { fill: none; } .ic-none .s { stroke: var(--grey); stroke-dasharray: 3 3; }
@@ -132,8 +166,8 @@ footer.sig a { color: inherit; text-decoration: none; }
     <rect x="56" y="130" width="108" height="18" fill="#FFFFFF"/><rect x="62" y="134" width="96" height="10" fill="#F0902A"/>
   </svg>
   <h1>Zoom Out with Nagel</h1>
-  <p class="start-lines">A camera whose zoom ring steps back from your own eyes. Four readers want to know about four things, and most of them do not have your senses.</p>
-  <p class="acts">Turn the ring and watch the picture change. The ring turns freely; the shutter fires at three stops. Press Send.</p>
+  <p class="start-lines">A camera whose zoom ring steps back from your own eyes. Three readers want to know about three things, and two of them do not have your senses. Then night falls, the camera turns on a bat, and you build what the bat has of the same three things.</p>
+  <p class="acts">Turn the ring and watch the picture change; the ring turns freely and the shutter fires at three stops. Press Send. Then, at night, tap the pieces of your evening that you think a bat has.</p>
   <p class="aimline">Get as much of each thing across to its reader as you can.</p>
   <button class="big" id="b-start">Start</button>
   <div class="links"><button class="quiet" data-open="help">How to play</button><button class="quiet" data-open="about">About</button></div>
@@ -160,12 +194,37 @@ footer.sig a { color: inherit; text-decoration: none; }
   </div>
 </section>
 
+<section id="turn" class="screen">
+  <div class="top"><div class="disp">Night falls</div><button class="help-btn" data-open="help" aria-label="How to play">?</button></div>
+  <div class="winwrap" id="turnwin"></div>
+  <p class="now" style="margin-top:12px">The camera turns on a bat. It wakes at dusk in the attic over the pier, over the storm, over the field.</p>
+  <p style="font-size:15.5px">You know how the sunset, the lightning and the red were for you. Three nights, three windows: build what the bat has of each, from the pieces of your own evening, and the window will show you how far you got.</p>
+  <div class="sendrow"><button class="big" id="b-night">Open the first window</button></div>
+</section>
+
+<section id="nightscr" class="screen">
+  <div class="top"><div class="disp" id="nightno">Night 1 of 3</div><button class="help-btn" data-open="help" aria-label="How to play">?</button></div>
+  <div class="aim">Aim: build what the bat has of it, from the pieces of your own evening.</div>
+  <div class="now" id="nightnow"></div>
+  <div class="winwrap" id="win"></div>
+  <div class="tray" id="tray"></div>
+  <div class="sendrow" id="batrow"><button class="big" id="b-bat">That’s my bat</button></div>
+  <div id="nightresult" style="display:none">
+    <div class="nightline fade" id="nightline"></div>
+    <div class="grades fade" id="grades"></div>
+    <div class="sendrow fade" id="nightnext"><button class="big" id="b-nightnext">Next night</button></div>
+  </div>
+  <div id="blankpart" style="display:none">
+    <div class="nightline fade" id="blankline"></div>
+    <div class="sendrow fade" id="blanknext"><button class="big" id="b-blanknext">Go on</button></div>
+  </div>
+</section>
+
 <section id="question" class="screen">
   <div class="top"><div class="disp">The question</div><button class="help-btn" data-open="help" aria-label="How to play">?</button></div>
-  <div class="reader" id="qreader"></div>
   <p class="now" id="qtext"></p>
-  <p style="font-size:14px;color:#6E5A4A;margin:0 0 4px">Your own prints are the evidence. Tap one to see what the reader got, and the frame they could not read.</p>
-  <div class="qrow" id="qrow"></div>
+  <div class="wins" id="qwins"></div>
+  <p class="aim">Your three windows, and the blank one stop further in. Tap a window to see its pieces again.</p>
   <div id="answers"></div>
 </section>
 
@@ -209,7 +268,7 @@ footer.sig a { color: inherit; text-decoration: none; }
   <p>The picture is what your camera sees. Turn the ring under it and watch: the camera steps back from your own eyes, the colour drains, things leave the frame and other things come in. The ring turns freely, but the shutter fires at only three stops, and the ring settles on the nearest when you let go. <b>Naked eye</b> is the thing exactly as it is for you; it can be read only with the sense it was taken with (eyes, sonar). <b>The shape</b> is the outline of the thing, where it sits among its neighbours; it can be read with a mind. <b>The physics</b> is what any instrument would find; it can be read with instruments and sums. The tag under the picture says which stop you are at and what it takes to read it; the blue marks above the ring show which stops this reader can read.</p>
   <p>Look at the picture and ask: is the thing still in it? Then press <b>Send</b>.</p>
   <p>The picture becomes a print at the reader's side. The small drawing beside the reader fills by how much of the thing arrived: solid is all of it, pale is a part, a dotted outline is none. One line says what crossed. <b>What that means</b> opens the same stop drawn with its labels, what left the picture on the way there, the rule, and the reader's answer. <b>Next</b> goes on.</p>
-  <p>Four rounds; every round the ring starts at the naked eye. In the last round the bat holds the camera and you are the reader. Then one question about the frame you could not read: tap your four prints to see what each reader got and the frame they could not read, then choose an answer. The verdict comes in steps; press Go on.</p>
+  <p>Three rounds; every round the ring starts at the naked eye. Then night falls and the camera turns on a bat. Three windows, one for each thing: under the window is a tray of pieces of your own evening, storm and field. Tap the ones you think the bat has; they go into the window. Press <b>That’s my bat</b>: the pieces a bat has turn into the bat’s own idiom, echoes and loud waves and warmth, the pieces it does not have fade, and the ones you missed appear dashed, so the window ends as the shape of the bat’s evening. A line under each piece says why. After the third window the camera goes one stop further in, and the window is blank. Then one question about that blank frame, and the verdict in steps; press Go on.</p>
   <div class="sendrow"><button class="big" data-close="help">Back</button></div>
 </div></div>
 
@@ -218,10 +277,11 @@ footer.sig a { color: inherit; text-decoration: none; }
   <div id="abouttext"><h2>About this game</h2>
 <p><b>The paper.</b> Thomas Nagel, "What Is It Like to Be a Bat?", <i>The Philosophical Review</i> 83(4), October 1974, pp. 435–450. DOI <a href="https://doi.org/10.2307/2183914">10.2307/2183914</a>. Game built from this paper; the paper is the authority where the two disagree.</p>
 <p><b>What the paper argues.</b> An organism has conscious experience if there is something it is like to be that organism, for the organism. Most bats perceive the world by sonar, and nothing in our experience lets us imagine what that is like: adding webbing and poor vision to ourselves only tells us what it would be like for us to behave as a bat. A point of view is a type, not a private possession; the more different another creature is, the less of its point of view we can take up. In every other science, understanding grows by moving away from the human point of view toward what any observer could find: lightning is more than its look, and the look is explained as an effect on eyes. For experience the move runs backwards: step away from the point of view and the experience is left behind, because it is how things are from that point of view. A Martian scientist with no eyes could understand lightning in full and never the human idea of it; a Martian physiologist with every cell of your brain on screen would find no trace of your pain, and would be wrong to conclude there is none. None of this shows that mind is not brain. It shows that nobody yet knows how to read the sentence "the pain is this firing", as a pre-Socratic could not read "matter is energy". Nagel's proposal is an objective phenomenology: describing the structure of an experience in terms a creature that cannot have it could follow, as one might explain to a person blind from birth something of what seeing is like, knowing one would reach a blank wall eventually.</p>
-<p><b>The game.</b> You hold a camera whose zoom ring steps back from your own eyes. The ring turns freely and the picture changes under your thumb: the colour drains, things leave the frame and other things come in. The shutter fires at three stops. At the naked eye the frame holds a thing exactly as it is for you, and can be read only with the sense it was taken with. The shape holds the outline of a thing, where it sits among its neighbours, and can be read with a mind. The physics holds what any instrument would find, and can be read with instruments and sums. Four readers ask about four things from the paper; you choose the stop and send. The print that comes out at the reader's side is what they now have, and the small drawing beside them is how much of the thing that is. At the end the bat holds the camera, and the frame you cannot read is the one you are asked about. This is the second build (19 November 2026); the first, with six rounds and three separate drawings per thing, is kept in the repository.</p>
+<p><b>The game.</b> Two halves. In the first you hold a camera whose zoom ring steps back from your own eyes. The ring turns freely and the picture changes under your thumb: the colour drains, things leave the frame and other things come in. The shutter fires at three stops. At the naked eye the frame holds a thing exactly as it is for you, and can be read only with the sense it was taken with. The shape holds the outline of a thing, where it sits among its neighbours, and can be read with a mind. The physics holds what any instrument would find, and can be read with instruments and sums. Three readers ask about three things from the paper; you choose the stop and send. The print that comes out at the reader's side is what they now have, and the small drawing beside them is how much of the thing that is. In the second half night falls and the camera turns on a bat. Three windows, one for each of the same three things: under each is a tray of pieces of your own evening, storm and field, and you tap the ones you think the bat has. The window then settles into the shape of the bat's evening: the pieces a bat has turn into its idiom, echoes and loud waves and warmth, the pieces it does not have fade, and the ones you missed appear dashed. After the third window the camera goes one stop further in, and the window is blank. Then one question about that blank frame, and the verdict. This is the third build (19 November 2026); the earlier ones are kept in the repository.</p>
+<p><b>Where the second half steps away from the paper.</b> Nagel writes that we can ascribe general types of experience to a bat on the basis of its structure and behaviour (sonar as "a form of three-dimensional forward perception"; versions of pain, fear, hunger and lust) and no more. The windows take him at his word and go further than he does: which pieces a bat has is decided by bat biology the paper does not contain, summarised from general references (Neuweiler, <i>The Biology of Bats</i>, 2000; Fenton and Simmons, <i>Bats: A World of Science and Mystery</i>, 2015): most small bats have poor eyesight that tells light from dark and no colour, hearing far sharper than ours, sonar as the main sense and a good nose; they feel warmth as we do and fly at dusk. The pieces, the idiom of the window and the lines are the game's. What the windows show is therefore the shape of a bat's evening as a biologist would draw it, which is Nagel's objective phenomenology done by hand; the blank one stop further in is the paper's claim, and the game has not shown you what it is like to be a bat and could not.</p>
 <p><b>Mechanism kind: a toy.</b> The paper has no numbers. The game runs a model we built to illustrate its argument, and every number in it is ours: how much of a thing each frame holds (an experience: all of it from inside, a part as the shape, none as the physics; a thing in the world: its look from inside, a part as the shape, all of it as the physics), and the rule that a frame is readable with the sense it was taken with or not at all. The paper gives the direction of each of these and nothing finer; the "shape" stop is its proposal for an objective phenomenology; the readers' senses are drawn from the paper's descriptions of its Martian, its person blind from birth and its physiologist. The game's readers are invented; their lines are the game's, not the paper's.</p>
-<p><b>What the game demonstrates:</b> that under this rule, a thing in the world fills the far frame and an experience empties out of it; that a reader without your senses can be reached only by frames the experience has left, so that the shape is the best bridge there is and it carries the outline and not the thing; and that the physical account of red can arrive whole, to a reader who can read it, and hold none of the red.<br><b>What it assumes:</b> the three stops; the fractions; readability as all-or-nothing by sense; that the structural frame carries something and the physical frame carries nothing of an experience.<br><b>What the paper establishes:</b> an argument, not evidence: that we have no conception of how the subjective character of experience could be captured by an objective description, and that this is a reason to doubt we understand physicalism, not a proof that it is false. Under this game's assumptions the player meets that argument; the game is no independent evidence for it.</p>
-<p><b>What is cut.</b> The particular and the type within the subjective (the paper's pp. 441–442); the imaginer adding webbing (p. 439); the rainbow, the Mona Lisa, the trumpet, pain, hunger, fear and lust (the physiologist with the whole brain on screen, fn. 10 and p. 444, is read on the end screen rather than played); Kripke, Davidson and the question whether the mind-brain relation is necessary (fn. 11, p. 448); the caterpillar locked in the safe (p. 447) is on the end screen only.</p>
+<p><b>What the game demonstrates:</b> that under this rule, a thing in the world fills the far frame and an experience empties out of it; that a reader without your senses can be reached only by frames the experience has left, so that the shape is the best bridge there is and it carries the outline and not the thing; that the physical account of red can arrive whole, to a reader who can read it, and hold none of the red; and that the shape of a bat's evening can be built from what is known of bats, while the stop beyond it stays blank.<br><b>What it assumes:</b> the three stops; the fractions; readability as all-or-nothing by sense; that the structural frame carries something and the physical frame carries nothing of an experience; and, in the second half, the bat biology named above and the game's choice of pieces.<br><b>What the paper establishes:</b> an argument, not evidence: that we have no conception of how the subjective character of experience could be captured by an objective description, and that this is a reason to doubt we understand physicalism, not a proof that it is false. Under this game's assumptions the player meets that argument; the game is no independent evidence for it.</p>
+<p><b>What is cut.</b> The particular and the type within the subjective (the paper's pp. 441–442); the imaginer adding webbing (p. 439; the windows are its cousin, built from pieces instead of webbing); the rainbow, the Mona Lisa, the trumpet, pain, hunger, fear and lust (the physiologist with the whole brain on screen, fn. 10 and p. 444, is read on the end screen rather than played); Kripke, Davidson and the question whether the mind-brain relation is necessary (fn. 11, p. 448); the caterpillar locked in the safe (p. 447) is on the end screen only.</p>
 <p><b>Credits.</b> Design and build: Steffen Huck with Claude, November 2026. Type: Baloo 2 (Ek Type) and Varela Round (Joe Prince and others), both under the SIL Open Font License. The memo, the mechanism and its check are in the <a href="https://github.com/steffenhuck/paper-to-game/tree/main/nagel">repository</a>.</p>
 </div>
   <div class="sendrow"><button class="big" data-close="about">Back</button></div>
@@ -308,29 +368,57 @@ var CONFIG = {
         physics: { says: 'Light of about 700 nanometres; the long-wave cones in the eye firing more than the others.' }
       },
       reply: { inside: '', shape: 'Next to orange, the warm end, blood. So I know where it sits. And what is it like? Say it in sound and I would have it; I hear.',
-               physics: 'Seven hundred nanometres. A number. And what is it like?', unread: 'I have never seen. This frame is nothing to me.' } },
-    { id: 'bat', thing: 'the bat’s world, as it is for the bat', short: 'the bat’s world', kind: 'experience', sense: 'sonar',
-      // pp. 438-440: sonar as "three-dimensional forward perception"; the intelligent bat as our mirror
-      reader: { id: 'you', name: 'you', pron: 'you', who: 'the bat is sending; you receive', has: ['eyes', 'ears', 'body', 'mind', 'sums'], lacks: ['sonar'] },
-      ask: 'What is my world like? Which frame do you want?',
-      frames: {
-        inside:  { says: 'No picture. This frame is taken from where you cannot stand.' },
-        shape:   { says: 'Forward, in three dimensions; distance, size, shape, texture, motion, read off the echoes of its own shrieks.' },
-        physics: { says: 'A shriek at 50,000 times a second from the throat; the echo back to the ears; the brain timing the gap.' }
-      },
-      reply: { inside: '', shape: 'Forward, in three dimensions. The shape of it. What is it like? You have no idea.',
-               physics: 'A shriek, an echo, a gap. All of it. What is it like? You have no idea.', unread: 'You have no sonar. This frame is nothing to you.' } }
+               physics: 'Seven hundred nanometres. A number. And what is it like?', unread: 'I have never seen. This frame is nothing to me.' } }
   ],
   // What left the picture on the way to each stop, as the player saw it happen on the ring (revision 1; ours).
   LEFT: {
     sunset:    { inside: 'Nothing has left yet: this is the evening as you had it.', shape: 'On the way here the figure on the pier went out of the frame, then the colour; the sun stayed, as a disc going down.', physics: 'On the way here the figure went, then the colour, then the sun as you saw it; the camera pulled back until the earth was a ball and the evening was a sun two degrees under a line.' },
     lightning: { inside: 'Nothing has left yet: the flash as you had it, and the flinch.', shape: 'On the way here you went out of the frame, then the colour; the bolt stayed, as a branching line, and the bang took its place after it.', physics: 'On the way here you went, then the colour; the bolt stayed in the middle and gained what made it: the cloud, the ground, the charge, the channel.' },
-    red:       { inside: 'Nothing has left yet: the field, red to the edges.', shape: 'On the way here the red went out of the poppies and a ring of colours came in with one slot marked; the red is the slot, not the colour.', physics: 'On the way here the red went, then the field; the eye that saw it shrank to the corner and the frame filled with the light that caused it.' },
-    bat:       { inside: 'Nothing could be shown: this frame is taken from where you cannot stand.', shape: 'On the way here the blank gave way to a cone in front of a bat, with things in it at distances.', physics: 'On the way here the blank gave way to a cone, then the cone to a throat, two ears and a clock.' }
+    red:       { inside: 'Nothing has left yet: the field, red to the edges.', shape: 'On the way here the red went out of the poppies and a ring of colours came in with one slot marked; the red is the slot, not the colour.', physics: 'On the way here the red went, then the field; the eye that saw it shrank to the corner and the frame filled with the light that caused it.' }
   },
+  // The second half (revision 3): the camera turns on the bat and the player builds, from pieces of their own evening,
+  // storm and field, what the bat has of each. The grading is the SHAPE of a bat's world, built as a biologist would
+  // build it from structure and behaviour (Nagel p. 439: "we may ascribe general types of experience on the basis of the
+  // animal's structure and behavior"). Which pieces are in rests on bat biology the paper does not contain, summarised
+  // from general references (Neuweiler, The Biology of Bats, 2000; Fenton & Simmons, Bats: A World of Science and
+  // Mystery, 2015): most small bats have poor eyesight that tells light from dark and no colour, hearing far sharper
+  // than ours, sonar as the main sense, and a good nose; they feel warmth and cold as we do, and fly at dusk. The pieces,
+  // their idiom in the window, and the lines are ours.
+  NIGHTS: [
+    { id: 'evening', thing: 'the sunset', name: 'the bat\u2019s evening', ask: 'How does the bat have the sunset?',
+      pieces: [
+        { id: 'colour', label: 'the colour of the sky', idiom: 'light', in: false, why: 'A bat\u2019s eyes tell light from dark and no colour, and sonar carries no light. The colour is not in there.' },
+        { id: 'disc', label: 'the sun\u2019s disc', idiom: 'light', in: false, why: 'A bat\u2019s eyes make no disc of it; at most a brightness, going.' },
+        { id: 'warm', label: 'the warmth of the air', idiom: 'warm', in: true, why: 'A bat\u2019s skin feels the warm air as yours does.' },
+        { id: 'sea', label: 'the sound of the sea', idiom: 'sound', in: true, why: 'A bat\u2019s hearing is far sharper than yours. The sea is loud in there.' },
+        { id: 'moths', label: 'the moths rising', idiom: 'echo', in: true, why: 'Every moth answers a shriek. This is what the evening is for.' },
+        { id: 'dark', label: 'the dark coming', idiom: 'dark', in: true, why: 'Dark from light is what a bat\u2019s eyes are for, and dusk is when it wakes.' }
+      ] },
+    { id: 'storm', thing: 'lightning', name: 'the bat\u2019s storm', ask: 'How does the bat have the lightning?',
+      pieces: [
+        { id: 'crack', label: 'the white crack', idiom: 'flash', in: true, why: 'A flash of brightness, yes: a bat\u2019s eyes can tell that much. The shape of it, no.' },
+        { id: 'purple', label: 'the purple sky', idiom: 'light', in: false, why: 'No colour. The sky is not purple in there, or any colour.' },
+        { id: 'bang', label: 'the bang', idiom: 'sound', in: true, why: 'Enormous. A bat\u2019s ears are made for faint echoes; thunder fills them.' },
+        { id: 'rain', label: 'the rain on the leaves', idiom: 'echo', in: true, why: 'Every drop answers a shriek. The air fills with clutter.' },
+        { id: 'flinch', label: 'the flinch', idiom: 'self', in: false, why: 'That was yours. It came with the sight of the crack, and the sight is not in there.' },
+        { id: 'petrichor', label: 'the smell of rain', idiom: 'smell', in: true, why: 'A bat has a good nose. The wet earth is in there.' }
+      ] },
+    { id: 'field', thing: 'red', name: 'the bat\u2019s field', ask: 'How does the bat have the red?',
+      pieces: [
+        { id: 'red', label: 'the red', idiom: 'light', in: false, why: 'No colour vision, and sonar carries no light. The red is not in there at all.' },
+        { id: 'shapes', label: 'the shape of the poppies', idiom: 'echo', in: true, why: 'By echo: a soft clutter of stalks and cups, each answering a shriek.' },
+        { id: 'smell', label: 'the smell of the field', idiom: 'smell', in: true, why: 'A good nose. The field is in there as a smell before anything else.' },
+        { id: 'rustle', label: 'the rustle of the stalks', idiom: 'sound', in: true, why: 'Sharp ears. The rustle is loud in there.' },
+        { id: 'warmend', label: 'the warm end of the colours', idiom: 'light', in: false, why: 'There is no ring of colours in a bat, so nothing has a warm end.' },
+        { id: 'bees', label: 'the bees humming', idiom: 'echo', in: true, why: 'Heard, and echoed: small, fast, near.' }
+      ] }
+  ],
+  // Words for how much of the shape the player built (ours; no tally on screen).
+  BUILT_WORDS: [[1, 'All of'], [0.74, 'Most of'], [0.4, 'About half of'], [0.01, 'A little of'], [0, 'None of']],
+  BLANK_LINE: 'One stop further in, and the window is blank. This is as far in as anyone\u2019s camera goes: what it is like for the bat to have this is the stop nobody reaches.',
   // The closing question (p. 440: bats or Martians trying to conceive of us "would be wrong to conclude that there is
   // not anything precise that it is like to be us"; pp. 446-447: physicalism not shown false, the "is" not understood).
-  QUESTION: 'The bat’s naked-eye frame came to you blank. What is in it?',
+  QUESTION: 'Three times the window went blank one stop further in. What is in that frame?',
   ANSWERS: [
     { id: 'nothing', label: 'Nothing. There is nothing it is like to be a bat.' },
     { id: 'physics', label: 'Only what the physics frame shows. The bat’s world is that shriek and that echo.' },
@@ -391,12 +479,30 @@ function best(k) {
 }
 
 // ---------------------------------------------------------------------------------------------------------------
+// The nights: grading a built window. `chosen` is an array of piece ids.
+// ---------------------------------------------------------------------------------------------------------------
+function night(n) { return CONFIG.NIGHTS[n]; }
+function builtWords(f) { for (var i = 0; i < CONFIG.BUILT_WORDS.length; i++) if (f >= CONFIG.BUILT_WORDS[i][0]) return CONFIG.BUILT_WORDS[i][1]; return 'None of'; }
+function grade(n, chosen) {
+  var N = night(n), inCount = 0, found = 0, wrong = [], pieces = N.pieces.map(function (p) {
+    var c = chosen.indexOf(p.id) >= 0; if (p.in) inCount++; if (p.in && c) found++; if (!p.in && c) wrong.push(p.label);
+    return { id: p.id, label: p.label, idiom: p.idiom, chosen: c, in: p.in, why: p.why, status: c && p.in ? 'kept' : c && !p.in ? 'faded' : !c && p.in ? 'missed' : 'left' };
+  });
+  var f = found / inCount, w = builtWords(f);
+  var NUM = ['no', 'one', 'two', 'three', 'four', 'five', 'six'];
+  var line = w + ' the shape of ' + N.name + ' is in your window' + (found === inCount ? '' : ', ' + NUM[inCount - found] + ' of its pieces missing') + (wrong.length ? ', and ' + joinList(wrong) + (wrong.length > 1 ? ' are' : ' is') + ' in it that a bat does not have.' : ', and nothing that a bat does not have.');
+  return { night: n, pieces: pieces, found: found, inCount: inCount, wrong: wrong, fraction: f, words: w, line: line };
+}
+function joinList(a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; }
+function nightLine(g) { var N = night(g.night); return cap(N.name) + ': ' + g.words.toLowerCase() + ' its shape' + (g.wrong.length ? ', with ' + joinList(g.wrong) + ' in it that ' + (g.wrong.length > 1 ? 'do' : 'does') + ' not belong' : '') + '; the inside, blank.'; }
+
+// ---------------------------------------------------------------------------------------------------------------
 // The verdict. `sends` is an array of six results from send(); `answer` is one of CONFIG.ANSWERS ids.
 // ---------------------------------------------------------------------------------------------------------------
 var NAGEL_SAYS = [
   'Step back from your eyes and a thing in the world stays in view and gets clearer: lightning is what it does, not how it looks.',
   'Step back from your eyes and an experience drops out of the frame: red is a way of seeing, not a thing seen, so the far frame holds its cause and not it.',
-  'A frame you cannot read is not an empty one: Ada could not read your red, and the red was there. The bat\u2019s frame is blank to you the same way.'
+  'What a bat\u2019s evening holds can be built from its structure and behaviour, as you built it; what it is like for the bat is the stop nobody reaches. And a frame you cannot read is not an empty one: Ada could not read your red, and the red was there.'
 ];
 // The evidence panel (revision 2): for a round, which frame the reader could not read, and the line under it.
 function evidence(k) {
@@ -414,7 +520,7 @@ function foundLine(s) {
   if (s.arrived > 0) return cap(r.short) + ' ' + stopPhrase(s.stop) + ': ' + (r.kind === 'experience' ? 'the shape of it reached ' + who + ', not the thing.' : 'a part of it reached ' + who + '.');
   return cap(r.short) + ' ' + stopPhrase(s.stop) + ': ' + 'the cause of it reached ' + who + ', and none of the thing.';
 }
-function verdict(sends, answer) {
+function verdict(sends, grades, answer) {
   var head, part, stood;
   if (answer === 'nothing') {
     head = 'You called the blank frame empty.';
@@ -429,7 +535,7 @@ function verdict(sends, answer) {
     part = 'That is Nagel\u2019s answer. We can say what sort of thing is there, forward, in three dimensions, read off echoes, and believe it as rich as our own, and still have no way to read it. This does not make physicalism false; it means nobody yet understands what would make it true.';
     stood = 'Had yours stood, and it does: there are facts about what it is like to be a bat, beyond our concepts; the bat is in the same position about us; and the science of its brain, which we can have in full, does not reach them.';
   }
-  return { head: head, nagel: NAGEL_SAYS, found: sends.map(foundLine), part: part, stood: stood, nagelAnswer: CONFIG.NAGEL_ANSWER, answer: answer };
+  return { head: head, nagel: NAGEL_SAYS, found: sends.map(foundLine).concat((grades || []).map(nightLine)), part: part, stood: stood, nagelAnswer: CONFIG.NAGEL_ANSWER, answer: answer };
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -449,7 +555,7 @@ var STRATEGIES = {
   'best': function (k) { return best(k).stop; }
 };
 
-var api = { CONFIG: CONFIG, evidence: evidence, round: round, needs: needs, needsLabel: needsLabel, canRead: canRead, holds: holds, send: send, best: best, verdict: verdict, play: play, STRATEGIES: STRATEGIES, arrivedWords: arrivedWords, stopIndex: stopIndex, NAGEL_SAYS: NAGEL_SAYS };
+var api = { CONFIG: CONFIG, evidence: evidence, night: night, grade: grade, nightLine: nightLine, builtWords: builtWords, round: round, needs: needs, needsLabel: needsLabel, canRead: canRead, holds: holds, send: send, best: best, verdict: verdict, play: play, STRATEGIES: STRATEGIES, arrivedWords: arrivedWords, stopIndex: stopIndex, NAGEL_SAYS: NAGEL_SAYS };
 if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.NagelMechanism = api;
 })(typeof window !== 'undefined' ? window : this);
 
@@ -481,11 +587,6 @@ var FRAMES = {
     inside: function () { var p = '<rect width="320" height="190" fill="#D7261E"/>'; var pts = [[40, 50, 26], [120, 30, 20], [210, 60, 28], [290, 24, 18], [70, 130, 30], [160, 110, 22], [250, 140, 30], [300, 100, 16], [20, 170, 18], [140, 170, 20]]; pts.forEach(function (q) { p += '<circle cx="' + q[0] + '" cy="' + q[1] + '" r="' + q[2] + '" fill="#F04A2E"/><circle cx="' + (q[0] - q[2] * .25) + '" cy="' + (q[1] - q[2] * .25) + '" r="' + (q[2] * .5) + '" fill="#FF6A3C" opacity=".6"/><circle cx="' + q[0] + '" cy="' + q[1] + '" r="' + (q[2] * .22) + '" fill="#2A0A0A"/>'; }); return p; },
     shape: function () { var s = white + arrowDef; var cx = 110, cy = 95, r1 = 42, r2 = 72; for (var i = 0; i < 8; i++) { var a0 = (i / 8) * Math.PI * 2 - Math.PI / 2, a1 = ((i + 1) / 8) * Math.PI * 2 - Math.PI / 2; var p = function (r, a) { return (cx + r * Math.cos(a)).toFixed(1) + ' ' + (cy + r * Math.sin(a)).toFixed(1); }; s += '<path d="M' + p(r1, a0) + ' L' + p(r2, a0) + ' A' + r2 + ' ' + r2 + ' 0 0 1 ' + p(r2, a1) + ' L' + p(r1, a1) + ' A' + r1 + ' ' + r1 + ' 0 0 0 ' + p(r1, a0) + ' z" fill="' + TINT + '" stroke="' + INK + '" stroke-width="' + (i === 0 ? 3.5 : 1.2) + '"/>'; } s += t(cx - 14, cy + 4, 'colours', ';font-size:10px') + t(96, 10, 'here', ';font-size:12px') + '<line x1="122" y1="12" x2="130" y2="30" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/>' + t(186, 46, 'orange', ';font-size:10px') + t(186, 98, 'yellow', ';font-size:10px') + t(60, 184, 'green: far from it', ';font-size:10px') + t(6, 98, 'violet', ';font-size:10px') + t(8, 52, 'next to it', ';font-size:10px') + '<path d="M196 60 q30 -40 60 -10" fill="none" stroke="' + INK + '" stroke-width="1" stroke-dasharray="3 3"/>' + t(224, 18, 'the warm end', ';font-size:10px'); s += '<circle cx="236" cy="110" r="12" fill="none" stroke="' + INK + '" stroke-width="1.5"/><path d="M236 98 q4 -8 8 -6" fill="none" stroke="' + INK + '" stroke-width="1.5"/>' + t(252, 114, 'ripe fruit', ';font-size:10px') + '<path d="M236 136 q-9 14 0 20 q9 -6 0 -20z" fill="none" stroke="' + INK + '" stroke-width="1.5"/>' + t(252, 150, 'blood', ';font-size:10px') + '<path d="M232 164 h8 l6 6 v8 l-6 6 h-8 l-6 -6 v-8 z" fill="none" stroke="' + INK + '" stroke-width="1.5"/>' + t(252, 178, 'a stop sign', ';font-size:10px'); return s; },
     physics: function () { var w = 'M10 70'; for (var x = 10; x <= 200; x += 4) w += ' L' + x + ' ' + (70 - 24 * Math.sin((x - 10) / 60 * Math.PI * 2)).toFixed(1); return white + arrowDef + '<path d="' + w + '" fill="none" stroke="' + INK + '" stroke-width="2"/><line x1="10" y1="110" x2="70" y2="110" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/><line x1="70" y1="110" x2="10" y2="110" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/>' + t(10, 130, 'one wave: 700 nanometres') + t(10, 146, 'light, long waves', ';font-size:10px') + '<path d="M230 40 l34 0 l20 60 l-10 50 l-10 0 l-10 -50 z" fill="none" stroke="' + INK + '" stroke-width="2"/><path d="M240 60 h26 M242 72 h24 M246 86 h20" stroke="' + INK + '" stroke-width="1" opacity=".6"/>' + t(222, 30, 'a cone cell', ';font-size:10px') + t(150, 170, 'the long-wave cones in the eye', ';font-size:10px') + t(150, 182, 'fire more than the others', ';font-size:10px') + '<path d="M204 100 l20 0" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/>'; }
-  },
-  bat: {
-    inside: function () { return '<rect width="320" height="190" fill="#F3EBDC"/><defs><pattern id="hatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="12" stroke="#CDBFA8" stroke-width="5"/></pattern></defs><rect width="320" height="190" fill="url(#hatch)"/><rect x="60" y="72" width="200" height="46" rx="8" fill="#F3EBDC" opacity=".92"/>' + t(76, 92, 'no picture', ';font-size:14px;fill:#6E5A4A') + t(76, 108, 'taken from where you cannot stand', ';font-size:10px;fill:#6E5A4A'); },
-    shape: function () { return white + arrowDef + '<path d="M20 95 l40 -25 M20 95 l40 25" stroke="' + INK + '" stroke-width="0" /><path d="M60 95 L320 20 L320 170 z" fill="' + TINT + '"/><path d="M28 86 q6 -14 18 -2 q6 -8 12 0 l-2 10 q-4 8 -10 6 q-6 8 -16 2 q-8 -4 -2 -16z" fill="' + INK + '"/><path d="M24 84 l-14 -10 q8 -2 14 2 M50 84 l14 -10 q-8 -2 -14 2" stroke="' + INK + '" stroke-width="2" fill="none"/><path d="M70 60 q20 35 0 70" fill="none" stroke="' + INK + '" stroke-width="1.5" stroke-dasharray="3 3"/><path d="M90 50 q30 45 0 90" fill="none" stroke="' + INK + '" stroke-width="1.5" stroke-dasharray="3 3"/><circle cx="130" cy="90" r="6" fill="' + INK + '"/><path d="M124 90 l-6 -6 M136 90 l6 -6" stroke="' + INK + '" stroke-width="1.5"/>' + t(118, 114, 'a moth, near', ';font-size:10px') + '<path d="M200 40 q10 40 0 110" fill="none" stroke="' + INK + '" stroke-width="3"/>' + t(206, 160, 'a branch', ';font-size:10px') + '<rect x="296" y="30" width="20" height="130" fill="none" stroke="' + INK + '" stroke-width="2"/>' + t(254, 180, 'a wall, far', ';font-size:10px') + t(100, 32, 'forward, in three dimensions') + t(100, 46, 'distance, size, shape, texture, motion', ';font-size:9px') + t(20, 140, 'read off the echoes', ';font-size:10px') + t(20, 152, 'of its own shrieks', ';font-size:10px'); },
-    physics: function () { var w = 'M110 70'; for (var x = 110; x <= 200; x += 2) w += ' L' + x + ' ' + (70 - 8 * Math.sin((x - 110) / 7 * Math.PI * 2)).toFixed(1); return white + arrowDef + '<path d="M40 80 q-12 -40 10 -50 l10 20 q14 -6 28 0 l10 -20 q22 10 10 50 q-14 20 -34 20 q-20 0 -34 -20 z" fill="none" stroke="' + INK + '" stroke-width="2"/><circle cx="58" cy="76" r="3" fill="' + INK + '"/><circle cx="84" cy="76" r="3" fill="' + INK + '"/><path d="M62 92 q8 6 16 0" fill="none" stroke="' + INK + '" stroke-width="1.5"/>' + t(28, 122, 'the throat: a shriek', ';font-size:10px') + '<path d="' + w + '" fill="none" stroke="' + INK + '" stroke-width="1.5"/>' + t(124, 52, '50,000 a second', ';font-size:10px') + '<line x1="110" y1="90" x2="250" y2="90" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/><line x1="250" y1="104" x2="104" y2="104" stroke="' + INK + '" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#ah)"/><circle cx="268" cy="97" r="9" fill="none" stroke="' + INK + '" stroke-width="2"/>' + t(254, 124, 'a moth', ';font-size:10px') + t(150, 120, 'the echo back', ';font-size:10px') + '<line x1="110" y1="150" x2="250" y2="150" stroke="' + INK + '" stroke-width="1.5"/><line x1="110" y1="144" x2="110" y2="156" stroke="' + INK + '" stroke-width="1.5"/><line x1="250" y1="144" x2="250" y2="156" stroke="' + INK + '" stroke-width="1.5"/>' + t(120, 170, 'the brain times the gap: distance', ';font-size:10px') + t(28, 136, 'the ears: the echo', ';font-size:10px'); }
   }
 };
 var ICONS = {
@@ -583,27 +684,13 @@ var SCENES = {
       var s = lerp(1, 0.9, cl(z / 0.5)) * lerp(1, 0.2, cl((z - 0.5) / 0.5));
       tf(svg, 'field', about(300, 172, s)); op(svg, 'field', 1 - 0.55 * cl((z - 0.6) / 0.4));
     }
-  },
-  // The bat: the naked eye is a blank that cannot be shown; the blank gives way to a cone in front of a bat with things
-  // in it at distances; then to a throat, two ears and a clock.
-  bat: {
-    markup: function () {
-      var wave = 'M110 70'; for (var x = 110; x <= 200; x += 2) wave += ' L' + x + ' ' + (70 - 8 * Math.sin((x - 110) / 7 * Math.PI * 2)).toFixed(1);
-      return sceneSvg('<pattern id="bhatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="12" stroke="#CDBFA8" stroke-width="5"/></pattern>',
-        '<g class="blank"><rect width="320" height="190" fill="#F3EBDC"/><rect width="320" height="190" fill="url(#bhatch)"/></g>' +
-        '<g class="tint"><path d="M60 95L320 20L320 170z" fill="' + TINT + '"/><path d="M28 86q6 -14 18 -2q6 -8 12 0l-2 10q-4 8 -10 6q-6 8 -16 2q-8 -4 -2 -16z" fill="' + INK + '"/><path d="M24 84l-14 -10q8 -2 14 2M50 84l14 -10q-8 -2 -14 2" stroke="' + INK + '" stroke-width="2" fill="none"/><path d="M70 60q20 35 0 70" fill="none" stroke="' + INK + '" stroke-width="1.5" stroke-dasharray="3 3"/><path d="M90 50q30 45 0 90" fill="none" stroke="' + INK + '" stroke-width="1.5" stroke-dasharray="3 3"/><circle cx="130" cy="90" r="6" fill="' + INK + '"/><path d="M124 90l-6 -6M136 90l6 -6" stroke="' + INK + '" stroke-width="1.5"/><path d="M200 40q10 40 0 110" fill="none" stroke="' + INK + '" stroke-width="3"/><rect x="296" y="30" width="20" height="130" fill="none" stroke="' + INK + '" stroke-width="2"/></g>' +
-        '<g class="ink"><path d="M40 80q-12 -40 10 -50l10 20q14 -6 28 0l10 -20q22 10 10 50q-14 20 -34 20q-20 0 -34 -20z" fill="' + WHITE + '" stroke="' + INK + '" stroke-width="2.5"/><circle cx="58" cy="76" r="3" fill="' + INK + '"/><circle cx="84" cy="76" r="3" fill="' + INK + '"/><path d="M62 92q8 6 16 0" fill="none" stroke="' + INK + '" stroke-width="1.5"/><path d="' + wave + '" fill="none" stroke="' + INK + '" stroke-width="1.5"/><line x1="110" y1="90" x2="250" y2="90" stroke="' + INK + '" stroke-width="2" marker-end="url(#sah)"/><line x1="250" y1="104" x2="104" y2="104" stroke="' + INK + '" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#sah)"/><circle cx="268" cy="97" r="9" fill="none" stroke="' + INK + '" stroke-width="2"/><line x1="110" y1="150" x2="250" y2="150" stroke="' + INK + '" stroke-width="2"/><line x1="110" y1="142" x2="110" y2="158" stroke="' + INK + '" stroke-width="2"/><line x1="250" y1="142" x2="250" y2="158" stroke="' + INK + '" stroke-width="2"/><circle cx="180" cy="150" r="14" fill="' + WHITE + '" stroke="' + INK + '" stroke-width="2"/><path d="M180 150l0 -9M180 150l6 4" stroke="' + INK + '" stroke-width="2"/></g>');
-    },
-    apply: function (svg, z) {
-      op(svg, 'blank', 1 - cl(z / 0.35)); op(svg, 'tint', cl((z - 0.15) / 0.3) * (1 - cl((z - 0.55) / 0.3))); op(svg, 'ink', cl((z - 0.55) / 0.4));
-    }
   }
 };
 // ---------------------------------------------------------------- state and screens
-var G = { k: 0, z: 0, sends: [], answer: null, sent: false };
+var G = { k: 0, z: 0, sends: [], answer: null, sent: false, n: 0, chosen: [], grades: [], built: false };
 window.__game = G;
 function $(id) { return document.getElementById(id); }
-function show(id) { ['start', 'play', 'question', 'end'].forEach(function (s) { $(s).classList.toggle('on', s === id); }); window.scrollTo(0, 0); }
+function show(id) { ['start', 'play', 'turn', 'nightscr', 'question', 'end'].forEach(function (s) { $(s).classList.toggle('on', s === id); }); document.documentElement.classList.toggle('night', id === 'turn' || id === 'nightscr' || id === 'question'); window.scrollTo(0, 0); }
 var STOPS = C.STOPS.map(function (s) { return s.id; });
 function stopOfZ(z) { return z < 0.25 ? 0 : z < 0.75 ? 1 : 2; }
 function readerCard(r, iconState, iconId, you) {
@@ -680,7 +767,7 @@ function openMeans() {
   $('mreply').textContent = res.reply;
   $('means').classList.add('on'); $('means').scrollTop = 0;
 }
-function next() { G.k++; if (G.k >= C.ROUNDS.length) renderQuestion(); else renderRound(); }
+function next() { G.k++; if (G.k >= C.ROUNDS.length) showTurn(); else renderRound(); }
 function iconState(s) { return !s.readable || s.arrived === 0 ? 'ic-none' : s.arrived >= 1 ? 'ic-full' : 'ic-part'; }
 function printOf(sendRes) { var rr = M.round(sendRes.round); return sendRes.readable ? svgFrame(FRAMES[rr.id][sendRes.stop]()) : svgFrame('<rect width="320" height="190" fill="#EDE4D2"/>' + t(100, 100, 'unread', ';font-size:22px;fill:#8C7A68')); }
 function openEvidence(k) {
@@ -696,9 +783,8 @@ function openEvidence(k) {
 }
 function evidenceRow() { return G.sends.map(function (sd) { var rr = M.round(sd.round); return '<button class="thing" data-ev="' + sd.round + '">' + icon(rr.id, iconState(sd)) + rr.short + '</button>'; }).join(''); }
 function renderQuestion() {
-  $('qreader').innerHTML = '<div class="portrait">' + portrait('bat') + '</div><div class="rtext"><b>The bat</b>sent you its world. Its naked-eye frame came to you blank.</div>';
   $('qtext').textContent = C.QUESTION;
-  $('qrow').innerHTML = evidenceRow();
+  $('qwins').innerHTML = [0, 1, 2].map(function (n) { return miniWindow(n, M.night(n).name); }).join('');
   $('answers').innerHTML = C.ANSWERS.map(function (a) { return '<button class="answer" data-a="' + a.id + '">' + a.label + '</button>'; }).join('');
   show('question');
 }
@@ -710,8 +796,8 @@ function renderEnd(v) {
   STEPS = [
     '<div class="step"><div class="stitle">What Nagel says, in three steps</div><p>' + v.nagel[0] + '</p>' + pair(F('lightning', 'inside'), 'lightning, naked eye', F('lightning', 'physics'), 'lightning, the physics') + '</div>',
     '<div class="step"><p>' + v.nagel[1] + '</p>' + pair(F('red', 'inside'), 'red, naked eye', F('red', 'physics'), 'red, the physics') + '</div>',
-    '<div class="step"><p>' + v.nagel[2] + '</p>' + pair(F('red', 'inside'), 'your red: Ada could not read it', F('bat', 'inside'), 'the bat\u2019s world: you could not read it') + '</div>',
-    '<div class="step"><div class="stitle">What you found</div><ul>' + v.found.map(function (l) { return '<li>' + l + '</li>'; }).join('') + '</ul><div class="prints">' + G.sends.map(function (sd) { var rr = M.round(sd.round); return '<div class="mini" data-ev="' + sd.round + '">' + printOf(sd) + '<span class="cap">' + rr.short + ', ' + C.STOPS[M.stopIndex(sd.stop)].label.toLowerCase() + '</span><span class="mi">' + icon(rr.id, iconState(sd)) + '</span></div>'; }).join('') + '</div><p style="font-size:13px;color:#6E5A4A">Tap a print to see it with the frame its reader could not read.</p></div>',
+    '<div class="step"><p>' + v.nagel[2] + '</p><div class="pair"><div class="pr dark">' + windowSvg(0, G.grades[0] ? G.grades[0].pieces.filter(function (p) { return p.chosen; }).map(function (p) { return p.id; }) : [], !!G.grades[0], { still: true }) + '<span class="cap">the bat\u2019s evening, as you built it</span></div><div class="pr dark">' + windowSvg(0, [], false, { still: true, blank: true }) + '<span class="cap">one stop further in</span></div></div></div>',
+    '<div class="step"><div class="stitle">What you found</div><ul>' + v.found.map(function (l) { return '<li>' + l + '</li>'; }).join('') + '</ul><div class="prints">' + G.sends.map(function (sd) { var rr = M.round(sd.round); return '<div class="mini" data-ev="' + sd.round + '">' + printOf(sd) + '<span class="cap">' + rr.short + ', ' + C.STOPS[M.stopIndex(sd.stop)].label.toLowerCase() + '</span><span class="mi">' + icon(rr.id, iconState(sd)) + '</span></div>'; }).join('') + '</div><div class="wins">' + [0, 1, 2].map(function (n) { return miniWindow(n, M.night(n).name); }).join('') + '</div><p style="font-size:13px;color:#6E5A4A">Tap a print or a window to see it again.</p></div>',
     '<div class="step"><div class="stitle">Where you part</div><p>' + v.part + '</p><div class="stitle">Had yours stood</div><p>' + v.stood + '</p></div>'
   ];
   stepAt = 0; $('steps').innerHTML = ''; $('goon').style.display = ''; $('endtail').style.display = 'none'; $('further').style.display = 'none';
@@ -724,21 +810,136 @@ function goOn() {
   else { $('b-goon').textContent = stepAt === STEPS.length - 1 ? 'Go on' : 'Go on'; }
   var last = $('steps').lastElementChild; if (last && stepAt > 1) last.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
-function reset() { G.k = 0; G.sends = []; G.answer = null; renderRound(); }
+
+// ---------------------------------------------------------------- the second half: night, the window, the pieces
+var TEAL = '#5FE3C8', NIGHTBG = '#0B1626', WOOD = '#6B4A2B';
+// Piece icons in the player's own colours (the tray, and the badges that fly into the window).
+var PIECE_ICONS = {
+  colour: '<defs><linearGradient id="pcol" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4E2F86"/><stop offset=".5" stop-color="#E86A8A"/><stop offset="1" stop-color="#FBD36A"/></linearGradient></defs><rect x="6" y="6" width="36" height="36" rx="8" fill="url(#pcol)"/>',
+  disc: '<circle cx="24" cy="26" r="12" fill="#FFE07A" stroke="#F0902A" stroke-width="2"/><path d="M8 40h32" stroke="#F0902A" stroke-width="3"/>',
+  warm: '<path d="M14 40q-6-8 0-16t0-16M24 40q-6-8 0-16t0-16M34 40q-6-8 0-16t0-16" fill="none" stroke="#F0902A" stroke-width="3" stroke-linecap="round"/>',
+  sea: '<path d="M4 20q5-6 10 0t10 0 10 0 10 0M4 32q5-6 10 0t10 0 10 0 10 0" fill="none" stroke="#2F6FB5" stroke-width="3" stroke-linecap="round"/>',
+  moths: '<path d="M24 26c-3-6-9-8-12-4 2 4 8 6 12 4zm0 0c3-6 9-8 12-4-2 4-8 6-12 4z" fill="#D9C7A8" stroke="#8C7A68" stroke-width="1.5"/><path d="M24 20v12" stroke="#8C7A68" stroke-width="2"/><path d="M10 38c-2-4-6-5-8-3 1 3 5 4 8 3zm0 0c2-4 6-5 8-3-1 3-5 4-8 3z" fill="#D9C7A8" stroke="#8C7A68" stroke-width="1.2"/>',
+  dark: '<circle cx="24" cy="24" r="16" fill="#3C2E6E"/><circle cx="30" cy="20" r="14" fill="#13223A"/>',
+  crack: '<polygon points="27,4 12,26 22,26 18,44 36,20 26,20 31,4" fill="#FFFFFF" stroke="#C9B8FF" stroke-width="2" stroke-linejoin="round"/>',
+  purple: '<rect x="6" y="6" width="36" height="36" rx="8" fill="#4A2C78"/>',
+  bang: '<path d="M24 4l4 12 11-6-6 11 12 4-12 4 6 11-11-6-4 12-4-12-11 6 6-11-12-4 12-4-6-11 11 6z" fill="#F2C53D" stroke="#3A2A1F" stroke-width="1.5"/>',
+  rain: '<path d="M12 8v12M24 6v14M36 8v12" stroke="#2F6FB5" stroke-width="3" stroke-linecap="round"/><path d="M8 34q6-10 12 0t12 0 12 0" fill="none" stroke="#3F9C5B" stroke-width="3"/>',
+  flinch: '<circle cx="24" cy="12" r="6" fill="#E9B98B" stroke="#3A2A1F" stroke-width="1.5"/><path d="M24 18v16M24 24l-10-10M24 24l10-10M24 34l-8 10M24 34l8 10" fill="none" stroke="#3A2A1F" stroke-width="3" stroke-linecap="round"/>',
+  petrichor: '<path d="M10 40h28" stroke="#6B4A2B" stroke-width="4" stroke-linecap="round"/><path d="M16 36q-6-10 0-14M24 36q-6-10 0-14M32 36q-6-10 0-14" fill="none" stroke="#3F9C5B" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="12" r="5" fill="#2F6FB5"/>',
+  red: '<circle cx="24" cy="24" r="17" fill="#D7261E"/>',
+  shapes: '<circle cx="24" cy="18" r="10" fill="none" stroke="#3A2A1F" stroke-width="2"/><circle cx="24" cy="18" r="3" fill="#3A2A1F"/><path d="M24 28v16" stroke="#3F9C5B" stroke-width="3"/>',
+  smell: '<path d="M14 42q-4-10 4-16t2-16M26 42q-4-10 4-16t2-16" fill="none" stroke="#9FB0C6" stroke-width="3" stroke-linecap="round"/>',
+  rustle: '<path d="M12 44v-26M20 44v-32M28 44v-28M36 44v-30" stroke="#3F9C5B" stroke-width="3" stroke-linecap="round"/><path d="M8 16q4-6 8 0M24 10q4-6 8 0" fill="none" stroke="#3F9C5B" stroke-width="2"/>',
+  warmend: '<path d="M24 24L24 6A18 18 0 0 1 42 24z" fill="#E2402F"/><path d="M24 24L42 24A18 18 0 0 1 24 42z" fill="#F0902A"/><path d="M24 24L24 42A18 18 0 0 1 6 24z" fill="#F2C53D"/><path d="M24 24L6 24A18 18 0 0 1 24 6z" fill="#B8AD9C"/>',
+  bees: '<ellipse cx="24" cy="26" rx="12" ry="8" fill="#F2C53D" stroke="#3A2A1F" stroke-width="1.5"/><path d="M18 20v12M24 18v16M30 20v12" stroke="#3A2A1F" stroke-width="2"/><ellipse cx="18" cy="16" rx="7" ry="4" fill="#FFFDF8" opacity=".8"/><ellipse cx="30" cy="16" rx="7" ry="4" fill="#FFFDF8" opacity=".8"/>'
+};
+function pieceIcon(id, size) { return '<svg viewBox="0 0 48 48" width="' + (size || 40) + '" height="' + (size || 40) + '" xmlns="http://www.w3.org/2000/svg">' + PIECE_ICONS[id] + '</svg>'; }
+// The bat's idiom: what a kept piece becomes in the window (teal on night).
+function idiomGlyph(idiom, x, y, dashed) {
+  var st = 'stroke="' + TEAL + '" fill="none" stroke-width="2"' + (dashed ? ' stroke-dasharray="4 3" opacity=".55"' : '');
+  if (idiom === 'sound') return '<path d="M' + (x - 16) + ' ' + (y - 14) + 'q14 14 0 28M' + (x - 6) + ' ' + (y - 20) + 'q20 20 0 40M' + (x + 4) + ' ' + (y - 26) + 'q26 26 0 52" ' + st + '/>';
+  if (idiom === 'echo') return '<circle cx="' + x + '" cy="' + y + '" r="18" ' + st + ' stroke-dasharray="3 4"/><circle cx="' + x + '" cy="' + y + '" r="10" ' + st + ' stroke-dasharray="3 4"/><circle cx="' + x + '" cy="' + y + '" r="3" fill="' + TEAL + '"' + (dashed ? ' opacity=".55"' : '') + '/>';
+  if (idiom === 'warm') return '<circle cx="' + x + '" cy="' + y + '" r="22" fill="' + TEAL + '" opacity="' + (dashed ? '.08' : '.16') + '"/><circle cx="' + x + '" cy="' + y + '" r="12" fill="' + TEAL + '" opacity="' + (dashed ? '.1' : '.2') + '"/>' + (dashed ? '<circle cx="' + x + '" cy="' + y + '" r="22" ' + st + '/>' : '');
+  if (idiom === 'smell') return '<path d="M' + (x - 14) + ' ' + (y + 16) + 'q-4-10 4-16t2-16M' + (x) + ' ' + (y + 16) + 'q-4-10 4-16t2-16M' + (x + 14) + ' ' + (y + 16) + 'q-4-10 4-16t2-16" ' + st + ' stroke-linecap="round"/>';
+  if (idiom === 'flash') return '<circle cx="' + x + '" cy="' + y + '" r="20" fill="#FFFFFF" opacity="' + (dashed ? '.12' : '.3') + '"/>' + (dashed ? '<circle cx="' + x + '" cy="' + y + '" r="20" ' + st + '/>' : '');
+  if (idiom === 'dark') return dashed ? '<circle cx="' + x + '" cy="' + y + '" r="18" ' + st + '/>' : '';
+  return '';
+}
+var SLOTS = [[160, 60], [214, 92], [214, 150], [160, 182], [106, 150], [106, 92]];
+// The window: an attic's round window at night, the bat at the sill; pieces at six places round the middle.
+function windowSvg(n, chosen, graded, opts) {
+  opts = opts || {}; var N = M.night(n), g = graded ? M.grade(n, chosen) : null, inner = '';
+  var darkIn = g ? g.pieces.some(function (p) { return p.idiom === 'dark' && p.in; }) : false;
+  inner += '<defs><clipPath id="wclip' + n + '"><circle cx="160" cy="120" r="104"/></clipPath><radialGradient id="wsky' + n + '" cx=".5" cy=".9" r=".9"><stop offset="0" stop-color="' + (graded && darkIn ? '#0E1A2B' : '#2A2A5A') + '"/><stop offset="1" stop-color="' + (graded && darkIn ? '#060B14' : '#0E1A2B') + '"/></radialGradient></defs>';
+  inner += '<rect width="320" height="240" fill="' + NIGHTBG + '"/>';
+  inner += '<g clip-path="url(#wclip' + n + ')"><g class="zoomg" style="transform-origin:160px 120px;transition:transform 1.6s ease"><rect width="320" height="240" fill="url(#wsky' + n + ')"/>';
+  if (graded) inner += '<path d="M160 214L300 40M160 214L300 200M160 214L20 40M160 214L20 200" stroke="' + TEAL + '" stroke-width="1" opacity=".18"/><circle cx="160" cy="214" r="70" fill="none" stroke="' + TEAL + '" stroke-width="1" stroke-dasharray="3 5" opacity=".3"/><circle cx="160" cy="214" r="120" fill="none" stroke="' + TEAL + '" stroke-width="1" stroke-dasharray="3 5" opacity=".2"/>';
+  N.pieces.forEach(function (p, i) {
+    var x = SLOTS[i][0], y = SLOTS[i][1], c = chosen.indexOf(p.id) >= 0;
+    if (!graded) { if (c) inner += '<g class="badge"><circle cx="' + x + '" cy="' + y + '" r="24" fill="#F4ECDC" stroke="#F0902A" stroke-width="3"/><svg x="' + (x - 18) + '" y="' + (y - 18) + '" width="36" height="36" viewBox="0 0 48 48">' + PIECE_ICONS[p.id] + '</svg></g>'; return; }
+    var st = g.pieces[i].status;
+    if (st === 'faded') inner += '<g class="fadeout" style="opacity:' + (opts.still ? '.12' : '1') + '"><circle cx="' + x + '" cy="' + y + '" r="24" fill="#F4ECDC" stroke="#F0902A" stroke-width="3"/><svg x="' + (x - 18) + '" y="' + (y - 18) + '" width="36" height="36" viewBox="0 0 48 48">' + PIECE_ICONS[p.id] + '</svg></g>';
+    if (st === 'kept') inner += '<g class="glyph" style="opacity:' + (opts.still ? '1' : '0') + '">' + idiomGlyph(p.idiom, x, y, false) + '</g>';
+    if (st === 'missed') inner += '<g class="glyph" style="opacity:' + (opts.still ? '1' : '0') + '">' + idiomGlyph(p.idiom, x, y, true) + '</g>';
+  });
+  inner += '</g></g>';
+  // the sill and the bat
+  inner += '<circle cx="160" cy="120" r="104" fill="none" stroke="' + WOOD + '" stroke-width="12"/><circle cx="160" cy="120" r="104" fill="none" stroke="#3A2A1F" stroke-width="2"/><rect x="40" y="218" width="240" height="14" rx="4" fill="' + WOOD + '"/>';
+  inner += '<path d="M146 212q6-14 18-2q6-8 12 0l-2 10q-4 8-10 6q-6 8-16 2q-8-4-2-16z" fill="#1A1210"/><path d="M142 210l-14-10q8-2 14 2M168 210l14-10q-8-2-14 2" stroke="#1A1210" stroke-width="2" fill="none"/>';
+  if (opts.blank) inner += '<defs><pattern id="nhatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="12" stroke="#3A5578" stroke-width="5"/></pattern></defs><g class="blankv2" style="opacity:' + (opts.still ? 1 : 0) + ';transition:opacity 1.6s ease"><circle cx="160" cy="120" r="98" fill="#13223A"/><circle cx="160" cy="120" r="98" fill="url(#nhatch)"/><text x="160" y="116" text-anchor="middle" style="font-family:Varela,system-ui,sans-serif;font-size:15px;fill:#9FB0C6">no picture</text><text x="160" y="134" text-anchor="middle" style="font-family:Varela,system-ui,sans-serif;font-size:10px;fill:#9FB0C6">one stop further in than any camera goes</text></g>';
+  return '<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg"' + (opts.cls ? ' class="' + opts.cls + '"' : '') + '>' + inner + '</svg>';
+}
+function showTurn() { $('turnwin').innerHTML = windowSvg(0, [], false, {}); show('turn'); }
+function renderNight(n) {
+  G.n = n; G.chosen = []; G.built = false; var N = M.night(n);
+  $('nightno').textContent = 'Night ' + (n + 1) + ' of ' + C.NIGHTS.length;
+  $('nightnow').textContent = N.ask + ' Tap the pieces a bat has.';
+  $('win').innerHTML = windowSvg(n, [], false, {});
+  $('tray').innerHTML = N.pieces.map(function (p) { return '<button class="tile" data-piece="' + p.id + '">' + pieceIcon(p.id) + p.label + '</button>'; }).join('');
+  $('batrow').style.display = ''; $('nightresult').style.display = 'none'; $('blankpart').style.display = 'none';
+  ['nightline', 'grades', 'nightnext', 'blankline', 'blanknext'].forEach(function (id) { $(id).classList.remove('in'); });
+  show('nightscr');
+}
+function togglePiece(id) {
+  if (G.built) return; var i = G.chosen.indexOf(id); if (i >= 0) G.chosen.splice(i, 1); else G.chosen.push(id);
+  $('win').innerHTML = windowSvg(G.n, G.chosen, false, {});
+  Array.prototype.forEach.call($('tray').children, function (b) { b.classList.toggle('on', G.chosen.indexOf(b.getAttribute('data-piece')) >= 0); });
+}
+function thatsMyBat() {
+  if (G.built) return; G.built = true; var g = M.grade(G.n, G.chosen); G.grades[G.n] = g; var N = M.night(G.n);
+  $('batrow').style.display = 'none'; Array.prototype.forEach.call($('tray').children, function (b) { b.disabled = true; });
+  $('win').innerHTML = windowSvg(G.n, G.chosen, true, {});
+  requestAnimationFrame(function () { requestAnimationFrame(function () { $('win').querySelectorAll('.fadeout').forEach(function (e) { e.style.opacity = .12; }); $('win').querySelectorAll('.glyph').forEach(function (e) { e.style.opacity = 1; }); }); });
+  $('nightnow').textContent = 'The window settles.';
+  $('nightline').textContent = g.line;
+  $('grades').innerHTML = g.pieces.map(function (p) { var you = p.status === 'kept' ? 'you had it' : p.status === 'faded' ? 'you put it in' : p.status === 'missed' ? 'you left it out' : 'you left it out'; return '<div class="g ' + (p.in ? 'in' : 'out') + '"><div class="mk">' + (p.in ? 'in' : 'out') + '</div><div><b>' + cap(p.label) + '</b> <span class="you">(' + you + ')</span>. ' + p.why + '</div></div>'; }).join('');
+  $('nightresult').style.display = '';
+  setTimeout(function () { $('nightline').classList.add('in'); $('nightnow').textContent = g.words + ' the shape of ' + N.name + ' is in your window.'; }, 1500);
+  setTimeout(function () { $('grades').classList.add('in'); }, 2100);
+  setTimeout(function () { $('nightnext').classList.add('in'); $('b-nightnext').textContent = G.n + 1 < C.NIGHTS.length ? 'Next night' : 'One stop further in'; }, 2600);
+}
+function nightNext() {
+  if (G.n + 1 < C.NIGHTS.length) { renderNight(G.n + 1); return; }
+  // the blank: the window zooms one stop further in and goes blank
+  $('nightresult').style.display = 'none'; $('tray').style.display = 'none'; $('nightnow').textContent = 'The camera goes one stop further in.';
+  $('win').innerHTML = windowSvg(G.n, G.chosen, true, { still: true, blank: true });
+  requestAnimationFrame(function () { requestAnimationFrame(function () { $('win').querySelector('.zoomg').style.transform = 'scale(1.5)'; $('win').querySelector('.blankv2').style.opacity = 1; }); });
+  $('blankpart').style.display = ''; $('blankline').textContent = C.BLANK_LINE;
+  setTimeout(function () { $('blankline').classList.add('in'); $('nightnow').textContent = 'Blank.'; }, 1800);
+  setTimeout(function () { $('blanknext').classList.add('in'); }, 2400);
+  window.scrollTo(0, 0);
+}
+function miniWindow(n, caption) { var g = G.grades[n]; return '<div class="w" data-win="' + n + '">' + windowSvg(n, g ? g.pieces.filter(function (p) { return p.chosen; }).map(function (p) { return p.id; }) : [], !!g, { still: true }) + '<div class="cap">' + caption + '</div></div>'; }
+function blankWindow(caption) { return '<div class="w">' + windowSvg(2, [], false, { still: true, blank: true }) + '<div class="cap">' + caption + '</div></div>'; }
+function openWindowPanel(n) {
+  var g = G.grades[n]; if (!g) return; var N = M.night(n);
+  $('etitle').textContent = cap(N.name);
+  $('epair').innerHTML = '<div class="pr dark">' + windowSvg(n, g.pieces.filter(function (p) { return p.chosen; }).map(function (p) { return p.id; }), true, { still: true }) + '<span class="cap">your window, settled</span></div><div class="pr dark">' + windowSvg(n, [], false, { still: true, blank: true }) + '<span class="cap">one stop further in</span></div>';
+  $('eline').textContent = g.line; $('eline2').textContent = C.BLANK_LINE;
+  $('evidence').classList.add('on'); $('evidence').scrollTop = 0;
+}
+function reset() { G.k = 0; G.sends = []; G.grades = []; G.answer = null; $('tray').style.display = ''; renderRound(); }
 $('b-start').addEventListener('click', reset);
 $('b-again').addEventListener('click', reset);
 $('b-goon').addEventListener('click', goOn);
+$('b-night').addEventListener('click', function () { renderNight(0); });
+$('b-bat').addEventListener('click', thatsMyBat);
+$('b-nightnext').addEventListener('click', nightNext);
+$('b-blanknext').addEventListener('click', renderQuestion);
+$('tray').addEventListener('click', function (e) { var b = e.target.closest('button[data-piece]'); if (b) togglePiece(b.getAttribute('data-piece')); });
 $('b-further').addEventListener('click', function () { var f = $('further'); f.style.display = f.style.display === 'none' ? '' : 'none'; });
 $('b-send').addEventListener('click', doSend);
 $('b-next').addEventListener('click', next);
 $('b-means').addEventListener('click', openMeans);
-$('answers').addEventListener('click', function (e) { var b = e.target.closest('button[data-a]'); if (!b) return; G.answer = b.getAttribute('data-a'); renderEnd(M.verdict(G.sends, G.answer)); });
+$('answers').addEventListener('click', function (e) { var b = e.target.closest('button[data-a]'); if (!b) return; G.answer = b.getAttribute('data-a'); renderEnd(M.verdict(G.sends, G.grades, G.answer)); });
 document.addEventListener('click', function (e) {
   var ev = e.target.closest('[data-ev]'); if (ev) { openEvidence(+ev.getAttribute('data-ev')); return; }
+  var wn = e.target.closest('[data-win]'); if (wn) { openWindowPanel(+wn.getAttribute('data-win')); return; }
   var o = e.target.closest('[data-open]'); if (o) { $(o.getAttribute('data-open')).classList.add('on'); $(o.getAttribute('data-open')).scrollTop = 0; return; }
   var c = e.target.closest('[data-close]'); if (c) { $(c.getAttribute('data-close')).classList.remove('on'); }
 });
-window.__api = { setStop: setStop, openEvidence: openEvidence, goOn: goOn, setZ: function (z) { if (anim) { cancelAnimationFrame(anim); anim = null; } G.z = z; renderZ(); }, doSend: doSend, next: next, openMeans: openMeans, renderRound: renderRound, FRAMES: FRAMES, SCENES: SCENES };
+window.__api = { setStop: setStop, openEvidence: openEvidence, goOn: goOn, togglePiece: togglePiece, thatsMyBat: thatsMyBat, nightNext: nightNext, renderNight: renderNight, showTurn: showTurn, setZ: function (z) { if (anim) { cancelAnimationFrame(anim); anim = null; } G.z = z; renderZ(); }, doSend: doSend, next: next, openMeans: openMeans, renderRound: renderRound, FRAMES: FRAMES, SCENES: SCENES };
 })();
 </script>
 </body>

@@ -7,13 +7,13 @@ function check(name, ok, detail) { n++; if (!ok) fails++; console.log((ok ? 'ok 
 var R = C.ROUNDS;
 
 console.log('== the rounds');
-check('four rounds, in the memo’s order', R.map(function (r) { return r.id; }).join(',') === 'sunset,lightning,red,bat');
+check('three rounds, in the memo’s order', R.map(function (r) { return r.id; }).join(',') === 'sunset,lightning,red');
 check('three stops', C.STOPS.length === 3 && C.STOPS[0].id === 'inside' && C.STOPS[2].id === 'physics');
 
 console.log('== readability (the rule the reader’s card states)');
-var expectRead = { sunset: [1, 1, 1], lightning: [0, 1, 1], red: [0, 1, 1], bat: [0, 1, 1] };
+var expectRead = { sunset: [1, 1, 1], lightning: [0, 1, 1], red: [0, 1, 1] };
 R.forEach(function (r, k) { var got = C.STOPS.map(function (s) { return M.canRead(k, s.id) ? 1 : 0; }); check(r.id + ' readable ' + got.join(''), got.join('') === expectRead[r.id].join('')); });
-check('the inside frame needs the sense the thing is in', M.needs(0, 'inside') === 'eyes' && M.needs(1, 'inside') === 'eyes' && M.needs(3, 'inside') === 'sonar');
+check('the inside frame needs the sense the thing is in', M.needs(0, 'inside') === 'eyes' && M.needs(1, 'inside') === 'eyes' && M.needs(2, 'inside') === 'eyes');
 check('the shape needs a mind, the physics instruments and sums', M.needs(2, 'shape') === 'mind' && M.needs(2, 'physics') === 'sums');
 
 console.log('== what each frame holds (pp. 443-445, fn. 10, p. 449: direction only; fractions ours)');
@@ -24,19 +24,18 @@ R.forEach(function (r, k) {
 });
 
 console.log('== the best stop per round, and the discovery');
-var expectBest = { sunset: 'inside', lightning: 'physics', red: 'shape', bat: 'shape' };
+var expectBest = { sunset: 'inside', lightning: 'physics', red: 'shape' };
 R.forEach(function (r, k) { var b = M.best(k); check(r.id + ': best is ' + expectBest[r.id], b.stop === expectBest[r.id], b.stop + ' ' + b.arrived); });
 check('round 3 (red to Ada): the readable frames are the ones red has left', !M.canRead(2, 'inside') && M.holds(2, 'inside') === 1 && M.best(2).arrived < 1 && M.best(2).arrived > 0);
 check('round 3 (red, physics): readable, and none of the red', M.send(2, 'physics').readable && M.send(2, 'physics').arrived === 0);
-check('round 4 (the bat, inside): blank to you', !M.send(3, 'inside').readable);
 check('every send carries what left the picture on the way', R.every(function (r, k) { return C.STOPS.every(function (s) { return M.send(k, s.id).left.length > 20; }); }));
 
 console.log('== strategy table (build.md §3)');
 var table = {};
 Object.keys(M.STRATEGIES).forEach(function (name) { var p = M.play(M.STRATEGIES[name]); table[name] = p.total; console.log('   ' + name.padEnd(32) + p.total.toFixed(2) + '   ' + p.sends.map(function (s) { return s.arrived; }).join(' ')); });
-check('always physics (the reductionist) gets lightning and nothing else', M.play(M.STRATEGIES['always physics']).sends.map(function (s) { return s.arrived; }).join(',') === '0,1,0,0');
-check('always the naked eye gets the sunset and nothing else', M.play(M.STRATEGIES['always inside']).sends.map(function (s) { return s.arrived; }).join(',') === '1,0,0,0');
-check('nearest the reader can read loses only on lightning', (function () { var a = M.play(M.STRATEGIES['nearest the reader can read']).sends, b = M.play(M.STRATEGIES['best']).sends; for (var i = 0; i < 4; i++) if ((a[i].arrived !== b[i].arrived) !== (i === 1)) return false; return true; })());
+check('always physics (the reductionist) gets lightning and nothing else', M.play(M.STRATEGIES['always physics']).sends.map(function (s) { return s.arrived; }).join(',') === '0,1,0');
+check('always the naked eye gets the sunset and nothing else', M.play(M.STRATEGIES['always inside']).sends.map(function (s) { return s.arrived; }).join(',') === '1,0,0');
+check('nearest the reader can read loses only on lightning', (function () { var a = M.play(M.STRATEGIES['nearest the reader can read']).sends, b = M.play(M.STRATEGIES['best']).sends; for (var i = 0; i < 3; i++) if ((a[i].arrived !== b[i].arrived) !== (i === 1)) return false; return true; })());
 check('best beats every other strategy', Object.keys(table).every(function (k) { return k === 'best' || table[k] < table.best; }));
 check('every strategy but best goes wrong somewhere', Object.keys(table).every(function (k) { return k === 'best' || table[k] < table.best; }));
 
@@ -56,14 +55,28 @@ C.HOLDS.experience.physics = 0.5; var broke = M.best(2).stop !== 'shape'; C.HOLD
 check('the lesson rests on the paper’s claim that the physics frame holds none of an experience (set it to half and the best stop for red moves)', broke);
 
 console.log('== the evidence panel');
-check('the naked-eye frame is the unread one for lightning, red and the bat, and none for the sunset', M.evidence(0).unread === null && M.evidence(1).unread === 'inside' && M.evidence(2).unread === 'inside' && M.evidence(3).unread === 'inside');
-check('the bat\u2019s line turns the mirror', /You could not read this frame. The bat can/.test(M.evidence(3).line) && /Ada could not read this frame. You can/.test(M.evidence(2).line));
+check('the naked-eye frame is the unread one for lightning and red, and none for the sunset', M.evidence(0).unread === null && M.evidence(1).unread === 'inside' && M.evidence(2).unread === 'inside');
+check('Ada\u2019s line', /Ada could not read this frame. You can/.test(M.evidence(2).line));
+
+console.log('== the nights (the second half)');
+check('three nights, one per round, in order', C.NIGHTS.length === 3 && C.NIGHTS.map(function (n) { return n.thing; }).join(',') === 'the sunset,lightning,red');
+C.NIGHTS.forEach(function (N, n) {
+  var ins = N.pieces.filter(function (p) { return p.in; }).length;
+  check(N.id + ': six pieces, between three and five in, every piece with a reason', N.pieces.length === 6 && ins >= 3 && ins <= 5 && N.pieces.every(function (p) { return p.why.length > 20 && p.label.length > 3; }));
+  check(N.id + ': every light-piece is out and every sound, echo, smell and warmth piece is in', N.pieces.every(function (p) { return (p.idiom === 'light' || p.idiom === 'self') ? !p.in : p.in; }));
+  var all = M.grade(n, N.pieces.map(function (p) { return p.id; })), none = M.grade(n, []), best = M.grade(n, N.pieces.filter(function (p) { return p.in; }).map(function (p) { return p.id; }));
+  check(N.id + ': all pieces chosen finds everything and adds what does not belong; none finds nothing; the right set is clean', all.found === all.inCount && all.wrong.length === 6 - all.inCount && none.found === 0 && none.wrong.length === 0 && best.found === best.inCount && best.wrong.length === 0 && best.words === 'All of');
+  check(N.id + ': the status of every piece is one of kept, faded, missed, left', all.pieces.every(function (p) { return p.status === 'kept' || p.status === 'faded'; }) && none.pieces.every(function (p) { return p.status === 'missed' || p.status === 'left'; }));
+});
+check('the verdict carries one line per night after the three prints', M.verdict(M.play(M.STRATEGIES.best).sends, [M.grade(0, []), M.grade(1, []), M.grade(2, [])], 'something').found.length === 6);
 
 console.log('== the words');
 var bad = [], lines = [];
 R.forEach(function (r, k) { C.STOPS.forEach(function (s) { var x = M.send(k, s.id); lines.push(x.line, x.reply, x.why || '', x.frame, x.left, M.evidence(k).line); check(r.id + ' ' + s.id + ': a line, a reply, and a rule when read', x.line.length > 20 && x.reply.length > 5 && (!x.readable || x.why.length > 10)); }); });
-C.ANSWERS.forEach(function (a) { var v = M.verdict(M.play(M.STRATEGIES.best).sends, a.id); lines.push(v.head, v.part, v.stood); lines = lines.concat(v.found, v.nagel); check('verdict for "' + a.id + '": head, four found lines, where you part, had yours stood', v.head.length > 10 && v.found.length === 4 && v.part.length > 40 && v.stood.length > 40); });
+C.ANSWERS.forEach(function (a) { var v = M.verdict(M.play(M.STRATEGIES.best).sends, [], a.id); lines.push(v.head, v.part, v.stood); lines = lines.concat(v.found, v.nagel); check('verdict for "' + a.id + '": head, three found lines, where you part, had yours stood', v.head.length > 10 && v.found.length === 3 && v.part.length > 40 && v.stood.length > 40); });
 check('Nagel’s answer is the third', C.NAGEL_ANSWER === 'something' && C.ANSWERS[2].id === 'something');
+C.NIGHTS.forEach(function (N, n) { [[], N.pieces.map(function (p) { return p.id; }), [N.pieces[0].id, N.pieces[2].id]].forEach(function (ch) { var g = M.grade(n, ch); lines.push(g.line, M.nightLine(g)); g.pieces.forEach(function (p) { lines.push(p.why); }); }); });
+lines.push(C.BLANK_LINE, C.QUESTION);
 lines.forEach(function (l) { if (/undefined|NaN|Infinity|\d\.\d/.test(l)) bad.push(l); });
 check('no decimal, NaN, undefined or Infinity in ' + lines.length + ' lines', bad.length === 0, bad.join(' | '));
 check('no "no a body"', !lines.some(function (l) { return /no a /.test(l); }));

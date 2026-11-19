@@ -1,34 +1,30 @@
 == the rounds
-ok   four rounds, in the memo’s order
+ok   three rounds, in the memo’s order
 ok   three stops
 == readability (the rule the reader’s card states)
 ok   sunset readable 111
 ok   lightning readable 011
 ok   red readable 011
-ok   bat readable 011
 ok   the inside frame needs the sense the thing is in
 ok   the shape needs a mind, the physics instruments and sums
 == what each frame holds (pp. 443-445, fn. 10, p. 449: direction only; fractions ours)
 ok   sunset: all inside, part as shape, none as physics  [1/0.3/0]
 ok   lightning: its look inside, part as shape, all as physics  [0.25/0.6/1]
 ok   red: all inside, part as shape, none as physics  [1/0.3/0]
-ok   bat: all inside, part as shape, none as physics  [1/0.3/0]
 == the best stop per round, and the discovery
 ok   sunset: best is inside  [inside 1]
 ok   lightning: best is physics  [physics 1]
 ok   red: best is shape  [shape 0.3]
-ok   bat: best is shape  [shape 0.3]
 ok   round 3 (red to Ada): the readable frames are the ones red has left
 ok   round 3 (red, physics): readable, and none of the red
-ok   round 4 (the bat, inside): blank to you
 ok   every send carries what left the picture on the way
 == strategy table (build.md §3)
-   always inside                   1.00   1 0 0 0
-   always shape                    1.50   0.3 0.6 0.3 0.3
-   always physics                  1.00   0 1 0 0
-   furthest the reader can read    1.00   0 1 0 0
-   nearest the reader can read     2.20   1 0.6 0.3 0.3
-   best                            2.60   1 1 0.3 0.3
+   always inside                   1.00   1 0 0
+   always shape                    1.20   0.3 0.6 0.3
+   always physics                  1.00   0 1 0
+   furthest the reader can read    1.00   0 1 0
+   nearest the reader can read     1.90   1 0.6 0.3
+   best                            2.30   1 1 0.3
 ok   always physics (the reductionist) gets lightning and nothing else
 ok   always the naked eye gets the sunset and nothing else
 ok   nearest the reader can read loses only on lightning
@@ -39,8 +35,23 @@ ok   best stop unchanged, and the three wrong strategies still wrong, over 1750 
 ok   fractions restored
 ok   the lesson rests on the paper’s claim that the physics frame holds none of an experience (set it to half and the best stop for red moves)
 == the evidence panel
-ok   the naked-eye frame is the unread one for lightning, red and the bat, and none for the sunset
-ok   the bat’s line turns the mirror
+ok   the naked-eye frame is the unread one for lightning and red, and none for the sunset
+ok   Ada’s line
+== the nights (the second half)
+ok   three nights, one per round, in order
+ok   evening: six pieces, between three and five in, every piece with a reason
+ok   evening: every light-piece is out and every sound, echo, smell and warmth piece is in
+ok   evening: all pieces chosen finds everything and adds what does not belong; none finds nothing; the right set is clean
+ok   evening: the status of every piece is one of kept, faded, missed, left
+ok   storm: six pieces, between three and five in, every piece with a reason
+ok   storm: every light-piece is out and every sound, echo, smell and warmth piece is in
+ok   storm: all pieces chosen finds everything and adds what does not belong; none finds nothing; the right set is clean
+ok   storm: the status of every piece is one of kept, faded, missed, left
+ok   field: six pieces, between three and five in, every piece with a reason
+ok   field: every light-piece is out and every sound, echo, smell and warmth piece is in
+ok   field: all pieces chosen finds everything and adds what does not belong; none finds nothing; the right set is clean
+ok   field: the status of every piece is one of kept, faded, missed, left
+ok   the verdict carries one line per night after the three prints
 == the words
 ok   sunset inside: a line, a reply, and a rule when read
 ok   sunset shape: a line, a reply, and a rule when read
@@ -51,14 +62,11 @@ ok   lightning physics: a line, a reply, and a rule when read
 ok   red inside: a line, a reply, and a rule when read
 ok   red shape: a line, a reply, and a rule when read
 ok   red physics: a line, a reply, and a rule when read
-ok   bat inside: a line, a reply, and a rule when read
-ok   bat shape: a line, a reply, and a rule when read
-ok   bat physics: a line, a reply, and a rule when read
-ok   verdict for "nothing": head, four found lines, where you part, had yours stood
-ok   verdict for "physics": head, four found lines, where you part, had yours stood
-ok   verdict for "something": head, four found lines, where you part, had yours stood
+ok   verdict for "nothing": head, three found lines, where you part, had yours stood
+ok   verdict for "physics": head, three found lines, where you part, had yours stood
+ok   verdict for "something": head, three found lines, where you part, had yours stood
 ok   Nagel’s answer is the third
-ok   no decimal, NaN, undefined or Infinity in 102 lines
+ok   no decimal, NaN, undefined or Infinity in 155 lines
 ok   no "no a body"
 
-48 checks, 0 failed
+55 checks, 0 failed
