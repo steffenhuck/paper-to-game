@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Zoom Out with Nagel</title>
+<title>Nagel’s Camera</title>
 <script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <style>
 @font-face { font-family: 'Baloo'; font-weight: 800; src: url(data:font/woff2;base64,/*__F_DISP__*/) format('woff2'); }
@@ -165,7 +165,7 @@ html.night #eline2 { color: #9FB0C6; }
     <rect x="30" y="126" width="160" height="6" rx="3" fill="#1A1210"/>
     <rect x="56" y="130" width="108" height="18" fill="#FFFFFF"/><rect x="62" y="134" width="96" height="10" fill="#F0902A"/>
   </svg>
-  <h1>Zoom Out with Nagel</h1>
+  <h1>Nagel’s Camera</h1>
   <p class="start-lines">A camera whose zoom ring steps back from your own eyes. Three readers want to know about three things, and two of them do not have your senses. Then night falls, the camera turns on a bat, and you build what the bat has of the same three things.</p>
   <p class="acts">Turn the ring and watch the picture change; the ring turns freely and the shutter fires at three stops. Press Send. Then, at night, tap the pieces of your evening that you think a bat has.</p>
   <p class="aimline">Get as much of each thing across to its reader as you can.</p>
@@ -256,7 +256,7 @@ html.night #eline2 { color: #9FB0C6; }
   <p>The picture is what your camera sees. Turn the ring under it and watch: the camera steps back from your own eyes, the colour drains, things leave the frame and other things come in. The ring turns freely, but the shutter fires at only three stops, and the ring settles on the nearest when you let go. <b>Naked eye</b> is the thing exactly as it is for you; it can be read only with the sense it was taken with (eyes, sonar). <b>The shape</b> is the outline of the thing, where it sits among its neighbours; it can be read with a mind. <b>The physics</b> is what any instrument would find; it can be read with instruments and sums. The tag under the picture says which stop you are at and what it takes to read it; the blue marks above the ring show which stops this reader can read.</p>
   <p>Look at the picture and ask: is the thing still in it? Then press <b>Send</b>.</p>
   <p>The picture becomes a print at the reader's side. The small drawing beside the reader fills by how much of the thing arrived: solid is all of it, pale is a part, a dotted outline is none. One line says what crossed. <b>What that means</b> opens the same stop drawn with its labels, what left the picture on the way there, the rule, and the reader's answer. <b>Next</b> goes on.</p>
-  <p>Three rounds; every round the ring starts at the naked eye. Then night falls and the camera turns on a bat. Three windows, one for each thing: under the window is a tray of pieces of your own evening, storm and field. Tap the ones you think the bat has; they go into the window. Press <b>That’s my bat</b>: the pieces a bat has turn into the bat’s own idiom, echoes and loud waves and warmth, the pieces it does not have fade, and the ones you missed appear dashed, so the window ends as the shape of the bat’s evening. A line under each piece says why. After the third window, the verdict in steps; press Go on. Its third step shows your window beside the frame one stop further in, which is blank.</p>
+  <p>Three rounds; every round the ring starts at the naked eye. Then night falls and the camera turns on a bat. Three windows, one for each thing: under the window is a tray of pieces of your own evening, storm and field. Tap the ones you think the bat has; they go into the window. Press <b>That’s my bat</b>: the pieces a bat has turn into the bat’s own idiom, echoes and loud waves and warmth, the pieces it does not have fade, and the ones you missed appear dashed, so the window ends as the shape of the bat’s evening. A line under each piece says why. After the third window, the verdict in steps; press Go on. Its third step shows your window beside the frame one stop further in, which is blank, and its last step gives three ways to read that frame.</p>
   <div class="sendrow"><button class="big" data-close="help">Back</button></div>
 </div></div>
 
@@ -501,7 +501,7 @@ function renderEnd(v) {
     '<div class="step"><p>' + v.nagel[1] + '</p>' + pair(F('red', 'inside'), 'red, naked eye', F('red', 'physics'), 'red, the physics') + '</div>',
     '<div class="step"><p>' + v.nagel[2] + '</p><div class="pair"><div class="pr dark">' + windowSvg(0, G.grades[0] ? G.grades[0].pieces.filter(function (p) { return p.chosen; }).map(function (p) { return p.id; }) : [], !!G.grades[0], { still: true }) + '<span class="cap">the bat\u2019s evening, as you built it</span></div><div class="pr dark">' + windowSvg(0, [], false, { still: true, blank: true }) + '<span class="cap">one stop further in</span></div></div><p>' + C.BLANK_LINE + '</p></div>',
     '<div class="step"><div class="stitle">What you found</div><ul>' + v.found.map(function (l) { return '<li>' + l + '</li>'; }).join('') + '</ul><div class="prints">' + G.sends.map(function (sd) { var rr = M.round(sd.round); return '<div class="mini" data-ev="' + sd.round + '">' + printOf(sd) + '<span class="cap">' + rr.short + ', ' + C.STOPS[M.stopIndex(sd.stop)].label.toLowerCase() + '</span><span class="mi">' + icon(rr.id, iconState(sd)) + '</span></div>'; }).join('') + '</div><div class="wins">' + [0, 1, 2].map(function (n) { return miniWindow(n, M.night(n).name); }).join('') + '</div><p style="font-size:13px;color:#6E5A4A">Tap a print or a window to see it again.</p></div>',
-    '<div class="step"><div class="stitle">Three ways to read the blank</div>' + v.readings.map(function (r) { return '<p><b>' + r.label + '</b> ' + r.says + '</p>'; }).join('') + '</div>'
+    '<div class="step"><div class="stitle">Three ways to read the frame one stop further in</div>' + v.readings.map(function (r) { return '<p><b>' + r.label + '</b> ' + r.says + '</p>'; }).join('') + '</div>'
   ];
   stepAt = 0; $('steps').innerHTML = ''; $('goon').style.display = ''; $('endtail').style.display = 'none'; $('further').style.display = 'none';
   goOn();

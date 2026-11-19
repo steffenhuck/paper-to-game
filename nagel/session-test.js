@@ -9,7 +9,7 @@ const { chromium } = require('playwright'); const path = require('path'); const 
   const page = await browser.newPage({ viewport: { width: 380, height: 760 }, deviceScaleFactor: 1 });
   const errors = [], log = [];
   page.on('pageerror', e => errors.push(e.message)); page.on('console', m => { if (m.type() === 'error' && m.text().indexOf('Failed to load resource') < 0) errors.push(m.text()); });
-  await page.goto('file://' + path.resolve(__dirname, 'zoom-out-with-nagel.html')); await page.waitForTimeout(600);
+  await page.goto('file://' + path.resolve(__dirname, 'nagels-camera.html')); await page.waitForTimeout(600);
   const shot = (n, full) => page.screenshot({ path: path.join(__dirname, 'screenshot-' + n + '.png'), fullPage: !!full });
   const hscroll = async (where) => { if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) errors.push('horizontal scroll at ' + where); };
   const fits = async (where) => { const b = await page.evaluate(() => document.getElementById('b-send').getBoundingClientRect().bottom); log.push(where + ': Send bottom at ' + Math.round(b) + ' px (within 700: ' + (b <= 700) + ')'); if (b > 700) errors.push('Send below 700 px at ' + where); };
