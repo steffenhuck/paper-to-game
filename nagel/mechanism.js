@@ -1,4 +1,4 @@
-// Zoom Out with Nagel: the mechanism, headless and the only copy. Runs unchanged in Node (module.exports) and in the
+// Zoom Out with Nagel (revision 1, four rounds): the mechanism, headless and the only copy. Runs unchanged in Node (module.exports) and in the
 // browser (window.NagelMechanism). Everything that moves an outcome lives here: the six rounds (thing, reader, the three
 // frames and how much of the thing each holds), the rule that says whether a reader can read a frame, the result of a
 // send, the closing question and the verdict's words. The interface only passes actions in and draws what comes back.
@@ -18,7 +18,7 @@ var CONFIG = {
   // experiences"), the physics frame needs instruments and sums (pp. 443-444: the domain "observed and understood
   // from many points of view").
   STOPS: [
-    { id: 'inside',  label: 'From inside',  needsLabel: null,     reads: 'with the same sense' },
+    { id: 'inside',  label: 'Naked eye',    needsLabel: null,     reads: 'with the same sense' },
     { id: 'shape',   label: 'The shape',    needsLabel: 'a mind', reads: 'with a mind' },
     { id: 'physics', label: 'The physics',  needsLabel: 'instruments and sums', reads: 'with instruments and sums' }
   ],
@@ -77,32 +77,8 @@ var CONFIG = {
         shape:   { says: 'One of the colours; next to orange, far from green; the warm end; the colour of ripe fruit, of blood, of a stop sign.' },
         physics: { says: 'Light of about 700 nanometres; the long-wave cones in the eye firing more than the others.' }
       },
-      reply: { inside: '', shape: 'Next to orange, the warm end, blood. So I know where it sits. And what is it like?',
+      reply: { inside: '', shape: 'Next to orange, the warm end, blood. So I know where it sits. And what is it like? Say it in sound and I would have it; I hear.',
                physics: 'Seven hundred nanometres. A number. And what is it like?', unread: 'I have never seen. This frame is nothing to me.' } },
-    { id: 'trumpet', thing: 'the sound of a trumpet, as it is to hear it', short: 'the trumpet', kind: 'experience', sense: 'ears',
-      // p. 449: the trumpet is Nagel's own example; fn. 8: understanding is partial by similarity, and Ada hears
-      reader: { id: 'ada', name: 'Ada', pron: 'she', who: 'blind from birth', has: ['ears', 'body', 'mind', 'sums'], lacks: ['eyes'] },
-      ask: 'And the sound of a trumpet, what is that like?',
-      frames: {
-        inside:  { says: 'That bright brassy blare, right in the chest, the note held and then bent.' },
-        shape:   { says: 'A loud, bright sound; sharp at the start, steady, then bent; one note of the scale at a time.' },
-        physics: { says: 'A column of air set shaking at 440 times a second, with the overtones piled on; a wave in the air.' }
-      },
-      reply: { inside: 'Oh, I know that one. Right in the chest. Yes.',
-               shape: 'Loud, bright, steady. I know all that already; I hear. Why the outline?',
-               physics: 'Four hundred and forty a second. I hear trumpets, you know. Why the sums?', unread: '' } },
-    { id: 'pain', thing: 'your pain', short: 'the pain', kind: 'experience', sense: 'body',
-      // p. 444: "a Martian investigating my brain might be observing physical processes which were my mental
-      // processes"; fn. 10; fn. 11: pain's "immediate phenomenological quality"; pp. 446-447: the "is" not understood
-      reader: { id: 'physiologist', name: 'the physiologist', pron: 'he', who: 'a Martian, your whole brain on its screen', has: ['mind', 'sums'], lacks: ['eyes', 'ears', 'body'] },
-      ask: 'I have every cell of your brain on screen. What is your pain?',
-      frames: {
-        inside:  { says: 'Your hand on the hot pan. That. Sharp, and all at once, and nothing else in the world.' },
-        shape:   { says: 'Sharp, not dull; in the hand, not everywhere; it makes the hand pull back; worse than an itch, like a burn.' },
-        physics: { says: 'Heat at the skin; a signal up the arm; a region of the brain lighting up; the arm’s muscles firing.' }
-      },
-      reply: { inside: '', shape: 'Sharp, placed, pulls the hand back. That is more than I had. Is that all it is?',
-               physics: 'I had this. It is what I measured. Is that all it is?', unread: 'I have no body. This frame is nothing to me.' } },
     { id: 'bat', thing: 'the bat’s world, as it is for the bat', short: 'the bat’s world', kind: 'experience', sense: 'sonar',
       // pp. 438-440: sonar as "three-dimensional forward perception"; the intelligent bat as our mirror
       reader: { id: 'you', name: 'you', pron: 'you', who: 'the bat is sending; you receive', has: ['eyes', 'ears', 'body', 'mind', 'sums'], lacks: ['sonar'] },
@@ -115,9 +91,16 @@ var CONFIG = {
       reply: { inside: '', shape: 'Forward, in three dimensions. The shape of it. What is it like? You have no idea.',
                physics: 'A shriek, an echo, a gap. All of it. What is it like? You have no idea.', unread: 'You have no sonar. This frame is nothing to you.' } }
   ],
+  // What left the picture on the way to each stop, as the player saw it happen on the ring (revision 1; ours).
+  LEFT: {
+    sunset:    { inside: 'Nothing has left yet: this is the evening as you had it.', shape: 'On the way here the figure on the pier went out of the frame, then the colour; the sun stayed, as a disc going down.', physics: 'On the way here the figure went, then the colour, then the sun as you saw it; the camera pulled back until the earth was a ball and the evening was a sun two degrees under a line.' },
+    lightning: { inside: 'Nothing has left yet: the flash as you had it, and the flinch.', shape: 'On the way here you went out of the frame, then the colour; the bolt stayed, as a branching line, and the bang took its place after it.', physics: 'On the way here you went, then the colour; the bolt stayed in the middle and gained what made it: the cloud, the ground, the charge, the channel.' },
+    red:       { inside: 'Nothing has left yet: the field, red to the edges.', shape: 'On the way here the red went out of the poppies and a ring of colours came in with one slot marked; the red is the slot, not the colour.', physics: 'On the way here the red went, then the field; the eye that saw it shrank to the corner and the frame filled with the light that caused it.' },
+    bat:       { inside: 'Nothing could be shown: this frame is taken from where you cannot stand.', shape: 'On the way here the blank gave way to a cone in front of a bat, with things in it at distances.', physics: 'On the way here the blank gave way to a cone, then the cone to a throat, two ears and a clock.' }
+  },
   // The closing question (p. 440: bats or Martians trying to conceive of us "would be wrong to conclude that there is
   // not anything precise that it is like to be us"; pp. 446-447: physicalism not shown false, the "is" not understood).
-  QUESTION: 'The bat’s inside frame came to you blank. What is in it?',
+  QUESTION: 'The bat’s naked-eye frame came to you blank. What is in it?',
   ANSWERS: [
     { id: 'nothing', label: 'Nothing. There is nothing it is like to be a bat.' },
     { id: 'physics', label: 'Only what the physics frame shows. The bat’s world is that shriek and that echo.' },
@@ -149,7 +132,6 @@ function why(k, stop) {
     if (stop === 'inside') return 'It lives in this frame: how it is from where you stand.';
     if (stop === 'shape') return 'The shape of it crossed: where it sits among its neighbours and what it makes you do. The thing itself stayed in the first frame.';
     if (r.id === 'bat') return 'The cause of it crossed, not the thing. The bat\u2019s world lives in the frame you cannot read.';
-    if (r.id === 'pain') return 'The cause of it crossed, not the thing. Nobody yet knows how to read the sentence \u201Cthe pain is this firing\u201D: it may be true, and the pain is still not in the frame.';
     return 'The cause of it crossed, not the thing. Step back from your senses and a thing in your sensing drops out of the frame.';
   }
   if (stop === 'inside') return 'Only how it looks crossed. ' + cap(r.short) + ' is more than its look.';
@@ -165,12 +147,11 @@ function send(k, stop) {
     line = (you ? 'You asked for ' : 'You sent ') + r.short + ' ' + stopPhrase(stop) + '. ' + (you ? 'You have' : cap(r.reader.name) + ' has') + ' no ' + CONFIG.NO_SENSE[needs(k, stop)] + ', and that frame can be read only with ' + sense + '. Nothing arrived.';
   } else {
     line = (you ? 'You asked for ' : 'You sent ') + r.short + ' ' + stopPhrase(stop) + '. ' + (you ? 'You have ' : cap(r.reader.name) + ' has ') + sense + '; ' + (you ? 'you' : r.reader.pron) + ' read it. ' + arrivedWords(arrived) + ' of ' + r.short + ' arrived.';
-    if (r.id === 'pain' && stop === 'physics') line = 'You sent the pain as the physics. The physiologist has instruments and sums; he read it, and he had it already: it is what he measured. All of the brain arrived. Of the pain, none.';
   }
   var reply = readable ? r.reply[stop] : r.reply.unread;
-  return { round: k, stop: stop, readable: readable, holds: h, arrived: arrived, words: arrivedWords(arrived), line: line, why: readable ? why(k, stop) : null, reply: reply, frame: r.frames[stop].says, need: needsLabel(k, stop) };
+  return { round: k, stop: stop, readable: readable, holds: h, arrived: arrived, words: arrivedWords(arrived), line: line, why: readable ? why(k, stop) : null, reply: reply, frame: r.frames[stop].says, need: needsLabel(k, stop), left: CONFIG.LEFT[r.id][stop] };
 }
-function stopPhrase(stop) { return stop === 'inside' ? 'from inside' : stop === 'shape' ? 'as the shape' : 'as the physics'; }
+function stopPhrase(stop) { return stop === 'inside' ? 'from the naked eye' : stop === 'shape' ? 'as the shape' : 'as the physics'; }
 function withSense(k, stop) { return CONFIG.SENSES[needs(k, stop)]; }
 // The best stop for a round: the readable frame that holds most.
 function best(k) {
@@ -185,7 +166,7 @@ function best(k) {
 var NAGEL_SAYS = [
   'Step back from your eyes and a thing in the world stays in view and gets clearer: lightning is what it does, not how it looks.',
   'Step back from your eyes and an experience drops out of the frame, because it is a way of seeing and not a thing seen: of red, of pain, the far frame holds the cause and not the thing.',
-  'A frame you cannot read is not an empty one. The Martian got your brain and none of your pain, and your pain was there. The bat’s frame is blank to you the same way.'
+  'A frame you cannot read is not an empty one. Ada could not read your red from the naked eye, and the red was there; a physiologist with your whole brain on screen would get all of the brain and none of it. The bat’s frame is blank to you the same way.'
 ];
 function foundLine(s) {
   var r = round(s.round);
@@ -193,18 +174,18 @@ function foundLine(s) {
   if (!s.readable) return cap(r.short) + ' ' + stopPhrase(s.stop) + ': ' + who + ' could not read it. Nothing arrived.';
   if (s.arrived >= 1) return cap(r.short) + ' ' + stopPhrase(s.stop) + ': all of it reached ' + who + '.';
   if (s.arrived > 0) return cap(r.short) + ' ' + stopPhrase(s.stop) + ': ' + (r.kind === 'experience' ? 'the shape of it reached ' + who + ', not the thing.' : 'a part of it reached ' + who + '.');
-  return cap(r.short) + ' ' + stopPhrase(s.stop) + ': ' + (r.id === 'pain' ? 'all of the brain reached him, and none of the pain.' : 'the cause of it reached ' + who + ', and none of the thing.');
+  return cap(r.short) + ' ' + stopPhrase(s.stop) + ': ' + 'the cause of it reached ' + who + ', and none of the thing.';
 }
 function verdict(sends, answer) {
   var head, part, stood;
   if (answer === 'nothing') {
     head = 'You called the blank frame empty.';
-    part = 'Nagel parts from you here. A frame you cannot read is not an empty one: Ada could not read your red from inside, and the red was there; the Martian could not read your pain from inside, and the pain was there. The bat’s inside frame is blank to you for the same reason, and no other.';
-    stood = 'Had yours stood, the Martian with your whole brain on screen would be right to say there is nothing it is like to be you. You know that is false. So does the bat about itself.';
+    part = 'Nagel parts from you here. A frame you cannot read is not an empty one: Ada could not read your red from the naked eye, and the red was there; the Martian could not read your sunset from the naked eye, and the evening was there. The bat’s naked-eye frame is blank to you for the same reason, and no other.';
+    stood = 'Had yours stood, a physiologist with your whole brain on screen would be right to say there is nothing it is like to be you. You know that is false. So does the bat about itself.';
   } else if (answer === 'physics') {
     head = 'You called the blank frame the physics frame over again.';
-    part = 'Nagel does not call this false. He says nobody can yet read it. "The bat’s world is that shriek and that echo" is a sentence like "matter is energy" said to someone two thousand years before anyone knew how it could be true: it may be so, and we have no idea what would make it so. Your own pain round showed the gap: the physics arrived whole and the pain was not in it.';
-    stood = 'Had yours stood, the shriek and the echo would be all there is to the bat, and the firing would be all there is to your pain. Then the physiologist had your pain on screen all along, and could not find it. Something in the sentence is still missing.';
+    part = 'Nagel does not call this false. He says nobody can yet read it. "The bat’s world is that shriek and that echo" is a sentence like "matter is energy" said to someone two thousand years before anyone knew how it could be true: it may be so, and we have no idea what would make it so. Your own red round showed the gap: the physics could arrive whole, and the red was not in it. The same question is asked today of machines: a complete account of the works, and whether anything is felt.';
+    stood = 'Had yours stood, the shriek and the echo would be all there is to the bat, and the firing of your eye and brain would be all there is to your red. Then a physiologist with your brain on screen would have had your red in front of him, and could not find it. Something in the sentence is still missing.';
   } else {
     head = 'You called the blank frame full of something you cannot read.';
     part = 'That is Nagel’s answer. We can say in a schematic way what sort of thing is there (forward, three-dimensional, read off echoes) and believe it is as specific and as rich as our own, and still have no way to read it, because our frames are taken from where we stand. He adds that this does not make physicalism false: it means we do not yet understand what it would mean for it to be true.';

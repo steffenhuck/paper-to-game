@@ -1,12 +1,10 @@
 == the rounds
-ok   six rounds, in the memo’s order
+ok   four rounds, in the memo’s order
 ok   three stops
 == readability (the rule the reader’s card states)
 ok   sunset readable 111
 ok   lightning readable 011
 ok   red readable 011
-ok   trumpet readable 111
-ok   pain readable 011
 ok   bat readable 011
 ok   the inside frame needs the sense the thing is in
 ok   the shape needs a mind, the physics instruments and sums
@@ -14,29 +12,25 @@ ok   the shape needs a mind, the physics instruments and sums
 ok   sunset: all inside, part as shape, none as physics  [1/0.3/0]
 ok   lightning: its look inside, part as shape, all as physics  [0.25/0.6/1]
 ok   red: all inside, part as shape, none as physics  [1/0.3/0]
-ok   trumpet: all inside, part as shape, none as physics  [1/0.3/0]
-ok   pain: all inside, part as shape, none as physics  [1/0.3/0]
 ok   bat: all inside, part as shape, none as physics  [1/0.3/0]
 == the best stop per round, and the discovery
 ok   sunset: best is inside  [inside 1]
 ok   lightning: best is physics  [physics 1]
 ok   red: best is shape  [shape 0.3]
-ok   trumpet: best is inside  [inside 1]
-ok   pain: best is shape  [shape 0.3]
 ok   bat: best is shape  [shape 0.3]
 ok   round 3 (red to Ada): the readable frames are the ones red has left
-ok   round 5 (pain, physics): all of the brain arrives and none of the pain
-ok   round 6 (the bat, inside): blank to you
-ok   round 4 (the trumpet to Ada): from inside, all of it
+ok   round 3 (red, physics): readable, and none of the red
+ok   round 4 (the bat, inside): blank to you
+ok   every send carries what left the picture on the way
 == strategy table (build.md §3)
-   always inside                   2.00   1 0 0 1 0 0
-   always shape                    2.10   0.3 0.6 0.3 0.3 0.3 0.3
-   always physics                  1.00   0 1 0 0 0 0
-   furthest the reader can read    1.00   0 1 0 0 0 0
-   nearest the reader can read     3.50   1 0.6 0.3 1 0.3 0.3
-   best                            3.90   1 1 0.3 1 0.3 0.3
+   always inside                   1.00   1 0 0 0
+   always shape                    1.50   0.3 0.6 0.3 0.3
+   always physics                  1.00   0 1 0 0
+   furthest the reader can read    1.00   0 1 0 0
+   nearest the reader can read     2.20   1 0.6 0.3 0.3
+   best                            2.60   1 1 0.3 0.3
 ok   always physics (the reductionist) gets lightning and nothing else
-ok   always inside gets the sunset and the trumpet and nothing else
+ok   always the naked eye gets the sunset and nothing else
 ok   nearest the reader can read loses only on lightning
 ok   best beats every other strategy
 ok   every strategy but best goes wrong somewhere
@@ -54,20 +48,14 @@ ok   lightning physics: a line, a reply, and a rule when read
 ok   red inside: a line, a reply, and a rule when read
 ok   red shape: a line, a reply, and a rule when read
 ok   red physics: a line, a reply, and a rule when read
-ok   trumpet inside: a line, a reply, and a rule when read
-ok   trumpet shape: a line, a reply, and a rule when read
-ok   trumpet physics: a line, a reply, and a rule when read
-ok   pain inside: a line, a reply, and a rule when read
-ok   pain shape: a line, a reply, and a rule when read
-ok   pain physics: a line, a reply, and a rule when read
 ok   bat inside: a line, a reply, and a rule when read
 ok   bat shape: a line, a reply, and a rule when read
 ok   bat physics: a line, a reply, and a rule when read
-ok   verdict for "nothing": head, six found lines, where you part, had yours stood
-ok   verdict for "physics": head, six found lines, where you part, had yours stood
-ok   verdict for "something": head, six found lines, where you part, had yours stood
+ok   verdict for "nothing": head, four found lines, where you part, had yours stood
+ok   verdict for "physics": head, four found lines, where you part, had yours stood
+ok   verdict for "something": head, four found lines, where you part, had yours stood
 ok   Nagel’s answer is the third
-ok   no decimal, NaN, undefined or Infinity in 108 lines
+ok   no decimal, NaN, undefined or Infinity in 90 lines
 ok   no "no a body"
 
-58 checks, 0 failed
+46 checks, 0 failed

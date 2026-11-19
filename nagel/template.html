@@ -23,9 +23,10 @@ p { margin: 6px 0; }
 button { border: 0; border-radius: 999px; background: var(--orange); color: var(--ink); font-size: 19px; padding: 12px 22px; cursor: pointer; line-height: 1.1; }
 button:active { filter: brightness(.92); }
 button.big { width: 100%; font-size: 23px; padding: 12px 20px; }
+button.half { flex: 1 1 0; font-size: 19px; padding: 12px 10px; }
+button.pale { background: var(--white); border: 2px solid var(--ink); }
 button.quiet { background: transparent; color: var(--ink); font-family: 'Varela', system-ui, sans-serif; font-weight: 400; font-size: 15px; text-decoration: underline; padding: 8px 10px; }
 button.answer { width: 100%; text-align: left; font-family: 'Varela', system-ui, sans-serif; font-weight: 400; font-size: 16.5px; background: var(--white); border: 2px solid var(--ink); border-radius: 16px; padding: 12px 14px; margin: 8px 0; }
-button:disabled { opacity: .45; cursor: default; }
 .aim { font-size: 13px; color: #6E5A4A; margin: 0 0 4px; line-height: 1.25; }
 .top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 2px; }
 .top .disp { font-size: 22px; }
@@ -44,33 +45,37 @@ button:disabled { opacity: .45; cursor: default; }
 .bubble:after { content: ''; position: absolute; left: -8px; top: 14px; border: 5px solid transparent; border-right-color: var(--white); border-left: 0; }
 .bubble.reply { border-color: var(--blue); }
 .bubble.reply:before { border-right-color: var(--blue); }
-.vf { position: relative; border: 5px solid var(--ink); border-radius: 14px; overflow: hidden; background: var(--white); margin: 4px auto 0; max-width: 324px; }
-.vf svg.frame { display: block; width: 100%; height: auto; }
-.under { display: flex; justify-content: space-between; align-items: center; gap: 6px; margin: 4px auto 0; max-width: 324px; }
+.vfwrap { position: relative; max-width: 324px; margin: 6px auto 0; }
+.vf { position: relative; border-radius: 14px; overflow: hidden; background: var(--white); }
+.vf svg.scene { display: block; width: 100%; height: auto; }
+.cam { position: absolute; inset: 0; pointer-events: none; border-radius: 14px; border: 5px solid var(--ink); opacity: 0; }
+.cam i { position: absolute; width: 20px; height: 20px; border: 3px solid var(--ink); }
+.cam i.tl { left: 9px; top: 9px; border-right: 0; border-bottom: 0; } .cam i.tr { right: 9px; top: 9px; border-left: 0; border-bottom: 0; } .cam i.bl { left: 9px; bottom: 9px; border-right: 0; border-top: 0; } .cam i.br { right: 9px; bottom: 9px; border-left: 0; border-top: 0; }
+.vfwrap.print .vf { border: 6px solid #FFFFFF; border-bottom-width: 26px; border-radius: 6px; box-shadow: 0 3px 0 #D9CFBC, 0 10px 18px rgba(58,42,31,.18); }
+.vfwrap.print .cam { display: none; }
+.develop { position: absolute; inset: 0; background: #4E443B; opacity: 0; pointer-events: none; }
+.vfwrap.developing .develop { opacity: 1; transition: none; }
+.vfwrap.print .develop { opacity: 0; transition: opacity 2.2s ease; }
+.blankv { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; color: #6E5A4A; background: repeating-linear-gradient(135deg, #EDE4D2 0 7px, #F8F2E6 7px 14px); opacity: 0; transition: opacity .6s ease 1.6s; pointer-events: none; }
+.vfwrap.print.unread .blankv { opacity: 1; }
+.under { display: flex; justify-content: space-between; align-items: center; gap: 6px; margin: 5px auto 0; max-width: 324px; }
 .under .tag { background: var(--ink); color: var(--card); font-size: 13px; padding: 2px 10px; border-radius: 999px; white-space: nowrap; }
 .under .needs { color: var(--ink); font-size: 13px; padding: 2px 8px; border-radius: 999px; border: 1.5px solid var(--ink); background: var(--white); white-space: nowrap; }
-.vf.print { border-color: #FFFFFF; box-shadow: 0 3px 0 #D9CFBC, 0 10px 18px rgba(58,42,31,.18); border-bottom-width: 26px; border-radius: 6px; }
-.vf .develop { position: absolute; inset: 0; background: #4E443B; opacity: 0; pointer-events: none; }
-.vf.developing .develop { opacity: 1; transition: none; }
-.vf.print .develop { opacity: 0; transition: opacity 2.2s ease; }
-.vf .blankv { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; color: #6E5A4A; background: repeating-linear-gradient(135deg, #EDE4D2 0 7px, #F8F2E6 7px 14px); opacity: 0; transition: opacity .6s ease 1.6s; pointer-events: none; }
-.vf.print.unread .blankv { opacity: 1; }
-.says { font-size: 13px; color: #5A4838; margin: 3px 2px 0; min-height: 30px; line-height: 1.25; }
-.ringbox { margin-top: 6px; }
-.ringbox .lbl { display: flex; justify-content: space-between; font-size: 12px; color: #6E5A4A; margin: 0 2px 0; }
-input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 30px; margin: 0; background: transparent; }
-input[type=range]::-webkit-slider-runnable-track { height: 30px; border-radius: 999px; border: 2px solid var(--ink); background: repeating-linear-gradient(90deg, #FFFDF8 0 4px, #CDBFA8 4px 6px); }
-input[type=range]::-moz-range-track { height: 30px; border-radius: 999px; border: 2px solid var(--ink); background: repeating-linear-gradient(90deg, #FFFDF8 0 4px, #CDBFA8 4px 6px); }
-input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 44px; height: 30px; margin-top: -2px; border-radius: 999px; background: var(--orange); border: 2px solid var(--ink); cursor: pointer; }
-input[type=range]::-moz-range-thumb { width: 40px; height: 26px; border-radius: 999px; background: var(--orange); border: 2px solid var(--ink); cursor: pointer; }
-.stops { display: flex; justify-content: space-between; margin-top: 2px; }
+.ringbox { margin: 12px auto 0; max-width: 324px; }
+.ring { position: relative; height: 44px; border-radius: 999px; border: 2px solid var(--ink); background: repeating-linear-gradient(90deg, #FFFDF8 0 4px, #CDBFA8 4px 6px); touch-action: none; cursor: pointer; }
+.ring .reach { position: absolute; top: -8px; height: 5px; border-radius: 3px; background: var(--blue); }
+.ring .reach.off { background: transparent; border: 1.5px solid var(--grey); height: 3px; }
+.ring .det { position: absolute; top: 0; bottom: 0; width: 3px; background: var(--ink); transform: translateX(-50%); }
+.ring .thumb { position: absolute; top: 2px; width: 54px; height: 36px; border-radius: 999px; background: var(--orange); border: 2px solid var(--ink); transform: translateX(-50%); display: flex; align-items: center; justify-content: center; }
+.ring .thumb:before { content: ''; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--ink); }
+.stops { display: flex; justify-content: space-between; margin-top: 6px; }
 .stops span { font-size: 14px; padding: 4px 8px; border-radius: 999px; cursor: pointer; color: #6E5A4A; }
 .stops span.on { background: var(--ink); color: var(--card); }
-.sendrow { margin-top: 8px; }
+.sendrow { margin-top: 10px; display: flex; gap: 8px; }
 .line { font-size: 16px; margin-top: 10px; }
 .rule { background: var(--paper); border-left: 6px solid var(--orange); border-radius: 0 12px 12px 0; padding: 8px 12px; margin-top: 8px; font-size: 15px; }
 .fade { opacity: 0; transition: opacity .5s ease; } .fade.in { opacity: 1; }
-.cam { width: 220px; margin: 6px auto 0; display: block; }
+.camsvg { width: 220px; margin: 6px auto 0; display: block; }
 .start-lines { font-size: 17px; }
 .acts { font-size: 17px; margin: 10px 0 4px; }
 .aimline { font-family: 'Baloo', system-ui, sans-serif; font-size: 21px; line-height: 1.15; margin: 8px 0 14px; }
@@ -81,17 +86,19 @@ footer.sig a { color: inherit; text-decoration: none; }
 .overlay.on { display: block; }
 .overlay .wrap { padding-bottom: 40px; }
 .overlay p, .overlay li { font-size: 15.5px; }
+.labelled { border: 4px solid var(--ink); border-radius: 12px; overflow: hidden; background: var(--white); max-width: 340px; margin: 8px auto; }
+.labelled svg { display: block; width: 100%; height: auto; }
 .end .head { font-size: 28px; line-height: 1.1; margin: 8px 0 10px; }
 .end ul { padding-left: 20px; margin: 4px 0; }
 .end li { margin: 4px 0; font-size: 15.5px; }
-.prints { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
-.prints .mini { background: #fff; padding: 4px 4px 18px; box-shadow: 0 2px 0 #D9CFBC; border-radius: 3px; position: relative; }
+.prints { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 8px; }
+.prints .mini { background: #fff; padding: 5px 5px 22px; box-shadow: 0 2px 0 #D9CFBC; border-radius: 3px; position: relative; }
 .prints .mini svg.frame { width: 100%; height: auto; display: block; border-radius: 2px; }
-.prints .mini .mi { position: absolute; right: 3px; bottom: 1px; width: 20px; height: 20px; }
-.prints .mini .cap { font-size: 10px; position: absolute; left: 5px; bottom: 2px; color: #5A4838; }
-.qrow { display: flex; justify-content: space-between; gap: 4px; margin: 8px 0; }
-.qrow .thing { text-align: center; font-size: 10px; flex: 1; }
-.qrow .thing svg { width: 40px; height: 40px; display: block; margin: 0 auto; }
+.prints .mini .mi { position: absolute; right: 4px; bottom: 1px; width: 22px; height: 22px; }
+.prints .mini .cap { font-size: 11px; position: absolute; left: 6px; bottom: 3px; color: #5A4838; }
+.qrow { display: flex; justify-content: space-around; gap: 4px; margin: 8px 0; }
+.qrow .thing { text-align: center; font-size: 11px; flex: 1; }
+.qrow .thing svg { width: 44px; height: 44px; display: block; margin: 0 auto; }
 .ic-full .f { fill: var(--c); } .ic-full .s { stroke: var(--c); }
 .ic-part .f { fill: var(--c); fill-opacity: .28; } .ic-part .s { stroke: var(--c); stroke-dasharray: none; }
 .ic-none .f { fill: none; } .ic-none .s { stroke: var(--grey); stroke-dasharray: 3 3; }
@@ -104,7 +111,7 @@ footer.sig a { color: inherit; text-decoration: none; }
 
 <section id="start" class="screen on">
   <div class="stripe"></div>
-  <svg class="cam" viewBox="0 0 220 150" aria-hidden="true">
+  <svg class="camsvg" viewBox="0 0 220 150" aria-hidden="true">
     <rect x="18" y="30" width="184" height="96" rx="14" fill="#3A2A1F"/>
     <rect x="26" y="38" width="168" height="80" rx="10" fill="#F4ECDC"/>
     <rect x="26" y="70" width="168" height="6" fill="#E2402F"/><rect x="26" y="76" width="168" height="6" fill="#F0902A"/><rect x="26" y="82" width="168" height="6" fill="#F2C53D"/><rect x="26" y="88" width="168" height="6" fill="#3F9C5B"/><rect x="26" y="94" width="168" height="6" fill="#2F6FB5"/>
@@ -115,8 +122,8 @@ footer.sig a { color: inherit; text-decoration: none; }
     <rect x="56" y="130" width="108" height="18" fill="#FFFFFF"/><rect x="62" y="134" width="96" height="10" fill="#F0902A"/>
   </svg>
   <h1>Zoom Out with Nagel</h1>
-  <p class="start-lines">A camera whose zoom ring steps back from your own eyes. Six readers want to know about six things, and most of them do not have your senses.</p>
-  <p class="acts">Turn the zoom ring. Look at what is in the frame. Press Send.</p>
+  <p class="start-lines">A camera whose zoom ring steps back from your own eyes. Four readers want to know about four things, and most of them do not have your senses.</p>
+  <p class="acts">Turn the ring and watch the picture change. The ring turns freely; the shutter fires at three stops. Press Send.</p>
   <p class="aimline">Get as much of each thing across to its reader as you can.</p>
   <button class="big" id="b-start">Start</button>
   <div class="links"><button class="quiet" data-open="help">How to play</button><button class="quiet" data-open="about">About</button></div>
@@ -125,24 +132,21 @@ footer.sig a { color: inherit; text-decoration: none; }
 </section>
 
 <section id="play" class="screen">
-  <div class="top"><div class="disp" id="roundno">Round 1 of 6</div><button class="help-btn" data-open="help" aria-label="How to play">?</button></div>
+  <div class="top"><div class="disp" id="roundno">Round 1 of 4</div><button class="help-btn" data-open="help" aria-label="How to play">?</button></div>
   <div class="aim">Aim: get as much of each thing across to its reader as you can.</div>
   <div class="now" id="now"></div>
   <div class="reader" id="reader"></div>
   <div class="bubble" id="ask"></div>
-  <div class="vf" id="vf"><div id="framehost"></div><div class="develop" id="develop"></div><div class="blankv" id="blankv">Nothing: this frame cannot be read.</div></div>
+  <div class="vfwrap" id="vfwrap"><div class="vf" id="vf"><div id="scenehost"></div><div class="develop"></div><div class="blankv">Nothing: this frame cannot be read.</div></div><div class="cam" id="cam"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i></div></div>
   <div class="under"><span class="tag" id="tag"></span><span class="needs" id="needs"></span></div>
-  <div class="says" id="says"></div>
   <div class="ringbox" id="ringbox">
-    <input type="range" id="ring" min="0" max="2" step="1" value="0" aria-label="Zoom ring">
-    <div class="stops" id="stops"><span data-i="0" class="on">From inside</span><span data-i="1">The shape</span><span data-i="2">The physics</span></div>
+    <div class="ring" id="ring"><div class="reach" id="reach0"></div><div class="reach" id="reach1"></div><div class="reach" id="reach2"></div><div class="det" style="left:6%"></div><div class="det" style="left:50%"></div><div class="det" style="left:94%"></div><div class="thumb" id="thumb"></div></div>
+    <div class="stops" id="stops"><span data-i="0" class="on">Naked eye</span><span data-i="1">The shape</span><span data-i="2">The physics</span></div>
   </div>
   <div class="sendrow" id="sendrow"><button class="big" id="b-send">Send</button></div>
   <div id="result" style="display:none">
     <div class="line fade" id="line"></div>
-    <div class="rule fade" id="why"></div>
-    <div class="bubble reply fade" id="reply"></div>
-    <div class="sendrow fade" id="nextrow"><button class="big" id="b-next">Next</button></div>
+    <div class="sendrow fade" id="nextrow"><button class="half pale" id="b-means">What that means</button><button class="half" id="b-next">Next</button></div>
   </div>
 </section>
 
@@ -164,7 +168,7 @@ footer.sig a { color: inherit; text-decoration: none; }
   <h3>Had yours stood</h3><p id="estood"></p>
   <h3>Your prints</h3><div class="prints" id="prints"></div>
   <h3>Read further</h3>
-  <p style="font-size:15px">Nagel does not conclude that mind is not brain. He says we are like someone told that a caterpillar locked in a safe became the butterfly found there weeks later: we may have good reason to believe it without any idea of how it could be so. "The pain is this firing" is a sentence we may one day learn to read; what the bat shows is that no amount of stepping back from the point of view will teach us. His proposal is to go the other way: an objective phenomenology that describes the structure of an experience, as the shape frames did, in terms a creature that cannot have it could follow, knowing one reaches a blank wall eventually.</p>
+  <p style="font-size:15px">Nagel does not conclude that mind is not brain. He says we are like someone told that a caterpillar locked in a safe became the butterfly found there weeks later: we may have good reason to believe it without any idea of how it could be so. "The red is this firing" is a sentence we may one day learn to read; what the bat shows is that no amount of stepping back from the point of view will teach us. His proposal is to go the other way: an objective phenomenology that describes the structure of an experience, as the shape stop did, in terms a creature that cannot have it could follow, knowing one reaches a blank wall eventually. The same question is asked today of machines: a complete account of the works, and whether anything is felt.</p>
   <div class="sendrow"><button class="big" id="b-again">Play again</button></div>
   <div class="links"><button class="quiet" data-open="help">How to play</button><button class="quiet" data-open="about">About</button></div>
   <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
@@ -172,14 +176,23 @@ footer.sig a { color: inherit; text-decoration: none; }
 
 </div>
 
+<div class="overlay" id="means"><div class="wrap">
+  <div class="top"><h2 style="margin:4px 0" id="mtitle"></h2><button class="help-btn" data-close="means" aria-label="Back">&times;</button></div>
+  <div class="labelled" id="mpic"></div>
+  <p id="mleft"></p>
+  <div class="rule" id="mwhy"></div>
+  <div class="bubble reply" id="mreply"></div>
+  <div class="sendrow"><button class="big" data-close="means">Back</button></div>
+</div></div>
+
 <div class="overlay" id="help"><div class="wrap">
   <div class="top"><h2 style="margin:4px 0">How to play</h2><button class="help-btn" data-close="help" aria-label="Back">&times;</button></div>
   <p><b>Get as much of each thing across to its reader as you can.</b></p>
   <p>Each round a reader asks about a thing. The reader's card says which senses they have and which they lack.</p>
-  <p>The viewfinder shows the frame at the zoom ring's stop. <b>From inside</b> holds the thing exactly as it is for you; it can be read only with the sense it was taken with (eyes, ears, a body that feels, sonar). <b>The shape</b> holds the outline of the thing, where it sits among its neighbours and what it makes you do; it can be read with a mind. <b>The physics</b> holds what any instrument would find; it can be read with instruments and sums. The tag on the frame says which.</p>
-  <p>Turn the ring and the frame changes. Look at it and ask two things: is the thing in this frame? Can this reader read this frame? Then press <b>Send</b>.</p>
-  <p>The frame becomes a print at the reader's side. The small drawing beside the reader fills by how much of the thing arrived: solid is all of it, pale is a part, a dotted outline is none. The game says what crossed and why, in one rule; the reader answers in blue. Press <b>Next</b>.</p>
-  <p>Six rounds; every round the ring starts from inside. In the last round the bat holds the camera and you are the reader. Then one question about the frame you could not read, and the verdict.</p>
+  <p>The picture is what your camera sees. Turn the ring under it and watch: the camera steps back from your own eyes, the colour drains, things leave the frame and other things come in. The ring turns freely, but the shutter fires at only three stops, and the ring settles on the nearest when you let go. <b>Naked eye</b> is the thing exactly as it is for you; it can be read only with the sense it was taken with (eyes, sonar). <b>The shape</b> is the outline of the thing, where it sits among its neighbours; it can be read with a mind. <b>The physics</b> is what any instrument would find; it can be read with instruments and sums. The tag under the picture says which stop you are at and what it takes to read it; the blue marks above the ring show which stops this reader can read.</p>
+  <p>Look at the picture and ask: is the thing still in it? Then press <b>Send</b>.</p>
+  <p>The picture becomes a print at the reader's side. The small drawing beside the reader fills by how much of the thing arrived: solid is all of it, pale is a part, a dotted outline is none. One line says what crossed. <b>What that means</b> opens the same stop drawn with its labels, what left the picture on the way there, the rule, and the reader's answer. <b>Next</b> goes on.</p>
+  <p>Four rounds; every round the ring starts at the naked eye. In the last round the bat holds the camera and you are the reader. Then one question about the frame you could not read, and the verdict.</p>
   <div class="sendrow"><button class="big" data-close="help">Back</button></div>
 </div></div>
 
@@ -203,7 +216,7 @@ function t(x, y, s, extra) { return '<text x="' + x + '" y="' + y + '" style="' 
 function svgFrame(inner) { return '<svg class="frame" viewBox="0 0 320 190" xmlns="http://www.w3.org/2000/svg">' + inner + '</svg>'; }
 var white = '<rect width="320" height="190" fill="' + WHITE + '"/>';
 var arrowDef = '<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="' + INK + '"/></marker></defs>';
-// ---------------------------------------------------------------- the frames: colour is the point of view
+// ---------------------------------------------------------------- the labelled drawings (for What that means and the prints)
 var FRAMES = {
   sunset: {
     inside: function () { return '<defs><linearGradient id="gsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4E2F86"/><stop offset=".45" stop-color="#E86A8A"/><stop offset=".8" stop-color="#F6A23A"/><stop offset="1" stop-color="#FBD36A"/></linearGradient><linearGradient id="gsea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E88A5A"/><stop offset="1" stop-color="#3C2E6E"/></linearGradient></defs><rect width="320" height="190" fill="url(#gsky)"/><circle cx="205" cy="124" r="27" fill="#FFE07A"/><rect y="124" width="320" height="66" fill="url(#gsea)"/><path d="M175 130h60M165 142h80M180 154h50" stroke="#FFD27A" stroke-width="3" opacity=".75"/><rect x="0" y="150" width="150" height="9" fill="#2A1A2E"/><rect x="22" y="159" width="7" height="31" fill="#2A1A2E"/><rect x="78" y="159" width="7" height="31" fill="#2A1A2E"/><rect x="134" y="159" width="7" height="31" fill="#2A1A2E"/><circle cx="105" cy="127" r="7" fill="#2A1A2E"/><rect x="99" y="134" width="12" height="17" rx="3" fill="#2A1A2E"/>'; },
@@ -220,29 +233,16 @@ var FRAMES = {
     shape: function () { var s = white + arrowDef; var cx = 110, cy = 95, r1 = 42, r2 = 72; for (var i = 0; i < 8; i++) { var a0 = (i / 8) * Math.PI * 2 - Math.PI / 2, a1 = ((i + 1) / 8) * Math.PI * 2 - Math.PI / 2; var p = function (r, a) { return (cx + r * Math.cos(a)).toFixed(1) + ' ' + (cy + r * Math.sin(a)).toFixed(1); }; s += '<path d="M' + p(r1, a0) + ' L' + p(r2, a0) + ' A' + r2 + ' ' + r2 + ' 0 0 1 ' + p(r2, a1) + ' L' + p(r1, a1) + ' A' + r1 + ' ' + r1 + ' 0 0 0 ' + p(r1, a0) + ' z" fill="' + TINT + '" stroke="' + INK + '" stroke-width="' + (i === 0 ? 3.5 : 1.2) + '"/>'; } s += t(cx - 14, cy + 4, 'colours', ';font-size:10px') + t(96, 10, 'here', ';font-size:12px') + '<line x1="122" y1="12" x2="130" y2="30" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/>' + t(186, 46, 'orange', ';font-size:10px') + t(186, 98, 'yellow', ';font-size:10px') + t(60, 184, 'green: far from it', ';font-size:10px') + t(6, 98, 'violet', ';font-size:10px') + t(8, 52, 'next to it', ';font-size:10px') + '<path d="M196 60 q30 -40 60 -10" fill="none" stroke="' + INK + '" stroke-width="1" stroke-dasharray="3 3"/>' + t(224, 18, 'the warm end', ';font-size:10px'); s += '<circle cx="236" cy="110" r="12" fill="none" stroke="' + INK + '" stroke-width="1.5"/><path d="M236 98 q4 -8 8 -6" fill="none" stroke="' + INK + '" stroke-width="1.5"/>' + t(252, 114, 'ripe fruit', ';font-size:10px') + '<path d="M236 136 q-9 14 0 20 q9 -6 0 -20z" fill="none" stroke="' + INK + '" stroke-width="1.5"/>' + t(252, 150, 'blood', ';font-size:10px') + '<path d="M232 164 h8 l6 6 v8 l-6 6 h-8 l-6 -6 v-8 z" fill="none" stroke="' + INK + '" stroke-width="1.5"/>' + t(252, 178, 'a stop sign', ';font-size:10px'); return s; },
     physics: function () { var w = 'M10 70'; for (var x = 10; x <= 200; x += 4) w += ' L' + x + ' ' + (70 - 24 * Math.sin((x - 10) / 60 * Math.PI * 2)).toFixed(1); return white + arrowDef + '<path d="' + w + '" fill="none" stroke="' + INK + '" stroke-width="2"/><line x1="10" y1="110" x2="70" y2="110" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/><line x1="70" y1="110" x2="10" y2="110" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/>' + t(10, 130, 'one wave: 700 nanometres') + t(10, 146, 'light, long waves', ';font-size:10px') + '<path d="M230 40 l34 0 l20 60 l-10 50 l-10 0 l-10 -50 z" fill="none" stroke="' + INK + '" stroke-width="2"/><path d="M240 60 h26 M242 72 h24 M246 86 h20" stroke="' + INK + '" stroke-width="1" opacity=".6"/>' + t(222, 30, 'a cone cell', ';font-size:10px') + t(150, 170, 'the long-wave cones in the eye', ';font-size:10px') + t(150, 182, 'fire more than the others', ';font-size:10px') + '<path d="M204 100 l20 0" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/>'; }
   },
-  trumpet: {
-    inside: function () { return '<rect width="320" height="190" fill="#FBE7B5"/><path d="M40 100 h120 v-14 h14 v14 h16 l60 -40 v94 l-60 -40 h-16 v14 h-14 v-14 h-120 z" fill="#E3A62B" stroke="#8A5A12" stroke-width="2"/><rect x="60" y="86" width="80" height="12" rx="6" fill="#F6C955"/><rect x="120" y="70" width="8" height="18" fill="#8A5A12"/><rect x="134" y="70" width="8" height="18" fill="#8A5A12"/><rect x="148" y="70" width="8" height="18" fill="#8A5A12"/><path d="M252 78 q24 22 0 44" fill="none" stroke="#E2402F" stroke-width="5" stroke-linecap="round"/><path d="M268 64 q40 36 0 72" fill="none" stroke="#F0902A" stroke-width="5" stroke-linecap="round"/><path d="M284 48 q58 52 0 104" fill="none" stroke="#F2C53D" stroke-width="5" stroke-linecap="round"/><path d="M24 100 h16" stroke="#8A5A12" stroke-width="6" stroke-linecap="round"/>'; },
-    shape: function () { return white + arrowDef + '<path d="M20 150 L34 40 L170 40 L210 70 L250 60" fill="none" stroke="' + INK + '" stroke-width="3"/><path d="M20 150 L34 40 L170 40 L210 70 L250 60 L250 150 z" fill="' + TINT + '"/><line x1="20" y1="150" x2="270" y2="150" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/>' + t(40, 170, 'time', ';font-size:10px') + t(6, 26, 'sharp at the start', ';font-size:10px') + t(112, 30, 'steady', ';font-size:10px') + t(206, 90, 'then bent', ';font-size:10px') + t(60, 100, 'loud, bright, brassy') + '<g transform="translate(280 20)">' + [0, 1, 2, 3, 4, 5, 6, 7].map(function (i) { return '<line x1="0" y1="' + (i * 18) + '" x2="22" y2="' + (i * 18) + '" stroke="' + INK + '" stroke-width="' + (i === 3 ? 4 : 1.2) + '"/>'; }).join('') + '<line x1="2" y1="0" x2="2" y2="126" stroke="' + INK + '" stroke-width="1.2"/><line x1="20" y1="0" x2="20" y2="126" stroke="' + INK + '" stroke-width="1.2"/></g>' + t(222, 174, 'one note of the scale', ';font-size:9px'); },
-    physics: function () { var w = 'M10 70'; for (var x = 10; x <= 300; x += 3) { var ph = (x - 10) / 44 * Math.PI * 2; w += ' L' + x + ' ' + (70 - 18 * Math.sin(ph) - 9 * Math.sin(2 * ph) - 5 * Math.sin(3 * ph)).toFixed(1); } return white + arrowDef + '<path d="' + w + '" fill="none" stroke="' + INK + '" stroke-width="1.8"/>' + t(10, 118, 'the air shaking 440 times a second,') + t(10, 134, 'with the overtones piled on', ';font-size:10px') + '<rect x="20" y="150" width="180" height="22" fill="none" stroke="' + INK + '" stroke-width="1.5"/><path d="M40 161 h30 M90 161 h30 M140 161 h30" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/>' + t(210, 166, 'a column of air', ';font-size:10px'); }
-  },
-  pain: {
-    inside: function () { return '<rect width="320" height="190" fill="#F6B26B"/><circle cx="220" cy="120" r="62" fill="#3A3A3A"/><circle cx="220" cy="120" r="50" fill="#555"/><rect x="276" y="112" width="44" height="14" rx="6" fill="#222"/><path d="M60 110 q-30 30 0 60 h50 q30 0 34 -30 l6 -40 q0 -10 -10 -10 q-10 0 -10 10 l-4 20 l-2 -36 q0 -10 -10 -10 q-10 0 -10 10 v34 l-6 -40 q0 -10 -10 -10 q-10 0 -10 10 v44 l-6 -26 q-2 -10 -12 -8 q-8 2 -6 12 z" fill="#E9B98B" stroke="#B5805A" stroke-width="2"/><path d="M160 88 l18 -30 l6 24 l22 -16 l-6 26 l26 -4 l-18 16 l22 12 l-26 2 l10 22 l-20 -14 l-4 24 l-10 -22 l-18 12 l6 -22 z" fill="#E2402F" opacity=".92"/><path d="M150 40 l-10 -14 M176 30 l0 -16 M204 36 l10 -14" stroke="#E2402F" stroke-width="4" stroke-linecap="round"/>'; },
-    shape: function () { return white + arrowDef + '<circle cx="70" cy="34" r="16" fill="none" stroke="' + INK + '" stroke-width="2"/><path d="M70 50 v60 M70 70 l-30 30 M70 70 l34 -22 M70 110 l-18 60 M70 110 l18 60" fill="none" stroke="' + INK + '" stroke-width="2.5" stroke-linecap="round"/><path d="M104 48 l12 -16 l4 10 l10 -8 l-2 12 l12 2 l-10 8 l8 10 l-12 -4 l0 12 l-8 -10 l-8 8 l2 -12 l-12 0 l8 -8 z" fill="' + TINT + '" stroke="' + INK + '" stroke-width="1.5"/>' + t(140, 30, 'here, in the hand') + t(140, 46, 'sharp, not dull', ';font-size:10px') + '<path d="M118 36 q-30 40 -70 40" fill="none" stroke="' + INK + '" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#ah)"/>' + t(100, 86, 'it makes the hand pull back') + '<line x1="140" y1="150" x2="300" y2="150" stroke="' + INK + '" stroke-width="2"/>' + t(136, 170, 'an itch', ';font-size:10px') + t(270, 170, 'a burn', ';font-size:10px') + '<line x1="276" y1="138" x2="276" y2="162" stroke="' + INK + '" stroke-width="4"/>' + t(190, 136, 'worse than an itch, like a burn', ';font-size:9px'); },
-    physics: function () { return white + arrowDef + '<path d="M40 70 q-20 -50 40 -56 q40 -16 70 10 q30 6 24 40 q-8 30 -50 30 h-40 q-30 0 -44 -24 z" fill="none" stroke="' + INK + '" stroke-width="2"/><path d="M60 40 q20 -10 30 10 q10 -16 30 -4 M70 70 q16 -8 30 6" fill="none" stroke="' + INK + '" stroke-width="1.2"/><path d="M110 40 l12 12 M104 48 l12 12 M98 56 l12 12 M116 34 l12 12" stroke="' + INK + '" stroke-width="1.5"/><ellipse cx="114" cy="52" rx="22" ry="16" fill="none" stroke="' + INK + '" stroke-width="2"/>' + t(194, 40, 'a region lights up', ';font-size:10px') + '<path d="M100 94 q60 40 120 60 L260 170" fill="none" stroke="' + INK + '" stroke-width="2"/><path d="M250 164 l-16 -8" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/><path d="M200 136 l-16 -8" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/>' + t(190, 120, 'a signal up the arm', ';font-size:10px') + '<path d="M262 176 h30 l8 -20 M270 176 l-6 10" fill="none" stroke="' + INK + '" stroke-width="2"/>' + t(176, 186, 'heat at the skin', ';font-size:9px') + '<path d="M150 150 l20 -4" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/>' + t(104, 160, 'the muscles fire', ';font-size:10px'); }
-  },
   bat: {
     inside: function () { return '<rect width="320" height="190" fill="#F3EBDC"/><defs><pattern id="hatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="12" stroke="#CDBFA8" stroke-width="5"/></pattern></defs><rect width="320" height="190" fill="url(#hatch)"/><rect x="60" y="72" width="200" height="46" rx="8" fill="#F3EBDC" opacity=".92"/>' + t(76, 92, 'no picture', ';font-size:14px;fill:#6E5A4A') + t(76, 108, 'taken from where you cannot stand', ';font-size:10px;fill:#6E5A4A'); },
     shape: function () { return white + arrowDef + '<path d="M20 95 l40 -25 M20 95 l40 25" stroke="' + INK + '" stroke-width="0" /><path d="M60 95 L320 20 L320 170 z" fill="' + TINT + '"/><path d="M28 86 q6 -14 18 -2 q6 -8 12 0 l-2 10 q-4 8 -10 6 q-6 8 -16 2 q-8 -4 -2 -16z" fill="' + INK + '"/><path d="M24 84 l-14 -10 q8 -2 14 2 M50 84 l14 -10 q-8 -2 -14 2" stroke="' + INK + '" stroke-width="2" fill="none"/><path d="M70 60 q20 35 0 70" fill="none" stroke="' + INK + '" stroke-width="1.5" stroke-dasharray="3 3"/><path d="M90 50 q30 45 0 90" fill="none" stroke="' + INK + '" stroke-width="1.5" stroke-dasharray="3 3"/><circle cx="130" cy="90" r="6" fill="' + INK + '"/><path d="M124 90 l-6 -6 M136 90 l6 -6" stroke="' + INK + '" stroke-width="1.5"/>' + t(118, 114, 'a moth, near', ';font-size:10px') + '<path d="M200 40 q10 40 0 110" fill="none" stroke="' + INK + '" stroke-width="3"/>' + t(206, 160, 'a branch', ';font-size:10px') + '<rect x="296" y="30" width="20" height="130" fill="none" stroke="' + INK + '" stroke-width="2"/>' + t(254, 180, 'a wall, far', ';font-size:10px') + t(100, 32, 'forward, in three dimensions') + t(100, 46, 'distance, size, shape, texture, motion', ';font-size:9px') + t(20, 140, 'read off the echoes', ';font-size:10px') + t(20, 152, 'of its own shrieks', ';font-size:10px'); },
     physics: function () { var w = 'M110 70'; for (var x = 110; x <= 200; x += 2) w += ' L' + x + ' ' + (70 - 8 * Math.sin((x - 110) / 7 * Math.PI * 2)).toFixed(1); return white + arrowDef + '<path d="M40 80 q-12 -40 10 -50 l10 20 q14 -6 28 0 l10 -20 q22 10 10 50 q-14 20 -34 20 q-20 0 -34 -20 z" fill="none" stroke="' + INK + '" stroke-width="2"/><circle cx="58" cy="76" r="3" fill="' + INK + '"/><circle cx="84" cy="76" r="3" fill="' + INK + '"/><path d="M62 92 q8 6 16 0" fill="none" stroke="' + INK + '" stroke-width="1.5"/>' + t(28, 122, 'the throat: a shriek', ';font-size:10px') + '<path d="' + w + '" fill="none" stroke="' + INK + '" stroke-width="1.5"/>' + t(124, 52, '50,000 a second', ';font-size:10px') + '<line x1="110" y1="90" x2="250" y2="90" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/><line x1="250" y1="104" x2="104" y2="104" stroke="' + INK + '" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#ah)"/><circle cx="268" cy="97" r="9" fill="none" stroke="' + INK + '" stroke-width="2"/>' + t(254, 124, 'a moth', ';font-size:10px') + t(150, 120, 'the echo back', ';font-size:10px') + '<line x1="110" y1="150" x2="250" y2="150" stroke="' + INK + '" stroke-width="1.5"/><line x1="110" y1="144" x2="110" y2="156" stroke="' + INK + '" stroke-width="1.5"/><line x1="250" y1="144" x2="250" y2="156" stroke="' + INK + '" stroke-width="1.5"/>' + t(120, 170, 'the brain times the gap: distance', ';font-size:10px') + t(28, 136, 'the ears: the echo', ';font-size:10px'); }
   }
 };
-// ---------------------------------------------------------------- the things (icons) and the readers (portraits)
 var ICONS = {
   sunset: { c: '#F0902A', svg: '<circle class="f s" cx="24" cy="26" r="11" stroke-width="2"/><path class="s" d="M24 6v6M8 12l4 4M40 12l-4 4M4 28h5M39 28h5" stroke-width="2.5" stroke-linecap="round" fill="none"/><path class="s" d="M6 42h36" stroke-width="2.5" fill="none"/>' },
   lightning: { c: '#5B3A8C', svg: '<polygon class="f s" points="27,3 10,27 22,27 17,45 38,19 26,19 32,3" stroke-width="2" stroke-linejoin="round"/>' },
   red: { c: '#D7261E', svg: '<circle class="f s" cx="24" cy="24" r="18" stroke-width="2"/>' },
-  trumpet: { c: '#D9A226', svg: '<path class="f s" d="M4 22h18v-4h4v4h4l14 -10v24l-14 -10h-4v4h-4v-4H4z" stroke-width="2" stroke-linejoin="round"/>' },
-  pain: { c: '#E86A1F', svg: '<path class="f s" d="M24 4c2 10 12 12 12 24a12 12 0 0 1 -24 0c0 -6 4 -8 4 -12c4 2 6 6 6 8c2 -6 0 -14 2 -20z" stroke-width="2" stroke-linejoin="round"/>' },
   bat: { c: '#3A2A1F', svg: '<path class="f s" d="M24 14c-3 -6 -8 -8 -8 -8l2 6c-6 -2 -14 2 -16 10c6 -2 10 0 12 4c3 -2 6 0 7 4c1 -4 4 -6 7 -4c2 -4 6 -6 12 -4c-2 -8 -10 -12 -16 -10l2 -6s-5 2 -8 8z" stroke-width="2" stroke-linejoin="round"/>' }
 };
 function icon(id, state) { var ic = ICONS[id]; return '<svg viewBox="0 0 48 48" class="' + state + '" style="--c:' + ic.c + '" xmlns="http://www.w3.org/2000/svg">' + ic.svg + '</svg>'; }
@@ -256,65 +256,185 @@ var PORTRAITS = {
 function portrait(id) { return '<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">' + PORTRAITS[id] + '</svg>'; }
 function senseList(arr) { return arr.map(function (s) { return C.SENSES[s]; }).join(', '); }
 function noList(arr) { return arr.map(function (s) { return C.NO_SENSE[s]; }).join(', no '); }
+// ---------------------------------------------------------------- the scenes: one layered picture per thing, moved by the ring
+function cl(x) { return Math.max(0, Math.min(1, x)); }
+function lerp(a, b, u) { return a + (b - a) * u; }
+function sceneSvg(defs, inner) { return '<svg class="scene" viewBox="0 0 320 190" xmlns="http://www.w3.org/2000/svg"><defs>' + defs + '<clipPath id="clipall"><rect width="320" height="190"/></clipPath><marker id="sah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="' + INK + '"/></marker></defs><rect width="320" height="190" fill="' + WHITE + '"/><g clip-path="url(#clipall)">' + inner + '</g></svg>'; }
+function Q(svg, cls) { return svg.querySelector('.' + cls); }
+function op(svg, cls, v) { var e = Q(svg, cls); if (e) e.style.opacity = v; }
+function tf(svg, cls, v) { var e = Q(svg, cls); if (e) e.setAttribute('transform', v); }
+function about(cx, cy, s, tx, ty) { return 'translate(' + (cx + (tx || 0)) + ' ' + (cy + (ty || 0)) + ') scale(' + s.toFixed(4) + ') translate(' + (-cx) + ' ' + (-cy) + ')'; }
+var SCENES = {
+  // The sunset: colour drains, the pier and the figure leave below, the sun becomes a disc going down, then the camera
+  // pulls back until the earth is a ball with its air, the sun two degrees under the line and its rays through the air.
+  sunset: {
+    markup: function () {
+      var bands = ''; for (var i = 0; i < 24; i++) { var y = 124 - (24 - i) * 20; bands += '<rect x="-400" y="' + y + '" width="1120" height="20.5" fill="' + TINT + '" opacity="' + (Math.max(0, 1 - (24 - i) * 0.12)).toFixed(2) + '"/>'; }
+      return sceneSvg('<linearGradient id="gsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4E2F86"/><stop offset=".45" stop-color="#E86A8A"/><stop offset=".8" stop-color="#F6A23A"/><stop offset="1" stop-color="#FBD36A"/></linearGradient><linearGradient id="gsea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E88A5A"/><stop offset="1" stop-color="#3C2E6E"/></linearGradient>',
+        '<g class="sc"><g class="colour"><rect x="-400" y="-300" width="1120" height="424" fill="url(#gsky)"/><rect x="-400" y="124" width="1120" height="400" fill="url(#gsea)"/><path d="M175 130h60M165 142h80M180 154h50" stroke="#FFD27A" stroke-width="3" opacity=".75"/></g>' +
+        '<g class="tint">' + bands + '<path d="M-400 140h1120M-400 158h1120M-400 176h1120M-400 194h1120M-400 212h1120" stroke="' + INK + '" stroke-width="1" opacity=".5"/></g>' +
+        '<g class="ink"><circle cx="160" cy="444" r="320" fill="' + TINT + '" stroke="' + INK + '" stroke-width="7"/><circle cx="160" cy="444" r="360" fill="none" stroke="' + INK + '" stroke-width="4" stroke-dasharray="14 10"/><circle cx="160" cy="124" r="12" fill="' + INK + '"/><path d="M-480 150 L150 128" stroke="' + INK + '" stroke-width="5"/><path d="M-480 190 L152 134" stroke="' + INK + '" stroke-width="5"/><path d="M-60 142 l40 -60 M20 136 l40 -60 M100 131 l40 -60" stroke="' + INK + '" stroke-width="4" marker-end="url(#sah)"/><circle cx="-520" cy="170" r="60" fill="none" stroke="' + INK + '" stroke-width="7"/><path d="M-520 90 v-40 M-520 250 v40 M-600 170 h-40 M-440 170 h40 M-575 115 l-28 -28 M-465 115 l28 -28 M-575 225 l-28 28 M-465 225 l28 28" stroke="' + INK + '" stroke-width="6"/></g>' +
+        '<line class="horizon" x1="-400" y1="124" x2="720" y2="124" stroke="' + INK + '" stroke-width="2"/>' +
+        '<g class="sun"><circle class="sunfill" cx="205" cy="124" r="27" fill="#FFE07A"/><circle class="sunline" cx="205" cy="124" r="27" fill="none" stroke="' + INK + '" stroke-width="2.5"/><line class="sunarrow" x1="205" y1="156" x2="205" y2="184" stroke="' + INK + '" stroke-width="2.5" marker-end="url(#sah)"/></g>' +
+        '<g class="pier"><rect x="-200" y="150" width="350" height="9" fill="#2A1A2E"/><rect x="22" y="159" width="7" height="60" fill="#2A1A2E"/><rect x="78" y="159" width="7" height="60" fill="#2A1A2E"/><rect x="134" y="159" width="7" height="60" fill="#2A1A2E"/><circle cx="105" cy="127" r="7" fill="#2A1A2E"/><rect x="99" y="134" width="12" height="17" rx="3" fill="#2A1A2E"/></g></g>');
+    },
+    apply: function (svg, z) {
+      var colour = 1 - cl(z / 0.45), tint = z < 0.5 ? cl((z - 0.15) / 0.3) : 1 - cl((z - 0.5) / 0.3), ink = cl((z - 0.55) / 0.4);
+      op(svg, 'colour', colour); op(svg, 'tint', tint); op(svg, 'ink', ink);
+      var h = Q(svg, 'horizon'); h.style.opacity = cl(z / 0.3); h.setAttribute('stroke-width', lerp(2, 5, cl((z - 0.5) / 0.5)));
+      var s = lerp(1, 0.78, cl(z / 0.5)) * lerp(1, 0.28, cl((z - 0.5) / 0.5)), ty = lerp(0, -8, cl(z / 0.5)) + lerp(0, -30, cl((z - 0.5) / 0.5));
+      tf(svg, 'sc', about(160, 124, s, 0, ty));
+      tf(svg, 'pier', 'translate(0 ' + (cl(z / 0.5) * 140).toFixed(1) + ')'); op(svg, 'pier', 1 - cl((z - 0.1) / 0.4));
+      op(svg, 'sunfill', colour); op(svg, 'sunline', cl((z - 0.2) / 0.2)); op(svg, 'sunarrow', tint); op(svg, 'sun', z < 0.5 ? 1 : 1 - cl((z - 0.5) / 0.3));
+      var sunY = z < 0.5 ? lerp(124, 112, cl((z - 0.2) / 0.3)) : 112, sunR = z < 0.5 ? lerp(27, 22, cl((z - 0.2) / 0.3)) : 22;
+      ['sunfill', 'sunline'].forEach(function (c) { var e = Q(svg, c); e.setAttribute('cy', sunY); e.setAttribute('r', sunR); });
+      var a = Q(svg, 'sunarrow'); a.setAttribute('y1', sunY + sunR + 6); a.setAttribute('y2', sunY + sunR + 34);
+    }
+  },
+  // Lightning: the colour drains and you leave the frame; the bolt stays in the middle as a branching line, the bang
+  // beside it; then the camera pulls back and the bolt gains what made it: the cloud, the ground, the charge, the channel.
+  lightning: {
+    markup: function () {
+      var pts = '160,-40 176,50 154,62 188,120 174,124 200,175';
+      return sceneSvg('<linearGradient id="gst" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1E1030"/><stop offset="1" stop-color="#4A2C78"/></linearGradient>',
+        '<g class="sc"><g class="colour"><rect x="-400" y="-300" width="1120" height="462" fill="url(#gst)"/><rect x="-400" y="162" width="1120" height="400" fill="#120A1A"/><path d="M20 20l-4 14M40 60l-4 14M280 30l-4 14M300 90l-4 14M250 140l-4 14M90 40l-4 14M120 100l-4 14" stroke="#9C8AD0" stroke-width="1.5" opacity=".6"/><polyline points="' + pts + '" fill="none" stroke="#C9B8FF" stroke-width="11" opacity=".45" stroke-linejoin="round"/><polyline points="' + pts + '" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round"/><polyline points="154,62 126,90 134,110" fill="none" stroke="#FFFFFF" stroke-width="2.5"/></g>' +
+        '<g class="fig"><circle cx="60" cy="128" r="8" fill="#120A1A"/><rect x="52" y="136" width="16" height="30" rx="4" fill="#120A1A"/><path d="M52 142L36 126M68 142L84 128" stroke="#120A1A" stroke-width="5" stroke-linecap="round"/></g>' +
+        '<g class="tint"><rect x="-400" y="-300" width="1120" height="360" fill="' + TINT + '"/><path d="M236 70l8 -14 4 14 10 -10 -2 14 12 -4 -8 10 12 4 -14 2 6 12 -10 -8 -2 14 -6 -12 -10 8 4 -14 -14 2 12 -6 -10 -8z" fill="' + TINT + '" stroke="' + INK + '" stroke-width="2"/><line x1="214" y1="130" x2="300" y2="130" stroke="' + INK + '" stroke-width="2" marker-end="url(#sah)"/></g>' +
+        '<g class="inkbolt"><polyline points="' + pts + '" fill="none" stroke="' + INK + '" stroke-width="3.5" stroke-linejoin="round"/><polyline points="154,62 126,90 134,110" fill="none" stroke="' + INK + '" stroke-width="2"/><polyline points="188,120 212,138 206,156" fill="none" stroke="' + INK + '" stroke-width="2"/></g>' +
+        '<g class="ink"><path d="M40 -30 q-40 -50 20 -70 q20 -60 100 -50 q60 -40 120 0 q60 -10 70 50 q30 30 -20 70 z" fill="' + WHITE + '" stroke="' + INK + '" stroke-width="5"/><path d="M60 -60h24M110 -60h24M160 -60h24M210 -60h24M260 -60h24M85 -30h24M135 -30h24M185 -30h24M235 -30h24" stroke="' + INK + '" stroke-width="5"/><line x1="-400" y1="178" x2="720" y2="178" stroke="' + INK + '" stroke-width="5"/><path d="M40 196h24M52 184v24M100 196h24M112 184v24M160 196h24M172 184v24M220 196h24M232 184v24M280 196h24M292 184v24" stroke="' + INK + '" stroke-width="4"/><line x1="136" y1="-8" x2="136" y2="176" stroke="' + INK + '" stroke-width="2"/><line x1="222" y1="-8" x2="222" y2="176" stroke="' + INK + '" stroke-width="2"/><line x1="240" y1="30" x2="240" y2="150" stroke="' + INK + '" stroke-width="4" marker-end="url(#sah)"/></g></g>');
+    },
+    apply: function (svg, z) {
+      var colour = 1 - cl(z / 0.45), tint = z < 0.5 ? cl((z - 0.15) / 0.3) : 1 - cl((z - 0.5) / 0.3), ink = cl((z - 0.55) / 0.4);
+      op(svg, 'colour', colour); op(svg, 'tint', tint); op(svg, 'ink', ink); op(svg, 'inkbolt', cl((z - 0.15) / 0.3));
+      tf(svg, 'fig', 'translate(0 ' + (cl(z / 0.5) * 120).toFixed(1) + ')'); op(svg, 'fig', 1 - cl((z - 0.1) / 0.35));
+      var s = lerp(1, 0.9, cl(z / 0.5)) * lerp(1, 0.58, cl((z - 0.5) / 0.5));
+      tf(svg, 'sc', about(170, 80, s, 0, lerp(0, 30, cl((z - 0.5) / 0.5))));
+      svg.querySelectorAll('.inkbolt polyline').forEach(function (e, i) { e.setAttribute('stroke-width', lerp(i === 0 ? 3.5 : 2, i === 0 ? 6 : 3.5, cl((z - 0.5) / 0.5))); });
+    }
+  },
+  // Red: the red goes out of the poppies and a ring of colours comes in with one slot marked; then the field shrinks
+  // to the eye that saw it, in the corner, and the frame fills with the light that caused it and the cell it struck.
+  red: {
+    markup: function () {
+      var pts = [[40, 50, 26], [120, 30, 20], [210, 60, 28], [290, 24, 18], [70, 130, 30], [160, 110, 22], [250, 140, 30], [300, 100, 16], [20, 170, 18], [140, 170, 20]], p = '';
+      pts.forEach(function (q) { p += '<circle class="pc" cx="' + q[0] + '" cy="' + q[1] + '" r="' + q[2] + '" fill="#F04A2E"/><circle class="pc" cx="' + (q[0] - q[2] * .25) + '" cy="' + (q[1] - q[2] * .25) + '" r="' + (q[2] * .5) + '" fill="#FF6A3C" opacity=".6"/><circle class="po" cx="' + q[0] + '" cy="' + q[1] + '" r="' + q[2] + '" fill="none" stroke="' + INK + '" stroke-width="1.5"/><circle cx="' + q[0] + '" cy="' + q[1] + '" r="' + (q[2] * .22) + '" fill="#2A0A0A"/>'; });
+      var cx = 160, cy = 95, r1 = 36, r2 = 64, w = '';
+      for (var i = 0; i < 8; i++) { var a0 = (i / 8) * Math.PI * 2 - Math.PI / 2, a1 = ((i + 1) / 8) * Math.PI * 2 - Math.PI / 2; var P = function (r, a) { return (cx + r * Math.cos(a)).toFixed(1) + ' ' + (cy + r * Math.sin(a)).toFixed(1); }; w += '<path d="M' + P(r1, a0) + ' L' + P(r2, a0) + ' A' + r2 + ' ' + r2 + ' 0 0 1 ' + P(r2, a1) + ' L' + P(r1, a1) + ' A' + r1 + ' ' + r1 + ' 0 0 0 ' + P(r1, a0) + ' z" fill="' + TINT + '" stroke="' + INK + '" stroke-width="' + (i === 0 ? 4 : 1.2) + '"/>'; }
+      var wave = 'M10 95'; for (var x = 10; x <= 210; x += 4) wave += ' L' + x + ' ' + (95 - 26 * Math.sin((x - 10) / 60 * Math.PI * 2)).toFixed(1);
+      return sceneSvg('',
+        '<g class="field"><rect class="bg" x="-400" y="-300" width="1120" height="800" fill="#D7261E"/>' + p + '</g>' +
+        '<g class="tint">' + w + '<circle cx="262" cy="60" r="12" fill="none" stroke="' + INK + '" stroke-width="2"/><path d="M262 48q4 -8 8 -6" fill="none" stroke="' + INK + '" stroke-width="2"/><path d="M262 92q-9 14 0 20q9 -6 0 -20z" fill="none" stroke="' + INK + '" stroke-width="2"/><path d="M258 128h8l6 6v8l-6 6h-8l-6 -6v-8z" fill="none" stroke="' + INK + '" stroke-width="2"/></g>' +
+        '<g class="ink"><path d="' + wave + '" fill="none" stroke="' + INK + '" stroke-width="2.5"/><line x1="10" y1="140" x2="70" y2="140" stroke="' + INK + '" stroke-width="2" marker-end="url(#sah)"/><line x1="70" y1="140" x2="10" y2="140" stroke="' + INK + '" stroke-width="2" marker-end="url(#sah)"/><path d="M236 30l34 0 20 60 -10 50 -10 0 -10 -50z" fill="' + WHITE + '" stroke="' + INK + '" stroke-width="2.5"/><path d="M246 50h26M248 62h24M252 76h20" stroke="' + INK + '" stroke-width="1.2" opacity=".6"/><path d="M212 95l18 0" stroke="' + INK + '" stroke-width="2" marker-end="url(#sah)"/><path d="M262 170q24 -18 48 0q-24 18 -48 0z" fill="' + WHITE + '" stroke="' + INK + '" stroke-width="2.5"/><circle cx="286" cy="170" r="6" fill="' + INK + '"/></g>');
+    },
+    apply: function (svg, z) {
+      var colour = 1 - cl(z / 0.4), tint = z < 0.5 ? cl((z - 0.15) / 0.3) : 1 - cl((z - 0.5) / 0.3), ink = cl((z - 0.55) / 0.4);
+      op(svg, 'bg', colour); svg.querySelectorAll('.pc').forEach(function (e) { e.style.opacity = colour * (e.getAttribute('opacity') || 1); });
+      var po = cl((z - 0.1) / 0.3); svg.querySelectorAll('.po').forEach(function (e) { e.style.opacity = po; });
+      op(svg, 'tint', tint); op(svg, 'ink', ink);
+      var s = lerp(1, 0.9, cl(z / 0.5)) * lerp(1, 0.2, cl((z - 0.5) / 0.5));
+      tf(svg, 'field', about(300, 172, s)); op(svg, 'field', 1 - 0.55 * cl((z - 0.6) / 0.4));
+    }
+  },
+  // The bat: the naked eye is a blank that cannot be shown; the blank gives way to a cone in front of a bat with things
+  // in it at distances; then to a throat, two ears and a clock.
+  bat: {
+    markup: function () {
+      var wave = 'M110 70'; for (var x = 110; x <= 200; x += 2) wave += ' L' + x + ' ' + (70 - 8 * Math.sin((x - 110) / 7 * Math.PI * 2)).toFixed(1);
+      return sceneSvg('<pattern id="bhatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="12" stroke="#CDBFA8" stroke-width="5"/></pattern>',
+        '<g class="blank"><rect width="320" height="190" fill="#F3EBDC"/><rect width="320" height="190" fill="url(#bhatch)"/></g>' +
+        '<g class="tint"><path d="M60 95L320 20L320 170z" fill="' + TINT + '"/><path d="M28 86q6 -14 18 -2q6 -8 12 0l-2 10q-4 8 -10 6q-6 8 -16 2q-8 -4 -2 -16z" fill="' + INK + '"/><path d="M24 84l-14 -10q8 -2 14 2M50 84l14 -10q-8 -2 -14 2" stroke="' + INK + '" stroke-width="2" fill="none"/><path d="M70 60q20 35 0 70" fill="none" stroke="' + INK + '" stroke-width="1.5" stroke-dasharray="3 3"/><path d="M90 50q30 45 0 90" fill="none" stroke="' + INK + '" stroke-width="1.5" stroke-dasharray="3 3"/><circle cx="130" cy="90" r="6" fill="' + INK + '"/><path d="M124 90l-6 -6M136 90l6 -6" stroke="' + INK + '" stroke-width="1.5"/><path d="M200 40q10 40 0 110" fill="none" stroke="' + INK + '" stroke-width="3"/><rect x="296" y="30" width="20" height="130" fill="none" stroke="' + INK + '" stroke-width="2"/></g>' +
+        '<g class="ink"><path d="M40 80q-12 -40 10 -50l10 20q14 -6 28 0l10 -20q22 10 10 50q-14 20 -34 20q-20 0 -34 -20z" fill="' + WHITE + '" stroke="' + INK + '" stroke-width="2.5"/><circle cx="58" cy="76" r="3" fill="' + INK + '"/><circle cx="84" cy="76" r="3" fill="' + INK + '"/><path d="M62 92q8 6 16 0" fill="none" stroke="' + INK + '" stroke-width="1.5"/><path d="' + wave + '" fill="none" stroke="' + INK + '" stroke-width="1.5"/><line x1="110" y1="90" x2="250" y2="90" stroke="' + INK + '" stroke-width="2" marker-end="url(#sah)"/><line x1="250" y1="104" x2="104" y2="104" stroke="' + INK + '" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#sah)"/><circle cx="268" cy="97" r="9" fill="none" stroke="' + INK + '" stroke-width="2"/><line x1="110" y1="150" x2="250" y2="150" stroke="' + INK + '" stroke-width="2"/><line x1="110" y1="142" x2="110" y2="158" stroke="' + INK + '" stroke-width="2"/><line x1="250" y1="142" x2="250" y2="158" stroke="' + INK + '" stroke-width="2"/><circle cx="180" cy="150" r="14" fill="' + WHITE + '" stroke="' + INK + '" stroke-width="2"/><path d="M180 150l0 -9M180 150l6 4" stroke="' + INK + '" stroke-width="2"/></g>');
+    },
+    apply: function (svg, z) {
+      op(svg, 'blank', 1 - cl(z / 0.35)); op(svg, 'tint', cl((z - 0.15) / 0.3) * (1 - cl((z - 0.55) / 0.3))); op(svg, 'ink', cl((z - 0.55) / 0.4));
+    }
+  }
+};
 // ---------------------------------------------------------------- state and screens
-var G = { k: 0, stop: 'inside', sends: [], answer: null, sent: false };
+var G = { k: 0, z: 0, sends: [], answer: null, sent: false };
 window.__game = G;
 function $(id) { return document.getElementById(id); }
 function show(id) { ['start', 'play', 'question', 'end'].forEach(function (s) { $(s).classList.toggle('on', s === id); }); window.scrollTo(0, 0); }
 var STOPS = C.STOPS.map(function (s) { return s.id; });
+function stopOfZ(z) { return z < 0.25 ? 0 : z < 0.75 ? 1 : 2; }
 function readerCard(r, iconState, iconId, you) {
-  var has = you ? 'You have: ' + senseList(r.reader.has) + '.' : 'Has: ' + senseList(r.reader.has) + '.';
-  var no = r.reader.lacks.length ? (you ? ' No ' : ' No ') + noList(r.reader.lacks) + '.' : '';
+  var has = (you ? 'You have: ' : 'Has: ') + senseList(r.reader.has) + '.';
+  var no = r.reader.lacks.length ? ' No ' + noList(r.reader.lacks) + '.' : '';
   var pid = you ? 'bat' : r.reader.id, name = you ? 'The bat' : cap(r.reader.name), who = you ? 'holds the camera; you receive' : r.reader.who;
   return '<div class="portrait">' + portrait(pid) + '</div><div class="rtext"><b>' + name + '</b>' + who + '<br>' + has + '<span class="no">' + no + '</span></div><div class="thing" id="thingbox">' + icon(iconId, iconState) + '<span id="thingcap">' + (you ? 'for you to get' : 'to get across') + '</span></div>';
 }
+var svgEl = null;
 function renderRound() {
-  var r = M.round(G.k); G.stop = 'inside'; G.sent = false;
+  var r = M.round(G.k); G.z = 0; G.sent = false;
   $('roundno').textContent = 'Round ' + (G.k + 1) + ' of ' + C.ROUNDS.length;
-  $('now').textContent = r.id === 'bat' ? 'The bat holds the camera now. Choose a stop and ask for the bat’s world.' : 'Choose a stop and send ' + r.short + ' to ' + r.reader.name + '.';
+  $('now').textContent = r.id === 'bat' ? 'The bat holds the camera now. Turn the ring and ask for the bat’s world.' : 'Turn the ring, then send ' + r.short + ' to ' + r.reader.name + '.';
   $('reader').innerHTML = readerCard(r, 'ic-wait', r.id, r.id === 'bat');
   $('ask').textContent = r.ask;
-  $('ring').value = 0;
-  $('vf').className = 'vf';
-  $('says').style.display = ''; $('ringbox').style.display = ''; $('sendrow').style.display = ''; $('result').style.display = 'none';
-  ['line', 'why', 'reply', 'nextrow'].forEach(function (id) { $(id).classList.remove('in'); });
-  renderFrame();
+  $('scenehost').innerHTML = SCENES[r.id].markup(); svgEl = $('scenehost').querySelector('svg');
+  $('vfwrap').className = 'vfwrap';
+  for (var i = 0; i < 3; i++) { var el = $('reach' + i); el.style.left = (6 + i * 44 - 9) + '%'; el.style.width = '18%'; el.className = 'reach' + (M.canRead(G.k, STOPS[i]) ? '' : ' off'); }
+  $('ringbox').style.display = ''; $('sendrow').style.display = ''; $('result').style.display = 'none';
+  ['line', 'nextrow'].forEach(function (id) { $(id).classList.remove('in'); });
+  renderZ();
   show('play');
 }
-function renderFrame() {
-  var r = M.round(G.k), s = G.stop, i = STOPS.indexOf(s);
-  $('framehost').innerHTML = svgFrame(FRAMES[r.id][s]());
+function renderZ() {
+  var z = G.z, i = stopOfZ(z);
+  SCENES[M.round(G.k).id].apply(svgEl, z);
+  $('cam').style.opacity = cl(z / 0.25);
+  $('thumb').style.left = (6 + z * 88) + '%';
   $('tag').textContent = C.STOPS[i].label;
-  $('needs').textContent = 'Read with: ' + M.needsLabel(G.k, s);
-  $('says').textContent = r.frames[s].says;
+  $('needs').textContent = 'Read with: ' + M.needsLabel(G.k, STOPS[i]);
   var sp = $('stops').children; for (var j = 0; j < sp.length; j++) sp[j].classList.toggle('on', j === i);
 }
-function setStop(i) { if (G.sent) return; G.stop = STOPS[i]; $('ring').value = i; renderFrame(); }
+var anim = null;
+function animateTo(target) {
+  if (anim) cancelAnimationFrame(anim);
+  var from = G.z, t0 = null;
+  function step(ts) { if (t0 === null) t0 = ts; var u = cl((ts - t0) / 240); u = 1 - (1 - u) * (1 - u); G.z = lerp(from, target, u); renderZ(); if (u < 1) anim = requestAnimationFrame(step); else anim = null; }
+  anim = requestAnimationFrame(step);
+}
+function nearest(z) { return z < 0.25 ? 0 : z < 0.75 ? 0.5 : 1; }
+var ring = $('ring'), drag = false;
+function setFromX(x) { var rc = ring.getBoundingClientRect(); G.z = cl((x - rc.left - rc.width * 0.06) / (rc.width * 0.88)); renderZ(); }
+ring.addEventListener('pointerdown', function (e) { if (G.sent) return; drag = true; if (anim) { cancelAnimationFrame(anim); anim = null; } ring.setPointerCapture(e.pointerId); setFromX(e.clientX); });
+ring.addEventListener('pointermove', function (e) { if (drag) setFromX(e.clientX); });
+function release() { if (!drag) return; drag = false; animateTo(nearest(G.z)); }
+ring.addEventListener('pointerup', release); ring.addEventListener('pointercancel', release);
+Array.prototype.forEach.call($('stops').children, function (el) { el.addEventListener('click', function () { if (G.sent) return; animateTo(+el.getAttribute('data-i') * 0.5); }); });
+function setStop(i) { if (G.sent) return; if (anim) { cancelAnimationFrame(anim); anim = null; } G.z = i * 0.5; renderZ(); }
 function doSend() {
   if (G.sent) return; G.sent = true;
-  var res = M.send(G.k, G.stop); G.sends.push(res);
+  if (anim) { cancelAnimationFrame(anim); anim = null; }
+  G.z = nearest(G.z); renderZ();
+  var stop = STOPS[stopOfZ(G.z)], res = M.send(G.k, stop); G.sends.push(res);
   var r = M.round(G.k);
-  $('ringbox').style.display = 'none'; $('sendrow').style.display = 'none'; $('says').style.display = 'none';
-  var vf = $('vf'); vf.className = 'vf developing'; void vf.offsetWidth;
-  requestAnimationFrame(function () { requestAnimationFrame(function () { vf.className = 'vf print' + (res.readable ? '' : ' unread'); }); });
+  $('ringbox').style.display = 'none'; $('sendrow').style.display = 'none';
+  var w = $('vfwrap'); w.className = 'vfwrap developing'; void w.offsetWidth;
+  requestAnimationFrame(function () { requestAnimationFrame(function () { w.className = 'vfwrap print' + (res.readable ? '' : ' unread'); }); });
   var state = !res.readable || res.arrived === 0 ? 'ic-none' : res.arrived >= 1 ? 'ic-full' : 'ic-part';
-  var cap = !res.readable ? 'nothing arrived' : res.arrived >= 1 ? 'all of it' : res.arrived > 0 ? 'a part of it' : 'none of it';
+  var capx = !res.readable ? 'nothing arrived' : res.arrived >= 1 ? 'all of it' : res.arrived > 0 ? 'a part of it' : 'none of it';
   $('now').textContent = r.id === 'bat' ? 'The print develops in your hand.' : 'The print develops at ' + r.reader.name + '’s side.';
   $('line').textContent = res.line;
-  $('why').textContent = res.why ? res.why : (r.id === 'bat' ? 'A frame can be read only with the sense it was taken with. This one was taken with sonar.' : 'A frame can be read only with the sense it was taken with.');
-  $('reply').textContent = res.reply;
   $('result').style.display = '';
-  setTimeout(function () { $('thingbox').innerHTML = icon(r.id, state) + '<span id="thingcap">' + cap + '</span>'; $('line').classList.add('in'); }, 1400);
-  setTimeout(function () { $('why').classList.add('in'); }, 2200);
-  setTimeout(function () { $('reply').classList.add('in'); }, 2900);
-  setTimeout(function () { $('nextrow').classList.add('in'); $('now').textContent = (res.readable ? res.words + ' of ' + r.short + ' arrived. ' : 'Nothing arrived. ') + 'Press Next.'; }, 3200);
+  setTimeout(function () { $('thingbox').innerHTML = icon(r.id, state) + '<span id="thingcap">' + capx + '</span>'; $('line').classList.add('in'); }, 1400);
+  setTimeout(function () { $('nextrow').classList.add('in'); $('now').textContent = (res.readable ? res.words + ' of ' + r.short + ' arrived. ' : 'Nothing arrived. ') + 'What that means, or Next.'; }, 2400);
+}
+function openMeans() {
+  var res = G.sends[G.sends.length - 1]; if (!res) return; var r = M.round(res.round);
+  $('mtitle').textContent = C.STOPS[M.stopIndex(res.stop)].label + ': ' + r.short;
+  $('mpic').innerHTML = svgFrame(FRAMES[r.id][res.stop]());
+  $('mleft').textContent = res.left;
+  $('mwhy').textContent = res.why ? res.why : 'A frame can be read only with the sense it was taken with. This one was taken with ' + res.need + '.';
+  $('mreply').textContent = res.reply;
+  $('means').classList.add('on'); $('means').scrollTop = 0;
 }
 function next() { G.k++; if (G.k >= C.ROUNDS.length) renderQuestion(); else renderRound(); }
+function iconState(s) { return !s.readable || s.arrived === 0 ? 'ic-none' : s.arrived >= 1 ? 'ic-full' : 'ic-part'; }
 function renderQuestion() {
-  var r = M.round(5);
-  $('qreader').innerHTML = '<div class="portrait">' + portrait('bat') + '</div><div class="rtext"><b>The bat</b>sent you its world. Its inside frame came to you blank.</div>';
+  $('qreader').innerHTML = '<div class="portrait">' + portrait('bat') + '</div><div class="rtext"><b>The bat</b>sent you its world. Its naked-eye frame came to you blank.</div>';
   $('qtext').textContent = C.QUESTION;
-  $('qrow').innerHTML = G.sends.map(function (s) { var rr = M.round(s.round); var st = !s.readable || s.arrived === 0 ? 'ic-none' : s.arrived >= 1 ? 'ic-full' : 'ic-part'; return '<div class="thing">' + icon(rr.id, st) + rr.short + '</div>'; }).join('');
+  $('qrow').innerHTML = G.sends.map(function (s) { var rr = M.round(s.round); return '<div class="thing">' + icon(rr.id, iconState(s)) + rr.short + '</div>'; }).join('');
   $('answers').innerHTML = C.ANSWERS.map(function (a) { return '<button class="answer" data-a="' + a.id + '">' + a.label + '</button>'; }).join('');
   show('question');
 }
@@ -323,24 +443,21 @@ function renderEnd(v) {
   $('enagel').innerHTML = v.nagel.map(function (l) { return '<li>' + l + '</li>'; }).join('');
   $('efound').innerHTML = v.found.map(function (l) { return '<li>' + l + '</li>'; }).join('');
   $('epart').textContent = v.part; $('estood').textContent = v.stood;
-  $('prints').innerHTML = G.sends.map(function (s) { var rr = M.round(s.round); var st = !s.readable || s.arrived === 0 ? 'ic-none' : s.arrived >= 1 ? 'ic-full' : 'ic-part'; return '<div class="mini">' + (s.readable ? svgFrame(FRAMES[rr.id][s.stop]()) : svgFrame('<rect width="320" height="190" fill="#EDE4D2"/>' + t(100, 100, 'unread', ';font-size:22px;fill:#8C7A68'))) + '<span class="cap">' + rr.short + '</span><span class="mi">' + icon(rr.id, st) + '</span></div>'; }).join('');
+  $('prints').innerHTML = G.sends.map(function (s) { var rr = M.round(s.round); return '<div class="mini">' + (s.readable ? svgFrame(FRAMES[rr.id][s.stop]()) : svgFrame('<rect width="320" height="190" fill="#EDE4D2"/>' + t(100, 100, 'unread', ';font-size:22px;fill:#8C7A68'))) + '<span class="cap">' + rr.short + ', ' + C.STOPS[M.stopIndex(s.stop)].label.toLowerCase() + '</span><span class="mi">' + icon(rr.id, iconState(s)) + '</span></div>'; }).join('');
   show('end');
 }
 function reset() { G.k = 0; G.sends = []; G.answer = null; renderRound(); }
-// ---------------------------------------------------------------- wiring
 $('b-start').addEventListener('click', reset);
 $('b-again').addEventListener('click', reset);
 $('b-send').addEventListener('click', doSend);
 $('b-next').addEventListener('click', next);
-$('ring').addEventListener('input', function () { setStop(+this.value); });
-$('ring').addEventListener('change', function () { setStop(+this.value); });
-Array.prototype.forEach.call($('stops').children, function (el) { el.addEventListener('click', function () { setStop(+el.getAttribute('data-i')); }); });
+$('b-means').addEventListener('click', openMeans);
 $('answers').addEventListener('click', function (e) { var b = e.target.closest('button[data-a]'); if (!b) return; G.answer = b.getAttribute('data-a'); renderEnd(M.verdict(G.sends, G.answer)); });
 document.addEventListener('click', function (e) {
   var o = e.target.closest('[data-open]'); if (o) { $(o.getAttribute('data-open')).classList.add('on'); $(o.getAttribute('data-open')).scrollTop = 0; return; }
   var c = e.target.closest('[data-close]'); if (c) { $(c.getAttribute('data-close')).classList.remove('on'); }
 });
-window.__api = { setStop: setStop, doSend: doSend, next: next, renderRound: renderRound, FRAMES: FRAMES };
+window.__api = { setStop: setStop, setZ: function (z) { if (anim) { cancelAnimationFrame(anim); anim = null; } G.z = z; renderZ(); }, doSend: doSend, next: next, openMeans: openMeans, renderRound: renderRound, FRAMES: FRAMES, SCENES: SCENES };
 })();
 </script>
 </body>
