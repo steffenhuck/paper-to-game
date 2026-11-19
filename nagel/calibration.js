@@ -55,9 +55,13 @@ check('fractions restored', JSON.stringify(C.HOLDS) === saved);
 C.HOLDS.experience.physics = 0.5; var broke = M.best(2).stop !== 'shape'; C.HOLDS.experience.physics = 0;
 check('the lesson rests on the paper’s claim that the physics frame holds none of an experience (set it to half and the best stop for red moves)', broke);
 
+console.log('== the evidence panel');
+check('the naked-eye frame is the unread one for lightning, red and the bat, and none for the sunset', M.evidence(0).unread === null && M.evidence(1).unread === 'inside' && M.evidence(2).unread === 'inside' && M.evidence(3).unread === 'inside');
+check('the bat\u2019s line turns the mirror', /You could not read this frame. The bat can/.test(M.evidence(3).line) && /Ada could not read this frame. You can/.test(M.evidence(2).line));
+
 console.log('== the words');
 var bad = [], lines = [];
-R.forEach(function (r, k) { C.STOPS.forEach(function (s) { var x = M.send(k, s.id); lines.push(x.line, x.reply, x.why || '', x.frame, x.left); check(r.id + ' ' + s.id + ': a line, a reply, and a rule when read', x.line.length > 20 && x.reply.length > 5 && (!x.readable || x.why.length > 10)); }); });
+R.forEach(function (r, k) { C.STOPS.forEach(function (s) { var x = M.send(k, s.id); lines.push(x.line, x.reply, x.why || '', x.frame, x.left, M.evidence(k).line); check(r.id + ' ' + s.id + ': a line, a reply, and a rule when read', x.line.length > 20 && x.reply.length > 5 && (!x.readable || x.why.length > 10)); }); });
 C.ANSWERS.forEach(function (a) { var v = M.verdict(M.play(M.STRATEGIES.best).sends, a.id); lines.push(v.head, v.part, v.stood); lines = lines.concat(v.found, v.nagel); check('verdict for "' + a.id + '": head, four found lines, where you part, had yours stood', v.head.length > 10 && v.found.length === 4 && v.part.length > 40 && v.stood.length > 40); });
 check('Nagel’s answer is the third', C.NAGEL_ANSWER === 'something' && C.ANSWERS[2].id === 'something');
 lines.forEach(function (l) { if (/undefined|NaN|Infinity|\d\.\d/.test(l)) bad.push(l); });

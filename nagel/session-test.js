@@ -27,6 +27,9 @@ const { chromium } = require('playwright'); const path = require('path'); const 
       await page.mouse.move(rc.x + rc.w * 0.1, rc.y); await page.mouse.down(); await page.mouse.move(rc.x + rc.w * 0.3, rc.y, { steps: 6 }); await page.mouse.move(rc.x + rc.w * (0.06 + 0.88 * 0.38), rc.y, { steps: 6 }); await page.mouse.up(); await page.waitForTimeout(400);
       const z = await page.evaluate(() => window.__game.z); log.push('  drag released at 38 %: ring settled at z=' + z); if (Math.abs(z - 0.5) > 0.001) errors.push('ring did not snap to the middle detent (z=' + z + ')');
       await page.click('#stops span[data-i="0"]'); await page.waitForTimeout(400); log.push('  tap "Naked eye": z=' + await page.evaluate(() => window.__game.z));
+      await page.mouse.click(rc.x + rc.w * 0.5, rc.y); await page.waitForTimeout(80); const zMid = await page.evaluate(() => window.__game.z); await page.waitForTimeout(500); const zEnd = await page.evaluate(() => window.__game.z);
+      log.push('  tap at the middle: z after 80 ms = ' + zMid.toFixed(2) + ' (gliding), settled at ' + zEnd); if (Math.abs(zEnd - 0.5) > 0.001) errors.push('tap did not settle at the middle detent'); if (zMid >= 0.5) errors.push('tap jumped instead of gliding');
+      await page.click('#stops span[data-i="0"]'); await page.waitForTimeout(400);
     }
     if (k === 2) { await page.click('.help-btn'); await page.waitForTimeout(300); await shot('help', true); await page.click('#help [data-close]'); await page.waitForTimeout(200); log.push('  help opened and closed mid-round; z still ' + await page.evaluate(() => window.__game.z)); }
     await page.evaluate(i => window.__api.setStop(i), plan[k]); await page.waitForTimeout(150);
@@ -40,17 +43,22 @@ const { chromium } = require('playwright'); const path = require('path'); const 
     await page.click('#b-next'); await page.waitForTimeout(400);
   }
   await hscroll('question'); await shot('a-question', true); log.push('question: ' + await page.$eval('#qtext', e => e.textContent));
-  await page.click('button[data-a="something"]'); await page.waitForTimeout(400); await hscroll('end'); await shot('a-end', true);
-  log.push('END: ' + await page.$eval('#ehead', e => e.textContent)); log.push('found: ' + await page.$eval('#efound', e => e.innerText.replace(/\n+/g, ' / ')));
+  for (let k = 0; k < 4; k++) { await page.click('#qrow button[data-ev="' + k + '"]'); await page.waitForTimeout(300); await shot('a-evidence-' + ids[k], true); log.push('  evidence ' + ids[k] + ': ' + await page.$eval('#etitle', e => e.textContent) + ' | ' + await page.$$eval('#epair .cap', es => es.map(e => e.textContent).join(' / ')) + ' | ' + await page.$eval('#eline', e => e.textContent) + ' ' + await page.$eval('#eline2', e => e.textContent)); await hscroll('evidence ' + ids[k]); await page.click('#evidence [data-close]'); await page.waitForTimeout(200); }
+  await page.click('button[data-a="something"]'); await page.waitForTimeout(400); await hscroll('end'); await shot('a-end-1', true);
+  log.push('END: ' + await page.$eval('#ehead', e => e.textContent));
+  for (let i = 2; i <= 5; i++) { await page.click('#b-goon'); await page.waitForTimeout(500); if (i === 3 || i === 5) await shot('a-end-' + i, true); }
+  log.push('steps shown: ' + await page.$$eval('#steps .step', es => es.length) + '; Go on hidden: ' + await page.$eval('#goon', e => e.style.display === 'none'));
+  await page.click('#steps .mini[data-ev="3"]'); await page.waitForTimeout(300); log.push('end print tapped: ' + await page.$eval('#etitle', e => e.textContent)); await page.click('#evidence [data-close]'); await page.waitForTimeout(200);
+  await page.click('#b-further'); await page.waitForTimeout(300); await shot('a-end-further', true);
   await page.click('#end [data-open="about"]'); await page.waitForTimeout(300); await shot('about', true); await page.click('#about [data-close]'); await page.waitForTimeout(200);
   // session B: the reductionist
   await page.click('#b-again'); await page.waitForTimeout(300);
   for (let k = 0; k < 4; k++) { await page.evaluate(() => window.__api.setStop(2)); await page.waitForTimeout(100); await page.click('#b-send'); await page.waitForTimeout(3000); if (k === 2) await shot('b-3-red-physics-sent', true); log.push('B round ' + (k + 1) + ' physics: ' + await page.$eval('#line', e => e.textContent)); await page.click('#b-next'); await page.waitForTimeout(300); }
-  await page.click('button[data-a="physics"]'); await page.waitForTimeout(300); await shot('b-end', true); log.push('B END: ' + await page.$eval('#ehead', e => e.textContent));
+  await page.click('button[data-a="physics"]'); await page.waitForTimeout(300); for (let i = 2; i <= 5; i++) { await page.click('#b-goon'); await page.waitForTimeout(150); } await shot('b-end', true); log.push('B END: ' + await page.$eval('#ehead', e => e.textContent));
   // session C: the naked eye throughout
   await page.click('#b-again'); await page.waitForTimeout(300);
   for (let k = 0; k < 4; k++) { await page.click('#b-send'); await page.waitForTimeout(3000); if (k === 1 || k === 3) await shot('c-' + (k + 1) + '-' + ids[k] + '-eye-sent', true); log.push('C round ' + (k + 1) + ' naked eye: ' + await page.$eval('#line', e => e.textContent)); await page.click('#b-next'); await page.waitForTimeout(300); }
-  await page.click('button[data-a="nothing"]'); await page.waitForTimeout(300); await shot('c-end', true); log.push('C END: ' + await page.$eval('#ehead', e => e.textContent));
+  await page.click('button[data-a="nothing"]'); await page.waitForTimeout(300); for (let i = 2; i <= 5; i++) { await page.click('#b-goon'); await page.waitForTimeout(150); } await shot('c-end', true); log.push('C END: ' + await page.$eval('#ehead', e => e.textContent));
   await page.setViewportSize({ width: 1280, height: 720 }); await page.click('#b-again'); await page.waitForTimeout(300); await page.evaluate(() => window.__api.setZ(0.5)); await page.waitForTimeout(120); await shot('laptop-round1'); await hscroll('laptop');
   log.push('errors: ' + (errors.length ? errors.join(' | ') : 'none'));
   fs.writeFileSync(path.join(__dirname, 'session-log.txt'), log.join('\n') + '\n');
