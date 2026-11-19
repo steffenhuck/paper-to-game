@@ -165,9 +165,17 @@ function best(k) {
 // ---------------------------------------------------------------------------------------------------------------
 var NAGEL_SAYS = [
   'Step back from your eyes and a thing in the world stays in view and gets clearer: lightning is what it does, not how it looks.',
-  'Step back from your eyes and an experience drops out of the frame, because it is a way of seeing and not a thing seen: of red, of pain, the far frame holds the cause and not the thing.',
-  'A frame you cannot read is not an empty one. Ada could not read your red from the naked eye, and the red was there; a physiologist with your whole brain on screen would get all of the brain and none of it. The bat’s frame is blank to you the same way.'
+  'Step back from your eyes and an experience drops out of the frame: red is a way of seeing, not a thing seen, so the far frame holds its cause and not it.',
+  'A frame you cannot read is not an empty one: Ada could not read your red, and the red was there. The bat\u2019s frame is blank to you the same way.'
 ];
+// The evidence panel (revision 2): for a round, which frame the reader could not read, and the line under it.
+function evidence(k) {
+  var r = round(k), unread = canRead(k, 'inside') ? null : 'inside', line;
+  if (r.id === 'bat') line = 'You could not read this frame. The bat can.';
+  else if (unread) line = cap(r.reader.name) + ' could not read this frame. You can. ' + (r.kind === 'experience' ? 'It was full.' : 'It holds the look of the thing, not the thing.');
+  else line = cap(r.reader.name) + ' could read every frame.';
+  return { unread: unread, line: line };
+}
 function foundLine(s) {
   var r = round(s.round);
   var who = r.id === 'bat' ? 'you' : r.reader.name;
@@ -180,16 +188,16 @@ function verdict(sends, answer) {
   var head, part, stood;
   if (answer === 'nothing') {
     head = 'You called the blank frame empty.';
-    part = 'Nagel parts from you here. A frame you cannot read is not an empty one: Ada could not read your red from the naked eye, and the red was there; the Martian could not read your sunset from the naked eye, and the evening was there. The bat’s naked-eye frame is blank to you for the same reason, and no other.';
+    part = 'Nagel parts from you here. Ada could not read your red, and the red was there. The bat\u2019s frame is blank to you for the same reason, and no other.';
     stood = 'Had yours stood, a physiologist with your whole brain on screen would be right to say there is nothing it is like to be you. You know that is false. So does the bat about itself.';
   } else if (answer === 'physics') {
     head = 'You called the blank frame the physics frame over again.';
-    part = 'Nagel does not call this false. He says nobody can yet read it. "The bat’s world is that shriek and that echo" is a sentence like "matter is energy" said to someone two thousand years before anyone knew how it could be true: it may be so, and we have no idea what would make it so. Your own red round showed the gap: the physics could arrive whole, and the red was not in it. The same question is asked today of machines: a complete account of the works, and whether anything is felt.';
-    stood = 'Had yours stood, the shriek and the echo would be all there is to the bat, and the firing of your eye and brain would be all there is to your red. Then a physiologist with your brain on screen would have had your red in front of him, and could not find it. Something in the sentence is still missing.';
+    part = 'Nagel does not call this false. He says nobody can yet read it, like \u201Cmatter is energy\u201D said two thousand years early. Your red round showed the gap: the physics could arrive whole, and the red was not in it.';
+    stood = 'Had yours stood, a physiologist with your brain on screen would have had your red in front of him and could not have found it. Something in the sentence is still missing. The same question is asked today of machines.';
   } else {
     head = 'You called the blank frame full of something you cannot read.';
-    part = 'That is Nagel’s answer. We can say in a schematic way what sort of thing is there (forward, three-dimensional, read off echoes) and believe it is as specific and as rich as our own, and still have no way to read it, because our frames are taken from where we stand. He adds that this does not make physicalism false: it means we do not yet understand what it would mean for it to be true.';
-    stood = 'Had yours stood, and it does: there are facts about what it is like to be a bat, true and beyond our concepts; the bat is in the same position about us; and the science of the bat’s brain, which we can have in full, does not reach them.';
+    part = 'That is Nagel\u2019s answer. We can say what sort of thing is there, forward, in three dimensions, read off echoes, and believe it as rich as our own, and still have no way to read it. This does not make physicalism false; it means nobody yet understands what would make it true.';
+    stood = 'Had yours stood, and it does: there are facts about what it is like to be a bat, beyond our concepts; the bat is in the same position about us; and the science of its brain, which we can have in full, does not reach them.';
   }
   return { head: head, nagel: NAGEL_SAYS, found: sends.map(foundLine), part: part, stood: stood, nagelAnswer: CONFIG.NAGEL_ANSWER, answer: answer };
 }
@@ -211,6 +219,6 @@ var STRATEGIES = {
   'best': function (k) { return best(k).stop; }
 };
 
-var api = { CONFIG: CONFIG, round: round, needs: needs, needsLabel: needsLabel, canRead: canRead, holds: holds, send: send, best: best, verdict: verdict, play: play, STRATEGIES: STRATEGIES, arrivedWords: arrivedWords, stopIndex: stopIndex, NAGEL_SAYS: NAGEL_SAYS };
+var api = { CONFIG: CONFIG, evidence: evidence, round: round, needs: needs, needsLabel: needsLabel, canRead: canRead, holds: holds, send: send, best: best, verdict: verdict, play: play, STRATEGIES: STRATEGIES, arrivedWords: arrivedWords, stopIndex: stopIndex, NAGEL_SAYS: NAGEL_SAYS };
 if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.NagelMechanism = api;
 })(typeof window !== 'undefined' ? window : this);

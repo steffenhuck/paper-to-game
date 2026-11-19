@@ -99,6 +99,16 @@ footer.sig a { color: inherit; text-decoration: none; }
 .qrow { display: flex; justify-content: space-around; gap: 4px; margin: 8px 0; }
 .qrow .thing { text-align: center; font-size: 11px; flex: 1; }
 .qrow .thing svg { width: 44px; height: 44px; display: block; margin: 0 auto; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
+.pair .pr { background: #fff; padding: 4px 4px 20px; box-shadow: 0 2px 0 #D9CFBC; border-radius: 3px; position: relative; }
+.pair .pr svg.frame { width: 100%; height: auto; display: block; border-radius: 2px; }
+.pair .pr .cap { font-size: 11px; position: absolute; left: 5px; right: 5px; bottom: 3px; color: #5A4838; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pair .pr.single { grid-column: 1 / span 2; max-width: 60%; margin: 0 auto; }
+.qrow button.thing { background: var(--white); border: 2px solid var(--ink); border-radius: 14px; padding: 6px 2px; font-family: 'Varela', system-ui, sans-serif; font-weight: 400; font-size: 11px; color: var(--ink); }
+.step { margin: 10px 0 0; }
+.step .stitle { font-family: 'Baloo', system-ui, sans-serif; font-size: 17px; margin: 4px 0; }
+.step p { font-size: 15.5px; margin: 4px 0; }
+.step .prints .mini { cursor: pointer; }
 .ic-full .f { fill: var(--c); } .ic-full .s { stroke: var(--c); }
 .ic-part .f { fill: var(--c); fill-opacity: .28; } .ic-part .s { stroke: var(--c); stroke-dasharray: none; }
 .ic-none .f { fill: none; } .ic-none .s { stroke: var(--grey); stroke-dasharray: 3 3; }
@@ -154,7 +164,7 @@ footer.sig a { color: inherit; text-decoration: none; }
   <div class="top"><div class="disp">The question</div><button class="help-btn" data-open="help" aria-label="How to play">?</button></div>
   <div class="reader" id="qreader"></div>
   <p class="now" id="qtext"></p>
-  <p style="font-size:14px;color:#6E5A4A;margin:0 0 4px">Your own prints are the evidence: how much of each thing got across.</p>
+  <p style="font-size:14px;color:#6E5A4A;margin:0 0 4px">Your own prints are the evidence. Tap one to see what the reader got, and the frame they could not read.</p>
   <div class="qrow" id="qrow"></div>
   <div id="answers"></div>
 </section>
@@ -162,15 +172,14 @@ footer.sig a { color: inherit; text-decoration: none; }
 <section id="end" class="screen end">
   <div class="stripe"></div>
   <div class="head" id="ehead"></div>
-  <h3>What Nagel says</h3><ul id="enagel"></ul>
-  <h3>What you found</h3><ul id="efound"></ul>
-  <h3>Where you part</h3><p id="epart"></p>
-  <h3>Had yours stood</h3><p id="estood"></p>
-  <h3>Your prints</h3><div class="prints" id="prints"></div>
-  <h3>Read further</h3>
-  <p style="font-size:15px">Nagel does not conclude that mind is not brain. He says we are like someone told that a caterpillar locked in a safe became the butterfly found there weeks later: we may have good reason to believe it without any idea of how it could be so. "The red is this firing" is a sentence we may one day learn to read; what the bat shows is that no amount of stepping back from the point of view will teach us. His proposal is to go the other way: an objective phenomenology that describes the structure of an experience, as the shape stop did, in terms a creature that cannot have it could follow, knowing one reaches a blank wall eventually. The same question is asked today of machines: a complete account of the works, and whether anything is felt.</p>
-  <div class="sendrow"><button class="big" id="b-again">Play again</button></div>
-  <div class="links"><button class="quiet" data-open="help">How to play</button><button class="quiet" data-open="about">About</button></div>
+  <div id="steps"></div>
+  <div class="sendrow" id="goon"><button class="big" id="b-goon">Go on</button></div>
+  <div id="endtail" style="display:none">
+    <div class="sendrow"><button class="big pale" id="b-further">Read further</button></div>
+    <div id="further" style="display:none" class="step"><p>Nagel does not conclude that mind is not brain. He says we are like someone told that a caterpillar locked in a safe became the butterfly found there weeks later: we may have good reason to believe it without any idea of how it could be so. "The red is this firing" is a sentence we may one day learn to read; what the bat shows is that no amount of stepping back from the point of view will teach us. His proposal is to go the other way: an objective phenomenology that describes the structure of an experience, as the shape stop did, in terms a creature that cannot have it could follow, knowing one reaches a blank wall eventually. The same question is asked today of machines: a complete account of the works, and whether anything is felt.</p></div>
+    <div class="sendrow"><button class="big" id="b-again">Play again</button></div>
+    <div class="links"><button class="quiet" data-open="help">How to play</button><button class="quiet" data-open="about">About</button></div>
+  </div>
   <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
 </section>
 
@@ -185,6 +194,14 @@ footer.sig a { color: inherit; text-decoration: none; }
   <div class="sendrow"><button class="big" data-close="means">Back</button></div>
 </div></div>
 
+<div class="overlay" id="evidence"><div class="wrap">
+  <div class="top"><h2 style="margin:4px 0" id="etitle"></h2><button class="help-btn" data-close="evidence" aria-label="Back">&times;</button></div>
+  <div class="pair" id="epair"></div>
+  <p id="eline" style="font-size:16px"></p>
+  <p id="eline2" style="font-size:14px;color:#6E5A4A"></p>
+  <div class="sendrow"><button class="big" data-close="evidence">Back</button></div>
+</div></div>
+
 <div class="overlay" id="help"><div class="wrap">
   <div class="top"><h2 style="margin:4px 0">How to play</h2><button class="help-btn" data-close="help" aria-label="Back">&times;</button></div>
   <p><b>Get as much of each thing across to its reader as you can.</b></p>
@@ -192,7 +209,7 @@ footer.sig a { color: inherit; text-decoration: none; }
   <p>The picture is what your camera sees. Turn the ring under it and watch: the camera steps back from your own eyes, the colour drains, things leave the frame and other things come in. The ring turns freely, but the shutter fires at only three stops, and the ring settles on the nearest when you let go. <b>Naked eye</b> is the thing exactly as it is for you; it can be read only with the sense it was taken with (eyes, sonar). <b>The shape</b> is the outline of the thing, where it sits among its neighbours; it can be read with a mind. <b>The physics</b> is what any instrument would find; it can be read with instruments and sums. The tag under the picture says which stop you are at and what it takes to read it; the blue marks above the ring show which stops this reader can read.</p>
   <p>Look at the picture and ask: is the thing still in it? Then press <b>Send</b>.</p>
   <p>The picture becomes a print at the reader's side. The small drawing beside the reader fills by how much of the thing arrived: solid is all of it, pale is a part, a dotted outline is none. One line says what crossed. <b>What that means</b> opens the same stop drawn with its labels, what left the picture on the way there, the rule, and the reader's answer. <b>Next</b> goes on.</p>
-  <p>Four rounds; every round the ring starts at the naked eye. In the last round the bat holds the camera and you are the reader. Then one question about the frame you could not read, and the verdict.</p>
+  <p>Four rounds; every round the ring starts at the naked eye. In the last round the bat holds the camera and you are the reader. Then one question about the frame you could not read: tap your four prints to see what each reader got and the frame they could not read, then choose an answer. The verdict comes in steps; press Go on.</p>
   <div class="sendrow"><button class="big" data-close="help">Back</button></div>
 </div></div>
 
@@ -397,9 +414,11 @@ function animateTo(target) {
 function nearest(z) { return z < 0.25 ? 0 : z < 0.75 ? 0.5 : 1; }
 var ring = $('ring'), drag = false;
 function setFromX(x) { var rc = ring.getBoundingClientRect(); G.z = cl((x - rc.left - rc.width * 0.06) / (rc.width * 0.88)); renderZ(); }
-ring.addEventListener('pointerdown', function (e) { if (G.sent) return; drag = true; if (anim) { cancelAnimationFrame(anim); anim = null; } ring.setPointerCapture(e.pointerId); setFromX(e.clientX); });
-ring.addEventListener('pointermove', function (e) { if (drag) setFromX(e.clientX); });
-function release() { if (!drag) return; drag = false; animateTo(nearest(G.z)); }
+var downX = 0, moved = false;
+function zOfX(x) { var rc = ring.getBoundingClientRect(); return cl((x - rc.left - rc.width * 0.06) / (rc.width * 0.88)); }
+ring.addEventListener('pointerdown', function (e) { if (G.sent) return; drag = true; moved = false; downX = e.clientX; if (anim) { cancelAnimationFrame(anim); anim = null; } ring.setPointerCapture(e.pointerId); animateTo(zOfX(e.clientX)); });
+ring.addEventListener('pointermove', function (e) { if (!drag) return; if (!moved && Math.abs(e.clientX - downX) < 4) return; moved = true; if (anim) { cancelAnimationFrame(anim); anim = null; } setFromX(e.clientX); });
+function release() { if (!drag) return; drag = false; var target = nearest(anim && !moved ? zOfX(downX) : G.z); if (anim) { cancelAnimationFrame(anim); anim = null; } animateTo(target); }
 ring.addEventListener('pointerup', release); ring.addEventListener('pointercancel', release);
 Array.prototype.forEach.call($('stops').children, function (el) { el.addEventListener('click', function () { if (G.sent) return; animateTo(+el.getAttribute('data-i') * 0.5); }); });
 function setStop(i) { if (G.sent) return; if (anim) { cancelAnimationFrame(anim); anim = null; } G.z = i * 0.5; renderZ(); }
@@ -431,33 +450,63 @@ function openMeans() {
 }
 function next() { G.k++; if (G.k >= C.ROUNDS.length) renderQuestion(); else renderRound(); }
 function iconState(s) { return !s.readable || s.arrived === 0 ? 'ic-none' : s.arrived >= 1 ? 'ic-full' : 'ic-part'; }
+function printOf(sendRes) { var rr = M.round(sendRes.round); return sendRes.readable ? svgFrame(FRAMES[rr.id][sendRes.stop]()) : svgFrame('<rect width="320" height="190" fill="#EDE4D2"/>' + t(100, 100, 'unread', ';font-size:22px;fill:#8C7A68')); }
+function openEvidence(k) {
+  var sendRes = null; G.sends.forEach(function (x) { if (x.round === k) sendRes = x; }); if (!sendRes) return;
+  var r = M.round(k), ev = M.evidence(k), you = r.id === 'bat', who = you ? 'you' : cap(r.reader.name);
+  $('etitle').textContent = cap(r.short);
+  var got = '<div class="pr' + (ev.unread ? '' : ' single') + '">' + printOf(sendRes) + '<span class="cap">' + (you ? 'What you got: ' : 'What ' + r.reader.name + ' got: ') + C.STOPS[M.stopIndex(sendRes.stop)].label.toLowerCase() + '</span></div>';
+  var unread = ev.unread ? '<div class="pr">' + svgFrame(FRAMES[r.id][ev.unread]()) + '<span class="cap">' + (you ? 'What you could not read' : 'What ' + r.reader.name + ' could not read') + '</span></div>' : '';
+  $('epair').innerHTML = got + unread;
+  $('eline').textContent = ev.line;
+  $('eline2').textContent = sendRes.readable ? (sendRes.words + ' of ' + r.short + ' arrived' + (sendRes.arrived > 0 && sendRes.arrived < 1 ? ': the shape of it, not the thing.' : '.')) : 'Nothing arrived: ' + who + ' could not read the frame you sent.';
+  $('evidence').classList.add('on'); $('evidence').scrollTop = 0;
+}
+function evidenceRow() { return G.sends.map(function (sd) { var rr = M.round(sd.round); return '<button class="thing" data-ev="' + sd.round + '">' + icon(rr.id, iconState(sd)) + rr.short + '</button>'; }).join(''); }
 function renderQuestion() {
   $('qreader').innerHTML = '<div class="portrait">' + portrait('bat') + '</div><div class="rtext"><b>The bat</b>sent you its world. Its naked-eye frame came to you blank.</div>';
   $('qtext').textContent = C.QUESTION;
-  $('qrow').innerHTML = G.sends.map(function (s) { var rr = M.round(s.round); return '<div class="thing">' + icon(rr.id, iconState(s)) + rr.short + '</div>'; }).join('');
+  $('qrow').innerHTML = evidenceRow();
   $('answers').innerHTML = C.ANSWERS.map(function (a) { return '<button class="answer" data-a="' + a.id + '">' + a.label + '</button>'; }).join('');
   show('question');
 }
+var STEPS = [], stepAt = 0;
+function pair(leftSvg, leftCap, rightSvg, rightCap) { return '<div class="pair"><div class="pr">' + leftSvg + '<span class="cap">' + leftCap + '</span></div><div class="pr">' + rightSvg + '<span class="cap">' + rightCap + '</span></div></div>'; }
 function renderEnd(v) {
+  var F = function (id, stop) { return svgFrame(FRAMES[id][stop]()); };
   $('ehead').textContent = v.head;
-  $('enagel').innerHTML = v.nagel.map(function (l) { return '<li>' + l + '</li>'; }).join('');
-  $('efound').innerHTML = v.found.map(function (l) { return '<li>' + l + '</li>'; }).join('');
-  $('epart').textContent = v.part; $('estood').textContent = v.stood;
-  $('prints').innerHTML = G.sends.map(function (s) { var rr = M.round(s.round); return '<div class="mini">' + (s.readable ? svgFrame(FRAMES[rr.id][s.stop]()) : svgFrame('<rect width="320" height="190" fill="#EDE4D2"/>' + t(100, 100, 'unread', ';font-size:22px;fill:#8C7A68'))) + '<span class="cap">' + rr.short + ', ' + C.STOPS[M.stopIndex(s.stop)].label.toLowerCase() + '</span><span class="mi">' + icon(rr.id, iconState(s)) + '</span></div>'; }).join('');
+  STEPS = [
+    '<div class="step"><div class="stitle">What Nagel says, in three steps</div><p>' + v.nagel[0] + '</p>' + pair(F('lightning', 'inside'), 'lightning, naked eye', F('lightning', 'physics'), 'lightning, the physics') + '</div>',
+    '<div class="step"><p>' + v.nagel[1] + '</p>' + pair(F('red', 'inside'), 'red, naked eye', F('red', 'physics'), 'red, the physics') + '</div>',
+    '<div class="step"><p>' + v.nagel[2] + '</p>' + pair(F('red', 'inside'), 'your red: Ada could not read it', F('bat', 'inside'), 'the bat\u2019s world: you could not read it') + '</div>',
+    '<div class="step"><div class="stitle">What you found</div><ul>' + v.found.map(function (l) { return '<li>' + l + '</li>'; }).join('') + '</ul><div class="prints">' + G.sends.map(function (sd) { var rr = M.round(sd.round); return '<div class="mini" data-ev="' + sd.round + '">' + printOf(sd) + '<span class="cap">' + rr.short + ', ' + C.STOPS[M.stopIndex(sd.stop)].label.toLowerCase() + '</span><span class="mi">' + icon(rr.id, iconState(sd)) + '</span></div>'; }).join('') + '</div><p style="font-size:13px;color:#6E5A4A">Tap a print to see it with the frame its reader could not read.</p></div>',
+    '<div class="step"><div class="stitle">Where you part</div><p>' + v.part + '</p><div class="stitle">Had yours stood</div><p>' + v.stood + '</p></div>'
+  ];
+  stepAt = 0; $('steps').innerHTML = ''; $('goon').style.display = ''; $('endtail').style.display = 'none'; $('further').style.display = 'none';
+  goOn();
   show('end');
+}
+function goOn() {
+  if (stepAt < STEPS.length) { var d = document.createElement('div'); d.innerHTML = STEPS[stepAt]; $('steps').appendChild(d); stepAt++; }
+  if (stepAt >= STEPS.length) { $('goon').style.display = 'none'; $('endtail').style.display = ''; }
+  else { $('b-goon').textContent = stepAt === STEPS.length - 1 ? 'Go on' : 'Go on'; }
+  var last = $('steps').lastElementChild; if (last && stepAt > 1) last.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 function reset() { G.k = 0; G.sends = []; G.answer = null; renderRound(); }
 $('b-start').addEventListener('click', reset);
 $('b-again').addEventListener('click', reset);
+$('b-goon').addEventListener('click', goOn);
+$('b-further').addEventListener('click', function () { var f = $('further'); f.style.display = f.style.display === 'none' ? '' : 'none'; });
 $('b-send').addEventListener('click', doSend);
 $('b-next').addEventListener('click', next);
 $('b-means').addEventListener('click', openMeans);
 $('answers').addEventListener('click', function (e) { var b = e.target.closest('button[data-a]'); if (!b) return; G.answer = b.getAttribute('data-a'); renderEnd(M.verdict(G.sends, G.answer)); });
 document.addEventListener('click', function (e) {
+  var ev = e.target.closest('[data-ev]'); if (ev) { openEvidence(+ev.getAttribute('data-ev')); return; }
   var o = e.target.closest('[data-open]'); if (o) { $(o.getAttribute('data-open')).classList.add('on'); $(o.getAttribute('data-open')).scrollTop = 0; return; }
   var c = e.target.closest('[data-close]'); if (c) { $(c.getAttribute('data-close')).classList.remove('on'); }
 });
-window.__api = { setStop: setStop, setZ: function (z) { if (anim) { cancelAnimationFrame(anim); anim = null; } G.z = z; renderZ(); }, doSend: doSend, next: next, openMeans: openMeans, renderRound: renderRound, FRAMES: FRAMES, SCENES: SCENES };
+window.__api = { setStop: setStop, openEvidence: openEvidence, goOn: goOn, setZ: function (z) { if (anim) { cancelAnimationFrame(anim); anim = null; } G.z = z; renderZ(); }, doSend: doSend, next: next, openMeans: openMeans, renderRound: renderRound, FRAMES: FRAMES, SCENES: SCENES };
 })();
 </script>
 </body>

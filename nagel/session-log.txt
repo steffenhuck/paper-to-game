@@ -7,6 +7,7 @@ round 1: Turn the ring, then send the sunset to Sam. | ask: What was the sunset 
   z=1: tag=The physics · Read with: instruments and sums
   drag released at 38 %: ring settled at z=0.5
   tap "Naked eye": z=0
+  tap at the middle: z after 80 ms = 0.29 (gliding), settled at 0.5
   SENT stop 0: You sent the sunset from the naked eye. Sam has eyes; he read it. All of the sunset arrived.
   now: All of the sunset arrived. What that means, or Next. | icon: ic-full all of it
   Next bottom at 616 px
@@ -46,8 +47,13 @@ round 4: The bat holds the camera now. Turn the ring and ask for the bat’s wor
   Next bottom at 687 px
   MEANS: The shape: the bat’s world | On the way here the blank gave way to a cone in front of a bat, with things in it at distances. | The shape of it crossed: where it sits among its neighbours and what it makes you do. The thing itself stayed in the first frame. | Forward, in three dimensions. The shape of it. What is it like? You have no idea.
 question: The bat’s naked-eye frame came to you blank. What is in it?
+  evidence sunset: The sunset | What Sam got: naked eye | Sam could read every frame. All of the sunset arrived.
+  evidence lightning: Lightning | What the Martian got: the physics / What the Martian could not read | The Martian could not read this frame. You can. It holds the look of the thing, not the thing. All of lightning arrived.
+  evidence red: Red | What Ada got: the shape / What Ada could not read | Ada could not read this frame. You can. It was full. A part of red arrived: the shape of it, not the thing.
+  evidence bat: The bat’s world | What you got: the shape / What you could not read | You could not read this frame. The bat can. A part of the bat’s world arrived: the shape of it, not the thing.
 END: You called the blank frame full of something you cannot read.
-found: The sunset from the naked eye: all of it reached Sam. / Lightning as the physics: all of it reached the Martian. / Red as the shape: the shape of it reached Ada, not the thing. / The bat’s world as the shape: the shape of it reached you, not the thing.
+steps shown: 5; Go on hidden: true
+end print tapped: The bat’s world
 B round 1 physics: You sent the sunset as the physics. Sam has instruments and sums; he read it. None of the sunset arrived.
 B round 2 physics: You sent lightning as the physics. The Martian has instruments and sums; it read it. All of lightning arrived.
 B round 3 physics: You sent red as the physics. Ada has instruments and sums; she read it. None of red arrived.
