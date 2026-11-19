@@ -188,3 +188,9 @@ Steffen, after revision 3: the night half is right; the question after it is a l
 - "Where you part" and "Had yours stood" are replaced by one last step, *Three ways to read the blank*: nothing is there; only the physics is there; something is there that cannot be read, which is Nagel's, each with one or two sentences on what Nagel says of it. The paper's closing argument stays on the screen as reading, not as a choice.
 
 Mechanism: `READINGS` replaces `QUESTION`, `ANSWERS` and `NAGEL_ANSWER`; `verdict(sends, grades)` has no answer argument. 52 checks, all passing. Browser session: the blank goes to the verdict, five steps, the readings counted, a window opened from the end screen.
+
+---
+
+# Revision 5 (19 November 2026): the blank screen goes
+
+Steffen, after revision 4: the screen after the third window, where the picture zooms one stop further in and goes blank, looked like a leftover. On reflection it was a reveal with nothing for the player to do, dressed as a page they had landed on, and the only way to give it a decision was the prediction we had just cut. Agreed to cut the screen: the second half now ends on the third window settling, the player's own act, and the blank appears in the verdict's third step beside the player's window, with its line. `BLANK_LINE` reworded to say where the blank is relative to the shape the player built. The third window's button reads *Go on*. 52 checks, all passing; the browser session walks from the third window into the five steps; no errors.

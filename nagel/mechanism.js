@@ -125,7 +125,7 @@ var CONFIG = {
   ],
   // Words for how much of the shape the player built (ours; no tally on screen).
   BUILT_WORDS: [[1, 'All of'], [0.74, 'Most of'], [0.4, 'About half of'], [0.01, 'A little of'], [0, 'None of']],
-  BLANK_LINE: 'One stop further in, and the window is blank. This is as far in as anyone\u2019s camera goes: what it is like for the bat to have this is the stop nobody reaches.',
+  BLANK_LINE: 'One stop further in than the shape you built, the window is blank. That is as far in as anyone\u2019s camera goes: what it is like for the bat to have this is the stop nobody reaches.',
   // The three readings of the blank (p. 440: a sceptical conclusion would be wrong; pp. 446-447: physicalism not
   // shown false, the "is" not understood). Read on the end screen, not chosen (revision 4).
   READINGS: [
