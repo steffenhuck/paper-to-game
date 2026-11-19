@@ -493,7 +493,7 @@ function grade(n, chosen) {
   return { night: n, pieces: pieces, found: found, inCount: inCount, wrong: wrong, fraction: f, words: w, line: line };
 }
 function joinList(a) { return a.length < 2 ? a.join('') : a.length === 2 ? a[0] + ' and ' + a[1] : a.slice(0, -1).join(', ') + ', and ' + a[a.length - 1]; }
-function nightLine(g) { var N = night(g.night); return cap(N.name) + ': ' + g.words.toLowerCase() + ' its shape' + (g.wrong.length ? ', with ' + joinList(g.wrong) + ' in it that ' + (g.wrong.length > 1 ? 'do' : 'does') + ' not belong' : '') + '; the inside, blank.'; }
+function nightLine(g) { var N = night(g.night); return cap(N.name) + ': ' + g.words.toLowerCase() + ' its shape' + (g.wrong.length ? ', with ' + joinList(g.wrong) + ' in it that ' + (g.wrong.length > 1 ? 'do' : 'does') + ' not belong' : '') + '.'; }
 
 // ---------------------------------------------------------------------------------------------------------------
 // The verdict. `sends` is an array of six results from send(); `answer` is one of CONFIG.ANSWERS ids.
