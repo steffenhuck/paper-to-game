@@ -211,3 +211,11 @@ Steffen, after revision 6: the headline ("You built the shape of a bat's evening
 - **Checked over every path.** `calibration.js` generates all 27 first-half sentences (printed in full in `calibration-result.txt`) and all 262,144 ways of filling the three windows, and tests each sentence for the faults of generated prose (an empty list after a colon, a stray "and", a double comma, a repeated word, a sentence without a full stop, any digit); twenty distinct night sentences spread across the range are printed. 56 checks, all passing.
 - **The empty window is gone from the verdict.** The third step shows the player's own window alone, under the sentence that what a bat gets can be worked out and what it is like to be the bat cannot. The last step is *Three answers to Nagel's question: what is it like to be a bat?* The words "blank", "frame" and "stop" no longer appear in the verdict.
 - **Plainer words throughout** for a smart fourteen-year-old: the start screen ("a camera with a strange zoom ring"), the rules after a send ("anything that lives in your senses drops out of the picture"), Nagel's three sentences, the three answers.
+
+---
+
+# Revision 8 (23 November 2026): right or wrong, at the end of each entry
+
+Steffen, after playing revision 7: the list under a settled window said "you put it in" or "you left it out" and never whether that was right. It also printed the same words, "you left it out", for a piece rightly left out and for a piece missed. Built: each entry ends with a mark, a green check when the player's call was right (put in a piece a bat has, or left out one it lacks) and a red exclamation mark when it was wrong; the words now differ too ("you left it out, rightly" against "you missed it"). No count of right calls is shown; the game still has no number in it. Mechanism unchanged; 56 checks, all passing; the browser session re-run, no errors, no horizontal scroll.
+
+Also on 23 November: a chapter on Nagel's November 2026 interview about machines was weighed and dropped, to keep the game to the 1974 paper.

@@ -135,6 +135,10 @@ html.night #eline2 { color: #9FB0C6; }
 .grades .g.in .mk { background: #5FE3C8; color: #0B1626; } .grades .g.out .mk { border: 2px solid #5A6F8C; color: #9FB0C6; }
 .grades .g b { font-weight: 400; color: #5FE3C8; } .grades .g.out b { color: #9FB0C6; }
 .grades .g .you { color: #F0902A; }
+.grades .g .gt { flex: 1 1 auto; min-width: 0; }
+.grades .g .rw { flex: 0 0 22px; width: 22px; height: 22px; margin-top: 1px; }
+.grades .g .rw path { fill: none; stroke: #0B1626; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.grades .g .rw.ok circle { fill: #5BD08A; } .grades .g .rw.no circle { fill: #FF6B5A; }
 .nightline { font-size: 16px; margin: 10px auto 0; max-width: 324px; }
 .wins { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 8px 0; }
 .wins .w svg { width: 100%; height: auto; display: block; border-radius: 10px; }
@@ -598,7 +602,7 @@ function thatsMyBat() {
   requestAnimationFrame(function () { requestAnimationFrame(function () { $('win').querySelectorAll('.fadeout').forEach(function (e) { e.style.opacity = .12; }); $('win').querySelectorAll('.glyph').forEach(function (e) { e.style.opacity = 1; }); }); });
   $('nightnow').textContent = 'The window settles.';
   $('nightline').textContent = g.line;
-  $('grades').innerHTML = g.pieces.map(function (p) { var you = p.status === 'kept' ? 'you had it' : p.status === 'faded' ? 'you put it in' : p.status === 'missed' ? 'you left it out' : 'you left it out'; return '<div class="g ' + (p.in ? 'in' : 'out') + '"><div class="mk">' + (p.in ? 'in' : 'out') + '</div><div><b>' + cap(p.label) + '</b> <span class="you">(' + you + ')</span>. ' + p.why + '</div></div>'; }).join('');
+  $('grades').innerHTML = g.pieces.map(function (p) { var you = p.status === 'kept' ? 'you had it' : p.status === 'faded' ? 'you put it in' : p.status === 'missed' ? 'you missed it' : 'you left it out, rightly'; var ok = p.status === 'kept' || p.status === 'left'; var mark = ok ? '<svg class="rw ok" viewBox="0 0 22 22" role="img" aria-label="right"><circle cx="11" cy="11" r="11"/><path d="M6 11.5l3.4 3.4L16 8"/></svg>' : '<svg class="rw no" viewBox="0 0 22 22" role="img" aria-label="wrong"><circle cx="11" cy="11" r="11"/><path d="M11 5.5v7"/><path d="M11 16.2v.3"/></svg>'; return '<div class="g ' + (p.in ? 'in' : 'out') + '" data-right="' + (ok ? 'yes' : 'no') + '"><div class="mk">' + (p.in ? 'in' : 'out') + '</div><div class="gt"><b>' + cap(p.label) + '</b> <span class="you">(' + you + ')</span>. ' + p.why + '</div>' + mark + '</div>'; }).join('');
   $('nightresult').style.display = '';
   setTimeout(function () { $('nightline').classList.add('in'); $('nightnow').textContent = g.words + ' the shape of ' + N.name + ' is in your window.'; }, 1500);
   setTimeout(function () { $('grades').classList.add('in'); }, 2100);
