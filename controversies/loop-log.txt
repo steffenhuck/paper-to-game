@@ -1,50 +1,52 @@
-QUARREL 1: Should cars be banned from the city centre?
+QUARREL 1: Should phones be banned in school?
   stance: Ban them
   + b1 reason → on the page, full
   + b1 reply → on the page, reply
   + b2 reason → on the page, full
-  + c1 reason → on the page, full
-  + c1 reply → on the page, reply
+  + p1 reason → on the page, full
+  + p1 reply → on the page, reply
   + b3 reason → on the page, full
   + b3 reply → refused: the page is full
   ~ line 2 → brief
-  + c2 reason → on the page, brief
+  + p2 reason → on the page, brief
   ↕ line 0 up
   ~ line 1 → undefined
   page:
-     Ban full: Nobody walks or cycles happily beside mo…
-     Cars (reply): A place for whom? For the people who can…
-     Ban brief: The air gets cleaner, and quickly; every…
-     Cars full: The old, the ill and the parent with twi…
-     Ban (reply): Exemptions and vans cover those. The ban…
-     Ban full: Shops do better, not worse: people on fo…
-     Cars brief: The traffic does not vanish; it moves to…
+     Ban full: Nobody can learn with a buzzing pocket. …
+     Phones (reply): Then take away the buzzing, not the phon…
+     Ban brief: Without phones, break time has people in…
+     Phones full: A phone is a calculator, a dictionary, a…
+     Ban (reply): Adults are not fourteen, and do not have…
+     Ban full: Half the bullying now happens on a scree…
+     Phones brief: A ban cuts the line home for seven hours…
      [10 of 10 lines; publish open]
   PUBLISH
-     Ban full: Nobody walks or cycles happily beside mo…
-     Cars (reply): A place for whom? For the people who can…
-     Ban brief: The air gets cleaner, and quickly; every…
-     Cars full: The old, the ill and the parent with twi…
-     Ban (reply): Exemptions and vans cover those. The ban…
-     Ban full: Shops do better, not worse: people on fo…
-     Cars brief: The traffic does not vanish; it moves to…
+     Ban full: Nobody can learn with a buzzing pocket. …
+     Phones (reply): Then take away the buzzing, not the phon…
+     Ban brief: Without phones, break time has people in…
+     Phones full: A phone is a calculator, a dictionary, a…
+     Ban (reply): Adults are not fourteen, and do not have…
+     Ban full: Half the bullying now happens on a scree…
+     Phones brief: A ban cuts the line home for seven hours…
      [10 of 10 lines; publish open]
-     Ban-side counts lines: Ban speaks 6 lines, Cars 4. One of ours.
-     Cars-side counts lines: Ban speaks 6 lines, Cars 4. One of theirs.
-     Ban-side checks gaps: Ban: 2 unanswered, 0 left out (2). Cars: 1 unanswered, 1 left out (0). One of ours.
-     Cars-side checks gaps: Ban: 2 unanswered, 0 left out (2). Cars: 1 unanswered, 1 left out (0). One of theirs.
-     Ban-side first & last: First line Ban, last line Cars. Can’t tell.
-     Cars-side first & last: First line Ban, last line Cars. Can’t tell.
-     GAME: 4 of 6 could tell. Your page leaned to the ban.
+     Ban-side lines: Ban speaks 6 lines, Phones 4. One of ours.
+     Phones-side lines: Ban speaks 6 lines, Phones 4. One of theirs.
+     Ban-side left out: Left out: Ban 0, Phones 1. One of ours.
+     Phones-side left out: Left out: Ban 0, Phones 1. One of theirs.
+     Ban-side unanswered: Unanswered: Ban 2, Phones 1. One of ours.
+     Phones-side unanswered: Unanswered: Ban 2, Phones 1. One of theirs.
+     Ban-side first & last: First word Ban, last word Phones. Can’t tell.
+     Phones-side first & last: First word Ban, last word Phones. Can’t tell.
+     GAME: 6 of 8 could tell. Your page leaned to the ban.
 QUARREL 2: Dogs or cats?
   stance: Cats
   + d1 reason → on the page, full
-  + k1 reason → on the page, full
+  + c1 reason → on the page, full
   + d2 reason → on the page, full
   + d1 reply → refused: the page is full
   − line 2 off
   + d1 reply → on the page, reply
-  + k1 reply → on the page, reply
+  + c1 reply → on the page, reply
   ↕ line 3 up
   PUBLISH
      Dogs full: A dog is glad you exist, every single ti…
@@ -52,48 +54,52 @@ QUARREL 2: Dogs or cats?
      Dogs (reply): Earned by feeding it. That is not respec…
      Cats (reply): Glad anyone exists. It is not a judgemen…
      [6 of 6 lines; publish open]
-     Dogs-side counts lines: Dogs speaks 3 lines, Cats 3. Can’t tell.
-     Cats-side counts lines: Dogs speaks 3 lines, Cats 3. Can’t tell.
-     Dogs-side checks gaps: Dogs: 0 unanswered, 2 left out (-2). Cats: 0 unanswered, 2 left out (-2). Can’t tell.
-     Cats-side checks gaps: Dogs: 0 unanswered, 2 left out (-2). Cats: 0 unanswered, 2 left out (-2). Can’t tell.
-     Dogs-side first & last: First line Dogs, last line Cats. Can’t tell.
-     Cats-side first & last: First line Dogs, last line Cats. Can’t tell.
+     Dogs-side lines: Dogs speaks 3 lines, Cats 3. Can’t tell.
+     Cats-side lines: Dogs speaks 3 lines, Cats 3. Can’t tell.
+     Dogs-side left out: Left out: Dogs 2, Cats 2. Can’t tell.
+     Cats-side left out: Left out: Dogs 2, Cats 2. Can’t tell.
+     Dogs-side unanswered: Unanswered: Dogs 0, Cats 0. Can’t tell.
+     Cats-side unanswered: Unanswered: Dogs 0, Cats 0. Can’t tell.
+     Dogs-side first & last: First word Dogs, last word Cats. Can’t tell.
+     Cats-side first & last: First word Dogs, last word Cats. Can’t tell.
      GAME: No reader could tell.
-QUARREL 3: Back to the office five days a week?
+QUARREL 3: Should homework be scrapped?
   stance: no view
-  + o1 reason → on the page, full
-  + h1 reason → on the page, full
-  + o2 reason → on the page, full
-  + h2 reason → on the page, full
+  + s1 reason → on the page, full
+  + k1 reason → on the page, full
+  + s2 reason → on the page, full
+  + k2 reason → on the page, full
   ~ line 0 → brief
   ~ line 1 → brief
   ~ line 2 → brief
   ~ line 3 → brief
-  + h1 reply → on the page, reply
-  + o1 reply → on the page, reply
-  + h2 reply → on the page, reply
-  + o2 reply → on the page, reply
+  + k1 reply → on the page, reply
+  + s1 reply → on the page, reply
+  + k2 reply → on the page, reply
+  + s2 reply → on the page, reply
   PUBLISH
-     Office brief: The good ideas happen in corridors, not …
-     Home brief: The commute is unpaid time; give it back…
-     Office brief: The young learn by watching, and there i…
-     Home brief: Output rose when the offices closed; the…
-     Office (reply): The commute is also where the day begins…
-     Home (reply): Count them. The corridor’s ideas are mos…
-     Office (reply): Output of the things already set up. Not…
-     Home (reply): Then bring the juniors in and leave the …
+     Scrap brief: Seven hours of school, then an evening s…
+     Keep brief: The practice between lessons is where le…
+     Scrap brief: Homework rewards a quiet room and a pare…
+     Keep brief: Homework is the first time you manage yo…
+     Scrap (reply): Then make the lesson longer and the even…
+     Keep (reply): Half an hour a night is not a shift. It …
+     Scrap (reply): Failing safely still means failing every…
+     Keep (reply): So does everything. Homework at least gi…
      [8 of 10 lines; publish open]
-     Office-side counts lines: Office speaks 4 lines, Home 4. Can’t tell.
-     Home-side counts lines: Office speaks 4 lines, Home 4. Can’t tell.
-     Office-side checks gaps: Office: 0 unanswered, 0 left out (0). Home: 0 unanswered, 2 left out (-2). One of ours.
-     Home-side checks gaps: Office: 0 unanswered, 0 left out (0). Home: 0 unanswered, 2 left out (-2). One of theirs.
-     Office-side first & last: First line Office, last line Home. Can’t tell.
-     Home-side first & last: First line Office, last line Home. Can’t tell.
-     GAME: 2 of 6 could tell. Your page leaned to the office.
+     Scrap-side lines: Scrap speaks 4 lines, Keep 4. Can’t tell.
+     Keep-side lines: Scrap speaks 4 lines, Keep 4. Can’t tell.
+     Scrap-side left out: Left out: Scrap 2, Keep 0. One of theirs.
+     Keep-side left out: Left out: Scrap 2, Keep 0. One of ours.
+     Scrap-side unanswered: Unanswered: Scrap 0, Keep 0. Can’t tell.
+     Keep-side unanswered: Unanswered: Scrap 0, Keep 0. Can’t tell.
+     Scrap-side first & last: First word Scrap, last word Keep. Can’t tell.
+     Keep-side first & last: First word Scrap, last word Keep. Can’t tell.
+     GAME: 2 of 8 could tell. Your page leaned to keeping it.
 VERDICT: The readers could tell in two of your three quarrels.
-  Should cars be banned from the city centre? Your page was placed by four (the line count and the gaps), with the ban.
+  Should phones be banned in school? Your page was placed by six (the line count, what you left out and what went unanswered), with the ban.
   Dogs or cats? Your page gave the readers nothing: no reader could tell.
-  Back to the office five days a week? Your page was placed by two (the gaps), with the office.
+  Should homework be scrapped? Your page was placed by two (what you left out), with keeping it.
   You are for the ban, and the readers found you out.
   You are for the cats. Nobody could tell.
-  You declared no view; the readers put you with the office.
+  You declared no view; the readers put you with keeping it.
