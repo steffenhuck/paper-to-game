@@ -1,5 +1,5 @@
 // Calibration check for Leibniz's Register, second build (memo §17). The mechanism is a toy; nothing in the paper is a
-// number. What is checked, over many seeds: (1) the draw (four kinds of winter, one remedy helps, one does nothing,
+// number. What is checked, over many seeds: (1) the draw (four kinds of winter, one remedy helps, one is no better than the fever alone,
 // one harms in each; every remedy helps somewhere; bark harms somewhere; the plan's kinds are neighbours as promised);
 // (2) the plan's promises (trusting last winter is right at 1691 and 1693 and loses thirty at 1692 and 1697); (3) the
 // floors on the letters (the helper of your 1695 winter is in the letters of 1694; every kind's helper is in the
@@ -15,7 +15,7 @@ out.push('     ' + SEEDS + ' games drawn; reseeded for a floor: ' + reseeded);
 check('every seed draws a game', games.every(function (g) { return g; }));
 
 // 1. the draw
-check('each kind of winter: one remedy helps, one does nothing, one harms', games.every(function (g) { return K.every(function (k) { var v = C.REMEDIES.map(function (r) { return g.effects[k][r]; }).sort(); return v.join() === 'harms,helps,none'; }); }));
+check('each kind of winter: one remedy helps, one is no better than the fever alone, one harms', games.every(function (g) { return K.every(function (k) { var v = C.REMEDIES.map(function (r) { return g.effects[k][r]; }).sort(); return v.join() === 'harms,helps,none'; }); }));
 check('every remedy helps in some kind (rest and bleeding are live)', games.every(function (g) { return C.REMEDIES.every(function (r) { return K.some(function (k) { return g.effects[k][r] === 'helps'; }); }); }));
 check('bark helps in one kind and harms in another (black to white)', games.every(function (g) { return K.some(function (k) { return g.effects[k].bark === 'helps'; }) && K.some(function (k) { return g.effects[k].bark === 'harms'; }); }));
 check('A and B share the temperature and differ in wetness (the lookalike); C differs from A in temperature only; D in both', games.every(function (g) { var L = g.letters; return M.temp(L.A) === M.temp(L.B) && M.wet(L.A) !== M.wet(L.B) && M.temp(L.A) !== M.temp(L.C) && M.wet(L.A) === M.wet(L.C) && M.temp(L.A) !== M.temp(L.D) && M.wet(L.A) !== M.wet(L.D); }));
@@ -77,6 +77,7 @@ C.ROBUST.EFFECT_ALTS.forEach(function (alt) {
 
 // 7. the words
 check('number words for the three counts', M.numberWord(5) === 'five' && M.numberWord(20) === 'twenty' && M.numberWord(30) === 'thirty');
+check('the middle word names the baseline', M.effectWord('none') === 'was no better than the fever alone' && M.effectShort('none') === 'no better');
 check('the verdict lines name the lookalike at 1692', (function () { var g = M.newGame(3); for (var t = 0; t < 2; t++) M.give(g, M.DOCTORS.oracle(g, t)); var rec = M.give(g, g.history[1].remedy); var v = M.roundVerdict(g, rec).join(' '); return v.indexOf('thirty died') >= 0 && v.indexOf('a different winter') >= 0 && v.indexOf('Nothing could have told you') >= 0; })());
 check('the verdict lines name the letters at 1695', (function () { var g = M.newGame(3); for (var t = 0; t < 5; t++) M.give(g, M.DOCTORS.oracle(g, t)); var rec = M.give(g, M.DOCTORS.reader(g, 5, M.rng(1))); var v = M.roundVerdict(g, rec).join(' '); return v.indexOf('The letters had this winter') >= 0 && v.indexOf('five died') >= 0; })());
 check('the summary counts before and after the letter', (function () { var g = M.newGame(4); for (var t = 0; t < 10; t++) M.give(g, M.DOCTORS.reader(g, t, M.rng(9))); var s = M.summary(g); return s.sick === 1000 && s.sickBefore === 400 && s.sickAfter === 600 && s.before + s.after === s.total && s.status.collection === 5 && s.others.oracle === 50 && s.letters === 72 + 6; })());

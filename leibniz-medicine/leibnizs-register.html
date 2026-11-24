@@ -79,7 +79,7 @@ b,strong{font-weight:700}
 .crowd .f{aspect-ratio:1/1}
 .crowd .f .st{fill:var(--teal)}.crowd .f .ly{fill:var(--tomato);display:none}
 .crowd .f.d .st{display:none}.crowd .f.d .ly{display:block}
-.ckey{display:flex;justify-content:space-between;font-size:11.5px;color:var(--mute);margin-top:5px}
+.ckey{display:flex;flex-direction:column;gap:1px;font-size:11.5px;color:var(--mute);margin-top:5px;line-height:1.2}
 .ckey b{color:var(--ink);font-weight:600}
 .badge{position:absolute;top:-14px;right:10px;width:44px;height:44px;border-radius:4px;background:var(--ink);display:none;align-items:center;justify-content:center}
 .badge svg{width:30px;height:30px;filter:invert(1) hue-rotate(180deg)}
@@ -172,7 +172,7 @@ b,strong{font-weight:700}
   <h1 class="title">Leibniz&rsquo;s<br><i>Register</i></h1>
   <div class="blocks"><span style="background:var(--teal)"></span><span style="background:var(--mustard)"></span><span style="background:var(--tomato)"></span><span style="background:var(--ink)"></span></div>
   <div class="setting">
-    <p>You are the physician of a province. Every winter a fever comes, a hundred sick come to you with it, and you give them one remedy for the winter. The same remedy saves them in one kind of winter and kills them in another, and all that tells the kinds apart is two things: whether the winter is cold or mild, and whether it is dry or wet.</p>
+    <p>You are the physician of a province. Every winter a fever comes, a hundred sick come to you with it, and you give them one remedy for the winter. Left to itself the fever kills about twenty of the hundred. The right remedy saves most of them; the wrong one kills more than the fever would; and the same remedy is right in one kind of winter and wrong in another. All that tells the kinds apart is two things: whether the winter is cold or mild, and whether it is dry or wet.</p>
     <p>Nobody writes the winters down. In 1694 a letter from Mr Leibniz will change that, for every doctor in the kingdom.</p>
   </div>
   <p class="acts">Read the two cards of the winter. Read the letters, once there are any. Give the hundred sick one remedy.</p>
@@ -207,7 +207,7 @@ b,strong{font-weight:700}
   <div class="crowdbox">
     <div class="badge" id="badge"><svg><use id="badgeuse" href="#i-bark"/></svg></div>
     <div class="crowd" id="crowd"></div>
-    <div class="ckey"><span>The hundred sick who came this winter</span><span><b>standing</b> alive &middot; <b style="color:var(--tomato)">lying</b> dead</span></div>
+    <div class="ckey"><span>The hundred sick who came this winter &middot; left to itself the fever kills about twenty</span><span><b>standing</b> alive &middot; <b style="color:var(--tomato)">lying</b> dead</span></div>
   </div>
   <div id="result" class="hid">
     <div class="say" id="say"></div>
@@ -240,7 +240,7 @@ b,strong{font-weight:700}
   <div class="lab" style="margin-top:14px">Your ten winters, as they were</div>
   <div class="decade" id="decade"></div>
   <div id="v-kinds"></div>
-  <p class="vl" style="color:var(--mute);font-size:13.5px">Dark cards above were written and sent; pale ones were yours alone.</p>
+  <p class="vl" style="color:var(--mute);font-size:13.5px">Dark cards above were written and sent; pale ones were yours alone. &ldquo;No better&rdquo; means no better than the fever alone, twenty of a hundred.</p>
   <p class="quote" id="v-paper"></p>
   <button class="btn" id="b-again">Play again, a new draw</button>
   <button class="btn ghost" id="b-about-end">About the paper and this game</button>
@@ -270,9 +270,9 @@ b,strong{font-weight:700}
     <h3>The winter</h3>
     <p>Two cards show the winter: cold (pale, snowflake) or mild (mustard, sun); dry (red, wind) or wet (teal, drops). That makes four kinds of winter, and the kind is all that matters.</p>
     <h3>The remedy</h3>
-    <p>Three remedies: bark, bleeding, rest. In every kind of winter one of them helps (five of a hundred die), one does nothing (twenty die), one harms (thirty die). Which is which depends only on the kind of winter, and the same remedy can help in one kind and harm in another. Tap a remedy to see the move, then tap <i>Give it to the hundred sick</i>. You see what the remedy you gave did; you never see what the others would have done.</p>
+    <p>Three remedies: bark, bleeding, rest; rest is a treatment like the others, bed, warmth and broth by your order. Left to itself the fever kills about twenty of a hundred. In every kind of winter one remedy helps (five die), one is no better than the fever alone (twenty die), one harms (thirty die). Which is which depends only on the kind of winter, and the same remedy can help in one kind and harm in another. Tap a remedy to see the move, then tap <i>Give it to the hundred sick</i>. You see what the remedy you gave did; you never see what the others would have done.</p>
     <h3>What you have to go on</h3>
-    <p>Your own past winters, every one, as small cards: the two cards of the winter, what you gave, what came of it. From 1695, the collection: every province's letters for every winter since 1694, grouped by kind of winter, with a count of how often each remedy helped, did nothing or harmed there, and your own winters among them. Tap it to open it and look for your winter's kind.</p>
+    <p>Your own past winters, every one, as small cards: the two cards of the winter, what you gave, what came of it. From 1695, the collection: every province's letters for every winter since 1694, grouped by kind of winter, with a count of how often each remedy helped, was no better than the fever alone, or harmed there, and your own winters among them. Tap it to open it and look for your winter's kind.</p>
     <h3>The end</h3>
     <p>After 1699 the game says what became of the sick, before the letter and after it, sets your ten winters beside three other doctors (memory alone, the letters from 1694, the letters from 1690, and one who knew every winter), and shows the ten winters as they were. Add <i>?seed=</i> and a number to the address to replay a draw.</p>
   </div>
@@ -287,10 +287,10 @@ b,strong{font-weight:700}
     <h3>What the paper says</h3>
     <p>Leibniz asks whether anyone in Paris is still keeping the registers of baptisms and funerals, and points to the Bills of Mortality in London, from which able people have drawn observations. One could go further: an annual history of medicine for each province, on the plan of Bernardino Ramazzini in Modena, who writes first of the seasons and the constitution of the air, then of how the grains and fruits did and what diseases the animals had, then of the chief matter, the health of human bodies, and above all of which medicines had the best effect, what harms and what helps. In two such years Ramazzini has already seen great variations, "as it were changes from black to white", quinquina (cinchona bark, the remedy for intermittent fevers) succeeding "incomparably better in one year than in the other". And years similar to past ones often return, so the past would be of the greatest use in deciding; "whereas now we are reduced to learning almost always from scratch at the expense of the sick". What a treasure trove there would be if this had been done for a while; but it is always time to begin good things. It costs scarcely any trouble: a letter of a few pages a year from an able practitioner in each province, to the First Doctor of the King, by public order. France, with its police, could do it best, and the king would deserve more by it than the kings who gave their names to a few medicines, or than Alfonso and Ulugh Beg by their astronomy. The soul and the body, he ends, are the first things that should be thought about, and the last that are.</p>
     <h3>What the game does</h3>
-    <p>It gives you the practitioner's winter, ten times. A winter has a kind, and the kind is two things you can see: cold or mild, dry or wet. A hundred sick come with the winter's fever and you give them one remedy: bark, bleeding or rest. In every kind of winter one remedy helps, one does nothing and one harms, and which is which depends only on the kind; the same bark helps in one kind and harms in another. You see what the remedy you gave did and nothing about the others. For four winters you have only your own past winters to go on, and you can see all of them: your memory is not the problem, your sample is. One province meets one winter a year, and a kind you have never had tells you nothing. Then Leibniz's letter arrives, and by public order every physician in every province writes a few lines a year to the First Doctor, who sends the collection back. From 1695 you read, for each kind of winter, what twelve other doctors gave and what came of it; by 1696 the collection holds the remedy that helps in every kind. The hard part dissolves, and that dissolving is what the game is for. The other doctors choose at random, so the collection shows what harmed as well as what helped; the draw is checked so that the letters of 1694 hold the remedy for your 1695 winter and the letters of 1694 and 1695 hold it for every kind.</p>
+    <p>It gives you the practitioner's winter, ten times. A winter has a kind, and the kind is two things you can see: cold or mild, dry or wet. A hundred sick come with the winter's fever and you give them one remedy: bark, bleeding or rest. Left to itself the fever kills about twenty of a hundred, and the game says so. In every kind of winter one remedy helps (five die), one is no better than the fever alone (twenty), and one harms (thirty), and which is which depends only on the kind; rest is a treatment like the others, bed, warmth and broth by the doctor's order; the same bark helps in one kind and harms in another. You see what the remedy you gave did and nothing about the others. For four winters you have only your own past winters to go on, and you can see all of them: your memory is not the problem, your sample is. One province meets one winter a year, and a kind you have never had tells you nothing. Then Leibniz's letter arrives, and by public order every physician in every province writes a few lines a year to the First Doctor, who sends the collection back. From 1695 you read, for each kind of winter, what twelve other doctors gave and what came of it; by 1696 the collection holds the remedy that helps in every kind. The hard part dissolves, and that dissolving is what the game is for. The other doctors choose at random, so the collection shows what harmed as well as what helped; the draw is checked so that the letters of 1694 hold the remedy for your 1695 winter and the letters of 1694 and 1695 hold it for every kind.</p>
     <p>The plan of your own ten winters is fixed and the kinds are drawn fresh each game: a winter that repeats, when trusting last winter is right; a lookalike, one card the same and the other different, when last winter's remedy harms; a new kind with nothing to read; and from 1695 winters the letters answer. At the end the game sets your ten winters beside three other doctors on the same winters: one with nothing but his own, who repeats what helped last year and otherwise tries another; one who read the letters from 1694; and one who had had letters from 1690, as Leibniz wished it had been done "for a while now". The score, the dead out of a thousand sick, is the game's; the unit, the sick, is Leibniz's.</p>
     <h3>What kind of mechanism this is</h3>
-    <p><b>Toy.</b> The game runs a model built to illustrate the paper's argument, and where the argument had to be made exact, the toy chose: a winter's kind is two cards; a remedy's effect depends on the kind and on nothing else; five, twenty and thirty of a hundred die under the remedy that helps, does nothing and harms; twelve other provinces, each with its own winter and a doctor who chooses at random; and the plan of which kind comes to you when. There is no noise: the same remedy in the same kind of winter does the same thing every time, everywhere.</p>
+    <p><b>Toy.</b> The game runs a model built to illustrate the paper's argument, and where the argument had to be made exact, the toy chose: a winter's kind is two cards; a remedy's effect depends on the kind and on nothing else; five, twenty and thirty of a hundred die under the remedy that helps, is no better than the fever alone, and harms, twenty being the fever's own toll; twelve other provinces, each with its own winter and a doctor who chooses at random; and the plan of which kind comes to you when. There is no noise: the same remedy in the same kind of winter does the same thing every time, everywhere.</p>
     <ul>
       <li><b>What the game demonstrates:</b> that under these rules a doctor with only his own winters is right when the winter repeats and wrong when a lookalike comes; that a collection of every province's winters answers, within a year or two, what one province cannot learn in a decade; and that the collection cannot answer for the winters before it began. The headless check runs the four doctors over three hundred draws and finds the same order every time, with other sizes for the dead and with noise added.</li>
       <li><b>What the game assumes:</b> everything in the paragraph above, and in particular that the other doctors go on choosing at random after the letters arrive, so that the collection keeps showing harm as well as help. A doctor with only his own winters does about as well over the ten as one who gives the same remedy every winter; that is the plan's doing, and the order of the four doctors does not depend on it.</li>
@@ -316,7 +316,7 @@ b,strong{font-weight:700}
     YEARS: [1690, 1691, 1692, 1693, 1694, 1695, 1696, 1697, 1698, 1699], // our choice: ten winters, one tap each; the letter is dated 1694
     LETTER_YEAR: 1694,            // the letter in the Journal des sçavans, 26 July 1694: from this year every doctor writes; the letters of a year reach you the next year
     SICK: 100,                    // our choice: "a hundred sick" a winter, so every count on screen is out of a hundred
-    DEAD: { helps: 5, none: 20, harms: 30 },   // our choice: the paper says "black to white", "incomparably better"; these are the sizes
+    DEAD: { helps: 5, none: 20, harms: 30 },   // our choice: the paper says "black to white", "incomparably better"; these are the sizes. 'none' is the fever's own toll, left to itself, and is shown to the player as the baseline
     TEMPS: ['cold', 'mild'],      // our choice: a winter fever; all that matters is the winter, in two things the player can see
     WETS: ['dry', 'wet'],
     REMEDIES: ['bark', 'bleed', 'rest'],   // bark is the paper's (quinquina, note 3); bleeding and rest are ours, so the choice has three live options
@@ -400,7 +400,7 @@ b,strong{font-weight:700}
   function deadFor(effect, DEAD) { return (DEAD || CONFIG.DEAD)[effect]; }
 
   // The collection at time t: every letter you hold, with your own written winters, grouped by kind of winter, with
-  // a count per remedy of how many letters said it helped, did nothing or harmed.
+  // a count per remedy of how many letters said it helped, was no better than the fever alone, or harmed.
   function collection(game, t) {
     var ys = mailYears(game, t), rows = [];
     ys.forEach(function (y) { game.mail[y].forEach(function (l) { rows.push(l); }); });
@@ -522,7 +522,8 @@ b,strong{font-weight:700}
   function numberWord(n) { if (NUM[n] !== undefined) return NUM[n]; return String(n); }
   function numberWordAny(n) { return SMALL[n] !== undefined ? SMALL[n] : String(n); }
   function remedyName(r) { return { bark: 'bark', bleed: 'bleeding', rest: 'rest' }[r]; }
-  function effectWord(e) { return { helps: 'helped', none: 'did nothing', harms: 'harmed' }[e]; }
+  function effectWord(e) { return { helps: 'helped', none: 'was no better than the fever alone', harms: 'harmed' }[e]; }   // the middle word is judged against the fever's own toll, which the screen states
+  function effectShort(e) { return { helps: 'helped', none: 'no better', harms: 'harmed' }[e]; }   // for small cards and tallies; 'no better' is defined on screen as 'no better than the fever alone'
   function kindName(k) { return temp(k) + ', ' + wet(k); }
   function capital(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
   function listYears(ys) { if (ys.length === 1) return String(ys[0]); return ys.slice(0, -1).join(', ') + ' and ' + ys[ys.length - 1]; }
@@ -535,7 +536,7 @@ b,strong{font-weight:700}
     return 'about one in three';
   }
 
-  var M = { CONFIG: CONFIG, KINDS: KINDS, rng: rng, newGame: newGame, give: give, lookup: lookup, collection: collection, roundVerdict: roundVerdict, kindAt: kindAt, yearAt: yearAt, hasRegister: hasRegister, mailYears: mailYears, effectOf: effectOf, helper: helper, temp: temp, wet: wet, DOCTORS: DOCTORS, playDoctor: playDoctor, withMailFrom1690: withMailFrom1690, summary: summary, numberWord: numberWord, numberWordAny: numberWordAny, remedyName: remedyName, effectWord: effectWord, kindName: kindName, listYears: listYears, roughOf: roughOf, known: known };
+  var M = { CONFIG: CONFIG, KINDS: KINDS, rng: rng, newGame: newGame, give: give, lookup: lookup, collection: collection, roundVerdict: roundVerdict, kindAt: kindAt, yearAt: yearAt, hasRegister: hasRegister, mailYears: mailYears, effectOf: effectOf, helper: helper, temp: temp, wet: wet, DOCTORS: DOCTORS, playDoctor: playDoctor, withMailFrom1690: withMailFrom1690, summary: summary, numberWord: numberWord, numberWordAny: numberWordAny, remedyName: remedyName, effectWord: effectWord, effectShort: effectShort, kindName: kindName, listYears: listYears, roughOf: roughOf, known: known };
   if (typeof module !== 'undefined' && module.exports) module.exports = M; else root.MECH = M;
 })(typeof window !== 'undefined' ? window : this);
 
@@ -549,7 +550,7 @@ b,strong{font-weight:700}
   var game = M.newGame(seed), t = 0, chosen = null;
   window.__game = game;
   var RN = { bark: 'Bark', bleed: 'Bleeding', rest: 'Rest' };
-  var DEF0 = '<b>Bark</b> is the powdered bark of the cinchona tree. <b>Bleeding</b> opens a vein with a lancet. <b>Rest</b> is bed and broth and no physic. Tap one to see the move; then give it.';
+  var DEF0 = '<b>Bark</b> is the powdered bark of the cinchona tree. <b>Bleeding</b> opens a vein with a lancet. <b>Rest</b> is bed, warmth and broth by your order, and neither bark nor lancet. Tap one to see the move; then give it.';
 
   function show(id) { document.querySelectorAll('.screen').forEach(function (s) { s.classList.toggle('on', s.id === id); }); window.scrollTo(0, 0); }
   function openOv(id) { $(id).classList.add('on'); document.body.classList.add('lock'); $(id).scrollTop = 0; }
@@ -568,7 +569,7 @@ b,strong{font-weight:700}
   function renderGoon() {
     var H = game.history.slice(0, t), own = $('own'), no = $('nothing');
     if (!H.length) { own.innerHTML = ''; no.classList.remove('hid'); no.textContent = 'Nothing. You have just arrived, and nobody has written the winters down.'; }
-    else { no.classList.add('hid'); own.innerHTML = H.map(function (h) { return '<div class="mem"><div class="my">' + h.year + '</div>' + miniSq(h.kind) + '<div class="mr">' + RN[h.remedy] + '<br><span class="' + (h.effect === 'helps' ? 'h' : h.effect === 'harms' ? 'x' : '') + '">' + M.effectWord(h.effect) + '</span></div></div>'; }).join(''); }
+    else { no.classList.add('hid'); own.innerHTML = H.map(function (h) { return '<div class="mem"><div class="my">' + h.year + '</div>' + miniSq(h.kind) + '<div class="mr">' + RN[h.remedy] + '<br><span class="' + (h.effect === 'helps' ? 'h' : h.effect === 'harms' ? 'x' : '') + '">' + M.effectShort(h.effect) + '</span></div></div>'; }).join(''); }
     var b = $('b-book'), year = M.yearAt(game, t), col = M.collection(game, t);
     if (year < C.LETTER_YEAR) { b.className = 'book none'; b.disabled = true; b.innerHTML = '<div><div class="bt">No letters</div><div class="bs">Nobody writes the winters down.</div></div>'; }
     else if (col.count === 0) { b.className = 'book none'; b.disabled = true; b.innerHTML = '<div><div class="bt">No letters yet</div><div class="bs">Every doctor writes this winter down. The collection comes back next winter.</div></div>'; }
@@ -604,7 +605,7 @@ b,strong{font-weight:700}
     chosen = r;
     document.querySelectorAll('#rem button').forEach(function (b) { b.classList.toggle('sel', b.getAttribute('data-r') === r); });
     $('badgeuse').setAttribute('href', '#i-' + r); $('badge').classList.add('on');
-    $('def').innerHTML = '<b>' + RN[r] + '</b> for the hundred sick, all winter. ' + { bark: 'The powdered bark of the cinchona tree, in wine.', bleed: 'A vein opened with a lancet, a bowl held under it.', rest: 'Bed and broth and no physic at all.' }[r] + ' Nothing has happened yet.';
+    $('def').innerHTML = '<b>' + RN[r] + '</b> for the hundred sick, all winter. ' + { bark: 'The powdered bark of the cinchona tree, in wine.', bleed: 'A vein opened with a lancet, a bowl held under it.', rest: 'Bed, warmth and broth by your order, and neither bark nor lancet.' }[r] + ' Nothing has happened yet.';
     $('b-give').classList.remove('dim'); $('b-give').textContent = 'Give ' + RN[r].toLowerCase() + ' to the hundred sick';
   }
 
@@ -624,7 +625,7 @@ b,strong{font-weight:700}
     var lines = M.roundVerdict(game, rec);
     $('say').innerHTML = lines.map(function (l, i) { return '<p' + (i === 0 ? ' class="lead"' : '') + '>' + l + '</p>'; }).join('');
     var k = $('kept');
-    if (rec.written) { k.className = 'kept ink'; k.innerHTML = remIcon('book') + '<div><b>Written and sent.</b> ' + rec.year + ', a ' + M.kindName(rec.kind) + ' winter, ' + RN[rec.remedy].toLowerCase() + ' ' + M.effectWord(rec.effect) + ', ' + M.numberWord(rec.dead) + ' of a hundred died. Every province will read it next winter.</div>'; }
+    if (rec.written) { k.className = 'kept ink'; k.innerHTML = remIcon('book') + '<div><b>Written and sent.</b> ' + rec.year + ', a ' + M.kindName(rec.kind) + ' winter, ' + RN[rec.remedy].toLowerCase() + ' ' + M.effectShort(rec.effect) + ', ' + M.numberWord(rec.dead) + ' of a hundred died. Every province will read it next winter.</div>'; }
     else { k.className = 'kept wash'; k.innerHTML = remIcon('head') + '<div><b>Yours alone.</b> You will remember it; nobody else will ever know it happened.</div>'; }
     $('now').textContent = (t + 1 < game.plan.length) ? 'Then the next winter' : 'Then the century turns';
     $('b-next').textContent = (t + 1 < game.plan.length) ? 'Next winter, ' + game.years[t + 1] : 'What became of the sick';
@@ -645,8 +646,8 @@ b,strong{font-weight:700}
     $('bookintro').textContent = col.count + ' letters: every province’s winter' + (col.years.length === 1 ? ' of ' + col.years[0] : 's from ' + col.years[0] + ' to ' + col.years[col.years.length - 1]) + ', what its doctor gave the sick, and what came of it, with your own among them. Sorted by kind of winter.';
     $('thisw').innerHTML = miniSq(kind) + '<div>This winter, yours, is <b>' + M.kindName(kind) + '</b>. Find that kind below.</div>';
     $('groups').innerHTML = M.KINDS.map(function (k) {
-      var g = col.groups[k], tl = C.REMEDIES.map(function (x) { var y = g.tally[x]; var body = y.n === 0 ? '<span class="z">not tried</span>' : [y.helps ? '<span class="h">helped ' + y.helps + '</span>' : '', y.none ? '<span class="z">did nothing ' + y.none + '</span>' : '', y.harms ? '<span class="x">harmed ' + y.harms + '</span>' : ''].filter(Boolean).join('<br>'); return '<div>' + remIcon(x) + '<b>' + RN[x] + '</b>' + body + '</div>'; }).join('');
-      var rows = g.rows.length ? '<div class="rows">' + g.rows.map(function (l) { return '<div class="' + (l.province === 'you' ? 'you' : '') + '"><span>' + l.year + '</span><span>' + (l.province === 'you' ? 'You' : l.province) + '</span><span>' + RN[l.remedy] + ' <span class="' + (l.effect === 'helps' ? 'h' : l.effect === 'harms' ? 'x' : '') + '">' + M.effectWord(l.effect) + '</span>, ' + M.numberWord(l.dead) + ' died</span></div>'; }).join('') + '</div>' : '<p class="empty">No province has had this kind of winter yet.</p>';
+      var g = col.groups[k], tl = C.REMEDIES.map(function (x) { var y = g.tally[x]; var body = y.n === 0 ? '<span class="z">not tried</span>' : [y.helps ? '<span class="h">helped ' + y.helps + '</span>' : '', y.none ? '<span class="z">no better ' + y.none + '</span>' : '', y.harms ? '<span class="x">harmed ' + y.harms + '</span>' : ''].filter(Boolean).join('<br>'); return '<div>' + remIcon(x) + '<b>' + RN[x] + '</b>' + body + '</div>'; }).join('');
+      var rows = g.rows.length ? '<div class="rows">' + g.rows.map(function (l) { return '<div class="' + (l.province === 'you' ? 'you' : '') + '"><span>' + l.year + '</span><span>' + (l.province === 'you' ? 'You' : l.province) + '</span><span>' + RN[l.remedy] + ' <span class="' + (l.effect === 'helps' ? 'h' : l.effect === 'harms' ? 'x' : '') + '">' + M.effectShort(l.effect) + '</span>, ' + M.numberWord(l.dead) + ' died</span></div>'; }).join('') + '</div>' : '<p class="empty">No province has had this kind of winter yet.</p>';
       return '<div class="group"><div class="gh">' + miniSq(k) + '<b>' + cap(M.kindName(k)) + ' winters</b></div><div class="tally">' + tl + '</div>' + rows + '</div>';
     }).join('');
     openOv('book');
@@ -673,7 +674,7 @@ b,strong{font-weight:700}
     $('docs').innerHTML = docs.map(function (d) { var n = Math.round(d[1] / 10), f = ''; for (var i = 0; i < n; i++) f += '<i></i>'; return '<div class="doc ' + d[2] + '"><div class="dn"><b>' + d[0] + '</b>' + (d[2] ? 'ten winters' : 'the same winters') + '</div><div class="dr">' + f + '</div><div class="dc">' + d[1] + '</div></div>'; }).join('');
     var TAG = { 'new': 'new, nothing to read', 'last': 'like last winter', 'own': 'one of your own', 'collection': 'in the letters', 'partial': 'letters, not the remedy' };
     $('decade').innerHTML = H.map(function (h) { return '<div class="dy ' + (h.written ? 'ink' : '') + '"><div class="my">' + h.year + '</div>' + miniSq(h.kind) + '<div class="dd">' + RN[h.remedy] + '<br>' + M.effectWord(h.effect) + '</div><div class="tag">' + TAG[h.lookup.status] + '</div></div>'; }).join('');
-    $('v-kinds').innerHTML = '<div class="lab" style="margin:12px 0 4px">The four kinds of winter, and what helped</div>' + M.KINDS.map(function (k) { var ys = H.filter(function (h) { return h.kind === k; }).map(function (h) { return h.year; }); var e = game.effects[k]; return '<div class="kind">' + miniSq(k) + '<div><b>' + cap(M.kindName(k)) + '</b>: ' + C.REMEDIES.map(function (x) { return RN[x].toLowerCase() + ' ' + M.effectWord(e[x]); }).join(', ') + '<br><span>' + (ys.length ? 'yours in ' + M.listYears(ys) : 'never yours') + '</span></div></div>'; }).join('');
+    $('v-kinds').innerHTML = '<div class="lab" style="margin:12px 0 4px">The four kinds of winter, and what helped</div>' + M.KINDS.map(function (k) { var ys = H.filter(function (h) { return h.kind === k; }).map(function (h) { return h.year; }); var e = game.effects[k]; return '<div class="kind">' + miniSq(k) + '<div><b>' + cap(M.kindName(k)) + '</b>: ' + C.REMEDIES.map(function (x) { return RN[x].toLowerCase() + ' ' + M.effectShort(e[x]); }).join(', ') + '<br><span>' + (ys.length ? 'yours in ' + M.listYears(ys) : 'never yours') + '</span></div></div>'; }).join('');
     $('v-paper').innerHTML = 'Leibniz, 1694: it is always time to begin good things. A letter of a few pages a year from each province would do; it has only to be desired, and costs scarcely any trouble. The soul and the body are the first things that should be thought about, and the last that are.';
     $('seedline').textContent = 'Draw ' + game.seed + '. Add ?seed=' + game.seed + ' to the address to play these same winters again.';
     show('s-end');
