@@ -9,51 +9,55 @@ var CONFIG = {
   // How many ruled lines a thing takes on the page. Our choice: a reason in full is twice a reason in brief; a reply is one line.
   LINES: { full: 2, brief: 1, reply: 1 },
 
-  // The three rules the partisan readers apply, one pair of readers (one per side) each. Leibniz's readers "examine you very
-  // closely, picking out words everywhere" (A IV 3, 207); ours count three countable things, the forms of ploys 1, 2 and 4
-  // (A IV 3, 209–210): the order, the length, the answers. Any difference at all places the writer: no tolerance (our choice).
+  // The four rules the partisan readers apply, one pair of readers (one per side) each. Leibniz's readers "examine you very
+  // closely, picking out words everywhere" (A IV 3, 207); ours count four countable things: the length (ploy 2), the points
+  // left out (note 5, "so that they cannot say that their arguments have been neglected"), the answers (ploy 4) and the
+  // order (ploy 1). Any difference at all places the writer: no tolerance (our choice). Each rule is one sentence a
+  // teenager can check against the page; nothing is netted (revision 2).
   READERS: [
-    { key: 'lines', label: 'counts lines', rule: 'counts the lines each side speaks' },
-    { key: 'gaps', label: 'checks gaps', rule: 'for each side, counts its reasons left standing with no answer, minus its reasons left off the page' },
-    { key: 'ends', label: 'first & last', rule: 'reads only the first line and the last' }
+    { key: 'lines', label: 'lines', rule: 'who speaks more lines' },
+    { key: 'leftout', label: 'left out', rule: 'whose points you left out' },
+    { key: 'unanswered', label: 'unanswered', rule: 'whose points stand with no answer under them' },
+    { key: 'ends', label: 'first & last', rule: 'who gets the first word and the last' }
   ],
 
-  // The three quarrels, written for the game (Leibniz's was the Church: A IV 3, 212, note 1). Side 0 is drawn violet, side 1
-  // tangerine. budget: lines on the page (ploy 2, "disputes expand into volumes", turned into a constraint). min: the fewest
-  // lines the readers will read as a report (our choice: keeps the empty page from passing). A reason has a full form and a
-  // brief form, both its own side's words; its reply is the other side's one line.
+  // The three quarrels, written for the game (Leibniz's was the Church: A IV 3, 212, note 1), chosen so that a teenager has
+  // a view on each. Side 0 is drawn violet, side 1 tangerine. budget: lines on the page (ploy 2, "disputes expand into
+  // volumes", turned into a constraint). min: the fewest lines the readers will read as a report (our choice: keeps the
+  // empty page from passing). A point has a full form and a short form, both its own side's words; its reply is the other
+  // side's one line.
   QUARRELS: [
     {
-      slug: 'cars', question: 'Should cars be banned from the city centre?', budget: 10, min: 6,
+      slug: 'phones', question: 'Should phones be banned in school?', budget: 10, min: 6,
       sides: [
         { name: 'Ban', side: 'the ban side', says: 'The ban side says', stance: 'Ban them', of: 'the ban' },
-        { name: 'Cars', side: 'the car side', says: 'The car side says', stance: 'Let them drive', of: 'the cars' }
+        { name: 'Phones', side: 'the phone side', says: 'The phone side says', stance: 'Let us keep them', of: 'the phones' }
       ],
       reasons: [
         { id: 'b1', side: 0,
-          full: 'Nobody walks or cycles happily beside moving metal. Take the cars out and the street becomes a place rather than a route.',
-          brief: 'A street without cars becomes a place, not a route.',
-          reply: 'A place for whom? For the people who can get there, which is fewer.' },
+          full: 'Nobody can learn with a buzzing pocket. Take the phones away and whole lessons come back.',
+          brief: 'A buzzing pocket makes lessons impossible.',
+          reply: 'Then take away the buzzing, not the phone. Silent mode exists.' },
         { id: 'b2', side: 0,
-          full: 'Half the air in the centre is exhaust. Every city that has tried a ban measured cleaner air within a year.',
-          brief: 'The air gets cleaner, and quickly; every trial shows it.',
-          reply: 'Cleaner on the closed streets; dirtier on the ring road the cars moved to.' },
+          full: 'Break time without phones is break time with people. Schools that tried it saw the corridors fill with talk again.',
+          brief: 'Without phones, break time has people in it again.',
+          reply: 'Or it has bored kids staring at walls, counting the minutes.' },
         { id: 'b3', side: 0,
-          full: 'Shops do better, not worse: people on foot stop, browse and come back. Drivers pass through.',
-          brief: 'Shops gain: people on foot stop and browse; drivers pass.',
-          reply: 'Boutiques gain. The shop that sells fridges loses; nobody carries a fridge home on foot.' },
-        { id: 'c1', side: 1,
-          full: 'The old, the ill and the parent with twins and the shopping cannot be told to cycle. For them the car is the city’s front door.',
-          brief: 'For the old, the ill and the laden, the car is the front door.',
-          reply: 'Exemptions and vans cover those. The ban is for the healthy commuter alone in two tonnes of steel.' },
-        { id: 'c2', side: 1,
-          full: 'A ban does not abolish trips, it reroutes them. The traffic goes somewhere, usually the poorer streets just outside the cordon.',
-          brief: 'The traffic does not vanish; it moves to the streets outside.',
-          reply: 'Some of it evaporates: once driving stops being easy, many trips are never made.' },
-        { id: 'c3', side: 1,
-          full: 'Drivers already pay road tax, parking and fuel duty to use their own city. Shutting them out is a tax rise by other means.',
-          brief: 'Drivers have paid for the streets they are being shut out of.',
-          reply: 'Road tax pays for a fraction of the roads; everyone else pays the rest through everything else.' }
+          full: 'Half the bullying now happens on a screen, during the school day, where no teacher can see it.',
+          brief: 'Bullying moved onto screens; a ban moves it back where adults can see.',
+          reply: 'It moves it to after four o’clock. The screen comes home.' },
+        { id: 'p1', side: 1,
+          full: 'A phone is a calculator, a dictionary, a camera and a map. Banning it bans every tool a working adult uses.',
+          brief: 'A phone is every tool an adult uses. Banning it is absurd.',
+          reply: 'Adults are not fourteen, and do not have maths next period.' },
+        { id: 'p2', side: 1,
+          full: 'Parents want to reach their kids, and kids want to reach their parents. A ban cuts that line for seven hours a day.',
+          brief: 'A ban cuts the line home for seven hours a day.',
+          reply: 'The school office has had a phone for a hundred years.' },
+        { id: 'p3', side: 1,
+          full: 'You do not learn to handle a thing by having it taken away. School is exactly where to learn to put the phone down.',
+          brief: 'You learn to put a phone down by practising, not by losing it.',
+          reply: 'You also do not learn to swim by being thrown in the deep end.' }
       ]
     },
     {
@@ -75,51 +79,51 @@ var CONFIG = {
           full: 'Dogs do jobs: they herd, guide, and find the lost and the buried. A cat has never found anyone.',
           brief: 'Dogs work: they guide, herd and rescue.',
           reply: 'Cats cleared the granaries of rats and made cities possible. Quietly.' },
-        { id: 'k1', side: 1,
+        { id: 'c1', side: 1,
           full: 'A cat asks nothing of you and gives you, on its own terms, something close to respect. You have to earn it.',
           brief: 'A cat’s affection is earned, so it means something.',
           reply: 'Earned by feeding it. That is not respect, it is a contract.' },
-        { id: 'k2', side: 1,
+        { id: 'c2', side: 1,
           full: 'A cat can be left alone for a weekend with a bowl and a box. Try that with a labrador.',
           brief: 'A cat can be left alone with a bowl for a weekend.',
           reply: 'A cat can be left alone because it does not mind whether you come back.' },
-        { id: 'k3', side: 1,
+        { id: 'c3', side: 1,
           full: 'Cats are clean, quiet and small. They fit a flat, a budget and a city; a dog needs a garden and a van.',
           brief: 'Cats fit a flat, a budget and a city.',
           reply: 'So does a dachshund.' }
       ]
     },
     {
-      slug: 'office', question: 'Back to the office five days a week?', budget: 10, min: 6,
+      slug: 'homework', question: 'Should homework be scrapped?', budget: 10, min: 6,
       sides: [
-        { name: 'Office', side: 'the office side', says: 'The office side says', stance: 'Back to the office', of: 'the office' },
-        { name: 'Home', side: 'the home side', says: 'The home side says', stance: 'Stay home', of: 'home' }
+        { name: 'Scrap', side: 'the scrap side', says: 'The scrap side says', stance: 'Scrap it', of: 'scrapping it' },
+        { name: 'Keep', side: 'the keep side', says: 'The keep side says', stance: 'Keep it', of: 'keeping it' }
       ],
       reasons: [
-        { id: 'o1', side: 0,
-          full: 'The ideas that matter are had at the coffee machine and in the corridor, not on a scheduled call. You cannot schedule a chance.',
-          brief: 'The good ideas happen in corridors, not on calls.',
-          reply: 'Count them. The corridor’s ideas are mostly gossip; the written ones get read.' },
-        { id: 'o2', side: 0,
-          full: 'New people learn by watching. A twenty-three-year-old on a laptop in a bedsit learns nothing from anyone.',
-          brief: 'The young learn by watching, and there is nobody to watch at home.',
-          reply: 'Then bring the juniors in and leave the rest. A five-day rule for everyone is a blunt tool.' },
-        { id: 'h1', side: 1,
-          full: 'Two hours a day on a train are two hours nobody is paid for. Give them back and people are rested, and work no worse.',
-          brief: 'The commute is unpaid time; give it back.',
-          reply: 'The commute is also where the day begins and ends; without it, work leaks into everything.' },
-        { id: 'h2', side: 1,
-          full: 'Output went up, not down, when the offices closed. The numbers are in; the complaint is about control.',
-          brief: 'Output rose when the offices closed; the complaint is about control.',
-          reply: 'Output of the things already set up. Nothing new got started.' },
-        { id: 'h3', side: 1,
-          full: 'Parents, carers and anyone outside the big city can finally hold a good job. Five days in the office quietly fires them.',
-          brief: 'Five days in the office quietly fires parents and carers.',
-          reply: 'Or hires them part-time, which was always the honest deal.' },
-        { id: 'h4', side: 1,
-          full: 'Empty offices still cost rent. The firm that lets people stay home saves on floors and spends it on people.',
-          brief: 'Offices are rent; home is free.',
-          reply: 'The lease is signed either way; the saving is a slide, not a cheque.' }
+        { id: 's1', side: 0,
+          full: 'School already takes seven hours. Homework takes the evening too, and nobody else works a double shift at twelve.',
+          brief: 'Seven hours of school, then an evening shift. Nobody else works that.',
+          reply: 'Half an hour a night is not a shift. It is practice.' },
+        { id: 's2', side: 0,
+          full: 'Homework rewards the kids with a quiet room and a parent who can help. The rest fall further behind every night.',
+          brief: 'Homework rewards a quiet room and a parent who can help.',
+          reply: 'So does everything. Homework at least gives the rest a chance to catch up.' },
+        { id: 's3', side: 0,
+          full: 'The studies agree: in primary school homework does nothing for results, and in secondary school very little.',
+          brief: 'The studies find it does little or nothing for results.',
+          reply: 'Results are not the point. Doing a thing alone, without a teacher, is.' },
+        { id: 's4', side: 0,
+          full: 'What homework mostly teaches is how to copy it from a friend at one minute to nine.',
+          brief: 'It mostly teaches copying from a friend before the bell.',
+          reply: 'That is a lesson about the kid, not about homework.' },
+        { id: 'k1', side: 1,
+          full: 'You cannot learn an instrument, a language or algebra in the lesson alone. The practice between lessons is where it sticks.',
+          brief: 'The practice between lessons is where learning sticks.',
+          reply: 'Then make the lesson longer and the evening free.' },
+        { id: 'k2', side: 1,
+          full: 'Nobody at work or university will sit beside you. Homework is the first time you manage your own time, and fail, safely.',
+          brief: 'Homework is the first time you manage your own time.',
+          reply: 'Failing safely still means failing every night for years.' }
       ]
     }
   ],
@@ -196,8 +200,8 @@ function sums(q, page) {
 function leans(s) {
   return {
     lines: s.lines[0] - s.lines[1],
-    // A side is favoured by the other side's reasons being left out, and by its own reasons standing unanswered.
-    gaps: (s.leftOut[1] - s.leftOut[0]) + (s.unanswered[0] - s.unanswered[1]),
+    leftout: s.leftOut[1] - s.leftOut[0],           // a side is favoured by the other side's points being left out
+    unanswered: s.unanswered[0] - s.unanswered[1],  // and by its own points standing with no answer
     ends: s.ends[0] - s.ends[1]
   };
 }
@@ -211,8 +215,9 @@ function readPage(q, page) {
   for (var k = 0; k < CONFIG.READERS.length; k++) {
     var rule = CONFIG.READERS[k], lean = L[rule.key], placed = placedBy(lean), sum;
     if (rule.key === 'lines') sum = A + ' speaks ' + plural(s.lines[0], 'line') + ', ' + B + ' ' + s.lines[1] + '.';
-    else if (rule.key === 'gaps') sum = A + ': ' + s.unanswered[0] + ' unanswered, ' + s.leftOut[0] + ' left out (' + (s.unanswered[0] - s.leftOut[0]) + '). ' + B + ': ' + s.unanswered[1] + ' unanswered, ' + s.leftOut[1] + ' left out (' + (s.unanswered[1] - s.leftOut[1]) + ').';
-    else sum = page.length ? 'First line ' + q.sides[speakerOf(q, page[0])].name + ', last line ' + q.sides[speakerOf(q, page[page.length - 1])].name + '.' : 'An empty page.';
+    else if (rule.key === 'leftout') sum = 'Left out: ' + A + ' ' + s.leftOut[0] + ', ' + B + ' ' + s.leftOut[1] + '.';
+    else if (rule.key === 'unanswered') sum = 'Unanswered: ' + A + ' ' + s.unanswered[0] + ', ' + B + ' ' + s.unanswered[1] + '.';
+    else sum = page.length ? 'First word ' + q.sides[speakerOf(q, page[0])].name + ', last word ' + q.sides[speakerOf(q, page[page.length - 1])].name + '.' : 'An empty page.';
     for (var side = 0; side < 2; side++) {
       var call = placed === null ? CONFIG.WORDS.cant : placed === side ? CONFIG.WORDS.ours : CONFIG.WORDS.theirs;
       readers.push({ side: side, key: rule.key, label: rule.label, placed: placed, lean: lean, sum: sum, call: call, text: sum + ' ' + call });
@@ -228,7 +233,7 @@ function readPage(q, page) {
 // What the game says, in its own voice, when the placards are up.
 function statement(q, n, direction) {
   if (n === 0) return CONFIG.WORDS.nobody;
-  var head = (n === 6 ? 'All six' : n + ' of 6') + ' could tell.';
+  var head = (n === 8 ? 'All eight' : n + ' of 8') + ' could tell.';
   if (direction === 'split') return head + ' ' + CONFIG.WORDS.split;
   return head + ' Your page leaned to ' + q.sides[direction].of + '.';
 }
@@ -255,9 +260,9 @@ function next(game) {
   game.q++; game.stage = 'stance'; game.page = []; return game;
 }
 
-function numberWord(n) { return ['no', 'one', 'two', 'three', 'four', 'five', 'six'][n] || String(n); }
+function numberWord(n) { return ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'][n] || String(n); }
 function ruleWords(keys) {
-  var w = { lines: 'the line count', gaps: 'the gaps', ends: 'the first line and the last' };
+  var w = { lines: 'the line count', leftout: 'what you left out', unanswered: 'what went unanswered', ends: 'the first word and the last' };
   var out = keys.map(function (k) { return w[k]; });
   return out.length <= 1 ? out.join('') : out.slice(0, -1).join(', ') + ' and ' + out[out.length - 1];
 }
@@ -280,7 +285,7 @@ function verdict(game) {
     else s = 'You are for ' + q.sides[st].of + ', and the readers put you with ' + q.sides[dir].of + '. Bending over backwards is the other way of leaning.';
     stood.push(s);
   }
-  var head = clean === Q.length ? 'No reader could tell. Eighteen partisans read you, and not one could place you.'
+  var head = clean === Q.length ? 'No reader could tell. Twenty-four partisans read you, and not one could place you.'
     : clean === 0 ? 'The readers could tell every time.'
     : 'The readers could tell in ' + numberWord(Q.length - clean) + ' of your three quarrels.';
   return { headline: head, clean: clean, quarrels: quarrels, stood: stood };

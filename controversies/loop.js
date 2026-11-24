@@ -12,14 +12,14 @@ function move(idx, d) { var q = M.quarrel(g); g.page = M.moveItem(q, g.page, idx
 function pub() { var q = M.quarrel(g), r = M.publish(g); say('  PUBLISH\n     ' + show(q, r.page)); r.readers.forEach(function (x) { say('     ' + q.sides[x.side].name + '-side ' + x.label + ': ' + x.text); }); say('     GAME: ' + r.statement); }
 
 say('QUARREL 1: ' + C.QUARRELS[0].question); M.setStance(g, 0); say('  stance: ' + C.QUARRELS[0].sides[0].stance);
-add('b1', 'reason'); add('b1', 'reply'); add('b2', 'reason'); add('c1', 'reason'); add('c1', 'reply'); add('b3', 'reason'); add('b3', 'reply');
-brief(2); add('c2', 'reason'); move(0, -1); brief(1);
+add('b1', 'reason'); add('b1', 'reply'); add('b2', 'reason'); add('p1', 'reason'); add('p1', 'reply'); add('b3', 'reason'); add('b3', 'reply');
+brief(2); add('p2', 'reason'); move(0, -1); brief(1);
 say('  page:\n     ' + show(C.QUARRELS[0], g.page)); pub(); M.next(g);
 say('QUARREL 2: ' + C.QUARRELS[1].question); M.setStance(g, 1); say('  stance: ' + C.QUARRELS[1].sides[1].stance);
-add('d1', 'reason'); add('k1', 'reason'); add('d2', 'reason'); add('d1', 'reply'); off(2); add('d1', 'reply'); add('k1', 'reply'); move(3, -1);
+add('d1', 'reason'); add('c1', 'reason'); add('d2', 'reason'); add('d1', 'reply'); off(2); add('d1', 'reply'); add('c1', 'reply'); move(3, -1);
 pub(); M.next(g);
 say('QUARREL 3: ' + C.QUARRELS[2].question); M.setStance(g, null); say('  stance: no view');
-add('o1', 'reason'); add('h1', 'reason'); add('o2', 'reason'); add('h2', 'reason'); brief(0); brief(1); brief(2); brief(3); add('h1', 'reply'); add('o1', 'reply'); add('h2', 'reply'); add('o2', 'reply');
+add('s1', 'reason'); add('k1', 'reason'); add('s2', 'reason'); add('k2', 'reason'); brief(0); brief(1); brief(2); brief(3); add('k1', 'reply'); add('s1', 'reply'); add('k2', 'reply'); add('s2', 'reply');
 pub(); M.next(g);
 var v = M.verdict(g);
 say('VERDICT: ' + v.headline); v.quarrels.forEach(function (l) { say('  ' + l); }); v.stood.forEach(function (l) { say('  ' + l); });

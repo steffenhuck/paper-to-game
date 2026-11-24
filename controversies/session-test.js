@@ -1,5 +1,5 @@
-// Full session in headless Chromium at phone width (build.md §4.6), no revision stage: the stranger's session (a ban-heavy
-// page in the cars quarrel, a mirrored page in the short quarrel, the mirror of counts in the uneven quarrel), with help
+// Full session in headless Chromium at phone width (build.md §4.6), revision 2: the stranger's session (a ban-heavy page in
+// the phones quarrel, a mirrored page in the short quarrel, the mirror of counts in the uneven quarrel), with help
 // opened and closed mid-play and every tool exercised; then a second game played clean (every page one nobody can place)
 // and a third played as a partisan; a laptop window last. Errors and horizontal scroll go to session-log.txt.
 const { chromium } = require('playwright'); const path = require('path'); const fs = require('fs');
@@ -32,10 +32,10 @@ const { chromium } = require('playwright'); const path = require('path'); const 
   // the ban-heavy page of memo §9, with every tool tried on the way
   await add('b1', 'reason'); log.push('  after b1: ' + await txt('#say'));
   await add('b1', 'reply'); log.push('  after b1 reply: ' + await txt('#say'));
-  await add('b2', 'reason'); await add('c1', 'reason'); await add('c1', 'reply'); await add('b3', 'reason');
+  await add('b2', 'reason'); await add('p1', 'reason'); await add('p1', 'reply'); await add('b3', 'reason');
   await add('b3', 'reply'); log.push('  b3 reply on a full page: ' + await txt('#say'));
   await add('b1', 'reason'); log.push('  b1 again: ' + await txt('#say'));
-  await act(2, 'form'); log.push('  b2 brief: ' + await txt('#say'));
+  await act(2, 'form'); log.push('  b2 short: ' + await txt('#say'));
   await act(2, 'form'); log.push('  b2 full again: ' + await txt('#say'));
   await act(0, 'up'); log.push('  up at top: ' + await txt('#say'));
   await act(3, 'down'); log.push('  down: ' + await txt('#say'));
@@ -47,7 +47,8 @@ const { chromium } = require('playwright'); const path = require('path'); const 
   await page.click('#page .ln[data-i="2"]'); await page.waitForTimeout(150); await shot('a-1-selected'); log.push('  selected line 2; tools: ' + await page.$$eval('#tools .t', es => es.map(e => e.textContent).join(' ')));
   await page.click('#page .ln[data-i="2"]'); await page.waitForTimeout(100);
   const r1 = await publish('a-1');
-  if (r1.couldTell !== 6) errors.push('the ban-heavy page should be placed by all six');
+  if (r1.couldTell !== 8) errors.push('the ban-heavy page should be placed by all eight');
+  if ((await page.$$('#bench .seat')).length !== 8) errors.push('the bench should seat eight readers');
   log.push('  bench placards: ' + await page.$$eval('#bench .plac div', es => es.map(e => e.textContent + (e.classList.contains('up') ? '' : '(down)')).join(' ')));
   log.push('  readers: ' + r1.readers.map(x => x.text).join(' || '));
   await page.click('#b-help-read'); await page.waitForTimeout(200); await page.click('#help [data-close]'); await page.waitForTimeout(200); log.push('  help opened and closed on the reading screen; statement still: ' + await txt('#rstate'));
@@ -55,16 +56,16 @@ const { chromium } = require('playwright'); const path = require('path'); const 
   // quarrel 2: dogs or cats, six lines, mirrored: one reason each in full, both answers, reasons first
   log.push('stance 2: ' + await txt('#stq')); await page.click('#b-st1'); await page.waitForTimeout(300); await hscroll('write 2'); await shot('a-2-empty');
   log.push('write 2: ' + await txt('#now') + ' | ' + await txt('#bt'));
-  await add('d1', 'reason'); await add('k1', 'reason'); await add('d2', 'reason'); await add('d1', 'reply'); log.push('  reply on a full page: ' + await txt('#say'));
-  await act(2, 'off'); await add('d1', 'reply'); await add('k1', 'reply'); await act(3, 'up'); await page.evaluate(() => window.scrollTo(0, 0)); await shot('a-2-page'); log.push('  page: ' + await pageWords());
+  await add('d1', 'reason'); await add('c1', 'reason'); await add('d2', 'reason'); await add('d1', 'reply'); log.push('  reply on a full page: ' + await txt('#say'));
+  await act(2, 'off'); await add('d1', 'reply'); await add('c1', 'reply'); await act(3, 'up'); await page.evaluate(() => window.scrollTo(0, 0)); await shot('a-2-page'); log.push('  page: ' + await pageWords());
   const r2 = await publish('a-2'); if (r2.couldTell !== 0) errors.push('quarrel 2 page should be clean');
   await page.click('#b-next'); await page.waitForTimeout(300);
   // quarrel 3: the office, uneven: the mirror of counts, which the gaps catch
   log.push('stance 3: ' + await txt('#stq')); await page.click('#b-st2'); await page.waitForTimeout(300); await hscroll('write 3'); await shot('a-3-empty-full', true);
-  await add('o1', 'reason'); await add('h1', 'reason'); await add('o2', 'reason'); await add('h2', 'reason');
+  await add('s1', 'reason'); await add('k1', 'reason'); await add('s2', 'reason'); await add('k2', 'reason');
   for (let i = 0; i < 4; i++) await act(i, 'form');
-  await add('h1', 'reply'); await add('o1', 'reply'); await add('h2', 'reply'); await add('o2', 'reply'); await page.evaluate(() => window.scrollTo(0, 0)); await shot('a-3-page'); log.push('  page: ' + await pageWords());
-  const r3 = await publish('a-3'); if (r3.caught.join() !== 'gaps') errors.push('quarrel 3 mirror of counts should be caught by the gaps alone: ' + r3.caught.join());
+  await add('k1', 'reply'); await add('s1', 'reply'); await add('k2', 'reply'); await add('s2', 'reply'); await page.evaluate(() => window.scrollTo(0, 0)); await shot('a-3-page'); log.push('  page: ' + await pageWords());
+  const r3 = await publish('a-3'); if (r3.caught.join() !== 'leftout') errors.push('quarrel 3 mirror of counts should be caught by the left-out readers alone: ' + r3.caught.join());
   await hscroll('reading'); await page.click('#b-next'); await page.waitForTimeout(400); await hscroll('end'); await shot('a-end', true);
   log.push('END: ' + await txt('#vhead')); log.push('  found: ' + await page.$$eval('#vfound p', es => es.map(e => e.textContent).join(' // '))); log.push('  stood: ' + await page.$$eval('#vstood p', es => es.map(e => e.textContent).join(' // ')));
   log.push('  part: ' + await txt('#vpart')); log.push('  had: ' + await txt('#vhad'));
@@ -73,9 +74,9 @@ const { chromium } = require('playwright'); const path = require('path'); const 
   // session B: clean, by the mirror with the ends split; in the uneven quarrel one office reason brief with three home reasons brief and every reply
   await page.click('#b-again'); await page.waitForTimeout(300);
   const clean = [
-    [0, [['b1', 'reason'], ['c1', 'reason'], ['b2', 'reason'], ['c2', 'reason'], ['c1', 'reply'], ['b1', 'reply'], ['c2', 'reply'], ['b2', 'reply']], [[0, 'form'], [1, 'form']]],
-    [1, [['d1', 'reason'], ['k1', 'reason'], ['k1', 'reply'], ['d1', 'reply']], []],
-    [null, [['o1', 'reason'], ['h1', 'reason'], ['h2', 'reason'], ['h3', 'reason'], ['h1', 'reply'], ['h2', 'reply'], ['h3', 'reply'], ['o1', 'reply']], [[0, 'form'], [1, 'form'], [2, 'form'], [3, 'form']]]
+    [0, [['b1', 'reason'], ['p1', 'reason'], ['b2', 'reason'], ['p2', 'reason'], ['p1', 'reply'], ['b1', 'reply'], ['p2', 'reply'], ['b2', 'reply']], [[0, 'form'], [1, 'form']]],
+    [1, [['d1', 'reason'], ['c1', 'reason'], ['c1', 'reply'], ['d1', 'reply']], []],
+    [null, [['s1', 'reason'], ['s2', 'reason'], ['s3', 'reason'], ['k1', 'reason'], ['k1', 'reply'], ['s1', 'reply'], ['s2', 'reply'], ['s3', 'reply']], [[0, 'form'], [1, 'form'], [2, 'form'], [3, 'form']]]
   ];
   for (let k = 0; k < 3; k++) {
     await page.evaluate(s => window.__api.stance(s), clean[k][0]); await page.waitForTimeout(200);
