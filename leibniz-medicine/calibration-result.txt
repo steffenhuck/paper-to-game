@@ -1,6 +1,6 @@
      300 games drawn; reseeded for a floor: 189
 PASS every seed draws a game
-PASS each kind of winter: one remedy helps, one does nothing, one harms
+PASS each kind of winter: one remedy helps, one is no better than the fever alone, one harms
 PASS every remedy helps in some kind (rest and bleeding are live)
 PASS bark helps in one kind and harms in another (black to white)
 PASS A and B share the temperature and differ in wetness (the lookalike); C differs from A in temperature only; D in both
@@ -41,6 +41,7 @@ PASS other effect sizes {"helps":5,"none":15,"harms":40}: the order holds  — 5
 PASS noise of plus or minus 6 on every count: the order holds  — 51 < 65 < 117 < 190
 PASS without the floors on the letters the reader still beats memory  — 120 < 189
 PASS number words for the three counts
+PASS the middle word names the baseline
 PASS the verdict lines name the lookalike at 1692
 PASS the verdict lines name the letters at 1695
 PASS the summary counts before and after the letter

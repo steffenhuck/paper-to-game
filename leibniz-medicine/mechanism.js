@@ -9,7 +9,7 @@
     YEARS: [1690, 1691, 1692, 1693, 1694, 1695, 1696, 1697, 1698, 1699], // our choice: ten winters, one tap each; the letter is dated 1694
     LETTER_YEAR: 1694,            // the letter in the Journal des sçavans, 26 July 1694: from this year every doctor writes; the letters of a year reach you the next year
     SICK: 100,                    // our choice: "a hundred sick" a winter, so every count on screen is out of a hundred
-    DEAD: { helps: 5, none: 20, harms: 30 },   // our choice: the paper says "black to white", "incomparably better"; these are the sizes
+    DEAD: { helps: 5, none: 20, harms: 30 },   // our choice: the paper says "black to white", "incomparably better"; these are the sizes. 'none' is the fever's own toll, left to itself, and is shown to the player as the baseline
     TEMPS: ['cold', 'mild'],      // our choice: a winter fever; all that matters is the winter, in two things the player can see
     WETS: ['dry', 'wet'],
     REMEDIES: ['bark', 'bleed', 'rest'],   // bark is the paper's (quinquina, note 3); bleeding and rest are ours, so the choice has three live options
@@ -93,7 +93,7 @@
   function deadFor(effect, DEAD) { return (DEAD || CONFIG.DEAD)[effect]; }
 
   // The collection at time t: every letter you hold, with your own written winters, grouped by kind of winter, with
-  // a count per remedy of how many letters said it helped, did nothing or harmed.
+  // a count per remedy of how many letters said it helped, was no better than the fever alone, or harmed.
   function collection(game, t) {
     var ys = mailYears(game, t), rows = [];
     ys.forEach(function (y) { game.mail[y].forEach(function (l) { rows.push(l); }); });
@@ -215,7 +215,8 @@
   function numberWord(n) { if (NUM[n] !== undefined) return NUM[n]; return String(n); }
   function numberWordAny(n) { return SMALL[n] !== undefined ? SMALL[n] : String(n); }
   function remedyName(r) { return { bark: 'bark', bleed: 'bleeding', rest: 'rest' }[r]; }
-  function effectWord(e) { return { helps: 'helped', none: 'did nothing', harms: 'harmed' }[e]; }
+  function effectWord(e) { return { helps: 'helped', none: 'was no better than the fever alone', harms: 'harmed' }[e]; }   // the middle word is judged against the fever's own toll, which the screen states
+  function effectShort(e) { return { helps: 'helped', none: 'no better', harms: 'harmed' }[e]; }   // for small cards and tallies; 'no better' is defined on screen as 'no better than the fever alone'
   function kindName(k) { return temp(k) + ', ' + wet(k); }
   function capital(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
   function listYears(ys) { if (ys.length === 1) return String(ys[0]); return ys.slice(0, -1).join(', ') + ' and ' + ys[ys.length - 1]; }
@@ -228,6 +229,6 @@
     return 'about one in three';
   }
 
-  var M = { CONFIG: CONFIG, KINDS: KINDS, rng: rng, newGame: newGame, give: give, lookup: lookup, collection: collection, roundVerdict: roundVerdict, kindAt: kindAt, yearAt: yearAt, hasRegister: hasRegister, mailYears: mailYears, effectOf: effectOf, helper: helper, temp: temp, wet: wet, DOCTORS: DOCTORS, playDoctor: playDoctor, withMailFrom1690: withMailFrom1690, summary: summary, numberWord: numberWord, numberWordAny: numberWordAny, remedyName: remedyName, effectWord: effectWord, kindName: kindName, listYears: listYears, roughOf: roughOf, known: known };
+  var M = { CONFIG: CONFIG, KINDS: KINDS, rng: rng, newGame: newGame, give: give, lookup: lookup, collection: collection, roundVerdict: roundVerdict, kindAt: kindAt, yearAt: yearAt, hasRegister: hasRegister, mailYears: mailYears, effectOf: effectOf, helper: helper, temp: temp, wet: wet, DOCTORS: DOCTORS, playDoctor: playDoctor, withMailFrom1690: withMailFrom1690, summary: summary, numberWord: numberWord, numberWordAny: numberWordAny, remedyName: remedyName, effectWord: effectWord, effectShort: effectShort, kindName: kindName, listYears: listYears, roughOf: roughOf, known: known };
   if (typeof module !== 'undefined' && module.exports) module.exports = M; else root.MECH = M;
 })(typeof window !== 'undefined' ? window : this);
