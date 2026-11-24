@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Leibniz's Register</title>
 <script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<meta name="description" content="Leibniz, 1694: years like past years come back, the same bark cures in one and fails in the next, and a doctor with no record learns from scratch at the expense of the sick. Eleven years as a province physician: give the remedy, keep the register from 1694, and meet the year nobody wrote down.">
+<meta name="description" content="Leibniz, 1694: the same bark cures in one winter and fails in the next, and a doctor with only his own winters learns from scratch at the expense of the sick. Ten winters as a province physician: four alone, then every doctor in the kingdom writes a few lines a year and the collection comes back to you.">
 <style>
 @font-face{font-family:'Jost';font-weight:100 900;font-style:normal;src:url(data:font/woff2;base64,/*__F_JOST__*/) format('woff2')}
 :root{--paper:#F2E8D0;--paper2:#E8DCBE;--ink:#2B2A28;--mustard:#E3A62A;--teal:#2F8F8C;--tomato:#D8502C;--mute:#7E7668;--line:#CDBF9D;color-scheme:light}
@@ -30,7 +30,6 @@ b,strong{font-weight:700}
 .btn.teal{background:var(--teal);color:var(--paper)}
 .btn.ghost{background:none;border:2px solid var(--ink);text-transform:none;letter-spacing:0;font-weight:500}
 .btn.dim{opacity:.35;pointer-events:none}
-.row2{display:flex;gap:8px}.row2 .btn{flex:1;padding-left:8px;padding-right:8px}
 .cred{font-size:13px;color:var(--mute);text-align:center;margin-top:14px;line-height:1.35}
 .cred a{color:inherit;text-decoration:none}
 .sig{text-align:center;font-style:italic;font-size:13px;margin-top:22px;color:var(--mute)}.sig a{color:inherit;text-decoration:none}
@@ -39,34 +38,32 @@ b,strong{font-weight:700}
 .top .aimline{font-size:13.5px;font-weight:600;line-height:1.25}
 .qm{width:36px;height:36px;border-radius:4px;border:2px solid var(--ink);font-weight:700;font-size:17px;text-align:center;flex:none;line-height:32px}
 .yr{display:flex;justify-content:space-between;align-items:baseline}
-.yr .lab{font-size:11.5px}
 .now{font-size:24px;font-weight:700;line-height:1.1;margin:2px 0 8px}
-.cards{display:flex;gap:6px}
+.cards{display:flex;gap:8px;max-width:260px;margin:0 auto 8px}
 .card{flex:1;text-align:center}
-.card .sq{height:56px;border-radius:4px;display:flex;align-items:center;justify-content:center}
-.card .sn{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin-bottom:3px}
-.card .wd{font-size:13px;font-weight:600;margin-top:3px}
-.sq.wet{background:var(--teal)}.sq.hot{background:var(--mustard)}.sq.cold{background:var(--paper2);border:2px solid var(--ink)}.sq.mild{background:var(--tomato)}
-.sq svg{width:30px;height:30px}
-.flav{font-size:14px;color:var(--ink);text-align:center;margin:6px 0 8px;font-style:italic}
-.goon{display:flex;gap:6px;align-items:stretch;margin:4px 0 8px}
-.mem{flex:1;min-width:0;background:var(--paper2);border-radius:4px;padding:5px 3px 4px;text-align:center;position:relative;height:94px;overflow:hidden}
-.mem .my{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
-.mem .msq{display:flex;gap:2px;justify-content:center;margin:4px 0 3px}
-.mem .msq i{display:block;width:14px;height:14px;border-radius:2px}
-.mem .msq i.wet{background:var(--teal)}.mem .msq i.hot{background:var(--mustard)}.mem .msq i.cold{background:var(--paper);border:1.5px solid var(--ink)}.mem .msq i.mild{background:var(--tomato)}
-.mem .mr{font-size:11px;line-height:1.1;font-weight:500}
-.mem .mf{display:flex;gap:1px;justify-content:center;margin-top:3px}
-.mem .mf i{display:block;width:5px;height:9px;border-radius:1px;background:var(--teal)}.mem .mf i.d{background:var(--tomato);height:5px;margin-top:4px;width:9px}
-.mem.l2 .msq{filter:grayscale(.5);opacity:.75}.mem.l2 .mr{opacity:.7}
-.mem.l3 .msq{filter:grayscale(1) blur(1.3px);opacity:.45}
-.mem.l4{background:#DDD3BB}
-.mem .gone{font-size:11px;color:var(--mute);font-style:italic;margin-top:6px;line-height:1.15}
-.book{flex:1.15;min-width:0;border-radius:4px;background:var(--ink);color:var(--paper);padding:6px 6px;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;height:94px}
+.card .sq{height:54px;border-radius:4px;display:flex;align-items:center;justify-content:center}
+.card .sn{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin-bottom:2px}
+.card .wd{font-size:14px;font-weight:600;margin-top:2px}
+.sq.wet{background:var(--teal)}.sq.mild{background:var(--mustard)}.sq.cold{background:var(--paper2);border:2px solid var(--ink)}.sq.dry{background:var(--tomato)}
+.sq svg{width:32px;height:32px}
+.winterline{font-size:14px;color:var(--mute);text-align:center;margin:6px 0 8px}
+.goon{margin:4px 0 6px}
+.own{display:flex;flex-wrap:wrap;gap:4px;margin:4px 0 6px}
+.own .mem{width:calc(20% - 3.2px);background:var(--paper2);border-radius:4px;padding:3px 2px 3px;text-align:center}
+.mem .mr .h{color:var(--teal)}.mem .mr .x{color:var(--tomato)}
+.mem .my{font-size:10.5px;letter-spacing:.06em;color:var(--mute)}
+.mem .msq{display:flex;gap:2px;justify-content:center;margin:3px 0 2px}
+.msq i{display:block;width:14px;height:14px;border-radius:2px}
+.msq i.wet{background:var(--teal)}.msq i.mild{background:var(--mustard)}.msq i.cold{background:var(--paper);border:1.5px solid var(--ink)}.msq i.dry{background:var(--tomato)}
+.mem .mr{font-size:10.5px;line-height:1.1;font-weight:500}
+.mf{display:flex;gap:1px;justify-content:center;margin-top:3px}
+.mf i{display:block;width:5px;height:9px;border-radius:1px;background:var(--teal)}.mf i.d{background:var(--tomato);height:5px;margin-top:4px;width:9px}
+.nothing{font-size:13.5px;color:var(--mute);font-style:italic;margin:2px 0 6px}
+.book{width:100%;border-radius:4px;background:var(--ink);color:var(--paper);padding:6px 10px;text-align:left;display:flex;align-items:center;gap:10px;min-height:42px;margin:0 0 6px}
 .book.none{background:none;border:2px dashed var(--line);color:var(--mute)}
-.book .bt{font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;line-height:1.1}
-.book .bs{font-size:11.5px;line-height:1.15;opacity:.85}
-.book svg{width:22px;height:22px}
+.book .bt{font-size:13px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;line-height:1.1}
+.book .bs{font-size:12.5px;line-height:1.15;opacity:.85}
+.book svg{width:26px;height:26px;flex:none}
 .rem{display:flex;gap:6px;margin:4px 0 6px}
 .rem button{flex:1;border:2px solid var(--ink);border-radius:4px;padding:6px 4px 5px;text-align:center;background:var(--paper)}
 .rem button svg{width:30px;height:30px;display:block;margin:0 auto 2px}
@@ -113,16 +110,15 @@ b,strong{font-weight:700}
 .doc .dr i{display:block;width:12px;height:7px;border-radius:1px;background:var(--tomato)}
 .doc.you .dr i{background:var(--ink)}
 .doc .dc{font-size:13px;font-weight:600;width:34px;text-align:right;flex:none}
-.decade{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0}
-.dy{background:var(--paper2);border-radius:4px;padding:5px 4px 4px;text-align:center}
+.decade{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin:8px 0}
+.dy{background:var(--paper2);border-radius:4px;padding:5px 2px 4px;text-align:center}
 .dy .my{font-size:11px;font-weight:600}
 .dy .msq{display:flex;gap:2px;justify-content:center;margin:3px 0}
-.dy .msq i{display:block;width:12px;height:12px;border-radius:2px}
-.dy .msq i.wet{background:var(--teal)}.dy .msq i.hot{background:var(--mustard)}.dy .msq i.cold{background:var(--paper);border:1.5px solid var(--ink)}.dy .msq i.mild{background:var(--tomato)}
-.dy .tag{font-size:10px;line-height:1.1;color:var(--mute);margin-top:2px;min-height:22px}
-.dy.ink{background:var(--ink);color:var(--paper)}.dy.ink .tag{color:var(--paper);opacity:.85}
-.dy .dd{font-size:12px;font-weight:600}
-.kind{display:flex;gap:10px;align-items:center;margin:0 0 8px;font-size:14px;line-height:1.25}.kind .msq{display:flex;gap:2px;flex:none}.kind .msq i{display:block;width:14px;height:14px;border-radius:2px}.kind .msq i.wet{background:var(--teal)}.kind .msq i.hot{background:var(--mustard)}.kind .msq i.cold{background:var(--paper2);border:1.5px solid var(--ink)}.kind .msq i.mild{background:var(--tomato)}.kind span{color:var(--mute);font-style:italic}
+.dy .msq i{width:13px;height:13px}
+.dy .tag{font-size:9.5px;line-height:1.1;color:var(--mute);margin-top:2px;min-height:22px}
+.dy.ink{background:var(--ink);color:var(--paper)}.dy.ink .tag{color:var(--paper);opacity:.85}.dy.ink .msq i.cold{background:var(--paper2)}
+.dy .dd{font-size:10.5px;font-weight:600;line-height:1.1}
+.kind{display:flex;gap:10px;align-items:center;margin:0 0 8px;font-size:14px;line-height:1.25}.kind .msq{flex:none;margin:0}.kind span{color:var(--mute)}
 .quote{font-size:15px;margin:12px 0;padding-left:12px;border-left:3px solid var(--mustard)}
 /* overlays */
 .ov{position:fixed;inset:0;background:var(--paper);overflow-y:auto;display:none;z-index:9}
@@ -133,18 +129,24 @@ b,strong{font-weight:700}
 .ov p,.ov li{font-size:15px;margin:0 0 8px}
 .ov ul{margin:0 0 8px 18px;padding:0}
 .ov .close{position:sticky;top:8px;float:right;margin-left:10px}
-.pages{margin-top:8px}
-.page{background:#FBF5E6;border-radius:4px;padding:10px 10px 8px;margin:0 0 8px;border-left:6px solid var(--ink)}
-.page .ph{display:flex;justify-content:space-between;align-items:baseline}
-.page .ph b{font-size:18px}
-.page .ph span{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
-.page .cards{margin:6px 0 4px}.page .card .sq{height:38px}.page .card .sq svg{width:20px;height:20px}.page .card .sn{font-size:9.5px}.page .card .wd{font-size:11.5px}
-.page .pf{font-size:13px;font-style:italic;margin:2px 0 6px}
-.page .pr{display:flex;align-items:center;gap:8px;font-size:14px}
-.page .pr svg{width:26px;height:26px;flex:none}
-.page .pr .mf{display:flex;gap:1px;margin-left:auto}
-.page .pr .mf i{display:block;width:5px;height:10px;border-radius:1px;background:var(--teal)}.page .pr .mf i.d{background:var(--tomato);height:5px;margin-top:5px;width:10px}
-.empty{font-size:15px;color:var(--mute);font-style:italic;margin:14px 0}
+.thisw{display:flex;align-items:center;gap:10px;background:var(--paper2);border-radius:4px;padding:8px 10px;margin:6px 0 12px;font-size:14px}
+.thisw .msq{margin:0}
+.group{background:#FBF5E6;border-radius:4px;padding:10px 10px 6px;margin:0 0 10px;border-left:6px solid var(--ink)}
+.group .gh{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.group .gh b{font-size:16px}
+.group .gh .msq{margin:0}
+.tally{display:flex;gap:6px;margin:4px 0 8px}
+.tally div{flex:1;border:1.5px solid var(--line);border-radius:4px;padding:5px 4px;text-align:center;font-size:12px;line-height:1.2}
+.tally div b{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.tally div svg{width:22px;height:22px;display:block;margin:0 auto 2px}
+.tally .h{color:var(--teal);font-weight:600}.tally .x{color:var(--tomato);font-weight:600}.tally .z{color:var(--mute)}
+.rows{font-size:13px;line-height:1.3}
+.rows div{display:flex;gap:6px;padding:2px 0;border-top:1px solid var(--paper2)}
+.rows div span:first-child{width:36px;flex:none;color:var(--mute)}
+.rows div span:nth-child(2){width:84px;flex:none;font-weight:500}
+.rows div.you span:nth-child(2){color:var(--tomato)}
+.rows .h{color:var(--teal)}.rows .x{color:var(--tomato)}
+.empty{font-size:14px;color:var(--mute);font-style:italic;margin:4px 0 6px}
 @media (min-width:700px){.wrap{max-width:460px}}
 </style>
 </head>
@@ -152,30 +154,29 @@ b,strong{font-weight:700}
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
     <symbol id="i-wet" viewBox="0 0 24 24"><path fill="#F2E8D0" d="M7 3c2 3.5 3.5 5.3 3.5 7.3A3.5 3.5 0 0 1 3.5 10.3C3.5 8.3 5 6.5 7 3zM17 3c2 3.5 3.5 5.3 3.5 7.3a3.5 3.5 0 0 1-7 0C13.5 8.3 15 6.5 17 3zM12 12c2 3.5 3.5 5.3 3.5 7.3a3.5 3.5 0 0 1-7 0c0-2 1.5-3.8 3.5-7.3z"/></symbol>
-    <symbol id="i-hot" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" fill="#2B2A28"/><g stroke="#2B2A28" stroke-width="2.2" stroke-linecap="round"><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1"/></g></symbol>
+    <symbol id="i-mild" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" fill="#2B2A28"/><g stroke="#2B2A28" stroke-width="2.2" stroke-linecap="round"><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1"/></g></symbol>
     <symbol id="i-cold" viewBox="0 0 24 24"><g stroke="#2B2A28" stroke-width="2.2" stroke-linecap="round"><path d="M12 2v20M3.3 7l17.4 10M3.3 17L20.7 7M12 2l-3 3M12 2l3 3M12 22l-3-3M12 22l3-3"/></g></symbol>
-    <symbol id="i-mild" viewBox="0 0 24 24"><path fill="#F2E8D0" d="M7 18a4 4 0 0 1-.6-7.95A5.5 5.5 0 0 1 17 8.5a4.5 4.5 0 0 1 .5 9.5z"/></symbol>
+    <symbol id="i-dry" viewBox="0 0 24 24"><g stroke="#F2E8D0" stroke-width="2.4" stroke-linecap="round" fill="none"><path d="M3 8h11a2.5 2.5 0 1 0-2.5-2.5M3 13h15a2.5 2.5 0 1 1-2.5 2.5M3 18h8a2 2 0 1 1-2 2"/></g></symbol>
     <symbol id="i-bark" viewBox="0 0 32 32"><path fill="#2B2A28" d="M10 4h12v4h-1v2.5c2.4 1 4 3.3 4 6V26a3 3 0 0 1-3 3H10a3 3 0 0 1-3-3V16.5c0-2.7 1.6-5 4-6V8h-1z"/><rect x="10" y="17" width="12" height="6" fill="#F2E8D0"/><path d="M11.5 20h9" stroke="#2B2A28" stroke-width="1.6"/></symbol>
     <symbol id="i-bleed" viewBox="0 0 32 32"><path fill="#2B2A28" d="M6 20h20a10 10 0 0 1-20 0z"/><path d="M8 5l12 12" stroke="#2B2A28" stroke-width="3.5" stroke-linecap="round"/><path d="M4 2l5 3-2 2z" fill="#2B2A28"/><circle cx="21" cy="14" r="2.2" fill="#D8502C"/></symbol>
     <symbol id="i-rest" viewBox="0 0 32 32"><rect x="3" y="15" width="26" height="8" rx="2" fill="#2B2A28"/><rect x="3" y="23" width="4" height="6" fill="#2B2A28"/><rect x="25" y="23" width="4" height="6" fill="#2B2A28"/><rect x="5" y="9" width="8" height="6" rx="2" fill="#2B2A28"/><rect x="14" y="11" width="13" height="4" rx="1" fill="#F2E8D0"/></symbol>
     <symbol id="i-book" viewBox="0 0 24 24"><path d="M2.5 4.5h7.5a2 2 0 0 1 2 2V21a2 2 0 0 0-2-2H2.5z" fill="#F2E8D0"/><path d="M21.5 4.5H14a2 2 0 0 0-2 2V21a2 2 0 0 1 2-2h7.5z" fill="#F2E8D0"/><path d="M5 8.5h3.5M5 11.5h3.5M5 14.5h3.5M15.5 8.5H19M15.5 11.5H19M15.5 14.5H19" stroke="#2B2A28" stroke-width="1.3" stroke-linecap="round"/></symbol>
-    <symbol id="i-head" viewBox="0 0 24 24"><g fill="#7E7668" opacity=".55" filter="url(#blur)"><circle cx="12" cy="4.5" r="4"/><path d="M6 9.5h12v9h-3.5V24h-5v-5.5H6z"/></g></symbol>
-    <filter id="blur"><feGaussianBlur stdDeviation="0.9"/></filter>
+    <symbol id="i-head" viewBox="0 0 24 24"><g fill="#7E7668" opacity=".55"><circle cx="12" cy="4.5" r="4"/><path d="M6 9.5h12v9h-3.5V24h-5v-5.5H6z"/></g></symbol>
   </defs>
 </svg>
 <div class="wrap">
 
 <!-- START -->
 <section class="screen on" id="s-start">
-  <div class="lab">A province of France &middot; 1690 to 1700</div>
+  <div class="lab">A province of France &middot; 1690 to 1699</div>
   <h1 class="title">Leibniz&rsquo;s<br><i>Register</i></h1>
   <div class="blocks"><span style="background:var(--teal)"></span><span style="background:var(--mustard)"></span><span style="background:var(--tomato)"></span><span style="background:var(--ink)"></span></div>
   <div class="setting">
-    <p>You are the physician of a province. Every year the seasons come in as four cards, a hundred sick come to you with the year&rsquo;s fever, and you give them one remedy for the year. The same remedy saves them in one kind of year and kills them in another.</p>
-    <p>Nobody has written the years down. In 1694 a letter from Mr Leibniz will change that.</p>
+    <p>You are the physician of a province. Every winter a fever comes, a hundred sick come to you with it, and you give them one remedy for the winter. The same remedy saves them in one kind of winter and kills them in another, and all that tells the kinds apart is two things: whether the winter is cold or mild, and whether it is dry or wet.</p>
+    <p>Nobody writes the winters down. In 1694 a letter from Mr Leibniz will change that, for every doctor in the kingdom.</p>
   </div>
-  <p class="acts">Read the four cards of the year. Open the register, once there is one. Give the hundred sick one remedy.</p>
-  <p class="aim">Lose as few of the sick as you can in eleven years: each year, give the one remedy that fits the kind of year it is.</p>
+  <p class="acts">Read the two cards of the winter. Read the letters, once there are any. Give the hundred sick one remedy.</p>
+  <p class="aim">Lose as few of the sick as you can in ten winters: each winter, give the one remedy that fits the kind of winter it is.</p>
   <button class="btn" id="b-begin">Begin, 1690</button>
   <button class="btn ghost" id="b-help-start">How to play</button>
   <p class="cred"><a href="#" id="b-about-start">About the paper and this game</a></p>
@@ -184,14 +185,14 @@ b,strong{font-weight:700}
 
 <!-- PLAY -->
 <section class="screen" id="s-play">
-  <div class="top"><div class="aimline">Lose as few of the sick as you can: give the remedy that fits the kind of year.</div><button class="qm" id="b-help-play" aria-label="How to play">?</button></div>
-  <div class="yr"><span class="lab" id="yearno">1690 &middot; year 1 of 11</span><span class="stat" id="stat"></span></div>
-  <h2 class="now" id="now">Give this year&rsquo;s remedy</h2>
+  <div class="top"><div class="aimline">Lose as few of the sick as you can: give the remedy that fits the kind of winter.</div><button class="qm" id="b-help-play" aria-label="How to play">?</button></div>
+  <div class="yr"><span class="lab" id="yearno">1690 &middot; winter 1 of 10</span><span class="stat" id="stat"></span></div>
+  <h2 class="now" id="now">Give this winter&rsquo;s remedy</h2>
   <div class="cards" id="cards"></div>
-  <p class="flav" id="flav"></p>
-  <div class="lab" style="margin-bottom:4px">What you have to go on</div>
-  <div class="goon" id="goon">
-    <div class="mem" id="m1"></div><div class="mem" id="m2"></div><div class="mem" id="m3"></div>
+  <div class="lab">What you have to go on</div>
+  <div class="goon">
+    <div class="own" id="own"></div>
+    <p class="nothing hid" id="nothing"></p>
     <button class="book none" id="b-book"></button>
   </div>
   <div id="choose">
@@ -200,18 +201,18 @@ b,strong{font-weight:700}
       <button data-r="bleed"><svg><use href="#i-bleed"/></svg><div class="rn">Bleeding</div></button>
       <button data-r="rest"><svg><use href="#i-rest"/></svg><div class="rn">Rest</div></button>
     </div>
-    <p class="def" id="def"><b>Bark</b> is the powdered bark of the cinchona tree. <b>Bleeding</b> opens a vein with a lancet. <b>Rest</b> is bed and broth and no physic. Tap one to see the move; then give it.</p>
+    <p class="def" id="def"></p>
     <button class="btn give dim" id="b-give">Give it to the hundred sick</button>
   </div>
   <div class="crowdbox">
     <div class="badge" id="badge"><svg><use id="badgeuse" href="#i-bark"/></svg></div>
     <div class="crowd" id="crowd"></div>
-    <div class="ckey"><span>The hundred sick who came this year</span><span id="ck"><b>standing</b> alive &middot; <b style="color:var(--tomato)">lying</b> dead</span></div>
+    <div class="ckey"><span>The hundred sick who came this winter</span><span><b>standing</b> alive &middot; <b style="color:var(--tomato)">lying</b> dead</span></div>
   </div>
   <div id="result" class="hid">
     <div class="say" id="say"></div>
     <div class="kept" id="kept"></div>
-    <button class="btn teal" id="b-next">Next year</button>
+    <button class="btn teal" id="b-next">Next winter</button>
   </div>
 </section>
 
@@ -220,27 +221,26 @@ b,strong{font-weight:700}
   <div class="lab">1694 &middot; a letter arrives</div>
   <div class="memo">
     <div class="mh"><span>From the First Doctor of the King</span><span>Paris, July 1694</span></div>
-    <p>Mr Leibniz writes in the <i>Journal des s&ccedil;avans</i>. In Modena a doctor has kept a history of each year, and in two years has already seen the bark succeed incomparably better in one than in the other. Years like past years come back; a doctor with no record of them learns again from scratch, at the expense of the sick.</p>
-    <p>From this year, write each year down. This is the <b>register</b>: a few lines a year, in this order:</p>
-    <ul><li>the seasons and the air;</li><li>the harvest and the beasts;</li><li>what you gave the sick, and what came of it: what helped, what harmed.</li></ul>
-    <p>What you wrote you will keep. What you did not write, you will not.</p>
+    <p>Mr Leibniz writes in the <i>Journal des s&ccedil;avans</i>. In Modena a doctor has kept a history of each year, and in two years has already seen the bark succeed incomparably better in one than in the other. Winters like past winters come back; a doctor who has only his own winters to go on learns again from scratch, at the expense of the sick.</p>
+    <p>By order of the King, from this winter <b>every physician in every province</b> writes a few lines a year to me: the winter, what he gave the sick, what came of it. I send the whole <b>collection</b> back to each of you the following winter.</p>
+    <p>What one doctor sees in a lifetime, twelve see in a year.</p>
   </div>
-  <p class="setting">The four years behind you were never written. Your head holds last year whole, the year before it in part, and little beyond that.</p>
-  <button class="btn" id="b-register">Begin the register</button>
+  <p class="setting">The four winters behind you are yours alone. The first letters from the other provinces come back next winter.</p>
+  <button class="btn" id="b-register">Write this winter down</button>
 </section>
 
 <!-- END -->
 <section class="screen" id="s-end">
-  <div class="lab">1700 &middot; the century turns</div>
+  <div class="lab">1699 &middot; the century turns</div>
   <h2 class="title" style="font-size:36px">What became of<br>the sick</h2>
   <p class="verdict" id="v-lead"></p>
   <div id="v-lines"></div>
-  <div class="lab" style="margin-top:14px">Four doctors, the same eleven years &middot; one block for every ten dead</div>
+  <div class="lab" style="margin-top:14px">Four doctors, the same ten winters &middot; one block for every ten dead</div>
   <div class="docs" id="docs"></div>
-  <div class="lab" style="margin-top:14px">The eleven years, as they were</div>
+  <div class="lab" style="margin-top:14px">Your ten winters, as they were</div>
   <div class="decade" id="decade"></div>
   <div id="v-kinds"></div>
-  <p class="vl" style="color:var(--mute);font-size:13.5px">Dark cards above were written in the register; pale ones were not.</p>
+  <p class="vl" style="color:var(--mute);font-size:13.5px">Dark cards above were written and sent; pale ones were yours alone.</p>
   <p class="quote" id="v-paper"></p>
   <button class="btn" id="b-again">Play again, a new draw</button>
   <button class="btn ghost" id="b-about-end">About the paper and this game</button>
@@ -250,13 +250,14 @@ b,strong{font-weight:700}
 </section>
 </div>
 
-<!-- REGISTER -->
+<!-- COLLECTION -->
 <div class="ov" id="book">
   <div class="in">
     <button class="btn ghost close" id="b-book-close" style="width:auto;min-height:40px;padding:6px 14px">Close</button>
-    <h2>The register</h2>
-    <p>Every year you have written since 1694, newest first. Compare the four cards with this year&rsquo;s.</p>
-    <div class="pages" id="pages"></div>
+    <h2>The collection</h2>
+    <p id="bookintro"></p>
+    <div class="thisw" id="thisw"></div>
+    <div id="groups"></div>
   </div>
 </div>
 
@@ -265,15 +266,15 @@ b,strong{font-weight:700}
   <div class="in">
     <button class="btn ghost close" id="b-help-close" style="width:auto;min-height:40px;padding:6px 14px">Back</button>
     <h2>How to play</h2>
-    <p><b>Lose as few of the sick as you can in eleven years: each year, give the one remedy that fits the kind of year it is.</b></p>
-    <h3>The year</h3>
-    <p>Four cards show the four seasons of the year and their weather: wet (teal, drops), hot (mustard, sun), cold (pale, snowflake), mild (red, cloud). A line beneath says how the harvest and the beasts did. Years of the same kind have the same four cards and the same line.</p>
+    <p><b>Lose as few of the sick as you can in ten winters: each winter, give the one remedy that fits the kind of winter it is.</b></p>
+    <h3>The winter</h3>
+    <p>Two cards show the winter: cold (pale, snowflake) or mild (mustard, sun); dry (red, wind) or wet (teal, drops). That makes four kinds of winter, and the kind is all that matters.</p>
     <h3>The remedy</h3>
-    <p>Three remedies: bark, bleeding, rest. In every kind of year one of them helps (five of a hundred die), one does nothing (twenty die), one harms (thirty die). Which is which depends only on the kind of year, and the same remedy can help in one kind and harm in another. Tap a remedy to see the move, then tap <i>Give it to the hundred sick</i>. You see what the remedy you gave did; you never see what the others would have done.</p>
+    <p>Three remedies: bark, bleeding, rest. In every kind of winter one of them helps (five of a hundred die), one does nothing (twenty die), one harms (thirty die). Which is which depends only on the kind of winter, and the same remedy can help in one kind and harm in another. Tap a remedy to see the move, then tap <i>Give it to the hundred sick</i>. You see what the remedy you gave did; you never see what the others would have done.</p>
     <h3>What you have to go on</h3>
-    <p>Three memory cards show the last three years as your head holds them: last year whole, with its cards, its remedy and its dead; two years ago its cards and its remedy, but not what came of it; three years ago its cards, faded. Older years are gone. From 1694, the register holds every year you wrote, whole, for as long as you like: tap it to open it, and look for a past year with the same four cards.</p>
+    <p>Your own past winters, every one, as small cards: the two cards of the winter, what you gave, what came of it. From 1695, the collection: every province's letters for every winter since 1694, grouped by kind of winter, with a count of how often each remedy helped, did nothing or harmed there, and your own winters among them. Tap it to open it and look for your winter's kind.</p>
     <h3>The end</h3>
-    <p>After 1700 the game says what became of the sick, sets your eleven years beside three other doctors (memory alone, the register from 1690, and one who knew every year), and shows the eleven years as they were. Add <i>?seed=</i> and a number to the address to replay a draw.</p>
+    <p>After 1699 the game says what became of the sick, before the letter and after it, sets your ten winters beside three other doctors (memory alone, the letters from 1694, the letters from 1690, and one who knew every winter), and shows the ten winters as they were. Add <i>?seed=</i> and a number to the address to replay a draw.</p>
   </div>
 </div>
 
@@ -294,43 +295,37 @@ b,strong{font-weight:700}
   var $ = function (id) { return document.getElementById(id); };
   var q = new URLSearchParams(location.search);
   var seed = parseInt(q.get('seed'), 10); if (!(seed > 0)) seed = 1 + Math.floor(Math.random() * 100000);
-  var game = M.newGame(seed), t = 0, chosen = null, prevScreen = null, returnTo = null;
+  var game = M.newGame(seed), t = 0, chosen = null;
   window.__game = game;
-  var WEATHER = { wet: 'wet', hot: 'hot', cold: 'cold', mild: 'mild' };
   var RN = { bark: 'Bark', bleed: 'Bleeding', rest: 'Rest' };
-  var SEASON = { winter: 'Winter', spring: 'Spring', summer: 'Summer', autumn: 'Autumn' };
+  var DEF0 = '<b>Bark</b> is the powdered bark of the cinchona tree. <b>Bleeding</b> opens a vein with a lancet. <b>Rest</b> is bed and broth and no physic. Tap one to see the move; then give it.';
 
   function show(id) { document.querySelectorAll('.screen').forEach(function (s) { s.classList.toggle('on', s.id === id); }); window.scrollTo(0, 0); }
   function openOv(id) { $(id).classList.add('on'); document.body.classList.add('lock'); $(id).scrollTop = 0; }
   function closeOv(id) { $(id).classList.remove('on'); document.body.classList.remove('lock'); }
 
-  function cardsHTML(sig, small) {
-    return sig.map(function (w, i) { return '<div class="card"><div class="sn">' + SEASON[C.SEASONS[i]] + '</div><div class="sq ' + w + '"><svg><use href="#i-' + w + '"/></svg></div><div class="wd">' + WEATHER[w] + '</div></div>'; }).join('');
+  function cardsHTML(kind) {
+    var tp = M.temp(kind), wt = M.wet(kind);
+    return '<div class="card"><div class="sn">The winter was</div><div class="sq ' + tp + '"><svg><use href="#i-' + tp + '"/></svg></div><div class="wd">' + tp + '</div></div>' +
+           '<div class="card"><div class="sn">and</div><div class="sq ' + wt + '"><svg><use href="#i-' + wt + '"/></svg></div><div class="wd">' + wt + '</div></div>';
   }
-  function miniSq(sig) { return '<div class="msq">' + sig.map(function (w) { return '<i class="' + w + '"></i>'; }).join('') + '</div>'; }
+  function miniSq(kind) { return '<div class="msq"><i class="' + M.temp(kind) + '"></i><i class="' + M.wet(kind) + '"></i></div>'; }
   function miniFig(dead) { var n = Math.round(dead / 10), s = ''; for (var i = 0; i < 10; i++) s += '<i class="' + (i < n ? 'd' : '') + '"></i>'; return '<div class="mf">' + s + '</div>'; }
   function remIcon(r) { return '<svg><use href="#i-' + r + '"/></svg>'; }
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
-  function renderMemory() {
-    var mv = M.memoryView(game, t);
-    ['m1', 'm2', 'm3'].forEach(function (id, i) {
-      var m = mv[i], el = $(id), label = ['Last year', 'Two years ago', 'Three years ago'][i];
-      el.className = 'mem';
-      if (!m) { el.className = 'mem l4'; el.innerHTML = '<div class="my">' + label + '</div><div class="gone">' + (t === 0 && i === 0 ? 'You have just arrived.' : 'nothing') + '</div>'; return; }
-      var h = '<div class="my">' + m.year + '</div>';
-      if (m.level === 'whole') { el.className = 'mem l1'; h += miniSq(m.sig) + '<div class="mr">' + RN[m.remedy] + ' ' + M.effectWord(m.effect) + '</div>' + miniFig(m.dead); }
-      else if (m.level === 'cards-and-remedy') { el.className = 'mem l2'; h += miniSq(m.sig) + '<div class="mr">' + RN[m.remedy] + '&hellip;</div><div class="gone">what came of it? gone</div>'; }
-      else { el.className = 'mem l3'; h += miniSq(m.sig) + '<div class="gone">a year like that&hellip;</div>'; }
-      el.innerHTML = h;
-    });
-    var pages = M.registerPages(game, t), b = $('b-book');
-    if (!M.hasRegister(game, t)) { b.className = 'book none'; b.disabled = true; b.innerHTML = '<div class="bt">No register</div><div class="bs">Nobody wrote the years down.</div>'; }
-    else { b.className = 'book'; b.disabled = false; b.innerHTML = '<svg><use href="#i-book"/></svg><div class="bt">Open the register</div><div class="bs">' + (pages.length === 0 ? 'begun this year, empty' : pages.length === 1 ? 'one year written' : pages.length + ' years written') + '</div>'; }
+  function renderGoon() {
+    var H = game.history.slice(0, t), own = $('own'), no = $('nothing');
+    if (!H.length) { own.innerHTML = ''; no.classList.remove('hid'); no.textContent = 'Nothing. You have just arrived, and nobody has written the winters down.'; }
+    else { no.classList.add('hid'); own.innerHTML = H.map(function (h) { return '<div class="mem"><div class="my">' + h.year + '</div>' + miniSq(h.kind) + '<div class="mr">' + RN[h.remedy] + '<br><span class="' + (h.effect === 'helps' ? 'h' : h.effect === 'harms' ? 'x' : '') + '">' + M.effectWord(h.effect) + '</span></div></div>'; }).join(''); }
+    var b = $('b-book'), year = M.yearAt(game, t), col = M.collection(game, t);
+    if (year < C.LETTER_YEAR) { b.className = 'book none'; b.disabled = true; b.innerHTML = '<div><div class="bt">No letters</div><div class="bs">Nobody writes the winters down.</div></div>'; }
+    else if (col.count === 0) { b.className = 'book none'; b.disabled = true; b.innerHTML = '<div><div class="bt">No letters yet</div><div class="bs">Every doctor writes this winter down. The collection comes back next winter.</div></div>'; }
+    else { b.className = 'book'; b.disabled = false; b.innerHTML = '<svg><use href="#i-book"/></svg><div><div class="bt">Open the collection</div><div class="bs">' + col.count + ' letters, ' + (col.years.length === 1 ? 'the winter of ' + col.years[0] : 'the winters ' + col.years[0] + ' to ' + col.years[col.years.length - 1]) + ', every province</div></div>'; }
   }
 
   function renderCrowd() {
-    var s = '';
-    var fig = '<svg viewBox="0 0 24 24"><g class="st"><circle cx="12" cy="4.5" r="4"/><path d="M6 9.5h12v9h-3.5V24h-5v-5.5H6z"/></g><g class="ly"><circle cx="4.5" cy="15" r="4"/><path d="M9.5 9v12h9v-3.5H24v-5h-5.5V9z"/></g></svg>';
+    var fig = '<svg viewBox="0 0 24 24"><g class="st"><circle cx="12" cy="4.5" r="4"/><path d="M6 9.5h12v9h-3.5V24h-5v-5.5H6z"/></g><g class="ly"><circle cx="4.5" cy="15" r="4"/><path d="M9.5 9v12h9v-3.5H24v-5h-5.5V9z"/></g></svg>', s = '';
     for (var i = 0; i < C.SICK; i++) s += '<div class="f">' + fig + '</div>';
     $('crowd').innerHTML = s;
   }
@@ -340,14 +335,13 @@ b,strong{font-weight:700}
   function renderPlay() {
     chosen = null;
     var kind = M.kindAt(game, t), year = M.yearAt(game, t);
-    $('yearno').textContent = year + ' · year ' + (t + 1) + ' of ' + game.plan.length;
+    $('yearno').textContent = year + ' · winter ' + (t + 1) + ' of ' + game.plan.length;
     var ds = deadSoFar(); $('stat').innerHTML = t === 0 ? '' : 'dead so far <b>' + ds.d + '</b> of ' + ds.n + ' sick';
-    $('now').textContent = 'Give this year’s remedy';
-    $('cards').innerHTML = cardsHTML(kind.sig);
-    $('flav').textContent = 'This year ' + kind.flavour + '.';
-    renderMemory();
+    $('now').textContent = 'Give this winter’s remedy';
+    $('cards').innerHTML = cardsHTML(kind);
+    renderGoon();
     document.querySelectorAll('#rem button').forEach(function (b) { b.classList.remove('sel'); });
-    $('def').innerHTML = '<b>Bark</b> is the powdered bark of the cinchona tree. <b>Bleeding</b> opens a vein with a lancet. <b>Rest</b> is bed and broth and no physic. Tap one to see the move; then give it.';
+    $('def').innerHTML = DEF0;
     $('b-give').classList.add('dim'); $('b-give').textContent = 'Give it to the hundred sick';
     $('badge').classList.remove('on');
     $('choose').classList.remove('hid'); $('result').classList.add('hid');
@@ -359,7 +353,7 @@ b,strong{font-weight:700}
     chosen = r;
     document.querySelectorAll('#rem button').forEach(function (b) { b.classList.toggle('sel', b.getAttribute('data-r') === r); });
     $('badgeuse').setAttribute('href', '#i-' + r); $('badge').classList.add('on');
-    $('def').innerHTML = '<b>' + RN[r] + '</b> for the hundred sick, all year. ' + { bark: 'The powdered bark of the cinchona tree, in wine.', bleed: 'A vein opened with a lancet, a bowl held under it.', rest: 'Bed and broth and no physic at all.' }[r] + ' Nothing has happened yet.';
+    $('def').innerHTML = '<b>' + RN[r] + '</b> for the hundred sick, all winter. ' + { bark: 'The powdered bark of the cinchona tree, in wine.', bleed: 'A vein opened with a lancet, a bowl held under it.', rest: 'Bed and broth and no physic at all.' }[r] + ' Nothing has happened yet.';
     $('b-give').classList.remove('dim'); $('b-give').textContent = 'Give ' + RN[r].toLowerCase() + ' to the hundred sick';
   }
 
@@ -372,20 +366,17 @@ b,strong{font-weight:700}
     for (var i = 0; i < C.SICK; i++) order.push(i);
     var r = M.rng(game.seed * 101 + t); for (var j = order.length - 1; j > 0; j--) { var k = Math.floor(r() * (j + 1)); var tmp = order[j]; order[j] = order[k]; order[k] = tmp; }
     var n = 0;
-    (function tick() {
-      if (n < rec.dead) { figs[order[n]].classList.add('d'); n++; setTimeout(tick, 38); }
-      else afterDeaths(rec);
-    })();
+    (function tick() { if (n < rec.dead) { figs[order[n]].classList.add('d'); n++; setTimeout(tick, 38); } else afterDeaths(rec); })();
   }
 
   function afterDeaths(rec) {
     var lines = M.roundVerdict(game, rec);
     $('say').innerHTML = lines.map(function (l, i) { return '<p' + (i === 0 ? ' class="lead"' : '') + '>' + l + '</p>'; }).join('');
     var k = $('kept');
-    if (rec.written) { k.className = 'kept ink'; k.innerHTML = remIcon('book') + '<div><b>Written in the register.</b> ' + rec.year + ': the four cards, the harvest and the beasts, ' + RN[rec.remedy].toLowerCase() + ' ' + M.effectWord(rec.effect) + ', ' + M.numberWord(rec.dead) + ' of a hundred died. It stays.</div>'; }
-    else { k.className = 'kept wash'; k.innerHTML = remIcon('head') + '<div><b>Kept only in your head.</b> There is no register. Next year you will have it whole; the year after, in part; then it is gone.</div>'; }
-    $('now').textContent = (t + 1 < game.plan.length) ? 'Then the next year' : 'Then the century turns';
-    $('b-next').textContent = (t + 1 < game.plan.length) ? 'Next year, ' + game.years[t + 1] : 'What became of the sick';
+    if (rec.written) { k.className = 'kept ink'; k.innerHTML = remIcon('book') + '<div><b>Written and sent.</b> ' + rec.year + ', a ' + M.kindName(rec.kind) + ' winter, ' + RN[rec.remedy].toLowerCase() + ' ' + M.effectWord(rec.effect) + ', ' + M.numberWord(rec.dead) + ' of a hundred died. Every province will read it next winter.</div>'; }
+    else { k.className = 'kept wash'; k.innerHTML = remIcon('head') + '<div><b>Yours alone.</b> You will remember it; nobody else will ever know it happened.</div>'; }
+    $('now').textContent = (t + 1 < game.plan.length) ? 'Then the next winter' : 'Then the century turns';
+    $('b-next').textContent = (t + 1 < game.plan.length) ? 'Next winter, ' + game.years[t + 1] : 'What became of the sick';
     var ds = deadSoFar(); $('stat').innerHTML = 'dead so far <b>' + ds.d + '</b> of ' + ds.n + ' sick';
     $('result').classList.remove('hid');
     setTimeout(function () { $('result').scrollIntoView({ behavior: 'smooth', block: 'end' }); }, 50);
@@ -394,47 +385,46 @@ b,strong{font-weight:700}
   function next() {
     t++;
     if (t >= game.plan.length) return renderEnd();
-    if (M.yearAt(game, t) === C.REGISTER_FROM) { show('s-letter'); return; }
+    if (M.yearAt(game, t) === C.LETTER_YEAR) { show('s-letter'); return; }
     renderPlay();
   }
 
   function renderBook() {
-    var pages = M.registerPages(game, t);
-    if (!pages.length) { $('pages').innerHTML = '<p class="empty">The register was begun this year. Nothing is written in it yet; this year will be its first page.</p>'; }
-    else $('pages').innerHTML = pages.map(function (p) {
-      return '<div class="page"><div class="ph"><b>' + p.year + '</b><span>' + RN[p.remedy] + ' ' + M.effectWord(p.effect) + '</span></div><div class="cards">' + cardsHTML(p.sig) + '</div><div class="pf">That year ' + p.flavour + '.</div><div class="pr">' + remIcon(p.remedy) + '<span>Gave ' + RN[p.remedy].toLowerCase() + ': ' + M.numberWord(p.dead) + ' of a hundred died.</span>' + miniFig(p.dead) + '</div></div>';
+    var col = M.collection(game, t), kind = M.kindAt(game, t);
+    $('bookintro').textContent = col.count + ' letters: every province’s winter' + (col.years.length === 1 ? ' of ' + col.years[0] : 's from ' + col.years[0] + ' to ' + col.years[col.years.length - 1]) + ', what its doctor gave the sick, and what came of it, with your own among them. Sorted by kind of winter.';
+    $('thisw').innerHTML = miniSq(kind) + '<div>This winter, yours, is <b>' + M.kindName(kind) + '</b>. Find that kind below.</div>';
+    $('groups').innerHTML = M.KINDS.map(function (k) {
+      var g = col.groups[k], tl = C.REMEDIES.map(function (x) { var y = g.tally[x]; var body = y.n === 0 ? '<span class="z">not tried</span>' : [y.helps ? '<span class="h">helped ' + y.helps + '</span>' : '', y.none ? '<span class="z">did nothing ' + y.none + '</span>' : '', y.harms ? '<span class="x">harmed ' + y.harms + '</span>' : ''].filter(Boolean).join('<br>'); return '<div>' + remIcon(x) + '<b>' + RN[x] + '</b>' + body + '</div>'; }).join('');
+      var rows = g.rows.length ? '<div class="rows">' + g.rows.map(function (l) { return '<div class="' + (l.province === 'you' ? 'you' : '') + '"><span>' + l.year + '</span><span>' + (l.province === 'you' ? 'You' : l.province) + '</span><span>' + RN[l.remedy] + ' <span class="' + (l.effect === 'helps' ? 'h' : l.effect === 'harms' ? 'x' : '') + '">' + M.effectWord(l.effect) + '</span>, ' + M.numberWord(l.dead) + ' died</span></div>'; }).join('') + '</div>' : '<p class="empty">No province has had this kind of winter yet.</p>';
+      return '<div class="group"><div class="gh">' + miniSq(k) + '<b>' + cap(M.kindName(k)) + ' winters</b></div><div class="tally">' + tl + '</div>' + rows + '</div>';
     }).join('');
     openOv('book');
   }
 
   function renderEnd() {
     var s = M.summary(game), H = game.history;
-    var worst = Math.max(s.total, s.others.memory, s.others.register, s.others.registerFrom1690);
-    var lead;
-    if (s.total <= s.others.registerFrom1690) lead = 'Of the eleven hundred sick who came to you, ' + s.total + ' died: ' + M.roughOf(s.total, s.sick) + '. You did as well as a doctor who had had the register from the start, or better.';
-    else if (s.total < s.others.memory) lead = 'Of the eleven hundred sick who came to you, ' + s.total + ' died: ' + M.roughOf(s.total, s.sick) + '. Fewer than memory alone would have lost; more than a register kept from 1690 would have.';
-    else lead = 'Of the eleven hundred sick who came to you, ' + s.total + ' died: ' + M.roughOf(s.total, s.sick) + '. As many as a doctor with nothing but his memory would have lost, or more.';
+    var W = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'], T = ['never', 'once', 'twice', 'three times', 'four times', 'five times', 'six times'];
+    var lead = 'Of the thousand sick who came to you, ' + s.total + ' died. Before the letter, ' + s.before + ' of four hundred: ' + M.roughOf(s.before, s.sickBefore) + '. After it, ' + s.after + ' of six hundred: ' + M.roughOf(s.after, s.sickAfter) + '.';
     $('v-lead').textContent = lead;
     var L = [];
-    L.push('<p class="vl"><b>What Leibniz says:</b> years like past years come back, and the same bark cures in one and fails in the next; a doctor with only his memory learns it again each time at the expense of the sick, and a register of a few lines a year would have told him.</p>');
-    var W = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven'], T = ['never', 'once', 'twice', 'three times', 'four times', 'five times'];
+    L.push('<p class="vl"><b>What Leibniz says:</b> winters like past winters come back, and the same bark cures in one and fails in the next; a doctor with only his own years to go on learns it again each time at the expense of the sick, and a few lines a year from every province, collected, would tell him.</p>');
     var found = [];
-    if (s.last) found.push(W[s.last] + (s.last === 1 ? ' year was the same kind as the year before it, and your head held it' : ' years were the same kind as the year before them, and your head held them'));
-    if (s.inBook) found.push(T[s.inBook] + ' the year that matched was in your register');
-    if (s.lost) found.push(T[s.lost] + ' it was a year nobody had written down, and you learned it again from scratch');
-    if (s.fromScratch) found.push(W[s.fromScratch] + ' years were new, and nothing could have told you');
+    if (s.status.last) found.push(W[s.status.last] + (s.status.last === 1 ? ' winter was the same kind as the one before it, and you knew it' : ' winters were the same kind as the one before them, and you knew them'));
+    if (s.status.own) found.push(T[s.status.own] + ' the winter that matched was one of your own earlier ones');
+    if (s.status['new']) found.push(W[s.status['new']] + ' winters were new to you with nothing to read, and you learned them from scratch');
+    if (s.status.partial) found.push(T[s.status.partial] + ' the letters had the winter but not the remedy');
+    if (s.status.collection) found.push(T[s.status.collection] + ' the letters had your winter and the remedy that helped in it');
     L.push('<p class="vl"><b>What you found:</b> ' + found.join('; ') + '.</p>');
-    L.push('<p class="vl"><b>Where you part:</b> you lost ' + s.total + '; a doctor with nothing but memory, who repeated what helped last year and otherwise tried another, about ' + s.others.memory + '; a doctor who kept the register from 1694 and read it, about ' + s.others.register + '; a doctor who had kept it from 1690, as Leibniz wished it had been done "for a while now", about ' + s.others.registerFrom1690 + '; a doctor who knew every year, ' + s.others.oracle + '.</p>');
-    L.push('<p class="vl"><b>What you leave:</b> a register of ' + W[s.written] + ' years for the doctor who comes after you. The ' + W[s.unwritten] + ' years before it go with you.</p>');
+    L.push('<p class="vl"><b>Where you part:</b> you lost ' + s.total + '; a doctor with nothing but his own winters, who repeated what helped last year and otherwise tried another, about ' + s.others.memory + '; a doctor who read the letters from 1694, about ' + s.others.reader + '; a doctor who had had letters from 1690, as Leibniz wished it had been done "for a while now", about ' + s.others.readerFrom1690 + '; a doctor who knew every winter, ' + s.others.oracle + '.</p>');
+    L.push('<p class="vl"><b>What you leave:</b> a collection of ' + s.letters + ' letters that every doctor in the kingdom holds, and the four winters before it that only you ever knew.</p>');
     $('v-lines').innerHTML = L.join('');
-    var docs = [['You', s.total, 'you'], ['Memory alone', s.others.memory, ''], ['Register from 1694', s.others.register, ''], ['Register from 1690', s.others.registerFrom1690, ''], ['Knew every year', s.others.oracle, '']];
-    $('docs').innerHTML = docs.map(function (d) { var n = Math.round(d[1] / 10), f = ''; for (var i = 0; i < n; i++) f += '<i></i>'; return '<div class="doc ' + d[2] + '"><div class="dn"><b>' + d[0] + '</b>' + (d[2] ? 'eleven years' : 'the same years') + '</div><div class="dr">' + f + '</div><div class="dc">' + d[1] + '</div></div>'; }).join('');
-    var TAG = { 'new': 'new kind', 'last': 'like last year', 'book': 'in the register', 'lost': 'never written down', 'half-remembered': 'half remembered' };
-    $('decade').innerHTML = H.map(function (h) { return '<div class="dy ' + (h.written ? 'ink' : '') + '"><div class="my">' + h.year + '</div>' + miniSq(game.kinds[h.kind].sig) + '<div class="dd">' + RN[h.remedy] + ' ' + M.effectWord(h.effect) + '</div><div class="tag">' + TAG[h.lookup.status] + '</div></div>'; }).join('');
-    var kinds = {}; H.forEach(function (h) { (kinds[h.kind] = kinds[h.kind] || []).push(h.year); });
-    $('v-kinds').innerHTML = '<div class="lab" style="margin:12px 0 4px">Four kinds of year in eleven</div>' + Object.keys(kinds).map(function (k) { var ys = kinds[k], best = C.REMEDIES.filter(function (r) { return game.kinds[k].effects[r] === 'helps'; })[0]; return '<div class="kind">' + miniSq(game.kinds[k].sig) + '<div><b>' + M.listYears(ys) + '</b> &middot; ' + RN[best].toLowerCase() + ' helped<br><span>' + game.kinds[k].flavour + '</span></div></div>'; }).join('');
-    $('v-paper').innerHTML = 'Leibniz, 1694: it is always time to begin good things. The register costs scarcely any trouble; it has only to be desired. The soul and the body are the first things that should be thought about, and the last that are.';
-    $('seedline').textContent = 'Draw ' + game.seed + '. Add ?seed=' + game.seed + ' to the address to play these same years again.';
+    var docs = [['You', s.total, 'you'], ['Own winters only', s.others.memory, ''], ['Letters from 1694', s.others.reader, ''], ['Letters from 1690', s.others.readerFrom1690, ''], ['Knew every winter', s.others.oracle, '']];
+    $('docs').innerHTML = docs.map(function (d) { var n = Math.round(d[1] / 10), f = ''; for (var i = 0; i < n; i++) f += '<i></i>'; return '<div class="doc ' + d[2] + '"><div class="dn"><b>' + d[0] + '</b>' + (d[2] ? 'ten winters' : 'the same winters') + '</div><div class="dr">' + f + '</div><div class="dc">' + d[1] + '</div></div>'; }).join('');
+    var TAG = { 'new': 'new, nothing to read', 'last': 'like last winter', 'own': 'one of your own', 'collection': 'in the letters', 'partial': 'letters, not the remedy' };
+    $('decade').innerHTML = H.map(function (h) { return '<div class="dy ' + (h.written ? 'ink' : '') + '"><div class="my">' + h.year + '</div>' + miniSq(h.kind) + '<div class="dd">' + RN[h.remedy] + '<br>' + M.effectWord(h.effect) + '</div><div class="tag">' + TAG[h.lookup.status] + '</div></div>'; }).join('');
+    $('v-kinds').innerHTML = '<div class="lab" style="margin:12px 0 4px">The four kinds of winter, and what helped</div>' + M.KINDS.map(function (k) { var ys = H.filter(function (h) { return h.kind === k; }).map(function (h) { return h.year; }); var e = game.effects[k]; return '<div class="kind">' + miniSq(k) + '<div><b>' + cap(M.kindName(k)) + '</b>: ' + C.REMEDIES.map(function (x) { return RN[x].toLowerCase() + ' ' + M.effectWord(e[x]); }).join(', ') + '<br><span>' + (ys.length ? 'yours in ' + M.listYears(ys) : 'never yours') + '</span></div></div>'; }).join('');
+    $('v-paper').innerHTML = 'Leibniz, 1694: it is always time to begin good things. A letter of a few pages a year from each province would do; it has only to be desired, and costs scarcely any trouble. The soul and the body are the first things that should be thought about, and the last that are.';
+    $('seedline').textContent = 'Draw ' + game.seed + '. Add ?seed=' + game.seed + ' to the address to play these same winters again.';
     show('s-end');
   }
 
