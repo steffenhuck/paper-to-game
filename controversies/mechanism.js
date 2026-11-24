@@ -1,0 +1,380 @@
+// mechanism.js — Leibniz's Even Hand. The single source of truth: the page, the readers and every rule that moves
+// anything on screen live here and nowhere else. Runs unchanged in Node (calibration.js) and in the browser (inlined
+// verbatim by build.py). No DOM, no randomness.
+//
+// The text: G. W. Leibniz, "On Controversies" (1680), A IV 3, 204–212, in Lloyd Strickland's translation (2021).
+// The text has no numbers. Every number below is a design choice and says so.
+
+var CONFIG = {
+  // How many ruled lines a thing takes on the page. Our choice: a reason in full is twice a reason in brief; a reply is one line.
+  LINES: { full: 2, brief: 1, reply: 1 },
+
+  // The three rules the partisan readers apply, one pair of readers (one per side) each. Leibniz's readers "examine you very
+  // closely, picking out words everywhere" (A IV 3, 207); ours count three countable things, the forms of ploys 1, 2 and 4
+  // (A IV 3, 209–210): the order, the length, the answers. Any difference at all places the writer: no tolerance (our choice).
+  READERS: [
+    { key: 'lines', label: 'counts lines', rule: 'counts the lines each side speaks' },
+    { key: 'gaps', label: 'checks gaps', rule: 'for each side, counts its reasons left standing with no answer, minus its reasons left off the page' },
+    { key: 'ends', label: 'first & last', rule: 'reads only the first line and the last' }
+  ],
+
+  // The three quarrels, written for the game (Leibniz's was the Church: A IV 3, 212, note 1). Side 0 is drawn violet, side 1
+  // tangerine. budget: lines on the page (ploy 2, "disputes expand into volumes", turned into a constraint). min: the fewest
+  // lines the readers will read as a report (our choice: keeps the empty page from passing). A reason has a full form and a
+  // brief form, both its own side's words; its reply is the other side's one line.
+  QUARRELS: [
+    {
+      slug: 'cars', question: 'Should cars be banned from the city centre?', budget: 10, min: 6,
+      sides: [
+        { name: 'Ban', side: 'the ban side', says: 'The ban side says', stance: 'Ban them', of: 'the ban' },
+        { name: 'Cars', side: 'the car side', says: 'The car side says', stance: 'Let them drive', of: 'the cars' }
+      ],
+      reasons: [
+        { id: 'b1', side: 0,
+          full: 'Nobody walks or cycles happily beside moving metal. Take the cars out and the street becomes a place rather than a route.',
+          brief: 'A street without cars becomes a place, not a route.',
+          reply: 'A place for whom? For the people who can get there, which is fewer.' },
+        { id: 'b2', side: 0,
+          full: 'Half the air in the centre is exhaust. Every city that has tried a ban measured cleaner air within a year.',
+          brief: 'The air gets cleaner, and quickly; every trial shows it.',
+          reply: 'Cleaner on the closed streets; dirtier on the ring road the cars moved to.' },
+        { id: 'b3', side: 0,
+          full: 'Shops do better, not worse: people on foot stop, browse and come back. Drivers pass through.',
+          brief: 'Shops gain: people on foot stop and browse; drivers pass.',
+          reply: 'Boutiques gain. The shop that sells fridges loses; nobody carries a fridge home on foot.' },
+        { id: 'c1', side: 1,
+          full: 'The old, the ill and the parent with twins and the shopping cannot be told to cycle. For them the car is the city’s front door.',
+          brief: 'For the old, the ill and the laden, the car is the front door.',
+          reply: 'Exemptions and vans cover those. The ban is for the healthy commuter alone in two tonnes of steel.' },
+        { id: 'c2', side: 1,
+          full: 'A ban does not abolish trips, it reroutes them. The traffic goes somewhere, usually the poorer streets just outside the cordon.',
+          brief: 'The traffic does not vanish; it moves to the streets outside.',
+          reply: 'Some of it evaporates: once driving stops being easy, many trips are never made.' },
+        { id: 'c3', side: 1,
+          full: 'Drivers already pay road tax, parking and fuel duty to use their own city. Shutting them out is a tax rise by other means.',
+          brief: 'Drivers have paid for the streets they are being shut out of.',
+          reply: 'Road tax pays for a fraction of the roads; everyone else pays the rest through everything else.' }
+      ]
+    },
+    {
+      slug: 'pets', question: 'Dogs or cats?', budget: 6, min: 4,
+      sides: [
+        { name: 'Dogs', side: 'the dog side', says: 'The dog side says', stance: 'Dogs', of: 'the dogs' },
+        { name: 'Cats', side: 'the cat side', says: 'The cat side says', stance: 'Cats', of: 'the cats' }
+      ],
+      reasons: [
+        { id: 'd1', side: 0,
+          full: 'A dog is glad you exist, every single time you come through the door. Nothing else on earth does that.',
+          brief: 'A dog is glad you exist, every time.',
+          reply: 'Glad anyone exists. It is not a judgement, it is a reflex.' },
+        { id: 'd2', side: 0,
+          full: 'A dog gets you out of the house twice a day in all weathers, which is more than any gym has managed.',
+          brief: 'A dog gets you out of the house, twice a day.',
+          reply: 'In the rain. At six. For fifteen years.' },
+        { id: 'd3', side: 0,
+          full: 'Dogs do jobs: they herd, guide, and find the lost and the buried. A cat has never found anyone.',
+          brief: 'Dogs work: they guide, herd and rescue.',
+          reply: 'Cats cleared the granaries of rats and made cities possible. Quietly.' },
+        { id: 'k1', side: 1,
+          full: 'A cat asks nothing of you and gives you, on its own terms, something close to respect. You have to earn it.',
+          brief: 'A cat’s affection is earned, so it means something.',
+          reply: 'Earned by feeding it. That is not respect, it is a contract.' },
+        { id: 'k2', side: 1,
+          full: 'A cat can be left alone for a weekend with a bowl and a box. Try that with a labrador.',
+          brief: 'A cat can be left alone with a bowl for a weekend.',
+          reply: 'A cat can be left alone because it does not mind whether you come back.' },
+        { id: 'k3', side: 1,
+          full: 'Cats are clean, quiet and small. They fit a flat, a budget and a city; a dog needs a garden and a van.',
+          brief: 'Cats fit a flat, a budget and a city.',
+          reply: 'So does a dachshund.' }
+      ]
+    },
+    {
+      slug: 'office', question: 'Back to the office five days a week?', budget: 10, min: 6,
+      sides: [
+        { name: 'Office', side: 'the office side', says: 'The office side says', stance: 'Back to the office', of: 'the office' },
+        { name: 'Home', side: 'the home side', says: 'The home side says', stance: 'Stay home', of: 'home' }
+      ],
+      reasons: [
+        { id: 'o1', side: 0,
+          full: 'The ideas that matter are had at the coffee machine and in the corridor, not on a scheduled call. You cannot schedule a chance.',
+          brief: 'The good ideas happen in corridors, not on calls.',
+          reply: 'Count them. The corridor’s ideas are mostly gossip; the written ones get read.' },
+        { id: 'o2', side: 0,
+          full: 'New people learn by watching. A twenty-three-year-old on a laptop in a bedsit learns nothing from anyone.',
+          brief: 'The young learn by watching, and there is nobody to watch at home.',
+          reply: 'Then bring the juniors in and leave the rest. A five-day rule for everyone is a blunt tool.' },
+        { id: 'h1', side: 1,
+          full: 'Two hours a day on a train are two hours nobody is paid for. Give them back and people are rested, and work no worse.',
+          brief: 'The commute is unpaid time; give it back.',
+          reply: 'The commute is also where the day begins and ends; without it, work leaks into everything.' },
+        { id: 'h2', side: 1,
+          full: 'Output went up, not down, when the offices closed. The numbers are in; the complaint is about control.',
+          brief: 'Output rose when the offices closed; the complaint is about control.',
+          reply: 'Output of the things already set up. Nothing new got started.' },
+        { id: 'h3', side: 1,
+          full: 'Parents, carers and anyone outside the big city can finally hold a good job. Five days in the office quietly fires them.',
+          brief: 'Five days in the office quietly fires parents and carers.',
+          reply: 'Or hires them part-time, which was always the honest deal.' },
+        { id: 'h4', side: 1,
+          full: 'Empty offices still cost rent. The firm that lets people stay home saves on floors and spends it on people.',
+          brief: 'Offices are rent; home is free.',
+          reply: 'The lease is signed either way; the saving is a slide, not a cheque.' }
+      ]
+    }
+  ],
+
+  // Words the game says. Kept here so the calibration check can read them.
+  WORDS: {
+    ours: 'One of ours.', theirs: 'One of theirs.', cant: 'Can’t tell.',
+    nobody: 'No reader could tell.',
+    split: 'And they do not agree which way, which is halfway to nobody knowing.'
+  }
+};
+
+// ---------- the page ----------
+
+function reasonById(q, id) { for (var i = 0; i < q.reasons.length; i++) if (q.reasons[i].id === id) return q.reasons[i]; return null; }
+function speakerOf(q, item) { var r = reasonById(q, item.id); return item.kind === 'reply' ? 1 - r.side : r.side; }
+function linesOf(item) { return item.kind === 'reply' ? CONFIG.LINES.reply : CONFIG.LINES[item.form]; }
+function textOf(q, item) { var r = reasonById(q, item.id); return item.kind === 'reply' ? r.reply : r[item.form]; }
+function pageLines(q, page) { var n = 0; for (var i = 0; i < page.length; i++) n += linesOf(page[i]); return n; }
+function indexOnPage(page, id, kind) { for (var i = 0; i < page.length; i++) if (page[i].id === id && page[i].kind === kind) return i; return -1; }
+function canPublish(q, page) { return pageLines(q, page) >= q.min && pageLines(q, page) <= q.budget; }
+
+// Puts a reason or a reply on the page, at the end. A reason goes on in full if it fits, in brief if only that fits.
+// A reply goes on only if its reason is on the page. Returns {page, note} or {error}.
+function addItem(q, page, id, kind) {
+  if (indexOnPage(page, id, kind) >= 0) return { error: 'already on the page' };
+  var room = q.budget - pageLines(q, page);
+  if (kind === 'reply') {
+    if (indexOnPage(page, id, 'reason') < 0) return { error: 'put the reason on the page first' };
+    if (room < CONFIG.LINES.reply) return { error: 'the page is full' };
+    return { page: page.concat([{ id: id, kind: 'reply' }]), note: 'reply' };
+  }
+  if (room >= CONFIG.LINES.full) return { page: page.concat([{ id: id, kind: 'reason', form: 'full' }]), note: 'full' };
+  if (room >= CONFIG.LINES.brief) return { page: page.concat([{ id: id, kind: 'reason', form: 'brief' }]), note: 'brief' };
+  return { error: 'the page is full' };
+}
+
+// Takes a line off the page. Taking a reason off takes its reply off with it.
+function removeItem(q, page, idx) {
+  var it = page[idx]; if (!it) return page;
+  return page.filter(function (x, i) { return i !== idx && !(it.kind === 'reason' && x.id === it.id && x.kind === 'reply'); });
+}
+
+function moveItem(q, page, idx, dir) {
+  var j = idx + dir; if (j < 0 || j >= page.length) return page;
+  var p = page.slice(); var t = p[idx]; p[idx] = p[j]; p[j] = t; return p;
+}
+
+// Full to brief always works; brief to full only if the page has room for the extra line.
+function toggleForm(q, page, idx) {
+  var it = page[idx]; if (!it || it.kind !== 'reason') return { page: page };
+  var p = page.slice();
+  if (it.form === 'full') { p[idx] = { id: it.id, kind: 'reason', form: 'brief' }; return { page: p, note: 'brief' }; }
+  if (q.budget - pageLines(q, page) < CONFIG.LINES.full - CONFIG.LINES.brief) return { page: page, error: 'no room to say it in full' };
+  p[idx] = { id: it.id, kind: 'reason', form: 'full' }; return { page: p, note: 'full' };
+}
+
+// ---------- the readers ----------
+
+// Everything a reader could count, for both sides.
+function sums(q, page) {
+  var lines = [0, 0], leftOut = [0, 0], unanswered = [0, 0], ends = [0, 0];
+  for (var i = 0; i < page.length; i++) lines[speakerOf(q, page[i])] += linesOf(page[i]);
+  for (var r = 0; r < q.reasons.length; r++) {
+    var R = q.reasons[r];
+    if (indexOnPage(page, R.id, 'reason') < 0) leftOut[R.side]++;
+    else if (indexOnPage(page, R.id, 'reply') < 0) unanswered[R.side]++;
+  }
+  if (page.length) { ends[speakerOf(q, page[0])]++; ends[speakerOf(q, page[page.length - 1])]++; }
+  return { lines: lines, leftOut: leftOut, unanswered: unanswered, ends: ends };
+}
+
+// Each rule's lean: positive means side 0 comes off better, negative side 1, zero neither.
+function leans(s) {
+  return {
+    lines: s.lines[0] - s.lines[1],
+    // A side is favoured by the other side's reasons being left out, and by its own reasons standing unanswered.
+    gaps: (s.leftOut[1] - s.leftOut[0]) + (s.unanswered[0] - s.unanswered[1]),
+    ends: s.ends[0] - s.ends[1]
+  };
+}
+
+function placedBy(lean) { return lean > 0 ? 0 : lean < 0 ? 1 : null; }
+function plural(n, w) { return n + ' ' + w + (n === 1 ? '' : 's'); }
+
+// The six readers' readings of a page: for each, the side he places the writer with (or null), and his sentence.
+function readPage(q, page) {
+  var s = sums(q, page), L = leans(s), readers = [], A = q.sides[0].name, B = q.sides[1].name;
+  for (var k = 0; k < CONFIG.READERS.length; k++) {
+    var rule = CONFIG.READERS[k], lean = L[rule.key], placed = placedBy(lean), sum;
+    if (rule.key === 'lines') sum = A + ' speaks ' + plural(s.lines[0], 'line') + ', ' + B + ' ' + s.lines[1] + '.';
+    else if (rule.key === 'gaps') sum = A + ': ' + s.unanswered[0] + ' unanswered, ' + s.leftOut[0] + ' left out (' + (s.unanswered[0] - s.leftOut[0]) + '). ' + B + ': ' + s.unanswered[1] + ' unanswered, ' + s.leftOut[1] + ' left out (' + (s.unanswered[1] - s.leftOut[1]) + ').';
+    else sum = page.length ? 'First line ' + q.sides[speakerOf(q, page[0])].name + ', last line ' + q.sides[speakerOf(q, page[page.length - 1])].name + '.' : 'An empty page.';
+    for (var side = 0; side < 2; side++) {
+      var call = placed === null ? CONFIG.WORDS.cant : placed === side ? CONFIG.WORDS.ours : CONFIG.WORDS.theirs;
+      readers.push({ side: side, key: rule.key, label: rule.label, placed: placed, lean: lean, sum: sum, call: call, text: sum + ' ' + call });
+    }
+  }
+  var n = 0, dirs = {};
+  for (var i = 0; i < readers.length; i++) if (readers[i].placed !== null) { n++; dirs[readers[i].placed] = true; }
+  var direction = n === 0 ? null : (dirs[0] && dirs[1]) ? 'split' : dirs[0] ? 0 : 1;
+  var caught = []; for (var j = 0; j < CONFIG.READERS.length; j++) if (L[CONFIG.READERS[j].key] !== 0) caught.push(CONFIG.READERS[j].key);
+  return { sums: s, leans: L, readers: readers, couldTell: n, direction: direction, caught: caught, statement: statement(q, n, direction) };
+}
+
+// What the game says, in its own voice, when the placards are up.
+function statement(q, n, direction) {
+  if (n === 0) return CONFIG.WORDS.nobody;
+  var head = (n === 6 ? 'All six' : n + ' of 6') + ' could tell.';
+  if (direction === 'split') return head + ' ' + CONFIG.WORDS.split;
+  return head + ' Your page leaned to ' + q.sides[direction].of + '.';
+}
+
+// ---------- the game ----------
+
+function newGame() {
+  return { q: 0, stage: 'stance', stance: [null, null, null], page: [], draft: null, results: [[], [], []], done: false };
+}
+function quarrel(game) { return CONFIG.QUARRELS[game.q]; }
+function setStance(game, side) { game.stance[game.q] = side; game.stage = 'draft'; game.page = []; return game; }
+
+// Publishing reads the page and records the reading; the first reading of a quarrel is the draft, the second the final.
+function publish(game) {
+  var q = quarrel(game); if (!canPublish(q, game.page)) return null;
+  var r = readPage(q, game.page); r.page = game.page.slice(); r.stage = game.stage;
+  game.results[game.q].push(r);
+  game.stage = game.stage === 'draft' ? 'readDraft' : 'readFinal';
+  return r;
+}
+function revise(game) { if (game.stage !== 'readDraft') return game; game.stage = 'revision'; return game; }
+function next(game) {
+  if (game.stage !== 'readFinal') return game;
+  if (game.q === CONFIG.QUARRELS.length - 1) { game.done = true; game.stage = 'end'; return game; }
+  game.q++; game.stage = 'stance'; game.page = []; return game;
+}
+
+function numberWord(n) { return ['no', 'one', 'two', 'three', 'four', 'five', 'six'][n] || String(n); }
+function ruleWords(keys) {
+  var w = { lines: 'the line count', gaps: 'the gaps', ends: 'the first line and the last' };
+  var out = keys.map(function (k) { return w[k]; });
+  return out.length <= 1 ? out.join('') : out.slice(0, -1).join(', ') + ' and ' + out[out.length - 1];
+}
+
+// The verdict: headline in words, one line per quarrel, and where the player really stood.
+function verdict(game) {
+  var Q = CONFIG.QUARRELS, clean = 0, quarrels = [], stood = [];
+  for (var i = 0; i < Q.length; i++) {
+    var res = game.results[i], d = res[0], f = res[res.length - 1], q = Q[i];
+    if (f.couldTell === 0) clean++;
+    var line = q.question + ' ';
+    if (d.couldTell === 0) line += 'Your first page gave the readers nothing: no reader could tell.';
+    else line += 'Your first page was placed by ' + numberWord(d.couldTell) + ' (' + ruleWords(d.caught) + ')' + (d.direction === 'split' ? ', and they disagreed which way' : ', with ' + q.sides[d.direction].of) + '.';
+    if (res.length > 1) {
+      if (f.couldTell === 0) line += d.couldTell === 0 ? ' Your revision held.' : ' Your revision mended it: no reader could tell.';
+      else if (d.couldTell === 0) line += ' Your revision undid it: placed by ' + numberWord(f.couldTell) + ' (' + ruleWords(f.caught) + ').';
+      else line += ' Your revision was still placed by ' + numberWord(f.couldTell) + ' (' + ruleWords(f.caught) + ').';
+    }
+    quarrels.push(line);
+    var st = game.stance[i], dir = f.direction, s;
+    if (st === null) s = dir === null ? 'You declared no view, and the readers found none.' : dir === 'split' ? 'You declared no view; the readers quarrelled over you anyway.' : 'You declared no view; the readers put you with ' + q.sides[dir].of + '.';
+    else if (dir === null) s = 'You are for ' + q.sides[st].of + '. Nobody could tell.';
+    else if (dir === 'split') s = 'You are for ' + q.sides[st].of + '. The readers quarrelled over you, and none of them knew.';
+    else if (dir === st) s = 'You are for ' + q.sides[st].of + ', and the readers found you out.';
+    else s = 'You are for ' + q.sides[st].of + ', and the readers put you with ' + q.sides[dir].of + '. Bending over backwards is the other way of leaning.';
+    stood.push(s);
+  }
+  var head = clean === Q.length ? 'No reader could tell. Eighteen partisans read you, and not one could place you.'
+    : clean === 0 ? 'The readers could tell every time.'
+    : 'The readers could tell in ' + numberWord(Q.length - clean) + ' of your three quarrels.';
+  return { headline: head, clean: clean, quarrels: quarrels, stood: stood };
+}
+
+// ---------- for the calibration check: every page, and the obvious ways of playing ----------
+
+// Enumerates every page shape (which reasons, in which form, with or without their reply) within the budget and the
+// minimum, and for each the ends a player could arrange. Order beyond the ends changes no reader's count.
+function enumeratePages(q) {
+  var out = [], n = q.reasons.length;
+  function rec(i, items) {
+    if (i === n) {
+      var lines = pageLines(q, items); if (lines < q.min || lines > q.budget) return;
+      var spk = [0, 0]; for (var k = 0; k < items.length; k++) spk[speakerOf(q, items[k])]++;
+      var endsOptions = [];
+      if (items.length === 1) endsOptions.push([spk[0] ? 0 : 1, spk[0] ? 0 : 1]);
+      else { if (spk[0] >= 2) endsOptions.push([0, 0]); if (spk[1] >= 2) endsOptions.push([1, 1]); if (spk[0] && spk[1]) { endsOptions.push([0, 1]); endsOptions.push([1, 0]); } }
+      for (var e = 0; e < endsOptions.length; e++) {
+        var page = arrange(q, items, endsOptions[e][0], endsOptions[e][1]);
+        out.push({ page: page, reading: readPage(q, page) });
+      }
+      return;
+    }
+    var R = q.reasons[i];
+    rec(i + 1, items);
+    ['brief', 'full'].forEach(function (form) {
+      rec(i + 1, items.concat([{ id: R.id, kind: 'reason', form: form }]));
+      rec(i + 1, items.concat([{ id: R.id, kind: 'reason', form: form }, { id: R.id, kind: 'reply' }]));
+    });
+  }
+  rec(0, []);
+  return out;
+}
+
+// Orders a set of items so that the first line is spoken by `first` and the last by `last`, if possible.
+function arrange(q, items, first, last) {
+  var rest = items.slice(), f = null, l = null;
+  for (var i = 0; i < rest.length; i++) if (speakerOf(q, rest[i]) === first) { f = rest.splice(i, 1)[0]; break; }
+  for (var j = rest.length - 1; j >= 0; j--) if (speakerOf(q, rest[j]) === last) { l = rest.splice(j, 1)[0]; break; }
+  var page = []; if (f) page.push(f); page = page.concat(rest); if (l) page.push(l); return page;
+}
+
+// The obvious ways of playing (build.md §3), each a function from a quarrel to a page.
+var HEURISTICS = {
+  // The partisan for side S: own reasons in full first, own replies to the other side's reasons, the other side in brief, their replies dropped first.
+  partisan: function (q, S) {
+    var page = [], T = 1 - S, i;
+    var own = q.reasons.filter(function (r) { return r.side === S; }), other = q.reasons.filter(function (r) { return r.side === T; });
+    for (i = 0; i < own.length; i++) { var a = addItem(q, page, own[i].id, 'reason'); if (a.page) page = a.page; }
+    for (i = 0; i < other.length; i++) { var b = addItem(q, page, other[i].id, 'reason'); if (b.page) { page = b.page; var k = page.length - 1; if (page[k].form === 'full') page = toggleForm(q, page, k).page; var c = addItem(q, page, other[i].id, 'reply'); if (c.page) page = c.page; } }
+    return page;
+  },
+  // The stranger's first draft, a wall of reasons: reasons alternate sides in full as long as they fit, then replies if any fit.
+  alternate: function (q) {
+    var page = [], a = q.reasons.filter(function (r) { return r.side === 0; }), b = q.reasons.filter(function (r) { return r.side === 1; }), i;
+    for (i = 0; i < Math.max(a.length, b.length); i++) { if (a[i]) { var x = addItem(q, page, a[i].id, 'reason'); if (x.page) page = x.page; } if (b[i]) { var y = addItem(q, page, b[i].id, 'reason'); if (y.page) page = y.page; } }
+    for (i = 0; i < page.length; i++) if (page[i].kind === 'reason') { var z = addItem(q, page, page[i].id, 'reply'); if (z.page) page = z.page; }
+    return page;
+  },
+  // The completist: every reason in brief, then every reply that fits, in the quarrel's order.
+  completist: function (q) {
+    var page = [], i;
+    for (i = 0; i < q.reasons.length; i++) { var x = addItem(q, page, q.reasons[i].id, 'reason'); if (x.page) { page = x.page; var k = page.length - 1; if (page[k].form === 'full') page = toggleForm(q, page, k).page; } }
+    for (i = 0; i < q.reasons.length; i++) { var y = addItem(q, page, q.reasons[i].id, 'reply'); if (y.page) page = y.page; }
+    return page;
+  },
+  // The mirror: the same number of reasons a side, each with its reply, as many as fit, reasons first and replies after so the ends split.
+  mirror: function (q) {
+    var a = q.reasons.filter(function (r) { return r.side === 0; }), b = q.reasons.filter(function (r) { return r.side === 1; });
+    var best = [];
+    for (var k = Math.min(a.length, b.length); k >= 1; k--) {
+      for (var fulls = k; fulls >= 0; fulls--) {
+        var items = [], i;
+        for (i = 0; i < k; i++) { items.push({ id: a[i].id, kind: 'reason', form: i < fulls ? 'full' : 'brief' }); items.push({ id: b[i].id, kind: 'reason', form: i < fulls ? 'full' : 'brief' }); }
+        for (i = 0; i < k; i++) { items.push({ id: b[i].id, kind: 'reply' }); items.push({ id: a[i].id, kind: 'reply' }); } // the reply to b is spoken by side 0, so the last line is side 1's
+        if (pageLines(q, items) <= q.budget && pageLines(q, items) >= q.min) return items;
+      }
+    }
+    return best;
+  },
+  // The over-corrector for side S: the other side's reasons in full, own reasons in brief, own reasons' replies in, the other side's replies dropped first.
+  overcorrect: function (q, S) { return HEURISTICS.partisan(q, 1 - S); }
+};
+
+if (typeof module !== 'undefined') module.exports = {
+  CONFIG: CONFIG, reasonById: reasonById, speakerOf: speakerOf, linesOf: linesOf, textOf: textOf, pageLines: pageLines, indexOnPage: indexOnPage,
+  canPublish: canPublish, addItem: addItem, removeItem: removeItem, moveItem: moveItem, toggleForm: toggleForm, sums: sums, leans: leans,
+  readPage: readPage, statement: statement, newGame: newGame, quarrel: quarrel, setStance: setStance, publish: publish, revise: revise,
+  next: next, verdict: verdict, enumeratePages: enumeratePages, arrange: arrange, HEURISTICS: HEURISTICS, numberWord: numberWord
+};

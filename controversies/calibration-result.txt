@@ -1,0 +1,84 @@
+ok   three rules agree with an independent count on 1200 random pages — 1200 of 1200
+ok   no random page ever exceeds its budget
+ok   no reply ever sits on a page without its reason
+ok   a reply cannot go on before its reason
+ok   a reason goes on in full when there is room
+ok   its reply goes on after it
+ok   taking a reason off takes its reply with it
+ok   ten lines of full reasons fill the page
+ok   a sixth reason is refused on a full page
+ok   full to brief frees a line
+ok   a reason goes on in brief when only a brief fits
+ok   brief to full is refused without room
+ok   an empty page cannot be published
+ok   a page under the minimum cannot be published
+ok   a page at the minimum can be published
+ok   cars: 35888 page shapes within 6–10 lines, 1370 that no reader can place
+ok   cars: every fair page has equal lines, the same net of unanswered minus left-out on each side, and split ends
+     of which 866 mirror the cuts exactly (same left-outs, same unanswered) and 504 square a left-out against an unanswered
+ok   cars: no enumerated page is under the minimum
+     fair pages by length: {"6":236,"8":504,"10":630}
+     fair pages by reasons on the page (side 0 v side 1): {"1v2":54,"1v1":18,"2v3":198,"2v2":612,"2v1":54,"3v3":236,"3v2":198}
+     96 per cent of page shapes are placed by at least one reader
+ok   pets: 5870 page shapes within 4–6 lines, 290 that no reader can place
+ok   pets: every fair page has equal lines, the same net of unanswered minus left-out on each side, and split ends
+     of which 218 mirror the cuts exactly (same left-outs, same unanswered) and 72 square a left-out against an unanswered
+ok   pets: no enumerated page is under the minimum
+     fair pages by length: {"4":54,"6":236}
+     fair pages by reasons on the page (side 0 v side 1): {"1v2":36,"1v1":54,"2v2":162,"2v1":36,"3v3":2}
+     95 per cent of page shapes are placed by at least one reader
+ok   office: 35599 page shapes within 6–10 lines, 784 that no reader can place
+ok   office: every fair page has equal lines, the same net of unanswered minus left-out on each side, and split ends
+     of which 380 mirror the cuts exactly (same left-outs, same unanswered) and 404 square a left-out against an unanswered
+ok   office: no enumerated page is under the minimum
+     fair pages by length: {"6":112,"8":304,"10":368}
+     fair pages by reasons on the page (side 0 v side 1): {"1v3":256,"1v4":16,"1v2":48,"2v4":124,"2v3":328,"2v2":12}
+     98 per cent of page shapes are placed by at least one reader
+ok   cars: two stacked pairs are caught by the first-and-last readers only — 2 of 6 could tell. Your page leaned to the ban.
+ok   cars: the same four items reordered are placed by nobody — b1 b1-reply c1-reply c1
+ok   pets: a six-line page nobody can place exists, and among the fullest, one reason each in full with both answers is one — 236 fullest fair shapes
+ok   pets: fair pages exist at four lines and at six, and none in between (five lines cannot be even)
+     office: fair pages by reasons left out (office/home): {"1/1":256,"1/0":16,"1/2":48,"0/0":124,"0/1":328,"0/2":12}
+ok   office: fair pages exist that leave out none, and that leave out one of each; none leaves out both office reasons
+ok   office: the mirror of counts (two a side, both answered) is not fair, because two home reasons are left out against none
+ok   office: a page that leaves out the same share of each side (none) is among the fair pages — 172 of 784
+
+     heuristic           cars                       pets                       office
+     partisan, side 0    6 could tell, Ban [lines,ga6 could tell, Dogs [lines,g6 could tell, Office [lines
+     partisan, side 1    6 could tell, Cars [lines,g6 could tell, Cats [lines,g6 could tell, Home [lines,g
+     wall of reasons     6 could tell, Ban [lines,ga6 could tell, Dogs [lines,g2 could tell, Home [lines] 
+     completist          6 could tell, split [lines,0 could tell, — [] 6l      6 could tell, split [lines,
+     mirror              0 could tell, — [] 10l     0 could tell, — [] 6l      2 could tell, Office [gaps]
+     over-correct, for 0 6 could tell, Cars [lines,g6 could tell, Cats [lines,g6 could tell, Home [lines,g
+ok   the partisan is always placed, with his own side
+ok   the over-corrector is placed with the side he bent towards
+ok   the stranger’s wall of reasons is caught in the first quarrel by the line count and the ends (ploys 2 and 1): a fifth reason breaks the count
+ok   the completist is caught in the first quarrel by the gaps (ploy 4, reasons without their answers)
+ok   the mirror passes the even quarrels
+ok   the mirror fails the uneven quarrel, by the gaps (reasons left out by count)
+ok   some way of playing goes wrong in every quarrel
+ok   some way of playing passes every quarrel
+ok   statement: nobody
+ok   statement: four, with the ban
+ok   statement: split
+ok   readers’ calls: ours / theirs / can’t tell
+ok   a clean game ends done, with the all-clear headline
+ok   a clean game: the quarrel lines say the revision held, not that it mended anything — Should cars be banned from the city centre? Your first page gave the readers nothing: no reader could tell. Your revision held.
+ok   a game whose revisions undo clean drafts says so — Dogs or cats? Your first page gave the readers nothing: no reader could tell. Your revision undid it: placed by six (the line count, the gaps and the first line and the last).
+ok   a clean game: the stance lines say nobody could tell
+ok   a partisan game: the readers could tell every time
+ok   a partisan game: found out / bent over backwards — You are for the ban, and the readers put you with the cars. Bending over backwards is the other way of leaning.
+ok   a mixed game: headline counts the quarrels the readers could tell
+ok   a mixed game: the quarrel line names what caught the draft and that the revision mended it — Should cars be banned from the city centre? Your first page was placed by six (the line count, the gaps and the first line and the last), with the ban. Your revision mended it: no reader could tell.
+ok   no decimals in any word the game says
+ok   cars: with a share-counting gap-finder, fair pages still exist (1370), 1370 of them fair under both rules
+ok   pets: with a share-counting gap-finder, fair pages still exist (290), 290 of them fair under both rules
+ok   office: with a share-counting gap-finder, fair pages still exist (406), 268 of them fair under both rules
+ok   cars: with a full reason at three lines, fair pages still exist (542) and the partisan is still placed
+ok   pets: with a full reason at three lines, fair pages still exist (128) and the partisan is still placed
+ok   office: with a full reason at three lines, fair pages still exist (260) and the partisan is still placed
+ok   cars: the partisan’s page leans by more than one line or one gap, so a tolerant reader would catch it too — {"lines":-6,"gaps":-4,"ends":-2}
+ok   pets: the partisan’s page leans by more than one line or one gap, so a tolerant reader would catch it too — {"lines":-6,"gaps":-6,"ends":-2}
+ok   office: the partisan’s page leans by more than one line or one gap, so a tolerant reader would catch it too — {"lines":-8,"gaps":-5,"ends":-2}
+
+ALL CHECKS PASS

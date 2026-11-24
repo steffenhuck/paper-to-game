@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Leibniz's Even Hand</title>
+<script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<meta name="description" content="Leibniz, 1680: the sign of a fair account of a dispute is that no reader can tell whose side the writer is on. Three quarrels people still have. You write them up on one short page; six partisans read it and hold up placards.">
+<style>
+@font-face{font-family:'Unbounded';font-weight:200 900;font-style:normal;src:url(data:font/woff2;base64,/*__F_UNB__*/) format('woff2')}
+@font-face{font-family:'Bricolage';font-weight:200 800;font-style:normal;src:url(data:font/woff2;base64,/*__F_BRI__*/) format('woff2')}
+:root{--chalk:#F3F1EA;--ink:#141414;--s0:#5B2BFF;--s1:#FF6A00;--acid:#E6FF3A;--concrete:#C9C6BC;--pale:#E7E4DA;color-scheme:light}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--chalk);color:var(--ink)}
+body{font-family:'Bricolage',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-size:16px;line-height:1.4;font-weight:400}
+.disp{font-family:'Unbounded','Bricolage',system-ui,sans-serif;font-weight:900;letter-spacing:-.02em}
+.wrap{max-width:420px;margin:0 auto;min-height:100vh;padding:14px 16px 28px;position:relative}
+.screen{display:none}.screen.on{display:block}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:inherit;touch-action:manipulation}
+h1,h2,h3,p{margin:0}
+b,strong{font-weight:700}
+.kicker{font-family:'Unbounded',sans-serif;font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.title{font-size:46px;line-height:.98;margin:0 0 14px}
+.motif{display:flex;gap:6px;margin:0 0 16px;height:74px}
+.motif div{flex:1;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Unbounded',sans-serif;font-weight:900;font-size:34px}
+.motif .m0{background:var(--s0)}.motif .m1{background:var(--s1)}.motif .mq{background:var(--concrete);color:var(--ink)}
+.setting p{margin:0 0 10px;font-size:16px}
+.acts{font-size:18px;font-weight:700;line-height:1.3;margin:12px 0 12px}
+.aim{font-family:'Unbounded',sans-serif;font-weight:700;font-size:15px;line-height:1.35;border-top:3px solid var(--ink);border-bottom:3px solid var(--ink);padding:10px 0;margin:8px 0 14px}
+.btn{display:block;width:100%;min-height:54px;background:var(--ink);color:#fff;font-family:'Unbounded',sans-serif;font-weight:700;font-size:15px;letter-spacing:.06em;text-transform:uppercase;text-align:center;padding:14px 16px;margin:8px 0}
+.btn.sec{background:transparent;color:var(--ink);border:2px solid var(--ink)}
+.btn.c0{background:var(--s0)}.btn.c1{background:var(--s1)}
+.btn:disabled,.btn.dim{background:var(--concrete);color:#5a584f}
+.row2{display:flex;gap:8px}.row2 .btn{flex:1;padding-left:8px;padding-right:8px}
+.cred{font-size:13px;text-align:center;margin-top:16px;line-height:1.35;color:#555}
+.cred a{color:inherit}
+.sig{text-align:center;font-style:italic;font-size:13px;margin-top:22px;color:#777}.sig a{color:inherit;text-decoration:none}
+/* play */
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.top .aimline{font-family:'Unbounded',sans-serif;font-weight:700;font-size:11.5px;line-height:1.3}
+.qm{width:38px;height:38px;background:var(--ink);color:#fff;font-family:'Unbounded',sans-serif;font-weight:900;font-size:18px;text-align:center;flex:none;line-height:38px}
+.qno{font-family:'Unbounded',sans-serif;font-weight:700;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#555}
+.question{font-size:20px;line-height:1.08;margin:3px 0 6px}
+.now{font-size:17px;font-weight:800;line-height:1.2;margin:4px 0 6px}
+.intro{font-size:14.5px;margin:0 0 8px;line-height:1.35}
+.stick{position:sticky;top:0;background:var(--chalk);z-index:5;padding-top:2px;padding-bottom:4px;box-shadow:0 10px 10px -10px rgba(0,0,0,.25)}
+.page{background:#fff;border:3px solid var(--ink);padding:6px 8px;position:relative}
+.page .ln{display:flex;align-items:flex-start;gap:6px;height:17px;line-height:17px;font-size:12.5px;font-weight:600;overflow:hidden;border-bottom:1px solid var(--pale);padding:0 2px}
+.page .ln .tx{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.page .ln.two{height:34px}
+.page .ln.two .tx{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.page .ln .dot{display:inline-block;width:9px;height:9px;margin:4px 2px 0 0;flex:none}
+.page .ln.rep{padding-left:16px}
+.page .ln.rep .dot{width:9px;height:4px;margin-top:6px}
+.page .ln.s0{color:var(--s0)}.page .ln.s0 .dot{background:var(--s0)}
+.page .ln.s1{color:var(--s1)}.page .ln.s1 .dot{background:var(--s1)}
+.page .ln.sel{background:var(--acid)}
+.page .ln.read{background:var(--acid)}
+.page .ln.empty{color:var(--concrete)}
+.page .num{position:absolute;right:6px;top:-12px;background:var(--ink);color:#fff;font-family:'Unbounded',sans-serif;font-weight:700;font-size:10px;padding:2px 6px;letter-spacing:.08em}
+.tools{display:flex;gap:6px;margin-top:5px;min-height:34px;align-items:center}
+.tools .t{flex:1;min-height:36px;background:var(--ink);color:#fff;font-family:'Unbounded',sans-serif;font-weight:700;font-size:11px;letter-spacing:.04em;text-transform:uppercase;text-align:center;padding:9px 4px}
+.tools .t.sec{background:transparent;color:var(--ink);border:2px solid var(--ink)}
+.tools .t.dim{opacity:.3}
+.tools .hint{font-size:12.5px;color:#555;line-height:1.3}
+.say{font-size:13px;line-height:1.25;margin-top:3px;min-height:16px;font-weight:600}
+.readers{margin:10px 0 4px;border-top:3px solid var(--ink);padding-top:6px}
+.readers p{font-size:13.5px;margin:0 0 4px;line-height:1.3}
+.rule{display:flex;align-items:center;gap:8px;margin:2px 0;font-size:13px;line-height:1.25}
+.rule .pair{display:flex;gap:3px;flex:none}
+.head{width:22px;height:26px;position:relative;flex:none}
+.head .face{position:absolute;left:3px;top:0;width:16px;height:14px}
+.head .face:before,.head .face:after{content:'';position:absolute;top:5px;width:3px;height:3px;background:#fff}
+.head .face:before{left:3px}.head .face:after{right:3px}
+.head .body{position:absolute;left:0;bottom:0;width:22px;height:10px}
+.head.h0 .face,.head.h0 .body{background:var(--s0)}.head.h1 .face,.head.h1 .body{background:var(--s1)}
+.rule b{font-family:'Unbounded',sans-serif;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;display:inline;margin-right:4px}
+.tray{margin-top:4px;padding-bottom:96px}
+.tray .sh{font-family:'Unbounded',sans-serif;font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#fff;padding:7px 10px;margin:10px 0 4px}
+.tray .sh.s0{background:var(--s0)}.tray .sh.s1{background:var(--s1)}
+.card{display:block;width:100%;border:3px solid;padding:8px 10px;margin:6px 0 0;font-size:14.5px;line-height:1.3;font-weight:500;text-align:left;background:#fff}
+.card.s0{border-color:var(--s0)}.card.s1{border-color:var(--s1)}
+.card .tag{font-family:'Unbounded',sans-serif;font-weight:700;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:3px}
+.card.s0 .tag{color:var(--s0)}.card.s1 .tag{color:var(--s1)}
+.card.on{opacity:.38;background:transparent}
+.card.lock{opacity:.5;border-style:dashed}
+.rcard{margin:0 0 0 18px;width:calc(100% - 18px);border-width:0 0 0 6px;padding:6px 8px;background:transparent;font-size:13.5px;font-weight:500}
+.rcard.s0{border-left-color:var(--s0)}.rcard.s1{border-left-color:var(--s1)}
+.bottom{position:fixed;left:0;right:0;bottom:0;background:var(--chalk);border-top:3px solid var(--ink);z-index:6}
+.bottom .in{max-width:420px;margin:0 auto;padding:8px 16px calc(10px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:10px}
+.budget{flex:1}
+.budget .bt{font-family:'Unbounded',sans-serif;font-weight:700;font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+.meter{display:flex;gap:2px;height:12px}
+.meter i{flex:1;background:var(--pale);border:1px solid var(--ink)}
+.meter i.f{background:var(--acid)}
+.bottom .btn{width:auto;min-width:130px;margin:0;min-height:48px;padding:12px 14px}
+/* reading */
+.bench{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 0 6px}
+.seat{text-align:center}
+.seat .plac{height:44px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:4px}
+.seat .plac div{width:56px;height:40px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Unbounded',sans-serif;font-weight:900;font-size:11px;letter-spacing:.04em;text-transform:uppercase;transform:translateY(46px);opacity:0;transition:transform .35s,opacity .35s}
+.seat .plac div.up{transform:translateY(0);opacity:1}
+.seat .plac .p0{background:var(--s0)}.seat .plac .p1{background:var(--s1)}.seat .plac .pq{background:var(--concrete);color:var(--ink);font-size:20px}
+.seat .bighead{width:44px;height:52px;margin:0 auto;position:relative}
+.seat .bighead .face{position:absolute;left:6px;top:0;width:32px;height:28px}
+.seat .bighead .face:before,.seat .bighead .face:after{content:'';position:absolute;top:11px;width:6px;height:6px;background:#fff}
+.seat .bighead .face:before{left:6px}.seat .bighead .face:after{right:6px}
+.seat .bighead .body{position:absolute;left:0;bottom:0;width:44px;height:20px}
+.seat.r0 .face,.seat.r0 .body{background:var(--s0)}.seat.r1 .face,.seat.r1 .body{background:var(--s1)}
+.seat .lab{font-family:'Unbounded',sans-serif;font-weight:700;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;margin-top:4px;line-height:1.2}
+.benchlab{font-family:'Unbounded',sans-serif;font-weight:700;font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin:8px 0 0}
+.lines{margin-top:8px}
+.lines p{margin:0 0 6px;font-size:14px;line-height:1.35;padding-left:12px;border-left:5px solid var(--ink)}
+.lines p.l0{border-left-color:var(--s0)}.lines p.l1{border-left-color:var(--s1)}
+.lines p b{font-family:'Unbounded',sans-serif;font-weight:700;font-size:10px;letter-spacing:.06em;text-transform:uppercase}
+.state{font-size:20px;line-height:1.15;margin:12px 0 10px;padding:10px 12px;background:var(--ink);color:#fff}
+.state.clean{background:var(--acid);color:var(--ink)}
+.hid{display:none!important}
+/* end */
+.vhead{font-size:28px;line-height:1.08;margin:6px 0 16px}
+.vlab{font-family:'Unbounded',sans-serif;font-weight:700;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;margin:16px 0 6px;border-top:3px solid var(--ink);padding-top:8px}
+.vtext p{margin:0 0 8px;font-size:15px;line-height:1.4}
+/* overlays */
+.ov{display:none;position:fixed;inset:0;background:var(--chalk);z-index:20;overflow-y:auto}
+.ov.on{display:block}
+.ov .in{max-width:420px;margin:0 auto;padding:18px 16px 40px}
+.ov h2{font-size:26px;margin-bottom:10px}
+.ov h3{font-size:16px;font-weight:800;margin:16px 0 6px}
+.ov p{margin:0 0 10px;font-size:15px;line-height:1.4}
+.ov ul{padding-left:18px;margin:0 0 10px}.ov li{margin-bottom:6px;font-size:15px}
+.ov .btn{margin-top:14px}
+.ov a{color:inherit}
+.ov .sw{display:inline-block;width:12px;height:12px;vertical-align:-1px;margin-right:3px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<section class="screen on" id="s-start">
+  <div class="kicker">Hanover, 1680</div>
+  <h1 class="title disp">Leibniz&rsquo;s Even&nbsp;Hand</h1>
+  <div class="motif" aria-hidden="true"><div class="m0"></div><div class="mq">?</div><div class="m1"></div></div>
+  <div class="setting">
+    <p>Leibniz told a prince he had a way of writing up a dispute that nobody could object to. The sign that it had worked: no reader would be able to tell whose side the writer was on.</p>
+    <p>Partisans from both sides would read every word to catch him out, and fail.</p>
+    <p>Three quarrels people still have. You write them up, on one short page.</p>
+  </div>
+  <p class="acts">Put what each side said on the page.<br>Order it; say it in full or in brief.<br>Then six partisans read it.</p>
+  <p class="aim">Write up the quarrel so that no reader can tell whose side you are on.</p>
+  <button class="btn" id="b-begin">Begin</button>
+  <button class="btn sec" id="b-help-start">How to play</button>
+  <p class="cred">Built on <a href="https://leibnizpapers.org/about.htm">Lloyd Strickland</a>&rsquo;s translation of Leibniz&rsquo;s <i>On Controversies</i> (2021), <a href="https://www.leibniz-translations.com/controversies.htm">leibniz-translations.com</a>.</p>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+
+<section class="screen" id="s-stance">
+  <div class="top"><div class="aimline">Write up the quarrel so that no reader can tell whose side you are on.</div><button class="qm" id="b-help-stance" aria-label="How to play">?</button></div>
+  <div class="qno" id="stno">Quarrel 1 of 3</div>
+  <h2 class="question disp" id="stq"></h2>
+  <p class="now">Before you write: where do you stand?</p>
+  <p class="intro">Nobody sees this but the verdict, which will say whether the readers found you out. The page you write is the same whatever you answer here.</p>
+  <button class="btn c0" id="b-st0"></button>
+  <button class="btn c1" id="b-st1"></button>
+  <button class="btn sec" id="b-st2">No view</button>
+</section>
+
+<section class="screen" id="s-write">
+  <div class="top"><div class="aimline">Write up the quarrel so that no reader can tell whose side you are on.</div><button class="qm" id="b-help-write" aria-label="How to play">?</button></div>
+  <div class="qno" id="wno">Quarrel 1 of 3 &middot; first draft</div>
+  <h2 class="question disp" id="wq"></h2>
+  <div class="stick">
+    <h2 class="now" id="now">Fill the page: ten lines, no more.</h2>
+    <div class="page" id="page"><span class="num">THE PAGE</span></div>
+    <div class="tools" id="tools"></div>
+    <p class="say" id="say"></p>
+  </div>
+  <div class="readers">
+    <p><b>Who reads it.</b> Six partisans, three a side. They count; they do not weigh. Any difference places you.</p>
+    <div id="rules"></div>
+  </div>
+  <p class="intro" id="wintro"><b>What each side said.</b> Tap a card to put it on the page: a reason in full (two lines) if there is room, else in brief (one); a reply goes under its reason.</p>
+  <div class="tray" id="tray"></div>
+</section>
+<div class="bottom hid" id="bottom"><div class="in">
+  <div class="budget"><div class="bt" id="bt">0 of 10 lines</div><div class="meter" id="meter"></div></div>
+  <button class="btn" id="b-publish">Publish</button>
+</div></div>
+
+<section class="screen" id="s-read">
+  <div class="top"><div class="aimline">Write up the quarrel so that no reader can tell whose side you are on.</div><button class="qm" id="b-help-read" aria-label="How to play">?</button></div>
+  <div class="qno" id="rno">Quarrel 1 of 3 &middot; the readers</div>
+  <h2 class="now" id="rnow">The readers read your page.</h2>
+  <div class="page" id="rpage"><span class="num">THE PAGE</span></div>
+  <div class="benchlab" id="benchlab0"></div>
+  <div class="bench" id="bench"></div>
+  <div class="lines" id="rlines"></div>
+  <div class="state disp hid" id="rstate"></div>
+  <p class="intro hid" id="rmean"></p>
+  <div id="rbtns" class="hid"></div>
+</section>
+
+<section class="screen" id="s-end">
+  <div class="kicker">The verdict</div>
+  <h2 class="vhead disp" id="vhead"></h2>
+  <div class="vlab">What Leibniz says</div>
+  <div class="vtext">
+    <p>A dispute written up fairly has a visible sign: the reader cannot judge which party the writer has embraced. Partisans will examine the page very closely, picking out words everywhere, to convict the writer of partiality; some will fight to claim him and others to disown him.</p>
+    <p>The writer who manages it is neither judge, nor client, nor reconciler, but rapporteur. And the form forces him to moderation in spite of himself: he cannot disguise his side without giving each side its reasons, with the answers, in an order that is nobody&rsquo;s own.</p>
+  </div>
+  <div class="vlab">What you found</div>
+  <div class="vtext" id="vfound"></div>
+  <div class="vlab">Where you really stood</div>
+  <div class="vtext" id="vstood"></div>
+  <div class="vlab">Where you part</div>
+  <div class="vtext" id="vpart"></div>
+  <div class="vlab">Had your pages stood</div>
+  <div class="vtext" id="vhad"></div>
+  <button class="btn" id="b-again">Play again</button>
+  <div class="row2"><button class="btn sec" id="b-help-end">How to play</button><button class="btn sec" id="b-about">About</button></div>
+  <p class="cred">Built on <a href="https://leibnizpapers.org/about.htm">Lloyd Strickland</a>&rsquo;s translation of Leibniz&rsquo;s <i>On Controversies</i> (1680; translation 2021), <a href="https://www.leibniz-translations.com/controversies.htm">leibniz-translations.com</a>. The second game of a Leibniz suite, after <a href="../leibniz/leibnizs-fullest-world.html">Leibniz&rsquo;s Fullest World</a>.</p>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+
+</div>
+
+<div class="ov" id="help"><div class="in">
+  <h2 class="disp">How to play</h2>
+  <p><b>Write up the quarrel so that no reader can tell whose side you are on.</b></p>
+  <h3>The page</h3>
+  <p>Three quarrels, each on one page: ten ruled lines (six for the short one). Below the page is everything each side said: three or four reasons a side, each with the other side&rsquo;s one-line reply.</p>
+  <ul>
+    <li><b>Tap a card</b> to put it on the page. A reason takes two lines in full, one in brief; it goes on in full if there is room. A reply takes one line and goes on only under its own reason.</li>
+    <li><b>Tap a line on the page</b> to select it. Then <b>Up</b> and <b>Down</b> move it, <b>Brief</b> and <b>Full</b> change its length, <b>Off</b> takes it off (a reason takes its reply off with it).</li>
+    <li>Every line is in the colour of the side that speaks it: <span class="sw" style="background:var(--s0)"></span>the first side, <span class="sw" style="background:var(--s1)"></span>the second. A reply is spoken by the side that answered.</li>
+    <li><b>Publish</b> when the page has at least six lines (four on the short page).</li>
+  </ul>
+  <h3>The readers</h3>
+  <p>Six partisans read the page, three from each side. They do not weigh what is true; they count, and any difference places you:</p>
+  <ul>
+    <li><b>Counts lines:</b> the lines each side speaks.</li>
+    <li><b>Checks gaps:</b> for each side, its reasons on the page with no answer under them, minus its reasons left off the page. The higher number is your side.</li>
+    <li><b>First &amp; last:</b> only the first line and the last. Both the same side, and that side is yours.</li>
+  </ul>
+  <p>Each reader holds up a placard: the colour of the side he places you with, or a grey question mark when he can&rsquo;t tell. His sentence under the bench is the sum he counted.</p>
+  <h3>Draft and revision</h3>
+  <p>Each quarrel gets a first draft and one revision; the revision starts from the draft and is final. Before each quarrel you say where you stand; that changes nothing on the page, and only the verdict will say whether the readers found you out.</p>
+  <h3>The verdict</h3>
+  <p>How many readers could tell, quarrel by quarrel; what caught you; and where you really stood against where they put you.</p>
+  <button class="btn" data-close>Back</button>
+</div></div>
+
+<div class="ov" id="about"><div class="in">
+  /*__ABOUT__*/
+  <button class="btn" data-close>Back</button>
+</div></div>
+
+<script>
+/*__MECHANISM__*/
+</script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var game = newGame(), sel = null, returnTo = null, reading = false;
+  window.__game = game;
+
+  function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  function screen(id) { document.querySelectorAll('.screen').forEach(function (s) { s.classList.toggle('on', s.id === id); }); $('bottom').classList.toggle('hid', id !== 's-write'); window.scrollTo(0, 0); }
+  function q() { return quarrel(game); }
+  function qLabel() { return 'Quarrel ' + (game.q + 1) + ' of ' + CONFIG.QUARRELS.length; }
+  function stageLabel() { return game.stage === 'draft' ? 'first draft' : 'revision, the last'; }
+  function words(n) { return ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'][n] || String(n); }
+  function sideWord(s) { return q().sides[s].name; }
+  function describe(it) { var spk = speakerOf(q(), it); return it.kind === 'reply' ? q().sides[spk].side + '’s reply' : q().sides[spk].side + '’s reason, in ' + it.form; }
+
+  // ---- the page ----
+  function renderPage(el, page, selectable) {
+    var Q = q(), used = 0;
+    el.querySelectorAll('.ln').forEach(function (n) { n.remove(); });
+    page.forEach(function (it, i) {
+      var n = linesOf(it), spk = speakerOf(Q, it), d = document.createElement('div');
+      d.className = 'ln s' + spk + (n === 2 ? ' two' : '') + (it.kind === 'reply' ? ' rep' : '') + (selectable && sel === i ? ' sel' : '');
+      d.setAttribute('data-i', i);
+      d.innerHTML = '<span class="dot"></span><span class="tx">' + esc(textOf(Q, it)) + '</span>';
+      if (selectable) d.addEventListener('click', function () { sel = (sel === i) ? null : i; renderWrite(); });
+      el.appendChild(d); used += n;
+    });
+    for (var k = used; k < Q.budget; k++) { var e = document.createElement('div'); e.className = 'ln empty'; e.innerHTML = '&nbsp;'; el.appendChild(e); }
+  }
+
+  function renderTools() {
+    var t = $('tools'), Q = q();
+    if (sel === null || !game.page[sel]) { sel = null; t.innerHTML = '<p class="hint">' + (game.page.length ? 'Tap a line on the page to move it, shorten it, or take it off.' : 'The cards are below. Tap one to put it on the page.') + '</p>'; return; }
+    var it = game.page[sel];
+    t.innerHTML = '<button class="t sec" data-act="up">&#9650; Up</button><button class="t sec" data-act="down">&#9660; Down</button>' +
+      (it.kind === 'reason' ? '<button class="t" data-act="form">' + (it.form === 'full' ? 'Brief' : 'Full') + '</button>' : '') +
+      '<button class="t" data-act="off">Off</button>';
+    t.querySelectorAll('.t').forEach(function (b) { b.addEventListener('click', function () { act(b.getAttribute('data-act')); }); });
+  }
+
+  function act(a) {
+    var Q = q(), it = game.page[sel], before = describe(it);
+    if (a === 'up' || a === 'down') { var d = a === 'up' ? -1 : 1; var p2 = moveItem(Q, game.page, sel, d); if (p2 === game.page) say('It is already at the ' + (d < 0 ? 'top' : 'bottom') + '.'); else { game.page = p2; sel = sel + d; say(before + ' moved ' + (d < 0 ? 'up' : 'down') + '.'); } }
+    else if (a === 'form') { if (it.kind !== 'reason') { say('A reply is one line, always.'); renderWrite(); return; } var r = toggleForm(Q, game.page, sel); if (r.error) say('No room to say it in full: the page has ' + pageLines(Q, game.page) + ' of ' + Q.budget + ' lines.'); else { game.page = r.page; say(Q.sides[speakerOf(Q, it)].side + '’s reason is now in ' + r.note + ' (' + CONFIG.LINES[r.note] + (r.note === 'full' ? ' lines' : ' line') + '). ' + pageLines(Q, game.page) + ' of ' + Q.budget + '.'); } }
+    else if (a === 'off') { var hadReply = it.kind === 'reason' && indexOnPage(game.page, it.id, 'reply') >= 0; game.page = removeItem(Q, game.page, sel); sel = null; say(before + ' is off the page' + (hadReply ? ', and its reply with it' : '') + '. ' + pageLines(Q, game.page) + ' of ' + Q.budget + '.'); }
+    renderWrite();
+  }
+
+  function say(s) { $('say').textContent = s; }
+
+  function renderTray() {
+    var Q = q(), t = $('tray'), h = '';
+    for (var s = 0; s < 2; s++) {
+      h += '<div class="sh s' + s + '">' + esc(Q.sides[s].says) + '</div>';
+      Q.reasons.filter(function (r) { return r.side === s; }).forEach(function (r) {
+        var on = indexOnPage(game.page, r.id, 'reason') >= 0, rOn = indexOnPage(game.page, r.id, 'reply') >= 0;
+        h += '<button class="card s' + s + (on ? ' on' : '') + '" data-id="' + r.id + '" data-kind="reason"><span class="tag">' + esc(Q.sides[s].name) + (on ? ' · on the page' : '') + '</span>' + esc(r.full) + '</button>';
+        h += '<button class="card rcard s' + (1 - s) + (rOn ? ' on' : (on ? '' : ' lock')) + '" data-id="' + r.id + '" data-kind="reply"><span class="tag">' + esc(Q.sides[1 - s].name) + ' replies' + (rOn ? ' · on the page' : (on ? '' : ' · after its reason')) + '</span>' + esc(r.reply) + '</button>';
+      });
+    }
+    t.innerHTML = h;
+    t.querySelectorAll('.card').forEach(function (c) { c.addEventListener('click', function () { add(c.getAttribute('data-id'), c.getAttribute('data-kind')); }); });
+  }
+
+  function add(id, kind) {
+    var Q = q(), r = addItem(Q, game.page, id, kind);
+    if (r.error === 'already on the page') { say('That is already on the page. Tap its line on the page to change it.'); }
+    else if (r.error === 'put the reason on the page first') { say('A reply goes under its reason. Put the reason on the page first.'); }
+    else if (r.error) { say('The page is full: ' + pageLines(Q, game.page) + ' of ' + Q.budget + ' lines. Take something off, or make a reason brief.'); }
+    else { game.page = r.page; sel = null; var it = game.page[game.page.length - 1]; say('On the page, line ' + pageLines(Q, game.page) + ': ' + describe(it) + (it.kind === 'reply' ? ' (one line)' : ' (' + CONFIG.LINES[it.form] + (it.form === 'full' ? ' lines' : ' line') + ')') + '. ' + pageLines(Q, game.page) + ' of ' + Q.budget + '.'); }
+    renderWrite();
+
+  }
+
+  function renderBottom() {
+    var Q = q(), n = pageLines(Q, game.page), m = $('meter'), h = '';
+    for (var i = 0; i < Q.budget; i++) h += '<i class="' + (i < n ? 'f' : '') + '"></i>';
+    m.innerHTML = h;
+    $('bt').textContent = n + ' of ' + Q.budget + ' lines' + (n < Q.min ? ' · at least ' + Q.min : '');
+    $('b-publish').disabled = !canPublish(Q, game.page);
+  }
+
+  function renderRules() {
+    var h = '';
+    CONFIG.READERS.forEach(function (r) {
+      h += '<div class="rule"><div class="pair"><div class="head h0"><div class="face"></div><div class="body"></div></div><div class="head h1"><div class="face"></div><div class="body"></div></div></div><div><b>' + esc(r.label) + '</b> ' + esc(r.rule.charAt(0).toUpperCase() + r.rule.slice(1)) + '.</div></div>';
+    });
+    $('rules').innerHTML = h;
+  }
+
+  function renderWrite() {
+    var Q = q();
+    $('wno').textContent = qLabel() + ' · ' + stageLabel();
+    var n = pageLines(Q, game.page);
+    $('now').textContent = game.stage === 'draft'
+      ? (n === 0 ? 'Fill the page: ' + words(Q.budget) + ' lines, no more.' : n < Q.min ? 'Keep going: at least ' + words(Q.min) + ' lines.' : 'Add, cut, reorder; then publish.')
+      : 'Revise the page. This one is final.';
+    renderPage($('page'), game.page, true);
+    $('wq').textContent = Q.question;
+    renderTools(); renderTray(); renderBottom();
+  }
+
+  // ---- screens ----
+  function showStance() {
+    var Q = q();
+    $('stno').textContent = qLabel(); $('stq').textContent = Q.question;
+    $('b-st0').textContent = Q.sides[0].stance; $('b-st1').textContent = Q.sides[1].stance;
+    screen('s-stance');
+  }
+  function showWrite() { sel = null; say(game.stage === 'draft' ? '' : 'Your draft is back, as you left it. The readers’ placards are under the ? if you want them again.'); renderRules(); renderWrite(); screen('s-write'); }
+
+  var lastResult = null;
+  function doPublish() {
+    var Q = q(), r = publish(game); if (!r) return; lastResult = r; reading = true;
+    $('rno').textContent = qLabel() + ' · the readers · ' + (r.stage === 'draft' ? 'first draft' : 'final');
+    $('rnow').textContent = 'The readers read your page.';
+    renderPage($('rpage'), r.page, false);
+    $('benchlab0').textContent = Q.sides[0].side + '’s readers, then ' + Q.sides[1].side + '’s';
+    var b = $('bench'), h = '';
+    for (var side = 0; side < 2; side++) for (var k = 0; k < 3; k++) {
+      var rd = r.readers[2 * k + side];
+      h += '<div class="seat r' + side + '" data-k="' + k + '" data-side="' + side + '"><div class="plac"><div class="' + (rd.placed === null ? 'pq' : 'p' + rd.placed) + '">' + (rd.placed === null ? '?' : esc(Q.sides[rd.placed].name)) + '</div></div><div class="bighead"><div class="face"></div><div class="body"></div></div><div class="lab">' + esc(rd.label) + '</div></div>';
+    }
+    b.innerHTML = h;
+    $('rlines').innerHTML = ''; $('rstate').classList.add('hid'); $('rmean').classList.add('hid'); $('rbtns').classList.add('hid');
+    screen('s-read');
+    // the reading: line by line, then the placards pair by pair
+    var lines = $('rpage').querySelectorAll('.ln:not(.empty)'), i = 0;
+    function sweep() {
+      if (i > 0) lines[i - 1].classList.remove('read');
+      if (i < lines.length) { lines[i].classList.add('read'); i++; setTimeout(sweep, 170); } else setTimeout(placards, 250);
+    }
+    var k = 0;
+    function placards() {
+      if (k < 3) {
+        var rd0 = r.readers[2 * k], rd1 = r.readers[2 * k + 1];
+        [0, 1].forEach(function (side) { var seat = b.querySelector('.seat[data-k="' + k + '"][data-side="' + side + '"]'); seat.querySelector('.plac div').classList.add('up'); });
+        var p = document.createElement('p'); p.className = 'l' + (rd0.placed === null ? 'q' : rd0.placed);
+        p.innerHTML = '<b>' + esc(rd0.label) + '</b> · ' + esc(rd0.sum) + ' <i>' + esc(Q.sides[0].side.charAt(0).toUpperCase() + Q.sides[0].side.slice(1)) + '’s reader: ' + esc(rd0.call) + ' ' + esc(Q.sides[1].side.charAt(0).toUpperCase() + Q.sides[1].side.slice(1)) + '’s: ' + esc(rd1.call) + '</i>';
+        $('rlines').appendChild(p);
+        k++; setTimeout(placards, 650);
+      } else finish();
+    }
+    function finish() {
+      var st = $('rstate'); st.textContent = r.statement; st.classList.toggle('clean', r.couldTell === 0); st.classList.remove('hid');
+      var mean = $('rmean');
+      if (r.couldTell === 0) mean.textContent = 'This is the sign Leibniz promised the prince: a page from which nobody can read the writer’s side.';
+      else if (r.stage === 'draft') mean.textContent = 'Every placard points at something on the page. Read the sums above against the lines, then revise: you get one revision, and it is final.';
+      else mean.textContent = 'Every placard points at something on the page. This page is final; the verdict will say what caught you.';
+      mean.classList.remove('hid');
+      $('rnow').textContent = r.couldTell === 0 ? 'Nobody could tell.' : (r.stage === 'draft' ? 'They could tell. Revise.' : 'They could tell.');
+      var bt = $('rbtns');
+      bt.innerHTML = r.stage === 'draft' ? '<button class="btn" id="b-revise">Revise the page</button>' : (game.q === CONFIG.QUARRELS.length - 1 ? '<button class="btn" id="b-next">The verdict</button>' : '<button class="btn" id="b-next">Next quarrel</button>');
+      bt.classList.remove('hid'); reading = false;
+      if ($('b-revise')) $('b-revise').addEventListener('click', function () { revise(game); showWrite(); });
+      if ($('b-next')) $('b-next').addEventListener('click', function () { next(game); if (game.done) showEnd(); else showStance(); });
+    }
+    sweep();
+  }
+
+  function showEnd() {
+    var v = verdict(game), Q = CONFIG.QUARRELS;
+    $('vhead').textContent = v.headline;
+    $('vfound').innerHTML = v.quarrels.map(function (l) { return '<p>' + esc(l) + '</p>'; }).join('');
+    $('vstood').innerHTML = v.stood.map(function (l, i) { return '<p><b>' + esc(Q[i].question) + '</b> ' + esc(l) + '</p>'; }).join('');
+    var drafts = 0, finals = 0; game.results.forEach(function (res) { if (res[0].couldTell > 0) drafts++; if (res[res.length - 1].couldTell > 0) finals++; });
+    var part;
+    if (v.clean === Q.length) part = (drafts === 0 ? 'Nowhere. Your first pages were already pages nobody could place; Leibniz said the method was very difficult and would take a great deal of application, and you made it look easy.' : 'Nowhere, in the end. Leibniz said the method was very difficult and would take a great deal of application; it took you ' + words(drafts) + ' revision' + (drafts === 1 ? '' : 's') + '. He also says the form forces the writer to moderation in spite of himself. Your pages show the other half of that: the readers catch every cut, but the mirroring is the writer’s own work, line by line.');
+    else part = 'Leibniz says the form forces the writer to moderation in spite of himself. Your pages show the other half of that: the form catches every cut, and the mirroring is the writer’s own work, line by line, under a length that will not take everything. Where a page of yours still leaned, it was not for want of good will; it was a line, a gap, or an end.';
+    $('vpart').innerHTML = '<p>' + esc(part) + '</p>';
+    var had;
+    if (finals === 0) had = 'They could be handed to anyone. Leibniz’s hope was that a man of common sense could judge the quarrel from the report alone, without the writer having to declare himself; that needs exactly the page nobody can place. He feared that both sides would condemn him by mutual consent, to keep themselves in business. The prince told him not to worry, and to work on it for his sake.';
+    else had = 'A page the readers can place is read as a brief, not a report. The side it leans to claims it and quotes it; the other side stops reading at the first line that gave you away; and the quarrel carries on, now with you in it. Leibniz’s hope was that a man of common sense could judge from the report alone, without the writer declaring himself; that needs the page nobody can place, and it needs it every time.';
+    $('vhad').innerHTML = '<p>' + esc(had) + '</p>';
+    screen('s-end');
+  }
+
+  // ---- wiring ----
+  $('b-begin').addEventListener('click', function () { game = newGame(); window.__game = game; showStance(); });
+  $('b-again').addEventListener('click', function () { game = newGame(); window.__game = game; showStance(); });
+  $('b-st0').addEventListener('click', function () { setStance(game, 0); showWrite(); });
+  $('b-st1').addEventListener('click', function () { setStance(game, 1); showWrite(); });
+  $('b-st2').addEventListener('click', function () { setStance(game, null); showWrite(); });
+  $('b-publish').addEventListener('click', function () { if (!reading) doPublish(); });
+  function openOv(id) { returnTo = window.scrollY; document.body.style.overflow = 'hidden'; $(id).classList.add('on'); $(id).scrollTop = 0; }
+  function closeOv() { document.querySelectorAll('.ov').forEach(function (o) { o.classList.remove('on'); }); document.body.style.overflow = ''; if (returnTo !== null) window.scrollTo(0, returnTo); }
+  ['b-help-start', 'b-help-stance', 'b-help-write', 'b-help-read', 'b-help-end'].forEach(function (id) { $(id).addEventListener('click', function () { openOv('help'); }); });
+  $('b-about').addEventListener('click', function () { openOv('about'); });
+  document.querySelectorAll('[data-close]').forEach(function (b) { b.addEventListener('click', closeOv); });
+
+  window.__api = {
+    add: add, act: function (i, a) { sel = i; act(a); }, publish: doPublish, stance: function (s) { setStance(game, s); showWrite(); },
+    page: function () { return game.page; }, game: function () { return game; }, last: function () { return lastResult; }, reading: function () { return reading; }
+  };
+})();
+</script>
+</body>
+</html>

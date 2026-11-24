@@ -1,0 +1,31 @@
+// loop.js — the play loop on placeholder graphics (build.md §4.2): the stranger's session of memo §9 played against the
+// mechanism, printing after each action what changed and where the player now stands. Output in loop-log.txt.
+var M = require('./mechanism.js'), C = M.CONFIG;
+var g = M.newGame(), log = [];
+function say(s) { log.push(s); console.log(s); }
+function show(q, page) { return page.map(function (it) { return q.sides[M.speakerOf(q, it)].name + (it.kind === 'reply' ? ' (reply)' : ' ' + it.form) + ': ' + M.textOf(q, it).slice(0, 40) + '…'; }).join('\n     ') + '\n     [' + M.pageLines(q, page) + ' of ' + q.budget + ' lines; publish ' + (M.canPublish(q, page) ? 'open' : 'closed') + ']'; }
+function add(id, kind) { var q = M.quarrel(g), a = M.addItem(q, g.page, id, kind); if (a.error) say('  + ' + id + ' ' + kind + ' → refused: ' + a.error); else { g.page = a.page; say('  + ' + id + ' ' + kind + ' → on the page, ' + a.note); } }
+function off(idx) { var q = M.quarrel(g); g.page = M.removeItem(q, g.page, idx); say('  − line ' + idx + ' off'); }
+function brief(idx) { var q = M.quarrel(g), t = M.toggleForm(q, g.page, idx); g.page = t.page; say('  ~ line ' + idx + ' → ' + (t.note || t.error)); }
+function move(idx, d) { var q = M.quarrel(g); g.page = M.moveItem(q, g.page, idx, d); say('  ↕ line ' + idx + (d < 0 ? ' up' : ' down')); }
+function pub() { var q = M.quarrel(g), r = M.publish(g); say('  PUBLISH\n     ' + show(q, r.page)); r.readers.forEach(function (x) { say('     ' + q.sides[x.side].name + '-side ' + x.label + ': ' + x.text); }); say('     GAME: ' + r.statement); }
+
+say('QUARREL 1: ' + C.QUARRELS[0].question); M.setStance(g, 0); say('  stance: ' + C.QUARRELS[0].sides[0].stance);
+add('b1', 'reason'); add('b1', 'reply'); add('b2', 'reason'); add('c1', 'reason'); add('c1', 'reply'); add('b3', 'reason'); add('b3', 'reply');
+say('  page:\n     ' + show(C.QUARRELS[0], g.page)); pub();
+M.revise(g); say('  REVISE');
+off(5); // b3 and its reply go
+add('c2', 'reason'); brief(2); add('b2', 'reply'); add('c2', 'reply');
+say('  page:\n     ' + show(C.QUARRELS[0], g.page)); pub();
+M.next(g);
+say('QUARREL 2: ' + C.QUARRELS[1].question); M.setStance(g, 1); say('  stance: ' + C.QUARRELS[1].sides[1].stance);
+add('d1', 'reason'); add('k1', 'reason'); add('d2', 'reason'); add('d1', 'reply'); add('k1', 'reply');
+pub(); M.revise(g); say('  REVISE'); off(2); add('d1', 'reply'); add('k1', 'reply'); move(3, -1); pub(); M.next(g);
+say('QUARREL 3: ' + C.QUARRELS[2].question); M.setStance(g, null); say('  stance: no view');
+add('o1', 'reason'); add('h1', 'reason'); add('o2', 'reason'); add('h2', 'reason'); add('o1', 'reply'); add('h1', 'reply');
+pub(); M.revise(g); say('  REVISE');
+brief(0); brief(1); brief(2); brief(3); add('h3', 'reason'); add('o2', 'reply'); add('h2', 'reply'); add('h3', 'reply'); move(4, 1);
+pub(); M.next(g);
+var v = M.verdict(g);
+say('VERDICT: ' + v.headline); v.quarrels.forEach(function (l) { say('  ' + l); }); v.stood.forEach(function (l) { say('  ' + l); });
+require('fs').writeFileSync(__dirname + '/loop-log.txt', log.join('\n') + '\n');
