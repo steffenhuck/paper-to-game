@@ -1,0 +1,47 @@
+     300 games drawn; reseeded: 0
+PASS every seed draws a game
+PASS four kinds, four seasons each, weather from the list
+PASS any two kinds differ in 2..3 seasons
+PASS each kind: one remedy helps, one does nothing, one harms
+PASS every remedy helps in some kind (rest and bleeding are live)
+PASS bark helps in one kind and harms in another (black to white)
+PASS flavour lines distinct across kinds
+     which remedy helps in kind A, over seeds: {"bleed":97,"rest":102,"bark":101}
+PASS plan is the plan
+PASS 1692: the remedy that helped in 1691 (A) harms in 1692 (B)
+PASS 1696: the remedy that helped in 1695 (C) harms in 1696 (B)
+PASS 1699: the remedy that helped in 1698 (D) harms in 1699 (A)
+PASS trusting last year is right at 1691, 1693, 1695, 1698 (five die) on every seed
+PASS trusting last year loses thirty at 1692, 1696, 1699 on every seed
+PASS lookup along the plan: new, last, new, last, new, last, lost, new, last, lost, book  — new,last,new,last,new,last,lost,new,last,lost,book
+PASS the register begins in 1694 (year 5)
+PASS memory at 1696: last year whole, two years ago cards and remedy, three years ago cards faded
+PASS four years ago is blank
+PASS register at 1696 holds 1694 and 1695, whole, newest first
+PASS register at 1693 is empty
+PASS a twelfth year is refused
+PASS an unknown remedy is refused
+     dead over eleven years (of eleven hundred sick), mean over 300 seeds:
+       oracle            55   by year: 5 5 5 5 5 5 5 5 5 5 5
+       registerFrom1690  157   by year: 18 11 28 13 20 13 5 26 15 5 5
+       register          191   by year: 18 11 28 13 20 13 26 17 11 28 7
+       memory            203   by year: 18 11 28 13 20 13 26 17 11 28 19
+       bark              208   by year: 19 19 20 20 19 19 20 17 17 19 20
+       bleeding          198   by year: 18 18 18 18 18 18 18 18 18 18 18
+       rest              199   by year: 18 18 18 18 18 18 18 20 20 18 18
+PASS order: oracle < register from 1690 < register from 1694 < memory alone  — 55 < 157 < 191 < 203
+PASS oracle loses exactly fifty-five
+PASS the memory doctor loses fewer on the repeat years than on the years before them
+PASS the memory doctor loses most on the lost years 1696 and 1699  — 18 11 28 13 20 13 26 17 11 28 19
+PASS the register doctor reads the book at 1700 and loses fewer there than the memory doctor
+PASS the register doctor loses as much as the memory doctor at 1696 and 1699: the matching year was never written
+PASS the register from 1690 loses far fewer at 1696 and 1699
+     a fixed remedy against the memory doctor: 198 vs 203 (the plan has as many flips as a trusting doctor can profit from repeats; memo §18)
+PASS spread: the memory doctor loses at least three times what the best possible loses  — 203 vs 55
+PASS other effect sizes {"helps":10,"none":20,"harms":30}: the order holds  — 110 < 187 < 214 < 224
+PASS other effect sizes {"helps":5,"none":15,"harms":40}: the order holds  — 55 < 173 < 221 < 238
+PASS noise of plus or minus 6 on every count: the order holds  — 56 < 158 < 191 < 203
+PASS number words for the three counts
+PASS the verdict lines name the lost years at 1696
+PASS the summary counts the kinds of year
+ALL PASSED
