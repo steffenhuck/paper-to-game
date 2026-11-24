@@ -242,8 +242,8 @@ b,strong{font-weight:700}
     <li><b>First &amp; last:</b> only the first line and the last. Both the same side, and that side is yours.</li>
   </ul>
   <p>Each reader holds up a placard: the colour of the side he places you with, or a grey question mark when he can&rsquo;t tell. His sentence under the bench is the sum he counted.</p>
-  <h3>Draft and revision</h3>
-  <p>Each quarrel gets a first draft and one revision; the revision starts from the draft and is final. Before each quarrel you say where you stand; that changes nothing on the page, and only the verdict will say whether the readers found you out.</p>
+  <h3>One page a quarrel</h3>
+  <p>Once the readers have read a page it is final: no revision. What they caught, you carry to the next quarrel. Before each quarrel you say where you stand; that changes nothing on the page, and only the verdict will say whether the readers found you out.</p>
   <h3>The verdict</h3>
   <p>How many readers could tell, quarrel by quarrel; what caught you; and where you really stood against where they put you.</p>
   <button class="btn" data-close>Back</button>
@@ -267,7 +267,6 @@ b,strong{font-weight:700}
   function screen(id) { document.querySelectorAll('.screen').forEach(function (s) { s.classList.toggle('on', s.id === id); }); $('bottom').classList.toggle('hid', id !== 's-write'); window.scrollTo(0, 0); }
   function q() { return quarrel(game); }
   function qLabel() { return 'Quarrel ' + (game.q + 1) + ' of ' + CONFIG.QUARRELS.length; }
-  function stageLabel() { return game.stage === 'draft' ? 'first draft' : 'revision, the last'; }
   function words(n) { return ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'][n] || String(n); }
   function sideWord(s) { return q().sides[s].name; }
   function describe(it) { var spk = speakerOf(q(), it); return it.kind === 'reply' ? q().sides[spk].side + '’s reply' : q().sides[spk].side + '’s reason, in ' + it.form; }
@@ -349,11 +348,9 @@ b,strong{font-weight:700}
 
   function renderWrite() {
     var Q = q();
-    $('wno').textContent = qLabel() + ' · ' + stageLabel();
+    $('wno').textContent = qLabel() + ' · the page';
     var n = pageLines(Q, game.page);
-    $('now').textContent = game.stage === 'draft'
-      ? (n === 0 ? 'Fill the page: ' + words(Q.budget) + ' lines, no more.' : n < Q.min ? 'Keep going: at least ' + words(Q.min) + ' lines.' : 'Add, cut, reorder; then publish.')
-      : 'Revise the page. This one is final.';
+    $('now').textContent = n === 0 ? 'Fill the page: ' + words(Q.budget) + ' lines, no more.' : n < Q.min ? 'Keep going: at least ' + words(Q.min) + ' lines.' : 'Add, cut, reorder; then publish. Published is final.';
     renderPage($('page'), game.page, true);
     $('wq').textContent = Q.question;
     renderTools(); renderTray(); renderBottom();
@@ -366,12 +363,12 @@ b,strong{font-weight:700}
     $('b-st0').textContent = Q.sides[0].stance; $('b-st1').textContent = Q.sides[1].stance;
     screen('s-stance');
   }
-  function showWrite() { sel = null; say(game.stage === 'draft' ? '' : 'Your draft is back, as you left it. The readers’ placards are under the ? if you want them again.'); renderRules(); renderWrite(); screen('s-write'); }
+  function showWrite() { sel = null; say(''); renderRules(); renderWrite(); screen('s-write'); }
 
   var lastResult = null;
   function doPublish() {
     var Q = q(), r = publish(game); if (!r) return; lastResult = r; reading = true;
-    $('rno').textContent = qLabel() + ' · the readers · ' + (r.stage === 'draft' ? 'first draft' : 'final');
+    $('rno').textContent = qLabel() + ' · the readers';
     $('rnow').textContent = 'The readers read your page.';
     renderPage($('rpage'), r.page, false);
     $('benchlab0').textContent = Q.sides[0].side + '’s readers, then ' + Q.sides[1].side + '’s';
@@ -404,14 +401,12 @@ b,strong{font-weight:700}
       var st = $('rstate'); st.textContent = r.statement; st.classList.toggle('clean', r.couldTell === 0); st.classList.remove('hid');
       var mean = $('rmean');
       if (r.couldTell === 0) mean.textContent = 'This is the sign Leibniz promised the prince: a page from which nobody can read the writer’s side.';
-      else if (r.stage === 'draft') mean.textContent = 'Every placard points at something on the page. Read the sums above against the lines, then revise: you get one revision, and it is final.';
-      else mean.textContent = 'Every placard points at something on the page. This page is final; the verdict will say what caught you.';
+      else mean.textContent = 'Every placard points at something on the page: read the sums above against the lines. This page is final; what they caught, you carry to the next quarrel.';
       mean.classList.remove('hid');
-      $('rnow').textContent = r.couldTell === 0 ? 'Nobody could tell.' : (r.stage === 'draft' ? 'They could tell. Revise.' : 'They could tell.');
+      $('rnow').textContent = r.couldTell === 0 ? 'Nobody could tell.' : 'They could tell.';
       var bt = $('rbtns');
-      bt.innerHTML = r.stage === 'draft' ? '<button class="btn" id="b-revise">Revise the page</button>' : (game.q === CONFIG.QUARRELS.length - 1 ? '<button class="btn" id="b-next">The verdict</button>' : '<button class="btn" id="b-next">Next quarrel</button>');
+      bt.innerHTML = game.q === CONFIG.QUARRELS.length - 1 ? '<button class="btn" id="b-next">The verdict</button>' : '<button class="btn" id="b-next">Next quarrel</button>';
       bt.classList.remove('hid'); reading = false;
-      if ($('b-revise')) $('b-revise').addEventListener('click', function () { revise(game); showWrite(); });
       if ($('b-next')) $('b-next').addEventListener('click', function () { next(game); if (game.done) showEnd(); else showStance(); });
     }
     sweep();
@@ -422,9 +417,9 @@ b,strong{font-weight:700}
     $('vhead').textContent = v.headline;
     $('vfound').innerHTML = v.quarrels.map(function (l) { return '<p>' + esc(l) + '</p>'; }).join('');
     $('vstood').innerHTML = v.stood.map(function (l, i) { return '<p><b>' + esc(Q[i].question) + '</b> ' + esc(l) + '</p>'; }).join('');
-    var drafts = 0, finals = 0; game.results.forEach(function (res) { if (res[0].couldTell > 0) drafts++; if (res[res.length - 1].couldTell > 0) finals++; });
+    var finals = 0; game.results.forEach(function (res) { if (res.couldTell > 0) finals++; });
     var part;
-    if (v.clean === Q.length) part = (drafts === 0 ? 'Nowhere. Your first pages were already pages nobody could place; Leibniz said the method was very difficult and would take a great deal of application, and you made it look easy.' : 'Nowhere, in the end. Leibniz said the method was very difficult and would take a great deal of application; it took you ' + words(drafts) + ' revision' + (drafts === 1 ? '' : 's') + '. He also says the form forces the writer to moderation in spite of himself. Your pages show the other half of that: the readers catch every cut, but the mirroring is the writer’s own work, line by line.');
+    if (v.clean === Q.length) part = 'Nowhere. Three pages, three times nobody could place you; Leibniz said the method was very difficult and would take a great deal of application, and you made it look easy. He also says the form forces the writer to moderation in spite of himself; your pages show the other half of that: the readers catch every cut, but the mirroring is the writer’s own work, line by line.';
     else part = 'Leibniz says the form forces the writer to moderation in spite of himself. Your pages show the other half of that: the form catches every cut, and the mirroring is the writer’s own work, line by line, under a length that will not take everything. Where a page of yours still leaned, it was not for want of good will; it was a line, a gap, or an end.';
     $('vpart').innerHTML = '<p>' + esc(part) + '</p>';
     var had;

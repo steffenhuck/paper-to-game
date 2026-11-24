@@ -1,93 +1,55 @@
 stance: Should cars be banned from the city centre? | Ban them / Let them drive / No view
-write 1: Fill the page: ten lines, no more. | 0 of 10 lines · at least 6
+write 1: Quarrel 1 of 3 · the page | Fill the page: ten lines, no more. | 0 of 10 lines · at least 6
   after b1: On the page, line 2: the ban side’s reason, in full (2 lines). 2 of 10.
   after b1 reply: On the page, line 3: the car side’s reply (one line). 3 of 10.
   b3 reply on a full page: The page is full: 10 of 10 lines. Take something off, or make a reason brief.
   b1 again: That is already on the page. Tap its line on the page to change it.
-  page: s0 two:Nobody walks or cycles / s1 rep:A place for whom? For  / s0 two:Half the air in the ce / s1 two:The old, the ill and t / s0 rep:Exemptions and vans co / s0 two:Shops do better, not w | 10 of 10 lines | now: Add, cut, reorder; then publish.
-  selected line 2; tools: ▲ Up ▼ Down Brief Off
-  publish bottom at 750 px, enabled: true
-  PUBLISHED a-1-draft: All six could tell. Your page leaned to the ban. | caught: lines,gaps,ends | now: They could tell. Revise.
-  bench placards: Ban Ban Ban Ban Ban Ban
-  help opened and closed on the reading screen; statement still: All six could tell. Your page leaned to the ban.
-revise 1: Revise the page. This one is final. | Your draft is back, as you left it. The readers’ placards are under the ? if you want them again.
-  off b3: the ban side’s reason, in full is off the page. 8 of 10.
   b2 brief: the ban side’s reason is now in brief (1 line). 9 of 10.
-  c2 reply: The page is full: 10 of 10 lines. Take something off, or make a reason brief.
+  b2 full again: the ban side’s reason is now in full (2 lines). 10 of 10.
   up at top: It is already at the top.
   down: the car side’s reason, in full moved down.
-  full on a full page: A reply is one line, always.
-  page: s0 two:Nobody walks or cycles / s1 rep:A place for whom? For  / s0:The air gets cleaner,  / s0 rep:Exemptions and vans co / s1 two:The old, the ill and t / s1 two:A ban does not abolish / s1 rep:Cleaner on the closed 
+  up: the ban side’s reply moved up.
+  form on a reply: A reply is one line, always.
+  off b3: the ban side’s reason, in full is off the page. 8 of 10.
+  b3 back: On the page, line 10: the ban side’s reason, in full (2 lines). 10 of 10.
+  page: s0 two:Nobody walks or cycles / s1 rep:A place for whom? For  / s0 rep:Exemptions and vans co / s0 two:Half the air in the ce / s1 two:The old, the ill and t / s0 two:Shops do better, not w | 10 of 10 lines | now: Add, cut, reorder; then publish. Published is final.
+  selected line 2; tools: ▲ Up ▼ Down Off
   publish bottom at 750 px, enabled: true
-  PUBLISHED a-1-final: 4 of 6 could tell. Your page leaned to the cars. | caught: lines,gaps | now: They could tell.
-  final 1: Ban speaks 4 lines, Cars 6. One of theirs. || Ban speaks 4 lines, Cars 6. One of ours. || Ban: 0 unanswered, 1 left out (-1). Cars: 1 unanswered, 1 left out (0). One of theirs. || Ban: 0 unanswered, 1 left out (-1). Cars: 1 unanswered, 1 left out (0). One of ours. || First line Ban, last line Cars. Can’t tell. || First line Ban, last line Cars. Can’t tell.
+  PUBLISHED a-1: All six could tell. Your page leaned to the ban. | caught: lines,gaps,ends | now: They could tell. | buttons: Next quarrel
+  bench placards: Ban Ban Ban Ban Ban Ban
+  readers: Ban speaks 7 lines, Cars 3. One of ours. || Ban speaks 7 lines, Cars 3. One of theirs. || Ban: 2 unanswered, 0 left out (2). Cars: 0 unanswered, 2 left out (-2). One of ours. || Ban: 2 unanswered, 0 left out (2). Cars: 0 unanswered, 2 left out (-2). One of theirs. || First line Ban, last line Ban. One of ours. || First line Ban, last line Ban. One of theirs.
+  help opened and closed on the reading screen; statement still: All six could tell. Your page leaned to the ban.
 stance 2: Dogs or cats?
 write 2: Fill the page: six lines, no more. | 0 of 6 lines · at least 4
   reply on a full page: The page is full: 6 of 6 lines. Take something off, or make a reason brief.
-  publish bottom at 750 px, enabled: true
-  PUBLISHED a-2-draft: All six could tell. Your page leaned to the dogs. | caught: lines,gaps,ends | now: They could tell. Revise.
   page: s0 two:A dog is glad you exis / s1 two:A cat asks nothing of  / s0 rep:Earned by feeding it.  / s1 rep:Glad anyone exists. It
   publish bottom at 750 px, enabled: true
-  PUBLISHED a-2-final: No reader could tell. | caught:  | now: Nobody could tell.
+  PUBLISHED a-2: No reader could tell. | caught:  | now: Nobody could tell. | buttons: Next quarrel
 stance 3: Back to the office five days a week?
+  page: s0:The good ideas happen  / s1:The commute is unpaid  / s0:The young learn by wat / s1:Output rose when the o / s0 rep:The commute is also wh / s1 rep:Count them. The corrid / s0 rep:Output of the things a / s1 rep:Then bring the juniors
   publish bottom at 750 px, enabled: true
-  PUBLISHED a-3-draft: 4 of 6 could tell. Your page leaned to the office. | caught: gaps,ends | now: They could tell. Revise.
-  page: s0:The good ideas happen  / s1:The commute is unpaid  / s0:The young learn by wat / s1:Output rose when the o / s0 rep:The commute is also wh / s1 rep:Count them. The corrid / s1 two:Parents, carers and an / s1 rep:Then bring the juniors / s0 rep:Output of the things a
-  publish bottom at 750 px, enabled: true
-  PUBLISHED a-3-final: 4 of 6 could tell. And they do not agree which way, which is halfway to nobody knowing. | caught: lines,ends | now: They could tell.
+  PUBLISHED a-3: 2 of 6 could tell. Your page leaned to the office. | caught: gaps | now: They could tell. | buttons: The verdict
 END: The readers could tell in two of your three quarrels.
-  found: Should cars be banned from the city centre? Your first page was placed by six (the line count, the gaps and the first line and the last), with the ban. Your revision was still placed by four (the line count and the gaps). // Dogs or cats? Your first page was placed by six (the line count, the gaps and the first line and the last), with the dogs. Your revision mended it: no reader could tell. // Back to the office five days a week? Your first page was placed by four (the gaps and the first line and the last), with the office. Your revision was still placed by four (the line count and the first line and the last).
-  stood: Should cars be banned from the city centre? You are for the ban, and the readers put you with the cars. Bending over backwards is the other way of leaning. // Dogs or cats? You are for the cats. Nobody could tell. // Back to the office five days a week? You declared no view; the readers quarrelled over you anyway.
+  found: Should cars be banned from the city centre? Your page was placed by six (the line count, the gaps and the first line and the last), with the ban. // Dogs or cats? Your page gave the readers nothing: no reader could tell. // Back to the office five days a week? Your page was placed by two (the gaps), with the office.
+  stood: Should cars be banned from the city centre? You are for the ban, and the readers found you out. // Dogs or cats? You are for the cats. Nobody could tell. // Back to the office five days a week? You declared no view; the readers put you with the office.
   part: Leibniz says the form forces the writer to moderation in spite of himself. Your pages show the other half of that: the form catches every cut, and the mirroring is the writer’s own work, line by line, under a length that will not take everything. Where a page of yours still leaned, it was not for want of good will; it was a line, a gap, or an end.
   had: A page the readers can place is read as a brief, not a report. The side it leans to claims it and quotes it; the other side stops reading at the first line that gave you away; and the quarrel carries on, now with you in it. Leibniz’s hope was that a man of common sense could judge from the report alone, without the writer declaring himself; that needs the page nobody can place, and it needs it every time.
-    B1 +b1 reason: b1-brief | the ban side’s reason is now in brief (1 line). 1 of 10.
-    B1 +c1 reason: b1-brief c1-brief | the car side’s reason is now in brief (1 line). 2 of 10.
-    B1 +b2 reason: b1-brief c1-brief b2-full | On the page, line 4: the ban side’s reason, in full (2 lines). 4 of 10.
-    B1 +c2 reason: b1-brief c1-brief b2-full c2-full | On the page, line 6: the car side’s reason, in full (2 lines). 6 of 10.
-    B1 +c1 reply: b1-brief c1-brief b2-full c2-full c1-r | On the page, line 7: the ban side’s reply (one line). 7 of 10.
-    B1 +b1 reply: b1-brief c1-brief b2-full c2-full c1-r b1-r | On the page, line 8: the car side’s reply (one line). 8 of 10.
-    B1 +c2 reply: b1-brief c1-brief b2-full c2-full c1-r b1-r c2-r | On the page, line 9: the ban side’s reply (one line). 9 of 10.
-    B1 +b2 reply: b1-brief c1-brief b2-full c2-full c1-r b1-r c2-r b2-r | On the page, line 10: the car side’s reply (one line). 10 of 10.
   publish bottom at 750 px, enabled: true
-  PUBLISHED b-1-draft: No reader could tell. | caught:  | now: Nobody could tell.
-B quarrel 1 draft: No reader could tell. | Ban speaks 5 lines, Cars 5. | Ban: 0 unanswered, 1 left out (-1). Cars: 0 unanswered, 1 left out (-1). | First line Ban, last line Cars.
+  PUBLISHED b-1: No reader could tell. | caught:  | now: Nobody could tell. | buttons: Next quarrel
+B quarrel 1: No reader could tell. | Ban speaks 5 lines, Cars 5. | Ban: 0 unanswered, 1 left out (-1). Cars: 0 unanswered, 1 left out (-1). | First line Ban, last line Cars.
   publish bottom at 750 px, enabled: true
-  PUBLISHED b-1-final: No reader could tell. | caught:  | now: Nobody could tell.
-    B2 +d1 reason: d1-full | On the page, line 2: the dog side’s reason, in full (2 lines). 2 of 6.
-    B2 +k1 reason: d1-full k1-full | On the page, line 4: the cat side’s reason, in full (2 lines). 4 of 6.
-    B2 +k1 reply: d1-full k1-full k1-r | On the page, line 5: the dog side’s reply (one line). 5 of 6.
-    B2 +d1 reply: d1-full k1-full k1-r d1-r | On the page, line 6: the cat side’s reply (one line). 6 of 6.
+  PUBLISHED b-2: No reader could tell. | caught:  | now: Nobody could tell. | buttons: Next quarrel
+B quarrel 2: No reader could tell. | Dogs speaks 3 lines, Cats 3. | Dogs: 0 unanswered, 2 left out (-2). Cats: 0 unanswered, 2 left out (-2). | First line Dogs, last line Cats.
   publish bottom at 750 px, enabled: true
-  PUBLISHED b-2-draft: No reader could tell. | caught:  | now: Nobody could tell.
-B quarrel 2 draft: No reader could tell. | Dogs speaks 3 lines, Cats 3. | Dogs: 0 unanswered, 2 left out (-2). Cats: 0 unanswered, 2 left out (-2). | First line Dogs, last line Cats.
+  PUBLISHED b-3: No reader could tell. | caught:  | now: Nobody could tell. | buttons: The verdict
+B quarrel 3: No reader could tell. | Office speaks 4 lines, Home 4. | Office: 0 unanswered, 1 left out (-1). Home: 0 unanswered, 1 left out (-1). | First line Office, last line Home.
+B END: No reader could tell. Eighteen partisans read you, and not one could place you. | Nowhere. Three pages, three times nobody could place you; Leibniz said the method was very difficult and would take a great deal of application, and you made it look easy. He also says the form forces the writer to moderation in spite of himself; your pages show the other half of that: the readers catch every cut, but the mirroring is the writer’s own work, line by line.
   publish bottom at 750 px, enabled: true
-  PUBLISHED b-2-final: No reader could tell. | caught:  | now: Nobody could tell.
-    B3 +o1 reason: o1-brief | the office side’s reason is now in brief (1 line). 1 of 10.
-    B3 +h1 reason: o1-brief h1-brief | the home side’s reason is now in brief (1 line). 2 of 10.
-    B3 +h2 reason: o1-brief h1-brief h2-brief | the home side’s reason is now in brief (1 line). 3 of 10.
-    B3 +h3 reason: o1-brief h1-brief h2-brief h3-brief | the home side’s reason is now in brief (1 line). 4 of 10.
-    B3 +h1 reply: o1-brief h1-brief h2-brief h3-brief h1-r | On the page, line 5: the office side’s reply (one line). 5 of 10.
-    B3 +h2 reply: o1-brief h1-brief h2-brief h3-brief h1-r h2-r | On the page, line 6: the office side’s reply (one line). 6 of 10.
-    B3 +h3 reply: o1-brief h1-brief h2-brief h3-brief h1-r h2-r h3-r | On the page, line 7: the office side’s reply (one line). 7 of 10.
-    B3 +o1 reply: o1-brief h1-brief h2-brief h3-brief h1-r h2-r h3-r o1-r | On the page, line 8: the home side’s reply (one line). 8 of 10.
+  PUBLISHED c-1: All six could tell. Your page leaned to the ban. | caught: lines,gaps,ends | now: They could tell. | buttons: Next quarrel
   publish bottom at 750 px, enabled: true
-  PUBLISHED b-3-draft: No reader could tell. | caught:  | now: Nobody could tell.
-B quarrel 3 draft: No reader could tell. | Office speaks 4 lines, Home 4. | Office: 0 unanswered, 1 left out (-1). Home: 0 unanswered, 1 left out (-1). | First line Office, last line Home.
+  PUBLISHED c-2: All six could tell. Your page leaned to the dogs. | caught: lines,gaps,ends | now: They could tell. | buttons: Next quarrel
   publish bottom at 750 px, enabled: true
-  PUBLISHED b-3-final: No reader could tell. | caught:  | now: Nobody could tell.
-B END: No reader could tell. Eighteen partisans read you, and not one could place you. | Nowhere. Your first pages were already pages nobody could place; Leibniz said the method was very difficult and would take a great deal of application, and you made it look easy.
-  publish bottom at 750 px, enabled: true
-  PUBLISHED c-1-draft: All six could tell. Your page leaned to the ban. | caught: lines,gaps,ends | now: They could tell. Revise.
-  publish bottom at 750 px, enabled: true
-  PUBLISHED c-1-final: All six could tell. Your page leaned to the ban. | caught: lines,gaps,ends | now: They could tell.
-  publish bottom at 750 px, enabled: true
-  PUBLISHED c-2-draft: All six could tell. Your page leaned to the dogs. | caught: lines,gaps,ends | now: They could tell. Revise.
-  publish bottom at 750 px, enabled: true
-  PUBLISHED c-2-final: All six could tell. Your page leaned to the dogs. | caught: lines,gaps,ends | now: They could tell.
-  publish bottom at 750 px, enabled: true
-  PUBLISHED c-3-draft: All six could tell. Your page leaned to the office. | caught: lines,gaps,ends | now: They could tell. Revise.
-  publish bottom at 750 px, enabled: true
-  PUBLISHED c-3-final: All six could tell. Your page leaned to the office. | caught: lines,gaps,ends | now: They could tell.
+  PUBLISHED c-3: All six could tell. Your page leaned to the office. | caught: lines,gaps,ends | now: They could tell. | buttons: The verdict
 C END: The readers could tell every time. | stood: Should cars be banned from the city centre? You are for the cars, and the readers put you with the ban. Bending over backwards is the other way of leaning. // Dogs or cats? You are for the cats, and the readers put you with the dogs. Bending over backwards is the other way of leaning. // Back to the office five days a week? You are for home, and the readers put you with the office. Bending over backwards is the other way of leaning.
 
 ERRORS: none

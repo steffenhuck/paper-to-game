@@ -236,22 +236,21 @@ function statement(q, n, direction) {
 // ---------- the game ----------
 
 function newGame() {
-  return { q: 0, stage: 'stance', stance: [null, null, null], page: [], draft: null, results: [[], [], []], done: false };
+  return { q: 0, stage: 'stance', stance: [null, null, null], page: [], results: [null, null, null], done: false };
 }
 function quarrel(game) { return CONFIG.QUARRELS[game.q]; }
-function setStance(game, side) { game.stance[game.q] = side; game.stage = 'draft'; game.page = []; return game; }
+function setStance(game, side) { game.stance[game.q] = side; game.stage = 'write'; game.page = []; return game; }
 
-// Publishing reads the page and records the reading; the first reading of a quarrel is the draft, the second the final.
+// Publishing reads the page and records the reading. One page a quarrel: once read, it is final (no revision; the author's call, 24 Nov 2026).
 function publish(game) {
-  var q = quarrel(game); if (!canPublish(q, game.page)) return null;
-  var r = readPage(q, game.page); r.page = game.page.slice(); r.stage = game.stage;
-  game.results[game.q].push(r);
-  game.stage = game.stage === 'draft' ? 'readDraft' : 'readFinal';
+  var q = quarrel(game); if (game.stage !== 'write' || !canPublish(q, game.page)) return null;
+  var r = readPage(q, game.page); r.page = game.page.slice();
+  game.results[game.q] = r;
+  game.stage = 'read';
   return r;
 }
-function revise(game) { if (game.stage !== 'readDraft') return game; game.stage = 'revision'; return game; }
 function next(game) {
-  if (game.stage !== 'readFinal') return game;
+  if (game.stage !== 'read') return game;
   if (game.q === CONFIG.QUARRELS.length - 1) { game.done = true; game.stage = 'end'; return game; }
   game.q++; game.stage = 'stance'; game.page = []; return game;
 }
@@ -267,16 +266,11 @@ function ruleWords(keys) {
 function verdict(game) {
   var Q = CONFIG.QUARRELS, clean = 0, quarrels = [], stood = [];
   for (var i = 0; i < Q.length; i++) {
-    var res = game.results[i], d = res[0], f = res[res.length - 1], q = Q[i];
+    var f = game.results[i], q = Q[i];
     if (f.couldTell === 0) clean++;
     var line = q.question + ' ';
-    if (d.couldTell === 0) line += 'Your first page gave the readers nothing: no reader could tell.';
-    else line += 'Your first page was placed by ' + numberWord(d.couldTell) + ' (' + ruleWords(d.caught) + ')' + (d.direction === 'split' ? ', and they disagreed which way' : ', with ' + q.sides[d.direction].of) + '.';
-    if (res.length > 1) {
-      if (f.couldTell === 0) line += d.couldTell === 0 ? ' Your revision held.' : ' Your revision mended it: no reader could tell.';
-      else if (d.couldTell === 0) line += ' Your revision undid it: placed by ' + numberWord(f.couldTell) + ' (' + ruleWords(f.caught) + ').';
-      else line += ' Your revision was still placed by ' + numberWord(f.couldTell) + ' (' + ruleWords(f.caught) + ').';
-    }
+    if (f.couldTell === 0) line += 'Your page gave the readers nothing: no reader could tell.';
+    else line += 'Your page was placed by ' + numberWord(f.couldTell) + ' (' + ruleWords(f.caught) + ')' + (f.direction === 'split' ? ', and they disagreed which way' : ', with ' + q.sides[f.direction].of) + '.';
     quarrels.push(line);
     var st = game.stance[i], dir = f.direction, s;
     if (st === null) s = dir === null ? 'You declared no view, and the readers found none.' : dir === 'split' ? 'You declared no view; the readers quarrelled over you anyway.' : 'You declared no view; the readers put you with ' + q.sides[dir].of + '.';
@@ -375,6 +369,6 @@ var HEURISTICS = {
 if (typeof module !== 'undefined') module.exports = {
   CONFIG: CONFIG, reasonById: reasonById, speakerOf: speakerOf, linesOf: linesOf, textOf: textOf, pageLines: pageLines, indexOnPage: indexOnPage,
   canPublish: canPublish, addItem: addItem, removeItem: removeItem, moveItem: moveItem, toggleForm: toggleForm, sums: sums, leans: leans,
-  readPage: readPage, statement: statement, newGame: newGame, quarrel: quarrel, setStance: setStance, publish: publish, revise: revise,
+  readPage: readPage, statement: statement, newGame: newGame, quarrel: quarrel, setStance: setStance, publish: publish,
   next: next, verdict: verdict, enumeratePages: enumeratePages, arrange: arrange, HEURISTICS: HEURISTICS, numberWord: numberWord
 };
