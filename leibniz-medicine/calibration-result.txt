@@ -1,0 +1,47 @@
+     300 games drawn; reseeded for a floor: 189
+PASS every seed draws a game
+PASS each kind of winter: one remedy helps, one does nothing, one harms
+PASS every remedy helps in some kind (rest and bleeding are live)
+PASS bark helps in one kind and harms in another (black to white)
+PASS A and B share the temperature and differ in wetness (the lookalike); C differs from A in temperature only; D in both
+     which winter is A, over seeds: {"mild-dry":79,"cold-wet":78,"cold-dry":79,"mild-wet":64}
+     which remedy helps in A, over seeds: {"rest":93,"bleed":98,"bark":109}
+PASS plan is the plan
+PASS twelve letters a year from 1694, none before
+PASS trusting last winter is right at 1691 and 1693 (five die) on every seed
+PASS trusting last winter loses thirty at 1692 and 1697, the lookalike winters, on every seed
+PASS the letters of 1694 hold the remedy that helps in your 1695 winter
+PASS the letters of 1694 and 1695 hold the helper of every kind of winter
+     share of kinds whose helper the letters of 1694 alone show: 79% (the floor guarantees your 1695 winter; by 1696 all four)
+PASS no letters held before 1695
+PASS at 1695 the collection holds the twelve letters of 1694 and your own 1694
+PASS at 1696 it holds twenty-six
+PASS tallies add up
+PASS lookup along the plan: new, last, new, last, new, then collection every year  — new,last,new,last,new,collection,collection,collection,collection,collection
+PASS an eleventh winter is refused
+PASS an unknown remedy is refused
+     dead over ten winters (of a thousand sick), mean over 300 seeds:
+       oracle            50   by year: 5 5 5 5 5 5 5 5 5 5
+       readerFrom1690    64   by year: 18 6 5 5 5 5 5 5 5 5
+       reader            118   by year: 18 12 27 13 22 5 5 5 5 5
+       memory            192   by year: 18 12 27 13 22 19 19 24 19 20
+       bark              188   by year: 19 19 18 18 19 20 19 18 19 20
+       bleeding          183   by year: 18 18 19 19 18 17 18 19 18 17
+       rest              179   by year: 18 18 18 18 17 18 18 18 17 18
+PASS order: oracle < collection from 1690 < collection from 1694 < memory alone  — 50 < 64 < 118 < 192
+PASS oracle loses exactly fifty
+PASS the reader loses five every winter from 1695: near perfect information
+PASS the reader is the memory doctor until 1694
+PASS the memory doctor loses most on the lookalike winters 1692 and 1697  — 18 12 27 13 22 19 19 24 19 20
+PASS the collection from 1690 loses five from 1691 on, or nearly  — 18 6 5 5 5 5 5 5 5 5
+     a fixed remedy against the memory doctor: 183 vs 192
+PASS spread: the memory doctor loses at least three times what the best possible loses  — 192 vs 50
+PASS other effect sizes {"helps":10,"none":20,"harms":30}: the order holds  — 100 < 111 < 151 < 208
+PASS other effect sizes {"helps":5,"none":15,"harms":40}: the order holds  — 50 < 66 < 130 < 217
+PASS noise of plus or minus 6 on every count: the order holds  — 51 < 65 < 117 < 190
+PASS without the floors on the letters the reader still beats memory  — 120 < 189
+PASS number words for the three counts
+PASS the verdict lines name the lookalike at 1692
+PASS the verdict lines name the letters at 1695
+PASS the summary counts before and after the letter
+ALL PASSED

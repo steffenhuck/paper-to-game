@@ -1,0 +1,67 @@
+PASS a boat carries the weight of the water it could hold: floats iff load ≤ tuns, draught = load / tuns (196 loadings, both hulls)
+PASS earth is heavier than the hollow can hold: 6 ft of wall alone (12 tuns) sinks the shallow boat and fills the great one
+PASS an overloaded boat sinks at the bank and the push is lost
+PASS crossing 1 (Below the Lech): best by exhaustive search = 620  — got 620 with [{"feet":4,"guns":1,"men":20,"landing":"front"}]
+PASS crossing 1: the best is reached on the first push
+PASS crossing 1: the memo’s first push is among the best  — [{"feet":4,"guns":1,"men":20,"landing":"front"}]
+PASS crossing 1: that first push is unique  — 1 loadings tie
+PASS crossing 1: the best first push weighs exactly the hull or less
+PASS crossing 2 (At the bend): best by exhaustive search = 660  — got 660 with [{"feet":1,"guns":0,"men":60,"landing":"front"}]
+PASS crossing 2: the best is reached on the first push
+PASS crossing 2: the memo’s first push is among the best  — [{"feet":1,"guns":0,"men":60,"landing":"front"},{"feet":1,"guns":1,"men":60,"landing":"front"},{"feet":1,"guns":2,"men":60,"landing":"front"},{"feet":2,"guns":0,"men":60,"landing":"front"},{"feet":2,"guns":1,"men":60,"landing":"front"},{"feet":3,"guns":0,"men":60,"landing":"front"}]
+PASS crossing 2: every best first push carries 60 men and a wall of at least 1 ft (guns and extra feet are neutral here)
+PASS crossing 2: the best first push weighs exactly the hull or less
+PASS crossing 3 (The narrows): best by exhaustive search = 640  — got 640 with [{"feet":1,"guns":0,"men":40,"landing":"up"}]
+PASS crossing 3: the best is reached on the first push
+PASS crossing 3: the memo’s first push is among the best  — [{"feet":1,"guns":0,"men":40,"landing":"up"}]
+PASS crossing 3: that first push is unique  — 1 loadings tie
+PASS crossing 3: the best first push weighs exactly the hull or less
+PASS crossing 1: the best first push fills the hull to the tun (4 ft + a gun + 20 men = 12)
+PASS crossing 3: the shallow boat cannot carry the wall their light pieces need and a gun (2 ft + a gun = 6 tuns of 6) with the men to serve it
+PASS crossing 3: the shallow boat cannot be made proof against field pieces at all (4 ft = 8 tuns of 6)
+     heuristics (men across by dark, three pushes a crossing):
+     strategy                                                             c1    c2    c3    total
+     best possible                                                        620   660   640   1920
+     all men (60, no earth, no gun)                                       0     0     0     0
+     firepower (as many guns as float, then men)                          0     0     0     0
+     earth to the brim (no men)                                           0     0     0     0
+     the spreader (2 ft, a gun, the rest men)                             0     660   0     660
+     the physicist (just enough wall, then men, no gun)                   120   660   60    840
+     the paper (just enough wall, a gun where there is a battery, then men)620   660   60    1340
+     the crossing-1 recipe everywhere (4 ft, a gun, 20 men)               620   620   0     1240
+     the paper, and upstream where offered                                620   660   640   1920
+     learns: wrong once, then the paper                                   320   360   340   1020
+PASS all men: nothing across under cannon or musket (a boat of men is a boat of planks to a ball)
+PASS firepower: nothing across anywhere (guns keep nothing off on the water)
+PASS earth to the brim: nothing across (nobody to raise the parapet)
+PASS the spreader: through under field pieces; passes under muskets
+PASS the physicist (wall but no gun) digs in under the battery but the rest never pass: 120 < 620
+PASS the physicist is best where there is no battery (crossing 2)
+PASS the paper’s loading is best in crossings 1 and 2
+PASS the paper’s loading sent at the battery with a shallow boat cannot carry the gun: the rest wait (60 < 640)
+PASS the crossing-1 recipe everywhere: best in 1, short in 2 (four feet where one would do: 20 men instead of 60), sinks in 3
+PASS the paper, upstream where offered: best everywhere
+PASS learning costs one push: 320/360/340 against 620/660/640
+PASS some way of playing goes wrong in every crossing, for a reason the paper names
+PASS guns: a sensible loading takes 0 and 1 (crossings 2 and 1)
+PASS earth: sensible loadings take 1 ft and 4 ft
+PASS men: sensible loadings take 20, 40 and 60
+PASS landing: in crossing 3 both landings can land a boat that digs in (A: 2 ft + 20 men; B: 1 ft + 40 men)
+PASS baseline: all five lessons hold  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:holds
+PASS field pieces stopped by 3 ft instead of 4: core lessons hold  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:holds
+PASS field pieces need 5 ft: the great boat can no longer carry wall, gun and crew (10 + 2 + half a tun > 12), so the earth-then-gun lesson needs the wall to fit in the hull with a gun and its crew; reported, not required  — earthThenGun:CHANGES noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:holds
+PASS a gun weighs 1 tun: core lessons hold; the shallow boat can then carry wall and gun, so the crossing-3 lesson changes (reported)  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:CHANGES
+PASS a gun weighs 3 tuns: all lessons hold  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:holds
+PASS light pieces stopped by 1 ft: core lessons hold; the crossing-3 lesson needs light pieces to need 2 ft (reported)  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:CHANGES
+PASS the rest pass at 30 a boat: all lessons hold  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:holds
+PASS the rest pass at 90 a boat: all lessons hold  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:holds
+PASS a fleet of one open boat: all lessons hold  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:holds
+PASS a foot of wall weighs 1 tun: core lessons hold (the shallow boat can then carry wall and gun; reported)  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:CHANGES
+PASS restored
+PASS no decimal in any sentence the sheet can say (544 pushes, every floating loading, plus the verdicts)  — 
+PASS a perfect game is the sum of the bests and gets the first fate
+PASS a game with nothing across gets the last fate
+PASS tuns in words
+     sample: 2 and a half tuns / a tenth of a tun / 11 and seven tenths tuns
+
+ALL PASSED (52 checks)
