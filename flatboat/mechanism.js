@@ -89,7 +89,7 @@
         r.events.push({ t: 'shot', fire: l.fire, need: need, feet: load.feet, stopped: stopped });
         if (!stopped) {
           r.outcome = 'through'; r.events.push({ t: 'back' });
-          r.lines.push('Push ' + r.push + '. ' + cap(fire.ball) + ' went through ' + (load.feet ? feet(load.feet) + ' of earth and ' : '') + 'the planks. The boat turned back.' + (load.feet ? '' : ' Nothing aboard stopped it.'));
+          r.lines.push('Push ' + r.push + '. ' + cap(fire.ball) + ' stops only in ' + feet(need) + ' of earth; this boat had ' + (load.feet ? feet(load.feet) : 'none') + '. It went through ' + (load.feet ? 'the earth and ' : '') + 'the planks, and the boat turned back.' + (load.guns ? ' The ' + guns(load.guns) + ' aboard kept nothing off: a gun cannot stop a ball on the water.' : ''));
         } else {
           r.lines.push('Push ' + r.push + '. ' + cap(fire.ball) + ' stopped in ' + feet(load.feet) + ' of earth.');
         }
@@ -109,9 +109,9 @@
               bank.batteryOff = true; r.events.push({ t: 'drive' });
               r.lines.push('Your gun fired from behind the earth. Their battery, on an open bank, limbered up and drew off.');
             } else if (bank.guns >= 1) {
-              r.lines.push('A gun is ashore but fewer than ' + CONFIG.CREW + ' men to serve it; it stays silent. Their battery still commands the water.');
+              r.lines.push('A gun is ashore but fewer than ' + CONFIG.CREW + ' men to serve it; it stays silent. Their battery still fires on the water, so no open boat can cross.');
             } else {
-              r.lines.push('Their battery still commands the water: an open boat could not cross it.');
+              r.lines.push('Their battery still fires on the water, so no open boat can cross. Only a gun of yours ashore, behind earth, with ' + CONFIG.CREW + ' men to serve it, drives a battery off.');
             }
           }
           if (bankSafe(l, bank)) {
@@ -216,13 +216,18 @@
   function guns(g) { return g === 0 ? 'no gun' : g === 1 ? 'a gun' : g + ' guns'; }
   function loadWords(ld) { var p = []; p.push(ld.feet ? feet(ld.feet) + ' of earth' : 'no earth'); p.push(guns(ld.guns)); p.push(men(ld.men)); return p.join(', '); }
   function sumLine(cr, load) {
-    var w = weight(load), H = hull(cr);
-    return (load.feet ? feet(load.feet) + ' of earth ' + tuns(load.feet * CONFIG.FOOT_T) : 'no earth') + ' · ' + guns(load.guns) + (load.guns ? ' ' + tuns(load.guns * CONFIG.GUN_T) : '') + ' · ' + men(load.men) + (load.men ? ' ' + tuns(load.men * CONFIG.MAN_T) : '') + ' = ' + tuns(w) + ' of ' + H.tuns + (w > H.tuns + 1e-9 ? ' — it sinks' : '');
+    var w = weight(load), H = hull(cr), p = [];
+    p.push(load.feet ? 'earth ' + feet(load.feet) + ' = ' + tuns(load.feet * CONFIG.FOOT_T) : 'no earth');
+    p.push(load.guns ? load.guns + (load.guns > 1 ? ' guns = ' : ' gun = ') + tuns(load.guns * CONFIG.GUN_T) : 'no gun');
+    p.push(load.men ? load.men + ' men = ' + tuns(load.men * CONFIG.MAN_T) : 'no men');
+    return p.join(' \u00b7 ') + ' \u00b7 ' + tuns(w) + ' of ' + H.tuns + (w > H.tuns + 1e-9 ? ' \u2014 it sinks' : '');
   }
   function wallWords(f) { if (f >= CONFIG.STOPS.field) return 'stops a six-pound ball'; if (f >= CONFIG.STOPS.light) return 'stops a light ball, not a six-pounder'; if (f >= CONFIG.STOPS.musket) return 'stops a musket ball, not a cannon ball'; return 'stops nothing'; }
+  // the wall against the ball fired at a landing: what the sheet says while loading
+  function wallVs(f, fire) { var need = CONFIG.STOPS[fire], ball = CONFIG.FIRE[fire].ball; if (f >= need) return { ok: true, text: 'your ' + feet(f) + ' of earth stops ' + ball }; return { ok: false, text: (f ? 'your ' + feet(f) : 'no earth') + ': ' + ball + ' needs ' + feet(need) + ', goes through' }; }
 
   var M = { CONFIG: CONFIG, weight: weight, hull: hull, floats: floats, draught: draught, newGame: newGame, newCrossing: newCrossing, landing: landing, push: push,
-            loadings: loadings, best: best, crossingVerdict: crossingVerdict, gameVerdict: gameVerdict, sumLine: sumLine, wallWords: wallWords,
+            loadings: loadings, best: best, crossingVerdict: crossingVerdict, gameVerdict: gameVerdict, sumLine: sumLine, wallWords: wallWords, wallVs: wallVs,
             words: { tuns: tuns, feet: feet, men: men, guns: guns, loadWords: loadWords, cap: cap } };
   if (typeof module !== 'undefined' && module.exports) module.exports = M; else root.FLATBOAT = M;
 })(typeof window !== 'undefined' ? window : this);

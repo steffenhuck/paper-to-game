@@ -13,79 +13,80 @@
 :root{--blue:#163A6B;--deep:#0F2C55;--line:#F4F7FB;--cyan:#9FD3E6;--red:#E8403A;--sand:#E9C877;--mute:rgba(244,247,251,.62);--rule:rgba(244,247,251,.28);--grid:rgba(244,247,251,.07);color-scheme:dark}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0;background:var(--blue);color:var(--line)}
-body{font-family:'Barlow',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-size:16px;line-height:1.4;overflow-x:hidden;font-weight:400;
+body{font-family:'Barlow',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-size:17px;line-height:1.4;overflow-x:hidden;font-weight:400;
   background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:20px 20px}
 body.lock{overflow:hidden}
-.wrap{max-width:420px;margin:0 auto;min-height:100vh;padding:14px 16px 28px;position:relative}
+.wrap{max-width:430px;margin:0 auto;min-height:100vh;padding:14px 16px 28px;position:relative}
 .screen{display:none}.screen.on{display:block}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:inherit;touch-action:manipulation}
 h1,h2,h3,p{margin:0}
 b,strong{font-weight:600}
 .cond{font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
-.kicker{font-size:13px;color:var(--mute);margin-bottom:6px}
+.kicker{font-size:14px;color:var(--mute);margin-bottom:6px}
 .title{font-size:58px;line-height:.92;margin:4px 0 12px}
 .motif{display:block;margin:6px auto 12px;width:100%;max-width:340px}
-.setting p{margin:0 0 10px;font-size:16px}
-.acts{font-size:18px;font-weight:600;line-height:1.3;margin:10px 0 10px}
-.aim{font-size:17px;font-weight:600;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:10px 0;margin:8px 0 14px}
+.setting p{margin:0 0 10px}
+.acts{font-size:1.1em;font-weight:600;line-height:1.3;margin:10px 0 10px}
+.aim{font-size:1.05em;font-weight:600;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:10px 0;margin:8px 0 14px}
 .btn{display:block;width:100%;min-height:50px;border:1px solid var(--line);font-size:18px;text-align:center;padding:12px 14px;margin:8px 0;border-radius:0}
 .btn.solid{background:var(--line);color:var(--blue)}
 .btn.dim{opacity:.4}
 .btn:disabled{opacity:.4}
 .row2{display:flex;gap:8px}.row2 .btn{flex:1;padding-left:8px;padding-right:8px}
-.cred{font-size:13px;color:var(--mute);text-align:center;margin-top:14px;line-height:1.35}
+.cred{font-size:14px;color:var(--mute);text-align:center;margin-top:14px;line-height:1.35}
 .cred a{color:inherit;text-decoration:underline;text-decoration-color:var(--rule)}
 .sig{text-align:center;font-style:italic;font-size:13px;margin-top:22px;color:var(--mute)}.sig a{color:inherit;text-decoration:none}
 /* play */
 .top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px}
 .top .aimline{font-size:14px;font-weight:600;color:var(--mute)}
 .qm{width:38px;height:38px;border:1px solid var(--line);font-size:18px;text-align:center;flex:none;line-height:36px}
-.where{font-size:15px;color:var(--mute);margin-bottom:2px}
-.donow{font-size:19px;line-height:1.15;margin-bottom:6px}
+.where{font-size:16px;color:var(--mute);margin-bottom:2px}
+.donow{font-size:22px;line-height:1.15;margin-bottom:6px}
 .tb{display:flex;border:1px solid var(--line);margin:0 0 8px}
-.tb div{flex:1;padding:3px 7px;font-size:11px;color:var(--mute)}
+.tb div{flex:1;padding:3px 7px;font-size:12px;color:var(--mute)}
 .tb div .v{color:var(--line)}
 .tb div+div{border-left:1px solid var(--line)}
-.tb .v{font-size:16px;line-height:1;margin-top:1px;white-space:nowrap}
+.tb .v{font-size:19px;line-height:1;margin-top:2px;white-space:nowrap}
 .sheet{display:block;width:100%;border:1px solid var(--line);background:var(--deep)}
-.sum{font-size:12.5px;letter-spacing:.03em;margin:4px 0 4px;min-height:18px}
-.notes{font-size:14px;color:var(--mute);line-height:1.35;margin:4px 0 8px}
+.sum{font-size:15px;letter-spacing:0;margin:6px 0 4px;min-height:18px}
+.notes{font-size:16px;color:var(--mute);line-height:1.35;margin:6px 0 8px}
 .notes b{color:var(--line);font-weight:600}
 .landings{display:flex;gap:8px;margin:0 0 6px}
-.landings .btn{flex:1;min-height:40px;font-size:14px;padding:6px 6px;margin:0}
+.landings .btn{flex:1;min-height:42px;font-size:15px;padding:5px 6px;margin:0}
 .landings .btn.on{background:var(--line);color:var(--blue)}
 .dials{display:flex;gap:8px;margin:4px 0 8px}
 .dial{flex:1;border:1px solid var(--line);padding:6px 6px 6px;text-align:center}
-.dial .lab{font-size:13px;color:var(--mute)}
-.dial .val{font-size:26px;line-height:1;margin:2px 0}
-.dial .sub{font-size:11.5px;color:var(--mute);min-height:28px;line-height:1.2}
+.dial .lab{font-size:15px;color:var(--mute)}
+.dial .val{font-size:32px;line-height:1;margin:2px 0}
+.dial .sub{font-size:13px;color:var(--mute);min-height:30px;line-height:1.2}
 .dial .pm{display:flex;gap:6px;margin-top:4px}
-.dial .pm button{flex:1;min-height:42px;border:1px solid var(--line);font-size:24px;line-height:1;text-align:center}
+.dial .pm button{flex:1;min-height:46px;border:1px solid var(--line);font-size:28px;line-height:1;text-align:center}
 .dial .pm button:disabled{opacity:.3}
-.result{border:1px solid var(--line);padding:10px 12px;margin:8px 0;font-size:16px}
+.result{border:1px solid var(--line);padding:10px 12px;margin:8px 0}
 .result p{margin:0 0 6px}.result p:last-child{margin:0}
-.result .big{font-size:20px;font-weight:600;line-height:1.2;margin-bottom:8px}
+.result .big{font-size:1.3em;font-weight:600;line-height:1.2;margin-bottom:8px}
 .verdict{border:2px solid var(--line);padding:12px;margin:10px 0}
-.verdict .lead{font-size:21px;line-height:1.2;font-weight:600;margin-bottom:8px}
-.verdict p{margin:0 0 8px;font-size:16px}.verdict p:last-child{margin:0}
-.verdict .paper{color:var(--mute);font-size:15px}
+.verdict .lead{font-size:1.35em;line-height:1.2;font-weight:600;margin-bottom:8px}
+.verdict p{margin:0 0 8px}.verdict p:last-child{margin:0}
+.verdict .paper{color:var(--mute);font-size:.95em}
 .hide{display:none!important}
 /* end */
-.fate{font-size:30px;line-height:1.1;margin:6px 0 14px}
+.fate{font-size:32px;line-height:1.1;margin:6px 0 14px}
 .sec{border-top:1px solid var(--rule);padding-top:10px;margin-top:12px}
-.sec h2{font-size:14px;color:var(--mute);margin-bottom:6px}
-.sec p{margin:0 0 8px;font-size:16px}
+.sec h2{font-size:15px;color:var(--mute);margin-bottom:6px}
+.sec p{margin:0 0 8px}
 .bars{display:block;width:100%;margin:4px 0 4px}
 /* overlays */
 .overlay{position:fixed;inset:0;background:var(--blue);overflow:auto;z-index:10;display:none;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:20px 20px}
 .overlay.on{display:block}
 .overlay .wrap{padding-top:14px}
 .overlay h1{font-size:34px;margin-bottom:12px}
-.overlay h2{font-size:14px;color:var(--mute);margin:14px 0 6px}
-.overlay p{margin:0 0 10px;font-size:16px}
+.overlay h2{font-size:15px;color:var(--mute);margin:14px 0 6px}
+.overlay p{margin:0 0 10px}
 .overlay ul{margin:0 0 10px;padding-left:20px}.overlay li{margin-bottom:6px}
 .overlay a{color:inherit}
 .overlay .close{position:sticky;top:0;background:var(--blue);padding:6px 0 10px;z-index:2}
+@media (min-width:640px){.wrap{max-width:560px}body{font-size:19px}.notes,.sum{font-size:1em}.tb div{font-size:14px}.top .aimline{font-size:16px}.dial .sub{font-size:15px}.dial .lab{font-size:16px}}
 </style>
 </head>
 <body>
@@ -136,7 +137,7 @@ b,strong{font-weight:600}
   <div class="where cond" id="where">Crossing 1 of 3 · Below the Lech</div>
   <div class="donow cond" id="donow">Load the boat, then push off.</div>
   <div class="tb cond"><div>Pushes left<div class="v" id="tb-pushes">▮▮▮</div></div><div>Across by dark<div class="v" id="tb-across">0 men</div></div><div>Far bank<div class="v" id="tb-bank">nobody</div></div></div>
-  <svg class="sheet" id="sheet" viewBox="0 0 340 232" aria-label="The sheet: the river in plan, the boat in section"></svg>
+  <svg class="sheet" id="sheet" viewBox="0 0 340 212" aria-label="The sheet: the river in plan, the boat in section"></svg>
   <div class="sum cond" id="sum"></div>
   <div class="landings hide" id="landings"></div>
   <div class="dials" id="dials">
@@ -224,35 +225,34 @@ b,strong{font-weight:600}
   function W(s) { return M.words[s]; }
 
   // ---------- geometry of the sheet (viewBox 340 × 300) ----------
-  var PLAN = { y: 0, h: 96, far: 18, near: 78 };
-  var SEC = { y: 98, floor: 194, left: 40, right: 300, pxft: 11, menH: 26 };
+  var PLAN = { y: 0, h: 84, far: 18, near: 68 };
+  var SEC = { y: 86, floor: 186, left: 40, right: 300, pxft: 11, menH: 26 };
   var LX = { front: 232, up: 92 };
 
   // ---------- the plan ----------
   function planSVG(st) {
     var s = [], bank = function (y, h) { return el('rect', { x: 0, y: y, width: 340, height: h, fill: 'url(#hatchw2)' }) + el('line', { x1: 0, y1: y === 0 ? h : y, x2: 340, y2: y === 0 ? h : y, stroke: '#F4F7FB', 'stroke-width': 1.4 }); };
-    s.push(el('rect', { x: 0, y: 0, width: 340, height: 96, fill: '#0F2C55' }));
-    s.push(bank(0, PLAN.far)); s.push(bank(PLAN.near, 96 - PLAN.near));
-    for (var i = 0; i < 4; i++) s.push(el('path', { d: 'M4 ' + (30 + i * 12) + ' q8-3 16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0', fill: 'none', stroke: '#9FD3E6', 'stroke-width': 1, opacity: .35 }));
-    s.push(txt(6, 10, 'THEIR BANK', { size: 9, op: .8 })); s.push(txt(336, 93, 'OUR BANK', { size: 9, op: .8, anchor: 'end' }));
-    s.push(el('line', { x1: 8, y1: 62, x2: 40, y2: 62, stroke: '#9FD3E6', 'stroke-width': 1, 'marker-end': 'url(#arr)', opacity: .7 })); s.push(txt(8, 58, 'FLOW', { size: 8, fill: '#9FD3E6', op: .8 }));
+    s.push(el('rect', { x: 0, y: 0, width: 340, height: PLAN.h, fill: '#0F2C55' }));
+    s.push(bank(0, PLAN.far)); s.push(bank(PLAN.near, PLAN.h - PLAN.near));
+    for (var i = 0; i < 3; i++) s.push(el('path', { d: 'M4 ' + (32 + i * 12) + ' q8-3 16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0', fill: 'none', stroke: '#9FD3E6', 'stroke-width': 1, opacity: .35 }));
+    s.push(txt(6, 12, 'THEIR BANK', { size: 11, op: .85 })); s.push(txt(336, 81, 'OUR BANK', { size: 11, op: .85, anchor: 'end' }));
     // the fleet waiting
-    for (var f = 0; f < C.FLEET; f++) s.push(el('rect', { x: 8 + f * 18, y: 83, width: 14, height: 6, fill: 'none', stroke: '#F4F7FB', 'stroke-width': 1, opacity: .8, 'class': 'fleet' }));
-    s.push(txt(8, 80, 'THE REST: 5 OPEN BOATS A PUSH', { size: 8.5, op: .85 }));
+    for (var f = 0; f < C.FLEET; f++) s.push(el('rect', { x: 8 + f * 18, y: 73, width: 14, height: 7, fill: 'none', stroke: '#F4F7FB', 'stroke-width': 1, opacity: .8, 'class': 'fleet' }));
+    s.push(txt(104, 80, 'THE REST, 5 OPEN BOATS', { size: 10, op: .85 }));
     cr.landings.forEach(function (l) {
       var x = LX[l.id], b = st.banks[l.id], chosen = load.landing === l.id;
       s.push(el('line', { x1: x, y1: PLAN.near, x2: x, y2: PLAN.far, stroke: '#F4F7FB', 'stroke-width': 1, 'stroke-dasharray': chosen ? '' : '3 4', opacity: chosen ? .9 : .4 }));
       s.push(el('path', { d: 'M' + (x - 5) + ' ' + (PLAN.far + 7) + ' L' + x + ' ' + (PLAN.far + 1) + ' L' + (x + 5) + ' ' + (PLAN.far + 7) + ' Z', fill: '#F4F7FB', opacity: chosen ? 1 : .5 }));
-      s.push(txt(x + 8, PLAN.far + 11, l.letter, { size: 12, op: chosen ? 1 : .5 }));
+      s.push(txt(x + 8, PLAN.far + 13, l.letter, { size: 15, op: chosen ? 1 : .5 }));
       // the enemy
       var g = [];
       if (l.battery) { for (var i = 0; i < l.guns; i++) g.push(el('use', { href: '#rgun', x: x - 8 - (l.guns - 1) * 7 + i * 14, y: 4, width: 16, height: 10 })); }
       else { for (var j = 0; j < 9; j++) g.push(el('line', { x1: x - 24 + j * 6, y1: 5, x2: x - 24 + j * 6, y2: 13, stroke: '#E8403A', 'stroke-width': 1.6 })); }
       s.push(el('g', { id: 'enemy-' + l.id, opacity: b.batteryOff ? 0.15 : 1 }, g.join('')));
-      s.push(txt(x + (l.battery ? 22 + (l.guns - 1) * 7 : 34), 12, b.batteryOff ? 'DRAWN OFF' : (l.battery ? 'BATTERY' : 'FOOT'), { size: 8, fill: '#E8403A', op: .9 }));
-      if (chosen) s.push(txt(l.id === 'up' ? x + 10 : x - 10, PLAN.far + 22, b.batteryOff ? 'NOTHING REACHES THE WATER' : ('THEIR BALL: ' + C.STOPS[l.fire] + ' FT OF EARTH STOPS IT'), { size: 9, fill: '#E8403A', op: .95, anchor: l.id === 'up' ? 'start' : 'end' }));
+      s.push(txt(x + (l.battery ? 22 + (l.guns - 1) * 7 : 34), 13, b.batteryOff ? 'DRAWN OFF' : (l.battery ? 'BATTERY' : 'FOOT'), { size: 10, fill: '#E8403A', op: .9 }));
+      if (chosen) s.push(txt(l.id === 'up' ? x + 16 : x - 16, PLAN.far + 26, b.batteryOff ? 'NOTHING REACHES THE WATER NOW' : ('THEIR BALL STOPS ONLY IN ' + C.STOPS[l.fire] + ' FT OF EARTH'), { size: 11.5, fill: '#E8403A', anchor: l.id === 'up' ? 'start' : 'end' }));
       // what is ashore already
-      if (b.men || b.feet) s.push(el('g', {}, el('rect', { x: x - 16, y: PLAN.far + 1, width: 32, height: 4, fill: 'url(#hatch)', stroke: '#E9C877', 'stroke-width': .8 }) + txt(x - 16, PLAN.far + 32, b.men + ' DUG IN', { size: 8, fill: '#E9C877' })));
+      if (b.men || b.feet) s.push(el('g', {}, el('rect', { x: x - 16, y: PLAN.far + 1, width: 32, height: 4, fill: 'url(#hatch)', stroke: '#E9C877', 'stroke-width': .8 }) + txt(l.id === 'up' ? x + 16 : x - 16, PLAN.far + 40, b.men + ' DUG IN', { size: 10, fill: '#E9C877', anchor: l.id === 'up' ? 'start' : 'end' })));
     });
     // the boat (at the chosen landing, on our bank)
     var bx = LX[load.landing];
@@ -270,7 +270,7 @@ b,strong{font-weight:600}
     if (feet) {
       s.push(el('rect', { x: xw, y: floor - wallH, width: w, height: wallH, fill: 'url(#hatch)', stroke: '#E9C877', 'stroke-width': 1.2 }));
       s.push(el('line', { x1: xw, y1: floor - wallH - 10, x2: xr, y2: floor - wallH - 10, stroke: '#E9C877', 'stroke-width': 1, 'marker-start': 'url(#arr)', 'marker-end': 'url(#arr)' }));
-      s.push(txt(onBank ? xr : (xw + xr) / 2, floor - wallH - 14, (onBank ? 'PARAPET ' : 'EARTH ') + feet + ' FT', { size: 10, fill: '#E9C877', anchor: onBank ? 'end' : 'middle' }));
+      s.push(txt(onBank ? xr : (xw + xr) / 2, floor - wallH - 14, (onBank ? 'PARAPET ' : 'EARTH ') + feet + ' FT', { size: 12, fill: '#E9C877', anchor: onBank ? 'end' : 'middle' }));
     }
     var x = xw - 6;
     for (var g = 0; g < guns; g++) { x -= 20; s.push(el('g', { 'class': 'gunf', transform: 'translate(' + x + ',' + floor + ') scale(1.4)' }, el('use', { href: '#gun', x: -16, y: -18, width: 36, height: 20 }))); x -= 14; }
@@ -282,44 +282,46 @@ b,strong{font-weight:600}
   function sectionSVG(ld, opts) {
     opts = opts || {};
     var s = [], H = M.hull(cr), D = hullDepth(), floor = SEC.floor, gun = floor - D, dr = M.draught(cr, ld), yw = floor - D * dr;
-    s.push(el('rect', { x: 0, y: SEC.y, width: 340, height: 232 - SEC.y, fill: '#0F2C55' }));
-    s.push(txt(6, SEC.y + 12, 'A BOAT CARRIES THE WEIGHT OF THE WATER IT COULD HOLD: ' + H.tuns + ' TUNS', { size: 9, op: .85 }));
+    s.push(el('rect', { x: 0, y: SEC.y, width: 340, height: 212 - SEC.y, fill: '#0F2C55' }));
+    s.push(txt(6, SEC.y + 13, 'A BOAT CARRIES THE WEIGHT OF THE WATER IT COULD HOLD: ' + H.tuns + ' TUNS', { size: 11, op: .9 }));
+    var vs = M.wallVs(ld.feet, M.landing(cr, load.landing).fire);
+    s.push(txt(6, SEC.y + 28, vs.text.toUpperCase(), { size: 11.5, fill: vs.ok ? '#E9C877' : '#E8403A', id: 'walllabel' }));
     // water, below the water line
-    s.push(el('rect', { id: 'water', x: 0, y: yw, width: 340, height: 232 - yw, fill: '#9FD3E6', opacity: .12 }));
+    s.push(el('rect', { id: 'water', x: 0, y: yw, width: 340, height: 212 - yw, fill: '#9FD3E6', opacity: .12 }));
     s.push(el('line', { id: 'wline', x1: 0, y1: yw, x2: 340, y2: yw, stroke: '#9FD3E6', 'stroke-width': 1.6, 'stroke-dasharray': '7 3' }));
-    s.push(txt(338, 0, 'WATER LINE', { size: 7.5, fill: '#9FD3E6', id: 'wlabel0', anchor: 'end' }));
-    s.push(txt(338, 0, '', { size: 8.5, fill: '#9FD3E6', id: 'wlabel', anchor: 'end' }));
+    s.push(txt(338, 0, 'WATER LINE', { size: 9, fill: '#9FD3E6', id: 'wlabel0', anchor: 'end' }));
+    s.push(txt(338, 0, '', { size: 10.5, fill: '#9FD3E6', id: 'wlabel', anchor: 'end' }));
     for (var i = 1; i < 2; i++) s.push(el('path', { 'class': 'wave', d: 'M4 ' + (floor + 8 + i * 12) + ' q8-3 16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0', fill: 'none', stroke: '#9FD3E6', 'stroke-width': 1, opacity: .3 }));
     // the hull
     s.push(el('path', { id: 'hull', d: 'M' + SEC.left + ' ' + floor + ' L' + (SEC.left + 10) + ' ' + gun + ' L' + (SEC.right - 10) + ' ' + gun + ' L' + SEC.right + ' ' + floor + ' Z', fill: '#0F2C55', stroke: '#F4F7FB', 'stroke-width': 1.8 }));
     s.push(el('line', { x1: SEC.left - 14, y1: gun, x2: SEC.left - 14, y2: floor, stroke: '#F4F7FB', 'stroke-width': 1, 'marker-start': 'url(#arr)', 'marker-end': 'url(#arr)' }));
-    s.push(txt(4, floor + 22, 'HOLLOW ' + H.tuns + ' TUNS', { size: 9 }));
-    s.push(txt(SEC.right - 2, floor + 11, 'BOW', { size: 8, anchor: 'end', op: .7 })); s.push(txt(SEC.left + 2, floor + 11, 'STERN', { size: 8, op: .7 }));
+    s.push(txt(4, floor + 22, 'HOLLOW ' + H.tuns + ' TUNS', { size: 11 }));
+    s.push(txt(SEC.right - 2, floor + 13, 'BOW', { size: 10, anchor: 'end', op: .8 }));
     var cargo = cargoSVG(ld, SEC.right - 6, ld.men, ld.guns, ld.feet, false);
     s.push(el('g', { id: 'cargo' }, cargo.svg));
     s.push(el('g', { id: 'flood', opacity: 0 }, el('path', { d: 'M' + SEC.left + ' ' + floor + ' L' + (SEC.left + 10) + ' ' + gun + ' L' + (SEC.right - 10) + ' ' + gun + ' L' + SEC.right + ' ' + floor + ' Z', fill: '#9FD3E6', opacity: .35 })));
     s.push(el('g', { id: 'ballg' }, el('line', { id: 'trail', x1: 346, y1: floor - 30, x2: 346, y2: floor - 30, stroke: '#E8403A', 'stroke-width': 2, opacity: 0 }) + el('circle', { id: 'ball', cx: 346, cy: floor - 30, r: 3.4, fill: '#E8403A', opacity: 0 })));
-    s.push(txt(6, SEC.y + 30, '', { size: 14, anchor: 'start', id: 'biglabel' }));
-    s.push(txt(334, 228, "LEIBNIZ'S FLATBOAT · SHEET " + (k + 1) + ' OF 3 · ' + H.name.toUpperCase() + ', ' + H.tuns + ' TUNS', { size: 8, anchor: 'end', op: .7 }));
+    s.push(txt(6, SEC.y + 48, '', { size: 15, anchor: 'start', id: 'biglabel' }));
+    s.push(txt(334, 208, 'SHEET ' + (k + 1) + ' OF 3 · ' + H.name.toUpperCase() + ', ' + H.tuns + ' TUNS', { size: 9, anchor: 'end', op: .75 }));
     return el('g', { id: 'section' }, s.join(''));
   }
   function bankSVG(l, bank) {
     // the landing scene: the empty hull at the left, the bank at the right, the parapet on it with the men and guns behind
     var s = [], H = M.hull(cr), D = hullDepth(), floor = SEC.floor, gun = floor - D;
-    s.push(el('rect', { x: 0, y: SEC.y, width: 340, height: 232 - SEC.y, fill: '#0F2C55' }));
-    s.push(txt(6, SEC.y + 12, 'THE FAR BANK AT ' + l.letter + ' · ' + l.name.toUpperCase(), { size: 9, op: .85 }));
-    s.push(el('rect', { x: 0, y: floor - 2, width: 340, height: 232 - floor, fill: '#9FD3E6', opacity: .12 }));
+    s.push(el('rect', { x: 0, y: SEC.y, width: 340, height: 212 - SEC.y, fill: '#0F2C55' }));
+    s.push(txt(6, SEC.y + 13, 'THE FAR BANK AT ' + l.letter + ' · ' + l.name.toUpperCase(), { size: 11, op: .9 }));
+    s.push(el('rect', { x: 0, y: floor - 2, width: 340, height: 212 - floor, fill: '#9FD3E6', opacity: .12 }));
     s.push(el('line', { x1: 0, y1: floor - 2, x2: 200, y2: floor - 2, stroke: '#9FD3E6', 'stroke-width': 1.6, 'stroke-dasharray': '7 3' }));
-    s.push(el('path', { d: 'M196 ' + (floor - 2) + ' L214 ' + (floor - 10) + ' L340 ' + (floor - 10) + ' L340 232 L196 232 Z', fill: 'url(#hatchw2)', stroke: '#F4F7FB', 'stroke-width': 1.4 }));
-    s.push(txt(336, floor + 4, 'BANK', { size: 8, anchor: 'end', op: .7 }));
+    s.push(el('path', { d: 'M196 ' + (floor - 2) + ' L214 ' + (floor - 10) + ' L340 ' + (floor - 10) + ' L340 212 L196 212 Z', fill: 'url(#hatchw2)', stroke: '#F4F7FB', 'stroke-width': 1.4 }));
+    s.push(txt(336, floor + 4, 'BANK', { size: 10, anchor: 'end', op: .8 }));
     s.push(el('path', { d: 'M30 ' + floor + ' L40 ' + gun + ' L180 ' + gun + ' L196 ' + (floor - 2) + ' L190 ' + floor + ' Z', fill: '#0F2C55', stroke: '#F4F7FB', 'stroke-width': 1.8, opacity: .8 }));
-    s.push(txt(60, floor + 11, 'THE BOAT, EMPTIED', { size: 8, op: .7 }));
+    s.push(txt(60, floor + 13, 'THE BOAT, EMPTIED', { size: 10, op: .8 }));
     var c = cargoSVG(null, 336, Math.min(bank.men, 60), Math.min(bank.guns, 3), bank.feet, true);
     s.push(el('g', { id: 'ashore', transform: 'translate(0,-10)' }, c.svg));
     if (bank.men > 60) s.push(txt(224, floor - 10 - 30 - 4 * SEC.pxft - 2, bank.men + ' MEN', { size: 9, anchor: 'middle' }));
     s.push(el('line', { id: 'gunfire', x1: 0, y1: 0, x2: 0, y2: 0, stroke: '#F4F7FB', 'stroke-width': 1.6, opacity: 0 }));
-    s.push(txt(6, SEC.y + 30, '', { size: 14, anchor: 'start', id: 'biglabel' }));
-    s.push(txt(334, 228, "LEIBNIZ'S FLATBOAT · SHEET " + (k + 1) + ' OF 3 · THE LANDING', { size: 8, anchor: 'end', op: .7 }));
+    s.push(txt(6, SEC.y + 48, '', { size: 15, anchor: 'start', id: 'biglabel' }));
+    s.push(txt(334, 208, 'SHEET ' + (k + 1) + ' OF 3 · THE LANDING', { size: 9, anchor: 'end', op: .75 }));
     return el('g', { id: 'section' }, s.join(''));
   }
   function drawSheet(sectionMode, bankLanding) {
@@ -331,7 +333,7 @@ b,strong{font-weight:600}
     var w = $('wline'), lab = $('wlabel'), lab0 = $('wlabel0'); if (!w || !lab) return;
     var y = +w.getAttribute('y1'); lab0.setAttribute('y', y - 3); lab.setAttribute('y', y + 10);
     var tw = M.weight(load), tv = Math.round(tw * 10) / 10;
-    lab.textContent = (tv === Math.floor(tv) ? tv : W('tuns')(tw).toUpperCase().replace(' OF A TUN', '').replace(' TUNS', '')) + ' OF ' + M.hull(cr).tuns + ' TUNS';
+    lab.textContent = (tv === Math.floor(tv) ? tv : W('tuns')(tw).toUpperCase().replace(' OF A TUN', '').replace(' TUNS', '')) + ' OF ' + M.hull(cr).tuns;
     lab0.textContent = M.floats(cr, load) ? 'WATER LINE' : 'SINKS';
     lab.setAttribute('fill', M.floats(cr, load) ? '#9FD3E6' : '#E8403A'); lab0.setAttribute('fill', M.floats(cr, load) ? '#9FD3E6' : '#E8403A');
     $('flood').setAttribute('opacity', M.floats(cr, load) ? 0 : 1);
@@ -341,11 +343,13 @@ b,strong{font-weight:600}
   function resetLoad() { load = { feet: 0, guns: 0, men: 0, landing: load && cr.landings.length > 1 ? load.landing : cr.landings[0].id }; }
   function dialsUI() {
     $('d-feet').textContent = load.feet + ' ft';
-    $('d-feet-sub').textContent = (load.feet ? W('tuns')(load.feet * C.FOOT_T) + ' · ' : '') + M.wallWords(load.feet);
+    var vs = M.wallVs(load.feet, M.landing(cr, load.landing).fire);
+    $('d-feet-sub').textContent = (load.feet ? W('tuns')(load.feet * C.FOOT_T) + ' · ' : '') + (vs.ok ? 'stops their ball' : 'their ball needs ' + C.STOPS[M.landing(cr, load.landing).fire] + ' ft');
+    $('d-feet-sub').style.color = vs.ok ? '#E9C877' : '';
     $('d-guns').textContent = load.guns;
-    $('d-guns-sub').textContent = load.guns ? W('tuns')(load.guns * C.GUN_T) + (load.guns > 1 ? ' together' : '') + ' · ' + C.CREW + ' men serve each' : C.GUN_T + ' tuns each';
+    $('d-guns-sub').textContent = load.guns ? W('tuns')(load.guns * C.GUN_T) + ' · ' + C.CREW + ' men serve each' : C.GUN_T + ' tuns each';
     $('d-men').textContent = load.men;
-    $('d-men-sub').textContent = load.men ? W('tuns')(load.men * C.MAN_T) + ' · ' + (load.men >= C.HANDS ? 'enough to raise a parapet' : 'too few to raise a parapet') : 'a tenth of a tun each';
+    $('d-men-sub').textContent = load.men ? W('tuns')(load.men * C.MAN_T) + ' · ' + (load.men >= C.HANDS ? 'can raise a parapet' : 'too few for a parapet') : 'a tenth of a tun each';
     $('feet-minus').disabled = load.feet <= 0; $('feet-plus').disabled = load.feet >= C.MAX_FEET;
     $('guns-minus').disabled = load.guns <= 0; $('guns-plus').disabled = load.guns >= C.MAX_GUNS;
     $('men-minus').disabled = load.men <= 0; $('men-plus').disabled = load.men >= C.MAX_MEN;
@@ -365,7 +369,7 @@ b,strong{font-weight:600}
   function landingsUI() {
     var box = $('landings'); box.classList.toggle('hide', cr.landings.length < 2); box.innerHTML = '';
     if (cr.landings.length < 2) return;
-    cr.landings.forEach(function (l) { var b = document.createElement('button'); b.className = 'btn cond' + (load.landing === l.id ? ' on' : ''); b.id = 'land-' + l.id; b.textContent = l.letter + ' · ' + l.name; b.onclick = function () { if (phase !== 'load') return; load.landing = l.id; drawSheet('load'); landingsUI(); }; box.appendChild(b); });
+    cr.landings.forEach(function (l) { var b = document.createElement('button'); b.className = 'btn cond' + (load.landing === l.id ? ' on' : ''); b.id = 'land-' + l.id; b.textContent = l.letter + ' · ' + (l.id === 'up' ? 'a mile upstream' : l.name); b.onclick = function () { if (phase !== 'load') return; load.landing = l.id; drawSheet('load'); landingsUI(); }; box.appendChild(b); });
   }
   function topUI() {
     $('where').textContent = 'Crossing ' + (k + 1) + ' of 3 · ' + cr.title;
@@ -412,6 +416,7 @@ b,strong{font-weight:600}
     }
     // cross
     var pb = $('pboat'), bx = LX[ld.landing];
+    if ($('walllabel')) $('walllabel').textContent = '';
     at(100, function () { tween(1500, function (p) { pb.setAttribute('transform', 'translate(' + bx + ',' + (PLAN.near - 6 - (PLAN.near - 6 - (PLAN.far + 8)) * ease(p)) + ')'); }); });
     var shot = ev.filter(function (e) { return e.t === 'shot'; })[0];
     var T = 1700;
@@ -422,8 +427,8 @@ b,strong{font-weight:600}
         var stopX = shot.stopped ? (SEC.right - 6 - Math.max(2, Math.min(ld.feet * SEC.pxft - 4, shot.need * SEC.pxft * .8))) : 18;
         ball.setAttribute('opacity', 1); trail.setAttribute('opacity', .9);
         tween(shot.stopped ? 500 : 900, function (p) { var x = 346 - (346 - stopX) * p; ball.setAttribute('cx', x); trail.setAttribute('x2', x); }, function () {
-          if (shot.stopped) { $('biglabel').textContent = 'STOPS IN THE EARTH'; $('biglabel').setAttribute('fill', '#E9C877'); }
-          else { $('biglabel').textContent = 'THROUGH'; $('biglabel').setAttribute('fill', '#E8403A'); ball.setAttribute('opacity', 0); }
+          if (shot.stopped) { $('biglabel').textContent = 'STOPS IN YOUR ' + ld.feet + ' FT OF EARTH'; $('biglabel').setAttribute('fill', '#E9C877'); }
+          else { $('biglabel').textContent = 'THROUGH: ' + (ld.feet ? ld.feet + ' FT' : 'NO EARTH') + ', THEIR BALL NEEDS ' + shot.need + ' FT'; $('biglabel').setAttribute('fill', '#E8403A'); ball.setAttribute('opacity', 0); }
         });
       });
       T += shot.stopped ? 1300 : 1700;
@@ -456,9 +461,9 @@ b,strong{font-weight:600}
         $('biglabel').textContent = restEv.men ? 'THE REST PASS' : 'DARK: THE REST PASS AT FIRST LIGHT'; $('biglabel').setAttribute('fill', '#F4F7FB');
         if (!restEv.men) return;
         var g = $('prest'), boats = [], tx = Math.min(240, Math.max(60, LX[l.id] - 46)); for (var i = 0; i < 8; i++) { var x = 8 + (i % 5) * 18 + (i > 4 ? 6 : 0); boats.push({ x: x, x2: tx + (i % 5) * 18 + (i > 4 ? 6 : 0), d: i * 180 }); }
-        g.innerHTML = boats.map(function (b, i) { return el('rect', { id: 'rb' + i, x: b.x, y: 83, width: 14, height: 6, fill: '#F4F7FB', stroke: '#F4F7FB', 'stroke-width': 1 }); }).join('');
+        g.innerHTML = boats.map(function (b, i) { return el('rect', { id: 'rb' + i, x: b.x, y: 73, width: 14, height: 6, fill: '#F4F7FB', stroke: '#F4F7FB', 'stroke-width': 1 }); }).join('');
         var shown = state.across - restEv.men, target = state.across;
-        tween(2600, function (p) { boats.forEach(function (b, i) { var q = Math.max(0, Math.min(1, (p * 2600 - b.d) / 1400)); var e = $('rb' + i); e.setAttribute('y', 83 - (83 - (PLAN.far + 2)) * ease(q)); e.setAttribute('x', b.x + (b.x2 - b.x) * ease(q)); }); $('tb-across').textContent = Math.round(shown + (target - shown) * p) + ' men'; });
+        tween(2600, function (p) { boats.forEach(function (b, i) { var q = Math.max(0, Math.min(1, (p * 2600 - b.d) / 1400)); var e = $('rb' + i); e.setAttribute('y', 73 - (73 - (PLAN.far + 2)) * ease(q)); e.setAttribute('x', b.x + (b.x2 - b.x) * ease(q)); }); $('tb-across').textContent = Math.round(shown + (target - shown) * p) + ' men'; });
       });
       T += restEv.men ? 2900 : 1200;
     }

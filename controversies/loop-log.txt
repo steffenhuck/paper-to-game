@@ -7,43 +7,18 @@ QUARREL 1: Should cars be banned from the city centre?
   + c1 reply → on the page, reply
   + b3 reason → on the page, full
   + b3 reply → refused: the page is full
-  page:
-     Ban full: Nobody walks or cycles happily beside mo…
-     Cars (reply): A place for whom? For the people who can…
-     Ban full: Half the air in the centre is exhaust. E…
-     Cars full: The old, the ill and the parent with twi…
-     Ban (reply): Exemptions and vans cover those. The ban…
-     Ban full: Shops do better, not worse: people on fo…
-     [10 of 10 lines; publish open]
-  PUBLISH
-     Ban full: Nobody walks or cycles happily beside mo…
-     Cars (reply): A place for whom? For the people who can…
-     Ban full: Half the air in the centre is exhaust. E…
-     Cars full: The old, the ill and the parent with twi…
-     Ban (reply): Exemptions and vans cover those. The ban…
-     Ban full: Shops do better, not worse: people on fo…
-     [10 of 10 lines; publish open]
-     Ban-side counts lines: Ban speaks 7 lines, Cars 3. One of ours.
-     Cars-side counts lines: Ban speaks 7 lines, Cars 3. One of theirs.
-     Ban-side checks gaps: Ban: 2 unanswered, 0 left out (2). Cars: 0 unanswered, 2 left out (-2). One of ours.
-     Cars-side checks gaps: Ban: 2 unanswered, 0 left out (2). Cars: 0 unanswered, 2 left out (-2). One of theirs.
-     Ban-side first & last: First line Ban, last line Ban. One of ours.
-     Cars-side first & last: First line Ban, last line Ban. One of theirs.
-     GAME: All six could tell. Your page leaned to the ban.
-  REVISE
-  − line 5 off
-  + c2 reason → on the page, full
   ~ line 2 → brief
-  + b2 reply → on the page, reply
-  + c2 reply → refused: the page is full
+  + c2 reason → on the page, brief
+  ↕ line 0 up
+  ~ line 1 → undefined
   page:
      Ban full: Nobody walks or cycles happily beside mo…
      Cars (reply): A place for whom? For the people who can…
      Ban brief: The air gets cleaner, and quickly; every…
      Cars full: The old, the ill and the parent with twi…
      Ban (reply): Exemptions and vans cover those. The ban…
-     Cars full: A ban does not abolish trips, it reroute…
-     Cars (reply): Cleaner on the closed streets; dirtier o…
+     Ban full: Shops do better, not worse: people on fo…
+     Cars brief: The traffic does not vanish; it moves to…
      [10 of 10 lines; publish open]
   PUBLISH
      Ban full: Nobody walks or cycles happily beside mo…
@@ -51,36 +26,22 @@ QUARREL 1: Should cars be banned from the city centre?
      Ban brief: The air gets cleaner, and quickly; every…
      Cars full: The old, the ill and the parent with twi…
      Ban (reply): Exemptions and vans cover those. The ban…
-     Cars full: A ban does not abolish trips, it reroute…
-     Cars (reply): Cleaner on the closed streets; dirtier o…
+     Ban full: Shops do better, not worse: people on fo…
+     Cars brief: The traffic does not vanish; it moves to…
      [10 of 10 lines; publish open]
-     Ban-side counts lines: Ban speaks 4 lines, Cars 6. One of theirs.
-     Cars-side counts lines: Ban speaks 4 lines, Cars 6. One of ours.
-     Ban-side checks gaps: Ban: 0 unanswered, 1 left out (-1). Cars: 1 unanswered, 1 left out (0). One of theirs.
-     Cars-side checks gaps: Ban: 0 unanswered, 1 left out (-1). Cars: 1 unanswered, 1 left out (0). One of ours.
+     Ban-side counts lines: Ban speaks 6 lines, Cars 4. One of ours.
+     Cars-side counts lines: Ban speaks 6 lines, Cars 4. One of theirs.
+     Ban-side checks gaps: Ban: 2 unanswered, 0 left out (2). Cars: 1 unanswered, 1 left out (0). One of ours.
+     Cars-side checks gaps: Ban: 2 unanswered, 0 left out (2). Cars: 1 unanswered, 1 left out (0). One of theirs.
      Ban-side first & last: First line Ban, last line Cars. Can’t tell.
      Cars-side first & last: First line Ban, last line Cars. Can’t tell.
-     GAME: 4 of 6 could tell. Your page leaned to the cars.
+     GAME: 4 of 6 could tell. Your page leaned to the ban.
 QUARREL 2: Dogs or cats?
   stance: Cats
   + d1 reason → on the page, full
   + k1 reason → on the page, full
   + d2 reason → on the page, full
   + d1 reply → refused: the page is full
-  + k1 reply → refused: the page is full
-  PUBLISH
-     Dogs full: A dog is glad you exist, every single ti…
-     Cats full: A cat asks nothing of you and gives you,…
-     Dogs full: A dog gets you out of the house twice a …
-     [6 of 6 lines; publish open]
-     Dogs-side counts lines: Dogs speaks 4 lines, Cats 2. One of ours.
-     Cats-side counts lines: Dogs speaks 4 lines, Cats 2. One of theirs.
-     Dogs-side checks gaps: Dogs: 2 unanswered, 1 left out (1). Cats: 1 unanswered, 2 left out (-1). One of ours.
-     Cats-side checks gaps: Dogs: 2 unanswered, 1 left out (1). Cats: 1 unanswered, 2 left out (-1). One of theirs.
-     Dogs-side first & last: First line Dogs, last line Dogs. One of ours.
-     Cats-side first & last: First line Dogs, last line Dogs. One of theirs.
-     GAME: All six could tell. Your page leaned to the dogs.
-  REVISE
   − line 2 off
   + d1 reply → on the page, reply
   + k1 reply → on the page, reply
@@ -104,33 +65,14 @@ QUARREL 3: Back to the office five days a week?
   + h1 reason → on the page, full
   + o2 reason → on the page, full
   + h2 reason → on the page, full
-  + o1 reply → on the page, reply
-  + h1 reply → on the page, reply
-  PUBLISH
-     Office full: The ideas that matter are had at the cof…
-     Home full: Two hours a day on a train are two hours…
-     Office full: New people learn by watching. A twenty-t…
-     Home full: Output went up, not down, when the offic…
-     Home (reply): Count them. The corridor’s ideas are mos…
-     Office (reply): The commute is also where the day begins…
-     [10 of 10 lines; publish open]
-     Office-side counts lines: Office speaks 5 lines, Home 5. Can’t tell.
-     Home-side counts lines: Office speaks 5 lines, Home 5. Can’t tell.
-     Office-side checks gaps: Office: 1 unanswered, 0 left out (1). Home: 1 unanswered, 2 left out (-1). One of ours.
-     Home-side checks gaps: Office: 1 unanswered, 0 left out (1). Home: 1 unanswered, 2 left out (-1). One of theirs.
-     Office-side first & last: First line Office, last line Office. One of ours.
-     Home-side first & last: First line Office, last line Office. One of theirs.
-     GAME: 4 of 6 could tell. Your page leaned to the office.
-  REVISE
   ~ line 0 → brief
   ~ line 1 → brief
   ~ line 2 → brief
   ~ line 3 → brief
-  + h3 reason → on the page, full
-  + o2 reply → on the page, reply
+  + h1 reply → on the page, reply
+  + o1 reply → on the page, reply
   + h2 reply → on the page, reply
-  + h3 reply → refused: the page is full
-  ↕ line 4 down
+  + o2 reply → on the page, reply
   PUBLISH
      Office brief: The good ideas happen in corridors, not …
      Home brief: The commute is unpaid time; give it back…
@@ -138,21 +80,20 @@ QUARREL 3: Back to the office five days a week?
      Home brief: Output rose when the offices closed; the…
      Office (reply): The commute is also where the day begins…
      Home (reply): Count them. The corridor’s ideas are mos…
-     Home full: Parents, carers and anyone outside the b…
-     Home (reply): Then bring the juniors in and leave the …
      Office (reply): Output of the things already set up. Not…
-     [10 of 10 lines; publish open]
-     Office-side counts lines: Office speaks 4 lines, Home 6. One of theirs.
-     Home-side counts lines: Office speaks 4 lines, Home 6. One of ours.
-     Office-side checks gaps: Office: 0 unanswered, 0 left out (0). Home: 1 unanswered, 1 left out (0). Can’t tell.
-     Home-side checks gaps: Office: 0 unanswered, 0 left out (0). Home: 1 unanswered, 1 left out (0). Can’t tell.
-     Office-side first & last: First line Office, last line Office. One of ours.
-     Home-side first & last: First line Office, last line Office. One of theirs.
-     GAME: 4 of 6 could tell. And they do not agree which way, which is halfway to nobody knowing.
+     Home (reply): Then bring the juniors in and leave the …
+     [8 of 10 lines; publish open]
+     Office-side counts lines: Office speaks 4 lines, Home 4. Can’t tell.
+     Home-side counts lines: Office speaks 4 lines, Home 4. Can’t tell.
+     Office-side checks gaps: Office: 0 unanswered, 0 left out (0). Home: 0 unanswered, 2 left out (-2). One of ours.
+     Home-side checks gaps: Office: 0 unanswered, 0 left out (0). Home: 0 unanswered, 2 left out (-2). One of theirs.
+     Office-side first & last: First line Office, last line Home. Can’t tell.
+     Home-side first & last: First line Office, last line Home. Can’t tell.
+     GAME: 2 of 6 could tell. Your page leaned to the office.
 VERDICT: The readers could tell in two of your three quarrels.
-  Should cars be banned from the city centre? Your first page was placed by six (the line count, the gaps and the first line and the last), with the ban. Your revision was still placed by four (the line count and the gaps).
-  Dogs or cats? Your first page was placed by six (the line count, the gaps and the first line and the last), with the dogs. Your revision mended it: no reader could tell.
-  Back to the office five days a week? Your first page was placed by four (the gaps and the first line and the last), with the office. Your revision was still placed by four (the line count and the first line and the last).
-  You are for the ban, and the readers put you with the cars. Bending over backwards is the other way of leaning.
+  Should cars be banned from the city centre? Your page was placed by four (the line count and the gaps), with the ban.
+  Dogs or cats? Your page gave the readers nothing: no reader could tell.
+  Back to the office five days a week? Your page was placed by two (the gaps), with the office.
+  You are for the ban, and the readers found you out.
   You are for the cats. Nobody could tell.
-  You declared no view; the readers quarrelled over you anyway.
+  You declared no view; the readers put you with the office.
