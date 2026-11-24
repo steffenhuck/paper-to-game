@@ -25,50 +25,61 @@ const { chromium } = require('playwright'); const path = require('path'); const 
     await page.waitForTimeout(150);
   };
   const fits700 = async (where) => { const b = await page.evaluate(() => document.getElementById('b-push').getBoundingClientRect().bottom); log.push(where + ': Push off bottom at ' + Math.round(b) + ' px'); if (b > 700) errors.push('Push off below 700 px at ' + where + ' (' + Math.round(b) + ')'); };
-  const pushAndWatch = async (name, times) => {
+  const pushAndWatch = async (name, shotsAt) => {
     await page.evaluate(() => window.scrollTo(0, 0));
     await page.click('#b-push');
-    for (const [t, label] of times) { await page.waitForTimeout(t); await page.evaluate(() => window.scrollTo(0, 0)); await shot(name + '-' + label); }
-    await page.waitForFunction(() => window.__game.get().phase === 'result', null, { timeout: 20000 });
-    await page.waitForTimeout(700);
+    let n = 0;
+    while (true) {
+      await page.waitForTimeout(1900); await page.evaluate(() => window.scrollTo(0, 0));
+      const g = await page.evaluate(() => { const x = window.__game.get(); return { fi: x.fi, n: x.frames.length, phase: x.phase, pic: x.frames[x.fi] && x.frames[x.fi].pic }; });
+      if (!shotsAt || shotsAt.indexOf(g.pic) >= 0) await shot(name + '-' + (g.fi + 1) + '-' + g.pic);
+      log.push(name + ' frame ' + (g.fi + 1) + '/' + g.n + ' [' + g.pic + ']: ' + await text('#frame-text'));
+      n++; if (n > 14) { errors.push('frames did not end at ' + name); break; }
+      await page.click('#b-step');
+      const ph = await page.evaluate(() => window.__game.get().phase);
+      if (ph === 'result') break;
+    }
+    await page.waitForTimeout(500);
     await shot(name + '-result', true);
-    log.push(name + ': ' + await text('#result'));
+    log.push(name + ' RESULT: ' + await text('#result'));
   };
 
   await page.goto('file://' + path.resolve(__dirname, 'leibnizs-flatboat.html')); await page.waitForTimeout(600);
   await shot('start', true); await hscroll('start');
   log.push('START: ' + await text('#s-start'));
   await page.click('#b-begin'); await page.waitForTimeout(400);
+  await shot('a-0-general', true); await hscroll('opening'); await fits700('the general\u2019s boat');
+  log.push('OPENING donow: ' + await text('#donow'));
+  await pushAndWatch('a-0', null);
+  await page.click('#b-next'); await page.waitForTimeout(300);
   await shot('a-1-empty', true); await hscroll('crossing 1'); await fits700('crossing 1, empty');
   const pushDisabled = await page.$eval('#b-push', b => b.disabled); log.push('empty boat: Push off disabled: ' + pushDisabled); if (!pushDisabled) errors.push('Push off live with nothing aboard');
   await setLoad(0, 2, 40); await shot('a-1-guns'); await fits700('crossing 1, loaded');
   log.push('sum: ' + await text('#sum'));
-  await pushAndWatch('a-1-p1', [[1900, 'shot'], [2800, 'through']]);
+  await pushAndWatch('a-1-p1', ['fire', 'through', 'back']);
   await page.click('#b-next'); await page.waitForTimeout(300);
   await setLoad(6, 1, 0); await shot('a-1-sinkpreview'); log.push('sink preview sum: ' + await text('#sum') + ' | button: ' + await text('#b-push'));
+  await pushAndWatch('a-1-sink', ['sink', 'sunk']); await page.click('#b-next'); await page.waitForTimeout(300);
   await setLoad(4, 0, 40); await shot('a-1-earth');
-  await pushAndWatch('a-1-p2', [[2200, 'stops'], [3600, 'landed']]);
-  await page.click('#b-next'); await page.waitForTimeout(300);
-  await setLoad(4, 1, 20); await shot('a-1-paper');
-  await pushAndWatch('a-1-p3', [[3600, 'landed'], [5000, 'drive']]);
+  await pushAndWatch('a-1-p3', ['stuck', 'land', 'wall', 'wait']);
   log.push('C1 VERDICT: ' + await text('#cverdict'));
   await shot('a-1-verdict', true);
   await page.click('#b-nextcross'); await page.waitForTimeout(400);
   await shot('a-2-empty', true); await fits700('crossing 2');
   await page.click('#b-help-play'); await page.waitForTimeout(300); await shot('help', true); await page.click('#b-help-close'); await page.waitForTimeout(200);
   const backOnSheet = await page.$eval('#s-play', e => e.classList.contains('on')) && !(await page.$eval('#help', e => e.classList.contains('on'))); log.push('help closed back to the sheet: ' + backOnSheet); if (!backOnSheet) errors.push('help did not return to play');
-  await setLoad(1, 0, 60); await shot('a-2-loaded');
-  await pushAndWatch('a-2-p1', [[2200, 'stops'], [3600, 'landed'], [5400, 'rest']]);
+  await setLoad(4, 1, 20); await shot('a-2-paper');
+  await pushAndWatch('a-2-p1', ['stuck', 'wall', 'rest']);
   log.push('C2 VERDICT: ' + await text('#cverdict'));
   await page.click('#b-nextcross'); await page.waitForTimeout(400);
   await shot('a-3-empty', true); await fits700('crossing 3');
   await setLoad(4, 0, 0, 'front'); await shot('a-3-sinks'); log.push('C3 4 ft on the shallow boat: ' + await text('#sum'));
   await setLoad(2, 1, 0, 'front'); log.push('C3 2 ft + a gun: ' + await text('#sum') + ' | men sub: ' + await text('#d-men-sub'));
   await setLoad(2, 0, 20, 'front'); await shot('a-3-A');
-  await pushAndWatch('a-3-p1', [[3600, 'landed']]);
+  await pushAndWatch('a-3-p1', ['wait']);
   await page.click('#b-next'); await page.waitForTimeout(300);
   await setLoad(1, 0, 40, 'up'); await shot('a-3-B'); await fits700('crossing 3, B');
-  await pushAndWatch('a-3-p2', [[2200, 'stops'], [5400, 'rest']]);
+  await pushAndWatch('a-3-p2', ['rest']);
   log.push('C3 VERDICT: ' + await text('#cverdict'));
   await page.click('#b-nextcross'); await page.waitForTimeout(500);
   await shot('a-end', true); await hscroll('end');
@@ -77,7 +88,8 @@ const { chromium } = require('playwright'); const path = require('path'); const 
 
   // Session B: the paper's loading everywhere
   await page.click('#b-again'); await page.waitForTimeout(400);
-  await setLoad(4, 1, 20); await pushAndWatch('b-1', [[5000, 'drive'], [7200, 'rest']]);
+  await pushAndWatch('b-0', []); await page.click('#b-next'); await page.waitForTimeout(200);
+  await setLoad(4, 1, 20); await pushAndWatch('b-1', ['rest']);
   await page.click('#b-nextcross'); await page.waitForTimeout(300);
   await setLoad(1, 0, 60); await pushAndWatch('b-2', []);
   await page.click('#b-nextcross'); await page.waitForTimeout(300);
