@@ -242,8 +242,8 @@ b,strong{font-weight:700}
     <li><b>First &amp; last:</b> only the first line and the last. Both the same side, and that side is yours.</li>
   </ul>
   <p>Each reader holds up a placard: the colour of the side he places you with, or a grey question mark when he can&rsquo;t tell. His sentence under the bench is the sum he counted.</p>
-  <h3>Draft and revision</h3>
-  <p>Each quarrel gets a first draft and one revision; the revision starts from the draft and is final. Before each quarrel you say where you stand; that changes nothing on the page, and only the verdict will say whether the readers found you out.</p>
+  <h3>One page a quarrel</h3>
+  <p>Once the readers have read a page it is final: no revision. What they caught, you carry to the next quarrel. Before each quarrel you say where you stand; that changes nothing on the page, and only the verdict will say whether the readers found you out.</p>
   <h3>The verdict</h3>
   <p>How many readers could tell, quarrel by quarrel; what caught you; and where you really stood against where they put you.</p>
   <button class="btn" data-close>Back</button>
@@ -253,7 +253,7 @@ b,strong{font-weight:700}
     <h2 class="disp">About</h2>
   <p><b>The paper.</b> G. W. Leibniz, <i>On Controversies</i> (<i>Des controverses</i>), 1680, written after the death of Duke Johann Friedrich of Hanover and resumed for Landgrave Ernst von Hessen-Rheinfels. Akademie edition, <i>Sämtliche Schriften und Briefe</i> IV, 3, 204–212. Read in <a href="https://leibnizpapers.org/about.htm">Lloyd Strickland</a>&rsquo;s translation (© 2021), published at <a href="https://www.leibniz-translations.com/controversies.htm">leibniz-translations.com</a>; the game&rsquo;s words for Leibniz&rsquo;s ideas lean on his. No DOI. Game built from this paper; the paper is the authority where the two disagree.</p>
   <p><b>What Leibniz says.</b> He tells a prince he has a method for writing up controversies that nobody can object to, and that its visible sign is this: he will write them up &ldquo;in such a way that the reader cannot judge which party the author has embraced&rdquo;. Readers trying to convict him of partiality &ldquo;will examine you very closely, picking out words everywhere&rdquo;; people &ldquo;will fight to claim you or not to claim you&rdquo;, as seven cities fought over Homer. The writer is &ldquo;neither judge, nor client, nor reconciler, but rapporteur&rdquo;, and the form &ldquo;forces people to speak moderately in spite of themselves&rdquo;. On the way he lists five ploys disputants use without thinking: each chooses his own order; disputes swell into volumes; one conceals or weakens the opponent&rsquo;s arguments in reporting them; one repeats one&rsquo;s reasons without taking account of the answers; one digresses. His remedy: an indisputable order, a summary &ldquo;so that their whole economy can be seen&rdquo;, every argument unpacked &ldquo;so that they cannot say that their arguments have been neglected&rdquo;; then a man of common sense can judge without the rapporteur declaring himself.</p>
-  <p><b>The game.</b> You are the rapporteur. Three present-day quarrels, each on one short page, built from what both sides said; six partisan readers, three a side, who count rather than weigh: the lines each side speaks (the length, ploy 2), each side&rsquo;s reasons left off the page and left standing with no answer (the answers, ploy 4), and the first line and the last (the order, ploy 1). Any difference places you. One draft and one revision per quarrel; the verdict says how many readers could tell, and sets where you said you stood against where they put you.</p>
+  <p><b>The game.</b> You are the rapporteur. Three present-day quarrels, each on one short page, built from what both sides said; six partisan readers, three a side, who count rather than weigh: the lines each side speaks (the length, ploy 2), each side&rsquo;s reasons left off the page and left standing with no answer (the answers, ploy 4), and the first line and the last (the order, ploy 1). Any difference places you. One page a quarrel, final once the readers have read it; what they caught, you carry to the next. The verdict says how many readers could tell, and sets where you said you stood against where they put you.</p>
   <p><b>Mechanism: a toy.</b> The text is an argument with no numbers; everything countable here is the game&rsquo;s. The game <b>demonstrates</b> that, under readers who count the form of a page and nothing else, every cut a writer makes to fit a length is a sign, that pages nobody can place exist in every quarrel, and that they are reached only by mirroring the cuts (or squaring one kind of cut against another), which under a short page means saying less, whole, rather than more, half; and that in an uneven quarrel the mirror of counts is not enough. It <b>assumes</b> three countable rules in place of Leibniz&rsquo;s readers who pick out words; no tolerance (one line places you); that a reason&rsquo;s brief form is its own side&rsquo;s honest summary and not a weakening (ploy 3 is not a lever here); a page of ten or six lines with a minimum; and three quarrels written for the game, with three or four reasons a side and one reply each. The paper <b>establishes</b> a claim and a programme, not evidence: that such writing is possible, that its sign is the reader&rsquo;s inability to place the writer, and that the form forces moderation. Nothing in the game is evidence for any of that; the game lets you try to do it.</p>
   <p><b>What is cut.</b> The Church and the marks of the true Church, which the method was to be tried on first; the prince and his death; the Lullist and the geometer; the raven and the nightingale; ploy 3 (weakening the opponent&rsquo;s reasons in reporting them) as a control, and ploy 5 (digression) as a card. The readers are a toy: Leibniz&rsquo;s readers pick out words; ours count lines, gaps and ends. Leibniz feared the two sides would &ldquo;condemn me by mutual consent, in order to keep themselves in business&rdquo;; the readers here do not collude, but a page can be placed both ways at once, and the game says so when it happens.</p>
   <p><b>The look.</b> A 2020s protest-print poster: chalk, ink, violet and tangerine, acid for the budget and the reading. The one rule: every line on the page is in the colour of the side that speaks it, and a placard is a block of the same colour, because the readers see colour, not words.</p>
@@ -501,22 +501,21 @@ function statement(q, n, direction) {
 // ---------- the game ----------
 
 function newGame() {
-  return { q: 0, stage: 'stance', stance: [null, null, null], page: [], draft: null, results: [[], [], []], done: false };
+  return { q: 0, stage: 'stance', stance: [null, null, null], page: [], results: [null, null, null], done: false };
 }
 function quarrel(game) { return CONFIG.QUARRELS[game.q]; }
-function setStance(game, side) { game.stance[game.q] = side; game.stage = 'draft'; game.page = []; return game; }
+function setStance(game, side) { game.stance[game.q] = side; game.stage = 'write'; game.page = []; return game; }
 
-// Publishing reads the page and records the reading; the first reading of a quarrel is the draft, the second the final.
+// Publishing reads the page and records the reading. One page a quarrel: once read, it is final (no revision; the author's call, 24 Nov 2026).
 function publish(game) {
-  var q = quarrel(game); if (!canPublish(q, game.page)) return null;
-  var r = readPage(q, game.page); r.page = game.page.slice(); r.stage = game.stage;
-  game.results[game.q].push(r);
-  game.stage = game.stage === 'draft' ? 'readDraft' : 'readFinal';
+  var q = quarrel(game); if (game.stage !== 'write' || !canPublish(q, game.page)) return null;
+  var r = readPage(q, game.page); r.page = game.page.slice();
+  game.results[game.q] = r;
+  game.stage = 'read';
   return r;
 }
-function revise(game) { if (game.stage !== 'readDraft') return game; game.stage = 'revision'; return game; }
 function next(game) {
-  if (game.stage !== 'readFinal') return game;
+  if (game.stage !== 'read') return game;
   if (game.q === CONFIG.QUARRELS.length - 1) { game.done = true; game.stage = 'end'; return game; }
   game.q++; game.stage = 'stance'; game.page = []; return game;
 }
@@ -532,16 +531,11 @@ function ruleWords(keys) {
 function verdict(game) {
   var Q = CONFIG.QUARRELS, clean = 0, quarrels = [], stood = [];
   for (var i = 0; i < Q.length; i++) {
-    var res = game.results[i], d = res[0], f = res[res.length - 1], q = Q[i];
+    var f = game.results[i], q = Q[i];
     if (f.couldTell === 0) clean++;
     var line = q.question + ' ';
-    if (d.couldTell === 0) line += 'Your first page gave the readers nothing: no reader could tell.';
-    else line += 'Your first page was placed by ' + numberWord(d.couldTell) + ' (' + ruleWords(d.caught) + ')' + (d.direction === 'split' ? ', and they disagreed which way' : ', with ' + q.sides[d.direction].of) + '.';
-    if (res.length > 1) {
-      if (f.couldTell === 0) line += d.couldTell === 0 ? ' Your revision held.' : ' Your revision mended it: no reader could tell.';
-      else if (d.couldTell === 0) line += ' Your revision undid it: placed by ' + numberWord(f.couldTell) + ' (' + ruleWords(f.caught) + ').';
-      else line += ' Your revision was still placed by ' + numberWord(f.couldTell) + ' (' + ruleWords(f.caught) + ').';
-    }
+    if (f.couldTell === 0) line += 'Your page gave the readers nothing: no reader could tell.';
+    else line += 'Your page was placed by ' + numberWord(f.couldTell) + ' (' + ruleWords(f.caught) + ')' + (f.direction === 'split' ? ', and they disagreed which way' : ', with ' + q.sides[f.direction].of) + '.';
     quarrels.push(line);
     var st = game.stance[i], dir = f.direction, s;
     if (st === null) s = dir === null ? 'You declared no view, and the readers found none.' : dir === 'split' ? 'You declared no view; the readers quarrelled over you anyway.' : 'You declared no view; the readers put you with ' + q.sides[dir].of + '.';
@@ -640,7 +634,7 @@ var HEURISTICS = {
 if (typeof module !== 'undefined') module.exports = {
   CONFIG: CONFIG, reasonById: reasonById, speakerOf: speakerOf, linesOf: linesOf, textOf: textOf, pageLines: pageLines, indexOnPage: indexOnPage,
   canPublish: canPublish, addItem: addItem, removeItem: removeItem, moveItem: moveItem, toggleForm: toggleForm, sums: sums, leans: leans,
-  readPage: readPage, statement: statement, newGame: newGame, quarrel: quarrel, setStance: setStance, publish: publish, revise: revise,
+  readPage: readPage, statement: statement, newGame: newGame, quarrel: quarrel, setStance: setStance, publish: publish,
   next: next, verdict: verdict, enumeratePages: enumeratePages, arrange: arrange, HEURISTICS: HEURISTICS, numberWord: numberWord
 };
 
@@ -655,7 +649,6 @@ if (typeof module !== 'undefined') module.exports = {
   function screen(id) { document.querySelectorAll('.screen').forEach(function (s) { s.classList.toggle('on', s.id === id); }); $('bottom').classList.toggle('hid', id !== 's-write'); window.scrollTo(0, 0); }
   function q() { return quarrel(game); }
   function qLabel() { return 'Quarrel ' + (game.q + 1) + ' of ' + CONFIG.QUARRELS.length; }
-  function stageLabel() { return game.stage === 'draft' ? 'first draft' : 'revision, the last'; }
   function words(n) { return ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'][n] || String(n); }
   function sideWord(s) { return q().sides[s].name; }
   function describe(it) { var spk = speakerOf(q(), it); return it.kind === 'reply' ? q().sides[spk].side + '’s reply' : q().sides[spk].side + '’s reason, in ' + it.form; }
@@ -737,11 +730,9 @@ if (typeof module !== 'undefined') module.exports = {
 
   function renderWrite() {
     var Q = q();
-    $('wno').textContent = qLabel() + ' · ' + stageLabel();
+    $('wno').textContent = qLabel() + ' · the page';
     var n = pageLines(Q, game.page);
-    $('now').textContent = game.stage === 'draft'
-      ? (n === 0 ? 'Fill the page: ' + words(Q.budget) + ' lines, no more.' : n < Q.min ? 'Keep going: at least ' + words(Q.min) + ' lines.' : 'Add, cut, reorder; then publish.')
-      : 'Revise the page. This one is final.';
+    $('now').textContent = n === 0 ? 'Fill the page: ' + words(Q.budget) + ' lines, no more.' : n < Q.min ? 'Keep going: at least ' + words(Q.min) + ' lines.' : 'Add, cut, reorder; then publish. Published is final.';
     renderPage($('page'), game.page, true);
     $('wq').textContent = Q.question;
     renderTools(); renderTray(); renderBottom();
@@ -754,12 +745,12 @@ if (typeof module !== 'undefined') module.exports = {
     $('b-st0').textContent = Q.sides[0].stance; $('b-st1').textContent = Q.sides[1].stance;
     screen('s-stance');
   }
-  function showWrite() { sel = null; say(game.stage === 'draft' ? '' : 'Your draft is back, as you left it. The readers’ placards are under the ? if you want them again.'); renderRules(); renderWrite(); screen('s-write'); }
+  function showWrite() { sel = null; say(''); renderRules(); renderWrite(); screen('s-write'); }
 
   var lastResult = null;
   function doPublish() {
     var Q = q(), r = publish(game); if (!r) return; lastResult = r; reading = true;
-    $('rno').textContent = qLabel() + ' · the readers · ' + (r.stage === 'draft' ? 'first draft' : 'final');
+    $('rno').textContent = qLabel() + ' · the readers';
     $('rnow').textContent = 'The readers read your page.';
     renderPage($('rpage'), r.page, false);
     $('benchlab0').textContent = Q.sides[0].side + '’s readers, then ' + Q.sides[1].side + '’s';
@@ -792,14 +783,12 @@ if (typeof module !== 'undefined') module.exports = {
       var st = $('rstate'); st.textContent = r.statement; st.classList.toggle('clean', r.couldTell === 0); st.classList.remove('hid');
       var mean = $('rmean');
       if (r.couldTell === 0) mean.textContent = 'This is the sign Leibniz promised the prince: a page from which nobody can read the writer’s side.';
-      else if (r.stage === 'draft') mean.textContent = 'Every placard points at something on the page. Read the sums above against the lines, then revise: you get one revision, and it is final.';
-      else mean.textContent = 'Every placard points at something on the page. This page is final; the verdict will say what caught you.';
+      else mean.textContent = 'Every placard points at something on the page: read the sums above against the lines. This page is final; what they caught, you carry to the next quarrel.';
       mean.classList.remove('hid');
-      $('rnow').textContent = r.couldTell === 0 ? 'Nobody could tell.' : (r.stage === 'draft' ? 'They could tell. Revise.' : 'They could tell.');
+      $('rnow').textContent = r.couldTell === 0 ? 'Nobody could tell.' : 'They could tell.';
       var bt = $('rbtns');
-      bt.innerHTML = r.stage === 'draft' ? '<button class="btn" id="b-revise">Revise the page</button>' : (game.q === CONFIG.QUARRELS.length - 1 ? '<button class="btn" id="b-next">The verdict</button>' : '<button class="btn" id="b-next">Next quarrel</button>');
+      bt.innerHTML = game.q === CONFIG.QUARRELS.length - 1 ? '<button class="btn" id="b-next">The verdict</button>' : '<button class="btn" id="b-next">Next quarrel</button>';
       bt.classList.remove('hid'); reading = false;
-      if ($('b-revise')) $('b-revise').addEventListener('click', function () { revise(game); showWrite(); });
       if ($('b-next')) $('b-next').addEventListener('click', function () { next(game); if (game.done) showEnd(); else showStance(); });
     }
     sweep();
@@ -810,9 +799,9 @@ if (typeof module !== 'undefined') module.exports = {
     $('vhead').textContent = v.headline;
     $('vfound').innerHTML = v.quarrels.map(function (l) { return '<p>' + esc(l) + '</p>'; }).join('');
     $('vstood').innerHTML = v.stood.map(function (l, i) { return '<p><b>' + esc(Q[i].question) + '</b> ' + esc(l) + '</p>'; }).join('');
-    var drafts = 0, finals = 0; game.results.forEach(function (res) { if (res[0].couldTell > 0) drafts++; if (res[res.length - 1].couldTell > 0) finals++; });
+    var finals = 0; game.results.forEach(function (res) { if (res.couldTell > 0) finals++; });
     var part;
-    if (v.clean === Q.length) part = (drafts === 0 ? 'Nowhere. Your first pages were already pages nobody could place; Leibniz said the method was very difficult and would take a great deal of application, and you made it look easy.' : 'Nowhere, in the end. Leibniz said the method was very difficult and would take a great deal of application; it took you ' + words(drafts) + ' revision' + (drafts === 1 ? '' : 's') + '. He also says the form forces the writer to moderation in spite of himself. Your pages show the other half of that: the readers catch every cut, but the mirroring is the writer’s own work, line by line.');
+    if (v.clean === Q.length) part = 'Nowhere. Three pages, three times nobody could place you; Leibniz said the method was very difficult and would take a great deal of application, and you made it look easy. He also says the form forces the writer to moderation in spite of himself; your pages show the other half of that: the readers catch every cut, but the mirroring is the writer’s own work, line by line.';
     else part = 'Leibniz says the form forces the writer to moderation in spite of himself. Your pages show the other half of that: the form catches every cut, and the mirroring is the writer’s own work, line by line, under a length that will not take everything. Where a page of yours still leaned, it was not for want of good will; it was a line, a gap, or an end.';
     $('vpart').innerHTML = '<p>' + esc(part) + '</p>';
     var had;

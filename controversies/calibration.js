@@ -151,23 +151,23 @@ check('statement: split', M.statement(q1, 2, 'split').indexOf(C.WORDS.split) > 0
 check('readers’ calls: ours / theirs / can’t tell', (function () { var r = M.readPage(q1, trap).readers; return r[4].call === C.WORDS.ours && r[5].call === C.WORDS.theirs && r[0].call === C.WORDS.cant; })());
 function playGame(pages, stances) {
   var g = M.newGame();
-  for (var i = 0; i < 3; i++) { M.setStance(g, stances[i]); g.page = pages[i][0]; M.publish(g); M.revise(g); g.page = pages[i][1]; M.publish(g); M.next(g); }
+  for (var i = 0; i < 3; i++) { M.setStance(g, stances[i]); g.page = pages[i]; M.publish(g); M.next(g); }
   return g;
 }
-var cleanGame = playGame(C.QUARRELS.map(function (q) { var f = fairPages[q.slug][0].page; return [f, f]; }), [0, 1, null]);
+var cleanGame = playGame(C.QUARRELS.map(function (q) { return fairPages[q.slug][0].page; }), [0, 1, null]);
 check('a clean game ends done, with the all-clear headline', cleanGame.done && M.verdict(cleanGame).headline.indexOf('not one could place you') > 0);
-check('a clean game: the quarrel lines say the revision held, not that it mended anything', M.verdict(cleanGame).quarrels.every(function (l) { return l.indexOf('held') > 0 && l.indexOf('mended') < 0; }), M.verdict(cleanGame).quarrels[0]);
-var undoneGame = playGame(C.QUARRELS.map(function (q) { return [fairPages[q.slug][0].page, H.partisan(q, 1)]; }), [0, 0, 0]);
-check('a game whose revisions undo clean drafts says so', M.verdict(undoneGame).quarrels.every(function (l) { return l.indexOf('undid it') > 0; }), M.verdict(undoneGame).quarrels[1]);
+check('a clean game: every quarrel line says no reader could tell', M.verdict(cleanGame).quarrels.every(function (l) { return l.indexOf('no reader could tell') > 0; }), M.verdict(cleanGame).quarrels[0]);
+check('one page a quarrel: a second publish in the same quarrel is refused', (function () { var g = M.newGame(); M.setStance(g, 0); g.page = fairPages.cars[0].page; var a = M.publish(g); var b = M.publish(g); return a && b === null && g.stage === 'read'; })());
+check('next before publishing does nothing', (function () { var g = M.newGame(); M.setStance(g, 0); M.next(g); return g.q === 0 && g.stage === 'write'; })());
 check('a clean game: the stance lines say nobody could tell', M.verdict(cleanGame).stood[0] === 'You are for the ban. Nobody could tell.' && M.verdict(cleanGame).stood[2].indexOf('found none') > 0);
-var dirtyGame = playGame(C.QUARRELS.map(function (q) { return [H.partisan(q, 0), H.partisan(q, 1)]; }), [0, 1, 0]);
+var dirtyGame = playGame(C.QUARRELS.map(function (q) { return H.partisan(q, 1); }), [0, 1, 0]);
 var dv = M.verdict(dirtyGame);
 check('a partisan game: the readers could tell every time', dv.headline === 'The readers could tell every time.');
 check('a partisan game: found out / bent over backwards', dv.stood[1].indexOf('found you out') > 0 && dv.stood[0].indexOf('Bending over backwards') > 0, dv.stood[0]);
-var mixedGame = playGame([[H.alternate(q1), fairPages.cars[0].page], [H.partisan(q2, 0), fairPages.pets[0].page], [H.mirror(q3), H.mirror(q3)]], [0, 0, 1]);
+var mixedGame = playGame([H.alternate(q1), fairPages.pets[0].page, H.mirror(q3)], [0, 0, 1]);
 var mv = M.verdict(mixedGame);
-check('a mixed game: headline counts the quarrels the readers could tell', mv.headline === 'The readers could tell in one of your three quarrels.');
-check('a mixed game: the quarrel line names what caught the draft and that the revision mended it', mv.quarrels[0].indexOf('the first line and the last') > 0 && mv.quarrels[0].indexOf('mended') > 0, mv.quarrels[0]);
+check('a mixed game: headline counts the quarrels the readers could tell', mv.headline === 'The readers could tell in two of your three quarrels.', mv.headline);
+check('a mixed game: the quarrel line names what caught the page', mv.quarrels[0].indexOf('the line count') > 0 && mv.quarrels[0].indexOf('the first line and the last') > 0 && mv.quarrels[1].indexOf('no reader could tell') > 0, mv.quarrels[0]);
 check('no decimals in any word the game says', !/\d\.\d/.test(JSON.stringify(mv) + JSON.stringify(dv) + JSON.stringify(M.readPage(q1, trap))));
 
 // ---- 7. does the discovery survive the designer's choices? ----
