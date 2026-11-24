@@ -504,7 +504,7 @@ b,strong{font-weight:600}
       else { for (var j = 0; j < 9; j++) g.push(el('line', { x1: x - 24 + j * 6, y1: 5, x2: x - 24 + j * 6, y2: 13, stroke: RED, 'stroke-width': 1.8 })); }
       s.push(el('g', { id: 'enemy-' + l.id, opacity: b.batteryOff ? 0.15 : 1 }, g.join('')));
       s.push(txt(l.id === 'up' ? x + 34 : 336, 13, b.batteryOff ? 'DRIVEN OFF' : C.FIRE[l.fire].label, { size: 10, fill: RED, anchor: l.id === 'up' ? 'start' : 'end' }));
-      if (chosen && !opts.quietNote) s.push(txt(l.id === 'up' ? x + 16 : x - 16, PLAN.far + 26, b.batteryOff ? 'NOTHING FIRES ON THE RIVER NOW' : (C.FIRE[l.fire].shot.toUpperCase() + ' GOES THROUGH LESS THAN ' + C.STOPS[l.fire] + ' FT OF EARTH'), { size: 11, fill: RED, anchor: l.id === 'up' ? 'start' : 'end' }));
+      if (chosen && !opts.quietNote) s.push(txt(l.id === 'up' ? x + 16 : x - 16, PLAN.far + 26, b.batteryOff ? 'NOTHING FIRES ON THE RIVER NOW' : (C.STOPS[l.fire] + ' FT OF EARTH STOPS ' + C.FIRE[l.fire].shot.toUpperCase()), { size: 11, fill: RED, anchor: l.id === 'up' ? 'start' : 'end' }));
       if (b.men || b.feet) s.push(el('g', {}, el('rect', { x: x - 16, y: PLAN.far + 1, width: 32, height: 4, fill: 'url(#hatch)', stroke: EARTH, 'stroke-width': .8 }) + txt(l.id === 'up' ? x + 16 : x - 16, PLAN.far + 40, b.men + ' BEHIND A WALL', { size: 10, fill: EARTH, anchor: l.id === 'up' ? 'start' : 'end' })));
     });
     var bx = LX[load.landing], by = opts.boatY !== undefined ? opts.boatY : PLAN.near - 6;
