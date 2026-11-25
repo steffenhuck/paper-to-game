@@ -1,6 +1,7 @@
-PASS a boat carries the weight of the water it could hold: floats iff load ≤ tuns, draught = load / tuns (196 loadings, both hulls)
-PASS earth is heavier than the hollow can hold: 6 ft of wall alone (12 tuns) sinks the shallow boat and fills the great one
+PASS a boat carries the weight of the water it could hold: floats iff load ≤ tons, draught = load / tons (196 loadings, both hulls)
+PASS earth is heavier than the hollow can hold: 6 ft of wall alone (12 tons) sinks the shallow boat and fills the great one
 PASS an overloaded boat sinks at the bank and the push is lost
+PASS the general’s opening boat is shot through and changes nothing: no push used, nothing across, the bank untouched
 PASS crossing 1 (Below the Lech): best by exhaustive search = 620  — got 620 with [{"feet":4,"guns":1,"men":20,"landing":"front"}]
 PASS crossing 1: the best is reached on the first push
 PASS crossing 1: the memo’s first push is among the best  — [{"feet":4,"guns":1,"men":20,"landing":"front"}]
@@ -17,8 +18,8 @@ PASS crossing 3: the memo’s first push is among the best  — [{"feet":1,"guns
 PASS crossing 3: that first push is unique  — 1 loadings tie
 PASS crossing 3: the best first push weighs exactly the hull or less
 PASS crossing 1: the best first push fills the hull to the tun (4 ft + a gun + 20 men = 12)
-PASS crossing 3: the shallow boat cannot carry the wall their light pieces need and a gun (2 ft + a gun = 6 tuns of 6) with the men to serve it
-PASS crossing 3: the shallow boat cannot be made proof against field pieces at all (4 ft = 8 tuns of 6)
+PASS crossing 3: the shallow boat cannot carry the wall their small cannons need, a cannon, and any soldiers (2 ft + a cannon = 6 tons of 6)
+PASS crossing 3: the shallow boat cannot be made proof against field pieces at all (4 ft = 8 tons of 6)
      heuristics (men across by dark, three pushes a crossing):
      strategy                                                             c1    c2    c3    total
      best possible                                                        620   660   640   1920
@@ -33,12 +34,12 @@ PASS crossing 3: the shallow boat cannot be made proof against field pieces at a
      learns: wrong once, then the paper                                   320   360   340   1020
 PASS all men: nothing across under cannon or musket (a boat of men is a boat of planks to a ball)
 PASS firepower: nothing across anywhere (guns keep nothing off on the water)
-PASS earth to the brim: nothing across (nobody to raise the parapet)
+PASS earth to the brim: nothing across (nobody aboard to carry it ashore)
 PASS the spreader: through under field pieces; passes under muskets
 PASS the physicist (wall but no gun) digs in under the battery but the rest never pass: 120 < 620
 PASS the physicist is best where there is no battery (crossing 2)
 PASS the paper’s loading is best in crossings 1 and 2
-PASS the paper’s loading sent at the battery with a shallow boat cannot carry the gun: the rest wait (60 < 640)
+PASS the paper’s loading sent at the battery with a shallow boat cannot carry the cannon and any soldiers, so it goes without: dug in, and the rest wait (60 < 640)
 PASS the crossing-1 recipe everywhere: best in 1, short in 2 (four feet where one would do: 20 men instead of 60), sinks in 3
 PASS the paper, upstream where offered: best everywhere
 PASS learning costs one push: 320/360/340 against 620/660/640
@@ -51,17 +52,19 @@ PASS baseline: all five lessons hold  — earthThenGun:holds noGunLoses:holds th
 PASS field pieces stopped by 3 ft instead of 4: core lessons hold  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:holds
 PASS field pieces need 5 ft: the great boat can no longer carry wall, gun and crew (10 + 2 + half a tun > 12), so the earth-then-gun lesson needs the wall to fit in the hull with a gun and its crew; reported, not required  — earthThenGun:CHANGES noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:holds
 PASS a gun weighs 1 tun: core lessons hold; the shallow boat can then carry wall and gun, so the crossing-3 lesson changes (reported)  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:CHANGES
-PASS a gun weighs 3 tuns: all lessons hold  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:holds
+PASS a gun weighs 3 tons: all lessons hold  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:holds
 PASS light pieces stopped by 1 ft: core lessons hold; the crossing-3 lesson needs light pieces to need 2 ft (reported)  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:CHANGES
 PASS the rest pass at 30 a boat: all lessons hold  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:holds
 PASS the rest pass at 90 a boat: all lessons hold  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:holds
 PASS a fleet of one open boat: all lessons hold  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:holds
 PASS a foot of wall weighs 1 tun: core lessons hold (the shallow boat can then carry wall and gun; reported)  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:CHANGES
 PASS restored
-PASS no decimal in any sentence the sheet can say (544 pushes, every floating loading, plus the verdicts)  — 
+PASS every push has frames, each with a picture and a plain sentence; no decimal and no jargon (ball, tun, battery, foot, men) in any frame (544 pushes, every floating loading, plus the verdicts)  — 
 PASS a perfect game is the sum of the bests and gets the first fate
 PASS a game with nothing across gets the last fate
-PASS tuns in words
-     sample: 2 and a half tuns / a tenth of a tun / 11 and seven tenths tuns
+PASS tons in words
+     sample: 2 and a half tons / a tenth of a ton / 11 and seven tenths tons
+PASS the paper’s push plays as: push, fire, stuck, land, wall, drive, rest  — push,fire,stuck,land,wall,drive,rest
+PASS a boat of cannons and soldiers plays as: push, fire, through, back  — push,fire,through,back
 
-ALL PASSED (52 checks)
+ALL PASSED (55 checks)
