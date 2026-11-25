@@ -15,10 +15,10 @@ var CONFIG = {
   // order (ploy 1). Any difference at all places the writer: no tolerance (our choice). Each rule is one sentence a
   // teenager can check against the page; nothing is netted (revision 2).
   READERS: [
-    { key: 'lines', label: 'lines', rule: 'who speaks more lines' },
-    { key: 'leftout', label: 'left out', rule: 'whose points you left out' },
-    { key: 'unanswered', label: 'unanswered', rule: 'whose points stand with no answer under them' },
-    { key: 'ends', label: 'first & last', rule: 'who gets the first word and the last' }
+    { key: 'lines', label: 'lines', rule: 'They count the lines each side speaks, a reply counting for the side that spoke it. If one side has more lines, they will think you favour it.' },
+    { key: 'leftout', label: 'left out', rule: 'They count each side\u2019s points that are not on the page. If one side has more points missing, they will think you are against it.' },
+    { key: 'unanswered', label: 'unanswered', rule: 'They count each side\u2019s points on the page with no reply under them. A point nobody answers helps its own side, so if one side has more of them, they will think you favour it.' },
+    { key: 'ends', label: 'first & last', rule: 'They look only at who speaks the first line and who the last. If one side has both, they will think you favour it.' }
   ],
 
   // The quarrels, written for the game (Leibniz's was the Church: A IV 3, 212, note 1): three rounds, three quarrels a round;
@@ -421,10 +421,12 @@ function readPage(q, page) {
   var s = sums(q, page), L = leans(s), readers = [], A = q.sides[0].name, B = q.sides[1].name;
   for (var k = 0; k < CONFIG.READERS.length; k++) {
     var rule = CONFIG.READERS[k], lean = L[rule.key], placed = placedBy(lean), sum;
-    if (rule.key === 'lines') sum = A + ' speaks ' + plural(s.lines[0], 'line') + ', ' + B + ' ' + s.lines[1] + '.';
-    else if (rule.key === 'leftout') sum = 'Left out: ' + A + ' ' + s.leftOut[0] + ', ' + B + ' ' + s.leftOut[1] + '.';
-    else if (rule.key === 'unanswered') sum = 'Unanswered: ' + A + ' ' + s.unanswered[0] + ', ' + B + ' ' + s.unanswered[1] + '.';
-    else sum = page.length ? 'First word ' + q.sides[speakerOf(q, page[0])].name + ', last word ' + q.sides[speakerOf(q, page[page.length - 1])].name + '.' : 'An empty page.';
+    // the count, then what it means in the readers' own terms (the direction), so a placard never needs the help page
+    var fav = placed === null ? null : q.sides[placed].name;
+    if (rule.key === 'lines') sum = A + ' speaks ' + plural(s.lines[0], 'line') + ', ' + B + ' ' + s.lines[1] + '. ' + (fav ? 'More lines for ' + fav + '.' : 'Even.');
+    else if (rule.key === 'leftout') sum = 'Missing from the page: ' + A + ' ' + s.leftOut[0] + ', ' + B + ' ' + s.leftOut[1] + '. ' + (fav ? 'More of ' + q.sides[1 - placed].side + '\u2019s points left out.' : 'Even.');
+    else if (rule.key === 'unanswered') sum = 'Standing with no reply: ' + A + ' ' + s.unanswered[0] + ', ' + B + ' ' + s.unanswered[1] + '. ' + (fav ? 'More unanswered claims for ' + fav + '.' : 'Even.');
+    else sum = page.length ? 'First word ' + q.sides[speakerOf(q, page[0])].name + ', last word ' + q.sides[speakerOf(q, page[page.length - 1])].name + '. ' + (fav ? fav + ' has both.' : 'One each.') : 'An empty page.';
     for (var side = 0; side < 2; side++) {
       var call = placed === null ? CONFIG.WORDS.cant : placed === side ? CONFIG.WORDS.ours : CONFIG.WORDS.theirs;
       readers.push({ side: side, key: rule.key, label: rule.label, placed: placed, lean: lean, sum: sum, call: call, text: sum + ' ' + call });
