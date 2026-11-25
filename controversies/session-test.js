@@ -9,7 +9,8 @@ const { chromium } = require('playwright'); const path = require('path'); const 
   const errors = [], log = [];
   page.on('pageerror', e => errors.push(e.message)); page.on('console', m => { if (m.type() === 'error' && m.text().indexOf('Failed to load resource') < 0) errors.push(m.text()); });
   const url = 'file://' + path.resolve(__dirname, 'leibnizs-even-hand.html');
-  await page.goto(url + '?seed=14'); await page.waitForTimeout(600); // seed 14 draws phones, pets, homework (checked in calibration.js)
+  await page.goto(url); await page.waitForTimeout(600);
+  const pick = async (slugs) => { for (let r = 0; r < 3; r++) { const i = await page.evaluate(([r, slug]) => CONFIG.POOLS[r].findIndex(q => q.slug === slug), [r, slugs[r]]); await page.click('.pk[data-round="' + r + '"][data-idx="' + i + '"]'); await page.waitForTimeout(80); } };
   const shot = (n, full) => page.screenshot({ path: path.join(__dirname, 'screenshot-' + n + '.png'), fullPage: !!full });
   const hscroll = async (where) => { if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) errors.push('horizontal scroll at ' + where); };
   const txt = (sel) => page.$eval(sel, e => e.textContent.trim());
@@ -26,9 +27,14 @@ const { chromium } = require('playwright'); const path = require('path'); const 
 
   await shot('start', true); await hscroll('start');
   await page.click('#b-help-start'); await page.waitForTimeout(300); await shot('help', true); await page.click('#help [data-close]'); await page.waitForTimeout(200);
-  await page.click('#b-begin'); await page.waitForTimeout(300); await shot('stance'); await hscroll('stance');
-  log.push('stance: ' + await txt('#stq') + ' | ' + await txt('#stno') + ' | ' + await txt('#stdraw') + ' | ' + await txt('#b-st0') + ' / ' + await txt('#b-st1') + ' / ' + await txt('#b-st2'));
-  if ((await txt('#stq')).indexOf('phones') < 0) errors.push('seed 14 should draw the phones quarrel first');
+  await page.click('#b-begin'); await page.waitForTimeout(300); await shot('choose'); await hscroll('choose');
+  log.push('choose: ' + await page.$$eval('#pools .pk', es => es.map(e => (e.classList.contains('on') ? '[x] ' : '[ ] ') + e.textContent).join(' | ')));
+  if ((await page.$$('#pools .pk')).length !== 9 || (await page.$$('#pools .pk.on')).length !== 3) errors.push('the chooser should show nine quarrels with three picked');
+  const sb = await page.evaluate(() => document.getElementById('b-start').getBoundingClientRect().bottom); log.push('  Write these up bottom at ' + Math.round(sb) + ' px'); if (sb > 760) errors.push('the chooser does not fit a phone screen');
+  await pick(['phones', 'pets', 'homework']); await shot('choose-picked'); log.push('  picked: ' + await page.$$eval('#pools .pk.on', es => es.map(e => e.textContent).join(' | ')));
+  await page.click('#b-start'); await page.waitForTimeout(300); await shot('stance'); await hscroll('stance');
+  log.push('stance: ' + await txt('#stq') + ' | ' + await txt('#stno') + ' | ' + await txt('#b-st0') + ' / ' + await txt('#b-st1') + ' / ' + await txt('#b-st2'));
+  if ((await txt('#stq')).indexOf('phones') < 0) errors.push('the pick should give the phones quarrel first');
   await page.click('#b-st0'); await page.waitForTimeout(300); await hscroll('write 1'); await shot('a-1-empty'); await shot('a-1-empty-full', true);
   log.push('write 1: ' + await txt('#wno') + ' | ' + await txt('#now') + ' | ' + await txt('#bt'));
   // the ban-heavy page of memo §9, with every tool tried on the way
@@ -70,12 +76,13 @@ const { chromium } = require('playwright'); const path = require('path'); const 
   const r3 = await publish('a-3'); if (r3.caught.join() !== 'leftout') errors.push('quarrel 3 mirror of counts should be caught by the left-out readers alone: ' + r3.caught.join());
   await hscroll('reading'); await page.click('#b-next'); await page.waitForTimeout(400); await hscroll('end'); await shot('a-end', true);
   log.push('END: ' + await txt('#vhead')); log.push('  found: ' + await page.$$eval('#vfound p', es => es.map(e => e.textContent).join(' // '))); log.push('  stood: ' + await page.$$eval('#vstood p', es => es.map(e => e.textContent).join(' // ')));
-  log.push('  part: ' + await txt('#vpart')); log.push('  had: ' + await txt('#vhad')); log.push('  draw: ' + await txt('#vdraw'));
-  if ((await txt('#vdraw')).indexOf('?seed=14') < 0) errors.push('the end screen should name the seed');
+  log.push('  part: ' + await txt('#vpart')); log.push('  had: ' + await txt('#vhad')); log.push('  wrote up: ' + await txt('#vdraw'));
+  if ((await txt('#vdraw')).indexOf('homework') < 0) errors.push('the end screen should name the three quarrels');
   await page.click('#b-about'); await page.waitForTimeout(300); await shot('about', true); await page.click('#about [data-close]'); await page.waitForTimeout(200);
 
   // session B: clean, by the mirror with the ends split; in the uneven quarrel one office reason brief with three home reasons brief and every reply
   await page.click('#b-again'); await page.waitForTimeout(300);
+  await page.click('#b-start'); await page.waitForTimeout(200);
   log.push('B: a fresh draw, seed ' + await page.evaluate(() => window.__game.seed) + ': ' + await page.evaluate(() => gameQuarrels(window.__game).map(q => q.slug).join(',')));
   for (let k = 0; k < 3; k++) {
     await page.evaluate(s => window.__api.stance(s), [0, 1, null][k]); await page.waitForTimeout(200);
@@ -86,17 +93,19 @@ const { chromium } = require('playwright'); const path = require('path'); const 
     await page.click('#b-next'); await page.waitForTimeout(300);
   }
   await shot('b-end', true); log.push('B END: ' + await txt('#vhead') + ' | ' + await txt('#vpart'));
-  // session D: the other draw (seed 13: cars, pizza, office), the partisan page of each via the API, every screen shot
-  await page.goto(url + '?seed=13'); await page.waitForTimeout(500); await page.click('#b-begin'); await page.waitForTimeout(300);
+  // sessions D and E: the other six quarrels, picked on the chooser, the partisan page of each via the API, every screen shot
+  for (const [tag, slugs] of [['d', ['cars', 'pizza', 'office']], ['e', ['uniforms', 'seasons', 'votes']]]) {
+  await page.click('#b-again'); await page.waitForTimeout(300); await pick(slugs); await page.click('#b-start'); await page.waitForTimeout(300);
   for (let k = 0; k < 3; k++) {
-    log.push('D quarrel ' + (k + 1) + ': ' + await txt('#stq')); await shot('d-' + (k + 1) + '-stance'); await page.click('#b-st1'); await page.waitForTimeout(300); await hscroll('D write ' + (k + 1)); await shot('d-' + (k + 1) + '-empty-full', true);
-    await page.evaluate(() => window.__api.setPage(HEURISTICS.partisan(quarrel(window.__game), 0))); await page.waitForTimeout(150); await shot('d-' + (k + 1) + '-page');
-    const d = await publish('d-' + (k + 1)); if (d.direction !== 0) errors.push('D quarrel ' + (k + 1) + ' partisan page should lean to side 0'); await page.click('#b-next'); await page.waitForTimeout(300);
+    log.push(tag.toUpperCase() + ' quarrel ' + (k + 1) + ': ' + await txt('#stq')); if ((await txt('#stq')) !== await page.evaluate(s => CONFIG.QUARRELS.filter(q => q.slug === s)[0].question, slugs[k])) errors.push(tag + ' quarrel ' + (k + 1) + ' is not the one picked');
+    await shot(tag + '-' + (k + 1) + '-stance'); await page.click('#b-st1'); await page.waitForTimeout(300); await hscroll(tag + ' write ' + (k + 1)); await shot(tag + '-' + (k + 1) + '-empty-full', true);
+    await page.evaluate(() => window.__api.setPage(HEURISTICS.partisan(quarrel(window.__game), 0))); await page.waitForTimeout(150); await shot(tag + '-' + (k + 1) + '-page');
+    const d = await publish(tag + '-' + (k + 1)); if (d.direction !== 0) errors.push(tag + ' quarrel ' + (k + 1) + ' partisan page should lean to side 0'); await page.click('#b-next'); await page.waitForTimeout(300);
   }
-  await shot('d-end', true); log.push('D END: ' + await txt('#vhead') + ' | ' + await page.$$eval('#vfound p', es => es.map(e => e.textContent.slice(0, 60)).join(' // ')));
-  if ((await txt('#vfound')).indexOf('office') < 0) errors.push('seed 13 should end on the office quarrel');
+  await shot(tag + '-end', true); log.push(tag.toUpperCase() + ' END: ' + await txt('#vhead') + ' | ' + await txt('#vdraw'));
+  }
   // session C: the partisan, for side 0 every time, declared for side 1
-  await page.click('#b-again'); await page.waitForTimeout(300);
+  await page.click('#b-again'); await page.waitForTimeout(300); await page.click('#b-start'); await page.waitForTimeout(200);
   for (let k = 0; k < 3; k++) {
     await page.evaluate(() => window.__api.stance(1)); await page.waitForTimeout(150);
     const ids = await page.evaluate(() => quarrel(window.__game).reasons.map(r => [r.id, r.side]));
@@ -106,7 +115,7 @@ const { chromium } = require('playwright'); const path = require('path'); const 
   }
   await shot('c-end', true); log.push('C END: ' + await txt('#vhead') + ' | stood: ' + await page.$$eval('#vstood p', es => es.map(e => e.textContent).join(' // ')));
   // laptop
-  await page.setViewportSize({ width: 1280, height: 720 }); await page.click('#b-again'); await page.waitForTimeout(200); await page.click('#b-st0'); await page.waitForTimeout(200); await add('b1', 'reason'); await shot('laptop-write'); await hscroll('laptop');
+  await page.setViewportSize({ width: 1280, height: 720 }); await page.click('#b-again'); await page.waitForTimeout(200); await shot('laptop-choose'); await pick(['phones', 'pets', 'homework']); await page.click('#b-start'); await page.waitForTimeout(200); await page.click('#b-st0'); await page.waitForTimeout(200); await add('b1', 'reason'); await shot('laptop-write'); await hscroll('laptop');
   await browser.close();
   fs.writeFileSync(path.join(__dirname, 'session-log.txt'), log.join('\n') + '\n\nERRORS: ' + (errors.length ? errors.join('\n') : 'none') + '\n');
   console.log(log.join('\n')); console.log('\nERRORS:', errors.length ? errors : 'none');

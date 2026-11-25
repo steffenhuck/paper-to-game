@@ -21,13 +21,13 @@ var CONFIG = {
     { key: 'ends', label: 'first & last', rule: 'who gets the first word and the last' }
   ],
 
-  // The quarrels, written for the game (Leibniz's was the Church: A IV 3, 212, note 1): three rounds, two quarrels a round,
-  // one drawn by chance per game from a visible seed (revision 3). Side 0 is drawn violet, side 1 tangerine. budget: lines on the page (ploy 2, "disputes expand into
+  // The quarrels, written for the game (Leibniz's was the Church: A IV 3, 212, note 1): three rounds, three quarrels a round;
+  // a game draws one per round as a default and the player may swap it on the first screen (revision 4). Side 0 is drawn violet, side 1 tangerine. budget: lines on the page (ploy 2, "disputes expand into
   // volumes", turned into a constraint). min: the fewest lines the readers will read as a report (our choice: keeps the
   // empty page from passing). A point has a full form and a short form, both its own side's words; its reply is the other
   // side's one line.
   POOLS: [
-    [ // round 1: an even quarrel, three points a side, ten lines
+    [ // round 1: an even quarrel, three points a side, ten lines (phones, cars, uniforms) (phones, cars, uniforms)
       {
         slug: 'phones', question: 'Should phones be banned in school?', budget: 10, min: 6,
         sides: [
@@ -93,9 +93,42 @@ var CONFIG = {
             brief: 'Drivers have paid for the streets they are being shut out of.',
             reply: 'Road tax pays for a fraction of the roads; everyone else pays the rest through everything else.' }
         ]
+      },
+      {
+        slug: 'uniforms', question: 'Should school uniforms be scrapped?', budget: 10, min: 6,
+        sides: [
+          { name: 'Scrap', side: 'the scrap side', says: 'The scrap side says', stance: 'Scrap them', of: 'scrapping them' },
+          { name: 'Keep', side: 'the keep side', says: 'The keep side says', stance: 'Keep them', of: 'keeping them' }
+        ],
+        reasons: [
+          { id: 'u1', side: 0,
+            full: 'A uniform costs a family real money every autumn, for clothes nobody would choose and nobody can wear anywhere else.',
+            brief: 'Uniforms cost real money, for clothes nobody chose.',
+            reply: 'A blazer for a year is cheaper than a wardrobe that has to keep up.' },
+          { id: 'u2', side: 0,
+            full: 'Clothes are how a fourteen-year-old says who they are. Take that away and you get a quieter corridor, not a kinder one.',
+            brief: 'Clothes are how a teenager says who they are.',
+            reply: 'And how the ones with money say it louder.' },
+          { id: 'u3', side: 0,
+            full: 'No workplace you will ever join makes you wear a tie in order to think. Uniforms train obedience, not learning.',
+            brief: 'Uniforms train obedience, not learning.',
+            reply: 'Nurses, pilots and chefs would like a word.' },
+          { id: 'w1', side: 1,
+            full: 'In a uniform the kid in last year\u2019s trainers and the kid in this month\u2019s are the same kid. That is worth a tie.',
+            brief: 'In uniform the rich kid and the poor kid look the same.',
+            reply: 'They know anyway. The shoes, the bag and the phone give it away by nine.' },
+          { id: 'w2', side: 1,
+            full: 'Getting dressed for school in a uniform takes two minutes and no argument. Ask any parent at seven in the morning.',
+            brief: 'Two minutes, no argument, every morning.',
+            reply: 'Two minutes, plus ironing a shirt nobody wants to iron.' },
+          { id: 'w3', side: 1,
+            full: 'A school with a uniform is visible in the street, and its pupils behave as if someone might be watching. Someone is.',
+            brief: 'In uniform, pupils know the school is watching.',
+            reply: 'So the school outsources its discipline to passers-by.' }
+        ]
       }
     ],
-    [ // round 2: the short page, six lines
+    [ // round 2: the short page, six lines (pets, pizza, seasons) (pets, pizza, seasons)
       {
         slug: 'pets', question: 'Dogs or cats?', budget: 6, min: 4,
         sides: [
@@ -161,9 +194,42 @@ var CONFIG = {
             brief: 'If it needs pineapple, the pizza was bad.',
             reply: 'Or the pizza was fine and you are scared of a new flavour.' }
         ]
+      },
+      {
+        slug: 'seasons', question: 'Summer or winter?', budget: 6, min: 4,
+        sides: [
+          { name: 'Summer', side: 'the summer side', says: 'The summer side says', stance: 'Summer', of: 'summer' },
+          { name: 'Winter', side: 'the winter side', says: 'The winter side says', stance: 'Winter', of: 'winter' }
+        ],
+        reasons: [
+          { id: 'm1', side: 0,
+            full: 'Light until ten at night, doors open, nobody needs a coat. Summer is the only season that gives you more day.',
+            brief: 'Summer gives you more day.',
+            reply: 'More day to sweat through. Nobody sleeps in July.' },
+          { id: 'm2', side: 0,
+            full: 'The sea, the park, the garden, the bike: everything you would actually like to do is outside, and outside only opens in summer.',
+            brief: 'Everything worth doing is outside, and outside opens in summer.',
+            reply: 'Skiing, sledging and snow are outside, and they only open in winter.' },
+          { id: 'm3', side: 0,
+            full: 'Holidays. Six weeks of them. Winter gets a fortnight and a cold.',
+            brief: 'Six weeks of holidays. Winter gets a fortnight.',
+            reply: 'A fortnight with presents, lights and food beats six weeks of being bored by August.' },
+          { id: 't1', side: 1,
+            full: 'Cold is a problem you can solve with a jumper. Heat is a problem you can only complain about.',
+            brief: 'Cold has a cure, a jumper. Heat has none.',
+            reply: 'The cure for heat is a swim, and it is a lot more fun than a jumper.' },
+          { id: 't2', side: 1,
+            full: 'Snow turns an ordinary street into a place you would pay to visit. Nothing in summer does that to a street.',
+            brief: 'Snow turns a street into somewhere you would pay to visit.',
+            reply: 'For a morning. Then it is grey slush for a fortnight.' },
+          { id: 't3', side: 1,
+            full: 'Winter has the fire, the blanket, the long film, and the dark at four that makes being indoors a pleasure instead of a waste.',
+            brief: 'Winter makes being indoors a pleasure, not a waste.',
+            reply: 'That is a description of being trapped, with nice lighting.' }
+        ]
       }
     ],
-    [ // round 3: the uneven quarrel, four points against two, ten lines
+    [ // round 3: the uneven quarrel, four points against two, ten lines (homework, office, votes) (homework, office, votes)
       {
         slug: 'homework', question: 'Should homework be scrapped?', budget: 10, min: 6,
         sides: [
@@ -228,6 +294,39 @@ var CONFIG = {
             full: 'Empty offices still cost rent. The firm that lets people stay home saves on floors and spends it on people.',
             brief: 'Offices are rent; home is free.',
             reply: 'The lease is signed either way; the saving is a slide, not a cheque.' }
+        ]
+      },
+      {
+        slug: 'votes', question: 'Should sixteen-year-olds get the vote?', budget: 10, min: 6,
+        sides: [
+          { name: 'Yes', side: 'the yes side', says: 'The yes side says', stance: 'Yes, at sixteen', of: 'the vote at sixteen' },
+          { name: 'No', side: 'the no side', says: 'The no side says', stance: 'No, eighteen', of: 'waiting till eighteen' }
+        ],
+        reasons: [
+          { id: 'v1', side: 0,
+            full: 'At sixteen you can work, pay tax and leave home. Being taxed by a government you cannot vote for is the thing a revolution was once fought over.',
+            brief: 'At sixteen you can work and pay tax. No vote with it is tax without a say.',
+            reply: 'You cannot buy a drink, drive or sign a lease either. Sixteen is a line for some things, not all.' },
+          { id: 'v2', side: 0,
+            full: 'The laws passed now, on climate, on debt, on schools, land hardest on the people who will live longest with them. They should get a say.',
+            brief: 'Today\u2019s laws land hardest on the young. They should get a say.',
+            reply: 'By that logic a ten-year-old has the biggest stake of all.' },
+          { id: 'v3', side: 0,
+            full: 'Where it has been tried, sixteen-year-olds turned out in bigger numbers than eighteen-year-olds, and kept voting afterwards.',
+            brief: 'Where it has been tried, sixteen-year-olds turned out, and kept voting.',
+            reply: 'They turned out once, with a teacher reminding them. A habit needs more than one election.' },
+          { id: 'v4', side: 0,
+            full: 'Schools teach politics to sixteen-year-olds and then send them away for two years before they can use any of it.',
+            brief: 'School teaches you politics, then makes you wait two years to use it.',
+            reply: 'School teaches you the law too, and nobody suggests sixteen-year-old judges.' },
+          { id: 'x1', side: 1,
+            full: 'Sixteen-year-olds live with their parents, and a vote cast at home is a vote the household casts twice.',
+            brief: 'A vote at home is a vote the household casts twice.',
+            reply: 'So is a married couple\u2019s. Nobody counts those as one.' },
+          { id: 'x2', side: 1,
+            full: 'Eighteen is the age at which the state treats you as an adult for everything else. One line is clearer and fairer than a dozen.',
+            brief: 'Eighteen is the adult line for everything. One line is fairer than many.',
+            reply: 'There is no one line now: you drive at seventeen, marry at sixteen, drink at eighteen.' }
         ]
       }
     ]
@@ -348,16 +447,19 @@ function statement(q, n, direction) {
 
 // ---------- the game ----------
 
-// A game draws one quarrel from each round's pool, from a seed the player can see and replay (?seed=N in the address).
+// A game draws one quarrel from each round's pool as its default, from a seed; the player may swap any of the three on
+// the first screen (choose), then the game starts (start) and the draw is fixed.
 function rng(seed) { var s = (Math.floor(Math.abs(seed)) % 2147483647) || 1; var f = function () { s = s * 16807 % 2147483647; return (s - 1) / 2147483646; }; f(); f(); f(); return f; } // Park-Miller, warmed up so a small seed does not make a small first draw
 function newGame(seed) {
   seed = seed === undefined ? 1 : seed;
   var r = rng(seed), draw = CONFIG.POOLS.map(function (pool) { return Math.floor(r() * pool.length); });
-  return { q: 0, seed: seed, draw: draw, stage: 'stance', stance: [null, null, null], page: [], results: [null, null, null], done: false };
+  return { q: 0, seed: seed, draw: draw, stage: 'choose', stance: [null, null, null], page: [], results: [null, null, null], done: false };
 }
+function choose(game, round, idx) { if (game.stage !== 'choose' || !CONFIG.POOLS[round] || !CONFIG.POOLS[round][idx]) return game; game.draw[round] = idx; return game; }
+function start(game) { if (game.stage !== 'choose') return game; game.stage = 'stance'; return game; }
 function quarrel(game) { return CONFIG.POOLS[game.q][game.draw[game.q]]; }
 function gameQuarrels(game) { return CONFIG.POOLS.map(function (pool, i) { return pool[game.draw[i]]; }); }
-function setStance(game, side) { game.stance[game.q] = side; game.stage = 'write'; game.page = []; return game; }
+function setStance(game, side) { if (game.stage !== 'stance') return game; game.stance[game.q] = side; game.stage = 'write'; game.page = []; return game; }
 
 // Publishing reads the page and records the reading. One page a quarrel: once read, it is final (no revision; the author's call, 24 Nov 2026).
 function publish(game) {
@@ -487,6 +589,6 @@ var HEURISTICS = {
 if (typeof module !== 'undefined') module.exports = {
   CONFIG: CONFIG, reasonById: reasonById, speakerOf: speakerOf, linesOf: linesOf, textOf: textOf, pageLines: pageLines, indexOnPage: indexOnPage,
   canPublish: canPublish, addItem: addItem, removeItem: removeItem, moveItem: moveItem, toggleForm: toggleForm, sums: sums, leans: leans,
-  readPage: readPage, statement: statement, newGame: newGame, quarrel: quarrel, gameQuarrels: gameQuarrels, rng: rng, setStance: setStance, publish: publish,
+  readPage: readPage, statement: statement, newGame: newGame, choose: choose, start: start, quarrel: quarrel, gameQuarrels: gameQuarrels, rng: rng, setStance: setStance, publish: publish,
   next: next, verdict: verdict, enumeratePages: enumeratePages, arrange: arrange, HEURISTICS: HEURISTICS, numberWord: numberWord
 };

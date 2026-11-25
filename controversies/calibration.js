@@ -57,8 +57,9 @@ check('four rules agree with an independent count on ' + tried + ' random pages 
 check('no random page ever exceeds its budget', overBudget === 0);
 check('no reply ever sits on a page without its point', orphan === 0);
 check('eight readers, two per rule', NR === 8 && M.readPage(C.QUARRELS[0], []).readers.length === 8);
-check('six quarrels in three pools of two; every id unique within its quarrel', C.POOLS.length === 3 && C.POOLS.every(function (p) { return p.length === 2; }) && C.QUARRELS.every(function (q) { var ids = q.reasons.map(function (r) { return r.id; }); return ids.length === new Set(ids).size; }));
-check('each pool’s two quarrels have the same budget and minimum', C.POOLS.every(function (p) { return p[0].budget === p[1].budget && p[0].min === p[1].min; }));
+check('nine quarrels in three pools of three; every id unique within its quarrel', C.POOLS.length === 3 && C.POOLS.every(function (p) { return p.length === 3; }) && C.QUARRELS.every(function (q) { var ids = q.reasons.map(function (r) { return r.id; }); return ids.length === new Set(ids).size; }));
+check('each pool\u2019s quarrels have the same budget and minimum', C.POOLS.every(function (p) { return p.every(function (q) { return q.budget === p[0].budget && q.min === p[0].min; }); }));
+check('rounds 1 and 2 are even (three points a side); round 3 is four against two', C.POOLS[0].concat(C.POOLS[1]).every(function (q) { return q.reasons.filter(function (r) { return r.side === 0; }).length === 3 && q.reasons.length === 6; }) && C.POOLS[2].every(function (q) { var a = q.reasons.filter(function (r) { return r.side === 0; }).length; return q.reasons.length === 6 && (a === 4 || a === 2); }));
 
 // ---- 2. the page's invariants ----
 var q1 = bySlug('phones'), p = [];
@@ -152,16 +153,18 @@ check('statement: all eight', M.statement(q1, 8, 1) === 'All eight could tell. Y
 check('statement: split', M.statement(q1, 2, 'split').indexOf(C.WORDS.split) > 0);
 check('readers’ calls: ours / theirs / can’t tell', (function () { var r = M.readPage(q1, trap1).readers; return r[6].call === C.WORDS.ours && r[7].call === C.WORDS.theirs && r[0].call === C.WORDS.cant; })());
 function playGame(draw, pageOf, stances) {
-  var g = M.newGame(1); g.draw = draw;
+  var g = M.newGame(1); for (var r = 0; r < 3; r++) M.choose(g, r, draw[r]); M.start(g);
   for (var i = 0; i < 3; i++) { M.setStance(g, stances[i]); g.page = pageOf(M.quarrel(g)); M.publish(g); M.next(g); }
   return g;
 }
 var cleanGame = playGame([0, 0, 0], function (q) { return fairPages[q.slug][0].page; }, [0, 1, null]);
 check('a clean game ends done, with the all-clear headline', cleanGame.done && M.verdict(cleanGame).headline.indexOf('not one could place you') > 0, M.verdict(cleanGame).headline);
 check('a clean game: every quarrel line says no reader could tell', M.verdict(cleanGame).quarrels.every(function (l) { return l.indexOf('no reader could tell') > 0; }), M.verdict(cleanGame).quarrels[0]);
-check('a clean game on the other draw too', (function () { var g = playGame([1, 1, 1], function (q) { return fairPages[q.slug][0].page; }, [1, 0, 1]); var v = M.verdict(g); return v.clean === 3 && v.quarrels[0].indexOf('cars') > 0 && v.stood[2].indexOf('home') > 0; })());
-check('one page a quarrel: a second publish in the same quarrel is refused', (function () { var g = M.newGame(14); M.setStance(g, 0); g.page = fairPages[M.quarrel(g).slug][0].page; var a = M.publish(g); var b = M.publish(g); return a && b === null && g.stage === 'read'; })());
-check('next before publishing does nothing', (function () { var g = M.newGame(14); M.setStance(g, 0); M.next(g); return g.q === 0 && g.stage === 'write'; })());
+check('a clean game on the other draws too', (function () { var g = playGame([1, 1, 1], function (q) { return fairPages[q.slug][0].page; }, [1, 0, 1]); var v = M.verdict(g); var g2 = playGame([2, 2, 2], function (q) { return fairPages[q.slug][0].page; }, [0, 0, 0]); var v2 = M.verdict(g2); return v.clean === 3 && v.quarrels[0].indexOf('cars') > 0 && v.stood[2].indexOf('home') > 0 && v2.clean === 3 && v2.quarrels[0].indexOf('uniforms') > 0 && v2.quarrels[2].indexOf('sixteen') > 0; })());
+check('choosing works before start and not after; an index outside the pool is ignored', (function () { var g = M.newGame(5); M.choose(g, 0, 2); M.choose(g, 1, 7); var before = g.draw.slice(); M.start(g); M.choose(g, 0, 0); return before[0] === 2 && before[1] === M.newGame(5).draw[1] && g.draw[0] === 2 && g.stage === 'stance'; })());
+check('the stance cannot be set before the game starts', (function () { var g = M.newGame(5); M.setStance(g, 0); return g.stage === 'choose'; })());
+check('one page a quarrel: a second publish in the same quarrel is refused', (function () { var g = M.newGame(14); M.start(g); M.setStance(g, 0); g.page = fairPages[M.quarrel(g).slug][0].page; var a = M.publish(g); var b = M.publish(g); return a && b === null && g.stage === 'read'; })());
+check('next before publishing does nothing', (function () { var g = M.newGame(14); M.start(g); M.setStance(g, 0); M.next(g); return g.q === 0 && g.stage === 'write'; })());
 check('a clean game: the stance lines say nobody could tell', M.verdict(cleanGame).stood[0] === 'You are for the ban. Nobody could tell.' && M.verdict(cleanGame).stood[2].indexOf('found none') > 0);
 var dirtyGame = playGame([0, 0, 0], function (q) { return H.partisan(q, 1); }, [0, 1, 0]);
 var dv = M.verdict(dirtyGame);
@@ -174,11 +177,11 @@ check('a mixed game: the quarrel line names what caught the page', mv.quarrels[0
 check('no decimals in any word the game says', !/\d\.\d/.test(JSON.stringify(mv) + JSON.stringify(dv) + JSON.stringify(M.readPage(q1, trap1))));
 
 // ---- 7. the draw ----
-var counts = [[0, 0], [0, 0], [0, 0]], N = 0;
+var counts = [[0, 0, 0], [0, 0, 0], [0, 0, 0]], N = 0;
 for (var s = 10000; s < 100000; s += 3) { var g = M.newGame(s); for (var i = 0; i < 3; i++) counts[i][g.draw[i]]++; N++; }
-check('over ' + N + ' seeds each quarrel is drawn between 45 and 55 per cent of the time', counts.every(function (c) { return c[0] / N > 0.45 && c[0] / N < 0.55; }), JSON.stringify(counts));
+check('over ' + N + ' seeds each quarrel is the default pick between 30 and 37 per cent of the time', counts.every(function (c) { return c.every(function (n) { return n / N > 0.30 && n / N < 0.37; }); }), JSON.stringify(counts));
 check('the same seed gives the same draw; neighbouring seeds differ somewhere', M.newGame(4242).draw.join() === M.newGame(4242).draw.join() && (function () { var d = 0; for (var s = 1; s < 200; s++) if (M.newGame(s).draw.join() !== M.newGame(s + 1).draw.join()) d++; return d > 50; })());
-check('seed 14 draws phones, pets, homework; seed 13 draws cars, pizza, office (the scripted sessions rely on these)', M.gameQuarrels(M.newGame(14)).map(function (q) { return q.slug; }).join() === 'phones,pets,homework' && M.gameQuarrels(M.newGame(13)).map(function (q) { return q.slug; }).join() === 'cars,pizza,office');
+check('a game has three different rounds whatever the seed, and the end names its three quarrels', (function () { for (var s = 1; s < 300; s++) { var g = M.newGame(s); if (M.gameQuarrels(g).length !== 3 || g.draw.some(function (d) { return d < 0 || d > 2; })) return false; } return true; })());
 
 // ---- 8. does the discovery survive the designer's choices? ----
 function altRead(q, page) {
