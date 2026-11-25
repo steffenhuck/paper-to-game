@@ -131,8 +131,20 @@ function cr(k) { return C.CROSSINGS[k]; }
   check('a game with nothing across gets the last fate', v2.total === 0 && v2.fate === C.FATES[C.FATES.length - 1].line);
   check('tons in words', M.words.tuns(1) === 'a ton' && M.words.tuns(2) === '2 tons' && M.words.tuns(0.1) === 'a tenth of a ton' && M.words.tuns(2.5) === '2 and a half tons' && M.words.tuns(0.5) === 'half a ton');
   out.push('     sample: ' + M.words.tuns(2.5) + ' / ' + M.words.tuns(0.1) + ' / ' + M.words.tuns(11.7));
+  // revision 3: the feet are withheld; the detail measures
+  var g3 = M.newGame(), s3 = g3.crossings[0];
+  check('before any shot the sheet’s record names no number', !/\d/.test(M.record(g3.known, 'field').text) && !/\d/.test(M.wallVs(0, 'field', g3.known).text), M.record(g3.known, 'field').text);
+  var r3 = M.push(s3, { feet: 2, guns: 0, men: 40, landing: 'front' });
+  check('a shot through 2 ft is recorded as through 2 ft, and the frame gives no needed number', g3.known.field.throughAt === 2 && g3.known.field.stuckAt === null && !/\b4\b/.test(r3.frames.map(function (f) { return f.text; }).join(' ')), r3.frames[2].text);
+  var r4 = M.push(s3, { feet: 4, guns: 0, men: 40, landing: 'front' });
+  check('a stopped cannonball goes in 3½ ft (the feet it needs less a half) and the record keeps it', r4.depth === 3.5 && g3.known.field.stuckAt === 3.5 && /3½ ft/.test(r4.frames[2].text) && /3½/.test(M.record(g3.known, 'field').text), r4.frames[2].text);
+  check('the record is shared across crossings of the same game and empty for a kind of shot not yet met', g3.crossings[1].known === g3.known && !M.record(g3.known, 'musket').known);
+  var o3 = M.newGame(); M.push(o3.crossings[0], { feet: 0, guns: 0, men: 60, landing: 'front' }, { opening: true });
+  check('the general’s boat teaches nothing to the record (no earth aboard, nothing measured)', !o3.known.field || (o3.known.field.stuckAt === null && !o3.known.field.throughAt));
   var fr = M.push(M.newCrossing(0), { feet: 4, guns: 1, men: 20, landing: 'front' }).frames.map(function (f) { return f.pic; });
   check('the paper’s push plays as: push, fire, stuck, land, wall, drive, rest', fr.join(',') === 'push,fire,stuck,land,wall,drive,rest', fr.join(','));
+  var allText = []; [0, 1, 2].forEach(function (k) { M.loadings(cr(k)).forEach(function (ld) { var st = M.newCrossing(k); var rr = M.push(st, ld); if (rr.outcome === 'through') allText.push(rr.frames.map(function (f) { return f.text; }).join(' ')); }); });
+  check('no through-shot frame ever names the feet the shot needs (' + allText.length + ' through shots)', allText.every(function (t) { return !/would stop|needs \d|only \d/i.test(t); }));
   var fr2 = M.push(M.newCrossing(0), { feet: 0, guns: 2, men: 40, landing: 'front' }).frames.map(function (f) { return f.pic; });
   check('a boat of cannons and soldiers plays as: push, fire, through, back', fr2.join(',') === 'push,fire,through,back', fr2.join(','));
 })();
