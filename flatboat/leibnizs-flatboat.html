@@ -42,12 +42,14 @@ b,strong{font-weight:600}
 .where{font-size:15px;color:var(--mute);margin-bottom:1px}
 .donow{font-size:22px;line-height:1.1;margin-bottom:4px}
 .tb{display:flex;border:1.5px solid var(--ink);margin:0 0 8px;background:var(--paper)}
-.tb div{flex:1;padding:1px 7px;font-size:12px;color:var(--mute)}
+.tb div{flex:1;padding:1px 6px;font-size:11px;color:var(--mute);overflow:hidden}
+.tb div:first-child{flex:.9}.tb div:last-child{flex:1.3}
+.tb .v.lost{color:var(--red)}
 .tb div .v{color:var(--ink)}
 .tb div+div{border-left:1.5px solid var(--ink)}
 .tb .v{font-size:17px;line-height:1;margin-top:2px;white-space:nowrap}
 .tb .v2{font-size:11px;line-height:1.1;color:var(--ink);white-space:nowrap}
-.tb .v2.lost{color:var(--red)}
+
 .sheet{display:block;width:100%;border:1.5px solid var(--ink);background:var(--sheet)}
 .sum{font-size:15px;letter-spacing:0;margin:3px 0 2px;min-height:18px}
 .notes{font-size:16px;color:var(--mute);line-height:1.35;margin:6px 0 8px}
@@ -141,7 +143,7 @@ b,strong{font-weight:600}
   <div class="top"><div class="aimline">Load the first boat so that its soldiers land, dig in, and make the far shore safe for the rest of the army to follow.</div><button class="qm cond" id="b-help-play" aria-label="How to play">?</button></div>
   <div class="where cond" id="where">Crossing 1 of 3 · Below the Lech</div>
   <div class="donow cond" id="donow">Load the boat, then push off.</div>
-  <div class="tb cond"><div>Pushes left<div class="v" id="tb-pushes">▮▮▮</div></div><div>Across by dark<div class="v" id="tb-across">0</div><div class="v2 lost" id="tb-lost"></div></div><div>Far shore<div class="v" id="tb-bank">nobody</div><div class="v2" id="tb-bank2"></div></div></div>
+  <div class="tb cond"><div>Pushes left<div class="v" id="tb-pushes">▮▮▮</div></div><div>Across<div class="v" id="tb-across">0</div></div><div>Lost<div class="v lost" id="tb-lost">0</div><div class="v2" id="tb-attempt"></div></div><div>Far shore<div class="v" id="tb-bank">nobody</div><div class="v2" id="tb-bank2"></div></div></div>
   <svg class="sheet" id="sheet" viewBox="0 0 340 212" aria-label="The sheet: the river from above, the boat in section"></svg>
   <div class="sum cond" id="sum"></div>
   <div class="landings hide" id="landings"></div>
@@ -556,14 +558,14 @@ b,strong{font-weight:600}
       var x = LX[l.id], b = st.banks[l.id], chosen = load.landing === l.id;
       s.push(el('line', { x1: x, y1: PLAN.near, x2: x, y2: PLAN.far, stroke: INK, 'stroke-width': 1, 'stroke-dasharray': chosen ? '' : '3 4', opacity: chosen ? .9 : .4 }));
       s.push(el('path', { d: 'M' + (x - 5) + ' ' + (PLAN.far + 7) + ' L' + x + ' ' + (PLAN.far + 1) + ' L' + (x + 5) + ' ' + (PLAN.far + 7) + ' Z', fill: INK, opacity: chosen ? 1 : .5 }));
-      s.push(txt(x + 8, PLAN.far + 13, l.letter, { size: 15, op: chosen ? 1 : .5 }));
+      s.push(txt(x + 13, PLAN.far + 14, l.letter, { size: 15, op: chosen ? 1 : .5 }));
       var g = [];
       if (l.battery) { for (var i = 0; i < l.guns; i++) g.push(el('use', { href: '#rgun', x: x - 8 - (l.guns - 1) * 7 + i * 14, y: 4, width: 16, height: 10 })); }
       else { for (var j = 0; j < 9; j++) g.push(el('line', { x1: x - 24 + j * 6, y1: 5, x2: x - 24 + j * 6, y2: 13, stroke: RED, 'stroke-width': 1.8 })); }
       s.push(el('g', { id: 'enemy-' + l.id, opacity: b.batteryOff ? 0.15 : 1 }, g.join('')));
       s.push(txt(l.id === 'up' ? x + 34 : 336, 13, b.batteryOff ? 'DRIVEN OFF' : C.FIRE[l.fire].label, { size: 10, fill: RED, anchor: l.id === 'up' ? 'start' : 'end' }));
       if (chosen && b.batteryOff && !opts.quietNote) s.push(txt(x - 16, PLAN.far + 26, 'NOTHING FIRES ON THE RIVER NOW', { size: 11, fill: RED, anchor: 'end' }));
-      if (b.men || b.feet) { var wx = x - 22, cg = ''; for (var m = 0; m < Math.min(3, Math.ceil(b.men / 10)); m++) cg += el('use', { href: '#crouch', x: wx - 10 - m * 9, y: PLAN.far + 1, width: 10, height: 13 }); s.push(el('g', {}, el('rect', { x: wx, y: PLAN.far + 1, width: 44, height: 7, fill: 'url(#hatch)', stroke: EARTH, 'stroke-width': 1 }) + cg + txt(l.id === 'up' ? x + 24 : x - 24, PLAN.far + 38, b.men + ' BEHIND A WALL', { size: 10, fill: EARTH, anchor: l.id === 'up' ? 'start' : 'end' }))); }
+      if (b.men || b.feet) { var wx = x - 64, cg = ''; for (var m = 0; m < Math.min(3, Math.ceil(b.men / 10)); m++) cg += el('use', { href: '#crouch', x: wx - 12 - m * 9, y: PLAN.far + 1, width: 10, height: 13 }); s.push(el('g', {}, el('rect', { x: wx, y: PLAN.far + 1, width: 44, height: 7, fill: 'url(#hatch)', stroke: EARTH, 'stroke-width': 1 }) + cg + txt(l.id === 'up' ? 4 : x - 16, PLAN.far + 36, b.men + ' BEHIND A WALL', { size: 10, fill: EARTH, anchor: l.id === 'up' ? 'start' : 'end' }))); }
     });
     var bx = LX[load.landing], by = opts.boatY !== undefined ? opts.boatY : PLAN.near - 8;
     s.push(el('g', { id: 'pboat', transform: 'translate(' + bx + ',' + by + ')' }, el('path', { d: 'M-7 11 L-7 -6 L0 -14 L7 -6 L7 11 Z', fill: PAPER, stroke: INK, 'stroke-width': 1.5 }) + el('path', { id: 'pwall', d: 'M-5 -5 L0 -10 L5 -5 L5 1 L-5 1 Z', fill: 'url(#hatch)', stroke: EARTH, 'stroke-width': .8, opacity: load.feet ? 1 : 0 })));
@@ -597,11 +599,11 @@ b,strong{font-weight:600}
     s.push(el('rect', { x: 0, y: SEC.y, width: 340, height: SEC.h - SEC.y, fill: '#E9F0F7' }));
     var fm = framesMode();
     if (!fm) s.push(txt(6, SEC.y + 13, 'THE BOAT CARRIES AS MUCH AS THE WATER IT COULD HOLD: ' + H.tuns + ' TONS', { size: 11 }));
-    s.push(txt(6, SEC.y + 30, recordLine(M.landing(cr, load.landing).fire), { size: 11, fill: RED, id: 'walllabel' }));
+    s.push(txt(6, SEC.y + 28, recordLine(M.landing(cr, load.landing).fire), { size: 11, fill: RED, id: 'walllabel' }));
     s.push(el('rect', { id: 'water', x: 0, y: yw, width: 340, height: SEC.h - yw, fill: WATER, opacity: .18 }));
     s.push(el('line', { id: 'wline', x1: 0, y1: yw, x2: 340, y2: yw, stroke: WATER, 'stroke-width': 1.8, 'stroke-dasharray': '7 3' }));
-    s.push(txt(339, 0, 'WATER LINE', { size: 8.5, fill: WATER, id: 'wlabel0', anchor: 'end' }));
-    s.push(txt(339, 0, '', { size: 9.5, fill: WATER, id: 'wlabel', anchor: 'end' }));
+    s.push(txt(2, 0, 'WATER LINE', { size: 7.5, fill: WATER, id: 'wlabel0' }));
+    s.push(txt(2, 0, '', { size: 10, fill: WATER, id: 'wlabel' }));
     s.push(wave(floor + 20, .5));
     s.push(el('path', { id: 'hull', d: 'M' + SEC.left + ' ' + floor + ' L' + (SEC.left + 10) + ' ' + gun + ' L' + (SEC.right - 10) + ' ' + gun + ' L' + SEC.right + ' ' + floor + ' Z', fill: PAPER, stroke: INK, 'stroke-width': 2 }));
 
@@ -612,7 +614,7 @@ b,strong{font-weight:600}
     s.push(txt(6, SEC.y + 16, '', { size: 15, anchor: 'start', id: 'biglabel' }));
     return el('g', { id: 'section' }, s.join(''));
   }
-  function recordLine(fire) { var rec = M.record(game.known, fire), shot = C.FIRE[fire].shot.toUpperCase(); if (!rec.known) return shot.replace('A ', '') + ': HOW MUCH EARTH STOPS IT? NOT YET MEASURED'; var kk = game.known[fire], p = []; if (kk.throughAt) p.push('WENT THROUGH ' + kk.throughAt + ' FT'); if (kk.stuckAt !== null) p.push('STUCK ' + W('feetHalf')(kk.stuckAt).toUpperCase() + ' IN'); return shot.replace('A ', '') + ' MEASURED: ' + p.join(' · '); }
+  function recordLine(fire) { var rec = M.record(game.known, fire), shot = C.FIRE[fire].shot.toUpperCase(); if (!rec.known) return shot.replace('A ', '') + ': HOW MUCH EARTH STOPS IT? NOT MEASURED'; var kk = game.known[fire], p = []; if (kk.throughAt) p.push('WENT THROUGH ' + kk.throughAt + ' FT'); if (kk.stuckAt !== null) p.push('STUCK ' + W('feetHalf')(kk.stuckAt).toUpperCase() + ' IN'); return shot.replace('A ', '') + ' MEASURED: ' + p.join(' · '); }
   function bankSVG(l, bank, cargoIn, extraLoad) {
     // the landing: the boat at the left against the shore at the right; the cargo in the boat (cargoIn) or on the shore
     var s = [], H = M.hull(cr), D = hullDepth(), floor = SEC.floor, gun = floor - D;
@@ -634,7 +636,7 @@ b,strong{font-weight:600}
   function drawLoading() { setSheet(planSVG(state) + sectionSVG(load)); placeWaterLabel(); }
   function placeWaterLabel() {
     var w = $('wline'), lab = $('wlabel'), lab0 = $('wlabel0'); if (!w || !lab) return;
-    var y = +w.getAttribute('y1'); lab0.setAttribute('y', y - 3); lab.setAttribute('y', y + 10);
+    var y = +w.getAttribute('y1'); lab0.setAttribute('y', y - 3); lab.setAttribute('y', y + 11);
     var tw = M.weight(load), tv = Math.round(tw * 10) / 10;
     lab.textContent = (tv === Math.floor(tv) ? tv : W('tons')(tw).toUpperCase().replace(' OF A TON', '').replace(' TONS', '')) + ' OF ' + M.hull(cr).tuns;
     lab0.textContent = M.floats(cr, load) ? 'WATER LINE' : 'SINKS';
@@ -680,9 +682,11 @@ b,strong{font-weight:600}
     var left = C.PUSHES - state.pushes, p = ''; for (var i = 0; i < C.PUSHES; i++) p += i < left ? '▮' : '▯';
     $('tb-pushes').textContent = p;
     $('tb-across').textContent = state.across;
-    $('tb-lost').textContent = M.lostAll(state) ? 'lost ' + M.lostAll(state) + (state.attempts > 1 ? ' · attempt ' + state.attempts : '') : (state.attempts > 1 ? 'attempt ' + state.attempts : '');
+    $('tb-lost').textContent = M.lostAll(state); $('tb-lost').style.color = M.lostAll(state) ? '' : 'var(--mute)';
+    $('tb-attempt').textContent = state.attempts > 1 ? 'attempt ' + state.attempts : '';
     var b = state.banks[load.landing], parts = [];
     if (b.feet) parts.push(b.feet + ' ft wall'); if (b.guns) parts.push(b.guns + (b.guns > 1 ? ' cannons' : ' cannon'));
+    if (b.feet && b.guns) parts = [b.feet + ' ft · ' + b.guns + (b.guns > 1 ? ' cannons' : ' cannon')];
     $('tb-bank').textContent = b.men ? b.men + (b.men === 1 ? ' soldier' : ' soldiers') : 'nobody';
     $('tb-bank2').textContent = parts.join(' · ');
   }
@@ -731,7 +735,7 @@ b,strong{font-weight:600}
     function planAt(y, opts) { return planSVG(state, Object.assign({ boatY: y, quietNote: true }, opts || {})); }
     if (f.pic === 'sink') {
       sheet.innerHTML = planAt(PLAN.near - 8) + sectionSVG(ld); placeWaterLabel();
-      var fl = $('flood'); tween(1600, function (p) { fl.setAttribute('opacity', p); var y = SEC.floor - hullDepth() * (1 + .6 * p); $('wline').setAttribute('y1', y); $('wline').setAttribute('y2', y); $('water').setAttribute('y', y); $('wlabel').setAttribute('y', y + 10); $('wlabel0').setAttribute('y', y - 3); });
+      var fl = $('flood'); tween(1600, function (p) { fl.setAttribute('opacity', p); var y = SEC.floor - hullDepth() * (1 + .6 * p); $('wline').setAttribute('y1', y); $('wline').setAttribute('y2', y); $('water').setAttribute('y', y); $('wlabel').setAttribute('y', y + 11); $('wlabel0').setAttribute('y', y - 3); });
     } else if (f.pic === 'sankbank') {
       bigLabel('SUNK AT THE BANK', RED); var hl = $('hull'); tween(1400, function (p) { hl.setAttribute('transform', 'translate(0,' + (14 * p) + ')'); $('cargo').setAttribute('transform', 'translate(0,' + (14 * p) + ')'); });
       $('damage').innerHTML = wave(SEC.floor - hullDepth() + 2, .9);
@@ -798,7 +802,7 @@ b,strong{font-weight:600}
     } else if (f.pic === 'rest') {
       bigLabel(f.men ? 'THE REST OF THE ARMY CROSSES' : 'DARK: THE REST CROSS AT DAWN', INK);
       if (f.men) {
-        var g = $('prest'), boats = [], tx = Math.min(240, Math.max(60, LX[l.id] - 46)); for (var i = 0; i < 8; i++) { var x0 = 6 + (i % 5) * 16 + (i > 4 ? 6 : 0); boats.push({ x: x0, x2: tx + (i % 5) * 16 + (i > 4 ? 6 : 0), d: i * 220 }); }
+        var g = $('prest'), boats = [], tx = Math.min(250, LX[l.id] + 14); for (var i = 0; i < 8; i++) { var x0 = 6 + (i % 5) * 16 + (i > 4 ? 6 : 0); boats.push({ x: x0, x2: tx + (i % 5) * 16 + (i > 4 ? 6 : 0), d: i * 220 }); }
         g.innerHTML = boats.map(function (b, i) { return el('use', { id: 'rb' + i, href: '#pboatsym', x: b.x, y: 68, width: 16, height: 26 }); }).join('');
         var shown2 = state.across - (c.opening ? 0 : f.men), target = state.across, pc = $('prestcount'); if ($('restlabel')) $('restlabel').setAttribute('opacity', 0);
         tween(3400, function (p) { boats.forEach(function (b, i) { var q = Math.max(0, Math.min(1, (p * 3400 - b.d) / 1800)); var e = $('rb' + i); e.setAttribute('y', 68 - (68 - (PLAN.far + 2)) * ease(q)); e.setAttribute('x', b.x + (b.x2 - b.x) * ease(q)); }); var v = Math.round(shown2 + (target - shown2) * p); $('tb-across').textContent = v; if (pc) pc.textContent = Math.round(f.men * p) + ' CROSSED'; });

@@ -1,5 +1,5 @@
 START: A SHEET FROM THE GENERAL'S PLANS · LEIBNIZ, C. 1705 / LEIBNIZ'S FLATBOAT / WATER LINE / 12 TONS / EARTH 4 FT / Put earth, cannons and soldiers into a flatboat and watch it sink lower. Push off under the enemy's cannons. Carry the earth ashore as the wall your soldiers crouch behind. / Load the first boat so that its soldiers land, dig in, and make the far shore safe for the rest of the army to follow. / BEGIN · CROSSING 1 OF 3 / HOW TO PLAY / ABOUT / Built on Lloyd Strickland's translation of Leibniz's How to Cross a Large River in View of an Enemy Army (c. 1705). / steffen huck
-the general’s boat: Push off bottom at 528 px
+the general’s boat: Push off bottom at 527 px
 OPENING donow: FIRST, THE GENERAL’S OWN PLAN: A BOAT OF 60 SOLDIERS. PUSH IT OFF AND WATCH.
 a-0 frame 1/5 [push]: The general’s boat pushes off with no earth, no cannon, 60 soldiers aboard.
 a-0 frame 2/5 [fire]: The enemy cannons fire at it as it crosses.
@@ -7,9 +7,9 @@ a-0 frame 3/5 [through]: A cannonball goes straight through the wooden planks at
 a-0 frame 4/5 [holed]: The river comes in through the hole faster than anyone can bail. The boat fills.
 a-0 frame 5/5 [sunk]: It sinks in mid-river. Everyone aboard is lost: 60 soldiers. The river is theirs today.
 a-0 RESULT: That was the general’s plan: a boat full of soldiers, and the enemy cannons sank it with all sixty. / A boat of soldiers is a boat of wooden planks, and a cannonball goes straight through planks. Something in the boat has to stop the shot. Now you load: earth, cannons, soldiers, up to 12 tons. Three pushes before dark; a sunk boat ends the day.
-crossing 1, empty: Push off bottom at 654 px
+crossing 1, empty: Push off bottom at 653 px
 empty boat: Push off disabled: true
-crossing 1, loaded: Push off bottom at 654 px
+crossing 1, loaded: Push off bottom at 653 px
 sum: NO EARTH + 2 CANNONS + 40 SOLDIERS = 8 TONS OF 12
 a-1-p1 frame 1/5 [push]: Your boat pushes off with no earth, 2 cannons, 40 soldiers aboard.
 a-1-p1 frame 2/5 [fire]: The enemy cannons fire at it as it crosses.
@@ -18,7 +18,7 @@ a-1-p1 frame 4/5 [holed]: The river comes in through the hole faster than anyone
 a-1-p1 frame 5/5 [sunk]: It sinks in mid-river. Everyone aboard is lost: 40 soldiers, and 2 cannons with them. The river is theirs today.
 a-1-p1 RESULT: Sunk in mid-river. 40 soldiers lost. The day is lost. / Push 1: no earth, 2 cannons, 40 soldiers. Nobody landed. / A sunk boat ends the day: the river is theirs. You can play this crossing again, with the dead counted against you, or go on.
 LOST DAY: Sunk in mid-river. 40 soldiers lost. The day is lost. / Push 1: no earth, 2 cannons, 40 soldiers. Nobody landed. / A sunk boat ends the day: the river is theirs. You can play this crossing again, with the dead counted against you, or go on. | verdict hidden: true | replay visible: true
-REPLAY tb: PUSHES LEFT / ▮▮▮ / ACROSS BY DARK / 0 / LOST 40 · ATTEMPT 2 / FAR SHORE / NOBODY
+REPLAY tb: PUSHES LEFT / ▮▮▮ / ACROSS / 0 / LOST / 40 / ATTEMPT 2 / FAR SHORE / NOBODY
 sink preview sum: EARTH 6 FT + 1 CANNON + NO SOLDIERS = 14 TONS OF 12 — IT SINKS | button: PUSH OFF (IT WILL SINK)
 a-1b-sink frame 1/2 [sink]: Your boat is loaded with 14 tons. The hull holds only 12 tons of water, so it carries only 12 tons.
 a-1b-sink frame 2/2 [sankbank]: It sinks at the bank before it goes anywhere, in shallow water. The soldiers wade out; nobody is hurt, and the boat is raised by evening.
@@ -39,7 +39,7 @@ a-1b-p3 frame 6/7 [drive]: Your cannon fires from behind the wall. The enemy can
 a-1b-p3 frame 7/7 [rest]: Nothing fires on the river now. But it is dark. The rest of the army crosses at first light.
 a-1b-p3 RESULT: Landed, dug in, and the rest of the army crossed. / Push 3: 4 ft of earth, a cannon, 20 soldiers. 20 soldiers now on the far shore behind 4 ft of earth, with a cannon.
 C1 VERDICT: By dark: 60 soldiers across. Lost on the way: 40 soldiers, over 2 attempts. / Leibniz: make the boats cannon-proof with the very earth they carry, put cannons and soldiers in them, and let that earth cover and entrench the soldiers the moment they land; then the rest of the army passes under the cover of that wall and with the help of the cannons that have crossed.
-crossing 2: Push off bottom at 630 px
+crossing 2: Push off bottom at 628 px
 help closed back to the sheet: true
 a-2-p1 frame 1/4 [push]: Your boat pushes off with no earth, no cannon, 60 soldiers aboard.
 a-2-p1 frame 2/4 [fire]: Enemy soldiers with muskets fire at it as it crosses.
@@ -54,7 +54,7 @@ a-2-p2 frame 5/6 [wall]: The soldiers carry the sacks ashore and stack them into
 a-2-p2 frame 6/6 [rest]: The enemy soldiers keep away from the wall. The rest of the army crosses in ordinary boats: 300 soldiers before dark.
 a-2-p2 RESULT: Landed, dug in, and the rest of the army crossed. / Push 2: 1 ft of earth, no cannon, 60 soldiers. 60 soldiers now on the far shore behind 1 ft of earth.
 C2 VERDICT: By dark: 360 soldiers across. Lost on the way: 10 soldiers. / Leibniz: where the enemy’s cannons are avoided, the flatboat does not need to be cannon-proof; it is enough that it carries soldiers and what they need to take cover quickly. A bend with its bulge towards the enemy forces them to divide their army, while ours stays together.
-crossing 3: Push off bottom at 684 px
+crossing 3: Push off bottom at 682 px
 C3 4 ft on the shallow boat: EARTH 4 FT + NO CANNON + NO SOLDIERS = 8 TONS OF 6 — IT SINKS
 a-3-p1 frame 1/5 [push]: Your boat pushes off with 1 ft of earth, no cannon, 40 soldiers aboard.
 a-3-p1 frame 2/5 [fire]: The enemy’s small cannons fire at it as it crosses.
@@ -63,7 +63,7 @@ a-3-p1 frame 4/5 [holed]: The river comes in through the hole faster than anyone
 a-3-p1 frame 5/5 [sunk]: It sinks in mid-river. Everyone aboard is lost: 40 soldiers. The river is theirs today.
 a-3-p1 RESULT: Sunk in mid-river. 40 soldiers lost. The day is lost. / Push 1: 1 ft of earth, no cannon, 40 soldiers at A. Nobody landed. / A sunk boat ends the day: the river is theirs. You can play this crossing again, with the dead counted against you, or go on.
 C3 LOST DAY: Sunk in mid-river. 40 soldiers lost. The day is lost. / Push 1: 1 ft of earth, no cannon, 40 soldiers at A. Nobody landed. / A sunk boat ends the day: the river is theirs. You can play this crossing again, with the dead counted against you, or go on.
-crossing 3, B: Push off bottom at 696 px
+crossing 3, B: Push off bottom at 695 px
 a-3b-p1 frame 1/6 [push]: Your boat pushes off with 1 ft of earth, no cannon, 40 soldiers aboard.
 a-3b-p1 frame 2/6 [fire]: Enemy soldiers with muskets fire at it as it crosses.
 a-3b-p1 frame 3/6 [stuck]: A musket shot hits the heap of earth at the front and goes ½ ft in before it stops. Your heap is 1 ft, so it holds: the boat is not hurt.
