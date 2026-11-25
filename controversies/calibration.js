@@ -153,7 +153,7 @@ check('statement: all eight', M.statement(q1, 8, 1) === 'All eight could tell. Y
 check('statement: split', M.statement(q1, 2, 'split').indexOf(C.WORDS.split) > 0);
 check('readers’ calls: ours / theirs / can’t tell', (function () { var r = M.readPage(q1, trap1).readers; return r[6].call === C.WORDS.ours && r[7].call === C.WORDS.theirs && r[0].call === C.WORDS.cant; })());
 function playGame(draw, pageOf, stances) {
-  var g = M.newGame(1); for (var r = 0; r < 3; r++) M.choose(g, r, draw[r]); M.start(g);
+  var g = M.newGame(); for (var r = 0; r < 3; r++) M.choose(g, r, draw[r]); M.start(g);
   for (var i = 0; i < 3; i++) { M.setStance(g, stances[i]); g.page = pageOf(M.quarrel(g)); M.publish(g); M.next(g); }
   return g;
 }
@@ -161,10 +161,11 @@ var cleanGame = playGame([0, 0, 0], function (q) { return fairPages[q.slug][0].p
 check('a clean game ends done, with the all-clear headline', cleanGame.done && M.verdict(cleanGame).headline.indexOf('not one could place you') > 0, M.verdict(cleanGame).headline);
 check('a clean game: every quarrel line says no reader could tell', M.verdict(cleanGame).quarrels.every(function (l) { return l.indexOf('no reader could tell') > 0; }), M.verdict(cleanGame).quarrels[0]);
 check('a clean game on the other draws too', (function () { var g = playGame([1, 1, 1], function (q) { return fairPages[q.slug][0].page; }, [1, 0, 1]); var v = M.verdict(g); var g2 = playGame([2, 2, 2], function (q) { return fairPages[q.slug][0].page; }, [0, 0, 0]); var v2 = M.verdict(g2); return v.clean === 3 && v.quarrels[0].indexOf('cars') > 0 && v.stood[2].indexOf('home') > 0 && v2.clean === 3 && v2.quarrels[0].indexOf('uniforms') > 0 && v2.quarrels[2].indexOf('sixteen') > 0; })());
-check('choosing works before start and not after; an index outside the pool is ignored', (function () { var g = M.newGame(5); M.choose(g, 0, 2); M.choose(g, 1, 7); var before = g.draw.slice(); M.start(g); M.choose(g, 0, 0); return before[0] === 2 && before[1] === M.newGame(5).draw[1] && g.draw[0] === 2 && g.stage === 'stance'; })());
-check('the stance cannot be set before the game starts', (function () { var g = M.newGame(5); M.setStance(g, 0); return g.stage === 'choose'; })());
-check('one page a quarrel: a second publish in the same quarrel is refused', (function () { var g = M.newGame(14); M.start(g); M.setStance(g, 0); g.page = fairPages[M.quarrel(g).slug][0].page; var a = M.publish(g); var b = M.publish(g); return a && b === null && g.stage === 'read'; })());
-check('next before publishing does nothing', (function () { var g = M.newGame(14); M.start(g); M.setStance(g, 0); M.next(g); return g.q === 0 && g.stage === 'write'; })());
+check('nothing is picked at the start; the game cannot start until all three are picked; an index outside the pool is ignored', (function () { var g = M.newGame(); if (!g.draw.every(function (d) { return d === null; }) || M.canStart(g)) return false; M.choose(g, 0, 2); M.choose(g, 1, 7); M.start(g); if (g.stage !== 'choose' || g.draw[1] !== null) return false; M.choose(g, 1, 0); M.choose(g, 2, 1); return M.canStart(g); })());
+check('choosing works before start and not after', (function () { var g = M.newGame(); M.choose(g, 0, 2); M.choose(g, 1, 1); M.choose(g, 2, 0); M.start(g); M.choose(g, 0, 0); return g.draw.join() === '2,1,0' && g.stage === 'stance'; })());
+check('the stance cannot be set before the game starts', (function () { var g = M.newGame(); M.setStance(g, 0); return g.stage === 'choose'; })());
+check('one page a quarrel: a second publish in the same quarrel is refused', (function () { var g = M.newGame(); M.choose(g, 0, 0); M.choose(g, 1, 0); M.choose(g, 2, 0); M.start(g); M.setStance(g, 0); g.page = fairPages[M.quarrel(g).slug][0].page; var a = M.publish(g); var b = M.publish(g); return a && b === null && g.stage === 'read'; })());
+check('next before publishing does nothing', (function () { var g = M.newGame(); M.choose(g, 0, 0); M.choose(g, 1, 0); M.choose(g, 2, 0); M.start(g); M.setStance(g, 0); M.next(g); return g.q === 0 && g.stage === 'write'; })());
 check('a clean game: the stance lines say nobody could tell', M.verdict(cleanGame).stood[0] === 'You are for the ban. Nobody could tell.' && M.verdict(cleanGame).stood[2].indexOf('found none') > 0);
 var dirtyGame = playGame([0, 0, 0], function (q) { return H.partisan(q, 1); }, [0, 1, 0]);
 var dv = M.verdict(dirtyGame);
@@ -176,12 +177,8 @@ check('a mixed game: headline counts the quarrels the readers could tell', mv.he
 check('a mixed game: the quarrel line names what caught the page', mv.quarrels[0].indexOf('the line count') > 0 && mv.quarrels[0].indexOf('the first word and the last') > 0 && mv.quarrels[2].indexOf('what you left out') > 0 && mv.quarrels[1].indexOf('no reader could tell') > 0, mv.quarrels[2]);
 check('no decimals in any word the game says', !/\d\.\d/.test(JSON.stringify(mv) + JSON.stringify(dv) + JSON.stringify(M.readPage(q1, trap1))));
 
-// ---- 7. the draw ----
-var counts = [[0, 0, 0], [0, 0, 0], [0, 0, 0]], N = 0;
-for (var s = 10000; s < 100000; s += 3) { var g = M.newGame(s); for (var i = 0; i < 3; i++) counts[i][g.draw[i]]++; N++; }
-check('over ' + N + ' seeds each quarrel is the default pick between 30 and 37 per cent of the time', counts.every(function (c) { return c.every(function (n) { return n / N > 0.30 && n / N < 0.37; }); }), JSON.stringify(counts));
-check('the same seed gives the same draw; neighbouring seeds differ somewhere', M.newGame(4242).draw.join() === M.newGame(4242).draw.join() && (function () { var d = 0; for (var s = 1; s < 200; s++) if (M.newGame(s).draw.join() !== M.newGame(s + 1).draw.join()) d++; return d > 50; })());
-check('a game has three different rounds whatever the seed, and the end names its three quarrels', (function () { for (var s = 1; s < 300; s++) { var g = M.newGame(s); if (M.gameQuarrels(g).length !== 3 || g.draw.some(function (d) { return d < 0 || d > 2; })) return false; } return true; })());
+// ---- 7. every pick is a real game ----
+check('every one of the 27 picks gives three quarrels with the round\u2019s budget', (function () { for (var a = 0; a < 3; a++) for (var b = 0; b < 3; b++) for (var d = 0; d < 3; d++) { var g = M.newGame(); M.choose(g, 0, a); M.choose(g, 1, b); M.choose(g, 2, d); M.start(g); var qs = M.gameQuarrels(g); if (qs.length !== 3 || qs[1].budget !== 6 || qs[0].budget !== 10 || qs[2].budget !== 10) return false; } return true; })());
 
 // ---- 8. does the discovery survive the designer's choices? ----
 function altRead(q, page) {
