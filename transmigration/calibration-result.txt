@@ -1,0 +1,49 @@
+PASS a supposed exchange of pilots leaves every porthole and every log identical, bit for bit (12 pairs of the configured fleet)
+PASS the quiet swap reports the same observation before and after, and writes nothing
+PASS the invariant holds on 200 random fleets with random positions, portholes and logs (2516 pairs): the porthole belongs to the position and the log to the pod, so no swap can show
+PASS the station does see a pod move: a pod shifted one unit changes what it reads (the invariant is about pilots, not a blind book)
+PASS the configured logs: the first line of each has no cause, every other line a cause earlier in the same log
+PASS mark “THE LAMP”: two lines go into pod B’s log (the cause, then the sign) and the sign’s cause is the line before it  — [{"t":"3:15","ev":"the timer closes the lamp circuit","cause":0,"feel":"a stir"},{"t":"3:16","ev":"the lamp flashes","cause":5,"feel":"light"}]
+PASS mark “THE LAMP”: the frames show the sign and then the arrow to its cause
+PASS mark “THE LAMP”: pod A’s pilot is still in pod A and pod B’s is still in B
+PASS mark “A ROLL”: two lines go into pod B’s log (the cause, then the sign) and the sign’s cause is the line before it  — [{"t":"3:15","ev":"the thruster fires, on its schedule","cause":0,"feel":"a stir"},{"t":"3:16","ev":"rolls over, once","cause":5,"feel":"the fleet wheels in the window"}]
+PASS mark “A ROLL”: the frames show the sign and then the arrow to its cause
+PASS mark “A ROLL”: pod A’s pilot is still in pod A and pod B’s is still in B
+PASS mark “A NEW COURSE”: two lines go into pod B’s log (the cause, then the sign) and the sign’s cause is the line before it  — [{"t":"3:15","ev":"the course clock reaches its next leg","cause":0,"feel":"a stir"},{"t":"3:16","ev":"turns onto a new course","cause":5,"feel":"the fleet slides across the window"}]
+PASS mark “A NEW COURSE”: the frames show the sign and then the arrow to its cause
+PASS mark “A NEW COURSE”: pod A’s pilot is still in pod A and pod B’s is still in B
+PASS mark “A MEMORY”: two lines go into pod B’s log (the cause, then the sign) and the sign’s cause is the line before it  — [{"t":"3:15","ev":"its own works move so","cause":0,"feel":"the thought of pod A comes"},{"t":"3:16","ev":"its pilot says: “I was in pod A. I remember the roll at 3:12 and the warmth at 3:13.”","cause":5,"feel":"I was in pod A; I remember"}]
+PASS mark “A MEMORY”: the frames show the sign and then the arrow to its cause
+PASS mark “A MEMORY”: pod A’s pilot is still in pod A and pod B’s is still in B
+PASS after two mechanical marks the key is exhausted, and the logs still cause themselves
+PASS burn 1 LAYER: 1 layers, a pod remains with the same pilot and the same window; the outside scorched
+PASS burn 10: 10 layers, a pod remains with the same pilot and the same window; the outside scorched
+PASS burn 100: 100 layers, a pod remains with the same pilot and the same window; the outside scorched
+PASS burn ALL THE WAY: 1000000 layers, a pod remains with the same pilot and the same window; the outside scorched
+PASS a second burn exhausts the key; all the way is capped at the station’s million
+PASS the diamond has no porthole: no pilot found, nothing written, the dog in pod A
+PASS every other pod has a porthole and a pilot (rule 4)
+PASS a mechanical mark in shift 2 writes nothing in the second book
+PASS the memory writes the second book, and two pilots claim the one life
+PASS the memory has a mechanical cause too: the first book writes the words from the pod’s own works
+PASS you are still in your pod
+PASS a push of the stick adds the thruster line and the roll to the pod’s log, and the wanting to the pilot’s tape, each its own
+PASS with the stick out the pod still rolls as wanted, and the text says the stick is attached to nothing
+PASS no line of a pilot’s tape names the pod’s works, and no line of a pod’s log names the pilot (no wire)
+PASS shift 1 ends only after all three keys (beam)
+PASS shift 2 is not done before the booking
+PASS booking beam: claimants 2, the shift over, a verdict with the four parts  — You burnt 100 layers and found a pod under every one, with the dog in it. | You swapped on the quiet with pod B, and the book wrote nothing, because nothing showed. | You marked the arrival with the lamp, and the log explained the sign from the line before it. | You beamed a memory: the far pilot claimed your life, the second book wrote it, and you were still in your pod. Two pilots, one life. | You booked your passage by beam.
+PASS shift 1 ends only after all three keys (pod)
+PASS shift 2 is not done before the booking
+PASS booking pod: claimants 1, the shift over, a verdict with the four parts  — You burnt 100 layers and found a pod under every one, with the dog in it. | You swapped on the quiet with pod B, and the book wrote nothing, because nothing showed. | You marked the arrival with the lamp, and the log explained the sign from the line before it. | You beamed a memory: the far pilot claimed your life, the second book wrote it, and you were still in your pod. Two pilots, one life. | You booked your passage by pod.
+PASS shift 1 ends only after all three keys (beamburn)
+PASS shift 2 is not done before the booking
+PASS booking beamburn: claimants 2, the shift over, a verdict with the four parts  — You burnt 100 layers and found a pod under every one, with the dog in it. | You swapped on the quiet with pod B, and the book wrote nothing, because nothing showed. | You marked the arrival with the lamp, and the log explained the sign from the line before it. | You beamed a memory: the far pilot claimed your life, the second book wrote it, and you were still in your pod. Two pilots, one life. | You booked your passage by beam, then burn the one left here.
+PASS shift 1 is not done with one key unused
+PASS …and is done once the third is used, with the diamond and the fern both tried
+PASS a long path (two quiets, a mechanical beam, then the memory, then beam-and-burn) has a verdict  — You swapped on the quiet with the diamond and the fern’s pod; the diamond had no porthole to read, and for the rest the book wrote nothing, because nothing showed.
+PASS no sentence anywhere contains a decimal (132 strings)  — 
+PASS no sentence is empty
+PASS the rules are five sentences
+
+ALL 47 CHECKS PASS
