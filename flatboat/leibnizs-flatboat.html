@@ -554,14 +554,13 @@ b,strong{font-weight:600}
     var off = bank.batteryOff;
     s.push(el('g', { id: 'enemy', opacity: off ? .15 : 1, transform: off ? 'translate(40,0)' : '' }, e.join('')));
     s.push(txt(336, 46, off ? 'DRIVEN OFF' : C.FIRE[l.fire].label, { size: 10.5, fill: RED, anchor: 'end', id: 'enemylab' }));
-    if (cr.landings.length > 1) s.push(txt(336, 58, l.letter + ' · ' + (l.id === 'up' ? 'A MILE UPSTREAM' : 'OPPOSITE THEIR SMALL CANNONS'), { size: 10.5, anchor: 'end' }));
     // the wall and the soldiers behind it, as they stand on the bank now
     var b = [];
     if (bank.feet) b.push(el('rect', { x: G.wallX, y: G.top - 4 * G.pxft, width: bank.feet * G.pxft, height: 4 * G.pxft, fill: 'url(#hatch)', stroke: EARTH, 'stroke-width': 1.4 }));
     var nf = Math.min(2, Math.ceil(bank.men / 10));
     for (var m = 0; m < nf; m++) b.push(el('use', { href: '#crouch', x: G.wallX - 12 - m * 9, y: G.top - 17, width: 13, height: 18 }));
     if (bank.guns) b.push(el('g', { transform: 'translate(' + (G.wallX - 24) + ',' + G.top + ') scale(.9)' }, el('use', { href: '#gun', x: -16, y: -18, width: 36, height: 20 })));
-    if (bank.men) b.push(txt(G.wallX + (bank.feet * G.pxft) / 2, 70, bank.men + (bank.feet ? ' BEHIND ' + bank.feet + ' FT' : ' ASHORE'), { size: 9.5, anchor: 'middle', id: 'banklab' }));
+    if (bank.men) b.push(txt(336, 60, bank.men + (bank.feet ? ' BEHIND ' + bank.feet + ' FT OF EARTH' : ' ASHORE'), { size: 10, anchor: 'end', id: 'banklab' }));
     s.push(el('g', { id: 'bank' }, b.join('')));
     return s.join('');
   }
@@ -600,9 +599,10 @@ b,strong{font-weight:600}
     s.push(el('g', { id: 'over' }));
     s.push(txt(6, 17, opts.big || '', { size: 15, id: 'biglabel', fill: opts.bigColour }));
     s.push(txt(6, 31, recordLine(l.fire), { size: 10.5, fill: RED, id: 'record' }));
+    if (cr.landings.length > 1) s.push(txt(6, 45, 'LANDING ' + l.letter + ' · ' + (l.id === 'up' ? 'A MILE UPSTREAM' : 'OPPOSITE THEIR SMALL CANNONS'), { size: 10.5 }));
     return s.join('');
   }
-  function drawLoading() { setSheet(sheetSVG(load, state.banks[load.landing], { flooded: !M.floats(cr, load), big: M.floats(cr, load) ? '' : 'IT SINKS', bigColour: RED })); }
+  function drawLoading() { var ok = M.floats(cr, load), H = M.hull(cr); setSheet(sheetSVG(load, state.banks[load.landing], { flooded: !ok, big: ok ? H.name.toUpperCase().replace('THE ', '') + ' · HOLDS ' + H.tuns + ' TONS OF WATER' : 'IT SINKS: MORE THAN ' + H.tuns + ' TONS', bigColour: ok ? INK : RED })); }
   function bigLabel(t, colour) { var b = $('biglabel'); if (b) { b.textContent = t; b.setAttribute('fill', colour || INK); } }
   function moveBoat(toBow, ms, done) { var b = $('boat'), from = b ? +(b.getAttribute('transform').match(/translate\(([-\d.]+)/) || [0, 0])[1] : 0, to = toBow - G.bowStart; tween(ms, function (p) { var x = from + (to - from) * ease(p); setA('boat', 'transform', 'translate(' + x + ',0)'); var wl = $('wlabel'); if (wl) wl.setAttribute('x', G.bowStart + x + 6); }, done); }
 
@@ -779,7 +779,7 @@ b,strong{font-weight:600}
           if (f.drive) {
             after(300, function () {
               var gx = G.wallX - 24 + 15, gy = G.top - 15;
-              $('over').innerHTML = burstSVG(gx, gy, INK) + el('path', { d: 'M' + gx + ' ' + gy + ' Q ' + (gx + 40) + ' ' + (gy - 60) + ' 346 ' + (G.terrace - 30), fill: 'none', stroke: INK, 'stroke-width': 1.5, 'stroke-dasharray': '4 3', 'marker-end': 'url(#arr)' });
+              $('over').innerHTML = burstSVG(gx, gy, INK) + el('path', { d: 'M' + gx + ' ' + gy + ' Q ' + (gx + 36) + ' ' + (gy - 42) + ' 346 ' + (G.terrace - 4), fill: 'none', stroke: INK, 'stroke-width': 1.5, 'stroke-dasharray': '4 3', 'marker-end': 'url(#arr)' });
               bigLabel('YOUR CANNON FIRES: THEIR CANNONS PULL BACK', INK);
               tween(1500, function (p) { setA('enemy', 'opacity', 1 - .85 * p); setA('enemy', 'transform', 'translate(' + (40 * p) + ',0)'); }, function () { setT('enemylab', 'DRIVEN OFF'); done(); });
             });
@@ -815,7 +815,7 @@ b,strong{font-weight:600}
       var nb0 = $('b-next'); nb0.classList.remove('hide'); nb0.textContent = 'Load your boat';
       scrollTo(box); return;
     }
-    var big = r.outcome === 'landed' ? (state.restPassed ? 'Landed, dug in, and the rest of the army crossed.' : 'Landed and dug in. The rest wait.') : r.outcome === 'sinks' ? 'Sank at the bank. Nobody hurt.' : r.outcome === 'sunk' ? 'Sunk in mid-river. ' + W('cap')(W('men')(r.lost)) + ' lost. The day is lost.' : r.outcome === 'through' ? W('cap')(W('men')(r.lost)) + ' hit. Turned back.' : 'Nobody aboard. Drifted back.';
+    var big = r.outcome === 'landed' ? (state.restPassed ? (r.rest ? 'Landed, dug in, and the rest of the army crossed.' : 'Landed and dug in at dark. The far shore is safe: the rest cross at first light.') : 'Landed and dug in. The rest wait.') : r.outcome === 'sinks' ? 'Sank at the bank. Nobody hurt.' : r.outcome === 'sunk' ? 'Sunk in mid-river. ' + W('cap')(W('men')(r.lost)) + ' lost. The day is lost.' : r.outcome === 'through' ? W('cap')(W('men')(r.lost)) + ' hit. Turned back.' : 'Nobody aboard. Drifted back.';
     var lines = [];
     lines.push('Push ' + r.push + ': ' + W('loadWords')(r.load) + (cr.landings.length > 1 ? ' at ' + c.l.letter : '') + '. ' + (r.landed ? W('cap')(W('men')(r.load.men)) + ' now on the far shore' + (state.banks[c.l.id].feet ? ' behind ' + W('feet')(state.banks[c.l.id].feet) + ' of earth' : '') + (state.banks[c.l.id].guns ? ', with ' + W('guns')(state.banks[c.l.id].guns) : '') + '.' : 'Nobody landed.'));
     if (!state.over) lines.push('Across by dark so far: ' + r.acrossTotal + (M.lostAll(state) ? '; lost: ' + M.lostAll(state) : '') + '. ' + r.pushesLeft + (r.pushesLeft === 1 ? ' push' : ' pushes') + ' left before dark.');
@@ -853,7 +853,7 @@ b,strong{font-weight:600}
     body.push('<p>' + W('cap')(W('men')(v.total)) + ' across in all; the most these boats could have put across: ' + v.best + '.' + (v.lost ? ' Lost on the way: ' + v.lost + '.' : '') + '</p>');
     v.per.forEach(function (p, i) {
       var s = game.crossings[i], fl = s.firstLanded, l = fl ? M.landing(C.CROSSINGS[i], fl.landing) : null;
-      body.push('<p><b>' + C.CROSSINGS[i].title + ':</b> ' + (s.attempts > 1 ? 'played ' + s.attempts + ' times; ' : '') + (fl ? 'your first boat to reach the far shore carried ' + W('loadWords')(fl) + (C.CROSSINGS[i].landings.length > 1 ? ' at ' + l.letter : '') + ', on push ' + fl.push + '; ' : 'no boat reached the far shore; ') + (s.restPassed ? 'the rest of the army crossed after push ' + s.restAt : 'the rest of the army never crossed') + (M.lostAll(s) ? '; ' + W('men')(M.lostAll(s)) + ' lost.' : '.') + '</p>');
+      body.push('<p><b>' + C.CROSSINGS[i].title + ':</b> ' + (s.attempts > 1 ? 'played ' + s.attempts + ' times; ' : '') + (fl ? 'your first boat to reach the far shore carried ' + W('loadWords')(fl) + (C.CROSSINGS[i].landings.length > 1 ? ' at ' + l.letter : '') + ', on push ' + fl.push + '; ' : 'no boat reached the far shore; ') + (s.restPassed ? (s.restAt < C.PUSHES ? 'the rest of the army crossed after push ' + s.restAt : 'the rest of the army crossed at first light, after push ' + s.restAt) : 'the rest of the army never crossed') + (M.lostAll(s) ? '; ' + W('men')(M.lostAll(s)) + ' lost.' : '.') + '</p>');
     });
     body.push('</div>');
     body.push('<div class="sec"><h2 class="cond">The most each boat could have put across</h2>' + v.per.map(function (p, i) { return '<p><b>' + C.CROSSINGS[i].title + ':</b> ' + p.lines[1].replace('The most this boat could have put across here: ', '') + '</p>'; }).join('') + '</div>');
