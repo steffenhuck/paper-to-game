@@ -586,7 +586,7 @@ b,strong{font-weight:600}
     return el('g', { id: 'rest' }, s.join(''));
   }
   function recordLine(fire) { var kk = game.known[fire], shot = C.FIRE[fire].short, p = []; if (!kk || (kk.stuckAt === null && !kk.throughAt)) return shot + ': HOW MUCH EARTH STOPS IT? NOT MEASURED'; if (kk.throughAt) p.push('WENT THROUGH ' + kk.throughAt + ' FT'); if (kk.stuckAt !== null) p.push('STUCK ' + W('feetHalf')(kk.stuckAt).toUpperCase() + ' IN'); return shot + ' MEASURED: ' + p.join(' · '); }
-  function waterLabel(ld, bow, dr) { var w = M.weight(ld), tv = Math.round(w * 10) / 10, ok = M.floats(cr, ld); return txt(bow + 6, G.ws - 5, (ok ? '' : 'SINKS · ') + (tv === Math.floor(tv) ? tv : W('tons')(w).toUpperCase().replace(' OF A TON', '').replace(' TONS', '')) + ' OF ' + M.hull(cr).tuns + ' TONS', { size: 10, fill: ok ? WATER : RED, id: 'wlabel' }); }
+  function waterLabel(ld, bow, dr) { var w = M.weight(ld), tv = Math.round(w * 10) / 10, ok = M.floats(cr, ld); return txt(bow + 6, G.ws - 5, (ok ? '' : 'SINKS · ') + (tv === Math.floor(tv) ? tv : W('tons')(w).toUpperCase().replace(' OF A TON', '').replace(' TONS', '')) + ' OF ' + M.hull(cr).tuns + ' TONS', { size: 11.5, fill: ok ? WATER : RED, id: 'wlabel' }); }
   // the whole sheet: ground, the far shore as it stands (bank), the rest, the boat at `bow`, the labels
   function sheetSVG(ld, bank, opts) {
     opts = opts || {};
