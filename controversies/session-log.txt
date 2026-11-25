@@ -1,4 +1,7 @@
-stance: Should phones be banned in school? | Quarrel 1 of 3 · drawn by chance from two | Each of the three quarrels is drawn by chance from two. This game is draw 14; the end screen says how to get the same three again. | Ban them / Let us keep them / No view
+choose: [ ] Should phones be banned in school? | [x] Should cars be banned from the city centre? | [ ] Should school uniforms be scrapped? | [ ] Dogs or cats? | [x] Pineapple on pizza? | [ ] Summer or winter? | [x] Should homework be scrapped? | [ ] Back to the office five days a week? | [ ] Should sixteen-year-olds get the vote?
+  Write these up bottom at 676 px
+  picked: Should phones be banned in school? | Dogs or cats? | Should homework be scrapped?
+stance: Should phones be banned in school? | Quarrel 1 of 3 | Ban them / Let us keep them / No view
 write 1: Quarrel 1 of 3 · the page | Fill the page: ten lines, no more. | 0 of 10 lines · at least 6
   after b1: On the page, line 2: the ban side’s point, in full (2 lines). 2 of 10.
   after b1 reply: On the page, line 3: the phone side’s reply (one line). 3 of 10.
@@ -34,17 +37,17 @@ END: The readers could tell in two of your three quarrels.
   stood: Should phones be banned in school? You are for the ban, and the readers found you out. // Dogs or cats? You are for the cats. Nobody could tell. // Should homework be scrapped? You declared no view; the readers put you with keeping it.
   part: Leibniz says the form forces the writer to be fair whether he likes it or not. Your pages show the other half: the readers catch every cut, and the mirroring is the writer’s own work, line by line, on a page that will not take everything. Where a page of yours still leaned, it was not bad faith. It was a line, a point, an answer, or the last word.
   had: A page the readers can place is not read as a report but as a pitch. The side it leans to quotes it; the other side stops reading at the line that gave you away; and the argument goes on, now with you in it. Leibniz hoped an ordinary sensible reader could judge from the report alone, without the writer saying what he thought. That takes the page nobody can place, every time.
-  draw: This game was draw 14. Play again draws three fresh quarrels from the six; add ?seed=14 to the address for the same three.
-B: a fresh draw, seed 18968: cars,pizza,homework
+  wrote up: You wrote up: Should phones be banned in school; Dogs or cats; Should homework be scrapped. Play again to pick three others from the nine.
+B: a fresh draw, seed 47785: cars,pets,votes
   publish bottom at 750 px, enabled: true
   PUBLISHED b-1: No reader could tell. | caught:  | now: Nobody could tell. | buttons: Next quarrel
 B quarrel 1: No reader could tell. | Ban speaks 3 lines, Cars 3. | Left out: Ban 1, Cars 1. | Unanswered: Ban 1, Cars 1. | First word Cars, last word Ban.
   publish bottom at 750 px, enabled: true
   PUBLISHED b-2: No reader could tell. | caught:  | now: Nobody could tell. | buttons: Next quarrel
-B quarrel 2: No reader could tell. | Yes speaks 3 lines, No 3. | Left out: Yes 1, No 1. | Unanswered: Yes 2, No 2. | First word No, last word Yes.
+B quarrel 2: No reader could tell. | Dogs speaks 3 lines, Cats 3. | Left out: Dogs 1, Cats 1. | Unanswered: Dogs 2, Cats 2. | First word Cats, last word Dogs.
   publish bottom at 750 px, enabled: true
   PUBLISHED b-3: No reader could tell. | caught:  | now: Nobody could tell. | buttons: The verdict
-B quarrel 3: No reader could tell. | Scrap speaks 4 lines, Keep 4. | Left out: Scrap 0, Keep 0. | Unanswered: Scrap 2, Keep 2. | First word Scrap, last word Keep.
+B quarrel 3: No reader could tell. | Yes speaks 4 lines, No 4. | Left out: Yes 0, No 0. | Unanswered: Yes 2, No 2. | First word Yes, last word No.
 B END: No reader could tell. Twenty-four partisans read you, and not one could place you. | Nowhere. Three pages, and three times nobody could place you. Leibniz said the method was very hard and would take a lot of work; you made it look easy. He also says the form forces the writer to be fair whether he likes it or not. Your pages show the other half: the readers catch every cut, but the mirroring was your work, line by line.
 D quarrel 1: Should cars be banned from the city centre?
   publish bottom at 750 px, enabled: true
@@ -55,13 +58,23 @@ D quarrel 2: Pineapple on pizza?
 D quarrel 3: Back to the office five days a week?
   publish bottom at 750 px, enabled: true
   PUBLISHED d-3: All eight could tell. Your page leaned to the office. | caught: lines,leftout,unanswered,ends | now: They could tell. | buttons: The verdict
-D END: The readers could tell every time. | Should cars be banned from the city centre? Your page was pl // Pineapple on pizza? Your page was placed by eight (the line  // Back to the office five days a week? Your page was placed by
+D END: The readers could tell every time. | You wrote up: Should cars be banned from the city centre; Pineapple on pizza; Back to the office five days a week. Play again to pick three others from the nine.
+E quarrel 1: Should school uniforms be scrapped?
   publish bottom at 750 px, enabled: true
-  PUBLISHED c-1: All eight could tell. Your page leaned to the ban. | caught: lines,leftout,unanswered,ends | now: They could tell. | buttons: Next quarrel
+  PUBLISHED e-1: All eight could tell. Your page leaned to scrapping them. | caught: lines,leftout,unanswered,ends | now: They could tell. | buttons: Next quarrel
+E quarrel 2: Summer or winter?
+  publish bottom at 750 px, enabled: true
+  PUBLISHED e-2: All eight could tell. Your page leaned to summer. | caught: lines,leftout,unanswered,ends | now: They could tell. | buttons: Next quarrel
+E quarrel 3: Should sixteen-year-olds get the vote?
+  publish bottom at 750 px, enabled: true
+  PUBLISHED e-3: All eight could tell. Your page leaned to the vote at sixteen. | caught: lines,leftout,unanswered,ends | now: They could tell. | buttons: The verdict
+E END: The readers could tell every time. | You wrote up: Should school uniforms be scrapped; Summer or winter; Should sixteen-year-olds get the vote. Play again to pick three others from the nine.
+  publish bottom at 750 px, enabled: true
+  PUBLISHED c-1: All eight could tell. Your page leaned to scrapping them. | caught: lines,leftout,unanswered,ends | now: They could tell. | buttons: Next quarrel
   publish bottom at 750 px, enabled: true
   PUBLISHED c-2: All eight could tell. Your page leaned to the dogs. | caught: lines,leftout,unanswered,ends | now: They could tell. | buttons: Next quarrel
   publish bottom at 750 px, enabled: true
   PUBLISHED c-3: All eight could tell. Your page leaned to the office. | caught: lines,leftout,unanswered,ends | now: They could tell. | buttons: The verdict
-C END: The readers could tell every time. | stood: Should phones be banned in school? You are for the phones, and the readers put you with the ban. Bending over backwards is the other way of leaning. // Dogs or cats? You are for the cats, and the readers put you with the dogs. Bending over backwards is the other way of leaning. // Back to the office five days a week? You are for home, and the readers put you with the office. Bending over backwards is the other way of leaning.
+C END: The readers could tell every time. | stood: Should school uniforms be scrapped? You are for keeping them, and the readers put you with scrapping them. Bending over backwards is the other way of leaning. // Dogs or cats? You are for the cats, and the readers put you with the dogs. Bending over backwards is the other way of leaning. // Back to the office five days a week? You are for home, and the readers put you with the office. Bending over backwards is the other way of leaning.
 
 ERRORS: none
