@@ -22,7 +22,9 @@ check('A and B share the temperature and differ in wetness (the lookalike); C di
 var whichA = {}; games.forEach(function (g) { whichA[g.letters.A] = (whichA[g.letters.A] || 0) + 1; }); out.push('     which winter is A, over seeds: ' + JSON.stringify(whichA));
 var whichH = {}; games.forEach(function (g) { var h = M.helper(g.effects, g.letters.A); whichH[h] = (whichH[h] || 0) + 1; }); out.push('     which remedy helps in A, over seeds: ' + JSON.stringify(whichH));
 check('plan is the plan', games.every(function (g) { return g.plan.length === 10 && g.plan.join() === C.PLAN.map(function (x) { return g.letters[x]; }).join(); }));
-check('twelve letters a year from 1694, none before', games.every(function (g) { return g.years.every(function (y) { return y < C.LETTER_YEAR ? !g.mail[y] : g.mail[y].length === 12; }); }));
+check('twenty-four letters a year from 1694, none before', games.every(function (g) { return g.years.every(function (y) { return y < C.LETTER_YEAR ? !g.mail[y] : g.mail[y].length === 24; }); }));
+check('the other doctors read: from 1695 every letter for a kind whose helper the earlier letters show gives that helper', games.every(function (g) { return [1695, 1696, 1697, 1698, 1699].every(function (y) { var held = g.years.filter(function (z) { return z >= C.LETTER_YEAR && z < y; }); return g.mail[y].every(function (l) { var seen = M.known(g.mail, held, l.kind), h = M.helper(g.effects, l.kind); return seen[h] !== 'helps' || l.remedy === h; }); }); }));
+(function () { var n = 0, tot = 0; games.forEach(function (g) { g.mail[1699].forEach(function (l) { tot++; if (l.effect === 'helps') n++; }); }); out.push('     share of the letters of 1699 that report the helper: ' + Math.round(100 * n / tot) + '%'); })();
 
 // 2. the plan's promises
 function trust(g, t) { var game = M.newGame(g.seed); for (var u = 0; u < t; u++) M.give(game, M.DOCTORS.oracle(game, u)); return M.give(game, game.history[t - 1].remedy).dead; }
@@ -39,9 +41,9 @@ check('the letters of 1694 and 1695 hold the helper of every kind of winter', ga
   var g = M.newGame(3); for (var t = 0; t < 6; t++) M.give(g, 'bark');
   check('no letters held before 1695', M.collection(g, 4).count === 0 && M.mailYears(g, 4).length === 0);
   var c5 = M.collection(g, 5);
-  check('at 1695 the collection holds the twelve letters of 1694 and your own 1694', c5.count === 13 && c5.years.join() === '1694' && K.reduce(function (a, k) { return a + c5.groups[k].rows.length; }, 0) === 13);
+  check('at 1695 the collection holds the twenty-four letters of 1694 and your own 1694', c5.count === 25 && c5.years.join() === '1694' && K.reduce(function (a, k) { return a + c5.groups[k].rows.length; }, 0) === 25);
   var c6 = M.collection(g, 6);
-  check('at 1696 it holds twenty-six', c6.count === 26);
+  check('at 1696 it holds fifty', c6.count === 50);
   check('tallies add up', K.every(function (k) { var t = c6.groups[k].tally; return C.REMEDIES.every(function (x) { return t[x].helps + t[x].none + t[x].harms === t[x].n; }); }));
   var statuses = (function () { var h = M.newGame(1); var st = []; for (var t = 0; t < 10; t++) st.push(M.give(h, 'rest').lookup.status); return st; })();
   check('lookup along the plan: new, last, new, last, new, then collection every year', statuses.join() === 'new,last,new,last,new,collection,collection,collection,collection,collection', statuses.join());
@@ -80,7 +82,8 @@ check('number words for the three counts', M.numberWord(5) === 'five' && M.numbe
 check('the middle word names the baseline', M.effectWord('none') === 'was no better than the fever alone' && M.effectShort('none') === 'no better');
 check('the verdict lines name the lookalike at 1692', (function () { var g = M.newGame(3); for (var t = 0; t < 2; t++) M.give(g, M.DOCTORS.oracle(g, t)); var rec = M.give(g, g.history[1].remedy); var v = M.roundVerdict(g, rec).join(' '); return v.indexOf('thirty died') >= 0 && v.indexOf('a different winter') >= 0 && v.indexOf('Nothing could have told you') >= 0; })());
 check('the verdict lines name the letters at 1695', (function () { var g = M.newGame(3); for (var t = 0; t < 5; t++) M.give(g, M.DOCTORS.oracle(g, t)); var rec = M.give(g, M.DOCTORS.reader(g, 5, M.rng(1))); var v = M.roundVerdict(g, rec).join(' '); return v.indexOf('The letters had this winter') >= 0 && v.indexOf('five died') >= 0; })());
-check('the summary counts before and after the letter', (function () { var g = M.newGame(4); for (var t = 0; t < 10; t++) M.give(g, M.DOCTORS.reader(g, t, M.rng(9))); var s = M.summary(g); return s.sick === 1000 && s.sickBefore === 400 && s.sickAfter === 600 && s.before + s.after === s.total && s.status.collection === 5 && s.others.oracle === 50 && s.letters === 72 + 6; })());
+check('the summary counts the five winters with nothing to read and the five with the letters', (function () { var g = M.newGame(4); for (var t = 0; t < 10; t++) M.give(g, M.DOCTORS.reader(g, t, M.rng(9))); var s = M.summary(g); return s.sick === 1000 && s.sickBefore === 500 && s.sickAfter === 500 && s.before + s.after === s.total && s.status.collection === 5 && s.others.oracle === 50 && s.letters === 144 + 6 && s.after === 25 && s.word === 'letters'; })());
+check('the verdict word for a player who ignores the letters', (function () { var g = M.newGame(4); for (var t = 0; t < 10; t++) M.give(g, M.DOCTORS.memory(g, t, M.rng(9))); return M.summary(g).word !== 'letters'; })());
 
 out.push(fails ? 'FAILED: ' + fails : 'ALL PASSED');
 console.log(out.join('\n'));

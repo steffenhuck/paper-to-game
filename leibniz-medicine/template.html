@@ -48,8 +48,8 @@ b,strong{font-weight:700}
 .sq svg{width:32px;height:32px}
 .winterline{font-size:14px;color:var(--mute);text-align:center;margin:6px 0 8px}
 .goon{margin:4px 0 6px}
-.own{display:flex;flex-wrap:wrap;gap:4px;margin:4px 0 6px}
-.own .mem{width:calc(20% - 3.2px);background:var(--paper2);border-radius:4px;padding:3px 2px 3px;text-align:center}
+.own{display:flex;gap:4px;margin:4px 0 6px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}.own::-webkit-scrollbar{display:none}
+.own .mem{flex:none;width:66px;background:var(--paper2);border-radius:4px;padding:3px 2px 3px;text-align:center}
 .mem .mr .h{color:var(--teal)}.mem .mr .x{color:var(--tomato)}
 .mem .my{font-size:10.5px;letter-spacing:.06em;color:var(--mute)}
 .mem .msq{display:flex;gap:2px;justify-content:center;margin:3px 0 2px}
@@ -93,6 +93,15 @@ b,strong{font-weight:700}
 .kept svg{width:28px;height:28px;flex:none}
 .stat{font-size:12.5px;color:var(--mute);margin-top:2px}.stat b{color:var(--ink);font-weight:600}
 .hid{display:none!important}
+/* digest */
+.digest{border-radius:4px;padding:6px 8px 5px;margin:0 0 6px;background:var(--ink);color:var(--paper)}
+.digest.none{background:none;border:2px dashed var(--line);color:var(--mute)}
+.digest .dh{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;margin-bottom:4px;line-height:1.15}
+.digest .dh span{opacity:.75;font-weight:500;text-transform:none;letter-spacing:0}
+.digest .chips{display:flex;gap:5px}
+.digest .chip{flex:1;border-radius:3px;padding:4px 4px;background:rgba(242,232,208,.12);text-align:center;font-size:12px;line-height:1.15}
+.digest .chip b{display:block;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase}
+.digest .chip .h{color:#8FD6D0;font-weight:600}.digest .chip .x{color:#FFB39B;font-weight:600}.digest .chip .z{opacity:.75}
 /* letter */
 .memo{background:#FBF5E6;border-radius:4px;padding:16px 16px 14px;margin:10px 0 12px;border-top:10px solid var(--tomato)}
 .memo .mh{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-bottom:10px;line-height:1.5}.memo .mh span{display:block}
@@ -100,7 +109,14 @@ b,strong{font-weight:700}
 .memo ul{margin:0 0 9px 18px;padding:0;font-size:15.5px}
 .memo li{margin:0 0 2px}
 /* end */
-.verdict{font-size:19px;font-weight:600;line-height:1.3;margin:8px 0 12px}
+.verdict{font-size:19px;font-weight:600;line-height:1.3;margin:10px 0 12px}
+.halves{margin:8px 0 4px}
+.half{border-radius:4px;padding:10px 12px 9px;margin:0 0 6px;background:var(--paper2)}
+.half.ink{background:var(--ink);color:var(--paper)}
+.half .hh{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.half .hh b{font-size:15px}.half .hh span{font-size:12px;opacity:.8}
+.half .big{font-size:30px;font-weight:700;line-height:1;margin:4px 0 6px}.half .big small{font-size:14px;font-weight:500;margin-left:6px}
+.half .dr{display:flex;flex-wrap:wrap;gap:2px}.half .dr i{display:block;width:12px;height:7px;border-radius:1px;background:var(--tomato)}
 .vl{font-size:15.5px;margin:0 0 8px}
 .docs{margin:10px 0 6px}
 .doc{display:flex;align-items:center;gap:8px;margin:6px 0}
@@ -117,7 +133,7 @@ b,strong{font-weight:700}
 .dy .msq i{width:13px;height:13px}
 .dy .tag{font-size:9.5px;line-height:1.1;color:var(--mute);margin-top:2px;min-height:22px}
 .dy.ink{background:var(--ink);color:var(--paper)}.dy.ink .tag{color:var(--paper);opacity:.85}.dy.ink .msq i.cold{background:var(--paper2)}
-.dy .dd{font-size:10.5px;font-weight:600;line-height:1.1}
+.dy .dd{font-size:10.5px;font-weight:600;line-height:1.1}.dy .dn{font-size:15px;font-weight:700;color:var(--tomato);line-height:1.1;margin-top:2px}.dy.ink .dn{color:#FFB39B}
 .kind{display:flex;gap:10px;align-items:center;margin:0 0 8px;font-size:14px;line-height:1.25}.kind .msq{flex:none;margin:0}.kind span{color:var(--mute)}
 .quote{font-size:15px;margin:12px 0;padding-left:12px;border-left:3px solid var(--mustard)}
 /* overlays */
@@ -189,6 +205,7 @@ b,strong{font-weight:700}
   <div class="yr"><span class="lab" id="yearno">1690 &middot; winter 1 of 10</span><span class="stat" id="stat"></span></div>
   <h2 class="now" id="now">Give this winter&rsquo;s remedy</h2>
   <div class="cards" id="cards"></div>
+  <div class="digest" id="digest"></div>
   <div class="lab">What you have to go on</div>
   <div class="goon">
     <div class="own" id="own"></div>
@@ -233,14 +250,13 @@ b,strong{font-weight:700}
 <section class="screen" id="s-end">
   <div class="lab">1699 &middot; the century turns</div>
   <h2 class="title" style="font-size:36px">What became of<br>the sick</h2>
+  <div class="halves" id="halves"></div>
   <p class="verdict" id="v-lead"></p>
-  <div id="v-lines"></div>
-  <div class="lab" style="margin-top:14px">Four doctors, the same ten winters &middot; one block for every ten dead</div>
+  <div class="lab" style="margin-top:14px">Three doctors on your ten winters &middot; one block for every ten dead</div>
   <div class="docs" id="docs"></div>
-  <div class="lab" style="margin-top:14px">Your ten winters, as they were</div>
+  <div class="lab" style="margin-top:14px">Your ten winters</div>
   <div class="decade" id="decade"></div>
-  <div id="v-kinds"></div>
-  <p class="vl" style="color:var(--mute);font-size:13.5px">Dark cards above were written and sent; pale ones were yours alone. &ldquo;No better&rdquo; means no better than the fever alone, twenty of a hundred.</p>
+  <p class="vl" style="color:var(--mute);font-size:13.5px">The red number is the dead of a hundred. Dark cards were written and sent; pale ones were yours alone.</p>
   <p class="quote" id="v-paper"></p>
   <button class="btn" id="b-again">Play again, a new draw</button>
   <button class="btn ghost" id="b-about-end">About the paper and this game</button>
@@ -272,9 +288,9 @@ b,strong{font-weight:700}
     <h3>The remedy</h3>
     <p>Three remedies: bark, bleeding, rest; rest is a treatment like the others, bed, warmth and broth by your order. Left to itself the fever kills about twenty of a hundred. In every kind of winter one remedy helps (five die), one is no better than the fever alone (twenty die), one harms (thirty die). Which is which depends only on the kind of winter, and the same remedy can help in one kind and harm in another. Tap a remedy to see the move, then tap <i>Give it to the hundred sick</i>. You see what the remedy you gave did; you never see what the others would have done.</p>
     <h3>What you have to go on</h3>
-    <p>Your own past winters, every one, as small cards: the two cards of the winter, what you gave, what came of it. From 1695, the collection: every province's letters for every winter since 1694, grouped by kind of winter, with a count of how often each remedy helped, was no better than the fever alone, or harmed there, and your own winters among them. Tap it to open it and look for your winter's kind.</p>
+    <p>Your own past winters, every one, as small cards: the two cards of the winter, what you gave, what came of it. From 1695, the letters: every province's physician writes a few lines a year, and the box under the two cards says what the letters so far show for this kind of winter, how often each remedy helped, was no better than the fever alone, or harmed. The full collection, every letter grouped by kind of winter with your own among them, is behind the black button. The other physicians read the letters too, so from the second year they mostly give what the letters show helped.</p>
     <h3>The end</h3>
-    <p>After 1699 the game says what became of the sick, before the letter and after it, sets your ten winters beside three other doctors (memory alone, the letters from 1694, the letters from 1690, and one who knew every winter), and shows the ten winters as they were. Add <i>?seed=</i> and a number to the address to replay a draw.</p>
+    <p>After 1699 the game shows the dead of your five winters with nothing to read against the dead of your five with the letters, then sets your ten beside a doctor who never read a letter and one who had letters since 1690, and shows your ten winters as they were. Add <i>?seed=</i> and a number to the address to replay a draw.</p>
   </div>
 </div>
 
@@ -298,7 +314,7 @@ b,strong{font-weight:700}
   var game = M.newGame(seed), t = 0, chosen = null;
   window.__game = game;
   var RN = { bark: 'Bark', bleed: 'Bleeding', rest: 'Rest' };
-  var DEF0 = '<b>Bark</b> is the powdered bark of the cinchona tree. <b>Bleeding</b> opens a vein with a lancet. <b>Rest</b> is bed, warmth and broth by your order, and neither bark nor lancet. Tap one to see the move; then give it.';
+  var DEF0 = '<b>Bark</b>: powdered cinchona bark, in wine. <b>Bleeding</b>: a vein opened with a lancet. <b>Rest</b>: bed, warmth and broth by your order, no bark, no lancet. Tap one to see the move; then give it.';
 
   function show(id) { document.querySelectorAll('.screen').forEach(function (s) { s.classList.toggle('on', s.id === id); }); window.scrollTo(0, 0); }
   function openOv(id) { $(id).classList.add('on'); document.body.classList.add('lock'); $(id).scrollTop = 0; }
@@ -318,10 +334,20 @@ b,strong{font-weight:700}
     var H = game.history.slice(0, t), own = $('own'), no = $('nothing');
     if (!H.length) { own.innerHTML = ''; no.classList.remove('hid'); no.textContent = 'Nothing. You have just arrived, and nobody has written the winters down.'; }
     else { no.classList.add('hid'); own.innerHTML = H.map(function (h) { return '<div class="mem"><div class="my">' + h.year + '</div>' + miniSq(h.kind) + '<div class="mr">' + RN[h.remedy] + '<br><span class="' + (h.effect === 'helps' ? 'h' : h.effect === 'harms' ? 'x' : '') + '">' + M.effectShort(h.effect) + '</span></div></div>'; }).join(''); }
+    setTimeout(function () { own.scrollLeft = own.scrollWidth; }, 0);
     var b = $('b-book'), year = M.yearAt(game, t), col = M.collection(game, t);
     if (year < C.LETTER_YEAR) { b.className = 'book none'; b.disabled = true; b.innerHTML = '<div><div class="bt">No letters</div><div class="bs">Nobody writes the winters down.</div></div>'; }
     else if (col.count === 0) { b.className = 'book none'; b.disabled = true; b.innerHTML = '<div><div class="bt">No letters yet</div><div class="bs">Every doctor writes this winter down. The collection comes back next winter.</div></div>'; }
     else { b.className = 'book'; b.disabled = false; b.innerHTML = '<svg><use href="#i-book"/></svg><div><div class="bt">Open the collection</div><div class="bs">' + col.count + ' letters, ' + (col.years.length === 1 ? 'the winter of ' + col.years[0] : 'the winters ' + col.years[0] + ' to ' + col.years[col.years.length - 1]) + ', every province</div></div>'; }
+  }
+
+  // The observation drawn from the letters for this winter's kind: the First Doctor's digest, on the play screen.
+  function renderDigest(kind) {
+    var d = $('digest'), year = M.yearAt(game, t), col = M.collection(game, t);
+    if (col.count === 0) { d.className = 'digest none'; d.innerHTML = '<div class="dh">The letters say, for ' + M.kindName(kind) + ' winters: <span>' + (year < C.LETTER_YEAR ? 'nothing. There are no letters.' : 'nothing yet. The first come back next winter.') + '</span></div>'; return; }
+    var g = col.groups[kind];
+    d.className = 'digest';
+    d.innerHTML = '<div class="dh">The letters say, for ' + M.kindName(kind) + ' winters <span>(' + (g.rows.length ? g.rows.length + (g.rows.length === 1 ? ' letter' : ' letters') : 'no letters yet') + ')</span></div><div class="chips">' + C.REMEDIES.map(function (x) { var y = g.tally[x]; var body = y.n === 0 ? '<span class="z">not tried</span>' : [y.helps ? '<span class="h">helped ' + y.helps + '</span>' : '', y.none ? '<span class="z">no better ' + y.none + '</span>' : '', y.harms ? '<span class="x">harmed ' + y.harms + '</span>' : ''].filter(Boolean).join('<br>'); return '<div class="chip"><b>' + RN[x] + '</b>' + body + '</div>'; }).join('') + '</div>';
   }
 
   function renderCrowd() {
@@ -339,6 +365,7 @@ b,strong{font-weight:700}
     var ds = deadSoFar(); $('stat').innerHTML = t === 0 ? '' : 'dead so far <b>' + ds.d + '</b> of ' + ds.n + ' sick';
     $('now').textContent = 'Give this winter’s remedy';
     $('cards').innerHTML = cardsHTML(kind);
+    renderDigest(kind);
     renderGoon();
     document.querySelectorAll('#rem button').forEach(function (b) { b.classList.remove('sel'); });
     $('def').innerHTML = DEF0;
@@ -403,27 +430,18 @@ b,strong{font-weight:700}
 
   function renderEnd() {
     var s = M.summary(game), H = game.history;
-    var W = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'], T = ['never', 'once', 'twice', 'three times', 'four times', 'five times', 'six times'];
-    var lead = 'Of the thousand sick who came to you, ' + s.total + ' died. Before the letter, ' + s.before + ' of four hundred: ' + M.roughOf(s.before, s.sickBefore) + '. After it, ' + s.after + ' of six hundred: ' + M.roughOf(s.after, s.sickAfter) + '.';
+    function blocks(n) { var f = ''; for (var i = 0; i < Math.round(n / 10); i++) f += '<i></i>'; return '<div class="dr">' + f + '</div>'; }
+    $('halves').innerHTML =
+      '<div class="half"><div class="hh"><b>With nothing to read</b><span>1690 to 1694, five hundred sick</span></div><div class="big">' + s.before + '<small>died, ' + M.roughOf(s.before, s.sickBefore) + '</small></div>' + blocks(s.before) + '</div>' +
+      '<div class="half ink"><div class="hh"><b>With the letters</b><span>1695 to 1699, five hundred sick</span></div><div class="big">' + s.after + '<small>died, ' + M.roughOf(s.after, s.sickAfter) + '</small></div>' + blocks(s.after) + '</div>';
+    var lead = { letters: 'The letters did what Leibniz said they would: the kingdom\u2019s winters told you what your own could not, and the sick stopped paying for what you did not know.',
+                 some: 'The letters helped, and not as much as they could have: they held the answer for every winter from 1695, and you did not always give it.',
+                 ignored: 'You lost as many with the letters as without them. They held the answer for every winter from 1695; the kingdom\u2019s winters were telling you what to give.' }[s.word];
     $('v-lead').textContent = lead;
-    var L = [];
-    L.push('<p class="vl"><b>What Leibniz says:</b> winters like past winters come back, and the same bark cures in one and fails in the next; a doctor with only his own years to go on learns it again each time at the expense of the sick, and a few lines a year from every province, collected, would tell him.</p>');
-    var found = [];
-    if (s.status.last) found.push(W[s.status.last] + (s.status.last === 1 ? ' winter was the same kind as the one before it, and you knew it' : ' winters were the same kind as the one before them, and you knew them'));
-    if (s.status.own) found.push(T[s.status.own] + ' the winter that matched was one of your own earlier ones');
-    if (s.status['new']) found.push(W[s.status['new']] + ' winters were new to you with nothing to read, and you learned them from scratch');
-    if (s.status.partial) found.push(T[s.status.partial] + ' the letters had the winter but not the remedy');
-    if (s.status.collection) found.push(T[s.status.collection] + ' the letters had your winter and the remedy that helped in it');
-    L.push('<p class="vl"><b>What you found:</b> ' + found.join('; ') + '.</p>');
-    L.push('<p class="vl"><b>Where you part:</b> you lost ' + s.total + '; a doctor with nothing but his own winters, who repeated what helped last year and otherwise tried another, about ' + s.others.memory + '; a doctor who read the letters from 1694, about ' + s.others.reader + '; a doctor who had had letters from 1690, as Leibniz wished it had been done "for a while now", about ' + s.others.readerFrom1690 + '; a doctor who knew every winter, ' + s.others.oracle + '.</p>');
-    L.push('<p class="vl"><b>What you leave:</b> a collection of ' + s.letters + ' letters that every doctor in the kingdom holds, and the four winters before it that only you ever knew.</p>');
-    $('v-lines').innerHTML = L.join('');
-    var docs = [['You', s.total, 'you'], ['Own winters only', s.others.memory, ''], ['Letters from 1694', s.others.reader, ''], ['Letters from 1690', s.others.readerFrom1690, ''], ['Knew every winter', s.others.oracle, '']];
-    $('docs').innerHTML = docs.map(function (d) { var n = Math.round(d[1] / 10), f = ''; for (var i = 0; i < n; i++) f += '<i></i>'; return '<div class="doc ' + d[2] + '"><div class="dn"><b>' + d[0] + '</b>' + (d[2] ? 'ten winters' : 'the same winters') + '</div><div class="dr">' + f + '</div><div class="dc">' + d[1] + '</div></div>'; }).join('');
-    var TAG = { 'new': 'new, nothing to read', 'last': 'like last winter', 'own': 'one of your own', 'collection': 'in the letters', 'partial': 'letters, not the remedy' };
-    $('decade').innerHTML = H.map(function (h) { return '<div class="dy ' + (h.written ? 'ink' : '') + '"><div class="my">' + h.year + '</div>' + miniSq(h.kind) + '<div class="dd">' + RN[h.remedy] + '<br>' + M.effectWord(h.effect) + '</div><div class="tag">' + TAG[h.lookup.status] + '</div></div>'; }).join('');
-    $('v-kinds').innerHTML = '<div class="lab" style="margin:12px 0 4px">The four kinds of winter, and what helped</div>' + M.KINDS.map(function (k) { var ys = H.filter(function (h) { return h.kind === k; }).map(function (h) { return h.year; }); var e = game.effects[k]; return '<div class="kind">' + miniSq(k) + '<div><b>' + cap(M.kindName(k)) + '</b>: ' + C.REMEDIES.map(function (x) { return RN[x].toLowerCase() + ' ' + M.effectShort(e[x]); }).join(', ') + '<br><span>' + (ys.length ? 'yours in ' + M.listYears(ys) : 'never yours') + '</span></div></div>'; }).join('');
-    $('v-paper').innerHTML = 'Leibniz, 1694: it is always time to begin good things. A letter of a few pages a year from each province would do; it has only to be desired, and costs scarcely any trouble. The soul and the body are the first things that should be thought about, and the last that are.';
+    var docs = [['You', s.total, 'you'], ['Never read a letter', s.others.memory, ''], ['Letters since 1690', s.others.readerFrom1690, '']];
+    $('docs').innerHTML = docs.map(function (d) { var n = Math.round(d[1] / 10), f = ''; for (var i = 0; i < n; i++) f += '<i></i>'; return '<div class="doc ' + d[2] + '"><div class="dn"><b>' + d[0] + '</b>' + (d[2] ? 'ten winters' : d[0] === 'Never read a letter' ? 'own winters only, trusting the last' : 'as Leibniz wished, \u201cfor a while now\u201d') + '</div><div class="dr">' + f + '</div><div class="dc">' + d[1] + '</div></div>'; }).join('');
+    $('decade').innerHTML = H.map(function (h) { return '<div class="dy ' + (h.written ? 'ink' : '') + '"><div class="my">' + h.year + '</div>' + miniSq(h.kind) + '<div class="dd">' + RN[h.remedy] + '</div><div class="dn">' + h.dead + '</div></div>'; }).join('');
+    $('v-paper').innerHTML = 'Every doctor in the kingdom now holds ' + s.letters + ' letters. Leibniz, 1694: it is always time to begin good things; a few lines a year from each province would do, and it has only to be desired.';
     $('seedline').textContent = 'Draw ' + game.seed + '. Add ?seed=' + game.seed + ' to the address to play these same winters again.';
     show('s-end');
   }
