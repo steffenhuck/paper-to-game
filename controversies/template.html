@@ -159,6 +159,7 @@ b,strong{font-weight:700}
   <h2 class="question disp" id="stq"></h2>
   <p class="now">Before you write: where do you stand?</p>
   <p class="intro">Nobody sees this but the verdict at the end, which will say whether the readers worked you out. The page you write is the same whatever you answer here.</p>
+  <p class="intro" id="stdraw"></p>
   <button class="btn c0" id="b-st0"></button>
   <button class="btn c1" id="b-st1"></button>
   <button class="btn sec" id="b-st2">No view</button>
@@ -217,6 +218,7 @@ b,strong{font-weight:700}
   <div class="vtext" id="vhad"></div>
   <div class="vlab">What the readers cannot see</div>
   <div class="vtext"><p>They count. They cannot weigh. A page can be even in every count and still unfair in what it chose to say: leave out one side&rsquo;s weakest point and the other side&rsquo;s best, and every placard stays grey. No reader here can check that part. It is yours.</p></div>
+  <p class="cred" id="vdraw"></p>
   <button class="btn" id="b-again">Play again</button>
   <div class="row2"><button class="btn sec" id="b-help-end">How to play</button><button class="btn sec" id="b-about">About</button></div>
   <p class="cred">Built on <a href="https://leibnizpapers.org/about.htm">Lloyd Strickland</a>&rsquo;s translation of Leibniz&rsquo;s <i>On Controversies</i> (1680; translation 2021), <a href="https://www.leibniz-translations.com/controversies.htm">leibniz-translations.com</a>. The second game of a Leibniz suite, after <a href="../leibniz/leibnizs-fullest-world.html">Leibniz&rsquo;s Fullest World</a>.</p>
@@ -229,7 +231,7 @@ b,strong{font-weight:700}
   <h2 class="disp">How to play</h2>
   <p><b>Write up the quarrel so that no reader can tell whose side you are on.</b></p>
   <h3>The page</h3>
-  <p>Three quarrels, each on one page: ten ruled lines (six for the short one). Below the page is everything each side said: three or four points a side, each with the other side&rsquo;s one-line reply.</p>
+  <p>Three quarrels a game, each drawn by chance from two (an even one, a short one, an uneven one), each on one page: ten ruled lines (six for the short one). Below the page is everything each side said: three or four points a side, each with the other side&rsquo;s one-line reply.</p>
   <ul>
     <li><b>Tap a card</b> to put it on the page. A point takes two lines in full, one in short; it goes on in full if there is room. A reply takes one line and goes on only under its own point.</li>
     <li><b>Tap a line on the page</b> to select it. Then <b>Up</b> and <b>Down</b> move it, <b>Short</b> and <b>Full</b> change its length, <b>Off</b> takes it off (a point takes its reply off with it).</li>
@@ -263,13 +265,15 @@ b,strong{font-weight:700}
 <script>
 (function () {
   var $ = function (id) { return document.getElementById(id); };
-  var game = newGame(), sel = null, returnTo = null, reading = false;
+  var urlSeed = (function () { var x = /[?&]seed=(\d+)/.exec(location.search); return x ? +x[1] : null; })();
+  function newSeed() { var s = urlSeed !== null ? urlSeed : Math.floor(Math.random() * 90000) + 10000; urlSeed = null; return s; }
+  var game = newGame(newSeed()), sel = null, returnTo = null, reading = false;
   window.__game = game;
 
   function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
   function screen(id) { document.querySelectorAll('.screen').forEach(function (s) { s.classList.toggle('on', s.id === id); }); $('bottom').classList.toggle('hid', id !== 's-write'); window.scrollTo(0, 0); }
   function q() { return quarrel(game); }
-  function qLabel() { return 'Quarrel ' + (game.q + 1) + ' of ' + CONFIG.QUARRELS.length; }
+  function qLabel() { return 'Quarrel ' + (game.q + 1) + ' of ' + CONFIG.POOLS.length; }
   function words(n) { return ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'][n] || String(n); }
   function sideWord(s) { return q().sides[s].name; }
   function formWord(f) { return f === 'full' ? 'in full' : 'short'; }
@@ -363,8 +367,9 @@ b,strong{font-weight:700}
   // ---- screens ----
   function showStance() {
     var Q = q();
-    $('stno').textContent = qLabel(); $('stq').textContent = Q.question;
+    $('stno').textContent = qLabel() + ' \u00b7 drawn by chance from two'; $('stq').textContent = Q.question;
     $('b-st0').textContent = Q.sides[0].stance; $('b-st1').textContent = Q.sides[1].stance;
+    $('stdraw').textContent = game.q === 0 ? 'Each of the three quarrels is drawn by chance from two. This game is draw ' + game.seed + '; the end screen says how to get the same three again.' : '';
     screen('s-stance');
   }
   function showWrite() { sel = null; say(''); renderRules(); renderWrite(); screen('s-write'); }
@@ -409,7 +414,7 @@ b,strong{font-weight:700}
       mean.classList.remove('hid');
       $('rnow').textContent = r.couldTell === 0 ? 'Nobody could tell.' : 'They could tell.';
       var bt = $('rbtns');
-      bt.innerHTML = game.q === CONFIG.QUARRELS.length - 1 ? '<button class="btn" id="b-next">The verdict</button>' : '<button class="btn" id="b-next">Next quarrel</button>';
+      bt.innerHTML = game.q === CONFIG.POOLS.length - 1 ? '<button class="btn" id="b-next">The verdict</button>' : '<button class="btn" id="b-next">Next quarrel</button>';
       bt.classList.remove('hid'); reading = false;
       if ($('b-next')) $('b-next').addEventListener('click', function () { next(game); if (game.done) showEnd(); else showStance(); });
     }
@@ -417,7 +422,7 @@ b,strong{font-weight:700}
   }
 
   function showEnd() {
-    var v = verdict(game), Q = CONFIG.QUARRELS;
+    var v = verdict(game), Q = gameQuarrels(game);
     $('vhead').textContent = v.headline;
     $('vfound').innerHTML = v.quarrels.map(function (l) { return '<p>' + esc(l) + '</p>'; }).join('');
     $('vstood').innerHTML = v.stood.map(function (l, i) { return '<p><b>' + esc(Q[i].question) + '</b> ' + esc(l) + '</p>'; }).join('');
@@ -430,12 +435,13 @@ b,strong{font-weight:700}
     if (finals === 0) had = 'They could be handed to anyone. Leibniz hoped that an ordinary sensible reader could judge the argument from the report alone, without the writer saying what he thought. That takes exactly the page nobody can place. He was afraid both sides would gang up and condemn him anyway, to keep themselves in business. The prince told him not to worry and to get on with it.';
     else had = 'A page the readers can place is not read as a report but as a pitch. The side it leans to quotes it; the other side stops reading at the line that gave you away; and the argument goes on, now with you in it. Leibniz hoped an ordinary sensible reader could judge from the report alone, without the writer saying what he thought. That takes the page nobody can place, every time.';
     $('vhad').innerHTML = '<p>' + esc(had) + '</p>';
+    $('vdraw').textContent = 'This game was draw ' + game.seed + '. Play again draws three fresh quarrels from the six; add ?seed=' + game.seed + ' to the address for the same three.';
     screen('s-end');
   }
 
   // ---- wiring ----
-  $('b-begin').addEventListener('click', function () { game = newGame(); window.__game = game; showStance(); });
-  $('b-again').addEventListener('click', function () { game = newGame(); window.__game = game; showStance(); });
+  $('b-begin').addEventListener('click', function () { showStance(); }); // the game drawn at load (from ?seed= if given) is the one that starts
+  $('b-again').addEventListener('click', function () { game = newGame(newSeed()); window.__game = game; showStance(); });
   $('b-st0').addEventListener('click', function () { setStance(game, 0); showWrite(); });
   $('b-st1').addEventListener('click', function () { setStance(game, 1); showWrite(); });
   $('b-st2').addEventListener('click', function () { setStance(game, null); showWrite(); });
@@ -448,7 +454,7 @@ b,strong{font-weight:700}
 
   window.__api = {
     add: add, act: function (i, a) { sel = i; act(a); }, publish: doPublish, stance: function (s) { setStance(game, s); showWrite(); },
-    page: function () { return game.page; }, game: function () { return game; }, last: function () { return lastResult; }, reading: function () { return reading; }
+    page: function () { return game.page; }, setPage: function (p) { game.page = p; sel = null; renderWrite(); }, game: function () { return game; }, last: function () { return lastResult; }, reading: function () { return reading; }
   };
 })();
 </script>

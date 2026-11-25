@@ -21,111 +21,216 @@ var CONFIG = {
     { key: 'ends', label: 'first & last', rule: 'who gets the first word and the last' }
   ],
 
-  // The three quarrels, written for the game (Leibniz's was the Church: A IV 3, 212, note 1), chosen so that a teenager has
-  // a view on each. Side 0 is drawn violet, side 1 tangerine. budget: lines on the page (ploy 2, "disputes expand into
+  // The quarrels, written for the game (Leibniz's was the Church: A IV 3, 212, note 1): three rounds, two quarrels a round,
+  // one drawn by chance per game from a visible seed (revision 3). Side 0 is drawn violet, side 1 tangerine. budget: lines on the page (ploy 2, "disputes expand into
   // volumes", turned into a constraint). min: the fewest lines the readers will read as a report (our choice: keeps the
   // empty page from passing). A point has a full form and a short form, both its own side's words; its reply is the other
   // side's one line.
-  QUARRELS: [
-    {
-      slug: 'phones', question: 'Should phones be banned in school?', budget: 10, min: 6,
-      sides: [
-        { name: 'Ban', side: 'the ban side', says: 'The ban side says', stance: 'Ban them', of: 'the ban' },
-        { name: 'Phones', side: 'the phone side', says: 'The phone side says', stance: 'Let us keep them', of: 'the phones' }
-      ],
-      reasons: [
-        { id: 'b1', side: 0,
-          full: 'Nobody can learn with a buzzing pocket. Take the phones away and whole lessons come back.',
-          brief: 'A buzzing pocket makes lessons impossible.',
-          reply: 'Then take away the buzzing, not the phone. Silent mode exists.' },
-        { id: 'b2', side: 0,
-          full: 'Break time without phones is break time with people. Schools that tried it saw the corridors fill with talk again.',
-          brief: 'Without phones, break time has people in it again.',
-          reply: 'Or it has bored kids staring at walls, counting the minutes.' },
-        { id: 'b3', side: 0,
-          full: 'Half the bullying now happens on a screen, during the school day, where no teacher can see it.',
-          brief: 'Bullying moved onto screens; a ban moves it back where adults can see.',
-          reply: 'It moves it to after four o’clock. The screen comes home.' },
-        { id: 'p1', side: 1,
-          full: 'A phone is a calculator, a dictionary, a camera and a map. Banning it bans every tool a working adult uses.',
-          brief: 'A phone is every tool an adult uses. Banning it is absurd.',
-          reply: 'Adults are not fourteen, and do not have maths next period.' },
-        { id: 'p2', side: 1,
-          full: 'Parents want to reach their kids, and kids want to reach their parents. A ban cuts that line for seven hours a day.',
-          brief: 'A ban cuts the line home for seven hours a day.',
-          reply: 'The school office has had a phone for a hundred years.' },
-        { id: 'p3', side: 1,
-          full: 'You do not learn to handle a thing by having it taken away. School is exactly where to learn to put the phone down.',
-          brief: 'You learn to put a phone down by practising, not by losing it.',
-          reply: 'You also do not learn to swim by being thrown in the deep end.' }
-      ]
-    },
-    {
-      slug: 'pets', question: 'Dogs or cats?', budget: 6, min: 4,
-      sides: [
-        { name: 'Dogs', side: 'the dog side', says: 'The dog side says', stance: 'Dogs', of: 'the dogs' },
-        { name: 'Cats', side: 'the cat side', says: 'The cat side says', stance: 'Cats', of: 'the cats' }
-      ],
-      reasons: [
-        { id: 'd1', side: 0,
-          full: 'A dog is glad you exist, every single time you come through the door. Nothing else on earth does that.',
-          brief: 'A dog is glad you exist, every time.',
-          reply: 'Glad anyone exists. It is not a judgement, it is a reflex.' },
-        { id: 'd2', side: 0,
-          full: 'A dog gets you out of the house twice a day in all weathers, which is more than any gym has managed.',
-          brief: 'A dog gets you out of the house, twice a day.',
-          reply: 'In the rain. At six. For fifteen years.' },
-        { id: 'd3', side: 0,
-          full: 'Dogs do jobs: they herd, guide, and find the lost and the buried. A cat has never found anyone.',
-          brief: 'Dogs work: they guide, herd and rescue.',
-          reply: 'Cats cleared the granaries of rats and made cities possible. Quietly.' },
-        { id: 'c1', side: 1,
-          full: 'A cat asks nothing of you and gives you, on its own terms, something close to respect. You have to earn it.',
-          brief: 'A cat’s affection is earned, so it means something.',
-          reply: 'Earned by feeding it. That is not respect, it is a contract.' },
-        { id: 'c2', side: 1,
-          full: 'A cat can be left alone for a weekend with a bowl and a box. Try that with a labrador.',
-          brief: 'A cat can be left alone with a bowl for a weekend.',
-          reply: 'A cat can be left alone because it does not mind whether you come back.' },
-        { id: 'c3', side: 1,
-          full: 'Cats are clean, quiet and small. They fit a flat, a budget and a city; a dog needs a garden and a van.',
-          brief: 'Cats fit a flat, a budget and a city.',
-          reply: 'So does a dachshund.' }
-      ]
-    },
-    {
-      slug: 'homework', question: 'Should homework be scrapped?', budget: 10, min: 6,
-      sides: [
-        { name: 'Scrap', side: 'the scrap side', says: 'The scrap side says', stance: 'Scrap it', of: 'scrapping it' },
-        { name: 'Keep', side: 'the keep side', says: 'The keep side says', stance: 'Keep it', of: 'keeping it' }
-      ],
-      reasons: [
-        { id: 's1', side: 0,
-          full: 'School already takes seven hours. Homework takes the evening too, and nobody else works a double shift at twelve.',
-          brief: 'Seven hours of school, then an evening shift. Nobody else works that.',
-          reply: 'Half an hour a night is not a shift. It is practice.' },
-        { id: 's2', side: 0,
-          full: 'Homework rewards the kids with a quiet room and a parent who can help. The rest fall further behind every night.',
-          brief: 'Homework rewards a quiet room and a parent who can help.',
-          reply: 'So does everything. Homework at least gives the rest a chance to catch up.' },
-        { id: 's3', side: 0,
-          full: 'The studies agree: in primary school homework does nothing for results, and in secondary school very little.',
-          brief: 'The studies find it does little or nothing for results.',
-          reply: 'Results are not the point. Doing a thing alone, without a teacher, is.' },
-        { id: 's4', side: 0,
-          full: 'What homework mostly teaches is how to copy it from a friend at one minute to nine.',
-          brief: 'It mostly teaches copying from a friend before the bell.',
-          reply: 'That is a lesson about the kid, not about homework.' },
-        { id: 'k1', side: 1,
-          full: 'You cannot learn an instrument, a language or algebra in the lesson alone. The practice between lessons is where it sticks.',
-          brief: 'The practice between lessons is where learning sticks.',
-          reply: 'Then make the lesson longer and the evening free.' },
-        { id: 'k2', side: 1,
-          full: 'Nobody at work or university will sit beside you. Homework is the first time you manage your own time, and fail, safely.',
-          brief: 'Homework is the first time you manage your own time.',
-          reply: 'Failing safely still means failing every night for years.' }
-      ]
-    }
+  POOLS: [
+    [ // round 1: an even quarrel, three points a side, ten lines
+      {
+        slug: 'phones', question: 'Should phones be banned in school?', budget: 10, min: 6,
+        sides: [
+          { name: 'Ban', side: 'the ban side', says: 'The ban side says', stance: 'Ban them', of: 'the ban' },
+          { name: 'Phones', side: 'the phone side', says: 'The phone side says', stance: 'Let us keep them', of: 'the phones' }
+        ],
+        reasons: [
+          { id: 'b1', side: 0,
+            full: 'Nobody can learn with a buzzing pocket. Take the phones away and whole lessons come back.',
+            brief: 'A buzzing pocket makes lessons impossible.',
+            reply: 'Then take away the buzzing, not the phone. Silent mode exists.' },
+          { id: 'b2', side: 0,
+            full: 'Break time without phones is break time with people. Schools that tried it saw the corridors fill with talk again.',
+            brief: 'Without phones, break time has people in it again.',
+            reply: 'Or it has bored kids staring at walls, counting the minutes.' },
+          { id: 'b3', side: 0,
+            full: 'Half the bullying now happens on a screen, during the school day, where no teacher can see it.',
+            brief: 'Bullying moved onto screens; a ban moves it back where adults can see.',
+            reply: 'It moves it to after four o’clock. The screen comes home.' },
+          { id: 'p1', side: 1,
+            full: 'A phone is a calculator, a dictionary, a camera and a map. Banning it bans every tool a working adult uses.',
+            brief: 'A phone is every tool an adult uses. Banning it is absurd.',
+            reply: 'Adults are not fourteen, and do not have maths next period.' },
+          { id: 'p2', side: 1,
+            full: 'Parents want to reach their kids, and kids want to reach their parents. A ban cuts that line for seven hours a day.',
+            brief: 'A ban cuts the line home for seven hours a day.',
+            reply: 'The school office has had a phone for a hundred years.' },
+          { id: 'p3', side: 1,
+            full: 'You do not learn to handle a thing by having it taken away. School is exactly where to learn to put the phone down.',
+            brief: 'You learn to put a phone down by practising, not by losing it.',
+            reply: 'You also do not learn to swim by being thrown in the deep end.' }
+        ]
+      },
+      {
+        slug: 'cars', question: 'Should cars be banned from the city centre?', budget: 10, min: 6,
+        sides: [
+          { name: 'Ban', side: 'the ban side', says: 'The ban side says', stance: 'Ban them', of: 'the ban' },
+          { name: 'Cars', side: 'the car side', says: 'The car side says', stance: 'Let them drive', of: 'the cars' }
+        ],
+        reasons: [
+          { id: 'b1', side: 0,
+            full: 'Nobody walks or cycles happily beside moving metal. Take the cars out and the street becomes a place rather than a route.',
+            brief: 'A street without cars becomes a place, not a route.',
+            reply: 'A place for whom? For the people who can get there, which is fewer.' },
+          { id: 'b2', side: 0,
+            full: 'Half the air in the centre is exhaust. Every city that has tried a ban measured cleaner air within a year.',
+            brief: 'The air gets cleaner, and quickly; every trial shows it.',
+            reply: 'Cleaner on the closed streets; dirtier on the ring road the cars moved to.' },
+          { id: 'b3', side: 0,
+            full: 'Shops do better, not worse: people on foot stop, browse and come back. Drivers pass through.',
+            brief: 'Shops gain: people on foot stop and browse; drivers pass.',
+            reply: 'Boutiques gain. The shop that sells fridges loses; nobody carries a fridge home on foot.' },
+          { id: 'c1', side: 1,
+            full: 'The old, the ill and the parent with twins and the shopping cannot be told to cycle. For them the car is the city’s front door.',
+            brief: 'For the old, the ill and the laden, the car is the front door.',
+            reply: 'Exemptions and vans cover those. The ban is for the healthy commuter alone in two tonnes of steel.' },
+          { id: 'c2', side: 1,
+            full: 'A ban does not abolish trips, it reroutes them. The traffic goes somewhere, usually the poorer streets just outside the cordon.',
+            brief: 'The traffic does not vanish; it moves to the streets outside.',
+            reply: 'Some of it evaporates: once driving stops being easy, many trips are never made.' },
+          { id: 'c3', side: 1,
+            full: 'Drivers already pay road tax, parking and fuel duty to use their own city. Shutting them out is a tax rise by other means.',
+            brief: 'Drivers have paid for the streets they are being shut out of.',
+            reply: 'Road tax pays for a fraction of the roads; everyone else pays the rest through everything else.' }
+        ]
+      }
+    ],
+    [ // round 2: the short page, six lines
+      {
+        slug: 'pets', question: 'Dogs or cats?', budget: 6, min: 4,
+        sides: [
+          { name: 'Dogs', side: 'the dog side', says: 'The dog side says', stance: 'Dogs', of: 'the dogs' },
+          { name: 'Cats', side: 'the cat side', says: 'The cat side says', stance: 'Cats', of: 'the cats' }
+        ],
+        reasons: [
+          { id: 'd1', side: 0,
+            full: 'A dog is glad you exist, every single time you come through the door. Nothing else on earth does that.',
+            brief: 'A dog is glad you exist, every time.',
+            reply: 'Glad anyone exists. It is not a judgement, it is a reflex.' },
+          { id: 'd2', side: 0,
+            full: 'A dog gets you out of the house twice a day in all weathers, which is more than any gym has managed.',
+            brief: 'A dog gets you out of the house, twice a day.',
+            reply: 'In the rain. At six. For fifteen years.' },
+          { id: 'd3', side: 0,
+            full: 'Dogs do jobs: they herd, guide, and find the lost and the buried. A cat has never found anyone.',
+            brief: 'Dogs work: they guide, herd and rescue.',
+            reply: 'Cats cleared the granaries of rats and made cities possible. Quietly.' },
+          { id: 'c1', side: 1,
+            full: 'A cat asks nothing of you and gives you, on its own terms, something close to respect. You have to earn it.',
+            brief: 'A cat’s affection is earned, so it means something.',
+            reply: 'Earned by feeding it. That is not respect, it is a contract.' },
+          { id: 'c2', side: 1,
+            full: 'A cat can be left alone for a weekend with a bowl and a box. Try that with a labrador.',
+            brief: 'A cat can be left alone with a bowl for a weekend.',
+            reply: 'A cat can be left alone because it does not mind whether you come back.' },
+          { id: 'c3', side: 1,
+            full: 'Cats are clean, quiet and small. They fit a flat, a budget and a city; a dog needs a garden and a van.',
+            brief: 'Cats fit a flat, a budget and a city.',
+            reply: 'So does a dachshund.' }
+        ]
+      },
+      {
+        slug: 'pizza', question: 'Pineapple on pizza?', budget: 6, min: 4,
+        sides: [
+          { name: 'Yes', side: 'the yes side', says: 'The yes side says', stance: 'Yes, obviously', of: 'the pineapple' },
+          { name: 'No', side: 'the no side', says: 'The no side says', stance: 'Never', of: 'the purists' }
+        ],
+        reasons: [
+          { id: 'y1', side: 0,
+            full: 'Sweet against salty is the oldest trick in cooking. Ham and pineapple is a sandwich that went to Italy.',
+            brief: 'Sweet against salty is the oldest trick in cooking.',
+            reply: 'Italy did not invite it. The Hawaiian was invented in Canada.' },
+          { id: 'y2', side: 0,
+            full: 'Millions of people order it every week. A dish that popular is not a mistake, it is a taste you do not share.',
+            brief: 'Millions order it. That is a taste, not a mistake.',
+            reply: 'Millions also order it with a stuffed crust. Popular is not the same as right.' },
+          { id: 'y3', side: 0,
+            full: 'Pizza was street food for the poor and took whatever was cheap. The rules about it are a hundred years younger than pizza.',
+            brief: 'Pizza took whatever was cheap. The rules came later.',
+            reply: 'The rules came from people who have eaten a lot more pizza than you.' },
+          { id: 'n1', side: 1,
+            full: 'Hot fruit leaks. A slice of pineapple turns the crust underneath it into warm wet bread.',
+            brief: 'Hot pineapple turns the crust to warm wet bread.',
+            reply: 'So does a tomato, and nobody complains about tomato.' },
+          { id: 'n2', side: 1,
+            full: 'A pizza is a savoury thing. Fruit on it is a dessert that wandered onto the wrong plate.',
+            brief: 'Pizza is savoury. Fruit on it is dessert on the wrong plate.',
+            reply: 'Tomato is a fruit. Pizza has always been fruit on bread.' },
+          { id: 'n3', side: 1,
+            full: 'If a pizza needs pineapple to be interesting, the pizza was bad. Fix the pizza.',
+            brief: 'If it needs pineapple, the pizza was bad.',
+            reply: 'Or the pizza was fine and you are scared of a new flavour.' }
+        ]
+      }
+    ],
+    [ // round 3: the uneven quarrel, four points against two, ten lines
+      {
+        slug: 'homework', question: 'Should homework be scrapped?', budget: 10, min: 6,
+        sides: [
+          { name: 'Scrap', side: 'the scrap side', says: 'The scrap side says', stance: 'Scrap it', of: 'scrapping it' },
+          { name: 'Keep', side: 'the keep side', says: 'The keep side says', stance: 'Keep it', of: 'keeping it' }
+        ],
+        reasons: [
+          { id: 's1', side: 0,
+            full: 'School already takes seven hours. Homework takes the evening too, and nobody else works a double shift at twelve.',
+            brief: 'Seven hours of school, then an evening shift. Nobody else works that.',
+            reply: 'Half an hour a night is not a shift. It is practice.' },
+          { id: 's2', side: 0,
+            full: 'Homework rewards the kids with a quiet room and a parent who can help. The rest fall further behind every night.',
+            brief: 'Homework rewards a quiet room and a parent who can help.',
+            reply: 'So does everything. Homework at least gives the rest a chance to catch up.' },
+          { id: 's3', side: 0,
+            full: 'The studies agree: in primary school homework does nothing for results, and in secondary school very little.',
+            brief: 'The studies find it does little or nothing for results.',
+            reply: 'Results are not the point. Doing a thing alone, without a teacher, is.' },
+          { id: 's4', side: 0,
+            full: 'What homework mostly teaches is how to copy it from a friend at one minute to nine.',
+            brief: 'It mostly teaches copying from a friend before the bell.',
+            reply: 'That is a lesson about the kid, not about homework.' },
+          { id: 'k1', side: 1,
+            full: 'You cannot learn an instrument, a language or algebra in the lesson alone. The practice between lessons is where it sticks.',
+            brief: 'The practice between lessons is where learning sticks.',
+            reply: 'Then make the lesson longer and the evening free.' },
+          { id: 'k2', side: 1,
+            full: 'Nobody at work or university will sit beside you. Homework is the first time you manage your own time, and fail, safely.',
+            brief: 'Homework is the first time you manage your own time.',
+            reply: 'Failing safely still means failing every night for years.' }
+        ]
+      },
+      {
+        slug: 'office', question: 'Back to the office five days a week?', budget: 10, min: 6,
+        sides: [
+          { name: 'Office', side: 'the office side', says: 'The office side says', stance: 'Back to the office', of: 'the office' },
+          { name: 'Home', side: 'the home side', says: 'The home side says', stance: 'Stay home', of: 'home' }
+        ],
+        reasons: [
+          { id: 'o1', side: 0,
+            full: 'The ideas that matter are had at the coffee machine and in the corridor, not on a scheduled call. You cannot schedule a chance.',
+            brief: 'The good ideas happen in corridors, not on calls.',
+            reply: 'Count them. The corridor’s ideas are mostly gossip; the written ones get read.' },
+          { id: 'o2', side: 0,
+            full: 'New people learn by watching. A twenty-three-year-old on a laptop in a bedsit learns nothing from anyone.',
+            brief: 'The young learn by watching, and there is nobody to watch at home.',
+            reply: 'Then bring the juniors in and leave the rest. A five-day rule for everyone is a blunt tool.' },
+          { id: 'h1', side: 1,
+            full: 'Two hours a day on a train are two hours nobody is paid for. Give them back and people are rested, and work no worse.',
+            brief: 'The commute is unpaid time; give it back.',
+            reply: 'The commute is also where the day begins and ends; without it, work leaks into everything.' },
+          { id: 'h2', side: 1,
+            full: 'Output went up, not down, when the offices closed. The numbers are in; the complaint is about control.',
+            brief: 'Output rose when the offices closed; the complaint is about control.',
+            reply: 'Output of the things already set up. Nothing new got started.' },
+          { id: 'h3', side: 1,
+            full: 'Parents, carers and anyone outside the big city can finally hold a good job. Five days in the office quietly fires them.',
+            brief: 'Five days in the office quietly fires parents and carers.',
+            reply: 'Or hires them part-time, which was always the honest deal.' },
+          { id: 'h4', side: 1,
+            full: 'Empty offices still cost rent. The firm that lets people stay home saves on floors and spends it on people.',
+            brief: 'Offices are rent; home is free.',
+            reply: 'The lease is signed either way; the saving is a slide, not a cheque.' }
+        ]
+      }
+    ]
   ],
 
   // Words the game says. Kept here so the calibration check can read them.
@@ -135,6 +240,9 @@ var CONFIG = {
     split: 'And they do not agree which way, which is halfway to nobody knowing.'
   }
 };
+
+// Every quarrel, flat, for the calibration check.
+CONFIG.QUARRELS = CONFIG.POOLS.reduce(function (a, p) { return a.concat(p); }, []);
 
 // ---------- the page ----------
 
@@ -240,10 +348,15 @@ function statement(q, n, direction) {
 
 // ---------- the game ----------
 
-function newGame() {
-  return { q: 0, stage: 'stance', stance: [null, null, null], page: [], results: [null, null, null], done: false };
+// A game draws one quarrel from each round's pool, from a seed the player can see and replay (?seed=N in the address).
+function rng(seed) { var s = (Math.floor(Math.abs(seed)) % 2147483647) || 1; var f = function () { s = s * 16807 % 2147483647; return (s - 1) / 2147483646; }; f(); f(); f(); return f; } // Park-Miller, warmed up so a small seed does not make a small first draw
+function newGame(seed) {
+  seed = seed === undefined ? 1 : seed;
+  var r = rng(seed), draw = CONFIG.POOLS.map(function (pool) { return Math.floor(r() * pool.length); });
+  return { q: 0, seed: seed, draw: draw, stage: 'stance', stance: [null, null, null], page: [], results: [null, null, null], done: false };
 }
-function quarrel(game) { return CONFIG.QUARRELS[game.q]; }
+function quarrel(game) { return CONFIG.POOLS[game.q][game.draw[game.q]]; }
+function gameQuarrels(game) { return CONFIG.POOLS.map(function (pool, i) { return pool[game.draw[i]]; }); }
 function setStance(game, side) { game.stance[game.q] = side; game.stage = 'write'; game.page = []; return game; }
 
 // Publishing reads the page and records the reading. One page a quarrel: once read, it is final (no revision; the author's call, 24 Nov 2026).
@@ -256,7 +369,7 @@ function publish(game) {
 }
 function next(game) {
   if (game.stage !== 'read') return game;
-  if (game.q === CONFIG.QUARRELS.length - 1) { game.done = true; game.stage = 'end'; return game; }
+  if (game.q === CONFIG.POOLS.length - 1) { game.done = true; game.stage = 'end'; return game; }
   game.q++; game.stage = 'stance'; game.page = []; return game;
 }
 
@@ -269,7 +382,7 @@ function ruleWords(keys) {
 
 // The verdict: headline in words, one line per quarrel, and where the player really stood.
 function verdict(game) {
-  var Q = CONFIG.QUARRELS, clean = 0, quarrels = [], stood = [];
+  var Q = gameQuarrels(game), clean = 0, quarrels = [], stood = [];
   for (var i = 0; i < Q.length; i++) {
     var f = game.results[i], q = Q[i];
     if (f.couldTell === 0) clean++;
@@ -374,6 +487,6 @@ var HEURISTICS = {
 if (typeof module !== 'undefined') module.exports = {
   CONFIG: CONFIG, reasonById: reasonById, speakerOf: speakerOf, linesOf: linesOf, textOf: textOf, pageLines: pageLines, indexOnPage: indexOnPage,
   canPublish: canPublish, addItem: addItem, removeItem: removeItem, moveItem: moveItem, toggleForm: toggleForm, sums: sums, leans: leans,
-  readPage: readPage, statement: statement, newGame: newGame, quarrel: quarrel, setStance: setStance, publish: publish,
+  readPage: readPage, statement: statement, newGame: newGame, quarrel: quarrel, gameQuarrels: gameQuarrels, rng: rng, setStance: setStance, publish: publish,
   next: next, verdict: verdict, enumeratePages: enumeratePages, arrange: arrange, HEURISTICS: HEURISTICS, numberWord: numberWord
 };
