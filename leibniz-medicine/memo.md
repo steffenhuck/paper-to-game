@@ -24,7 +24,7 @@ The author asked for the verdict's doctors as a ladder: you; a doctor just guess
 
 ## 1. Paper
 
-G. W. Leibniz, "On the Way of Perfecting Medicine" (*Sur la manière de perfectionner la médecine*): an extract from a letter to Germain Brice, printed in the *Journal des sçavans*, 26 July 1694, pp. 338–340. Read in Lloyd Strickland's translation (© 2019), two pages with ten notes, supplied as a PDF; the translation is published at leibniz-translations.com (the page could not be reached from the build environment; the author-note says so). No DOI, no data, no code, no figures, no numbers. The game is built from the text alone.
+G. W. Leibniz, "On the Way of Perfecting Medicine" (*Sur la manière de perfectionner la médecine*): an extract from a letter to Germain Brice, printed in the *Journal des sçavans*, 26 July 1694, pp. 338–340. Read in Lloyd Strickland's translation (© 2019), two pages with ten notes, supplied as a PDF; the translation is published at leibniz-translations.com (https://www.leibniz-translations.com/medicine). No DOI, no data, no code, no figures, no numbers. The game is built from the text alone.
 
 ## 2. What the paper hands over
 
