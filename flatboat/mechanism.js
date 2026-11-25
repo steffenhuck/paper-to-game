@@ -3,6 +3,8 @@
 // Kind: toy (memo §16). The one rule the paper states is run as written: a boat carries the weight of the water it could
 // hold. Every other number is ours and tagged below. Revision 2: every push returns a list of frames, one thing happening
 // and one plain sentence each, which the sheet plays slowly; the words are plain (cannonball, cannons, soldiers, tons).
+// Revision 3: the feet of earth a shot needs are never told; a shot that sticks reports how far it went in (the detail
+// view's dimension), and the game keeps what the player has measured, per kind of shot, in state.known.
 (function (root) {
   'use strict';
 
@@ -15,6 +17,7 @@
     MAX_FEET: 6, MAX_GUNS: 3, MAX_MEN: 60, MEN_STEP: 10,   // ours: 60 is the standing room on a flatboat's floor
     // --- what stops what: feet of earth that stop each kind of shot — ours, on the light side of period field works
     STOPS: { musket: 1, light: 2, field: 4 },
+    PEN_SHORT: 0.5,      // a shot that is stopped goes in the feet it needs less this much: the depth the detail view measures — ours
     // --- the day and the rest of the army: "the rest will pass without difficulty" — ours
     PUSHES: 3,           // pushes before dark, each crossing
     FLEET: 5,            // ordinary boats that cross each push once the far shore is safe
@@ -66,7 +69,13 @@
     cr.landings.forEach(function (l) { banks[l.id] = { men: 0, feet: 0, guns: 0, batteryOff: false, held: false }; });
     return { k: k, pushes: 0, banks: banks, across: 0, over: false, restPassed: false, restAt: null, log: [], firstLanded: null, openingDone: !cr.opening };
   }
-  function newGame() { return { crossings: [newCrossing(0), newCrossing(1), newCrossing(2)], current: 0 }; }
+  function newGame() { var known = {}, g = { crossings: [newCrossing(0), newCrossing(1), newCrossing(2)], current: 0, known: known }; g.crossings.forEach(function (s) { s.known = known; }); return g; }
+  function pen(fire) { return CONFIG.STOPS[fire] - CONFIG.PEN_SHORT; }   // how far a stopped shot goes into the earth
+  function learn(state, fire, feet, stopped) {
+    if (!state.known) state.known = {};
+    var k = state.known[fire] || (state.known[fire] = { stuckAt: null, throughAt: 0 });
+    if (stopped) k.stuckAt = pen(fire); else k.throughAt = Math.max(k.throughAt, feet);
+  }
   function landing(cr, id) { for (var i = 0; i < cr.landings.length; i++) if (cr.landings[i].id === id) return cr.landings[i]; return cr.landings[0]; }
   function bankSafe(l, bank) { return bank.held && (!l.battery || bank.batteryOff); }
 
@@ -92,12 +101,14 @@
       if (!safeWater) {
         var stopped = load.feet >= need;
         r.frames.push({ pic: 'fire', text: cap(fire.who) + ' fire at it as it crosses.', stopped: stopped });
+        if (!opts.opening) learn(state, l.fire, load.feet, stopped);
         if (!stopped) {
-          r.outcome = 'through';
-          r.frames.push({ pic: 'through', text: cap(fire.shot) + ' goes straight through ' + (load.feet ? 'the ' + feet(load.feet) + ' of earth and ' : '') + 'the wooden planks. Only ' + feet(need) + ' of earth would stop it' + (load.guns ? '; the ' + guns(load.guns) + ' aboard cannot' : '') + '.' });
-          r.frames.push({ pic: 'back', text: 'A boat that cannonballs go through cannot go on. It turns back. Nobody has landed.' });
+          r.outcome = 'through'; r.depth = null;
+          r.frames.push({ pic: 'through', depth: null, text: cap(fire.shot) + ' goes ' + (load.feet ? 'through your ' + feet(load.feet) + ' of earth and through' : 'straight through') + ' the wooden planks. ' + (load.feet ? 'It takes more than ' + feet(load.feet) + ' of earth to stop ' + fire.shot + '.' : 'Nothing aboard stops it' + (load.guns ? '; a cannon on the water stops no shot' : '') + '.') });
+          r.frames.push({ pic: 'back', text: 'A boat that shots go through cannot go on. It turns back. Nobody has landed.' });
         } else {
-          r.frames.push({ pic: 'stuck', text: cap(fire.shot) + ' hits the heap of earth at the front and sticks in it. ' + cap(feet(load.feet)) + ' of earth is enough: the boat is not hurt.' });
+          r.depth = pen(l.fire);
+          r.frames.push({ pic: 'stuck', depth: r.depth, text: cap(fire.shot) + ' hits the heap of earth at the front and goes ' + feetHalf(r.depth) + ' in before it stops. Your heap is ' + feet(load.feet) + ', so it holds: the boat is not hurt.' });
         }
       } else {
         r.frames.push({ pic: 'quiet', text: 'Nothing fires on the river now: your soldiers hold the far shore.' });
@@ -220,6 +231,16 @@
     return whole + ' and ' + (tenth === 5 ? 'a half' : frac) + ' tons';
   }
   function feet(f) { return f === 1 ? '1 ft' : f + ' ft'; }
+  function feetHalf(f) { var w = Math.floor(f), h = f - w >= .49; return (w ? w : '') + (h ? '\u00bd' : '') + ' ft'; }
+  // what the player knows about a kind of shot, from what they have measured: the sheet's record, never the answer
+  function record(known, fire) {
+    var k = known && known[fire], shot = CONFIG.FIRE[fire].shot;
+    if (!k || (k.stuckAt === null && !k.throughAt)) return { known: false, text: 'earth stops ' + shot + ' if there is enough of it; how much, the sheet does not say' };
+    var p = [];
+    if (k.stuckAt !== null) p.push(shot + ' went ' + feetHalf(k.stuckAt) + ' into earth and stuck');
+    if (k.throughAt) p.push(shot + ' went through ' + feet(k.throughAt) + ' of earth');
+    return { known: true, text: 'measured: ' + p.join('; ') };
+  }
   function men(m) { return m === 0 ? 'no soldiers' : m === 1 ? 'one soldier' : m + ' soldiers'; }
   function guns(g) { return g === 0 ? 'no cannon' : g === 1 ? 'a cannon' : g + ' cannons'; }
   function loadWords(ld) { var p = []; p.push(ld.feet ? feet(ld.feet) + ' of earth' : 'no earth'); p.push(guns(ld.guns)); p.push(men(ld.men)); return p.join(', '); }
@@ -231,10 +252,10 @@
     return p.join(' + ') + ' = ' + tons(w) + ' of ' + H.tuns + (w > H.tuns + 1e-9 ? ' \u2014 it sinks' : '');
   }
   // the earth against the shot fired at a landing: what the sheet says while loading
-  function wallVs(f, fire) { var need = CONFIG.STOPS[fire], shot = CONFIG.FIRE[fire].shot; if (f >= need) return { ok: true, text: 'your ' + feet(f) + ' of earth stops ' + shot }; return { ok: false, text: (f ? 'your ' + feet(f) + ' of earth' : 'no earth') + ': ' + shot + ' goes through; ' + feet(need) + ' would stop it' }; }
+  function wallVs(f, fire, known) { var k = known && known[fire]; if (!k || (k.stuckAt === null && !k.throughAt)) return { ok: null, text: (f ? 'your heap: ' + feet(f) : 'no earth') + ' \u00b7 no shot measured yet' }; var p = []; if (k.stuckAt !== null) p.push('a shot stuck ' + feetHalf(k.stuckAt) + ' in'); if (k.throughAt) p.push('a shot went through ' + feet(k.throughAt)); return { ok: null, text: (f ? 'your heap: ' + feet(f) : 'no earth') + ' \u00b7 ' + p.join(', ') }; }
 
   var M = { CONFIG: CONFIG, weight: weight, hull: hull, floats: floats, draught: draught, newGame: newGame, newCrossing: newCrossing, landing: landing, push: push,
-            loadings: loadings, best: best, crossingVerdict: crossingVerdict, gameVerdict: gameVerdict, sumLine: sumLine, wallVs: wallVs,
-            words: { tons: tons, tuns: tons, feet: feet, men: men, guns: guns, loadWords: loadWords, cap: cap } };
+            loadings: loadings, best: best, crossingVerdict: crossingVerdict, gameVerdict: gameVerdict, sumLine: sumLine, wallVs: wallVs, record: record, pen: pen,
+            words: { tons: tons, tuns: tons, feet: feet, feetHalf: feetHalf, men: men, guns: guns, loadWords: loadWords, cap: cap } };
   if (typeof module !== 'undefined' && module.exports) module.exports = M; else root.FLATBOAT = M;
 })(typeof window !== 'undefined' ? window : this);
