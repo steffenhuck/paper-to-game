@@ -102,7 +102,7 @@
     if (!floats(cr, load)) {
       r.outcome = 'sinks';
       r.frames.push({ pic: 'sink', text: who + ' is loaded with ' + tons(w) + '. The hull holds only ' + tons(H.tuns) + ' of water, so it carries only ' + tons(H.tuns) + '.' });
-      r.frames.push({ pic: 'sunk', text: 'It sinks at the bank before it goes anywhere. The soldiers wade out. Nobody has crossed.' });
+      r.frames.push({ pic: 'sankbank', text: 'It sinks at the bank before it goes anywhere, in shallow water. The soldiers wade out; nobody is hurt, and the boat is raised by evening.' });
     } else {
       r.frames.push({ pic: 'push', text: who + ' pushes off with ' + loadWords(load) + ' aboard.' });
       var safeWater = bankSafe(l, bank);
