@@ -36,31 +36,32 @@ b,strong{font-weight:600}
 .cred a{color:inherit;text-decoration:underline;text-decoration-color:var(--rule)}
 .sig{text-align:center;font-style:italic;font-size:13px;margin-top:22px;color:var(--mute)}.sig a{color:inherit;text-decoration:none}
 /* play */
-.top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px}
+.top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:4px}
 .top .aimline{font-size:14px;font-weight:600;color:var(--mute)}
 .qm{width:38px;height:38px;border:1.5px solid var(--ink);font-size:18px;text-align:center;flex:none;line-height:35px;background:var(--paper)}
 .where{font-size:15px;color:var(--mute);margin-bottom:1px}
 .donow{font-size:22px;line-height:1.1;margin-bottom:4px}
 .tb{display:flex;border:1.5px solid var(--ink);margin:0 0 8px;background:var(--paper)}
-.tb div{flex:1;padding:2px 7px;font-size:12px;color:var(--mute)}
+.tb div{flex:1;padding:1px 7px;font-size:12px;color:var(--mute)}
 .tb div .v{color:var(--ink)}
 .tb div+div{border-left:1.5px solid var(--ink)}
 .tb .v{font-size:17px;line-height:1;margin-top:2px;white-space:nowrap}
 .tb .v2{font-size:11px;line-height:1.1;color:var(--ink);white-space:nowrap}
+.tb .v2.lost{color:var(--red)}
 .sheet{display:block;width:100%;border:1.5px solid var(--ink);background:var(--sheet)}
-.sum{font-size:15px;letter-spacing:0;margin:4px 0 3px;min-height:18px}
+.sum{font-size:15px;letter-spacing:0;margin:3px 0 2px;min-height:18px}
 .notes{font-size:16px;color:var(--mute);line-height:1.35;margin:6px 0 8px}
 .notes b{color:var(--ink);font-weight:600}
-.landings{display:flex;gap:8px;margin:0 0 3px}
+.landings{display:flex;gap:8px;margin:0 0 1px}
 .landings .btn{flex:1;min-height:38px;font-size:15px;padding:4px 6px;margin:0}
 .landings .btn.on{background:var(--ink);color:var(--paper)}
 .dials{display:flex;gap:8px;margin:4px 0 8px}
 .dial{flex:1;border:1.5px solid var(--ink);padding:6px 6px 6px;text-align:center;background:var(--paper)}
 .dial .lab{font-size:15px;color:var(--mute)}
 .dial .val{font-size:32px;line-height:1;margin:2px 0}
-.dial .sub{font-size:13px;color:var(--mute);min-height:26px;line-height:1.2}
+.dial .sub{font-size:13px;color:var(--mute);min-height:22px;line-height:1.2}
 .dial .pm{display:flex;gap:6px;margin-top:4px}
-.dial .pm button{flex:1;min-height:42px;border:1.5px solid var(--ink);font-size:28px;line-height:1;text-align:center;background:var(--paper)}
+.dial .pm button{flex:1;min-height:40px;border:1.5px solid var(--ink);font-size:28px;line-height:1;text-align:center;background:var(--paper)}
 .dial .pm button:disabled{opacity:.3}
 .frame{border:1.5px solid var(--ink);padding:12px 14px;margin:8px 0;font-size:20px;line-height:1.3;min-height:84px;background:var(--paper)}
 .frame .step{font-size:13px;color:var(--mute);margin-bottom:4px}
@@ -140,7 +141,7 @@ b,strong{font-weight:600}
   <div class="top"><div class="aimline">Load the first boat so that its soldiers land, dig in, and make the far shore safe for the rest of the army to follow.</div><button class="qm cond" id="b-help-play" aria-label="How to play">?</button></div>
   <div class="where cond" id="where">Crossing 1 of 3 · Below the Lech</div>
   <div class="donow cond" id="donow">Load the boat, then push off.</div>
-  <div class="tb cond"><div>Pushes left<div class="v" id="tb-pushes">▮▮▮</div></div><div>Across by dark<div class="v" id="tb-across">0</div></div><div>Far shore<div class="v" id="tb-bank">nobody</div><div class="v2" id="tb-bank2"></div></div></div>
+  <div class="tb cond"><div>Pushes left<div class="v" id="tb-pushes">▮▮▮</div></div><div>Across by dark<div class="v" id="tb-across">0</div><div class="v2 lost" id="tb-lost"></div></div><div>Far shore<div class="v" id="tb-bank">nobody</div><div class="v2" id="tb-bank2"></div></div></div>
   <svg class="sheet" id="sheet" viewBox="0 0 340 212" aria-label="The sheet: the river from above, the boat in section"></svg>
   <div class="sum cond" id="sum"></div>
   <div class="landings hide" id="landings"></div>
@@ -156,6 +157,7 @@ b,strong{font-weight:600}
   <div class="result hide" id="result"></div>
   <button class="btn solid cond hide" id="b-next">Load the next boat</button>
   <div class="verdict hide" id="cverdict"></div>
+  <button class="btn solid cond hide" id="b-replay">Play this crossing again</button>
   <button class="btn solid cond hide" id="b-nextcross">Next crossing</button>
 </section>
 
@@ -190,7 +192,9 @@ b,strong{font-weight:600}
     <li><b>Soldiers:</b> a tenth of a ton each, by tens, up to 60. Somebody has to be aboard to carry the sacks ashore.</li>
   </ul>
   <h2 class="cond">Push off</h2>
-  <p>Then the crossing plays out one step at a time: tap Next after each. The boat sets off; the enemy fires; the shot sticks in the earth or goes straight through the earth and the planks, and the detail view shows which and how far; a boat that is shot through turns back with nobody landed; a boat that gets across lands its soldiers, who stack the sacks into a wall and crouch behind it. Nobody dies on this sheet.</p>
+  <p>Then the crossing plays out one step at a time: tap Next after each. The boat sets off; the enemy fires; the shot sticks in the earth or goes straight through the earth and the planks, and the detail view shows which and how far. A cannonball that goes through holes the boat at the water line: it sinks in mid-river with everyone aboard, and the day is lost. Musket shots that go through hit one soldier in six, and the rest, with nothing to crouch behind, are driven back to the boat. A boat that gets across lands its soldiers, who stack the sacks into a wall and crouch behind it.</p>
+  <h2 class="cond">A day lost</h2>
+  <p>When a boat is sunk you choose: play this crossing again, or go on to the next. Playing again starts the river afresh, but the dead stay counted, the attempt is counted, and what you measured is still on the sheet. The verdict counts soldiers across and soldiers lost, and the attempts.</p>
   <h2 class="cond">The rest of the army</h2>
   <p>The rest cross in ordinary boats as soon as nothing on the far shore can fire on the river: enemy cannons have to be driven off by a cannon of yours behind the wall; enemy soldiers with muskets keep away from a wall with your soldiers behind it. Until then the rest wait. There are 3 pushes before dark in each crossing, and no push after.</p>
   <h2 class="cond">Three crossings</h2>
@@ -291,7 +295,7 @@ b,strong{font-weight:600}
     for (var g = 0; g < guns; g++) { x -= 20; s.push(el('g', { transform: 'translate(' + x + ',' + floor + ') scale(1.5)' }, el('use', { href: '#gun', x: -16, y: -18, width: 36, height: 20 }))); x -= 16; }
     // one figure stands for ten soldiers; crouching behind the wall on the shore
     var n = Math.ceil(men / 10), dx = onBank ? 13 : 15, menW = n * dx, xm = x - 6 - menW;
-    for (var i = 0; i < n; i++) s.push(onBank ? el('use', { href: '#crouch', x: xm + i * dx - 1, y: floor - 20, width: 15, height: 20 }) : el('use', { href: '#man', x: xm + i * dx - 1, y: floor - 24, width: 9, height: 25 }));
+    for (var i = 0; i < n; i++) s.push(onBank ? el('use', { href: '#crouch', x: xm + i * dx - 1, y: floor - 20, width: 15, height: 20 }) : el('use', { href: '#man', 'class': 'fig', 'data-x': xm + i * dx + 3.5, x: xm + i * dx - 1, y: floor - 24, width: 9, height: 25 }));
     if (men) s.push(txt(xm + menW / 2 - 2, floor - (onBank ? 24 : 28), men + ' SOLDIERS', { size: 9.5, anchor: 'middle' }));
     return s.join('');
   }
@@ -399,7 +403,7 @@ b,strong{font-weight:600}
     if (k === 0) parts.push('<b>Enemy cannons</b> on the far shore. A cannonball goes straight through wooden planks; a heap of earth at the front stops it <b>if the heap is thick enough</b>, and how thick that is, the sheet does not say. A cannon of yours, once ashore behind a wall of earth, drives the enemy cannons off; then the rest of the army crosses in ordinary boats.');
     if (k === 1) parts.push('The enemy cannons have gone up to the bend. Here only <b>enemy soldiers with muskets</b>: a musket shot goes through planks, and earth stops it if there is enough. Your soldiers behind a wall of earth keep them away; then the rest of the army crosses.');
     if (k === 2) parts.push('<b>Shallow boats</b> here: a hull of 6 tons. Tap a landing. <b>A</b>, opposite the enemy’s small cannons: a small cannonball goes through planks, and earth stops it if there is enough; a cannon of yours ashore behind the wall drives them off. <b>B</b>, a mile upstream, out of reach of their cannons and their mortars: only enemy soldiers with muskets.');
-    parts.push('<span>The dashed line shows how deep the boat sits; past the hull’s tons it sinks. A shot that sticks in the earth shows, in the detail view, how far it went in: that is how you learn how much earth a shot needs. Too much earth costs soldiers; too little costs the push. Three pushes before dark.</span>');
+    parts.push('<span>The dashed line shows how deep the boat sits; past the hull’s tons it sinks at the bank, and nobody is hurt. A shot that sticks in the earth shows, in the detail view, how far it went in: that is how you learn how much earth a shot needs. A cannonball that goes through sinks the boat with everyone aboard, and the day is lost; musket shots that go through hit one soldier in six. Three pushes before dark.</span>');
     return parts.join(' ');
   }
   function landingsUI() {
@@ -412,12 +416,13 @@ b,strong{font-weight:600}
     var left = C.PUSHES - state.pushes, p = ''; for (var i = 0; i < C.PUSHES; i++) p += i < left ? '▮' : '▯';
     $('tb-pushes').textContent = p;
     $('tb-across').textContent = state.across;
+    $('tb-lost').textContent = M.lostAll(state) ? 'lost ' + M.lostAll(state) + (state.attempts > 1 ? ' · attempt ' + state.attempts : '') : (state.attempts > 1 ? 'attempt ' + state.attempts : '');
     var b = state.banks[load.landing], parts = [];
     if (b.feet) parts.push(b.feet + ' ft wall'); if (b.guns) parts.push(b.guns + (b.guns > 1 ? ' cannons' : ' cannon'));
     $('tb-bank').textContent = b.men ? b.men + (b.men === 1 ? ' soldier' : ' soldiers') : 'nobody';
     $('tb-bank2').textContent = parts.join(' · ');
   }
-  function hideAll() { ['frame', 'b-step', 'result', 'b-next', 'cverdict', 'b-nextcross'].forEach(function (id) { $(id).classList.add('hide'); }); }
+  function hideAll() { ['frame', 'b-step', 'result', 'b-next', 'cverdict', 'b-replay', 'b-nextcross'].forEach(function (id) { $(id).classList.add('hide'); }); }
   function startCrossing(kk) {
     k = kk; cr = C.CROSSINGS[k]; state = game.crossings[k]; load = null; resetLoad();
     hideAll(); $('notes').innerHTML = notesHTML(); $('notes').classList.remove('hide');
@@ -463,7 +468,7 @@ b,strong{font-weight:600}
     if (f.pic === 'sink') {
       sheet.innerHTML = planAt(PLAN.near - 8) + sectionSVG(ld); placeWaterLabel();
       var fl = $('flood'); tween(1600, function (p) { fl.setAttribute('opacity', p); var y = SEC.floor - hullDepth() * (1 + .6 * p); $('wline').setAttribute('y1', y); $('wline').setAttribute('y2', y); $('water').setAttribute('y', y); $('wlabel').setAttribute('y', y + 10); $('wlabel0').setAttribute('y', y - 3); });
-    } else if (f.pic === 'sunk') {
+    } else if (f.pic === 'sankbank') {
       bigLabel('SUNK AT THE BANK', RED); var hl = $('hull'); tween(1400, function (p) { hl.setAttribute('transform', 'translate(0,' + (14 * p) + ')'); $('cargo').setAttribute('transform', 'translate(0,' + (14 * p) + ')'); });
       $('damage').innerHTML = wave(SEC.floor - hullDepth() + 2, .9);
     } else if (f.pic === 'push') {
@@ -483,7 +488,22 @@ b,strong{font-weight:600}
     } else if (f.pic === 'through') {
       var ball3 = $('ball'), trail3 = $('trail');
       $('damage').innerHTML = el('path', { d: 'M' + (SEC.right - 4) + ' ' + (SEC.floor - 18) + ' l-4 3 l5 3 l-5 3 l4 3', fill: 'none', stroke: RED, 'stroke-width': 1.8 });
-      tween(2000, function (p) { var x = (SEC.right + 8) - ((SEC.right + 8) - 18) * p; ball3.setAttribute('cx', x); trail3.setAttribute('x2', x); }, function () { bigLabel('STRAIGHT THROUGH', RED); $('damage').innerHTML += el('path', { d: 'M' + (SEC.left + 6) + ' ' + (SEC.floor - 18) + ' l4 3 l-5 3 l5 3 l-4 3', fill: 'none', stroke: RED, 'stroke-width': 1.8 }); $('detail').innerHTML = detailSVG(ld, null, true); $('walllabel').textContent = recordLine(l.fire); });
+      tween(2000, function (p) { var x = (SEC.right + 8) - ((SEC.right + 8) - 18) * p; ball3.setAttribute('cx', x); trail3.setAttribute('x2', x); }, function () {
+        bigLabel(f.lost ? 'THROUGH: ' + f.lost + ' HIT' : 'STRAIGHT THROUGH', RED);
+        $('damage').innerHTML += el('path', { d: 'M' + (SEC.left + 6) + ' ' + (SEC.floor - 18) + ' l4 3 l-5 3 l5 3 l-4 3', fill: 'none', stroke: RED, 'stroke-width': 1.8 });
+        if (f.lost) { var figs = Array.prototype.slice.call(document.querySelectorAll('#cargo use.fig')), nf = Math.max(1, Math.ceil(f.lost / 10)), marks = ''; figs.slice(-nf).forEach(function (u) { var fx = +u.getAttribute('data-x'); marks += el('line', { x1: fx - 6, y1: SEC.floor - 22, x2: fx + 6, y2: SEC.floor - 4, stroke: RED, 'stroke-width': 2 }) + el('line', { x1: fx + 6, y1: SEC.floor - 22, x2: fx - 6, y2: SEC.floor - 4, stroke: RED, 'stroke-width': 2 }); }); $('damage').innerHTML += marks + txt(figs.length ? +figs[figs.length - 1].getAttribute('data-x') + 10 : 200, SEC.floor - 30, f.lost + ' LOST', { size: 11, fill: RED }); }
+        $('detail').innerHTML = detailSVG(ld, null, true); $('walllabel').textContent = recordLine(l.fire); });
+    } else if (f.pic === 'holed') {
+      $('detail').innerHTML = ''; $('ball').setAttribute('opacity', 0); $('trail').setAttribute('opacity', 0);
+      var yw0 = +$('wline').getAttribute('y1');
+      $('damage').innerHTML += el('circle', { cx: SEC.right - 5, cy: yw0, r: 4, fill: 'none', stroke: RED, 'stroke-width': 2 }) + txt(SEC.right - 14, yw0 - 7, 'HOLE', { size: 9, fill: RED, anchor: 'end' });
+      var fl2 = $('flood'); tween(2200, function (p) { fl2.setAttribute('opacity', .2 + .7 * p); });
+      bigLabel('HOLED AT THE WATER LINE', RED);
+    } else if (f.pic === 'sunk') {
+      var dy = 46, parts = ['hull', 'cargo', 'flood', 'damage'];
+      tween(2400, function (p) { parts.forEach(function (id) { var e = $(id); if (e) { e.setAttribute('transform', 'translate(0,' + (dy * ease(p)) + ')'); e.setAttribute('opacity', 1 - .55 * p); } }); }, function () { bigLabel('SUNK: ' + f.lost + ' LOST', RED); });
+      var ps4 = $('pshot'); if (ps4) ps4.setAttribute('opacity', 0);
+      var pb4 = $('pboat'); if (pb4) { pb4.innerHTML = el('line', { x1: -7, y1: -7, x2: 7, y2: 7, stroke: RED, 'stroke-width': 2.2 }) + el('line', { x1: 7, y1: -7, x2: -7, y2: 7, stroke: RED, 'stroke-width': 2.2 }); }
     } else if (f.pic === 'back') {
       var ps2 = $('pshot'); if (ps2) ps2.setAttribute('opacity', 0);
       var pb2 = $('pboat'); tween(1800, function (p) { pb2.setAttribute('transform', 'translate(' + bx + ',' + (PLAN.mid + (PLAN.near - 8 - PLAN.mid) * ease(p)) + ')'); });
@@ -526,21 +546,23 @@ b,strong{font-weight:600}
     $('frame').classList.add('hide'); $('b-step').classList.add('hide');
     var box = $('result'); box.classList.remove('hide');
     if (c.opening) {
-      box.innerHTML = '<p class="big">That was the general’s plan: a boat full of soldiers, and the enemy cannons sent it home.</p><p>A boat of soldiers is a boat of wooden planks, and a cannonball goes straight through planks. Something in the boat has to stop the shot. Now you load: earth, cannons, soldiers, up to 12 tons. Three pushes before dark.</p>';
-      $('donow').textContent = 'The general’s boat came back. Your turn.';
+      box.innerHTML = '<p class="big">That was the general’s plan: a boat full of soldiers, and the enemy cannons sank it with all sixty.</p><p>A boat of soldiers is a boat of wooden planks, and a cannonball goes straight through planks. Something in the boat has to stop the shot. Now you load: earth, cannons, soldiers, up to 12 tons. Three pushes before dark; a sunk boat ends the day.</p>';
+      $('donow').textContent = 'The general’s boat is sunk. Your turn.';
       var nb0 = $('b-next'); nb0.classList.remove('hide'); nb0.textContent = 'Load your boat';
       scrollTo(box); return;
     }
-    var big = r.outcome === 'landed' ? (state.restPassed ? 'Landed, dug in, and the rest of the army crossed.' : 'Landed and dug in. The rest wait.') : r.outcome === 'sinks' ? 'Sank at the bank.' : r.outcome === 'through' ? 'Shot through. Turned back.' : r.outcome === 'nobody' ? 'Nobody aboard. Drifted back.' : 'Landed, but could not stay.';
+    var big = r.outcome === 'landed' ? (state.restPassed ? 'Landed, dug in, and the rest of the army crossed.' : 'Landed and dug in. The rest wait.') : r.outcome === 'sinks' ? 'Sank at the bank. Nobody hurt.' : r.outcome === 'sunk' ? 'Sunk in mid-river. ' + W('cap')(W('men')(r.lost)) + ' lost. The day is lost.' : r.outcome === 'through' ? W('cap')(W('men')(r.lost)) + ' hit. Turned back.' : r.outcome === 'nobody' ? 'Nobody aboard. Drifted back.' : 'Landed, but could not stay.';
     var lines = [];
     lines.push('Push ' + r.push + ': ' + W('loadWords')(r.load) + (cr.landings.length > 1 ? ' at ' + c.l.letter : '') + '. ' + (r.landed ? W('cap')(W('men')(r.load.men)) + ' now on the far shore' + (state.banks[c.l.id].feet ? ' behind ' + W('feet')(state.banks[c.l.id].feet) + ' of earth' : '') + (state.banks[c.l.id].guns ? ', with ' + W('guns')(state.banks[c.l.id].guns) : '') + '.' : 'Nobody landed.'));
-    if (!state.over) lines.push('Across by dark so far: ' + r.acrossTotal + '. ' + r.pushesLeft + (r.pushesLeft === 1 ? ' push' : ' pushes') + ' left before dark.');
+    if (!state.over) lines.push('Across by dark so far: ' + r.acrossTotal + (M.lostAll(state) ? '; lost: ' + M.lostAll(state) : '') + '. ' + r.pushesLeft + (r.pushesLeft === 1 ? ' push' : ' pushes') + ' left before dark.');
+    if (state.lostDay) lines.push('A sunk boat ends the day: the river is theirs. You can play this crossing again, with the dead counted against you, or go on.');
     box.innerHTML = '<p class="big">' + big + '</p>' + lines.map(function (t) { return '<p>' + t + '</p>'; }).join('');
     if (state.over) {
-      $('donow').textContent = state.restPassed ? 'The far shore is safe. Crossing over.' : 'Dark. Crossing over.';
+      $('donow').textContent = state.lostDay ? 'The day is lost. Play it again, or go on.' : state.restPassed ? 'The far shore is safe. Crossing over.' : 'Dark. Crossing over.';
       var v = M.crossingVerdict(state), cv = $('cverdict'); cv.classList.remove('hide');
       cv.innerHTML = '<p class="lead">' + v.lines[0] + '</p>' + v.lines.slice(1).map(function (t) { return '<p>' + t + '</p>'; }).join('') + '<p class="paper">' + v.paperLine + '</p>';
-      var nb = $('b-nextcross'); nb.classList.remove('hide'); nb.textContent = k < 2 ? 'Next crossing · ' + (k + 2) + ' of 3' : 'See the verdict';
+      if (state.lostDay) $('b-replay').classList.remove('hide');
+      var nb = $('b-nextcross'); nb.classList.remove('hide'); nb.textContent = (state.lostDay ? 'Go on · ' : '') + (k < 2 ? (state.lostDay ? 'crossing ' : 'Next crossing · ') + (k + 2) + ' of 3' : (state.lostDay ? 'the verdict' : 'See the verdict'));
     } else {
       $('donow').textContent = 'Load the next boat.';
       var nb2 = $('b-next'); nb2.classList.remove('hide'); nb2.textContent = 'Load the next boat';
@@ -552,19 +574,19 @@ b,strong{font-weight:600}
   // ---------- the end ----------
   function endScreen() {
     var v = M.gameVerdict(game), body = [];
-    $('fate').textContent = v.fate;
+    $('fate').textContent = v.fate + v.cost;
     var maxv = Math.max.apply(null, v.per.map(function (p) { return p.best; }));
     var bars = v.per.map(function (p, i) {
       var y = i * 46, wY = 250 * p.across / maxv, wB = 250 * p.best / maxv;
       return txt(0, y + 9, (i + 1) + ' · ' + C.CROSSINGS[i].title.toUpperCase(), { size: 11 }) +
         el('rect', { x: 0, y: y + 14, width: wB, height: 10, fill: 'none', stroke: INK, 'stroke-width': 1, 'stroke-dasharray': '3 2' }) + txt(wB + 4, y + 23, 'BEST ' + p.best, { size: 10, op: .8 }) +
-        el('rect', { x: 0, y: y + 27, width: Math.max(1, wY), height: 10, fill: EARTH }) + txt(Math.max(1, wY) + 4, y + 36, 'YOU ' + p.across, { size: 10, fill: EARTH });
+        el('rect', { x: 0, y: y + 27, width: Math.max(1, wY), height: 10, fill: EARTH }) + txt(Math.max(1, wY) + 4, y + 36, 'YOU ' + p.across + (p.lost ? ' · LOST ' + p.lost : ''), { size: 10, fill: p.lost ? RED : EARTH });
     }).join('');
     body.push('<div class="sec"><h2 class="cond">What you found · soldiers across by dark</h2><svg class="bars" viewBox="-2 -2 344 ' + (v.per.length * 46) + '">' + bars + '</svg>');
-    body.push('<p>' + W('cap')(W('men')(v.total)) + ' across in all; the most these boats could have put across: ' + v.best + '.</p>');
+    body.push('<p>' + W('cap')(W('men')(v.total)) + ' across in all; the most these boats could have put across: ' + v.best + '.' + (v.lost ? ' Lost on the way: ' + v.lost + '.' : '') + '</p>');
     v.per.forEach(function (p, i) {
       var s = game.crossings[i], fl = s.firstLanded, l = fl ? M.landing(C.CROSSINGS[i], fl.landing) : null;
-      body.push('<p><b>' + C.CROSSINGS[i].title + ':</b> ' + (fl ? 'your first boat to reach the far shore carried ' + W('loadWords')(fl) + (C.CROSSINGS[i].landings.length > 1 ? ' at ' + l.letter : '') + ', on push ' + fl.push + '; ' : 'no boat reached the far shore; ') + (s.restPassed ? 'the rest of the army crossed after push ' + s.restAt + '.' : 'the rest of the army never crossed.') + '</p>');
+      body.push('<p><b>' + C.CROSSINGS[i].title + ':</b> ' + (s.attempts > 1 ? 'played ' + s.attempts + ' times; ' : '') + (fl ? 'your first boat to reach the far shore carried ' + W('loadWords')(fl) + (C.CROSSINGS[i].landings.length > 1 ? ' at ' + l.letter : '') + ', on push ' + fl.push + '; ' : 'no boat reached the far shore; ') + (s.restPassed ? 'the rest of the army crossed after push ' + s.restAt : 'the rest of the army never crossed') + (M.lostAll(s) ? '; ' + W('men')(M.lostAll(s)) + ' lost.' : '.') + '</p>');
     });
     body.push('</div>');
     var parts = v.per.map(function (p, i) { return p.parted && p.parted !== 'That is the paper’s loading.' ? '<p><b>' + C.CROSSINGS[i].title + ':</b> ' + p.parted + '</p>' : ''; }).join('');
@@ -581,6 +603,7 @@ b,strong{font-weight:600}
   $('b-step').onclick = stepFrame;
   $('b-next').onclick = nextBoat;
   $('b-nextcross').onclick = function () { if (k < 2) startCrossing(k + 1); else endScreen(); };
+  $('b-replay').onclick = function () { M.replay(game, k); startCrossing(k); };
   ['feet', 'guns', 'men'].forEach(function (w) { $(w + '-minus').onclick = function () { step(w, -(w === 'men' ? C.MEN_STEP : 1)); }; $(w + '-plus').onclick = function () { step(w, w === 'men' ? C.MEN_STEP : 1); }; });
   function openOv(id) { $(id).classList.add('on'); document.body.classList.add('lock'); $(id).scrollTop = 0; }
   function closeOv(id) { $(id).classList.remove('on'); document.body.classList.remove('lock'); }

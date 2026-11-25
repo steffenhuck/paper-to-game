@@ -23,7 +23,26 @@ function cr(k) { return C.CROSSINGS[k]; }
   var s = M.newCrossing(0), r = M.push(s, { feet: 6, guns: 1, men: 0, landing: 'front' });
   check('an overloaded boat sinks at the bank and the push is lost', r.outcome === 'sinks' && s.across === 0 && s.pushes === 1);
   var o = M.newCrossing(0), ro = M.push(o, { feet: 0, guns: 0, men: 60, landing: 'front' }, { opening: true });
-  check('the general’s opening boat is shot through and changes nothing: no push used, nothing across, the bank untouched', ro.outcome === 'through' && o.pushes === 0 && o.across === 0 && o.banks.front.men === 0 && o.openingDone && ro.frames.length === 4);
+  check('the general’s opening boat is sunk with all sixty and changes nothing: no push used, nothing across, nothing in the tally, the bank untouched', ro.outcome === 'sunk' && ro.lost === 60 && o.pushes === 0 && o.across === 0 && o.lost === 0 && !o.lostDay && o.banks.front.men === 0 && o.openingDone && ro.frames.length === 5);
+  // revision 4: losses, the day lost, the replay
+  var g4 = M.newGame(), s4 = g4.crossings[0], r4a = M.push(s4, { feet: 2, guns: 1, men: 40, landing: 'front' });
+  check('a cannonball through sinks the boat: everyone aboard lost, the day over, nothing across', r4a.outcome === 'sunk' && r4a.lost === 40 && s4.lost === 40 && s4.lostDay && s4.over && s4.across === 0 && r4a.frames.map(function (f) { return f.pic; }).join(',') === 'push,fire,through,holed,sunk');
+  var c4 = M.replay(g4, 0);
+  check('the crossing played again starts afresh but carries the dead, the attempts and the record', c4.pushes === 0 && c4.across === 0 && !c4.over && c4.lost === 0 && c4.lostBefore === 40 && c4.attempts === 2 && c4.known === g4.known && g4.known.field.throughAt === 2 && g4.crossings[0] === c4);
+  M.push(c4, { feet: 4, guns: 1, men: 20, landing: 'front' });
+  var v4 = M.crossingVerdict(c4);
+  check('the verdict of a replayed crossing counts the dead over the attempts', v4.across === 620 && v4.lost === 40 && v4.attempts === 2 && /Lost on the way: 40 soldiers, over 2 attempts/.test(v4.lines[0]), v4.lines[0]);
+  var s5 = g4.crossings[1], r5 = M.push(s5, { feet: 0, guns: 0, men: 60, landing: 'front' });
+  check('musket fire through costs one in six and drives the rest back; the day goes on', r5.outcome === 'through' && r5.lost === 10 && s5.lost === 10 && !s5.over && !s5.lostDay && s5.across === 0 && r5.frames.map(function (f) { return f.pic; }).join(',') === 'push,fire,through,back');
+  var r5b = M.push(s5, { feet: 0, guns: 0, men: 10, landing: 'front' }); check('one in six rounds up: 10 soldiers lose 2', r5b.lost === 2);
+  var s6 = g4.crossings[2], r6 = M.push(s6, { feet: 1, guns: 0, men: 40, landing: 'front' });
+  check('a small cannonball through sinks the shallow boat too', r6.outcome === 'sunk' && s6.lostDay && s6.lost === 40);
+  M.replay(g4, 2); M.push(g4.crossings[2], { feet: 1, guns: 0, men: 40, landing: 'up' });
+  var gv4 = M.gameVerdict(g4);
+  check('the game verdict adds the cost: men lost and crossings played again', gv4.lost === 92 && gv4.attempts === 5 && /It cost 92 soldiers, and 2 crossings played again/.test(gv4.cost), gv4.cost);
+  var gv5 = (function () { var g = M.newGame(); g.crossings.forEach(function (s, k) { M.push(s, M.best(k).first); }); return M.gameVerdict(g); })();
+  check('a perfect game costs nobody', gv5.lost === 0 && gv5.cost === ' Not a man lost.');
+  check('the bests are unchanged by the losses (no best path loses anyone)', M.best(0).across === 620 && M.best(1).across === 660 && M.best(2).across === 640);
 })();
 
 // 2. the best loadings
@@ -75,7 +94,7 @@ function cr(k) { return C.CROSSINGS[k]; }
   check('the paper’s loading sent at the battery with a shallow boat cannot carry the cannon and any soldiers, so it goes without: dug in, and the rest wait (60 < 640)', res['the paper (just enough wall, a gun where there is a battery, then men)'][2] === 60);
   check('the crossing-1 recipe everywhere: best in 1, short in 2 (four feet where one would do: 20 men instead of 60), sinks in 3', res['the crossing-1 recipe everywhere (4 ft, a gun, 20 men)'][0] === bests[0] && res['the crossing-1 recipe everywhere (4 ft, a gun, 20 men)'][1] === 620 && res['the crossing-1 recipe everywhere (4 ft, a gun, 20 men)'][2] === 0);
   check('the paper, upstream where offered: best everywhere', res['the paper, and upstream where offered'].every(function (x, k) { return x === bests[k]; }));
-  check('learning costs one push: ' + res['learns: wrong once, then the paper'].join('/') + ' against ' + bests.join('/'), res['learns: wrong once, then the paper'].every(function (x, k) { return x === bests[k] - C.FLEET * C.OPEN_BOAT; }));
+  check('learning the hard way: a boat of cannons and soldiers at the battery sinks and the day is lost (0); under muskets it costs a push (360); the shallow boat overloaded sinks at the bank and the day goes on (340): ' + res['learns: wrong once, then the paper'].join('/'), res['learns: wrong once, then the paper'].join('/') === '0/360/340');
   check('some way of playing goes wrong in every crossing, for a reason the paper names', [0, 1, 2].every(function (k) { return Object.keys(H).some(function (n) { return res[n][k] < bests[k]; }); }));
   // every dial option is taken by some sensible loading in some crossing
   var bestsAll = [0, 1, 2].map(function (k) { return M.best(k).firsts; }).reduce(function (a, b) { return a.concat(b); }, []);
@@ -146,7 +165,7 @@ function cr(k) { return C.CROSSINGS[k]; }
   var allText = []; [0, 1, 2].forEach(function (k) { M.loadings(cr(k)).forEach(function (ld) { var st = M.newCrossing(k); var rr = M.push(st, ld); if (rr.outcome === 'through') allText.push(rr.frames.map(function (f) { return f.text; }).join(' ')); }); });
   check('no through-shot frame ever names the feet the shot needs (' + allText.length + ' through shots)', allText.every(function (t) { return !/would stop|needs \d|only \d/i.test(t); }));
   var fr2 = M.push(M.newCrossing(0), { feet: 0, guns: 2, men: 40, landing: 'front' }).frames.map(function (f) { return f.pic; });
-  check('a boat of cannons and soldiers plays as: push, fire, through, back', fr2.join(',') === 'push,fire,through,back', fr2.join(','));
+  check('a boat of cannons and soldiers plays as: push, fire, through, holed, sunk', fr2.join(',') === 'push,fire,through,holed,sunk', fr2.join(','));
 })();
 
 out.push(''); out.push(fails ? fails + ' FAILED' : 'ALL PASSED (' + out.filter(function (l) { return l.indexOf('PASS') === 0; }).length + ' checks)');
