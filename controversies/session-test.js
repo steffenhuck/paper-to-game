@@ -29,9 +29,13 @@ const { chromium } = require('playwright'); const path = require('path'); const 
   await page.click('#b-help-start'); await page.waitForTimeout(300); await shot('help', true); await page.click('#help [data-close]'); await page.waitForTimeout(200);
   await page.click('#b-begin'); await page.waitForTimeout(300); await shot('choose'); await hscroll('choose');
   log.push('choose: ' + await page.$$eval('#pools .pk', es => es.map(e => (e.classList.contains('on') ? '[x] ' : '[ ] ') + e.textContent).join(' | ')));
-  if ((await page.$$('#pools .pk')).length !== 9 || (await page.$$('#pools .pk.on')).length !== 3) errors.push('the chooser should show nine quarrels with three picked');
+  if ((await page.$$('#pools .pk')).length !== 9 || (await page.$$('#pools .pk.on')).length !== 0) errors.push('the chooser should show nine quarrels with none picked');
+  if (!(await page.$eval('#b-start', e => e.disabled))) errors.push('Write these up should be disabled before three are picked');
+  await page.click('.pk[data-round="0"][data-idx="1"]'); await page.waitForTimeout(80); log.push('  after one pick: ' + await txt('#chnow') + ' | disabled: ' + await page.$eval('#b-start', e => e.disabled)); await shot('choose-one');
+  if (!(await page.$eval('#b-start', e => e.disabled))) errors.push('Write these up should still be disabled after one pick');
   const sb = await page.evaluate(() => document.getElementById('b-start').getBoundingClientRect().bottom); log.push('  Write these up bottom at ' + Math.round(sb) + ' px'); if (sb > 760) errors.push('the chooser does not fit a phone screen');
-  await pick(['phones', 'pets', 'homework']); await shot('choose-picked'); log.push('  picked: ' + await page.$$eval('#pools .pk.on', es => es.map(e => e.textContent).join(' | ')));
+  await pick(['phones', 'pets', 'homework']); await shot('choose-picked'); log.push('  picked: ' + await page.$$eval('#pools .pk.on', es => es.map(e => e.textContent).join(' | ')) + ' | ' + await txt('#chnow'));
+  if ((await page.$$('#pools .pk.on')).length !== 3 || (await page.$eval('#b-start', e => e.disabled))) errors.push('three picks should light three slabs and enable the button');
   await page.click('#b-start'); await page.waitForTimeout(300); await shot('stance'); await hscroll('stance');
   log.push('stance: ' + await txt('#stq') + ' | ' + await txt('#stno') + ' | ' + await txt('#b-st0') + ' / ' + await txt('#b-st1') + ' / ' + await txt('#b-st2'));
   if ((await txt('#stq')).indexOf('phones') < 0) errors.push('the pick should give the phones quarrel first');
@@ -82,8 +86,8 @@ const { chromium } = require('playwright'); const path = require('path'); const 
 
   // session B: clean, by the mirror with the ends split; in the uneven quarrel one office reason brief with three home reasons brief and every reply
   await page.click('#b-again'); await page.waitForTimeout(300);
-  await page.click('#b-start'); await page.waitForTimeout(200);
-  log.push('B: a fresh draw, seed ' + await page.evaluate(() => window.__game.seed) + ': ' + await page.evaluate(() => gameQuarrels(window.__game).map(q => q.slug).join(',')));
+  await pick(['cars', 'seasons', 'votes']); await page.click('#b-start'); await page.waitForTimeout(200);
+  log.push('B: ' + await page.evaluate(() => gameQuarrels(window.__game).map(q => q.slug).join(',')));
   for (let k = 0; k < 3; k++) {
     await page.evaluate(s => window.__api.stance(s), [0, 1, null][k]); await page.waitForTimeout(200);
     await page.evaluate(() => { const q = quarrel(window.__game); const fair = enumeratePages(q).filter(x => x.reading.couldTell === 0); window.__api.setPage(fair[Math.floor(fair.length / 2)].page); }); await page.waitForTimeout(150);
@@ -105,7 +109,7 @@ const { chromium } = require('playwright'); const path = require('path'); const 
   await shot(tag + '-end', true); log.push(tag.toUpperCase() + ' END: ' + await txt('#vhead') + ' | ' + await txt('#vdraw'));
   }
   // session C: the partisan, for side 0 every time, declared for side 1
-  await page.click('#b-again'); await page.waitForTimeout(300); await page.click('#b-start'); await page.waitForTimeout(200);
+  await page.click('#b-again'); await page.waitForTimeout(300); await pick(['uniforms', 'pizza', 'office']); await page.click('#b-start'); await page.waitForTimeout(200);
   for (let k = 0; k < 3; k++) {
     await page.evaluate(() => window.__api.stance(1)); await page.waitForTimeout(150);
     const ids = await page.evaluate(() => quarrel(window.__game).reasons.map(r => [r.id, r.side]));

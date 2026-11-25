@@ -22,7 +22,7 @@ var CONFIG = {
   ],
 
   // The quarrels, written for the game (Leibniz's was the Church: A IV 3, 212, note 1): three rounds, three quarrels a round;
-  // a game draws one per round as a default and the player may swap it on the first screen (revision 4). Side 0 is drawn violet, side 1 tangerine. budget: lines on the page (ploy 2, "disputes expand into
+  // the player picks one per round on the first screen (revision 4; no defaults since revision 5). Side 0 is drawn violet, side 1 tangerine. budget: lines on the page (ploy 2, "disputes expand into
   // volumes", turned into a constraint). min: the fewest lines the readers will read as a report (our choice: keeps the
   // empty page from passing). A point has a full form and a short form, both its own side's words; its reply is the other
   // side's one line.
@@ -447,16 +447,14 @@ function statement(q, n, direction) {
 
 // ---------- the game ----------
 
-// A game draws one quarrel from each round's pool as its default, from a seed; the player may swap any of the three on
-// the first screen (choose), then the game starts (start) and the draw is fixed.
-function rng(seed) { var s = (Math.floor(Math.abs(seed)) % 2147483647) || 1; var f = function () { s = s * 16807 % 2147483647; return (s - 1) / 2147483646; }; f(); f(); f(); return f; } // Park-Miller, warmed up so a small seed does not make a small first draw
-function newGame(seed) {
-  seed = seed === undefined ? 1 : seed;
-  var r = rng(seed), draw = CONFIG.POOLS.map(function (pool) { return Math.floor(r() * pool.length); });
-  return { q: 0, seed: seed, draw: draw, stage: 'choose', stance: [null, null, null], page: [], results: [null, null, null], done: false };
+// A game is three quarrels, one from each round's pool, all three picked by the player on the first screen (no defaults:
+// the author's call, 25 Nov 2026); the game starts only when all three are picked, and nothing can be swapped after.
+function newGame() {
+  return { q: 0, draw: [null, null, null], stage: 'choose', stance: [null, null, null], page: [], results: [null, null, null], done: false };
 }
 function choose(game, round, idx) { if (game.stage !== 'choose' || !CONFIG.POOLS[round] || !CONFIG.POOLS[round][idx]) return game; game.draw[round] = idx; return game; }
-function start(game) { if (game.stage !== 'choose') return game; game.stage = 'stance'; return game; }
+function canStart(game) { return game.stage === 'choose' && game.draw.every(function (d) { return d !== null; }); }
+function start(game) { if (!canStart(game)) return game; game.stage = 'stance'; return game; }
 function quarrel(game) { return CONFIG.POOLS[game.q][game.draw[game.q]]; }
 function gameQuarrels(game) { return CONFIG.POOLS.map(function (pool, i) { return pool[game.draw[i]]; }); }
 function setStance(game, side) { if (game.stage !== 'stance') return game; game.stance[game.q] = side; game.stage = 'write'; game.page = []; return game; }
@@ -589,6 +587,6 @@ var HEURISTICS = {
 if (typeof module !== 'undefined') module.exports = {
   CONFIG: CONFIG, reasonById: reasonById, speakerOf: speakerOf, linesOf: linesOf, textOf: textOf, pageLines: pageLines, indexOnPage: indexOnPage,
   canPublish: canPublish, addItem: addItem, removeItem: removeItem, moveItem: moveItem, toggleForm: toggleForm, sums: sums, leans: leans,
-  readPage: readPage, statement: statement, newGame: newGame, choose: choose, start: start, quarrel: quarrel, gameQuarrels: gameQuarrels, rng: rng, setStance: setStance, publish: publish,
+  readPage: readPage, statement: statement, newGame: newGame, choose: choose, canStart: canStart, start: start, quarrel: quarrel, gameQuarrels: gameQuarrels, setStance: setStance, publish: publish,
   next: next, verdict: verdict, enumeratePages: enumeratePages, arrange: arrange, HEURISTICS: HEURISTICS, numberWord: numberWord
 };

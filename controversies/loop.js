@@ -2,7 +2,7 @@
 // mechanism, one page a quarrel (no revision stage), printing after each action what changed and where the player now
 // stands. Output in loop-log.txt.
 var M = require('./mechanism.js'), C = M.CONFIG;
-var g = M.newGame(1), log = []; M.choose(g, 0, 0); M.choose(g, 1, 0); M.choose(g, 2, 0); M.start(g); // phones, pets, homework
+var g = M.newGame(), log = []; M.choose(g, 0, 0); M.choose(g, 1, 0); M.choose(g, 2, 0); M.start(g); // phones, pets, homework
 function say(s) { log.push(s); console.log(s); }
 function show(q, page) { return page.map(function (it) { return q.sides[M.speakerOf(q, it)].name + (it.kind === 'reply' ? ' (reply)' : ' ' + it.form) + ': ' + M.textOf(q, it).slice(0, 40) + '…'; }).join('\n     ') + '\n     [' + M.pageLines(q, page) + ' of ' + q.budget + ' lines; publish ' + (M.canPublish(q, page) ? 'open' : 'closed') + ']'; }
 function add(id, kind) { var q = M.quarrel(g), a = M.addItem(q, g.page, id, kind); if (a.error) say('  + ' + id + ' ' + kind + ' → refused: ' + a.error); else { g.page = a.page; say('  + ' + id + ' ' + kind + ' → on the page, ' + a.note); } }

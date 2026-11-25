@@ -93,7 +93,8 @@ ok   readers’ calls: ours / theirs / can’t tell
 ok   a clean game ends done, with the all-clear headline — No reader could tell. Twenty-four partisans read you, and not one could place you.
 ok   a clean game: every quarrel line says no reader could tell — Should phones be banned in school? Your page gave the readers nothing: no reader could tell.
 ok   a clean game on the other draws too
-ok   choosing works before start and not after; an index outside the pool is ignored
+ok   nothing is picked at the start; the game cannot start until all three are picked; an index outside the pool is ignored
+ok   choosing works before start and not after
 ok   the stance cannot be set before the game starts
 ok   one page a quarrel: a second publish in the same quarrel is refused
 ok   next before publishing does nothing
@@ -103,9 +104,7 @@ ok   a partisan game: found out / bent over backwards — You are for the ban, a
 ok   a mixed game: headline counts the quarrels the readers could tell — The readers could tell in two of your three quarrels.
 ok   a mixed game: the quarrel line names what caught the page — Should homework be scrapped? Your page was placed by two (what you left out), with keeping it.
 ok   no decimals in any word the game says
-ok   over 30000 seeds each quarrel is the default pick between 30 and 37 per cent of the time — [[10000,10000,10000],[10000,10003,9997],[10000,9999,10001]]
-ok   the same seed gives the same draw; neighbouring seeds differ somewhere
-ok   a game has three different rounds whatever the seed, and the end names its three quarrels
+ok   every one of the 27 picks gives three quarrels with the round’s budget
 ok   phones: with a share-counting left-out reader, fair pages still exist (866), 866 of them fair under both rules
 ok   cars: with a share-counting left-out reader, fair pages still exist (866), 866 of them fair under both rules
 ok   uniforms: with a share-counting left-out reader, fair pages still exist (866), 866 of them fair under both rules
