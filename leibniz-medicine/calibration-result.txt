@@ -26,12 +26,16 @@ PASS an unknown remedy is refused
        oracle            50   by year: 5 5 5 5 5 5 5 5 5 5
        readerFrom1690    63   by year: 18 5 5 5 5 5 5 5 5 5
        reader            116   by year: 18 12 27 13 22 5 5 5 5 5
+       ownEvidence       131   by year: 18 12 19 12 18 18 5 5 12 12
        memory            189   by year: 18 12 27 13 22 19 19 23 18 18
+       guess             181   by year: 18 18 18 18 17 19 19 17 19 18
        bark              189   by year: 19 19 18 18 20 20 19 18 20 20
        bleeding          182   by year: 19 19 18 18 17 17 19 18 17 17
        rest              179   by year: 17 17 19 19 17 18 17 19 17 18
 PASS order: oracle < collection from 1690 < collection from 1694 < memory alone  — 50 < 63 < 116 < 189
 PASS oracle loses exactly fifty
+PASS the verdict ladder: omniscient < registers since 1690 < own evidence < guessing  — 50 < 63 < 131 < 181
+PASS the reader beats the own-evidence doctor, and only after 1694  — 116 < 131
 PASS the reader loses five every winter from 1695: near perfect information
 PASS the reader is the memory doctor until 1694
 PASS the memory doctor loses most on the lookalike winters 1692 and 1697  — 18 12 27 13 22 19 19 23 18 18
