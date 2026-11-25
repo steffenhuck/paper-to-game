@@ -8,7 +8,8 @@ const { chromium } = require('playwright'); const path = require('path'); const 
   const page = await browser.newPage({ viewport: { width: 380, height: 760 }, deviceScaleFactor: 1 });
   const errors = [], log = [];
   page.on('pageerror', e => errors.push(e.message)); page.on('console', m => { if (m.type() === 'error' && m.text().indexOf('Failed to load resource') < 0) errors.push(m.text()); });
-  await page.goto('file://' + path.resolve(__dirname, 'leibnizs-even-hand.html')); await page.waitForTimeout(600);
+  const url = 'file://' + path.resolve(__dirname, 'leibnizs-even-hand.html');
+  await page.goto(url + '?seed=14'); await page.waitForTimeout(600); // seed 14 draws phones, pets, homework (checked in calibration.js)
   const shot = (n, full) => page.screenshot({ path: path.join(__dirname, 'screenshot-' + n + '.png'), fullPage: !!full });
   const hscroll = async (where) => { if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) errors.push('horizontal scroll at ' + where); };
   const txt = (sel) => page.$eval(sel, e => e.textContent.trim());
@@ -26,7 +27,8 @@ const { chromium } = require('playwright'); const path = require('path'); const 
   await shot('start', true); await hscroll('start');
   await page.click('#b-help-start'); await page.waitForTimeout(300); await shot('help', true); await page.click('#help [data-close]'); await page.waitForTimeout(200);
   await page.click('#b-begin'); await page.waitForTimeout(300); await shot('stance'); await hscroll('stance');
-  log.push('stance: ' + await txt('#stq') + ' | ' + await txt('#b-st0') + ' / ' + await txt('#b-st1') + ' / ' + await txt('#b-st2'));
+  log.push('stance: ' + await txt('#stq') + ' | ' + await txt('#stno') + ' | ' + await txt('#stdraw') + ' | ' + await txt('#b-st0') + ' / ' + await txt('#b-st1') + ' / ' + await txt('#b-st2'));
+  if ((await txt('#stq')).indexOf('phones') < 0) errors.push('seed 14 should draw the phones quarrel first');
   await page.click('#b-st0'); await page.waitForTimeout(300); await hscroll('write 1'); await shot('a-1-empty'); await shot('a-1-empty-full', true);
   log.push('write 1: ' + await txt('#wno') + ' | ' + await txt('#now') + ' | ' + await txt('#bt'));
   // the ban-heavy page of memo §9, with every tool tried on the way
@@ -68,25 +70,31 @@ const { chromium } = require('playwright'); const path = require('path'); const 
   const r3 = await publish('a-3'); if (r3.caught.join() !== 'leftout') errors.push('quarrel 3 mirror of counts should be caught by the left-out readers alone: ' + r3.caught.join());
   await hscroll('reading'); await page.click('#b-next'); await page.waitForTimeout(400); await hscroll('end'); await shot('a-end', true);
   log.push('END: ' + await txt('#vhead')); log.push('  found: ' + await page.$$eval('#vfound p', es => es.map(e => e.textContent).join(' // '))); log.push('  stood: ' + await page.$$eval('#vstood p', es => es.map(e => e.textContent).join(' // ')));
-  log.push('  part: ' + await txt('#vpart')); log.push('  had: ' + await txt('#vhad'));
+  log.push('  part: ' + await txt('#vpart')); log.push('  had: ' + await txt('#vhad')); log.push('  draw: ' + await txt('#vdraw'));
+  if ((await txt('#vdraw')).indexOf('?seed=14') < 0) errors.push('the end screen should name the seed');
   await page.click('#b-about'); await page.waitForTimeout(300); await shot('about', true); await page.click('#about [data-close]'); await page.waitForTimeout(200);
 
   // session B: clean, by the mirror with the ends split; in the uneven quarrel one office reason brief with three home reasons brief and every reply
   await page.click('#b-again'); await page.waitForTimeout(300);
-  const clean = [
-    [0, [['b1', 'reason'], ['p1', 'reason'], ['b2', 'reason'], ['p2', 'reason'], ['p1', 'reply'], ['b1', 'reply'], ['p2', 'reply'], ['b2', 'reply']], [[0, 'form'], [1, 'form']]],
-    [1, [['d1', 'reason'], ['c1', 'reason'], ['c1', 'reply'], ['d1', 'reply']], []],
-    [null, [['s1', 'reason'], ['s2', 'reason'], ['s3', 'reason'], ['k1', 'reason'], ['k1', 'reply'], ['s1', 'reply'], ['s2', 'reply'], ['s3', 'reply']], [[0, 'form'], [1, 'form'], [2, 'form'], [3, 'form']]]
-  ];
+  log.push('B: a fresh draw, seed ' + await page.evaluate(() => window.__game.seed) + ': ' + await page.evaluate(() => gameQuarrels(window.__game).map(q => q.slug).join(',')));
   for (let k = 0; k < 3; k++) {
-    await page.evaluate(s => window.__api.stance(s), clean[k][0]); await page.waitForTimeout(200);
-    const briefs = clean[k][2].map(x => x[0]);
-    for (const [id, kind] of clean[k][1]) { await add(id, kind); const n = await page.evaluate(() => window.__game.page.length); const it = await page.evaluate(() => window.__game.page[window.__game.page.length - 1]); if (kind === 'reason' && briefs.indexOf(n - 1) >= 0 && it.form === 'full') await act(n - 1, 'form'); }
+    await page.evaluate(s => window.__api.stance(s), [0, 1, null][k]); await page.waitForTimeout(200);
+    await page.evaluate(() => { const q = quarrel(window.__game); const fair = enumeratePages(q).filter(x => x.reading.couldTell === 0); window.__api.setPage(fair[Math.floor(fair.length / 2)].page); }); await page.waitForTimeout(150);
+    await shot('b-' + (k + 1) + '-page');
     const d = await publish('b-' + (k + 1)); log.push('B quarrel ' + (k + 1) + ': ' + d.statement + ' | ' + d.readers.map(x => x.sum).filter((x, i) => i % 2 === 0).join(' | '));
     if (d.couldTell !== 0) errors.push('B quarrel ' + (k + 1) + ' should be clean: ' + d.readers.map(x => x.text).join(' || '));
     await page.click('#b-next'); await page.waitForTimeout(300);
   }
   await shot('b-end', true); log.push('B END: ' + await txt('#vhead') + ' | ' + await txt('#vpart'));
+  // session D: the other draw (seed 13: cars, pizza, office), the partisan page of each via the API, every screen shot
+  await page.goto(url + '?seed=13'); await page.waitForTimeout(500); await page.click('#b-begin'); await page.waitForTimeout(300);
+  for (let k = 0; k < 3; k++) {
+    log.push('D quarrel ' + (k + 1) + ': ' + await txt('#stq')); await shot('d-' + (k + 1) + '-stance'); await page.click('#b-st1'); await page.waitForTimeout(300); await hscroll('D write ' + (k + 1)); await shot('d-' + (k + 1) + '-empty-full', true);
+    await page.evaluate(() => window.__api.setPage(HEURISTICS.partisan(quarrel(window.__game), 0))); await page.waitForTimeout(150); await shot('d-' + (k + 1) + '-page');
+    const d = await publish('d-' + (k + 1)); if (d.direction !== 0) errors.push('D quarrel ' + (k + 1) + ' partisan page should lean to side 0'); await page.click('#b-next'); await page.waitForTimeout(300);
+  }
+  await shot('d-end', true); log.push('D END: ' + await txt('#vhead') + ' | ' + await page.$$eval('#vfound p', es => es.map(e => e.textContent.slice(0, 60)).join(' // ')));
+  if ((await txt('#vfound')).indexOf('office') < 0) errors.push('seed 13 should end on the office quarrel');
   // session C: the partisan, for side 0 every time, declared for side 1
   await page.click('#b-again'); await page.waitForTimeout(300);
   for (let k = 0; k < 3; k++) {

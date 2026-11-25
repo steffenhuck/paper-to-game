@@ -1,12 +1,14 @@
 // calibration.js — the headless check for Leibniz's Even Hand (build.md §2–3). The text has no numbers, so the check
 // verifies that the mechanism does what the memo and the screens say it does: the four readers' rules against an
-// independent count; the page's invariants; every page of every quarrel enumerated, with the fair pages counted and
-// their shape confirmed; the obvious ways of playing and where each goes wrong; the words; and whether the central
-// discovery survives changes to the designer's choices. Exit code 1 on any failure.
+// independent count; the page's invariants; every page of every quarrel (six, in three pools of two) enumerated, with the
+// fair pages counted and their shape confirmed; the lessons of each round; the obvious ways of playing and where each
+// goes wrong; the words; the draw's shape over thousands of seeds; and whether the central discovery survives changes
+// to the designer's choices. Exit code 1 on any failure.
 var M = require('./mechanism.js'), C = M.CONFIG;
 var fails = 0, out = [];
 function say(s) { out.push(s); console.log(s); }
 function check(name, ok, detail) { say((ok ? 'ok   ' : 'FAIL ') + name + (detail ? ' — ' + detail : '')); if (!ok) fails++; }
+function bySlug(slug) { return C.QUARRELS.filter(function (q) { return q.slug === slug; })[0]; }
 var NR = C.READERS.length * 2;
 
 // ---- 1. the readers' rules against an independent count, on random pages ----
@@ -41,23 +43,25 @@ function randomPage(q) {
 }
 var agree = 0, tried = 0, overBudget = 0, orphan = 0;
 C.QUARRELS.forEach(function (q) {
-  for (var i = 0; i < 400; i++) {
+  for (var i = 0; i < 300; i++) {
     var page = randomPage(q), L = M.leans(M.sums(q, page)), I = independent(q, page); tried++;
     if (L.lines === I.lines && L.leftout === I.leftout && L.unanswered === I.unanswered && L.ends === I.ends) agree++;
     if (M.pageLines(q, page) > q.budget) overBudget++;
     page.forEach(function (it) { if (it.kind === 'reply' && M.indexOnPage(page, it.id, 'reason') < 0) orphan++; });
     var R = M.readPage(q, page), n = R.readers.filter(function (x) { return x.placed !== null; }).length;
     if (n !== R.couldTell) fails++;
-    for (var k = 0; k < C.READERS.length; k++) if (R.readers[2 * k].placed !== R.readers[2 * k + 1].placed) fails++; // both sides' readers of one rule read the same lean
+    for (var k = 0; k < C.READERS.length; k++) if (R.readers[2 * k].placed !== R.readers[2 * k + 1].placed) fails++;
   }
 });
-check('four rules agree with an independent count on ' + tried + ' random pages', agree === tried, agree + ' of ' + tried);
+check('four rules agree with an independent count on ' + tried + ' random pages over six quarrels', agree === tried, agree + ' of ' + tried);
 check('no random page ever exceeds its budget', overBudget === 0);
 check('no reply ever sits on a page without its point', orphan === 0);
 check('eight readers, two per rule', NR === 8 && M.readPage(C.QUARRELS[0], []).readers.length === 8);
+check('six quarrels in three pools of two; every id unique within its quarrel', C.POOLS.length === 3 && C.POOLS.every(function (p) { return p.length === 2; }) && C.QUARRELS.every(function (q) { var ids = q.reasons.map(function (r) { return r.id; }); return ids.length === new Set(ids).size; }));
+check('each pool’s two quarrels have the same budget and minimum', C.POOLS.every(function (p) { return p[0].budget === p[1].budget && p[0].min === p[1].min; }));
 
 // ---- 2. the page's invariants ----
-var q1 = C.QUARRELS[0], p = [];
+var q1 = bySlug('phones'), p = [];
 check('a reply cannot go on before its point', !!M.addItem(q1, p, 'b1', 'reply').error);
 p = M.addItem(q1, p, 'b1', 'reason').page; check('a point goes on in full when there is room', p[0].form === 'full');
 p = M.addItem(q1, p, 'b1', 'reply').page; check('its reply goes on after it', p.length === 2 && p[1].kind === 'reply');
@@ -80,99 +84,103 @@ C.QUARRELS.forEach(function (q) {
   check(q.slug + ': ' + all.length + ' page shapes within ' + q.min + '–' + q.budget + ' lines, ' + fair.length + ' that no reader can place', fair.length > 0);
   var shaped = fair.every(function (x) { var s = x.reading.sums; return s.lines[0] === s.lines[1] && s.leftOut[0] === s.leftOut[1] && s.unanswered[0] === s.unanswered[1] && s.ends[0] === s.ends[1]; });
   check(q.slug + ': every fair page has equal lines, equal left-outs, equal unanswered and split ends (every cut mirrored)', shaped);
-  var underMin = all.some(function (x) { return M.pageLines(q, x.page) < q.min; });
-  check(q.slug + ': no enumerated page is under the minimum', !underMin);
+  check(q.slug + ': no enumerated page is under the minimum', !all.some(function (x) { return M.pageLines(q, x.page) < q.min; }));
   var sizes = {}; fair.forEach(function (x) { var n = M.pageLines(q, x.page); sizes[n] = (sizes[n] || 0) + 1; });
-  say('     fair pages by length: ' + JSON.stringify(sizes));
   var byReasons = {}; fair.forEach(function (x) { var c = [0, 0]; x.page.forEach(function (it) { if (it.kind === 'reason') c[M.speakerOf(q, it)]++; }); var k = c[0] + 'v' + c[1]; byReasons[k] = (byReasons[k] || 0) + 1; });
-  say('     fair pages by points on the page (side 0 v side 1): ' + JSON.stringify(byReasons));
-  var placedShare = Math.round(100 * (all.length - fair.length) / all.length);
-  say('     ' + placedShare + ' per cent of page shapes are placed by at least one reader');
+  say('     fair pages by length ' + JSON.stringify(sizes) + ', by points on the page (side 0 v side 1) ' + JSON.stringify(byReasons) + '; ' + Math.round(100 * (all.length - fair.length) / all.length) + ' per cent of shapes are placed');
 });
 
 var H = M.HEURISTICS;
-// ---- 4. the lessons of each quarrel ----
-// Quarrel 1: two point-and-reply pairs stacked give one side both ends; the same items in another order give nobody anything.
-var trap = [{ id: 'b1', kind: 'reason', form: 'full' }, { id: 'b1', kind: 'reply' }, { id: 'p1', kind: 'reason', form: 'full' }, { id: 'p1', kind: 'reply' }];
-var tr = M.readPage(q1, trap);
-check('phones: two stacked pairs are caught by the first-and-last readers only', tr.couldTell === 2 && tr.caught.join() === 'ends' && tr.direction === 0, tr.statement);
-var fixed = M.readPage(q1, M.arrange(q1, trap, 0, 1));
-check('phones: the same four items reordered are placed by nobody', fixed.couldTell === 0, M.arrange(q1, trap, 0, 1).map(function (i) { return i.id + (i.kind === 'reply' ? '-reply' : ''); }).join(' '));
-// Quarrel 2: six lines. Fair pages exist at four and six lines; one point each in full with both answers is among the fullest.
-var q2 = C.QUARRELS[1], f2 = fairPages.pets;
-var fullest = f2.filter(function (x) { return M.pageLines(q2, x.page) === q2.budget; });
-var whole = fullest.filter(function (x) { var s = x.reading.sums; return s.unanswered[0] === 0 && s.unanswered[1] === 0 && s.leftOut[0] === 2; });
-check('pets: a six-line page nobody can place exists, and among the fullest, one point each in full with both answers is one', whole.length > 0, fullest.length + ' fullest fair shapes');
-check('pets: fair pages exist at four lines and at six, and none at five (five lines cannot be even)', f2.some(function (x) { return M.pageLines(q2, x.page) === 4; }) && f2.some(function (x) { return M.pageLines(q2, x.page) === 6; }) && !f2.some(function (x) { return M.pageLines(q2, x.page) === 5; }));
-check('pets: every fair page has the same number of points a side', f2.every(function (x) { var c = [0, 0]; x.page.forEach(function (it) { if (it.kind === 'reason') c[M.speakerOf(q2, it)]++; }); return c[0] === c[1]; }));
-// Quarrel 3: four points against two. Equal left-outs by count, not share: the fair pages leave out none, or one of each.
-var q3 = C.QUARRELS[2], f3 = fairPages.homework;
-var lo = {}; f3.forEach(function (x) { var s = x.reading.sums; var k = s.leftOut[0] + '/' + s.leftOut[1]; lo[k] = (lo[k] || 0) + 1; });
-say('     homework: fair pages by points left out (scrap/keep): ' + JSON.stringify(lo));
-check('homework: every fair page leaves out the same number on each side, none or one of each; never both keep points', Object.keys(lo).every(function (k) { return k === '0/0' || k === '1/1'; }) && lo['0/0'] > 0 && lo['1/1'] > 0);
-check('homework: the mirror of counts (two a side, both answered) is not fair, because two scrap points are left out against none', (function () { var p = H.mirror(q3); var s = M.sums(q3, p); return s.leftOut[0] === 2 && s.leftOut[1] === 0 && M.readPage(q3, p).caught.join() === 'leftout'; })());
-check('homework: a fair page gives the side with more to say more points on the page', f3.every(function (x) { var c = [0, 0]; x.page.forEach(function (it) { if (it.kind === 'reason') c[M.speakerOf(q3, it)]++; }); return c[0] > c[1]; }));
+// ---- 4. the lessons of each round ----
+// Round 1: two point-and-reply pairs stacked give one side both ends; the same items in another order give nobody anything.
+C.POOLS[0].forEach(function (q) {
+  var a = q.reasons.filter(function (r) { return r.side === 0; })[0].id, b = q.reasons.filter(function (r) { return r.side === 1; })[0].id;
+  var trap = [{ id: a, kind: 'reason', form: 'full' }, { id: a, kind: 'reply' }, { id: b, kind: 'reason', form: 'full' }, { id: b, kind: 'reply' }];
+  var tr = M.readPage(q, trap), fx = M.readPage(q, M.arrange(q, trap, 0, 1));
+  check(q.slug + ': two stacked pairs are caught by the first-and-last readers only, and the same four items reordered by nobody', tr.couldTell === 2 && tr.caught.join() === 'ends' && tr.direction === 0 && fx.couldTell === 0, tr.statement);
+});
+// Round 2: six lines. Fair pages at four lines and at six, none at five; one point each in full with both answers among the fullest.
+C.POOLS[1].forEach(function (q) {
+  var f = fairPages[q.slug];
+  var whole = f.filter(function (x) { var s = x.reading.sums; return M.pageLines(q, x.page) === q.budget && s.unanswered[0] === 0 && s.unanswered[1] === 0 && s.leftOut[0] === 2; });
+  check(q.slug + ': fair pages at four lines and at six, none at five; one point each in full with both answers is among the fullest', whole.length > 0 && f.some(function (x) { return M.pageLines(q, x.page) === 4; }) && !f.some(function (x) { return M.pageLines(q, x.page) === 5; }));
+});
+// Round 3: four points against two. Equal left-outs by count, not share: a fair page leaves out none, or one of each, and gives the louder side more of the page.
+C.POOLS[2].forEach(function (q) {
+  var f = fairPages[q.slug], big = q.reasons.filter(function (r) { return r.side === 0; }).length > 3 ? 0 : 1;
+  var lo = {}; f.forEach(function (x) { var s = x.reading.sums; var k = s.leftOut[0] + '/' + s.leftOut[1]; lo[k] = (lo[k] || 0) + 1; });
+  check(q.slug + ': every fair page leaves out none or one of each (' + JSON.stringify(lo) + ')', Object.keys(lo).every(function (k) { return k === '0/0' || k === '1/1'; }) && lo['0/0'] > 0 && lo['1/1'] > 0);
+  var mp = H.mirror(q), ms = M.sums(q, mp);
+  check(q.slug + ': the mirror of counts (two a side, both answered) is caught by the left-out readers alone', ms.leftOut[big] === 2 && ms.leftOut[1 - big] === 0 && M.readPage(q, mp).caught.join() === 'leftout');
+  check(q.slug + ': every fair page gives the side with more to say more points on the page', f.every(function (x) { var c = [0, 0]; x.page.forEach(function (it) { if (it.kind === 'reason') c[M.speakerOf(q, it)]++; }); return c[big] > c[1 - big]; }));
+});
 
 // ---- 5. the obvious ways of playing (build.md §3) ----
 say('');
-say('     heuristic           phones                     pets                       homework');
 var rows = [
-  ['partisan, side 0', function (q) { return H.partisan(q, 0); }],
-  ['partisan, side 1', function (q) { return H.partisan(q, 1); }],
-  ['wall of points', function (q) { return H.alternate(q); }],
+  ['partisan 0', function (q) { return H.partisan(q, 0); }],
+  ['partisan 1', function (q) { return H.partisan(q, 1); }],
+  ['wall', function (q) { return H.alternate(q); }],
   ['completist', function (q) { return H.completist(q); }],
   ['mirror', function (q) { return H.mirror(q); }],
-  ['over-correct, for 0', function (q) { return H.overcorrect(q, 0); }]
+  ['over-correct 0', function (q) { return H.overcorrect(q, 0); }]
 ];
 var table = {};
-rows.forEach(function (row) {
+C.QUARRELS.forEach(function (q) {
   var cells = [];
-  C.QUARRELS.forEach(function (q) {
-    var page = row[1](q), r = M.readPage(q, page), ok = M.canPublish(q, page);
-    table[row[0] + '|' + q.slug] = { r: r, ok: ok, lines: M.pageLines(q, page) };
+  rows.forEach(function (row) {
+    var page = row[1](q), r = M.readPage(q, page);
+    table[row[0] + '|' + q.slug] = r;
     var dir = r.direction === null ? '—' : r.direction === 'split' ? 'split' : q.sides[r.direction].name;
-    cells.push((ok ? '' : '(short) ') + r.couldTell + ' could tell, ' + dir + ' [' + r.caught.join(',') + '] ' + M.pageLines(q, page) + 'l');
+    cells.push(row[0] + ' ' + r.couldTell + '/' + dir + (r.caught.length ? ' [' + r.caught.join(',') + ']' : ''));
   });
-  say('     ' + (row[0] + '                    ').slice(0, 20) + cells.map(function (c) { return (c + '                           ').slice(0, 27); }).join(''));
+  say('     ' + (q.slug + '          ').slice(0, 10) + cells.join('; '));
 });
-check('the partisan is always placed, with his own side', C.QUARRELS.every(function (q) { return table['partisan, side 0|' + q.slug].r.direction === 0 && table['partisan, side 1|' + q.slug].r.direction === 1; }));
-check('the over-corrector is placed with the side he bent towards', C.QUARRELS.every(function (q) { return table['over-correct, for 0|' + q.slug].r.direction === 1; }));
-check('the stranger’s wall of points is caught in the first quarrel by the line count and the ends (ploys 2 and 1): a fifth point breaks the count', table['wall of points|phones'].r.caught.indexOf('lines') >= 0 && table['wall of points|phones'].r.caught.indexOf('ends') >= 0 && table['wall of points|phones'].r.direction === 0);
-check('the completist is caught in the first quarrel by the unanswered points (ploy 4)', table['completist|phones'].r.caught.indexOf('unanswered') >= 0);
-check('the mirror passes the even quarrels', table['mirror|phones'].r.couldTell === 0 && table['mirror|pets'].r.couldTell === 0);
-check('the mirror fails the uneven quarrel, by what was left out (note 5)', table['mirror|homework'].r.couldTell === 2 && table['mirror|homework'].r.caught.join() === 'leftout');
-check('some way of playing goes wrong in every quarrel', C.QUARRELS.every(function (q) { return rows.some(function (row) { return table[row[0] + '|' + q.slug].r.couldTell > 0; }); }));
-check('some way of playing passes every quarrel', C.QUARRELS.every(function (q) { return fairPages[q.slug].length > 0; }));
+check('the partisan is always placed, with his own side', C.QUARRELS.every(function (q) { return table['partisan 0|' + q.slug].direction === 0 && table['partisan 1|' + q.slug].direction === 1; }));
+check('the over-corrector is placed with the side he bent towards', C.QUARRELS.every(function (q) { return table['over-correct 0|' + q.slug].direction === 1; }));
+check('the wall of points is caught in round 1 by the line count and the ends (ploys 2 and 1): a fifth point breaks the count', C.POOLS[0].every(function (q) { var r = table['wall|' + q.slug]; return r.caught.indexOf('lines') >= 0 && r.caught.indexOf('ends') >= 0 && r.direction === 0; }));
+check('the completist is caught in round 1 by the unanswered points (ploy 4)', C.POOLS[0].every(function (q) { return table['completist|' + q.slug].caught.indexOf('unanswered') >= 0; }));
+check('the mirror passes the even rounds', C.POOLS[0].concat(C.POOLS[1]).every(function (q) { return table['mirror|' + q.slug].couldTell === 0; }));
+check('the mirror fails the uneven round, by what was left out (note 5)', C.POOLS[2].every(function (q) { var r = table['mirror|' + q.slug]; return r.couldTell === 2 && r.caught.join() === 'leftout'; }));
+check('some way of playing goes wrong in every quarrel, and some way passes', C.QUARRELS.every(function (q) { return rows.some(function (row) { return table[row[0] + '|' + q.slug].couldTell > 0; }) && fairPages[q.slug].length > 0; }));
 
 // ---- 6. the words ----
+var trap1 = [{ id: 'b1', kind: 'reason', form: 'full' }, { id: 'b1', kind: 'reply' }, { id: 'p1', kind: 'reason', form: 'full' }, { id: 'p1', kind: 'reply' }];
 check('statement: nobody', M.statement(q1, 0, null) === C.WORDS.nobody);
 check('statement: four, with the ban', M.statement(q1, 4, 0) === '4 of 8 could tell. Your page leaned to the ban.');
 check('statement: all eight', M.statement(q1, 8, 1) === 'All eight could tell. Your page leaned to the phones.');
 check('statement: split', M.statement(q1, 2, 'split').indexOf(C.WORDS.split) > 0);
-check('readers’ calls: ours / theirs / can’t tell', (function () { var r = M.readPage(q1, trap).readers; return r[6].call === C.WORDS.ours && r[7].call === C.WORDS.theirs && r[0].call === C.WORDS.cant; })());
-function playGame(pages, stances) {
-  var g = M.newGame();
-  for (var i = 0; i < 3; i++) { M.setStance(g, stances[i]); g.page = pages[i]; M.publish(g); M.next(g); }
+check('readers’ calls: ours / theirs / can’t tell', (function () { var r = M.readPage(q1, trap1).readers; return r[6].call === C.WORDS.ours && r[7].call === C.WORDS.theirs && r[0].call === C.WORDS.cant; })());
+function playGame(draw, pageOf, stances) {
+  var g = M.newGame(1); g.draw = draw;
+  for (var i = 0; i < 3; i++) { M.setStance(g, stances[i]); g.page = pageOf(M.quarrel(g)); M.publish(g); M.next(g); }
   return g;
 }
-var cleanGame = playGame(C.QUARRELS.map(function (q) { return fairPages[q.slug][0].page; }), [0, 1, null]);
+var cleanGame = playGame([0, 0, 0], function (q) { return fairPages[q.slug][0].page; }, [0, 1, null]);
 check('a clean game ends done, with the all-clear headline', cleanGame.done && M.verdict(cleanGame).headline.indexOf('not one could place you') > 0, M.verdict(cleanGame).headline);
 check('a clean game: every quarrel line says no reader could tell', M.verdict(cleanGame).quarrels.every(function (l) { return l.indexOf('no reader could tell') > 0; }), M.verdict(cleanGame).quarrels[0]);
-check('one page a quarrel: a second publish in the same quarrel is refused', (function () { var g = M.newGame(); M.setStance(g, 0); g.page = fairPages.phones[0].page; var a = M.publish(g); var b = M.publish(g); return a && b === null && g.stage === 'read'; })());
-check('next before publishing does nothing', (function () { var g = M.newGame(); M.setStance(g, 0); M.next(g); return g.q === 0 && g.stage === 'write'; })());
+check('a clean game on the other draw too', (function () { var g = playGame([1, 1, 1], function (q) { return fairPages[q.slug][0].page; }, [1, 0, 1]); var v = M.verdict(g); return v.clean === 3 && v.quarrels[0].indexOf('cars') > 0 && v.stood[2].indexOf('home') > 0; })());
+check('one page a quarrel: a second publish in the same quarrel is refused', (function () { var g = M.newGame(14); M.setStance(g, 0); g.page = fairPages[M.quarrel(g).slug][0].page; var a = M.publish(g); var b = M.publish(g); return a && b === null && g.stage === 'read'; })());
+check('next before publishing does nothing', (function () { var g = M.newGame(14); M.setStance(g, 0); M.next(g); return g.q === 0 && g.stage === 'write'; })());
 check('a clean game: the stance lines say nobody could tell', M.verdict(cleanGame).stood[0] === 'You are for the ban. Nobody could tell.' && M.verdict(cleanGame).stood[2].indexOf('found none') > 0);
-var dirtyGame = playGame(C.QUARRELS.map(function (q) { return H.partisan(q, 1); }), [0, 1, 0]);
+var dirtyGame = playGame([0, 0, 0], function (q) { return H.partisan(q, 1); }, [0, 1, 0]);
 var dv = M.verdict(dirtyGame);
 check('a partisan game: the readers could tell every time', dv.headline === 'The readers could tell every time.');
 check('a partisan game: found out / bent over backwards', dv.stood[1].indexOf('found you out') > 0 && dv.stood[0].indexOf('Bending over backwards') > 0, dv.stood[0]);
-var mixedGame = playGame([H.alternate(q1), fairPages.pets[0].page, H.mirror(q3)], [0, 0, 1]);
+var mixedGame = playGame([0, 0, 0], function (q) { return q.slug === 'phones' ? H.alternate(q) : q.slug === 'pets' ? fairPages.pets[0].page : H.mirror(q); }, [0, 0, 1]);
 var mv = M.verdict(mixedGame);
 check('a mixed game: headline counts the quarrels the readers could tell', mv.headline === 'The readers could tell in two of your three quarrels.', mv.headline);
 check('a mixed game: the quarrel line names what caught the page', mv.quarrels[0].indexOf('the line count') > 0 && mv.quarrels[0].indexOf('the first word and the last') > 0 && mv.quarrels[2].indexOf('what you left out') > 0 && mv.quarrels[1].indexOf('no reader could tell') > 0, mv.quarrels[2]);
-check('no decimals in any word the game says', !/\d\.\d/.test(JSON.stringify(mv) + JSON.stringify(dv) + JSON.stringify(M.readPage(q1, trap))));
+check('no decimals in any word the game says', !/\d\.\d/.test(JSON.stringify(mv) + JSON.stringify(dv) + JSON.stringify(M.readPage(q1, trap1))));
 
-// ---- 7. does the discovery survive the designer's choices? ----
-// (a) a left-out reader who counts the share of each side's points left out, not the number
+// ---- 7. the draw ----
+var counts = [[0, 0], [0, 0], [0, 0]], N = 0;
+for (var s = 10000; s < 100000; s += 3) { var g = M.newGame(s); for (var i = 0; i < 3; i++) counts[i][g.draw[i]]++; N++; }
+check('over ' + N + ' seeds each quarrel is drawn between 45 and 55 per cent of the time', counts.every(function (c) { return c[0] / N > 0.45 && c[0] / N < 0.55; }), JSON.stringify(counts));
+check('the same seed gives the same draw; neighbouring seeds differ somewhere', M.newGame(4242).draw.join() === M.newGame(4242).draw.join() && (function () { var d = 0; for (var s = 1; s < 200; s++) if (M.newGame(s).draw.join() !== M.newGame(s + 1).draw.join()) d++; return d > 50; })());
+check('seed 14 draws phones, pets, homework; seed 13 draws cars, pizza, office (the scripted sessions rely on these)', M.gameQuarrels(M.newGame(14)).map(function (q) { return q.slug; }).join() === 'phones,pets,homework' && M.gameQuarrels(M.newGame(13)).map(function (q) { return q.slug; }).join() === 'cars,pizza,office');
+
+// ---- 8. does the discovery survive the designer's choices? ----
 function altRead(q, page) {
   var s = M.sums(q, page), nA = q.reasons.filter(function (r) { return r.side === 0; }).length, nB = q.reasons.length - nA;
   return { lines: s.lines[0] - s.lines[1], leftout: Math.round((s.leftOut[1] / nB - s.leftOut[0] / nA) * 1000) / 1000, unanswered: s.unanswered[0] - s.unanswered[1], ends: s.ends[0] - s.ends[1] };
@@ -182,20 +190,16 @@ C.QUARRELS.forEach(function (q) {
   var both = fairAlt.filter(function (x) { return x.reading.couldTell === 0; });
   check(q.slug + ': with a share-counting left-out reader, fair pages still exist (' + fairAlt.length + '), ' + both.length + ' of them fair under both rules', fairAlt.length > 0 && both.length > 0);
 });
-// (b) a full point three lines long instead of two
 var saved = C.LINES.full; C.LINES.full = 3;
 C.QUARRELS.forEach(function (q) {
   var fair = M.enumeratePages(q).filter(function (x) { return x.reading.couldTell === 0; });
   check(q.slug + ': with a full point at three lines, fair pages still exist (' + fair.length + ') and the partisan is still placed', fair.length > 0 && M.readPage(q, H.partisan(q, 0)).direction === 0);
 });
 C.LINES.full = saved;
-// (c) a reader with a tolerance of one would still catch the partisan
 C.QUARRELS.forEach(function (q) {
   var L = M.leans(M.sums(q, H.partisan(q, 1)));
   check(q.slug + ': the partisan’s page leans by more than one on lines or on unanswered points, so a tolerant reader would catch it too', Math.abs(L.lines) > 1 || Math.abs(L.unanswered) > 1, JSON.stringify(L));
 });
-// (d) the readers count, they cannot weigh: a page that leaves out each side's point in mirrored number is fair whichever points go,
-//     which is the game's declared limit (verdict, "What the readers cannot see")
 (function () {
   var q = q1, a = M.readPage(q, M.arrange(q, [{ id: 'b1', kind: 'reason', form: 'full' }, { id: 'b1', kind: 'reply' }, { id: 'p1', kind: 'reason', form: 'full' }, { id: 'p1', kind: 'reply' }], 0, 1));
   var b = M.readPage(q, M.arrange(q, [{ id: 'b3', kind: 'reason', form: 'full' }, { id: 'b3', kind: 'reply' }, { id: 'p2', kind: 'reason', form: 'full' }, { id: 'p2', kind: 'reply' }], 0, 1));
