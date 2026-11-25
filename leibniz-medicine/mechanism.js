@@ -16,7 +16,8 @@
     // The plan of your own winters (memo §11), as letters over four kinds drawn per game: A any kind, B its neighbour
     // with the other wetness (one card the same), C its neighbour with the other temperature, D the opposite.
     PLAN: ['A', 'A', 'B', 'B', 'C', 'D', 'A', 'B', 'C', 'D'],
-    PROVINCES: ['Burgundy', 'Normandy', 'Brittany', 'Picardy', 'Champagne', 'Guyenne', 'Provence', 'Languedoc', 'Dauphiné', 'Auvergne', 'Poitou', 'Lorraine'], // our choice: twelve other provinces write
+    PROVINCES: ['Burgundy', 'Normandy', 'Brittany', 'Picardy', 'Champagne', 'Guyenne', 'Provence', 'Languedoc', 'Dauphiné', 'Auvergne', 'Poitou', 'Lorraine', 'Anjou', 'Maine', 'Touraine', 'Berry', 'Orléanais', 'Nivernais', 'Bourbonnais', 'Lyonnais', 'Limousin', 'Béarn', 'Gascony', 'Artois'], // our choice: twenty-four other provinces write (revision 0c)
+    OTHERS_READ: true,            // revision 0c: from the second year of letters the other doctors give what the collection shows helped in their kind, and choose at random only where it shows nothing yet
     // Floors on the draw (build.md §3): the other doctors choose at random, but the lesson must be able to appear:
     FLOOR: { helperKnownAt1695: true,   // the letters of 1694 hold the remedy that helps in your 1695 winter
              allHelpersKnownBy1696: true }, // the letters of 1694 and 1695 together hold the helper of every kind of winter
@@ -52,12 +53,19 @@
   }
   function helper(E, k) { return CONFIG.REMEDIES.filter(function (x) { return E[k][x] === 'helps'; })[0]; }
 
-  // The other provinces: each year each has a winter and a doctor who gives something, at random (About says so).
-  function drawLetters(r, E) {
-    var L = {};
+  // The other provinces: each year each has a winter at random and a doctor who gives something: in the first year of
+  // letters at random; after that (OTHERS_READ) what the letters so far show helped in his kind, else at random.
+  function drawLetters(r, E, fromYear) {
+    var L = {}, held = [];
     CONFIG.YEARS.forEach(function (y) {
-      if (y < CONFIG.LETTER_YEAR) return;
-      L[y] = CONFIG.PROVINCES.map(function (p) { var k = pick(KINDS, r), x = pick(CONFIG.REMEDIES, r); return { province: p, year: y, kind: k, remedy: x, effect: E[k][x], dead: CONFIG.DEAD[E[k][x]] }; });
+      if (y < fromYear) return;
+      L[y] = CONFIG.PROVINCES.map(function (p) {
+        var k = pick(KINDS, r), x = null;
+        if (CONFIG.OTHERS_READ && held.length) { var seen = known(L, held, k); x = CONFIG.REMEDIES.filter(function (q) { return seen[q] === 'helps'; })[0] || null; }
+        if (!x) x = pick(CONFIG.REMEDIES, r);
+        return { province: p, year: y, kind: k, remedy: x, effect: E[k][x], dead: CONFIG.DEAD[E[k][x]] };
+      });
+      held.push(y);
     });
     return L;
   }
@@ -72,7 +80,7 @@
       var A = pick(KINDS, r), B = flipWet(A), C = flipTemp(A), D = flipWet(flipTemp(A));
       var map = { A: A, B: B, C: C, D: D };
       var E = drawEffects(r, A, B); if (!E) continue;
-      var letters = drawLetters(r, E);
+      var letters = drawLetters(r, E, CONFIG.LETTER_YEAR);
       var plan = CONFIG.PLAN.map(function (x) { return map[x]; });
       // floors
       var k95 = plan[5], s94 = known(letters, [1694], k95);
@@ -182,7 +190,7 @@
   // For the counterfactual the mail must exist from 1690: a game with letters for every year, drawn from the same seed.
   function withMailFrom1690(game) {
     var r = rng(game.drawSeed + 17), g = {}; for (var k in game) g[k] = game[k];
-    g.mail = {}; game.years.forEach(function (y) { g.mail[y] = game.mail[y] || CONFIG.PROVINCES.map(function (p) { var kd = pick(KINDS, r), x = pick(CONFIG.REMEDIES, r); return { province: p, year: y, kind: kd, remedy: x, effect: game.effects[kd][x], dead: CONFIG.DEAD[game.effects[kd][x]] }; }); });
+    g.mail = drawLetters(r, game.effects, game.years[0]);
     g.history = []; return g;
   }
 
@@ -203,10 +211,12 @@
   // ---- the end (memo §7) ---------------------------------------------------------------------------------------
   function summary(game) {
     var H = game.history, total = 0, before = 0, after = 0, nBefore = 0, nAfter = 0, st = { collection: 0, last: 0, own: 0, partial: 0, 'new': 0 };
-    H.forEach(function (h) { total += h.dead; st[h.lookup.status]++; if (h.year < CONFIG.LETTER_YEAR) { before += h.dead; nBefore++; } else { after += h.dead; nAfter++; } });
+    // before: the winters with nothing to read (1690 to 1694, the first letters come back in 1695); after: with the letters
+    H.forEach(function (h) { total += h.dead; st[h.lookup.status]++; if (h.year <= CONFIG.LETTER_YEAR) { before += h.dead; nBefore++; } else { after += h.dead; nAfter++; } });
     var others = {};
     ['memory', 'reader', 'readerFrom1690', 'oracle'].forEach(function (n) { var tot = 0; for (var k = 0; k < CONFIG.OTHER_RUNS; k++) tot += playDoctor(game.seed, n, { run: k }).total; others[n] = 5 * Math.round(tot / CONFIG.OTHER_RUNS / 5); });
-    return { total: total, sick: CONFIG.SICK * H.length, before: before, after: after, sickBefore: nBefore * CONFIG.SICK, sickAfter: nAfter * CONFIG.SICK, status: st, others: others, letters: collection(game, H.length).count };
+    var word = after * nBefore < before * nAfter / 2 ? 'letters' : (after * nBefore >= before * nAfter ? 'ignored' : 'some');
+    return { total: total, sick: CONFIG.SICK * H.length, before: before, after: after, sickBefore: nBefore * CONFIG.SICK, sickAfter: nAfter * CONFIG.SICK, status: st, others: others, letters: collection(game, H.length).count, word: word };
   }
 
   // ---- words (build.md §4.4: no decimals, rough sizes in words) ------------------------------------------------
