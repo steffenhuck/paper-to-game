@@ -181,6 +181,16 @@
   }
   var DOCTORS = {
     memory: function (game, t, r) { return lastYearRule(game, t, r, []); },       // trusts the remembered winter: repeats what helped last year, otherwise tries another
+    guess: function (game, t, r) { return pick(CONFIG.REMEDIES, r); },             // a remedy at random every winter (verdict row, revision 0d)
+    // learns only from her own evidence: her own winters by kind; gives what helped there, avoids what harmed or was no
+    // better, guesses among the untried (verdict row, revision 0d)
+    ownEvidence: function (game, t, r) {
+      var k = kindAt(game, t), seen = {};
+      game.history.slice(0, t).forEach(function (h) { if (h.kind === k) seen[h.remedy] = h.effect; });
+      var hel = CONFIG.REMEDIES.filter(function (x) { return seen[x] === 'helps'; }); if (hel.length) return hel[0];
+      var untried = CONFIG.REMEDIES.filter(function (x) { return seen[x] === undefined; });
+      return pick(untried.length ? untried : CONFIG.REMEDIES, r);
+    },
     bleeding: function () { return 'bleed'; }, bark: function () { return 'bark'; }, rest: function () { return 'rest'; },
     reader: function (game, t, r) { return readRule(game, t, r, CONFIG.LETTER_YEAR); },   // reads the collection from 1694
     readerFrom1690: function (game, t, r) { return readRule(game, t, r, 1690); },         // Leibniz's counterfactual: every doctor writing "for a while now"
@@ -214,7 +224,7 @@
     // before: the winters with nothing to read (1690 to 1694, the first letters come back in 1695); after: with the letters
     H.forEach(function (h) { total += h.dead; st[h.lookup.status]++; if (h.year <= CONFIG.LETTER_YEAR) { before += h.dead; nBefore++; } else { after += h.dead; nAfter++; } });
     var others = {};
-    ['memory', 'reader', 'readerFrom1690', 'oracle'].forEach(function (n) { var tot = 0; for (var k = 0; k < CONFIG.OTHER_RUNS; k++) tot += playDoctor(game.seed, n, { run: k }).total; others[n] = 5 * Math.round(tot / CONFIG.OTHER_RUNS / 5); });
+    ['guess', 'ownEvidence', 'memory', 'reader', 'readerFrom1690', 'oracle'].forEach(function (n) { var tot = 0; for (var k = 0; k < CONFIG.OTHER_RUNS; k++) tot += playDoctor(game.seed, n, { run: k }).total; others[n] = 5 * Math.round(tot / CONFIG.OTHER_RUNS / 5); });
     var word = after * nBefore < before * nAfter / 2 ? 'letters' : (after * nBefore >= before * nAfter ? 'ignored' : 'some');
     return { total: total, sick: CONFIG.SICK * H.length, before: before, after: after, sickBefore: nBefore * CONFIG.SICK, sickAfter: nAfter * CONFIG.SICK, status: st, others: others, letters: collection(game, H.length).count, word: word };
   }

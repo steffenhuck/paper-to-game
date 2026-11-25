@@ -52,13 +52,15 @@ check('the letters of 1694 and 1695 hold the helper of every kind of winter', ga
 })();
 
 // 5. the doctors' table (memo §18)
-var NAMES = ['oracle', 'readerFrom1690', 'reader', 'memory', 'bark', 'bleeding', 'rest'];
+var NAMES = ['oracle', 'readerFrom1690', 'reader', 'ownEvidence', 'memory', 'guess', 'bark', 'bleeding', 'rest'];
 var table = {}, perYear = {};
 NAMES.forEach(function (n) { var tot = 0, py = []; games.forEach(function (g) { var r = M.playDoctor(g.seed, n); tot += r.total; r.perYear.forEach(function (d, i) { py[i] = (py[i] || 0) + d; }); }); table[n] = tot / games.length; perYear[n] = py.map(function (d) { return d / games.length; }); });
 out.push('     dead over ten winters (of a thousand sick), mean over ' + SEEDS + ' seeds:');
 NAMES.forEach(function (n) { out.push('       ' + (n + '                ').slice(0, 18) + Math.round(table[n]) + '   by year: ' + perYear[n].map(function (d) { return Math.round(d); }).join(' ')); });
 check('order: oracle < collection from 1690 < collection from 1694 < memory alone', table.oracle < table.readerFrom1690 && table.readerFrom1690 < table.reader && table.reader < table.memory, Math.round(table.oracle) + ' < ' + Math.round(table.readerFrom1690) + ' < ' + Math.round(table.reader) + ' < ' + Math.round(table.memory));
 check('oracle loses exactly fifty', table.oracle === 50);
+check('the verdict ladder: omniscient < registers since 1690 < own evidence < guessing', table.oracle < table.readerFrom1690 && table.readerFrom1690 < table.ownEvidence && table.ownEvidence < table.guess, [table.oracle, table.readerFrom1690, table.ownEvidence, table.guess].map(Math.round).join(' < '));
+check('the reader beats the own-evidence doctor, and only after 1694', table.reader < table.ownEvidence && [0, 1, 2, 3, 4].every(function (t) { return Math.abs(perYear.reader[t] - perYear.ownEvidence[t]) < 10; }) && perYear.reader[5] < perYear.ownEvidence[5] - 8, Math.round(table.reader) + ' < ' + Math.round(table.ownEvidence));
 check('the reader loses five every winter from 1695: near perfect information', [5, 6, 7, 8, 9].every(function (t) { return perYear.reader[t] === 5; }));
 check('the reader is the memory doctor until 1694', [0, 1, 2, 3, 4].every(function (t) { return perYear.reader[t] === perYear.memory[t]; }));
 check('the memory doctor loses most on the lookalike winters 1692 and 1697', [2, 7].every(function (t) { return perYear.memory[t] > 22 && perYear.memory[t] > perYear.memory[t - 1]; }), perYear.memory.map(Math.round).join(' '));
