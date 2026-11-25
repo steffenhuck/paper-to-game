@@ -1,54 +1,55 @@
-ok   ordering on plans: chimp/dog/pig > infant/elder — "Killing": chimpanzees, dogs, pigs far surpass the brain-damaged infant and the senile in self-awareness
-ok   ordering on reason: dog >= disab — "Killing": some severely retarded people can never achieve the intelligence level of a dog
-ok   ordering on plans: adult > mouse — "Killing": worse to kill a normal adult than a mouse, by self-awareness and plans
-ok   ordering on ties: adult > mouse — "Killing": close personal ties that humans have but mice do not to the same degree
-ok   ordering on ties: dog/chimp/pig > infant — "Killing": the parents do not want the infant kept alive; the animals have a capacity for meaningful relations
-ok   ordering on reason: adult > baby — "The basis for equality": the right to vote rests on rational decisions; a baby cannot vote
-ok   Pain reads the same for every being that can feel, and 0 for the oak
-ok   five humans, five animals, one thing
-ok   every legal line on Reasoning has a misfit (8 legal lines, fewest misfits 4)
-ok   Reasoning: the line with fewest misfits is unique or tied, and never 0
-ok   every legal line on Plans has a misfit (8 legal lines, fewest misfits 3)
-ok   Plans: the line with fewest misfits is unique or tied, and never 0
-ok   every legal line on Ties has a misfit (9 legal lines, fewest misfits 3)
-ok   Ties: the line with fewest misfits is unique or tied, and never 0
-ok   every legal line on Pain has a misfit (3 legal lines, fewest misfits 5)
-ok   Pain: the line with fewest misfits is unique or tied, and never 0
+ok   ordering on reason: horse/dog > infant — p. 106, Bentham: a full-grown horse or dog is beyond comparison a more rational animal than an infant of a day
+ok   ordering on talk: horse/dog > infant — p. 106, Bentham: a full-grown horse or dog is a more conversable animal than an infant
+ok   ordering on reason: dog >= disab — p. 113-114, on Benn: no fundamental inequality of claims between a dog and a human imbecile; the dog "however faithful or intelligent"
+ok   ordering on aware: chimp/mouse > infant — p. 110: adult apes, cats, mice and other mammals are more aware of what is happening to them, more self-directing, than any human infant
+ok   ordering on aware: chimp/dog/pig > braindam/infant/disab — p. 113: humans with severe brain damage, infants and permanently retarded humans are below the level of awareness, self-consciousness, intelligence and sentience of many non-humans
+ok   ordering on reason: chimp/pig/dog > braindam/infant — p. 113: the same passage, intelligence
+ok   ordering on reason: adult > infant/braindam/disab — p. 113, Benn: the rational man and the imbecile; p. 106: the infant
+ok   Suffer reads the same for every being that can feel, and 0 for the stone
+ok   four humans, five animals, one thing
+ok   every legal line on Reason has a misfit (8 legal lines, fewest misfits 3)
+ok   every legal line on Talk has a misfit (6 legal lines, fewest misfits 2)
+ok   every legal line on Aware has a misfit (9 legal lines, fewest misfits 3)
+ok   every legal line on Suffer has a misfit (3 legal lines, fewest misfits 4)
 ok   Species: exactly one legal line has no misfit
-ok   Pain: the only legal lines are above the lot, under everyone who can feel, and under the lot
-ok   the three reading rulers cost different people at their best line — baby,disab,elder,infant | baby,elder,infant | disab,elder,infant
+ok   Suffer: the only legal lines are above the lot, under everyone who can suffer, and under the lot
 ok   robustness: with random lengths that keep only the paper's orderings, every reading ruler still fails and Species still works — 500 of 500 random casts
 ok   cast restored after robustness runs
-ok   scene slap: the paper's answer is pig
-ok   scene slap: the answer goes by pain now (2 vs 7)
-ok   scene slap pick adult judged part
-ok   scene slap pick pig judged agree
-ok   scene ward: the paper's answer is either
-ok   scene ward: the answer goes by pain now (6 vs 6)
-ok   scene ward pick adult judged either
-ok   scene ward pick disab judged either
-ok   scene fire: the paper's answer is adult
-ok   scene fire: the answer goes by Plans (10 vs 1)
-ok   scene fire pick adult judged agree
-ok   scene fire pick mouse judged part
-ok   scene fire2: the paper's answer is chimp
-ok   scene fire2: the answer goes by Plans (0 vs 7)
-ok   scene fire2 pick infant judged part
-ok   scene fire2 pick chimp judged agree
-ok   the species chooser parts from the paper on slap and fire2; the plans-for-everything chooser parts on slap alone; pain-by-amount-then-plans parts nowhere
+ok   no two rulers sort the cast the same way
+ok   no two rulers say the same thing after the line
+ok   on Reason the chimpanzee is second
+ok   on Reason the dog and the adult with a severe intellectual disability read the same (the paper on Benn)
+ok   on Aware the mouse stands above the infant (p. 110)
+ok   on Talk only two of them read above the animals' best
+ok   path {"pick":"infant","infant":null,"why":null,"braindam":null} judged read with words
+ok   path {"pick":"braindam","infant":null,"why":null,"braindam":null} judged read with words
+ok   path {"pick":"chimp","infant":"yes","why":null,"braindam":null} judged read with words
+ok   path {"pick":"chimp","infant":"no","why":"human","braindam":null} judged species with words
+ok   path {"pick":"chimp","infant":"no","why":"grow","braindam":"yes"} judged potential with words
+ok   path {"pick":"chimp","infant":"no","why":"grow","braindam":"no"} judged species with words
+ok   path {"pick":"mouse","infant":"yes","why":null,"braindam":null} judged read with words
+ok   path {"pick":"mouse","infant":"no","why":"human","braindam":null} judged species with words
+ok   path {"pick":"mouse","infant":"no","why":"grow","braindam":"yes"} judged potential with words
+ok   path {"pick":"mouse","infant":"no","why":"grow","braindam":"no"} judged species with words
+ok   path {"pick":"nobody","infant":null,"why":null,"braindam":null} judged refuse with words
+ok   the experiment has a finite set of paths (11)
+ok   every status is reachable: species, potential, read, refuse — {"read":4,"species":4,"potential":2,"refuse":1}
+ok   a subject chosen by species alone is judged species
+ok   an animal chosen with the infant also usable is judged read
+ok   every subject the paper names is above or level with the infant on every ruler but Suffer, for the animals
 
-Heuristics, board one (misfits = people out + animals in + the oak in):
-  Reasoning  | keep every person: 6 | keep every animal out: 4 | fewest misfits: 4 | under the adult only: 4
-  Plans      | keep every person: 6 | keep every animal out: 3 | fewest misfits: 3 | under the adult only: 4
-  Ties       | keep every person: 6 | keep every animal out: 3 | fewest misfits: 3 | under the adult only: 4
-  Pain       | keep every person: 5 | keep every animal out: 5 | fewest misfits: 5 | under the adult only: 4 (illegal)
-  Species    | keep every person: 0 | keep every animal out: 0 | fewest misfits: 0 | under the adult only: 4 (illegal)
-Heuristics, board two (parts from the paper on which scenes):
-  always the human             parts on: slap, fire2
-  by pain now, then by plans   parts on: none
-  always by plans              parts on: slap
-  always the animal            parts on: fire
-  the paper                    parts on: none
-ok   no dead option on board two: every being in every scene is picked by some way of playing
+Heuristics, board one (misfits = people out + animals in + the stone in):
+  Reason   | keep every person: 5 (illegal) | keep every animal out: 3 | fewest misfits: 3 | under the adult only: 3
+  Talk     | keep every person: 4 (illegal) | keep every animal out: 2 | fewest misfits: 2 | under the adult only: 3
+  Aware    | keep every person: 5 (illegal) | keep every animal out: 3 | fewest misfits: 3 | under the adult only: 3
+  Suffer   | keep every person: 0 (illegal) | keep every animal out: 0 (illegal) | fewest misfits: 4 | under the adult only: 3 (illegal)
+  Species  | keep every person: 0 | keep every animal out: 0 | fewest misfits: 0 | under the adult only: 3 (illegal)
+Heuristics, board two (how each way of playing is judged):
+  the species chooser (chimp; not the infant; one of us)                         -> species
+  the potential chooser (chimp; not the infant; it will grow; yes to the brain-damaged adult) -> potential
+  the half-potential chooser (chimp; it will grow; no to the brain-damaged adult) -> species
+  the reader (mouse; yes to the infant)                                          -> read
+  the reader (the infant)                                                        -> read
+  the abolitionist (nobody)                                                      -> refuse
 
 all checks passed
