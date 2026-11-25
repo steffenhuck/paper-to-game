@@ -6,7 +6,7 @@ Mine: Steffen's signature and counter. Author title. Ideas given, all binding: t
 
 ## 1. Paper
 
-G. W. Leibniz, "On Controversies" (*Des controverses*), 1680, written for Duke Johann Friedrich of Hanover shortly after his death and resumed for Landgrave Ernst von Hessen-Rheinfels. Akademie edition *Sämtliche Schriften und Briefe* IV, 3, 204–212. Read in Lloyd Strickland's translation (© 2021), published at leibniz-translations.com (the page address could not be checked from this session; the author-note says so). No DOI. Available: the translation as a PDF, five pages; no data, no code, no figures, no numbers. The game is built from the text alone.
+G. W. Leibniz, "On Controversies" (*Des controverses*), 1680, written for Duke Johann Friedrich of Hanover shortly after his death and resumed for Landgrave Ernst von Hessen-Rheinfels. Akademie edition *Sämtliche Schriften und Briefe* IV, 3, 204–212. Read in Lloyd Strickland's translation (© 2021), published at leibniz-translations.com/controversies. No DOI. Available: the translation as a PDF, five pages; no data, no code, no figures, no numbers. The game is built from the text alone.
 
 ## 2. What the paper hands over
 
