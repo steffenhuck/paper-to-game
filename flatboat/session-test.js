@@ -66,7 +66,7 @@ const { chromium } = require('playwright'); const path = require('path'); const 
   await shot('a-1-verdict', true);
   await page.click('#b-nextcross'); await page.waitForTimeout(400);
   await shot('a-2-empty', true); await fits700('crossing 2');
-  await page.click('#b-help-play'); await page.waitForTimeout(300); await shot('help', true); await page.click('#b-help-close'); await page.waitForTimeout(200);
+  await page.click('#b-help-play'); await page.waitForTimeout(300); await shot('help', false); await page.click('#b-help-close'); await page.waitForTimeout(200);
   const backOnSheet = await page.$eval('#s-play', e => e.classList.contains('on')) && !(await page.$eval('#help', e => e.classList.contains('on'))); log.push('help closed back to the sheet: ' + backOnSheet); if (!backOnSheet) errors.push('help did not return to play');
   await setLoad(4, 1, 20); await shot('a-2-paper');
   await pushAndWatch('a-2-p1', ['stuck', 'wall', 'rest']);
@@ -84,7 +84,7 @@ const { chromium } = require('playwright'); const path = require('path'); const 
   await page.click('#b-nextcross'); await page.waitForTimeout(500);
   await shot('a-end', true); await hscroll('end');
   log.push('END: ' + await text('#s-end'));
-  await page.click('#b-about-end'); await page.waitForTimeout(300); await shot('about', true); await page.click('#b-about-close'); await page.waitForTimeout(200);
+  await page.click('#b-about-end'); await page.waitForTimeout(300); await shot('about', false); await page.click('#b-about-close'); await page.waitForTimeout(200);
 
   // Session B: the paper's loading everywhere
   await page.click('#b-again'); await page.waitForTimeout(400);

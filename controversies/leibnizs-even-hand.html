@@ -71,7 +71,7 @@ b,strong{font-weight:700}
 .say{font-size:13px;line-height:1.25;margin-top:3px;min-height:16px;font-weight:600}
 .readers{margin:10px 0 4px;border-top:3px solid var(--ink);padding-top:6px}
 .readers p{font-size:13.5px;margin:0 0 4px;line-height:1.3}
-.rule{display:flex;align-items:center;gap:8px;margin:2px 0;font-size:13px;line-height:1.25}
+.rule{display:flex;align-items:flex-start;gap:8px;margin:5px 0;font-size:13px;line-height:1.3}
 .rule .pair{display:flex;gap:3px;flex:none}
 .head{width:22px;height:26px;position:relative;flex:none}
 .head .face{position:absolute;left:3px;top:0;width:16px;height:14px}
@@ -154,7 +154,7 @@ b,strong{font-weight:700}
   <p class="aim">Write up the quarrel so that no reader can tell whose side you are on.</p>
   <button class="btn" id="b-begin">Begin</button>
   <button class="btn sec" id="b-help-start">How to play</button>
-  <p class="cred">Built on <a href="https://leibnizpapers.org/about.htm">Lloyd Strickland</a>&rsquo;s translation of Leibniz&rsquo;s <i>On Controversies</i> (2021), <a href="https://www.leibniz-translations.com/controversies.htm">leibniz-translations.com</a>.</p>
+  <p class="cred">Built on <a href="https://leibnizpapers.org/about.htm">Lloyd Strickland</a>&rsquo;s translation of Leibniz&rsquo;s <i>On Controversies</i> (2021), <a href="https://leibniz-translations.com/controversies">leibniz-translations.com</a>.</p>
   <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
 </section>
 
@@ -233,7 +233,7 @@ b,strong{font-weight:700}
   <p class="cred" id="vdraw"></p>
   <button class="btn" id="b-again">Play again</button>
   <div class="row2"><button class="btn sec" id="b-help-end">How to play</button><button class="btn sec" id="b-about">About</button></div>
-  <p class="cred">Built on <a href="https://leibnizpapers.org/about.htm">Lloyd Strickland</a>&rsquo;s translation of Leibniz&rsquo;s <i>On Controversies</i> (1680; translation 2021), <a href="https://www.leibniz-translations.com/controversies.htm">leibniz-translations.com</a>. The second game of a Leibniz suite, after <a href="../leibniz/leibnizs-fullest-world.html">Leibniz&rsquo;s Fullest World</a>.</p>
+  <p class="cred">Built on <a href="https://leibnizpapers.org/about.htm">Lloyd Strickland</a>&rsquo;s translation of Leibniz&rsquo;s <i>On Controversies</i> (1680; translation 2021), <a href="https://leibniz-translations.com/controversies">leibniz-translations.com</a>. The second game of a Leibniz suite, after <a href="../leibniz/leibnizs-fullest-world.html">Leibniz&rsquo;s Fullest World</a>.</p>
   <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
 </section>
 
@@ -251,12 +251,12 @@ b,strong{font-weight:700}
     <li><b>Publish</b> when the page has at least six lines (four on the short page).</li>
   </ul>
   <h3>The readers</h3>
-  <p>Eight readers read the page, four from each side, and every one is on a side. They do not weigh what is true; they count, and any difference places you:</p>
+  <p>Eight readers read the page, four from each side, and every one is on a side. They do not weigh what is true; they count, in pairs, and any difference places you:</p>
   <ul>
-    <li><b>Lines:</b> who speaks more lines.</li>
-    <li><b>Left out:</b> whose points you left off the page.</li>
-    <li><b>Unanswered:</b> whose points stand with no answer under them.</li>
-    <li><b>First &amp; last:</b> who gets the first word and the last. Both the same side, and that side is yours.</li>
+    <li><b>Lines.</b> They count the lines each side speaks, a reply counting for the side that spoke it. If one side has more lines, they will think you favour it.</li>
+    <li><b>Left out.</b> They count each side&rsquo;s points that are not on the page. If one side has more points missing, they will think you are against it.</li>
+    <li><b>Unanswered.</b> They count each side&rsquo;s points on the page with no reply under them. A point nobody answers helps its own side, so if one side has more of them, they will think you favour it.</li>
+    <li><b>First &amp; last.</b> They look only at who speaks the first line and who the last. If one side has both, they will think you favour it.</li>
   </ul>
   <p>Each reader holds up a placard: the colour of the side he places you with, or a grey question mark when he can&rsquo;t tell. His sentence under the bench is what he counted.</p>
   <h3>One page a quarrel</h3>
@@ -268,9 +268,9 @@ b,strong{font-weight:700}
 
 <div class="ov" id="about"><div class="in">
     <h2 class="disp">About</h2>
-  <p><b>The paper.</b> G. W. Leibniz, <i>On Controversies</i> (<i>Des controverses</i>), 1680, written after the death of Duke Johann Friedrich of Hanover and resumed for Landgrave Ernst von Hessen-Rheinfels. Akademie edition, <i>Sämtliche Schriften und Briefe</i> IV, 3, 204–212. Read in <a href="https://leibnizpapers.org/about.htm">Lloyd Strickland</a>&rsquo;s translation (© 2021), published at <a href="https://www.leibniz-translations.com/controversies.htm">leibniz-translations.com</a>; the game&rsquo;s words for Leibniz&rsquo;s ideas lean on his. No DOI. Game built from this paper; the paper is the authority where the two disagree.</p>
+  <p><b>The paper.</b> G. W. Leibniz, <i>On Controversies</i> (<i>Des controverses</i>), 1680, written after the death of Duke Johann Friedrich of Hanover and resumed for Landgrave Ernst von Hessen-Rheinfels. Akademie edition, <i>Sämtliche Schriften und Briefe</i> IV, 3, 204–212. Read in <a href="https://leibnizpapers.org/about.htm">Lloyd Strickland</a>&rsquo;s translation (© 2021), published at <a href="https://leibniz-translations.com/controversies">leibniz-translations.com</a>; the game&rsquo;s words for Leibniz&rsquo;s ideas lean on his. No DOI. Game built from this paper; the paper is the authority where the two disagree.</p>
   <p><b>What Leibniz says.</b> He tells a prince he has a way of writing up controversies that nobody can object to, and that its visible sign is this: he will write them up &ldquo;in such a way that the reader cannot judge which party the author has embraced&rdquo;. Readers trying to convict him of partiality &ldquo;will examine you very closely, picking out words everywhere&rdquo;; people &ldquo;will fight to claim you or not to claim you&rdquo;, as seven cities fought over Homer. The writer is &ldquo;neither judge, nor client, nor reconciler, but rapporteur&rdquo;, the one who reports, and the form &ldquo;forces people to speak moderately in spite of themselves&rdquo;. On the way he lists five ploys disputants use without thinking: each chooses his own order; disputes swell into volumes; one conceals or weakens the opponent&rsquo;s arguments in reporting them; one repeats one&rsquo;s reasons without taking account of the answers; one digresses. His remedy: an indisputable order, a summary &ldquo;so that their whole economy can be seen&rdquo;, every argument unpacked &ldquo;so that they cannot say that their arguments have been neglected&rdquo;; then a man of common sense can judge without the rapporteur declaring himself.</p>
-  <p><b>The game.</b> You are the one who reports. Nine present-day quarrels in three rounds (phones in school, cars in the city centre, school uniforms; dogs or cats, pineapple on pizza, summer or winter; homework, the office, votes at sixteen); you pick one a round on the first screen; each is one short page, built from what both sides said; eight readers, four a side and every one of them on a side, who count rather than weigh: who speaks more lines (the length, ploy 2), whose points were left out (note 5, the neglected arguments), whose points stand with no answer (ploy 4), and who gets the first word and the last (the order, ploy 1). Any difference places you. One page a quarrel, final once the readers have read it; what they caught, you carry to the next. The verdict says how many readers could tell, and sets where you said you stood against where they put you.</p>
+  <p><b>The game.</b> You are the one who reports. Nine present-day quarrels in three rounds (phones in school, cars in the city centre, school uniforms; dogs or cats, pineapple on pizza, summer or winter; homework, the office, votes at sixteen); you pick one a round on the first screen; each is one short page, built from what both sides said; eight readers, four a side and every one of them on a side, who count rather than weigh, in pairs: the lines each side speaks (the length, ploy 2); each side&rsquo;s points missing from the page (note 5, the neglected arguments); each side&rsquo;s points standing with no reply, which help their own side (ploy 4); and who speaks the first line and the last (the order, ploy 1). Any difference places you, and each pair says on the page which way and why. One page a quarrel, final once the readers have read it; what they caught, you carry to the next. The verdict says how many readers could tell, and sets where you said you stood against where they put you.</p>
   <p><b>Mechanism: a toy.</b> The text is an argument with no numbers; everything countable here is the game&rsquo;s. The game <b>demonstrates</b> that, under readers who count the form of a page and nothing else, every cut a writer makes to fit a length is a sign; that pages nobody can place exist in every quarrel and are reached only by mirroring every cut, which on a short page means saying less, the same on both sides, rather than more, half; and that when one side has more to say, a page nobody can place gives it more of the page, because the readers count the points left out, not the share. It <b>assumes</b> four countable rules in place of Leibniz&rsquo;s readers who pick out words; no tolerance (one line places you); that a point&rsquo;s short form is its own side&rsquo;s honest summary and not a weakening (ploy 3 is not a lever here); a page of ten or six lines with a minimum; and nine quarrels written for the game, with three or four points a side and one reply each, three a game, picked by the player. The paper <b>establishes</b> a claim and a programme, not evidence: that such writing is possible, that its sign is the reader&rsquo;s inability to place the writer, and that the form forces moderation. Nothing in the game is evidence for any of that; the game lets you try to do it. And the readers count what they cannot weigh: two pages that mirror every cut are both fair to them whichever points were chosen, so a page can pass every reader and still be unfair in what it chose to say. The verdict says so.</p>
   <p><b>What is cut.</b> The Church and the marks of the true Church, which the method was to be tried on first; the prince and his death; the Lullist and the geometer; the raven and the nightingale; ploy 3 (weakening the opponent&rsquo;s reasons in reporting them) as a control, and ploy 5 (digression) as a card. Leibniz feared the two sides would &ldquo;condemn me by mutual consent, in order to keep themselves in business&rdquo;; the readers here do not collude, but a page can be placed both ways at once, and the game says so when it happens.</p>
   <p><b>The look.</b> A 2020s protest-print poster: chalk, ink, violet and tangerine, acid for the budget and the reading. The one rule: every line on the page is in the colour of the side that speaks it, and a placard is a block of the same colour, because the readers see colour, not words.</p>
@@ -297,10 +297,10 @@ var CONFIG = {
   // order (ploy 1). Any difference at all places the writer: no tolerance (our choice). Each rule is one sentence a
   // teenager can check against the page; nothing is netted (revision 2).
   READERS: [
-    { key: 'lines', label: 'lines', rule: 'who speaks more lines' },
-    { key: 'leftout', label: 'left out', rule: 'whose points you left out' },
-    { key: 'unanswered', label: 'unanswered', rule: 'whose points stand with no answer under them' },
-    { key: 'ends', label: 'first & last', rule: 'who gets the first word and the last' }
+    { key: 'lines', label: 'lines', rule: 'They count the lines each side speaks, a reply counting for the side that spoke it. If one side has more lines, they will think you favour it.' },
+    { key: 'leftout', label: 'left out', rule: 'They count each side\u2019s points that are not on the page. If one side has more points missing, they will think you are against it.' },
+    { key: 'unanswered', label: 'unanswered', rule: 'They count each side\u2019s points on the page with no reply under them. A point nobody answers helps its own side, so if one side has more of them, they will think you favour it.' },
+    { key: 'ends', label: 'first & last', rule: 'They look only at who speaks the first line and who the last. If one side has both, they will think you favour it.' }
   ],
 
   // The quarrels, written for the game (Leibniz's was the Church: A IV 3, 212, note 1): three rounds, three quarrels a round;
@@ -703,10 +703,12 @@ function readPage(q, page) {
   var s = sums(q, page), L = leans(s), readers = [], A = q.sides[0].name, B = q.sides[1].name;
   for (var k = 0; k < CONFIG.READERS.length; k++) {
     var rule = CONFIG.READERS[k], lean = L[rule.key], placed = placedBy(lean), sum;
-    if (rule.key === 'lines') sum = A + ' speaks ' + plural(s.lines[0], 'line') + ', ' + B + ' ' + s.lines[1] + '.';
-    else if (rule.key === 'leftout') sum = 'Left out: ' + A + ' ' + s.leftOut[0] + ', ' + B + ' ' + s.leftOut[1] + '.';
-    else if (rule.key === 'unanswered') sum = 'Unanswered: ' + A + ' ' + s.unanswered[0] + ', ' + B + ' ' + s.unanswered[1] + '.';
-    else sum = page.length ? 'First word ' + q.sides[speakerOf(q, page[0])].name + ', last word ' + q.sides[speakerOf(q, page[page.length - 1])].name + '.' : 'An empty page.';
+    // the count, then what it means in the readers' own terms (the direction), so a placard never needs the help page
+    var fav = placed === null ? null : q.sides[placed].name;
+    if (rule.key === 'lines') sum = A + ' speaks ' + plural(s.lines[0], 'line') + ', ' + B + ' ' + s.lines[1] + '. ' + (fav ? 'More lines for ' + fav + '.' : 'Even.');
+    else if (rule.key === 'leftout') sum = 'Missing from the page: ' + A + ' ' + s.leftOut[0] + ', ' + B + ' ' + s.leftOut[1] + '. ' + (fav ? 'More of ' + q.sides[1 - placed].side + '\u2019s points left out.' : 'Even.');
+    else if (rule.key === 'unanswered') sum = 'Standing with no reply: ' + A + ' ' + s.unanswered[0] + ', ' + B + ' ' + s.unanswered[1] + '. ' + (fav ? 'More unanswered claims for ' + fav + '.' : 'Even.');
+    else sum = page.length ? 'First word ' + q.sides[speakerOf(q, page[0])].name + ', last word ' + q.sides[speakerOf(q, page[page.length - 1])].name + '. ' + (fav ? fav + ' has both.' : 'One each.') : 'An empty page.';
     for (var side = 0; side < 2; side++) {
       var call = placed === null ? CONFIG.WORDS.cant : placed === side ? CONFIG.WORDS.ours : CONFIG.WORDS.theirs;
       readers.push({ side: side, key: rule.key, label: rule.label, placed: placed, lean: lean, sum: sum, call: call, text: sum + ' ' + call });
@@ -959,7 +961,7 @@ if (typeof module !== 'undefined') module.exports = {
   function renderRules() {
     var h = '';
     CONFIG.READERS.forEach(function (r) {
-      h += '<div class="rule"><div class="pair"><div class="head h0"><div class="face"></div><div class="body"></div></div><div class="head h1"><div class="face"></div><div class="body"></div></div></div><div><b>' + esc(r.label) + '</b> ' + esc(r.rule.charAt(0).toUpperCase() + r.rule.slice(1)) + '.</div></div>';
+      h += '<div class="rule"><div class="pair"><div class="head h0"><div class="face"></div><div class="body"></div></div><div class="head h1"><div class="face"></div><div class="body"></div></div></div><div><b>' + esc(r.label) + '</b> ' + esc(r.rule) + '</div></div>';
     });
     $('rules').innerHTML = h;
   }

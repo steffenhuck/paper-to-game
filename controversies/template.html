@@ -71,7 +71,7 @@ b,strong{font-weight:700}
 .say{font-size:13px;line-height:1.25;margin-top:3px;min-height:16px;font-weight:600}
 .readers{margin:10px 0 4px;border-top:3px solid var(--ink);padding-top:6px}
 .readers p{font-size:13.5px;margin:0 0 4px;line-height:1.3}
-.rule{display:flex;align-items:center;gap:8px;margin:2px 0;font-size:13px;line-height:1.25}
+.rule{display:flex;align-items:flex-start;gap:8px;margin:5px 0;font-size:13px;line-height:1.3}
 .rule .pair{display:flex;gap:3px;flex:none}
 .head{width:22px;height:26px;position:relative;flex:none}
 .head .face{position:absolute;left:3px;top:0;width:16px;height:14px}
@@ -154,7 +154,7 @@ b,strong{font-weight:700}
   <p class="aim">Write up the quarrel so that no reader can tell whose side you are on.</p>
   <button class="btn" id="b-begin">Begin</button>
   <button class="btn sec" id="b-help-start">How to play</button>
-  <p class="cred">Built on <a href="https://leibnizpapers.org/about.htm">Lloyd Strickland</a>&rsquo;s translation of Leibniz&rsquo;s <i>On Controversies</i> (2021), <a href="https://www.leibniz-translations.com/controversies.htm">leibniz-translations.com</a>.</p>
+  <p class="cred">Built on <a href="https://leibnizpapers.org/about.htm">Lloyd Strickland</a>&rsquo;s translation of Leibniz&rsquo;s <i>On Controversies</i> (2021), <a href="https://leibniz-translations.com/controversies">leibniz-translations.com</a>.</p>
   <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
 </section>
 
@@ -233,7 +233,7 @@ b,strong{font-weight:700}
   <p class="cred" id="vdraw"></p>
   <button class="btn" id="b-again">Play again</button>
   <div class="row2"><button class="btn sec" id="b-help-end">How to play</button><button class="btn sec" id="b-about">About</button></div>
-  <p class="cred">Built on <a href="https://leibnizpapers.org/about.htm">Lloyd Strickland</a>&rsquo;s translation of Leibniz&rsquo;s <i>On Controversies</i> (1680; translation 2021), <a href="https://www.leibniz-translations.com/controversies.htm">leibniz-translations.com</a>. The second game of a Leibniz suite, after <a href="../leibniz/leibnizs-fullest-world.html">Leibniz&rsquo;s Fullest World</a>.</p>
+  <p class="cred">Built on <a href="https://leibnizpapers.org/about.htm">Lloyd Strickland</a>&rsquo;s translation of Leibniz&rsquo;s <i>On Controversies</i> (1680; translation 2021), <a href="https://leibniz-translations.com/controversies">leibniz-translations.com</a>. The second game of a Leibniz suite, after <a href="../leibniz/leibnizs-fullest-world.html">Leibniz&rsquo;s Fullest World</a>.</p>
   <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
 </section>
 
@@ -251,12 +251,12 @@ b,strong{font-weight:700}
     <li><b>Publish</b> when the page has at least six lines (four on the short page).</li>
   </ul>
   <h3>The readers</h3>
-  <p>Eight readers read the page, four from each side, and every one is on a side. They do not weigh what is true; they count, and any difference places you:</p>
+  <p>Eight readers read the page, four from each side, and every one is on a side. They do not weigh what is true; they count, in pairs, and any difference places you:</p>
   <ul>
-    <li><b>Lines:</b> who speaks more lines.</li>
-    <li><b>Left out:</b> whose points you left off the page.</li>
-    <li><b>Unanswered:</b> whose points stand with no answer under them.</li>
-    <li><b>First &amp; last:</b> who gets the first word and the last. Both the same side, and that side is yours.</li>
+    <li><b>Lines.</b> They count the lines each side speaks, a reply counting for the side that spoke it. If one side has more lines, they will think you favour it.</li>
+    <li><b>Left out.</b> They count each side&rsquo;s points that are not on the page. If one side has more points missing, they will think you are against it.</li>
+    <li><b>Unanswered.</b> They count each side&rsquo;s points on the page with no reply under them. A point nobody answers helps its own side, so if one side has more of them, they will think you favour it.</li>
+    <li><b>First &amp; last.</b> They look only at who speaks the first line and who the last. If one side has both, they will think you favour it.</li>
   </ul>
   <p>Each reader holds up a placard: the colour of the side he places you with, or a grey question mark when he can&rsquo;t tell. His sentence under the bench is what he counted.</p>
   <h3>One page a quarrel</h3>
@@ -359,7 +359,7 @@ b,strong{font-weight:700}
   function renderRules() {
     var h = '';
     CONFIG.READERS.forEach(function (r) {
-      h += '<div class="rule"><div class="pair"><div class="head h0"><div class="face"></div><div class="body"></div></div><div class="head h1"><div class="face"></div><div class="body"></div></div></div><div><b>' + esc(r.label) + '</b> ' + esc(r.rule.charAt(0).toUpperCase() + r.rule.slice(1)) + '.</div></div>';
+      h += '<div class="rule"><div class="pair"><div class="head h0"><div class="face"></div><div class="body"></div></div><div class="head h1"><div class="face"></div><div class="body"></div></div></div><div><b>' + esc(r.label) + '</b> ' + esc(r.rule) + '</div></div>';
     });
     $('rules').innerHTML = h;
   }

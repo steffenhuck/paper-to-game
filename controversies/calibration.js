@@ -175,6 +175,8 @@ var mixedGame = playGame([0, 0, 0], function (q) { return q.slug === 'phones' ? 
 var mv = M.verdict(mixedGame);
 check('a mixed game: headline counts the quarrels the readers could tell', mv.headline === 'The readers could tell in two of your three quarrels.', mv.headline);
 check('a mixed game: the quarrel line names what caught the page', mv.quarrels[0].indexOf('the line count') > 0 && mv.quarrels[0].indexOf('the first word and the last') > 0 && mv.quarrels[2].indexOf('what you left out') > 0 && mv.quarrels[1].indexOf('no reader could tell') > 0, mv.quarrels[2]);
+check('every reader\u2019s sentence ends with its direction or with Even / One each', (function () { var r = M.readPage(q1, trap1).readers; var r2 = M.readPage(q1, H.partisan(q1, 0)).readers; return r[0].sum.indexOf('Even.') > 0 && r[6].sum.indexOf('Ban has both.') > 0 && r2[0].sum.indexOf('More lines for Ban.') > 0 && r2[2].sum.indexOf('More of the phone side\u2019s points left out.') > 0 && r2[4].sum.indexOf('More unanswered claims for Ban.') > 0; })(), M.readPage(q1, H.partisan(q1, 0)).readers.map(function (x) { return x.sum; }).join(' | '));
+check('each rule is stated as what they count and which way it points', C.READERS.every(function (r) { return r.rule.indexOf('They count') === 0 || r.rule.indexOf('They look') === 0; }) && C.READERS.every(function (r) { return /they will think you (favour|are against) it\.$/.test(r.rule); }));
 check('no decimals in any word the game says', !/\d\.\d/.test(JSON.stringify(mv) + JSON.stringify(dv) + JSON.stringify(M.readPage(q1, trap1))));
 
 // ---- 7. every pick is a real game ----

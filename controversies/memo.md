@@ -6,7 +6,7 @@ Mine: Steffen's signature and counter. Author title. Ideas given, all binding: t
 
 ## 1. Paper
 
-G. W. Leibniz, "On Controversies" (*Des controverses*), 1680, written for Duke Johann Friedrich of Hanover shortly after his death and resumed for Landgrave Ernst von Hessen-Rheinfels. Akademie edition *Sämtliche Schriften und Briefe* IV, 3, 204–212. Read in Lloyd Strickland's translation (© 2021), published at leibniz-translations.com (the page address could not be checked from this session; the author-note says so). No DOI. Available: the translation as a PDF, five pages; no data, no code, no figures, no numbers. The game is built from the text alone.
+G. W. Leibniz, "On Controversies" (*Des controverses*), 1680, written for Duke Johann Friedrich of Hanover shortly after his death and resumed for Landgrave Ernst von Hessen-Rheinfels. Akademie edition *Sämtliche Schriften und Briefe* IV, 3, 204–212. Read in Lloyd Strickland's translation (© 2021), published at leibniz-translations.com/controversies. No DOI. Available: the translation as a PDF, five pages; no data, no code, no figures, no numbers. The game is built from the text alone.
 
 ## 2. What the paper hands over
 
@@ -143,3 +143,7 @@ The author's idea: a first stage where the player picks the three quarrels, so t
 # Revision 5 (25 November 2026): no defaults
 
 The author: better with no defaults at the topic choice. Built: the chooser opens with nothing picked and "Pick one quarrel for each round."; the line counts down ("Pick two more.", "Pick one more.", "Three picked. Tap another to swap, or write these up."); Write these up is disabled until all three are picked. The seed and the generator are gone from the mechanism, which no longer draws anything: `newGame()` starts with three empty picks, `canStart` says when the game may begin. The calibration check covers the empty start, the disabled start, all 27 picks; the browser session checks the button stays disabled after one pick and lights after three. The memo's §8 replayability line holds: a second game is three other quarrels, by the player's own choice.
+
+# Revision 6 (25 November 2026): the readers explained
+
+The author asked what the unanswered reader does and said the four types needed better explanations; he drafted the wording and the merged version was agreed. Each rule on the write screen and the help page now says what the pair counts and which way it points, in his shape: "They count … If one side has more …, they will think you favour it" (left out: "are against it"; unanswered carries the one clause a player cannot guess, that a point nobody answers helps its own side). The reading sentences close the loop: after the count, the direction in the readers' own terms ("More lines for Ban.", "More of Phones's points left out.", "More unanswered claims for Ban.", "Ban has both."; "Even." or "One each." when they cannot tell). "Left out" keeps its name on the bench; the sentence says "missing from the page". Two checks added; all pass.
