@@ -1,86 +1,70 @@
 PASS a boat carries the weight of the water it could hold: floats iff load ≤ tons, draught = load / tons (196 loadings, both hulls)
 PASS earth is heavier than the hollow can hold: 6 ft of wall alone (12 tons) sinks the shallow boat and fills the great one
-PASS an overloaded boat sinks at the bank and the push is lost
-PASS the general’s opening boat is sunk with all sixty and changes nothing: no push used, nothing across, nothing in the tally, the bank untouched
+PASS an overloaded boat sinks at the bank in one frame, nobody hurt, and the push is lost
+PASS the general’s opening boat is sunk with all sixty in three frames and changes nothing: no push used, nothing across, nothing in the tally, the bank untouched
+PASS the opening boat’s frames keep the title block at zero throughout (its dead are not the player’s)
+PASS a cannonball through sinks the boat: everyone aboard lost, the day over, nothing across, three frames
+PASS the dead appear in the title block only at the sunk frame, not before
 PASS a lost day’s verdict line says the day was lost on that push, not by dark  — The day was lost on push 1: nobody across. Lost: 40 soldiers.
-PASS a cannonball through sinks the boat: everyone aboard lost, the day over, nothing across
 PASS the crossing played again starts afresh but carries the dead, the attempts and the record
+PASS the paper’s push plays in four frames: push, stuck, land (with the cannon driving the battery off), rest
+PASS the title block moves with the frames: nobody across until the landing, the rest counted only at the last frame
 PASS the verdict of a replayed crossing counts the dead over the attempts  — By dark: 620 soldiers across. Lost on the way: 40 soldiers, over 2 attempts.
-PASS musket fire through costs one in six and drives the rest back; the day goes on
+PASS musket fire through costs one in six and drives the rest back; the day goes on; three frames
 PASS one in six rounds up: 10 soldiers lose 2
+PASS the last push of the day that makes the shore safe ends with the rest crossing at dawn (no soldiers counted)
 PASS a small cannonball through sinks the shallow boat too
-PASS the game verdict adds the cost: men lost and crossings played again  —  It cost 92 soldiers, and 2 crossings played again.
-PASS a perfect game costs nobody
-PASS the bests are unchanged by the losses (no best path loses anyone)
+PASS the shallow boat with the wall and a cannon has nobody aboard: it drifts back, three frames
+PASS the shallow boat at A digs in without a cannon and the rest wait
+PASS the game verdict adds the cost: men lost and crossings played again  —  It cost 52 soldiers, and 1 crossing played again.
+PASS a perfect game costs nobody and is over by morning
 PASS crossing 1 (Below the Lech): best by exhaustive search = 620  — got 620 with [{"feet":4,"guns":1,"men":20,"landing":"front"}]
 PASS crossing 1: the best is reached on the first push
-PASS crossing 1: the memo’s first push is among the best  — [{"feet":4,"guns":1,"men":20,"landing":"front"}]
-PASS crossing 1: that first push is unique  — 1 loadings tie
-PASS crossing 1: the best first push weighs exactly the hull or less
-PASS crossing 2 (At the bend): best by exhaustive search = 660  — got 660 with [{"feet":1,"guns":0,"men":60,"landing":"front"}]
+PASS crossing 1: the memo’s first push is the best, and unique  — [{"feet":4,"guns":1,"men":20,"landing":"front"}]
+PASS crossing 1: the best first push weighs exactly the hull
+PASS crossing 2 (The narrows): best by exhaustive search = 640  — got 640 with [{"feet":1,"guns":0,"men":40,"landing":"up"}]
 PASS crossing 2: the best is reached on the first push
-PASS crossing 2: the memo’s first push is among the best  — [{"feet":1,"guns":0,"men":60,"landing":"front"},{"feet":1,"guns":1,"men":60,"landing":"front"},{"feet":1,"guns":2,"men":60,"landing":"front"},{"feet":2,"guns":0,"men":60,"landing":"front"},{"feet":2,"guns":1,"men":60,"landing":"front"},{"feet":3,"guns":0,"men":60,"landing":"front"}]
-PASS crossing 2: every best first push carries 60 men and a wall of at least 1 ft (guns and extra feet are neutral here)
-PASS crossing 2: the best first push weighs exactly the hull or less
-PASS crossing 3 (The narrows): best by exhaustive search = 640  — got 640 with [{"feet":1,"guns":0,"men":40,"landing":"up"}]
-PASS crossing 3: the best is reached on the first push
-PASS crossing 3: the memo’s first push is among the best  — [{"feet":1,"guns":0,"men":40,"landing":"up"}]
-PASS crossing 3: that first push is unique  — 1 loadings tie
-PASS crossing 3: the best first push weighs exactly the hull or less
-PASS crossing 1: the best first push fills the hull to the tun (4 ft + a gun + 20 men = 12)
-PASS crossing 3: the shallow boat cannot carry the wall their small cannons need, a cannon, and any soldiers (2 ft + a cannon = 6 tons of 6)
-PASS crossing 3: the shallow boat cannot be made proof against field pieces at all (4 ft = 8 tons of 6)
-     heuristics (men across by dark, three pushes a crossing):
-     strategy                                                             c1    c2    c3    total
-     best possible                                                        620   660   640   1920
-     all men (60, no earth, no gun)                                       0     0     0     0
-     firepower (as many guns as float, then men)                          0     0     0     0
-     earth to the brim (no men)                                           0     0     0     0
-     the spreader (2 ft, a gun, the rest men)                             0     660   0     660
-     the physicist (just enough wall, then men, no gun)                   120   660   60    840
-     the paper (just enough wall, a gun where there is a battery, then men)620   660   60    1340
-     the crossing-1 recipe everywhere (4 ft, a gun, 20 men)               620   620   0     1240
-     the paper, and upstream where offered                                620   660   640   1920
-     learns: wrong once, then the paper                                   0     360   340   700
-PASS all men: nothing across under cannon or musket (a boat of men is a boat of planks to a ball)
-PASS firepower: nothing across anywhere (guns keep nothing off on the water)
-PASS earth to the brim: nothing across (nobody aboard to carry it ashore)
-PASS the spreader: through under field pieces; passes under muskets
-PASS the physicist (wall but no gun) digs in under the battery but the rest never pass: 120 < 620
-PASS the physicist is best where there is no battery (crossing 2)
-PASS the paper’s loading is best in crossings 1 and 2
-PASS the paper’s loading sent at the battery with a shallow boat cannot carry the cannon and any soldiers, so it goes without: dug in, and the rest wait (60 < 640)
-PASS the crossing-1 recipe everywhere: best in 1, short in 2 (four feet where one would do: 20 men instead of 60), sinks in 3
-PASS the paper, upstream where offered: best everywhere
-PASS learning the hard way: a boat of cannons and soldiers at the battery sinks and the day is lost (0); under muskets it costs a push (360); the shallow boat overloaded sinks at the bank and the day goes on (340): 0/360/340
-PASS some way of playing goes wrong in every crossing, for a reason the paper names
-PASS guns: a sensible loading takes 0 and 1 (crossings 2 and 1)
-PASS earth: sensible loadings take 1 ft and 4 ft
-PASS men: sensible loadings take 20, 40 and 60
-PASS landing: in crossing 3 both landings can land a boat that digs in (A: 2 ft + 20 men; B: 1 ft + 40 men)
-PASS baseline: all five lessons hold  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:holds
-PASS field pieces stopped by 3 ft instead of 4: core lessons hold  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:holds
-PASS field pieces need 5 ft: the great boat can no longer carry wall, gun and crew (10 + 2 + half a tun > 12), so the earth-then-gun lesson needs the wall to fit in the hull with a gun and its crew; reported, not required  — earthThenGun:CHANGES noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:holds
-PASS a gun weighs 1 tun: core lessons hold; the shallow boat can then carry wall and gun, so the crossing-3 lesson changes (reported)  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:CHANGES
-PASS a gun weighs 3 tons: all lessons hold  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:holds
-PASS light pieces stopped by 1 ft: core lessons hold; the crossing-3 lesson needs light pieces to need 2 ft (reported)  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:CHANGES
-PASS the rest pass at 30 a boat: all lessons hold  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:holds
-PASS the rest pass at 90 a boat: all lessons hold  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:holds
-PASS a fleet of one open boat: all lessons hold  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:holds
-PASS a foot of wall weighs 1 tun: core lessons hold (the shallow boat can then carry wall and gun; reported)  — earthThenGun:holds noGunLoses:holds thinWhereMuskets:holds upstreamBest:holds shallowCannot:CHANGES
-PASS restored
-PASS every push has frames, each with a picture and a plain sentence; no decimal and no jargon (ball, tun, battery, foot, men) in any frame (544 pushes, every floating loading, plus the verdicts)  — 
-PASS a perfect game is the sum of the bests and gets the first fate
-PASS a game with nothing across gets the last fate
-PASS tons in words
-     sample: 2 and a half tons / a tenth of a ton / 11 and seven tenths tons
-PASS before any shot the sheet’s record names no number  — earth stops a cannonball if there is enough of it; how much, the sheet does not say
-PASS a shot through 2 ft is recorded as through 2 ft, and the frame gives no needed number  — A cannonball goes through your 2 ft of earth and through the wooden planks at the water line. It takes more than 2 ft of earth to stop a cannonball.
-PASS a stopped cannonball goes in 3½ ft (the feet it needs less a half) and the record keeps it  — A cannonball hits the heap of earth at the front and goes 3½ ft in before it stops. Your heap is 4 ft, so it holds: the boat is not hurt.
-PASS the record is shared across crossings of the same game and empty for a kind of shot not yet met
-PASS the general’s boat teaches nothing to the record (no earth aboard, nothing measured)
-PASS the paper’s push plays as: push, fire, stuck, land, wall, drive, rest  — push,fire,stuck,land,wall,drive,rest
-PASS no through-shot frame ever names the feet the shot needs (44 through shots)
-PASS a boat of cannons and soldiers plays as: push, fire, through, holed, sunk  — push,fire,through,holed,sunk
+PASS crossing 2: the memo’s first push is the best, and unique  — [{"feet":1,"guns":0,"men":40,"landing":"up"}]
+PASS crossing 2: the best first push weighs exactly the hull
+PASS the narrows at A: no loading of the shallow boat lets the rest cross (best at A = 60, three boats of twenty)  — best at A 60
 
-ALL PASSED (71 checks)
+heuristics (men across by dark, three pushes a crossing):
+strategy                                                              c1    c2    total
+best possible                                                         620   640   1260
+all men (60, no earth, no gun)                                        0     0     0
+firepower (as many guns as float, then men)                           0     0     0
+earth to the brim (no men)                                            0     0     0
+the spreader (2 ft, a gun, the rest men)                              0     0     0
+the physicist (just enough wall, then men, no gun)                    120   60    180
+the paper (just enough wall, a gun where there is a battery, then men)620   0     620
+the crossing-1 recipe everywhere (4 ft, a gun, 20 men)                620   0     620
+the paper, and upstream where offered                                 620   640   1260
+learns: wrong once, then the paper                                    0     340   340
+
+PASS all men: nobody across anywhere (a boat of planks to a cannonball; muskets at the bend drive it back)
+PASS firepower: nobody across anywhere (a gun keeps nothing off on the water)
+PASS earth to the brim: nobody across (no hands)
+PASS the spreader (2 ft and a gun) is shot through under field pieces and sinks the shallow boat
+PASS the physicist, who armours and forgets the gun, digs in under the battery and the rest never pass: 120 against 620
+PASS the paper’s loading at the battery is best (620); sent at A with the shallow boat, the wall and the gun fill the hull and nobody is aboard to land: 0
+PASS the crossing-1 recipe sinks the shallow boat (0 in the narrows)
+PASS the paper, and upstream where offered, is the best in both crossings (1260)
+PASS learning after one sunk boat costs the day in crossing 1 (the boat sinks) and one push in the narrows
+PASS base: earth then a gun at the battery; a wall without a gun leaves the rest waiting; a thin wall and a boat of men upstream  — {"earthThenGun":true,"wallAlone":true,"upstream":true}
+PASS field piece needs 3 ft instead of 4: the lessons hold  — {"earthThenGun":true,"wallAlone":true,"upstream":true}
+PASS field piece needs 5 ft: the wall, a gun and soldiers no longer fit the great hull (5·2 + 2 = 12), so the earth-then-gun lesson falls, as the memo says  — {"earthThenGun":false,"wallAlone":true,"upstream":true}
+PASS a gun of 1 ton: the battery lessons hold; the shallow-boat lesson changes (a 1-ton gun fits at A), as the memo says  — {"earthThenGun":true,"wallAlone":true,"upstream":true}
+PASS a gun of 3 tons: the lessons hold  — {"earthThenGun":true,"wallAlone":true,"upstream":true}
+PASS the rest at thirty or ninety a boat: the lessons hold
+PASS a fleet of one: the lessons hold  — {"earthThenGun":true,"wallAlone":true,"upstream":true}
+PASS every push plays in one to four frames (3 to 4 over every loading of both crossings)
+PASS plain words only (no ball, tun, battery, parapet, men, gun) and no decimals in any frame  — 
+PASS no through-shot frame names the feet a shot needs
+PASS the title block is never ahead of the frames, and ends at the state after the push  — 
+PASS the record before any shot does not name the feet  — earth stops a cannonball if there is enough of it; how much, the sheet does not say
+PASS after a through shot the record says only what it went through  — measured: a cannonball went through 2 ft of earth
+PASS after a stuck shot the record says how far it went in (the feet needed less a half)  — measured: a cannonball went 3½ ft into earth and stuck; a cannonball went through 2 ft of earth
+PASS the verdict’s words carry no decimal
+PASS the sum line reads in plain words: earth 1 ft + 1 cannon + 10 soldiers = 5 tons of 12
+
+all checks pass (54)

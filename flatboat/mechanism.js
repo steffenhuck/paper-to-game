@@ -1,13 +1,13 @@
 // Leibniz's Flatboat — the mechanism, headless. The only copy: build.py inlines this file verbatim into the HTML and
 // refuses to build if the embedded copy differs. Runs unchanged in Node (module.exports) and in the browser (window.FLATBOAT).
 // Kind: toy (memo §16). The one rule the paper states is run as written: a boat carries the weight of the water it could
-// hold. Every other number is ours and tagged below. Revision 2: every push returns a list of frames, one thing happening
-// and one plain sentence each, which the sheet plays slowly; the words are plain (cannonball, cannons, soldiers, tons).
-// Revision 3: the feet of earth a shot needs are never told; a shot that sticks reports how far it went in (the detail
-// view's dimension), and the game keeps what the player has measured, per kind of shot, in state.known.
-// Revision 4: a cannonball that goes through sinks the boat with everyone aboard and ends the day; musket fire that goes
-// through costs one soldier in six and drives the rest back; a lost crossing can be played again, and the dead and the
-// attempts are carried into the verdict.
+// hold. Every other number is ours and tagged below.
+// Revision 6 (25 November 2026): two crossings instead of three; a push plays in three or four frames instead of five to
+// seven; and every frame carries the title-block state as it is after that frame (`tb`), so the sheet never shows the
+// future. The feet of earth a shot needs are never told; a shot that sticks reports how far it went in, and the game keeps
+// what the player has measured, per kind of shot, in state.known. A cannonball that goes through sinks the boat with
+// everyone aboard and ends the day; musket fire that goes through costs one soldier in six and drives the rest back;
+// a lost crossing can be played again, and the dead and the attempts are carried into the verdict.
 (function (root) {
   'use strict';
 
@@ -20,7 +20,7 @@
     MAX_FEET: 6, MAX_GUNS: 3, MAX_MEN: 60, MEN_STEP: 10,   // ours: 60 is the standing room on a flatboat's floor
     // --- what stops what: feet of earth that stop each kind of shot — ours, on the light side of period field works
     STOPS: { musket: 1, light: 2, field: 4 },
-    PEN_SHORT: 0.5,      // a shot that is stopped goes in the feet it needs less this much: the depth the detail view measures — ours
+    PEN_SHORT: 0.5,      // a shot that is stopped goes in the feet it needs less this much: the depth dimensioned on the heap — ours
     MUSKET_LOSS: 6,      // under musket fire with too thin a heap, one soldier in this many is hit on the way over — ours
     SINK_FIRE: { light: true, field: true },   // the shots that hole a flatboat and sink it with everyone aboard — ours (the paper: cannon-proof or nothing)
     // --- the day and the rest of the army: "the rest will pass without difficulty" — ours
@@ -32,24 +32,21 @@
       great:   { tuns: 12, name: 'the big flatboat',     depthFt: 2 },   // 24 ft × 8 ft × 2 ft of hollow, about 12 tons of water
       shallow: { tuns: 6,  name: 'the shallow flatboat', depthFt: 1 }    // the same floor, a foot of hollow: 6 tons
     },
-    // --- the three crossings: the paper's cases, in the game's order (memo §11)
+    // --- the two crossings: the paper's cases, in the game's order (memo §11, revision 6)
     CROSSINGS: [
       { id: 'battery', title: 'Below the Lech', hull: 'great', opening: true,
-        landings: [ { id: 'front', letter: 'A', name: 'opposite the enemy cannons', fire: 'field', battery: true, guns: 4 } ],
+        landings: [ { id: 'front', letter: 'A', name: 'opposite the enemy cannons', fire: 'field', battery: true, guns: 3 } ],
         paperLine: 'Leibniz: make the boats cannon-proof with the very earth they carry, put cannons and soldiers in them, and let that earth cover and entrench the soldiers the moment they land; then the rest of the army passes under the cover of that wall and with the help of the cannons that have crossed.' },
-      { id: 'foot', title: 'At the bend', hull: 'great',
-        landings: [ { id: 'front', letter: 'A', name: 'where enemy soldiers wait with muskets', fire: 'musket', battery: false, guns: 0 } ],
-        paperLine: 'Leibniz: where the enemy’s cannons are avoided, the flatboat does not need to be cannon-proof; it is enough that it carries soldiers and what they need to take cover quickly. A bend with its bulge towards the enemy forces them to divide their army, while ours stays together.' },
       { id: 'shallow', title: 'The narrows', hull: 'shallow',
-        landings: [ { id: 'front', letter: 'A', name: 'opposite the enemy’s small cannons', fire: 'light', battery: true, guns: 3 },
-                    { id: 'up', letter: 'B', name: 'a mile upstream, out of reach of their cannons', fire: 'musket', battery: false, guns: 0, mortars: true } ],
-        paperLine: 'Leibniz: since earth and cannon are very heavy, these boats must have hollowness enough, because a vessel carries without sinking the weight of the water it could contain. And the enemy’s cannons are not as mobile as these boats: land further up- or downstream, where their mortars cannot follow.' }
+        landings: [ { id: 'front', letter: 'A', name: 'opposite the enemy’s small cannons', fire: 'light', battery: true, guns: 2 },
+                    { id: 'up', letter: 'B', name: 'a mile upstream, where only soldiers with muskets wait', fire: 'musket', battery: false, guns: 0, mortars: true } ],
+        paperLine: 'Leibniz: since earth and cannon are very heavy, these boats must have hollowness enough, because a vessel carries without sinking the weight of the water it could contain. Where the enemy’s cannons are avoided, the boat does not need to be cannon-proof: land further up- or downstream, where their cannons and mortars cannot follow, and it is enough that the boat carries soldiers and what they need to take cover quickly.' }
     ],
     // --- the fire, in plain words, for the sheet
     FIRE: {
-      musket: { who: 'enemy soldiers with muskets', shot: 'a musket shot', shots: 'musket shots', label: 'ENEMY SOLDIERS' },
-      light:  { who: 'the enemy’s small cannons', shot: 'a small cannonball', shots: 'small cannonballs', label: 'SMALL CANNONS' },
-      field:  { who: 'the enemy cannons', shot: 'a cannonball', shots: 'cannonballs', label: 'ENEMY CANNONS' }
+      musket: { who: 'the enemy soldiers', shot: 'a musket shot', shots: 'musket shots', label: 'ENEMY SOLDIERS WITH MUSKETS', short: 'MUSKET SHOT' },
+      light:  { who: 'the enemy’s small cannons', shot: 'a small cannonball', shots: 'small cannonballs', label: 'ENEMY SMALL CANNONS', short: 'SMALL CANNONBALL' },
+      field:  { who: 'the enemy cannons', shot: 'a cannonball', shots: 'cannonballs', label: 'ENEMY CANNONS', short: 'CANNONBALL' }
     },
     // --- the general's own first boat, shown before the player loads in crossing 1 — ours
     OPENING: { feet: 0, guns: 0, men: 60 },
@@ -74,7 +71,7 @@
     cr.landings.forEach(function (l) { banks[l.id] = { men: 0, feet: 0, guns: 0, batteryOff: false, held: false }; });
     return { k: k, pushes: 0, banks: banks, across: 0, over: false, restPassed: false, restAt: null, log: [], firstLanded: null, openingDone: !cr.opening, lost: 0, lostBefore: 0, attempts: 1, lostDay: false };
   }
-  function newGame() { var known = {}, g = { crossings: [newCrossing(0), newCrossing(1), newCrossing(2)], current: 0, known: known }; g.crossings.forEach(function (s) { s.known = known; }); return g; }
+  function newGame() { var known = {}, g = { crossings: CONFIG.CROSSINGS.map(function (c, k) { return newCrossing(k); }), current: 0, known: known }; g.crossings.forEach(function (s) { s.known = known; }); return g; }
   // play a crossing again: the river, the pushes and the far shore start afresh; the dead, the attempts and what was measured stay
   function replay(game, k) { var old = game.crossings[k], c = newCrossing(k); c.known = game.known; c.openingDone = true; c.attempts = old.attempts + 1; c.lostBefore = old.lostBefore + old.lost; game.crossings[k] = c; return c; }
   function lostAll(s) { return s.lost + s.lostBefore; }
@@ -86,75 +83,73 @@
   }
   function landing(cr, id) { for (var i = 0; i < cr.landings.length; i++) if (cr.landings[i].id === id) return cr.landings[i]; return cr.landings[0]; }
   function bankSafe(l, bank) { return bank.held && (!l.battery || bank.batteryOff); }
+  // the title block, as the sheet shows it: pushes left, across, lost (with attempts), and the far shore at a landing
+  function titleBlock(state, landingId) {
+    var b = state.banks[landingId];
+    return { pushesLeft: CONFIG.PUSHES - state.pushes, across: state.across, lost: lostAll(state), attempts: state.attempts,
+             bank: { men: b.men, feet: b.feet, guns: b.guns, batteryOff: b.batteryOff } };
+  }
 
   // ---------- one push ----------
   // load: { feet, guns, men, landing }. opts.opening: the general's boat, which does not count as a push and changes nothing.
-  // Returns the result: frames for the sheet (each { pic, text }), the outcome, and the state after; updates the state unless opening.
+  // Returns the result: frames for the sheet (each { pic, text, tb }), the outcome, and the state after; updates the state unless opening.
+  // Each frame's `tb` is the title block as it stands after that frame's event, so the sheet never shows the future.
   function push(state, load, opts) {
     opts = opts || {};
     var cr = CONFIG.CROSSINGS[state.k], l = landing(cr, load.landing), bank0 = state.banks[l.id], H = hull(cr);
     var bank = opts.opening ? JSON.parse(JSON.stringify(bank0)) : bank0;
     var r = { push: state.pushes + (opts.opening ? 0 : 1), opening: !!opts.opening, load: { feet: load.feet, guns: load.guns, men: load.men, landing: l.id }, frames: [], landed: false, across: 0 };
+    // the running title block: starts as the sheet shows it before the push, and moves only as the frames say
+    var tb = titleBlock(state, l.id);
+    function frame(f) { f.tb = JSON.parse(JSON.stringify(tb)); r.frames.push(f); }
     if (!opts.opening) state.pushes += 1; else state.openingDone = true;
     var w = weight(load), need = CONFIG.STOPS[l.fire], fire = CONFIG.FIRE[l.fire];
     r.weight = w; r.need = need;
     var who = opts.opening ? 'The general’s boat' : 'Your boat';
     if (!floats(cr, load)) {
       r.outcome = 'sinks';
-      r.frames.push({ pic: 'sink', text: who + ' is loaded with ' + tons(w) + '. The hull holds only ' + tons(H.tuns) + ' of water, so it carries only ' + tons(H.tuns) + '.' });
-      r.frames.push({ pic: 'sankbank', text: 'It sinks at the bank before it goes anywhere, in shallow water. The soldiers wade out; nobody is hurt, and the boat is raised by evening.' });
+      if (!opts.opening) tb.pushesLeft = CONFIG.PUSHES - state.pushes;
+      frame({ pic: 'sink', text: who + ' is loaded with ' + tons(w) + '. The hull holds ' + tons(H.tuns) + ' of water, so it carries ' + tons(H.tuns) + ' and no more. It sinks at the bank in shallow water; the soldiers wade out, nobody is hurt, and the push is lost.' });
     } else {
-      r.frames.push({ pic: 'push', text: who + ' pushes off with ' + loadWords(load) + ' aboard.' });
-      var safeWater = bankSafe(l, bank);
-      if (!safeWater) {
-        var stopped = load.feet >= need;
-        r.frames.push({ pic: 'fire', text: cap(fire.who) + ' fire at it as it crosses.', stopped: stopped });
-        if (!opts.opening) learn(state, l.fire, load.feet, stopped);
-        if (!stopped && CONFIG.SINK_FIRE[l.fire]) {
-          r.outcome = 'sunk'; r.depth = null; r.lost = load.men;
-          r.frames.push({ pic: 'through', depth: null, text: cap(fire.shot) + ' goes ' + (load.feet ? 'through your ' + feet(load.feet) + ' of earth and through' : 'straight through') + ' the wooden planks at the water line. ' + (load.feet ? 'It takes more than ' + feet(load.feet) + ' of earth to stop ' + fire.shot + '.' : 'Nothing aboard stops it' + (load.guns ? '; a cannon on the water stops no shot' : '') + '.') });
-          r.frames.push({ pic: 'holed', text: 'The river comes in through the hole faster than anyone can bail. The boat fills.' });
-          r.frames.push({ pic: 'sunk', lost: load.men, text: 'It sinks in mid-river. ' + (load.men ? 'Everyone aboard is lost: ' + men(load.men) + (load.guns ? ', and ' + guns(load.guns) + ' with them' : '') + '.' : 'The ' + (load.guns ? guns(load.guns) + ' and the ' : '') + 'earth go down with it.') + ' The river is theirs today.' });
-          if (!opts.opening) { state.lost += load.men; state.lostDay = true; }
-        } else if (!stopped) {
-          r.outcome = 'through'; r.depth = null; r.lost = Math.ceil(load.men / CONFIG.MUSKET_LOSS);
-          r.frames.push({ pic: 'through', depth: null, lost: r.lost, text: cap(fire.shots) + ' come ' + (load.feet ? 'through your ' + feet(load.feet) + ' of earth and through' : 'straight through') + ' the planks all the way over. ' + (r.lost ? cap(men(r.lost)) + ' of the ' + load.men + ' are hit.' : 'Nobody is aboard to be hit.') });
-          r.frames.push({ pic: 'back', text: 'The rest reach the shore with nothing to crouch behind, and ' + fire.who + ' drive them back into the boat. It turns back.' });
-          if (!opts.opening) state.lost += r.lost;
-        } else {
-          r.depth = pen(l.fire);
-          r.frames.push({ pic: 'stuck', depth: r.depth, text: cap(fire.shot) + ' hits the heap of earth at the front and goes ' + feetHalf(r.depth) + ' in before it stops. Your heap is ' + feet(load.feet) + ', so it holds: the boat is not hurt.' });
-        }
+      if (!opts.opening) tb.pushesLeft = CONFIG.PUSHES - state.pushes;
+      frame({ pic: 'push', text: who + ' pushes off with ' + loadWords(load) + ' aboard.' });
+      var stopped = load.feet >= need;
+      if (!opts.opening) learn(state, l.fire, load.feet, stopped);
+      if (!stopped && CONFIG.SINK_FIRE[l.fire]) {
+        r.outcome = 'sunk'; r.depth = null; r.lost = load.men;
+        frame({ pic: 'through', text: cap(fire.who) + ' fire. ' + cap(fire.shot) + ' goes ' + (load.feet ? 'through your ' + feet(load.feet) + ' of earth and through' : 'straight through') + ' the planks at the water line. ' + (load.feet ? 'It takes more than ' + feet(load.feet) + ' of earth to stop ' + fire.shot + '.' : 'Nothing aboard stops it' + (load.guns ? ': a cannon on the water stops no shot' : '') + '.') });
+        if (!opts.opening) { state.lost += load.men; state.lostDay = true; tb.lost = lostAll(state); }
+        frame({ pic: 'sunk', lost: load.men, text: 'The river comes in through the hole faster than anyone can bail. The boat sinks in mid-river. ' + (load.men ? 'Everyone aboard is lost: ' + men(load.men) + (load.guns ? ', and ' + guns(load.guns) + ' with them' : '') + '.' : 'The ' + (load.guns ? guns(load.guns) + ' and the ' : '') + 'earth go down with it.') + ' The river is theirs today.' });
+      } else if (!stopped) {
+        r.outcome = 'through'; r.depth = null; r.lost = Math.ceil(load.men / CONFIG.MUSKET_LOSS);
+        if (!opts.opening) { state.lost += r.lost; tb.lost = lostAll(state); }
+        frame({ pic: 'hit', lost: r.lost, text: cap(fire.who) + ' fire. ' + cap(fire.shots) + ' come ' + (load.feet ? 'through your ' + feet(load.feet) + ' of earth and through' : 'straight through') + ' the planks, all the way over. ' + (r.lost ? cap(men(r.lost)) + ' of the ' + load.men + ' are hit.' : 'Nobody is aboard to be hit.') });
+        frame({ pic: 'back', text: 'The rest reach the shore with nothing to crouch behind, and ' + fire.who + ' drive them back into the boat. It turns back.' });
       } else {
-        r.frames.push({ pic: 'quiet', text: 'Nothing fires on the river now: your soldiers hold the far shore.' });
-      }
-      if (r.outcome !== 'through' && r.outcome !== 'sunk' && bank.men + load.men === 0) {
-        r.outcome = 'nobody';
-        r.frames.push({ pic: 'back', text: 'Nobody is aboard to carry anything ashore. The boat drifts back.' });
-      }
-      if (r.outcome !== 'through' && r.outcome !== 'sunk' && r.outcome !== 'nobody') {
-        r.outcome = 'landed'; r.landed = true;
-        r.frames.push({ pic: 'land', text: 'The boat reaches the far shore.' });
-        bank.feet = Math.max(bank.feet, load.feet); bank.men += load.men; bank.guns += load.guns; bank.held = bank.feet >= need && bank.men > 0;
-        if (!opts.opening) { state.across += load.men; r.across += load.men; if (!state.firstLanded) state.firstLanded = { feet: load.feet, guns: load.guns, men: load.men, landing: l.id, push: r.push }; }
-        if (load.feet) r.frames.push({ pic: 'wall', text: 'The soldiers carry the sacks ashore and stack them into a wall, ' + feet(bank.feet) + ' thick. They crouch behind it' + (load.guns ? ', with ' + guns(load.guns) + ' beside them' : '') + '. The wall stops ' + fire.shots + ', so they can stay.' });
-        else if (bank.feet) r.frames.push({ pic: 'wall', text: 'The soldiers run to the wall already there and crouch behind it' + (load.guns ? ', with ' + guns(load.guns) + ' beside them' : '') + '.' });
-        else r.frames.push({ pic: 'nowall', text: 'There is no earth to stack into a wall. The soldiers stand on the open shore.' });
-        if (l.battery && !bank.batteryOff) {
-          if (bank.guns >= 1) {
-            bank.batteryOff = true;
-            r.frames.push({ pic: 'drive', text: 'Your cannon fires from behind the wall. The enemy cannons stand in the open and cannot hit it, so they pull back out of range.' });
-          } else {
-            r.frames.push({ pic: 'wait', text: 'But the enemy cannons still fire on the river, so ordinary boats cannot cross yet. Only a cannon of yours, behind the wall, could drive them off.' });
+        r.depth = pen(l.fire);
+        frame({ pic: 'stuck', depth: r.depth, text: cap(fire.who) + ' fire. ' + cap(fire.shot) + ' hits the heap of earth at the front and goes ' + feetHalf(r.depth) + ' in before it stops. Your heap is ' + feet(load.feet) + ', so it holds: the boat is not hurt.' });
+        if (bank.men + load.men === 0) {
+          r.outcome = 'nobody';
+          frame({ pic: 'back', text: 'Nobody is aboard to carry anything ashore. The boat drifts back.' });
+        } else {
+          r.outcome = 'landed'; r.landed = true;
+          var hadWall = bank.feet;
+          bank.feet = Math.max(bank.feet, load.feet); bank.men += load.men; bank.guns += load.guns; bank.held = bank.feet >= need && bank.men > 0;
+          if (!opts.opening) { state.across += load.men; r.across += load.men; if (!state.firstLanded) state.firstLanded = { feet: load.feet, guns: load.guns, men: load.men, landing: l.id, push: r.push }; }
+          tb.across = opts.opening ? tb.across : state.across; tb.bank = { men: bank.men, feet: bank.feet, guns: bank.guns, batteryOff: bank.batteryOff };
+          var landText = 'The boat reaches the far shore. ' + (load.feet ? 'The soldiers carry the sacks up the bank and stack them into a wall, ' + feet(bank.feet) + ' thick, and crouch behind it' : 'The soldiers run to the wall already there and crouch behind it') + (load.guns ? ', with ' + guns(load.guns) + ' beside them' : '') + '.';
+          var drive = false;
+          if (l.battery && !bank.batteryOff) {
+            if (bank.guns >= 1) { bank.batteryOff = true; drive = true; tb.bank.batteryOff = true; landText += ' Your cannon fires from behind the wall; the enemy cannons stand in the open and cannot answer, so they pull back out of range.'; }
           }
-        }
-        if (bankSafe(l, bank)) {
-          var left = CONFIG.PUSHES - state.pushes, rest = left * CONFIG.FLEET * CONFIG.OPEN_BOAT;
-          if (!opts.opening) { state.restPassed = true; state.restAt = r.push; state.across += rest; r.across += rest; r.rest = rest; r.left = left; }
-          r.frames.push({ pic: 'rest', boats: left * CONFIG.FLEET, men: rest, text: (l.battery ? 'Nothing fires on the river now. ' : 'The enemy soldiers keep away from the wall. ') + (left ? 'The rest of the army crosses in ordinary boats: ' + rest + ' soldiers before dark.' : 'But it is dark. The rest of the army crosses at first light.') });
-        } else if (!l.battery || bank.batteryOff) {
-          r.frames.push({ pic: 'wait', text: 'Without a wall to crouch behind, the soldiers cannot hold the shore against ' + fire.who + '. They get back in the boat.' });
-          bank.men -= load.men; bank.guns -= load.guns; if (!opts.opening) { state.across -= load.men; r.across -= load.men; } r.landed = false; r.outcome = 'nowall';
+          frame({ pic: 'land', feet: bank.feet, newWall: load.feet > 0 || !hadWall, drive: drive, text: landText });
+          if (bankSafe(l, bank)) {
+            var left = CONFIG.PUSHES - state.pushes, rest = left * CONFIG.FLEET * CONFIG.OPEN_BOAT;
+            if (!opts.opening) { state.restPassed = true; state.restAt = r.push; state.across += rest; r.across += rest; r.rest = rest; r.left = left; tb.across = state.across; }
+            frame({ pic: 'rest', boats: left * CONFIG.FLEET, men: rest, text: (l.battery ? 'Nothing fires on the river now. ' : 'The enemy soldiers keep away from a wall with soldiers behind it. ') + (left ? 'The rest of the army crosses in ordinary boats: ' + rest + ' soldiers before dark.' : 'But it is dark. The rest of the army crosses at first light.') });
+          } else {
+            frame({ pic: 'wait', text: 'But the enemy cannons still fire on the river, so ordinary boats cannot cross. The rest wait. Only a cannon of yours, behind the wall, could drive the enemy cannons off.' });
+          }
         }
       }
     }
@@ -221,19 +216,20 @@
       if (first.load.feet === 0) return 'Your first boat carried no earth. To a cannonball a boat of soldiers is a boat of planks; the earth is the armour.';
       return 'Your first boat carried ' + feet(first.load.feet) + ' of earth where ' + CONFIG.FIRE[l0.fire].shot + ' needs ' + feet(need0) + '.';
     }
-    if (first.outcome === 'nowall') return 'Your first boat landed soldiers with no earth to crouch behind, and they could not stay.';
-    if (first.landed && cr.landings.length > 1 && first.load.landing !== f.landing) return 'You landed at ' + l0.letter + '. With a hull of ' + tons(hull(cr).tuns) + ', the earth their cannonballs need leaves no room for a cannon of yours, so the enemy cannons stay and the rest wait; at ' + landing(cr, f.landing).letter + ' a foot of earth is enough and the rest cross at once.';
+    if (first.outcome === 'nobody') return 'Your first boat carried earth and nobody to carry it ashore.';
+    if (first.landed && cr.landings.length > 1 && first.load.landing !== f.landing) return 'You landed at ' + l0.letter + '. With a hull of ' + tons(hull(cr).tuns) + ', the earth their small cannonballs need leaves no room for a cannon of yours and soldiers to go with it, so the enemy cannons stay and the rest wait; at ' + landing(cr, f.landing).letter + ' a foot of earth is enough and the rest cross at once.';
     if (first.landed && l0.battery && first.load.guns === 0) return 'Your first boat landed and dug in without a cannon. Soldiers behind earth hold the shore; it takes a cannon behind that earth to drive the enemy cannons off and let the rest cross.';
     if (first.landed && first.load.feet > need0) return 'Your first boat carried ' + feet(first.load.feet) + ' of earth where ' + feet(need0) + ' would have stopped ' + CONFIG.FIRE[l0.fire].shot + '; the rest of that weight could have been soldiers.';
     if (first.landed && first.load.men < f.men) return 'Your first boat landed with ' + men(first.load.men) + ' where ' + men(f.men) + ' would have floated.';
     return 'The first push could have made the far shore safe at once.';
   }
   function gameVerdict(game) {
-    var tot = 0, bst = 0, lost = 0, att = 0, per = [];
+    var tot = 0, bst = 0, lost = 0, att = 0, per = [], n = game.crossings.length;
     game.crossings.forEach(function (s) { var v = crossingVerdict(s); per.push(v); tot += s.across; bst += v.best; lost += lostAll(s); att += s.attempts; });
     var share = bst ? tot / bst : 0, fate = CONFIG.FATES[CONFIG.FATES.length - 1];
     for (var i = 0; i < CONFIG.FATES.length; i++) if (share >= CONFIG.FATES[i].min) { fate = CONFIG.FATES[i]; break; }
-    var cost = lost ? ' It cost ' + men(lost) + (att > 3 ? ', and ' + (att - 3) + (att - 3 === 1 ? ' crossing played again' : ' crossings played again') : '') + '.' : (att > 3 ? ' Not a man lost, though ' + (att - 3) + (att - 3 === 1 ? ' crossing was played again' : ' crossings were played again') + '.' : ' Not a man lost.');
+    var extra = att - n;
+    var cost = lost ? ' It cost ' + men(lost) + (extra > 0 ? ', and ' + extra + (extra === 1 ? ' crossing played again' : ' crossings played again') : '') + '.' : (extra > 0 ? ' Not a man lost, though ' + extra + (extra === 1 ? ' crossing was played again' : ' crossings were played again') + '.' : ' Not a man lost.');
     return { total: tot, best: bst, share: share, fate: fate.line, cost: cost, lost: lost, attempts: att, per: per };
   }
 
@@ -249,7 +245,7 @@
   }
   function feet(f) { return f === 1 ? '1 ft' : f + ' ft'; }
   function nth(n) { return n === 1 ? 'first' : n === 2 ? 'second' : n === 3 ? 'third' : n + 'th'; }
-  function feetHalf(f) { var w = Math.floor(f), h = f - w >= .49; return (w ? w : '') + (h ? '\u00bd' : '') + ' ft'; }
+  function feetHalf(f) { var w = Math.floor(f), h = f - w >= .49; return (w ? w : '') + (h ? '½' : '') + ' ft'; }
   // what the player knows about a kind of shot, from what they have measured: the sheet's record, never the answer
   function record(known, fire) {
     var k = known && known[fire], shot = CONFIG.FIRE[fire].shot;
@@ -267,13 +263,11 @@
     p.push(load.feet ? 'earth ' + feet(load.feet) : 'no earth');
     p.push(guns(load.guns).replace('a cannon', '1 cannon'));
     p.push(men(load.men));
-    return p.join(' + ') + ' = ' + tons(w) + ' of ' + H.tuns + (w > H.tuns + 1e-9 ? ' \u2014 it sinks' : '');
+    return p.join(' + ') + ' = ' + tons(w) + ' of ' + H.tuns + (w > H.tuns + 1e-9 ? ' — it sinks' : '');
   }
-  // the earth against the shot fired at a landing: what the sheet says while loading
-  function wallVs(f, fire, known) { var k = known && known[fire]; if (!k || (k.stuckAt === null && !k.throughAt)) return { ok: null, text: (f ? 'your heap: ' + feet(f) : 'no earth') + ' \u00b7 no shot measured yet' }; var p = []; if (k.stuckAt !== null) p.push('a shot stuck ' + feetHalf(k.stuckAt) + ' in'); if (k.throughAt) p.push('a shot went through ' + feet(k.throughAt)); return { ok: null, text: (f ? 'your heap: ' + feet(f) : 'no earth') + ' \u00b7 ' + p.join(', ') }; }
 
-  var M = { CONFIG: CONFIG, weight: weight, hull: hull, floats: floats, draught: draught, newGame: newGame, newCrossing: newCrossing, replay: replay, lostAll: lostAll, landing: landing, push: push,
-            loadings: loadings, best: best, crossingVerdict: crossingVerdict, gameVerdict: gameVerdict, sumLine: sumLine, wallVs: wallVs, record: record, pen: pen,
+  var M = { CONFIG: CONFIG, weight: weight, hull: hull, floats: floats, draught: draught, newGame: newGame, newCrossing: newCrossing, replay: replay, lostAll: lostAll, landing: landing, push: push, titleBlock: titleBlock,
+            loadings: loadings, best: best, crossingVerdict: crossingVerdict, gameVerdict: gameVerdict, sumLine: sumLine, record: record, pen: pen,
             words: { tons: tons, tuns: tons, feet: feet, feetHalf: feetHalf, men: men, guns: guns, loadWords: loadWords, cap: cap } };
   if (typeof module !== 'undefined' && module.exports) module.exports = M; else root.FLATBOAT = M;
 })(typeof window !== 'undefined' ? window : this);
