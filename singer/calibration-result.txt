@@ -1,0 +1,54 @@
+ok   ordering on plans: chimp/dog/pig > infant/elder — "Killing": chimpanzees, dogs, pigs far surpass the brain-damaged infant and the senile in self-awareness
+ok   ordering on reason: dog >= disab — "Killing": some severely retarded people can never achieve the intelligence level of a dog
+ok   ordering on plans: adult > mouse — "Killing": worse to kill a normal adult than a mouse, by self-awareness and plans
+ok   ordering on ties: adult > mouse — "Killing": close personal ties that humans have but mice do not to the same degree
+ok   ordering on ties: dog/chimp/pig > infant — "Killing": the parents do not want the infant kept alive; the animals have a capacity for meaningful relations
+ok   ordering on reason: adult > baby — "The basis for equality": the right to vote rests on rational decisions; a baby cannot vote
+ok   Pain reads the same for every being that can feel, and 0 for the oak
+ok   five humans, five animals, one thing
+ok   every legal line on Reasoning has a misfit (8 legal lines, fewest misfits 4)
+ok   Reasoning: the line with fewest misfits is unique or tied, and never 0
+ok   every legal line on Plans has a misfit (8 legal lines, fewest misfits 3)
+ok   Plans: the line with fewest misfits is unique or tied, and never 0
+ok   every legal line on Ties has a misfit (9 legal lines, fewest misfits 3)
+ok   Ties: the line with fewest misfits is unique or tied, and never 0
+ok   every legal line on Pain has a misfit (3 legal lines, fewest misfits 5)
+ok   Pain: the line with fewest misfits is unique or tied, and never 0
+ok   Species: exactly one legal line has no misfit
+ok   Pain: the only legal lines are above the lot, under everyone who can feel, and under the lot
+ok   the three reading rulers cost different people at their best line — baby,disab,elder,infant | baby,elder,infant | disab,elder,infant
+ok   robustness: with random lengths that keep only the paper's orderings, every reading ruler still fails and Species still works — 500 of 500 random casts
+ok   cast restored after robustness runs
+ok   scene slap: the paper's answer is pig
+ok   scene slap: the answer goes by pain now (2 vs 7)
+ok   scene slap pick adult judged part
+ok   scene slap pick pig judged agree
+ok   scene ward: the paper's answer is either
+ok   scene ward: the answer goes by pain now (6 vs 6)
+ok   scene ward pick adult judged either
+ok   scene ward pick disab judged either
+ok   scene fire: the paper's answer is adult
+ok   scene fire: the answer goes by Plans (10 vs 1)
+ok   scene fire pick adult judged agree
+ok   scene fire pick mouse judged part
+ok   scene fire2: the paper's answer is chimp
+ok   scene fire2: the answer goes by Plans (0 vs 7)
+ok   scene fire2 pick infant judged part
+ok   scene fire2 pick chimp judged agree
+ok   the species chooser parts from the paper on slap and fire2; the plans-for-everything chooser parts on slap alone; pain-by-amount-then-plans parts nowhere
+
+Heuristics, board one (misfits = people out + animals in + the oak in):
+  Reasoning  | keep every person: 6 | keep every animal out: 4 | fewest misfits: 4 | under the adult only: 4
+  Plans      | keep every person: 6 | keep every animal out: 3 | fewest misfits: 3 | under the adult only: 4
+  Ties       | keep every person: 6 | keep every animal out: 3 | fewest misfits: 3 | under the adult only: 4
+  Pain       | keep every person: 5 | keep every animal out: 5 | fewest misfits: 5 | under the adult only: 4 (illegal)
+  Species    | keep every person: 0 | keep every animal out: 0 | fewest misfits: 0 | under the adult only: 4 (illegal)
+Heuristics, board two (parts from the paper on which scenes):
+  always the human             parts on: slap, fire2
+  by pain now, then by plans   parts on: none
+  always by plans              parts on: slap
+  always the animal            parts on: fire
+  the paper                    parts on: none
+ok   no dead option on board two: every being in every scene is picked by some way of playing
+
+all checks passed
