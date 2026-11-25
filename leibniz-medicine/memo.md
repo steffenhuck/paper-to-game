@@ -14,6 +14,10 @@ The first build (in `previous/`) had four kinds of year drawn from four seasons,
 
 The author met the line "Bleeding did nothing this winter" and asked what it was calibrated against: some died, some lived, and the screen showed no baseline. It was the mechanism's middle label leaking: twenty dead is the fever's own toll, which the game never stated, and the third remedy was defined as "no physic", so it read as the nothing and yet could help or harm. Settled: rest is a treatment in its own right, bed, warmth and broth by the doctor's order, and neither bark nor lancet, and it can help, be no better, or harm like the others; the fever's own toll, about twenty of a hundred, is stated on the start screen, under the crowd, in the collection and on the end screen; and the middle word is now *no better than the fever alone* (*no better* on small cards and tallies, defined where it appears). No change to the mechanism's numbers.
 
+## 0c. Revision, 25 November 2026 (more to read, and a verdict in two halves)
+
+The author found the second regime still a guess (twenty-four letters a year behind a button, three or four per kind the first year) and the verdict cumbersome (a list of how many winters were like the last, five doctors in a paragraph, tags on every card). Three changes to the second regime: the First Doctor's digest sits on the play screen under the two cards, for this winter's kind, with a chip per remedy (helped n, no better n, harmed n, not tried), Leibniz's "able people have drawn important observations"; twenty-four provinces instead of twelve; and the other physicians read the letters too, giving what the collection shows helped in their kind from the second year and choosing at random only where it shows nothing, so the digest converges (every letter of 1699 reports the helper). The game becomes trivial once the data are there; that is the point, and the author said so. The verdict now leads with two halves, the five winters with nothing to read against the five with the letters, each a count, a size in words and a row of blocks; one sentence in words (the letters did what Leibniz said; or they helped less than they could; or you lost as many with them as without); three doctors, not five (you, one who never read a letter, one with letters since 1690); the ten winters as cards with the red count of the dead and no tags; and the Leibniz line with the count of letters the kingdom now holds. The own-winters strip became one scrolling row to keep the crowd on screen. Calibration: the same order, reader 116 against memory 189, letters from 1690 63.
+
 ## 1. Paper
 
 G. W. Leibniz, "On the Way of Perfecting Medicine" (*Sur la manière de perfectionner la médecine*): an extract from a letter to Germain Brice, printed in the *Journal des sçavans*, 26 July 1694, pp. 338–340. Read in Lloyd Strickland's translation (© 2019), two pages with ten notes, supplied as a PDF; the translation is published at leibniz-translations.com (the page could not be reached from the build environment; the author-note says so). No DOI, no data, no code, no figures, no numbers. The game is built from the text alone.
@@ -123,8 +127,8 @@ The Bills of Mortality and the Paris registers are a line on About. Ramazzini's 
 - **Kinds:** four, from two cards. Leibniz's "constitutions of the times" are richer; the user asked for this simplification.
 - **Remedies:** three; bark is Leibniz's, bleeding and rest are ours.
 - **Effects:** five, twenty, thirty of a hundred; no noise. Leibniz gives sizes in words.
-- **The other doctors choose at random**, before and after the letter, so the collection keeps showing harm. Real doctors would read the collection too and the harmful rows would thin out; About says so.
-- **Twelve provinces**, named after real ones; the player's is unnamed.
+- **The other physicians choose at random only in the first year of letters** and where the letters show nothing; after that they give what the letters show helped (revision 0c), so the harm rows stay from the first year and the later letters converge.
+- **Twenty-four provinces**, named after real ones; the player's is unnamed. The other physicians read the letters from their second year (revision 0c).
 - **The score** is ours; the sick are Leibniz's. **The look** is three hundred years after the letter, on purpose.
 
 ## 16. Mechanism kind and claim boundaries
@@ -155,4 +159,5 @@ What the table says. The two regimes are the two halves of the reader's row: the
 - Two browser sessions at 380 × 760 (`session-test.js`, `session-log.txt`): seed 42 played by the reading rule, with How to play opened in 1692 and the collection in 1695 and 1698; seed 7 by the own-winters rule; a laptop window. No page errors, no horizontal scroll, the collection dead until 1695 and live after, Give dead until a remedy is chosen.
 - Fixed on the screenshots: the strip of own winters pushing the crowd below the fold from 1696 (the cards lost their figure row, the winter line went, the cards and the book button shrank); the lookalike line reworded to name both winters plainly.
 - Revision 0b: the baseline on screen and the middle word reworded; rebuilt and rerun, no errors.
+- Revision 0c: the digest, twenty-four provinces, readers, the verdict in two halves; the own-winters strip as one scrolling row (Give's bottom at 564 to 615 px); rebuilt and rerun, no errors.
 - Not measured: session length. Not tested in Safari. Not reachable from here: leibniz-translations.com (author-note).
