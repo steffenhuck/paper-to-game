@@ -2,7 +2,7 @@
 // mechanism, one page a quarrel (no revision stage), printing after each action what changed and where the player now
 // stands. Output in loop-log.txt.
 var M = require('./mechanism.js'), C = M.CONFIG;
-var g = M.newGame(), log = [];
+var g = M.newGame(), log = []; M.choose(g, 0, 0); M.choose(g, 1, 0); M.choose(g, 2, 0); M.start(g); // phones, pets, homework
 function say(s) { log.push(s); console.log(s); }
 function show(q, page) { return page.map(function (it) { return q.sides[M.speakerOf(q, it)].name + (it.kind === 'reply' ? ' (reply)' : ' ' + it.form) + ': ' + M.textOf(q, it).slice(0, 40) + '…'; }).join('\n     ') + '\n     [' + M.pageLines(q, page) + ' of ' + q.budget + ' lines; publish ' + (M.canPublish(q, page) ? 'open' : 'closed') + ']'; }
 function add(id, kind) { var q = M.quarrel(g), a = M.addItem(q, g.page, id, kind); if (a.error) say('  + ' + id + ' ' + kind + ' → refused: ' + a.error); else { g.page = a.page; say('  + ' + id + ' ' + kind + ' → on the page, ' + a.note); } }
@@ -11,15 +11,15 @@ function brief(idx) { var q = M.quarrel(g), t = M.toggleForm(q, g.page, idx); g.
 function move(idx, d) { var q = M.quarrel(g); g.page = M.moveItem(q, g.page, idx, d); say('  ↕ line ' + idx + (d < 0 ? ' up' : ' down')); }
 function pub() { var q = M.quarrel(g), r = M.publish(g); say('  PUBLISH\n     ' + show(q, r.page)); r.readers.forEach(function (x) { say('     ' + q.sides[x.side].name + '-side ' + x.label + ': ' + x.text); }); say('     GAME: ' + r.statement); }
 
-say('QUARREL 1: ' + C.QUARRELS[0].question); M.setStance(g, 0); say('  stance: ' + C.QUARRELS[0].sides[0].stance);
-add('b1', 'reason'); add('b1', 'reply'); add('b2', 'reason'); add('c1', 'reason'); add('c1', 'reply'); add('b3', 'reason'); add('b3', 'reply');
-brief(2); add('c2', 'reason'); move(0, -1); brief(1);
-say('  page:\n     ' + show(C.QUARRELS[0], g.page)); pub(); M.next(g);
-say('QUARREL 2: ' + C.QUARRELS[1].question); M.setStance(g, 1); say('  stance: ' + C.QUARRELS[1].sides[1].stance);
-add('d1', 'reason'); add('k1', 'reason'); add('d2', 'reason'); add('d1', 'reply'); off(2); add('d1', 'reply'); add('k1', 'reply'); move(3, -1);
+say('QUARREL 1: ' + M.gameQuarrels(g)[0].question); M.setStance(g, 0); say('  stance: ' + M.gameQuarrels(g)[0].sides[0].stance);
+add('b1', 'reason'); add('b1', 'reply'); add('b2', 'reason'); add('p1', 'reason'); add('p1', 'reply'); add('b3', 'reason'); add('b3', 'reply');
+brief(2); add('p2', 'reason'); move(0, -1); brief(1);
+say('  page:\n     ' + show(M.gameQuarrels(g)[0], g.page)); pub(); M.next(g);
+say('QUARREL 2: ' + M.gameQuarrels(g)[1].question); M.setStance(g, 1); say('  stance: ' + M.gameQuarrels(g)[1].sides[1].stance);
+add('d1', 'reason'); add('c1', 'reason'); add('d2', 'reason'); add('d1', 'reply'); off(2); add('d1', 'reply'); add('c1', 'reply'); move(3, -1);
 pub(); M.next(g);
-say('QUARREL 3: ' + C.QUARRELS[2].question); M.setStance(g, null); say('  stance: no view');
-add('o1', 'reason'); add('h1', 'reason'); add('o2', 'reason'); add('h2', 'reason'); brief(0); brief(1); brief(2); brief(3); add('h1', 'reply'); add('o1', 'reply'); add('h2', 'reply'); add('o2', 'reply');
+say('QUARREL 3: ' + M.gameQuarrels(g)[2].question); M.setStance(g, null); say('  stance: no view');
+add('s1', 'reason'); add('k1', 'reason'); add('s2', 'reason'); add('k2', 'reason'); brief(0); brief(1); brief(2); brief(3); add('k1', 'reply'); add('s1', 'reply'); add('k2', 'reply'); add('s2', 'reply');
 pub(); M.next(g);
 var v = M.verdict(g);
 say('VERDICT: ' + v.headline); v.quarrels.forEach(function (l) { say('  ' + l); }); v.stood.forEach(function (l) { say('  ' + l); });
