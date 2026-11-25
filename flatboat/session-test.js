@@ -57,7 +57,8 @@ const { chromium } = require('playwright'); const path = require('path'); const 
   await setLoad(0, 2, 40); await shot('a-1-guns'); await fits700('crossing 1, loaded');
   log.push('sum: ' + await text('#sum'));
   await pushAndWatch('a-1-p1', ['fire', 'through', 'holed', 'sunk']);
-  await shot('a-1-lostday', true); log.push('LOST DAY: ' + await text('#cverdict') + ' | replay visible: ' + await page.$eval('#b-replay', e => !e.classList.contains('hide')));
+  await shot('a-1-lostday', true); const cvHidden = await page.$eval('#cverdict', e => e.classList.contains('hide')); log.push('LOST DAY: ' + await text('#result') + ' | verdict hidden: ' + cvHidden + ' | replay visible: ' + await page.$eval('#b-replay', e => !e.classList.contains('hide'))); if (!cvHidden) errors.push('a lost day showed the crossing verdict');
+  const lostText = await text('#s-play'); if (/most this boat could|By dark/.test(lostText)) errors.push('a lost day gave away the best loading or said by dark');
   await page.click('#b-replay'); await page.waitForTimeout(400); await shot('a-1b-empty', true);
   log.push('REPLAY tb: ' + await text('.tb'));
   await setLoad(6, 1, 0); await shot('a-1b-sinkpreview'); log.push('sink preview sum: ' + await text('#sum') + ' | button: ' + await text('#b-push'));

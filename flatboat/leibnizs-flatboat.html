@@ -430,7 +430,8 @@ b,strong{font-weight:600}
   // ---------- the verdict ----------
   function crossingVerdict(state) {
     var k = state.k, cr = CONFIG.CROSSINGS[k], b = best(k), f = b.first, lines = [];
-    lines.push('By dark: ' + men(state.across) + ' across.' + (lostAll(state) ? ' Lost on the way: ' + men(lostAll(state)) + (state.attempts > 1 ? ', over ' + state.attempts + ' attempts' : '') + '.' : (state.attempts > 1 ? ' On the ' + nth(state.attempts) + ' attempt.' : ' Nobody lost.')));
+    if (state.lostDay) lines.push('The day was lost on push ' + state.pushes + ': nobody across. Lost: ' + men(lostAll(state)) + (state.attempts > 1 ? ', over ' + state.attempts + ' attempts' : '') + '.');
+    else lines.push('By dark: ' + men(state.across) + ' across.' + (lostAll(state) ? ' Lost on the way: ' + men(lostAll(state)) + (state.attempts > 1 ? ', over ' + state.attempts + ' attempts' : '') + '.' : (state.attempts > 1 ? ' On the ' + nth(state.attempts) + ' attempt.' : ' Nobody lost.')));
     lines.push('The most this boat could have put across here: ' + b.across + ', with ' + loadWords(f) + (cr.landings.length > 1 ? ' at ' + landing(cr, f.landing).letter : '') + ' on the first push.');
     var part = whereParted(state, b);
     if (part) lines.push(part);
@@ -849,8 +850,11 @@ b,strong{font-weight:600}
     box.innerHTML = '<p class="big">' + big + '</p>' + lines.map(function (t) { return '<p>' + t + '</p>'; }).join('');
     if (state.over) {
       $('donow').textContent = state.lostDay ? 'The day is lost. Play it again, or go on.' : state.restPassed ? 'The far shore is safe. Crossing over.' : 'Dark. Crossing over.';
-      var v = M.crossingVerdict(state), cv = $('cverdict'); cv.classList.remove('hide');
-      cv.innerHTML = '<p class="lead">' + v.lines[0] + '</p>' + v.lines.slice(1).map(function (t) { return '<p>' + t + '</p>'; }).join('') + '<p class="paper">' + v.paperLine + '</p>';
+      if (!state.lostDay) {
+        // the crossing's own verdict says what happened and what Leibniz says; the best loading waits for the end
+        var v = M.crossingVerdict(state), cv = $('cverdict'); cv.classList.remove('hide');
+        cv.innerHTML = '<p class="lead">' + v.lines[0] + '</p><p class="paper">' + v.paperLine + '</p>';
+      }
       if (state.lostDay) $('b-replay').classList.remove('hide');
       var nb = $('b-nextcross'); nb.classList.remove('hide'); nb.textContent = (state.lostDay ? 'Go on · ' : '') + (k < 2 ? (state.lostDay ? 'crossing ' : 'Next crossing · ') + (k + 2) + ' of 3' : (state.lostDay ? 'the verdict' : 'See the verdict'));
     } else {
@@ -879,6 +883,7 @@ b,strong{font-weight:600}
       body.push('<p><b>' + C.CROSSINGS[i].title + ':</b> ' + (s.attempts > 1 ? 'played ' + s.attempts + ' times; ' : '') + (fl ? 'your first boat to reach the far shore carried ' + W('loadWords')(fl) + (C.CROSSINGS[i].landings.length > 1 ? ' at ' + l.letter : '') + ', on push ' + fl.push + '; ' : 'no boat reached the far shore; ') + (s.restPassed ? 'the rest of the army crossed after push ' + s.restAt : 'the rest of the army never crossed') + (M.lostAll(s) ? '; ' + W('men')(M.lostAll(s)) + ' lost.' : '.') + '</p>');
     });
     body.push('</div>');
+    body.push('<div class="sec"><h2 class="cond">The most each boat could have put across</h2>' + v.per.map(function (p, i) { return '<p><b>' + C.CROSSINGS[i].title + ':</b> ' + p.lines[1].replace('The most this boat could have put across here: ', '') + '</p>'; }).join('') + '</div>');
     var parts = v.per.map(function (p, i) { return p.parted && p.parted !== 'That is the paper’s loading.' ? '<p><b>' + C.CROSSINGS[i].title + ':</b> ' + p.parted + '</p>' : ''; }).join('');
     body.push('<div class="sec"><h2 class="cond">Where you part from the paper</h2>' + (parts || '<p>Nowhere. Every crossing was loaded as the paper would load it.</p>') + '</div>');
     $('endbody').innerHTML = body.join('');

@@ -203,7 +203,8 @@
   // ---------- the verdict ----------
   function crossingVerdict(state) {
     var k = state.k, cr = CONFIG.CROSSINGS[k], b = best(k), f = b.first, lines = [];
-    lines.push('By dark: ' + men(state.across) + ' across.' + (lostAll(state) ? ' Lost on the way: ' + men(lostAll(state)) + (state.attempts > 1 ? ', over ' + state.attempts + ' attempts' : '') + '.' : (state.attempts > 1 ? ' On the ' + nth(state.attempts) + ' attempt.' : ' Nobody lost.')));
+    if (state.lostDay) lines.push('The day was lost on push ' + state.pushes + ': nobody across. Lost: ' + men(lostAll(state)) + (state.attempts > 1 ? ', over ' + state.attempts + ' attempts' : '') + '.');
+    else lines.push('By dark: ' + men(state.across) + ' across.' + (lostAll(state) ? ' Lost on the way: ' + men(lostAll(state)) + (state.attempts > 1 ? ', over ' + state.attempts + ' attempts' : '') + '.' : (state.attempts > 1 ? ' On the ' + nth(state.attempts) + ' attempt.' : ' Nobody lost.')));
     lines.push('The most this boat could have put across here: ' + b.across + ', with ' + loadWords(f) + (cr.landings.length > 1 ? ' at ' + landing(cr, f.landing).letter : '') + ' on the first push.');
     var part = whereParted(state, b);
     if (part) lines.push(part);
