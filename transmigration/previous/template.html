@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Beam Me Up, Leibniz</title>
+<script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<meta name="description" content="Leibniz, c. 1702: can a soul move from one body to another? A space-age transfer station: burn the pod and find a pod inside, swap pilots and watch nothing show, mark the arrival and read the log. Then beam yourself by memory, and see who is still here.">
+<style>
+@font-face{font-family:'Michroma';font-weight:400;font-style:normal;src:url(data:font/woff2;base64,/*__F_MICHROMA__*/) format('woff2')}
+@font-face{font-family:'Outfit';font-weight:100 900;font-style:normal;src:url(data:font/woff2;base64,/*__F_OUTFIT__*/) format('woff2')}
+:root{--space:#07080F;--chrome:#D7DCE4;--dim:#7C8594;--faint:#2A2F3B;--orange:#FF6A1F;--teal:#5EE6D2;--amber:#FFC54D;--panel:#0E1019}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--space);color:var(--chrome);font-family:'Outfit',system-ui,sans-serif;font-size:17px;line-height:1.4}
+body{overflow-x:hidden}
+.wrap{max-width:440px;margin:0 auto;padding:12px 14px 40px}
+@media(min-width:700px){.wrap{max-width:600px}html,body{font-size:19px}}
+.mono,.key,.tag,.k{font-family:'Michroma','Outfit',sans-serif;text-transform:uppercase;letter-spacing:.06em}
+h1.title{font-family:'Michroma',sans-serif;font-size:26px;line-height:1.15;margin:8px 0 6px;letter-spacing:.04em;color:var(--chrome)}
+@media(min-width:700px){h1.title{font-size:34px}}
+.tag{font-size:10px;color:var(--amber);margin:0 0 10px}
+p{margin:8px 0}
+.screen{display:none}.screen.on{display:block}
+.hide{display:none!important}
+.aim{font-weight:600;color:var(--teal);border-left:3px solid var(--teal);padding-left:10px;margin:14px 0}
+/* keys */
+.key{position:relative;display:flex;align-items:center;gap:8px;width:100%;min-height:44px;padding:8px 12px 8px 10px;margin:5px 0;background:none;border:0;color:var(--chrome);font-size:12px;text-align:left;cursor:pointer;line-height:1.3}
+.key::before,.key::after{content:'';position:absolute;inset:0;clip-path:polygon(9px 0,calc(100% - 9px) 0,100% 9px,100% calc(100% - 9px),calc(100% - 9px) 100%,9px 100%,0 calc(100% - 9px),0 9px);z-index:0}
+.key::before{background:var(--chrome)}
+.key::after{inset:1px;background:var(--panel)}
+.key>*{position:relative;z-index:1}
+.key .lamp{flex:0 0 10px;width:10px;height:10px;border-radius:50%;background:var(--faint);border:1px solid var(--dim)}
+.key.lit .lamp{background:var(--orange);box-shadow:0 0 8px var(--orange);border-color:var(--orange)}
+.key.solid::after{background:var(--chrome)}.key.solid{color:var(--space)}
+.key.solid .lamp{background:var(--orange);border-color:var(--orange)}
+.key.off{color:var(--dim)}.key.off::before{background:var(--faint)}
+.key.small{min-height:38px;font-size:10px;padding:6px 8px;margin:3px 0;gap:6px}
+.keyrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px}.keyrow .key{min-height:48px;font-size:9.5px;padding:6px 6px 6px 8px;margin:4px 0;gap:6px;line-height:1.25}.keyrow .key small{display:block;color:var(--teal);font-size:7.5px;letter-spacing:.1em}
+.subrow.four{grid-template-columns:1fr 1fr 1fr 1fr}.subrow.three{grid-template-columns:1fr 1fr 1fr}
+.row{display:flex;gap:6px}.row .key{margin:4px 0}
+.subrow{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.qm{width:38px;min-height:38px;flex:0 0 38px;padding:0;justify-content:center;gap:0;font-size:14px}
+.top{display:flex;gap:10px;align-items:flex-start;margin:4px 0 6px}
+.top .aim{flex:1;margin:0;font-size:14.5px;line-height:1.3}
+.donow{font-family:'Michroma',sans-serif;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--amber);margin:4px 0 6px;line-height:1.5}
+/* pad */
+.pad{width:100%;display:block;background:#000;border:1px solid var(--faint);border-radius:4px}
+.padwrap{position:relative;margin:4px 0}
+/* tapes */
+.tapes{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0;font-size:12.5px}
+.tape{background:var(--panel);border:1px solid var(--faint);border-radius:3px;padding:5px 8px;min-height:70px}
+.tape h4{margin:0 0 4px;font-family:'Michroma',sans-serif;font-size:9px;letter-spacing:.08em;color:var(--dim);text-transform:uppercase}
+.tape .ln{display:flex;gap:6px;color:var(--teal);line-height:1.25;margin:2px 0}
+.tape .ln .t{font-family:'Michroma',sans-serif;font-size:9px;color:var(--amber);flex:0 0 30px;padding-top:3px}
+.tape .ln.new{color:#fff;background:rgba(255,197,77,.12);border-radius:2px;margin:2px -4px;padding:1px 4px}
+.tape .ln.cause{color:var(--orange)}
+.tape .fr{font-family:'Michroma',sans-serif;font-size:8px;color:var(--orange);text-transform:uppercase;margin:0 0 2px 36px;letter-spacing:.04em}
+.tapes.flash .tape{box-shadow:0 0 0 1px var(--teal) inset}
+.nowire{text-align:center;font-size:11px;color:var(--dim);margin:-2px 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* console */
+.console{margin:8px 0}
+.explain{font-size:14.5px;color:var(--chrome);margin:4px 0 6px;line-height:1.35}
+.explain b{color:var(--amber);font-weight:600}
+.preview{font-size:14px;color:var(--teal);margin:4px 0 4px;line-height:1.35}
+/* frame box */
+.framebox{background:var(--panel);border:1px solid var(--teal);border-radius:4px;padding:10px 12px;margin:8px 0}
+.framebox .ft{font-size:16px;line-height:1.4;min-height:44px}
+.result{background:var(--panel);border:1px solid var(--faint);border-radius:4px;padding:10px 12px;margin:8px 0;font-size:16px}
+.result .h{font-family:'Michroma',sans-serif;font-size:9px;letter-spacing:.08em;color:var(--dim);text-transform:uppercase;margin-bottom:4px}
+.book{background:#1a1407;border:1px solid var(--amber);border-radius:3px;padding:8px 12px;margin:8px 0;color:var(--amber);font-size:14px}
+.book .h{font-family:'Michroma',sans-serif;font-size:9px;letter-spacing:.08em;color:var(--amber);opacity:.8;text-transform:uppercase;margin-bottom:3px}
+.book.moral{background:#0f1a17;border-color:var(--teal);color:var(--teal)}.book.moral .h{color:var(--teal)}
+.leib{font-size:14px;color:var(--dim);font-style:italic;margin:8px 0}
+.stick{display:flex;align-items:center;gap:8px;margin:8px 0}
+.stick .key{flex:1}
+.lever{flex:0 0 96px;height:80px}
+/* end */
+.verdict h2{font-family:'Michroma',sans-serif;font-size:11px;letter-spacing:.08em;color:var(--amber);text-transform:uppercase;margin:14px 0 4px}
+.verdict p.big{font-size:19px;font-weight:600;line-height:1.35;color:#fff}
+.credit{font-size:13px;color:var(--dim);margin-top:18px;border-top:1px solid var(--faint);padding-top:10px}
+footer.sig{margin-top:22px;font-style:italic;font-size:14px;color:var(--dim)}
+footer.sig a{color:var(--dim);text-decoration:none}
+/* overlays */
+.ov{position:fixed;inset:0;background:var(--space);overflow:auto;display:none;z-index:10}.ov.on{display:block}
+.ov .wrap{padding-bottom:60px}
+.ov h2{font-family:'Michroma',sans-serif;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--amber);margin:18px 0 6px}
+.ov p,.ov li{font-size:16px}
+.ov a{color:var(--teal)}
+.close{position:sticky;top:0;background:var(--space);padding:8px 0;z-index:2}
+/* svg bits */
+.pod-capsule{fill:#0B0D16;stroke:var(--chrome);stroke-width:1.4}
+.pod-shell{fill:none;stroke:var(--chrome);stroke-opacity:.22;stroke-width:1}
+.porthole{fill:#062B29;stroke:var(--teal);stroke-width:1.2}
+.lbl{font-family:'Michroma',sans-serif;font-size:7px;fill:var(--chrome);letter-spacing:.06em;text-transform:uppercase}
+.lbl.dim{fill:var(--dim)}
+.lbl.amber{fill:var(--amber)}
+.lbl.big{font-size:10px}
+.lbl.orange{fill:var(--orange)}
+.bubble{fill:#fff;stroke:none}
+.bt{font-family:'Outfit',sans-serif;font-size:9.5px;font-weight:600;fill:#07080F}
+.mover{transition:transform 1.3s ease-in-out}
+.spin{transform-box:fill-box;transform-origin:center;animation:spin 1.2s ease-in-out 1}
+@keyframes spin{to{transform:rotate(360deg)}}
+.blink{animation:blink .4s steps(2) 4}
+@keyframes blink{50%{opacity:0}}
+.flame{fill:var(--orange);opacity:.9;animation:flick .25s infinite alternate;transform-box:fill-box;transform-origin:bottom}
+@keyframes flick{to{transform:translateY(-2px) scaleY(1.15)}}
+.peel{animation:peel .9s linear infinite;transform-box:view-box}
+@keyframes peel{from{transform:scale(1);opacity:1}to{transform:scale(1.5);opacity:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<section id="s-start" class="screen on">
+  <div class="tag">Transfer station · a game from Leibniz, c. 1702</div>
+  <h1 class="title">Beam Me Up, Leibniz</h1>
+  <svg class="pad" viewBox="0 0 340 120" id="startpad"></svg>
+  <p>Pods drift in the dark, a pilot in each. Every pod has a porthole, and in every porthole the whole fleet, seen from where that pod is. Under the pad run two tapes, the pod's log and the pilot's, in step, with no wire between them.</p>
+  <p>Your hands will set a fire and turn a dial, swap two pilots and watch the portholes, pick a sign for a pod to show, and in the end book your own passage.</p>
+  <div class="aim">Get a pilot out of one pod and into another, and get the station's book to record it.</div>
+  <button class="key solid" id="b-begin"><span class="lamp"></span><span>Begin · shift 1, the dog</span></button>
+  <div class="row"><button class="key" id="b-help-start"><span class="lamp"></span><span>How to play</span></button><button class="key" id="b-about-start"><span class="lamp"></span><span>About</span></button></div>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+
+<section id="s-play" class="screen">
+  <div class="top"><div class="aim" id="aimline">Get a pilot out of one pod and into another, and get the station's book to record it.</div><button class="key qm" id="b-help-play" aria-label="How to play"><span>?</span></button></div>
+  <div class="donow" id="donow"></div>
+  <div class="padwrap"><svg class="pad" viewBox="0 0 340 150" id="pad"></svg></div>
+  <div class="tapes" id="tapes"></div>
+  <div class="nowire" id="nowire">No wire between the tapes: each follows its own line; they agree.</div>
+  <div class="console" id="console"></div>
+  <div class="framebox hide" id="framebox"><div class="ft" id="frame-text"></div><button class="key solid" id="b-step"><span class="lamp"></span><span>Next</span></button></div>
+  <div class="result hide" id="result"></div>
+  <div class="book hide" id="book"></div>
+  <div class="book moral hide" id="moral"></div>
+  <div class="leib hide" id="leib"></div>
+  <div id="after"></div>
+</section>
+
+<section id="s-end" class="screen">
+  <div class="tag">End of shift 2 · the station's verdict</div>
+  <div class="verdict" id="verdict"></div>
+  <svg class="pad" viewBox="0 0 340 120" id="endpad"></svg>
+  <div class="credit" id="credit">Text: G. W. Leibniz, <i>On Unities and Transmigration</i> (c. 1702–1705), manuscript LBr 40 Bl. 22–23, read in <b>Lloyd Strickland's</b> translation from the French (© 2016), published at leibniz-translations.com, with thanks. His analysis of the text: "Leibniz vs. transmigration: a previously unpublished text from the early 1700s", <i>Quaestiones Disputatae</i> 7(2), 139–159. Game built from this text; the text is the authority where the two disagree.</div>
+  <button class="key solid" id="b-again"><span class="lamp"></span><span>Play again</span></button>
+  <div class="row"><button class="key" id="b-about-end"><span class="lamp"></span><span>About</span></button></div>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+
+</div>
+
+<div class="ov" id="ov-help"><div class="wrap">
+  <div class="close"><button class="key" id="b-help-close"><span class="lamp"></span><span>Back to the station</span></button></div>
+  <h2>How to play</h2>
+  <p><b>The aim:</b> get a pilot out of one pod and into another, and get the station's book to record it.</p>
+  <h2>What is on the pad</h2>
+  <p>Pods in the dark, a pilot in each: the dog in pod A, the cat in pod B, the fern, a mouse, and a diamond with no porthole. Every pod has a porthole, and in it the whole fleet from where that pod is. Under the pad, two tapes: the pod's log (what happens to it, line by line, each line from the line before: the timer, the thruster, the heater) and the pilot's tape (what the pilot feels at each line). There is no wire between them; they agree. The station's book, the amber strip, writes what the pods show and nothing else.</p>
+  <h2>Shift 1: the dog</h2>
+  <p>Three keys. Touch one and its settings appear with a preview on the pad; then press the chrome key to do it. Every try plays out one step at a time; press Next. After the last step the station says in its own words what happened, then the book writes its line, then Leibniz has his say.</p>
+  <ul>
+    <li><b>Burn:</b> set how deep (one layer, ten, a hundred, all the way) and press Fire. The outside of pod A burns off, layer by layer, and you see what is under each.</li>
+    <li><b>Swap quietly:</b> pick a pod to swap the dog with (the cat's pod, the fern's pod, the diamond) and press Swap. Two shadows cross; then the portholes and the tapes are shown before and after.</li>
+    <li><b>Swap with a mark:</b> pick a sign for pod B to show when the dog arrives (its lamp, a roll, a new course) and press Swap. Pod B shows the sign; its log writes it; the book reads the line before.</li>
+  </ul>
+  <p>Each key can be tried more than once with another setting. The shift ends when all three have been tried; then press End the shift.</p>
+  <h2>Shift 2: you</h2>
+  <p>You sit in your pod with a stick. Push it left or right and the pod rolls; both tapes say why. Then pull the stick out, want a turn, and press To the console. Then one key, Beam, with a sign for the far pod to show (its lamp, a roll, a memory); press Beam. Then Book your passage to the far station: by beam, by pod, or by beam and then fire for the pod left here. Pick a way, read what it does, press Book passage.</p>
+  <h2>The end</h2>
+  <p>No score. The verdict says what Leibniz found, what you found, where the two part, and what would have followed had yours stood.</p>
+  <div class="close" style="position:static"><button class="key" id="b-help-close2"><span class="lamp"></span><span>Back to the station</span></button></div>
+</div></div>
+
+<div class="ov" id="ov-about"><div class="wrap">
+  <div class="close"><button class="key" id="b-about-close"><span class="lamp"></span><span>Back</span></button></div>
+  /*__ABOUT__*/
+  <div class="close" style="position:static"><button class="key" id="b-about-close2"><span class="lamp"></span><span>Back</span></button></div>
+</div></div>
+
+<script>
+/*__MECHANISM__*/
+</script>
+<script>
+(function () {
+  'use strict';
+  var M = window.BEAM, C = M.CONFIG, $ = function (id) { return document.getElementById(id); };
+  var game, s, phase = 'idle', key = null, pick = null, frames = [], fi = 0, last = null, snapBefore = null, tapePod = 'A', stickStage = 0, shiftEnded = false, returnTo = null;
+  var NS = 'http://www.w3.org/2000/svg';
+
+  // ---------- drawing ----------
+  function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
+  var STARS = (function () { var a = [], x = 7; for (var i = 0; i < 46; i++) { x = (x * 1103515245 + 12345) & 0x7fffffff; var px = (x % 340); x = (x * 1103515245 + 12345) & 0x7fffffff; var py = (x % 190); a.push([px, py, (i % 5 === 0) ? 1 : .5]); } return a; })();
+  function stars(h) { var o = ''; STARS.forEach(function (st) { if (st[1] < h - 4) o += '<circle cx="' + st[0] + '" cy="' + st[1] + '" r="' + st[2] + '" fill="#9aa3b2" opacity=".6"/>'; }); o += '<ellipse cx="170" cy="' + (h / 2) + '" rx="190" ry="' + (h * .42) + '" fill="none" stroke="#1d2230" stroke-width="1"/><ellipse cx="170" cy="' + (h / 2) + '" rx="120" ry="' + (h * .26) + '" fill="none" stroke="#1d2230" stroke-width="1"/>'; return o; }
+  function pilotMark(kind, name, cx, cy, sc) {
+    var r = 5 * sc, o = '';
+    if (kind === 'heap') return '';
+    if (name === 'the dog') o = '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="#c9cfd8"/><path d="M' + (cx - r) + ' ' + (cy - r * .2) + ' l' + (-r * .9) + ' ' + (r * 1.1) + ' l' + (r * 1.1) + ' ' + (-r * .3) + 'z M' + (cx + r) + ' ' + (cy - r * .2) + ' l' + (r * .9) + ' ' + (r * 1.1) + ' l' + (-r * 1.1) + ' ' + (-r * .3) + 'z" fill="#c9cfd8"/><circle cx="' + (cx + r * .2) + '" cy="' + (cy + r * .35) + '" r="' + (r * .25) + '" fill="#07080F"/>';
+    else if (name === 'the cat') o = '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="#c9cfd8"/><path d="M' + (cx - r * .9) + ' ' + (cy - r * .3) + ' l' + (-r * .2) + ' ' + (-r * 1.2) + ' l' + (r * 1) + ' ' + (r * .6) + 'z M' + (cx + r * .9) + ' ' + (cy - r * .3) + ' l' + (r * .2) + ' ' + (-r * 1.2) + ' l' + (-r * 1) + ' ' + (r * .6) + 'z" fill="#c9cfd8"/><circle cx="' + (cx - r * .3) + '" cy="' + cy + '" r="' + (r * .18) + '" fill="#07080F"/><circle cx="' + (cx + r * .3) + '" cy="' + cy + '" r="' + (r * .18) + '" fill="#07080F"/>';
+    else if (name === 'the fern') o = '<path d="M' + cx + ' ' + (cy + r) + ' v' + (-2 * r) + ' M' + cx + ' ' + (cy + r * .4) + ' l' + (-r) + ' ' + (-r * .6) + ' M' + cx + ' ' + (cy) + ' l' + (r) + ' ' + (-r * .6) + ' M' + cx + ' ' + (cy - r * .5) + ' l' + (-r * .7) + ' ' + (-r * .5) + '" stroke="#7fd98a" stroke-width="' + (1.2 * sc) + '" fill="none"/>';
+    else if (name === 'a mouse') o = '<circle cx="' + cx + '" cy="' + cy + '" r="' + (r * .8) + '" fill="#c9cfd8"/><circle cx="' + (cx - r * .7) + '" cy="' + (cy - r * .7) + '" r="' + (r * .4) + '" fill="#c9cfd8"/><circle cx="' + (cx + r * .7) + '" cy="' + (cy - r * .7) + '" r="' + (r * .4) + '" fill="#c9cfd8"/>';
+    else o = '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="#c9cfd8" stroke-width="' + (1.2 * sc) + '"/><circle cx="' + cx + '" cy="' + (cy + r * .15) + '" r="' + (r * .55) + '" fill="#c9cfd8"/>';   // a mind: a helmet
+    return o;
+  }
+  function porthole(st, id, cx, cy, r) {
+    var v = M.view(st, id), k = r / 150, o = '<circle class="porthole" cx="' + cx + '" cy="' + cy + '" r="' + r + '"/>';
+    if (!v) return o;
+    o += '<clipPath id="cp' + id + cx + cy + '"><circle cx="' + cx + '" cy="' + cy + '" r="' + (r - 1) + '"/></clipPath><g clip-path="url(#cp' + id + cx + cy + ')">';
+    v.forEach(function (p) { var rr = p.big ? r * .16 : r * .09; o += '<rect x="' + (cx + p.dx * k - rr * 1.6) + '" y="' + (cy + p.dy * k - rr * .8) + '" width="' + (rr * 3.2) + '" height="' + (rr * 1.6) + '" rx="' + rr * .8 + '" fill="var(--teal)" opacity=".95"/>'; });
+    return o + '</g>';
+  }
+  function podSvg(st, id, opt) {
+    opt = opt || {}; var p = st.pods[id], big = p.big, w = big ? 96 : 48, h = big ? 44 : 22, x = p.x - w / 2, y = p.y - h / 2, o = '<g id="pod-' + id + '" class="podg">';
+    if (p.kind === 'heap') {
+      o += '<polygon points="' + (p.x - 16) + ',' + p.y + ' ' + (p.x - 8) + ',' + (p.y - 11) + ' ' + (p.x + 8) + ',' + (p.y - 11) + ' ' + (p.x + 16) + ',' + p.y + ' ' + p.x + ',' + (p.y + 13) + '" fill="#141826" stroke="var(--chrome)" stroke-width="1.2"/><path d="M' + (p.x - 8) + ' ' + (p.y - 11) + ' L' + p.x + ' ' + (p.y + 13) + ' L' + (p.x + 8) + ' ' + (p.y - 11) + '" stroke="var(--chrome)" stroke-opacity=".5" fill="none"/>';
+      o += '<text class="lbl dim" x="' + p.x + '" y="' + (p.y + 23) + '" text-anchor="middle">diamond</text><text class="lbl dim" x="' + p.x + '" y="' + (p.y + 32) + '" text-anchor="middle">no porthole</text>';
+      return o + '</g>';
+    }
+    if (id === 'A' && opt.shells !== false) for (var i = 1; i <= 3; i++) o += '<rect class="pod-shell" x="' + (x - 6 * i) + '" y="' + (y - 6 * i) + '" width="' + (w + 12 * i) + '" height="' + (h + 12 * i) + '" rx="' + (h / 2 + 6 * i) + '"' + (opt.burnTo && i <= opt.burnTo ? ' stroke="var(--orange)" stroke-opacity=".9" stroke-dasharray="3 2"' : '') + '/>';
+    o += '<rect class="pod-capsule" x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + (h / 2) + '"' + (opt.lit === id ? ' stroke="var(--teal)" stroke-width="2"' : '') + '/>';
+    if (p.scorched) o += '<path d="M' + (x + w * .55) + ' ' + (y + 2) + ' q' + (w * .25) + ' ' + (h * .2) + ' ' + (w * .3) + ' ' + (h * .7) + '" stroke="var(--orange)" stroke-opacity=".7" stroke-width="' + (big ? 4 : 2) + '" fill="none" stroke-linecap="round"/>';
+    var pr = big ? 15 : 7.5; o += porthole(st, id, x + (big ? 24 : 12), p.y, pr);
+    o += pilotMark(p.kind, p.pilot, x + w - (big ? 26 : 13), p.y, big ? 1.3 : .7);
+    if (opt.sign === 'lamp' && id === 'B') o += '<circle cx="' + (x + w - 4) + '" cy="' + (y + 4) + '" r="7" fill="var(--amber)"' + (opt.signLive ? ' class="blink"' : ' opacity=".35" stroke="var(--amber)" stroke-dasharray="2 1"') + '/>';
+    if (opt.sign === 'course' && id === 'B') o += '<path d="M' + (x + w + 4) + ' ' + p.y + ' l22 -14" stroke="var(--amber)" stroke-width="1.5" fill="none"' + (opt.signLive ? '' : ' stroke-dasharray="3 2" opacity=".6"') + '/><path d="M' + (x + w + 22) + ' ' + (p.y - 16) + ' l5 2 -3 4z" fill="var(--amber)"' + (opt.signLive ? '' : ' opacity=".6"') + '/>';
+    if (opt.sign === 'roll' && id === 'B') o += '<path d="M' + (p.x - 16) + ' ' + (y - 8) + ' a20 20 0 0 1 32 0" stroke="var(--amber)" stroke-width="1.5" fill="none"' + (opt.signLive ? '' : ' stroke-dasharray="3 2" opacity=".6"') + '/><path d="M' + (p.x + 16) + ' ' + (y - 8) + ' l-5 -3 1 5z" fill="var(--amber)"/>';
+    if (opt.sign === 'memory' && id === 'B' && !opt.signLive) o += '<text class="lbl amber" x="' + p.x + '" y="' + (y - 12) + '" text-anchor="middle" opacity=".7">“I was in pod A”</text>';
+    if (big) o += '<text class="lbl big" x="' + p.x + '" y="' + (y + h + 13) + '" text-anchor="middle">' + esc(p.name) + '</text><text class="lbl dim" x="' + p.x + '" y="' + (y + h + 23) + '" text-anchor="middle">' + esc(p.pilot) + '</text>';
+    else o += '<text class="lbl dim" x="' + p.x + '" y="' + (y + h + 10) + '" text-anchor="middle">' + esc(p.pilot) + '</text>';
+    return o + '</g>';
+  }
+  function drawPad(opt) {
+    opt = opt || {}; var o = stars(190);
+    if (s.shift === 2) o += '<rect x="318" y="50" width="22" height="80" fill="none" stroke="#3a4050" stroke-dasharray="3 3"/><text class="lbl dim" x="329" y="142" text-anchor="middle">far</text>';
+    ['E', 'C', 'D', 'B', 'A'].forEach(function (id) { if (s.pods[id]) o += podSvg(s, id, opt); });
+    if (opt.target && s.pods[opt.target]) { var a = s.pods.A, t = s.pods[opt.target]; o += '<path d="M' + (a.x + 50) + ' ' + (a.y - 6) + ' Q' + ((a.x + t.x) / 2) + ' ' + (t.big ? a.y - 34 : (a.y + t.y) / 2 - 10) + ' ' + (t.x - (t.big ? 50 : 26)) + ' ' + (t.y - (t.big ? 6 : 0)) + '" stroke="var(--teal)" stroke-dasharray="4 3" fill="none" stroke-width="1.2"/>'; }
+    o += '<g id="padfx"></g>';
+    $('pad').innerHTML = o;
+  }
+  function fx(html) { $('padfx').innerHTML = html; }
+
+  // ---------- tapes ----------
+  function drawTapes(opt) {
+    opt = opt || {}; var id = opt.pod || tapePod, p = s.pods[id], log = s.logs[id], n = Math.max(0, log.length - 3), o = '';
+    function lines(side) {
+      var h = '';
+      for (var i = n; i < log.length; i++) {
+        var l = log[i], cls = 'ln' + (opt.newIdx !== undefined && i === opt.newIdx ? ' new' : '') + (opt.causeIdx !== undefined && i === opt.causeIdx ? ' cause' : '');
+        if (side === 'pod' && opt.causeIdx !== undefined && i === opt.newIdx) h += '<div class="fr">follows from ' + esc(log[opt.causeIdx].t) + ' ↑</div>';
+        h += '<div class="' + cls + '"><span class="t">' + esc(l.t) + '</span><span>' + esc(side === 'pod' ? l.ev : l.feel) + '</span></div>';
+      }
+      return h;
+    }
+    o += '<div class="tape"><h4>' + esc(p.name) + ' · its log</h4>' + lines('pod') + '</div>';
+    o += '<div class="tape"><h4>' + esc(p.pilot || 'nobody') + ' · the tape</h4>' + lines('pilot') + '</div>';
+    $('tapes').innerHTML = o; $('tapes').classList.toggle('flash', !!opt.flash);
+  }
+
+  // ---------- console ----------
+  var KEYS1 = [
+    { id: 'burn', label: 'Burn', explain: '<b>Burn:</b> fire on pod A, as deep as you set; the rings round it are its layers. Expect a bottom and the dog loose, or no bottom.' },
+    { id: 'quiet', label: 'Swap quietly', explain: '<b>Swap quietly:</b> the dog and another pilot change pods, with nothing to show. Expect the portholes and tapes before and after, and the book’s line.' },
+    { id: 'mark', label: 'Swap with a mark', explain: '<b>Swap with a mark:</b> the dog into pod B, which shows a sign as she arrives. Expect the sign in pod B’s log, and the book reading the line before it.' }
+  ];
+  function keyHtml(id, label, cls) { return '<button class="key ' + (cls || '') + '" id="k-' + id + '"><span class="lamp"></span><span>' + label + '</span></button>'; }
+  function subHtml(items, chosen) { return '<div class="subrow ' + (items.length === 4 ? 'four' : items.length === 3 ? 'three' : '') + '">' + items.map(function (it) { return '<button class="key small' + (chosen === it.id ? ' lit' : '') + '" id="p-' + it.id + '"><span class="lamp"></span><span>' + it.label + '</span></button>'; }).join('') + '</div>'; }
+  function drawConsole() {
+    var o = '', c = $('console');
+    if (phase === 'frames' || phase === 'result' || phase === 'shiftend') { c.innerHTML = ''; return; }
+    if (s.shift === 1) {
+      o += '<div class="keyrow">';
+      KEYS1.forEach(function (k) {
+        var used = s.used[k.id], ex = (k.id === 'burn' && s.burns >= 2) || (k.id === 'mark' && s.marks >= 2) || (k.id === 'quiet' && s.quiets >= 3);
+        o += keyHtml(k.id, k.label + (used ? '<small>tried' + (ex ? ', now off' : '') + '</small>' : ''), (key === k.id ? 'lit' : '') + (ex ? ' off' : ''));
+      });
+      o += '</div>';
+      KEYS1.forEach(function (k) { if (key === k.id) o += '<div class="explain">' + k.explain + '</div>' + subFor(k.id); });
+      if (!key && !M.shiftDone(s)) o += '<div class="explain">Three ways to move the dog. Touch a key to see what it does and set it; nothing happens until you press the chrome key. After every try the station says what happened, and <b>the station’s book</b>, the amber strip, writes what the pods showed, and nothing else.</div>';
+      if (M.shiftDone(s) && !shiftEnded) o += keyHtml('endshift', 'End the shift', 'solid');
+    } else {
+      if (stickStage < 4) {
+        o += '<div class="explain">' + (stickStage === 0 ? '<b>The stick:</b> push it and your pod rolls. Both tapes say why.' : stickStage < 2 ? 'Once more, the other way.' : stickStage === 2 ? 'Now pull the stick out.' : '<b>The stick is out.</b> Want a turn, and see what the pod does.') + '</div>';
+        o += '<div class="stick"><button class="key" id="k-left"><span class="lamp"></span><span>' + (s.stickOut ? 'Want left' : 'Push left') + '</span></button><svg class="lever" viewBox="0 0 70 70" id="lever"></svg><button class="key" id="k-right"><span class="lamp"></span><span>' + (s.stickOut ? 'Want right' : 'Push right') + '</span></button></div>';
+        if (stickStage === 2) o += keyHtml('pull', 'Pull the stick out', 'solid');
+        if (stickStage === 3 && s.steers >= 3) o += keyHtml('toconsole', 'To the console', 'solid');
+      } else if (!s.beamed) {
+        var ex2 = s.marks >= 3;
+        o += keyHtml('beam', 'Beam', (key === 'beam' ? 'lit' : ''));
+        if (key === 'beam') o += '<div class="explain"><b>Beam:</b> you into the far pod, which shows a sign as you arrive. Expect the sign in its log, and the book reading the line before it.</div>' + subFor('beam');
+      } else if (!s.booked) {
+        o += keyHtml('book', 'Book your passage', (key === 'book' ? 'lit' : ''));
+        if (key === 'book') o += '<div class="explain"><b>Book your passage</b> to the far station: three ways. Pick one, read what it does, book it. None is wrong; the verdict says what became of you.</div>' + subFor('book');
+      }
+    }
+    c.innerHTML = o;
+    // wire
+    KEYS1.forEach(function (k) { var b = $('k-' + k.id); if (b) b.onclick = function () { if (b.classList.contains('off')) return; if (key !== k.id) { key = k.id; pick = null; } drawConsole(); previewPad(); }; });
+    ['beam', 'book'].forEach(function (k) { var b = $('k-' + k); if (b) b.onclick = function () { if (key !== k) { key = k; pick = null; } drawConsole(); previewPad(); }; });
+    var e = $('k-endshift'); if (e) e.onclick = endShift;
+    var l = $('k-left'), r = $('k-right'); if (l) l.onclick = function () { doSteer('left'); }; if (r) r.onclick = function () { doSteer('right'); };
+    var pu = $('k-pull'); if (pu) pu.onclick = function () { var t = M.pullStick(s); stickStage = 3; drawConsole(); drawLever(0); showNote(t.text); };
+    var tc = $('k-toconsole'); if (tc) tc.onclick = function () { stickStage = 4; key = 'beam'; $('nowire').classList.remove('hide'); hideNote(); drawConsole(); previewPad(); setDonow(); };
+    document.querySelectorAll('[id^="p-"]').forEach(function (b) { b.onclick = function () { pick = b.id.slice(2); drawConsole(); previewPad(); }; });
+    var go = $('k-go'); if (go) go.onclick = commit;
+    drawLever(0);
+  }
+  function subFor(k) {
+    var items, o = '';
+    if (k === 'burn') items = C.DEPTHS.map(function (d, i) { return { id: 'd' + i, label: d.key }; });
+    if (k === 'quiet') items = [{ id: 'B', label: 'the cat’s pod' }, { id: 'C', label: 'the fern’s pod' }, { id: 'D', label: 'the diamond' }];
+    if (k === 'mark') items = ['lamp', 'roll', 'course'].map(function (m) { return { id: m, label: C.MARKS[m].key }; });
+    if (k === 'beam') items = ['lamp', 'roll', 'memory'].map(function (m) { return { id: m, label: C.MARKS[m].key }; });
+    if (k === 'book') items = Object.keys(C.WAYS).map(function (w) { return { id: w, label: C.WAYS[w].key }; });
+    o += subHtml(items, pick);
+    if (pick) {
+      var pv = previewText(k, pick); o += '<div class="preview">' + pv + '</div>';
+      var lab = k === 'burn' ? 'Fire' : k === 'beam' ? 'Beam' : k === 'book' ? 'Book passage' : 'Swap';
+      o += keyHtml('go', lab, 'solid');
+    }
+    return o;
+  }
+  function previewText(k, p) {
+    if (k === 'burn') { var d = C.DEPTHS[+p.slice(1)]; return d.all ? 'The rings on pod A, and whatever is under them, burnt until the station stops counting.' : 'The outer ' + (d.n === 1 ? 'ring' : d.n + ' rings') + ' of pod A burnt off; then whatever is under them.'; }
+    if (k === 'quiet') { var t = s.pods[p]; return t.porthole ? 'The dog and ' + t.pilot + ' change pods, with nothing to show for it. Then the portholes and the tapes, before and after.' : 'The dog and whatever is in the diamond change pods. The diamond has no porthole, so first the station must find a pilot in it.'; }
+    if (k === 'mark' || k === 'beam') { var m = C.MARKS[p]; return (k === 'mark' ? 'The dog' : 'You') + ' into ' + (k === 'mark' ? 'pod B' : 'the far pod') + ', which then ' + (p === 'lamp' ? 'flashes its lamp' : p === 'roll' ? 'rolls over, once' : p === 'course' ? 'turns onto a new course' : 'says “I was in pod A. I remember the roll at 3:12 and the warmth at 3:13.”') + ', drawn in amber on the pad. The book then reads the line before it.'; }
+    if (k === 'book') return C.WAYS[p].line;
+    return '';
+  }
+  function previewPad() {
+    var opt = {};
+    if (key === 'burn' && pick) opt.burnTo = Math.min(3, C.DEPTHS[+pick.slice(1)].n);
+    if (key === 'quiet' && pick) { opt.target = pick; opt.lit = pick; }
+    if ((key === 'mark' || key === 'beam') && pick) { opt.sign = pick; opt.target = 'B'; opt.lit = 'B'; }
+    drawPad(opt);
+  }
+  function drawLever(tilt) {
+    var el = $('lever'); if (!el) return;
+    el.setAttribute('viewBox', '0 0 96 80');
+    el.innerHTML = s.stickOut
+      ? '<circle cx="30" cy="62" r="7" fill="none" stroke="var(--dim)" stroke-dasharray="2 2"/><text class="lbl dim" x="30" y="78" text-anchor="middle">socket</text><g transform="translate(44 18) rotate(90)"><line x1="0" y1="0" x2="0" y2="40" stroke="var(--chrome)" stroke-width="4"/><circle cx="0" cy="-4" r="8" fill="var(--orange)"/></g><text class="lbl amber" x="58" y="42" text-anchor="middle">out, in</text><text class="lbl amber" x="58" y="52" text-anchor="middle">your hand</text>'
+      : '<circle cx="48" cy="66" r="8" fill="none" stroke="var(--chrome)" stroke-width="1.5"/><g style="transform-origin:48px 66px;transform:rotate(' + tilt + 'deg);transition:transform .3s"><line x1="48" y1="64" x2="48" y2="20" stroke="var(--chrome)" stroke-width="4"/><circle cx="48" cy="14" r="9" fill="var(--orange)"/></g>';
+  }
+  function doSteer(dir) {
+    var r = M.steer(s, dir); drawLever(dir === 'left' ? -28 : 28);
+    var g = $('pad-A'); if (g) { g.style.transformBox = 'fill-box'; g.style.transformOrigin = 'center'; g.style.transition = 'transform .6s'; g.style.transform = 'rotate(' + (dir === 'left' ? -12 : 12) + 'deg)'; setTimeout(function () { g.style.transform = 'rotate(0deg)'; }, 700); }
+    drawTapes({ pod: 'A', newIdx: s.logs.A.length - 1 });
+    if (stickStage < 2 && s.steers >= 2) stickStage = 2; else if (stickStage < 2) stickStage = 1;
+    showNote(r.text); drawConsole(); drawLever(dir === 'left' ? -28 : 28);
+  }
+  function showNote(t) { var r = $('result'); r.classList.remove('hide'); r.innerHTML = '<div class="h">The station says</div>' + esc(t); }
+  function hideNote() { $('result').classList.add('hide'); }
+
+  // ---------- donow ----------
+  function setDonow(extra) {
+    var t;
+    if (s.shift === 1) { var nk = ['burn', 'quiet', 'mark'].filter(function (k) { return s.used[k]; }).length; t = 'Shift 1 of 2 · the dog, in pod A · ' + (M.shiftDone(s) ? 'all keys tried: end the shift' : nk ? nk + ' of 3 keys tried' : '3 keys: try each'); }
+    else if (stickStage < 4) t = 'Shift 2 of 2 · you, in your pod · first, the stick';
+    else if (!s.beamed) t = 'Shift 2 of 2 · you, into the far pod · one key: beam';
+    else if (!s.booked) t = 'Shift 2 of 2 · you · last: book your passage';
+    else t = 'Shift 2 of 2 · booked.';
+    $('donow').textContent = extra ? t + ' ' + extra : t;
+  }
+
+  // ---------- commit and frames ----------
+  function commit() {
+    var r; hideResult();
+    if (key === 'burn') r = M.burn(s, +pick.slice(1));
+    else if (key === 'quiet') { snapBefore = { A: M.view(s, 'A'), T: M.view(s, pick) }; r = M.swapQuiet(s, pick); }
+    else if (key === 'mark' || key === 'beam') { tapePod = 'B'; r = M.swapMark(s, pick); }
+    else if (key === 'book') { r = M.bookPassage(s, pick); last = r; finish(); return; }
+    last = r; frames = r.frames; fi = 0; phase = 'frames'; drawConsole(); $('framebox').classList.remove('hide'); playFrame();
+  }
+  function hideResult() { ['result', 'book', 'moral', 'leib'].forEach(function (id) { $(id).classList.add('hide'); }); $('after').innerHTML = ''; }
+  function playFrame() {
+    var f = frames[fi]; $('frame-text').textContent = f.text; $('b-step').querySelector('span:last-child').textContent = fi === frames.length - 1 ? 'What this means' : 'Next';
+    window.scrollTo(0, 0);
+    var A = s.pods.A, B = s.pods.B, tgt = f.target ? s.pods[f.target] : null;
+    if (f.pic === 'fire') { drawPad({ burnTo: 3 }); fx(flames(A)); }
+    if (f.pic === 'peel') { drawPad({ shells: false }); fx(peelRings(A) + flames(A) + '<text class="lbl orange big" id="cnt" x="170" y="144" text-anchor="middle">layers burnt: 0</text>'); runCounter(f.n, f.all); }
+    if (f.pic === 'remains') { drawPad({ shells: false }); fx('<text class="lbl orange big" x="170" y="144" text-anchor="middle">' + (f.all ? 'past a million layers burnt. a pod.' : f.n + (f.n === 1 ? ' layer' : ' layers') + ' burnt. a pod.') + '</text>'); }
+    if (f.pic === 'seek') { drawPad({ lit: f.target }); fx('<circle cx="' + tgt.x + '" cy="' + tgt.y + '" r="26" fill="none" stroke="var(--teal)" stroke-dasharray="4 3" class="spin"/>'); }
+    if (f.pic === 'heap') { drawPad({}); fx('<text class="lbl orange big" x="' + tgt.x + '" y="' + (tgt.y - 20) + '" text-anchor="middle">no porthole</text>'); }
+    if (f.pic === 'cross') { drawPad({ target: f.target }); crossShadows(A, tgt); }
+    if (f.pic === 'windows') { drawPad({}); windowsCompare(f.target); }
+    if (f.pic === 'tapes') { drawPad({}); drawTapes({ pod: 'A', flash: true }); }
+    if (f.pic === 'book') { drawPad({}); $('book').classList.remove('hide'); $('book').innerHTML = '<div class="h">The station’s book</div>Nothing shown. Nothing written.'; }
+    if (f.pic === 'mark') { drawPad({ sign: f.sign, signLive: true }); if (f.sign === 'roll') { var g = $('pod-B'); g.classList.add('spin'); } if (f.sign === 'course') { var g2 = $('pod-B'); g2.classList.add('mover'); setTimeout(function () { g2.style.transform = 'translate(14px,-10px)'; }, 50); } drawTapes({ pod: 'B', newIdx: s.logs.B.length - 1 }); }
+    if (f.pic === 'arrow') { drawPad({ sign: f.sign, signLive: f.sign !== 'memory' }); drawTapes({ pod: 'B', newIdx: s.logs.B.length - 1, causeIdx: s.logs.B.length - 2 }); if (f.sign === 'memory') fx(bubble(B, 'I was in pod A. I remember the roll at 3:12 and the warmth at 3:13.')); }
+    if (f.pic === 'speak') { drawPad({}); fx(bubble(B, 'I was in pod A. I remember the roll at 3:12 and the warmth at 3:13.')); drawTapes({ pod: 'B', newIdx: s.logs.B.length - 1 }); }
+    if (f.pic === 'moral') { drawPad({}); fx(bubble(B, 'I was in pod A. I remember.')); $('moral').classList.remove('hide'); $('moral').innerHTML = '<div class="h">The second book · by what minds claim and remember</div>' + esc(s.moral[s.moral.length - 1]); }
+    if (f.pic === 'speakA') { drawPad({}); fx(bubble(B, 'I was in pod A. I remember.') + bubble(A, 'I am in pod A. I remember the roll at 3:12 and the warmth at 3:13.')); }
+  }
+  function flames(p) { var o = ''; for (var i = 0; i < 9; i++) { var x = p.x - 64 + i * 16, y = p.y - 40 + (i % 2) * 3, h = 14 + (i * 7) % 9; o += '<path class="flame" style="animation-delay:' + (i * 37 % 200) + 'ms" d="M' + x + ' ' + y + ' c-2 -' + (h * .4) + ' 3 -' + (h * .6) + ' 4 -' + h + ' c2 ' + (h * .5) + ' 7 ' + (h * .5) + ' 6 ' + h + ' q-5 3 -10 0z"/>'; } return o; }
+  function peelRings(p) { var o = ''; for (var i = 0; i < 3; i++) o += '<rect class="peel" style="animation-delay:' + (i * 300) + 'ms;transform-origin:' + p.x + 'px ' + p.y + 'px" x="' + (p.x - 48) + '" y="' + (p.y - 22) + '" width="96" height="44" rx="22" fill="none" stroke="var(--orange)" stroke-width="1.5"/>'; return o; }
+  function runCounter(n, all) { var t0 = Date.now(), el = $('cnt'); (function tick() { var el2 = $('cnt'); if (!el2 || el2 !== el) return; var e = (Date.now() - t0) / 1600, v = Math.min(1, e); var shown = all ? Math.round(Math.pow(10, v * 6)) : Math.round(v * v * n); el2.textContent = 'layers burnt: ' + (all && v >= 1 ? 'past a million…' : shown.toLocaleString('en-GB')); if (v < 1) requestAnimationFrame(tick); })(); }
+  function crossShadows(a, t) {
+    fx('<g id="sh1" class="mover"><circle cx="' + (a.x + 20) + '" cy="' + a.y + '" r="7" fill="#9aa3b2" opacity=".7"/></g><g id="sh2" class="mover"><circle cx="' + (t.x - (t.big ? 20 : 10)) + '" cy="' + t.y + '" r="' + (t.big ? 7 : 4) + '" fill="#9aa3b2" opacity=".7"/></g>');
+    setTimeout(function () { var s1 = $('sh1'), s2 = $('sh2'); if (!s1) return; s1.style.transform = 'translate(' + (t.x - (t.big ? 20 : 10) - a.x - 20) + 'px,' + (t.y - a.y) + 'px)'; s2.style.transform = 'translate(' + (a.x + 20 - t.x + (t.big ? 20 : 10)) + 'px,' + (a.y - t.y) + 'px)'; }, 60);
+  }
+  function windowsCompare(tid) {
+    var o = '<rect x="0" y="0" width="340" height="190" fill="#000" opacity=".88"/>';
+    var rows = [['before', snapBefore], ['after', { A: M.view(s, 'A'), T: M.view(s, tid) }]];
+    rows.forEach(function (row, ri) {
+      var y = 52 + ri * 86; o += '<text class="lbl amber big" x="22" y="' + (y + 4) + '">' + row[0] + '</text>';
+      [['A', s.pods.A.name, 110], [tid, s.pods[tid].name, 230]].forEach(function (c) {
+        var v = row[1][c[0] === 'A' ? 'A' : 'T'], cx = c[2], r = 30, k = r / 150; o += '<circle class="porthole" cx="' + cx + '" cy="' + y + '" r="' + r + '"/><clipPath id="w' + ri + c[0] + '"><circle cx="' + cx + '" cy="' + y + '" r="' + (r - 1) + '"/></clipPath><g clip-path="url(#w' + ri + c[0] + ')">';
+        (v || []).forEach(function (p) { var rr = p.big ? r * .16 : r * .09; o += '<rect x="' + (cx + p.dx * k - rr * 1.6) + '" y="' + (y + p.dy * k - rr * .8) + '" width="' + (rr * 3.2) + '" height="' + (rr * 1.6) + '" rx="' + rr * .8 + '" fill="var(--teal)"/>'; });
+        o += '</g><text class="lbl dim" x="' + cx + '" y="' + (y + 40) + '" text-anchor="middle">' + esc(c[1]) + '</text>';
+      });
+    });
+    fx(o);
+  }
+  function bubble(p, text) {
+    var w = 164, x = Math.max(3, Math.min(337 - w, p.x - w / 2)), lines = [], cur = '';
+    text.split(' ').forEach(function (wd) { if ((cur + ' ' + wd).length > 30) { lines.push(cur); cur = wd; } else cur = cur ? cur + ' ' + wd : wd; }); lines.push(cur);
+    var h = 8 + lines.length * 12, y = p.y - 32 - h - 8, o = '<path class="bubble" d="M' + x + ' ' + y + ' h' + w + ' v' + h + ' h' + (-(w / 2 - 6)) + ' l-6 8 -6 -8 h' + (-(w / 2 - 6)) + 'z"/>';
+    lines.forEach(function (l, i) { o += '<text class="bt" x="' + (x + 6) + '" y="' + (y + 13 + i * 12) + '">' + esc(l) + '</text>'; });
+    return o;
+  }
+  function step() {
+    if (fi < frames.length - 1) { fi++; playFrame(); return; }
+    phase = 'result'; $('framebox').classList.add('hide');
+    var r = last; $('result').classList.remove('hide'); $('result').innerHTML = '<div class="h">The station says</div>' + esc(r.voice);
+    if (r.book) { $('book').classList.remove('hide'); $('book').innerHTML = '<div class="h">The station’s book</div>' + esc(r.book); }
+    if (r.leibniz) { $('leib').classList.remove('hide'); $('leib').textContent = r.leibniz; }
+    var after = $('after'); after.innerHTML = '';
+    if (s.shift === 1) {
+      after.innerHTML = keyHtml('next', M.shiftDone(s) ? 'Back to the keys · then end the shift' : 'Back to the keys', 'solid');
+      $('k-next').onclick = function () { phase = 'idle'; key = null; pick = null; tapePod = 'A'; hideResult(); setDonow(); drawPad({}); drawTapes({ pod: 'A' }); drawConsole(); window.scrollTo(0, 0); };
+    } else {
+      after.innerHTML = keyHtml('next', s.beamed ? 'Now book your passage' : 'Back to the beam', 'solid');
+      $('k-next').onclick = function () { phase = 'idle'; key = s.beamed ? 'book' : 'beam'; pick = null; hideResult(); setDonow(); drawPad({}); drawTapes({ pod: s.beamed ? 'B' : 'A' }); drawConsole(); window.scrollTo(0, 0); };
+    }
+    if (r.exhausted && r.kind === 'burn') $('leib').textContent += ' · The Burn key is now off: the station has no deeper setting.';
+    if (r.exhausted && r.kind === 'mark' && !r.moral) $('leib').textContent += ' · The Mark key is now off: every line of a log follows from the line before, whatever the sign.';
+    window.scrollTo(0, 0);
+  }
+  function endShift() {
+    shiftEnded = true; phase = 'shiftend'; drawConsole(); hideResult(); drawPad({});
+    $('book').classList.remove('hide'); $('book').innerHTML = '<div class="h">The station’s book · end of shift 1</div>The dog is in pod A, as she was. Three keys tried; written: a scorch on the outside, and a sign with its cause. No pilot moved.';
+    $('result').classList.remove('hide'); $('result').innerHTML = '<div class="h">The station says</div>You tried every key the station has for an animal. Next shift: you. A mind can do sums and keep a book of its own, and the station keeps a second book for minds.';
+    $('after').innerHTML = keyHtml('shift2', 'Shift 2 · you', 'solid');
+    $('k-shift2').onclick = function () { M.nextShift(game); s = game.shift; shiftEnded = false; phase = 'idle'; key = null; pick = null; stickStage = 0; tapePod = 'A'; hideResult(); $('nowire').classList.add('hide'); setDonow(); drawPad({}); drawTapes({ pod: 'A' }); drawConsole(); window.scrollTo(0, 0); };
+    window.scrollTo(0, 0);
+  }
+  function finish() {
+    game.done = true; var v = M.verdict(game), r = last, o = '';
+    o += '<h2>What Leibniz found</h2><p class="big">' + esc(v.paper) + '</p>';
+    o += '<h2>What you found</h2>' + v.found.map(function (f) { return '<p>' + esc(f) + '</p>'; }).join('');
+    o += '<p>' + esc(r.voice) + '</p>';
+    o += '<h2>Where you part</h2><p>' + esc(v.part) + '</p>';
+    o += '<h2>What would have followed</h2><p>' + esc(v.followed) + '</p><p class="leib">' + esc(r.leibniz) + '</p>';
+    $('verdict').innerHTML = o;
+    var ep = $('endpad'), e = stars(120), two = r.claimants === 2;
+    var st = { pods: { A: { id: 'A', name: 'your pod', pilot: 'you', kind: 'mind', porthole: true, x: 85, y: 44, big: true, scorched: r.wayId === 'beamburn' ? 1 : 0 }, B: { id: 'B', name: 'the far pod', pilot: two ? 'also you' : 'the far pilot', kind: 'mind', porthole: true, x: 255, y: 44, big: true, scorched: 0 } }, logs: {}, shift: 2 };
+    if (r.wayId === 'pod') { st.pods.A.x = 230; st.pods.A.y = 44; st.pods.B.x = 80; st.pods.B.y = 30; st.pods.B.big = false; st.pods.B.pilot = 'the far pilot'; st.pods.B.name = 'the far pod'; }
+    e += podSvg(st, 'B', { shells: false }) + podSvg(st, 'A', { shells: false });
+    if (r.wayId !== 'pod') e += '<text class="lbl amber big" x="170" y="112" text-anchor="middle">two pilots · one life</text>'; else e += '<text class="lbl amber big" x="170" y="112" text-anchor="middle">one pilot · one pod · together</text>';
+    ep.innerHTML = e; show('s-end');
+  }
+
+  // ---------- screens ----------
+  function show(id) { ['s-start', 's-play', 's-end'].forEach(function (x) { $(x).classList.toggle('on', x === id); }); window.scrollTo(0, 0); }
+  function start() {
+    game = M.newGame(); s = game.shift; phase = 'idle'; key = null; pick = null; frames = []; fi = 0; last = null; tapePod = 'A'; stickStage = 0; shiftEnded = false;
+    hideResult(); $('framebox').classList.add('hide'); $('nowire').classList.remove('hide'); setDonow(); drawPad({}); drawTapes({ pod: 'A' }); drawConsole(); show('s-play');
+  }
+  function openOv(n) { returnTo = window.scrollY; $('ov-' + n).classList.add('on'); $('ov-' + n).scrollTop = 0; }
+  function closeOv(n) { $('ov-' + n).classList.remove('on'); window.scrollTo(0, returnTo || 0); }
+  $('b-begin').onclick = start; $('b-again').onclick = function () { show('s-start'); };
+  $('b-step').onclick = step;
+  $('b-help-start').onclick = function () { openOv('help'); }; $('b-help-play').onclick = function () { openOv('help'); };
+  $('b-help-close').onclick = function () { closeOv('help'); }; $('b-help-close2').onclick = function () { closeOv('help'); };
+  $('b-about-start').onclick = function () { openOv('about'); }; $('b-about-end').onclick = function () { openOv('about'); };
+  $('b-about-close').onclick = function () { closeOv('about'); }; $('b-about-close2').onclick = function () { closeOv('about'); };
+  // start pad: one pod with its porthole and the dog
+  (function () { var st = M.newShift(1); st.pods.A.x = 120; st.pods.A.y = 58; st.pods.B.x = 250; st.pods.B.y = 40; st.pods.C.x = 290; st.pods.C.y = 90; st.pods.E.x = 40; st.pods.E.y = 25; st.pods.D.x = 200; st.pods.D.y = 95; var o = stars(120); ['E', 'C', 'D', 'B', 'A'].forEach(function (id) { o += podSvg(st, id, {}); }); $('startpad').innerHTML = o; })();
+  window.__game = { get: function () { return { game: game, s: s, phase: phase, key: key, pick: pick, fi: fi, frames: frames, last: last, stickStage: stickStage }; }, M: M };
+})();
+</script>
+</body>
+</html>
