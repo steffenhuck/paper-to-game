@@ -26,6 +26,7 @@ function cr(k) { return C.CROSSINGS[k]; }
   check('the general’s opening boat is sunk with all sixty and changes nothing: no push used, nothing across, nothing in the tally, the bank untouched', ro.outcome === 'sunk' && ro.lost === 60 && o.pushes === 0 && o.across === 0 && o.lost === 0 && !o.lostDay && o.banks.front.men === 0 && o.openingDone && ro.frames.length === 5);
   // revision 4: losses, the day lost, the replay
   var g4 = M.newGame(), s4 = g4.crossings[0], r4a = M.push(s4, { feet: 2, guns: 1, men: 40, landing: 'front' });
+  check('a lost day’s verdict line says the day was lost on that push, not by dark', /^The day was lost on push 1: nobody across\. Lost: 40 soldiers\.$/.test(M.crossingVerdict(s4).lines[0]), M.crossingVerdict(s4).lines[0]);
   check('a cannonball through sinks the boat: everyone aboard lost, the day over, nothing across', r4a.outcome === 'sunk' && r4a.lost === 40 && s4.lost === 40 && s4.lostDay && s4.over && s4.across === 0 && r4a.frames.map(function (f) { return f.pic; }).join(',') === 'push,fire,through,holed,sunk');
   var c4 = M.replay(g4, 0);
   check('the crossing played again starts afresh but carries the dead, the attempts and the record', c4.pushes === 0 && c4.across === 0 && !c4.over && c4.lost === 0 && c4.lostBefore === 40 && c4.attempts === 2 && c4.known === g4.known && g4.known.field.throughAt === 2 && g4.crossings[0] === c4);
