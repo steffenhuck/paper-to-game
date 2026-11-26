@@ -2,7 +2,7 @@
 // Usage: node loop.js [seed] [strategy: homebody|loyal|spreader|bridgesOften|oneCircle|stayIn|learns]
 var m = require('./mechanism.js'), C = m.CONFIG;
 var seed = process.argv[2] || 'demo', stratName = process.argv[3] || 'learns';
-var learns = [function () { return { Ann: 2, Ben: 2, Cal: 2, Dee: 1 }; }, function () { return { Ann: 1, Dee: 1, Eli: 1, Fay: 1, Gus: 1, Wes: 1, Kim: 1 }; }, function () { return { Ann: 1, Dee: 2, Eli: 1, Fay: 1, Gus: 1, Wes: 1 }; }, function (s) { return m.STRATEGIES.spreader(s); }, function (s) { return m.STRATEGIES.spreader(s); }];
+var learns = [function () { return { Ann: 2, Ben: 2, Cal: 2, Dee: 1 }; }, function () { return { Ann: 1, Dee: 1, Eli: 1, Fay: 1, Gus: 1, Wes: 1, Kim: 1 }; }, function () { return { Ann: 1, Dee: 2, Eli: 1, Fay: 1, Gus: 1, Wes: 1 }; }];
 var strat = stratName === 'learns' ? function (s) { return learns[s.week - 1](s); } : m.STRATEGIES[stratName];
 function say(x) { console.log(x); }
 function lineWord(cat) { return cat === 'often' ? 'thick line' : (cat === 'occ' ? 'thin line' : 'dashed line'); }
@@ -30,10 +30,13 @@ while (!m.isOver(s)) {
   });
   say('   WEEK ' + w + ': you heard of ' + rec.heard + ' of ' + rec.total + ' openings. Weeks so far: ' + s.weeks.map(function (x) { return x.heard; }).join(' · ') + '. [Next week]');
 }
+say('\n-- THE BET. One more week of news, every line dashed. How many of the seven reach you? [none | one or two | three or four | five or more]');
+var br = m.betWeek(s), tell = []; br.pieces.forEach(function (p) { if (p.heard) p.tellers.forEach(function (t) { if (tell.indexOf(t.who) < 0) tell.push(t.who); }); });
+say('   You said: one or two. ' + br.heard + ' of 7 reached you anyway, from ' + tell.join(', ') + '. Not counted. The paper: more than a quarter of the Boston job changers heard from someone seen once a year or less. [See the verdict]');
 var t = m.tally(s);
-say('\n== VERDICT. You heard of ' + t.heard + ' of the ' + t.total + ' openings the town heard of in five weeks.');
+say('\n== VERDICT. You heard of ' + t.heard + ' of the ' + t.total + ' openings the town heard of in three weeks.');
 say('   From people you saw often: ' + t.seen.often + '; now and then: ' + t.seen.occ + '; rarely: ' + t.seen.rare + '.   Granovetter\'s 54 job changers: ' + C.BOSTON_SEEN.often + ' / ' + C.BOSTON_SEEN.occ + ' / ' + C.BOSTON_SEEN.rare + ' per cent.');
 say('   Straight from the source: ' + t.hands.h0 + '; one pair of hands: ' + t.hands.h1 + '; two: ' + t.hands.h2 + '; more: ' + t.hands.h3 + '.');
-var hb = m.tally(m.runStrategy(seed, m.STRATEGIES.homebody)).heard, sp = m.tally(m.runStrategy(seed, m.STRATEGIES.spreader)).heard;
-say('   Same news, every evening in your circle: ' + hb + '. One evening to one person in each circle: ' + sp + '.');
+var hb = m.tally(m.runStrategy(seed, m.STRATEGIES.homebody)).heard, sp = m.tally(m.runStrategy(seed, m.STRATEGIES.spreader)).heard, st = m.tally(m.runStrategy(seed, m.STRATEGIES.stayIn)).heard, hs = m.tally(m.runStrategy(seed, m.STRATEGIES.hindsight)).heard;
+say('   Same news, every evening in your circle: ' + hb + '. One evening to one person in each circle: ' + sp + '. No evening on anyone: ' + st + '. Best three weeks knowing the news: ' + hs + '.');
 say('   Then the West End, read: a town with no dashed lines cannot get a leaflet past one circle.');

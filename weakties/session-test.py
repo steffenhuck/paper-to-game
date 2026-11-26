@@ -3,12 +3,10 @@ import asyncio, sys, os
 from playwright.async_api import async_playwright
 SEED = sys.argv[1] if len(sys.argv) > 1 else '4821'
 URL = 'file://' + os.path.abspath('granovetters-dashed-line.html') + '?seed=' + SEED
-PLAN = [  # a learning player: the circle first, then spread, then a strong bridge, then one per circle
+PLAN = [  # a learning player: the circle first, then spread, then a strong bridge
     {'Ann': 2, 'Ben': 2, 'Cal': 2, 'Dee': 1},
     {'Ann': 1, 'Dee': 1, 'Eli': 1, 'Fay': 1, 'Gus': 1, 'Wes': 1, 'Kim': 1},
     {'Ann': 1, 'Dee': 2, 'Eli': 1, 'Fay': 1, 'Gus': 1, 'Wes': 1},
-    {'Ann': 1, 'Dee': 1, 'Eli': 1, 'Fay': 1, 'Gus': 1, 'Wes': 1, 'Kim': 1},
-    {'Ann': 1, 'Dee': 1, 'Eli': 1, 'Fay': 1, 'Gus': 1, 'Wes': 1, 'Kim': 1},
 ]
 async def main():
     async with async_playwright() as p:
@@ -32,7 +30,7 @@ async def main():
                 for _ in range(n): await pg.click(f'.chip:has-text("{name}")'); await pg.wait_for_timeout(60)
             left = await pg.text_content('#wk-leftn'); print(f'week {w}: evenings left {left}')
             if w == 1: await shot('week1-planned'); await nohs('week1-planned')
-            if w == 3:
+            if w == 2:
                 await pg.click('#b-help-week'); await pg.wait_for_timeout(150); assert await pg.evaluate("document.getElementById('help').classList.contains('on')")
                 await pg.click('#b-help-close'); await pg.wait_for_timeout(100)
                 assert (await pg.text_content('#wk-leftn')) == left, 'help lost the plan'
@@ -46,8 +44,20 @@ async def main():
                 await pg.wait_for_timeout(100)
             print('   ', await pg.text_content('#res-big'), '|', await pg.text_content('#res-text'))
             await shot(f'week{w}-result', True); await nohs(f'week{w}-result')
+            if w == 3: await shot('week3-planned-strong-bridge') if False else None
             await pg.click('#b-next'); await pg.wait_for_timeout(300)
-            if w == 3: await shot('week4-new-names')
+            if w == 2: await shot('week3-new-names')
+        # the bet
+        assert await pg.evaluate("document.getElementById('wk-bet').style.display === ''"), 'bet panel not shown'
+        await shot('bet-offer'); await nohs('bet')
+        await pg.click('.chip:has-text("one or two")'); await pg.wait_for_timeout(1500); await shot('bet-playing')
+        await pg.click('#b-skip')
+        for _ in range(200):
+            if await pg.evaluate("document.getElementById('wk-result').style.display === ''"): break
+            await pg.wait_for_timeout(100)
+        bt = await pg.text_content('#res-text'); print('BET |', await pg.text_content('#res-big'), '|', bt[:80])
+        await shot('bet-result', True)
+        await pg.click('#b-next'); await pg.wait_for_timeout(400)
         await shot('end', True); await nohs('end')
         print('VERDICT |', await pg.text_content('#v-big'), '|', await pg.text_content('#v-you'), '|', await pg.text_content('#v-ghosts'), '|', await pg.text_content('#v-part'))
         await pg.click('#b-about-end'); await pg.wait_for_timeout(200); await shot('about', True); await pg.click('#b-about-close')

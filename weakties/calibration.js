@@ -73,14 +73,22 @@ for (var nm in table) { var x = table[nm]; out.push('     ' + nm.padEnd(14) + r1
 out.push('     ' + 'reference'.padEnd(14) + r1(ref.heard).toFixed(1).padStart(6) + '  ' + (r1(ref.tellHome) + '/' + r1(ref.tellOut)).padEnd(14) + '  ' + (Math.round(ref.seen.often) + '/' + Math.round(ref.seen.occ) + '/' + Math.round(ref.seen.rare)).padEnd(30) + '  ' + Math.round(ref.hands.h0) + '/' + Math.round(ref.hands.h1) + '/' + Math.round(ref.hands.h2) + '/' + Math.round(ref.hands.h3));
 out.push('     ' + 'Boston (paper)'.padEnd(14) + ''.padStart(6) + '  ' + ''.padEnd(14) + '  ' + (C.BOSTON_SEEN.often + '/' + C.BOSTON_SEEN.occ + '/' + C.BOSTON_SEEN.rare).padEnd(30) + '  ' + C.BOSTON_HANDS.h0 + '/' + C.BOSTON_HANDS.h1 + '/' + C.BOSTON_HANDS.h2 + '/' + C.BOSTON_HANDS.h3);
 out.push('');
-check('the discovery: spreading evenings across circles beats every evening in the circle, by at least 5', table.spreader.heard - table.homebody.heard >= 5, r1(table.spreader.heard) + ' vs ' + r1(table.homebody.heard));
+check('the discovery: spreading evenings across circles beats every evening in the circle, by at least 3 of ' + (C.WEEKS * C.NEWS_PER_WEEK), table.spreader.heard - table.homebody.heard >= 3, r1(table.spreader.heard) + ' vs ' + r1(table.homebody.heard));
 check('the loyal week (circle often, one acquaintance) is between the two', table.loyal.heard > table.homebody.heard && table.loyal.heard < table.spreader.heard);
 check('everything into one circle loses to spreading', table.oneCircle.heard < table.spreader.heard);
 check('no evenings at all is the floor', table.stayIn.heard <= table.homebody.heard && table.stayIn.heard <= table.spreader.heard);
 check('strong bridges (two evenings on one person per circle) do not beat spreading by more than 1: a strong bridge costs its evenings', table.bridgesOften.heard - table.spreader.heard <= 1, r1(table.bridgesOften.heard) + ' vs ' + r1(table.spreader.heard));
 check('the circle tells you its news more than twice on average; a dashed line tells you once or so (homebody)', table.homebody.tellHome > 2 && table.homebody.tellOut < 1.5, r1(table.homebody.tellHome) + ' / ' + r1(table.homebody.tellOut));
 check('the spreader\'s news comes mostly from people seen now and then, and none from people seen often', table.spreader.seen.occ > 70 && table.spreader.seen.often === 0);
-check('every strategy takes a live option: no strategy hears fewer than a third, none hears all', Object.keys(table).every(function (k) { return table[k].heard > 10 && table[k].heard < C.WEEKS * C.NEWS_PER_WEEK; }));
+check('every strategy takes a live option: no strategy hears fewer than a third, none hears all', Object.keys(table).every(function (k) { return table[k].heard > C.WEEKS * C.NEWS_PER_WEEK / 3 && table[k].heard < C.WEEKS * C.NEWS_PER_WEEK; }));
+check('hindsight (the best week found knowing the news) beats the spreader and hears fewer than all', table.hindsight.heard > table.spreader.heard && table.hindsight.heard < C.WEEKS * C.NEWS_PER_WEEK, r1(table.hindsight.heard));
+// the closing bet: a week with every line dashed, after three weeks of the spreader and of the homebody
+var betH = [], betBands = {};
+for (var bq = 0; bq < 400; bq++) { var gs = m.runStrategy('b' + bq, bq % 2 ? m.STRATEGIES.spreader : m.STRATEGIES.homebody), br = m.betWeek(gs); betH.push(br.heard); betBands[m.betBand(br.heard)] = (betBands[m.betBand(br.heard)] || 0) + 1; if (gs.weeks.length !== C.WEEKS) fails++; }
+var betMean = betH.reduce(function (a, b) { return a + b; }, 0) / betH.length;
+check('the bet week (every line dashed) still brings news: between 2 and 5 of 7 on average', betMean >= 2 && betMean <= 5, r1(betMean) + ' of ' + C.NEWS_PER_WEEK);
+check('every answer to the bet comes true sometimes (all four bands reached) and the bet week leaves the score alone', Object.keys(betBands).length === C.BET_OPTIONS.length, JSON.stringify(betBands));
+check('the bet week on a seed is the same whatever the three weeks were', JSON.stringify(m.betWeek(m.runStrategy('bb', m.STRATEGIES.spreader)).pieces.map(function (p) { return p.origin; })) === JSON.stringify(m.betWeek(m.runStrategy('bb', m.STRATEGIES.homebody)).pieces.map(function (p) { return p.origin; })));
 
 // (6) robustness of the discovery to our own choices
 var saved = JSON.stringify({ P: C.P_PASS, D: C.DAMP, T: C.TIME_IS_FINITE, NW: C.NEWS_PER_WEEK, F: C.WEEK1_FLOOR, MH: C.MAX_HOPS });
@@ -122,19 +130,14 @@ check('the ghosts meet the same news as the player on the same seed', sameOrigin
 
 // (9) a clairvoyant best week by search: week one exhaustive (every legal week over the eleven you know), later weeks by hill-climbing
 //     from the spreader's week, with hindsight on the week's news; read for loopholes
-function lightClone(s) { return { seed: s.seed, week: s.week, known: s.known.slice(), extra: Object.assign({}, s.extra), weeks: [], heardAll: {} }; }
-function heardOf(s, ev) { return m.playWeek(lightClone(s), ev).heard; }
-function climb(s, ev) { var best = Object.assign({}, ev), bestH = heardOf(s, best), improved = true;
-  while (improved) { improved = false;
-    s.known.forEach(function (from) { s.known.forEach(function (to) { if (from === to || !(best[from] > 0) || (best[to] || 0) >= C.CAP) return; var e = Object.assign({}, best); e[from]--; if (!e[from]) delete e[from]; e[to] = (e[to] || 0) + 1; var h = heardOf(s, e); if (h > bestH) { bestH = h; best = e; improved = true; } }); });
-  } return { ev: best, heard: bestH }; }
+var heardOf = m.heardOf;
 var clair = 0, clairN = 6, firstWeeks = {}, week1Cands = m.allWeeks(C.KNOWN_AT_START);
 for (var c = 0; c < clairN; c++) {
   var g2 = m.newGame('c' + c), sum = 0;
   while (!m.isOver(g2)) {
     var best = null, bestH = -1;
     if (g2.week === 1) { week1Cands.forEach(function (ev) { var h = heardOf(g2, ev); if (h > bestH) { bestH = h; best = ev; } }); var desc = Object.keys(best).map(function (n) { return n + ':' + best[n]; }).join(' '); firstWeeks[desc] = (firstWeeks[desc] || 0) + 1; }
-    else { var cl = climb(g2, m.STRATEGIES.spreader(g2)); best = cl.ev; }
+    else { best = m.hindsightWeek(g2).ev; }
     sum += m.playWeek(g2, best).heard;
   }
   clair += sum;

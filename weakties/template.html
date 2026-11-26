@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Granovetter's Dashed Line</title>
 <script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<meta name="description" content="Granovetter, The Strength of Weak Ties (1973): spend a week of evenings on the people you know and watch where the news comes from. Your friends tell you the same thing three times; the person you hardly see brings the news from elsewhere.">
+<meta name="description" content="Granovetter, The Strength of Weak Ties (1973): three weeks of evenings on the people you know, and watch where the news comes from. Your friends tell you the same thing three times; the person you hardly see brings the news from elsewhere. Then one bet on the lines you never tend.">
 <style>
 @font-face{font-family:'Archivo';font-weight:100 900;font-style:normal;src:url(data:font/woff2;base64,/*__F_ARCHIVO__*/) format('woff2')}
 :root{--paper:#F7F9FB;--ink:#14171B;--blue:#1F6FEB;--frost:#C9D3DD;--frost2:#E8EDF2;--slate:#5B6773}
@@ -77,7 +77,7 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
     <line x1="8" y1="36" x2="150" y2="36" stroke="#14171B" stroke-width="1.25"/><text x="160" y="40" font-size="12" fill="#5B6773" font-family="Archivo,Helvetica,Arial">now and then</text>
     <line x1="8" y1="58" x2="150" y2="58" stroke="#14171B" stroke-width="1.25" stroke-dasharray="4 4"/><text x="160" y="62" font-size="12" fill="#5B6773" font-family="Archivo,Helvetica,Arial">rarely: a dashed line</text>
   </svg>
-  <p class="acts">You are looking for a job in a town of seven circles. Each week you give seven evenings to the people you know. The town reacts. Then the week's news travels along the lines, and you watch which of it reaches you, and from whom.</p>
+  <p class="acts">You are looking for a job in a town of seven circles. Three weeks; each week you give seven evenings to the people you know. The town reacts. Then the week's news travels along the lines, and you watch which of it reaches you, and from whom. At the end, one bet.</p>
   <p class="aim">Spend your evenings so that you hear of as many job openings as you can.</p>
   <button class="btn solid" id="b-begin">Start</button>
   <div class="row2"><button class="btn" id="b-help-start">How to play</button><button class="btn" id="b-about-start">About</button></div>
@@ -87,7 +87,7 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
 
 <!-- THE WEEK -->
 <section id="s-week" class="screen">
-  <div class="topbar"><div><div class="kicker" id="wk-kicker">Week 1 of 5</div><div class="now" id="wk-now">Give your seven evenings.</div><div class="sub" id="wk-sub">Tap a name: one evening, a ring and a thin line. Again: two, a thick line. Again: none.</div></div><button class="qbtn" id="b-help-week" aria-label="How to play">?</button></div>
+  <div class="topbar"><div><div class="kicker" id="wk-kicker">Week 1 of 3</div><div class="now" id="wk-now">Give your seven evenings.</div><div class="sub" id="wk-sub">Tap a name once or twice.</div></div><button class="qbtn" id="b-help-week" aria-label="How to play">?</button></div>
   <svg class="map" id="map" viewBox="0 0 340 316" aria-label="The town"></svg>
   <div class="legend"><span><svg viewBox="0 0 30 10"><line x1="0" y1="5" x2="30" y2="5" stroke="#14171B" stroke-width="3"/></svg>often</span><span><svg viewBox="0 0 30 10"><line x1="0" y1="5" x2="30" y2="5" stroke="#14171B" stroke-width="1.25"/></svg>now and then</span><span><svg viewBox="0 0 30 10"><line x1="0" y1="5" x2="30" y2="5" stroke="#14171B" stroke-width="1.25" stroke-dasharray="4 3"/></svg>rarely</span><span><svg viewBox="0 0 30 10"><circle cx="15" cy="5" r="4" fill="#1F6FEB"/></svg>news</span></div>
   <div id="wk-plan">
@@ -104,11 +104,15 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
     <div class="result"><div class="big" id="res-big"></div><div id="res-text"></div><div class="weeks" id="res-weeks"></div></div>
     <button class="btn solid" id="b-next">Next week</button>
   </div>
+  <div id="wk-bet" style="display:none">
+    <div class="result"><div class="big">One more week of news is coming. Suppose you spend no evening on anyone: every line dashed, as the map shows. How many of the seven will reach you?</div><div class="small" style="margin-top:4px">Tap your answer, then watch. This week is not counted.</div></div>
+    <div class="chips" id="bet-chips"></div>
+  </div>
 </section>
 
 <!-- VERDICT -->
 <section id="s-end" class="screen verdict">
-  <div class="kicker">After five weeks</div>
+  <div class="kicker">After three weeks and a bet</div>
   <div class="big" id="v-big"></div>
   <p id="v-you"></p>
   <div class="rule thin"></div>
@@ -144,8 +148,10 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
   <p>Two people you see often come to know each other: a new grey dashed line between them. A person you see often introduces you to someone from their circle: a new name on your map, with a dashed line to you. A person outside Home whom you see often has given you two of their evenings, so their lines in their own circle go thin that week. And once a week you run into someone by chance: another new name. A line, once there, never vanishes.</p>
   <h2>The news</h2>
   <p>Seven openings a week, each first heard by one person, who turns blue. Whoever hears passes it on to each person they are tied to: on a thick line always, on a thin line usually (three times in four), on a dashed line sometimes (one in three), and a little less at every pair of hands it has passed through. The blue mark travels along the lines; where it stops short, that person did not mention it. You keep what you hear. The week's line tells you who told you, who told you the same thing again, and what never reached you.</p>
+  <h2>The bet</h2>
+  <p>After the third week, one bet: one more week of news with no evening spent on anyone, every line dashed. Say how many of the seven will reach you, then watch. It is not counted.</p>
   <h2>The verdict</h2>
-  <p>After five weeks: how many of the town's openings you heard of; who told you first, by how often you saw them, against the paper's own table; how many pairs of hands the news passed through; what two other players would have heard from the same news; and what the paper says about towns with no dashed lines.</p>
+  <p>How many of the town's openings you heard of in three weeks; who told you first, by how often you saw them, against the paper's own table; how many pairs of hands the news passed through; what four other players would have heard from the same news (your circle, one person per circle, nobody, and the best weeks we could find knowing the news in advance); and what the paper says about towns with no dashed lines.</p>
   <div class="close"><button class="btn" id="b-help-close2">Back</button></div>
 </div></div>
 
@@ -234,15 +240,15 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
     var ch = $('chips'); ch.innerHTML = '';
     G.known.forEach(function (p) { var b = document.createElement('button'); var e = ev[p] || 0; b.className = 'chip' + (e === 1 ? ' one' : (e === 2 ? ' two' : '')) + (isNew(p) ? ' new' : ''); b.innerHTML = '<span>' + p + '</span><span class="c">' + circleLabel(circleOf(p)).replace(/^the /i, '') + '</span><span class="d">' + (e === 2 ? '●●' : (e === 1 ? '●' : '○')) + '</span>'; b.addEventListener('click', function () { tap(p); }); ch.appendChild(b); });
     renderTies(allTies(G, ev));
-    $('b-spend').textContent = left === CONFIG.EVENINGS ? 'Spend the week with nobody' : (left ? 'Spend the week (' + left + ' evening' + (left === 1 ? '' : 's') + ' unspent)' : 'Spend the week');
+    $('b-spend').textContent = left ? 'Spend the week (' + left + ' evening' + (left === 1 ? '' : 's') + ' unspent)' : 'Spend the week';
   }
   function isNew(p) { return lastRec && (lastRec.intros.some(function (x) { return x.who === p; }) || (lastRec.chance && lastRec.chance.who === p)); }
   function startWeek() {
     ev = {}; clearNews(); renderTies(allTies(G, ev));
     $('wk-kicker').textContent = 'Week ' + G.week + ' of ' + CONFIG.WEEKS;
     $('wk-now').textContent = G.week === 1 ? 'Give your seven evenings.' : (G.week === CONFIG.WEEKS ? 'The last week. Give your seven evenings.' : 'A new week. Give your seven evenings.');
-    $('wk-sub').textContent = G.week === 1 ? 'Tap a name: one evening, a ring and a thin line. Again: two, a thick line. Again: none.' : 'Every week starts from none. Tap a name: one evening. Again: two.';
-    $('wk-plan').style.display = ''; $('wk-play').style.display = 'none'; $('wk-result').style.display = 'none';
+    $('wk-sub').textContent = G.week === 1 ? 'Tap a name once or twice.' : 'Every week starts from none. Tap a name once or twice.';
+    $('wk-plan').style.display = ''; $('wk-play').style.display = 'none'; $('wk-result').style.display = 'none'; $('wk-bet').style.display = 'none';
     renderPlan(); window.scrollTo(0, 0);
   }
   function voice(html) { $('voice').innerHTML = html; }
@@ -254,7 +260,7 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
   function travel(from, to, ok, cat) { // a blue mark moves along the line; stops short and fades if the person did not mention it
     return new Promise(function (res) {
       if (skip) { if (ok) arrive(to, from); return res(); }
-      var a = pos[from], b = pos[to], d = el('circle', { cx: a[0], cy: a[1], r: 4.5, fill: BLUE }, layers.news), t0 = null, dur = 420, frac = ok ? 1 : 0.45;
+      var a = pos[from], b = pos[to], d = el('circle', { cx: a[0], cy: a[1], r: 4.5, fill: BLUE }, layers.news), t0 = null, dur = 300, frac = ok ? 1 : 0.45;
       function step(ts) { if (!t0) t0 = ts; var u = Math.min(1, (ts - t0) / dur); var e = u * u * (3 - 2 * u); d.setAttribute('cx', a[0] + (b[0] - a[0]) * e * frac); d.setAttribute('cy', a[1] + (b[1] - a[1]) * e * frac); if (!ok) d.setAttribute('opacity', 1 - u * 0.9); if (u < 1 && !skip) requestAnimationFrame(step); else { layers.news.removeChild(d); if (ok) arrive(to, from); res(); } }
       requestAnimationFrame(step);
     });
@@ -283,30 +289,16 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
     $('wk-now').textContent = 'The week goes by.'; $('wk-sub').textContent = 'Watch the lines. Blue is news.';
     var wk = G.week, rec = playWeek(G, ev); lastRec = rec;
     var often = Object.keys(rec.evenings).filter(function (n) { return catOf(rec.evenings[n]) === 'often'; });
-    voice('You gave ' + (often.length ? 'two evenings to ' + list(often) : 'no one two evenings') + (Object.keys(rec.evenings).some(function (n) { return rec.evenings[n] === 1; }) ? ', one to ' + list(Object.keys(rec.evenings).filter(function (n) { return rec.evenings[n] === 1; })) : '') + (evSum() === 0 ? 'You stayed in all week.' : '') + '.');
-    await wait(900);
+    voice('You gave ' + (often.length ? 'two evenings to ' + list(often) : 'no one two evenings') + (Object.keys(rec.evenings).some(function (n) { return rec.evenings[n] === 1; }) ? ', one to ' + list(Object.keys(rec.evenings).filter(function (n) { return rec.evenings[n] === 1; })) : '') + (evSum() === 0 ? '. You stayed in all week' : '') + '.');
+    await wait(700);
     // the town reacts
-    for (var i = 0; i < rec.closures.length; i++) { var c = rec.closures[i]; renderTies(rec.ties); flashLine(key(c[0], c[1])); voice('<b>' + c[0] + ' and ' + c[1] + ' come to know each other.</b> You see both often, so they meet: a new dashed line between them.'); await wait(1300); }
-    for (var j = 0; j < rec.intros.length; j++) { var x = rec.intros[j]; renderTies(rec.ties); flashLine(key(CONFIG.YOU, x.who)); voice('<b>' + x.by + ' introduces you to ' + x.who + '</b>, from ' + circleLabel(x.circle).toLowerCase() + '. A new name on your map, on a dashed line.'); await wait(1300); }
+    for (var i = 0; i < rec.closures.length; i++) { var c = rec.closures[i]; renderTies(rec.ties); flashLine(key(c[0], c[1])); voice('<b>' + c[0] + ' and ' + c[1] + ' come to know each other.</b> You see both often, so they meet: a new dashed line between them.'); await wait(1000); }
+    for (var j = 0; j < rec.intros.length; j++) { var x = rec.intros[j]; renderTies(rec.ties); flashLine(key(CONFIG.YOU, x.who)); voice('<b>' + x.by + ' introduces you to ' + x.who + '</b>, from ' + circleLabel(x.circle).toLowerCase() + '. A new name on your map, on a dashed line.'); await wait(1000); }
     var oftenOut = often.filter(function (n) { return circleOf(n) !== 'home'; });
-    if (oftenOut.length) { renderTies(rec.ties); voice('<b>' + list(oftenOut) + ' gave you two evenings</b>, so ' + (oftenOut.length > 1 ? 'their' : 'their') + ' lines in ' + (oftenOut.length > 1 ? 'their own circles' : 'their own circle') + ' go thin this week.'); await wait(1300); }
-    if (rec.chance) { renderTies(rec.ties); flashLine(key(CONFIG.YOU, rec.chance.who)); voice('<b>By chance you run into ' + rec.chance.who + '</b>, from ' + circleLabel(rec.chance.circle).toLowerCase() + '. A new name on your map, on a dashed line.'); await wait(1300); }
+    if (oftenOut.length) { renderTies(rec.ties); voice('<b>' + list(oftenOut) + ' gave you two evenings</b>, so their lines in ' + (oftenOut.length > 1 ? 'their own circles' : 'their own circle') + ' go thin this week.'); await wait(1000); }
+    if (rec.chance) { renderTies(rec.ties); flashLine(key(CONFIG.YOU, rec.chance.who)); voice('<b>By chance you run into ' + rec.chance.who + '</b>, from ' + circleLabel(rec.chance.circle).toLowerCase() + '. A new name on your map, on a dashed line.'); await wait(1000); }
     renderTies(rec.ties);
-    // the news
-    for (var n = 0; n < rec.pieces.length; n++) {
-      var p = rec.pieces[n];
-      clearNews(); dotEls[p.origin].setAttribute('fill', BLUE);
-      voice('<b>Opening ' + (n + 1) + ' of ' + rec.pieces.length + '.</b> ' + p.origin + ', at ' + circleLabel(p.originCircle).toLowerCase() + ', hears of a job.');
-      await wait(650);
-      for (var r = 0; r < p.rounds.length; r++) {
-        var round = p.rounds[r]; if (!round.length) continue;
-        await Promise.all(round.map(function (tr) { return travel(tr.from, tr.to, tr.ok, tr.cat); }));
-        await wait(140);
-      }
-      voice('<b>Opening ' + (n + 1) + '.</b> ' + pieceWords(p));
-      await wait(p.heard ? 1500 : 1100);
-    }
-    clearNews();
+    await playNews(rec);
     // the result in the game's voice
     var bySeen = { often: 0, occ: 0, rare: 0 }, twice = 0;
     rec.pieces.forEach(function (p) { if (p.heard) { bySeen[p.first.cat]++; var u = {}; p.tellers.forEach(function (t) { u[t.who] = 1; }); if (Object.keys(u).length > 1) twice++; } });
@@ -316,8 +308,51 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
     var missed = rec.total - rec.heard; if (missed) parts.push((missed === 1 ? 'One opening' : missed + ' openings') + ' never reached you.');
     $('res-text').textContent = parts.join(' ');
     $('res-weeks').textContent = 'Heard of, week by week: ' + G.weeks.map(function (w) { return w.heard; }).join(' · ') + ' of ' + rec.total + ' each.';
-    $('wk-now').textContent = isOver(G) ? 'The five weeks are over.' : 'The week is over.'; $('wk-sub').textContent = isOver(G) ? 'See the verdict.' : 'Read the week, then give next week\'s evenings.';
-    $('b-next').textContent = isOver(G) ? 'See the verdict' : 'Next week';
+    $('wk-now').textContent = isOver(G) ? 'The three weeks are over.' : 'The week is over.'; $('wk-sub').textContent = isOver(G) ? 'One bet, then the verdict.' : 'Read the week, then give next week\'s evenings.';
+    $('b-next').textContent = isOver(G) ? 'One more thing' : 'Next week';
+    $('wk-play').style.display = 'none'; $('wk-result').style.display = '';
+    playing = false;
+  }
+  async function playNews(rec) {
+    for (var n = 0; n < rec.pieces.length; n++) {
+      var p = rec.pieces[n];
+      clearNews(); dotEls[p.origin].setAttribute('fill', BLUE);
+      voice('<b>Opening ' + (n + 1) + ' of ' + rec.pieces.length + '.</b> ' + p.origin + ', at ' + circleLabel(p.originCircle).toLowerCase() + ', hears of a job.');
+      await wait(420);
+      for (var r = 0; r < p.rounds.length; r++) {
+        var round = p.rounds[r]; if (!round.length) continue;
+        await Promise.all(round.map(function (tr) { return travel(tr.from, tr.to, tr.ok, tr.cat); }));
+        await wait(70);
+      }
+      voice('<b>Opening ' + (n + 1) + '.</b> ' + pieceWords(p));
+      await wait(p.heard ? 950 : 700);
+    }
+    clearNews();
+  }
+  // the closing bet
+  var bet = null, betRec = null;
+  function offerBet() {
+    ev = {}; renderTies(allTies(G, ev)); clearNews();
+    $('wk-kicker').textContent = 'After week ' + CONFIG.WEEKS + ' · the bet'; $('wk-now').textContent = 'Every line dashed. How much still gets through?'; $('wk-sub').textContent = 'One more week of news, with no evening spent on anyone.';
+    $('wk-plan').style.display = 'none'; $('wk-play').style.display = 'none'; $('wk-result').style.display = 'none'; $('wk-bet').style.display = '';
+    var ch = $('bet-chips'); ch.innerHTML = '';
+    CONFIG.BET_LABELS.forEach(function (lab, i) { var b = document.createElement('button'); b.className = 'chip one'; b.textContent = lab; b.addEventListener('click', function () { bet = i; playBet(); }); ch.appendChild(b); });
+    window.scrollTo(0, 0);
+  }
+  async function playBet() {
+    if (playing) return; playing = true; skip = false;
+    $('wk-bet').style.display = 'none'; $('wk-play').style.display = '';
+    $('wk-now').textContent = 'The week goes by, with every line dashed.'; $('wk-sub').textContent = 'You said ' + CONFIG.BET_LABELS[bet] + '. Watch the lines.';
+    betRec = betWeek(G);
+    voice('You spent no evening on anyone. Every line is dashed: whoever hears something mentions it to you one time in three.');
+    await wait(900);
+    await playNews(betRec);
+    var tellers = []; betRec.pieces.forEach(function (p) { if (p.heard) p.tellers.forEach(function (t) { if (tellers.indexOf(t.who) < 0) tellers.push(t.who); }); });
+    var right = betBand(betRec.heard) === bet;
+    $('res-big').textContent = (right ? 'As you said: ' : 'You said ' + CONFIG.BET_LABELS[bet] + '. ') + (betRec.heard === 0 ? 'none of the 7 reached you.' : betRec.heard + ' of the 7 reached you anyway.');
+    $('res-text').textContent = (betRec.heard ? 'From ' + list(tellers) + ': people you gave no evening, who mentioned it. ' : 'Every dashed line stayed quiet this week, which happens. ') + 'The paper: more than a quarter of the Boston job changers heard of their job from someone they saw once a year or less, often someone they had nearly forgotten. That an untended line carries news is the paper\'s finding. How much it carries, one time in three, is this game\'s number.';
+    $('res-weeks').textContent = 'Not counted. Your three weeks: ' + G.weeks.map(function (w) { return w.heard; }).join(' · ') + ' of ' + CONFIG.NEWS_PER_WEEK + ' each.';
+    $('b-next').textContent = 'See the verdict';
     $('wk-play').style.display = 'none'; $('wk-result').style.display = '';
     playing = false;
   }
@@ -337,12 +372,12 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
     });
   }
   function pct(n, d) { return d ? 100 * n / d : 0; }
-  function words(share) { return share >= 85 ? 'almost all' : share >= 60 ? 'most' : share >= 40 ? 'about half' : share >= 20 ? 'some' : share > 0 ? 'hardly any' : 'none'; }
+  function words(share) { return share >= 85 ? 'almost all' : share >= 60 ? 'most' : share >= 40 ? 'about half' : share >= 15 ? 'some' : share > 0 ? 'hardly any' : 'none'; }
   function verdict() {
     var t = tally(G), heard = t.heard, total = t.total;
     $('v-big').textContent = heard === 0 ? 'You heard of none of the ' + total + ' openings.' : 'You heard of ' + heard + ' of the ' + total + ' openings.';
     var sh = { often: pct(t.seen.often, heard), occ: pct(t.seen.occ, heard), rare: pct(t.seen.rare, heard) };
-    $('v-you').innerHTML = heard ? ('Of those, <b>' + words(sh.often) + '</b> came first from someone you saw often, <b>' + words(sh.occ) + '</b> from someone you saw now and then, and <b>' + words(sh.rare) + '</b> from someone you rarely saw.') : 'Nothing reached you in five weeks.';
+    $('v-you').innerHTML = heard ? ('Of those, <b>' + words(sh.often) + '</b> came first from someone you saw often, <b>' + words(sh.occ) + '</b> from someone you saw now and then, and <b>' + words(sh.rare) + '</b> from someone you rarely saw. In Boston the rarely-seen brought more than a quarter.') : 'Nothing reached you in three weeks.';
     var B = CONFIG.BOSTON_SEEN;
     bars('v-bars1', [
       { label: 'saw them often', you: sh.often, paper: B.often, note: Math.round(sh.often) + '% · paper ' + Math.round(B.often) + '%' },
@@ -356,8 +391,8 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
       { label: 'two pairs', you: hs.h2, paper: H.h2, note: Math.round(hs.h2) + '% · paper ' + Math.round(H.h2) + '%' },
       { label: 'more than two', you: hs.h3, paper: H.h3, note: Math.round(hs.h3) + '% · paper ' + Math.round(H.h3) + '%' }
     ], 100, 28);
-    var hb = tally(runStrategy(G.seed, STRATEGIES.homebody)).heard, sp = tally(runStrategy(G.seed, STRATEGIES.spreader)).heard;
-    $('v-ghosts').innerHTML = '<b>The same news, two other ways.</b> Every evening in your own circle, all five weeks: <b>' + hb + '</b> of ' + total + '. One evening to one person in each circle, no one twice: <b>' + sp + '</b> of ' + total + '. You: <b>' + heard + '</b>.';
+    var hb = tally(runStrategy(G.seed, STRATEGIES.homebody)).heard, sp = tally(runStrategy(G.seed, STRATEGIES.spreader)).heard, st = tally(runStrategy(G.seed, STRATEGIES.stayIn)).heard, hs = tally(runStrategy(G.seed, STRATEGIES.hindsight)).heard;
+    $('v-ghosts').innerHTML = '<b>The same news, four other ways.</b> Every evening in your own circle, all three weeks: <b>' + hb + '</b> of ' + total + '. One evening to one person in each circle, no one twice: <b>' + sp + '</b>. No evening on anyone: <b>' + st + '</b>. The best three weeks we could find, knowing the news in advance: <b>' + hs + '</b>. You: <b>' + heard + '</b>.' + (betRec ? ' <span class="small">The bet week, every line dashed: ' + betRec.heard + ' of 7 reached you; you said ' + CONFIG.BET_LABELS[bet] + '.</span>' : '');
     var part;
     if (!heard) part = 'Nothing reached you, which the paper does not describe: even the people you have forgotten mention things sometimes.';
     else if (sh.often >= 40) part = '<b>Where you part from the paper.</b> You leaned on the people you see most. They told you what they heard, and told you the same thing twice and three times, because they are each other\'s friends and hear what each other hears. In Boston, the people seen often brought one job in six.';
@@ -384,13 +419,13 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
 
   // ---------- wiring ----------
   function newSeed() { return String(Math.floor(1000 + Math.random() * 9000)); }
-  function begin(sd) { seed = sd; G = newGame(seed); lastRec = null; layout(); buildMap(); show('s-week'); startWeek(); }
+  function begin(sd) { seed = sd; G = newGame(seed); lastRec = null; bet = null; betRec = null; layout(); buildMap(); show('s-week'); startWeek(); }
   var q = /[?&]seed=([^&]+)/.exec(location.search);
   $('b-begin').addEventListener('click', function () { begin(q ? decodeURIComponent(q[1]) : newSeed()); });
   $('b-spend').addEventListener('click', spendWeek);
   $('b-skip').addEventListener('click', function () { skip = true; });
   $('map').addEventListener('click', function () { if (playing) skip = true; });
-  $('b-next').addEventListener('click', function () { if (isOver(G)) verdict(); else startWeek(); });
+  $('b-next').addEventListener('click', function () { if (betRec) verdict(); else if (isOver(G)) offerBet(); else startWeek(); });
   $('b-again').addEventListener('click', function () { begin(newSeed()); });
   $('b-replay').addEventListener('click', function () { begin(seed); });
   function openOverlay(id) { helpFrom = window.scrollY; $(id).classList.add('on'); $(id).scrollTop = 0; }
