@@ -1,6 +1,6 @@
 import asyncio, sys
 from playwright.async_api import async_playwright
-URL='file://' + __import__('os').path.abspath('singers-chalk-line.html') + ''
+URL='file://' + __import__('os').path.abspath('draw-a-line-with-singer.html') + ''
 async def main():
     async with async_playwright() as p:
         b = await p.chromium.launch()

@@ -1,4 +1,4 @@
-// Calibration check for Singer's Chalk Line. Run: node calibration.js. Exit code 1 on any failure.
+// Calibration check for Draw a Line with Singer. Run: node calibration.js. Exit code 1 on any failure.
 // The mechanism is a TOY of an argument; the check verifies (1) that every ordering the 1974 paper states holds in the cast,
 // (2) that the paper's claim holds on this cast: on every ruler you can read, every legal line has a misfit, and Species has none,
 // (3) that the claim rests on the paper's orderings and not on our lengths: random casts that keep only the stated orderings all fail the same way,

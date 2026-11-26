@@ -1,4 +1,4 @@
-# Singer's Chalk Line — note for the author
+# Draw a Line with Singer — note for the author
 
 Revision of 25 November 2026, built against the 1974 paper (memo, section 20). The first build, from the 2004 anthology excerpt, is in `previous/`.
 

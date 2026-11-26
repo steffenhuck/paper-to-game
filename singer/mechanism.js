@@ -1,4 +1,4 @@
-// Singer's Chalk Line — the mechanism. The only copy: the HTML is generated from this file and embeds it verbatim.
+// Draw a Line with Singer — the mechanism. The only copy: the HTML is generated from this file and embeds it verbatim.
 // Runs unchanged in Node (calibration.js, loop.js) and in the browser (the game passes actions in and draws what comes back).
 // Mechanism kind: TOY, built to illustrate the argument of Peter Singer, "All Animals Are Equal", Philosophic Exchange 5(1), 1974,
 // pp. 103-116 (the journal's own text, SUNY open repository). Page numbers below are the journal's.
