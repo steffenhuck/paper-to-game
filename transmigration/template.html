@@ -80,8 +80,16 @@ footer.sig a{color:var(--dim);text-decoration:none}
 @keyframes blink{50%{opacity:0}}
 .flame{fill:var(--orange);opacity:.9;animation:flick .25s infinite alternate;transform-box:fill-box;transform-origin:bottom}
 @keyframes flick{to{transform:translateY(-2px) scaleY(1.15)}}
-.peel{animation:peel .9s linear infinite;transform-box:view-box}
-@keyframes peel{from{transform:scale(1);opacity:1}to{transform:scale(1.5);opacity:0}}
+.peel{animation:peel .6s ease-out forwards;transform-box:fill-box;transform-origin:center}
+.peel.fast{animation-duration:.25s}
+@keyframes peel{from{transform:scale(1);opacity:1}to{transform:scale(1.6);opacity:0}}
+.grow{animation:grow .6s ease-out forwards;transform-box:fill-box;transform-origin:center}
+.grow.fast{animation-duration:.25s}
+@keyframes grow{from{transform:scale(1)}to{transform:scale(1.35)}}
+.podg.tap{cursor:pointer}
+.taphint{fill:none;stroke:var(--amber);stroke-width:1.5;stroke-dasharray:4 3;animation:pulse 1s ease-in-out infinite alternate}
+@keyframes pulse{from{opacity:.25}to{opacity:1}}
+.framebox .ft b{color:var(--amber);font-weight:600}
 .beamline{stroke-dasharray:6 4;animation:dash .6s linear infinite}
 @keyframes dash{to{stroke-dashoffset:-20}}
 .glow{animation:glow 1s ease-in-out infinite alternate}
@@ -96,21 +104,20 @@ footer.sig a{color:var(--dim);text-decoration:none}
   <div class="tag">Transfer station · a game from Leibniz, c. 1702</div>
   <h1 class="title">Beam Me Up, Leibniz</h1>
   <svg class="pad" viewBox="0 0 340 130" id="startpad"></svg>
-  <p>You are in a pod. You want to be at the far station. The station will try four ways to get you there.</p>
-  <p>After each try, it asks you one thing: <b>where are you now?</b> You answer. Then Leibniz answers.</p>
-  <div class="aim">Get to the far station. After every try, say where you are.</div>
+  <p>Three hundred years ago, Leibniz asked: could you leave your body and move into another one?</p>
+  <p>This station is going to try. You are the pilot in the pod on the left. The station will try three ways to get you to the far station. After each one, it asks: <b>which pod are you in now?</b> You tap a pod. Then Leibniz answers.</p>
+  <div class="aim">Get to the far station. After every try, tap the pod you are in.</div>
   <button class="key solid" id="b-begin"><span class="lamp"></span><span>Begin</span></button>
   <div class="row"><button class="key" id="b-help-start"><span class="lamp"></span><span>How to play</span></button><button class="key" id="b-about-start"><span class="lamp"></span><span>About</span></button></div>
   <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
 </section>
 
 <section id="s-play" class="screen">
-  <div class="top"><div class="aim" id="aimline">Get to the far station. After every try, say where you are.</div><button class="key qm" id="b-help-play" aria-label="How to play"><span>?</span></button></div>
+  <div class="top"><div class="aim" id="aimline">Get to the far station. After every try, tap the pod you are in.</div><button class="key qm" id="b-help-play" aria-label="How to play"><span>?</span></button></div>
   <div class="donow" id="donow"></div>
   <div class="padwrap"><svg class="pad" viewBox="0 0 340 150" id="pad"></svg></div>
   <div class="log hide" id="log"></div>
   <div class="console" id="console"></div>
-  <div class="framebox hide" id="framebox"><div class="ft" id="frame-text"></div><div id="frame-keys"></div></div>
   <div class="result hide" id="result"></div>
   <div class="leib hide" id="leib"></div>
   <div id="after"></div>
@@ -131,15 +138,14 @@ footer.sig a{color:var(--dim);text-decoration:none}
 <div class="ov" id="ov-help"><div class="wrap">
   <div class="close"><button class="key" id="b-help-close"><span class="lamp"></span><span>Back to the station</span></button></div>
   <h2>How to play</h2>
-  <p>You are the pilot of your pod. You want to be at the far station, where the far pod is, with its own pilot.</p>
-  <p>The station tries four ways to get you there, one after the other. Press the key, watch what happens, press Next. Then the station asks: <b>where are you now?</b> Pick an answer. Then Leibniz gives his.</p>
+  <p>You are the pilot of the pod on the left. You want to be at the far station, where the far pod is. It has a pilot too. All pilots look the same.</p>
+  <p>The station tries three ways to get you there. Each time, do what the screen says (tap your pod, press a key), watch, and then <b>tap the pod you think you are in</b>. Then Leibniz tells you where you really are.</p>
   <ul>
-    <li><b>Move.</b> Lift you out and carry you over. The pod has no door, so the station burns it open.</li>
-    <li><b>Swap.</b> You and the far pilot change places.</li>
-    <li><b>Swap with a sign.</b> The same, but the far pod flashes its lamp as you arrive.</li>
-    <li><b>Beam.</b> Everything about you is sent to the far pod.</li>
+    <li><b>Get you out.</b> Tap your pod to burn off a layer. See what is underneath.</li>
+    <li><b>Swap.</b> You and the far pilot change places. Then pick a sign so everyone can see you arrived.</li>
+    <li><b>Beam.</b> Everything you remember is sent into the far pilot's head.</li>
   </ul>
-  <p>At the end you book your passage on to the next station, by beam or by pod. No score; the verdict says where you and Leibniz agreed. Three minutes.</p>
+  <p>At the end you choose how to travel on: by beam or by pod. No points. The verdict says where you and Leibniz agreed. About three minutes.</p>
   <div class="close" style="position:static"><button class="key" id="b-help-close2"><span class="lamp"></span><span>Back to the station</span></button></div>
 </div></div>
 
@@ -147,15 +153,14 @@ footer.sig a{color:var(--dim);text-decoration:none}
   <div class="close"><button class="key" id="b-about-close"><span class="lamp"></span><span>Back</span></button></div>
   <h2>About this game</h2>
   <p>Built from two manuscript pages Leibniz wrote around 1702–1705 and never published, <i>On Unities and Transmigration</i>, read in Lloyd Strickland's translation. The old question: can a soul move from one body to another? Leibniz says no, three times, and then allows one thing.</p>
-  <h2>The four tries, in his words</h2>
+  <h2>The three tries, in his words</h2>
   <ul>
-    <li><b>Burn.</b> A living body is a machine made of smaller machines, with no end; fire and other forces only ever disturb the outside. So no body can be broken open, and no soul lifted out.</li>
-    <li><b>Swap.</b> If two souls changed bodies and nothing in either body showed it, that would be against the order of things, because a body must express everything that happens to it.</li>
-    <li><b>Swap with a sign.</b> And if a body did show it, what could the sign be? Every state of a body follows from the one before by the laws of mechanics. There is no room in it for a sign that means "a soul has arrived."</li>
+    <li><b>Get you out.</b> A living body is a machine made of smaller machines, with no end; fire and other forces only ever disturb the outside. So no body can be broken open, and no soul lifted out.</li>
+    <li><b>Swap.</b> If two souls changed bodies and nothing in either body showed it, that would be against the order of things, because a body must express everything that happens to it. And if a body did show it, what could the sign be? Every state of a body follows from the one before by the laws of mechanics; there is no room in it for a sign that means "a soul has arrived." The lamp and its timer are the game's picture of that.</li>
     <li><b>Beam.</b> For a mind (a soul that can reason and remember, not a dog's), the laws of mechanics could build somewhere else a life that continues mine and claims what happened to me as its own. Morally, that would be me. Leibniz thinks this possible, and would rather identity came with the body.</li>
   </ul>
   <h2>What is ours</h2>
-  <p>The station, the pods, the lamp and its timer, the clock times, and the two of you at the end. Leibniz does not say the original is still there after the "rebirth elsewhere"; it follows from his own rules (no body is destroyed, nothing leaves a soul), and the game shows it. The question "where are you now?" and the booking are the game's; Leibniz's answers are the station's.</p>
+  <p>The station, the pods, the lamp and its timer, the clock times, and the two of you at the end. Leibniz does not say the original is still there after the "rebirth elsewhere"; it follows from his own rules (no body is destroyed, nothing leaves a soul), and the game shows it. The question "which pod are you in?" and the booking are the game's; Leibniz's answers are the station's.</p>
   <h2>The text</h2>
   <p>G. W. Leibniz, <i>On Unities and Transmigration</i> (c. 1702–1705), LBr 40 Bl. 22–23, translated by Lloyd Strickland (© 2016) at <a href="https://www.leibniz-translations.com/">leibniz-translations.com</a>. His analysis: "Leibniz vs. transmigration: a previously unpublished text from the early 1700s", <i>Quaestiones Disputatae</i> 7(2), 139–159.</p>
   <p>Game: Steffen Huck, built with Claude.</p>
@@ -166,7 +171,7 @@ footer.sig a{color:var(--dim);text-decoration:none}
 (function () {
   'use strict';
   var $ = function (id) { return document.getElementById(id); };
-  var s, frames, fi, timers = [];
+  var s, timers = [];
   function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
   function clearTimers() { timers.forEach(clearInterval); timers = []; }
 
@@ -177,7 +182,7 @@ footer.sig a{color:var(--dim);text-decoration:none}
     p4: { x: 180, y: 18, big: false },
     p5: { x: 318, y: 20, big: false }
   };
-  function fresh() { return { step: 0, scorched: false, beamed: false, answers: {}, booked: null }; }
+  function fresh() { return { layers: 0, scorched: false, beamed: false, sign: null, answers: {}, booked: null }; }
 
   // ---------- drawing ----------
   var STARS = (function () { var a = [], x = 7; for (var i = 0; i < 46; i++) { x = (x * 1103515245 + 12345) & 0x7fffffff; var px = (x % 340); x = (x * 1103515245 + 12345) & 0x7fffffff; var py = (x % 190); a.push([px, py, (i % 5 === 0) ? 1 : .5]); } return a; })();
@@ -196,17 +201,25 @@ footer.sig a{color:var(--dim);text-decoration:none}
     });
     return o + '</g>';
   }
+  function capsule(cx, cy, w, h, extra) { return '<rect class="pod-capsule" x="' + (cx - w / 2) + '" y="' + (cy - h / 2) + '" width="' + w + '" height="' + h + '" rx="' + (h / 2) + '"' + (extra || '') + '/>'; }
   function podSvg(id, opt) {
-    opt = opt || {}; var p = PODS[id], big = p.big, w = big ? 96 : 44, h = big ? 44 : 20, x = p.x - w / 2, y = p.y - h / 2, o = '<g id="pod-' + id + '">';
-    if (id === 'you') for (var i = 1; i <= 3; i++) o += '<rect class="pod-shell" x="' + (x - 6 * i) + '" y="' + (y - 6 * i) + '" width="' + (w + 12 * i) + '" height="' + (h + 12 * i) + '" rx="' + (h / 2 + 6 * i) + '"' + (opt.burnRings && i <= opt.burnRings ? ' stroke="var(--orange)" stroke-opacity=".9" stroke-dasharray="3 2"' : '') + '/>';
-    o += '<rect class="pod-capsule" x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + (h / 2) + '"' + (opt.lit === id ? ' stroke="var(--teal)" stroke-width="2"' : '') + '/>';
+    opt = opt || {}; var p = PODS[id], big = p.big, w = big ? 96 : 44, h = big ? 44 : 20, x = p.x - w / 2, y = p.y - h / 2;
+    var o = '<g id="' + (opt.pre || 'pod-') + id + '" class="podg' + (opt.tappable ? ' tap' : '') + '">';
+    if (id === 'you' && !opt.noRings) for (var i = 1; i <= 3; i++) o += '<rect class="pod-shell" x="' + (x - 6 * i) + '" y="' + (y - 6 * i) + '" width="' + (w + 12 * i) + '" height="' + (h + 12 * i) + '" rx="' + (h / 2 + 6 * i) + '"/>';
+    if (opt.tappable && big) o += '<rect class="taphint" x="' + (x - 10) + '" y="' + (y - 10) + '" width="' + (w + 20) + '" height="' + (h + 20) + '" rx="' + (h / 2 + 10) + '"/>';
+    o += capsule(p.x, p.y, w, h, (opt.lit === id ? ' stroke="var(--teal)" stroke-width="2"' : '') + (id === 'you' && !opt.pre ? ' id="cap-you"' : ''));
+    if (id === 'you' && opt.inner) o += '<g id="inner-you">' + capsule(p.x, p.y, w * .74, h * .74, ' stroke-opacity=".45"') + '</g>';
     if (id === 'you' && s.scorched) o += '<path d="M' + (x + w * .55) + ' ' + (y + 2) + ' q' + (w * .25) + ' ' + (h * .2) + ' ' + (w * .3) + ' ' + (h * .7) + '" stroke="var(--orange)" stroke-opacity=".7" stroke-width="4" fill="none" stroke-linecap="round"/>';
     var pr = big ? 15 : 7; o += porthole(id, x + (big ? 24 : 11), p.y, pr);
     var hx = x + w - (big ? 26 : 12);
     if (big) { if (!opt['hide_' + id]) o += helmet(hx, p.y, 1.3); }
     else o += helmet(hx, p.y, .7, true);
-    if (opt.lamp && id === 'far') o += '<circle cx="' + (x + w - 4) + '" cy="' + (y + 4) + '" r="7" fill="var(--amber)"' + (opt.lampLive ? ' class="blink"' : ' opacity=".35" stroke="var(--amber)" stroke-dasharray="2 1"') + '/>';
-    if (big) o += '<text class="lbl big" x="' + p.x + '" y="' + (y + h + 13) + '" text-anchor="middle">' + esc(p.name) + '</text><text class="lbl dim" x="' + p.x + '" y="' + (y + h + 23) + '" text-anchor="middle">' + esc(id === 'you' ? 'you' : (opt.farLabel || (s.beamed ? 'the far pilot · now also you' : 'the far pilot'))) + '</text>';
+    if (id === 'far' && opt.sign) {
+      if (opt.sign === 'lamp') o += '<circle cx="' + (x + w - 4) + '" cy="' + (y + 4) + '" r="7" fill="var(--amber)"' + (opt.signLive ? ' class="blink"' : ' opacity=".35" stroke="var(--amber)" stroke-dasharray="2 1"') + '/>';
+      if (opt.sign === 'horn') o += '<g' + (opt.signLive ? ' class="blink"' : ' opacity=".4"') + '><path d="M' + (x + w - 2) + ' ' + (y + 6) + ' l10 -8 v16 z" fill="var(--amber)"/><path d="M' + (x + w + 12) + ' ' + (y - 2) + ' q6 8 0 16" stroke="var(--amber)" fill="none" stroke-width="1.5"/></g>';
+      if (opt.sign === 'spin') o += '<path d="M' + (x + w - 12) + ' ' + (y - 6) + ' a14 10 0 1 1 20 4" stroke="var(--amber)" fill="none" stroke-width="2"' + (opt.signLive ? ' class="blink"' : ' opacity=".4"') + '/><path d="M' + (x + w + 4) + ' ' + (y - 6) + ' l4 4 l-6 2z" fill="var(--amber)"' + (opt.signLive ? '' : ' opacity=".4"') + '/>';
+    }
+    if (big) o += '<text class="lbl big" x="' + p.x + '" y="' + (y + h + 13) + '" text-anchor="middle">' + esc(p.name) + '</text><text class="lbl dim" x="' + p.x + '" y="' + (y + h + 23) + '" text-anchor="middle">' + esc(id === 'you' ? 'you' : (opt.farLabel || (s.beamed ? 'the far pilot · also you' : 'the far pilot'))) + '</text>';
     return o + '</g>';
   }
   function bubble(x, y, text, w) {
@@ -221,6 +234,7 @@ footer.sig a{color:var(--dim);text-decoration:none}
     o += '<rect x="200" y="58" width="132" height="88" fill="none" stroke="#3a4050" stroke-dasharray="3 3"/><text class="lbl dim" x="266" y="54" text-anchor="middle">far station</text>';
     ['p3', 'p4', 'p5', 'far', 'you'].forEach(function (id) { o += podSvg(id, opt); });
     o += '<g id="padfx"></g>';
+    if (opt.tappable) o += '<text class="lbl amber big" x="150" y="44" text-anchor="middle">tap the pod you are in</text>';
     $('pad').innerHTML = o;
   }
   function fx(html) { $('padfx').innerHTML = html; }
@@ -228,7 +242,7 @@ footer.sig a{color:var(--dim);text-decoration:none}
     var h = 130, o = stars(h);
     o += '<rect x="200" y="' + (h / 2 - 36) + '" width="132" height="76" fill="none" stroke="#3a4050" stroke-dasharray="3 3"/><text class="lbl dim" x="266" y="' + (h / 2 - 40) + '" text-anchor="middle">far station</text>';
     var save = {}; Object.keys(PODS).forEach(function (k) { save[k] = PODS[k].y; PODS[k].y = PODS[k].big ? h / 2 + 2 : PODS[k].y - 4; });
-    ['p3', 'p4', 'p5', 'far', 'you'].forEach(function (id) { o += podSvg(id, {}); });
+    ['p3', 'p4', 'p5', 'far', 'you'].forEach(function (id) { o += podSvg(id, { pre: 'sp-' }); });
     Object.keys(PODS).forEach(function (k) { PODS[k].y = save[k]; });
     $('startpad').innerHTML = o;
   }
@@ -236,151 +250,157 @@ footer.sig a{color:var(--dim);text-decoration:none}
     var ax = 102, bx = 288, y = 96, x1 = ax + (bx - ax) * pos, x2 = bx - (bx - ax) * pos;
     return helmet(x1, y - 18 * Math.sin(Math.PI * pos), 1.3) + helmet(x2, y + 18 * Math.sin(Math.PI * pos), 1.3);
   }
-  function animateCrossing() { drawPad({ hide_you: true, hide_far: true }); fx(crossing(0)); var t0 = Date.now(), iv = setInterval(function () { var k = Math.min(1, (Date.now() - t0) / 1300); fx(crossing(k)); if (k >= 1) clearInterval(iv); }, 40); timers.push(iv); }
-  function flames() { var o = ''; for (var i = 0; i < 7; i++) o += '<path class="flame" style="animation-delay:' + (i * .07) + 's" d="M' + (30 + i * 16) + ' 72 q5 -22 10 0 q-5 -6 -10 0z"/>'; return o + '<rect class="pod-shell peel" x="14" y="56" width="132" height="80" rx="40" stroke="var(--orange)" stroke-opacity=".8"/>'; }
-  function counterFx(from, to, ms, cap) {
-    var el = document.createElementNS('http://www.w3.org/2000/svg', 'text'); el.setAttribute('class', 'lbl orange big'); el.setAttribute('x', '8'); el.setAttribute('y', '42'); el.setAttribute('text-anchor', 'start');
-    var padfx = $('padfx'); padfx.appendChild(el); var t0 = Date.now();
-    var iv = setInterval(function () {
-      var k = Math.min(1, (Date.now() - t0) / ms), v = Math.round(from + (to - from) * (cap ? k * k * k : k));
-      el.textContent = (v >= 1000000 ? '1 000 000 + ' : v.toLocaleString('en-GB')) + (v === 1 ? ' layer' : ' layers');
-      if (k >= 1) { clearInterval(iv); if (cap) { el.textContent = 'past a million'; var e2 = el.cloneNode(); e2.setAttribute('y', '54'); e2.setAttribute('x', '8'); e2.setAttribute('class', 'lbl orange'); e2.textContent = 'the station stops counting'; padfx.appendChild(e2); } }
-    }, 40); timers.push(iv);
-  }
-  function drawClock(n, arrow) {
-    var L = [['3:15', 'the timer trips, as it does every day'], ['3:16', 'the lamp flashes']], o = '<h4>The far pod’s clock</h4>';
-    for (var i = 0; i < n; i++) { if (arrow && i === 1) o += '<div class="fr">because of 3:15 ↑</div>'; o += '<div class="ln' + (i === 1 ? ' new' : (arrow ? ' cause' : '')) + '"><span class="t">' + L[i][0] + '</span><span>' + L[i][1] + '</span></div>'; }
+  function animateCrossing(opt, done) { opt = opt || {}; opt.hide_you = true; opt.hide_far = true; drawPad(opt); fx(crossing(0)); var t0 = Date.now(), iv = setInterval(function () { var k = Math.min(1, (Date.now() - t0) / 1300); fx(crossing(k)); if (k >= 1) { clearInterval(iv); if (done) done(); } }, 40); timers.push(iv); }
+  function flames() { var o = ''; for (var i = 0; i < 7; i++) o += '<path class="flame" style="animation-delay:' + (i * .07) + 's" d="M' + (30 + i * 16) + ' 72 q5 -22 10 0 q-5 -6 -10 0z"/>'; return o; }
+  function counter() { var v = s.layers; if (!v) return ''; return '<text class="lbl orange big" x="8" y="42">' + (v >= 1000000 ? 'over a million' : v.toLocaleString('en-GB')) + '</text><text class="lbl orange" x="8" y="53">' + (v === 1 ? 'layer burnt' : 'layers burnt') + '</text>'; }
+  function drawClock(sign, arrow) {
+    var what = sign === 'lamp' ? ['the timer trips, as it does every day', 'the lamp flashes'] : sign === 'horn' ? ['the timer trips, as it does every day', 'the horn sounds'] : ['the timer trips, as it does every day', 'the pod spins round'];
+    var o = '<h4>The far pod’s clock · every day</h4>';
+    o += '<div class="ln' + (arrow ? ' cause' : '') + '"><span class="t">3:15</span><span>' + what[0] + '</span></div>';
+    if (arrow) o += '<div class="fr">because of 3:15 ↑</div>';
+    o += '<div class="ln new"><span class="t">3:16</span><span>' + what[1] + '</span></div>';
     $('log').innerHTML = o; $('log').classList.remove('hide');
   }
 
   // ---------- screens ----------
   function show(id) { ['s-start', 's-play', 's-end'].forEach(function (x) { $(x).classList.toggle('on', x === id); }); window.scrollTo(0, 0); }
   function keyHtml(id, label, cls, sub) { return '<button class="key ' + (cls || '') + '" id="k-' + id + '"><span class="lamp"></span><span>' + label + (sub ? '<small>' + sub + '</small>' : '') + '</span></button>'; }
-  function hideAll() { ['framebox', 'result', 'leib', 'log'].forEach(function (x) { $(x).classList.add('hide'); }); $('after').innerHTML = ''; $('console').innerHTML = ''; }
-  function scrollTo(el) { window.scrollTo({ top: el.offsetTop - 200, behavior: 'smooth' }); }
+  function hideAll() { ['result', 'leib', 'log'].forEach(function (x) { $(x).classList.add('hide'); }); $('after').innerHTML = ''; $('console').innerHTML = ''; }
+  function scrollTo(el) { window.scrollTo({ top: Math.max(0, el.offsetTop - 220), behavior: 'smooth' }); }
+  function say(html, keys) { $('console').innerHTML = '<div class="framebox"><div class="ft">' + html + '</div>' + (keys || '') + '</div>'; }
 
-  function runFrames(list, done) {
-    frames = list; fi = 0; $('console').innerHTML = ''; $('framebox').classList.remove('hide');
-    function step() {
-      clearTimers(); var f = frames[fi]; f.draw(); $('frame-text').innerHTML = f.text;
-      var keys = f.keys || [{ label: fi < frames.length - 1 ? 'Next' : 'So, where am I?', go: function () { fi++; if (fi < frames.length) step(); else { $('framebox').classList.add('hide'); done(); } } }];
-      $('frame-keys').innerHTML = keys.map(function (k, i) { return keyHtml('f' + i, k.label, 'solid'); }).join('');
-      keys.forEach(function (k, i) { $('k-f' + i).onclick = function () { clearTimers(); k.go(); }; });
-      scrollTo($('framebox'));
+  // which pod are you in? — opt drawn with tappable; answers {you:{text}, far:{text}, cant:{text}} ; leib; next
+  function findMe(tryId, drawOpt, answers, leib, next, extraKey) {
+    drawOpt = drawOpt || {}; drawOpt.tappable = true; drawPad(drawOpt);
+    $('console').innerHTML = '<div class="explain"><b>Which pod are you in now?</b> Tap it.</div>' + (extraKey ? keyHtml('cant', extraKey) : '');
+    scrollTo($('pad'));
+    function answer(k) {
+      s.answers[tryId] = k; drawOpt.tappable = false; drawPad(drawOpt); $('console').innerHTML = '';
+      $('result').innerHTML = '<div class="h">Leibniz says</div>' + answers[k].text; $('result').classList.remove('hide');
+      $('leib').innerHTML = 'His own words: ' + leib; $('leib').classList.remove('hide');
+      $('after').innerHTML = keyHtml('next', answers[k].nextLabel || 'Next try', 'solid'); $('k-next').onclick = next;
+      scrollTo($('result'));
     }
-    step();
+    $('pod-you').onclick = function () { answer('you'); };
+    $('pod-far').onclick = function () { answer('far'); };
+    if (extraKey) $('k-cant').onclick = function () { answer('cant'); };
   }
 
-  // ---------- the one question ----------
-  // opts: [{id,label}], answers: {id: {text, agree: 0|1|2}}, leib: line, next: fn
-  function ask(tryId, opts, answers, leib, next) {
-    $('console').innerHTML = '<div class="explain"><b>Where are you now?</b></div>' + opts.map(function (o) { return keyHtml(o.id, o.label); }).join('');
-    scrollTo($('console'));
-    opts.forEach(function (o) {
-      $('k-' + o.id).onclick = function () {
-        s.answers[tryId] = o.id; $('console').innerHTML = '';
-        var a = answers[o.id];
-        $('result').innerHTML = '<div class="h">Leibniz says</div>' + a.text; $('result').classList.remove('hide');
-        $('leib').innerHTML = 'In his words: ' + leib; $('leib').classList.remove('hide');
-        $('after').innerHTML = keyHtml('next', a.nextLabel || 'Next try', 'solid'); $('k-next').onclick = next;
-        scrollTo($('result'));
-      };
-    });
-  }
-  var HERE = { id: 'here', label: 'Here, in my pod' }, THERE = { id: 'there', label: 'There, in the far pod' }, CANT = { id: 'cant', label: 'I can’t tell' };
-
-  // ---------- try 1: move, so burn ----------
+  // ---------- try 1: get you out ----------
   function try1() {
-    hideAll(); drawPad(); $('donow').textContent = 'Try 1 of 4 · move';
-    $('console').innerHTML = '<div class="explain"><b>Move.</b> The station lifts you out of your pod and carries you to the far pod. Press Move.</div>' + keyHtml('move', 'Move', 'solid');
-    $('k-move').onclick = function () {
-      $('console').innerHTML = '<div class="explain">The station: <b>“Can’t. Your pod has no door.”</b> There is only one way to open it: burn it. The rings round your pod are its layers.</div>' + keyHtml('fire', 'Burn it open', 'solid');
-      drawPad({ burnRings: 3 });
-      $('k-fire').onclick = function () {
-        runFrames([
-          { text: 'The outside burns off. Under it: a pod. You in it.', draw: function () { drawPad({ burnRings: 1 }); fx(flames()); counterFx(1, 1, 100); } },
-          { text: 'Layer after layer. Under every one: a pod, with you in it.', draw: function () { drawPad({ burnRings: 3 }); fx(flames()); counterFx(1, 100, 2200); },
-            keys: [{ label: 'Burn deeper', go: function () { fi = 2; step2(); } }, { label: 'Enough', go: askBurn }] },
-          { text: 'Past a million layers the station stops counting. Still a pod. Still you in it.', draw: function () { drawPad({ burnRings: 3 }); fx(flames()); counterFx(100, 1000000, 2600, true); } }
-        ], askBurn);
-        function step2() { clearTimers(); frames[2].draw(); $('frame-text').innerHTML = frames[2].text; $('frame-keys').innerHTML = keyHtml('f0', 'So, where am I?', 'solid'); $('k-f0').onclick = function () { clearTimers(); askBurn(); }; }
-      };
+    hideAll(); $('donow').textContent = 'Try 1 of 3 · get you out';
+    drawPad({ inner: true });
+    say('First the station has to get you out of your pod. But the pod has no door. The only way in is fire. <b>Tap your pod to burn off a layer.</b>');
+    armBurn();
+  }
+  function armBurn() {
+    $('pod-you').onclick = function () {
+      $('pod-you').onclick = null; s.layers++;
+      var cap = $('cap-you'), inner = $('inner-you'); cap.setAttribute('class', 'pod-capsule peel'); if (inner) inner.setAttribute('class', 'grow'); fx(flames() + counter());
+      setTimeout(function () {
+        drawPad({ inner: true }); fx(counter());
+        if (s.layers === 1) say('Under the layer: another pod, a bit smaller. You in it. <b>Tap again.</b>');
+        else if (s.layers === 2) say('And under that: another pod. Still you in it. <b>Keep going.</b>');
+        else if (s.layers < 4) say('Another pod. You in it. <b>Again.</b>');
+        else say('Every layer hides another pod with you in it. The station takes over the burning.', keyHtml('auto', 'Let the station burn on', 'solid'));
+        if (s.layers < 4) armBurn(); else $('k-auto').onclick = autoBurn;
+      }, 650);
     };
   }
-  function askBurn() {
-    clearTimers(); $('framebox').classList.add('hide'); s.scorched = true; drawPad();
-    var A = {
-      here: { text: '<b>Here.</b> Under every layer there is another, with you in it. Fire only ever scorches the outside. A pod cannot be opened, so you cannot be lifted out.' },
-      there: { text: '<b>Here.</b> Nobody carried you anywhere: the station never got in. Under every layer there is another, with you in it. Fire only ever scorches the outside. A pod cannot be opened, so you cannot be lifted out.' },
-      gone: { text: '<b>Here.</b> Fire only ever scorches the outside. Under every layer there is another, with you in it, and no bottom. A pod cannot be opened, so you cannot be lifted out, and you cannot be burnt away either.' }
-    };
-    ask('burn', [HERE, THERE, { id: 'gone', label: 'Nowhere. Burnt.' }], A, 'nature’s machines are folded in themselves to infinity; fire and other external forces can only ever disturb the outside.', try2);
+  function autoBurn() {
+    say('The station burns. And burns. And burns.');
+    var n = 0, iv = setInterval(function () {
+      n++; s.layers = n < 10 ? s.layers + 1 : Math.round(Math.pow(10, 1 + (n - 10) * .55));
+      if (n >= 22) { s.layers = 1000000; clearInterval(iv); s.scorched = true; drawPad(); fx(counter() + '<text class="lbl orange" x="8" y="64">the station gives up</text>');
+        say('A pod inside a pod inside a pod. It never ends. The station gives up.', keyHtml('q', 'So where am I?', 'solid'));
+        $('k-q').onclick = function () {
+          var txt = 'Under every layer there is another pod, with you in it, and it never ends. Fire can only burn the outside. So nobody can ever get you out.';
+          findMe('burn', {}, {
+            you: { text: '<b>Yes, here.</b> ' + txt },
+            far: { text: '<b>No. Look: here, in your pod, under all the burnt layers.</b> ' + txt }
+          }, 'nature’s machines are folded in themselves to infinity; fire and other external forces can only ever disturb the outside.', try2);
+        };
+        return;
+      }
+      drawPad({ inner: true }); var cap = $('cap-you'), inner = $('inner-you'); cap.setAttribute('class', 'pod-capsule peel fast'); inner.setAttribute('class', 'grow fast'); fx(flames() + counter());
+    }, 260); timers.push(iv);
   }
 
   // ---------- try 2: swap ----------
   function try2() {
-    hideAll(); drawPad(); $('donow').textContent = 'Try 2 of 4 · swap';
-    $('console').innerHTML = '<div class="explain"><b>Swap.</b> No door needed: you and the far pilot change places. Press Swap, and look closely.</div>' + keyHtml('swap', 'Swap', 'solid');
+    hideAll(); $('donow').textContent = 'Try 2 of 3 · swap'; drawPad();
+    say('The station tries a trick. No door needed: <b>you and the far pilot change places</b>, just like that. Remember, all pilots look the same. Press Swap and watch closely.', keyHtml('swap', 'Swap', 'solid'));
     $('k-swap').onclick = function () {
-      runFrames([
-        { text: 'The pilots change places.', draw: animateCrossing },
-        { text: 'Done, says the station. Now look at the two pods. Is anything different from before?', draw: function () { drawPad(); } }
-      ], function () {
-        var A = {
-          here: { text: '<b>Here.</b> Look at the pods: nothing is different from before. Not in your pod, not in the far pod, not anywhere. And a change that shows nowhere, Leibniz says, is no change. It did not happen.' },
-          there: { text: '<b>Here.</b> Look at the pods: nothing is different from before. Not in your pod, not in the far pod, not anywhere. And a change that shows nowhere, Leibniz says, is no change. It did not happen.' },
-          cant: { text: '<b>Nobody can tell, and that is the point.</b> Nothing is different from before: not in your pod, not in the far pod, not anywhere. A change that shows nowhere, Leibniz says, is no change. It did not happen. You are here.' }
-        };
-        ask('swap', [HERE, THERE, CANT], A, 'an exchange of souls that showed in no body would be against order, since a body must express everything.', try3);
+      say('Changing places…');
+      animateCrossing({}, function () {
+        var txt = 'Look at the two pods. They look exactly as they did before. Nothing anywhere is different. And Leibniz says: if nothing anywhere is different, then nothing happened. You never moved.';
+        findMe('swap', {}, {
+          far: { text: '<b>Are you sure?</b> ' + txt, nextLabel: 'That’s not fair. Make it show!' },
+          you: { text: '<b>Here, yes. But could you tell?</b> ' + txt, nextLabel: 'Make it show, then' },
+          cant: { text: '<b>Nobody can tell.</b> ' + txt, nextLabel: 'Make it show, then' }
+        }, 'an exchange of souls that showed in no body would be against order, since a body must express everything.', try2b, 'I can’t tell');
       });
     };
   }
+  function try2b() {
+    hideAll(); $('donow').textContent = 'Try 2 of 3 · swap, with a sign'; drawPad();
+    say('Then make it show. <b>Pick a sign</b> the far pod gives the moment you arrive. Then the station swaps you again.',
+      keyHtml('lamp', 'Flash its lamp') + keyHtml('horn', 'Sound its horn') + keyHtml('spin', 'Spin it round'));
+    ['lamp', 'horn', 'spin'].forEach(function (k) {
+      $('k-' + k).onclick = function () {
+        s.sign = k; say('Changing places…');
+        animateCrossing({ sign: k }, function () {
+          var name = k === 'lamp' ? 'The lamp flashes!' : k === 'horn' ? 'The horn sounds!' : 'The pod spins round!';
+          drawPad({ sign: k, signLive: true });
+          say(name + ' A sign, at last. <b>But look at the far pod’s clock.</b>', keyHtml('clock', 'Look at the clock', 'solid'));
+          $('k-clock').onclick = function () {
+            drawClock(k, true); drawPad({ sign: k });
+            var did = k === 'lamp' ? 'The lamp flashes every day at 3:16' : k === 'horn' ? 'The horn sounds every day at 3:16' : 'The pod spins round every day at 3:16';
+            say(did + ', because its timer says so. It would have done that anyway, with or without you.', keyHtml('q', 'So where am I?', 'solid'));
+            $('k-q').onclick = function () {
+              var txt = did + ', because of its timer, not because of you. A pod does everything for its own reasons, like a clock. No sign it gives can mean “a new pilot is here”. So this swap shows nothing either. Nothing happened. You never moved.';
+              findMe('sign', { sign: k }, {
+                far: { text: '<b>The sign fooled you.</b> ' + txt, nextLabel: 'Last try' },
+                you: { text: '<b>Right, here.</b> ' + txt, nextLabel: 'Last try' },
+                cant: { text: '<b>Nobody can tell, again.</b> ' + txt, nextLabel: 'Last try' }
+              }, 'if the exchange showed in the bodies, what means are there of expressing the passage of a soul by the laws of mechanics?', try3, 'I can’t tell');
+            };
+          };
+        });
+      };
+    });
+  }
 
-  // ---------- try 3: swap with a sign ----------
+  // ---------- try 3: beam ----------
   function try3() {
-    hideAll(); drawPad({ lamp: true }); $('donow').textContent = 'Try 3 of 4 · swap with a sign';
-    $('console').innerHTML = '<div class="explain"><b>Then make it show.</b> The same swap, but the far pod flashes its lamp the moment you arrive. Press Swap.</div>' + keyHtml('swap2', 'Swap, lamp on', 'solid');
-    $('k-swap2').onclick = function () {
-      runFrames([
-        { text: 'The pilots change places.', draw: function () { animateCrossing(); } },
-        { text: 'The far pod’s lamp flashes. A sign, at last.', draw: function () { drawPad({ lamp: true, lampLive: true }); drawClock(2); } },
-        { text: 'But look at the far pod’s clock. The lamp flashed <b>because its timer tripped</b>, as it does every day at 3:15.', draw: function () { drawPad({ lamp: true }); drawClock(2, true); } }
-      ], function () {
-        var A = {
-          there: { text: '<b>Here.</b> The lamp proves nothing: the pod’s own timer flashed it, as it does every day. Whatever sign a pod gives, its own clockwork explains. There is no sign that means “a pilot has arrived.” So this swap, too, shows nowhere, and did not happen.' },
-          here: { text: '<b>Here.</b> The lamp was the pod’s own timer, as every day. Whatever sign a pod gives, its own clockwork explains. There is no sign that means “a pilot has arrived.” So this swap, too, shows nowhere, and did not happen.' },
-          cant: { text: '<b>Here.</b> The lamp cannot tell you: the pod’s own timer flashed it, as it does every day. Whatever sign a pod gives, its own clockwork explains. There is no sign that means “a pilot has arrived.” So this swap, too, shows nowhere, and did not happen.' }
-        };
-        ask('lamp', [{ id: 'there', label: 'There. The lamp proves it' }, HERE, CANT], A, 'if the exchange showed in the bodies, what means are there of expressing the passage of a soul by the laws of mechanics?', try4);
-      });
-    };
-  }
-
-  // ---------- try 4: beam ----------
-  function try4() {
-    hideAll(); drawPad(); $('donow').textContent = 'Try 4 of 4 · beam';
-    $('console').innerHTML = '<div class="explain"><b>One thing left: the beam.</b> It sends everything about you to the far pod. Nothing is lifted, nothing swapped. Press Beam, and watch both pods.</div>' + keyHtml('beam', 'Beam', 'solid');
+    hideAll(); $('donow').textContent = 'Try 3 of 3 · beam'; drawPad();
+    say('One thing left: <b>the beam.</b> It sends everything you remember, your whole life, into the far pilot’s head. Nothing is lifted, nothing swapped. Press Beam and watch both pods.', keyHtml('beam', 'Beam', 'solid'));
     $('k-beam').onclick = function () {
-      runFrames([
-        { text: 'The beam runs.', draw: function () { drawPad({ lit: 'you' }); fx('<line x1="128" y1="96" x2="214" y2="96" stroke="var(--teal)" stroke-width="2" class="beamline"/>'); } },
-        { text: 'The far pilot wakes up with your life in its head. It speaks.', draw: function () { s.beamed = true; drawPad({ lit: 'far' }); fx(bubble(176, 30, 'I’m you. I remember your breakfast, and the promise you made.', 160)); } },
-        { text: 'Now look at your own pod.', draw: function () { drawPad({ lit: 'you' }); fx(bubble(4, 30, 'So do I. I’m still here.', 110) + bubble(236, 30, 'I’m you.', 50)); } }
-      ], function () {
-        drawPad(); fx(bubble(4, 30, 'I’m still here.', 90) + bubble(236, 30, 'I’m you.', 50));
-        var A = {
-          here: { text: '<b>Here. And, in a way, there too.</b> Your body never moved. But the far pilot now remembers your life and calls it its own, and for Leibniz that counts: as far as promises, debts and blame go, whoever remembers your life and claims it <b>is you</b>. Two of you, one life.', nextLabel: 'Book your passage' },
-          there: { text: '<b>There, in a way. And here.</b> The far pilot now remembers your life and calls it its own, and for Leibniz that counts: as far as promises, debts and blame go, whoever remembers your life and claims it <b>is you</b>. But your body never moved, and you are still in it. Two of you, one life.', nextLabel: 'Book your passage' },
-          both: { text: '<b>Both, says Leibniz.</b> Your body never moved, so you are here. But the far pilot now remembers your life and calls it its own, and that counts: as far as promises, debts and blame go, whoever remembers your life and claims it <b>is you</b>. Two of you, one life.', nextLabel: 'Book your passage' }
+      drawPad({ lit: 'you' }); fx('<line x1="128" y1="96" x2="214" y2="96" stroke="var(--teal)" stroke-width="2" class="beamline"/>');
+      say('The beam runs…');
+      setTimeout(function () {
+        s.beamed = true; drawPad({ lit: 'far' }); fx(bubble(176, 30, 'I’m you! I remember your breakfast. And the promise you made.', 160));
+        say('The far pilot wakes up with your whole life in its head.', keyHtml('n1', 'And my pod?', 'solid'));
+        $('k-n1').onclick = function () {
+          drawPad({ lit: 'you' }); fx(bubble(4, 30, 'So do I. And I’m still here.', 130) + bubble(236, 30, 'I’m you!', 50));
+          say('You are still in your pod. You remember your breakfast too.', keyHtml('q', 'So where am I?', 'solid'));
+          $('k-q').onclick = function () {
+            var txt = 'Your body never moved, so you are here. But the far pilot now remembers your whole life and says “that’s me”. Leibniz says that counts: whoever remembers your life and calls it their own is you too, as far as promises and blame go. Two of you, one life.';
+            findMe('beam', {}, {
+              you: { text: '<b>Here. And, in a way, there too.</b> ' + txt, nextLabel: 'Book your passage' },
+              far: { text: '<b>There, in a way. And here.</b> ' + txt, nextLabel: 'Book your passage' },
+              cant: { text: '<b>Both, says Leibniz.</b> ' + txt, nextLabel: 'Book your passage' }
+            }, 'the mechanical laws themselves could make reborn elsewhere a life which continues my life, an intelligence that claims what has happened to me as its own, so that morally it would be me.', book, 'Both!');
+          };
         };
-        ask('beam', [HERE, THERE, { id: 'both', label: 'Both' }], A, 'the mechanical laws themselves could make reborn elsewhere a life which continues my life, an intelligence that claims what has happened to me as its own, so that morally it would be me.', book);
-      });
+      }, 1200);
     };
   }
 
   // ---------- booking ----------
   function book() {
     hideAll(); drawPad(); $('donow').textContent = 'Last · book your passage';
-    $('console').innerHTML = '<div class="explain"><b>Book your passage</b> on to the next station. The beam works, with a catch. Neither way is wrong.</div>' +
+    $('console').innerHTML = '<div class="explain"><b>How do you want to travel on</b> to the next station? Neither way is wrong.</div>' +
       keyHtml('bybeam', 'By beam', '', 'Someone there will remember your life. You stay here as well.') +
       keyHtml('bypod', 'By pod', '', 'You and your pod go together. Slow. One of you.');
     $('k-bybeam').onclick = function () { s.booked = 'beam'; endGame(); };
@@ -390,36 +410,36 @@ footer.sig a{color:var(--dim);text-decoration:none}
   // ---------- verdict ----------
   function endGame() {
     var a = s.answers, v = '';
-    v += '<h2>What Leibniz found</h2><p class="big">No pilot ever leaves its pod. A pod cannot be opened, because under every layer there is another. A swap that shows nowhere did not happen, and whatever a swap shows, the pod’s own clockwork explains. One thing is possible: someone else, somewhere else, may come to remember your life and call it theirs; as far as promises and blame go, that is you. But nothing moved, and Leibniz would rather you and your pod went together.</p>';
+    v += '<h2>What Leibniz found</h2><p class="big">Nobody ever leaves their pod. You cannot be taken out, because under every layer there is another pod. You cannot be swapped, because a swap that shows nowhere never happened, and any sign a pod gives, it gives for its own reasons. One thing can happen: someone else, somewhere else, can come to remember your whole life and call it theirs. That counts as you. But nothing moved, and Leibniz would rather you and your pod went together.</p>';
     v += '<h2>What you said</h2>';
     var rows = [
-      ['Burn', a.burn === 'here' ? 'here' : a.burn === 'there' ? 'there' : 'nowhere, burnt', 'here'],
-      ['Swap', a.swap === 'here' ? 'here' : a.swap === 'there' ? 'there' : 'you couldn’t tell', 'here'],
-      ['Swap with the lamp', a.lamp === 'here' ? 'here' : a.lamp === 'there' ? 'there, the lamp proved it' : 'you couldn’t tell', 'here'],
-      ['Beam', a.beam === 'here' ? 'here' : a.beam === 'there' ? 'there' : 'both', 'both']
+      ['Get you out', a.burn === 'you' ? 'your pod' : 'the far pod', 'your pod'],
+      ['Swap', a.swap === 'you' ? 'your pod' : a.swap === 'far' ? 'the far pod' : 'you couldn’t tell', 'your pod'],
+      ['Swap with a sign', a.sign === 'you' ? 'your pod' : a.sign === 'far' ? 'the far pod' : 'you couldn’t tell', 'your pod'],
+      ['Beam', a.beam === 'you' ? 'your pod' : a.beam === 'far' ? 'the far pod' : 'both', 'both']
     ];
     var agree = 0;
     rows.forEach(function (r) { var ok = r[1] === r[2] || (r[0] === 'Swap' && r[1] === 'you couldn’t tell'); if (ok) agree++; v += '<p><b>' + r[0] + ':</b> you said ' + r[1] + '. Leibniz: ' + r[2] + (ok ? '. Agreed.' : '.') + '</p>'; });
-    v += '<p>You booked your passage ' + (s.booked === 'beam' ? 'by beam.' : 'by pod.') + '</p>';
+    v += '<p>You chose to travel on ' + (s.booked === 'beam' ? 'by beam.' : 'by pod.') + '</p>';
     v += '<h2>Where you part</h2>';
-    v += '<p>' + (agree === 4 ? 'Nowhere on the four tries: you and Leibniz said the same each time.' : 'On ' + (4 - agree) + ' of the four tries you and Leibniz said different things; the lines above say where.') + '</p>';
-    v += '<p>' + (s.booked === 'beam' ? 'By beam, you took the road Leibniz calls possible and would not take: someone there with your life, and you left here as well.' : 'By pod, you went as Leibniz would: you and your body together, slowly.') + '</p>';
-    v += '<h2>What would have followed</h2>';
-    v += '<p>' + (s.booked === 'beam' ? 'Two of you now claim one life. Whose promise is a promise, whose debt a debt? Leibniz avoids the question by keeping the person with the body.' : 'Nothing to settle: one of you, with your pod. Had you beamed, two of you would claim one life, and someone would have to decide whose promise is a promise.') + '</p>';
-    v += '<div class="leib">In his words: that seems possible; but it seems more in keeping with order that moral identity is always accompanied by a physical identity.</div>';
+    v += '<p>' + (agree === 4 ? 'You and Leibniz said the same every time.' : 'On ' + (4 - agree) + ' of the four questions you and Leibniz said different things; the lines above say where.') + '</p>';
+    v += '<p>' + (s.booked === 'beam' ? 'By beam, you chose the way Leibniz thinks is possible but would not take himself: someone over there with your life, and you left here as well.' : 'By pod, you went the way Leibniz would: you and your body together, slowly.') + '</p>';
+    v += '<h2>What happens next</h2>';
+    v += '<p>' + (s.booked === 'beam' ? 'Two of you now say “that’s my life”. Who has to keep your promise? Who gets the blame? Leibniz avoids that mess by keeping a person with their body.' : 'Nothing to sort out: one of you, with your pod. Had you beamed, two of you would say “that’s my life”, and someone would have to decide who keeps your promises.') + '</p>';
+    v += '<div class="leib">His own words: that seems possible; but it seems more in keeping with order that moral identity is always accompanied by a physical identity.</div>';
     $('verdict').innerHTML = v;
     var o = stars(120), save = {};
     Object.keys(PODS).forEach(function (k) { save[k] = PODS[k].y; PODS[k].y = PODS[k].big ? 46 : -40; });
     o += '<rect x="200" y="14" width="132" height="84" fill="none" stroke="#3a4050" stroke-dasharray="3 3"/><text class="lbl dim" x="266" y="10" text-anchor="middle">next station</text>';
-    if (s.booked === 'beam') { o += podSvg('you') + podSvg('far', { farLabel: 'also you' }); o += '<text class="lbl amber big" x="170" y="116" text-anchor="middle">two pilots · one life</text>'; }
-    else { var sx = PODS.you.x; PODS.you.x = 266; o += podSvg('you'); PODS.you.x = sx; o += '<text class="lbl amber big" x="170" y="116" text-anchor="middle">one pilot · one pod · arrived</text>'; }
+    if (s.booked === 'beam') { o += podSvg('you', { noRings: true, pre: 'ep-' }) + podSvg('far', { farLabel: 'also you', pre: 'ep-' }); o += '<text class="lbl amber big" x="170" y="116" text-anchor="middle">two pilots · one life</text>'; }
+    else { var sx = PODS.you.x; PODS.you.x = 266; o += podSvg('you', { noRings: true, pre: 'ep-' }); PODS.you.x = sx; o += '<text class="lbl amber big" x="170" y="116" text-anchor="middle">one pilot · one pod · arrived</text>'; }
     Object.keys(PODS).forEach(function (k) { PODS[k].y = save[k]; });
     $('endpad').innerHTML = o;
     show('s-end');
   }
 
   // ---------- wiring ----------
-  function begin() { s = fresh(); show('s-play'); try1(); }
+  function begin() { clearTimers(); s = fresh(); show('s-play'); try1(); }
   $('b-begin').onclick = begin; $('b-again').onclick = begin;
   function ov(id, on) { $(id).classList.toggle('on', on); if (on) $(id).scrollTop = 0; }
   $('b-help-start').onclick = function () { ov('ov-help', true); }; $('b-help-play').onclick = function () { ov('ov-help', true); };
