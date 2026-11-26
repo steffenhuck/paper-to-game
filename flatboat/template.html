@@ -411,12 +411,13 @@ b,strong{font-weight:600}
   }
   function showFrame() {
     var f = frames[fi], c = frameCtx, ld = c.ld, l = c.l, tb = f.tb, tbPrev = tbBefore();
+    // the sentence arrives when the drawing has got there, and Next waits for both: the words never run ahead of the picture
     $('frame-step').textContent = 'Step ' + (fi + 1) + ' of ' + frames.length;
-    $('frame-text').textContent = f.text;
-    $('b-step').textContent = fi < frames.length - 1 ? 'Next' : 'What this means';
+    $('frame-text').textContent = '\u2026';
+    $('b-step').textContent = fi < frames.length - 1 ? 'Next' : 'What this means'; $('b-step').disabled = true;
     topUI(tbPrev);
     var dr = M.draught(cr, ld), Y = boatY(dr), floor = Y.floor;
-    function done() { topUI(tb); }
+    function done() { topUI(tb); $('frame-text').textContent = f.text; $('b-step').disabled = false; }
     if (f.pic === 'sink') {
       setSheet(sheetSVG(ld, bankBefore(), { flooded: true, big: 'IT SINKS AT THE BANK', bigColour: RED }));
       tween(1600, function (p) { setA('boat', 'transform', 'translate(0,' + (14 * ease(p)) + ')'); }, done);

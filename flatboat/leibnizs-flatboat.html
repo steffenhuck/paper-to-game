@@ -435,8 +435,9 @@ b,strong{font-weight:600}
     if (first.outcome === 'nobody') return 'Your first boat carried earth and nobody to carry it ashore.';
     if (first.landed && cr.landings.length > 1 && first.load.landing !== f.landing) return 'You landed at ' + l0.letter + '. With a hull of ' + tons(hull(cr).tuns) + ', the earth their small cannonballs need leaves no room for a cannon of yours and soldiers to go with it, so the enemy cannons stay and the rest wait; at ' + landing(cr, f.landing).letter + ' a foot of earth is enough and the rest cross at once.';
     if (first.landed && l0.battery && first.load.guns === 0) return 'Your first boat landed and dug in without a cannon. Soldiers behind earth hold the shore; it takes a cannon behind that earth to drive the enemy cannons off and let the rest cross.';
-    if (first.landed && first.load.feet > need0) return 'Your first boat carried ' + feet(first.load.feet) + ' of earth where ' + feet(need0) + ' would have stopped ' + CONFIG.FIRE[l0.fire].shot + '; the rest of that weight could have been soldiers.';
+    if (first.landed && first.load.feet > need0) return 'Your first boat carried ' + feet(first.load.feet) + ' of earth where ' + feet(need0) + ' would have stopped ' + CONFIG.FIRE[l0.fire].shot + '; the ' + tons((first.load.feet - need0) * CONFIG.FOOT_T) + ' more could have been ' + men(Math.round((first.load.feet - need0) * CONFIG.FOOT_T / CONFIG.MAN_T)) + '.';
     if (first.landed && first.load.men < f.men) return 'Your first boat landed with ' + men(first.load.men) + ' where ' + men(f.men) + ' would have floated.';
+    if (state.restPassed && state.restAt > 1) return 'The far shore became safe on push ' + state.restAt + '. Every push before that is ' + CONFIG.FLEET + ' boats of ' + CONFIG.OPEN_BOAT + ' that did not cross: ' + (CONFIG.FLEET * CONFIG.OPEN_BOAT) + ' soldiers a push, more than any first boat carries.';
     return 'The first push could have made the far shore safe at once.';
   }
   function gameVerdict(game) {
@@ -696,12 +697,13 @@ b,strong{font-weight:600}
   }
   function showFrame() {
     var f = frames[fi], c = frameCtx, ld = c.ld, l = c.l, tb = f.tb, tbPrev = tbBefore();
+    // the sentence arrives when the drawing has got there, and Next waits for both: the words never run ahead of the picture
     $('frame-step').textContent = 'Step ' + (fi + 1) + ' of ' + frames.length;
-    $('frame-text').textContent = f.text;
-    $('b-step').textContent = fi < frames.length - 1 ? 'Next' : 'What this means';
+    $('frame-text').textContent = '\u2026';
+    $('b-step').textContent = fi < frames.length - 1 ? 'Next' : 'What this means'; $('b-step').disabled = true;
     topUI(tbPrev);
     var dr = M.draught(cr, ld), Y = boatY(dr), floor = Y.floor;
-    function done() { topUI(tb); }
+    function done() { topUI(tb); $('frame-text').textContent = f.text; $('b-step').disabled = false; }
     if (f.pic === 'sink') {
       setSheet(sheetSVG(ld, bankBefore(), { flooded: true, big: 'IT SINKS AT THE BANK', bigColour: RED }));
       tween(1600, function (p) { setA('boat', 'transform', 'translate(0,' + (14 * ease(p)) + ')'); }, done);
