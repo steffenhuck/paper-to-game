@@ -214,3 +214,39 @@ The wrong ways are the paper's: the exactly equal pinch never finds barium; the 
 
 **Not done.** No stranger has played this. The Pantheon page and its line are untouched until the author has played it.
 
+## 22. Revision 4 (26 November 2026): one idea per screen
+
+**The author's note** (after playing rev. 3). "The looks are good, perhaps with the one exception that the slider where I can try to split is limited. Why not further out? But more fundamentally, it's all so hard to understand. Do another full sweep to come up with something more intelligible for the smart 11-year-old, or perhaps the harder quest: something that I can understand."
+
+**Diagnosis.** Rev. 3 asked the player to hold about a dozen ideas at once (charge, skin, pinch, hold, odds, climb, column, tube, explained, new elements, neutron budget, thorium) and hid what a move would do, so the game could only be learned by failing. The words were the physicist's. The three-drops screen put charge and skin in front of every player. The slider stopped at 28 and 64 for no reason the player could see. A fair reading: the game was explained in words and played in the dark.
+
+**The changes.**
+- The cut may go anywhere, 1 to 91 (thorium 1 to 89). Pieces lighter than potassium stand on a thin strip above the table and light nothing. Far out the chance is under 1%, and the hill says so.
+- The chance is a hill under the drop, with the knob riding on it and the percent beside it. "Sure in the middle, rare far out" is the whole odds lesson.
+- The game shows the cut before it is made: the hill, the pieces' path (red box, a dot for each change, black box), the columns that would light (shaded), the cards that would light (tinted) and one line in words ("This cut always works. It lights: 93, 94, 95, 96, 97." / "If it works, it lights: barium, lanthanum. If it fails, the drop keeps its neutron and lights the 24-min tube."). `preview()` in the mechanism computes it, and a calibration check confirms it equals what the cut then does.
+- One button, Fire the neutron. The Hold button is gone: a failed cut is the drop catching the neutron, so the 24-minute tube is reached by a failure, and aiming at barium gives barium or the 24-minute tube. The trade-off the author asked for in rev. 2 survives and is now readable.
+- The shelf screen is a map you tap: tap a tube or its card and its column shades and one sentence says what else stands in it ("Acts like rhenium ... Its column holds manganese, masurium, rhenium"). The three drops are an optional side trip, "Why can a drop split?".
+- Plain words everywhere: number for charge, cut for pinch, change for climb, lit for explained, "new elements" for ghosts. The start screen is a short story and one goal sentence. Results are three or four short lines. The verdict keeps its four parts and is shorter. Mev and the lost weight stay in About.
+
+**Strategies over a thousand seeds** (`node loop.js`, uranium, four neutrons, no Hold):
+
+| Strategy | Lit | All 8 | 24-min tube | Cuts failed |
+|---|---|---|---|---|
+| The equal splitter (46 four times) | 2.0 | 0 % | 0 % | 0 |
+| The edge hugger (1 four times) | 1.0 | 0 % | 100 % | 4.0 |
+| The barium gambler (56 four times) | 2.3 | 0 % | 100 % | 3.1 |
+| Safe first, then 56 three times | 7.0 | 51 % | 99 % | 2.1 |
+| Safe first, then 52 three times | 7.6 | 61 % | 62 % | 0.7 |
+| Safe first, then 53 three times | 7.7 | 74 % | 81 % | 1.1 |
+| Safe first, then 54 three times | 7.5 | 74 % | 92 % | 1.5 |
+| Safe first, then 55 three times | 7.3 | 64 % | 97 % | 1.8 |
+| The sweeper (40, 44, 48, 52) | 7.3 | 41 % | 47 % | 0.5 |
+
+A fixed plan clears the shelf about three times in four at best; a player who reads the lights and changes aim after a failure does better. The trade-off is visible and has no trap: safe cuts light the five "new elements", chancy cuts light barium and lanthanum, and a failed cut still lights something.
+
+**Checks added** (`calibration.js`, now 79, all passing): the range is 1 to 91; every cut in it has named pieces on the table or strip; the chance reads 100%, 25% and under 1% where it should; the preview lights exactly the tubes the cut then lights, and promises the 24-minute tube only while it is dark and only on uranium; result lines contain no pinch, skin, charge or climb. Claims about where tubes light are made for cuts with a real chance (5% or more), since the full range admits cuts like 4 | 88 (radium stands in barium's column) that never work.
+
+**Claim boundary.** Unchanged: the odds curve is ours. New: a cut far out of the middle lights tubes by column rules that were never in the paper (a piece of rhenium would light the rhenium tube); this can happen only at chances under a few percent.
+
+**Not done.** No stranger has played this. The Pantheon page and its line are untouched until the author has played it. Rev. 3 is kept in `previous/rev3/`.
+

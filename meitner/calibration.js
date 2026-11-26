@@ -10,6 +10,8 @@ function clearsU(actions) {               // with every pinch going through (the
 }
 function range(lo, hi) { var a = []; for (var z = lo; z <= hi; z++) a.push(z); return a; }
 var Z1s = range(C.MIN_PIECE, U.Z - C.MIN_PIECE);
+// rev. 4: the cut may go anywhere (1 to 91), but a cut far out has a chance of about nil. The claims about where the tubes light are made for the cuts with a real chance (5% or more), which are the 29 to 63 of the earlier builds.
+var REAL = Z1s.filter(function (z) { return m.splitOdds(U, z) >= 0.05; });
 
 // 1. the paper's numbers
 var eq = m.split(U, 46);
@@ -29,7 +31,7 @@ C.PAPER_CHAINS.forEach(function (ch) {
 });
 var s43 = m.split(U, 43);
 ok(reach(s43.pieces[0].path) === 48, 'the masurium piece climbs exactly into cadmium (p. 239: "... silver into cadmium")');
-ok(Z1s.every(function (z) { var s = m.split(U, z); return s.pieces.every(function (p) { return p.path.length - 1 >= 3 && p.path.length - 1 <= 6; }); }), 'every allowed piece climbs 3 to 6 steps (the on-screen rule says "about four or five")');
+ok(REAL.every(function (z) { var s = m.split(U, z); return s.pieces.every(function (p) { return p.path.length - 1 >= 3 && p.path.length - 1 <= 6; }); }), 'every piece of a cut with a real chance changes 3 to 6 times');
 
 // 3. the table
 C.TUBES_U.concat(C.TUBES_TH).forEach(function (t) { ok(m.cellOf(t.cellZ).col === t.col, 'tube "' + t.label + '" stands in column ' + (t.col + 1) + ' of the 1939 table, cell ' + t.cellZ); });
@@ -52,10 +54,10 @@ var any2 = false; Z1s.forEach(function (a) { Z1s.forEach(function (b) { if (clea
 ok(!any2, 'no two neutrons clear the uranium shelf; three is the minimum (the verdict says "where three would do")');
 var ways3 = 0; Z1s.forEach(function (a) { Z1s.forEach(function (b) { if (a <= b && clearsU([{ kind: 'split', Z1: a }, { kind: 'split', Z1: b }, { kind: 'hold' }])) ways3++; }); });
 ok(ways3 > 0, ways3 + ' pairs of pinches plus a hold clear the shelf in three neutrons');
-var fiveEka = Z1s.filter(function (z) { var s = m.split(U, z); return m.lightTubes(s, C.TUBES_U, U.Z).filter(function (l) { return m.isDashed(m.tubeById(C.TUBES_U, l.id).cellZ); }).length === 5; });
-ok(fiveEka.length >= 1 && fiveEka.length <= 4 && fiveEka.indexOf(43) >= 0, 'the pinches that bring all five ghosts down at once are ' + fiveEka.join(', ') + ': near masurium, as the paper has it (p. 239), and not many');
-var baLa = Z1s.filter(function (z) { var s = m.split(U, z); var ids = m.lightTubes(s, C.TUBES_U, U.Z).map(function (l) { return l.id; }); return ids.indexOf('ba') >= 0 && ids.indexOf('la') >= 0; });
-ok(baLa.length >= 2 && baLa.length <= 20 && baLa.indexOf(46) < 0, 'the pinches that light barium and lanthanum are ' + baLa.join(', ') + ' (some ways, not every way, and not the exactly equal pinch)');
+var fiveEka = REAL.filter(function (z) { var s = m.split(U, z); return m.lightTubes(s, C.TUBES_U, U.Z).filter(function (l) { return m.isDashed(m.tubeById(C.TUBES_U, l.id).cellZ); }).length === 5; });
+ok(fiveEka.length >= 1 && fiveEka.length <= 4 && fiveEka.indexOf(43) >= 0, 'the cuts (5% chance or better) that bring all five ghosts down at once are ' + fiveEka.join(', ') + ': near masurium, as the paper has it (p. 239), and not many');
+var baLa = REAL.filter(function (z) { var s = m.split(U, z); var ids = m.lightTubes(s, C.TUBES_U, U.Z).map(function (l) { return l.id; }); return ids.indexOf('ba') >= 0 && ids.indexOf('la') >= 0; });
+ok(baLa.length >= 2 && baLa.length <= 20 && baLa.indexOf(46) < 0, 'the cuts (5% chance or better) that light barium and lanthanum are ' + baLa.join(', ') + ' (some ways, not every way, and not the exactly equal pinch)');
 var eqLit = m.lightTubes(eq, C.TUBES_U, U.Z);
 ok(eqLit.length === 2 && !eqLit.some(function (l) { return l.id === 'ba' || l.id === 'la'; }), 'the exactly equal pinch, the obvious first move, lights only two tubes and neither barium nor lanthanum: the paper\'s "roughly equal" is not "equal"');
 ok(Z1s.filter(function (z) { return m.lightTubes(m.split(U, z), C.TUBES_U, U.Z).length <= 1; }).length > 0, 'some pinches light one tube or none: ' + Z1s.filter(function (z) { return m.lightTubes(m.split(U, z), C.TUBES_U, U.Z).length <= 1; }).join(', '));
@@ -73,7 +75,7 @@ var wins = 0, N = 2000; for (var sd = 1; sd <= N; sd++) { var s1 = m.newStage(U,
 ok(Math.abs(wins / N - m.splitOdds(U, 54)) < 0.04, 'over ' + N + ' seeds the 54 | 38 pinch went through ' + (wins / N * 100).toFixed(0) + '% of the time against stated odds of ' + (m.splitOdds(U, 54) * 100).toFixed(0) + '% (the draw matches the words)');
 var r1 = m.newStage(U, C.TUBES_U, 4, 5), mvR = null; for (var sd2 = 1; sd2 < 500 && !mvR; sd2++) { var s2 = m.newStage(U, C.TUBES_U, 4, sd2); var mm = m.play(s2, { kind: 'split', Z1: 60 }); if (mm.kind === 'rang') mvR = { st: s2, mv: mm }; }
 ok(mvR && mvR.mv.lit.length === 1 && mvR.mv.lit[0].id === 'u24' && mvR.mv.pieces[0].path[1] === 93, 'a pinch the skin pulls back keeps the neutron: it lights the 24-minute tube and climbs to 93, like a hold');
-ok(mvR && m.moveWords(mvR.st, mvR.mv).length >= 2 && m.moveWords(mvR.st, mvR.mv)[0].indexOf('skin pulled it back') > 0, 'the failed pinch has words that say the odds and the draw');
+ok(mvR && m.moveWords(mvR.st, mvR.mv).length >= 2 && m.moveWords(mvR.st, mvR.mv)[0].indexOf('it failed (the chance was') > 0, 'the failed cut has words that say it failed and what the chance was');
 function clearProb(acts, n) { var c2 = 0; for (var sd3 = 1; sd3 <= n; sd3++) { var s3 = m.newStage(U, C.TUBES_U, C.NEUTRONS_U, sd3); acts.forEach(function (a) { if (!m.stageDone(s3)) m.play(s3, a); }); if (C.TUBES_U.every(function (t) { return s3.lit[t.id]; })) c2++; } return c2 / n; }
 var pSafe = clearProb([{ kind: 'split', Z1: 43 }, { kind: 'hold' }, { kind: 'split', Z1: 56 }, { kind: 'split', Z1: 56 }], 1000);
 var pBold = clearProb([{ kind: 'split', Z1: 43 }, { kind: 'hold' }, { kind: 'split', Z1: 52 }, { kind: 'split', Z1: 52 }], 1000);
@@ -154,5 +156,15 @@ paths.forEach(function (p, i) {
   var v = m.verdict(a, b);
   ok(v.fate && v.paper && v.found.length >= 4 && v.part.length >= 1 && v.stood && v.seed !== undefined, 'verdict path ' + (i + 1) + ': "' + v.fate + '" with ' + v.found.length + ' findings and ' + v.part.length + ' partings');
 });
+
+// ---------- rev. 4: the whole range, the chance in percent, the preview that tells the truth ----------
+ok(m.clampZ1(U, -5) === 1 && m.clampZ1(U, 500) === 91 && m.clampZ1(TH, 500) === 89, 'rev. 4: the cut may go anywhere from 1 to 91 on uranium (1 to 89 on thorium)');
+ok(Z1s.length === 91 && Z1s.every(function (z) { var sp = m.split(U, z); return sp.pieces.every(function (p) { return p.path.every(function (Z) { return m.nameOf(Z).length > 0 && m.cellOf(Z); }); }); }), 'rev. 4: every cut from 1 to 91 has named pieces that all stand on the table or on the light-element strip');
+ok(m.oddsLabel(m.splitOdds(U, 46)) === '100%' && m.oddsLabel(m.splitOdds(U, 56)) === '25%' && m.oddsLabel(m.splitOdds(U, 1)) === '<1%' && Z1s.every(function (z) { return /^(100%|<1%|\d+%)$/.test(m.oddsLabel(m.splitOdds(U, z))); }), 'rev. 4: the chance reads 100% in the middle, 25% at 56 | 36 and under 1% at the very edge');
+ok(Z1s.every(function (z) { var pv = m.preview(m.newStage(U, C.TUBES_U, 4, 1), z), s9 = m.newStage(U, C.TUBES_U, 4, 1); s9.rng = function () { return 0; }; var mv9 = m.play(s9, { kind: 'split', Z1: z }); return JSON.stringify(pv.lights.map(function (l) { return l.id; })) === JSON.stringify(mv9.lit.map(function (l) { return l.id; })); }), 'rev. 4: the tubes the preview says a cut will light are exactly the tubes it lights when it works');
+ok(Z1s.every(function (z) { var pv = m.preview(m.newStage(U, C.TUBES_U, 4, 1), z); return (pv.p < 0.995) === (pv.failLights === 'u24'); }) && m.preview((function () { var x = m.newStage(U, C.TUBES_U, 4, 1); x.lit.u24 = { id: 'u24' }; return x; })(), 56).failLights === null, 'rev. 4: a cut that can fail says so, and says the failure lights the 24-minute tube, until that tube is lit');
+ok(Z1s.every(function (z) { var pv = m.preview(m.newStage(TH, C.TUBES_TH, 3, 1), Math.min(z, 89)); return pv.failLights === null; }), 'rev. 4: on thorium a failed cut lights nothing, and the preview does not promise it');
+ok((function () { var bad = 0; Z1s.forEach(function (z) { var s9 = m.newStage(U, C.TUBES_U, 4, 3); s9.rng = function () { return 0; }; var mv9 = m.play(s9, { kind: 'split', Z1: z }); var w = m.moveWords(s9, mv9).join(' '); if (/pinch|skin|charge|climb/i.test(w)) bad++; }); return bad === 0; })(), 'rev. 4: the result lines use the plain words: no pinch, skin, charge or climb');
+
 console.log(fails ? '\n' + fails + ' FAILED' : '\nall checks passed');
 process.exit(fails ? 1 : 0);

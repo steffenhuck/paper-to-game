@@ -37,7 +37,7 @@ v.part.forEach(function (l) { say('   Where you part: ' + l); });
 say('   Had yours stood: ' + v.stood);
 
 // ---- the table of obvious strategies (build.md section 3), over 1000 seeds ----
-say('\n== STRATEGIES (uranium, ' + C.NEUTRONS_U + ' neutrons, 1000 seeds): mean tubes lit of 8, mean ghosts down of 5, P(all 8), P(hold tube), mean pinches pulled back');
+say('\n== STRATEGIES (uranium, ' + C.NEUTRONS_U + ' neutrons, 1000 seeds): mean tubes lit of 8, mean ghosts down of 5, P(all 8), P(24-min tube), mean cuts failed');
 var NS = 1000;
 function run(acts, seed) { var st = m.newStage(U, C.TUBES_U, C.NEUTRONS_U, seed); acts.forEach(function (a) { if (!m.stageDone(st)) m.play(st, a); }); return st; }
 function row(name, acts) {
@@ -46,15 +46,14 @@ function row(name, acts) {
   say('   ' + name.padEnd(50) + ' lit ' + (lit / NS).toFixed(1) + '  ghosts ' + (gh / NS).toFixed(1) + '  all8 ' + (all / NS * 100).toFixed(0).padStart(3) + '%  hold ' + (hd / NS * 100).toFixed(0).padStart(3) + '%  pulled back ' + (rg / NS).toFixed(2));
 }
 var S = function (z) { return { kind: 'split', Z1: z }; }, H = { kind: 'hold' };
-row('the equal splitter (46|46 x4)', [S(46), S(46), S(46), S(46)]);
-row('the holder (hold x4)', [H, H, H, H]);
-row('the barium-first gambler (56, 56, 43, hold)', [S(56), S(56), S(43), H]);
-row('the safe-first player (43, hold, 56, 56)', [S(43), H, S(56), S(56)]);
-row('the safe-first, no hold (43, 56, 56, 56)', [S(43), S(56), S(56), S(56)]);
-row('the bold column reader (52, 43, hold, 52)', [S(52), S(43), H, S(52)]);
-row('the very bold (54, 54, 54, 54)', [S(54), S(54), S(54), S(54)]);
-row('the extreme pincher (28|64 x4)', [S(28), S(28), S(28), S(28)]);
+row('the equal splitter (46 x4)', [S(46), S(46), S(46), S(46)]);
+row('the edge hugger (1 x4)', [S(1), S(1), S(1), S(1)]);
+row('the barium gambler (56 x4)', [S(56), S(56), S(56), S(56)]);
+row('safe first, then barium (43, 56, 56, 56)', [S(43), S(56), S(56), S(56)]);
+row('safe first, then 52 (43, 52, 52, 52)', [S(43), S(52), S(52), S(52)]);
+row('safe first, then 53 (43, 53, 53, 53)', [S(43), S(53), S(53), S(53)]);
+row('safe first, then 54 (43, 54, 54, 54)', [S(43), S(54), S(54), S(54)]);
+row('safe first, then 55 (43, 55, 55, 55)', [S(43), S(55), S(55), S(55)]);
 row('the sweeper (40, 44, 48, 52)', [S(40), S(44), S(48), S(52)]);
-row('the three-neutron reader, lucky or not (56, 43, hold)', [S(56), S(43), H]);
 say('\n== WHAT EACH PINCH LIGHTS (uranium)');
 for (var z = C.MIN_PIECE; z <= U.Z - C.MIN_PIECE; z++) { var s = m.split(U, z), l = m.lightTubes(s, C.TUBES_U, U.Z); say('   ' + String(z).padStart(2) + ' | ' + String(U.Z - z).padEnd(2) + '  ' + Math.round(s.energyMeV) + ' Mev  splits ' + m.oddsWords(m.splitOdds(U, z)).padEnd(26) + (l.map(function (x) { return x.id + '@' + x.atZ; }).join(' ') || '-')); }

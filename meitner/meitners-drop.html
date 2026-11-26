@@ -24,14 +24,12 @@ h1.title{font-family:'Bangers',sans-serif;font-weight:400;font-size:52px;line-he
 .panel{border:3px solid var(--ink);background:#fff;position:relative;margin:0 0 8px}
 .panel svg{display:block;width:100%;height:auto}
 #dropsvg{touch-action:none}
-.panel,.panel *,.nudge,.btn{-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.panel,.panel *,.btn{-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
 .said:empty{display:none}
 .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
 .kick{font-family:'Bangers',sans-serif;font-size:16px;line-height:1.1;letter-spacing:.05em;color:var(--dim);margin:0 0 1px;text-transform:uppercase}
 .now{font-family:'Bangers',sans-serif;font-size:25px;line-height:1.05;margin:0 0 6px;min-height:26px;letter-spacing:.02em}
-.slot{min-height:62px}
 .aim{font-size:16px;font-weight:700;margin:0 0 6px}
-.rule{font-size:15px;color:var(--dim);margin:0 0 6px}
 .def{font-size:15px;color:var(--dim);margin:2px 0 6px}
 .acts{font-size:17px;margin:8px 0 6px}
 .big{font-size:19px}
@@ -47,7 +45,11 @@ p{margin:0 0 8px}
 .qm{flex:none;width:40px;height:40px;border:3px solid var(--ink);background:#fff;font-family:'Bangers',sans-serif;font-size:24px;color:var(--ink);cursor:pointer;line-height:1}
 .said{font-size:16px;margin:4px 0 6px;min-height:22px;border-left:4px solid var(--ink);padding-left:8px}
 .said p{margin:0 0 5px}
-.cap{font-size:14px;color:var(--dim);margin:2px 0 6px;min-height:18px}
+.cap{font-size:14px;color:var(--dim);margin:2px 0 6px;min-height:38px}
+.info{font-size:15px;border-left:4px solid var(--red);padding-left:8px;min-height:66px;margin:0 0 8px}
+.row3{display:flex;gap:6px;align-items:center;margin:4px 0 6px}.row3 .btn{margin:0}.row3 .red{flex:1}.row3 .small{min-width:50px;text-align:center}
+.stripe{fill:var(--tone);opacity:.16;pointer-events:none}.stripe.on{fill:var(--red);opacity:.26}.stripe.lit{fill:var(--red);opacity:.1}.stripe.pick{fill:var(--red);opacity:.3}
+.card.will{background:#F9DDD8;border-color:var(--red)}.card.iffail{background:repeating-linear-gradient(135deg,#fff,#fff 4px,#F3D2CD 4px,#F3D2CD 6px)}.card.pick{background:#F9DDD8}
 .dots{letter-spacing:.06em;white-space:nowrap}
 .dots b{color:var(--red);font-size:20px;line-height:0;vertical-align:-3px;font-weight:400}
 .dots i{color:var(--tone);font-size:20px;line-height:0;vertical-align:-3px;font-style:normal}
@@ -59,11 +61,7 @@ p{margin:0 0 8px}
 .card .bot rect.g{fill:#fff;stroke:#161414;stroke-width:1.6}
 .card.lit .bot rect.g{fill:var(--red)}
 .card.lit .ct{font-weight:700}
-.nudge{display:flex;justify-content:space-between;align-items:center;gap:6px;margin:-4px 0 4px}
 .hidden{display:none !important}
-.nudge .btn{margin:0;min-width:64px;text-align:center}
-.nudge span{font-size:14px;color:var(--dim);text-align:center;flex:1}
-.rule b{color:var(--ink)}
 .fate{font-family:'Bangers',sans-serif;font-size:36px;line-height:1;margin:4px 0 12px;color:var(--red);letter-spacing:.02em;-webkit-text-stroke:1px var(--ink);paint-order:stroke fill}
 .sec h2,h2{font-family:'Bangers',sans-serif;font-weight:400;font-size:22px;letter-spacing:.03em;margin:12px 0 4px;color:var(--ink)}
 .sec p{font-size:16px}
@@ -118,42 +116,43 @@ svg .bang{font-family:'Bangers',sans-serif}
     <g class="sfx" style="font-size:30px"><text x="262" y="60" class="sfx bang" transform="rotate(-8 262 60)">SNAP?</text></g>
     <g transform="translate(252 86)"><rect x="0" y="4" width="12" height="22" rx="3" fill="#fff" stroke="#161414" stroke-width="2"/><rect x="2" y="0" width="8" height="5" fill="#161414"/><rect x="20" y="4" width="12" height="22" rx="3" fill="#E23A2A" stroke="#161414" stroke-width="2"/><rect x="22" y="0" width="8" height="5" fill="#161414"/><rect x="40" y="4" width="12" height="22" rx="3" fill="#fff" stroke="#161414" stroke-width="2" stroke-dasharray="3 2"/><rect x="42" y="0" width="8" height="5" fill="#161414"/><rect x="60" y="4" width="12" height="22" rx="3" fill="#fff" stroke="#161414" stroke-width="2" stroke-dasharray="3 2"/><rect x="62" y="0" width="8" height="5" fill="#161414"/></g>
   </svg></div>
-  <p class="acts">For four years chemists have fired neutrons at uranium and filled a shelf of test tubes. Five of them hold brand-new elements, heavier than anything on Earth. You are the uranium drop. Pinch yourself in two where you choose, or hold together, then watch where the pieces land on the chemists' table.</p>
-  <p class="aim big">Explain every tube on the chemists' shelf. You have four neutrons.</p>
-  <button class="btn solid" id="b-begin">Drop a neutron</button>
-  <div class="row2"><button class="btn" id="b-help-start">How to play</button><button class="btn" id="b-about-start">About</button></div>
+  <p class="acts">1938. Chemists fire neutrons at uranium and find strange new stuff in eight test tubes. Five of the tubes seem to hold brand-new elements, heavier than uranium. Lise Meitner thinks something else happened: the uranium split in two.</p>
+  <p class="aim big">You are the uranium. Choose where to cut yourself, and light up all eight tubes. You have four neutrons.</p>
+  <button class="btn solid" id="b-begin">Play</button>
+  <div class="row2"><button class="btn" id="b-why">Why can a drop split?</button><button class="btn" id="b-about-start">About</button></div>
   <p class="cred">Built from Lise Meitner and O. R. Frisch, "Disintegration of Uranium by Neutrons: a New Type of Nuclear Reaction", <i>Nature</i> 143, 239–240 (1939).</p>
   <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
 </section>
 
-<!-- THREE DROPS -->
+<!-- WHY A DROP CAN SPLIT (optional side trip) -->
 <section id="s-drops" class="screen">
-  <div class="top"><div class="now" id="now0">Three drops · Tap one</div><button class="qm" id="b-help-drops" aria-label="How to play">?</button></div>
-  <p class="aim">A drop's skin holds it together. Its charge pulls it apart. Tap a drop to drop a neutron on it.</p>
+  <div class="top"><div><div class="kick">Why can a drop split?</div><div class="now" id="now0">Tap a drop.</div></div><button class="qm" id="b-help-drops" aria-label="How to play">?</button></div>
+  <p class="aim">A drop's skin holds it together. The bigger its number, the weaker its skin.</p>
   <div class="panel"><svg id="dropsvg0" viewBox="0 0 340 190"></svg></div>
-  <div class="said" id="said0"><p>The more charge a drop carries, the less skin it has left. Lead has 82 charges, uranium 92. The third drop is imagined: 100 charges, more than any element anyone has seen.</p></div>
-  <div class="row2"><button class="btn solid hidden" id="b-toshelf">To the shelf</button></div>
+  <div class="said" id="said0"><p>Tap a drop to hit it with a neutron.</p></div>
+  <div class="row2"><button class="btn solid" id="b-back0">Back</button></div>
 </section>
 
 <!-- THE SHELF -->
 <section id="s-shelf" class="screen">
-  <div class="top"><div><div class="kick">The chemists' shelf</div><div class="now">Eight tubes to explain.</div></div><button class="qm" id="b-help-shelf" aria-label="How to play">?</button></div>
-  <div class="panel"><svg id="tablesvg0" viewBox="0 0 340 146"></svg></div>
+  <div class="top"><div><div class="kick">The chemists' test tubes</div><div class="now">Eight tubes. Light them all.</div></div><button class="qm" id="b-help-shelf" aria-label="How to play">?</button></div>
+  <div class="panel"><svg id="tablesvg0" viewBox="0 0 340 166"></svg></div>
+  <p class="info" id="info0">Tap a tube to see its column.</p>
   <div class="cards" id="shelf0"></div>
-  <p class="def"><b>The table</b> runs in order of charges: 56 is barium, 92 is uranium. The five dashed tubes were filed as brand-new elements, 93 to 97.</p>
-  <p class="def"><b>Your pieces</b> land in the cell with their own number, then climb: too many neutrons for their size, they change into the next element, one cell to the right, again and again, until they settle.</p>
-  <p class="def"><b>A tube is explained</b> when a piece stands in its column. Elements in one column behave alike in chemistry, so the chemists could not tell them apart.</p>
+  <p class="def"><b>The table.</b> Every element has a number, its place in the table. Barium is 56. Uranium is 92.</p>
+  <p class="def"><b>Same column, same chemistry.</b> A tube lights when one of your pieces stands in its column.</p>
+  <p class="def"><b>The dashed tubes</b> are the chemists' "new elements", 93 to 97.</p>
   <div class="row2"><button class="btn solid" id="b-tobench">To the bench</button></div>
 </section>
 
 <!-- THE BENCH -->
 <section id="s-bench" class="screen">
   <div class="top"><div><div class="kick" id="kick1"></div><div class="now" id="now1"></div></div><button class="qm" id="b-help-bench" aria-label="How to play">?</button></div>
-  <div class="panel"><svg id="dropsvg" viewBox="0 0 340 150"></svg></div>
-  <div class="nudge" id="nudge"><button class="btn small" id="b-left" aria-label="move the line left">&#9666; 1</button><span>drag the red line, or nudge it</span><button class="btn small" id="b-right" aria-label="move the line right">1 &#9656;</button></div>
-  <div class="slot"><p class="rule" id="rule1"></p><div class="said" id="said1"></div></div>
-  <div class="row2" id="btns1"><button class="btn red" id="b-split">Split here</button><button class="btn" id="b-hold">Hold together</button><button class="btn solid hidden" id="b-next">Next neutron</button></div>
-  <div class="panel"><svg id="tablesvg" viewBox="0 0 340 146"></svg></div>
+  <div class="panel"><svg id="dropsvg" viewBox="0 0 340 184"></svg></div>
+  <div class="said" id="said1"></div>
+  <div class="row3" id="fire"><button class="btn small" id="b-left" aria-label="move the cut left">&#9666;</button><button class="btn red" id="b-split">Fire the neutron</button><button class="btn small" id="b-right" aria-label="move the cut right">&#9656;</button></div>
+  <div class="row2"><button class="btn solid hidden" id="b-next">Next neutron</button></div>
+  <div class="panel"><svg id="tablesvg" viewBox="0 0 340 166"></svg></div>
   <p class="cap" id="cap"></p>
   <div class="shead" id="shead1"></div>
   <div class="cards" id="shelf1"></div>
@@ -176,21 +175,18 @@ svg .bang{font-family:'Bangers',sans-serif}
 
 <!-- HELP -->
 <div class="overlay" id="help"><div class="wrap"><div class="page">
-  <div class="close"><button class="btn" id="b-help-close">Back to the drop</button></div>
+  <div class="close"><button class="btn" id="b-help-close">Back</button></div>
   <h1>How to play</h1>
-  <p><b>Explain every tube on the chemists' shelf. You have four neutrons.</b></p>
-  <h2>Three drops</h2>
-  <p>Tap a drop and a neutron lands on it. A drop's skin holds it together and its charge pulls it apart. Lead holds. Uranium wobbles, necks in the middle and just holds. An imagined drop of 100 charges falls apart on its own.</p>
-  <h2>The shelf</h2>
-  <p>Eight test tubes, each a body the chemists found. The table runs in order of charges, so a piece with 56 charges is barium, element 56. Five dashed tubes were filed as brand-new elements, 93 to 97. A tube is explained when a piece lands or climbs into its column: elements in one column behave alike in chemistry.</p>
-  <h2>The bench</h2>
-  <p>You are the uranium drop. Drag the red line across it, or nudge it with the two arrows. The two numbers are the charges each piece gets; together they are always 92. In the table below, the red box shows where each piece lands, the dots show how it climbs (one cell to the right at a time, about four or five times), and the black box shows where it stops. The line under the drop says how often a pinch there goes through.</p>
-  <p><b>Split here</b> pinches the drop at the line. Near the middle the skin has given up, so the pinch always goes through; far out the skin may pull the drop back. A drop pulled back keeps the neutron, so that neutron is spent without a split. The draw is by chance, from a seed shown on the last screen, so a game can be replayed.</p>
-  <p><b>Hold together</b>: the drop swallows the neutron and rings without splitting. That is certain, and it makes uranium-239, which sits in uranium's own cell and then moves one cell on.</p>
-  <p>When a tube is explained it slides down into the piece's cell and turns red, and its card on the shelf says what it really is. <b>Next neutron</b> brings a fresh neutron. The stage ends when every tube is explained or the neutrons are spent.</p>
+  <p><b>Light all eight tubes. You have four neutrons.</b></p>
+  <h2>The tubes</h2>
+  <p>Eight test tubes hold what the chemists found. Every element has a number, its place in the table: barium is 56, uranium 92. A tube lights when one of your pieces stands in its column, because elements in one column act alike in chemistry. The five dashed tubes were filed as brand-new elements, 93 to 97.</p>
+  <h2>The cut</h2>
+  <p>You are the uranium drop. Drag the red line, or use the arrows. The two numbers are your two pieces; together they are always 92. The hill shows the chance the cut works: sure in the middle, rare far out. Then press Fire the neutron.</p>
+  <p>The table shows the cut before you make it: a red box where each piece starts, a dot for each time it changes into the next element, a black box where it stops. Shaded columns would light, and the line under the table names the tubes.</p>
+  <p>If a cut fails, the drop keeps the neutron and becomes uranium-239. That lights the 24-minute tube, and the neutron is spent.</p>
   <h2>Thorium</h2>
-  <p>The chemists shot neutrons at thorium too, and found two more tubes, filed as radium and actinium. Same buttons, same rules, three neutrons.</p>
-  <div class="close"><button class="btn" id="b-help-close2">Back to the drop</button></div>
+  <p>The chemists tried thorium too and found two more tubes, "like radium" and "like actinium". Same game, three neutrons.</p>
+  <div class="close"><button class="btn" id="b-help-close2">Back</button></div>
 </div></div></div>
 
 <!-- ABOUT -->
@@ -202,14 +198,15 @@ svg .bang{font-family:'Bangers',sans-serif}
   <p>Fermi's group, and then Hahn, Meitner and Strassmann, bombarded uranium with neutrons and found a growing list of radioactive bodies, nine periods by 1937, six of them assigned to elements beyond uranium. The assignment rested on one assumption: a nucleus can only chip, since only particles of one or two charges were known to leave one, and Gamow's theory of the Coulomb barrier ruled out a shower of them. So a body that behaved like osmium was filed as eka-osmium, element 94, rather than osmium (76) or ruthenium (44). Then Hahn and Strassmann found that three of the new bodies could not be separated from barium, while mesothorium, an isotope of radium, separated readily in the same experiment: isotopes of barium (56) were coming out of uranium (92).</p>
   <p>Meitner and Frisch explain it with Bohr's picture of a heavy nucleus as a drop of liquid. A charged drop's surface tension is lowered by its charge, and a rough estimate puts it at zero near charge 100; uranium therefore has only a small stability of form and, after capturing a neutron, may divide into two drops of roughly equal size. The two repel each other with about 200 Mev, calculated from nuclear radius and charge, and that energy is available from the difference in packing fraction between uranium and the middle of the periodic table: the pieces weigh less than the whole. The process is classical, no tunnelling needed. The pieces carry uranium's surplus of neutrons and shed it by beta decay, each giving a chain. If one piece is barium the other is krypton, which would decay through rubidium, strontium and yttrium to zirconium; some supposed barium-lanthanum-cerium chains may be strontium-yttrium-zirconium chains. The periods ascribed to elements beyond uranium are probably light elements too: the 10 s and 40 s bodies may be masurium (43) decaying through ruthenium, rhodium, palladium and silver into cadmium. Nuclear isomerism need no longer be assumed. Thorium's "radium" and "actinium" are probably the same fission. The 24-minute body chemically identified with uranium is probably real uranium-239, formed by resonance capture, going over into an eka-rhenium that appears inactive; its compound state lives a million times longer than the drop takes to divide, perhaps a symmetrical motion that does not favour fission. Frisch's word for the division, "fission", in quotation marks in the letter, is borrowed from biology.</p>
   <h2>What the game does</h2>
-  <p>You are the uranium drop. The chemists' shelf is the paper's borrowed record: eight test tubes, each a radioactive body Hahn and Strassmann found, standing in the cell of the 1939 periodic table where the chemists filed it. Five stand in dashed cells beyond uranium. You pinch the drop where you choose (the paper leaves the ratio of the division to "finer structural features and perhaps partly on chance"; the game gives the choice to your hand and keeps the chance: an even pinch always goes through, an uneven one the skin pulls back at stated odds, and a drop pulled back keeps its neutron), or hold it together (the paper's resonance capture). The pieces land on the table and climb by beta decay; a tube lights when a piece stands in its column, because two elements in one column act alike at the bench. Before you commit, the table previews the pinch: a red box where each piece lands, dots along its climb and a black box where it stops. The preview is the mechanism's own path, drawn in advance; it says nowhere which tubes would light. The shelf of eight cards under the table keeps the count and says what each explained tube really is. The discovery is produced by your pinch and seen as the tubes sliding down out of the dashed row into the middle of the table. Then thorium, with its two tubes.</p>
+  <p>You are the uranium drop. The chemists' shelf is the paper's borrowed record: eight test tubes, each a radioactive body Hahn and Strassmann found, standing in the cell of the 1939 periodic table where the chemists filed it. Five stand in dashed cells beyond uranium. You cut the drop where you choose, anywhere from 1 to 91 (the paper leaves the ratio of the division to "finer structural features and perhaps partly on chance"; the game gives the choice to your hand and keeps the chance: a cut in the middle always works, a cut further out fails at the stated odds, and a drop whose cut fails keeps its neutron, the paper's resonance capture). The pieces land on the table and change by beta decay, one cell to the right each time; a tube lights when a piece stands in its column, because two elements in one column act alike at the bench. Before you fire, the game shows the cut: the chance as a hill under the drop, the pieces' path on the table (a red box where each starts, a dot for each change, a black box where it stops), the columns that would light, and one line in words naming the tubes. This is the mechanism's own result, computed in advance and checked by calibration against the cut when it is made; the third build hid it and the author found the game too hard to understand. The shelf of eight cards under the table keeps the count and says what each lit tube really is. The discovery is seen as the tubes sliding down out of the dashed row into the middle of the table. Then thorium, with its two tubes. An optional side trip from the start screen, three drops, shows why a drop can split at all.</p>
   <h2>Mechanism kind: toy</h2>
-  <p>The game runs a model built to illustrate the paper's argument, not the paper's own equations, which it does not have. Under this game's assumptions: the pieces share the drop's neutrons in proportion to their charges; each then climbs to the valley of stability given by a standard formula, Z* = A / (1.98 + 0.0155 A<sup>2/3</sup>), one cell per beta decay; the blast is the Coulomb energy of two touching spheres with a radius constant of 1.55 fm, fitted so that the equal split gives the paper's 200 Mev; the skin of a drop is 1 − (Z²/A)/39.4, fitted so that it vanishes at charge 100; the pinch is clamped to pieces of at least 28 protons; a pinch within three protons of the middle always goes through and beyond that its odds fall as 1 / (1 + ((a − 3) / 4.5)<sup>2.5</sup>) with a the distance from the middle, so the barium cell is a one-in-four shot and a pinch at 52 | 40 three in four; the draws come from a seed shown on the verdict screen; four neutrons for uranium and three for thorium; and a tube lights from any element in its column. All of these are ours and sit in the config block of the mechanism.</p>
-  <p><b>What the game demonstrates:</b> that a drop picture with these rules reproduces the paper's story, and makes "roughly equal size" a thing to weigh: the five "new elements" come down from safe pinches near the middle, barium needs a pinch the skin may refuse, and a refused pinch is a drop that held. Barium's partner is krypton; a piece near masurium climbs through the five columns the chemists had filed beyond uranium; the 24-minute body is reached only by holding; thorium's "radium" and "actinium" are lit by barium and lanthanum; and the climb reproduces the shape of the three chains the paper names (krypton to zirconium, barium to cerium, masurium to cadmium), though not every endpoint (our barium climbs on to neodymium).</p>
-  <p><b>What the game assumes:</b> the toy above; the odds curve, which is ours entirely (the paper says only "roughly equal" and "perhaps partly on chance", and nothing about how often an uneven division happens); a deterministic neutron share where the paper says "varying proportions"; a 1939 table that places thorium, protactinium and uranium under hafnium, tantalum and tungsten, with the transuranics in the next five columns, which is how the chemists' "eka-" names got their chemistry; that the five transuranic tubes are eka-rhenium to eka-gold (the paper names eka-rhenium and eka-osmium; the others follow the 1937 scheme of its reference 2); that the rare earths share lanthanum's cell and its chemistry. The one-pinch sweep of all five "new elements" depends on the climb being four or five steps long, which the paper's own chains state; under rules with shorter chains they still come down, in two pinches.</p>
-  <p><b>What the paper establishes:</b> the argument that a heavy charged drop can divide classically, with about 200 Mev released and paid for by the packing fraction; the identification of barium's partner as krypton; the conjecture, stated as "possible, and seems to us rather probable", that the transuranic periods are light elements; the suggestion that thorium fissions too; and the reading of the 24-minute body as genuine uranium-239. It establishes nothing about which pinch is likelier, nothing about the exact chains, and nothing about neutron emission or chain reactions, which are not in this paper at all; they came in the weeks after it.</p>
+  <p>The game runs a model built to illustrate the paper's argument, not the paper's own equations, which it does not have. Under this game's assumptions: the pieces share the drop's neutrons in proportion to their charges; each then climbs to the valley of stability given by a standard formula, Z* = A / (1.98 + 0.0155 A<sup>2/3</sup>), one cell per beta decay; the blast is the Coulomb energy of two touching spheres with a radius constant of 1.55 fm, fitted so that the equal split gives the paper's 200 Mev; the skin of a drop is 1 − (Z²/A)/39.4, fitted so that it vanishes at charge 100; the cut may go anywhere from 1 to 91 (pieces lighter than potassium, 19, stand on a thin strip above the table and light nothing, since the 1939 table has no tube there); a cut within three protons of the middle always goes through and beyond that its odds fall as 1 / (1 + ((a − 3) / 4.5)<sup>2.5</sup>) with a the distance from the middle, so the barium cell is a one-in-four shot, a cut at 52 | 40 three in four, and a cut at the very edge under one in a hundred; the draws come from a seed shown on the verdict screen; four neutrons for uranium and three for thorium; and a tube lights from any element in its column. All of these are ours and sit in the config block of the mechanism.</p>
+  <p><b>What the game demonstrates:</b> that a drop picture with these rules reproduces the paper's story, and makes "roughly equal size" a thing to weigh: the five "new elements" come down from safe cuts near the middle, barium needs a cut that may fail, and a failed cut is a drop that kept its neutron. Barium's partner is krypton; a piece near masurium climbs through the five columns the chemists had filed beyond uranium; the 24-minute body is reached only by a failed cut; thorium's "radium" and "actinium" are lit by barium and lanthanum; and the climb reproduces the shape of the three chains the paper names (krypton to zirconium, barium to cerium, masurium to cadmium), though not every endpoint (our barium climbs on to neodymium).</p>
+  <p><b>What the game assumes:</b> the toy above; the odds curve, which is ours entirely (the paper says only "roughly equal" and "perhaps partly on chance", and nothing about how often an uneven division happens); a deterministic neutron share where the paper says "varying proportions"; a 1939 table that places thorium, protactinium and uranium under hafnium, tantalum and tungsten, with the transuranics in the next five columns, which is how the chemists' "eka-" names got their chemistry; that the five transuranic tubes are eka-rhenium to eka-gold (the paper names eka-rhenium and eka-osmium; the others follow the 1937 scheme of its reference 2); that the rare earths share lanthanum's cell and its chemistry. The one-cut sweep of all five "new elements" depends on the climb being four or five steps long, which the paper's own chains state; under rules with shorter chains they still come down, in two cuts.</p>
+  <p><b>What the paper establishes:</b> the argument that a heavy charged drop can divide classically, with about 200 Mev released and paid for by the packing fraction; the identification of barium's partner as krypton; the conjecture, stated as "possible, and seems to us rather probable", that the transuranic periods are light elements; the suggestion that thorium fissions too; and the reading of the 24-minute body as genuine uranium-239. It establishes nothing about which cut is likelier, nothing about the exact chains, and nothing about neutron emission or chain reactions, which are not in this paper at all; they came in the weeks after it.</p>
   <h2>What is simplified or changed</h2>
-  <p>The first build let every pinch go through, and the author found that fission came too easily; the second build (26 November 2026) added the odds and cut the budget from five neutrons to four. The third build (26 November 2026) was rebuilt for a smart eleven-year-old: the shelf became a readable checklist of eight cards, the climb of each piece is shown before the pinch, the explanations were cut to a few plain sentences, and a short briefing screen now explains the table once. The mechanism, the numbers and the calibration are unchanged.</p>
+  <p>The first build let every cut go through, and the author found that fission came too easily; the second build (26 November 2026) added the odds and cut the budget from five neutrons to four. The third build (26 November 2026) was rebuilt for a smart eleven-year-old: the shelf became a readable checklist of eight cards, the climb of each piece was drawn before the cut, the explanations were cut to a few plain sentences, and a short briefing screen now explains the table once. The mechanism, the numbers and the calibration were unchanged.</p>
+  <p>The fourth build (26 November 2026) followed the author's note that the third was too hard to understand. The cut may now go anywhere from 1 to 91, with the chance drawn as a hill under the drop. The game shows what a cut will do before it is made. The Hold button is gone: a failed cut is the drop catching the neutron, which is how the 24-minute tube is reached, so aiming at barium either lights barium or lights the 24-minute tube. The words are plainer (number for charge, cut for cut, tube lit for explained) and the physics of the skin moved to an optional side trip. The mechanism's numbers are unchanged.</p>
   <p><b>A thing the paper could not know.</b> The odds in this game favour an even split, which is the paper's picture of "two nuclei of roughly equal size". Measurements made soon after 1939 showed that uranium most often splits unevenly, into one heavier and one lighter piece, and that barium with krypton is among the common pairs. So barium is the unlikely tube in this game and a common product in the real thing. The game keeps the paper's picture because the paper is the game's authority; the odds curve is ours, and it says nothing about how often an uneven split happens in nature.</p>
   <p>The half-lives of the nine periods are dropped except the 24 minutes; the 10 s and 40 s bodies are folded into the masurium tubes. Mesothorium and the separation itself stay here. The size of the shove (about 200 Mev, million electron-volts, in the paper), the mass the pieces lose for it (about a fifth of a proton between them, by E = mc<sup>2</sup>) and the origin of the word "fission" are in the paper's text above and no longer on the play screens. Nuclear isomerism, Gamow's theory and the lifetime of the compound state are mentioned only in the verdict and here. Cerium, named in the paper's chains, has no tube of its own: in 1939 tables cerium's column was ambiguous (the paper's own parallel, barium-lanthanum-cerium against strontium-yttrium-zirconium, puts it under zirconium), so it is named in the result lines instead. The clock is compressed: a climb that takes seconds to days on the bench takes two seconds on screen. "Masurium" is the 1939 name for element 43; it is called technetium today, and the 1925 claim to have found it was not sound. The imagined drop of 100 charges is marked as imagined on screen; element 100, fermium, was made in 1952 and does not fall apart unprovoked, since the real critical charge lies higher than the paper's rough estimate.</p>
   <h2>Where to read the paper</h2>
@@ -246,7 +243,7 @@ var CONFIG = {
   SKIN_GONE: 0.03,          // OURS: below this the drop falls apart unprovoked
 
   // --- the pinch ---
-  MIN_PIECE: 28,            // OURS: smallest piece the pinch allows; the paper discusses only "two nuclei of roughly equal size" (p. 239) and sets alpha-like chips aside via Gamow
+  MIN_PIECE: 1,             // OURS (rev. 4): the cut may go anywhere, 1 to 91; far out the odds are about nil (the paper discusses only "two nuclei of roughly equal size", p. 239, and sets alpha-like chips aside via Gamow)
   UNEVEN: 24,               // OURS: a pinch whose pieces differ by this many protons or more is called uneven in the verdict
 
   // --- play ---
@@ -260,19 +257,19 @@ var CONFIG = {
   // cellZ: the cell the chemists filed it in; col: the column (0-17) any landing piece lights it from; byHold: lit only by the drop that holds together;
   // wait: what the tube's card on the shelf says before it is explained (OURS, rev. 3); once explained the card says what the body really is (tubeAnswer)
   TUBES_U: [
-    { id: 'u24', label: 'like uranium, 24 min', wait: 'uranium, 24 min', filed: 'uranium itself', cellZ: 92, col: 5, byHold: true,
+    { id: 'u24', short: '24 min', label: 'like uranium, 24 min', wait: 'uranium, 24 min', filed: 'uranium itself', cellZ: 92, col: 5, byHold: true,
       src: 'p. 240: the 24 min body chemically identified with uranium is probably really 239U, formed by a resonance process' },
-    { id: 'eRe', label: 'like rhenium', wait: '93 · like rhenium', filed: 'eka-rhenium, element 93', cellZ: 93, col: 6, src: 'p. 240 names eka-rhenium; ref 2' },
-    { id: 'eOs', label: 'like osmium', wait: '94 · like osmium', filed: 'eka-osmium, element 94', cellZ: 94, col: 7, src: 'p. 239: "eka-osmium (Z = 94) rather than osmium (Z = 76) or ruthenium (Z = 44)"' },
-    { id: 'eIr', label: 'like iridium', wait: '95 · like iridium', filed: 'eka-iridium, element 95', cellZ: 95, col: 8, src: 'context: the 1937 scheme of ref 2 (Meitner, Hahn & Strassmann); the paper says "six ... assigned to elements beyond uranium"' },
-    { id: 'ePt', label: 'like platinum', wait: '96 · like platinum', filed: 'eka-platinum, element 96', cellZ: 96, col: 9, src: 'context: ref 2' },
-    { id: 'eAu', label: 'like gold', wait: '97 · like gold', filed: 'eka-gold, element 97', cellZ: 97, col: 10, src: 'context: ref 2' },
-    { id: 'ba', label: 'like barium', wait: 'like barium', filed: 'barium', cellZ: 56, col: 1, src: 'p. 239, refs 4-5: impossible to separate from barium; at least three such bodies' },
-    { id: 'la', label: 'like lanthanum', wait: 'like lanthanum', filed: 'lanthanum', cellZ: 57, col: 2, src: 'p. 239, ref 5: the barium-lanthanum(-cerium) chains' }
+    { id: 'eRe', short: '93', label: 'like rhenium', wait: '93 · like rhenium', filed: 'eka-rhenium, element 93', cellZ: 93, col: 6, src: 'p. 240 names eka-rhenium; ref 2' },
+    { id: 'eOs', short: '94', label: 'like osmium', wait: '94 · like osmium', filed: 'eka-osmium, element 94', cellZ: 94, col: 7, src: 'p. 239: "eka-osmium (Z = 94) rather than osmium (Z = 76) or ruthenium (Z = 44)"' },
+    { id: 'eIr', short: '95', label: 'like iridium', wait: '95 · like iridium', filed: 'eka-iridium, element 95', cellZ: 95, col: 8, src: 'context: the 1937 scheme of ref 2 (Meitner, Hahn & Strassmann); the paper says "six ... assigned to elements beyond uranium"' },
+    { id: 'ePt', short: '96', label: 'like platinum', wait: '96 · like platinum', filed: 'eka-platinum, element 96', cellZ: 96, col: 9, src: 'context: ref 2' },
+    { id: 'eAu', short: '97', label: 'like gold', wait: '97 · like gold', filed: 'eka-gold, element 97', cellZ: 97, col: 10, src: 'context: ref 2' },
+    { id: 'ba', short: 'barium', label: 'like barium', wait: 'like barium', filed: 'barium', cellZ: 56, col: 1, src: 'p. 239, refs 4-5: impossible to separate from barium; at least three such bodies' },
+    { id: 'la', short: 'lanthanum', label: 'like lanthanum', wait: 'like lanthanum', filed: 'lanthanum', cellZ: 57, col: 2, src: 'p. 239, ref 5: the barium-lanthanum(-cerium) chains' }
   ],
   TUBES_TH: [
-    { id: 'ra', label: 'like radium', wait: 'like radium', filed: 'radium', cellZ: 88, col: 1, src: 'p. 239, ref 8: activities from thorium ascribed to radium isotopes' },
-    { id: 'ac', label: 'like actinium', wait: 'like actinium', filed: 'actinium', cellZ: 89, col: 2, src: 'p. 239, ref 8: ... and actinium isotopes' }
+    { id: 'ra', short: 'radium', label: 'like radium', wait: 'like radium', filed: 'radium', cellZ: 88, col: 1, src: 'p. 239, ref 8: activities from thorium ascribed to radium isotopes' },
+    { id: 'ac', short: 'actinium', label: 'like actinium', wait: 'like actinium', filed: 'actinium', cellZ: 89, col: 2, src: 'p. 239, ref 8: ... and actinium isotopes' }
   ],
 
   // --- the paper's own chains, for the calibration check ---
@@ -283,12 +280,14 @@ var CONFIG = {
   ],
 
   // element names, Z = 19..97, as the 1939 table had them (43 masurium, now technetium; 61, 85, 87 unnamed or just found; 93-97 the chemists' eka-names)
-  NAMES: { 19: 'potassium', 20: 'calcium', 21: 'scandium', 22: 'titanium', 23: 'vanadium', 24: 'chromium', 25: 'manganese', 26: 'iron', 27: 'cobalt', 28: 'nickel', 29: 'copper', 30: 'zinc', 31: 'gallium', 32: 'germanium', 33: 'arsenic', 34: 'selenium', 35: 'bromine', 36: 'krypton',
+  NAMES: { 1: 'hydrogen', 2: 'helium', 3: 'lithium', 4: 'beryllium', 5: 'boron', 6: 'carbon', 7: 'nitrogen', 8: 'oxygen', 9: 'fluorine', 10: 'neon', 11: 'sodium', 12: 'magnesium', 13: 'aluminium', 14: 'silicon', 15: 'phosphorus', 16: 'sulphur', 17: 'chlorine', 18: 'argon',
+    19: 'potassium', 20: 'calcium', 21: 'scandium', 22: 'titanium', 23: 'vanadium', 24: 'chromium', 25: 'manganese', 26: 'iron', 27: 'cobalt', 28: 'nickel', 29: 'copper', 30: 'zinc', 31: 'gallium', 32: 'germanium', 33: 'arsenic', 34: 'selenium', 35: 'bromine', 36: 'krypton',
     37: 'rubidium', 38: 'strontium', 39: 'yttrium', 40: 'zirconium', 41: 'niobium', 42: 'molybdenum', 43: 'masurium', 44: 'ruthenium', 45: 'rhodium', 46: 'palladium', 47: 'silver', 48: 'cadmium', 49: 'indium', 50: 'tin', 51: 'antimony', 52: 'tellurium', 53: 'iodine', 54: 'xenon',
     55: 'caesium', 56: 'barium', 57: 'lanthanum', 58: 'cerium', 59: 'praseodymium', 60: 'neodymium', 61: 'element 61', 62: 'samarium', 63: 'europium', 64: 'gadolinium', 65: 'terbium', 66: 'dysprosium', 67: 'holmium', 68: 'erbium', 69: 'thulium', 70: 'ytterbium', 71: 'lutetium',
     72: 'hafnium', 73: 'tantalum', 74: 'tungsten', 75: 'rhenium', 76: 'osmium', 77: 'iridium', 78: 'platinum', 79: 'gold', 80: 'mercury', 81: 'thallium', 82: 'lead', 83: 'bismuth', 84: 'polonium', 85: 'element 85', 86: 'radon',
     87: 'element 87', 88: 'radium', 89: 'actinium', 90: 'thorium', 91: 'protactinium', 92: 'uranium', 93: 'eka-rhenium', 94: 'eka-osmium', 95: 'eka-iridium', 96: 'eka-platinum', 97: 'eka-gold' },
-  SYMBOLS: { 19: 'K', 20: 'Ca', 21: 'Sc', 22: 'Ti', 23: 'V', 24: 'Cr', 25: 'Mn', 26: 'Fe', 27: 'Co', 28: 'Ni', 29: 'Cu', 30: 'Zn', 31: 'Ga', 32: 'Ge', 33: 'As', 34: 'Se', 35: 'Br', 36: 'Kr',
+  SYMBOLS: { 1: 'H', 2: 'He', 3: 'Li', 4: 'Be', 5: 'B', 6: 'C', 7: 'N', 8: 'O', 9: 'F', 10: 'Ne', 11: 'Na', 12: 'Mg', 13: 'Al', 14: 'Si', 15: 'P', 16: 'S', 17: 'Cl', 18: 'Ar',
+    19: 'K', 20: 'Ca', 21: 'Sc', 22: 'Ti', 23: 'V', 24: 'Cr', 25: 'Mn', 26: 'Fe', 27: 'Co', 28: 'Ni', 29: 'Cu', 30: 'Zn', 31: 'Ga', 32: 'Ge', 33: 'As', 34: 'Se', 35: 'Br', 36: 'Kr',
     37: 'Rb', 38: 'Sr', 39: 'Y', 40: 'Zr', 41: 'Nb', 42: 'Mo', 43: 'Ma', 44: 'Ru', 45: 'Rh', 46: 'Pd', 47: 'Ag', 48: 'Cd', 49: 'In', 50: 'Sn', 51: 'Sb', 52: 'Te', 53: 'I', 54: 'Xe',
     55: 'Cs', 56: 'Ba', 57: 'La', 58: 'Ce', 59: 'Pr', 60: 'Nd', 61: '61', 62: 'Sm', 63: 'Eu', 64: 'Gd', 65: 'Tb', 66: 'Dy', 67: 'Ho', 68: 'Er', 69: 'Tm', 70: 'Yb', 71: 'Lu',
     72: 'Hf', 73: 'Ta', 74: 'W', 75: 'Re', 76: 'Os', 77: 'Ir', 78: 'Pt', 79: 'Au', 80: 'Hg', 81: 'Tl', 82: 'Pb', 83: 'Bi', 84: 'Po', 85: '85', 86: 'Rn',
@@ -298,6 +297,7 @@ var CONFIG = {
 // ---------- the table as drawn in 1939: four rows (periods 4-7), eighteen columns; the rare earths collapsed into lanthanum's cell;
 // thorium, protactinium and uranium under hafnium, tantalum and tungsten; 93-97 in the next five columns, dashed ----------
 function cellOf(Z) {
+  if (Z >= 1 && Z <= 18) return { row: -1, col: Z - 1, strip: true };   // rev. 4: the light elements, a thin strip above the table; they stand in no tube's column
   if (Z >= 19 && Z <= 36) return { row: 0, col: Z - 19 };
   if (Z >= 37 && Z <= 54) return { row: 1, col: Z - 37 };
   if (Z === 55) return { row: 2, col: 0 };
@@ -355,6 +355,11 @@ function oddsWords(p) {
   if (p >= 0.08) return 'about one time in ten';
   return 'hardly ever';
 }
+function oddsLabel(p) {                              // rev. 4: the chance as a percent, for the bar and the lines
+  if (p >= 0.995) return '100%';
+  if (p < 0.01) return '<1%';
+  return Math.round(p * 100) + '%';
+}
 // a small seeded generator (mulberry32), so a session's draws can be replayed by its seed
 function makeRng(seed) {
   var t = (seed >>> 0) || 1;
@@ -397,13 +402,24 @@ function lightTubes(move, tubes, nucZ) {
       var path = move.pieces[p].path;
       for (var i = 0; i < path.length; i++) {
         var c = cellOf(path[i]);
-        if (c && c.col === t.col && !isDashed(path[i])) { lit.push({ id: t.id, atZ: path[i], piece: p, step: i }); return; }
+        if (c && !c.strip && c.col === t.col && !isDashed(path[i])) { lit.push({ id: t.id, atZ: path[i], piece: p, step: i }); return; }
       }
     }
   });
   return lit;
 }
 function tubeById(tubes, id) { for (var i = 0; i < tubes.length; i++) if (tubes[i].id === id) return tubes[i]; return null; }
+
+// What a cut at Z1 would do, before it is made (rev. 4: the bench shows this live): the chance, the pieces and their walks,
+// the tubes it would light if it works, and the tube a failed cut would light (the drop keeps its neutron).
+function preview(st, Z1) {
+  var nuc = st.nuc, mv = split(nuc, Z1), p = splitOdds(nuc, mv.Z1);
+  var lit = lightTubes(mv, st.tubes, nuc.Z), failTube = null;
+  st.tubes.forEach(function (t) { if (t.byHold && !st.lit[t.id] && t.cellZ === nuc.Z) failTube = t.id; });
+  return { Z1: mv.Z1, Z2: mv.Z2, p: p, label: oddsLabel(p), pieces: mv.pieces,
+           lights: lit.filter(function (l) { return !st.lit[l.id]; }), again: lit.filter(function (l) { return st.lit[l.id]; }),
+           failLights: (p < 0.995 && failTube) ? failTube : null };
+}
 
 // ---------- a stage: one drop, one shelf, a budget of neutrons ----------
 function newStage(nuc, tubes, neutrons, seed) {
@@ -437,7 +453,7 @@ function lookalikes(move, tubes) {
   if (move.kind !== 'split') return out;
   move.pieces.forEach(function (pc, p) {
     pc.path.forEach(function (Z) {
-      var c = cellOf(Z); if (!c || isDashed(Z)) return;
+      var c = cellOf(Z); if (!c || c.strip || isDashed(Z)) return;
       tubes.forEach(function (t) { var tc = m_cell(t.cellZ); if (!t.byHold && t.col === c.col && Z !== t.cellZ && !(tc.row === c.row && tc.col === c.col)) out.push({ Z: Z, tube: t.id, piece: p }); });
     });
   });
@@ -451,37 +467,39 @@ function tubeAnswer(t, atZ) {                       // what a tube's card says o
   var nm = nameOf(atZ);
   return (isDashed(t.cellZ) ? t.cellZ + ' = ' + nm : '= ' + nm + (atZ === t.cellZ ? ' itself' : ''));
 }
+function pieceLine(pc) {
+  var steps = pc.path.length - 1;
+  if (!steps) return cap(nameOf(pc.Z)) + ' stays as it is.';
+  return cap(nameOf(pc.Z)) + ' changes ' + (steps === 1 ? 'once' : countWord(steps) + ' times') + ' and ends as ' + endName(pc.path) + '.';
+}
 function moveWords(st, move) {
   var T = st.tubes, lines = [], nuc = st.nuc;
   if (move.kind === 'hold' || move.kind === 'rang') {
     var pc = move.pieces[0], made = nuc.name + '-' + pc.A;
-    if (move.kind === 'rang') lines.push('You pinched at ' + move.Z1 + ' | ' + move.Z2 + '. This far from the middle a pinch goes through ' + oddsWords(move.odds) + ', and this time the skin pulled it back. No split: the drop kept the neutron and is ' + made + ' now.');
-    else lines.push('The drop swallowed the neutron and just rings. No split. It is ' + made + ' now.');
-    if (move.lit.length) lines.push('That explains the "uranium, 24 min" tube: it is uranium itself, made when a drop swallows a neutron instead of splitting' + (move.kind === 'rang' ? ' (this time by accident)' : '') + '.');
-    else if (move.relit.length) lines.push('The "uranium, 24 min" tube was already explained. Nothing new.');
+    if (move.kind === 'rang') lines.push('Cut at ' + move.Z1 + ' | ' + move.Z2 + ': it failed (the chance was ' + oddsLabel(move.odds) + '). The drop kept the neutron and is ' + made + ' now.');
+    else lines.push('The drop caught the neutron and did not split. It is ' + made + ' now.');
+    if (move.lit.length) lines.push('That lights the "24 min" tube: it is uranium itself.');
+    else if (move.relit.length) lines.push('The "24 min" tube was already lit. Nothing new.');
     else lines.push('No tube on this shelf is like that.');
-    if (nuc.id === 'U') lines.push('Then it changes one cell, into element 93, and sits there quiet.');
     return lines;
   }
-  var p0 = move.pieces[0], p1 = move.pieces[1];
-  lines.push('You pinched at ' + move.Z1 + ' | ' + move.Z2 + (move.odds !== undefined && move.odds < 0.9 ? ' (it goes through ' + oddsWords(move.odds) + ', and this time it did)' : '') + ': a piece of ' + nameOf(p0.Z) + ' and a piece of ' + nameOf(p1.Z) + '.');
-  lines.push(cap(nameOf(p0.Z)) + ' climbs to ' + endName(p0.path) + '. ' + cap(nameOf(p1.Z)) + ' climbs to ' + endName(p1.path) + '.');
+  var p0 = move.pieces[0], p1 = move.pieces[1], same = p0.Z === p1.Z;
+  lines.push('Cut at ' + move.Z1 + ' | ' + move.Z2 + (move.odds !== undefined && move.odds < 0.995 ? ' (chance ' + oddsLabel(move.odds) + ', and it worked)' : '') + ': ' + (same ? 'two pieces of ' + nameOf(p0.Z) : nameOf(p0.Z) + ' and ' + nameOf(p1.Z)) + '.');
+  lines.push(pieceLine(p0) + ' ' + pieceLine(p1));
   var ghosts = move.lit.filter(function (l) { return isDashed(tubeById(T, l.id).cellZ); });
   if (move.lit.length) {
-    var parts = move.lit.map(function (l) { var t = tubeById(T, l.id); return isDashed(t.cellZ) ? t.cellZ + ' is ' + nameOf(l.atZ) : '"' + t.label + '" is ' + nameOf(l.atZ); });
-    lines.push((ghosts.length ? 'Explained, and the "new elements" come down: ' : 'Explained: ') + parts.join('; ') + '.');
-  } else lines.push('No tube on the shelf is like any of these' + (move.relit.length ? ', apart from ones already explained' : '') + '.');
+    var parts = move.lit.map(function (l) { var t = tubeById(T, l.id); return (isDashed(t.cellZ) ? t.cellZ : 'like ' + t.short) + ' = ' + nameOf(l.atZ); });
+    lines.push('Lit: ' + parts.join('; ') + '.');
+    if (ghosts.length) lines.push('So ' + (ghosts.length === 1 ? 'that "new element" is' : 'those "new elements" are') + ' ordinary elements from the middle of the table.');
+  } else lines.push('No tube lights from these pieces' + (move.relit.length ? ' that was not lit already' : '') + '.');
   var look = move.lookalikes.filter(function (k) { return move.lit.some(function (l) { return l.id === k.tube; }) || move.relit.some(function (l) { return l.id === k.tube; }); });
   if (look.length && !ghosts.length) {
-    // one lookalike per tube: the piece that lit it if that piece is not the tube's own element, else the first in order of charge
     var litAt = {}; move.lit.concat(move.relit).forEach(function (l) { litAt[l.id] = l.atZ; });
     look.sort(function (a, b) { return (a.Z === litAt[a.tube] ? -1 : 0) - (b.Z === litAt[b.tube] ? -1 : 0) || a.Z - b.Z; });
     var seen = {}, nm = [], fd = [];
     look.forEach(function (k) { if (seen[k.tube]) return; seen[k.tube] = 1; nm.push(nameOf(k.Z)); fd.push(tubeById(T, k.tube).filed); });
     lines.push(cap(nm.join(' and ')) + (nm.length > 1 ? ' act' : ' acts') + ' like ' + fd.join(' and ') + ', so the chemists could not tell them apart.');
   }
-  var u6 = move.pieces.some(function (pc) { return pc.path.some(function (Z) { var c = cellOf(Z); return c && c.col === 5 && Z < 92; }); });
-  if (u6 && nuc.id === 'U' && !st.lit.u24) lines.push('Passing uranium\'s column does not make the 24-minute stuff: that needs a hold.');
   return lines;
 }
 function lostWords(p) {
@@ -508,32 +526,32 @@ function verdict(stU, stTh) {
   var rangs = stU.moves.filter(function (m) { return m.kind === 'rang'; });
   var unevens = splits.concat(rangs).filter(function (m) { return m.uneven; });
   var fate = (ekaLeft === 0 ? (allU ? 'THE "NEW ELEMENTS" WERE NEVER THERE' : 'THE "NEW ELEMENTS" ARE GONE, BUT TUBES STILL WAIT') : (ekaLeft === 1 ? 'ONE "NEW ELEMENT" STILL STANDS' : countWord(ekaLeft).toUpperCase() + ' "NEW ELEMENTS" STILL STAND'));
-  var paper = 'Uranium does not just chip. Hit by a neutron, it can pinch and split in two, like a drop whose skin has nearly given up, because its charge has almost cancelled its surface tension. The halves fly apart with a huge shove: far more than any ordinary chemical change. If one half is barium, the other is krypton. So the chemists\' "new elements" were very probably never there: they are middle-weight elements that behave the same in chemistry. The 24-minute stuff is uranium itself, after it swallowed a neutron. And thorium splits the same way.';
+  var paper = 'Uranium does not just chip. A neutron can make it split in two, like a drop that barely holds together, and the halves fly apart with a huge shove. If one half is barium, the other is krypton: their numbers add up to 92. So the chemists\' "new elements" were very probably never there. They are middle-weight elements that act like the ones beyond uranium. The 24-minute stuff is uranium that caught a neutron. Thorium splits the same way.';
   var found = [];
-  if (splits.length) found.push('Your splits: ' + splits.map(function (m) { return m.Z1 + ' | ' + m.Z2 + ' (' + nameOf(m.Z1) + ' and ' + nameOf(m.Z2) + ')'; }).join('; ') + '.');
-  if (rangs.length) found.push('The skin pulled back ' + countWord(rangs.length) + ' of your pinches (' + rangs.map(function (m) { return m.Z1 + ' | ' + m.Z2; }).join(', ') + '). A pulled-back drop keeps its neutron, so ' + (rangs.length === 1 ? 'that neutron was' : 'those neutrons were') + ' spent without a split.');
-  else if (splits.length) found.push('Every pinch went through.');
-  if (baLa === 2) found.push('Barium and lanthanum: explained. Whichever piece did it, its partner was forced: the two halves always add up to 92, so barium (56) goes with krypton (36).');
-  else if (baLa === 1) found.push('One of barium and lanthanum: explained; the other not.');
-  else found.push('Barium and lanthanum: not explained. Barium coming out of uranium is the paper\'s first fact, and your pinches never made it.');
+  if (splits.length) found.push('Your cuts: ' + splits.map(function (m) { return m.Z1 + ' | ' + m.Z2 + ' (' + nameOf(m.Z1) + ' and ' + nameOf(m.Z2) + ')'; }).join('; ') + '.');
+  if (rangs.length) found.push(cap(countWord(rangs.length)) + ' of your cuts failed (' + rangs.map(function (m) { return m.Z1 + ' | ' + m.Z2; }).join(', ') + '). A failed cut keeps its neutron, so ' + (rangs.length === 1 ? 'that neutron was' : 'those neutrons were') + ' spent without a split.');
+  else if (splits.length) found.push('Every cut worked.');
+  if (baLa === 2) found.push('Barium and lanthanum: lit. Their partner was forced: the two halves always add up to 92, so barium (56) goes with krypton (36).');
+  else if (baLa === 1) found.push('One of barium and lanthanum: lit; the other not.');
+  else found.push('Barium and lanthanum: still dark. Barium coming out of uranium is the paper\'s first fact, and your cuts never made it.');
   if (ekaDown === eka.length) found.push('All five "new elements" came down into the middle of the table: ' + ekaNames(stU) + '.');
   else if (ekaDown) found.push(cap(countWord(ekaDown)) + ' of the five "new elements" came down (' + ekaNames(stU) + '); ' + countWord(ekaLeft) + ' still stand' + (ekaLeft === 1 ? 's' : '') + ' in the dashed row.');
   else found.push('None of the five "new elements" came down. They still stand in the dashed row as elements nobody has ever seen.');
   var holdHow = stU.lit.u24 && stU.moves.some(function (m) { return m.kind === 'hold'; }) ? 'hold' : (stU.lit.u24 ? 'rang' : null);
-  found.push(holdHow === 'hold' ? 'You found the hold: the 24-minute stuff is a drop that swallowed its neutron, uranium-239.' : (holdHow === 'rang' ? 'The 24-minute stuff came to you by accident: a pinch the skin pulled back is a drop that kept its neutron, uranium-239.' : 'You never held the drop together, and no pinch was pulled back, so the 24-minute stuff is still unexplained.'));
-  if (stTh) found.push(thAll ? 'Thorium: both tubes explained. Its "radium" and "actinium" are barium and lanthanum, or their column-mates.' : (thLit ? 'Thorium: one of its two tubes explained.' : 'Thorium: neither tube explained; its "radium" and "actinium" are still a mystery on your shelf.'));
+  found.push(holdHow === 'hold' ? 'The 24-minute tube: lit. It is a drop that caught its neutron, uranium-239.' : (holdHow === 'rang' ? 'The 24-minute tube: lit by a failed cut. The drop kept its neutron and became uranium-239.' : 'The 24-minute tube: still dark. It needs a drop that keeps its neutron, and none of your cuts failed.'));
+  if (stTh) found.push(thAll ? 'Thorium: both tubes lit. Its "radium" and "actinium" are barium and lanthanum, or their column-mates.' : (thLit ? 'Thorium: one of its two tubes lit.' : 'Thorium: both tubes dark. Its "radium" and "actinium" are still a mystery on your shelf.'));
   var nTxt = 'Neutrons: ' + countWord(stU.used) + ' on uranium' + (stTh ? ' and ' + countWord(stTh.used) + ' on thorium' : '') + '.';
-  if (allU) nTxt += stU.used <= 3 ? ' Three is the fewest that can work.' : (rangs.length ? ' The skin took ' + (rangs.length === 1 ? 'one' : countWord(rangs.length)) + ' of them, which used up your spare.' : ' Three would have done.');
+  if (allU) nTxt += stU.used <= 3 ? ' Three is the fewest that can work.' : (rangs.length ? ' Failed cuts took ' + countWord(rangs.length) + ' of them, which used up your spare.' : ' Three would have done.');
   found.push(nTxt);
   var part = [];
-  if (allU && thAll) part.push('Nowhere that matters. Your shelf is the paper\'s shelf: every body the chemists found is a middle-weight element or uranium itself, and the only thing beyond uranium is a quiet element 93.');
-  if (ekaLeft) part.push('The paper brings all five "new elements" down with one idea: a piece near masurium climbs through five columns. On your shelf ' + countWord(ekaLeft) + ' still stand' + (ekaLeft === 1 ? 's' : '') + ' beyond uranium.');
-  if (baLa < 2) part.push('The paper starts from barium, the one fact the chemists were sure of. Your pinches did not make it.');
-  if (!holdFound) part.push('The paper keeps one body as genuine uranium-239, made by a drop that held. You never had one hold.');
-  if (unevens.length) part.push('You pinched far from the middle ' + countWord(unevens.length) + (unevens.length === 1 ? ' time' : ' times') + '. The paper speaks of "two nuclei of roughly equal size"; in this game the skin pulls such a pinch back more often than not.');
-  if (stTh && !thAll) part.push('The paper suggests thorium splits like uranium and gives partly the same products. Your thorium pinches did not show it.');
-  var stood = allU ? 'Nothing: the row beyond uranium is empty, as the paper leaves it, except one quiet element 93. Four years of "new elements" go back into the middle of the table, and the chemists\' barium is the ordinary barium it always was.' :
-    (countWord(ekaLeft + (holdFound ? 0 : 1) + (2 - baLa)).replace(/^./, function (c) { return c.toUpperCase(); }) + ' of the chemists\' bodies would still be ' + (ekaLeft ? 'elements nobody has ever seen' : 'a mystery') + ', and their long chains of changes would still need "nuclear isomerism" to account for them. The drop would have split on your shelf, but the chemists\' table would not have been corrected.');
+  if (allU && thAll) part.push('Nowhere that matters: every tube is a middle-weight element or uranium itself.');
+  if (ekaLeft) part.push('The paper brings all five "new elements" down with one idea: a piece near masurium changes five times and passes five columns. On your shelf ' + countWord(ekaLeft) + ' still stand' + (ekaLeft === 1 ? 's' : '') + ' beyond uranium.');
+  if (baLa < 2) part.push('The paper starts from barium, the one fact the chemists were sure of. Your cuts did not make it.');
+  if (!holdFound) part.push('The paper keeps one body as genuine uranium-239, a drop that kept its neutron. You never had one.');
+  if (unevens.length) part.push('You cut far from the middle ' + countWord(unevens.length) + (unevens.length === 1 ? ' time' : ' times') + '. The paper speaks of "two nuclei of roughly equal size"; in this game such a cut fails more often than not.');
+  if (stTh && !thAll) part.push('The paper suggests thorium splits like uranium and gives partly the same products. Your thorium cuts did not show it.');
+  var stood = allU ? 'Nothing beyond uranium, apart from one quiet element 93. The chemists\' "new elements" go back into the middle of the table, and their barium is just barium.' :
+    (countWord(ekaLeft + (holdFound ? 0 : 1) + (2 - baLa)).replace(/^./, function (c) { return c.toUpperCase(); }) + ' of the chemists\' bodies would still be ' + (ekaLeft ? 'elements nobody has ever seen' : 'a mystery') + '. The drop would have split on your shelf, but the chemists\' table would not have been corrected.');
   return { fate: fate, paper: paper, found: found, part: part, stood: stood, allU: allU, ekaLeft: ekaLeft, holdFound: holdFound, thAll: thAll, seed: stU.seed };
 }
 function ekaNames(stU) {
@@ -542,7 +560,7 @@ function ekaNames(stU) {
   return out.join(', ');
 }
 
-var MECH = { CONFIG: CONFIG, splitOdds: splitOdds, oddsWords: oddsWords, asym: asym, makeRng: makeRng, rang: rang, cellOf: cellOf, isDashed: isDashed, nameOf: nameOf, symbolOf: symbolOf, skin: skin, skinClass: skinClass, clampZ1: clampZ1, shareNeutrons: shareNeutrons, stableZ: stableZ, climb: climb, blastMeV: blastMeV, split: split, hold: hold, lightTubes: lightTubes, tubeById: tubeById, tubeAnswer: tubeAnswer, newStage: newStage, stageDone: stageDone, play: play, moveWords: moveWords, verdict: verdict, lookalikes: lookalikes };
+var MECH = { CONFIG: CONFIG, splitOdds: splitOdds, oddsWords: oddsWords, oddsLabel: oddsLabel, preview: preview, asym: asym, makeRng: makeRng, rang: rang, cellOf: cellOf, isDashed: isDashed, nameOf: nameOf, symbolOf: symbolOf, skin: skin, skinClass: skinClass, clampZ1: clampZ1, shareNeutrons: shareNeutrons, stableZ: stableZ, climb: climb, blastMeV: blastMeV, split: split, hold: hold, lightTubes: lightTubes, tubeById: tubeById, tubeAnswer: tubeAnswer, newStage: newStage, stageDone: stageDone, play: play, moveWords: moveWords, verdict: verdict, lookalikes: lookalikes };
 if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
 
 </script>
@@ -562,7 +580,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
   function closeHelp() { $('help').classList.remove('on'); }
   function openAbout() { $('about').classList.add('on'); window.scrollTo(0, 0); }
   function closeAbout() { $('about').classList.remove('on'); }
-  ['b-help-start', 'b-help-drops', 'b-help-shelf', 'b-help-bench'].forEach(function (id) { $(id).onclick = function () { openHelp(id); }; });
+  ['b-help-drops', 'b-help-shelf', 'b-help-bench'].forEach(function (id) { $(id).onclick = function () { openHelp(id); }; });
   $('b-help-close').onclick = closeHelp; $('b-help-close2').onclick = closeHelp;
   $('b-about-start').onclick = openAbout; $('b-about-end').onclick = openAbout;
   $('b-about-close').onclick = closeAbout; $('b-about-close2').onclick = closeAbout;
@@ -587,20 +605,19 @@ if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
     el('circle', { cx: 2, cy: 2, r: 1, fill: '#9A958C' }, p);
   }
 
-  // ---------- THREE DROPS ----------
-  var D0 = { nucs: [C.LEAD, C.URANIUM, C.IMAGINED], tapped: {}, anim: null };
-  var DROPS_SAID = 'The more charge a drop carries, the less skin it has left. Lead has 82 charges, uranium 92. The third drop is imagined: 100 charges, more than any element anyone has seen.';
+  // ---------- WHY A DROP CAN SPLIT (optional side trip from the start screen) ----------
+  var D0 = { nucs: [C.LEAD, C.URANIUM, C.IMAGINED] };
   function drawDrops() {
     var svg = $('dropsvg0'); svg.innerHTML = ''; tonePattern(svg, 'tp0');
     D0.g = [];
     D0.nucs.forEach(function (n, i) {
-      var cx = 58 + i * 112, cy = 92, g = el('g', { class: 'tapdrop', 'data-i': i }, svg);
+      var cx = 56 + i * 108, cy = 92, g = el('g', { class: 'tapdrop', 'data-i': i }, svg);
       var p = el('path', { d: blobPath(cx, cy, 42, 36, cx, 0, 0.03, i), fill: n.imagined ? 'url(#tp0)' : '#fff', stroke: '#161414', 'stroke-width': 3 }, g);
       if (n.imagined) p.setAttribute('stroke-dasharray', '6 4');
       el('path', { d: 'M' + (cx - 26) + ' ' + (cy - 14) + ' C' + (cx - 18) + ' ' + (cy - 24) + ' ' + (cx - 6) + ' ' + (cy - 28) + ' ' + (cx + 6) + ' ' + (cy - 28), fill: 'none', stroke: '#161414', 'stroke-width': 2, 'stroke-linecap': 'round', opacity: .5 }, g);
       txt(g, cx, cy + 6, String(n.Z), 'cnt bang', { 'text-anchor': 'middle' });
-      txt(g, cx, 158, n.imagined ? 'imagined' : n.name, 'lbl');
-      txt(g, cx, 174, n.imagined ? 'no such element seen' : (n.Z + ' charges'), 'brk');
+      txt(g, cx, 158, n.imagined ? 'made up' : n.name, 'lbl');
+      txt(g, cx, 174, 'number ' + n.Z, 'brk');
       el('rect', { x: cx - 56, y: 20, width: 112, height: 165, fill: 'transparent' }, g);
       g.addEventListener('click', function () { tapDrop(i); });
       D0.g.push({ g: g, p: p, cx: cx, cy: cy, n: n });
@@ -611,7 +628,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
   }
   function tapDrop(i) {
     if (busy) return; busy = true;
-    var d = D0.g[i], cls = M.skinClass(d.n), svg = $('dropsvg0');
+    var d = D0.g[i], cls = M.skinClass(d.n);
     D0.sfx.textContent = '';
     var nt = D0.neutron, t0 = performance.now();
     function fly(now) {
@@ -625,106 +642,113 @@ if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
       D0.sfx.textContent = cls === 'holds' ? 'RINGS' : (cls === 'barely' ? 'NECKS...' : 'FALLS APART');
       D0.sfx.setAttribute('x', d.cx); D0.sfx.setAttribute('fill', cls === 'barely' ? '#E23A2A' : '#161414');
       function step(now) {
-        var t = (now - t1) / dur, k = Math.min(1, t);
+        var k = Math.min(1, (now - t1) / dur);
         if (cls === 'holds') { var a = 0.12 * Math.exp(-3 * k) * Math.sin(k * 22); d.p.setAttribute('d', blobPath(d.cx, d.cy, 42 * (1 + a), 36 * (1 - a), d.cx, 0, 0.03, i)); }
         else if (cls === 'barely') { var dep = 0.55 * Math.sin(Math.PI * Math.min(1, k * 1.15)) * (k < 0.87 ? 1 : Math.max(0, (1 - k) / 0.13)); var b = 0.08 * Math.exp(-2 * k) * Math.sin(k * 18); d.p.setAttribute('d', blobPath(d.cx, d.cy, 42 * (1 + b + dep * 0.25), 36 * (1 - b), d.cx, Math.max(0, dep), 0.03, i)); }
-        else { var g = k; d.p.setAttribute('d', blobPath(d.cx, d.cy, 42 * (1 + g * 0.28), 36 * (1 - g * 0.3), d.cx, Math.min(0.98, g * 1.2), 0.08 * g, i)); d.p.setAttribute('opacity', 1 - 0.7 * g); }
+        else { d.p.setAttribute('d', blobPath(d.cx, d.cy, 42 * (1 + k * 0.16), 36 * (1 - k * 0.3), d.cx, Math.min(0.98, k * 1.2), 0.08 * k, i)); d.p.setAttribute('opacity', 1 - 0.7 * k); }
         if (k < 1) requestAnimationFrame(step); else done();
       }
       requestAnimationFrame(step);
     }
     function done() {
-      D0.tapped[i] = true; busy = false;
-      var words = cls === 'holds' ? 'Lead rings and settles. Its skin is well ahead of its charge: a neutron cannot split it.' :
-        (cls === 'barely' ? 'Uranium wobbles hard, necks in the middle, and just holds. Its charge has nearly cancelled its skin. The paper says such a drop, nudged, may divide in two: where it splits is up to you.' :
-          'The imagined drop of 100 charges has no skin left. It falls apart on its own, unprovoked; that is why no such element is found.');
+      busy = false;
+      var words = cls === 'holds' ? 'Lead (82) rings and settles. Its skin is strong enough: a neutron cannot split it.' :
+        (cls === 'barely' ? 'Uranium (92) wobbles and nearly splits. Its skin barely holds, so a neutron might tip it. That is the game.' :
+          'A made-up drop (100) has no skin left. It falls apart by itself, so no such element can last.');
       $('said0').innerHTML = '<p>' + words + '</p>';
-      if (D0.tapped[1]) { $('b-toshelf').classList.remove('hidden'); $('now0').textContent = 'Three drops · Tap another, or go on'; }
     }
   }
+  function openWhy() { busy = false; drawDrops(); $('said0').innerHTML = '<p>Tap a drop to hit it with a neutron.</p>'; show('s-drops'); }
 
   // ---------- THE TABLE (shared by the shelf screen and the bench) ----------
-  var TB = { x0: 3, y0: 4, cw: 18.55, ch: 28 };
-  function cellXY(Z) { var c = M.cellOf(Z); return c ? { x: TB.x0 + c.col * TB.cw, y: TB.y0 + c.row * TB.ch, c: c } : null; }
+  var TB = { x0: 3, y0: 4, cw: 18.55, ch: 28, strip: 22 };
+  function cellXY(Z) {
+    var c = M.cellOf(Z); if (!c) return null;
+    if (c.strip) return { x: TB.x0 + c.col * TB.cw, y: TB.y0, h: TB.strip, c: c };
+    return { x: TB.x0 + c.col * TB.cw, y: TB.y0 + TB.strip + c.row * TB.ch, h: TB.ch, c: c };
+  }
   var ORDER_U = ['eRe', 'eOs', 'eIr', 'ePt', 'eAu', 'u24', 'ba', 'la'];
   var BOTTLE = '<svg class="bot" viewBox="0 0 12 20" aria-hidden="true"><rect class="g" x="1.5" y="3.5" width="9" height="15" rx="3"/><rect x="3" y="0.5" width="6" height="3.5" fill="#161414"/></svg>';
   function cardsHTML(tubes) {
     var order = tubes.length === 8 ? ORDER_U : tubes.map(function (t) { return t.id; });
     return order.map(function (id) { var t = M.tubeById(tubes, id); return '<div class="card' + (M.isDashed(t.cellZ) ? ' dash' : '') + '" data-id="' + id + '">' + BOTTLE + '<span class="ct">' + t.wait + '</span></div>'; }).join('');
   }
-  function buildTable(svg, tubes, nucZ, interactive) {
+  function buildTable(svg, tubes, nucZ, interactive, onTube) {
     svg.innerHTML = ''; tonePattern(svg, 'tp' + svg.id);
-    var T = { svg: svg, cells: {}, syms: {}, tubes: {}, pieces: [], hits: [] };
-    var cellsG = el('g', {}, svg), symG = el('g', {}, svg);
+    var T = { svg: svg, cells: {}, syms: {}, tubes: {}, stripes: {}, pieces: [], hits: [] };
+    var cellsG = el('g', {}, svg);
+    // the light elements, 1 to 18: a thin strip above the table, on no tube's column
+    el('rect', { x: TB.x0, y: TB.y0, width: 18 * TB.cw, height: TB.strip, class: 'cell dash' }, cellsG);
+    txt(svg, TB.x0 + 9 * TB.cw, TB.y0 + 13, 'elements 1 to 18: not on the chemists’ table', 'brk');
     for (var Z = 19; Z <= 97; Z++) {
       var c = M.cellOf(Z); if (!c) continue;
       var key = c.row + ',' + c.col; if (T.cells[key]) continue;
-      var x = TB.x0 + c.col * TB.cw, y = TB.y0 + c.row * TB.ch;
-      T.cells[key] = el('rect', { x: x, y: y, width: TB.cw, height: TB.ch, class: 'cell' + (M.isDashed(Z) ? ' dash' : '') }, cellsG);
+      var q = cellXY(Z);
+      T.cells[key] = el('rect', { x: q.x, y: q.y, width: TB.cw, height: TB.ch, class: 'cell' + (M.isDashed(Z) ? ' dash' : '') }, cellsG);
     }
-    var yb = TB.y0 + 4 * TB.ch + 8, xb0 = TB.x0 + 6 * TB.cw, xb1 = TB.x0 + 11 * TB.cw;
+    var stripeG = el('g', {}, svg), symG = el('g', {}, svg);
+    tubes.forEach(function (t) { if (t.byHold) return; T.stripes[t.id] = el('rect', { x: TB.x0 + t.col * TB.cw, y: TB.y0 + TB.strip, width: TB.cw, height: 4 * TB.ch, class: 'stripe' }, stripeG); });
+    var yb = TB.y0 + TB.strip + 4 * TB.ch + 8, xb0 = TB.x0 + 6 * TB.cw, xb1 = TB.x0 + 11 * TB.cw;
     el('path', { d: 'M' + xb0 + ' ' + (yb - 4) + ' v4 H' + xb1 + ' v-4', fill: 'none', stroke: '#5E5A54', 'stroke-width': 1 }, svg);
-    txt(svg, (xb0 + xb1) / 2, yb + 11, tubes.length === 8 ? 'filed as "new elements"' : 'thorium\'s two tubes', 'brk');
+    txt(svg, (xb0 + xb1) / 2, yb + 11, 'the "new elements"', 'brk');
     T.hitG = el('g', {}, svg); T.symG = symG; T.tubeG = el('g', {}, svg); T.pieceG = el('g', {}, svg);
-    tubes.forEach(function (t) { drawTube(T, t, interactive); });
+    tubes.forEach(function (t) { drawTube(T, t, interactive, onTube); });
     sym(T, nucZ, false);
     return T;
   }
   function sym(T, Z, faint) {
-    var p = cellXY(Z); if (!p) return;
+    var p = cellXY(Z); if (!p || p.c.strip) return;
     var key = p.c.row + ',' + p.c.col;
     if (T.syms[key]) { if (!faint) T.syms[key].setAttribute('class', 'sym'); return; }
     var label = (Z >= 57 && Z <= 71) ? 'La' : M.symbolOf(Z);
     T.syms[key] = txt(T.symG, p.x + TB.cw / 2, p.y + TB.ch - 2.5, label, 'sym' + (faint ? ' faint' : ''));
   }
-  function drawTube(T, t, interactive) {
+  function drawTube(T, t, interactive, onTube) {
     var p = cellXY(t.cellZ), g = el('g', { class: 'tube', 'data-id': t.id }, T.tubeG);
     g.setAttribute('transform', 'translate(' + p.x + ' ' + p.y + ')');
     el('rect', { x: 5.3, y: 3.5, width: 8, height: 12, rx: 2.5, class: 'glass' }, g);
     el('rect', { x: 6.8, y: 1, width: 5, height: 3.2, fill: '#161414' }, g);
     if (interactive) {
       el('rect', { x: 0, y: 0, width: TB.cw, height: TB.ch, fill: 'transparent' }, g);
-      g.addEventListener('click', function () { var lit = S.st.lit[t.id]; $('cap').textContent = 'Tube: "' + t.label + '", filed as ' + t.filed + (t.byHold ? '. Made only when the drop swallows the neutron.' : '.') + (lit ? ' Explained: it is ' + M.nameOf(lit.atZ) + '.' : ''); });
+      g.style.cursor = 'pointer';
+      g.addEventListener('click', function () { onTube(t); });
     }
     T.tubes[t.id] = g; sym(T, t.cellZ, false);
   }
   function addPiece(T, Z) {
     var p = cellXY(Z), g = el('g', { class: 'piece' }, T.pieceG);
-    g.setAttribute('transform', 'translate(' + (p.x + TB.cw / 2) + ' ' + (p.y + 11) + ')');
+    g.setAttribute('transform', 'translate(' + (p.x + TB.cw / 2) + ' ' + (p.c.strip ? 11 : p.y + 11) + ')');
     el('circle', { cx: 0, cy: 0, r: 8 }, g); txt(g, 0, 3.4, String(Z), '', {});
     T.pieces.push(g); return g;
   }
-  function movePiece(g, Z) { var p = cellXY(Z); g.setAttribute('transform', 'translate(' + (p.x + TB.cw / 2) + ' ' + (p.y + 11) + ')'); g.querySelector('text').textContent = String(Z); }
-  function clearPieces() { TP.pieces.forEach(function (g) { g.remove(); }); TP.pieces = []; }
-  function clearPreview() { TP.hits.forEach(function (h) { h.remove(); }); TP.hits = []; }
-  // the preview: a red box where each piece lands, dots along its climb, a black box where it stops. It says what the pinch would do, never what it would light.
-  function previewMove(Z1) {
-    clearPreview();
-    var mv = M.split(S.st.nuc, Z1);
-    mv.pieces.forEach(function (pc) {
-      pc.path.forEach(function (Z, i) {
-        var p = cellXY(Z); if (!p) return;
-        if (i === 0) TP.hits.push(el('rect', { x: p.x + 1, y: p.y + 1, width: TB.cw - 2, height: TB.ch - 2, class: 'cell hit', fill: 'none' }, TP.hitG));
-        else if (i < pc.path.length - 1) TP.hits.push(el('circle', { cx: p.x + TB.cw / 2, cy: p.y + 18, r: 2.3, fill: '#161414' }, TP.hitG));
-        else TP.hits.push(el('rect', { x: p.x + 1, y: p.y + 1, width: TB.cw - 2, height: TB.ch - 2, class: 'cell endc' }, TP.hitG));
-      });
-    });
-  }
+  function movePiece(g, Z) { var p = cellXY(Z); g.setAttribute('transform', 'translate(' + (p.x + TB.cw / 2) + ' ' + (p.c.strip ? 11 : p.y + 11) + ')'); g.querySelector('text').textContent = String(Z); }
+  function colNames(col) { return [19 + col, 37 + col, col === 0 ? 55 : col === 1 ? 56 : col === 2 ? 57 : 69 + col].map(M.nameOf); }
 
-  // ---------- THE SHELF (briefing) ----------
+  // ---------- THE SHELF (briefing: tap a tube, see its column) ----------
+  var T0 = null;
+  function infoFor(t) {
+    if (t.byHold) return '<b>Uranium, 24 min</b> is uranium itself. It lights only when a cut fails: then the drop keeps its neutron and becomes uranium-239.';
+    var like = t.label.replace('like ', '');
+    return '<b>Acts like ' + like + '</b>' + (M.isDashed(t.cellZ) ? ', so the chemists filed it as element ' + t.cellZ : '') + '. Its column holds ' + colNames(t.col).join(', ') + '. A piece of any of them would act the same.';
+  }
+  function pickTube(id) {
+    var t = M.tubeById(C.TUBES_U, id);
+    Object.keys(T0.stripes).forEach(function (k) { T0.stripes[k].classList.toggle('pick', k === id); });
+    document.querySelectorAll('#shelf0 .card').forEach(function (c) { c.classList.toggle('pick', c.getAttribute('data-id') === id); });
+    $('info0').innerHTML = infoFor(t);
+  }
   function showShelf() {
-    buildTable($('tablesvg0'), C.TUBES_U, C.URANIUM.Z, false);
+    T0 = buildTable($('tablesvg0'), C.TUBES_U, C.URANIUM.Z, true, function (t) { pickTube(t.id); });
     $('shelf0').innerHTML = cardsHTML(C.TUBES_U);
+    document.querySelectorAll('#shelf0 .card').forEach(function (c) { c.style.cursor = 'pointer'; c.addEventListener('click', function () { pickTube(c.getAttribute('data-id')); }); });
+    $('info0').innerHTML = 'Tap a tube to see its column.';
     show('s-shelf');
   }
 
   // ---------- THE BENCH ----------
   var TP = null;
-  var DR = { cx: 170, cy: 72, rx: 100, ry: 44 };
-  var RULE = '<b>Split here</b>: near the middle every pinch goes through; far out the skin may pull the drop back, and a pulled-back drop keeps its neutron. <b>Hold together</b>: the drop swallows the neutron and just rings.';
-  var RULE_TH = 'The chemists shot neutrons at thorium too (90 charges) and found two more tubes. Same buttons, same rules. Three neutrons.';
-  var CAP_PRE = 'Red box: where a piece lands. Dots: its climb. Black box: where it stops.';
-
+  var DR = { cx: 170, cy: 72, rx: 128, ry: 38 }, HB = 170, HH = 40;
+  var CAP_AFTER = 'Red pieces are still changing. Black ones have stopped.';
   function pickSeed() {
     var q = /[?&]seed=(\d+)/.exec(location.search);
     return q ? Number(q[1]) : (Math.floor(Math.random() * 9000) + 1000);
@@ -732,110 +756,140 @@ if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
   function startGame() {
     S.seed = pickSeed();
     S.stages = [
-      { nuc: C.URANIUM, tubes: C.TUBES_U, n: C.NEUTRONS_U, label: 'Uranium' },
-      { nuc: C.THORIUM, tubes: C.TUBES_TH, n: C.NEUTRONS_TH, label: 'Thorium' }
+      { nuc: C.URANIUM, tubes: C.TUBES_U, n: C.NEUTRONS_U, label: 'Uranium', hint: 'Drag the red line along the hill. The table shows what the cut would do before you fire.' },
+      { nuc: C.THORIUM, tubes: C.TUBES_TH, n: C.NEUTRONS_TH, label: 'Thorium', hint: 'Thorium (90): same game. The chemists found two more tubes there. Three neutrons.' }
     ];
     S.i = 0; S.done = [];
     beginStage();
   }
   function dotsHTML() { var left = S.st.neutrons - S.st.used, s = ''; for (var i = 0; i < S.st.neutrons; i++) s += i < left ? '<b>&#9679;</b>' : '<i>&#9679;</i>'; return s; }
-  function setKick(num, done) {
-    $('kick1').innerHTML = 'Neutron ' + num + ' of ' + S.st.neutrons + (done ? ' done' : '') + ' &middot; ' + S.stages[S.i].label + ' <span class="dots">' + dotsHTML() + '</span>';
-  }
+  function setKick(num, done) { $('kick1').innerHTML = 'Neutron ' + num + ' of ' + S.st.neutrons + (done ? ' done' : '') + ' &middot; ' + S.stages[S.i].label + ' <span class="dots">' + dotsHTML() + '</span>'; }
   function setNow(s) { $('now1').textContent = s; }
-  function setShelfCount() { var n = document.querySelectorAll('#shelf1 .card.lit').length; $('shead1').textContent = 'The shelf · ' + n + ' of ' + S.st.tubes.length + ' explained'; }
+  function setShelfCount() { var n = document.querySelectorAll('#shelf1 .card.lit').length; $('shead1').textContent = 'The shelf · ' + n + ' of ' + S.st.tubes.length + ' lit'; }
   function lightCard(id, atZ) {
     var c = document.querySelector('#shelf1 .card[data-id="' + id + '"]'); if (!c) return;
-    c.classList.add('lit'); c.querySelector('.ct').textContent = M.tubeAnswer(M.tubeById(S.st.tubes, id), atZ); setShelfCount();
+    c.classList.add('lit'); c.classList.remove('will'); c.classList.remove('iffail'); c.querySelector('.ct').textContent = M.tubeAnswer(M.tubeById(S.st.tubes, id), atZ); setShelfCount();
   }
   function controls(mode) {   // 'choose' | 'watch' | 'next'
-    $('nudge').classList.toggle('hidden', mode !== 'choose'); $('rule1').classList.toggle('hidden', mode !== 'choose');
-    $('b-split').classList.toggle('hidden', mode !== 'choose'); $('b-hold').classList.toggle('hidden', mode !== 'choose');
+    $('fire').classList.toggle('hidden', mode !== 'choose');
     $('b-next').classList.toggle('hidden', mode !== 'next');
-    $('b-split').disabled = false; $('b-hold').disabled = false;
   }
   function beginStage() {
     var sg = S.stages[S.i];
     S.st = M.newStage(sg.nuc, sg.tubes, sg.n, S.seed + S.i * 7919);
-    S.Z1 = Math.round(sg.nuc.Z / 2);
-    TP = buildTable($('tablesvg'), sg.tubes, sg.nuc.Z, true);
-    drawDrop(); setLine(S.Z1, true);
-    $('shelf1').innerHTML = cardsHTML(sg.tubes); setShelfCount();
-    $('rule1').innerHTML = S.i === 0 ? RULE : RULE_TH + ' ' + RULE;
-    $('said1').innerHTML = ''; $('cap').textContent = CAP_PRE;
-    setKick(1, false); setNow('Choose where to pinch, or hold.'); controls('choose');
+    TP = buildTable($('tablesvg'), sg.tubes, sg.nuc.Z, true, function (t) { $('cap').textContent = 'Tube "' + t.label + '", filed as ' + t.filed + '.' + (S.st.lit[t.id] ? ' Lit: it is ' + M.nameOf(S.st.lit[t.id].atZ) + '.' : ''); });
+    drawDrop(); $('shelf1').innerHTML = cardsHTML(sg.tubes); setShelfCount();
+    setLine(Math.round(sg.nuc.Z / 2));
+    $('said1').innerHTML = '<p>' + sg.hint + '</p>';
+    setKick(1, false); setNow('Slide the cut, then fire.'); controls('choose');
     show('s-bench');
   }
 
-  // the drop panel
+  // the drop panel: the drop, the hill of chances under it, and the red cut line
   var DP = {};
+  function lineX(Z1) { return DR.cx - DR.rx * 0.9 + (Z1 / S.st.nuc.Z) * DR.rx * 1.8; }
+  function hillY(p) { return HB - HH * p; }
   function drawDrop() {
-    var svg = $('dropsvg'); svg.innerHTML = ''; tonePattern(svg, 'tp1');
+    var svg = $('dropsvg'), nuc = S.st.nuc; svg.innerHTML = ''; tonePattern(svg, 'tp1');
+    // the hill: the chance a cut at each place works
+    var d = 'M' + lineX(1).toFixed(1) + ' ' + HB, top = '';
+    for (var Z = 1; Z <= nuc.Z - 1; Z++) { var pt = lineX(Z).toFixed(1) + ' ' + hillY(M.splitOdds(nuc, Z)).toFixed(1); d += ' L' + pt; top += (Z === 1 ? 'M' : ' L') + pt; }
+    d += ' L' + lineX(nuc.Z - 1).toFixed(1) + ' ' + HB + ' Z';
+    el('path', { d: d, fill: 'url(#tp1)', stroke: 'none' }, svg);
+    el('path', { d: top, fill: 'none', stroke: '#161414', 'stroke-width': 2, 'stroke-linejoin': 'round' }, svg);
+    el('line', { x1: lineX(1), y1: HB, x2: lineX(nuc.Z - 1), y2: HB, stroke: '#161414', 'stroke-width': 1.5 }, svg);
+    txt(svg, DR.cx, 181, 'sure in the middle, rare far out', 'brk');
+    DP.chL = txt(svg, 28, 140, 'chance', 'brk'); DP.chV = txt(svg, 28, 166, '', 'cnt bang', { style: 'font-size:23px' });
     DP.ghost = el('path', { d: blobPath(DR.cx, DR.cy, DR.rx, DR.ry, DR.cx, 0, 0.02, 1), fill: 'none', stroke: '#9A958C', 'stroke-width': 1.5, 'stroke-dasharray': '4 3' }, svg);
     DP.g = el('g', {}, svg);
     DP.body = el('path', { d: blobPath(DR.cx, DR.cy, DR.rx, DR.ry, DR.cx, 0, 0.02, 1), fill: '#fff', stroke: '#161414', 'stroke-width': 3 }, DP.g);
-    DP.shine = el('path', { d: 'M' + (DR.cx - 60) + ' ' + (DR.cy - 18) + ' C' + (DR.cx - 45) + ' ' + (DR.cy - 34) + ' ' + (DR.cx - 20) + ' ' + (DR.cy - 38) + ' ' + (DR.cx) + ' ' + (DR.cy - 38), fill: 'none', stroke: '#161414', 'stroke-width': 2, 'stroke-linecap': 'round', opacity: .5 }, DP.g);
+    DP.shine = el('path', { d: 'M' + (DR.cx - 78) + ' ' + (DR.cy - 14) + ' C' + (DR.cx - 60) + ' ' + (DR.cy - 28) + ' ' + (DR.cx - 30) + ' ' + (DR.cy - 32) + ' ' + (DR.cx - 10) + ' ' + (DR.cy - 32), fill: 'none', stroke: '#161414', 'stroke-width': 2, 'stroke-linecap': 'round', opacity: .5 }, DP.g);
     DP.left = el('path', { d: '', fill: '#fff', stroke: '#161414', 'stroke-width': 3, class: 'hidden' }, svg);
     DP.right = el('path', { d: '', fill: '#fff', stroke: '#161414', 'stroke-width': 3, class: 'hidden' }, svg);
     DP.speed = el('g', { stroke: '#161414', 'stroke-width': 2, 'stroke-linecap': 'round', class: 'hidden' }, svg);
     for (var i = 0; i < 6; i++) { el('line', { x1: 0, y1: 0, x2: 0, y2: 0 }, DP.speed); }
-    DP.line = el('line', { x1: DR.cx, y1: 12, x2: DR.cx, y2: 128, stroke: '#E23A2A', 'stroke-width': 3, 'stroke-dasharray': '7 5' }, svg);
-    DP.knob = el('circle', { cx: DR.cx, cy: 121, r: 9, fill: '#E23A2A', stroke: '#161414', 'stroke-width': 2 }, svg);
+    DP.line = el('line', { x1: DR.cx, y1: 12, x2: DR.cx, y2: HB, stroke: '#E23A2A', 'stroke-width': 3, 'stroke-dasharray': '7 5' }, svg);
+    DP.knob = el('circle', { cx: DR.cx, cy: hillY(1), r: 9, fill: '#E23A2A', stroke: '#161414', 'stroke-width': 2 }, svg);
     DP.n1 = txt(svg, DR.cx - 50, 30, '', 'cnt bang'); DP.n2 = txt(svg, DR.cx + 50, 30, '', 'cnt bang');
     DP.bar = txt(svg, DR.cx, 30, '|', 'cnt bang', { fill: '#9A958C' });
     DP.neutron = el('circle', { cx: 18, cy: 16, r: 6, fill: '#E23A2A', stroke: '#161414', 'stroke-width': 2 }, svg);
     DP.nlab = txt(svg, 30, 20, 'neutron', 'brk', { style: 'text-anchor:start' });
     DP.sfx = txt(svg, DR.cx, DR.cy + 22, '', 'sfx bang', { 'text-anchor': 'middle', 'font-size': 40 });
     DP.sfx.setAttribute('transform', 'rotate(-6 ' + DR.cx + ' ' + DR.cy + ')');
-    DP.eline = txt(svg, DR.cx, 145, '', 'lbl');
-    DP.hit = el('rect', { x: 0, y: 0, width: 340, height: 150, fill: 'transparent' }, svg);
+    DP.eline = txt(svg, DR.cx, 126, '', 'lbl');
     var drag = false;
     function toZ(ev) {
       var r = svg.getBoundingClientRect(), px = (ev.clientX - r.left) / r.width * 340;
-      var p = (px - (DR.cx - DR.rx * 0.9)) / (DR.rx * 1.8);
-      return Math.round(p * S.st.nuc.Z);
+      return Math.round(((px - (DR.cx - DR.rx * 0.9)) / (DR.rx * 1.8)) * S.st.nuc.Z);
     }
     svg.addEventListener('pointerdown', function (ev) { if (busy) return; drag = true; svg.setPointerCapture(ev.pointerId); setLine(toZ(ev)); });
     svg.addEventListener('pointermove', function (ev) { if (!drag || busy) return; setLine(toZ(ev)); });
     svg.addEventListener('pointerup', function () { drag = false; });
     svg.addEventListener('pointercancel', function () { drag = false; });
   }
-  function lineX(Z1) { return DR.cx - DR.rx * 0.9 + (Z1 / S.st.nuc.Z) * DR.rx * 1.8; }
-  function setLine(Z1, silent) {
-    var nuc = S.st.nuc; S.Z1 = M.clampZ1(nuc, Z1); var Z2 = nuc.Z - S.Z1, x = lineX(S.Z1);
-    DP.line.setAttribute('x1', x); DP.line.setAttribute('x2', x); DP.knob.setAttribute('cx', x);
-    var p = M.splitOdds(nuc, S.Z1);
+  function setLine(Z1) {
+    var nuc = S.st.nuc; S.Z1 = M.clampZ1(nuc, Z1); var Z2 = nuc.Z - S.Z1, x = lineX(S.Z1), p = M.splitOdds(nuc, S.Z1);
+    DP.line.setAttribute('x1', x); DP.line.setAttribute('x2', x); DP.knob.setAttribute('cx', x); DP.knob.setAttribute('cy', hillY(p));
+    DP.line.setAttribute('y2', hillY(p));
     DP.body.setAttribute('d', blobPath(DR.cx, DR.cy, DR.rx, DR.ry, x, 0.1 + 0.4 * p, 0.02, 1));
     DP.n1.textContent = S.Z1; DP.n2.textContent = Z2;
     DP.n1.setAttribute('x', (DR.cx - DR.rx + x) / 2); DP.n2.setAttribute('x', (DR.cx + DR.rx + x) / 2); DP.bar.setAttribute('x', x);
-    DP.eline.textContent = p >= 0.999 ? 'here the pinch goes through every time' : 'here the pinch goes through ' + M.oddsWords(p);
-    DP.eline.setAttribute('fill', p >= 0.62 ? '#161414' : '#E23A2A');
-    previewMove(S.Z1);
+    DP.chV.textContent = M.oddsLabel(p); DP.chV.setAttribute('fill', p >= 0.62 ? '#161414' : '#E23A2A');
+    previewMove();
   }
   $('b-left').onclick = function () { if (!busy) setLine(S.Z1 - 1); };
   $('b-right').onclick = function () { if (!busy) setLine(S.Z1 + 1); };
-  function lightTube(id, atZ) { var g = TP.tubes[id], p = cellXY(atZ); g.classList.add('lit'); g.setAttribute('transform', 'translate(' + p.x + ' ' + p.y + ')'); sym(TP, atZ, false); lightCard(id, atZ); }
 
-  // ---------- a move ----------
-  function commit(action) {
+  // the preview: a red box where each piece starts, a dot for each change, a black box where it stops;
+  // shaded columns and tinted cards for the tubes it would light; one line saying so in words.
+  function clearPreview() {
+    TP.hits.forEach(function (h) { h.remove(); }); TP.hits = [];
+    Object.keys(TP.stripes).forEach(function (k) { TP.stripes[k].classList.remove('on'); });
+    document.querySelectorAll('#shelf1 .card').forEach(function (c) { c.classList.remove('will'); c.classList.remove('iffail'); });
+  }
+  function previewMove() {
+    clearPreview();
+    var pv = M.preview(S.st, S.Z1), T = S.st.tubes;
+    pv.pieces.forEach(function (pc) {
+      pc.path.forEach(function (Z, i) {
+        var p = cellXY(Z); if (!p) return;
+        if (i === 0) TP.hits.push(el('rect', { x: p.x + 1, y: p.y + 1, width: TB.cw - 2, height: p.h - 2, class: 'cell hit', fill: 'none' }, TP.hitG));
+        if (i === pc.path.length - 1) TP.hits.push(el('rect', { x: p.x + 2.5, y: p.y + 2.5, width: TB.cw - 5, height: p.h - 5, class: 'cell endc' }, TP.hitG));
+        else if (i > 0) TP.hits.push(el('circle', { cx: p.x + TB.cw / 2, cy: p.c.strip ? p.y + 11 : p.y + 18, r: 2.3, fill: '#161414' }, TP.hitG));
+      });
+    });
+    pv.lights.forEach(function (l) {
+      if (TP.stripes[l.id]) TP.stripes[l.id].classList.add('on');
+      var c = document.querySelector('#shelf1 .card[data-id="' + l.id + '"]'); if (c) c.classList.add('will');
+    });
+    if (pv.failLights) { var cf = document.querySelector('#shelf1 .card[data-id="' + pv.failLights + '"]'); if (cf) cf.classList.add('iffail'); }
+    var names = pv.lights.map(function (l) { return M.tubeById(T, l.id).short; });
+    var s = (pv.p >= 0.995 ? 'This cut always works. It lights: ' : 'If it works, it lights: ') + (names.length ? names.join(', ') : 'nothing new') + '.';
+    if (pv.p < 0.995) s += pv.failLights ? ' If it fails, the drop keeps its neutron and lights the 24-min tube.' : ' If it fails, nothing lights.';
+    $('cap').textContent = s;
+  }
+  function lightTube(id, atZ) {
+    var g = TP.tubes[id], p = cellXY(atZ); g.classList.add('lit'); g.setAttribute('transform', 'translate(' + p.x + ' ' + p.y + ')'); sym(TP, atZ, false); lightCard(id, atZ);
+    if (TP.stripes[id]) { TP.stripes[id].classList.remove('on'); TP.stripes[id].classList.add('lit'); }
+  }
+
+  // ---------- a cut ----------
+  function commit() {
     if (busy || M.stageDone(S.st)) return; busy = true;
-    controls('watch'); clearPreview(); clearPieces();
-    var mv = M.play(S.st, action), nuc = S.st.nuc;
+    controls('watch'); clearPreview();
+    var mv = M.play(S.st, { kind: 'split', Z1: S.Z1 }), nuc = S.st.nuc;
     setKick(S.st.used, false); setNow('Watch!');
     $('said1').innerHTML = ''; $('cap').textContent = ''; DP.eline.textContent = ''; DP.eline.setAttribute('fill', '#161414');
     var steps = [];
-    steps.push([0, function () { animNeutron(mv.kind === 'hold' ? DR.cx : lineX(mv.Z1)); }]);
+    steps.push([0, function () { animNeutron(lineX(mv.Z1)); }]);
     if (mv.kind === 'split') {
       steps.push([350, function () { animNeck(mv); }]);
       steps.push([900, function () { animSnap(mv); }]);
-      steps.push([1500, function () { DP.eline.textContent = 'the halves fly apart with a huge shove' + (mv.uneven ? ' (a smaller one than an even pinch)' : ''); }]);
+      steps.push([1500, function () { DP.eline.textContent = 'the halves fly apart with a huge shove'; }]);
       steps.push([1800, function () { land(mv); }]);
-    } else if (mv.kind === 'rang') {
+    } else {
       steps.push([350, function () { animPullBack(mv); }]);
       steps.push([1900, function () { land(mv); }]);
-    } else {
-      steps.push([350, function () { animRing(mv); }]);
-      steps.push([1500, function () { land(mv); }]);
     }
     steps.forEach(function (s) { setTimeout(s[1], s[0]); });
   }
@@ -853,7 +907,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
     var x = lineX(mv.Z1);
     DP.body.classList.add('hidden'); DP.shine.classList.add('hidden'); DP.line.classList.add('hidden'); DP.knob.classList.add('hidden'); DP.bar.classList.add('hidden');
     var lw = x - (DR.cx - DR.rx), rw = (DR.cx + DR.rx) - x;
-    var lr = Math.max(14, lw * 0.5), rr = Math.max(14, rw * 0.5), lcx = x - lr - 4, rcx = x + rr + 4;
+    var lr = Math.max(8, lw * 0.5), rr = Math.max(8, rw * 0.5), lcx = x - lr - 4, rcx = x + rr + 4;
     DP.left.setAttribute('d', blobPath(lcx, DR.cy, lr, Math.min(DR.ry, lr * 0.95), lcx, 0, 0.05, 2)); DP.left.classList.remove('hidden');
     DP.right.setAttribute('d', blobPath(rcx, DR.cy, rr, Math.min(DR.ry, rr * 0.95), rcx, 0, 0.05, 4)); DP.right.classList.remove('hidden');
     DP.speed.classList.remove('hidden');
@@ -879,45 +933,39 @@ if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
       var w = 0.02 + 0.06 * Math.exp(-2 * k) * Math.sin(k * 20);
       DP.body.setAttribute('d', blobPath(DR.cx, DR.cy, DR.rx * (1 + 0.05 * dep), DR.ry, x, dep, w, 1 + k * 2));
       if (k > 0.75) { DP.line.classList.add('hidden'); DP.knob.classList.add('hidden'); DP.bar.classList.add('hidden'); }
-      if (k < 1) requestAnimationFrame(step); else { DP.eline.textContent = 'no split: the skin won, and the drop kept the neutron'; DP.eline.setAttribute('fill', '#E23A2A'); }
+      if (k < 1) requestAnimationFrame(step); else { DP.eline.textContent = 'the cut failed: the drop kept the neutron'; DP.eline.setAttribute('fill', '#E23A2A'); }
     }
-    requestAnimationFrame(step);
-  }
-  function animRing(mv) {
-    var t0 = performance.now();
-    DP.line.classList.add('hidden'); DP.knob.classList.add('hidden'); DP.bar.classList.add('hidden'); DP.n1.classList.add('hidden'); DP.n2.classList.add('hidden');
-    DP.sfx.textContent = 'RINGS'; DP.sfx.setAttribute('fill', '#161414'); DP.sfx.setAttribute('font-size', 40);
-    function step(now) { var k = Math.min(1, (now - t0) / 1100); var a = 0.1 * Math.exp(-2.5 * k) * Math.sin(k * 24); DP.body.setAttribute('d', blobPath(DR.cx, DR.cy, DR.rx * (1 + a), DR.ry * (1 - a), DR.cx, 0, 0.02, 1)); if (k < 1) requestAnimationFrame(step); else DP.eline.textContent = S.st.nuc.name + '-' + (S.st.nuc.Z + S.st.nuc.N) + ' now; no split, no blast'; }
     requestAnimationFrame(step);
   }
   function land(mv) {
     var pcs = mv.pieces.map(function (p) { return { g: addPiece(TP, p.path[0]), path: p.path, i: 0 }; });
     mv.pieces.forEach(function (p) { sym(TP, p.path[0], false); });
     var litAt = {}; mv.lit.forEach(function (l) { litAt[l.piece + ':' + (l.step || 0)] = l; });
-    function narrate() { $('cap').textContent = pcs.map(function (pc, i) { return (pcs.length > 1 ? (i === 0 ? 'left: ' : 'right: ') : '') + M.nameOf(pc.path[pc.i]) + (pc.i < pc.path.length - 1 ? ' (climbing)' : ' (settled)'); }).join(' · '); }
     function fire(p, i) { var l = litAt[p + ':' + i]; if (l) lightTube(l.id, l.atZ); mv.relit.forEach(function (r) { if (r.piece === p && (r.step || 0) === i) { TP.tubes[r.id].classList.add('shake'); setTimeout(function () { TP.tubes[r.id].classList.remove('shake'); }, 400); } }); }
     pcs.forEach(function (pc, p) { fire(p, 0); });
-    narrate();
+    if (mv.kind !== 'split') { // the tube that holds the drop's own cell lights at once
+      mv.lit.forEach(function (l) { lightTube(l.id, l.atZ); });
+    }
     var maxSteps = Math.max.apply(null, pcs.map(function (pc) { return pc.path.length - 1; }));
     var step = 1;
     function tick() {
       if (step > maxSteps) { pcs.forEach(function (pc) { pc.g.classList.add('done'); }); setTimeout(finish, 450); return; }
       pcs.forEach(function (pc, p) { if (step < pc.path.length) { pc.i = step; movePiece(pc.g, pc.path[step]); sym(TP, pc.path[step], false); fire(p, step); } else pc.g.classList.add('done'); });
-      narrate(); step++;
+      step++;
       setTimeout(tick, 380);
     }
     setTimeout(tick, 500);
     function finish() {
       var lines = M.moveWords(S.st, mv);
       $('said1').innerHTML = lines.map(function (l) { return '<p>' + l + '</p>'; }).join('');
-      $('cap').textContent = 'Red pieces were still changing; black ones settled.';
+      $('cap').textContent = CAP_AFTER;
       var litN = S.st.tubes.filter(function (t) { return S.st.lit[t.id]; }).length;
       busy = false; controls('next');
+      setKick(S.st.used, true);
       if (M.stageDone(S.st)) {
-        setKick(S.st.used, true); setNow(litN === S.st.tubes.length ? 'Every tube explained!' : 'No neutrons left.');
+        setNow(litN === S.st.tubes.length ? 'Every tube is lit!' : 'No neutrons left.');
         $('b-next').textContent = S.i < S.stages.length - 1 ? 'To thorium' : 'The verdict';
-      } else { setKick(S.st.used, true); setNow('Read it, then go on.'); $('b-next').textContent = 'Next neutron'; }
-      try { $('said1').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (e) {}
+      } else { setNow('Read it, then go on.'); $('b-next').textContent = 'Next neutron'; }
     }
   }
   function nextNeutron() {
@@ -927,9 +975,10 @@ if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
       if (S.i < S.stages.length - 1) { S.i++; beginStage(); } else endGame();
       return;
     }
-    drawDrop(); clearPieces(); setLine(Math.round(S.st.nuc.Z / 2));
-    $('said1').innerHTML = ''; $('cap').textContent = CAP_PRE;
-    setKick(S.st.used + 1, false); setNow('Choose where to pinch, or hold.'); controls('choose');
+    TP.pieces.forEach(function (g) { g.remove(); }); TP.pieces = [];
+    drawDrop(); setLine(Math.round(S.st.nuc.Z / 2));
+    $('said1').innerHTML = '';
+    setKick(S.st.used + 1, false); setNow('Slide the cut, then fire.'); controls('choose');
   }
   function endGame() {
     var v = M.verdict(S.done[0], S.done[1]);
@@ -941,11 +990,11 @@ if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
     $('seedline').textContent = 'The draws in this game came from seed ' + S.seed + '. Add ?seed=' + S.seed + ' to the address to play the same draws again.';
     show('s-end');
   }
-  $('b-split').onclick = function () { commit({ kind: 'split', Z1: S.Z1 }); };
-  $('b-hold').onclick = function () { commit({ kind: 'hold' }); };
+  $('b-split').onclick = commit;
   $('b-next').onclick = nextNeutron;
-  $('b-begin').onclick = function () { D0.tapped = {}; busy = false; drawDrops(); $('b-toshelf').classList.add('hidden'); $('now0').textContent = 'Three drops · Tap one'; $('said0').innerHTML = '<p>' + DROPS_SAID + '</p>'; show('s-drops'); };
-  $('b-toshelf').onclick = showShelf;
+  $('b-begin').onclick = showShelf;
+  $('b-why').onclick = openWhy;
+  $('b-back0').onclick = function () { show('s-start'); };
   $('b-tobench').onclick = startGame;
   $('b-again').onclick = function () { show('s-start'); };
   window.__game = { S: S, startGame: startGame, setLine: setLine };
