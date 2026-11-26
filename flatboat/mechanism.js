@@ -85,7 +85,7 @@
   function bankSafe(l, bank) { return bank.held && (!l.battery || bank.batteryOff); }
   // the title block, as the sheet shows it: pushes left, across, lost (with attempts), and the far shore at a landing
   function titleBlock(state, landingId) {
-    var b = state.banks[landingId];
+    var b = state.banks[landingId] || { men: 0, feet: 0, guns: 0, batteryOff: false };   // no landing chosen yet: an empty shore
     return { pushesLeft: CONFIG.PUSHES - state.pushes, across: state.across, lost: lostAll(state), attempts: state.attempts,
              bank: { men: b.men, feet: b.feet, guns: b.guns, batteryOff: b.batteryOff } };
   }

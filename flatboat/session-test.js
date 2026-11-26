@@ -24,7 +24,7 @@ const { chromium } = require('playwright'); const path = require('path'); const 
     for (let i = 0; i < men / 10; i++) await page.click('#men-plus');
     await page.waitForTimeout(150);
   };
-  const fits700 = async (where) => { const b = await page.evaluate(() => document.getElementById('b-push').getBoundingClientRect().bottom); log.push(where + ': Push off bottom at ' + Math.round(b) + ' px'); if (b > 700) errors.push('Push off below 700 px at ' + where + ' (' + Math.round(b) + ')'); };
+  const fits700 = async (where) => { const b = await page.evaluate(() => { const e = document.getElementById('b-push'); return e.classList.contains('hide') ? document.getElementById('landings').getBoundingClientRect().bottom : e.getBoundingClientRect().bottom; }); log.push(where + ': Push off bottom at ' + Math.round(b) + ' px'); if (b > 700) errors.push('Push off below 700 px at ' + where + ' (' + Math.round(b) + ')'); };
   const tb = () => page.evaluate(() => ({ pushes: document.getElementById('tb-pushes').textContent, across: document.getElementById('tb-across').textContent, lost: document.getElementById('tb-lost').textContent, bank: document.getElementById('tb-bank').textContent + ' ' + document.getElementById('tb-bank2').textContent }));
   // push off and step through every frame; the title block at the START of each frame must be the one before the push's
   // events (never the future), and at the end of the last frame it must equal the state

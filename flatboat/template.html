@@ -53,7 +53,7 @@ b,strong{font-weight:600}
 .sheet{display:block;width:100%;border:1.5px solid var(--ink);background:var(--sheet)}
 .sum{font-size:15px;letter-spacing:0;margin:3px 0 2px;min-height:18px}
 .landings{display:flex;gap:8px;margin:4px 0 1px}
-.landings .btn{flex:1;min-height:38px;font-size:15px;padding:4px 6px;margin:0;line-height:1.15}
+.landings .btn{flex:1;min-height:52px;font-size:16px;padding:6px 8px;margin:0;line-height:1.15}
 .landings .btn.on{background:var(--ink);color:var(--paper)}
 .dials{display:flex;gap:8px;margin:4px 0 8px}
 .dial{flex:1;border:1.5px solid var(--ink);padding:6px 6px 6px;text-align:center;background:var(--paper)}
@@ -141,6 +141,7 @@ b,strong{font-weight:600}
     <div class="dial"><div class="lab cond">Soldiers</div><div class="val cond" id="d-men">0</div><div class="sub" id="d-men-sub">a tenth of a ton each</div><div class="pm"><button id="men-minus" aria-label="fewer soldiers">−</button><button id="men-plus" aria-label="more soldiers">+</button></div></div>
   </div>
   <button class="btn solid cond" id="b-push">Push off</button>
+  <button class="btn cond hide" id="b-skip">Skip the general’s boat</button>
   <div class="frame hide" id="frame"><div class="step cond" id="frame-step"></div><div id="frame-text"></div></div>
   <button class="btn solid cond hide" id="b-step">Next</button>
   <div class="result hide" id="result"></div>
@@ -187,7 +188,7 @@ b,strong{font-weight:600}
   <h2 class="cond">The rest of the army</h2>
   <p>The rest cross in ordinary boats as soon as nothing on the far shore can fire on the river. Until then they wait. There are 3 pushes before dark in each crossing, and no push after.</p>
   <h2 class="cond">Two crossings</h2>
-  <p>Below the Lech, opposite the enemy cannons, with the big flatboat; it opens with the general's own first plan, a boat of sixty soldiers, so you can see what happens to it. The narrows, with shallow boats of 6 tons and two landings to choose from: A, opposite the enemy's small cannons, or B, a mile upstream, out of reach of their cannons, where only soldiers with muskets wait. Tap A or B before you load.</p>
+  <p>Below the Lech, opposite the enemy cannons, with the big flatboat; it opens with the general's own first plan, a boat of sixty soldiers, so you can see what happens to it. The narrows, with shallow boats of 6 tons and two landings to choose from: A, opposite the enemy's small cannons, or B, a mile upstream, out of reach of their cannons, where only soldiers with muskets wait. Nothing is chosen for you: the dials appear once you have tapped A or B.</p>
   <h2 class="cond">The verdict</h2>
   <p>After each crossing: how many soldiers you put across by dark. At the end: the army's fate, in words; the most each boat could have put across, with the loading that does it; and where your loadings parted from the paper's.</p>
   <div class="close" style="position:static"><button class="btn cond" id="b-help-close2">Back to the sheet</button></div>
@@ -264,6 +265,7 @@ b,strong{font-weight:600}
   function farShoreSVG(l, bank, opts) {
     opts = opts || {};
     var s = [], e = [];
+    if (!l) return txt(336, 46, 'WHERE WILL YOU LAND?', { size: 10.5, fill: RED, anchor: 'end' }) + txt(336, 60, 'TAP A OR B BELOW THE SHEET', { size: 10.5, fill: RED, anchor: 'end' });
     if (l.battery) { for (var i = 0; i < l.guns; i++) e.push(el('g', { transform: 'translate(' + (G.enemyX + i * 10) + ',' + G.terrace + ') scale(.9)' }, el('use', { href: '#rgun', x: -20, y: -18, width: 36, height: 20 }))); }
     else { for (var j = 0; j < 3; j++) e.push(el('use', { href: '#rman', x: G.enemyX - 8 + j * 7, y: G.terrace - 24, width: 9, height: 25 })); }
     var off = bank.batteryOff;
@@ -304,7 +306,7 @@ b,strong{font-weight:600}
   // the whole sheet: ground, the far shore as it stands (bank), the rest, the boat at `bow`, the labels
   function sheetSVG(ld, bank, opts) {
     opts = opts || {};
-    var l = M.landing(cr, ld.landing), dr = M.draught(cr, ld), s = [];
+    var l = ld.landing ? M.landing(cr, ld.landing) : null, dr = M.draught(cr, ld), s = [];
     s.push(groundSVG());
     s.push(farShoreSVG(l, bank));
     s.push(restSVG(opts.crossed));
@@ -313,18 +315,19 @@ b,strong{font-weight:600}
     if (!opts.noWater) s.push(waterLabel(ld, (opts.bow || G.bowStart), dr));
     s.push(el('g', { id: 'over' }));
     s.push(txt(6, 17, opts.big || '', { size: 15, id: 'biglabel', fill: opts.bigColour }));
-    s.push(txt(6, 31, recordLine(l.fire), { size: 10.5, fill: RED, id: 'record' }));
-    if (cr.landings.length > 1) s.push(txt(6, 45, 'LANDING ' + l.letter + ' · ' + (l.id === 'up' ? 'A MILE UPSTREAM' : 'OPPOSITE THEIR SMALL CANNONS'), { size: 10.5 }));
+    s.push(txt(6, 31, l ? recordLine(l.fire) : 'TWO LANDINGS: A, OPPOSITE THEIR SMALL CANNONS; B, A MILE UPSTREAM', { size: 10.5, fill: RED, id: 'record' }));
+    if (l && cr.landings.length > 1) s.push(txt(6, 45, 'LANDING ' + l.letter + ' · ' + (l.id === 'up' ? 'A MILE UPSTREAM' : 'OPPOSITE THEIR SMALL CANNONS'), { size: 10.5 }));
     return s.join('');
   }
-  function drawLoading() { var ok = M.floats(cr, load), H = M.hull(cr); setSheet(sheetSVG(load, state.banks[load.landing], { flooded: !ok, big: ok ? H.name.toUpperCase().replace('THE ', '') + ' · HOLDS ' + H.tuns + ' TONS OF WATER' : 'IT SINKS: MORE THAN ' + H.tuns + ' TONS', bigColour: ok ? INK : RED })); }
+  function drawLoading() { var ok = M.floats(cr, load), H = M.hull(cr); setSheet(sheetSVG(load, state.banks[load.landing] || { men: 0, feet: 0, guns: 0, batteryOff: false }, { flooded: !ok, big: ok ? H.name.toUpperCase().replace('THE ', '') + ' · HOLDS ' + H.tuns + ' TONS OF WATER' : 'IT SINKS: MORE THAN ' + H.tuns + ' TONS', bigColour: ok ? INK : RED })); }
   function bigLabel(t, colour) { var b = $('biglabel'); if (b) { b.textContent = t; b.setAttribute('fill', colour || INK); } }
   function moveBoat(toBow, ms, done) { var b = $('boat'), from = b ? +(b.getAttribute('transform').match(/translate\(([-\d.]+)/) || [0, 0])[1] : 0, to = toBow - G.bowStart; tween(ms, function (p) { var x = from + (to - from) * ease(p); setA('boat', 'transform', 'translate(' + x + ',0)'); var wl = $('wlabel'); if (wl) wl.setAttribute('x', G.bowStart + x + 6); }, done); }
 
   // ---------- the loading screen ----------
-  function resetLoad() { load = { feet: 0, guns: 0, men: 0, landing: load && cr.landings.length > 1 ? load.landing : cr.landings[0].id }; }
+  // a crossing with a choice of landing opens with none chosen: the player taps A or B before anything else is live
+  function resetLoad() { load = { feet: 0, guns: 0, men: 0, landing: cr.landings.length > 1 ? (load ? load.landing : null) : cr.landings[0].id }; }
   function dialsUI() {
-    var fire = M.landing(cr, load.landing).fire, kn = game.known[fire], rec = [];
+    var fire = load.landing ? M.landing(cr, load.landing).fire : null, kn = fire && game.known[fire], rec = [];
     if (kn && kn.stuckAt !== null) rec.push('a shot stuck ' + W('feetHalf')(kn.stuckAt) + ' in'); else if (kn && kn.throughAt) rec.push('a shot went through ' + kn.throughAt + ' ft');
     $('d-feet').textContent = load.feet + ' ft';
     $('d-feet-sub').textContent = (load.feet ? W('tons')(load.feet * C.FOOT_T) + ' · ' : '2 tons a foot · ') + (rec.length ? rec[0] : 'not yet measured');
@@ -338,12 +341,15 @@ b,strong{font-weight:600}
     $('sum').textContent = M.sumLine(cr, load);
     $('sum').style.color = M.floats(cr, load) ? '' : RED;
     $('b-push').textContent = M.floats(cr, load) ? 'Push off' : 'Push off (it will sink)';
-    $('b-push').disabled = !load.feet && !load.guns && !load.men;
+    $('b-push').disabled = (!load.feet && !load.guns && !load.men) || !load.landing;
+    $('dials').classList.toggle('hide', !load.landing); $('b-push').classList.toggle('hide', !load.landing);
+    $('sum').classList.toggle('hide', !load.landing);
+    $('donow').textContent = cr.landings.length > 1 && !load.landing ? 'Shallow boats: 6 tons. Where will you land? Tap A or B.' : $('donow').textContent;
   }
   function landingsUI() {
     var box = $('landings'); box.classList.toggle('hide', cr.landings.length < 2 || phase !== 'load'); box.innerHTML = '';
     if (cr.landings.length < 2) return;
-    cr.landings.forEach(function (l) { var b = document.createElement('button'); b.className = 'btn cond' + (load.landing === l.id ? ' on' : ''); b.id = 'land-' + l.id; b.textContent = l.letter + ' · ' + (l.id === 'up' ? 'a mile upstream · muskets only' : 'opposite their small cannons'); b.onclick = function () { if (phase !== 'load') return; load.landing = l.id; drawLoading(); landingsUI(); dialsUI(); topUI(); }; box.appendChild(b); });
+    cr.landings.forEach(function (l) { var b = document.createElement('button'); b.className = 'btn cond' + (load.landing === l.id ? ' on' : ''); b.id = 'land-' + l.id; b.textContent = l.letter + ' · ' + (l.id === 'up' ? 'a mile upstream · muskets only' : 'opposite their small cannons'); b.onclick = function () { if (phase !== 'load') return; load.landing = l.id; $('donow').textContent = 'Landing ' + l.letter + '. Load the boat, then push off.'; drawLoading(); landingsUI(); dialsUI(); topUI(); }; box.appendChild(b); });
   }
   // the title block: from the state while loading, from a frame's own `tb` while a push plays
   function topUI(tb) {
@@ -371,30 +377,33 @@ b,strong{font-weight:600}
     if (cr.opening && !state.openingDone) {
       phase = 'opening'; load.feet = C.OPENING.feet; load.guns = C.OPENING.guns; load.men = C.OPENING.men;
       $('donow').textContent = 'First, the general’s own plan: a boat of ' + C.OPENING.men + ' soldiers. Push it off and watch.';
-      $('dials').classList.add('hide'); $('b-push').classList.remove('hide'); $('b-push').textContent = 'Push off the general’s boat'; $('b-push').disabled = false;
+      $('dials').classList.add('hide'); $('b-push').classList.remove('hide'); $('b-push').textContent = 'Push off the general’s boat'; $('b-push').disabled = false; $('b-skip').classList.remove('hide');
       drawLoading(); $('sum').textContent = M.sumLine(cr, load); landingsUI(); topUI(); show('s-play'); return;
     }
-    phase = 'load'; $('donow').textContent = cr.landings.length > 1 ? 'Shallow boats: 6 tons. Tap a landing, load, push off.' : 'Load the boat, then push off.';
-    $('dials').classList.remove('hide'); $('b-push').classList.remove('hide');
+    phase = 'load'; $('donow').textContent = cr.landings.length > 1 ? 'Shallow boats: 6 tons. Where will you land? Tap A or B.' : 'Load the boat, then push off.';
+    $('dials').classList.remove('hide'); $('b-push').classList.remove('hide'); $('b-skip').classList.add('hide');
     drawLoading(); dialsUI(); landingsUI(); topUI(); show('s-play');
   }
   function nextBoat() {
     resetLoad(); phase = 'load';
     $('donow').textContent = state.pushes ? 'Load the next boat.' : 'Now you load. Three pushes before dark.';
-    hideAll(); briefUI(); $('dials').classList.remove('hide'); $('b-push').classList.remove('hide'); $('sum').classList.remove('hide');
+    hideAll(); briefUI(); $('dials').classList.remove('hide'); $('b-push').classList.remove('hide'); $('b-skip').classList.add('hide'); $('sum').classList.remove('hide');
+    $('b-push').textContent = 'Push off';
     drawLoading(); dialsUI(); landingsUI(); topUI(); window.scrollTo(0, 0);
   }
+  function skipOpening() { if (phase !== 'opening') return; state.openingDone = true; nextBoat(); }
   function step(what, d) { if (phase !== 'load') return; load[what] = Math.max(0, Math.min(what === 'feet' ? C.MAX_FEET : what === 'guns' ? C.MAX_GUNS : C.MAX_MEN, load[what] + d)); dialsUI(); drawLoading(); }
 
   // ---------- the push: the frames, one at a time ----------
   function pushOff() {
     if (phase !== 'load' && phase !== 'opening') return;
+    if (!load.landing) return;
     var opening = phase === 'opening';
     var ld = { feet: load.feet, guns: load.guns, men: load.men, landing: load.landing };
     var tb0 = M.titleBlock(state, ld.landing), bank0 = JSON.parse(JSON.stringify(state.banks[ld.landing]));
     var r = M.push(state, ld, { opening: opening }); lastResult = r;
     phase = 'frames'; frames = r.frames; fi = 0; frameCtx = { ld: ld, l: M.landing(cr, ld.landing), r: r, opening: opening, tb0: tb0, bank0: bank0 };
-    $('dials').classList.add('hide'); $('b-push').classList.add('hide'); $('landings').classList.add('hide'); $('brief').classList.add('hide');
+    $('dials').classList.add('hide'); $('b-push').classList.add('hide'); $('b-skip').classList.add('hide'); $('landings').classList.add('hide'); $('brief').classList.add('hide');
     $('frame').classList.remove('hide'); $('b-step').classList.remove('hide');
     $('donow').textContent = (opening ? 'The general’s boat. ' : 'Push ' + r.push + ' of ' + C.PUSHES + '. ') + 'Tap Next for each step.';
     topUI(tb0);
@@ -606,6 +615,7 @@ b,strong{font-weight:600}
   $('b-begin').onclick = newGame;
   $('b-again').onclick = newGame;
   $('b-push').onclick = pushOff;
+  $('b-skip').onclick = skipOpening;
   $('b-step').onclick = stepFrame;
   $('b-next').onclick = nextBoat;
   $('b-nextcross').onclick = function () { if (k < C.CROSSINGS.length - 1) startCrossing(k + 1); else endScreen(); };

@@ -29,18 +29,18 @@ a-1b-p2 frame 3/4 [land]: The boat reaches the far shore. The soldiers carry the
 a-1b-p2 frame 4/4 [rest]: Nothing fires on the river now. The rest of the army crosses in ordinary boats: 300 soldiers before dark.  | tb at start {"pushes":"▮▯▯","across":"40","lost":"40","bank":"40 soldiers 5 ft · 1 cannon"} | tb at end {"pushes":"▮▯▯","across":"340","lost":"40","bank":"40 soldiers 5 ft · 1 cannon"}
 a-1b-p2 RESULT: Landed, dug in, and the rest of the army crossed. / Push 2: 4 ft of earth, a cannon, 20 soldiers. 20 soldiers now on the far shore behind 5 ft of earth, with a cannon.
 C1 VERDICT: By dark: 340 soldiers across. Lost on the way: 40 soldiers, over 2 attempts. / Leibniz: make the boats cannon-proof with the very earth they carry, put cannons and soldiers in them, and let that earth cover and entrench the soldiers the moment they land; then the rest of the army passes under the cover of that wall and with the help of the cannons that have crossed.
-crossing 2: Push off bottom at 679 px
+crossing 2: Push off bottom at 453 px
 help closed back to the sheet: true
 sink preview sum: EARTH 4 FT + NO CANNON + NO SOLDIERS = 8 TONS OF 6 — IT SINKS | button: PUSH OFF (IT WILL SINK)
 a-2-p1 frame 1/1 [sink]: Your boat is loaded with 8 tons. The hull holds 6 tons of water, so it carries 6 tons and no more. It sinks at the bank in shallow water; the soldiers wade out, nobody is hurt, and the push is lost.  | tb at start {"pushes":"▮▮▮","across":"0","lost":"0","bank":"nobody "} | tb at end {"pushes":"▮▮▯","across":"0","lost":"0","bank":"nobody "}
 a-2-p1 RESULT: Sank at the bank. Nobody hurt. / Push 1: 4 ft of earth, no cannon, no soldiers at A. Nobody landed. / Across by dark so far: 0. 2 pushes left before dark.
-crossing 2 at A, loaded: Push off bottom at 655 px
+crossing 2 at A, loaded: Push off bottom at 686 px
 a-2-p2 frame 1/4 [push]: Your boat pushes off with 2 ft of earth, no cannon, 20 soldiers aboard.  | tb at start {"pushes":"▮▮▯","across":"0","lost":"0","bank":"nobody "} | tb at end {"pushes":"▮▯▯","across":"0","lost":"0","bank":"nobody "}
 a-2-p2 frame 2/4 [stuck]: The enemy’s small cannons fire. A small cannonball hits the heap of earth at the front and goes 1½ ft in before it stops. Your heap is 2 ft, so it holds: the boat is not hurt.  | tb at start {"pushes":"▮▯▯","across":"0","lost":"0","bank":"nobody "} | tb at end {"pushes":"▮▯▯","across":"0","lost":"0","bank":"nobody "}
 a-2-p2 frame 3/4 [land]: The boat reaches the far shore. The soldiers carry the sacks up the bank and stack them into a wall, 2 ft thick, and crouch behind it.  | tb at start {"pushes":"▮▯▯","across":"0","lost":"0","bank":"nobody "} | tb at end {"pushes":"▮▯▯","across":"20","lost":"0","bank":"20 soldiers 2 ft wall"}
 a-2-p2 frame 4/4 [wait]: But the enemy cannons still fire on the river, so ordinary boats cannot cross. The rest wait. Only a cannon of yours, behind the wall, could drive the enemy cannons off.  | tb at start {"pushes":"▮▯▯","across":"20","lost":"0","bank":"20 soldiers 2 ft wall"} | tb at end {"pushes":"▮▯▯","across":"20","lost":"0","bank":"20 soldiers 2 ft wall"}
 a-2-p2 RESULT: Landed and dug in. The rest wait. / Push 2: 2 ft of earth, no cannon, 20 soldiers at A. 20 soldiers now on the far shore behind 2 ft of earth. / Across by dark so far: 20. 1 push left before dark.
-crossing 2 at B, loaded: Push off bottom at 655 px
+crossing 2 at B, loaded: Push off bottom at 686 px
 a-2-p3 frame 1/4 [push]: Your boat pushes off with 1 ft of earth, no cannon, 40 soldiers aboard.  | tb at start {"pushes":"▮▯▯","across":"20","lost":"0","bank":"nobody "} | tb at end {"pushes":"▯▯▯","across":"20","lost":"0","bank":"nobody "}
 a-2-p3 frame 2/4 [stuck]: The enemy soldiers fire. A musket shot hits the heap of earth at the front and goes ½ ft in before it stops. Your heap is 1 ft, so it holds: the boat is not hurt.  | tb at start {"pushes":"▯▯▯","across":"20","lost":"0","bank":"nobody "} | tb at end {"pushes":"▯▯▯","across":"20","lost":"0","bank":"nobody "}
 a-2-p3 frame 3/4 [land]: The boat reaches the far shore. The soldiers carry the sacks up the bank and stack them into a wall, 1 ft thick, and crouch behind it.  | tb at start {"pushes":"▯▯▯","across":"20","lost":"0","bank":"nobody "} | tb at end {"pushes":"▯▯▯","across":"60","lost":"0","bank":"40 soldiers 1 ft wall"}
