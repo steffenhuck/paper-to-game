@@ -2,7 +2,7 @@
 // Runs unchanged in Node (calibration.js, loop.js) and in the browser (the game passes actions in and draws what comes back).
 // Mechanism kind: TOY, built to illustrate the argument of Peter Singer, "All Animals Are Equal", Philosophic Exchange 5(1), 1974,
 // pp. 103-116 (the journal's own text, SUNY open repository). Page numbers below are the journal's.
-// Revision 4 (26 Nov 2026): the player picks who counts with no ruler in sight (round 0), then sees each ruler in turn and may move
+// Revision 5 (26 Nov 2026): the question is the paper's own, whose pain counts as much as yours. The player answers with no ruler in sight (round 0), then sees each ruler in turn and may move
 // anyone or keep the line (rounds 1-4, Reason, Talk, Aware, Suffer); each line is named by its shape; the verdict synthesises the five
 // lines (who moved you, when) and the experiment reads the last one.
 
@@ -39,7 +39,7 @@ var CONFIG = {
       { id: 'less',  text: 'Because the chimpanzee matters less.' },
       { id: 'none',  text: 'No reason. Either would have done.' }
     ],
-    outOption: { id: 'out', text: 'The baby is out on my line too.' } // offered only when the player's own line put the baby out
+    outOption: { id: 'out', text: 'On my line the baby\'s pain counts for less too.' } // offered only when the player's own line put the baby out
   },
   PAPER_ORDERINGS: [
     { ruler: 'reason', above: ['horse', 'dog'],        below: ['infant'],                      strict: true,  src: 'p. 106, Bentham: a full-grown horse or dog is beyond comparison a more rational animal than an infant of a day' },
@@ -97,11 +97,11 @@ function revealWords(set, rulerId) {
   if (t.line) {
     if (t.empty) return r.label + ' draws your line: nobody reads high enough.';
     if (t.full) return r.label + ' draws your line: everyone reads high enough, even the stone, which reads nothing.';
-    return r.label + ' draws your line. Everyone you put in reads higher than everyone you left out.';
+    return r.label + ' draws your line. Everyone whose pain you counted in full reads higher than everyone you counted for less.';
   }
   var a = castById(t.clash[0]), b = castById(t.clash[1]);
-  if (t.tie) return 'On ' + r.label + ', ' + a.phrase + ' is in and ' + b.phrase + ' is out, and they read the same. No line on ' + r.label + ' can part them.';
-  return 'On ' + r.label + ', ' + a.phrase + ' is in with ' + a[rulerId] + ', and ' + b.phrase + ' is out with ' + b[rulerId] + '. They are the wrong way round. No line on ' + r.label + ' does that.';
+  if (t.tie) return 'On ' + r.label + ', ' + a.phrase + ' counts as much as you and ' + b.phrase + ' for less, and they read the same. No line on ' + r.label + ' can part them.';
+  return 'On ' + r.label + ', ' + a.phrase + ' counts as much as you with ' + a[rulerId] + ', and ' + b.phrase + ' for less with ' + b[rulerId] + '. They are the wrong way round. No line on ' + r.label + ' does that.';
 }
 
 // ---------- The shape of the set ----------
@@ -124,38 +124,38 @@ function shapeWords(set) {
   var s = shapeOf(set), w = {};
   if (s.id === 'species') {
     w.name = 'Species'; w.headline = 'No ruler drew your line.';
-    w.who = 'You put in the four people and nobody else. No ruler draws that line: on every ruler you could read, an animal reads higher than a person you kept in, and on Suffer they all read the same. The line has a name. It is the one most people draw without thinking: Species.';
+    w.who = 'The four people\'s pain counts as much as yours, and nobody else\'s does. No ruler draws that line: on every ruler you could read, an animal reads higher than a person you kept in, and on Suffer they all read the same. The line has a name. It is the one most people draw without thinking: Species.';
     w.singer = '';
   } else if (s.id === 'singer') {
     w.name = 'Singer\'s line'; w.headline = 'Suffer drew your line.';
-    w.who = 'You put in everyone but the stone. One ruler draws exactly that line: Suffer, which reads the same for all nine and nothing for the stone.' + (s.lines.length === 1 ? ' No other ruler does: on Reason, Talk and Aware the grown-up whose brain is hurt reads none, like the stone, so no line on them can part the two.' : '');
-    w.singer = 'That is Singer\'s line. He says it is the only line that is not drawn by hand: whoever can feel pain has something to lose, so whoever can feel pain counts, and their pain counts as much as anyone\'s. Most people draw a different line, the four people. It is dashed below; keep it in mind for the next board.';
+    w.who = 'Everyone\'s pain counts as much as yours, and the stone has none. One ruler draws exactly that line: Suffer, which reads the same for all nine and nothing for the stone.' + (s.lines.length === 1 ? ' No other ruler does: on Reason, Talk and Aware the grown-up whose brain is hurt reads none, like the stone, so no line on them can part the two.' : '');
+    w.singer = 'That is Singer\'s line. He says it is the only line that is not drawn by hand: pain is pain, whoever feels it, so whoever can feel pain counts, and their pain counts as much as anyone\'s. Most people draw a different line, the four people. It is dashed below; keep it in mind for the next board.';
   } else if (s.id === 'everything') {
     w.name = 'Everything'; w.headline = 'Everyone in, the stone too.';
-    w.who = 'You put in all ten, the stone as well. Every ruler draws that line, because it is no line at all: nobody is out.';
+    w.who = 'Everyone\'s pain counts as much as yours, the stone\'s too. Every ruler draws that line, because it is no line at all: nobody is out.';
     w.singer = 'Singer would ask about the stone. A stone cannot feel pain, so nothing you do to it is good or bad for the stone. It has nothing to lose. He puts his line one step above yours: everyone who can feel pain, which is all of them but the stone. It is dashed below, with the line most people draw.';
   } else if (s.id === 'nothing') {
     w.name = 'Nobody'; w.headline = 'Nobody in.';
-    w.who = 'You put nobody in. Every ruler draws that line, because it is no line at all.';
-    w.singer = 'Singer would ask whether you count. If you do, the question is why, and the four rulers are the answers people give. His own: because you can feel pain. And so can nine of the ten. His line is dashed below, with the line most people draw.';
+    w.who = 'Nobody\'s pain counts as much as yours. Every ruler draws that line, because it is no line at all.';
+    w.singer = 'Singer would ask whether your own pain counts. If it does, the question is why, and the four rulers are the answers people give. His own: because you can feel it. And so can nine of the ten. His line is dashed below, with the line most people draw.';
   } else if (s.id === 'line') {
     var labs = s.lines.map(function (id) { return rulerById(id).label; });
     w.name = 'A ' + labs[0] + ' line'; w.headline = labs.join(' and ') + ' drew your line.';
-    w.who = (labs.length === 1 ? labs[0] + ' draws your line' : labs.join(' and ') + ' both draw your line') + ': everyone you put in reads higher than everyone you left out.' + (s.out.length ? ' It keeps out ' + listPhrases(s.out) + '.' : '') + (s.inAnimals.length ? ' It lets in ' + listPhrases(s.inAnimals) + '.' : '');
+    w.who = (labs.length === 1 ? labs[0] + ' draws your line' : labs.join(' and ') + ' both draw your line') + ': everyone whose pain counts in full reads higher than everyone whose pain counts for less.' + (s.out.length ? ' It counts ' + listPhrases(s.out) + ' for less.' : '') + (s.inAnimals.length ? ' It counts ' + listPhrases(s.inAnimals) + ' in full.' : '');
     w.singer = 'Singer says a line like that is straight, but it is in the wrong place. ' + (s.out.length ? listPhrases(s.out).charAt(0).toUpperCase() + listPhrases(s.out).slice(1) + (s.out.length === 1 ? ' reads' : ' read') + ' low on ' + labs[0] + ' but ' + (s.out.length === 1 ? 'feels' : 'feel') + ' pain exactly as much as the grown-up. ' : '') + 'Picking ' + labs[0] + ' to decide who counts is, he says, like picking skin colour: a mark that has nothing to do with being hurt. His line is one ruler over: everyone who can feel pain. It is dashed below, with the line most people draw.';
   } else if (s.id === 'species-plus') {
     w.name = 'Species, with favourites'; w.headline = 'No ruler drew your line.';
-    w.who = 'You put in the four people, and ' + listPhrases(s.added) + '. No ruler draws that line: ' + clashSentence(set) + ' The line is the one most people draw, Species, with ' + (s.added.length === 1 ? 'one favourite' : s.added.length + ' favourites') + ' let in.';
-    w.singer = 'Singer would ask what ' + listPhrases(s.added) + (s.added.length === 1 ? ' has' : ' have') + ' that the ones you left out do not. Not a higher mark on any ruler. What ' + (s.added.length === 1 ? 'it has' : 'they have') + ' is that you know ' + (s.added.length === 1 ? 'it' : 'them') + '. That is a fact about you, not about ' + (s.added.length === 1 ? 'it' : 'them') + '. His line is dashed below: everyone who can feel pain.';
+    w.who = 'The four people\'s pain counts as much as yours, and so does ' + listPhrases(s.added) + '\'s. No ruler draws that line: ' + clashSentence(set) + ' The line is the one most people draw, Species, with ' + (s.added.length === 1 ? 'one favourite' : s.added.length + ' favourites') + ' let in.';
+    w.singer = 'Singer would ask what ' + listPhrases(s.added) + (s.added.length === 1 ? ' has' : ' have') + ' that the ones you counted for less do not. Not a higher mark on any ruler. What ' + (s.added.length === 1 ? 'it has' : 'they have') + ' is that you know ' + (s.added.length === 1 ? 'it' : 'them') + '. That is a fact about you, not about ' + (s.added.length === 1 ? 'it' : 'them') + '. His line is dashed below: everyone who can feel pain.';
   } else if (s.id === 'species-minus') {
     w.name = 'Species, with exceptions'; w.headline = 'No ruler drew your line.';
-    w.who = 'You put in ' + listPhrases(set) + ' and left out ' + listPhrases(s.dropped) + ', and every animal. No ruler draws that line: ' + clashSentence(set) + ' It is the line most people draw, Species, with ' + (s.dropped.length === 1 ? 'one person' : s.dropped.length + ' people') + ' cut out.';
-    w.singer = 'Singer would ask why ' + listPhrases(s.dropped) + (s.dropped.length === 1 ? ' is' : ' are') + ' out. Not because of a mark: on Suffer ' + (s.dropped.length === 1 ? 'it reads' : 'they read') + ' the same as everyone you kept in, and the animals you left out read higher on Reason and Aware. The line is still the team, with a cut no ruler makes. His line is dashed below: everyone who can feel pain.';
+    w.who = cap(listPhrases(set)) + ': their pain counts as much as yours. Not ' + listPhrases(s.dropped) + '\'s, and no animal\'s. No ruler draws that line: ' + clashSentence(set) + ' It is the line most people draw, Species, with ' + (s.dropped.length === 1 ? 'one person' : s.dropped.length + ' people') + ' cut out.';
+    w.singer = 'Singer would ask why ' + listPhrases(s.dropped) + (s.dropped.length === 1 ? ' counts' : ' count') + ' for less. Not because of a mark: on Suffer ' + (s.dropped.length === 1 ? 'it reads' : 'they read') + ' the same as everyone you counted in full, and the animals you counted for less read higher on Reason and Aware. The line is still the team, with a cut no ruler makes. His line is dashed below: everyone who can feel pain.';
   } else {
     var near = s.nearest === 'singer' ? 'Singer\'s line, everyone who can feel pain' : 'the line most people draw, the four people';
     w.name = 'Your own line'; w.headline = 'No ruler drew your line.';
-    w.who = 'You put in ' + listPhrases(set) + '. No ruler draws that line: ' + clashSentence(set) + ' It is nearest to ' + near + (s.added.length ? ', with ' + listPhrases(s.added) + ' added' : '') + (s.dropped.length ? (s.added.length ? ' and ' : ', with ') + listPhrases(s.dropped) + ' dropped' : '') + '.';
-    w.singer = 'Singer would ask what the ones you put in share that the ones you left out do not. No ruler says. His own answer is one ruler, Suffer, and it draws the dashed line below: everyone who can feel pain. The other dashed line is the one most people draw.';
+    w.who = cap(listPhrases(set)) + ': their pain counts as much as yours, and nobody else\'s does. No ruler draws that line: ' + clashSentence(set) + ' It is nearest to ' + near + (s.added.length ? ', with ' + listPhrases(s.added) + ' added' : '') + (s.dropped.length ? (s.added.length ? ' and ' : ', with ') + listPhrases(s.dropped) + ' dropped' : '') + '.';
+    w.singer = 'Singer would ask what the ones you counted in full share that the others do not. No ruler says. His own answer is one ruler, Suffer, and it draws the dashed line below: everyone who can feel pain. The other dashed line is the one most people draw.';
   }
   w.shape = s;
   return w;
@@ -167,7 +167,7 @@ function clashSentence(set) {
     if (r.id === 'suffer' || parts.length) return;
     var t = testLine(set, r.id); if (t.line) return;
     var a = castById(t.clash[0]), b = castById(t.clash[1]);
-    parts.push('on ' + r.label + ', ' + a.phrase + ' is in with ' + a[r.id] + ' and ' + b.phrase + ' is out with ' + b[r.id] + ', the wrong way round');
+    parts.push('on ' + r.label + ', ' + a.phrase + ' counts as much as you with ' + a[r.id] + ' and ' + b.phrase + ' for less with ' + b[r.id] + ', the wrong way round');
   });
   var ts = testLine(set, 'suffer');
   if (!ts.line) parts.push('on Suffer they all read the same, so Suffer draws no line between them');
@@ -191,9 +191,9 @@ function judgeExperiment(path, set) {
   if (path.pick === 'nobody') return { status: 'refuse', said: 'You did no experiment.',
     paper: 'Singer asks the scientist one thing only: give the same answer for the baby and for the animal. You did. Neither. He adds that the experiment that saves many lives is a story told to make the point, and that nearly all real experiments on animals would never be done on a baby.' };
   if (who.human) return { status: 'read', said: 'You used ' + who.phrase + '.',
-    paper: (set.indexOf(who.id) >= 0 ? 'On your line ' + who.phrase + ' counts, and you used ' + (who.id === 'infant' ? 'the baby' : 'him') + ' anyway. ' : '') + 'Singer says: whatever you would do to the chimpanzee or the mouse, you must be ready to do to a baby who knows as little and feels as much. You were. He has no quarrel with your ruler. His quarrel is with the experiment itself, which he says almost nobody would do once they had answered this way.' };
-  if (path.why === 'out') return { status: 'read', said: 'You used ' + who.phrase + ', and the baby is out on your line too.',
-    paper: 'Then you are consistent: your line kept the baby out, and you used what your line keeps out. Singer has no quarrel with that as a line. He has one with where it runs: the baby feels the experiment exactly as much as ' + who.phrase + ' does, and as much as you would.' };
+    paper: (set.indexOf(who.id) >= 0 ? 'On your line ' + who.phrase + '\'s pain counts as much as yours, and you used ' + (who.id === 'infant' ? 'the baby' : 'him') + ' anyway. ' : '') + 'Singer says: whatever you would do to the chimpanzee or the mouse, you must be ready to do to a baby who knows as little and feels as much. You were. He has no quarrel with your ruler. His quarrel is with the experiment itself, which he says almost nobody would do once they had answered this way.' };
+  if (path.why === 'out') return { status: 'read', said: 'You used ' + who.phrase + ', and on your line the baby\'s pain counts for less too.',
+    paper: 'Then you are consistent: your line counted the baby\'s pain for less, and you spent it. Singer has no quarrel with that as a line. He has one with where it runs: the baby feels the experiment exactly as much as ' + who.phrase + ' does, and as much as you would.' };
   if (path.why === 'none') return { status: 'read', said: 'You used ' + who.phrase + ', and the baby would have done as well.',
     paper: 'Then your ruler is one you can read. Singer has no quarrel with it. His quarrel is with the experiment: he says that once the baby would have done as well, almost nobody still wants to do it to the chimpanzee or the mouse either.' };
   if (path.why === 'human') return { status: 'species', said: 'You used ' + who.phrase + ', not the baby, because the baby is one of us.',
@@ -206,6 +206,7 @@ function judgeExperiment(path, set) {
     paper: 'So "what it will grow into" was not your ruler after all: it would have let you use the grown-up whose brain is hurt, and you would not. On every ruler you could read, ' + who.phrase + ' was above him. What is left is the team he is on, and Singer says that is the same pattern as the racist\'s.' };
 }
 
+function cap(t) { return t.charAt(0).toUpperCase() + t.slice(1); }
 function lc(name) { return name.indexOf('Singer') === 0 ? name : name.charAt(0).toLowerCase() + name.slice(1); }
 
 // ---------- The five lines: who moved you, when ----------
@@ -229,24 +230,24 @@ function synthesis(lines) {
   mv.forEach(function (x) {
     var lab = rulerById(x.ruler).label;
     if (!x.added.length && !x.dropped.length) tr.push(lab + ' did not move you.');
-    else tr.push(lab + ' moved you: ' + (x.added.length ? 'you let in ' + listPhrases(x.added) : '') + (x.added.length && x.dropped.length ? ' and ' : '') + (x.dropped.length ? 'you put out ' + listPhrases(x.dropped) : '') + '.');
+    else tr.push(lab + ' moved you: ' + (x.added.length ? listPhrases(x.added) + ' now ' + (x.added.length === 1 ? 'counts' : 'count') + ' as much as you' : '') + (x.added.length && x.dropped.length ? ', and ' : '') + (x.dropped.length ? listPhrases(x.dropped) + ' now ' + (x.dropped.length === 1 ? 'counts' : 'count') + ' for less' : '') + '.');
   });
   var head, text;
   if (kind === 'unmoved') {
     head = 'No ruler moved you.';
     var L = last.shape.lines, labs = L.map(function (id) { return rulerById(id).label; }), others = CONFIG.RULERS.filter(function (r) { return L.indexOf(r.id) < 0; }).map(function (r) { return r.label; });
-    text = 'Four rulers, and your line never changed: ' + listPhrases(lines[0]) + (lines[0].length ? ' in' : '') + ', every time. ' +
-      (last.shape.id === 'species' ? 'Four times a ruler put an animal above a person you kept in, and you kept the line where it was. That is a line drawn by hand, and it has a name.'
+    text = 'Four rulers, and your line never changed: ' + listPhrases(lines[0]) + (lines[0].length ? ', as much as yours' : '') + ', every time. ' +
+      (last.shape.id === 'species' ? 'Four times a ruler put an animal above a person whose pain you counted in full, and you kept the line where it was. That is a line drawn by hand, and it has a name.'
       : last.shape.id === 'singer' ? 'Three rulers could not draw it and that did not move you; the fourth could. You had Singer\'s line from the start.'
       : last.shape.id === 'everything' || last.shape.id === 'nothing' ? 'Every ruler draws it, because it is no line at all.'
-      : L.length ? labs.join(' and ') + ' could draw it; ' + others.join(', ') + ' could not, and that did not move you.'
+      : L.length ? labs.join(' and ') + ' could draw it; ' + (others.length > 1 ? others.slice(0, -1).join(', ') + ' and ' + others[others.length - 1] : others[0]) + ' could not, and that did not move you.'
       : 'No ruler could draw it, and that did not move you.');
   } else if (kind === 'ruler-led') {
     head = 'The rulers drew your line.';
     text = 'On every ruler your line was that ruler\'s line: everyone in above everyone out. Four rulers, ' + (new Set(lines.slice(1).map(function (l) { return l.slice().sort().join(); })).size) + ' different lines. You ended on Suffer\'s, ' + (last.shape.id === 'singer' ? 'which is Singer\'s.' : 'but not where Singer puts it: ' + lc(last.name) + '.');
   } else {
     head = 'Some rulers moved you.';
-    text = tr.join(' ') + ' You ended with ' + listPhrases(lines[lines.length - 1]) + (lines[lines.length - 1].length ? ' in' : '') + ': ' + lc(last.name) + '.';
+    text = tr.join(' ') + ' You ended with ' + listPhrases(lines[lines.length - 1]) + (lines[lines.length - 1].length ? ' counting as much as you' : '') + ': ' + lc(last.name) + '.';
   }
   return { kind: kind, moves: mv, trajectory: tr, head: head, text: text, first: first, last: last, movedRounds: movedRounds.length };
 }
@@ -256,12 +257,12 @@ function synthesis(lines) {
 function verdict(state) {
   var lines = state.lines || [state.set || []], set = lines[lines.length - 1], w = shapeWords(set), s = w.shape, syn = synthesis(lines);
   var paper = [
-    'No ruler you can read draws a line between people and animals. The line most people draw is drawn by hand, and the team you are on is not a ruler.',
+    'Whose pain counts as much as yours? No ruler you can read draws the line most people draw, between people and animals. That line is drawn by hand, and the team you are on is not a ruler.',
     'One ruler reads the same for all of them but the stone: Suffer. That is where Singer puts the line. If it can feel pain, it counts, and its pain counts as much as anyone\'s.'
   ];
-  var found = ['Your first line, with no ruler: ' + listPhrases(lines[0]) + (lines[0].length ? ' in' : '') + ' (' + syn.first.name + ').'];
+  var found = ['Your first line, with no ruler: ' + listPhrases(lines[0]) + (lines[0].length ? ', as much as yours' : '') + ' (' + syn.first.name + ').'];
   found = found.concat(syn.trajectory);
-  found.push('Your last line, on Suffer: ' + listPhrases(set) + (set.length ? ' in' : '') + '. ' + w.headline + ' Its name: ' + w.name + '.');
+  found.push('Your last line, on Suffer: ' + listPhrases(set) + (set.length ? ', as much as yours' : '') + '. ' + w.headline + ' Its name: ' + w.name + '.');
   var j = state.path && state.path.pick ? judgeExperiment(state.path, set) : null;
   var did = j ? [j.said, j.paper] : ['You did not reach the experiment.'];
   var two = 'Singer names two things that do not survive his line: doing experiments on animals that nobody would do on a baby, and eating animals because they taste good. He says the first would shrink to almost nothing, and the second should stop.';
@@ -272,15 +273,15 @@ function verdict(state) {
     stood = [two];
   } else if (s.id === 'species' || s.id === 'species-plus' || s.id === 'species-minus') {
     fate = syn.kind === 'unmoved' ? 'No ruler moved you. Your hand drew the line.' : 'You ended with a line your hand drew.';
-    part = ['At the line. ' + (syn.kind === 'unmoved' ? 'Four rulers showed you an animal above a person you kept in, and none of them moved you. ' : syn.text + ' ') + 'Singer\'s word for a line drawn on the team you are on is speciesism, and he says it is the same pattern as racism and sexism.' + (j && j.status === 'species' ? ' At the experiment you drew it again.' : (j && j.status !== 'species' ? ' At the experiment, though, you did not use it.' : ''))];
-    stood = ['Singer has one more thing for you to do. Say out loud why the baby counts and the chimpanzee does not, then say it again with "white" where you said "human" or "person". He says what it sounds like the second time is the reason to give the line up.'];
+    part = ['At the line. ' + (syn.kind === 'unmoved' ? 'Four rulers showed you an animal above a person whose pain you counted in full, and none of them moved you. ' : syn.text + ' ') + 'Singer\'s word for counting pain by the team it belongs to is speciesism, and he says it is the same pattern as racism and sexism.' + (j && j.status === 'species' ? ' At the experiment you drew it again.' : (j && j.status !== 'species' ? ' At the experiment, though, you did not use it.' : ''))];
+    stood = ['Singer has one more thing for you to do. Say out loud why the baby\'s pain counts in full and the chimpanzee\'s for less, then say it again with "white" where you said "human" or "person". He says what it sounds like the second time is the reason to give the line up.'];
   } else if (s.id === 'line') {
     fate = syn.kind === 'ruler-led' ? 'You let the rulers draw your line.' : 'You ended on a straight line in the wrong place.';
-    part = ['At the ruler. Your last line is one a ruler can read, and Singer says it is as arbitrary as skin colour: the ones it keeps out are hurt exactly as much as the ones it keeps in. ' + (syn.kind === 'ruler-led' ? 'And a line that moves with every ruler is four lines, not one; Singer asks which of them is yours.' : syn.text)];
+    part = ['At the ruler. Your last line is one a ruler can read, and Singer says it is as arbitrary as skin colour: the ones it counts for less are hurt exactly as much as the ones it counts in full. ' + (syn.kind === 'ruler-led' ? 'And a line that moves with every ruler is four lines, not one; Singer asks which of them is yours.' : syn.text)];
     stood = [two];
-  } else if (s.id === 'everything') { fate = 'You let everything count, the stone too.'; part = ['One step. Singer stops at the stone, which cannot feel; you did not. ' + (syn.kind === 'unmoved' ? 'No ruler moved you, and none needed to.' : syn.text)]; stood = [two]; }
-  else if (s.id === 'nothing') { fate = 'You let nobody count.'; part = ['Everywhere, and nowhere Singer can argue with: his argument starts from somebody counting. If you count, so does whoever can feel pain.']; stood = [two]; }
-  else { fate = syn.kind === 'unmoved' ? 'You drew your own line, and kept it.' : 'You ended on your own line.'; part = ['At the line. No ruler draws yours, and no team does either. ' + syn.text + ' Singer would ask what the ones you put in share. If you can name it, it is a ruler, and the board can test it; if you cannot, it is a hand.']; stood = [two]; }
+  } else if (s.id === 'everything') { fate = 'You counted everything, the stone too.'; part = ['One step. Singer stops at the stone, which cannot feel; you did not. ' + (syn.kind === 'unmoved' ? 'No ruler moved you, and none needed to.' : syn.text)]; stood = [two]; }
+  else if (s.id === 'nothing') { fate = 'You counted nobody\'s pain as much as your own.'; part = ['Everywhere, and nowhere Singer can argue with: his argument starts from somebody\'s pain counting. If yours does, so does the pain of whoever can feel it.']; stood = [two]; }
+  else { fate = syn.kind === 'unmoved' ? 'You drew your own line, and kept it.' : 'You ended on your own line.'; part = ['At the line. No ruler draws yours, and no team does either. ' + syn.text + ' Singer would ask what the ones you counted in full share. If you can name it, it is a ruler, and the board can test it; if you cannot, it is a hand.']; stood = [two]; }
   if (j && j.status === 'potential') part.push('And at the experiment: you went by what they will grow into, which is a ruler you can read, and Singer tells you what it costs.');
   return { fate: fate, paper: paper, found: found, did: did, part: part, stood: stood, name: w.name, synthesis: syn };
 }

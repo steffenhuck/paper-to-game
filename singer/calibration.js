@@ -60,7 +60,7 @@ var rl = [H, ['adult'], ['adult', 'disab'], ['adult', 'chimp'], F]; // the four 
 var synR = m.synthesis(rl);
 check('a player who takes each ruler\'s line is ruler-led and ends on Singer\'s line', synR.kind === 'ruler-led' && synR.last.shape.id === 'singer', synR.text);
 var synM = m.synthesis([H, H, H, H, F]);
-check('a player moved only by Suffer is mixed, with three "did not move you" and one move', synM.kind === 'mixed' && synM.movedRounds === 1 && /Suffer moved you: you let in/.test(synM.text), synM.text);
+check('a player moved only by Suffer is mixed, with three "did not move you" and one move', synM.kind === 'mixed' && synM.movedRounds === 1 && /Suffer moved you: .* now count as much as you/.test(synM.text), synM.text);
 var synU = m.synthesis([F, F, F, F, F]);
 check('Singer\'s line kept five times is unmoved', synU.kind === 'unmoved' && /from the start/.test(synU.text));
 var vM = m.verdict({ lines: [H, H, H, H, F], path: { pick: 'mouse', why: 'none', braindam: null } });
