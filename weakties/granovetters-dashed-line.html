@@ -87,7 +87,7 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
 
 <!-- THE WEEK -->
 <section id="s-week" class="screen">
-  <div class="topbar"><div><div class="kicker" id="wk-kicker">Week 1 of 5</div><div class="now" id="wk-now">Give your seven evenings.</div><div class="sub" id="wk-sub">Tap a name: one evening. Again: two. Again: none.</div></div><button class="qbtn" id="b-help-week" aria-label="How to play">?</button></div>
+  <div class="topbar"><div><div class="kicker" id="wk-kicker">Week 1 of 5</div><div class="now" id="wk-now">Give your seven evenings.</div><div class="sub" id="wk-sub">Tap a name: one evening, a ring and a thin line. Again: two, a thick line. Again: none.</div></div><button class="qbtn" id="b-help-week" aria-label="How to play">?</button></div>
   <svg class="map" id="map" viewBox="0 0 340 316" aria-label="The town"></svg>
   <div class="legend"><span><svg viewBox="0 0 30 10"><line x1="0" y1="5" x2="30" y2="5" stroke="#14171B" stroke-width="3"/></svg>often</span><span><svg viewBox="0 0 30 10"><line x1="0" y1="5" x2="30" y2="5" stroke="#14171B" stroke-width="1.25"/></svg>now and then</span><span><svg viewBox="0 0 30 10"><line x1="0" y1="5" x2="30" y2="5" stroke="#14171B" stroke-width="1.25" stroke-dasharray="4 3"/></svg>rarely</span><span><svg viewBox="0 0 30 10"><circle cx="15" cy="5" r="4" fill="#1F6FEB"/></svg>news</span></div>
   <div id="wk-plan">
@@ -426,17 +426,17 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: n
   function el(tag, attrs, parent) { var e = document.createElementNS(SVGNS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
   function labelOffset(name) { var c = circleOf(name), cc = circleCentre[c], p = pos[name], dx = p[0] - cc[0], dy = p[1] - cc[1], d = Math.hypot(dx, dy) || 1; return [p[0] + dx / d * 13, p[1] + dy / d * 13 + 4]; }
 
-  var map, layers = {}, lineEls = {}, dotEls = {}, labelEls = {}, hitEls = {};
+  var map, layers = {}, lineEls = {}, dotEls = {}, labelEls = {}, hitEls = {}, ringEls = {};
   function buildMap() {
     map = $('map'); while (map.firstChild) map.removeChild(map.firstChild);
-    layers.halo = el('g', {}, map); layers.town = el('g', {}, map); layers.ego = el('g', {}, map); layers.dots = el('g', {}, map); layers.labels = el('g', {}, map); layers.news = el('g', {}, map); layers.hits = el('g', {}, map);
+    layers.halo = el('g', {}, map); layers.town = el('g', {}, map); layers.ego = el('g', {}, map); layers.rings = el('g', {}, map); layers.dots = el('g', {}, map); layers.labels = el('g', {}, map); layers.news = el('g', {}, map); layers.hits = el('g', {}, map);
     CONFIG.CIRCLES.forEach(function (c) {
       var cc = circleCentre[c.id];
       el('circle', { cx: cc[0], cy: cc[1], r: c.id === 'home' ? HOMEHALO : HALO, fill: FROST2, stroke: 'none' }, layers.halo);
       var up = cc[1] <= CY, ly = c.id === 'home' ? cc[1] - HOMEHALO - 5 : (up ? cc[1] - HALO - 5 : cc[1] + HALO + 11);
       cased(el('text', { x: cc[0], y: ly, 'text-anchor': 'middle', 'font-size': 8.5, fill: SLATE, 'letter-spacing': '0.1em', 'font-family': 'Archivo,Helvetica,Arial' }, layers.labels)).textContent = c.label.toUpperCase();
     });
-    lineEls = {}; dotEls = {}; labelEls = {}; hitEls = {};
+    lineEls = {}; dotEls = {}; labelEls = {}; hitEls = {}; ringEls = {};
     everyone().forEach(function (p) { dotEls[p] = el('circle', { cx: pos[p][0], cy: pos[p][1], r: 3.2, fill: FROST, stroke: 'none' }, layers.dots); });
     dotEls[CONFIG.YOU] = el('circle', { cx: CX, cy: CY, r: 8, fill: INK, stroke: PAPER, 'stroke-width': 2 }, layers.dots);
     cased(el('text', { x: CX - 11, y: CY + 4, 'text-anchor': 'end', 'font-size': 10, 'font-weight': 700, fill: INK, 'font-family': 'Archivo,Helvetica,Arial' }, layers.labels)).textContent = 'YOU';
@@ -454,7 +454,11 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: n
   function renderTies(ties) {
     for (var k in ties) lineFor(k, ties[k], k.indexOf(CONFIG.YOU + '~') === 0 || k.indexOf('~' + CONFIG.YOU) > 0);
     G.known.forEach(function (p) {
-      var d = dotEls[p]; d.setAttribute('r', 5.6); d.setAttribute('fill', INK);
+      var e = (ev && ev[p]) || 0, d = dotEls[p];
+      d.setAttribute('r', e === 2 ? 8 : (e === 1 ? 6.5 : 5.6)); d.setAttribute('fill', INK);
+      if (!ringEls[p]) ringEls[p] = el('circle', { cx: pos[p][0], cy: pos[p][1], fill: 'none', stroke: INK, 'stroke-width': 1.6 }, layers.rings);
+      ringEls[p].setAttribute('r', e === 2 ? 13 : 11); ringEls[p].setAttribute('display', e ? '' : 'none');
+      if (labelEls[p]) labelEls[p].setAttribute('font-weight', e ? 700 : 500);
       if (!labelEls[p]) { var o = labelOffset(p); labelEls[p] = cased(el('text', { x: o[0], y: o[1], 'text-anchor': 'middle', 'font-size': 10.5, 'font-weight': 500, fill: INK, 'font-family': 'Archivo,Helvetica,Arial' }, layers.labels)); labelEls[p].textContent = p; }
       if (!hitEls[p]) { hitEls[p] = el('circle', { cx: pos[p][0], cy: pos[p][1], r: 15, fill: 'transparent', 'data-p': p, style: 'cursor:pointer' }, layers.hits); hitEls[p].addEventListener('click', function () { tap(p); }); }
     });
@@ -474,10 +478,10 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: n
   }
   function isNew(p) { return lastRec && (lastRec.intros.some(function (x) { return x.who === p; }) || (lastRec.chance && lastRec.chance.who === p)); }
   function startWeek() {
-    ev = {}; clearNews();
+    ev = {}; clearNews(); renderTies(allTies(G, ev));
     $('wk-kicker').textContent = 'Week ' + G.week + ' of ' + CONFIG.WEEKS;
     $('wk-now').textContent = G.week === 1 ? 'Give your seven evenings.' : (G.week === CONFIG.WEEKS ? 'The last week. Give your seven evenings.' : 'A new week. Give your seven evenings.');
-    $('wk-sub').textContent = G.week === 1 ? 'Tap a name: one evening. Again: two. Again: none.' : 'Every week starts from none. Tap a name: one evening. Again: two.';
+    $('wk-sub').textContent = G.week === 1 ? 'Tap a name: one evening, a ring and a thin line. Again: two, a thick line. Again: none.' : 'Every week starts from none. Tap a name: one evening. Again: two.';
     $('wk-plan').style.display = ''; $('wk-play').style.display = 'none'; $('wk-result').style.display = 'none';
     renderPlan(); window.scrollTo(0, 0);
   }
