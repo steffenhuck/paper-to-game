@@ -154,3 +154,36 @@ The spread is real and the wrong ways are ones the paper names: the exactly equa
 - Skin: manga; Bangers and Comic Neue embedded (OFL). Three scripted sessions in headless Chromium at 380 × 700 and one at 1100 × 800 (`session-test.js`): the full path, the equal-splitter path, help opened mid-play and returned, play again; no page errors, no horizontal scroll. From the screenshots: text selection during the drag (fixed with user-select), two captions overlapping under the table (one removed), the neutron label under its dot (anchor fixed), the headline wrapping (shortened), the empty result bar (hidden when empty), the rule and the Hold definition merged so the split button and the table share the screen at 700 px (table bottom 584), one lowercase verdict line.
 - Self-review from the screenshots with the help page closed: the aim is on the start screen in one line; the discovery is the first line of the verdict; each play screen says what the things are, what the two buttons do and what to expect; after a move the game states what happened before anything else. It looks like no game in the table.
 - Session length: about five minutes, estimated from the scripted sessions' timings, not measured by a person.
+
+## 20. Revision 2 (26 November 2026): the skin fights back
+
+**The author's note.** "The looks are spectacular; the game play is less so. The main thing is whether I get fission or not, and I can get it easily. There should be a more obvious trade-off."
+
+**Diagnosis.** In the first build every pinch split, every split lit something, and five neutrons were never scarce. The opener promised a drop that was barely holding and the bench never cashed the promise: the skin never won. The hold was a free second button.
+
+**The change.** The paper's "two nuclei of roughly equal size … perhaps partly on chance" becomes the trade-off. A pinch within three protons of the middle always goes through; beyond that the odds fall, p = 1 / (1 + ((a − 3) / 4.5)^2.5) with a the distance from the middle, so the climb-aware pinch at 52 | 40 goes through about three times in four, 54 | 38 about one time in two, the barium cell at 56 | 36 about one time in four, and the ends hardly ever. The screen states the odds in words as the line moves and the drop's neck shows them: deep in the middle, shallow at the ends. A pinch the skin pulls back is not nothing: the drop kept its neutron, so it is uranium-239 and lights the 24-minute tube, once. The draw is seeded; the seed is shown on the verdict screen and `?seed=` replays it. The budget is four neutrons for uranium (the author's choice among the options offered) and three for thorium, whose two tubes sit only where an uneven pinch reaches. The pieces that go through are unchanged: the ghosts still come down from the safe middle, barium still forces krypton.
+
+**What the trade-off is now.** Safe pinches near the middle bring the ghosts down; barium and lanthanum, the paper's starting fact, lie out where the skin may refuse. With four neutrons and two of them needed for the ghosts and the hold, the player decides whether to gamble on barium's own cell (one in four, twice), or to find that a pinch at 52 lands tellurium, which climbs to barium at three in four. Holding is certain but gives one tube; a refused pinch gives the same tube by accident, so the order matters: hold first and the gambles are fewer, gamble first and a failure pays the hold for you.
+
+**Strategies over a thousand seeds** (uranium, four neutrons; mean tubes lit of 8, chance of all 8, chance of the hold tube, mean pinches pulled back):
+
+| Strategy | Lit | All 8 | Hold | Pulled back |
+|---|---|---|---|---|
+| The equal splitter (46 \| 46 four times) | 2.0 | 0 % | 0 % | 0 |
+| The holder (hold four times) | 1.0 | 0 % | 100 % | 0 |
+| Barium first, then ghosts and hold (56, 56, 43, hold) | 6.8 | 42 % | 100 % | 1.5 |
+| Safe first (43, hold, 56, 56) | 6.8 | 39 % | 100 % | 1.4 |
+| Safe first, no hold (43, 56, 56, 56) | 7.0 | 51 % | 99 % | 2.1 |
+| The climb-aware reader (52, 43, hold, 52) | 7.9 | 93 % | 100 % | 0.3 |
+| The very bold (54 four times) | 3.7 | 0 % | 97 % | 2.3 |
+| The extreme pincher (28 \| 64 four times) | 1.5 | 0 % | 100 % | 3.8 |
+| The sweeper (40, 44, 48, 52) | 7.3 | 41 % | 47 % | 0.5 |
+| The three-neutron reader (56, 43, hold) | 6.5 | 25 % | 100 % | 0.8 |
+
+The wrong ways are the paper's: the exactly equal pinch never finds barium; the player who aims at barium's own cell is refused three times in four; the player who learns the climb clears the shelf nine times in ten. Knowing the climb is worth about fifty points of clearing chance, which is the mastery the second playthrough offers. The hold is weakly dominated when barium is still wanted (a refused pinch pays it) and strictly best once barium is lit, so it stays a live choice about order, not a dead button.
+
+**Checks added** (`calibration.js`, now 66, all passing): the odds are symmetric and fall away from the middle; 43–49 always go through; the stated odds at 52, 54, 56 and 28 are as above; over 2000 seeds the draw at 54 | 38 matches its stated odds within four points; a refused pinch lights the 24-minute tube and climbs to 93 like a hold, and has words that say the odds and the draw; safe-first with two tries at barium's cell clears the shelf between 30 and 60 % of the time, the climb-aware path between 80 and 97 %, the equal pinch never; every thorium pinch that lights both tubes is one the skin refuses at least two times in five, and three tries at 38 | 52 light both more than three times in four.
+
+**Claim boundary.** The odds curve is ours entirely: the paper says "roughly equal" and "perhaps partly on chance" and nothing about how often an uneven division happens. The About screen says so, and that the first build let every pinch through.
+
+**Screens.** The odds line sits under the drop in the panel and turns red below three in four; the neck depth follows the odds; a refused pinch necks, springs back, rings, and the panel says "no split: the skin won, and the drop kept the neutron"; the headline says "pulled back". The climb sentence moved from the rule to the table's caption, so the split button and the table still share the screen at 380 × 700 (table bottom at 600). Three scripted sessions (seeds 7 and 2 at phone width, seed 7 at laptop width): the safe path, a path where barium's cell is refused twice and 52 | 40 rescues it, and the climb-aware path; no errors, no horizontal scroll.

@@ -3,8 +3,8 @@ var m = require('./mechanism.js'), C = m.CONFIG, U = C.URANIUM, TH = C.THORIUM;
 var fails = 0;
 function ok(cond, what) { console.log((cond ? 'ok   ' : 'FAIL ') + what); if (!cond) fails++; }
 function reach(path) { return path[path.length - 1]; }
-function clearsU(actions) {
-  var st = m.newStage(U, C.TUBES_U, actions.length);
+function clearsU(actions) {               // with every pinch going through (the odds are checked separately)
+  var st = m.newStage(U, C.TUBES_U, actions.length); st.rng = function () { return 0; };
   actions.forEach(function (a) { m.play(st, a); });
   return C.TUBES_U.every(function (t) { return st.lit[t.id]; });
 }
@@ -37,7 +37,7 @@ ok(m.cellOf(92).col === m.cellOf(74).col && m.cellOf(93).col === m.cellOf(75).co
 ok(m.cellOf(56).col === m.cellOf(38).col && m.cellOf(57).col === m.cellOf(39).col, 'strontium under barium, yttrium under lanthanum (p. 239: Sr-Y-Zr chains mistaken for Ba-La-Ce)');
 
 // 4. what the moves light
-var st = m.newStage(U, C.TUBES_U, 5);
+var st = m.newStage(U, C.TUBES_U, 5, 7); // seed 7: the barium pinch goes through
 var mv = m.play(st, { kind: 'split', Z1: 56 });
 ok(mv.lit.map(function (l) { return l.id; }).sort().join() === 'ba,la', 'the pinch at 56 | 36 lights barium and lanthanum: ' + mv.lit.map(function (l) { return l.id + '@' + l.atZ; }).join(' '));
 ok(mv.lookalikes.some(function (k) { return k.Z === 38 && k.tube === 'ba'; }) && mv.lookalikes.some(function (k) { return k.Z === 39 && k.tube === 'la'; }), 'the krypton piece passes strontium and yttrium, which act like barium and lanthanum');
@@ -61,12 +61,37 @@ ok(eqLit.length === 2 && !eqLit.some(function (l) { return l.id === 'ba' || l.id
 ok(Z1s.filter(function (z) { return m.lightTubes(m.split(U, z), C.TUBES_U, U.Z).length <= 1; }).length > 0, 'some pinches light one tube or none: ' + Z1s.filter(function (z) { return m.lightTubes(m.split(U, z), C.TUBES_U, U.Z).length <= 1; }).join(', '));
 ok(m.split(U, 28).energyMeV < eq.energyMeV && m.split(U, 36).energyMeV < eq.energyMeV, 'an uneven pinch gives a smaller blast than an even one (our Coulomb rule; the paper computes only the equal case)');
 
+// 4b. the odds (rev. 2)
+var odds = Z1s.map(function (z) { return m.splitOdds(U, z); });
+ok(odds.every(function (p, i) { return i === 0 || (Z1s[i] <= 46 ? p >= odds[i - 1] - 1e-9 : p <= odds[i - 1] + 1e-9); }), 'the odds of splitting rise toward the middle and fall away from it, symmetrically');
+ok(m.splitOdds(U, 43) === 1 && m.splitOdds(U, 49) === 1 && m.splitOdds(U, 46) === 1, 'pinches within three of the middle (43 to 49, the ghosts\' pinches) always go through: "roughly equal size"');
+ok(m.splitOdds(U, 56) > 0.2 && m.splitOdds(U, 56) < 0.3 && m.splitOdds(U, 36) === m.splitOdds(U, 56), 'the pinch aimed at barium\'s own cell (56 | 36) splits about one time in four: ' + m.splitOdds(U, 56).toFixed(2));
+ok(m.splitOdds(U, 52) > 0.62 && m.splitOdds(U, 52) < 0.85, 'the climb-aware pinch (52 | 40, tellurium climbs to barium) splits about three times in four: ' + m.splitOdds(U, 52).toFixed(2));
+ok(m.splitOdds(U, 54) > 0.35 && m.splitOdds(U, 54) < 0.5, 'the pinch at 54 | 38 (strontium and tellurium, three tubes) splits about one time in two: ' + m.splitOdds(U, 54).toFixed(2));
+ok(m.splitOdds(U, 28) < 0.1, 'the most uneven pinch allowed (28 | 64) hardly ever splits: ' + m.splitOdds(U, 28).toFixed(2));
+var wins = 0, N = 2000; for (var sd = 1; sd <= N; sd++) { var s1 = m.newStage(U, C.TUBES_U, 1, sd); if (m.play(s1, { kind: 'split', Z1: 54 }).kind === 'split') wins++; }
+ok(Math.abs(wins / N - m.splitOdds(U, 54)) < 0.04, 'over ' + N + ' seeds the 54 | 38 pinch went through ' + (wins / N * 100).toFixed(0) + '% of the time against stated odds of ' + (m.splitOdds(U, 54) * 100).toFixed(0) + '% (the draw matches the words)');
+var r1 = m.newStage(U, C.TUBES_U, 4, 5), mvR = null; for (var sd2 = 1; sd2 < 500 && !mvR; sd2++) { var s2 = m.newStage(U, C.TUBES_U, 4, sd2); var mm = m.play(s2, { kind: 'split', Z1: 60 }); if (mm.kind === 'rang') mvR = { st: s2, mv: mm }; }
+ok(mvR && mvR.mv.lit.length === 1 && mvR.mv.lit[0].id === 'u24' && mvR.mv.pieces[0].path[1] === 93, 'a pinch the skin pulls back keeps the neutron: it lights the 24-minute tube and climbs to 93, like a hold');
+ok(mvR && m.moveWords(mvR.st, mvR.mv).length >= 2 && m.moveWords(mvR.st, mvR.mv)[0].indexOf('skin pulled it back') > 0, 'the failed pinch has words that say the odds and the draw');
+function clearProb(acts, n) { var c2 = 0; for (var sd3 = 1; sd3 <= n; sd3++) { var s3 = m.newStage(U, C.TUBES_U, C.NEUTRONS_U, sd3); acts.forEach(function (a) { if (!m.stageDone(s3)) m.play(s3, a); }); if (C.TUBES_U.every(function (t) { return s3.lit[t.id]; })) c2++; } return c2 / n; }
+var pSafe = clearProb([{ kind: 'split', Z1: 43 }, { kind: 'hold' }, { kind: 'split', Z1: 56 }, { kind: 'split', Z1: 56 }], 1000);
+var pBold = clearProb([{ kind: 'split', Z1: 43 }, { kind: 'hold' }, { kind: 'split', Z1: 52 }, { kind: 'split', Z1: 52 }], 1000);
+var pEven = clearProb([{ kind: 'split', Z1: 46 }, { kind: 'split', Z1: 46 }, { kind: 'split', Z1: 46 }, { kind: 'split', Z1: 46 }], 1000);
+ok(pSafe > 0.3 && pSafe < 0.6, 'ghosts first, hold, then two tries aimed at barium\'s own cell clears the shelf ' + (pSafe * 100).toFixed(0) + '% of the time: reachable, far from guaranteed');
+ok(pBold > 0.8 && pBold < 0.97, 'the climb-aware path (43 | 49, hold, then 52 | 40 twice) clears the shelf ' + (pBold * 100).toFixed(0) + '% of the time: knowing the climb is worth about ' + ((pBold - pSafe) * 100).toFixed(0) + ' points');
+ok(pEven === 0, 'the exactly equal pinch four times never clears the shelf');
+
 // 5. thorium
-var stT = m.newStage(TH, C.TUBES_TH, 2);
+var stT = m.newStage(TH, C.TUBES_TH, 3); stT.rng = function () { return 0; };
 mv = m.play(stT, { kind: 'split', Z1: 56 });
 ok(mv.lit.map(function (l) { return l.id; }).sort().join() === 'ac,ra', 'thorium pinched at 56 | 34 lights the radium and actinium tubes from barium and lanthanum (p. 239: thorium\'s periods equal barium\'s and lanthanum\'s)');
 var thZ = range(C.MIN_PIECE, TH.Z - C.MIN_PIECE);
 ok(thZ.some(function (z) { return m.lightTubes(m.split(TH, z), C.TUBES_TH, TH.Z).length === 0; }), 'some thorium pinches light neither tube');
+var thLit = thZ.filter(function (z) { return m.lightTubes(m.split(TH, z), C.TUBES_TH, TH.Z).length === 2; });
+ok(thLit.length > 0 && thLit.every(function (z) { return m.splitOdds(TH, z) < 0.6; }), 'every thorium pinch that lights both tubes (' + thLit.join(', ') + ') is one the skin pulls back at least two times in five: thorium needs its three neutrons');
+var pTh = 0; for (var sd4 = 1; sd4 <= 1000; sd4++) { var s4 = m.newStage(TH, C.TUBES_TH, C.NEUTRONS_TH, sd4); [38, 38, 38].forEach(function (z) { if (!m.stageDone(s4)) m.play(s4, { kind: 'split', Z1: z }); }); if (C.TUBES_TH.every(function (t) { return s4.lit[t.id]; })) pTh++; }
+ok(pTh / 1000 > 0.75, 'three tries at 38 | 52 light both thorium tubes ' + (pTh / 10).toFixed(0) + '% of the time');
 
 // 6. robustness of the central discovery (build.md section 1): the ghosts come down from the middle rows under other plausible rules
 var saved = { A: C.VALLEY_A, B: C.VALLEY_B, M: C.MIN_PIECE };
@@ -102,14 +127,15 @@ ok([-3, -2, 2, 3].every(function (d) {
 }), 'if the masurium piece gets 2-3 neutrons more or fewer than its share (p. 239: "varying proportions of neutrons"), at least four of the five ghosts still come down');
 
 // 7. words for every move and every verdict path
-ok(Z1s.every(function (z) { var s2 = m.newStage(U, C.TUBES_U, 5); var mv2 = m.play(s2, { kind: 'split', Z1: z }); return m.moveWords(s2, mv2).length >= 3; }), 'every pinch has at least three lines of result in the game\'s voice');
+ok(Z1s.every(function (z) { var s2 = m.newStage(U, C.TUBES_U, 5); s2.rng = function () { return 0; }; var mv2 = m.play(s2, { kind: 'split', Z1: z }); return m.moveWords(s2, mv2).length >= 3; }), 'every pinch that goes through has at least three lines of result in the game\'s voice');
+ok(Z1s.every(function (z) { var s2 = m.newStage(U, C.TUBES_U, 5); s2.rng = function () { return 0.9999; }; var mv2 = m.play(s2, { kind: 'split', Z1: z }); return mv2.kind === 'split' ? m.splitOdds(U, z) === 1 : m.moveWords(s2, mv2).length >= 2; }), 'every pinch the skin can pull back has words for that too');
 var sH = m.newStage(U, C.TUBES_U, 5); ok(m.moveWords(sH, m.play(sH, { kind: 'hold' })).length >= 2, 'the hold has words');
-var paths = [[{ kind: 'split', Z1: 56 }, { kind: 'split', Z1: 43 }, { kind: 'hold' }], [{ kind: 'split', Z1: 46 }, { kind: 'split', Z1: 46 }, { kind: 'split', Z1: 46 }, { kind: 'split', Z1: 46 }, { kind: 'split', Z1: 46 }], [{ kind: 'hold' }, { kind: 'hold' }, { kind: 'hold' }, { kind: 'hold' }, { kind: 'hold' }], [{ kind: 'split', Z1: 28 }, { kind: 'split', Z1: 64 }, { kind: 'split', Z1: 30 }, { kind: 'split', Z1: 33 }, { kind: 'split', Z1: 60 }], [{ kind: 'split', Z1: 56 }, { kind: 'split', Z1: 44 }, { kind: 'split', Z1: 38 }, { kind: 'hold' }, { kind: 'split', Z1: 42 }]];
+var paths = [[{ kind: 'split', Z1: 56 }, { kind: 'split', Z1: 43 }, { kind: 'hold' }], [{ kind: 'split', Z1: 46 }, { kind: 'split', Z1: 46 }, { kind: 'split', Z1: 46 }, { kind: 'split', Z1: 46 }], [{ kind: 'hold' }, { kind: 'hold' }, { kind: 'hold' }, { kind: 'hold' }], [{ kind: 'split', Z1: 28 }, { kind: 'split', Z1: 64 }, { kind: 'split', Z1: 30 }, { kind: 'split', Z1: 33 }], [{ kind: 'split', Z1: 56 }, { kind: 'split', Z1: 44 }, { kind: 'split', Z1: 38 }, { kind: 'hold' }], [{ kind: 'split', Z1: 60 }, { kind: 'split', Z1: 60 }, { kind: 'split', Z1: 60 }, { kind: 'split', Z1: 60 }]];
 paths.forEach(function (p, i) {
-  var a = m.newStage(U, C.TUBES_U, 5); p.forEach(function (x) { m.play(a, x); });
+  var a = m.newStage(U, C.TUBES_U, C.NEUTRONS_U, 11 + i); p.forEach(function (x) { m.play(a, x); });
   var b = m.newStage(TH, C.TUBES_TH, 2); m.play(b, { kind: 'split', Z1: i % 2 ? 45 : 56 });
   var v = m.verdict(a, b);
-  ok(v.fate && v.paper && v.found.length >= 4 && v.part.length >= 1 && v.stood, 'verdict path ' + (i + 1) + ': "' + v.fate + '" with ' + v.found.length + ' findings and ' + v.part.length + ' partings');
+  ok(v.fate && v.paper && v.found.length >= 4 && v.part.length >= 1 && v.stood && v.seed !== undefined, 'verdict path ' + (i + 1) + ': "' + v.fate + '" with ' + v.found.length + ' findings and ' + v.part.length + ' partings');
 });
 console.log(fails ? '\n' + fails + ' FAILED' : '\nall checks passed');
 process.exit(fails ? 1 : 0);

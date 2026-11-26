@@ -36,17 +36,33 @@ ok   the pinches that light barium and lanthanum are 33, 34, 35, 36, 37, 38, 39,
 ok   the exactly equal pinch, the obvious first move, lights only two tubes and neither barium nor lanthanum: the paper's "roughly equal" is not "equal"
 ok   some pinches light one tube or none: 30, 31, 32, 60, 61, 62
 ok   an uneven pinch gives a smaller blast than an even one (our Coulomb rule; the paper computes only the equal case)
+ok   the odds of splitting rise toward the middle and fall away from it, symmetrically
+ok   pinches within three of the middle (43 to 49, the ghosts' pinches) always go through: "roughly equal size"
+ok   the pinch aimed at barium's own cell (56 | 36) splits about one time in four: 0.25
+ok   the climb-aware pinch (52 | 40, tellurium climbs to barium) splits about three times in four: 0.73
+ok   the pinch at 54 | 38 (strontium and tellurium, three tubes) splits about one time in two: 0.43
+ok   the most uneven pinch allowed (28 | 64) hardly ever splits: 0.05
+ok   over 2000 seeds the 54 | 38 pinch went through 43% of the time against stated odds of 43% (the draw matches the words)
+ok   a pinch the skin pulls back keeps the neutron: it lights the 24-minute tube and climbs to 93, like a hold
+ok   the failed pinch has words that say the odds and the draw
+ok   ghosts first, hold, then two tries aimed at barium's own cell clears the shelf 39% of the time: reachable, far from guaranteed
+ok   the climb-aware path (43 | 49, hold, then 52 | 40 twice) clears the shelf 94% of the time: knowing the climb is worth about 56 points
+ok   the exactly equal pinch four times never clears the shelf
 ok   thorium pinched at 56 | 34 lights the radium and actinium tubes from barium and lanthanum (p. 239: thorium's periods equal barium's and lanthanum's)
 ok   some thorium pinches light neither tube
+ok   every thorium pinch that lights both tubes (34, 35, 36, 37, 38, 52, 53, 54, 55, 56) is one the skin pulls back at least two times in five: thorium needs its three neutrons
+ok   three tries at 38 | 52 light both thorium tubes 93% of the time
 ok   under 5 other valley-of-stability rules that still reproduce the paper's own chains, some pinch still brings all five ghosts down, some pinch lights barium and lanthanum, some pinch lights one tube or none, and no pinch lights the 24-minute tube
 ok   with the smallest piece set anywhere from 24 to 32 protons, the five ghosts still come down together and no two pinches clear the shelf
 ok   if the masurium piece gets 2-3 neutrons more or fewer than its share (p. 239: "varying proportions of neutrons"), at least four of the five ghosts still come down
-ok   every pinch has at least three lines of result in the game's voice
+ok   every pinch that goes through has at least three lines of result in the game's voice
+ok   every pinch the skin can pull back has words for that too
 ok   the hold has words
-ok   verdict path 1: "THE ROW BEYOND URANIUM IS EMPTY" with 6 findings and 1 partings
-ok   verdict path 2: "THREE GHOSTS STILL STAND BEYOND URANIUM" with 6 findings and 4 partings
-ok   verdict path 3: "FIVE GHOSTS STILL STAND BEYOND URANIUM" with 5 findings and 2 partings
-ok   verdict path 4: "THREE GHOSTS STILL STAND BEYOND URANIUM" with 6 findings and 4 partings
-ok   verdict path 5: "THE ROW BEYOND URANIUM IS EMPTY" with 6 findings and 1 partings
+ok   verdict path 1: "THE GHOSTS CAME DOWN; ONE TUBE STILL WAITS" with 7 findings and 2 partings
+ok   verdict path 2: "THREE GHOSTS STILL STAND BEYOND URANIUM" with 7 findings and 4 partings
+ok   verdict path 3: "FIVE GHOSTS STILL STAND BEYOND URANIUM" with 5 findings and 3 partings
+ok   verdict path 4: "FIVE GHOSTS STILL STAND BEYOND URANIUM" with 6 findings and 4 partings
+ok   verdict path 5: "THE ROW BEYOND URANIUM IS EMPTY" with 7 findings and 1 partings
+ok   verdict path 6: "FIVE GHOSTS STILL STAND BEYOND URANIUM" with 6 findings and 4 partings
 
 all checks passed
