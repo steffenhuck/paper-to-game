@@ -33,13 +33,13 @@ var CONFIG = {
   EXPERIMENT: {
     subjects: ['infant', 'braindam', 'chimp', 'mouse'],
     many: 'One experiment would save many lives. It needs one subject: someone it is done to, and it will hurt.',
-    whyOptions: [
-      { id: 'human', text: 'Because the baby is one of us.' },
-      { id: 'grow',  text: 'Because the baby will grow into more than the chimpanzee.' },
-      { id: 'less',  text: 'Because the chimpanzee matters less.' },
-      { id: 'none',  text: 'No reason. Either would have done.' }
+    whyOptions: [ // {A} is the animal used
+      { id: 'human', text: 'Because the baby is one of us, and {A} is not.' },
+      { id: 'grow',  text: 'Because the baby will grow into more than {A} ever will.' },
+      { id: 'less',  text: 'Because {A}\'s pain counts for less than the baby\'s.' },
+      { id: 'none',  text: 'No reason. The baby would have done just as well.' }
     ],
-    outOption: { id: 'out', text: 'On my line the baby\'s pain counts for less too.' } // offered only when the player's own line put the baby out
+    outOption: { id: 'out', text: 'Because on my line the baby\'s pain already counts for less.' } // offered only when the player's own line put the baby out
   },
   PAPER_ORDERINGS: [
     { ruler: 'reason', above: ['horse', 'dog'],        below: ['infant'],                      strict: true,  src: 'p. 106, Bentham: a full-grown horse or dog is beyond comparison a more rational animal than an infant of a day' },
@@ -176,11 +176,22 @@ function clashSentence(set) {
 
 // ---------- Board two: the scientist ----------
 // path: { pick: subjectId | 'nobody', why: 'human'|'grow'|'less'|'none'|'out'|null, braindam: 'yes'|'no'|null }; set: the player's line
-function whyOptions(set) { var o = CONFIG.EXPERIMENT.whyOptions.slice(); if (set && set.indexOf('infant') < 0) o.unshift(CONFIG.EXPERIMENT.outOption); return o; }
+function whyOptions(set, pick) {
+  var who = pick ? castById(pick).phrase : 'the animal';
+  var o = CONFIG.EXPERIMENT.whyOptions.map(function (x) { return { id: x.id, text: x.text.replace(/\{A\}/g, who) }; });
+  if (set && set.indexOf('infant') < 0) o.unshift(CONFIG.EXPERIMENT.outOption);
+  return o;
+}
+// The question, which knows what the player's line said about the animal and the baby.
+function whyQuestion(path, set) {
+  var who = castById(path.pick), inA = set && set.indexOf(who.id) >= 0, inB = set && set.indexOf('infant') >= 0;
+  var pre = inA && inB ? 'On your line ' + who.phrase + '\'s pain counts as much as the baby\'s. ' : (!inA && inB ? 'On your line ' + who.phrase + '\'s pain counts for less than the baby\'s. ' : '');
+  return pre + 'Why ' + who.phrase + ', and not the baby?';
+}
 function nextQuestion(path, set) {
   if (!path.pick) return { id: 'pick', text: CONFIG.EXPERIMENT.many + ' Who?' };
   if (path.pick === 'nobody' || castById(path.pick).human) return null;
-  if (!path.why) return { id: 'why', text: 'Why not the baby?', options: whyOptions(set) };
+  if (!path.why) return { id: 'why', text: whyQuestion(path, set), options: whyOptions(set, path.pick) };
   if (path.why !== 'grow') return null;
   if (!path.braindam) return { id: 'braindam', text: 'The grown-up whose brain is badly hurt will not grow into more than the chimpanzee. Would you use him?', options: [{ id: 'yes', text: 'Yes' }, { id: 'no', text: 'No' }] };
   return null;
@@ -192,17 +203,17 @@ function judgeExperiment(path, set) {
     paper: 'Singer asks the scientist one thing only: give the same answer for the baby and for the animal. You did. Neither. He adds that the experiment that saves many lives is a story told to make the point, and that nearly all real experiments on animals would never be done on a baby.' };
   if (who.human) return { status: 'read', said: 'You used ' + who.phrase + '.',
     paper: (set.indexOf(who.id) >= 0 ? 'On your line ' + who.phrase + '\'s pain counts as much as yours, and you used ' + (who.id === 'infant' ? 'the baby' : 'him') + ' anyway. ' : '') + 'Singer says: whatever you would do to the chimpanzee or the mouse, you must be ready to do to a baby who knows as little and feels as much. You were. He has no quarrel with your ruler. His quarrel is with the experiment itself, which he says almost nobody would do once they had answered this way.' };
-  if (path.why === 'out') return { status: 'read', said: 'You used ' + who.phrase + ', and on your line the baby\'s pain counts for less too.',
+  if (path.why === 'out') return { status: 'read', said: 'You used ' + who.phrase + ', because on your line the baby\'s pain already counts for less.',
     paper: 'Then you are consistent: your line counted the baby\'s pain for less, and you spent it. Singer has no quarrel with that as a line. He has one with where it runs: the baby feels the experiment exactly as much as ' + who.phrase + ' does, and as much as you would.' };
-  if (path.why === 'none') return { status: 'read', said: 'You used ' + who.phrase + ', and the baby would have done as well.',
+  if (path.why === 'none') return { status: 'read', said: 'You used ' + who.phrase + ', and the baby would have done just as well.',
     paper: 'Then your ruler is one you can read. Singer has no quarrel with it. His quarrel is with the experiment: he says that once the baby would have done as well, almost nobody still wants to do it to the chimpanzee or the mouse either.' };
-  if (path.why === 'human') return { status: 'species', said: 'You used ' + who.phrase + ', not the baby, because the baby is one of us.',
+  if (path.why === 'human') return { status: 'species', said: 'You used ' + who.phrase + ', not the baby, because the baby is one of us and ' + who.phrase + ' is not.',
     paper: 'On every ruler you could read, ' + who.phrase + ' was above the baby: it knows more about what is happening to it, and it feels pain just as much. The only thing that put the baby out of reach is the team it is on. Singer\'s name for that is Species, and he says it is the same pattern as the racist\'s.' };
-  if (path.why === 'less') return { status: 'species', said: 'You used ' + who.phrase + ', not the baby, because the chimpanzee matters less.',
-    paper: 'Matters less measured how? Go back to the rulers: on Reason, Talk and Aware ' + who.phrase + ' was above the baby, and on Suffer they were level. No ruler says it matters less. What says so is the team it is on, and Singer says that is the same pattern as the racist\'s.' };
-  if (path.braindam === 'yes') return { status: 'potential', said: 'You used ' + who.phrase + ', not the baby, because the baby will grow. You would use the grown-up whose brain is badly hurt.',
+  if (path.why === 'less') return { status: 'species', said: 'You used ' + who.phrase + ', not the baby, because ' + who.phrase + '\'s pain counts for less.',
+    paper: 'Counts for less measured how? Go back to the rulers: on Reason, Talk and Aware ' + who.phrase + ' was above the baby, and on Suffer they were level. No ruler says its pain counts for less. What says so is the team it is on, and Singer says that is the same pattern as the racist\'s.' + (set.indexOf(who.id) >= 0 ? ' And on your own last line ' + who.phrase + '\'s pain counted as much as yours.' : '') };
+  if (path.braindam === 'yes') return { status: 'potential', said: 'You used ' + who.phrase + ', not the baby, because the baby will grow into more. You would use the grown-up whose brain is badly hurt.',
     paper: 'Then "what it will grow into" is your ruler, and it is one you can read. Singer lets it stand and tells you what it costs: on that ruler an unborn child has the same claim as the baby, and that is a line many people do not want to draw. And he points out that this ruler gives you no reason to prefer ' + who.phrase + ' over the grown-up whose brain is hurt, who will not grow either; you gave none.' };
-  return { status: 'species', said: 'You used ' + who.phrase + ', not the baby, because the baby will grow. You would not use the grown-up whose brain is badly hurt, who will not.',
+  return { status: 'species', said: 'You used ' + who.phrase + ', not the baby, because the baby will grow into more. You would not use the grown-up whose brain is badly hurt, who will not.',
     paper: 'So "what it will grow into" was not your ruler after all: it would have let you use the grown-up whose brain is hurt, and you would not. On every ruler you could read, ' + who.phrase + ' was above him. What is left is the team he is on, and Singer says that is the same pattern as the racist\'s.' };
 }
 
@@ -288,4 +299,4 @@ function verdict(state) {
 
 if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, castById: castById, humans: humans, feelers: feelers, allIds: allIds, rulerById: rulerById, sortBy: sortBy, sameSet: sameSet,
   testLine: testLine, linesOn: linesOn, revealWords: revealWords, shapeOf: shapeOf, shapeWords: shapeWords, clashSentence: clashSentence,
-  whyOptions: whyOptions, nextQuestion: nextQuestion, judgeExperiment: judgeExperiment, verdict: verdict, listPhrases: listPhrases, moves: moves, synthesis: synthesis };
+  whyOptions: whyOptions, whyQuestion: whyQuestion, nextQuestion: nextQuestion, judgeExperiment: judgeExperiment, verdict: verdict, listPhrases: listPhrases, moves: moves, synthesis: synthesis };

@@ -81,7 +81,8 @@ function walk(path, set) {
 walk({ pick: null, why: null, braindam: null }, H); var p1 = paths;
 walk({ pick: null, why: null, braindam: null }, ['adult']); var p2 = paths - p1;
 check('the experiment ends on every path (' + p1 + ' with the baby in, ' + p2 + ' with the baby out)', p1 === 13 && p2 === 15);
-check('"the baby is out on my line too" is offered only when the baby is out', m.whyOptions(H).length === 4 && m.whyOptions(['adult']).length === 5 && m.whyOptions(['adult'])[0].id === 'out');
+check('"the baby is out on my line too" is offered only when the baby is out', m.whyOptions(H, 'chimp').length === 4 && m.whyOptions(['adult'], 'chimp').length === 5 && m.whyOptions(['adult'], 'chimp')[0].id === 'out' && /the chimpanzee is not/.test(m.whyOptions(H, 'chimp')[0].text));
+check('the question names the animal and knows the line: ' + m.whyQuestion({ pick: 'chimp' }, F), /counts as much as the baby/.test(m.whyQuestion({ pick: 'chimp' }, F)) && /^Why the mouse, and not the baby\?$/.test(m.whyQuestion({ pick: 'mouse' }, ['adult'])));
 check('every status is reachable', ['species', 'potential', 'read', 'refuse'].every(function (s) { return statuses[s] > 0; }), JSON.stringify(statuses));
 
 // (6) table

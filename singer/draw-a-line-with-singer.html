@@ -46,6 +46,7 @@ svg.cast{display:block;width:100%;height:auto;margin:2px 0 4px;touch-action:mani
 svg text{font-family:'Architects',sans-serif;fill:var(--chalk)}
 .col-head{font-family:'Fredericka',serif;font-size:14px;letter-spacing:.06em;fill:var(--yellow)}
 .rowtap{cursor:pointer}
+#circles,#line,#ghost{pointer-events:none}
 .said{font-size:18px;margin:6px 0 4px;min-height:22px}
 .find{font-size:16px;color:var(--dim);margin:0 0 8px}
 .paperline{font-size:17px;color:var(--yellow);margin:6px 0 8px}
@@ -174,10 +175,10 @@ a{color:var(--chalk)}
   <p><b>Whose pain counts as much as yours? Draw the line.</b></p>
   <h2>The first board</h2>
   <p>Ten are on the board, every one an example from Singer's paper: a grown-up; a baby a few days old, with no parents; a grown-up whose brain is badly hurt, for good; a grown-up who cannot learn much; a chimpanzee, a dog, a pig, a horse, a mouse; and a stone. Everyone but the stone can be hurt. Tap everyone whose pain counts as much as your own: if they are hurt, it matters exactly as much as if you were. Tap again to take one out. Then tap <b>Done</b>. That is your first line.</p>
-  <p>Then four rulers come to the board one at a time: Reason, Talk, Aware and Suffer. Each sorts the ten by one thing, highest at the top, with a yellow mark for each; the marks follow what Singer's paper says. Your line is still there: a full dot for everyone whose pain counts as much as yours, an empty one for the rest. Now you may move anyone, or keep your line as it is. Tap <b>Keep my line</b> or <b>Done</b>. The board then says whether that ruler could have drawn the line you left it with: a red line if it could, red circles on the two that are the wrong way round if it could not. Then the next ruler.</p>
+  <p>Then four rulers come to the board one at a time: Reason, Talk, Aware and Suffer. Each sorts the ten by one thing, highest at the top, with a yellow mark for each; the marks follow what Singer's paper says. Your line is still there: a full dot for everyone whose pain counts as much as yours, an empty one for the rest. The board shows at once whether that ruler could have drawn your line: a red line if it could, red circles on the two that are the wrong way round if it could not. Now you may move anyone, or keep your line; every time you move someone the line or the circles are drawn again for the new line. Tap <b>Keep my line</b> or <b>Done</b>, and the next ruler comes.</p>
   <p>After Suffer, the board tells you what your last line is called, who moved you and when, and what Singer says about it.</p>
   <h2>The second board</h2>
-  <p>You are the scientist in Singer's own story: one experiment that would save many lives, and it needs one subject, someone it is done to. Four are on offer, with their marks, and there is a fifth answer: no one. Tap one, then <b>Use this one</b>. If you took an animal, Singer asks why not the baby, and maybe one more thing. Then he says what your answers add up to.</p>
+  <p>You are the scientist in Singer's own story: one experiment that would save many lives, and it needs one subject, someone it is done to. Four are on offer, with their marks, and there is a fifth answer: no one. Tap one, then <b>Use this one</b>. If you took an animal, Singer asks why that one and not the baby, and maybe one more thing. Then he says what your answers add up to.</p>
   <h2>The verdict</h2>
   <p>What Singer says; your five lines, and who moved you; what you did as the scientist; where you and Singer part; and what follows. No score. Play again to draw a different line.</p>
   <div class="close"><button class="btn" id="b-help-close2">Back to the board</button></div>
@@ -191,7 +192,7 @@ a{color:var(--chalk)}
   <h2>What the paper says</h2>
   <p>"The rights of animals" was once used to parody the rights of women: if Wollstonecraft's arguments held for women, said Thomas Taylor, they held for dogs, cats and horses, which was absurd (p. 103). Singer's reply is to ask what the case for equality rests on. Not on facts: humans differ in every capacity, and if equality rested on sameness, a sophisticated opponent could draw his line at an I.Q. of 100 and we would have no answer (p. 104). Equality is a prescription, not a description; each to count for one, the like interests of every being affected weighed the same (p. 105). The boundary of that concern is the capacity to suffer or enjoy, which Bentham marked with three questions, "Can they reason? nor Can they talk? but, Can they suffer?" (p. 106); a stone has no interests because it cannot suffer, a mouse has an interest in not being tormented, and sentience is the only defensible boundary; any other, like intelligence, is as arbitrary as skin colour (p. 107). Racists, sexists and speciesists give more weight to the interests of their own group: the pattern is the same in each case (p. 107). Two practices show it: eating animals for the taste, and experimenting on them. The experimenter's test is this: would he perform his experiment on an orphaned human infant if that were the only way to save many lives? If not, his readiness to use animals is simple discrimination, since adult apes, cats, mice and other mammals are more aware of what is happening to them, more self-directing, and at least as sensitive to pain as any infant; and if he answers that the infant will grow into more, the same question returns with a human who has severe and irreversible brain damage (pp. 109–110). Philosophers who defend the species line, Singer says, do so by forgetting these humans or by a move like Stanley Benn's, that rationality is "the human norm"; and he closes with an exercise: take Benn's passage, substitute "white" for "men", "black" for "dog", "high I.Q." for "rationality", and finally change "species" to "race", then re-read it (pp. 113–116). Killing is a footnote (fn. 7).</p>
   <h2>What the game does with it</h2>
-  <p>The question is the paper's own: whose pain counts as much as yours? That is what the paper means by equality, equal consideration of interests, and the game asks it in a child's words. You draw your own line first, with no ruler in sight: tap everyone whose pain counts as much as your own. Then the four rulers come to the board one at a time, and each time you may move anyone in or out, or keep your line; the board says whether that ruler could have drawn the line you left it with. The verdict reads all five lines: who moved you, and when. The ten are the paper's own examples, in a child's words: a grown-up; a baby of a few days with no parents (Bentham's "infant of a day", the paper's "orphaned human infant"); a grown-up whose brain is badly hurt for good (the paper's "severe and irreversible brain damage"); a grown-up who cannot learn much (the paper says "permanently retarded" and, quoting Benn, "imbeciles"); a chimpanzee, a dog, a pig, a horse, a mouse; and the stone. The rulers are Bentham's three questions as the paper quotes them, Reason, Talk and Suffer, and the one the paper adds in its own voice, Aware ("aware of what is happening to them, more self-directing"), in that order, Suffer last. A ruler can draw a line only if everyone in reads higher on it than everyone out; if not, the board shows the two that are the wrong way round. The marks are stylised: the orderings the game relies on are the ones the paper states (a horse or dog above the baby on reason and talk; the dog level with the grown-up who cannot learn much on reason, Singer's reply to Benn; apes and mice above the baby on awareness; the chimpanzee, dog and pig above the hurt grown-up, the baby and the grown-up who cannot learn much on awareness and intelligence; the grown-up above all three), and the lengths are ours. One length matters beyond the paper: the hurt grown-up reads none on Reason, Talk and Aware, like the stone, which is why only Suffer draws Singer's line in this cast.</p>
+  <p>The question is the paper's own: whose pain counts as much as yours? That is what the paper means by equality, equal consideration of interests, and the game asks it in a child's words. You draw your own line first, with no ruler in sight: tap everyone whose pain counts as much as your own. Then the four rulers come to the board one at a time, each showing at once whether it could draw your line, and you may move anyone in or out, watching the verdict redraw, or keep your line. The verdict reads all five lines: who moved you, and when. The ten are the paper's own examples, in a child's words: a grown-up; a baby of a few days with no parents (Bentham's "infant of a day", the paper's "orphaned human infant"); a grown-up whose brain is badly hurt for good (the paper's "severe and irreversible brain damage"); a grown-up who cannot learn much (the paper says "permanently retarded" and, quoting Benn, "imbeciles"); a chimpanzee, a dog, a pig, a horse, a mouse; and the stone. The rulers are Bentham's three questions as the paper quotes them, Reason, Talk and Suffer, and the one the paper adds in its own voice, Aware ("aware of what is happening to them, more self-directing"), in that order, Suffer last. A ruler can draw a line only if everyone in reads higher on it than everyone out; if not, the board shows the two that are the wrong way round. The marks are stylised: the orderings the game relies on are the ones the paper states (a horse or dog above the baby on reason and talk; the dog level with the grown-up who cannot learn much on reason, Singer's reply to Benn; apes and mice above the baby on awareness; the chimpanzee, dog and pig above the hurt grown-up, the baby and the grown-up who cannot learn much on awareness and intelligence; the grown-up above all three), and the lengths are ours. One length matters beyond the paper: the hurt grown-up reads none on Reason, Talk and Aware, like the stone, which is why only Suffer draws Singer's line in this cast.</p>
   <p>The board then names your last line by its shape, and says how you got there: no ruler moved you; the rulers drew your line (on every ruler you took that ruler's line); or some rulers moved you, named one by one. The four people: Species, the line most people draw, and the sponge writes Race and Sex over the name, which is the paper's own closing exercise (change "species" to "race" and re-read) and its opening (the rights of women mocked with the rights of brutes). Everyone but the stone: Singer's line, drawn by Suffer. A set that some reading ruler draws: a Reason line, say, with what it keeps out, and the paper's reply that a mark like intelligence is as arbitrary as skin colour for who counts. The four people plus some animals: Species with favourites. The four people minus some: Species with exceptions. Everything, nobody, or any other set: named as such, with the nearest of the two known lines and what was added or dropped. Species is never offered as a ruler; it is the name of a line no ruler draws. The second board is the paper's one thought experiment, asked as the paper asks it ("why not the baby?"), with four answers, a fifth when your own line already put the baby out, the paper's follow-up on potential, and the paper's reply in paraphrase; its two phrases kept in its own words are "simple discrimination" and "the pattern is the same". Killing, which the paper puts in a footnote, is left out.</p>
   <h2>Mechanism and claim boundaries</h2>
   <p><b>Kind: toy.</b> A model built to illustrate the paper's argument, not the paper's model (it has none) and not its data (it has none). <b>What the game demonstrates:</b> that on a cast of the paper's own examples, ranked as the paper ranks them, the line most people draw, the four people, is a line on no ruler, while Singer's line, everyone who can feel pain, is drawn by Suffer; and that every one of the 1024 lines a player can draw is either a ruler's line, with its price named, or a line drawn by hand. The calibration check proves this for every set and for five hundred random casts that keep only the paper's stated orderings. <b>What the game assumes:</b> the cast, the four rulers, the lengths of the marks, and the wording of the paper's answers. <b>What the paper establishes:</b> the argument, as an argument: it is a philosopher's case, not a finding about the world, and a reader who rejects a premise (that equality is a prescription, that suffering is the boundary) rejects the line too. The game shows where the line goes under the paper's premises; it does not show that the premises are right.</p>
@@ -238,13 +239,13 @@ var CONFIG = {
   EXPERIMENT: {
     subjects: ['infant', 'braindam', 'chimp', 'mouse'],
     many: 'One experiment would save many lives. It needs one subject: someone it is done to, and it will hurt.',
-    whyOptions: [
-      { id: 'human', text: 'Because the baby is one of us.' },
-      { id: 'grow',  text: 'Because the baby will grow into more than the chimpanzee.' },
-      { id: 'less',  text: 'Because the chimpanzee matters less.' },
-      { id: 'none',  text: 'No reason. Either would have done.' }
+    whyOptions: [ // {A} is the animal used
+      { id: 'human', text: 'Because the baby is one of us, and {A} is not.' },
+      { id: 'grow',  text: 'Because the baby will grow into more than {A} ever will.' },
+      { id: 'less',  text: 'Because {A}\'s pain counts for less than the baby\'s.' },
+      { id: 'none',  text: 'No reason. The baby would have done just as well.' }
     ],
-    outOption: { id: 'out', text: 'On my line the baby\'s pain counts for less too.' } // offered only when the player's own line put the baby out
+    outOption: { id: 'out', text: 'Because on my line the baby\'s pain already counts for less.' } // offered only when the player's own line put the baby out
   },
   PAPER_ORDERINGS: [
     { ruler: 'reason', above: ['horse', 'dog'],        below: ['infant'],                      strict: true,  src: 'p. 106, Bentham: a full-grown horse or dog is beyond comparison a more rational animal than an infant of a day' },
@@ -381,11 +382,22 @@ function clashSentence(set) {
 
 // ---------- Board two: the scientist ----------
 // path: { pick: subjectId | 'nobody', why: 'human'|'grow'|'less'|'none'|'out'|null, braindam: 'yes'|'no'|null }; set: the player's line
-function whyOptions(set) { var o = CONFIG.EXPERIMENT.whyOptions.slice(); if (set && set.indexOf('infant') < 0) o.unshift(CONFIG.EXPERIMENT.outOption); return o; }
+function whyOptions(set, pick) {
+  var who = pick ? castById(pick).phrase : 'the animal';
+  var o = CONFIG.EXPERIMENT.whyOptions.map(function (x) { return { id: x.id, text: x.text.replace(/\{A\}/g, who) }; });
+  if (set && set.indexOf('infant') < 0) o.unshift(CONFIG.EXPERIMENT.outOption);
+  return o;
+}
+// The question, which knows what the player's line said about the animal and the baby.
+function whyQuestion(path, set) {
+  var who = castById(path.pick), inA = set && set.indexOf(who.id) >= 0, inB = set && set.indexOf('infant') >= 0;
+  var pre = inA && inB ? 'On your line ' + who.phrase + '\'s pain counts as much as the baby\'s. ' : (!inA && inB ? 'On your line ' + who.phrase + '\'s pain counts for less than the baby\'s. ' : '');
+  return pre + 'Why ' + who.phrase + ', and not the baby?';
+}
 function nextQuestion(path, set) {
   if (!path.pick) return { id: 'pick', text: CONFIG.EXPERIMENT.many + ' Who?' };
   if (path.pick === 'nobody' || castById(path.pick).human) return null;
-  if (!path.why) return { id: 'why', text: 'Why not the baby?', options: whyOptions(set) };
+  if (!path.why) return { id: 'why', text: whyQuestion(path, set), options: whyOptions(set, path.pick) };
   if (path.why !== 'grow') return null;
   if (!path.braindam) return { id: 'braindam', text: 'The grown-up whose brain is badly hurt will not grow into more than the chimpanzee. Would you use him?', options: [{ id: 'yes', text: 'Yes' }, { id: 'no', text: 'No' }] };
   return null;
@@ -397,17 +409,17 @@ function judgeExperiment(path, set) {
     paper: 'Singer asks the scientist one thing only: give the same answer for the baby and for the animal. You did. Neither. He adds that the experiment that saves many lives is a story told to make the point, and that nearly all real experiments on animals would never be done on a baby.' };
   if (who.human) return { status: 'read', said: 'You used ' + who.phrase + '.',
     paper: (set.indexOf(who.id) >= 0 ? 'On your line ' + who.phrase + '\'s pain counts as much as yours, and you used ' + (who.id === 'infant' ? 'the baby' : 'him') + ' anyway. ' : '') + 'Singer says: whatever you would do to the chimpanzee or the mouse, you must be ready to do to a baby who knows as little and feels as much. You were. He has no quarrel with your ruler. His quarrel is with the experiment itself, which he says almost nobody would do once they had answered this way.' };
-  if (path.why === 'out') return { status: 'read', said: 'You used ' + who.phrase + ', and on your line the baby\'s pain counts for less too.',
+  if (path.why === 'out') return { status: 'read', said: 'You used ' + who.phrase + ', because on your line the baby\'s pain already counts for less.',
     paper: 'Then you are consistent: your line counted the baby\'s pain for less, and you spent it. Singer has no quarrel with that as a line. He has one with where it runs: the baby feels the experiment exactly as much as ' + who.phrase + ' does, and as much as you would.' };
-  if (path.why === 'none') return { status: 'read', said: 'You used ' + who.phrase + ', and the baby would have done as well.',
+  if (path.why === 'none') return { status: 'read', said: 'You used ' + who.phrase + ', and the baby would have done just as well.',
     paper: 'Then your ruler is one you can read. Singer has no quarrel with it. His quarrel is with the experiment: he says that once the baby would have done as well, almost nobody still wants to do it to the chimpanzee or the mouse either.' };
-  if (path.why === 'human') return { status: 'species', said: 'You used ' + who.phrase + ', not the baby, because the baby is one of us.',
+  if (path.why === 'human') return { status: 'species', said: 'You used ' + who.phrase + ', not the baby, because the baby is one of us and ' + who.phrase + ' is not.',
     paper: 'On every ruler you could read, ' + who.phrase + ' was above the baby: it knows more about what is happening to it, and it feels pain just as much. The only thing that put the baby out of reach is the team it is on. Singer\'s name for that is Species, and he says it is the same pattern as the racist\'s.' };
-  if (path.why === 'less') return { status: 'species', said: 'You used ' + who.phrase + ', not the baby, because the chimpanzee matters less.',
-    paper: 'Matters less measured how? Go back to the rulers: on Reason, Talk and Aware ' + who.phrase + ' was above the baby, and on Suffer they were level. No ruler says it matters less. What says so is the team it is on, and Singer says that is the same pattern as the racist\'s.' };
-  if (path.braindam === 'yes') return { status: 'potential', said: 'You used ' + who.phrase + ', not the baby, because the baby will grow. You would use the grown-up whose brain is badly hurt.',
+  if (path.why === 'less') return { status: 'species', said: 'You used ' + who.phrase + ', not the baby, because ' + who.phrase + '\'s pain counts for less.',
+    paper: 'Counts for less measured how? Go back to the rulers: on Reason, Talk and Aware ' + who.phrase + ' was above the baby, and on Suffer they were level. No ruler says its pain counts for less. What says so is the team it is on, and Singer says that is the same pattern as the racist\'s.' + (set.indexOf(who.id) >= 0 ? ' And on your own last line ' + who.phrase + '\'s pain counted as much as yours.' : '') };
+  if (path.braindam === 'yes') return { status: 'potential', said: 'You used ' + who.phrase + ', not the baby, because the baby will grow into more. You would use the grown-up whose brain is badly hurt.',
     paper: 'Then "what it will grow into" is your ruler, and it is one you can read. Singer lets it stand and tells you what it costs: on that ruler an unborn child has the same claim as the baby, and that is a line many people do not want to draw. And he points out that this ruler gives you no reason to prefer ' + who.phrase + ' over the grown-up whose brain is hurt, who will not grow either; you gave none.' };
-  return { status: 'species', said: 'You used ' + who.phrase + ', not the baby, because the baby will grow. You would not use the grown-up whose brain is badly hurt, who will not.',
+  return { status: 'species', said: 'You used ' + who.phrase + ', not the baby, because the baby will grow into more. You would not use the grown-up whose brain is badly hurt, who will not.',
     paper: 'So "what it will grow into" was not your ruler after all: it would have let you use the grown-up whose brain is hurt, and you would not. On every ruler you could read, ' + who.phrase + ' was above him. What is left is the team he is on, and Singer says that is the same pattern as the racist\'s.' };
 }
 
@@ -493,7 +505,7 @@ function verdict(state) {
 
 if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, castById: castById, humans: humans, feelers: feelers, allIds: allIds, rulerById: rulerById, sortBy: sortBy, sameSet: sameSet,
   testLine: testLine, linesOn: linesOn, revealWords: revealWords, shapeOf: shapeOf, shapeWords: shapeWords, clashSentence: clashSentence,
-  whyOptions: whyOptions, nextQuestion: nextQuestion, judgeExperiment: judgeExperiment, verdict: verdict, listPhrases: listPhrases, moves: moves, synthesis: synthesis };
+  whyOptions: whyOptions, whyQuestion: whyQuestion, nextQuestion: nextQuestion, judgeExperiment: judgeExperiment, verdict: verdict, listPhrases: listPhrases, moves: moves, synthesis: synthesis };
 
 </script>
 <script>
@@ -555,7 +567,7 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, castById: 
     var i = S.set.indexOf(id); if (i >= 0) S.set.splice(i, 1); else S.set.push(id);
     drawCast();
     if (S.phase === 'pick') { $('hint1').textContent = S.set.length === 0 ? 'Nobody yet.' : (S.set.length + ' as much as yours, ' + (N - S.set.length) + ' for less.'); $('b-done').disabled = false; }
-    else { var moved = !sameSet(S.set, S.lines[S.lines.length - 1]); $('hint1').textContent = moved ? 'You moved. ' + S.set.length + ' as much as yours, ' + (N - S.set.length) + ' for less.' : 'Back where it was.'; $('b-done').textContent = moved ? 'Done' : 'Keep my line'; }
+    else { var moved = !sameSet(S.set, S.lines[S.lines.length - 1]); $('hint1').textContent = moved ? 'You moved. ' + S.set.length + ' as much as yours, ' + (N - S.set.length) + ' for less.' : 'Back where it was.'; $('b-done').textContent = moved ? 'Done' : 'Keep my line'; judgeLive(false); }
   }
   function drawLine(k, color, dashed, label) {
     var y = TOP + k * RH, L = $('line'); if (!L) return;
@@ -568,7 +580,7 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, castById: 
     path.style.strokeDasharray = len; path.style.strokeDashoffset = len; path.style.transition = 'stroke-dashoffset .5s ease-out';
     requestAnimationFrame(function () { requestAnimationFrame(function () { path.style.strokeDashoffset = 0; }); });
   }
-  function drawCircles(ids) {
+  function drawCircles(ids, instant) {
     var C = $('circles'); if (!C) return; C.innerHTML = ''; var delay = 0;
     S.rows.forEach(function (row, j) {
       if (ids.indexOf(row.id) < 0) return;
@@ -577,6 +589,7 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, castById: 
       e.setAttribute('cx', 104); e.setAttribute('cy', cy); e.setAttribute('rx', 102); e.setAttribute('ry', 12.5);
       e.setAttribute('fill', 'none'); e.setAttribute('stroke', '#E8664D'); e.setAttribute('stroke-width', '2.4'); e.setAttribute('opacity', '.95'); e.setAttribute('transform', 'rotate(-1.5 104 ' + cy + ')');
       C.appendChild(e);
+      if (instant) return;
       var len = e.getTotalLength(); e.style.strokeDasharray = len; e.style.strokeDashoffset = len; e.style.transition = 'stroke-dashoffset .45s ease-out ' + delay + 'ms';
       requestAnimationFrame(function () { requestAnimationFrame(function () { e.style.strokeDashoffset = 0; }); }); delay += 200;
     });
@@ -591,7 +604,7 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, castById: 
     $('btns1').innerHTML = '<button class="btn solid" id="b-done" disabled>Done</button>'; $('b-done').onclick = commitRound;
     drawCast(); show('s-one');
   }
-  // ---- rounds 1-4: a ruler on the board; move anyone, or keep the line
+  // ---- rounds 1-4: a ruler on the board, its verdict on your line shown at once and kept live; move anyone, or keep the line
   function drawTray() {
     var t = $('tray'); t.innerHTML = '';
     CONFIG.RULERS.forEach(function (r, i) {
@@ -603,8 +616,7 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, castById: 
   }
   function commitRound() {
     if (S.phase === 'pick') { S.lines = [S.set.slice()]; S.round = 0; }
-    else { S.lines.push(S.set.slice()); }
-    if (S.phase === 'round') { revealRound(); return; }
+    else S.lines.push(S.set.slice());
     nextRound();
   }
   function nextRound() {
@@ -613,28 +625,21 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, castById: 
     S.phase = 'round'; S.cur = CONFIG.RULERS[S.round - 1].id;
     var r = rulerById(S.cur);
     $('tray').style.display = ''; $('bent').style.display = S.round === 1 ? '' : 'none';
-    $('now1').textContent = 'Ruler ' + S.round + ' of 4 · ' + r.label;
-    $('aim1').textContent = S.round === 1 ? 'Your line is drawn. Now a ruler comes to the board. Does it move you?' : (S.cur === 'suffer' ? 'Last ruler. Look at the marks. Does it move you?' : 'Next ruler. Does it move you?');
+    $('aim1').textContent = S.round === 1 ? 'Your line is drawn. Now the rulers come, one at a time. Does this one move you?' : (S.cur === 'suffer' ? 'Last ruler. Look at the marks. Does it move you?' : 'Next ruler. Does it move you?');
     $('rule1').innerHTML = S.cur === 'suffer'
-      ? '<b>Suffer</b>: whether it can feel pain. All nine read the same; only the stone reads none. So the question is now Singer\'s own: they all feel it. Does it all count the same? Your line is still there, full dots as much as yours, empty dots for less. Tap anyone to move them. Or keep your line.'
-      : '<b>' + esc(r.label) + '</b>: ' + esc(r.what) + '. The ten are sorted by it, highest at the top. Your line is still there: full dots for those whose pain counts as much as yours, empty dots for the rest. Tap anyone to move them. Or keep your line.';
-    $('hint1').textContent = ''; $('said1').textContent = ''; $('find1').textContent = '';
+      ? '<b>Suffer</b>: whether it can feel pain. All nine read the same; only the stone reads none. So the question is now Singer\'s own: they all feel it. Does it all count the same? Tap anyone to move them. Or keep your line.'
+      : '<b>' + esc(r.label) + '</b>: ' + esc(r.what) + '. The ten are sorted by it, highest at the top; your dots ride along. The board shows at once whether ' + esc(r.label) + ' could have drawn your line, and shows it again every time you move someone. Tap anyone to move them. Or keep your line.';
+    $('hint1').textContent = ''; $('find1').textContent = S.cur === 'suffer' ? '' : '';
     $('btns1').innerHTML = '<button class="btn solid" id="b-done">Keep my line</button>'; $('b-done').onclick = commitRound;
-    drawTray(); drawCast();
+    drawTray(); drawCast(); judgeLive(true);
   }
-  function revealRound() {
-    var rid = S.cur, r = rulerById(rid), t = testLine(S.set, rid), prev = S.lines[S.lines.length - 2], moved = !sameSet(S.set, prev);
-    S.phase = 'revealed'; drawCast(); drawTray();
-    $('btns1').innerHTML = ''; $('hint1').textContent = '';
-    setTimeout(function () {
-      if (t.line) { animateLine(t.k); $('now1').textContent = r.label + ' draws your line.'; }
-      else { drawCircles(t.clash); $('now1').textContent = 'No line on ' + r.label + ' does that.'; }
-      $('said1').textContent = (moved ? r.label + ' moved you. ' : 'You kept your line. ') + revealWords(S.set, rid);
-      if (rid === 'suffer') $('find1').textContent = 'Suffer reads the same for every one of them but the stone.';
-      var nb = document.createElement('button'); nb.className = 'btn solid';
-      nb.textContent = S.round < CONFIG.RULERS.length ? 'Next ruler: ' + CONFIG.RULERS[S.round].label + ' →' : 'So what drew my line?';
-      nb.onclick = nextRound; $('btns1').appendChild(nb);
-    }, 350);
+  // the ruler's verdict on the current line: a red line if it draws it, circles on the clash if not; redrawn after every tap
+  function judgeLive(first) {
+    var rid = S.cur, r = rulerById(rid), t = testLine(S.set, rid);
+    var L = $('line'), C = $('circles'); if (L) L.innerHTML = ''; if (C) C.innerHTML = '';
+    if (t.line) { if (first) animateLine(t.k); else drawLine(t.k, '#E8664D', false, ''); $('now1').textContent = r.label + ' draws your line.'; }
+    else { drawCircles(t.clash, !first); $('now1').textContent = r.label + ' cannot draw your line.'; }
+    $('said1').textContent = revealWords(S.set, rid);
   }
   // ---- the name
   function nameIt() {

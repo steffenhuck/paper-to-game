@@ -46,6 +46,7 @@ svg.cast{display:block;width:100%;height:auto;margin:2px 0 4px;touch-action:mani
 svg text{font-family:'Architects',sans-serif;fill:var(--chalk)}
 .col-head{font-family:'Fredericka',serif;font-size:14px;letter-spacing:.06em;fill:var(--yellow)}
 .rowtap{cursor:pointer}
+#circles,#line,#ghost{pointer-events:none}
 .said{font-size:18px;margin:6px 0 4px;min-height:22px}
 .find{font-size:16px;color:var(--dim);margin:0 0 8px}
 .paperline{font-size:17px;color:var(--yellow);margin:6px 0 8px}
@@ -174,10 +175,10 @@ a{color:var(--chalk)}
   <p><b>Whose pain counts as much as yours? Draw the line.</b></p>
   <h2>The first board</h2>
   <p>Ten are on the board, every one an example from Singer's paper: a grown-up; a baby a few days old, with no parents; a grown-up whose brain is badly hurt, for good; a grown-up who cannot learn much; a chimpanzee, a dog, a pig, a horse, a mouse; and a stone. Everyone but the stone can be hurt. Tap everyone whose pain counts as much as your own: if they are hurt, it matters exactly as much as if you were. Tap again to take one out. Then tap <b>Done</b>. That is your first line.</p>
-  <p>Then four rulers come to the board one at a time: Reason, Talk, Aware and Suffer. Each sorts the ten by one thing, highest at the top, with a yellow mark for each; the marks follow what Singer's paper says. Your line is still there: a full dot for everyone whose pain counts as much as yours, an empty one for the rest. Now you may move anyone, or keep your line as it is. Tap <b>Keep my line</b> or <b>Done</b>. The board then says whether that ruler could have drawn the line you left it with: a red line if it could, red circles on the two that are the wrong way round if it could not. Then the next ruler.</p>
+  <p>Then four rulers come to the board one at a time: Reason, Talk, Aware and Suffer. Each sorts the ten by one thing, highest at the top, with a yellow mark for each; the marks follow what Singer's paper says. Your line is still there: a full dot for everyone whose pain counts as much as yours, an empty one for the rest. The board shows at once whether that ruler could have drawn your line: a red line if it could, red circles on the two that are the wrong way round if it could not. Now you may move anyone, or keep your line; every time you move someone the line or the circles are drawn again for the new line. Tap <b>Keep my line</b> or <b>Done</b>, and the next ruler comes.</p>
   <p>After Suffer, the board tells you what your last line is called, who moved you and when, and what Singer says about it.</p>
   <h2>The second board</h2>
-  <p>You are the scientist in Singer's own story: one experiment that would save many lives, and it needs one subject, someone it is done to. Four are on offer, with their marks, and there is a fifth answer: no one. Tap one, then <b>Use this one</b>. If you took an animal, Singer asks why not the baby, and maybe one more thing. Then he says what your answers add up to.</p>
+  <p>You are the scientist in Singer's own story: one experiment that would save many lives, and it needs one subject, someone it is done to. Four are on offer, with their marks, and there is a fifth answer: no one. Tap one, then <b>Use this one</b>. If you took an animal, Singer asks why that one and not the baby, and maybe one more thing. Then he says what your answers add up to.</p>
   <h2>The verdict</h2>
   <p>What Singer says; your five lines, and who moved you; what you did as the scientist; where you and Singer part; and what follows. No score. Play again to draw a different line.</p>
   <div class="close"><button class="btn" id="b-help-close2">Back to the board</button></div>
@@ -253,7 +254,7 @@ a{color:var(--chalk)}
     var i = S.set.indexOf(id); if (i >= 0) S.set.splice(i, 1); else S.set.push(id);
     drawCast();
     if (S.phase === 'pick') { $('hint1').textContent = S.set.length === 0 ? 'Nobody yet.' : (S.set.length + ' as much as yours, ' + (N - S.set.length) + ' for less.'); $('b-done').disabled = false; }
-    else { var moved = !sameSet(S.set, S.lines[S.lines.length - 1]); $('hint1').textContent = moved ? 'You moved. ' + S.set.length + ' as much as yours, ' + (N - S.set.length) + ' for less.' : 'Back where it was.'; $('b-done').textContent = moved ? 'Done' : 'Keep my line'; }
+    else { var moved = !sameSet(S.set, S.lines[S.lines.length - 1]); $('hint1').textContent = moved ? 'You moved. ' + S.set.length + ' as much as yours, ' + (N - S.set.length) + ' for less.' : 'Back where it was.'; $('b-done').textContent = moved ? 'Done' : 'Keep my line'; judgeLive(false); }
   }
   function drawLine(k, color, dashed, label) {
     var y = TOP + k * RH, L = $('line'); if (!L) return;
@@ -266,7 +267,7 @@ a{color:var(--chalk)}
     path.style.strokeDasharray = len; path.style.strokeDashoffset = len; path.style.transition = 'stroke-dashoffset .5s ease-out';
     requestAnimationFrame(function () { requestAnimationFrame(function () { path.style.strokeDashoffset = 0; }); });
   }
-  function drawCircles(ids) {
+  function drawCircles(ids, instant) {
     var C = $('circles'); if (!C) return; C.innerHTML = ''; var delay = 0;
     S.rows.forEach(function (row, j) {
       if (ids.indexOf(row.id) < 0) return;
@@ -275,6 +276,7 @@ a{color:var(--chalk)}
       e.setAttribute('cx', 104); e.setAttribute('cy', cy); e.setAttribute('rx', 102); e.setAttribute('ry', 12.5);
       e.setAttribute('fill', 'none'); e.setAttribute('stroke', '#E8664D'); e.setAttribute('stroke-width', '2.4'); e.setAttribute('opacity', '.95'); e.setAttribute('transform', 'rotate(-1.5 104 ' + cy + ')');
       C.appendChild(e);
+      if (instant) return;
       var len = e.getTotalLength(); e.style.strokeDasharray = len; e.style.strokeDashoffset = len; e.style.transition = 'stroke-dashoffset .45s ease-out ' + delay + 'ms';
       requestAnimationFrame(function () { requestAnimationFrame(function () { e.style.strokeDashoffset = 0; }); }); delay += 200;
     });
@@ -289,7 +291,7 @@ a{color:var(--chalk)}
     $('btns1').innerHTML = '<button class="btn solid" id="b-done" disabled>Done</button>'; $('b-done').onclick = commitRound;
     drawCast(); show('s-one');
   }
-  // ---- rounds 1-4: a ruler on the board; move anyone, or keep the line
+  // ---- rounds 1-4: a ruler on the board, its verdict on your line shown at once and kept live; move anyone, or keep the line
   function drawTray() {
     var t = $('tray'); t.innerHTML = '';
     CONFIG.RULERS.forEach(function (r, i) {
@@ -301,8 +303,7 @@ a{color:var(--chalk)}
   }
   function commitRound() {
     if (S.phase === 'pick') { S.lines = [S.set.slice()]; S.round = 0; }
-    else { S.lines.push(S.set.slice()); }
-    if (S.phase === 'round') { revealRound(); return; }
+    else S.lines.push(S.set.slice());
     nextRound();
   }
   function nextRound() {
@@ -311,28 +312,21 @@ a{color:var(--chalk)}
     S.phase = 'round'; S.cur = CONFIG.RULERS[S.round - 1].id;
     var r = rulerById(S.cur);
     $('tray').style.display = ''; $('bent').style.display = S.round === 1 ? '' : 'none';
-    $('now1').textContent = 'Ruler ' + S.round + ' of 4 · ' + r.label;
-    $('aim1').textContent = S.round === 1 ? 'Your line is drawn. Now a ruler comes to the board. Does it move you?' : (S.cur === 'suffer' ? 'Last ruler. Look at the marks. Does it move you?' : 'Next ruler. Does it move you?');
+    $('aim1').textContent = S.round === 1 ? 'Your line is drawn. Now the rulers come, one at a time. Does this one move you?' : (S.cur === 'suffer' ? 'Last ruler. Look at the marks. Does it move you?' : 'Next ruler. Does it move you?');
     $('rule1').innerHTML = S.cur === 'suffer'
-      ? '<b>Suffer</b>: whether it can feel pain. All nine read the same; only the stone reads none. So the question is now Singer\'s own: they all feel it. Does it all count the same? Your line is still there, full dots as much as yours, empty dots for less. Tap anyone to move them. Or keep your line.'
-      : '<b>' + esc(r.label) + '</b>: ' + esc(r.what) + '. The ten are sorted by it, highest at the top. Your line is still there: full dots for those whose pain counts as much as yours, empty dots for the rest. Tap anyone to move them. Or keep your line.';
-    $('hint1').textContent = ''; $('said1').textContent = ''; $('find1').textContent = '';
+      ? '<b>Suffer</b>: whether it can feel pain. All nine read the same; only the stone reads none. So the question is now Singer\'s own: they all feel it. Does it all count the same? Tap anyone to move them. Or keep your line.'
+      : '<b>' + esc(r.label) + '</b>: ' + esc(r.what) + '. The ten are sorted by it, highest at the top; your dots ride along. The board shows at once whether ' + esc(r.label) + ' could have drawn your line, and shows it again every time you move someone. Tap anyone to move them. Or keep your line.';
+    $('hint1').textContent = ''; $('find1').textContent = S.cur === 'suffer' ? '' : '';
     $('btns1').innerHTML = '<button class="btn solid" id="b-done">Keep my line</button>'; $('b-done').onclick = commitRound;
-    drawTray(); drawCast();
+    drawTray(); drawCast(); judgeLive(true);
   }
-  function revealRound() {
-    var rid = S.cur, r = rulerById(rid), t = testLine(S.set, rid), prev = S.lines[S.lines.length - 2], moved = !sameSet(S.set, prev);
-    S.phase = 'revealed'; drawCast(); drawTray();
-    $('btns1').innerHTML = ''; $('hint1').textContent = '';
-    setTimeout(function () {
-      if (t.line) { animateLine(t.k); $('now1').textContent = r.label + ' draws your line.'; }
-      else { drawCircles(t.clash); $('now1').textContent = 'No line on ' + r.label + ' does that.'; }
-      $('said1').textContent = (moved ? r.label + ' moved you. ' : 'You kept your line. ') + revealWords(S.set, rid);
-      if (rid === 'suffer') $('find1').textContent = 'Suffer reads the same for every one of them but the stone.';
-      var nb = document.createElement('button'); nb.className = 'btn solid';
-      nb.textContent = S.round < CONFIG.RULERS.length ? 'Next ruler: ' + CONFIG.RULERS[S.round].label + ' →' : 'So what drew my line?';
-      nb.onclick = nextRound; $('btns1').appendChild(nb);
-    }, 350);
+  // the ruler's verdict on the current line: a red line if it draws it, circles on the clash if not; redrawn after every tap
+  function judgeLive(first) {
+    var rid = S.cur, r = rulerById(rid), t = testLine(S.set, rid);
+    var L = $('line'), C = $('circles'); if (L) L.innerHTML = ''; if (C) C.innerHTML = '';
+    if (t.line) { if (first) animateLine(t.k); else drawLine(t.k, '#E8664D', false, ''); $('now1').textContent = r.label + ' draws your line.'; }
+    else { drawCircles(t.clash, !first); $('now1').textContent = r.label + ' cannot draw your line.'; }
+    $('said1').textContent = revealWords(S.set, rid);
   }
   // ---- the name
   function nameIt() {
