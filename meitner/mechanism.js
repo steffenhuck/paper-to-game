@@ -36,21 +36,22 @@ var CONFIG = {
   NEUTRONS_TH: 3,           // OURS: one thing to find; thorium's two tubes are lit only from pinches the skin pulls back about half the time, so three tries (rev. 2)
 
   // --- the chemists' shelf: what Hahn and Strassmann found, filed where the 1939 table put it ---
-  // cellZ: the cell the chemists filed it in; col: the column (0-17) any landing piece lights it from; byHold: lit only by the drop that holds together
+  // cellZ: the cell the chemists filed it in; col: the column (0-17) any landing piece lights it from; byHold: lit only by the drop that holds together;
+  // wait: what the tube's card on the shelf says before it is explained (OURS, rev. 3); once explained the card says what the body really is (tubeAnswer)
   TUBES_U: [
-    { id: 'u24', label: 'like uranium, 24 min', filed: 'uranium itself', cellZ: 92, col: 5, byHold: true,
+    { id: 'u24', label: 'like uranium, 24 min', wait: 'uranium, 24 min', filed: 'uranium itself', cellZ: 92, col: 5, byHold: true,
       src: 'p. 240: the 24 min body chemically identified with uranium is probably really 239U, formed by a resonance process' },
-    { id: 'eRe', label: 'like rhenium', filed: 'eka-rhenium, element 93', cellZ: 93, col: 6, src: 'p. 240 names eka-rhenium; ref 2' },
-    { id: 'eOs', label: 'like osmium', filed: 'eka-osmium, element 94', cellZ: 94, col: 7, src: 'p. 239: "eka-osmium (Z = 94) rather than osmium (Z = 76) or ruthenium (Z = 44)"' },
-    { id: 'eIr', label: 'like iridium', filed: 'eka-iridium, element 95', cellZ: 95, col: 8, src: 'context: the 1937 scheme of ref 2 (Meitner, Hahn & Strassmann); the paper says "six ... assigned to elements beyond uranium"' },
-    { id: 'ePt', label: 'like platinum', filed: 'eka-platinum, element 96', cellZ: 96, col: 9, src: 'context: ref 2' },
-    { id: 'eAu', label: 'like gold', filed: 'eka-gold, element 97', cellZ: 97, col: 10, src: 'context: ref 2' },
-    { id: 'ba', label: 'like barium', filed: 'barium', cellZ: 56, col: 1, src: 'p. 239, refs 4-5: impossible to separate from barium; at least three such bodies' },
-    { id: 'la', label: 'like lanthanum', filed: 'lanthanum', cellZ: 57, col: 2, src: 'p. 239, ref 5: the barium-lanthanum(-cerium) chains' }
+    { id: 'eRe', label: 'like rhenium', wait: '93 · like rhenium', filed: 'eka-rhenium, element 93', cellZ: 93, col: 6, src: 'p. 240 names eka-rhenium; ref 2' },
+    { id: 'eOs', label: 'like osmium', wait: '94 · like osmium', filed: 'eka-osmium, element 94', cellZ: 94, col: 7, src: 'p. 239: "eka-osmium (Z = 94) rather than osmium (Z = 76) or ruthenium (Z = 44)"' },
+    { id: 'eIr', label: 'like iridium', wait: '95 · like iridium', filed: 'eka-iridium, element 95', cellZ: 95, col: 8, src: 'context: the 1937 scheme of ref 2 (Meitner, Hahn & Strassmann); the paper says "six ... assigned to elements beyond uranium"' },
+    { id: 'ePt', label: 'like platinum', wait: '96 · like platinum', filed: 'eka-platinum, element 96', cellZ: 96, col: 9, src: 'context: ref 2' },
+    { id: 'eAu', label: 'like gold', wait: '97 · like gold', filed: 'eka-gold, element 97', cellZ: 97, col: 10, src: 'context: ref 2' },
+    { id: 'ba', label: 'like barium', wait: 'like barium', filed: 'barium', cellZ: 56, col: 1, src: 'p. 239, refs 4-5: impossible to separate from barium; at least three such bodies' },
+    { id: 'la', label: 'like lanthanum', wait: 'like lanthanum', filed: 'lanthanum', cellZ: 57, col: 2, src: 'p. 239, ref 5: the barium-lanthanum(-cerium) chains' }
   ],
   TUBES_TH: [
-    { id: 'ra', label: 'like radium', filed: 'radium', cellZ: 88, col: 1, src: 'p. 239, ref 8: activities from thorium ascribed to radium isotopes' },
-    { id: 'ac', label: 'like actinium', filed: 'actinium', cellZ: 89, col: 2, src: 'p. 239, ref 8: ... and actinium isotopes' }
+    { id: 'ra', label: 'like radium', wait: 'like radium', filed: 'radium', cellZ: 88, col: 1, src: 'p. 239, ref 8: activities from thorium ascribed to radium isotopes' },
+    { id: 'ac', label: 'like actinium', wait: 'like actinium', filed: 'actinium', cellZ: 89, col: 2, src: 'p. 239, ref 8: ... and actinium isotopes' }
   ],
 
   // --- the paper's own chains, for the calibration check ---
@@ -222,34 +223,33 @@ function lookalikes(move, tubes) {
   return out;
 }
 
-// ---------- words: the game's own voice after a move ----------
-function pathWords(path) {
-  if (path.length === 1) return nameOf(path[0]) + ', which stays where it lands';
-  var names = path.slice(1).map(nameOf);
-  var last = names.pop();
-  return nameOf(path[0]) + ', which climbs ' + (names.length ? 'through ' + names.join(', ') + ' to ' : 'to ') + last + ' (' + (path.length - 1) + (path.length - 1 === 1 ? ' step' : ' steps') + ')';
+// ---------- words: the game's own voice after a move (rev. 3: short, plain, for a smart eleven-year-old) ----------
+function endName(path) { return nameOf(path[path.length - 1]); }
+function tubeAnswer(t, atZ) {                       // what a tube's card says once it is explained
+  if (t.byHold) return '= uranium itself';
+  var nm = nameOf(atZ);
+  return (isDashed(t.cellZ) ? t.cellZ + ' = ' + nm : '= ' + nm + (atZ === t.cellZ ? ' itself' : ''));
 }
 function moveWords(st, move) {
-  var T = st.tubes, lines = [];
+  var T = st.tubes, lines = [], nuc = st.nuc;
   if (move.kind === 'hold' || move.kind === 'rang') {
-    var pc = move.pieces[0];
-    if (move.kind === 'rang') lines.push('Pinched at ' + move.Z1 + ' | ' + move.Z2 + ', and the skin pulled it back: this far from the middle the drop splits ' + oddsWords(move.odds) + ', and this time it did not. No split, no blast. It kept the neutron: it is ' + st.nuc.name + '-' + pc.A + ' now, and after a while it climbs one cell to ' + nameOf(pc.path[pc.path.length - 1]) + '.');
-    else lines.push('The drop takes the neutron in and rings evenly. It is ' + st.nuc.name + '-' + pc.A + ' now, and after a while it climbs one cell to ' + nameOf(pc.path[pc.path.length - 1]) + '.');
-    if (move.lit.length) lines.push('That lights the tube "' + tubeById(T, move.lit[0].id).label + '": the body that acts like uranium is uranium, made when the drop holds' + (move.kind === 'rang' ? ', whether you meant it to or not' : '') + '.');
-    else if (move.relit.length) lines.push('The "' + tubeById(T, move.relit[0].id).label + '" tube was already lit. Nothing new.');
-    else lines.push('No tube on this shelf acts like that.');
-    if (st.nuc.id === 'U') lines.push('The cell it climbs into is a dashed one, 93. It sits there quiet, as the paper has it: the one body beyond uranium the paper allows, and not the lively "like rhenium" tube.');
+    var pc = move.pieces[0], made = nuc.name + '-' + pc.A;
+    if (move.kind === 'rang') lines.push('You pinched at ' + move.Z1 + ' | ' + move.Z2 + '. This far from the middle a pinch goes through ' + oddsWords(move.odds) + ', and this time the skin pulled it back. No split: the drop kept the neutron and is ' + made + ' now.');
+    else lines.push('The drop swallowed the neutron and just rings. No split. It is ' + made + ' now.');
+    if (move.lit.length) lines.push('That explains the "uranium, 24 min" tube: it is uranium itself, made when a drop swallows a neutron instead of splitting' + (move.kind === 'rang' ? ' (this time by accident)' : '') + '.');
+    else if (move.relit.length) lines.push('The "uranium, 24 min" tube was already explained. Nothing new.');
+    else lines.push('No tube on this shelf is like that.');
+    if (nuc.id === 'U') lines.push('Then it changes one cell, into element 93, and sits there quiet.');
     return lines;
   }
   var p0 = move.pieces[0], p1 = move.pieces[1];
-  lines.push('Pinched at ' + move.Z1 + ' | ' + move.Z2 + (move.odds !== undefined && move.odds < 0.9 ? ' (this far out the drop splits ' + oddsWords(move.odds) + ', and this time it did)' : '') + ': ' + nameOf(p0.Z) + ' and ' + nameOf(p1.Z) + '. They fly apart with about ' + move.energyShown + ' Mev' + (move.uneven ? ', less than an even pinch gives' : '') + '. Together the two pieces weigh less than the drop did, by about ' + lostWords(move.lostProtons) + ' of a proton: that lost weight is what they flew off with.');
-  lines.push('Left piece: ' + pathWords(p0.path) + '. Right piece: ' + pathWords(p1.path) + '.');
-  if (move.lit.length) {
-    var byTube = move.lit.map(function (l) { var t = tubeById(T, l.id); return '"' + t.label + '"' + (l.atZ !== t.cellZ ? ' (from ' + nameOf(l.atZ) + ', same column)' : ''); });
-    lines.push('Lit: ' + byTube.join('; ') + '.');
-  } else lines.push('No tube on the shelf acts like any of these' + (move.relit.length ? ', beyond ones already lit' : '') + '.');
+  lines.push('You pinched at ' + move.Z1 + ' | ' + move.Z2 + (move.odds !== undefined && move.odds < 0.9 ? ' (it goes through ' + oddsWords(move.odds) + ', and this time it did)' : '') + ': a piece of ' + nameOf(p0.Z) + ' and a piece of ' + nameOf(p1.Z) + '.');
+  lines.push(cap(nameOf(p0.Z)) + ' climbs to ' + endName(p0.path) + '. ' + cap(nameOf(p1.Z)) + ' climbs to ' + endName(p1.path) + '.');
   var ghosts = move.lit.filter(function (l) { return isDashed(tubeById(T, l.id).cellZ); });
-  if (ghosts.length) lines.push(countWord(ghosts.length).replace(/^./, function (c) { return c.toUpperCase(); }) + (ghosts.length === 1 ? ' tube comes' : ' tubes come') + ' down out of the dashed row: what the chemists filed beyond uranium acts exactly like ' + ghosts.map(function (l) { return nameOf(l.atZ); }).join(', ') + ', which sit in the same columns.');
+  if (move.lit.length) {
+    var parts = move.lit.map(function (l) { var t = tubeById(T, l.id); return isDashed(t.cellZ) ? t.cellZ + ' is ' + nameOf(l.atZ) : '"' + t.label + '" is ' + nameOf(l.atZ); });
+    lines.push((ghosts.length ? 'Explained, and the "new elements" come down: ' : 'Explained: ') + parts.join('; ') + '.');
+  } else lines.push('No tube on the shelf is like any of these' + (move.relit.length ? ', apart from ones already explained' : '') + '.');
   var look = move.lookalikes.filter(function (k) { return move.lit.some(function (l) { return l.id === k.tube; }) || move.relit.some(function (l) { return l.id === k.tube; }); });
   if (look.length && !ghosts.length) {
     // one lookalike per tube: the piece that lit it if that piece is not the tube's own element, else the first in order of charge
@@ -257,10 +257,10 @@ function moveWords(st, move) {
     look.sort(function (a, b) { return (a.Z === litAt[a.tube] ? -1 : 0) - (b.Z === litAt[b.tube] ? -1 : 0) || a.Z - b.Z; });
     var seen = {}, nm = [], fd = [];
     look.forEach(function (k) { if (seen[k.tube]) return; seen[k.tube] = 1; nm.push(nameOf(k.Z)); fd.push(tubeById(T, k.tube).filed); });
-    lines.push(cap(nm.join(' and ')) + (nm.length > 1 ? ' act' : ' acts') + ' like ' + fd.join(' and ') + ' at the bench: the chemists could not have told them apart.');
+    lines.push(cap(nm.join(' and ')) + (nm.length > 1 ? ' act' : ' acts') + ' like ' + fd.join(' and ') + ', so the chemists could not tell them apart.');
   }
   var u6 = move.pieces.some(function (pc) { return pc.path.some(function (Z) { var c = cellOf(Z); return c && c.col === 5 && Z < 92; }); });
-  if (u6 && st.nuc.id === 'U' && !st.lit.u24) lines.push('A piece passed through uranium\'s own column, but the 24-minute body is made only when the drop takes the neutron in: no split gives it.');
+  if (u6 && nuc.id === 'U' && !st.lit.u24) lines.push('Passing uranium\'s column does not make the 24-minute stuff: that needs a hold.');
   return lines;
 }
 function lostWords(p) {
@@ -286,38 +286,40 @@ function verdict(stU, stTh) {
   var splits = stU.moves.filter(function (m) { return m.kind === 'split'; });
   var rangs = stU.moves.filter(function (m) { return m.kind === 'rang'; });
   var unevens = splits.concat(rangs).filter(function (m) { return m.uneven; });
-  var fate = allU ? 'THE ROW BEYOND URANIUM IS EMPTY' : (ekaLeft === 0 ? 'THE GHOSTS CAME DOWN; ONE TUBE STILL WAITS' : (ekaLeft === 1 ? 'ONE GHOST STILL STANDS BEYOND URANIUM' : countWord(ekaLeft).toUpperCase() + ' GHOSTS STILL STAND BEYOND URANIUM'));
-  var paper = 'Uranium, hit by a neutron, does not chip: it pinches and splits in two, like a drop whose skin has nearly given up, because its charge has all but cancelled its surface tension. The two pieces fly apart with about 200 Mev, paid for by the weight they lose. If one piece is barium, the other must be krypton. The bodies the chemists filed beyond uranium are probably middle-weight elements, masurium and its neighbours, which act the same at the bench; their tangle of periods needs no "nuclear isomerism" to explain. The 24-minute body is real uranium-239, made when the drop takes the neutron in and rings instead of splitting; it goes over quietly into element 93. Thorium splits the same way, and its "radium" and "actinium" are barium and lanthanum.';
+  var fate = (ekaLeft === 0 ? (allU ? 'THE "NEW ELEMENTS" WERE NEVER THERE' : 'THE "NEW ELEMENTS" ARE GONE, BUT TUBES STILL WAIT') : (ekaLeft === 1 ? 'ONE "NEW ELEMENT" STILL STANDS' : countWord(ekaLeft).toUpperCase() + ' "NEW ELEMENTS" STILL STAND'));
+  var paper = 'Uranium does not just chip. Hit by a neutron, it can pinch and split in two, like a drop whose skin has nearly given up, because its charge has almost cancelled its surface tension. The halves fly apart with a huge shove: far more than any ordinary chemical change. If one half is barium, the other is krypton. So the chemists\' "new elements" were very probably never there: they are middle-weight elements that behave the same in chemistry. The 24-minute stuff is uranium itself, after it swallowed a neutron. And thorium splits the same way.';
   var found = [];
-  if (splits.length) found.push('You split the drop ' + countWord(splits.length) + (splits.length === 1 ? ' time' : ' times') + ': ' + splits.map(function (m) { return m.Z1 + ' | ' + m.Z2 + ' (' + nameOf(m.Z1) + ' and ' + nameOf(m.Z2) + ')'; }).join('; ') + '.');
-  if (rangs.length) found.push('The skin pulled back ' + countWord(rangs.length) + ' of your pinches (' + rangs.map(function (m) { return m.Z1 + ' | ' + m.Z2; }).join(', ') + '): the drop rang, kept the neutron, and ' + (rangs.length === 1 ? 'that neutron was' : 'those neutrons were') + ' spent.');
+  if (splits.length) found.push('Your splits: ' + splits.map(function (m) { return m.Z1 + ' | ' + m.Z2 + ' (' + nameOf(m.Z1) + ' and ' + nameOf(m.Z2) + ')'; }).join('; ') + '.');
+  if (rangs.length) found.push('The skin pulled back ' + countWord(rangs.length) + ' of your pinches (' + rangs.map(function (m) { return m.Z1 + ' | ' + m.Z2; }).join(', ') + '). A pulled-back drop keeps its neutron, so ' + (rangs.length === 1 ? 'that neutron was' : 'those neutrons were') + ' spent without a split.');
   else if (splits.length) found.push('Every pinch went through.');
-  if (baLa === 2) found.push('Barium and lanthanum: lit. Whichever piece did it, its partner was forced: the two charges add up to 92.');
-  else if (baLa === 1) found.push('One of barium and lanthanum: lit; the other not.');
-  else found.push('Barium and lanthanum: not lit. The paper\'s first fact, that barium came out, is one your pinches never made.');
-  if (ekaDown === eka.length) found.push('All five tubes filed beyond uranium came down into the middle rows: ' + ekaNames(stU) + '. The row of ghosts is empty.');
-  else if (ekaDown) found.push(cap(countWord(ekaDown)) + ' of the five tubes filed beyond uranium came down (' + ekaNames(stU) + '); ' + countWord(ekaLeft) + ' still stand in the dashed row.');
-  else found.push('None of the five tubes filed beyond uranium came down. They still stand in the dashed row as elements nobody has ever seen.');
+  if (baLa === 2) found.push('Barium and lanthanum: explained. Whichever piece did it, its partner was forced: the two halves always add up to 92, so barium (56) goes with krypton (36).');
+  else if (baLa === 1) found.push('One of barium and lanthanum: explained; the other not.');
+  else found.push('Barium and lanthanum: not explained. Barium coming out of uranium is the paper\'s first fact, and your pinches never made it.');
+  if (ekaDown === eka.length) found.push('All five "new elements" came down into the middle of the table: ' + ekaNames(stU) + '.');
+  else if (ekaDown) found.push(cap(countWord(ekaDown)) + ' of the five "new elements" came down (' + ekaNames(stU) + '); ' + countWord(ekaLeft) + ' still stand' + (ekaLeft === 1 ? 's' : '') + ' in the dashed row.');
+  else found.push('None of the five "new elements" came down. They still stand in the dashed row as elements nobody has ever seen.');
   var holdHow = stU.lit.u24 && stU.moves.some(function (m) { return m.kind === 'hold'; }) ? 'hold' : (stU.lit.u24 ? 'rang' : null);
-  found.push(holdHow === 'hold' ? 'You found the hold: the 24-minute body is the drop that kept the neutron, uranium-239.' : (holdHow === 'rang' ? 'The 24-minute body came to you by accident: a pinch the skin pulled back is a drop that kept its neutron, uranium-239.' : 'You never held the drop together, and no pinch failed, so the 24-minute body is still unexplained on your shelf.'));
-  if (stTh) found.push(thAll ? 'Thorium: your pinch lit both its tubes. Its "radium" and "actinium" are barium and lanthanum, or their column-mates.' : (thLit ? 'Thorium: one of its two tubes lit.' : 'Thorium: neither tube lit; its "radium" and "actinium" stand unexplained.'));
-  found.push('Neutrons: ' + countWord(stU.used) + ' on uranium' + (stU.used <= 3 && allU ? ', the fewest that will do' : ', where three would do') + (stTh ? ', and ' + countWord(stTh.used) + ' on thorium' : '') + '.');
+  found.push(holdHow === 'hold' ? 'You found the hold: the 24-minute stuff is a drop that swallowed its neutron, uranium-239.' : (holdHow === 'rang' ? 'The 24-minute stuff came to you by accident: a pinch the skin pulled back is a drop that kept its neutron, uranium-239.' : 'You never held the drop together, and no pinch was pulled back, so the 24-minute stuff is still unexplained.'));
+  if (stTh) found.push(thAll ? 'Thorium: both tubes explained. Its "radium" and "actinium" are barium and lanthanum, or their column-mates.' : (thLit ? 'Thorium: one of its two tubes explained.' : 'Thorium: neither tube explained; its "radium" and "actinium" are still a mystery on your shelf.'));
+  var nTxt = 'Neutrons: ' + countWord(stU.used) + ' on uranium' + (stTh ? ' and ' + countWord(stTh.used) + ' on thorium' : '') + '.';
+  if (allU) nTxt += stU.used <= 3 ? ' Three is the fewest that can work.' : (rangs.length ? ' The skin took ' + (rangs.length === 1 ? 'one' : countWord(rangs.length)) + ' of them, which used up your spare.' : ' Three would have done.');
+  found.push(nTxt);
   var part = [];
   if (allU && thAll) part.push('Nowhere that matters. Your shelf is the paper\'s shelf: every body the chemists found is a middle-weight element or uranium itself, and the only thing beyond uranium is a quiet element 93.');
-  if (ekaLeft) part.push('The paper brings all five ghosts down with one idea (a piece near masurium climbs through five columns); on your shelf ' + countWord(ekaLeft) + ' still stand' + (ekaLeft === 1 ? 's' : '') + ' beyond uranium.');
-  if (baLa < 2) part.push('The paper starts from barium, the one fact the chemists were sure of; your pinches did not make it.');
-  if (!holdFound) part.push('The paper keeps one body as genuine uranium-239, made by a drop that held; you never had one hold.');
-  if (unevens.length) part.push('You pinched far from the middle ' + countWord(unevens.length) + (unevens.length === 1 ? ' time' : ' times') + '. The paper speaks of "two nuclei of roughly equal size"; this game lets the skin pull such a pinch back more often than not, and gives it a smaller blast when it goes through.');
-  if (stTh && !thAll) part.push('The paper suggests thorium splits like uranium and gives partly the same products; your thorium pinches did not show it.');
-  var stood = allU ? 'Nothing: the row beyond uranium is empty, as the paper leaves it, except one quiet eka-rhenium. Four years of transuranic elements go back into the middle of the table, and the chemists\' barium is the ordinary barium it always was.' :
-    (countWord(ekaLeft + (holdFound ? 0 : 1) + (2 - baLa)).replace(/^./, function (c) { return c.toUpperCase(); }) + ' of the chemists\' bodies would still be ' + (ekaLeft ? 'elements nobody has ever seen' : 'unexplained') + ', and their chains would still need nuclear isomerism to account for them. The drop would have split on your shelf, but the chemists\' table would not have been corrected.');
+  if (ekaLeft) part.push('The paper brings all five "new elements" down with one idea: a piece near masurium climbs through five columns. On your shelf ' + countWord(ekaLeft) + ' still stand' + (ekaLeft === 1 ? 's' : '') + ' beyond uranium.');
+  if (baLa < 2) part.push('The paper starts from barium, the one fact the chemists were sure of. Your pinches did not make it.');
+  if (!holdFound) part.push('The paper keeps one body as genuine uranium-239, made by a drop that held. You never had one hold.');
+  if (unevens.length) part.push('You pinched far from the middle ' + countWord(unevens.length) + (unevens.length === 1 ? ' time' : ' times') + '. The paper speaks of "two nuclei of roughly equal size"; in this game the skin pulls such a pinch back more often than not.');
+  if (stTh && !thAll) part.push('The paper suggests thorium splits like uranium and gives partly the same products. Your thorium pinches did not show it.');
+  var stood = allU ? 'Nothing: the row beyond uranium is empty, as the paper leaves it, except one quiet element 93. Four years of "new elements" go back into the middle of the table, and the chemists\' barium is the ordinary barium it always was.' :
+    (countWord(ekaLeft + (holdFound ? 0 : 1) + (2 - baLa)).replace(/^./, function (c) { return c.toUpperCase(); }) + ' of the chemists\' bodies would still be ' + (ekaLeft ? 'elements nobody has ever seen' : 'a mystery') + ', and their long chains of changes would still need "nuclear isomerism" to account for them. The drop would have split on your shelf, but the chemists\' table would not have been corrected.');
   return { fate: fate, paper: paper, found: found, part: part, stood: stood, allU: allU, ekaLeft: ekaLeft, holdFound: holdFound, thAll: thAll, seed: stU.seed };
 }
 function ekaNames(stU) {
   var out = [];
-  stU.tubes.forEach(function (t) { if (isDashed(t.cellZ) && stU.lit[t.id]) out.push(t.filed.split(',')[0] + ' is ' + nameOf(stU.lit[t.id].atZ)); });
+  stU.tubes.forEach(function (t) { if (isDashed(t.cellZ) && stU.lit[t.id]) out.push(t.cellZ + ' is ' + nameOf(stU.lit[t.id].atZ)); });
   return out.join(', ');
 }
 
-var MECH = { CONFIG: CONFIG, splitOdds: splitOdds, oddsWords: oddsWords, asym: asym, makeRng: makeRng, rang: rang, cellOf: cellOf, isDashed: isDashed, nameOf: nameOf, symbolOf: symbolOf, skin: skin, skinClass: skinClass, clampZ1: clampZ1, shareNeutrons: shareNeutrons, stableZ: stableZ, climb: climb, blastMeV: blastMeV, split: split, hold: hold, lightTubes: lightTubes, tubeById: tubeById, newStage: newStage, stageDone: stageDone, play: play, moveWords: moveWords, pathWords: pathWords, verdict: verdict, lookalikes: lookalikes };
+var MECH = { CONFIG: CONFIG, splitOdds: splitOdds, oddsWords: oddsWords, asym: asym, makeRng: makeRng, rang: rang, cellOf: cellOf, isDashed: isDashed, nameOf: nameOf, symbolOf: symbolOf, skin: skin, skinClass: skinClass, clampZ1: clampZ1, shareNeutrons: shareNeutrons, stableZ: stableZ, climb: climb, blastMeV: blastMeV, split: split, hold: hold, lightTubes: lightTubes, tubeById: tubeById, tubeAnswer: tubeAnswer, newStage: newStage, stageDone: stageDone, play: play, moveWords: moveWords, verdict: verdict, lookalikes: lookalikes };
 if (typeof module !== 'undefined' && module.exports) module.exports = MECH;

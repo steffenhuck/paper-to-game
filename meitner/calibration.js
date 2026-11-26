@@ -128,6 +128,23 @@ ok([-3, -2, 2, 3].every(function (d) {
 
 // 7. words for every move and every verdict path
 ok(Z1s.every(function (z) { var s2 = m.newStage(U, C.TUBES_U, 5); s2.rng = function () { return 0; }; var mv2 = m.play(s2, { kind: 'split', Z1: z }); return m.moveWords(s2, mv2).length >= 3; }), 'every pinch that goes through has at least three lines of result in the game\'s voice');
+function wc(a) { return a.join(' ').split(/\s+/).length; }
+var longest = 0; Z1s.forEach(function (z) { var s2 = m.newStage(U, C.TUBES_U, 5); s2.rng = function () { return 0; }; var mv2 = m.play(s2, { kind: 'split', Z1: z }); longest = Math.max(longest, wc(m.moveWords(s2, mv2))); });
+ok(longest <= 80, 'rev. 3: the longest result after a split is ' + longest + ' words (the second build said about 127): short enough to read at the bench');
+var rr = m.newStage(U, C.TUBES_U, 4, 1); rr.rng = function () { return 0.9999; }; var mR = m.play(rr, { kind: 'split', Z1: 56 }); var hh = m.newStage(U, C.TUBES_U, 4, 1); var mH = m.play(hh, { kind: 'hold' });
+ok(wc(m.moveWords(rr, mR)) <= 80 && wc(m.moveWords(hh, mH)) <= 80, 'rev. 3: the pulled-back and the hold results are short too (' + wc(m.moveWords(rr, mR)) + ' and ' + wc(m.moveWords(hh, mH)) + ' words)');
+// the shelf cards (rev. 3): every card's text, waiting or explained, must fit its card at phone width (about 22 characters at 13.5 px)
+var longestCard = 0, cardsFit = true;
+C.TUBES_U.concat(C.TUBES_TH).forEach(function (t) { longestCard = Math.max(longestCard, t.wait.length); if (t.wait.length > 21) cardsFit = false; });
+[[U, C.TUBES_U, Z1s], [TH, C.TUBES_TH, range(C.MIN_PIECE, TH.Z - C.MIN_PIECE)]].forEach(function (a) { a[2].forEach(function (z) { m.lightTubes(m.split(a[0], z), a[1], a[0].Z).forEach(function (l) { var ans = m.tubeAnswer(m.tubeById(a[1], l.id), l.atZ); longestCard = Math.max(longestCard, ans.length); if (ans.length > 21) cardsFit = false; }); }); });
+ok(cardsFit, 'rev. 3: every shelf card, waiting or explained by any pinch, is at most 21 characters (longest ' + longestCard + '), so it fits the card at 380 px');
+ok(m.tubeAnswer(m.tubeById(C.TUBES_U, 'eRe'), 43) === '93 = masurium' && m.tubeAnswer(m.tubeById(C.TUBES_U, 'ba'), 38) === '= strontium' && m.tubeAnswer(m.tubeById(C.TUBES_U, 'ba'), 56) === '= barium itself' && m.tubeAnswer(m.tubeById(C.TUBES_U, 'u24'), 92) === '= uranium itself', 'rev. 3: an explained card says what the body really is (93 = masurium, = strontium, = barium itself, = uranium itself)');
+// the preview (rev. 3): the climb trail drawn before the pinch is exactly the path the pinch then takes, and it never enters the dashed row
+ok(Z1s.every(function (z) { var pv = m.split(U, z); var st9 = m.newStage(U, C.TUBES_U, 5); st9.rng = function () { return 0; }; var mv9 = m.play(st9, { kind: 'split', Z1: z }); return JSON.stringify(pv.pieces.map(function (p) { return p.path; })) === JSON.stringify(mv9.pieces.map(function (p) { return p.path; })); }), 'rev. 3: the trail shown for a pinch is the very path the pinch takes (the preview calls the mechanism, not a copy of it)');
+// the verdict is fair about luck (rev. 3): a clear shelf in four neutrons with pinches the skin took does not say that three would have done
+var vs = m.newStage(U, C.TUBES_U, 4, 2); [56, 56, 43, 52].forEach(function (z) { m.play(vs, { kind: 'split', Z1: z }); });
+var vv = m.verdict(vs, null);
+ok(vv.allU && vs.moves.some(function (x) { return x.kind === 'rang'; }) && vv.found.join(' ').indexOf('used up your spare') > 0 && vv.found.join(' ').indexOf('Three would have done') < 0, 'rev. 3: a shelf cleared in four neutrons after the skin took some says so, and does not say that three would have done (seed 2)');
 ok(Z1s.every(function (z) { var s2 = m.newStage(U, C.TUBES_U, 5); s2.rng = function () { return 0.9999; }; var mv2 = m.play(s2, { kind: 'split', Z1: z }); return mv2.kind === 'split' ? m.splitOdds(U, z) === 1 : m.moveWords(s2, mv2).length >= 2; }), 'every pinch the skin can pull back has words for that too');
 var sH = m.newStage(U, C.TUBES_U, 5); ok(m.moveWords(sH, m.play(sH, { kind: 'hold' })).length >= 2, 'the hold has words');
 var paths = [[{ kind: 'split', Z1: 56 }, { kind: 'split', Z1: 43 }, { kind: 'hold' }], [{ kind: 'split', Z1: 46 }, { kind: 'split', Z1: 46 }, { kind: 'split', Z1: 46 }, { kind: 'split', Z1: 46 }], [{ kind: 'hold' }, { kind: 'hold' }, { kind: 'hold' }, { kind: 'hold' }], [{ kind: 'split', Z1: 28 }, { kind: 'split', Z1: 64 }, { kind: 'split', Z1: 30 }, { kind: 'split', Z1: 33 }], [{ kind: 'split', Z1: 56 }, { kind: 'split', Z1: 44 }, { kind: 'split', Z1: 38 }, { kind: 'hold' }], [{ kind: 'split', Z1: 60 }, { kind: 'split', Z1: 60 }, { kind: 'split', Z1: 60 }, { kind: 'split', Z1: 60 }]];

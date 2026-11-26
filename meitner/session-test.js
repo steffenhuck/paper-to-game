@@ -2,7 +2,7 @@
 var { chromium } = require('playwright'), path = require('path');
 var URL = 'file://' + path.resolve('meitners-drop.html');
 (async function () {
-  var b = await chromium.launch(), errs = [];
+  var b = await chromium.launch(process.env.CHROME ? { executablePath: process.env.CHROME, args: ['--no-sandbox'] } : {}), errs = [];
   async function session(vw, vh, tag, actsU, actsT, shots, seed) {
     var ctx = await b.newContext({ viewport: { width: vw, height: vh }, deviceScaleFactor: 2 }), pg = await ctx.newPage();
     pg.on('pageerror', function (e) { errs.push('pageerror: ' + e); });
@@ -18,12 +18,13 @@ var URL = 'file://' + path.resolve('meitners-drop.html');
     await pg.click('g.tapdrop[data-i="2"]'); await pg.waitForTimeout(1000); await shot('drops-imagined'); await pg.waitForTimeout(800);
     await pg.click('g.tapdrop[data-i="1"]'); await pg.waitForTimeout(1100); await shot('drops-uranium'); await pg.waitForTimeout(1200);
     console.log(tag, 'drops |', await pg.textContent('#said0'));
+    await pg.click('#b-toshelf'); await pg.waitForTimeout(300); await shot('shelf', true); await nohs('shelf');
     await pg.click('#b-tobench'); await pg.waitForTimeout(300); await shot('bench-start'); await nohs('bench');
-    console.log(tag, 'bench: split button bottom', await bottom('#b-split'), 'table bottom', await bottom('#tablesvg'), 'dots bottom', await bottom('#dots'));
+    console.log(tag, 'bench: split button bottom', await bottom('#b-split'), 'table bottom', await bottom('#tablesvg'), 'shelf cards bottom', await bottom('#shelf1'), 'viewport', vh);
     // a real drag on the drop panel
     var box = await (await pg.$('#dropsvg')).boundingBox();
     await pg.mouse.move(box.x + box.width * 0.5, box.y + box.height * 0.9); await pg.mouse.down(); await pg.mouse.move(box.x + box.width * 0.62, box.y + box.height * 0.9, { steps: 6 }); await pg.mouse.up();
-    console.log(tag, 'after drag |', await pg.textContent('#cntline'));
+    console.log(tag, 'after drag | line at', await pg.evaluate('window.__game.S.Z1'));
     for (var i = 0; i < actsU.length; i++) {
       var a = actsU[i];
       if (a === 'hold') { await shot('u' + (i + 1) + '-before-hold'); await pg.click('#b-hold'); }

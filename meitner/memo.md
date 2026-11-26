@@ -187,3 +187,30 @@ The wrong ways are the paper's: the exactly equal pinch never finds barium; the 
 **Claim boundary.** The odds curve is ours entirely: the paper says "roughly equal" and "perhaps partly on chance" and nothing about how often an uneven division happens. The About screen says so, and that the first build let every pinch through.
 
 **Screens.** The odds line sits under the drop in the panel and turns red below three in four; the neck depth follows the odds; a refused pinch necks, springs back, rings, and the panel says "no split: the skin won, and the drop kept the neutron"; the headline says "pulled back". The climb sentence moved from the rule to the table's caption, so the split button and the table still share the screen at 380 × 700 (table bottom at 600). Three scripted sessions (seeds 7 and 2 at phone width, seed 7 at laptop width): the safe path, a path where barium's cell is refused twice and 52 | 40 rescues it, and the climb-aware path; no errors, no horizontal scroll.
+
+## 21. Revision 3 (26 November 2026): a full sweep for a smart eleven-year-old
+
+**The brief.** "Go inwards, do a full sweep and create the best version you can, playable for a smart kid." The mechanism, the numbers and the odds are unchanged (the strategies table in section 20 still holds); what changed is everything the player reads and sees. The rev. 2 screens are kept in `previous/rev2/`.
+
+**Diagnosis from the inspection of rev. 2.**
+- The shelf was unreadable: tube labels at 8 px, "La…" truncated, the five ghost tubes labelled only 93 to 97, names only on a tap. The goal was on the screen and could not be read.
+- A text wall: about 213 words before a move and about 127 after, with the same static rule repeated on every neutron.
+- The result sat below the fold, away from the control that caused it.
+- The climb was hidden. The real decision, between the odds (aim at barium) and the reach (aim where the climb carries a piece to barium), was found only by failing.
+- After a pinch the skin had pulled back, the verdict still said that three neutrons would have done: unfair about luck.
+- "FISSION!!" clipped the proton counts, and the imagined drop clipped on the right during its fall.
+- Mev, the word "fission" and the lost weight were explained on play screens where a ten-year-old does not need them.
+
+**The changes.**
+- A shelf screen between the three drops and the bench: the table, eight cards in plain words ("93 · like rhenium"), and three short lines (what the table is, what a piece does, when a tube is explained). The play screen stands on its own.
+- The bench holds the drop, the odds line, the buttons and the table at 380 x 700 without scrolling. Before a move there is a nudge row and a two-sentence rule; after a move they give way to the result under the drop panel, so the control and its effect stay together.
+- A trail preview on the table: a red box where each piece lands, dots along its climb, a black box where it stops. It calls the mechanism's own `split`, and a calibration check confirms the previewed path is the path taken. It never says which tubes would light.
+- A live shelf under the table: eight cards, a count ("5 of 8 explained"), and an explained card says what the body really is ("93 = masurium", "= strontium", "= barium itself").
+- Results cut to a few plain sentences (longest 74 words, was about 127). "Account for" became "Explain"; "ghosts" became "new elements".
+- The verdict says when the skin took neutrons, "which used up your spare", and says "three would have done" only when no pinch was pulled back.
+- Mev, the origin of "fission" and the lost weight moved to About. About also says that real fission mostly goes uneven, which was found after 1939, so barium is a common product in nature and the unlikely tube here; the paper is the game's authority.
+
+**Checks added** (`calibration.js`, now 72, all passing): result length, card text at most 21 characters (waiting and explained, for every pinch), the explained-card wording, the preview path equal to the played path, and the fair verdict at seed 2. `session-test.js` plays the new flow at 380 x 700 and 1100 x 800: no errors, no horizontal scroll, split button and table on screen together.
+
+**Not done.** No stranger has played this. The Pantheon page and its line are untouched until the author has played it.
+
