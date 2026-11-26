@@ -5,66 +5,62 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Draw a Line with Singer</title>
 <script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<meta name="description" content="Singer, All Animals Are Equal (1974): draw one line that keeps every person in and every animal out, with a ruler you can read. Ten of Singer's own beings on a blackboard, Bentham's rulers, then the one that works, and what it is called. Then you are the experimenter.">
+<meta name="description" content="Singer, All Animals Are Equal (1974): most people think every person counts and no animal does. Measured how? Ten of Singer's own beings on a blackboard and four rulers; draw a line anywhere and the board says who drew it, the ruler or your hand. Then you are the scientist, and Singer asks why not the baby.">
 <style>
 @font-face{font-family:'Fredericka';font-weight:400;font-style:normal;src:url(data:font/woff2;base64,/*__F_FRED__*/) format('woff2')}
 @font-face{font-family:'Architects';font-weight:400;font-style:normal;src:url(data:font/woff2;base64,/*__F_ARCH__*/) format('woff2')}
-:root{--board:#2F4A3E;--board2:#2A4337;--chalk:#F3EEDD;--red:#E8664D;--yellow:#F0D27A;--oak:#8C5E36;--oak2:#6E4626;--dim:rgba(243,238,221,.55);--faint:rgba(243,238,221,.22)}
+:root{--board:#2F4A3E;--board2:#2A4337;--chalk:#F3EEDD;--red:#E8664D;--yellow:#F0D27A;--oak:#8C5E36;--oak2:#6E4626;--dim:rgba(243,238,221,.62);--faint:rgba(243,238,221,.22)}
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
-body{background:var(--oak2);color:var(--chalk);font-family:'Architects',sans-serif;font-size:16px;line-height:1.35;-webkit-text-size-adjust:100%;min-height:100vh}
-.wrap{max-width:420px;margin:0 auto;padding:10px 10px 24px}
+body{background:var(--oak2);color:var(--chalk);font-family:'Architects',sans-serif;font-size:18px;line-height:1.38;-webkit-text-size-adjust:100%;min-height:100vh}
+.wrap{max-width:440px;margin:0 auto;padding:10px 10px 24px}
+@media (min-width:600px){.wrap{max-width:560px;padding:18px 12px 30px}body{font-size:19px}}
 .board{background:var(--board);border:10px solid var(--oak);border-radius:4px;box-shadow:inset 0 0 40px rgba(0,0,0,.35),0 2px 0 var(--oak2);padding:14px 12px 16px;position:relative;overflow:hidden}
+@media (min-width:600px){.board{padding:18px 18px 20px}}
 .board::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 20% 30%,rgba(255,255,255,.05),transparent 40%),radial-gradient(ellipse at 80% 70%,rgba(255,255,255,.04),transparent 45%),radial-gradient(ellipse at 50% 100%,rgba(255,255,255,.035),transparent 50%)}
 .board>*{position:relative}
 .screen{display:none}.screen.on{display:block}
-.kicker{font-size:13px;color:var(--dim);letter-spacing:.02em}
+.kicker{font-size:15px;color:var(--dim);letter-spacing:.02em}
 h1.title{font-family:'Fredericka',serif;font-weight:400;font-size:40px;line-height:1;margin:6px 0 10px;color:var(--chalk);text-shadow:0 0 1px rgba(243,238,221,.6)}
-.now{font-family:'Fredericka',serif;font-size:22px;line-height:1.1;margin:0 0 6px;min-height:26px}
-.aim{font-size:14px;color:var(--yellow);margin:0 0 8px}
-.rule{font-size:13px;color:var(--dim);margin:0 0 8px}
-.acts{font-size:15px;margin:10px 0 6px}
-.big{font-size:17px}
+.now{font-family:'Fredericka',serif;font-size:24px;line-height:1.1;margin:0 0 6px;min-height:26px}
+.aim{font-size:17px;color:var(--yellow);margin:0 0 8px}
+.rule{font-size:16px;color:var(--dim);margin:0 0 8px}
+.acts{font-size:18px;margin:10px 0 6px}
+.big{font-size:20px}
 p{margin:0 0 10px}
-.btn{display:inline-block;font-family:'Architects',sans-serif;font-size:16px;letter-spacing:.03em;text-transform:uppercase;color:var(--chalk);background:transparent;border:2px solid var(--chalk);border-radius:255px 15px 225px 15px/15px 225px 15px 255px;padding:11px 14px;margin:4px 6px 4px 0;cursor:pointer;min-height:44px;line-height:1.1}
+.btn{display:inline-block;font-family:'Architects',sans-serif;font-size:17px;letter-spacing:.03em;text-transform:uppercase;color:var(--chalk);background:transparent;border:2px solid var(--chalk);border-radius:255px 15px 225px 15px/15px 225px 15px 255px;padding:11px 14px;margin:4px 6px 4px 0;cursor:pointer;min-height:46px;line-height:1.1}
 .btn.solid{background:var(--chalk);color:var(--board);font-weight:700}
-.btn.small{font-size:13px;padding:7px 10px;min-height:36px}
 .btn:disabled{opacity:.35;cursor:default}
 .row2{display:flex;flex-wrap:wrap;gap:0 4px}
-.sig{margin-top:18px;font-size:13px;font-style:italic;color:var(--dim)}.sig a{color:var(--dim);text-decoration:none}
-.cred{font-size:12px;color:var(--dim);margin-top:14px}.cred a{color:var(--dim)}
+.sig{margin-top:18px;font-size:14px;font-style:italic;color:var(--dim)}.sig a{color:var(--dim);text-decoration:none}
+.cred{font-size:13px;color:var(--dim);margin-top:14px}.cred a{color:var(--dim)}
 .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-.qm{flex:none;width:36px;height:36px;border:2px solid var(--chalk);border-radius:50% 45% 55% 50%;font-family:'Fredericka',serif;font-size:22px;color:var(--chalk);background:transparent;cursor:pointer;line-height:1}
-.tray{display:flex;gap:6px;margin:4px 0 6px}
-.rb{flex:1;position:relative;font-family:'Fredericka',serif;font-size:15px;color:var(--chalk);background:transparent;border:2px solid var(--chalk);border-radius:15px 255px 15px 225px/225px 15px 255px 15px;padding:8px 2px;min-height:44px;cursor:pointer;line-height:1}
+.qm{flex:none;width:38px;height:38px;border:2px solid var(--chalk);border-radius:50% 45% 55% 50%;font-family:'Fredericka',serif;font-size:22px;color:var(--chalk);background:transparent;cursor:pointer;line-height:1}
+.tray{display:flex;gap:6px;margin:4px 0 8px}
+.rb{flex:1;position:relative;font-family:'Fredericka',serif;font-size:17px;color:var(--chalk);background:transparent;border:2px solid var(--chalk);border-radius:15px 255px 15px 225px/225px 15px 255px 15px;padding:9px 2px;min-height:46px;cursor:pointer;line-height:1}
 .rb.cur{color:var(--board);background:var(--yellow);border-color:var(--yellow)}
 .rb.done{color:var(--dim);border-color:var(--dim)}
 .rb.done::after{content:"";position:absolute;left:8%;right:8%;top:50%;height:2px;background:var(--red);transform:rotate(-8deg);opacity:.9}
-.rb .cnt{position:absolute;right:4px;top:-9px;white-space:nowrap;font-family:'Architects',sans-serif;font-size:11px;color:var(--red);background:var(--board);padding:0 3px;border-radius:4px}
-.rb.species{flex:1.1;border-style:dashed}
+.rb .cnt{position:absolute;right:4px;top:-10px;white-space:nowrap;font-family:'Architects',sans-serif;font-size:12px;color:var(--red);background:var(--board);padding:0 3px;border-radius:4px}
 svg.cast{display:block;width:100%;height:auto;margin:2px 0 4px;touch-action:manipulation}
 svg text{font-family:'Architects',sans-serif;fill:var(--chalk)}
 .col-head{font-family:'Fredericka',serif;font-size:14px;letter-spacing:.06em;fill:var(--yellow)}
 .rowtap{cursor:pointer}
-.said{font-size:16px;margin:6px 0 4px;min-height:22px}
-.find{font-size:13.5px;color:var(--dim);margin:0 0 8px}
-.paperline{font-size:15px;color:var(--yellow);margin:6px 0 8px}
-.mirror{font-family:'Fredericka',serif;font-size:26px;line-height:1.15;margin:8px 0 6px}
-.scene{display:flex;gap:10px;margin:6px 0 4px}
-.fig{flex:1;border:2px dashed var(--faint);border-radius:15px 255px 15px 225px/225px 15px 255px 15px;padding:8px 6px 8px;text-align:center;cursor:pointer;min-height:44px}
+.said{font-size:18px;margin:6px 0 4px;min-height:22px}
+.find{font-size:16px;color:var(--dim);margin:0 0 8px}
+.paperline{font-size:17px;color:var(--yellow);margin:6px 0 8px}
+.mirror{font-family:'Fredericka',serif;font-size:28px;line-height:1.15;margin:8px 0 6px}
+.fig{border:2px dashed var(--faint);border-radius:15px 255px 15px 225px/225px 15px 255px 15px;padding:8px 8px 8px;text-align:center;cursor:pointer;min-height:44px}
 .fig.sel{border:3px solid var(--yellow)}
-.fig .nm{font-size:15px;line-height:1.15;margin:2px 0 4px;min-height:36px}
+.fig .nm{font-size:17px;line-height:1.15;margin:2px 0 6px;min-height:40px}
 .fig svg{display:block;width:100%;height:auto}
-.fig .mk{font-size:12px;color:var(--dim);text-align:left;margin:2px 0 0}
-.bar{height:9px;border-radius:5px;margin:1px 0 4px;box-shadow:0 0 1px rgba(255,255,255,.4)}
-.bar.r{background:var(--red)}.bar.y{background:var(--yellow)}
-.fate{font-family:'Fredericka',serif;font-size:30px;line-height:1.1;margin:4px 0 14px}
-.sec h2,h2{font-family:'Fredericka',serif;font-weight:400;font-size:19px;margin:12px 0 4px;color:var(--yellow)}
-.sec p{font-size:15px}
+.fate{font-family:'Fredericka',serif;font-size:32px;line-height:1.1;margin:4px 0 14px}
+.sec h2,h2{font-family:'Fredericka',serif;font-weight:400;font-size:21px;margin:14px 0 4px;color:var(--yellow)}
+.sec p{font-size:17px}
 .overlay{display:none;position:fixed;inset:0;background:var(--oak2);overflow:auto;z-index:9}.overlay.on{display:block}
 .overlay .wrap{padding-top:10px}
 .overlay h1{font-family:'Fredericka',serif;font-weight:400;font-size:30px;margin:4px 0 10px}
-.overlay p,.overlay li{font-size:15px}
+.overlay p,.overlay li{font-size:17px}
 .overlay ul{padding-left:20px;margin:0 0 10px}
 .close{margin:0 0 8px}
 .sponge{position:absolute;left:-40%;top:0;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(243,238,221,.18),rgba(243,238,221,.06));pointer-events:none;display:none}
@@ -72,21 +68,19 @@ svg text{font-family:'Architects',sans-serif;fill:var(--chalk)}
 @keyframes swipe{from{left:-40%}to{left:110%}}
 .castbox{position:relative}
 .motif{display:block;width:100%;height:auto;margin:4px 0 2px}
-.hint{font-size:13px;color:var(--yellow);min-height:18px;margin:0 0 4px}
-.bent{font-family:'Fredericka',serif;font-size:15px;color:var(--chalk);margin:0 0 4px;letter-spacing:.01em}
+.hint{font-size:16px;color:var(--yellow);min-height:20px;margin:0 0 4px}
+.bent{font-family:'Fredericka',serif;font-size:17px;color:var(--chalk);margin:0 0 6px;letter-spacing:.01em}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0 4px}
 .grid .fig{min-height:150px}
-.fig .mk{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--dim);margin:1px 0}
-.fig .mk span{flex:none;width:44px;text-align:right}
-.fig .mk i{flex:1;height:7px;position:relative;display:block}
-.fig .mk b{display:block;height:7px;border-radius:4px;background:var(--yellow)}
+.fig .mk{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--dim);margin:2px 0;text-align:left}
+.fig .mk span{flex:none;width:52px;text-align:right}
+.fig .mk i{flex:1;height:8px;position:relative;display:block}
+.fig .mk b{display:block;height:8px;border-radius:4px;background:var(--yellow)}
 .nob{margin:2px 0 0}
 .qa{margin:8px 0 4px}
-.qa .q{font-size:16px;margin:0 0 6px}
-.qa .btn{display:block;width:100%;text-align:left;text-transform:none;letter-spacing:0;margin:0 0 6px}
-.trail{font-size:13px;color:var(--dim);margin:0 0 6px}
-.coda{font-size:16px;line-height:1.4;margin:8px 0 12px}
-.foot{font-family:'Fredericka',serif;font-size:20px;color:var(--yellow);margin:0 0 8px}
+.qa .q{font-size:19px;margin:0 0 8px}
+.qa .btn{display:block;width:100%;text-align:left;text-transform:none;letter-spacing:0;margin:0 0 8px}
+.trail{font-size:15px;color:var(--dim);margin:0 0 6px}
 a{color:var(--chalk)}
 </style>
 </head>
@@ -111,15 +105,15 @@ a{color:var(--chalk)}
 
 <!-- START -->
 <section id="s-start" class="screen on">
-  <div class="kicker">A reading on the board · Singer, 1974</div>
+  <div class="kicker">A reading on the board · New York, 1974</div>
   <h1 class="title">Draw a Line with Singer</h1>
   <svg class="motif" viewBox="0 0 340 92" aria-hidden="true">
     <g stroke="#F3EEDD" stroke-width="1.8"><use href="#i-adult" x="10" y="8" width="52" height="52"/><use href="#i-baby" x="72" y="8" width="52" height="52"/><use href="#i-chimp" x="134" y="8" width="52" height="52"/><use href="#i-dog" x="196" y="8" width="52" height="52"/><use href="#i-pig" x="258" y="8" width="52" height="52"/></g>
     <path d="M6 70 q60 -4 120 1 t120 -2 t88 1" fill="none" stroke="#E8664D" stroke-width="3" stroke-linecap="round" opacity=".95"/>
     <text x="8" y="88" font-size="13" fill="#F0D27A">in</text><text x="312" y="88" font-size="13" fill="#F0D27A">out?</text>
   </svg>
-  <p class="acts">Ten of Singer's own beings are on the board. Sort them with a ruler, chalk a line through them, and see who lands on the wrong side. Then you are the experimenter, and the paper asks you one question.</p>
-  <p class="aim big">Draw the line: who counts.</p>
+  <p class="acts">Most people think every person counts and no animal does. Singer asks: measured how? Ten of his own examples are on the board, and four rulers. Draw a line that keeps all the people in and all the animals out, and let a ruler draw it, not your hand. Then you are the scientist, and Singer has one question for you.</p>
+  <p class="aim big">Who counts? Draw the line.</p>
   <button class="btn solid" id="b-begin">Pick up the chalk</button>
   <div class="row2"><button class="btn" id="b-help-start">How to play</button><button class="btn" id="b-about-start">About</button></div>
   <p class="cred">Built from Peter Singer, "All Animals Are Equal", <i>Philosophic Exchange</i> 5(1), 1974, pp. 103–116.</p>
@@ -128,11 +122,11 @@ a{color:var(--chalk)}
 
 <!-- BOARD ONE -->
 <section id="s-one" class="screen">
-  <div class="top"><div class="now" id="now1">Ruler 1 of 5 · Pick a ruler</div><button class="qm" id="b-help-one" aria-label="How to play">?</button></div>
-  <p class="aim" id="aim1">Draw one line that keeps every person in and every animal out, with a ruler you can read.</p>
-  <p class="bent" id="bent">Bentham asked: can they reason? can they talk? can they suffer?</p>
+  <div class="top"><div class="now" id="now1">Ruler 1 of 4 · Pick a ruler</div><button class="qm" id="b-help-one" aria-label="How to play">?</button></div>
+  <p class="aim" id="aim1">Every person in, every animal out. Find the ruler that draws that line.</p>
+  <p class="bent" id="bent">Bentham asked: Can they reason? Can they talk? Can they suffer?</p>
   <div class="tray" id="tray"></div>
-  <p class="rule" id="rule1">A ruler sorts the ten by one thing, highest at the top, with a yellow mark for each. Above your line is <b>in</b>: it counts. Below is <b>out</b>. The board circles in red whoever lands on the wrong side.</p>
+  <p class="rule" id="rule1"></p>
   <div class="castbox"><svg class="cast" id="cast" viewBox="0 0 340 300"></svg></div>
   <p class="hint" id="hint1"></p>
   <p class="said" id="said1"></p>
@@ -144,8 +138,8 @@ a{color:var(--chalk)}
 
 <!-- BOARD TWO -->
 <section id="s-two" class="screen">
-  <div class="top"><div class="now" id="now2">You are the experimenter</div><button class="qm" id="b-help-two" aria-label="How to play">?</button></div>
-  <p class="aim" id="aim2">Everyone who can suffer is in. Now the paper asks you its one question.</p>
+  <div class="top"><div class="now" id="now2">Now you are the scientist</div><button class="qm" id="b-help-two" aria-label="How to play">?</button></div>
+  <p class="aim" id="aim2">Whoever can feel pain counts. Now Singer asks you his one question.</p>
   <p class="rule" id="rule2"></p>
   <div class="grid" id="grid"></div>
   <div class="nob" id="nob"></div>
@@ -156,22 +150,14 @@ a{color:var(--chalk)}
   <div class="row2" id="btns2"></div>
 </section>
 
-<!-- CODA -->
-<section id="s-coda" class="screen">
-  <div class="top"><div class="now">And killing?</div><button class="qm" id="b-help-coda" aria-label="How to play">?</button></div>
-  <div class="foot" id="footmark">footnote 7</div>
-  <p class="coda" id="coda"></p>
-  <div class="row2"><button class="btn solid" id="b-verdict">The verdict</button></div>
-</section>
-
 <!-- END -->
 <section id="s-end" class="screen">
   <div class="kicker">The verdict</div>
   <div class="fate" id="fate"></div>
-  <div class="sec"><h2>What the paper says</h2><div id="v-paper"></div></div>
-  <div class="sec"><h2>What you found on the first board</h2><div id="v-found"></div></div>
-  <div class="sec"><h2>What you did as the experimenter</h2><div id="v-did"></div></div>
-  <div class="sec"><h2>Where you part from the paper</h2><div id="v-part"></div></div>
+  <div class="sec"><h2>What Singer says</h2><div id="v-paper"></div></div>
+  <div class="sec"><h2>What you found on the board</h2><div id="v-found"></div></div>
+  <div class="sec"><h2>What you did as the scientist</h2><div id="v-did"></div></div>
+  <div class="sec"><h2>Where you and Singer part</h2><div id="v-part"></div></div>
   <div class="sec"><h2>What follows</h2><div id="v-stood"></div></div>
   <div class="row2"><button class="btn solid" id="b-again">Play again</button><button class="btn" id="b-about-end">About</button></div>
   <p class="cred">Built from Peter Singer, "All Animals Are Equal", <i>Philosophic Exchange</i> 5(1), 1974. The paper is the authority where the two disagree.</p>
@@ -183,16 +169,15 @@ a{color:var(--chalk)}
 <div class="overlay" id="help"><div class="wrap"><div class="board">
   <div class="close"><button class="btn" id="b-help-close">Back to the board</button></div>
   <h1>How to play</h1>
-  <p><b>Draw the line: who counts.</b></p>
+  <p><b>Who counts? Draw the line.</b></p>
   <h2>The first board</h2>
-  <p>Ten beings are on the board, every one an example from the paper: an adult; an infant a few days old, an orphan; an adult with severe, irreversible brain damage; an adult with a severe intellectual disability; a chimpanzee, a dog, a pig, a horse, a mouse; and a stone. The aim here: draw one line that keeps every person in and every animal out, with a ruler you can read.</p>
-  <p>Tap a ruler in the tray: Reason, Talk, Aware or Suffer. The first three are Bentham's questions as the paper quotes them, the fourth is the paper's own. Each sorts the ten by one thing, highest at the top, with a yellow mark for each; the marks follow the paper's rankings. Tap a row and a faint line appears under it: everyone above it is in (counts), everyone below is out. Two with the same mark cannot be parted; the line goes under both. Tap <b>Chalk it</b> and the line is drawn for good. The board then circles in red every person left out and every animal let in, and says what this ruler cannot do. <b>Sponge</b> wipes the line; the smear stays. Each ruler is used once; after the four there is one ruler left.</p>
+  <p>Ten are on the board, every one an example from Singer's paper: a grown-up; a baby a few days old, with no parents; a grown-up whose brain is badly hurt, for good; a grown-up who cannot learn much; a chimpanzee, a dog, a pig, a horse, a mouse; and a stone. Most people think every person counts and no animal does. Your job is to find the ruler that draws that line.</p>
+  <p>Tap a ruler in the tray: Reason, Talk, Aware or Suffer. Each one sorts the ten by one thing, highest at the top, with a yellow mark for each. Tap any row and a red line appears under it: everyone above is in (counts), everyone below is out. Tap <b>Chalk it</b> and the line is drawn for good. The board circles in red every person left out and every animal let in. And if your line runs between two equal marks, the board says so: the ruler did not draw that line, your hand did. <b>Sponge</b> wipes the line; the smear stays. Each ruler is used once.</p>
+  <p>After the four rulers you draw one line with no ruler at all, wherever you like. The board tells you what that line is called.</p>
   <h2>The second board</h2>
-  <p>You are the experimenter in the paper's own case: one experiment that would save many lives, one subject needed. Four are on offer, with their marks from the first board, and there is a fifth answer: no one. Tap one, then <b>Use this one</b>. If you took an animal, the paper asks its question: would you have used the infant instead? Answer, and it may ask once or twice more. Then it says what your answers add up to.</p>
-  <h2>The footnote</h2>
-  <p>What the paper says about killing, which is one footnote. Read it; nothing to do.</p>
+  <p>You are the scientist in Singer's own story: one experiment that would save many lives, and it needs one subject, someone it is done to. Four are on offer, with their marks from the first board, and there is a fifth answer: no one. Tap one, then <b>Use this one</b>. If you took an animal, Singer asks why not the baby, and maybe one more thing. Then he says what your answers add up to.</p>
   <h2>The verdict</h2>
-  <p>What the paper says; what you found on the first board, ruler by ruler; what you did as the experimenter; where you part from the paper; and what follows. No score.</p>
+  <p>What Singer says; what you found on the board, ruler by ruler; what you did as the scientist; where you and Singer part; and what follows. No score.</p>
   <div class="close"><button class="btn" id="b-help-close2">Back to the board</button></div>
 </div></div></div>
 
@@ -212,30 +197,30 @@ a{color:var(--chalk)}
   var $ = function (id) { return document.getElementById(id); };
   var S, helpFrom = null;
   var RH = 28, TOP = 20, W = 340;
-  function reset() { S = { stage: 'start', tried: [], cuts: [], cur: null, k: null, chalked: false, path: { pick: null, infant: null, why: null, braindam: null }, sel: null, mirror: 0, speciesPhase: false, smears: [] }; }
-  function show(id) { ['s-start', 's-one', 's-two', 's-coda', 's-end'].forEach(function (s) { $(s).classList.toggle('on', s === id); }); window.scrollTo(0, 0); }
+  var NH = humansCount(), N = CONFIG.CAST.length;
+  function reset() { S = { stage: 'start', tried: [], cuts: [], cur: null, k: null, chalked: false, lineK: undefined, path: { pick: null, why: null, braindam: null }, sel: null, mirror: 0, hand: false, smears: [] }; }
+  function show(id) { ['s-start', 's-one', 's-two', 's-end'].forEach(function (s) { $(s).classList.toggle('on', s === id); }); window.scrollTo(0, 0); }
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
   function people(n) { return n === 1 ? '1 person' : n + ' people'; }
   function animals(n) { return n === 1 ? '1 animal' : n + ' animals'; }
-  function wobble(x1, x2, y) { // a chalk stroke: a path that wanders a pixel or two
+  function wobble(x1, x2, y) {
     var d = 'M' + x1 + ' ' + y, n = 6, seg = (x2 - x1) / n;
     for (var i = 1; i <= n; i++) d += ' Q' + (x1 + seg * (i - .5)).toFixed(1) + ' ' + (y + (i % 2 ? 1.6 : -1.4)).toFixed(1) + ' ' + (x1 + seg * i).toFixed(1) + ' ' + (y + (i % 3 === 0 ? .8 : -.6)).toFixed(1);
     return d;
   }
   function iconOf(id) { return 'i-' + (id === 'disab' ? 'adult' : (id === 'braindam' ? 'lying' : id)); }
   function iconFor(row) { return S.mirror ? 'i-us' : iconOf(row.id); }
-  var NH = humansCount(), N = CONFIG.CAST.length;
+  var RULE_PICK = 'A ruler sorts the ten by one thing, highest at the top, with a yellow mark for each. Tap any row to put your line under it: above the line is <b>in</b>, it counts; below is <b>out</b>.';
 
   // ---------- Board one ----------
-  function rulerList() { var l = CONFIG.RULERS.slice(); if (S.speciesPhase) l.push(CONFIG.SPECIES); return l; }
   function drawTray() {
     var t = $('tray'); t.innerHTML = '';
-    rulerList().forEach(function (r) {
-      var b = document.createElement('button'); b.className = 'rb' + (r.id === 'species' ? ' species' : '') + (S.cur === r.id ? ' cur' : '') + (S.tried.indexOf(r.id) >= 0 ? ' done' : '');
+    CONFIG.RULERS.forEach(function (r) {
+      var b = document.createElement('button'); b.className = 'rb' + (S.cur === r.id ? ' cur' : '') + (S.tried.indexOf(r.id) >= 0 ? ' done' : '');
       b.textContent = r.label; b.setAttribute('aria-label', 'Ruler: ' + r.label);
       var c = S.cuts.filter(function (x) { return x.ruler === r.id; })[0];
-      if (c) { var sp = document.createElement('span'); sp.className = 'cnt'; sp.textContent = c.misfits === 0 ? '0' : c.misfits + ' wrong'; b.appendChild(sp); }
-      b.disabled = S.tried.indexOf(r.id) >= 0 || S.chalked || (S.speciesPhase && r.id !== 'species');
+      if (c) { var sp = document.createElement('span'); sp.className = 'cnt'; sp.textContent = c.byHand ? 'by hand' : (c.misfits + ' wrong'); b.appendChild(sp); }
+      b.disabled = S.tried.indexOf(r.id) >= 0 || S.chalked || S.hand;
       b.onclick = function () { pickRuler(r.id); };
       t.appendChild(b);
     });
@@ -243,19 +228,19 @@ a{color:var(--chalk)}
   function pickRuler(id) {
     S.cur = id; S.k = null; drawTray(); drawCast();
     var r = rulerById(id);
-    $('rule1').innerHTML = '<b>' + esc(r.label) + '</b>: ' + esc(r.what) + '. ' + (id === 'species' ? 'Not a mark anyone measured: just which side of us it is on.' : 'Highest at the top. Tap a row to put your line under it. Two with the same mark cannot be parted.');
-    $('now1').textContent = 'Ruler ' + (S.tried.length + 1) + ' of 5 · ' + r.label + ': tap a row';
+    $('rule1').innerHTML = '<b>' + esc(r.label) + '</b>: ' + esc(r.what) + '. Highest at the top. Tap any row to put your line under it.';
+    $('now1').textContent = 'Ruler ' + (S.tried.length + 1) + ' of 4 · ' + r.label;
     $('hint1').textContent = ''; $('said1').textContent = ''; $('find1').textContent = '';
     $('b-chalk').disabled = true;
   }
   function drawCast() {
     var svg = $('cast'); svg.innerHTML = '';
-    var rows = S.cur ? sortBy(S.cur) : CONFIG.CAST.map(function (b) { return { id: b.id, label: b.label, sub: b.sub, human: b.human, r: null, tieAbove: false, tieBelow: false }; });
+    var rows = S.cur ? sortBy(S.cur) : sortBy('hand');
     S.rows = rows;
-    var g = '';
-    var head = S.cur ? (S.mirror ? CONFIG.MIRROR[S.mirror - 1] : rulerById(S.cur).label).toUpperCase() : 'THE TEN, UNSORTED';
-    g += '<text class="col-head" x="4" y="13">' + esc(head) + '</text>';
-    if (S.cur) g += '<text x="336" y="13" text-anchor="end" font-size="11" fill="#F0D27A">' + (S.mirror ? '' : 'mark  (= same mark)') + '</text>';
+    var g = '', ruler = S.cur && S.cur !== 'hand';
+    var head = S.mirror ? CONFIG.MIRROR[S.mirror - 1] : (S.cur === 'hand' ? (S.handNamed ? CONFIG.HAND.label : 'NO RULER') : (S.cur ? rulerById(S.cur).label : 'THE TEN'));
+    g += '<text class="col-head" x="4" y="13">' + esc(head.toUpperCase()) + '</text>';
+    if (ruler && !S.mirror) g += '<text x="336" y="13" text-anchor="end" font-size="11" fill="#F0D27A">mark  (= same)</text>';
     S.smears.forEach(function (y) { g += '<ellipse cx="170" cy="' + y + '" rx="160" ry="9" fill="#F3EEDD" opacity=".055"/>'; });
     rows.forEach(function (row, j) {
       var y = TOP + j * RH, cy = y + RH / 2;
@@ -264,8 +249,8 @@ a{color:var(--chalk)}
       g += '<rect x="0" y="' + y + '" width="' + W + '" height="' + RH + '" fill="transparent"/>';
       g += '<g stroke="#F3EEDD" stroke-width="1.5"><use href="#' + iconFor(row) + '" x="4" y="' + (cy - 12) + '" width="24" height="24"/></g>';
       g += '<text x="36" y="' + (cy + (sub ? 0 : 5)) + '" font-size="15">' + esc(name) + '</text>';
-      if (sub) g += '<text x="36" y="' + (cy + 11) + '" font-size="10" fill="#F3EEDD" opacity=".7">' + esc(sub) + '</text>';
-      if (row.r !== null && !S.mirror) {
+      if (sub) g += '<text x="36" y="' + (cy + 11) + '" font-size="10" fill="#F3EEDD" opacity=".75">' + esc(sub) + '</text>';
+      if (ruler && !S.mirror) {
         var len = Math.max(2, row.r * 10.5), x0 = 222;
         g += '<rect x="' + x0 + '" y="' + (cy - 4) + '" width="' + len + '" height="8" rx="3" fill="#F0D27A" opacity=".92"/>';
         if (row.r === 0) g += '<text x="' + (x0 + 6) + '" y="' + (cy + 4) + '" font-size="10" fill="#F0D27A" opacity=".8">none</text>';
@@ -274,7 +259,7 @@ a{color:var(--chalk)}
       if (S.mirror) g += '<text x="300" y="' + (cy + 5) + '" font-size="13" fill="#F0D27A">' + (j < NH ? 'ours' : 'theirs') + '</text>';
       g += '</g>';
     });
-    g += '<g id="preview"></g><g id="line"></g><g id="circles"></g>';
+    g += '<g id="preview"></g><g id="line"></g><g id="circles"></g><g id="ghost"></g>';
     svg.innerHTML = g;
     if (S.cur && !S.chalked && !S.mirror) {
       Array.prototype.forEach.call(svg.querySelectorAll('.rowtap'), function (el) { el.addEventListener('click', function () { tapRow(+el.getAttribute('data-j')); }); });
@@ -283,22 +268,34 @@ a{color:var(--chalk)}
     if (S.chalked && S.lineK !== undefined) drawLine(S.lineK, true);
   }
   function tapRow(j) {
-    var rows = S.rows, k = j + 1, note = '';
-    while (k < rows.length && rows[k - 1].r === rows[k].r) k++; // cannot part a tie: the line goes under the whole group
-    if (k !== j + 1) note = 'Same mark: the ruler cannot tell them apart, so the line goes under both.';
-    S.k = k; drawPreview();
-    $('hint1').textContent = (note ? note + ' ' : '') + 'Line under row ' + k + ' of ' + N + ': ' + k + ' in, ' + (rows.length - k) + ' out. Chalk it, or tap another row.';
+    var k = j + 1; S.k = k; drawPreview();
+    var same = S.cur !== 'hand' && k < S.rows.length && S.rows[k - 1].r === S.rows[k].r;
+    $('hint1').textContent = 'Line under row ' + k + ': ' + k + ' in, ' + (N - k) + ' out.' + (same ? ' The two marks either side are the same.' : '') + ' Chalk it, or tap another row.';
     $('b-chalk').disabled = false;
   }
   function drawPreview() {
     var y = TOP + S.k * RH; var p = $('preview'); if (!p) return;
-    p.innerHTML = '<path d="' + wobble(2, 338, y) + '" fill="none" stroke="#F3EEDD" stroke-width="2" stroke-dasharray="6 5" opacity=".55"/>';
+    p.innerHTML = '<path d="' + wobble(2, 338, y) + '" fill="none" stroke="#E8664D" stroke-width="3" stroke-dasharray="7 5" stroke-linecap="round" opacity=".8"/>';
   }
   function drawLine(k, instant) {
     var y = TOP + k * RH; var L = $('line'); if (!L) return;
-    L.innerHTML = '<path id="stroke" d="' + wobble(2, 338, y) + '" fill="none" stroke="#E8664D" stroke-width="3.2" stroke-linecap="round" opacity=".95"/>';
+    L.innerHTML = '<path id="stroke" d="' + wobble(2, 338, y) + '" fill="none" stroke="#E8664D" stroke-width="3.4" stroke-linecap="round" opacity=".95"/>';
     var path = $('stroke'), len = path.getTotalLength();
-    if (!instant) { path.style.strokeDasharray = len; path.style.strokeDashoffset = len; path.style.transition = 'stroke-dashoffset .6s ease-out'; requestAnimationFrame(function () { requestAnimationFrame(function () { path.style.strokeDashoffset = 0; }); }); }
+    if (!instant) { path.style.strokeDasharray = len; path.style.strokeDashoffset = len; path.style.transition = 'stroke-dashoffset .5s ease-out'; requestAnimationFrame(function () { requestAnimationFrame(function () { path.style.strokeDashoffset = 0; }); }); }
+  }
+  function drawGhost(k) { // the line most people draw, dashed, when the player drew another by hand
+    var y = TOP + k * RH; var G = $('ghost'); if (!G) return;
+    G.innerHTML = '<path d="' + wobble(2, 338, y) + '" fill="none" stroke="#F0D27A" stroke-width="3" stroke-dasharray="7 5" stroke-linecap="round" opacity=".95"/>';
+  }
+  function drawHandMarks(c) { // on a line between equal marks: a yellow bracket joining the two parted marks
+    var C = $('circles'); if (!C || !c.parted) return;
+    var y = TOP + c.k * RH;
+    var e = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    e.setAttribute('d', 'M318 ' + (y - 18) + ' h14 v36 h-14'); e.setAttribute('fill', 'none'); e.setAttribute('stroke', '#F0D27A'); e.setAttribute('stroke-width', '2.4'); e.setAttribute('opacity', '.95');
+    C.appendChild(e);
+    var t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    t.setAttribute('x', 312); t.setAttribute('y', y + 5); t.setAttribute('text-anchor', 'end'); t.setAttribute('font-size', '11'); t.setAttribute('fill', '#F0D27A'); t.textContent = 'same mark';
+    C.appendChild(t);
   }
   function drawCircles(c, instant) {
     var C = $('circles'); if (!C) return; C.innerHTML = '';
@@ -312,8 +309,9 @@ a{color:var(--chalk)}
       e.setAttribute('fill', 'none'); e.setAttribute('stroke', '#E8664D'); e.setAttribute('stroke-width', '2.4'); e.setAttribute('opacity', '.95');
       e.setAttribute('transform', 'rotate(-1.5 104 ' + cy + ')');
       C.appendChild(e);
-      if (!instant) { var len = e.getTotalLength(); e.style.strokeDasharray = len; e.style.strokeDashoffset = len; e.style.transition = 'stroke-dashoffset .45s ease-out ' + delay + 'ms'; requestAnimationFrame(function () { requestAnimationFrame(function () { e.style.strokeDashoffset = 0; }); }); delay += 220; }
+      if (!instant) { var len = e.getTotalLength(); e.style.strokeDasharray = len; e.style.strokeDashoffset = len; e.style.transition = 'stroke-dashoffset .45s ease-out ' + delay + 'ms'; requestAnimationFrame(function () { requestAnimationFrame(function () { e.style.strokeDashoffset = 0; }); }); delay += 200; }
     });
+    if (c.byHand && c.ruler !== 'hand') drawHandMarks(c);
   }
   function chalk() {
     if (S.k === null || S.chalked) return;
@@ -323,27 +321,48 @@ a{color:var(--chalk)}
     var said = $('said1'), find = $('find1');
     said.textContent = ''; find.textContent = '';
     setTimeout(function () {
+      if (S.cur === 'hand') { afterHand(c); return; } // no red circles with no ruler: this line is the player's own
       drawCircles(c, false);
-      var summary = 'In: ' + people(c.inH) + ', ' + animals(c.inA) + (c.thingIn ? ', the stone' : '') + '. Out: ' + people(c.outH) + ', ' + animals(c.outA) + (c.thingIn ? '' : ', the stone') + '.';
-      $('now1').textContent = c.misfits === 0 ? 'It works.' : (c.misfits === 1 ? 'One on the wrong side.' : c.misfits + ' on the wrong side.');
-      said.textContent = cutWords(c) + ' ' + summary;
-      if (c.ruler !== 'species') find.textContent = rulerFind(c.ruler);
+      $('now1').textContent = headline(c);
+      said.textContent = cutWords(c);
+      find.textContent = rulerFind(c.ruler);
       var b = $('btns1'); b.innerHTML = '';
-      if (c.ruler === 'species') { var nb = document.createElement('button'); nb.className = 'btn solid'; nb.textContent = 'And then…'; nb.onclick = mirrorStep; b.appendChild(nb); }
-      else { var sb = document.createElement('button'); sb.className = 'btn solid'; sb.textContent = 'Sponge'; sb.onclick = sponge; b.appendChild(sb); }
-    }, 650);
+      var sb = document.createElement('button'); sb.className = 'btn solid'; sb.textContent = 'Sponge'; sb.onclick = sponge; b.appendChild(sb);
+    }, 550);
   }
   function sponge() {
     var sp = $('sponge'); sp.classList.remove('go'); void sp.offsetWidth; sp.classList.add('go');
     var y = TOP + S.lineK * RH;
     setTimeout(function () {
       S.smears.push(y); S.tried.push(S.cur); S.cur = null; S.k = null; S.chalked = false; S.lineK = undefined;
-      if (S.tried.length === CONFIG.RULERS.length) { S.speciesPhase = true; $('now1').textContent = 'One ruler left · tap it'; $('rule1').innerHTML = 'Four rulers, four lines, and every one left a person out or let an animal in. There is one ruler left in the tray. It is not a measurement.'; }
-      else { $('now1').textContent = 'Ruler ' + (S.tried.length + 1) + ' of 5 · Pick a ruler'; $('rule1').innerHTML = 'The sponge took the line; the smear stays. Pick another ruler and try again: a different ruler may cost a different person.'; }
+      if (S.tried.length === CONFIG.RULERS.length) { startHand(); return; }
+      $('now1').textContent = 'Ruler ' + (S.tried.length + 1) + ' of 4 · Pick a ruler';
+      $('rule1').innerHTML = 'The sponge took the line; the smear stays. Try another ruler.';
       $('said1').textContent = ''; $('find1').textContent = ''; $('hint1').textContent = '';
       drawTray(); drawCast();
       $('btns1').innerHTML = '<button class="btn solid" id="b-chalk" disabled>Chalk it</button>'; $('b-chalk').onclick = chalk;
     }, 500);
+  }
+  // ---- the hand round: no ruler
+  function startHand() {
+    S.hand = true; S.cur = 'hand'; S.handNamed = false;
+    $('now1').textContent = 'No ruler · Draw your line';
+    $('bent').style.display = 'none';
+    $('rule1').innerHTML = 'Four rulers, four lines. Every one cost somebody, or your hand drew it. Now put the rulers away. The ten are back in no order, with no marks. Draw the line where you think it goes.';
+    $('said1').textContent = ''; $('find1').textContent = ''; $('hint1').textContent = '';
+    drawTray(); drawCast();
+    $('btns1').innerHTML = '<button class="btn solid" id="b-chalk" disabled>Chalk it</button>'; $('b-chalk').onclick = chalk;
+  }
+  function afterHand(c) {
+    var h = handWords(c);
+    S.handWords = h; S.handK = c.k;
+    $('now1').textContent = h.species ? 'Every person in, every animal out.' : (c.k === N - 1 ? 'That is Singer\'s line.' : headline(c));
+    $('said1').textContent = h.text;
+    if (h.species) { S.handNamed = true; drawCast(); drawLine(c.k, true); }
+    else drawGhost(NH);
+    $('find1').textContent = h.species ? '' : 'The yellow line: every person in, every animal out. No ruler drew it either. Its name is ' + CONFIG.HAND.label + '.';
+    var b = $('btns1'); b.innerHTML = '';
+    var nb = document.createElement('button'); nb.className = 'btn solid'; nb.textContent = 'And then…'; nb.onclick = mirrorStep; b.appendChild(nb);
   }
   function mirrorStep() {
     S.mirror++;
@@ -351,35 +370,35 @@ a{color:var(--chalk)}
     setTimeout(function () {
       if (S.mirror <= CONFIG.MIRROR.length) {
         var lab = CONFIG.MIRROR[S.mirror - 1];
-        drawCast(); drawLine(NH, true);
+        S.cur = 'hand'; drawCast(); drawLine(NH, true);
         $('now1').textContent = 'The same line, another word on it';
         $('rule1').innerHTML = S.mirror === 1
-          ? 'The sponge wiped the word <b>Species</b> and wrote <b>Race</b>. The names are gone; the line is where it was. This is the paper\'s own exercise: take a defence of the species line, change "species" to "race", and re-read it.'
+          ? 'The sponge wiped the word <b>Species</b> and wrote <b>Race</b>. The names are gone; the line is where it was. This is Singer\'s own trick: take anyone who says "people count more because they are people", put "white" where they said "people", and read it again.'
           : 'The sponge wiped <b>Race</b> and wrote <b>Sex</b>. The line is still where it was.';
-        $('said1').textContent = 'On ' + lab + ', every one of us in, every one of them out. It works.';
-        $('find1').textContent = S.mirror === 1 ? 'This is the line the racist draws, and it works for him for the same reason: it is drawn on the group he belongs to, not on anything he can read off anyone.' : 'And the line the sexist draws, the one the paper opens with: the rights of women were once mocked with the rights of brutes. The same line, the same reason.';
-        $('btns1').innerHTML = ''; var nb = document.createElement('button'); nb.className = 'btn solid'; nb.textContent = S.mirror < CONFIG.MIRROR.length ? 'And then…' : 'So where is the line?'; nb.onclick = mirrorStep; $('btns1').appendChild(nb);
+        $('said1').textContent = 'On ' + lab + ', every one of us in, every one of them out.';
+        $('find1').textContent = S.mirror === 1 ? 'This is the line the racist draws, and it works for him for the same reason: it is drawn on the team he is on, not on anything he could measure.' : 'And the line the sexist draws. When women first asked for rights, people laughed and said that next the dogs and horses would ask. Singer starts his paper with that joke. Same line, same reason.';
+        $('btns1').innerHTML = ''; var nb = document.createElement('button'); nb.className = 'btn solid'; nb.textContent = S.mirror < CONFIG.MIRROR.length ? 'And then…' : 'So where does the line go?'; nb.onclick = mirrorStep; $('btns1').appendChild(nb);
       } else {
-        $('cast').style.display = 'none'; $('tray').style.display = 'none'; $('bent').style.display = 'none'; $('hint1').style.display = 'none'; $('said1').style.display = 'none'; $('find1').style.display = 'none'; $('aim1').style.display = 'none';
-        $('now1').textContent = 'Singer\'s reply';
+        $('cast').style.display = 'none'; $('tray').style.display = 'none'; $('hint1').style.display = 'none'; $('said1').style.display = 'none'; $('find1').style.display = 'none'; $('aim1').style.display = 'none';
+        $('now1').textContent = 'Singer\'s answer';
         $('rule1').innerHTML = '';
         $('mirror').style.display = 'block'; $('mirror').textContent = 'The pattern is the same in each case.';
         $('reply1').style.display = 'block';
-        $('reply1').innerHTML = 'Species, race and sex drew your line for the same reason: none of them is a mark you read off anyone. They are the group you belong to. The paper\'s reply: equality was never a fact about them; it is a rule about how to treat them. And one ruler read the same for every one of them but the stone. <b>Suffer.</b> That is where the line goes, the only defensible boundary: whoever can suffer is in.';
-        $('btns1').innerHTML = ''; var nb = document.createElement('button'); nb.className = 'btn solid'; nb.textContent = 'Now you are the experimenter →'; nb.onclick = startTwo; $('btns1').appendChild(nb);
+        $('reply1').innerHTML = 'Species, race and sex all drew your line, and for the same reason: none of them is a ruler. They are the team you are on. Singer says: nobody ever counted because they measured well. Counting is not something you measure, it is something you are owed. And one ruler read the same for every one of them but the stone. <b>Suffer.</b> That is where the line goes: whoever can feel pain counts, and their pain counts as much as anyone\'s.';
+        $('btns1').innerHTML = ''; var nb = document.createElement('button'); nb.className = 'btn solid'; nb.textContent = 'Now you are the scientist →'; nb.onclick = startTwo; $('btns1').appendChild(nb);
       }
     }, 500);
   }
 
-  // ---------- Board two: the experimenter ----------
-  function startTwo() { S.stage = 'two'; S.path = { pick: null, infant: null, why: null, braindam: null }; S.sel = null; show('s-two'); drawExperiment(); }
+  // ---------- Board two: the scientist ----------
+  function startTwo() { S.stage = 'two'; S.path = { pick: null, why: null, braindam: null }; S.sel = null; show('s-two'); drawExperiment(); }
   function barsFor(id) {
     var b = castById(id), h = '';
     CONFIG.RULERS.forEach(function (r) { h += '<div class="mk"><span>' + esc(r.label.toLowerCase()) + '</span><i><b style="width:' + Math.max(3, b[r.id] * 10) + '%"></b></i></div>'; });
     return h;
   }
   function drawExperiment() {
-    $('now2').textContent = 'You are the experimenter';
+    $('now2').textContent = 'Now you are the scientist';
     $('rule2').innerHTML = esc(CONFIG.EXPERIMENT.many) + ' Four are on offer, with their marks from the first board. Tap one, then <b>Use this one</b>. Or do no experiment.';
     var grid = $('grid'); grid.innerHTML = '';
     CONFIG.EXPERIMENT.subjects.forEach(function (id) {
@@ -408,7 +427,7 @@ a{color:var(--chalk)}
     var q = nextQuestion(S.path);
     var qa = $('qa'); qa.innerHTML = '';
     if (!q) { finishExperiment(); return; }
-    $('now2').textContent = 'The paper asks';
+    $('now2').textContent = 'Singer asks';
     var h = '<div class="q">' + esc(q.text) + '</div>';
     q.options.forEach(function (o) { h += '<button class="btn" data-o="' + esc(o.id) + '">' + esc(o.text) + '</button>'; });
     qa.innerHTML = h;
@@ -416,19 +435,19 @@ a{color:var(--chalk)}
   }
   function answer(qid, oid, text) {
     S.path[qid] = oid;
-    $('trail').textContent += ' ' + (qid === 'infant' ? (oid === 'yes' ? 'You would have used the infant.' : 'Not the infant.') : (qid === 'why' ? text : (oid === 'yes' ? 'You would use the adult with brain damage.' : 'Not him either.')));
+    $('trail').textContent += ' ' + (qid === 'why' ? text : (oid === 'yes' ? 'You would use the grown-up whose brain is hurt.' : 'Not him either.'));
     askNext();
   }
   function finishExperiment() {
     var j = judgeExperiment(S.path);
-    $('now2').textContent = j.status === 'species' ? 'The fifth ruler.' : (j.status === 'refuse' ? 'No experiment.' : 'A ruler you can read.');
-    $('trail').textContent = ''; $('said2').textContent = j.said;
+    $('trail').textContent = '';
+    $('now2').textContent = j.status === 'species' ? 'Your hand again.' : (j.status === 'refuse' ? 'No experiment.' : 'A ruler you can read.');
+    $('said2').textContent = j.said;
     setTimeout(function () {
       $('paper2').style.display = 'block'; $('paper2').textContent = j.paper;
-      var nb = document.createElement('button'); nb.className = 'btn solid'; nb.textContent = 'And killing?'; nb.onclick = showCoda; $('btns2').innerHTML = ''; $('btns2').appendChild(nb);
-    }, 800);
+      var nb = document.createElement('button'); nb.className = 'btn solid'; nb.textContent = 'The verdict'; nb.onclick = endGame; $('btns2').innerHTML = ''; $('btns2').appendChild(nb);
+    }, 700);
   }
-  function showCoda() { $('coda').textContent = CONFIG.CODA; show('s-coda'); }
   function endGame() {
     var v = verdict({ cuts: S.cuts, path: S.path });
     $('fate').textContent = v.fate;
@@ -441,8 +460,8 @@ a{color:var(--chalk)}
   function startOne() {
     reset(); S.stage = 'one';
     $('cast').style.display = ''; $('tray').style.display = ''; $('bent').style.display = ''; $('mirror').style.display = 'none'; $('reply1').style.display = 'none'; $('hint1').style.display = ''; $('said1').style.display = ''; $('find1').style.display = ''; $('aim1').style.display = '';
-    $('now1').textContent = 'Ruler 1 of 5 · Pick a ruler';
-    $('rule1').innerHTML = 'A ruler sorts the ten by one thing, highest at the top, with a yellow mark for each. Above your line is <b>in</b>: it counts. Below is <b>out</b>. The board circles in red whoever lands on the wrong side.';
+    $('now1').textContent = 'Ruler 1 of 4 · Pick a ruler';
+    $('rule1').innerHTML = RULE_PICK;
     $('said1').textContent = ''; $('find1').textContent = ''; $('hint1').textContent = '';
     $('btns1').innerHTML = '<button class="btn solid" id="b-chalk" disabled>Chalk it</button>'; $('b-chalk').onclick = chalk;
     drawTray(); drawCast(); show('s-one');
@@ -451,8 +470,8 @@ a{color:var(--chalk)}
   function closeHelp() { $('help').classList.remove('on'); window.scrollTo(0, helpFrom || 0); }
   function openAbout() { helpFrom = window.scrollY; $('about').classList.add('on'); $('about').scrollTop = 0; }
   function closeAbout() { $('about').classList.remove('on'); window.scrollTo(0, helpFrom || 0); }
-  $('b-begin').onclick = startOne; $('b-again').onclick = startOne; $('b-verdict').onclick = endGame;
-  $('b-help-start').onclick = openHelp; $('b-help-one').onclick = openHelp; $('b-help-two').onclick = openHelp; $('b-help-coda').onclick = openHelp;
+  $('b-begin').onclick = startOne; $('b-again').onclick = startOne;
+  $('b-help-start').onclick = openHelp; $('b-help-one').onclick = openHelp; $('b-help-two').onclick = openHelp;
   $('b-help-close').onclick = closeHelp; $('b-help-close2').onclick = closeHelp;
   $('b-about-start').onclick = openAbout; $('b-about-end').onclick = openAbout; $('b-about-close').onclick = closeAbout; $('b-about-close2').onclick = closeAbout;
   reset();

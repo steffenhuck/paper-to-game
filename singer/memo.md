@@ -172,3 +172,28 @@ Each scene has a way of playing that gets it wrong for a reason the paper names:
 **Least sure.** (a) The brain-damaged adult's chalk figure (an adult lying down) and the infant's, which may read alike at row size; (b) whether the experimenter's dialogue holds a player who took the infant, who gets no question and goes straight to the paper's reply; (c) "Aware" as the fourth ruler's name, for "aware of what is happening to them, more self-directing"; (d) the stone's row reading "none" on every ruler, which is the paper's point but makes the stone look like furniture.
 
 **Title, 26 November 2026.** Renamed by the author from *Singer's Chalk Line* to *Draw a Line with Singer* (`draw-a-line-with-singer.html`; the old address redirects).
+
+
+## 21. Revision 2, 26 November 2026: for a smart eleven-year-old
+
+**The author's play notes on revision 1** (the build of section 20), in his order: the first line should be red straight away; on Talk, Suffer and Reason he could not draw arbitrary lines; the Species round confused him ("I thought the whole point of Singer is to discard the species criterion"); the fonts were far too small, even on a laptop; at the experiment, "would you have used the infant instead?" asked about something he had not done, and the two reasons offered were both pro-infant; the killing stage was not understood. Brief for the rebuild: the best version imaginable, for a smart eleven-year-old.
+
+**What changed, and why.**
+
+*The premise is said.* The start screen and board one now open with the stance the paper opens with: most people think every person counts and no animal does; Singer asks, measured how? The task ("every person in, every animal out") is the player's own belief to defend, not a puzzle rule.
+
+*Lines go anywhere; the board says who drew them.* The tie rule is gone. `cut()` accepts any k; if the rows either side of the line read the same, the cut is `byHand` and the board says: the ruler did not draw this line, your hand did (a yellow bracket joins the two equal marks; the tray chip reads "by hand" instead of "n wrong"). On Suffer this enacts the lesson instead of blocking it: the player draws under the four people, sees "every person in, every animal out", and is told the ruler drew none of it. The calibration's claim is restated: no line on any ruler is both the ruler's own (not between equal marks) and clean; the species line is clean but by hand. Robustness 500/500 as before.
+
+*Species is never a ruler.* The fifth-ruler round, which made the player pick Species and told him "It works" before pulling the rug, is replaced by the hand round: after the four rulers the ten return in no order with no marks and the player draws one line wherever he likes, with no red circles (this line is his own). If it is the line under the four people the board names it, Species; if it is Singer's line (everyone but the stone) the board says so and draws the species line in dashed yellow beside it as "the one most people draw"; any other line gets the same dashed yellow. Then the sponge, Race and Sex, unchanged. The game's through-line is now one question asked on every board: who drew this line, the ruler or you?
+
+*Type.* Base 18 px (19 px on a laptop), the column 440 px on a phone and 560 px from 600 px up, so the cast column grows with it; every text size up a step. Chalk it still sits inside a 760-px phone viewport.
+
+*The experiment asks the paper's question outright.* No more "would you have used the infant instead?". After an animal is chosen: *Why not the baby?*, four answers: because the baby is one of us (species); because the baby will grow into more (the paper's potential follow-up: the hurt grown-up will not grow, would you use him? yes → potential, no → species); because the chimpanzee matters less (species, answered with the first board: on which ruler?); no reason, either would have done (read). Thirteen paths. The paper's reply says "the team it is on" and "the same pattern as the racist's"; "the shape of the racist's thought" and the verdict's "you drew the species line after all" are gone.
+
+*Killing is cut.* One line in About.
+
+*Words.* The cast speaks in a child's words on screen: grown-up, baby, "brain badly hurt, for good", "who cannot learn much"; the paper's own words are given in About. Singer is "Singer" on the boards, not "the paper".
+
+**Checks.** `node calibration.js` passes (33 checks plus the 13 path checks). `session-test.py` runs five scripted sessions, two with screenshots (phone 380 × 760: the species player; laptop 1000 × 800: lines by hand, Singer's own line in the hand round, the potential path) and three without (matters less; either would have done; nobody): no page errors, no horizontal scroll.
+
+**Least sure.** (a) Whether "by hand" lands for an eleven-year-old as the ruler's failure rather than the player's; (b) the hand round for a player who draws Singer's line, who gets the species line shown rather than drawn and may feel told what most people think; (c) "grown-up who cannot learn much" as the child's phrase for the paper's "permanently retarded"; (d) the four "why not the baby?" answers as a complete menu.
