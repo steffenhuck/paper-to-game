@@ -62,5 +62,8 @@ ok   the same coin for the same tie, piece and week whatever the week's evenings
 ok   the ghosts meet the same news as the player on the same seed
      clairvoyant (best week with hindsight; 17469 legal weeks searched in week one; 6 seeds): 20.2 of 21; week-one picks: {"Gus:1 Kim:2":1,"Dee:1 Gus:1 Kim:2":1,"Gus:1 Kim:1":1,"Cal:2 Oli:2 Kim:2":2,"Cal:1 Eli:2":1}
 ok   the clairvoyant best beats the spreader (there is luck to read), and hears fewer than all — 20.2
+ok   the best plan (spreader) is within 0.15 of the best first weeks found by exhaustive search, all of them one evening per circle — 5.41 vs 5.46, 5.45, 5.45, 5.42 of 7
+ok   the score: the ceiling is never below the player's own count, over 200 towns and three strategies
+ok   the score bands: the best plan lands in the top two bands most of the time, the circle in the bottom two most of the time
 
 all checks passed

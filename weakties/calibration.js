@@ -145,6 +145,15 @@ for (var c = 0; c < clairN; c++) {
 out.push('     clairvoyant (best week with hindsight; ' + week1Cands.length + ' legal weeks searched in week one; ' + clairN + ' seeds): ' + r1(clair / clairN) + ' of ' + (C.WEEKS * C.NEWS_PER_WEEK) + '; week-one picks: ' + JSON.stringify(firstWeeks));
 check('the clairvoyant best beats the spreader (there is luck to read), and hears fewer than all', clair / clairN > table.spreader.heard && clair / clairN < C.WEEKS * C.NEWS_PER_WEEK, r1(clair / clairN));
 
+// (10) the best plan without foreknowledge: the spreader's first week against the top first weeks of an exhaustive search
+//      (every one of the 17,469 legal first weeks scored on 40 towns, the top 60 rescored on 300; memo, revision 3), over 300 towns
+var TOP = [{ Cal: 1, Dee: 1, Eli: 1, Oli: 1, Gus: 1, Wes: 1, Kim: 1 }, { Ann: 1, Dee: 1, Eli: 1, Oli: 1, Gus: 1, Wes: 1, Kim: 1 }, { Cal: 1, Hal: 1, Eli: 1, Oli: 1, Gus: 1, Wes: 1, Kim: 1 }, { Cal: 1, Eli: 2, Oli: 1, Wes: 2, Kim: 1 }];
+function week1(ev) { var sum = 0; for (var i = 0; i < 300; i++) sum += m.heardOf(m.newGame('x' + i), ev); return sum / 300; }
+var spW = week1(m.STRATEGIES[C.BEST_PLAN](m.newGame('z'))), topW = TOP.map(week1);
+check('the best plan (' + C.BEST_PLAN + ') is within 0.15 of the best first weeks found by exhaustive search, all of them one evening per circle', topW.every(function (w) { return spW >= w - 0.15; }), r1(spW * 10) / 10 + ' vs ' + topW.map(function (w) { return Math.round(w * 100) / 100; }).join(', ') + ' of 7');
+check('the score: the ceiling is never below the player\'s own count, over 200 towns and three strategies', (function () { for (var i = 0; i < 200; i++) { var g = m.runStrategy('sc' + i, [m.STRATEGIES.spreader, m.STRATEGIES.bridgesOften, m.STRATEGIES.homebody][i % 3]); var sc = m.scoreOf(g); if (sc.ceiling < sc.heard || sc.pct > 100 || sc.pct < 0) return false; } return true; })());
+check('the score bands: the best plan lands in the top two bands most of the time, the circle in the bottom two most of the time', (function () { var a = 0, b = 0; for (var i = 0; i < 200; i++) { if (m.scoreOf(m.runStrategy('bd' + i, m.STRATEGIES.spreader)).band >= 1) a++; if (m.scoreOf(m.runStrategy('bd' + i, m.STRATEGIES.homebody)).band <= 1) b++; } return a >= 150 && b >= 150; })());
+
 out.push('');
 out.push(fails ? fails + ' FAILED' : 'all checks passed');
 console.log(out.join('\n'));
