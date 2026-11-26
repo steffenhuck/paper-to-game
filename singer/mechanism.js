@@ -2,8 +2,9 @@
 // Runs unchanged in Node (calibration.js, loop.js) and in the browser (the game passes actions in and draws what comes back).
 // Mechanism kind: TOY, built to illustrate the argument of Peter Singer, "All Animals Are Equal", Philosophic Exchange 5(1), 1974,
 // pp. 103-116 (the journal's own text, SUNY open repository). Page numbers below are the journal's.
-// Revision 3 (26 Nov 2026): the player picks who counts, once, with no ruler in sight; the four rulers then each say whether they
-// could have drawn that line, and if not, which two are the wrong way round; the set is named by its shape; the experiment reads the set.
+// Revision 4 (26 Nov 2026): the player picks who counts with no ruler in sight (round 0), then sees each ruler in turn and may move
+// anyone or keep the line (rounds 1-4, Reason, Talk, Aware, Suffer); each line is named by its shape; the verdict synthesises the five
+// lines (who moved you, when) and the experiment reads the last one.
 
 var CONFIG = {
   // ---- The cast: ten beings, every one an example the paper uses. Readings are ORDINAL STYLISATIONS, 0-10: the ORDERINGS the
@@ -205,34 +206,85 @@ function judgeExperiment(path, set) {
     paper: 'So "what it will grow into" was not your ruler after all: it would have let you use the grown-up whose brain is hurt, and you would not. On every ruler you could read, ' + who.phrase + ' was above him. What is left is the team he is on, and Singer says that is the same pattern as the racist\'s.' };
 }
 
+function lc(name) { return name.indexOf('Singer') === 0 ? name : name.charAt(0).toLowerCase() + name.slice(1); }
+
+// ---------- The five lines: who moved you, when ----------
+// lines: [set0, set1, set2, set3, set4], set i for i >= 1 drawn with CONFIG.RULERS[i-1] on the board.
+function moves(lines) {
+  var out = [];
+  for (var i = 1; i < lines.length; i++) {
+    var prev = lines[i - 1], cur = lines[i];
+    out.push({ ruler: CONFIG.RULERS[i - 1].id, added: inCastOrder(minus(cur, prev)), dropped: inCastOrder(minus(prev, cur)) });
+  }
+  return out;
+}
+// The kind of player: unmoved (the same line five times), ruler-led (on every ruler round the line is a line on that ruler, and at least one move),
+// or mixed. Plus the words for the trajectory.
+function synthesis(lines) {
+  var mv = moves(lines), movedRounds = mv.filter(function (x) { return x.added.length || x.dropped.length; });
+  var onRuler = mv.map(function (x, i) { return testLine(lines[i + 1], x.ruler).line; });
+  var kind = movedRounds.length === 0 ? 'unmoved' : (onRuler.every(Boolean) ? 'ruler-led' : 'mixed');
+  var first = shapeWords(lines[0]), last = shapeWords(lines[lines.length - 1]);
+  var tr = [];
+  mv.forEach(function (x) {
+    var lab = rulerById(x.ruler).label;
+    if (!x.added.length && !x.dropped.length) tr.push(lab + ' did not move you.');
+    else tr.push(lab + ' moved you: ' + (x.added.length ? 'you let in ' + listPhrases(x.added) : '') + (x.added.length && x.dropped.length ? ' and ' : '') + (x.dropped.length ? 'you put out ' + listPhrases(x.dropped) : '') + '.');
+  });
+  var head, text;
+  if (kind === 'unmoved') {
+    head = 'No ruler moved you.';
+    var L = last.shape.lines, labs = L.map(function (id) { return rulerById(id).label; }), others = CONFIG.RULERS.filter(function (r) { return L.indexOf(r.id) < 0; }).map(function (r) { return r.label; });
+    text = 'Four rulers, and your line never changed: ' + listPhrases(lines[0]) + (lines[0].length ? ' in' : '') + ', every time. ' +
+      (last.shape.id === 'species' ? 'Four times a ruler put an animal above a person you kept in, and you kept the line where it was. That is a line drawn by hand, and it has a name.'
+      : last.shape.id === 'singer' ? 'Three rulers could not draw it and that did not move you; the fourth could. You had Singer\'s line from the start.'
+      : last.shape.id === 'everything' || last.shape.id === 'nothing' ? 'Every ruler draws it, because it is no line at all.'
+      : L.length ? labs.join(' and ') + ' could draw it; ' + others.join(', ') + ' could not, and that did not move you.'
+      : 'No ruler could draw it, and that did not move you.');
+  } else if (kind === 'ruler-led') {
+    head = 'The rulers drew your line.';
+    text = 'On every ruler your line was that ruler\'s line: everyone in above everyone out. Four rulers, ' + (new Set(lines.slice(1).map(function (l) { return l.slice().sort().join(); })).size) + ' different lines. You ended on Suffer\'s, ' + (last.shape.id === 'singer' ? 'which is Singer\'s.' : 'but not where Singer puts it: ' + lc(last.name) + '.');
+  } else {
+    head = 'Some rulers moved you.';
+    text = tr.join(' ') + ' You ended with ' + listPhrases(lines[lines.length - 1]) + (lines[lines.length - 1].length ? ' in' : '') + ': ' + lc(last.name) + '.';
+  }
+  return { kind: kind, moves: mv, trajectory: tr, head: head, text: text, first: first, last: last, movedRounds: movedRounds.length };
+}
+
 // ---------- The verdict ----------
-// state: { set: [ids], path }
+// state: { lines: [five sets], path }
 function verdict(state) {
-  var set = state.set || [], w = shapeWords(set), s = w.shape;
+  var lines = state.lines || [state.set || []], set = lines[lines.length - 1], w = shapeWords(set), s = w.shape, syn = synthesis(lines);
   var paper = [
     'No ruler you can read draws a line between people and animals. The line most people draw is drawn by hand, and the team you are on is not a ruler.',
     'One ruler reads the same for all of them but the stone: Suffer. That is where Singer puts the line. If it can feel pain, it counts, and its pain counts as much as anyone\'s.'
   ];
-  var found = ['Your line: ' + listPhrases(set) + (set.length ? ' in' : '') + '. ' + w.headline + ' Its name: ' + w.name + '.'];
-  CONFIG.RULERS.forEach(function (r) { found.push(r.label + ': ' + revealWords(set, r.id)); });
+  var found = ['Your first line, with no ruler: ' + listPhrases(lines[0]) + (lines[0].length ? ' in' : '') + ' (' + syn.first.name + ').'];
+  found = found.concat(syn.trajectory);
+  found.push('Your last line, on Suffer: ' + listPhrases(set) + (set.length ? ' in' : '') + '. ' + w.headline + ' Its name: ' + w.name + '.');
   var j = state.path && state.path.pick ? judgeExperiment(state.path, set) : null;
   var did = j ? [j.said, j.paper] : ['You did not reach the experiment.'];
   var two = 'Singer names two things that do not survive his line: doing experiments on animals that nobody would do on a baby, and eating animals because they taste good. He says the first would shrink to almost nothing, and the second should stop.';
   var fate, part, stood;
-  if (s.id === 'singer') { fate = 'You drew Singer\'s line.'; part = [j && j.status === 'species' ? 'Only at the experiment: your line let the baby and ' + castById(state.path.pick).phrase + ' both count, and then you treated them differently. Singer would say the line was right and the scientist forgot it.' : 'Nowhere. Your line is his, and you kept to it as the scientist.']; stood = [two]; }
-  else if (s.id === 'species' || s.id === 'species-plus' || s.id === 'species-minus') {
-    fate = 'Your hand drew the line, not a ruler.';
-    part = ['At the line itself. ' + (s.id === 'species' ? 'The four people and nobody else: no ruler draws it, and Race and Sex drew the same line. ' : (s.id === 'species-plus' ? 'The four people and the ones you know: no ruler draws it. ' : 'The team with a cut in it: no ruler draws it. ')) + 'Singer\'s word for a line drawn on the team you are on is speciesism, and he says it is the same pattern as racism and sexism.' + (j && j.status === 'species' ? ' At the experiment you drew it again.' : (j && j.status !== 'species' ? ' At the experiment, though, you did not use it.' : ''))];
+  if (s.id === 'singer') {
+    fate = syn.kind === 'unmoved' ? 'You drew Singer\'s line, and kept it.' : 'You ended on Singer\'s line.';
+    part = [j && j.status === 'species' ? 'Only at the experiment: your line let the baby and ' + castById(state.path.pick).phrase + ' both count, and then you treated them differently. Singer would say the line was right and the scientist forgot it.' : (syn.kind === 'unmoved' ? 'Nowhere. Your line was his from the start, and you kept to it as the scientist.' : 'Nowhere, by the end. ' + syn.text)];
+    stood = [two];
+  } else if (s.id === 'species' || s.id === 'species-plus' || s.id === 'species-minus') {
+    fate = syn.kind === 'unmoved' ? 'No ruler moved you. Your hand drew the line.' : 'You ended with a line your hand drew.';
+    part = ['At the line. ' + (syn.kind === 'unmoved' ? 'Four rulers showed you an animal above a person you kept in, and none of them moved you. ' : syn.text + ' ') + 'Singer\'s word for a line drawn on the team you are on is speciesism, and he says it is the same pattern as racism and sexism.' + (j && j.status === 'species' ? ' At the experiment you drew it again.' : (j && j.status !== 'species' ? ' At the experiment, though, you did not use it.' : ''))];
     stood = ['Singer has one more thing for you to do. Say out loud why the baby counts and the chimpanzee does not, then say it again with "white" where you said "human" or "person". He says what it sounds like the second time is the reason to give the line up.'];
-  }
-  else if (s.id === 'line') { fate = 'You drew a straight line in the wrong place.'; part = ['At the ruler. Yours is one you can read, and Singer says it is as arbitrary as skin colour: the ones it keeps out are hurt exactly as much as the ones it keeps in.' + (j && j.status === 'read' ? ' As the scientist you kept to your line.' : '')]; stood = [two]; }
-  else if (s.id === 'everything') { fate = 'You let everything count, the stone too.'; part = ['One step. Singer stops at the stone, which cannot feel; you did not. Everything else you share with him.']; stood = [two]; }
+  } else if (s.id === 'line') {
+    fate = syn.kind === 'ruler-led' ? 'You let the rulers draw your line.' : 'You ended on a straight line in the wrong place.';
+    part = ['At the ruler. Your last line is one a ruler can read, and Singer says it is as arbitrary as skin colour: the ones it keeps out are hurt exactly as much as the ones it keeps in. ' + (syn.kind === 'ruler-led' ? 'And a line that moves with every ruler is four lines, not one; Singer asks which of them is yours.' : syn.text)];
+    stood = [two];
+  } else if (s.id === 'everything') { fate = 'You let everything count, the stone too.'; part = ['One step. Singer stops at the stone, which cannot feel; you did not. ' + (syn.kind === 'unmoved' ? 'No ruler moved you, and none needed to.' : syn.text)]; stood = [two]; }
   else if (s.id === 'nothing') { fate = 'You let nobody count.'; part = ['Everywhere, and nowhere Singer can argue with: his argument starts from somebody counting. If you count, so does whoever can feel pain.']; stood = [two]; }
-  else { fate = 'You drew your own line.'; part = ['At the line. No ruler draws yours, and no team does either. Singer would ask what the ones you put in share. If you can name it, it is a ruler, and the board can test it; if you cannot, it is a hand.']; stood = [two]; }
+  else { fate = syn.kind === 'unmoved' ? 'You drew your own line, and kept it.' : 'You ended on your own line.'; part = ['At the line. No ruler draws yours, and no team does either. ' + syn.text + ' Singer would ask what the ones you put in share. If you can name it, it is a ruler, and the board can test it; if you cannot, it is a hand.']; stood = [two]; }
   if (j && j.status === 'potential') part.push('And at the experiment: you went by what they will grow into, which is a ruler you can read, and Singer tells you what it costs.');
-  return { fate: fate, paper: paper, found: found, did: did, part: part, stood: stood, name: w.name };
+  return { fate: fate, paper: paper, found: found, did: did, part: part, stood: stood, name: w.name, synthesis: syn };
 }
 
 if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, castById: castById, humans: humans, feelers: feelers, allIds: allIds, rulerById: rulerById, sortBy: sortBy, sameSet: sameSet,
   testLine: testLine, linesOn: linesOn, revealWords: revealWords, shapeOf: shapeOf, shapeWords: shapeWords, clashSentence: clashSentence,
-  whyOptions: whyOptions, nextQuestion: nextQuestion, judgeExperiment: judgeExperiment, verdict: verdict, listPhrases: listPhrases };
+  whyOptions: whyOptions, nextQuestion: nextQuestion, judgeExperiment: judgeExperiment, verdict: verdict, listPhrases: listPhrases, moves: moves, synthesis: synthesis };

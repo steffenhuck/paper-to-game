@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Draw a Line with Singer</title>
 <script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<meta name="description" content="Singer, All Animals Are Equal (1974): who counts? Tap them. Ten of Singer's own examples on a blackboard; then four rulers each say whether they could have drawn your line, and the board names it. Then you are the scientist, and Singer asks why not the baby.">
+<meta name="description" content="Singer, All Animals Are Equal (1974): who counts? Tap them. Then four rulers come to the board one at a time, Reason, Talk, Aware, Suffer, and each asks whether it moves you. The board names your line and says who moved you. Then you are the scientist, and Singer asks why not the baby.">
 <style>
 @font-face{font-family:'Fredericka';font-weight:400;font-style:normal;src:url(data:font/woff2;base64,/*__F_FRED__*/) format('woff2')}
 @font-face{font-family:'Architects';font-weight:400;font-style:normal;src:url(data:font/woff2;base64,/*__F_ARCH__*/) format('woff2')}
@@ -114,7 +114,7 @@ a{color:var(--chalk)}
     <path d="M6 70 q60 -4 120 1 t120 -2 t88 1" fill="none" stroke="#E8664D" stroke-width="3" stroke-linecap="round" opacity=".95"/>
     <text x="8" y="88" font-size="13" fill="#F0D27A">in</text><text x="312" y="88" font-size="13" fill="#F0D27A">out?</text>
   </svg>
-  <p class="acts">Ten of them are on the board: people, animals, and a stone. Tap everyone you think counts. Then four rulers will each tell you whether they could have drawn your line, and the board will tell you what your line is called. Then you are the scientist, and Singer has one question for you.</p>
+  <p class="acts">Ten of them are on the board: people, animals, and a stone. Tap everyone you think counts. Then four rulers come to the board, one at a time, and each one asks: does this move you? At the end the board tells you what your line is called, and who moved you. Then you are the scientist, and Singer has one question for you.</p>
   <p class="aim big">Who counts? Draw the line.</p>
   <button class="btn solid" id="b-begin">Pick up the chalk</button>
   <div class="row2"><button class="btn" id="b-help-start">How to play</button><button class="btn" id="b-about-start">About</button></div>
@@ -157,7 +157,7 @@ a{color:var(--chalk)}
   <div class="kicker">The verdict</div>
   <div class="fate" id="fate"></div>
   <div class="sec"><h2>What Singer says</h2><div id="v-paper"></div></div>
-  <div class="sec"><h2>Your line</h2><div id="v-found"></div></div>
+  <div class="sec"><h2>Your lines</h2><div id="v-found"></div></div>
   <div class="sec"><h2>What you did as the scientist</h2><div id="v-did"></div></div>
   <div class="sec"><h2>Where you and Singer part</h2><div id="v-part"></div></div>
   <div class="sec"><h2>What follows</h2><div id="v-stood"></div></div>
@@ -173,13 +173,13 @@ a{color:var(--chalk)}
   <h1>How to play</h1>
   <p><b>Who counts? Draw the line.</b></p>
   <h2>The first board</h2>
-  <p>Ten are on the board, every one an example from Singer's paper: a grown-up; a baby a few days old, with no parents; a grown-up whose brain is badly hurt, for good; a grown-up who cannot learn much; a chimpanzee, a dog, a pig, a horse, a mouse; and a stone. Tap everyone who counts, whatever that means to you. Tap again to take one out. Then tap <b>Done</b>. That is your line, and nothing can change it until you play again.</p>
-  <p>Then four rulers appear: Reason, Talk, Aware and Suffer. Tap one and the ten sort by it, highest at the top, with a yellow mark for each; the marks follow what Singer's paper says. Your line rides along: a full dot for everyone you put in, an empty one for everyone you left out. If the ruler could have drawn your line, with everyone you put in above everyone you left out, a red line draws itself. If it could not, the board circles the two that are the wrong way round and says so. Tap all four.</p>
-  <p>Then the board tells you what your line is called, and what Singer says about it.</p>
+  <p>Ten are on the board, every one an example from Singer's paper: a grown-up; a baby a few days old, with no parents; a grown-up whose brain is badly hurt, for good; a grown-up who cannot learn much; a chimpanzee, a dog, a pig, a horse, a mouse; and a stone. Tap everyone who counts, whatever that means to you. Tap again to take one out. Then tap <b>Done</b>. That is your first line.</p>
+  <p>Then four rulers come to the board one at a time: Reason, Talk, Aware and Suffer. Each sorts the ten by one thing, highest at the top, with a yellow mark for each; the marks follow what Singer's paper says. Your line is still there: a full dot for everyone in, an empty one for everyone out. Now you may move anyone, in or out, or keep your line as it is. Tap <b>Keep my line</b> or <b>Done</b>. The board then says whether that ruler could have drawn the line you left it with: a red line if it could, red circles on the two that are the wrong way round if it could not. Then the next ruler.</p>
+  <p>After Suffer, the board tells you what your last line is called, who moved you and when, and what Singer says about it.</p>
   <h2>The second board</h2>
   <p>You are the scientist in Singer's own story: one experiment that would save many lives, and it needs one subject, someone it is done to. Four are on offer, with their marks, and there is a fifth answer: no one. Tap one, then <b>Use this one</b>. If you took an animal, Singer asks why not the baby, and maybe one more thing. Then he says what your answers add up to.</p>
   <h2>The verdict</h2>
-  <p>What Singer says; your line, ruler by ruler; what you did as the scientist; where you and Singer part; and what follows. No score. Play again to draw a different line.</p>
+  <p>What Singer says; your five lines, and who moved you; what you did as the scientist; where you and Singer part; and what follows. No score. Play again to draw a different line.</p>
   <div class="close"><button class="btn" id="b-help-close2">Back to the board</button></div>
 </div></div></div>
 
@@ -200,7 +200,7 @@ a{color:var(--chalk)}
   var S, helpFrom = null;
   var RH = 28, TOP = 20, W = 340;
   var NH = humans().length, N = CONFIG.CAST.length;
-  function reset() { S = { stage: 'start', phase: 'pick', set: [], seen: [], cur: null, path: { pick: null, why: null, braindam: null }, sel: null, mirror: 0, words: null }; }
+  function reset() { S = { stage: 'start', phase: 'pick', set: [], lines: [], round: 0, cur: null, path: { pick: null, why: null, braindam: null }, sel: null, mirror: 0, words: null, syn: null }; }
   function show(id) { ['s-start', 's-one', 's-two', 's-end'].forEach(function (s) { $(s).classList.toggle('on', s === id); }); window.scrollTo(0, 0); }
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
   function wobble(x1, x2, y) {
@@ -217,10 +217,10 @@ a{color:var(--chalk)}
   function drawCast() {
     var svg = $('cast'); svg.innerHTML = '';
     var rows = castRows(); S.rows = rows;
-    var ruler = !!S.cur, g = '';
+    var ruler = !!S.cur, g = '', tappable = S.phase === 'pick' || S.phase === 'round';
     var head = S.mirror ? CONFIG.MIRROR[S.mirror - 1] : (S.phase === 'name' && S.words ? S.words.name : (ruler ? rulerById(S.cur).label : (S.phase === 'pick' ? 'THE TEN' : 'YOUR LINE')));
     g += '<text class="col-head" x="4" y="13">' + esc(head.toUpperCase()) + '</text>';
-    if (ruler && !S.mirror) g += '<text x="336" y="13" text-anchor="end" font-size="11" fill="#F0D27A">mark</text>';
+    if (ruler && !S.mirror) g += '<text x="336" y="13" text-anchor="end" font-size="11" fill="#F0D27A">' + (tappable ? 'tap to move · ' : '') + 'mark</text>';
     else if (S.phase === 'pick') g += '<text x="336" y="13" text-anchor="end" font-size="11" fill="#F0D27A">tap: counts?</text>';
     rows.forEach(function (row, j) {
       var y = TOP + j * RH, cy = y + RH / 2, isIn = inSet(row.id);
@@ -228,15 +228,14 @@ a{color:var(--chalk)}
       g += '<g class="rowtap" data-id="' + row.id + '">';
       g += '<rect x="0" y="' + y + '" width="' + W + '" height="' + RH + '" fill="transparent"/>';
       g += '<g stroke="#F3EEDD" stroke-width="1.5"><use href="#' + iconFor(row) + '" x="4" y="' + (cy - 12) + '" width="24" height="24"/></g>';
-      g += '<text x="36" y="' + (cy + (sub ? 0 : 5)) + '" font-size="15"' + (S.phase === 'pick' && !isIn ? ' opacity=".6"' : '') + '>' + esc(name) + '</text>';
+      g += '<text x="36" y="' + (cy + (sub ? 0 : 5)) + '" font-size="15"' + (tappable && !isIn ? ' opacity=".6"' : '') + '>' + esc(name) + '</text>';
       if (sub) g += '<text x="36" y="' + (cy + 11) + '" font-size="10" fill="#F3EEDD" opacity=".75">' + esc(sub) + '</text>';
       if (S.mirror) { g += '<text x="300" y="' + (cy + 5) + '" font-size="13" fill="#F0D27A">' + (j < NH ? 'ours' : 'theirs') + '</text>'; }
       else if (S.phase === 'pick') {
         g += isIn ? '<circle cx="300" cy="' + cy + '" r="7" fill="#F0D27A"/><text x="312" y="' + (cy + 4) + '" font-size="12" fill="#F0D27A">in</text>'
                   : '<circle cx="300" cy="' + cy + '" r="7" fill="none" stroke="#F3EEDD" stroke-width="1.2" opacity=".45"/><text x="312" y="' + (cy + 4) + '" font-size="12" fill="#F3EEDD" opacity=".45">out</text>';
       } else {
-        // the player's line rides along: a full dot in, an empty dot out
-        g += isIn ? '<circle cx="207" cy="' + cy + '" r="5.5" fill="#F0D27A"/>' : '<circle cx="207" cy="' + cy + '" r="5.5" fill="none" stroke="#F3EEDD" stroke-width="1.2" opacity=".5"/>';
+        g += isIn ? '<circle cx="207" cy="' + cy + '" r="6" fill="#F0D27A"/>' : '<circle cx="207" cy="' + cy + '" r="6" fill="none" stroke="#F3EEDD" stroke-width="1.2" opacity=".5"/>';
         if (ruler) {
           var len = Math.max(2, row.r * 10.5), x0 = 222;
           g += '<rect x="' + x0 + '" y="' + (cy - 4) + '" width="' + len + '" height="8" rx="3" fill="#F0D27A" opacity=".92"/>';
@@ -248,13 +247,13 @@ a{color:var(--chalk)}
     });
     g += '<g id="ghost"></g><g id="line"></g><g id="circles"></g>';
     svg.innerHTML = g;
-    if (S.phase === 'pick') Array.prototype.forEach.call(svg.querySelectorAll('.rowtap'), function (el) { el.addEventListener('click', function () { toggle(el.getAttribute('data-id')); }); });
+    if (tappable) Array.prototype.forEach.call(svg.querySelectorAll('.rowtap'), function (el) { el.addEventListener('click', function () { toggle(el.getAttribute('data-id')); }); });
   }
   function toggle(id) {
     var i = S.set.indexOf(id); if (i >= 0) S.set.splice(i, 1); else S.set.push(id);
     drawCast();
-    $('hint1').textContent = S.set.length === 0 ? 'Nobody in yet.' : (S.set.length + ' in, ' + (N - S.set.length) + ' out.');
-    $('b-done').disabled = false;
+    if (S.phase === 'pick') { $('hint1').textContent = S.set.length === 0 ? 'Nobody in yet.' : (S.set.length + ' in, ' + (N - S.set.length) + ' out.'); $('b-done').disabled = false; }
+    else { var moved = !sameSet(S.set, S.lines[S.lines.length - 1]); $('hint1').textContent = moved ? 'You moved. ' + S.set.length + ' in, ' + (N - S.set.length) + ' out.' : 'Back where it was.'; $('b-done').textContent = moved ? 'Done' : 'Keep my line'; }
   }
   function drawLine(k, color, dashed, label) {
     var y = TOP + k * RH, L = $('line'); if (!L) return;
@@ -280,61 +279,67 @@ a{color:var(--chalk)}
       requestAnimationFrame(function () { requestAnimationFrame(function () { e.style.strokeDashoffset = 0; }); }); delay += 200;
     });
   }
-  // ---- the pick
+  // ---- round 0: the pick
   function startOne() {
     reset(); S.stage = 'one';
     $('cast').style.display = ''; $('tray').style.display = 'none'; $('bent').style.display = 'none'; $('mirror').style.display = 'none'; $('reply1').style.display = 'none'; $('hint1').style.display = ''; $('said1').style.display = ''; $('find1').style.display = ''; $('aim1').style.display = '';
     $('now1').textContent = 'Who counts?'; $('aim1').textContent = 'Tap everyone who counts. The rest are out.';
     $('rule1').innerHTML = 'Ten are on the board: people, animals, a stone. Counting means: what happens to it matters. Tap a row to put it in; tap again to take it out. When your line is drawn, tap <b>Done</b>.';
     $('said1').textContent = ''; $('find1').textContent = ''; $('hint1').textContent = 'Nobody in yet.';
-    $('btns1').innerHTML = '<button class="btn solid" id="b-done" disabled>Done</button>'; $('b-done').onclick = startReveal;
+    $('btns1').innerHTML = '<button class="btn solid" id="b-done" disabled>Done</button>'; $('b-done').onclick = commitRound;
     drawCast(); show('s-one');
   }
-  // ---- the four reveals
+  // ---- rounds 1-4: a ruler on the board; move anyone, or keep the line
   function drawTray() {
     var t = $('tray'); t.innerHTML = '';
-    CONFIG.RULERS.forEach(function (r) {
-      var b = document.createElement('button'); b.className = 'rb' + (S.cur === r.id ? ' cur' : '') + (S.seen.indexOf(r.id) >= 0 && S.cur !== r.id ? ' seen' : '');
-      b.textContent = r.label; b.setAttribute('aria-label', 'Ruler: ' + r.label);
-      if (S.seen.indexOf(r.id) >= 0) { var sp = document.createElement('span'); var t0 = testLine(S.set, r.id); sp.className = 'cnt' + (t0.line ? ' ok' : ''); sp.textContent = t0.line ? 'draws it' : 'cannot'; b.appendChild(sp); }
-      b.onclick = function () { reveal(r.id); };
+    CONFIG.RULERS.forEach(function (r, i) {
+      var b = document.createElement('button'); b.className = 'rb' + (S.cur === r.id ? ' cur' : '') + (i < S.round - 1 ? ' seen' : '');
+      b.textContent = r.label; b.disabled = true; b.setAttribute('aria-label', 'Ruler: ' + r.label);
+      if (i < S.round - 1) { var sp = document.createElement('span'); var t0 = testLine(S.lines[i + 1], r.id); sp.className = 'cnt' + (t0.line ? ' ok' : ''); sp.textContent = t0.line ? 'drew it' : 'could not'; b.appendChild(sp); }
       t.appendChild(b);
     });
   }
-  function startReveal() {
-    S.phase = 'reveal'; $('tray').style.display = ''; $('bent').style.display = '';
-    $('now1').textContent = 'Your line is drawn. Now the rulers.';
-    $('aim1').textContent = 'Could a ruler have drawn your line? Tap each one and see.';
-    $('rule1').innerHTML = 'A ruler sorts the ten by one thing, highest at the top. Your line rides along: a full dot for everyone you put in, an empty one for everyone you left out. A ruler can draw your line only if all your full dots are above all your empty ones.';
+  function commitRound() {
+    if (S.phase === 'pick') { S.lines = [S.set.slice()]; S.round = 0; }
+    else { S.lines.push(S.set.slice()); }
+    if (S.phase === 'round') { revealRound(); return; }
+    nextRound();
+  }
+  function nextRound() {
+    S.round = S.lines.length; // 1..4
+    if (S.round > CONFIG.RULERS.length) { nameIt(); return; }
+    S.phase = 'round'; S.cur = CONFIG.RULERS[S.round - 1].id;
+    var r = rulerById(S.cur);
+    $('tray').style.display = ''; $('bent').style.display = S.round === 1 ? '' : 'none';
+    $('now1').textContent = 'Ruler ' + S.round + ' of 4 · ' + r.label;
+    $('aim1').textContent = S.round === 1 ? 'Your line is drawn. Now a ruler comes to the board. Does it move you?' : 'Next ruler. Does it move you?';
+    $('rule1').innerHTML = '<b>' + esc(r.label) + '</b>: ' + esc(r.what) + '. The ten are sorted by it, highest at the top. Your line is still there, full dots in, empty dots out. Tap anyone to move them in or out. Or keep your line.';
     $('hint1').textContent = ''; $('said1').textContent = ''; $('find1').textContent = '';
-    $('btns1').innerHTML = '';
+    $('btns1').innerHTML = '<button class="btn solid" id="b-done">Keep my line</button>'; $('b-done').onclick = commitRound;
     drawTray(); drawCast();
   }
-  function reveal(rid) {
-    S.cur = rid; if (S.seen.indexOf(rid) < 0) S.seen.push(rid);
-    drawTray(); drawCast();
-    var r = rulerById(rid), t = testLine(S.set, rid);
-    $('rule1').innerHTML = '<b>' + esc(r.label) + '</b>: ' + esc(r.what) + '. Highest at the top.';
-    $('said1').textContent = ''; $('find1').textContent = '';
+  function revealRound() {
+    var rid = S.cur, r = rulerById(rid), t = testLine(S.set, rid), prev = S.lines[S.lines.length - 2], moved = !sameSet(S.set, prev);
+    S.phase = 'revealed'; drawCast(); drawTray();
+    $('btns1').innerHTML = ''; $('hint1').textContent = '';
     setTimeout(function () {
       if (t.line) { animateLine(t.k); $('now1').textContent = r.label + ' draws your line.'; }
       else { drawCircles(t.clash); $('now1').textContent = 'No line on ' + r.label + ' does that.'; }
-      $('said1').textContent = revealWords(S.set, rid);
+      $('said1').textContent = (moved ? r.label + ' moved you. ' : 'You kept your line. ') + revealWords(S.set, rid);
       if (rid === 'suffer') $('find1').textContent = 'Suffer reads the same for every one of them but the stone.';
-      if (S.seen.length === CONFIG.RULERS.length) {
-        $('btns1').innerHTML = ''; var nb = document.createElement('button'); nb.className = 'btn solid'; nb.textContent = 'So what drew my line?'; nb.onclick = nameIt; $('btns1').appendChild(nb);
-      } else $('hint1').textContent = (CONFIG.RULERS.length - S.seen.length) + ' more to tap.';
+      var nb = document.createElement('button'); nb.className = 'btn solid';
+      nb.textContent = S.round < CONFIG.RULERS.length ? 'Next ruler: ' + CONFIG.RULERS[S.round].label + ' →' : 'So what drew my line?';
+      nb.onclick = nextRound; $('btns1').appendChild(nb);
     }, 350);
   }
   // ---- the name
   function nameIt() {
-    S.phase = 'name'; S.cur = null; S.words = shapeWords(S.set);
+    S.phase = 'name'; S.cur = null; S.words = shapeWords(S.set); S.syn = synthesis(S.lines);
     var w = S.words, sh = w.shape;
     $('tray').style.display = 'none'; $('bent').style.display = 'none'; $('hint1').textContent = '';
-    $('now1').textContent = w.headline; $('aim1').textContent = 'Your line, and its name.';
-    $('rule1').innerHTML = '';
+    $('now1').textContent = S.syn.head; $('aim1').textContent = 'Your last line, and its name.';
+    $('rule1').innerHTML = esc(S.syn.text);
     drawCast();
-    // the player's own line, if it is a single stretch in cast order, drawn solid red; the two named lines dashed where they are not the player's
     if (sh.id === 'species') drawLine(NH, '#E8664D', false, '');
     else if (sh.id === 'singer') drawLine(N - 1, '#E8664D', false, '');
     else if (sh.id === 'everything') drawLine(N, '#E8664D', false, '');
@@ -353,7 +358,8 @@ a{color:var(--chalk)}
       if (S.mirror <= CONFIG.MIRROR.length) {
         var lab = CONFIG.MIRROR[S.mirror - 1];
         S.cur = null; drawCast(); drawLine(NH, '#E8664D', false, '');
-        $('now1').textContent = 'The same line, another word on it';
+        $('now1').textContent = 'The same line, another word on it'; $('rule1').innerHTML = '';
+        $('aim1').textContent = own ? 'Your line, with its name wiped off.' : 'The line most people draw, with its name wiped off.';
         $('rule1').innerHTML = S.mirror === 1
           ? (own ? 'The sponge wiped the word <b>Species</b> and wrote <b>Race</b>.' : 'Here is the line most people draw, the four people, with its name, <b>Species</b>, wiped off and <b>Race</b> written instead.') + ' The names are gone; the line is where it was. This is Singer\'s own trick: take anyone who says "people count more because they are people", put "white" where they said "people", and read it again.'
           : 'The sponge wiped <b>Race</b> and wrote <b>Sex</b>. The line is still where it was.';
@@ -366,7 +372,7 @@ a{color:var(--chalk)}
         $('rule1').innerHTML = '';
         $('mirror').style.display = 'block'; $('mirror').textContent = 'The pattern is the same in each case.';
         $('reply1').style.display = 'block';
-        $('reply1').innerHTML = 'Species, race and sex all draw that line, and for the same reason: none of them is a ruler. They are the team you are on. Singer says: nobody ever counted because they measured well. Counting is not something you measure, it is something you are owed. And one ruler reads the same for every one of them but the stone. <b>Suffer.</b> That is where his line goes: whoever can feel pain counts, and their pain counts as much as anyone\'s.' + (own ? '' : ' Your line: ' + esc(S.words.name) + '.');
+        $('reply1').innerHTML = 'Species, race and sex all draw that line, and for the same reason: none of them is a ruler. They are the team you are on. Singer says: nobody ever counted because they measured well. Counting is not something you measure, it is something you are owed. And one ruler reads the same for every one of them but the stone. <b>Suffer.</b> That is where his line goes: whoever can feel pain counts, and their pain counts as much as anyone\'s.' + (own ? '' : ' Your last line: ' + esc(S.words.name) + '.');
         $('btns1').innerHTML = ''; var nb = document.createElement('button'); nb.className = 'btn solid'; nb.textContent = 'Now you are the scientist →'; nb.onclick = startTwo; $('btns1').appendChild(nb);
       }
     }, 500);
@@ -431,7 +437,7 @@ a{color:var(--chalk)}
     }, 700);
   }
   function endGame() {
-    var v = verdict({ set: S.set, path: S.path });
+    var v = verdict({ lines: S.lines, path: S.path });
     $('fate').textContent = v.fate;
     function fill(id, arr) { $(id).innerHTML = arr.map(function (t) { return '<p>' + esc(t) + '</p>'; }).join(''); }
     fill('v-paper', v.paper); fill('v-found', v.found); fill('v-did', v.did); fill('v-part', v.part); fill('v-stood', v.stood);

@@ -1,4 +1,4 @@
-// Calibration check for Draw a Line with Singer (revision 3). Run: node calibration.js. Exit code 1 on any failure.
+// Calibration check for Draw a Line with Singer (revision 4). Run: node calibration.js. Exit code 1 on any failure.
 // The mechanism is a TOY of an argument; the check verifies (1) that every ordering the 1974 paper states holds in the cast,
 // (2) the paper's claim on this cast: the four-people set is a line on no ruler, and the everyone-who-feels set is a line on Suffer only,
 // (3) that this rests on the paper's orderings, not our lengths: random casts keeping only the stated orderings behave the same,
@@ -51,10 +51,20 @@ for (var mask = 0; mask < (1 << n); mask++) {
   shapes[s.id] = (shapes[s.id] || 0) + 1;
   if (!w.name || !w.headline || !w.who || w.who.length < 40 || (s.id !== 'species' && (!w.singer || w.singer.length < 40))) bad++;
   C.RULERS.forEach(function (r) { if (!m.revealWords(set, r.id) || m.revealWords(set, r.id).length < 20) bad++; });
-  var v = m.verdict({ set: set, path: { pick: 'chimp', why: 'human', braindam: null } }); if (!v.fate || v.found.length !== 5 || !v.part.length) bad++;
+  var v = m.verdict({ lines: [set, set, set, set, set], path: { pick: 'chimp', why: 'human', braindam: null } }); if (!v.fate || v.found.length !== 6 || !v.part.length || v.synthesis.kind !== 'unmoved') bad++;
   s.lines.forEach(function (rid) { var rows = m.sortBy(rid); for (var i = 1; i < rows.length; i++) { var inA = set.indexOf(rows[i - 1].id) >= 0, inB = set.indexOf(rows[i].id) >= 0; if (!inA && inB) bad++; if (inA !== inB && rows[i - 1].r === rows[i].r) bad++; } });
 }
-check('all 1024 sets get a shape, a name, words, four reveals and a verdict; every line is a true threshold', bad === 0, bad + ' problems');
+check('all 1024 sets get a shape, a name, words, four reveals and a verdict (unmoved); every line is a true threshold', bad === 0, bad + ' problems');
+// (4b) trajectories
+var rl = [H, ['adult'], ['adult', 'disab'], ['adult', 'chimp'], F]; // the four people, then each ruler's own line
+var synR = m.synthesis(rl);
+check('a player who takes each ruler\'s line is ruler-led and ends on Singer\'s line', synR.kind === 'ruler-led' && synR.last.shape.id === 'singer', synR.text);
+var synM = m.synthesis([H, H, H, H, F]);
+check('a player moved only by Suffer is mixed, with three "did not move you" and one move', synM.kind === 'mixed' && synM.movedRounds === 1 && /Suffer moved you: you let in/.test(synM.text), synM.text);
+var synU = m.synthesis([F, F, F, F, F]);
+check('Singer\'s line kept five times is unmoved', synU.kind === 'unmoved' && /from the start/.test(synU.text));
+var vM = m.verdict({ lines: [H, H, H, H, F], path: { pick: 'mouse', why: 'none', braindam: null } });
+check('the verdict reads the last line (Singer\'s) and reports the trajectory', /Singer/.test(vM.fate) && vM.found.length === 6 && /Suffer moved you/.test(vM.found.join(' ')), vM.fate);
 check('eight shapes occur', Object.keys(shapes).length === 8, JSON.stringify(shapes));
 check('the grown-up alone is a Reason, Talk and Aware line', JSON.stringify(m.linesOn(['adult'])) === '["reason","talk","aware"]');
 check('the four people plus the dog is species-with-favourites', m.shapeOf(H.concat(['dog'])).id === 'species-plus');
