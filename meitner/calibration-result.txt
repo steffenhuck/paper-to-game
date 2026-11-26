@@ -1,0 +1,52 @@
+ok   equal split of 239U flies apart with 200 Mev (paper, p. 239: c. 200 Mev; tolerance 5%)
+ok   the fitted radius constant r0 = 1.55 fm lies in the range 1939 used (1.2-1.6 fm)
+ok   the two pieces lose about a fifth of a proton between them (0.21), E = mc^2 on the paper's 200 Mev
+ok   barium's partner is krypton: 92 - 56 = 36 (p. 239)
+ok   the skin is gone at Z = 100 (p. 239: surface tension may become zero for Z of the order of 100): 0.001
+ok   lead holds, uranium barely holds (p. 239: "only small stability of form"), the imagined drop falls apart: 0.18 / 0.10 / 0.00
+ok   239U climbs exactly one step, to element 93 (p. 240: 239U goes over into an eka-rhenium; "cannot be expected to give more than one or two beta decays")
+ok   from krypton the climb reaches niobium (5 steps); the paper: krypton ... through rubidium, strontium and yttrium to zirconium (p. 239)
+ok   from barium the climb reaches neodymium (4 steps); the paper: barium-lanthanum-cerium chains (p. 239)
+ok   from masurium the climb reaches cadmium (5 steps); the paper: masurium isotopes (Z = 43) decaying through ruthenium, rhodium, palladium and silver into cadmium (p. 239)
+ok   the masurium piece climbs exactly into cadmium (p. 239: "... silver into cadmium")
+ok   every allowed piece climbs 3 to 6 steps (the on-screen rule says "about four or five")
+ok   tube "like uranium, 24 min" stands in column 6 of the 1939 table, cell 92
+ok   tube "like rhenium" stands in column 7 of the 1939 table, cell 93
+ok   tube "like osmium" stands in column 8 of the 1939 table, cell 94
+ok   tube "like iridium" stands in column 9 of the 1939 table, cell 95
+ok   tube "like platinum" stands in column 10 of the 1939 table, cell 96
+ok   tube "like gold" stands in column 11 of the 1939 table, cell 97
+ok   tube "like barium" stands in column 2 of the 1939 table, cell 56
+ok   tube "like lanthanum" stands in column 3 of the 1939 table, cell 57
+ok   tube "like radium" stands in column 2 of the 1939 table, cell 88
+ok   tube "like actinium" stands in column 3 of the 1939 table, cell 89
+ok   uranium under tungsten, 93 under rhenium, 94 under osmium: the 1939 placement that made the eka-names fit their chemistry
+ok   strontium under barium, yttrium under lanthanum (p. 239: Sr-Y-Zr chains mistaken for Ba-La-Ce)
+ok   the pinch at 56 | 36 lights barium and lanthanum: ba@56 la@57
+ok   the krypton piece passes strontium and yttrium, which act like barium and lanthanum
+ok   the pinch at 43 | 49 lights all five tubes filed beyond uranium: eRe@43 eOs@44 eIr@45 ePt@46 eAu@47
+ok   the hold lights the 24-minute tube and nothing else
+ok   the shelf is clear after three neutrons
+ok   no pinch lights the 24-minute tube (p. 240: it is 239U, a resonance capture)
+ok   no piece of any pinch ever lands in or climbs into the dashed row
+ok   no two neutrons clear the uranium shelf; three is the minimum (the verdict says "where three would do")
+ok   90 pairs of pinches plus a hold clear the shelf in three neutrons
+ok   the pinches that bring all five ghosts down at once are 42, 43, 49, 50: near masurium, as the paper has it (p. 239), and not many
+ok   the pinches that light barium and lanthanum are 33, 34, 35, 36, 37, 38, 39, 40, 52, 53, 54, 55, 56, 57, 58, 59 (some ways, not every way, and not the exactly equal pinch)
+ok   the exactly equal pinch, the obvious first move, lights only two tubes and neither barium nor lanthanum: the paper's "roughly equal" is not "equal"
+ok   some pinches light one tube or none: 30, 31, 32, 60, 61, 62
+ok   an uneven pinch gives a smaller blast than an even one (our Coulomb rule; the paper computes only the equal case)
+ok   thorium pinched at 56 | 34 lights the radium and actinium tubes from barium and lanthanum (p. 239: thorium's periods equal barium's and lanthanum's)
+ok   some thorium pinches light neither tube
+ok   under 5 other valley-of-stability rules that still reproduce the paper's own chains, some pinch still brings all five ghosts down, some pinch lights barium and lanthanum, some pinch lights one tube or none, and no pinch lights the 24-minute tube
+ok   with the smallest piece set anywhere from 24 to 32 protons, the five ghosts still come down together and no two pinches clear the shelf
+ok   if the masurium piece gets 2-3 neutrons more or fewer than its share (p. 239: "varying proportions of neutrons"), at least four of the five ghosts still come down
+ok   every pinch has at least three lines of result in the game's voice
+ok   the hold has words
+ok   verdict path 1: "THE ROW BEYOND URANIUM IS EMPTY" with 6 findings and 1 partings
+ok   verdict path 2: "THREE GHOSTS STILL STAND BEYOND URANIUM" with 6 findings and 4 partings
+ok   verdict path 3: "FIVE GHOSTS STILL STAND BEYOND URANIUM" with 5 findings and 2 partings
+ok   verdict path 4: "THREE GHOSTS STILL STAND BEYOND URANIUM" with 6 findings and 4 partings
+ok   verdict path 5: "THE ROW BEYOND URANIUM IS EMPTY" with 6 findings and 1 partings
+
+all checks passed
