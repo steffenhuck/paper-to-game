@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Meitner's Drop</title>
 <script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<meta name="description" content="Meitner and Frisch, Nature 1939: a heavy nucleus splits like a drop whose skin has nearly given up. You are the uranium drop. Pinch yourself where you choose, or hold together, and watch where the pieces land on the chemists' 1939 table; account for every tube on their shelf, including the five they filed as elements beyond uranium.">
+<meta name="description" content="Meitner and Frisch, Nature 1939: a heavy nucleus splits like a drop whose skin has nearly given up. You are the uranium drop. Pinch yourself where you choose, if the skin lets you, or hold together, and watch where the pieces land on the chemists' 1939 table; account for every tube on their shelf, including the five they filed as elements beyond uranium.">
 <style>
 @font-face{font-family:'Bangers';font-weight:400;font-style:normal;src:url(data:font/woff2;base64,/*__F_BANGERS__*/) format('woff2')}
 @font-face{font-family:'ComicNeue';font-weight:400;font-style:normal;src:url(data:font/woff2;base64,/*__F_COMIC400__*/) format('woff2')}
@@ -104,8 +104,8 @@ svg .bang{font-family:'Bangers',sans-serif}
     <g class="sfx" style="font-size:30px"><text x="262" y="60" class="sfx bang" transform="rotate(-8 262 60)">SNAP?</text></g>
     <g transform="translate(252 86)"><rect x="0" y="4" width="12" height="22" rx="3" fill="#fff" stroke="#161414" stroke-width="2"/><rect x="2" y="0" width="8" height="5" fill="#161414"/><rect x="20" y="4" width="12" height="22" rx="3" fill="#E23A2A" stroke="#161414" stroke-width="2"/><rect x="22" y="0" width="8" height="5" fill="#161414"/><rect x="40" y="4" width="12" height="22" rx="3" fill="#fff" stroke="#161414" stroke-width="2" stroke-dasharray="3 2"/><rect x="42" y="0" width="8" height="5" fill="#161414"/><rect x="60" y="4" width="12" height="22" rx="3" fill="#fff" stroke="#161414" stroke-width="2" stroke-dasharray="3 2"/><rect x="62" y="0" width="8" height="5" fill="#161414"/></g>
   </svg></div>
-  <p class="acts">For four years the chemists have been tapping uranium with neutrons, and they have a shelf of test tubes to show for it, five of them filed as brand-new elements heavier than anything on Earth. You are the uranium drop. Drop a neutron on yourself, pinch where you choose, or hold together, and watch where the pieces land on the chemists' own table.</p>
-  <p class="aim big">Account for every tube on the chemists' shelf. You have five neutrons.</p>
+  <p class="acts">For four years the chemists have been tapping uranium with neutrons, and they have a shelf of test tubes to show for it, five of them filed as brand-new elements heavier than anything on Earth. You are the uranium drop. Drop a neutron on yourself and pinch where you choose: an even pinch goes through, an uneven one the skin may pull back. Or hold together. Then watch where the pieces land on the chemists' own table.</p>
+  <p class="aim big">Account for every tube on the chemists' shelf. You have four neutrons.</p>
   <button class="btn solid" id="b-begin">Drop a neutron</button>
   <div class="row2"><button class="btn" id="b-help-start">How to play</button><button class="btn" id="b-about-start">About</button></div>
   <p class="cred">Built from Lise Meitner and O. R. Frisch, "Disintegration of Uranium by Neutrons: a New Type of Nuclear Reaction", <i>Nature</i> 143, 239–240 (1939).</p>
@@ -125,12 +125,12 @@ svg .bang{font-family:'Bangers',sans-serif}
 <section id="s-bench" class="screen">
   <div class="top"><div class="now" id="now1">Neutron 1 of 5 · Uranium</div><button class="qm" id="b-help-bench" aria-label="How to play">?</button></div>
   <p class="aim" id="aim1">Account for every tube on the chemists' shelf.</p>
-  <div class="panel"><svg id="dropsvg" viewBox="0 0 340 134"></svg></div>
-  <div class="nudge" id="nudge"><button class="btn small" id="b-left" aria-label="move the line left">◂ 1</button><span id="cntline">Drag the dashed line, or nudge it. The numbers are the protons each piece gets.</span><button class="btn small" id="b-right" aria-label="move the line right">1 ▸</button></div>
-  <p class="rule" id="rule1"><b>Split here</b> pinches the drop at the line. <b>Hold together</b> lets it take the neutron in and ring evenly, without splitting. A piece that lands keeps the drop's mix of neutrons, too many for its size, so it climbs the table to the right, one cell per step, about four or five, until its mix fits.</p>
+  <div class="panel"><svg id="dropsvg" viewBox="0 0 340 150"></svg></div>
+  <div class="nudge" id="nudge"><button class="btn small" id="b-left" aria-label="move the line left">◂ 1</button><span id="cntline">Drag the dashed line, or nudge it; the numbers are the protons each piece gets.</span><button class="btn small" id="b-right" aria-label="move the line right">1 ▸</button></div>
+  <p class="rule" id="rule1"><b>Split here</b> pinches the drop at the line. Near the middle the skin has given up and the pinch goes through; far out the skin may pull the drop back, and a drop pulled back keeps the neutron. <b>Hold together</b> keeps it on purpose: the drop takes the neutron in and rings evenly.</p>
   <div class="row2" id="btns1"><button class="btn red" id="b-split">Split here</button><button class="btn" id="b-hold">Hold together</button><button class="btn solid hidden" id="b-next">Next neutron</button></div>
   <div class="panel"><svg id="tablesvg" viewBox="0 0 340 128"></svg></div>
-  <p class="cap" id="cap">The chemists' table, as drawn in 1939. Each tube is a radioactive body they found, standing in the cell they filed it in. Dashed cells: elements nobody has ever seen. Tap a tube to read its label.</p>
+  <p class="cap" id="cap"></p>
   <div class="said" id="said1"></div>
   <div class="dots" id="dots"></div>
 </section>
@@ -145,6 +145,7 @@ svg .bang{font-family:'Bangers',sans-serif}
   <div class="sec"><h2>Had your shelf stood</h2><div id="v-stood"></div></div>
   <div class="row2"><button class="btn solid" id="b-again">Play again</button><button class="btn" id="b-about-end">About</button></div>
   <p class="cred">Built from Lise Meitner and O. R. Frisch, "Disintegration of Uranium by Neutrons: a New Type of Nuclear Reaction", <i>Nature</i> 143, 239–240 (1939). The paper is the authority where the two disagree.</p>
+  <p class="cred" id="seedline"></p>
   <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
 </section>
 </div></div>
@@ -153,20 +154,20 @@ svg .bang{font-family:'Bangers',sans-serif}
 <div class="overlay" id="help"><div class="wrap"><div class="page">
   <div class="close"><button class="btn" id="b-help-close">Back to the drop</button></div>
   <h1>How to play</h1>
-  <p><b>Account for every tube on the chemists' shelf. You have five neutrons.</b></p>
+  <p><b>Account for every tube on the chemists' shelf. You have four neutrons.</b></p>
   <h2>Three drops</h2>
   <p>Three ink drops: lead (82 charges), uranium (92) and an imagined drop of 100. Tap one and a red dot, a neutron, drops onto it. A drop's skin holds it together and its charge pulls it apart; the more charge, the less skin is left. Lead rings and settles. Uranium wobbles, necks in the middle and just holds. The imagined drop falls apart on its own. When you have tapped uranium, <b>To the bench</b> takes you on.</p>
   <h2>The bench</h2>
-  <p>You are the uranium drop, the big blob in the top panel, with a red dashed line through it. Drag the line, or tap <b>◂ 1</b> and <b>1 ▸</b> to nudge it. The two numbers above the drop are the protons each piece would get; they always add up to 92. As the line moves, two cells in the table below are outlined in red: that is where the two pieces would land.</p>
+  <p>You are the uranium drop, the big blob in the top panel, with a red dashed line through it. Drag the line, or tap <b>◂ 1</b> and <b>1 ▸</b> to nudge it. The two numbers above the drop are the protons each piece would get; they always add up to 92. As the line moves, two cells in the table below are outlined in red: that is where the two pieces would land. The line under the drop says how often a pinch there goes through: near the middle, every time; far out, hardly ever. The drop's neck shows it too: deep where the skin has given up, shallow where it still holds.</p>
   <p>Below the drop is the chemists' periodic table as it was drawn in 1939, four rows of it. The small bottles are their test tubes: each is a radioactive body they found, standing in the cell they filed it in. Tap a tube to read its label. Five tubes stand in dashed cells at the bottom right, filed as elements beyond uranium, which nobody has ever seen.</p>
-  <p><b>Split here</b>: the drop pinches at the line and snaps in two. The pieces fly apart and land in the table. Both keep the drop's mix of neutrons, which is too many for their size, so each then climbs to the right, one cell per step, about four or five steps, until its mix fits. While a piece is still climbing it is red; when it stops it turns black.</p>
+  <p><b>Split here</b>: the drop pinches at the line. If the pinch goes through it snaps in two, the pieces fly apart and land in the table. If the skin pulls it back, the drop rings and keeps the neutron: no split, the neutron is spent, and the drop is uranium-239, as if you had held it. Whether a pinch goes through is drawn by chance at the odds the line states; the draws come from a seed shown on the verdict screen, so a game can be replayed. Both keep the drop's mix of neutrons, which is too many for their size, so each then climbs to the right, one cell per step, about four or five steps, until its mix fits. While a piece is still climbing it is red; when it stops it turns black.</p>
   <p>A tube lights, and slides down into the piece's cell, when a piece lands in or climbs into the tube's column, in any row: two elements in the same column act alike at the bench, so the chemists could not have told them apart. One tube is different: "like uranium, 24 min" lights only when the drop holds.</p>
-  <p><b>Hold together</b>: the drop takes the neutron in and rings evenly without splitting. It is uranium-239 then, sits in uranium's own cell, and after a while climbs one cell.</p>
+  <p><b>Hold together</b>: the drop takes the neutron in on purpose and rings evenly without splitting. It is uranium-239 then, sits in uranium's own cell, and after a while climbs one cell. A hold is certain; an uneven pinch is a gamble that ends the same way when it fails.</p>
   <p>After each neutron the game says what happened under the table, and the dots at the bottom show the neutrons you have left. <b>Next neutron</b> brings a fresh neutron; the line goes back to the middle. The stage ends when every tube is lit or the neutrons are spent.</p>
   <h2>Thorium</h2>
-  <p>The chemists also bombarded thorium (90 charges) and found two bodies they filed as radium and actinium. Two tubes, two neutrons, the same two buttons.</p>
+  <p>The chemists also bombarded thorium (90 charges) and found two bodies they filed as radium and actinium. Two tubes, three neutrons, the same two buttons; both tubes sit where only an uneven pinch reaches.</p>
   <h2>The verdict</h2>
-  <p>What the paper found; what you found; where the two part; and what would have followed had your shelf stood. No score, only the neutrons you used.</p>
+  <p>What the paper found; what you found, including which pinches the skin pulled back; where the two part; and what would have followed had your shelf stood. No score, only the neutrons you used.</p>
   <div class="close"><button class="btn" id="b-help-close2">Back to the drop</button></div>
 </div></div></div>
 
@@ -282,7 +283,12 @@ svg .bang{font-family:'Bangers',sans-serif}
   function cellXY(Z) { var c = M.cellOf(Z); return c ? { x: TB.x0 + c.col * TB.cw, y: TB.y0 + c.row * TB.ch, c: c } : null; }
   var DR = { cx: 170, cy: 72, rx: 100, ry: 44 };
 
+  function pickSeed() {
+    var q = /[?&]seed=(\d+)/.exec(location.search);
+    return q ? Number(q[1]) : (Math.floor(Math.random() * 9000) + 1000);
+  }
   function startGame() {
+    S.seed = pickSeed();
     S.stages = [
       { nuc: C.URANIUM, tubes: C.TUBES_U, n: C.NEUTRONS_U, label: 'Uranium' },
       { nuc: C.THORIUM, tubes: C.TUBES_TH, n: C.NEUTRONS_TH, label: 'Thorium' }
@@ -292,13 +298,13 @@ svg .bang{font-family:'Bangers',sans-serif}
   }
   function beginStage() {
     var sg = S.stages[S.i];
-    S.st = M.newStage(sg.nuc, sg.tubes, sg.n);
+    S.st = M.newStage(sg.nuc, sg.tubes, sg.n, S.seed + S.i * 7919);
     S.Z1 = Math.round(sg.nuc.Z / 2);
     drawTable(); drawDrop(); setLine(S.Z1, true); updateDots();
     $('now1').textContent = 'Neutron 1 of ' + sg.n + ' · ' + sg.label;
     $('aim1').textContent = S.i === 0 ? 'Account for every tube on the chemists\' shelf.' : 'The chemists also bombarded thorium. Two more tubes: account for both.';
-    $('said1').innerHTML = S.i === 0 ? '<p>Eight tubes on the shelf. Five stand in dashed cells, filed as elements beyond uranium. Choose where to pinch, or hold.</p>' : '<p>The drop is thorium now: 90 charges, two fewer than uranium. The chemists filed what came out of it as radium and actinium.</p>';
-    $('cap').textContent = S.i === 0 ? 'The chemists\' table, as drawn in 1939. Each tube is a radioactive body they found, standing in the cell they filed it in. Dashed cells: elements nobody has ever seen. Tap a tube to read its label.' : 'Thorium\'s two tubes, filed as radium and actinium, in the bottom row. Tap a tube to read its label.';
+    $('said1').innerHTML = S.i === 0 ? '<p>Eight tubes on the shelf. Five stand in dashed cells, filed as elements beyond uranium. Choose where to pinch, or hold. Four neutrons; a pinch the skin pulls back costs one.</p>' : '<p>The drop is thorium now: 90 charges, two fewer than uranium. The chemists filed what came out of it as radium and actinium. Three neutrons.</p>';
+    $('cap').textContent = S.i === 0 ? 'The chemists\' table, as drawn in 1939. Each tube is a radioactive body they found, standing in the cell they filed it in; dashed cells are elements nobody has ever seen. A piece that lands keeps the drop\'s mix of neutrons, too many for its size, so it climbs right, one cell per step, about four or five, until its mix fits. Tap a tube to read its label.' : 'Thorium\'s two tubes, filed as radium and actinium, in the bottom row. Pieces climb as before. Tap a tube to read its label.';
     $('b-split').disabled = false; $('b-hold').disabled = false; $('b-next').classList.add('hidden');
     $('b-split').classList.remove('hidden'); $('b-hold').classList.remove('hidden'); $('nudge').style.visibility = 'visible';
     show('s-bench');
@@ -321,16 +327,16 @@ svg .bang{font-family:'Bangers',sans-serif}
     DP.right = el('path', { d: '', fill: '#fff', stroke: '#161414', 'stroke-width': 3, class: 'hidden' }, svg);
     DP.speed = el('g', { stroke: '#161414', 'stroke-width': 2, 'stroke-linecap': 'round', class: 'hidden' }, svg);
     for (var i = 0; i < 6; i++) { el('line', { x1: 0, y1: 0, x2: 0, y2: 0 }, DP.speed); }
-    DP.line = el('line', { x1: DR.cx, y1: 12, x2: DR.cx, y2: 132, stroke: '#E23A2A', 'stroke-width': 3, 'stroke-dasharray': '7 5' }, svg);
-    DP.knob = el('circle', { cx: DR.cx, cy: 124, r: 9, fill: '#E23A2A', stroke: '#161414', 'stroke-width': 2 }, svg);
+    DP.line = el('line', { x1: DR.cx, y1: 12, x2: DR.cx, y2: 128, stroke: '#E23A2A', 'stroke-width': 3, 'stroke-dasharray': '7 5' }, svg);
+    DP.knob = el('circle', { cx: DR.cx, cy: 121, r: 9, fill: '#E23A2A', stroke: '#161414', 'stroke-width': 2 }, svg);
     DP.n1 = txt(svg, DR.cx - 50, 30, '', 'cnt bang'); DP.n2 = txt(svg, DR.cx + 50, 30, '', 'cnt bang');
     DP.bar = txt(svg, DR.cx, 30, '|', 'cnt bang', { fill: '#9A958C' });
     DP.neutron = el('circle', { cx: 18, cy: 16, r: 6, fill: '#E23A2A', stroke: '#161414', 'stroke-width': 2 }, svg);
     DP.nlab = txt(svg, 30, 20, 'neutron', 'brk', { style: 'text-anchor:start' });
     DP.sfx = txt(svg, DR.cx, DR.cy + 12, '', 'sfx bang', { 'text-anchor': 'middle', 'font-size': 40 });
     DP.sfx.setAttribute('transform', 'rotate(-6 ' + DR.cx + ' ' + DR.cy + ')');
-    DP.eline = txt(svg, DR.cx, 124, '', 'lbl');
-    DP.hit = el('rect', { x: 0, y: 0, width: 340, height: 134, fill: 'transparent' }, svg);
+    DP.eline = txt(svg, DR.cx, 145, '', 'lbl');
+    DP.hit = el('rect', { x: 0, y: 0, width: 340, height: 150, fill: 'transparent' }, svg);
     var drag = false;
     function toZ(ev) {
       var r = svg.getBoundingClientRect(), px = (ev.clientX - r.left) / r.width * 340;
@@ -346,10 +352,13 @@ svg .bang{font-family:'Bangers',sans-serif}
   function setLine(Z1, silent) {
     var nuc = S.st.nuc; S.Z1 = M.clampZ1(nuc, Z1); var Z2 = nuc.Z - S.Z1, x = lineX(S.Z1);
     DP.line.setAttribute('x1', x); DP.line.setAttribute('x2', x); DP.knob.setAttribute('cx', x);
-    DP.body.setAttribute('d', blobPath(DR.cx, DR.cy, DR.rx, DR.ry, x, 0.42, 0.02, 1));
+    var p = M.splitOdds(nuc, S.Z1);
+    DP.body.setAttribute('d', blobPath(DR.cx, DR.cy, DR.rx, DR.ry, x, 0.1 + 0.4 * p, 0.02, 1));
     DP.n1.textContent = S.Z1; DP.n2.textContent = Z2;
     DP.n1.setAttribute('x', (DR.cx - DR.rx + x) / 2); DP.n2.setAttribute('x', (DR.cx + DR.rx + x) / 2); DP.bar.setAttribute('x', x);
-    $('cntline').textContent = S.Z1 + ' protons left, ' + Z2 + ' right. Outlined below: where they would land.';
+    DP.eline.textContent = p >= 0.999 ? 'here the pinch goes through every time' : 'here the pinch goes through ' + M.oddsWords(p);
+    DP.eline.setAttribute('fill', p >= 0.62 ? '#161414' : '#E23A2A');
+    $('cntline').textContent = 'Lands in the outlined cells. Goes through ' + M.oddsWords(p) + '.';
     previewCells([S.Z1, Z2]);
   }
   $('b-left').onclick = function () { if (!busy) setLine(S.Z1 - 1); };
@@ -414,16 +423,19 @@ svg .bang{font-family:'Bangers',sans-serif}
     $('b-split').disabled = true; $('b-hold').disabled = true; $('nudge').style.visibility = 'hidden';
     previewCells([]); clearPieces();
     var mv = M.play(S.st, action), nuc = S.st.nuc;
-    $('now1').textContent = 'Neutron ' + S.st.used + ' · ' + (mv.kind === 'hold' ? 'held together' : 'split ' + mv.Z1 + ' | ' + mv.Z2);
-    $('said1').innerHTML = ''; $('cap').textContent = '';
+    $('now1').textContent = 'Neutron ' + S.st.used + ' · ' + (mv.kind === 'hold' ? 'held together' : (mv.kind === 'rang' ? 'pulled back' : 'split ' + mv.Z1 + ' | ' + mv.Z2));
+    $('said1').innerHTML = ''; $('cap').textContent = ''; DP.eline.textContent = ''; DP.eline.setAttribute('fill', '#161414');
     var steps = [];
     // 1. the neutron flies in
-    steps.push([0, function () { animNeutron(mv.kind === 'split' ? lineX(mv.Z1) : DR.cx); }]);
+    steps.push([0, function () { animNeutron(mv.kind === 'hold' ? DR.cx : lineX(mv.Z1)); }]);
     if (mv.kind === 'split') {
       steps.push([350, function () { animNeck(mv); }]);
       steps.push([900, function () { animSnap(mv); }]);
       steps.push([1500, function () { DP.eline.textContent = 'about ' + mv.energyShown + ' Mev' + (mv.uneven ? ' (an uneven pinch: less than an even one)' : ''); }]);
       steps.push([1800, function () { land(mv); }]);
+    } else if (mv.kind === 'rang') {
+      steps.push([350, function () { animPullBack(mv); }]);
+      steps.push([1900, function () { land(mv); }]);
     } else {
       steps.push([350, function () { animRing(mv); }]);
       steps.push([1500, function () { land(mv); }]);
@@ -450,7 +462,7 @@ svg .bang{font-family:'Bangers',sans-serif}
     DP.right.setAttribute('d', blobPath(rcx, DR.cy, rr, Math.min(DR.ry, rr * 0.95), rcx, 0, 0.05, 4)); DP.right.classList.remove('hidden');
     DP.speed.classList.remove('hidden');
     var lines = DP.speed.querySelectorAll('line');
-    DP.sfx.textContent = 'FISSION!!'; DP.sfx.setAttribute('fill', '#E23A2A');
+    DP.sfx.textContent = 'FISSION!!'; DP.sfx.setAttribute('fill', '#E23A2A'); DP.sfx.setAttribute('font-size', 40);
     var t0 = performance.now();
     function step(now) {
       var k = Math.min(1, (now - t0) / 600), e = k * k;
@@ -462,10 +474,23 @@ svg .bang{font-family:'Bangers',sans-serif}
     }
     requestAnimationFrame(step);
   }
+  function animPullBack(mv) {
+    var x = lineX(mv.Z1), t0 = performance.now();
+    DP.sfx.textContent = 'RINGS...'; DP.sfx.setAttribute('fill', '#161414'); DP.sfx.setAttribute('font-size', 30);
+    function step(now) {
+      var k = Math.min(1, (now - t0) / 1400);
+      var dep = k < 0.4 ? 0.1 + 0.6 * (k / 0.4) : 0.7 * Math.max(0, 1 - (k - 0.4) / 0.35);
+      var w = 0.02 + 0.06 * Math.exp(-2 * k) * Math.sin(k * 20);
+      DP.body.setAttribute('d', blobPath(DR.cx, DR.cy, DR.rx * (1 + 0.05 * dep), DR.ry, x, dep, w, 1 + k * 2));
+      if (k > 0.75) { DP.line.classList.add('hidden'); DP.knob.classList.add('hidden'); DP.bar.classList.add('hidden'); }
+      if (k < 1) requestAnimationFrame(step); else { DP.eline.textContent = 'no split: the skin won, and the drop kept the neutron'; DP.eline.setAttribute('fill', '#E23A2A'); }
+    }
+    requestAnimationFrame(step);
+  }
   function animRing(mv) {
     var t0 = performance.now();
     DP.line.classList.add('hidden'); DP.knob.classList.add('hidden'); DP.bar.classList.add('hidden'); DP.n1.classList.add('hidden'); DP.n2.classList.add('hidden');
-    DP.sfx.textContent = 'RINGS'; DP.sfx.setAttribute('fill', '#161414');
+    DP.sfx.textContent = 'RINGS'; DP.sfx.setAttribute('fill', '#161414'); DP.sfx.setAttribute('font-size', 40);
     function step(now) { var k = Math.min(1, (now - t0) / 1100); var a = 0.1 * Math.exp(-2.5 * k) * Math.sin(k * 24); DP.body.setAttribute('d', blobPath(DR.cx, DR.cy, DR.rx * (1 + a), DR.ry * (1 - a), DR.cx, 0, 0.02, 1)); if (k < 1) requestAnimationFrame(step); else DP.eline.textContent = S.st.nuc.name + '-' + (S.st.nuc.Z + S.st.nuc.N) + ' now; no split, no blast'; }
     requestAnimationFrame(step);
   }
@@ -527,6 +552,7 @@ svg .bang{font-family:'Bangers',sans-serif}
     $('v-found').innerHTML = v.found.map(function (l) { return '<p>' + l + '</p>'; }).join('');
     $('v-part').innerHTML = v.part.map(function (l) { return '<p>' + l + '</p>'; }).join('');
     $('v-stood').innerHTML = '<p>' + v.stood + '</p>';
+    $('seedline').textContent = 'The draws in this game came from seed ' + S.seed + '. Add ?seed=' + S.seed + ' to the address to play the same draws again.';
     show('s-end');
   }
   $('b-split').onclick = function () { commit({ kind: 'split', Z1: S.Z1 }); };
