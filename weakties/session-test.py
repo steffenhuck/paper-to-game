@@ -59,7 +59,7 @@ async def main():
         await shot('bet-result', True)
         await pg.click('#b-next'); await pg.wait_for_timeout(400)
         await shot('end', True); await nohs('end')
-        print('VERDICT |', await pg.text_content('#v-big'), '|', await pg.text_content('#v-you'), '|', await pg.text_content('#v-ghosts'), '|', await pg.text_content('#v-part'))
+        print('VERDICT |', await pg.text_content('#v-pct'), '|', await pg.text_content('#v-big'), '|', await pg.text_content('#v-fate'), '|', await pg.text_content('#v-plan'), '|', await pg.text_content('#v-part'))
         await pg.click('#b-about-end'); await pg.wait_for_timeout(200); await shot('about', True); await pg.click('#b-about-close')
         # retry: replay this town, homebody, watch one full week without skipping
         await pg.click('#b-replay'); await pg.wait_for_timeout(300)

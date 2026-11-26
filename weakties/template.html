@@ -8,7 +8,7 @@
 <meta name="description" content="Granovetter, The Strength of Weak Ties (1973): three weeks of evenings on the people you know, and watch where the news comes from. Your friends tell you the same thing three times; the person you hardly see brings the news from elsewhere. Then one bet on the lines you never tend.">
 <style>
 @font-face{font-family:'Archivo';font-weight:100 900;font-style:normal;src:url(data:font/woff2;base64,/*__F_ARCHIVO__*/) format('woff2')}
-:root{--paper:#F7F9FB;--ink:#14171B;--blue:#1F6FEB;--frost:#C9D3DD;--frost2:#E8EDF2;--slate:#5B6773}
+:root{--paper:#F7F9FB;--ink:#14171B;--blue:#1F6FEB;--blue2:#7FA8F0;--blue3:#BBD0F4;--frost:#C9D3DD;--frost2:#E8EDF2;--slate:#5B6773}
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{background:var(--paper);color:var(--ink);font-family:'Archivo',Helvetica,Arial,sans-serif;font-size:16px;line-height:1.4;-webkit-text-size-adjust:100%;min-height:100vh;font-variant-numeric:tabular-nums}
@@ -58,7 +58,12 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
 .overlay h2{font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--slate);margin:18px 0 6px;font-weight:500}
 .overlay p{font-size:15px}
 .close{margin:4px 0 8px}
-.verdict .big{font-weight:700;font-size:26px;line-height:1.1;margin:0 0 10px;letter-spacing:-.02em}
+.score{display:flex;align-items:flex-end;gap:14px;margin:2px 0 8px}
+.score .pct{font-weight:700;font-size:64px;line-height:.9;letter-spacing:-.04em;flex:none}
+.score .scoretxt{font-weight:500;font-size:17px;line-height:1.25;padding-bottom:4px}
+.scorebar{height:12px;background:var(--frost2);margin:0 0 10px}.scorebar div{height:12px;width:0;transition:width .9s ease}
+.band2{color:var(--blue)}.band1{color:var(--blue2)}.band0{color:var(--blue3)}
+.bg2{background:var(--blue)}.bg1{background:var(--blue2)}.bg0{background:var(--blue3)}
 .bars{display:block;width:100%;height:auto;margin:6px 0 4px}
 .part{border-left:3px solid var(--blue);padding-left:10px;margin:12px 0}
 .blue{color:var(--blue)}
@@ -113,20 +118,19 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
 <!-- VERDICT -->
 <section id="s-end" class="screen verdict">
   <div class="kicker">After three weeks and a bet</div>
-  <div class="big" id="v-big"></div>
-  <p id="v-you"></p>
+  <div class="score"><div class="pct" id="v-pct"></div><div class="scoretxt" id="v-big"></div></div>
+  <div class="scorebar"><div id="v-fill"></div></div>
+  <p id="v-fate"></p>
+  <p class="small" style="margin:0">The same news, five ways, as a share of what could have been heard</p>
+  <svg class="bars" id="v-bars0" viewBox="0 0 340 128"></svg>
+  <p id="v-plan"></p>
   <div class="rule thin"></div>
   <p class="small" style="margin:0">Who told you first, by how often you saw them: <b>you</b> (black) against <b>Granovetter's 54 job changers</b> (outline)</p>
   <svg class="bars" id="v-bars1" viewBox="0 0 340 96"></svg>
-  <p class="small" style="margin:0">How many pairs of hands the news passed through before you: you against the paper's 64</p>
-  <svg class="bars" id="v-bars2" viewBox="0 0 340 118"></svg>
-  <div class="rule thin"></div>
-  <p id="v-ghosts"></p>
   <div class="part" id="v-part"></div>
-  <p id="v-paper"><b>What Granovetter found.</b> He asked people in a Boston suburb who had found their job through a contact how often they saw that contact. One in six said often. More than half said now and then. More than a quarter said rarely, once a year or less: an old college friend, a former workmate, someone they had nearly forgotten. The people closest to you move in your circle and hear what you hear. The person you hardly see spends their evenings somewhere else, and is the only line between that somewhere and you.</p>
-  <p id="v-follow"><b>What would have followed.</b> If the news that mattered came from close friends, a town of close circles would be a town of well-informed people. It is a town of islands.</p>
-  <svg id="v-westend" viewBox="0 0 340 100" width="100%" aria-hidden="true" style="display:block;margin:6px 0"></svg>
-  <p class="small">The West End of Boston, around 1960: a neighbourhood of close family circles, where almost nobody worked or belonged to anything inside it, could not form one organisation against the plan that demolished it. Charlestown, with its clubs and local jobs, fought the same city and won. In this game's terms: a town with no dashed lines, where a leaflet fills one circle and stops.</p>
+  <p id="v-paper"><b>The paper.</b> The people closest to you move in your circle and hear what you hear. The person you hardly see spends their evenings somewhere else and is your only line into it. So the news comes down the dashed lines, and a town whose circles have no dashed lines between them is a town of islands.</p>
+  <svg id="v-westend" viewBox="0 0 340 112" width="100%" aria-hidden="true" style="display:block;margin:4px 0"></svg>
+  <p class="small">Boston, around 1960. The West End, close family circles and nothing between them, could not form one organisation against the plan that demolished it; Charlestown, with its clubs and local jobs, fought the same city and won.</p>
   <button class="btn solid" id="b-again">Play again, in a new town</button>
   <div class="row2"><button class="btn" id="b-replay">Replay this town</button><button class="btn" id="b-help-end">How to play</button><button class="btn" id="b-about-end">About</button></div>
   <div class="seedline" id="v-seed"></div>
@@ -151,7 +155,7 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
   <h2>The bet</h2>
   <p>After the third week, one bet: one more week of news with no evening spent on anyone, every line dashed. Say how many of the seven will reach you, then watch. It is not counted.</p>
   <h2>The verdict</h2>
-  <p>How many of the town's openings you heard of in three weeks; who told you first, by how often you saw them, against the paper's own table; how many pairs of hands the news passed through; what four other players would have heard from the same news (your circle, one person per circle, nobody, and the best weeks we could find knowing the news in advance); and what the paper says about towns with no dashed lines.</p>
+  <p>Your score: the openings you heard of in three weeks as a share of what could have been heard on this town's news (the best three weeks we could find knowing the news in advance, or your own run if it did better), in three bands of blue. Then the same news five ways: you, the best plan without foreknowledge, your circle, nobody, and the news known in advance; who told you first, against the paper's own table; and the paper's two towns, the West End and Charlestown.</p>
   <div class="close"><button class="btn" id="b-help-close2">Back</button></div>
 </div></div>
 
@@ -373,32 +377,47 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
   }
   function pct(n, d) { return d ? 100 * n / d : 0; }
   function words(share) { return share >= 85 ? 'almost all' : share >= 60 ? 'most' : share >= 40 ? 'about half' : share >= 15 ? 'some' : share > 0 ? 'hardly any' : 'none'; }
+  var BLUES = ['#BBD0F4', '#7FA8F0', '#1F6FEB'];
+  function fiveBars(rows, ceil) {
+    var svg = $('v-bars0'); while (svg.firstChild) svg.removeChild(svg.firstChild);
+    var y = 4, labW = 142, bw = 340 - labW - 56;
+    rows.forEach(function (r) {
+      el('text', { x: 0, y: y + 12, 'font-size': 11.5, 'font-weight': r.me ? 700 : 400, fill: INK, 'font-family': 'Archivo,Helvetica,Arial' }, svg).textContent = r.label;
+      var w = ceil ? bw * r.n / ceil : 0;
+      if (r.me) el('rect', { x: labW, y: y + 1, width: Math.max(w, 0), height: 13, fill: r.colour }, svg);
+      else el('rect', { x: labW + 0.5, y: y + 1.5, width: Math.max(w - 1, 0), height: 12, fill: 'none', stroke: INK, 'stroke-width': 1, 'stroke-dasharray': r.dash ? '3 2' : 'none' }, svg);
+      el('text', { x: labW + Math.max(w, 0) + 5, y: y + 12, 'font-size': 11, fill: SLATE, 'font-family': 'Archivo,Helvetica,Arial' }, svg).textContent = r.n + ' · ' + Math.round(pct(r.n, ceil)) + '%';
+      y += 25;
+    });
+  }
   function verdict() {
-    var t = tally(G), heard = t.heard, total = t.total;
-    $('v-big').textContent = heard === 0 ? 'You heard of none of the ' + total + ' openings.' : 'You heard of ' + heard + ' of the ' + total + ' openings.';
-    var sh = { often: pct(t.seen.often, heard), occ: pct(t.seen.occ, heard), rare: pct(t.seen.rare, heard) };
-    $('v-you').innerHTML = heard ? ('Of those, <b>' + words(sh.often) + '</b> came first from someone you saw often, <b>' + words(sh.occ) + '</b> from someone you saw now and then, and <b>' + words(sh.rare) + '</b> from someone you rarely saw. In Boston the rarely-seen brought more than a quarter.') : 'Nothing reached you in three weeks.';
-    var B = CONFIG.BOSTON_SEEN;
+    var t = tally(G), heard = t.heard, total = t.total, sc = scoreOf(G), ceil = sc.ceiling;
+    var hb = tally(runStrategy(G.seed, STRATEGIES.homebody)).heard, sp = tally(runStrategy(G.seed, STRATEGIES[CONFIG.BEST_PLAN])).heard, st = tally(runStrategy(G.seed, STRATEGIES.stayIn)).heard;
+    $('v-pct').textContent = Math.round(sc.pct) + '%'; $('v-pct').className = 'pct band' + sc.band;
+    $('v-big').textContent = 'You heard of ' + heard + ' of the ' + ceil + ' openings that could have been heard in this town.';
+    $('v-fill').className = 'bg' + sc.band; $('v-fill').style.width = '0'; setTimeout(function () { $('v-fill').style.width = Math.round(sc.pct) + '%'; }, 50);
+    $('v-fate').innerHTML = sc.band === 2 ? '<b>Nearly everything that could reach you did.</b> You read the town: one line into every circle, and the circle not tended twice.' : sc.band === 1 ? '<b>Most of what could reach you did.</b> The rest went past you on dashed lines that stayed quiet, or on evenings spent where the news had already been heard.' : '<b>Less than two thirds of what could reach you did.</b> Most of your evenings went where the news was not: into one circle, which told you what it knew, over and over.';
+    fiveBars([
+      { label: 'you', n: heard, me: true, colour: BLUES[sc.band] },
+      { label: 'the best plan', n: sp },
+      { label: 'every evening in your circle', n: hb },
+      { label: 'no evening on anyone', n: st },
+      { label: 'news known in advance', n: ceil, dash: true }
+    ], ceil);
+    var planPeople = Object.keys(STRATEGIES[CONFIG.BEST_PLAN](newGame(G.seed)));
+    $('v-plan').innerHTML = '<b>The best plan without foreknowledge:</b> one evening to one person in each circle, no one twice: ' + list(planPeople) + ', every week, and the new names as they come. It hears ' + sp + ' of ' + ceil + ' here. The paper\'s reason: your circle hears one circle\'s news; each dashed line is your only line into another.' + (betRec ? ' <span class="small">The bet week, every line dashed: ' + betRec.heard + ' of 7 reached you; you said ' + CONFIG.BET_LABELS[bet] + '.</span>' : '');
+    var sh = { often: pct(t.seen.often, heard), occ: pct(t.seen.occ, heard), rare: pct(t.seen.rare, heard) }, B = CONFIG.BOSTON_SEEN;
     bars('v-bars1', [
       { label: 'saw them often', you: sh.often, paper: B.often, note: Math.round(sh.often) + '% · paper ' + Math.round(B.often) + '%' },
       { label: 'now and then', you: sh.occ, paper: B.occ, note: Math.round(sh.occ) + '% · paper ' + Math.round(B.occ) + '%' },
       { label: 'rarely', you: sh.rare, paper: B.rare, note: Math.round(sh.rare) + '% · paper ' + Math.round(B.rare) + '%' }
     ], 100, 30);
-    var H = CONFIG.BOSTON_HANDS, hs = { h0: pct(t.hands.h0, heard), h1: pct(t.hands.h1, heard), h2: pct(t.hands.h2, heard), h3: pct(t.hands.h3, heard) };
-    bars('v-bars2', [
-      { label: 'straight from the source', you: hs.h0, paper: H.h0, note: Math.round(hs.h0) + '% · paper ' + Math.round(H.h0) + '%' },
-      { label: 'one pair of hands', you: hs.h1, paper: H.h1, note: Math.round(hs.h1) + '% · paper ' + Math.round(H.h1) + '%' },
-      { label: 'two pairs', you: hs.h2, paper: H.h2, note: Math.round(hs.h2) + '% · paper ' + Math.round(H.h2) + '%' },
-      { label: 'more than two', you: hs.h3, paper: H.h3, note: Math.round(hs.h3) + '% · paper ' + Math.round(H.h3) + '%' }
-    ], 100, 28);
-    var hb = tally(runStrategy(G.seed, STRATEGIES.homebody)).heard, sp = tally(runStrategy(G.seed, STRATEGIES.spreader)).heard, st = tally(runStrategy(G.seed, STRATEGIES.stayIn)).heard, hs = tally(runStrategy(G.seed, STRATEGIES.hindsight)).heard;
-    $('v-ghosts').innerHTML = '<b>The same news, four other ways.</b> Every evening in your own circle, all three weeks: <b>' + hb + '</b> of ' + total + '. One evening to one person in each circle, no one twice: <b>' + sp + '</b>. No evening on anyone: <b>' + st + '</b>. The best three weeks we could find, knowing the news in advance: <b>' + hs + '</b>. You: <b>' + heard + '</b>.' + (betRec ? ' <span class="small">The bet week, every line dashed: ' + betRec.heard + ' of 7 reached you; you said ' + CONFIG.BET_LABELS[bet] + '.</span>' : '');
     var part;
     if (!heard) part = 'Nothing reached you, which the paper does not describe: even the people you have forgotten mention things sometimes.';
-    else if (sh.often >= 40) part = '<b>Where you part from the paper.</b> You leaned on the people you see most. They told you what they heard, and told you the same thing twice and three times, because they are each other\'s friends and hear what each other hears. In Boston, the people seen often brought one job in six.';
-    else if (sh.occ >= 50) part = '<b>Where you stand with the paper.</b> You spread your evenings, and most of your news came from people you saw now and then, as it did for the paper\'s job changers. Your close friends told you less, not because they cared less, but because they move where you move.';
-    else if (sh.rare >= 50) part = '<b>Where you part from the paper.</b> You left nearly every line dashed and let the dice decide. The dashed lines did bring news from everywhere, and failed to mention it more often than not. That is the motivation the paper weighs against structure: the person you hardly see has the news, and may not bother.';
-    else part = '<b>Where you stand with the paper.</b> Your news came from everywhere in about the paper\'s proportions: a little from the circle, most from the people you see now and then, a good part from people you had nearly forgotten.';
+    else if (sh.often >= 40) part = '<b>Where you part from the paper.</b> You leaned on the people you see most, and they told you the same thing twice and three times, because they are each other\'s friends. In Boston the people seen often brought one job in six.';
+    else if (sh.occ >= 50) part = '<b>Where you stand with the paper.</b> Most of your news came from people you saw now and then, as it did for the paper\'s job changers. Your close friends told you less, not because they cared less, but because they move where you move.';
+    else if (sh.rare >= 50) part = '<b>Where you part from the paper.</b> You left nearly every line dashed and let the dice decide. The dashed lines brought news from everywhere, and stayed quiet more often than not: the motivation the paper weighs against structure.';
+    else part = '<b>Where you stand with the paper.</b> Your news came from everywhere in about the paper\'s proportions: a little from the circle, most from people seen now and then, a good part from people you had nearly forgotten.';
     $('v-part').innerHTML = part;
     westEnd();
     $('v-seed').textContent = 'Town ' + G.seed;
@@ -406,15 +425,20 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
   }
   function westEnd() {
     var svg = $('v-westend'); while (svg.firstChild) svg.removeChild(svg.firstChild);
-    var centres = [[60, 50], [170, 50], [280, 50]];
-    centres.forEach(function (c, ci) {
-      el('circle', { cx: c[0], cy: c[1], r: 42, fill: FROST2 }, svg);
-      var pts = []; for (var i = 0; i < 6; i++) { var a = i * Math.PI / 3; pts.push([c[0] + 26 * Math.cos(a), c[1] + 26 * Math.sin(a)]); }
-      for (var i2 = 0; i2 < 6; i2++) for (var j = i2 + 1; j < 6; j++) el('line', { x1: pts[i2][0], y1: pts[i2][1], x2: pts[j][0], y2: pts[j][1], stroke: FROST, 'stroke-width': 1.4 }, svg);
-      pts.forEach(function (p) { el('circle', { cx: p[0], cy: p[1], r: 5, fill: ci === 0 ? BLUE : INK }, svg); });
+    [{ x0: 4, name: 'THE WEST END', joined: false }, { x0: 176, name: 'CHARLESTOWN', joined: true }].forEach(function (town) {
+      var cs = [town.x0 + 28, town.x0 + 80, town.x0 + 132], pts = [];
+      cs.forEach(function (cx, ci) {
+        el('circle', { cx: cx, cy: 44, r: 25, fill: FROST2 }, svg);
+        var ring = []; for (var i = 0; i < 5; i++) { var a = -Math.PI / 2 + i * 2 * Math.PI / 5; ring.push([cx + 15 * Math.cos(a), 44 + 15 * Math.sin(a)]); }
+        for (var i2 = 0; i2 < 5; i2++) for (var j = i2 + 1; j < 5; j++) el('line', { x1: ring[i2][0], y1: ring[i2][1], x2: ring[j][0], y2: ring[j][1], stroke: FROST, 'stroke-width': 1.2 }, svg);
+        var lit = town.joined || ci === 0;
+        ring.forEach(function (p) { el('circle', { cx: p[0], cy: p[1], r: 3.6, fill: lit ? BLUE : INK }, svg); });
+        pts.push(ring);
+      });
+      if (town.joined) { el('line', { x1: pts[0][1][0], y1: pts[0][1][1], x2: pts[1][4][0], y2: pts[1][4][1], stroke: SLATE, 'stroke-width': 1.2, 'stroke-dasharray': '3 3' }, svg); el('line', { x1: pts[1][1][0], y1: pts[1][1][1], x2: pts[2][4][0], y2: pts[2][4][1], stroke: SLATE, 'stroke-width': 1.2, 'stroke-dasharray': '3 3' }, svg); }
+      el('text', { x: town.x0 + 80, y: 88, 'text-anchor': 'middle', 'font-size': 9, fill: SLATE, 'letter-spacing': '0.1em', 'font-family': 'Archivo,Helvetica,Arial' }, svg).textContent = town.name;
+      el('text', { x: town.x0 + 80, y: 104, 'text-anchor': 'middle', 'font-size': 10.5, fill: INK, 'font-family': 'Archivo,Helvetica,Arial' }, svg).textContent = town.joined ? 'dashed lines: the leaflet crosses' : 'no lines between: it stops';
     });
-    el('text', { x: 115, y: 95, 'text-anchor': 'middle', 'font-size': 10, fill: SLATE, 'font-family': 'Archivo,Helvetica,Arial' }, svg).textContent = 'no dashed line';
-    el('text', { x: 225, y: 95, 'text-anchor': 'middle', 'font-size': 10, fill: SLATE, 'font-family': 'Archivo,Helvetica,Arial' }, svg).textContent = 'no dashed line';
   }
 
   // ---------- wiring ----------

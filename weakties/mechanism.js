@@ -15,7 +15,8 @@
 //   The close: after the last week, a bet. One more week of news with every line dashed (no evening on anyone): how many of the
 //   seven reach you? Then it is watched. Not counted in the score. The paper's line (p. 1372): people receive crucial information from
 //   individuals whose very existence they have forgotten; the Boston table's "rarely" row.
-//   Score: distinct openings you heard of. The verdict counts, for each, how often you saw the person who told you first
+//   Score: distinct openings you heard of, as a share of what could have been heard on this town's news: the better of the best
+//   three weeks found with the news known in advance (hindsight) and your own run, so the share never exceeds 100. The verdict counts, for each, how often you saw the person who told you first
 //   (Boston table, p. 1371) and how many hands it passed through before you (p. 1372).
 
 var CONFIG = {
@@ -32,6 +33,9 @@ var CONFIG = {
   CHANCE_FROM_WEEK: 2,             // our choice: week one is the circle as it is; chance meetings begin in week two
   BET_OPTIONS: [[0, 0], [1, 2], [3, 4], [5, 7]],  // our choice: the four answers to the closing question (how many of seven reach you with every line dashed)
   BET_LABELS: ['none', 'one or two', 'three or four', 'five or more'],
+  BANDS: [85, 60],                 // our choice: the score's three bands, as a share of what could have been heard (85 and up; 60 to 85; under 60)
+  BEST_PLAN: 'spreader',           // the best plan without foreknowledge: one evening to one person in each circle, no one twice; confirmed by
+                                   //   searching every legal first week over 300 towns (memo, revision 3; calibration 10)
   WEEK1_FLOOR: true,               // our choice (build.md §3, a floor): week one's six openings include one in Home and one in every outer circle,
                                    //   so the triple arrival and the dashed-line arrival can both be seen; later weeks are unconstrained draws
   CIRCLES: [                       // ours: the paper gives no town. Ties inside a circle are all "often" (the circle is a clique);
@@ -224,6 +228,8 @@ var STRATEGIES = {
   stayIn: function (s) { return {}; }, // no evenings on anyone: every line dashed
   hindsight: function (s) { return hindsightWeek(s).ev; } // the best week we can find knowing the week's news: hill-climbing from the spreader's week
 };
+function ceiling(s) { return Math.max(tally(runStrategy(s.seed, STRATEGIES.hindsight)).heard, tally(s).heard); }
+function scoreOf(s) { var c = ceiling(s), h = tally(s).heard, p = c ? 100 * h / c : 0; return { heard: h, ceiling: c, pct: p, band: p >= CONFIG.BANDS[0] ? 2 : (p >= CONFIG.BANDS[1] ? 1 : 0) }; }
 function lightClone(s) { return { seed: s.seed, week: s.week, known: s.known.slice(), extra: Object.assign({}, s.extra), weeks: [], heardAll: {} }; }
 function heardOf(s, ev) { return playWeek(lightClone(s), ev).heard; }
 function hindsightWeek(s) { // move one evening at a time while it helps; with hindsight on this week's draw and coins
@@ -247,4 +253,4 @@ function allWeeks(known) {
   return out;
 }
 
-if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: newGame, playWeek: playWeek, isOver: isOver, legalWeek: legalWeek, allTies: allTies, townTies: townTies, circleOf: circleOf, circleLabel: circleLabel, everyone: everyone, catOf: catOf, catWord: catWord, key: key, tally: tally, shares: shares, STRATEGIES: STRATEGIES, runStrategy: runStrategy, betWeek: betWeek, betBand: betBand, hindsightWeek: hindsightWeek, heardOf: heardOf, lightClone: lightClone, allWeeks: allWeeks, drawOrigins: drawOrigins, spread: spread, reachedCircles: reachedCircles, sizeOf: sizeOf, unit: unit, rng: rng };
+if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: newGame, playWeek: playWeek, isOver: isOver, legalWeek: legalWeek, allTies: allTies, townTies: townTies, circleOf: circleOf, circleLabel: circleLabel, everyone: everyone, catOf: catOf, catWord: catWord, key: key, tally: tally, shares: shares, STRATEGIES: STRATEGIES, runStrategy: runStrategy, betWeek: betWeek, betBand: betBand, ceiling: ceiling, scoreOf: scoreOf, hindsightWeek: hindsightWeek, heardOf: heardOf, lightClone: lightClone, allWeeks: allWeeks, drawOrigins: drawOrigins, spread: spread, reachedCircles: reachedCircles, sizeOf: sizeOf, unit: unit, rng: rng };
