@@ -7,55 +7,39 @@ ok   ordering on reason: chimp/pig/dog > braindam/infant — p. 113: the same pa
 ok   ordering on reason: adult > infant/braindam/disab — p. 113, Benn: the rational man and the imbecile; p. 106: the infant
 ok   Suffer reads the same for every being that can feel, and 0 for the stone
 ok   four humans, five animals, one thing
-ok   no line on Reason is both the ruler's own and clean (8 lines the ruler draws, fewest on the wrong side 3)
-ok   no line on Talk is both the ruler's own and clean (6 lines the ruler draws, fewest on the wrong side 2)
-ok   no line on Aware is both the ruler's own and clean (9 lines the ruler draws, fewest on the wrong side 3)
-ok   no line on Suffer is both the ruler's own and clean (3 lines the ruler draws, fewest on the wrong side 4)
-ok   the species line (under the 4 people, no ruler) is clean but by hand
-ok   Suffer: the only lines the ruler itself draws are above the lot, under everyone who can feel, and under the lot
-ok   Suffer: the line under the four people is by hand, between two equal marks
-ok   every cut on every ruler is allowed and judged with words
-ok   the hand round has words for every line
-ok   robustness: with random lengths that keep only the paper's orderings, no ruler draws a clean line of its own — 500 of 500 random casts
+ok   the four people are a line on no ruler — [["braindam","chimp"],["infant","chimp"],["braindam","chimp"],["adult","chimp"]]
+ok   everyone who feels is a line on Suffer and, in this cast, on no other ruler (the hurt grown-up reads none, like the stone: our length, not the paper's)
+ok   on each reading ruler the clash for the four people is a person in and an animal out
+ok   on Suffer the clash for the four people is a tie
+ok   shape of the four people is species; of everyone who feels, singer; of all ten, everything; of nobody, nothing
+ok   robustness: with random lengths that keep only the paper's orderings, the four people are a line on no ruler and everyone-who-feels is a line on Suffer — 500 of 500
 ok   cast restored after robustness runs
-ok   no two rulers sort the cast the same way
-ok   no two rulers say the same thing after the line
-ok   on Reason the chimpanzee is second
-ok   on Reason the dog and the adult with a severe intellectual disability read the same (the paper on Benn)
-ok   on Aware the mouse stands above the infant (p. 110)
-ok   on Talk only two of them read above the animals' best
-ok   path {"pick":"infant","why":null,"braindam":null} judged read with words
-ok   path {"pick":"braindam","why":null,"braindam":null} judged read with words
-ok   path {"pick":"chimp","why":"human","braindam":null} judged species with words
-ok   path {"pick":"chimp","why":"grow","braindam":"yes"} judged potential with words
-ok   path {"pick":"chimp","why":"grow","braindam":"no"} judged species with words
-ok   path {"pick":"chimp","why":"less","braindam":null} judged species with words
-ok   path {"pick":"chimp","why":"none","braindam":null} judged read with words
-ok   path {"pick":"mouse","why":"human","braindam":null} judged species with words
-ok   path {"pick":"mouse","why":"grow","braindam":"yes"} judged potential with words
-ok   path {"pick":"mouse","why":"grow","braindam":"no"} judged species with words
-ok   path {"pick":"mouse","why":"less","braindam":null} judged species with words
-ok   path {"pick":"mouse","why":"none","braindam":null} judged read with words
-ok   path {"pick":"nobody","why":null,"braindam":null} judged refuse with words
-ok   the experiment has a finite set of paths (13)
-ok   every status is reachable: species, potential, read, refuse — {"read":4,"species":6,"potential":2,"refuse":1}
-ok   an animal kept over the baby because it is one of us is judged species
-ok   "matters less" is judged species, with the first board as the answer
-ok   "either would have done" is judged read
-ok   every animal the paper names is above or level with the baby on every ruler
+ok   all 1024 sets get a shape, a name, words, four reveals and a verdict; every line is a true threshold — 0 problems
+ok   eight shapes occur — {"nothing":1,"line":11,"species-minus":12,"species":1,"own":967,"species-plus":30,"singer":1,"everything":1}
+ok   the grown-up alone is a Reason, Talk and Aware line
+ok   the four people plus the dog is species-with-favourites
+ok   the four people minus the hurt grown-up is species-with-exceptions
+ok   everyone but the baby and the stone is own, nearest Singer, with the baby dropped
+ok   the experiment ends on every path (13 with the baby in, 15 with the baby out)
+ok   "the baby is out on my line too" is offered only when the baby is out
+ok   every status is reachable — {"read":10,"species":12,"potential":4,"refuse":2}
 
-Heuristics, board one:
-  Reason   | keep every person: 5 (hand) | keep every animal out: 3 | under the grown-up only: 3 | under the four people: 4 (hand) | fewest, ruler's own line: 3
-  Talk     | keep every person: 4 (hand) | keep every animal out: 2 | under the grown-up only: 3 | under the four people: 4 (hand) | fewest, ruler's own line: 2
-  Aware    | keep every person: 5 (hand) | keep every animal out: 3 | under the grown-up only: 3 | under the four people: 6 | fewest, ruler's own line: 3
-  Suffer   | keep every person: 0 (hand) | keep every animal out: 0 (hand) | under the grown-up only: 3 (hand) | under the four people: 0 (hand) | fewest, ruler's own line: 4
-Heuristics, board two (how each way of playing is judged):
-  one of us (chimp)                                -> species
-  matters less (mouse)                             -> species
-  will grow, yes to the hurt grown-up (chimp)      -> potential
-  will grow, no to the hurt grown-up (chimp)       -> species
-  either would have done (mouse)                   -> read
-  the baby                                         -> read
-  nobody                                           -> refuse
+Shapes (how many of the 1024 sets fall in each):
+  nothing       1
+  line          11
+  species-minus 12
+  species       1
+  own           967
+  species-plus  30
+  singer        1
+  everything    1
+Named sets:
+  the four people                    -> Species                    lines: none
+  everyone who feels                 -> Singer's line              lines: suffer
+  the grown-up alone                 -> A Reason line              lines: reason,talk,aware
+  the four people + dog              -> Species, with favourites   lines: none
+  the four people - hurt grown-up    -> Species, with exceptions   lines: none
+  grown-up + chimpanzee              -> A Reason line              lines: reason,aware
+  animals only                       -> Your own line              lines: none
 
 all checks passed
