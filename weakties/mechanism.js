@@ -237,12 +237,9 @@ function ceiling(s) { return Math.max(tally(runStrategy(s.seed, STRATEGIES.hinds
 function scoreOf(s) { var c = ceiling(s), h = tally(s).heard, p = c ? 100 * h / c : 0; return { heard: h, ceiling: c, pct: p, band: p >= CONFIG.BANDS[0] ? 2 : (p >= CONFIG.BANDS[1] ? 1 : 0) }; }
 function lightClone(s) { return { seed: s.seed, week: s.week, known: s.known.slice(), extra: Object.assign({}, s.extra), weeks: [], heardAll: {}, strength: Object.assign({}, s.strength), revived: {} }; }
 function heardOf(s, ev) { return playWeek(lightClone(s), ev).heard; }
-function hindsightWeek(s) { // move one evening at a time while it helps; with hindsight on this week's draw and coins
-  var best = Object.assign({}, STRATEGIES[CONFIG.BEST_PLAN](s)), bestH = heardOf(s, best), improved = true, guard = 0;
-  while (improved && guard++ < 40) { improved = false;
-    s.known.forEach(function (from) { s.known.forEach(function (to) { if (from === to || !(best[from] > 0) || (best[to] || 0) >= CONFIG.CAP) return; var e = Object.assign({}, best); e[from]--; if (!e[from]) delete e[from]; e[to] = (e[to] || 0) + 1; var h = heardOf(s, e); if (h > bestH) { bestH = h; best = e; improved = true; } }); });
-    if (!improved) s.known.forEach(function (to) { if ((best[to] || 0) >= CONFIG.CAP) return; var sum = 0; for (var k in best) sum += best[k]; if (sum >= CONFIG.EVENINGS) return; var e = Object.assign({}, best); e[to] = 1; var h = heardOf(s, e); if (h > bestH) { bestH = h; best = e; improved = true; } });
-  }
+function hindsightWeek(s) { // the best week with the news known: every legal week (a few hundred with three evenings, one per person) tried on this week's draw and coins
+  var best = {}, bestH = -1;
+  allWeeks(s.known).forEach(function (ev) { var h = heardOf(s, ev); if (h > bestH) { bestH = h; best = ev; } });
   return { ev: best, heard: bestH };
 }
 function sizeOf(cid) { for (var i = 0; i < CONFIG.CIRCLES.length; i++) if (CONFIG.CIRCLES[i].id === cid) return CONFIG.CIRCLES[i].people.length; return 0; }

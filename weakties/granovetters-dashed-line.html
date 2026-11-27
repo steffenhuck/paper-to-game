@@ -92,7 +92,7 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
 
 <!-- THE WEEK -->
 <section id="s-week" class="screen">
-  <div class="topbar"><div><div class="kicker" id="wk-kicker">Week 1 of 3</div><div class="now" id="wk-now">Give your three evenings.</div><div class="sub" id="wk-sub">Tap a name: a dashed line goes thin, a thin line goes thick.</div></div><button class="qbtn" id="b-help-week" aria-label="How to play">?</button></div>
+  <div class="topbar"><div><div class="kicker" id="wk-kicker">Week 1 of 3</div><div class="now" id="wk-now">Give your three evenings.</div><div class="sub" id="wk-sub">Tap a name to spend an evening with them.</div></div><button class="qbtn" id="b-help-week" aria-label="How to play">?</button></div>
   <svg class="map" id="map" viewBox="0 0 340 316" aria-label="The town"></svg>
   <div class="legend"><span><svg viewBox="0 0 30 10"><line x1="0" y1="5" x2="30" y2="5" stroke="#14171B" stroke-width="3"/></svg>often</span><span><svg viewBox="0 0 30 10"><line x1="0" y1="5" x2="30" y2="5" stroke="#14171B" stroke-width="1.25"/></svg>now and then</span><span><svg viewBox="0 0 30 10"><line x1="0" y1="5" x2="30" y2="5" stroke="#14171B" stroke-width="1.25" stroke-dasharray="4 3"/></svg>rarely</span><span><svg viewBox="0 0 30 10"><circle cx="15" cy="5" r="4" fill="#1F6FEB"/></svg>news</span><span><svg viewBox="0 0 30 10"><circle cx="15" cy="5" r="2.6" fill="#14171B"/><circle cx="15" cy="5" r="4.6" fill="none" stroke="#14171B" stroke-width="1"/></svg>evenings</span></div>
   <div id="wk-plan">
@@ -414,12 +414,9 @@ function ceiling(s) { return Math.max(tally(runStrategy(s.seed, STRATEGIES.hinds
 function scoreOf(s) { var c = ceiling(s), h = tally(s).heard, p = c ? 100 * h / c : 0; return { heard: h, ceiling: c, pct: p, band: p >= CONFIG.BANDS[0] ? 2 : (p >= CONFIG.BANDS[1] ? 1 : 0) }; }
 function lightClone(s) { return { seed: s.seed, week: s.week, known: s.known.slice(), extra: Object.assign({}, s.extra), weeks: [], heardAll: {}, strength: Object.assign({}, s.strength), revived: {} }; }
 function heardOf(s, ev) { return playWeek(lightClone(s), ev).heard; }
-function hindsightWeek(s) { // move one evening at a time while it helps; with hindsight on this week's draw and coins
-  var best = Object.assign({}, STRATEGIES[CONFIG.BEST_PLAN](s)), bestH = heardOf(s, best), improved = true, guard = 0;
-  while (improved && guard++ < 40) { improved = false;
-    s.known.forEach(function (from) { s.known.forEach(function (to) { if (from === to || !(best[from] > 0) || (best[to] || 0) >= CONFIG.CAP) return; var e = Object.assign({}, best); e[from]--; if (!e[from]) delete e[from]; e[to] = (e[to] || 0) + 1; var h = heardOf(s, e); if (h > bestH) { bestH = h; best = e; improved = true; } }); });
-    if (!improved) s.known.forEach(function (to) { if ((best[to] || 0) >= CONFIG.CAP) return; var sum = 0; for (var k in best) sum += best[k]; if (sum >= CONFIG.EVENINGS) return; var e = Object.assign({}, best); e[to] = 1; var h = heardOf(s, e); if (h > bestH) { bestH = h; best = e; improved = true; } });
-  }
+function hindsightWeek(s) { // the best week with the news known: every legal week (a few hundred with three evenings, one per person) tried on this week's draw and coins
+  var best = {}, bestH = -1;
+  allWeeks(s.known).forEach(function (ev) { var h = heardOf(s, ev); if (h > bestH) { bestH = h; best = ev; } });
   return { ev: best, heard: bestH };
 }
 function sizeOf(cid) { for (var i = 0; i < CONFIG.CIRCLES.length; i++) if (CONFIG.CIRCLES[i].id === cid) return CONFIG.CIRCLES[i].people.length; return 0; }
@@ -521,7 +518,7 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: n
     ev = {}; clearNews(); renderTies(displayTies());
     $('wk-kicker').textContent = 'Week ' + G.week + ' of ' + CONFIG.WEEKS;
     $('wk-now').textContent = G.week === 1 ? 'Give your three evenings.' : (G.week === CONFIG.WEEKS ? 'The last week. Give your three evenings.' : 'A new week. Give your three evenings.');
-    $('wk-sub').textContent = G.week === 1 ? 'Tap a name: a dashed line goes thin, a thin line goes thick.' : 'Tap a name to raise a line one step; an untended line may thin.';
+    $('wk-sub').textContent = G.week === 1 ? 'Tap a name to spend an evening with them.' : 'Tap a name; an untended line may thin.';
     $('wk-plan').style.display = ''; $('wk-play').style.display = 'none'; $('wk-result').style.display = 'none';
     renderPlan(); window.scrollTo(0, 0);
   }

@@ -141,7 +141,7 @@ var sameOrigins = true; for (var q = 0; q < 50; q++) { var ga = m.runStrategy('o
 check('the ghosts meet the same news as the player on the same seed', sameOrigins);
 
 // (9) a clairvoyant best week by search: week one exhaustive (every legal week over the eleven you know), later weeks by hill-climbing
-//     from the best plan's week, with hindsight on the week's news; read for loopholes
+//     (the mechanism's hindsight week is now this exhaustive search); read for loopholes
 var heardOf = m.heardOf;
 var clair = 0, clairN = 6, firstWeeks = {}, week1Cands = m.allWeeks(C.KNOWN_AT_START);
 for (var c = 0; c < clairN; c++) {
