@@ -171,6 +171,7 @@ ok((function () { var bad = 0; Z1s.forEach(function (z) { var s9 = m.newStage(U,
 // ---------- rev. 5: handholding, what you will learn ----------
 function plain(txt) { return !/pinch|skin|charge|climb|ghost/i.test(txt); }
 function nt(h) { return h.replace(/<[^>]+>/g, ''); }
+C.EXPLAIN_PREVIEW = true;   // the rev. 5 to 11 checks below test the explaining preview; rev. 12 tests the blind default at the end
 ok(Z1s.every(function (z) { var w = nt(m.previewWords(m.newStage(U, m.claimTubes(), 4, 1), z)); return /You will learn|learn nothing new/.test(w) && plain(w) && w.split(/\s+/).length <= 50; }), 'rev. 5: every cut from 1 to 91 has a preview that says what you will learn and is 50 words or fewer');
 ok(/splits here for sure/.test(nt(m.previewWords(m.newStage(U, C.TUBES_U, 4, 1), 46))) && /splits here 25% of the time/.test(nt(m.previewWords(m.newStage(U, C.TUBES_U, 4, 1), 56))) && /Otherwise the cut fails and lights the 24-min tube\. You will learn: a neutron can just get caught/.test(nt(m.previewWords(m.newStage(U, C.TUBES_U, 4, 1), 56))) && /Otherwise the cut fails and nothing is explained/.test(nt(m.previewWords(m.newStage(TH, C.TUBES_TH, 3, 1), 56))) && !/24-min/.test(nt(m.previewWords(m.newStage(TH, C.TUBES_TH, 3, 1), 56))), 'rev. 5: the preview says whether the cut splits for sure or at what chance, and what a failure lights (the 24-minute tube on uranium, nothing on thorium)');
 ok((function () { var bad = 0; Z1s.forEach(function (z) { [0, 0.9999].forEach(function (r) { var s9 = m.newStage(U, C.TUBES_U, 4, 3); s9.rng = function () { return r; }; var mv9 = m.play(s9, { kind: 'split', Z1: z }); var l = m.lessonOf(s9, mv9); if (!l || !plain(l) || l.split(/\s+/).length > 40) bad++; }); }); return bad === 0; })(), 'rev. 5: every outcome, split or failed, ends with a short lesson in plain words');
@@ -194,7 +195,7 @@ ok(/You are Meitner and Frisch/.test(m.coachWords(m.newStage(U, m.claimTubes(), 
 // ---------- rev. 11: the game as played, five claims and the barium, three tries ----------
 (function () {
   var gt = m.gameTubes(), st = m.newStage(U, gt, C.TRIES_GAME, 1);
-  ok(gt.length === 6 && gt.filter(function (t) { return t.id === 'ba'; }).length === 1 && C.TRIES_GAME === 3, 'rev. 11: the game has the five claims and one barium tube, and three tries');
+  ok(gt.length === 6 && gt.filter(function (t) { return t.id === 'ba'; }).length === 1 && C.TRIES_GAME >= 3, 'rev. 11: the game has the five claims and one barium tube, and at least three tries');
   var p43 = m.preview(st, 43), p40 = m.preview(st, 40), p36 = m.preview(st, 36);
   var ids = function (pv) { return pv.lights.map(function (l) { return l.id; }).sort().join(','); };
   ok(p43.p >= 0.995 && ids(p43) === 'eAu,eIr,eOs,ePt,eRe' && !/ba/.test(ids(p43).replace(/eRe|ePt/g, '')), 'rev. 11: the sure cut at 43 | 49 explains the five and not the barium');
@@ -210,6 +211,25 @@ ok(/You are Meitner and Frisch/.test(m.coachWords(m.newStage(U, m.claimTubes(), 
   ok(v.you === 5 && v.barium.lit && /trade-off/.test(tx) && /If barium itself is one piece/.test(tx) && /Barium came out/.test(tx), 'rev. 11: the verdict for two cuts says the barium came out and names the trade-off');
   var s5 = m.newStage(U, gt, 3, 6); m.play(s5, { kind: 'split', Z1: 43 }); var v5 = m.verdict(s5, null);
   ok(v5.you === 5 && !v5.barium.lit && /GONE, BUT THE BARIUM IS NOT EXPLAINED/.test(v5.fate) && /Your cuts never made barium/.test(v5.story.join(' ')), 'rev. 11: the sure cut alone gives "gone, but the barium is not explained"');
+})();
+
+// ---------- rev. 12: the blind bench: the chance and the paths are shown, what a cut would explain is not ----------
+(function () {
+  C.EXPLAIN_PREVIEW = false;
+  var gt = m.gameTubes(), st = m.newStage(U, gt, C.TRIES_GAME, 1);
+  ok(C.TRIES_GAME === 4, 'rev. 12: four tries in the blind game');
+  var w43 = nt(m.previewWords(st, 43)), w56 = nt(m.previewWords(st, 56));
+  ok(/for sure/.test(w43) && /25% of the time/.test(w56) && /watch what the two pieces climb through/.test(w43) && /nothing is explained/.test(w56), 'rev. 12: the line under the button gives the chance and what to watch');
+  var leak = true; for (var z = 1; z <= 91; z++) { var w = nt(m.previewWords(st, z)); if (/explain (all|none|one|two|three|four|five)|93|94|95|96|97|barium/i.test(w) || w.split(/\s+/).length > 45) leak = false; }
+  ok(leak, 'rev. 12: no preview line, for any cut from 1 to 91, says what the cut would explain or names a tube, and each is 45 words or fewer');
+  ok(/You are not told what a cut explains\. Test it to find out/.test(m.coachWords(st)), 'rev. 12: the first try says that you are not told in advance');
+  var s2 = m.newStage(U, gt, 4, 1); m.play(s2, { kind: 'split', Z1: 46 });
+  var c2 = nt(m.coachWords(s2));
+  ok(/Still to explain: 93, 94, 95/.test(c2) && /starts further left/.test(c2) && /barium/.test(c2), 'rev. 12: after 46 | 46 the hint names what is left and says a piece that starts further left passes more of the left-hand columns');
+  var s3 = m.newStage(U, gt, 4, 1); m.play(s3, { kind: 'split', Z1: 43 });
+  ok(/Still to explain: barium \(try a little off the middle\)/.test(nt(m.coachWords(s3))), 'rev. 12: after 43 | 49 the hint says the barium needs a cut a little off the middle');
+  var s4 = m.newStage(U, gt, 4, 1); m.play(s4, { kind: 'split', Z1: 30 }); s4.moves.length;
+  ok(m.preview(m.newStage(U, gt, 4, 1), 43).lights.length === 5, 'rev. 12: the mechanism still knows what a cut explains (only the display is blind)');
 })();
 
 console.log(fails ? '\n' + fails + ' FAILED' : '\nall checks passed');

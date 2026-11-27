@@ -52,9 +52,9 @@ var URL = 'file://' + path.resolve('meitners-drop.html');
     await pg.click('#b-again'); await pg.waitForTimeout(200); console.log(tag, 'again ->', await pg.evaluate("document.querySelector('.screen.on').id"));
     await ctx.close();
   }
-  await session(380, 700, 'a-', [43, 36, 40], [], true, 7);
-  await session(380, 700, 'b-', [56, 56, 56], [], true, 2);
-  await session(1100, 800, 'laptop-', [40, 43], [], true, 7);
+  await session(380, 700, 'a-', [46, 43, 40, 40], [], true, 7);
+  await session(380, 700, 'b-', [56, 56, 56, 56], [], true, 2);
+  await session(1100, 800, 'laptop-', [46, 43, 40, 40], [], true, 7);
   await b.close();
   if (errs.length) { console.log('ERRORS:\n' + errs.join('\n')); process.exit(1); }
   console.log('sessions ok, no errors, no horizontal scroll');

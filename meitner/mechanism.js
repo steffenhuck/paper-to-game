@@ -29,7 +29,8 @@ var CONFIG = {
   UNEVEN: 24,               // OURS: a pinch whose pieces differ by this many protons or more is called uneven in the verdict
 
   // --- play ---
-  TRIES_GAME: 3,            // OURS (rev. 11): tries in the game as played: the five claims and the barium; a sure cut for the five, a riskier one for the barium
+  EXPLAIN_PREVIEW: false,   // OURS (rev. 12): false = the bench does not say in advance which claims a cut would explain (you find out by testing); true restores rev. 11 (the red boxes, with TRIES_GAME 3)
+  TRIES_GAME: 4,            // OURS (rev. 11): tries in the game as played: the five claims and the barium; a sure cut for the five, a riskier one for the barium
   NEUTRONS_U: 4,            // OURS: three suffice when every pinch goes through (a pinch near 56, a pinch near 43, a hold); one spare for a pinch the skin pulls back (rev. 2)
   ODDS_HALF: 7.5,           // OURS (rev. 2): how far from the middle (in protons) a pinch must sit for the drop to split one time in two; the paper: "two nuclei of roughly equal size ... perhaps partly on chance" (p. 239)
   ODDS_FLAT: 3,             // OURS (rev. 2): a pinch within this many protons of the middle always goes through ("roughly equal size")
@@ -213,6 +214,10 @@ function pctWords(label) { return label === '<1%' ? 'under 1%' : label; }
 // the line under the table before you fire: what the cut lights and what you will learn, if it splits and if it fails
 function previewWords(st, Z1) {
   var pv = preview(st, Z1), T = st.tubes, sure = pv.p >= 0.995;
+  if (!CONFIG.EXPLAIN_PREVIEW) {          // rev. 12: the chance, and what to watch; not what the cut would explain
+    var watch = 'If it splits, watch what the two pieces climb through on the table. If the cut fails, the neutron is just caught and nothing is explained.';
+    return (sure ? '<b>The uranium splits here for sure.</b> ' : '<b>The uranium splits here ' + pctWords(pv.label) + ' of the time.</b> ') + watch;
+  }
   var claims = T.filter(function (t) { return isDashed(t.cellZ); }), hasBa = T.some(function (t) { return t.id === 'ba'; });
   var cl = pv.lights.filter(function (l) { return isDashed(tubeById(T, l.id).cellZ); }).map(function (l) { return tubeById(T, l.id).short; });
   var ba = pv.lights.some(function (l) { return l.id === 'ba'; });
@@ -234,12 +239,14 @@ function coachWords(st) {
   var left = st.tubes.filter(function (t) { return !st.lit[t.id]; });
   if (st.used === 0) return st.nuc.name === 'uranium' ?
     'You are Meitner and Frisch. The chemists found five "new elements", 93 to 97, and also barium, an ordinary element that nobody expected in uranium. Your idea: the uranium split in two.</p>' +
-    '<p>A "new element" is explained when one of your pieces turns into an old element that acts just like it: the same column of the table, the same chemistry. Barium is explained when one of your pieces acts like barium.' :
+    '<p>A "new element" is explained when one of your pieces turns into an old element that acts just like it: the same column of the table, the same chemistry. Barium is explained when one of your pieces acts like barium.</p>' +
+    (CONFIG.EXPLAIN_PREVIEW ? '<p>The row of boxes shows what a cut would explain.' : '<p>You are not told what a cut explains. Test it to find out.') :
     cap(st.nuc.name) + ' (' + st.nuc.Z + '): same game, two new tubes, three neutrons. A tube lights when one of your pieces ends up in its column. Drag the red line, then press Test this cut.';
   if (!left.length) return '';
   var eka = left.filter(function (t) { return isDashed(t.cellZ); }), mid = left.filter(function (t) { return !isDashed(t.cellZ) && !t.byHold; }), u24 = left.filter(function (t) { return t.byHold; });
   var parts = [];
-  if (eka.length) parts.push(eka.length === left.length ? eka.map(function (t) { return t.short; }).join(', ') + ' (try the middle of the table, where a cut always works)' : 'the dashed tubes (try the middle, where a cut always works)');
+  var ekaDone = st.tubes.some(function (t) { return isDashed(t.cellZ) && st.lit[t.id]; });
+  if (eka.length) parts.push(eka.map(function (t) { return t.short; }).join(', ') + (ekaDone && !CONFIG.EXPLAIN_PREVIEW ? ' (your pieces climb to the right, so a piece that starts further left passes more of the columns on the left, like 93 and 94)' : ' (try the middle of the table, where a cut always works)'));
   if (mid.length) parts.push(mid.map(function (t) { return t.short; }).join(' and ') + ' (try a little off the middle)');
   if (u24.length) parts.push('the 24-min tube (it lights when a cut fails, so risk a cut far from the middle)');
   return 'Still to explain: ' + parts.join('; ') + '.';
@@ -321,7 +328,8 @@ function moveWords(st, move) {
   }
   var p0 = move.pieces[0], p1 = move.pieces[1], same = p0.Z === p1.Z;
   lines.push('Cut at ' + move.Z1 + ' | ' + move.Z2 + (move.odds !== undefined && move.odds < 0.995 ? ' (chance ' + oddsLabel(move.odds) + ', and it worked)' : '') + ': ' + (same ? 'two pieces of ' + nameOf(p0.Z) : nameOf(p0.Z) + ' and ' + nameOf(p1.Z)) + '.');
-  lines.push(pieceLine(p0) + ' ' + pieceLine(p1));
+  var l0 = pieceLine(p0), l1 = pieceLine(p1), st0 = p0.path.length - 1;
+  lines.push(l0 !== l1 ? l0 + ' ' + l1 : !st0 ? 'Both pieces stay as they are.' : 'Each piece changes ' + (st0 === 1 ? 'once' : countWord(st0) + ' times') + ' and ends as ' + endName(p0.path) + '.');
   var ghosts = move.lit.filter(function (l) { return isDashed(tubeById(T, l.id).cellZ); });
   if (move.lit.length) {
     var parts = move.lit.map(function (l) { var t = tubeById(T, l.id); return (isDashed(t.cellZ) ? t.cellZ : 'like ' + t.short) + ' = ' + nameOf(l.atZ); });
