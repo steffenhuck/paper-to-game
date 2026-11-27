@@ -1,12 +1,13 @@
-// Calibration check for Draw a Line with Singer (revision 7). Run: node calibration.js. Exit code 1 on any failure.
+// Calibration check for Draw a Line with Singer (revision 8). Run: node calibration.js. Exit code 1 on any failure.
 // The mechanism is a TOY of an argument; the check verifies (1) that every ordering the 1974 paper states holds in the cast,
-// (2) the paper's claim on this cast: the four-people set is a line on no ruler, and the everyone-who-feels set is a line on Suffer only,
-// (3) that this rests on the paper's orderings, not our lengths: random casts keeping only the stated orderings behave the same,
-// (4) that every one of the 1024 sets a player can make gets a shape, a name and words, and every reveal has words,
-// (5) the experiment: every path ends and is judged, with the extra answer only when the baby is out, (6) a table of the shapes.
-var m = require('./mechanism.js'), C = m.CONFIG, fails = 0, out = [];
+// (2) the claim on this cast: whenever the player would use an animal sooner than every person (the species pattern), all three rules with
+// marks object, and Suffer objects as soon as the player says the beings can suffer; (3) that the Aware objection rests on the paper's own
+// orderings (apes and mice above the baby), not on our lengths; (4) that every one of the 256 lines the three experiments can reveal, with every
+// one of the 16 answer sets to "can they suffer?", gets a pattern, a shape, a name, words for each rule, Suffer words and a verdict;
+// (5) the stories: three rungs, three stories each, drawn reproducibly; (6) a table of the shapes.
+var m = require('./mechanism.js'), C = m.CONFIG, N = m.NEVER, fails = 0, out = [];
 function check(name, ok, detail) { out.push((ok ? 'ok   ' : 'FAIL ') + name + (detail ? ' — ' + detail : '')); if (!ok) fails++; }
-var READ = ['reason', 'talk', 'aware'], H = m.humans(), F = m.feelers(), A = m.allIds();
+var S = C.SUBJECTS, LV = [1, 2, 3, N];
 
 // (1)
 C.PAPER_ORDERINGS.forEach(function (o) {
@@ -14,95 +15,71 @@ C.PAPER_ORDERINGS.forEach(function (o) {
   o.above.forEach(function (a) { o.below.forEach(function (b) { var ra = m.castById(a)[o.ruler], rb = m.castById(b)[o.ruler]; if (o.strict ? !(ra > rb) : !(ra >= rb)) ok = false; }); });
   check('ordering on ' + o.ruler + ': ' + o.above.join('/') + (o.strict ? ' > ' : ' >= ') + o.below.join('/'), ok, o.src);
 });
-check('Suffer reads the same for every being that can feel, and 0 for the stone', C.CAST.every(function (b) { return b.id === C.THING ? b.suffer === 0 : b.suffer === C.CAST[0].suffer; }));
-check('four humans, five animals, one thing', H.length === 4 && F.length === 9 && A.length === 10);
+check('the four subjects are the paper\'s: the baby, the hurt grown-up, the chimpanzee, the mouse', JSON.stringify(S) === '["infant","braindam","chimp","mouse"]');
+check('every subject can suffer in the paper\'s reading (suffer mark 10)', S.every(function (id) { return m.castById(id).suffer === 10; }));
 
-// (2)
-check('the four people are a line on no ruler', m.linesOn(H).length === 0, JSON.stringify(C.RULERS.map(function (r) { return m.testLine(H, r.id).clash; })));
-check('everyone who feels is a line on Suffer and, in this cast, on no other ruler (the hurt grown-up reads none, like the stone: our length, not the paper\'s)', JSON.stringify(m.linesOn(F)) === '["suffer"]');
-check('on each reading ruler the clash for the four people is a person in and an animal out', READ.every(function (r) { var t = m.testLine(H, r); return !t.line && m.castById(t.clash[0]).human && !m.castById(t.clash[1]).human; }));
-check('on Suffer the clash for the four people is a tie', m.testLine(H, 'suffer').tie === true);
-check('shape of the four people is species; of everyone who feels, singer; of all ten, everything; of nobody, nothing', m.shapeOf(H).id === 'species' && m.shapeOf(F).id === 'singer' && m.shapeOf(A).id === 'everything' && m.shapeOf([]).id === 'nothing');
+// (4) every line × every answer set
+var shapes = {}, patterns = {}, bad = 0, speciesLines = 0, speciesAllObject = 0;
+var allYes = {}; S.forEach(function (id) { allYes[id] = true; });
+function thOf(vals) { var th = {}; S.forEach(function (id, i) { th[id] = vals[i]; }); return th; }
+function ticksOf(th) { var t = { 1: [], 2: [], 3: [] }; S.forEach(function (id) { for (var n = 1; n <= 3; n++) if (th[id] !== N && th[id] <= n) t[n].push(id); }); return t; }
+for (var a = 0; a < 4; a++) for (var b = 0; b < 4; b++) for (var c = 0; c < 4; c++) for (var d = 0; d < 4; d++) {
+  var th = thOf([LV[a], LV[b], LV[c], LV[d]]), p = m.pattern(th);
+  patterns[p] = (patterns[p] || 0) + 1;
+  if (JSON.stringify(m.thresholds(ticksOf(th))) !== JSON.stringify(th)) bad++; // thresholds round-trip through ticks
+  if (!m.didWords(th)) bad++;
+  C.RULES.forEach(function (r) { var w = m.ruleWords(th, r.id); if (!w || w.length < 40) bad++; });
+  if (p === 'species') { speciesLines++; if (C.RULES.every(function (r) { return !m.ruleTest(th, r.id).agrees; })) speciesAllObject++; }
+  for (var mask = 0; mask < 16; mask++) {
+    var ans = {}; S.forEach(function (id, i) { ans[id] = !!(mask & (1 << i)); });
+    var w = m.shapeWords(th, ans); shapes[w.shape.id] = (shapes[w.shape.id] || 0) + 1;
+    if (!w.name || !w.headline || !w.who || w.who.length < 40) bad++;
+    if (w.shape.id !== 'species' && (!w.singer || w.singer.length < 40)) bad++;
+    var sw = m.sufferWords(th, ans); if (!sw || sw.length < 30) bad++;
+    var v = m.verdict({ ticks: ticksOf(th), answers: ans }); if (!v.fate || v.did.length !== 5 || v.found.length !== 1 || !v.part.length || !v.stood.length) bad++;
+    var st = m.sufferTest(th, ans);
+    var yesVals = S.filter(function (id) { return ans[id]; }).map(function (id) { return th[id]; });
+    var shouldObject = yesVals.length >= 2 && Math.min.apply(null, yesVals) !== Math.max.apply(null, yesVals);
+    if (st.objects !== shouldObject) bad++;
+  }
+}
+check('all 256 lines x 16 answer sets get a pattern, a shape, a name, words for each rule, Suffer words and a verdict; thresholds round-trip; Suffer objects exactly when it should', bad === 0, bad + ' problems');
+check('patterns: refuse 1, equal 3, and the rest species / reverse / mixed', patterns.refuse === 1 && patterns.equal === 3, JSON.stringify(patterns));
+check('every species-pattern line draws an objection from all three rules with marks (' + speciesLines + ' such lines)', speciesLines > 0 && speciesAllObject === speciesLines, speciesAllObject + ' of ' + speciesLines);
+check('all six shapes occur', ['refuse', 'singer', 'equal-no', 'line', 'species', 'own'].every(function (k) { return shapes[k] > 0; }), JSON.stringify(shapes));
+check('the paper\'s own case, the chimpanzee to save a life and the baby only for a thousand, is species and no rule agrees', (function () { var t = thOf([3, 3, 2, 2]); return m.pattern(t) === 'species' && m.rulesAgreeing(t).length === 0 && m.shapeOf(t, allYes).id === 'species'; })());
+check('the mouse alone, to save a life, is species: Aware and Reason object on marks, Talk on a tie', (function () { var t = thOf([N, N, N, 2]); return m.pattern(t) === 'species' && !m.ruleTest(t, 'aware').agrees && !m.ruleTest(t, 'reason').agrees && m.ruleTest(t, 'talk').tie === true; })());
+check('people before animals, hurt grown-up first, is a Reason line', (function () { var t = thOf([2, 1, 3, 2]); var s = m.shapeOf(t, allYes); return m.pattern(t) === 'reverse' && s.id === 'line' && s.lines.indexOf('reason') >= 0; })());
+check('all four at the same rung, all can suffer, is Singer\'s line; with one "no" it is equal-no', m.shapeOf(thOf([2, 2, 2, 2]), allYes).id === 'singer' && m.shapeOf(thOf([2, 2, 2, 2]), { infant: true, braindam: true, chimp: true, mouse: false }).id === 'equal-no');
+check('nobody at any price is refuse, and its verdict points to Foot', m.shapeOf(thOf([N, N, N, N]), allYes).id === 'refuse' && /Foot/.test(m.verdict({ ticks: { 1: [], 2: [], 3: [] }, answers: allYes }).stood[0]));
 
-// (3) robustness
+// (3) robustness: the Aware objection to the species pattern rests on the paper's orderings (chimp, mouse > infant on aware)
 function rnd(seed) { var x = seed >>> 0; return function () { x = (x * 1664525 + 1013904223) >>> 0; return x / 4294967296; }; }
-var survived = 0, trials = 500, saved = C.CAST.map(function (b) { return { reason: b.reason, talk: b.talk, aware: b.aware }; });
+var trials = 500, survived = 0, saved = C.CAST.map(function (b) { return { reason: b.reason, talk: b.talk, aware: b.aware }; });
+var speciesTh = []; for (var a2 = 0; a2 < 4; a2++) for (var b2 = 0; b2 < 4; b2++) for (var c2 = 0; c2 < 4; c2++) for (var d2 = 0; d2 < 4; d2++) { var t2 = thOf([LV[a2], LV[b2], LV[c2], LV[d2]]); if (m.pattern(t2) === 'species') speciesTh.push(t2); }
 for (var t = 0; t < trials; t++) {
   var R = rnd(t + 1), ok = true;
-  READ.forEach(function (rid) {
+  ['reason', 'talk', 'aware'].forEach(function (rid) {
     var found = false;
     for (var tries = 0; tries < 20000 && !found; tries++) {
-      C.CAST.forEach(function (b) { if (b.id !== C.THING) b[rid] = Math.floor(R() * 11); });
-      found = C.PAPER_ORDERINGS.filter(function (o) { return o.ruler === rid; }).every(function (o) { return o.above.every(function (a) { return o.below.every(function (bb) { var ra = m.castById(a)[rid], rb = m.castById(bb)[rid]; return o.strict ? ra > rb : ra >= rb; }); }); });
+      C.CAST.forEach(function (b) { if (b.id !== 'stone') b[rid] = Math.floor(R() * 11); });
+      found = C.PAPER_ORDERINGS.filter(function (o) { return o.ruler === rid; }).every(function (o) { return o.above.every(function (x) { return o.below.every(function (y) { var ra = m.castById(x)[rid], rb = m.castById(y)[rid]; return o.strict ? ra > rb : ra >= rb; }); }); });
     }
     if (!found) ok = false;
   });
-  if (ok && m.linesOn(H).length === 0 && m.linesOn(F).indexOf('suffer') >= 0) survived++;
+  if (ok && speciesTh.every(function (th3) { return !m.ruleTest(th3, 'aware').agrees; })) survived++;
   C.CAST.forEach(function (b, i) { b.reason = saved[i].reason; b.talk = saved[i].talk; b.aware = saved[i].aware; });
 }
-check('robustness: with random lengths that keep only the paper\'s orderings, the four people are a line on no ruler and everyone-who-feels is a line on Suffer', survived === trials, survived + ' of ' + trials);
-check('cast restored after robustness runs', m.castById('chimp').aware === 8 && m.castById('disab').reason === 3 && m.castById('mouse').aware === 3);
+check('robustness: with random marks that keep only the paper\'s orderings, Aware objects to every species-pattern line', survived === trials, survived + ' of ' + trials);
+check('cast restored', m.castById('chimp').aware === 8 && m.castById('mouse').aware === 3 && m.castById('infant').reason === 1);
 
-// (4) every set
-var shapes = {}, bad = 0, n = A.length;
-for (var mask = 0; mask < (1 << n); mask++) {
-  var set = A.filter(function (id, i) { return mask & (1 << i); });
-  var w = m.shapeWords(set), s = w.shape;
-  shapes[s.id] = (shapes[s.id] || 0) + 1;
-  if (!w.name || !w.headline || !w.who || w.who.length < 40 || (s.id !== 'species' && (!w.singer || w.singer.length < 40))) bad++;
-  C.RULERS.forEach(function (r) { if (!m.revealWords(set, r.id) || m.revealWords(set, r.id).length < 20) bad++; });
-  var ans = {}; m.sufferAsked(set).forEach(function (id) { ans[id] = true; });
-  var v = m.verdict({ lines: [set, set, set, set, set], answers: ans, path: { pick: 'chimp', why: 'human', braindam: null } }); if (!v.fate || v.found.length !== 6 || v.part.length !== 2 || v.synthesis.kind !== 'unmoved') bad++;
-  var sw = m.sufferWords(set, ans); if (typeof sw !== 'string' || (m.sufferAsked(set).length && sw.length < 40)) bad++;
-  s.lines.forEach(function (rid) { var rows = m.sortBy(rid); for (var i = 1; i < rows.length; i++) { var inA = set.indexOf(rows[i - 1].id) >= 0, inB = set.indexOf(rows[i].id) >= 0; if (!inA && inB) bad++; if (inA !== inB && rows[i - 1].r === rows[i].r) bad++; } });
-}
-check('all 1024 sets get a shape, a name, words, four reveals, Suffer words and a verdict (unmoved); every line is a true threshold', bad === 0, bad + ' problems');
-// (4c) the Suffer round
-var stS = m.sufferTest(H, { chimp: true, dog: true, pig: false, horse: false, mouse: true });
-check('Suffer asks about exactly the beings counted for less, minus the stone (species player: five animals)', JSON.stringify(m.sufferAsked(H)) === '["chimp","dog","pig","horse","mouse"]' && m.sufferAsked(F).length === 0 && m.sufferAsked(['adult']).length === 8);
-check('Suffer objects to every "yes, it can suffer" still counted for less, and marks the "no"s as disputed by Singer', JSON.stringify(stS.objections) === '["chimp","dog","mouse"]' && JSON.stringify(stS.disputed) === '["pig","horse"]' && stS.complete && !stS.agrees);
-check('an unanswered being leaves the test incomplete and the words empty', !m.sufferTest(H, { chimp: true }).complete && m.sufferWords(H, { chimp: true }) === '');
-check('all "no" answers: Suffer agrees, Singer disputes the fact', /Suffer agrees/.test(m.sufferWords(H, { chimp: false, dog: false, pig: false, horse: false, mouse: false })) && /Singer disputes a fact/.test(m.sufferWords(H, { chimp: false, dog: false, pig: false, horse: false, mouse: false })));
-check('Singer\'s line: nothing to ask', /nothing to ask/.test(m.sufferWords(F, {})));
-// (4b) trajectories
-var rl = [H, ['adult'], ['adult', 'disab'], ['adult', 'chimp'], F]; // the four people, then each ruler's own line
-var synR = m.synthesis(rl, {});
-check('a player who takes each ruler\'s line is ruler-led and ends on Singer\'s line', synR.kind === 'rule-led' && synR.last.shape.id === 'singer', synR.text);
-var synM = m.synthesis([H, H, H, H, F], { chimp: true, dog: true, pig: true, horse: true, mouse: true });
-check('a player moved only by Suffer is mixed, with one move, and the Suffer line says he moved them in', synM.kind === 'mixed' && synM.movedRounds === 1 && /Suffer moved you: .* now count as much as you/.test(synM.text) && /moved them in/.test(synM.suffer), synM.suffer);
-var synU = m.synthesis([F, F, F, F, F], {});
-check('Singer\'s line kept five times is unmoved', synU.kind === 'unmoved' && /from the start/.test(synU.text));
-var vM = m.verdict({ lines: [H, H, H, H, F], answers: { chimp: true, dog: true, pig: true, horse: true, mouse: true }, path: { pick: 'mouse', why: 'none', braindam: null } });
-check('the verdict reads the last line (Singer\'s), reports the trajectory, and always speaks to the experiment', /Singer/.test(vM.fate) && vM.found.length === 6 && /Suffer moved you/.test(vM.found.join(' ')) && /^At the experiment: you spent the mouse/.test(vM.part[1]), vM.part[1]);
-var vS = m.verdict({ lines: [H, H, H, H, H], answers: { chimp: true, dog: true, pig: true, horse: true, mouse: true }, path: { pick: 'chimp', why: 'human', braindam: null } });
-check('the species player who says the animals can suffer gets his two answers side by side', /side by side/.test(vS.found[4]) && /drew the team/.test(vS.part[1]), vS.found[4]);
-check('eight shapes occur', Object.keys(shapes).length === 8, JSON.stringify(shapes));
-check('the grown-up alone is a Reason, Talk and Aware line', JSON.stringify(m.linesOn(['adult'])) === '["reason","talk","aware"]');
-check('the four people plus the dog is species-with-favourites', m.shapeOf(H.concat(['dog'])).id === 'species-plus');
-check('the four people minus the hurt grown-up is species-with-exceptions', m.shapeOf(['adult', 'infant', 'disab']).id === 'species-minus');
-check('everyone but the baby and the stone is own, nearest Singer, with the baby dropped', (function () { var s = m.shapeOf(F.filter(function (x) { return x !== 'infant'; })); return s.id === 'own' && s.nearest === 'singer' && JSON.stringify(s.dropped) === '["infant"]'; })());
+// (5) stories
+check('three rungs of rising stakes, three stories each, and a fixed cost', C.LEVELS.length === 3 && C.LEVELS.every(function (L) { return L.skins.length === 3 && L.skins.every(function (s) { return s.length > 60; }); }) && C.COST.length > 40);
+check('stories draw reproducibly, and seed 0 gives the first of each rung', JSON.stringify(m.drawSkins(7)) === JSON.stringify(m.drawSkins(7)) && m.drawSkins(0).every(function (s, i) { return s === C.LEVELS[i].skins[0]; }) && (function () { var seen = {}; for (var k = 1; k < 60; k++) seen[m.drawSkins(k).join('|')] = 1; return Object.keys(seen).length > 5; })());
 
-// (5) the experiment
-var statuses = {}, paths = 0;
-function walk(path, set) {
-  var q = m.nextQuestion(path, set);
-  if (!q) { var j = m.judgeExperiment(path, set); statuses[j.status] = (statuses[j.status] || 0) + 1; paths++; if (!j.said || !j.paper || j.paper.length < 40) check('path ' + JSON.stringify(path) + ' has words', false); return; }
-  (q.id === 'pick' ? C.EXPERIMENT.subjects.concat(['nobody']).map(function (s) { return { id: s }; }) : q.options).forEach(function (o) { var p = {}; for (var k in path) p[k] = path[k]; p[q.id] = o.id; walk(p, set); });
-}
-walk({ pick: null, why: null, braindam: null }, H); var p1 = paths;
-walk({ pick: null, why: null, braindam: null }, ['adult']); var p2 = paths - p1;
-check('the experiment ends on every path (' + p1 + ' with the baby in, ' + p2 + ' with the baby out)', p1 === 13 && p2 === 15);
-check('"the baby is out on my line too" is offered only when the baby is out', m.whyOptions(H, 'chimp').length === 4 && m.whyOptions(['adult'], 'chimp').length === 5 && m.whyOptions(['adult'], 'chimp')[0].id === 'out' && /the chimpanzee is not/.test(m.whyOptions(H, 'chimp')[0].text));
-check('the question names the animal and knows the line: ' + m.whyQuestion({ pick: 'chimp' }, F), /counts as much as the baby/.test(m.whyQuestion({ pick: 'chimp' }, F)) && /^Why the mouse, and not the baby\?$/.test(m.whyQuestion({ pick: 'mouse' }, ['adult'])) && /counts for less\. Why the chimpanzee/.test(m.whyQuestion({ pick: 'chimp' }, H)));
-check('every status is reachable', ['species', 'potential', 'read', 'refuse'].every(function (s) { return statuses[s] > 0; }), JSON.stringify(statuses));
-
-// (6) table
-out.push('\nShapes (how many of the 1024 sets fall in each):');
-Object.keys(shapes).forEach(function (k) { out.push('  ' + k.padEnd(14) + shapes[k]); });
-out.push('Named sets:');
-[['the four people', H], ['everyone who feels', F], ['the grown-up alone', ['adult']], ['the four people + dog', H.concat(['dog'])], ['the four people - hurt grown-up', ['adult', 'infant', 'disab']], ['grown-up + chimpanzee', ['adult', 'chimp']], ['animals only', ['chimp', 'dog', 'pig', 'horse', 'mouse']]].forEach(function (h) {
-  var w = m.shapeWords(h[1]); out.push('  ' + h[0].padEnd(34) + ' -> ' + w.name.padEnd(26) + ' lines: ' + (w.shape.lines.join(',') || 'none'));
-});
+// (6)
+out.push('\nShapes over 256 lines x 16 answer sets:'); Object.keys(shapes).forEach(function (k) { out.push('  ' + k.padEnd(10) + shapes[k]); });
+out.push('Patterns over 256 lines:'); Object.keys(patterns).forEach(function (k) { out.push('  ' + k.padEnd(10) + patterns[k]); });
 console.log(out.join('\n'));
 console.log(fails ? '\n' + fails + ' CHECK(S) FAILED' : '\nall checks passed');
 process.exit(fails ? 1 : 0);
