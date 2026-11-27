@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Draw a Line with Singer</title>
 <script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<meta name="description" content="Singer, All Animals Are Equal (1974): you are the scientist. Three experiments of rising stakes, each with its own menu of subjects, nine creatures in all, from a grown-up to a mouse. Tick everyone you would use. Then the board asks whether any one rule can make sense of your three choices: Reason, Talk, Aware; then Bentham's question, can they suffer? Then the board names your line.">
+<meta name="description" content="Singer, All Animals Are Equal (1974): you are the scientist. Three experiments of rising stakes, each with its own menu of three subjects, nine creatures in all. Tick everyone you would use. Then four rules come to the board, Reason, Talk, Aware and Suffer, and each asks: which of your three choices will I complain about? Then the board draws your line, and Singer's.">
 <style>
 @font-face{font-family:'Fredericka';font-weight:400;font-style:normal;src:url(data:font/woff2;base64,/*__F_FRED__*/) format('woff2')}
 @font-face{font-family:'Architects';font-weight:400;font-style:normal;src:url(data:font/woff2;base64,/*__F_ARCH__*/) format('woff2')}
@@ -83,6 +83,8 @@ svg text{font-family:'Architects',sans-serif;fill:var(--chalk)}
 .asksub{font-size:13px;color:var(--dim)}
 .askbtns{flex:none}
 .btn.on{background:var(--yellow);color:var(--board);border-color:var(--yellow)}
+.verdictpic{margin:8px 0 4px}
+.vp-head{font-family:'Fredericka the Great',serif;font-size:20px;color:var(--yellow);margin:10px 0 2px}
 .legend{font-size:14px;color:var(--dim);margin:0 0 8px}
 .story{font-size:18px;line-height:1.4;margin:0 0 6px}
 .cost{font-size:16px;color:var(--yellow);margin:0 0 8px}
@@ -117,7 +119,6 @@ a{color:var(--chalk)}
 </defs></svg>
 
 <div class="wrap"><div class="board">
-<div class="sponge" id="sponge"></div>
 
 <!-- START -->
 <section id="s-start" class="screen on">
@@ -126,9 +127,9 @@ a{color:var(--chalk)}
   <svg class="motif" viewBox="0 0 340 92" aria-hidden="true">
     <g stroke="#F3EEDD" stroke-width="0.8" fill="none" transform="translate(22,4) scale(2.3)"><use href="#i-baby" x="0" y="0" width="24" height="24"/><use href="#i-lying" x="36" y="0" width="24" height="24"/><use href="#i-chimp" x="72" y="0" width="24" height="24"/><use href="#i-mouse" x="108" y="0" width="24" height="24"/></g>
     <path d="M6 70 q60 -4 120 1 t120 -2 t88 1" fill="none" stroke="#E8664D" stroke-width="3" stroke-linecap="round" opacity=".95"/>
-    <text x="8" y="88" font-size="13" fill="#F0D27A">use first?</text><text x="334" y="88" text-anchor="end" font-size="13" fill="#F0D27A">spare?</text>
+    <text x="8" y="88" font-size="13" fill="#F0D27A">use?</text><text x="334" y="88" text-anchor="end" font-size="13" fill="#F0D27A">spare?</text>
   </svg>
-  <p class="acts">You are a scientist. Three experiments are on your desk, and each one would help people, some a little, some a lot. Each experiment needs a subject: someone it is done to, and it hurts. Each experiment comes with its own menu of who is on offer, nine creatures in all, from a grown-up to a mouse. You decide who may be used, and for what. Then Singer looks at your three choices and asks whether any one rule can make sense of them. Then he asks one more question of his own.</p>
+  <p class="acts">You are a scientist. Three experiments are on your desk, and each one would help people, some a little, some a lot. Each experiment needs a subject: someone it is done to, and it hurts. Each experiment comes with its own menu of three who are on offer, nine creatures in all, from a grown-up to a mouse. You decide who may be used, and for what. Then four rules come to the board, one at a time, and each asks whether it could have made your choices. Then the board draws your line, and Singer's.</p>
   <p class="aim big">Whose pain would you spend? Draw the line.</p>
   <button class="btn solid" id="b-begin">Pick up the chalk</button>
   <div class="row2"><button class="btn" id="b-help-start">How to play</button><button class="btn" id="b-about-start">About</button></div>
@@ -148,7 +149,7 @@ a{color:var(--chalk)}
   <div class="row2" id="btnsE"></div>
 </section>
 
-<!-- BOARD ONE: what you did, the rules, suffer, the name -->
+<!-- BOARD ONE: what you did, the four rules, the name -->
 <section id="s-one" class="screen">
   <div class="top"><div class="now" id="now1"></div><button class="qm" id="b-help-one" aria-label="How to play">?</button></div>
   <p class="aim" id="aim1"></p>
@@ -156,12 +157,9 @@ a{color:var(--chalk)}
   <p class="rule" id="rule1"></p>
   <div class="castbox"><svg class="cast" id="cast" viewBox="0 0 340 300"></svg></div>
   <p class="legend" id="legend" style="display:none"></p>
-  <div id="ask" style="display:none"></div>
   <p class="hint" id="hint1"></p>
   <p class="said" id="said1"></p>
   <p class="find" id="find1"></p>
-  <div class="mirror" id="mirror" style="display:none"></div>
-  <p class="paperline" id="reply1" style="display:none"></p>
   <div class="row2" id="btns1"></div>
 </section>
 
@@ -169,9 +167,11 @@ a{color:var(--chalk)}
 <section id="s-end" class="screen">
   <div class="kicker">The verdict</div>
   <div class="fate" id="fate"></div>
-  <div class="sec"><h2>What Singer says</h2><div id="v-paper"></div></div>
-  <div class="sec"><h2>What you did, and what the rules said</h2><div id="v-did"></div></div>
-  <div class="sec"><h2>Your line, and its name</h2><div id="v-found"></div></div>
+  <div class="vp-head" id="vp-yours"></div>
+  <div class="verdictpic"><svg id="pic-yours" viewBox="0 0 340 150"></svg></div>
+  <div class="vp-head">Singer's line</div>
+  <div class="verdictpic"><svg id="pic-singer" viewBox="0 0 340 150"></svg></div>
+  <p class="find" id="v-singer"></p>
   <div class="sec"><h2>Where you and Singer part</h2><div id="v-part"></div></div>
   <div class="sec"><h2>What follows</h2><div id="v-stood"></div></div>
   <div class="row2"><button class="btn solid" id="b-again">Play again</button><button class="btn" id="b-about-end">About</button></div>
@@ -186,13 +186,12 @@ a{color:var(--chalk)}
   <h1>How to play</h1>
   <p><b>Whose pain would you spend? Draw the line.</b></p>
   <h2>The experiments</h2>
-  <p>You are a scientist, and three experiments come to your desk, one after the other. The first would spare one child a year of illness. The second would save one life. The third would save a thousand lives. Each experiment needs a subject: someone it is done to. Whoever you use will be in bad pain for a day, and then be fine again, with no lasting harm. Each experiment has its own menu of who is on offer, three creatures; across the three menus you meet nine: a grown-up; a baby a few days old, with no parents; a grown-up whose brain is badly hurt, for good; a grown-up who cannot learn much; a chimpanzee; a dog; a pig; a horse; and a mouse. Every one of them is an example from Singer's paper.</p>
+  <p>You are a scientist, and three experiments come to your desk, one after the other. The first would spare one child a year of illness. The second would save one life. The third would save a thousand lives. Each experiment needs a subject: someone it is done to. Whoever you use will be in bad pain for a day, and then be fine again, with no lasting harm. Each experiment has its own menu of three who are on offer; across the three menus you meet nine: a grown-up; a baby a few days old, with no parents; a grown-up whose brain is badly hurt, for good; a grown-up who cannot learn much; a chimpanzee; a dog; a pig; a horse; and a mouse. Every one of them is an example from Singer's paper.</p>
   <p>On each experiment, tap everyone you would be willing to use for it. You may tap one, several, or nobody at all. Tap again to change your mind. Then tap <b>Done</b>. Nothing you tick is done to anyone; the game only wants to know where your line is.</p>
-  <h2>Making sense of your choices</h2>
-  <p>Then the board tries to make sense of what you did. A rule is a way of deciding whom to use first. Reason's rule is: the less a being can think, the sooner you may use it. A rule with marks explains an experiment if it could have made that choice: that is, if everyone you would use there has a lower mark than everyone you would spare there. It explains your three choices if it explains all three experiments. The board first tells you how many of its three rules can explain all three of your choices, without saying which. Then the rules come to the board one at a time: Reason, Talk and Aware. Each one sorts the nine by its marks (the marks follow what Singer's paper says) and shows what you did on each menu. In each column, the rule is happy if every ✓ sits below every ✗; it complains about a column where a ✓ sits above a ✗. Before it speaks, you guess: tap the experiments you think it will complain about, then tap Check (or tap Check straight away if you think it has no complaint). Then the board tells you, experiment by experiment. Where the rule is fine, it draws a short red mark in that column: its cutoff, with the ones you would use below it. Where it complains, it circles the two creatures in that column it complains about most: one you would use although it has the higher mark, one you would spare although it has the lower mark. The circles are the rule's complaint, not the board's.</p>
-  <p>Then one more question, with no marks: can they suffer? Tap yes or no for each of the nine. The stone, which was on no menu, appears here once: nobody asks whether it can suffer, and that is where Singer's line runs. The Suffer rule is this: if a being can suffer, its pain counts as much as anyone's, so among beings that can suffer none may be used sooner than another; whatever cannot suffer may be used freely. If you say two beings can suffer and you would use one of them and spare the other, Suffer objects, and the circles are drawn from your own two answers.</p>
+  <h2>The four rules</h2>
+  <p>Then the board tries to make sense of what you did. A rule is a way of deciding whom to use first. Reason's rule is: the less a being can think, the sooner you may use it. Four rules come to the board, one at a time: Reason, Talk, Aware and Suffer. Each one sorts the nine by its marks (the marks follow what Singer's paper says) and shows what you did on each menu: a ✓ for everyone you would use, a ✗ for everyone you would spare. A rule could have made your choice in an experiment if the ones you would use there are the ones it would use first. Before each rule speaks, you guess: tap the experiments you think it will complain about, then tap Check; or tap Check straight away if you think it has no complaint. Then the board tells you, experiment by experiment, and shows where the rule's complaints are with red circles. Suffer is the fourth rule, and its marks are all the same, because every one of the nine can suffer; you will see what that means for its complaints.</p>
   <h2>The name, and the verdict</h2>
-  <p>The board tells you what your line is called, and what Singer says about it. Then the verdict: what you did, what each rule said, your line and its name, where you and Singer part, and what follows. No score. Play again to draw a different line; the stories change each time.</p>
+  <p>The board tells you what your line is called, and what Singer says about it. Then the verdict: a drawing of your line, who you would use and who you would spare; a drawing of Singer's line; where you and he part; and what follows. No score. Play again to draw a different line; the stories change each time.</p>
   <div class="close"><button class="btn" id="b-help-close2">Back to the board</button></div>
 </div></div></div>
 
@@ -212,7 +211,7 @@ a{color:var(--chalk)}
   var $ = function (id) { return document.getElementById(id); };
   var S, helpFrom = null;
   var RH = 30, TOP = 24, SUB = CONFIG.SUBJECTS, COLX = [244, 282, 320];
-  function reset() { S = { stage: 'start', level: 0, ticks: { 1: [], 2: [], 3: [] }, skins: drawSkins(Math.floor(Math.random() * 1e6) + 1), phase: '', round: 0, cur: null, answers: {}, mirror: 0, words: null, guess: null }; }
+  function reset() { S = { stage: 'start', level: 0, ticks: { 1: [], 2: [], 3: [] }, skins: drawSkins(Math.floor(Math.random() * 1e6) + 1), phase: '', round: 0, cur: null, words: null, guess: null }; }
   function show(id) { ['s-start', 's-exp', 's-one', 's-end'].forEach(function (s) { $(s).classList.toggle('on', s === id); }); window.scrollTo(0, 0); }
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
   function wobble(x1, x2, y) {
@@ -250,69 +249,59 @@ a{color:var(--chalk)}
   }
 
   // ---------- Board one: the nine, sorted by a rule's marks, with the three menus as columns ----------
-  function rows() { return S.cur && S.cur !== 'suffer' ? SUB.slice().sort(function (a, b) { return castById(b)[S.cur] - castById(a)[S.cur] || SUB.indexOf(a) - SUB.indexOf(b); }) : SUB.slice(); }
+  function rows() { return S.cur ? SUB.slice().sort(function (a, b) { return castById(b)[S.cur] - castById(a)[S.cur] || SUB.indexOf(a) - SUB.indexOf(b); }) : SUB.slice(); }
   function drawCast(opts) {
     opts = opts || {};
     var svg = $('cast'); svg.innerHTML = ''; var R = rows(); S.rows = R; var g = '';
-    var head = S.mirror ? CONFIG.MIRROR[S.mirror - 1] : (opts.head || (S.cur ? rulerById(S.cur).label : 'WHAT YOU DID'));
+    var head = opts.head || (S.cur ? rulerById(S.cur).label : 'WHAT YOU DID');
     g += '<text class="col-head" x="4" y="14">' + esc(head.toUpperCase()) + '</text>';
-    if (S.cur && S.cur !== 'suffer') g += '<text x="150" y="14" font-size="12" fill="#F0D27A">mark</text>';
-    if (opts.suffer) g += '<text x="150" y="14" font-size="12" fill="#F0D27A">you said</text>';
-    if (!S.mirror) COLX.forEach(function (x, i) { g += '<text x="' + x + '" y="14" text-anchor="middle" font-size="12" fill="#F0D27A">' + (i + 1) + '</text>'; });
+    if (S.cur) g += '<text x="150" y="14" font-size="12" fill="#F0D27A">mark</text>';
+    COLX.forEach(function (x, i) { g += '<text x="' + x + '" y="14" text-anchor="middle" font-size="12" fill="#F0D27A">' + (i + 1) + '</text>'; });
     R.forEach(function (id, j) {
       var b = castById(id), y = TOP + j * RH, cy = y + RH / 2, k = rungOf(id), on = tickedAt(S.ticks, id);
-      var name = S.mirror ? (b.human ? 'one of us' : 'one of them') : b.label, sub = S.mirror ? '' : b.sub;
       g += '<g class="rowtap" data-id="' + id + '">';
-      g += '<rect x="0" y="' + y + '" width="340" height="' + RH + '" fill="transparent"/>';
-      g += '<g stroke="#F3EEDD" stroke-width="1.5"><use href="#' + (S.mirror ? 'i-us' : iconOf(id)) + '" x="4" y="' + (cy - 11) + '" width="22" height="22"/></g>';
-      g += '<text x="34" y="' + (cy + (sub ? 0 : 5)) + '" font-size="15">' + esc(name) + '</text>';
-      if (sub) g += '<text x="34" y="' + (cy + 11) + '" font-size="10" fill="#F3EEDD" opacity=".75">' + esc(sub) + '</text>';
-      if (S.cur && S.cur !== 'suffer') { var len = Math.max(2, b[S.cur] * 6); g += '<rect x="150" y="' + (cy - 4) + '" width="' + len + '" height="8" rx="3" fill="#F0D27A" opacity=".92"/>'; if (b[S.cur] === 0) g += '<text x="156" y="' + (cy + 4) + '" font-size="10" fill="#F0D27A" opacity=".8">none</text>'; }
-      if (opts.suffer) { var a = S.answers[id]; g += '<text x="150" y="' + (cy + 5) + '" font-size="12" fill="' + (a ? '#F0D27A' : '#F3EEDD') + '"' + (a ? '' : ' opacity=".7"') + '>' + (a === undefined ? '' : (a ? 'can suffer' : 'cannot')) + '</text>'; }
-      if (S.mirror) g += '<text x="336" y="' + (cy + 5) + '" text-anchor="end" font-size="13" fill="#F0D27A">' + (b.human ? 'spared' : 'used first') + '</text>';
-      else COLX.forEach(function (x, i) { var sym = (i + 1 === k) ? (on ? '✓' : '✗') : '·', col = (i + 1 === k) ? (on ? '#F0D27A' : '#F3EEDD') : '#F3EEDD'; g += '<text x="' + x + '" y="' + (cy + 6) + '" text-anchor="middle" font-size="' + (sym === '·' ? 14 : 17) + '" fill="' + col + '"' + (sym === '·' ? ' opacity=".4"' : (sym === '✗' ? ' opacity=".75"' : '')) + '>' + sym + '</text>'; });
+      g += '<g stroke="#F3EEDD" stroke-width="1.5"><use href="#' + iconOf(id) + '" x="4" y="' + (cy - 11) + '" width="22" height="22"/></g>';
+      g += '<text x="34" y="' + (cy + (b.sub ? 0 : 5)) + '" font-size="15">' + esc(b.label) + '</text>';
+      if (b.sub) g += '<text x="34" y="' + (cy + 11) + '" font-size="10" fill="#F3EEDD" opacity=".75">' + esc(b.sub) + '</text>';
+      if (S.cur) { var len = Math.max(2, b[S.cur] * 6); g += '<rect x="150" y="' + (cy - 4) + '" width="' + len + '" height="8" rx="3" fill="#F0D27A" opacity=".92"/>'; if (b[S.cur] === 0) g += '<text x="156" y="' + (cy + 4) + '" font-size="10" fill="#F0D27A" opacity=".8">none</text>'; }
+      COLX.forEach(function (x, i) { var sym = (i + 1 === k) ? (on ? '✓' : '✗') : '·', col = (i + 1 === k) ? (on ? '#F0D27A' : '#F3EEDD') : '#F3EEDD'; g += '<text x="' + x + '" y="' + (cy + 6) + '" text-anchor="middle" font-size="' + (sym === '·' ? 14 : 17) + '" fill="' + col + '"' + (sym === '·' ? ' opacity=".4"' : (sym === '✗' ? ' opacity=".75"' : '')) + '>' + sym + '</text>'; });
       g += '</g>';
     });
     g += '<g id="line"></g><g id="circles"></g>';
     svg.innerHTML = g;
   }
-  function drawCircles(ids, hollow) {
+  function drawCircles(ids) {
     var C = $('circles'); if (!C) return; var delay = 0;
     S.rows.forEach(function (id, j) {
       if (ids.indexOf(id) < 0) return;
       var cy = TOP + j * RH + RH / 2;
       var e = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
       e.setAttribute('cx', 170); e.setAttribute('cy', cy); e.setAttribute('rx', 168); e.setAttribute('ry', 13.5);
-      e.setAttribute('fill', 'none'); e.setAttribute('stroke', hollow ? '#F3EEDD' : '#E8664D'); e.setAttribute('stroke-width', hollow ? '1.6' : '2.4'); e.setAttribute('opacity', hollow ? '.55' : '.95'); e.setAttribute('transform', 'rotate(-1 170 ' + cy + ')');
-      if (hollow) e.setAttribute('stroke-dasharray', '5 4');
+      e.setAttribute('fill', 'none'); e.setAttribute('stroke', '#E8664D'); e.setAttribute('stroke-width', '2.4'); e.setAttribute('opacity', '.95'); e.setAttribute('transform', 'rotate(-1 170 ' + cy + ')');
       C.appendChild(e);
-      if (hollow) return;
       var len = e.getTotalLength(); e.style.strokeDasharray = len; e.style.strokeDashoffset = len; e.style.transition = 'stroke-dashoffset .45s ease-out ' + delay + 'ms';
       requestAnimationFrame(function () { requestAnimationFrame(function () { e.style.strokeDashoffset = 0; }); }); delay += 200;
     });
   }
-  // per-column drawing: for each experiment the rule is fine with, a short red cutoff mark in that column between the crosses and the ticks;
-  // for each it complains about, red circles round that column's worst pair
-  function drawColumns(t, hollow) {
+  // per-column drawing: a short red cutoff mark in each column the rule is fine with; red circles round the worst pair in each column it complains about
+  function drawColumns(t) {
     var L = $('line'); if (!L) return; var h = '', circ = [];
     [1, 2, 3].forEach(function (k) {
       var c = t.cols[k], x = COLX[k - 1];
       if (c.ok) {
         if (c.used.length === 0 || c.spared.length === 0) return;
         var idx = -1; S.rows.forEach(function (id, j) { if (idx < 0 && rungOf(id) === k && tickedAt(S.ticks, id)) idx = j; });
-        var y = TOP + idx * RH;
-        h += '<path d="' + wobble(x - 16, x + 16, y) + '" fill="none" stroke="#E8664D" stroke-width="3" stroke-linecap="round" opacity=".95"/>';
+        h += '<path d="' + wobble(x - 16, x + 16, TOP + idx * RH) + '" fill="none" stroke="#E8664D" stroke-width="3" stroke-linecap="round" opacity=".95"/>';
       } else circ = circ.concat(c.clash);
     });
     L.innerHTML = h;
-    if (circ.length) drawCircles(circ, false);
+    if (circ.length) drawCircles(circ);
   }
   function drawTray() {
     var t = $('tray'); t.innerHTML = '';
-    CONFIG.RULES.concat([CONFIG.SUFFER]).forEach(function (r, i) {
-      var isSuffer = r.id === 'suffer', hidden = isSuffer && S.round < 4;
-      var b = document.createElement('button'); b.className = 'rb' + (S.cur === r.id || (isSuffer && S.round === 4) ? ' cur' : '') + (i < S.round - 1 ? ' seen' : '');
-      b.textContent = hidden ? '?' : r.label; b.disabled = true;
+    CONFIG.RULES.forEach(function (r, i) {
+      var b = document.createElement('button'); b.className = 'rb' + (S.cur === r.id ? ' cur' : '') + (i < S.round - 1 ? ' seen' : '');
+      b.textContent = r.label; b.disabled = true;
       if (i < S.round - 1) { var sp = document.createElement('span'); var ok = ruleTest(S.ticks, r.id).ok; sp.className = 'cnt' + (ok ? ' ok' : ''); sp.textContent = ok ? 'agreed' : 'objected'; b.appendChild(sp); }
       t.appendChild(b);
     });
@@ -321,14 +310,13 @@ a{color:var(--chalk)}
   // ---- what you did, and whether any rule can make sense of it
   function showDid() {
     S.stage = 'one'; S.phase = 'did'; S.cur = null; S.round = 0;
-    $('cast').style.display = ''; $('ask').style.display = 'none'; $('tray').style.display = 'none'; $('mirror').style.display = 'none'; $('reply1').style.display = 'none';
+    $('tray').style.display = 'none';
     var n = rulesExplaining(S.ticks).length, p = pattern(S.ticks);
     $('now1').textContent = 'What you did'; $('aim1').textContent = 'Your three choices, side by side. Then: can any one rule make sense of them?';
     var sense;
-    if (p === 'refuse') sense = 'Let\'s try to make sense of what you did. That is easy: you would use nobody who can feel anything, at any price. There is no order of use for a rule to explain. The three rules will still come to the board, but they will have nothing to say; the question for you comes at the end.';
-    else if (p === 'all') sense = 'Let\'s try to make sense of what you did. That is easy: you would use everyone on every menu, the stone, the grown-up, the baby and the mouse, at any stakes. There is no order of use for a rule to explain. The three rules will still come to the board, but they have no complaint.';
-    else if (n === 0) sense = 'Let\'s try to make sense of what you did. The board has three rules with marks, Reason, Talk and Aware, and it has tried each of them against your three choices. A rule explains an experiment if the ones you would use there have lower marks than the ones you would spare. The answer: <b>no single rule with marks can explain all three of your choices.</b> Let\'s look closer. The three rules will come to the board one at a time, and each will show you where your choices and the rule part. For each one, you say first which experiments you think it will complain about.';
-    else sense = 'Let\'s try to make sense of what you did. The board has three rules with marks, Reason, Talk and Aware, and it has tried each of them against your three choices. The answer: <b>' + (n === 1 ? 'there is exactly one rule with marks that explains all three of your choices' : (n === 2 ? 'two of the three rules with marks explain all three of your choices' : 'all three rules with marks explain all three of your choices')) + '.</b> ' + (n < 3 ? 'Which? ' : '') + 'The three rules will come to the board one at a time, and each will show its marks beside what you did. For each one, you say first which experiments, if any, you think it will complain about.';
+    if (p === 'refuse') sense = 'Let\'s try to make sense of what you did. That is easy: you would use nobody, at any price. There is nothing for a rule to explain. The four rules will still come to the board, but they will have nothing to say; the question for you comes at the end.';
+    else if (p === 'all') sense = 'Let\'s try to make sense of what you did. That is easy: you would use everyone on every menu, at any stakes. There is nothing for a rule to explain. The four rules will still come to the board, but they have no complaint.';
+    else sense = 'Let\'s try to make sense of what you did. A rule is a way of deciding whom to use first; Reason\'s rule, for example, is: the less a being can think, the sooner you may use it. The board has three rules with a ranking, Reason, Talk and Aware, and it has tried each of them against your three choices. The answer: <b>' + (n === 0 ? 'no single rule with a ranking can explain all three of your choices' : (n === 1 ? 'there is exactly one rule with a ranking that explains all three of your choices' : (n === 2 ? 'two of the three rules with a ranking explain all three of your choices' : 'all three rules with a ranking explain all three of your choices'))) + '.</b> ' + (n === 1 || n === 2 ? 'Which? ' : '') + 'The rules will come to the board one at a time, each with its marks beside what you did. For each one, you say first which experiments, if any, you think it will complain about. Then a fourth rule comes, with a surprise in its marks.';
     $('rule1').innerHTML = esc(didWords(S.ticks)) + ' ' + sense;
     legend(true);
     $('hint1').textContent = ''; $('said1').textContent = ''; $('find1').textContent = '';
@@ -336,26 +324,27 @@ a{color:var(--chalk)}
     $('btns1').innerHTML = '<button class="btn solid" id="b-next">The first rule: Reason →</button>'; $('b-next').onclick = nextRule;
     show('s-one');
   }
-  // ---- the three rules: a guess, then the reveal
+  // ---- the four rules: a guess, then the reveal
   function nextRule() {
     S.round++;
-    if (S.round === 4) { startSuffer(); return; }
+    if (S.round === 5) { nameIt(); return; }
     S.phase = 'rule'; S.cur = CONFIG.RULES[S.round - 1].id; S.guess = null;
-    var r = rulerById(S.cur), p = pattern(S.ticks);
+    var r = rulerById(S.cur), p = pattern(S.ticks), suffer = S.cur === 'suffer';
     $('tray').style.display = '';
     $('now1').textContent = r.label + ' comes to the board.';
-    $('aim1').textContent = S.round === 1 ? 'A rule with marks. Could it have made your three choices?' : 'The next rule. Could it have made your three choices?';
-    $('rule1').innerHTML = 'Suppose <b>' + esc(r.label) + '</b> were your rule: ' + esc(r.rule) + '. The nine are sorted by how well each one ' + esc(r.verb) + ', highest at the top, with a yellow mark for each. The three columns are the three experiments, and they show what you did. If ' + esc(r.label) + ' were your rule, then in each experiment you would have used the ones with the lowest marks: every ✓ below every ✗.';
+    $('aim1').textContent = suffer ? 'The fourth rule. Look at its marks.' : (S.round === 1 ? 'A rule with a ranking. Could it have made your three choices?' : 'The next rule. Could it have made your three choices?');
+    $('rule1').innerHTML = suffer
+      ? 'The fourth rule is the one Bentham asked about: not can they reason, not can they talk, but <b>can they suffer?</b> Its marks are all the same, a full bar for every one of the nine, because every one of them can suffer; Singer says the mouse feels pain at least as much as a baby a few days old does. (The stone, which was on no menu, would be the only empty bar: nothing can be done to a stone that it minds.) Suffer\'s rule: ' + esc(r.rule) + '. The three columns show what you did, as before.'
+      : 'Suppose <b>' + esc(r.label) + '</b> were your rule: ' + esc(r.rule) + '. The nine are sorted by how well each one ' + esc(r.verb) + ', highest at the top, with a yellow mark for each. The three columns are the three experiments, and they show what you did: ✓ for everyone you would use, ✗ for everyone you would spare.';
     legend(true);
     drawTray(); drawCast();
     $('said1').textContent = ''; $('find1').textContent = '';
     if (p === 'refuse' || p === 'all') { reveal(); return; }
-    $('hint1').innerHTML = 'In each column, ' + esc(r.label) + ' is happy if every ✓ sits below every ✗: the ones you would use have the lower marks. It complains about a column where a ✓ sits above a ✗. <b>Tap the experiments where ' + esc(r.label) + ' will complain.</b> Then tap Check. If you think it has no complaint anywhere, tap Check straight away.';
+    $('hint1').innerHTML = '<b>Which of your three choices will ' + esc(r.label) + ' complain about? Tap those experiments, then tap Check.</b> If you think ' + esc(r.label) + ' has no complaint anywhere, tap Check straight away.';
     S.guess = [];
     var bh = '';
     [1, 2, 3].forEach(function (k) { bh += '<button class="btn small" data-k="' + k + '">Experiment ' + k + '</button>'; });
-    bh = '<div class="row2" style="width:100%">' + bh + '</div>';
-    bh += '<button class="btn solid" id="b-check">Check</button>';
+    bh = '<div class="row2" style="width:100%">' + bh + '<button class="btn solid" id="b-check">Check</button></div>';
     $('btns1').innerHTML = bh;
     Array.prototype.forEach.call($('btns1').querySelectorAll('button[data-k]'), function (b) { b.onclick = function () { var k = +b.getAttribute('data-k'), i = S.guess.indexOf(k); if (i >= 0) S.guess.splice(i, 1); else S.guess.push(k); b.classList.toggle('on', i < 0); }; });
     $('b-check').onclick = reveal;
@@ -371,57 +360,19 @@ a{color:var(--chalk)}
       var g = S.guess, lines = [], found = 0;
       [1, 2, 3].forEach(function (k) {
         var tapped = g.indexOf(k) >= 0, bad = !t.cols[k].ok;
-        if (tapped && bad) { found++; lines.push('Experiment ' + k + ': yes, ' + r.label + ' complains there.'); }
-        else if (!tapped && bad) lines.push('Experiment ' + k + ': you missed this one; ' + r.label + ' complains there too.');
-        else if (tapped && !bad) lines.push('Experiment ' + k + ': you tapped it, but ' + r.label + ' is fine there; every ✓ sits below every ✗.');
+        if (tapped && bad) { found++; lines.push('Experiment ' + k + ': yes.'); }
+        else if (!tapped && bad) lines.push('Experiment ' + k + ': missed; ' + r.label + ' complains there too.');
+        else if (tapped && !bad) lines.push('Experiment ' + k + ': no, ' + r.label + ' is fine there.');
       });
-      if (t.bad.length === 0) fb = g.length === 0 ? 'Right: ' + r.label + ' has no complaint anywhere.' : r.label + ' has no complaint anywhere: in every column the ✓s sit below the ✗s. ' + lines.join(' ');
-      else fb = (found === t.bad.length && g.length === t.bad.length ? 'You found ' + (t.bad.length === 1 ? 'the one experiment' : (t.bad.length === 2 ? 'both experiments' : 'all three experiments')) + ' ' + r.label + ' complains about.' : 'You found ' + found + ' of the ' + t.bad.length + ' experiment' + (t.bad.length === 1 ? '' : 's') + ' ' + r.label + ' complains about.') + ' ' + lines.join(' ');
+      if (t.bad.length === 0) fb = g.length === 0 ? 'Right: ' + r.label + ' has no complaint anywhere.' : r.label + ' has no complaint anywhere. ' + lines.join(' ');
+      else fb = (found === t.bad.length && g.length === t.bad.length ? 'You found ' + (t.bad.length === 1 ? 'the one experiment' : (t.bad.length === 2 ? 'both experiments' : 'all three experiments')) + ' ' + r.label + ' complains about.' : 'You found ' + found + ' of ' + t.bad.length + '.') + ' ' + lines.join(' ');
     }
     $('said1').textContent = fb; $('find1').textContent = ruleWords(S.ticks, S.cur);
-    $('btns1').innerHTML = '<button class="btn solid" id="b-next">' + (S.round < 3 ? 'Next rule: ' + CONFIG.RULES[S.round].label + ' →' : 'One more question →') + '</button>'; $('b-next').onclick = nextRule;
+    $('btns1').innerHTML = '<button class="btn solid" id="b-next">' + (S.round < 4 ? 'Next rule: ' + CONFIG.RULES[S.round].label + ' →' : 'So what is my line called? →') + '</button>'; $('b-next').onclick = nextRule;
   }
-  // ---- can they suffer?
-  function startSuffer() {
-    S.phase = 'suffer-ask'; S.cur = null; S.answers = {};
-    drawTray(); legend(false);
-    $('now1').textContent = 'One more question: can they suffer?'; $('aim1').textContent = 'This question is about them, not about you.';
-    $('rule1').innerHTML = 'Three rules with marks have checked your choices. Now one more rule, with no marks, and it is the one Bentham asked about: <b>can they suffer?</b> Not how well they think, not how much they know, just whether they can feel pain at all. Yes or no, for each of the nine. And one more, who was on no menu: the stone. Nobody asks whether a stone can suffer; it cannot, and on that everyone agrees. That is exactly where Singer\'s line runs: between the mouse and the stone, not between the baby and the mouse. Then the Suffer rule will check your choices with your own answers. The Suffer rule is this: ' + esc(CONFIG.SUFFER.rule) + '.';
-    $('cast').style.display = 'none'; $('ask').style.display = '';
-    var h = '';
-    SUB.forEach(function (id) { var b = castById(id); h += '<div class="askrow" data-id="' + id + '"><div class="askname">' + esc(b.label.replace(/^./, function (c) { return c.toUpperCase(); })) + (b.sub ? ' <span class="asksub">(' + esc(b.sub) + ')</span>' : '') + '</div><div class="askbtns"><button class="btn small" data-a="yes">can suffer</button><button class="btn small" data-a="no">cannot</button></div></div>'; });
-    h += '<div class="askrow" data-id="stone"><div class="askname">Stone</div><div class="askbtns"><button class="btn small solid" disabled>cannot</button></div></div>';
-    $('ask').innerHTML = h;
-    Array.prototype.forEach.call($('ask').querySelectorAll('button'), function (b) {
-      b.onclick = function () {
-        var row = b.parentNode.parentNode, id = row.getAttribute('data-id');
-        S.answers[id] = b.getAttribute('data-a') === 'yes';
-        Array.prototype.forEach.call(row.querySelectorAll('button'), function (x) { x.classList.toggle('solid', x === b); });
-        var t = sufferTest(S.ticks, S.answers);
-        $('hint1').textContent = t.complete ? 'All nine answered.' : (t.unanswered.length + ' still to answer.');
-        $('b-next').disabled = !t.complete;
-      };
-    });
-    $('hint1').textContent = 'Nine to answer.'; $('said1').textContent = ''; $('find1').textContent = '';
-    $('btns1').innerHTML = '<button class="btn solid" id="b-next" disabled>I have answered →</button>'; $('b-next').onclick = sufferJudge;
-    window.scrollTo(0, 0);
-  }
-  function sufferJudge() {
-    S.phase = 'suffer'; S.cur = 'suffer'; var t = sufferTest(S.ticks, S.answers), p = pattern(S.ticks);
-    $('ask').style.display = 'none'; $('cast').style.display = '';
-    $('now1').textContent = t.objects ? 'Suffer objects to your choices.' : (p === 'refuse' ? 'Suffer has nothing to check.' : 'Suffer agrees with your choices.');
-    $('aim1').textContent = 'The Suffer rule checks your choices, using your own answers.';
-    $('rule1').innerHTML = 'The <b>Suffer</b> rule checks your three choices with your own answers: ' + esc(CONFIG.SUFFER.rule) + '. Beside each one is what you said, and the three columns show what you did. In each column, Suffer is fine if everyone you would use and everyone you would spare cannot both suffer; it complains where you would use one being that can suffer and spare another that can. If Suffer objects, the red circles are its complaint, built from two things you said yourself.';
-    legend(true); $('hint1').textContent = '';
-    drawCast({ suffer: true, head: 'SUFFER' });
-    setTimeout(function () { if (p !== 'refuse' && p !== 'all') drawColumns(t); var circled = []; [1, 2, 3].forEach(function (k) { if (!t.cols[k].ok) circled = circled.concat(t.cols[k].clash); }); if (t.no.length) drawCircles(t.no.filter(function (id) { return circled.indexOf(id) < 0; }), true); }, 150);
-    $('said1').textContent = sufferWords(S.ticks, S.answers); $('find1').textContent = '';
-    $('btns1').innerHTML = '<button class="btn solid" id="b-next">So what is my line called? →</button>'; $('b-next').onclick = nameIt;
-    window.scrollTo(0, 0);
-  }
-  // ---- the name, and the sponge, on one screen
+  // ---- the name
   function nameIt() {
-    S.phase = 'name'; S.cur = null; S.round = 5; S.words = shapeWords(S.ticks, S.answers);
+    S.phase = 'name'; S.cur = null; S.words = shapeWords(S.ticks);
     var w = S.words;
     $('tray').style.display = 'none'; $('hint1').textContent = ''; legend(true);
     $('now1').textContent = w.headline; $('aim1').textContent = 'Your line, and its name.';
@@ -429,43 +380,37 @@ a{color:var(--chalk)}
     drawCast({ head: w.name });
     if (w.shape.id === 'species') $('line').innerHTML = '<path d="' + wobble(2, 338, TOP + 4 * RH) + '" fill="none" stroke="#E8664D" stroke-width="3.4" stroke-linecap="round" opacity=".95"/>';
     $('said1').textContent = w.who; $('find1').textContent = w.singer;
-    $('btns1').innerHTML = '<button class="btn solid" id="b-next">' + (w.shape.id === 'species' ? 'And then…' : 'And the choices most people make?') + '</button>'; $('b-next').onclick = mirrorStep;
+    $('btns1').innerHTML = '<button class="btn solid" id="b-next">The verdict →</button>'; $('b-next').onclick = endGame;
     window.scrollTo(0, 0);
   }
-  function mirrorStep() {
-    S.mirror++;
-    var sp = $('sponge'); sp.classList.remove('go'); void sp.offsetWidth; sp.classList.add('go');
-    var own = S.words.shape.id === 'species';
-    setTimeout(function () {
-      if (S.mirror <= CONFIG.MIRROR.length) {
-        var lab = CONFIG.MIRROR[S.mirror - 1];
-        S.cur = null; legend(false); drawCast({ head: lab });
-        $('line').innerHTML = '<path d="' + wobble(2, 338, TOP + 4 * RH) + '" fill="none" stroke="#E8664D" stroke-width="3.4" stroke-linecap="round" opacity=".95"/>';
-        $('now1').textContent = 'The same line, another word on it';
-        $('aim1').textContent = own ? 'Your line, with its name wiped off.' : 'The line most people draw, with its name wiped off.';
-        $('rule1').innerHTML = S.mirror === 1
-          ? (own ? 'The sponge wiped the word <b>Species</b> off your line and wrote <b>Race</b>.' : 'Here is the line most people draw: the animals used first, the people spared. The sponge wiped its name, <b>Species</b>, and wrote <b>Race</b>.') + ' The names are gone; the line is where it was: one of us, spared; one of them, used. This is Singer\'s own trick, from the last page of his paper: take anyone who says "people may not be used, because they are people", put "white" where they said "people" and "black" where they said "animals", and read it again.'
-          : 'The sponge wiped <b>Race</b> and wrote <b>Sex</b>. The line is still where it was.';
-        $('said1').textContent = 'On ' + lab + ': every one of us spared, every one of them used first.';
-        $('find1').textContent = S.mirror === 1 ? 'This is the line the racist draws, and it works for him for the same reason the team\'s line works: it is drawn on the team he is on, not on any mark he could check.' : 'And the line the sexist draws. When women first asked for rights, people laughed and said that next the dogs and horses would ask. Singer starts his paper with that joke. Same line, same reason.';
-        $('btns1').innerHTML = '<button class="btn solid" id="b-next">' + (S.mirror < CONFIG.MIRROR.length ? 'And then…' : 'So where does the line go?') + '</button>'; $('b-next').onclick = mirrorStep;
-      } else {
-        $('cast').style.display = 'none'; $('said1').style.display = 'none'; $('find1').style.display = 'none'; $('aim1').style.display = 'none'; $('rule1').innerHTML = '';
-        $('now1').textContent = 'Singer\'s answer';
-        $('mirror').style.display = 'block'; $('mirror').textContent = 'The pattern is the same in each case.';
-        $('reply1').style.display = 'block';
-        $('reply1').innerHTML = 'Species, race and sex all draw that line, and for the same reason: none of them is a rule you can check. They are teams, the team you happen to be on. Singer says: nobody\'s pain ever counted because they measured well on some mark. Whether your pain counts is not something you measure; it is something you are owed. And one rule needs no marks at all, only a yes or a no: <b>can it suffer?</b> If it can, its pain counts as much as anyone\'s, and nobody who can suffer may be used sooner than another who can. The stone may be used freely; nobody else may be used before anybody else.' + (own ? '' : ' Your own line: ' + esc(S.words.name) + '.');
-        $('btns1').innerHTML = '<button class="btn solid" id="b-next">The verdict →</button>'; $('b-next').onclick = endGame;
-      }
-    }, 500);
+  // ---- the verdict: two drawings, then a few lines
+  function drawLinePic(svgId, used, spared, name, stakesOf) {
+    var svg = $(svgId), W = 340, g = '';
+    function row(ids, y, label, withStakes) {
+      g += '<text x="4" y="' + (y - 22) + '" font-size="12" fill="#F0D27A">' + esc(label) + '</text>';
+      var n = ids.length; if (!n) { g += '<text x="4" y="' + (y + 4) + '" font-size="13" fill="#F3EEDD" opacity=".7">nobody</text>'; return; }
+      var step = Math.min(36, (W - 8) / n), x0 = 4 + (W - 8 - step * n) / 2 + (step - 28) / 2;
+      ids.forEach(function (id, i) {
+        var x = x0 + i * step;
+        g += '<g stroke="#F3EEDD" stroke-width="1.3"><use href="#' + (id === 'stone' ? 'i-stone' : iconOf(id)) + '" x="' + x + '" y="' + (y - 14) + '" width="28" height="28"/></g>';
+        if (withStakes) g += '<text x="' + (x + 14) + '" y="' + (y + 26) + '" text-anchor="middle" font-size="11" fill="#F0D27A">' + stakesOf(id) + '</text>';
+      });
+    }
+    row(used, 40, 'would use' + (used.length && stakesOf ? ' (for experiment 1, 2 or 3)' : ''), !!stakesOf);
+    g += '<path d="' + wobble(2, 338, 80) + '" fill="none" stroke="#E8664D" stroke-width="3.4" stroke-linecap="round" opacity=".95"/>';
+    g += '<text x="336" y="76" text-anchor="end" font-size="13" fill="#E8664D">' + esc(name) + '</text>';
+    row(spared, 122, 'would spare', false);
+    svg.innerHTML = g;
   }
   function endGame() {
-    var v = verdict({ ticks: S.ticks, answers: S.answers, skins: S.skins });
+    var v = verdict({ ticks: S.ticks, skins: S.skins });
     $('fate').textContent = v.fate;
-    function fill(id, arr) { $(id).innerHTML = arr.map(function (t) { return '<p>' + esc(t) + '</p>'; }).join(''); }
-    fill('v-paper', v.paper); fill('v-did', v.did); fill('v-found', v.found); fill('v-part', v.part); fill('v-stood', v.stood);
-    if (v.shape.id === 'refuse') $('v-stood').innerHTML += '<p><a href="../foot/foots-bad-man.html" style="color:#F0D27A">Play Foot\'s Bad Man →</a></p>';
-    $('said1').style.display = ''; $('find1').style.display = ''; $('aim1').style.display = '';
+    $('vp-yours').textContent = 'Your line: ' + v.name;
+    drawLinePic('pic-yours', v.line.used, v.line.spared, v.name, v.line.stakes);
+    drawLinePic('pic-singer', SUB.slice(), ['stone'], 'Singer\'s line', null);
+    $('v-singer').textContent = v.singerLine;
+    $('v-part').innerHTML = '<p>' + esc(v.part) + '</p>';
+    $('v-stood').innerHTML = '<p>' + esc(v.two) + '</p>' + (v.shape.id === 'refuse' ? '<p><a href="../foot/foots-bad-man.html" style="color:#F0D27A">Play Foot\'s Bad Man →</a></p>' : '');
     show('s-end');
   }
 
