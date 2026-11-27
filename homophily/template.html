@@ -10,7 +10,7 @@
 @font-face { font-family: 'Rubik'; src: url(data:font/woff2;base64,/*__FONT_RUBIK__*/) format('woff2'); font-weight: 300 900; font-display: block; }
 :root {
   --board: #1e2a5e; --board2: #16204b; --felt: #2b3a7a; --line: #3d4d92;
-  --big: #ffbe2e; --oth: #21c7b0; --star: #ff5d5d; --chalk: #fff6e3; --ok: #3ddc84;
+  --big: #ffbe2e; --oth: #21c7b0; --star: #ff5d5d; --chalk: #fff6e3; --ok: #3ddc84; --bar: #c9b8f5; /* --bar: the four applicant bars; yellow and teal are country colours only */
   --ink: #12183a; --dim: #b9c0e6;
   --emoji: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
 }
@@ -70,16 +70,14 @@ b { font-weight: 700; }
 .grow2 { display: flex; align-items: center; gap: 6px; margin-top: 3px; }
 .gtrack { position: relative; flex: 1; height: 13px; border-radius: 7px; background: rgba(255,255,255,.08); overflow: hidden; }
 .gfill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 7px; transition: width .6s cubic-bezier(.3,1.3,.5,1); }
-.gcell.both .gfill { background: var(--big); } .gcell.neither .gfill { background: var(--oth); } .gcell.mixed .gfill { background: var(--dim); opacity: .55; }
-.gcell.mixed .gl { color: var(--dim); }
+.gcell .gfill { background: var(--bar); }
 .gcell .gk { font-family: 'Bungee', sans-serif; font-size: 10px; color: var(--chalk); }
-.gcell.mixed .gk { color: var(--dim); }
 .gnum { font-family: 'Bungee', sans-serif; font-size: 14px; min-width: 30px; text-align: right; }
 /* the GAP meter */
 .meter { background: var(--board2); border: 2px solid var(--line); border-radius: 10px; padding: 4px 8px 4px; }
 .mrow { display: flex; align-items: center; gap: 8px; }
 .mlab { font-family: 'Bungee', sans-serif; font-size: 13px; }
-.mtrack { position: relative; flex: 1; height: 24px; border-radius: 12px; background: linear-gradient(90deg, var(--oth) 0%, rgba(255,255,255,.08) 30%, rgba(255,255,255,.08) 70%, var(--big) 100%); }
+.mtrack { position: relative; flex: 1; height: 24px; border-radius: 12px; background: linear-gradient(90deg, var(--bar) 0%, rgba(255,255,255,.08) 30%, rgba(255,255,255,.08) 70%, var(--bar) 100%); } /* the ends are the bar colour, not the country colours */
 .mzone { position: absolute; top: -3px; bottom: -3px; background: var(--ok); border: 2px solid var(--ink); border-radius: 7px; display: flex; align-items: center; justify-content: center;
   font-family: 'Bungee', sans-serif; font-size: 10px; color: var(--ink); }
 .mmark { position: absolute; top: -7px; width: 6px; height: 38px; margin-left: -3px; background: var(--chalk); border: 2px solid var(--ink); border-radius: 3px; transition: left .6s cubic-bezier(.3,1.3,.5,1); z-index: 2; }
@@ -104,8 +102,9 @@ b { font-weight: 700; }
 /* Round 2 carries the most: tighter spacing so the board stays one viewport at 380 × 760 */
 #s-r2 { gap: 5px; } #s-r2 .aim { padding: 5px 10px; line-height: 1.15; } #s-r2 .jc { min-height: 44px; } #s-r2 .box { padding: 6px; }
 #s-r2 .boxhead { margin-bottom: 3px; } #s-r2 .gcell .gl { min-height: 0; } #s-r2 .gcell { padding: 3px 7px 4px; } #s-r2 .meter { padding: 3px 8px; }
-/* the Big Five definition (start screen: legend with colour key; elsewhere: the same words, no key) */
+/* .key: the colour key, on every screen that shows both country colours and nowhere else; .def: the Big Five sentence, on screens that say Big Five but show no key */
 .def { font-size: 12px; color: var(--dim); line-height: 1.25; }
+.key { font-size: 12px; color: var(--dim); line-height: 1.25; }
 .sw { display: inline-block; width: 13px; height: 13px; border-radius: 3px; border: 2px solid var(--ink); vertical-align: -2px; margin: 0 3px 0 0; }
 .sw.big { background: var(--big); } .sw.oth { background: var(--oth); }
 .about p { font-size: 12.5px; line-height: 1.3; margin: 0 0 6px; }
@@ -119,12 +118,11 @@ b { font-weight: 700; }
   <h1>HOME JUDGES</h1>
   <div class="aim">You choose a panel of 15 judges for ERC-style grant reviews.</div>
   <p><b>Round 1:</b> Seat 15 judges. See which applicants receive more home advantage.</p>
-  <p><b>Round 2:</b> Fix a tilted panel. Level the home advantage between applicants whose passport and workplace are both Big Five* and applicants with neither. Four swaps.</p>
+  <p><b>Round 2:</b> Fix a tilted panel. Level the home advantage between applicants whose passport and workplace are both in Germany, the UK, France, Italy or Spain (the "Big Five", the five countries with the most ERC applicants) and applicants with neither. Four swaps.</p>
   <div class="example" id="ex1"></div>
   <div class="example" id="ex2"></div>
   <p class="small dim">🛂 = passport, 📍 = where they work.</p>
   <div class="grow"></div>
-  <p class="def" id="legend">* Big Five: the five countries with the most ERC applicants (DE, UK, FR, IT, ES).<br><span class="sw big"></span>Big Five country &nbsp; <span class="sw oth"></span>other country</p>
   <button class="btn wide" id="b-play">PLAY</button>
   <button class="btn chalk sm wide" id="b-about0">ABOUT</button>
 </section>
@@ -146,7 +144,8 @@ b { font-weight: 700; }
 <!-- ROUND 1 -->
 <section class="screen" id="s-r1">
   <div class="tag">ROUND 1 · YOUR PANEL</div>
-  <div class="aim" id="aim-r1">Seat the 15 judges you think are fair.</div>
+  <div class="aim" id="aim-r1">Seat the 15 judges.</div>
+  <p class="key"><span class="sw big"></span>Big Five country (DE, UK, FR, IT, ES) &nbsp; <span class="sw oth"></span>other country</p>
   <div class="box"><div class="boxhead"><span>THE PANEL</span><span class="cnt" id="cnt1"></span></div><div class="grid g5" id="table1"></div></div>
   <div id="r1-pick">
     <div class="boxhead" style="margin-top:2px"><span>CANDIDATES · TAP TO SEAT</span></div>
@@ -156,8 +155,7 @@ b { font-weight: 700; }
     <div class="ghead">AVERAGE HOME-ADVANTAGE TOKENS</div>
     <div id="bars1"></div>
     <p class="small dim" style="margin:5px 0">Each bar is one applicant group: passport from the Big Five or elsewhere, crossed with workplace in the Big Five or elsewhere. Higher means more home advantage.</p>
-    <p id="r1-result" style="margin-bottom:6px"></p>
-    <p class="def" style="margin-bottom:8px">Big Five: the five countries with the most ERC applicants (DE, UK, FR, IT, ES).</p>
+    <p id="r1-result" style="margin-bottom:8px"></p>
     <button class="btn wide" id="b-r2">ROUND 2</button>
   </div>
 </section>
@@ -168,7 +166,7 @@ b { font-weight: 700; }
   <div class="aim">Level the home advantage between applicants whose passport and workplace are both Big Five and applicants with neither. Four swaps.</div>
   <div><div class="ghead">AVERAGE HOME-ADVANTAGE TOKENS</div><div id="bars2"></div></div>
   <div class="meter" id="meter"></div>
-  <p class="def">Big Five: the five countries with the most ERC applicants (DE, UK, FR, IT, ES).</p>
+  <p class="key"><span class="sw big"></span>Big Five country (DE, UK, FR, IT, ES) &nbsp; <span class="sw oth"></span>other country</p>
   <div class="instr" id="instr">Tap a judge in the panel, then one on the bench, to swap them.</div>
   <div class="box" id="tablebox2"><div class="boxhead"><span>THE PANEL</span><span class="row" style="gap:6px"><span>SWAPS</span><span class="pips" id="pips"></span></span></div><div class="grid g5" id="table2"></div></div>
   <div class="box bench" id="benchbox"><div class="boxhead"><span>THE BENCH</span></div><div class="grid g5" id="bench"></div></div>
@@ -232,9 +230,8 @@ b { font-weight: 700; }
   const LAB = { bigP_bigW: 'Big Five passport, works in the Big Five', bigP_othW: 'Big Five passport, works elsewhere',
     othP_bigW: 'Other passport, works in the Big Five', othP_othW: 'Other passport, works elsewhere' };
   const KEY = { bigP_bigW: 'BOTH', bigP_othW: '', othP_bigW: '', othP_othW: 'NEITHER' };
-  const KIND = { bigP_bigW: 'both', bigP_othW: 'mixed', othP_bigW: 'mixed', othP_othW: 'neither' };
   function buildBars(el) {
-    el.innerHTML = '<div class="ggrid">' + M.CELLS.map(k => `<div class="gcell ${KIND[k]}" data-cell="${k}"><div class="gl">${KEY[k] ? `<span class="gk">${KEY[k]}</span> · ` : ''}${LAB[k]}</div>` +
+    el.innerHTML = '<div class="ggrid">' + M.CELLS.map(k => `<div class="gcell" data-cell="${k}"><div class="gl">${KEY[k] ? `<span class="gk">${KEY[k]}</span> · ` : ''}${LAB[k]}</div>` +
       `<div class="grow2"><div class="gtrack"><div class="gfill"></div></div><div class="gnum"></div></div></div>`).join('') + '</div>';
   }
   function setBars(el, e) {

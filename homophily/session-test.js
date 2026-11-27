@@ -29,7 +29,6 @@ const W = 380, H = 760;
   console.log('  badge label: ' + await p.$eval('#ex1 .jc', e => e.getAttribute('aria-label')));
   console.log('  help screen or ? button present:', await p.$$eval('#s-help, .q, [data-help]', x => x.length));
   // iteration 3: the legend, the colours, the citation and the definition on every screen that says "Big Five"
-  console.log('  legend: ' + await txt('#legend'));
   const bg = async (pp, ww) => { const c = await p.evaluate(([pp, ww]) => { const b = document.createElement('button'); b.className = 'jc'; const M2 = window.MECH; const grp = c => M2.isBig(c) ? 'big' : 'oth'; return grp(pp) + '/' + grp(ww); }, [pp, ww]); return c; };
   const colourOf = async (pp, ww) => p.evaluate(([pp, ww]) => { const e = document.querySelector(`.jc[data-p="${pp}"][data-w="${ww}"] .ln.p`); return e && getComputedStyle(e).backgroundColor; }, [pp, ww]);
   const checkColours = async () => {
@@ -38,13 +37,23 @@ const W = 380, H = 760;
     console.log(`  badge colours: US ${us} | CA ${ca} | NL ${nl} | DE ${de} -> ${okc ? 'US and CA coloured like other non-Big-Five countries' : 'MISMATCH'}`);
     if (!okc) errs.push('badge colours: US/CA not coloured like other non-Big-Five countries');
   };
+  // revision 4: the colour key on every screen that shows both country colours and nowhere else; where the key is shown,
+  // no "Big Five: ..." sentence; where a screen says Big Five without the key, the sentence (or, on the start screen, the
+  // plain-words introduction); the four bars one colour, neither yellow nor teal
   const checkDef = async name => {
     const r = await p.evaluate(() => { const s = document.querySelector('.screen.on'); const txt = s.innerText; const says = /Big Five/.test(txt);
-      const def = /Big Five: the five countries with the most ERC applicants \(DE, UK, FR, IT, ES\)/.test(txt); return { says, def, star: /Big Five\*/.test(txt), key: !!s.querySelector('.sw') }; });
-    console.log(`  [${name}] says "Big Five": ${r.says} | definition present: ${r.def} | asterisk: ${r.star} | colour key: ${r.key}`);
-    if (r.says && !r.def) errs.push(name + ': mentions the Big Five without the definition');
-    if (name !== 'start' && (r.star || r.key)) errs.push(name + ': asterisk or colour key outside the start screen');
-    if (name === 'start' && !(r.star && r.key)) errs.push('start: asterisk or colour key missing');
+      const cols = new Set([...s.querySelectorAll('.jc .ln.p, .jc .ln.w')].filter(e => e.offsetParent).map(e => getComputedStyle(e).backgroundColor));
+      const fills = [...s.querySelectorAll('.gfill')].filter(e => e.offsetParent).map(e => getComputedStyle(e).backgroundColor);
+      const big = getComputedStyle(document.documentElement).getPropertyValue('--big').trim(), oth = getComputedStyle(document.documentElement).getPropertyValue('--oth').trim();
+      const hex = h => { const n = parseInt(h.slice(1), 16); return `rgb(${n >> 16}, ${(n >> 8) & 255}, ${n & 255})`; };
+      return { says, def: /Big Five: the five countries with the most ERC applicants/.test(txt), intro: /the "Big Five", the five countries with the most ERC applicants/.test(txt),
+        star: /Big Five\*/.test(txt), key: !!s.querySelector('.key .sw'), bothColours: cols.size >= 2, fills: [...new Set(fills)], bigRgb: hex(big), othRgb: hex(oth) }; });
+    console.log(`  [${name}] says "Big Five": ${r.says} | both country colours on screen: ${r.bothColours} | colour key: ${r.key} | definition: ${r.def} | intro: ${r.intro} | asterisk: ${r.star}${r.fills.length ? ' | bar fills: ' + r.fills.join(' ') : ''}`);
+    if (r.bothColours !== r.key) errs.push(name + ': the colour key must be shown exactly when both country colours are');
+    if (r.key && r.def) errs.push(name + ': the definition sentence next to the key');
+    if (r.says && !r.key && !r.def && !r.intro) errs.push(name + ': says Big Five without the key, the sentence or the introduction');
+    if (r.star) errs.push(name + ': asterisk');
+    if (r.fills.length > 1 || r.fills.some(c => c === r.bigRgb || c === r.othRgb)) errs.push(name + ': bars not one colour, or yellow/teal');
   };
   await checkDef('start');
   const h = require('fs').readFileSync(__dirname + '/home-judges.html', 'utf8');
