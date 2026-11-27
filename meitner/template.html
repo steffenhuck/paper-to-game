@@ -79,6 +79,11 @@ p{margin:0 0 8px}
 .chip.gone b{text-decoration:line-through;color:#7A766D}
 .chip.stand{border-color:var(--red);background:#FBE3DF}
 .story p{font-size:16px;margin:0 0 10px}
+.claims{margin:0 0 10px}
+.clhead{font-size:15px;margin-bottom:4px}
+.clhead span{color:#4a463f}
+.chip.will{border-style:solid;border-color:var(--red);background:#F9DDD8}
+.chip.will i{font-weight:700;color:var(--ink)}
 .overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background-color:var(--wash);background-image:radial-gradient(var(--tone) 1px,transparent 1.3px);background-size:6px 6px;overflow:auto;z-index:9}.overlay.on{display:block}
 .overlay .wrap{padding-top:8px}
 .overlay h1{font-family:'Bangers',sans-serif;font-weight:400;font-size:34px;margin:4px 0 10px;letter-spacing:.02em}
@@ -151,6 +156,7 @@ svg .bang{font-family:'Bangers',sans-serif}
 <section id="s-bench" class="screen">
   <div class="top"><div><div class="kick" id="kick1"></div><div class="now" id="now1"></div></div><button class="qm" id="b-help-bench" aria-label="How to play">?</button></div>
   <div class="panel"><svg id="dropsvg" viewBox="0 0 340 184"></svg></div>
+  <div class="claims" id="claims"><div class="clhead"><b>The five "new elements":</b> <span id="clsay"></span></div><div class="chips" id="clchips"></div></div>
   <div class="said" id="said1"></div>
   <div class="row3" id="fire"><button class="btn small" id="b-left" aria-label="move the cut left">&#9666;</button><button class="btn red" id="b-split">Fire the neutron</button><button class="btn small" id="b-right" aria-label="move the cut right">&#9656;</button></div>
   <div class="row2"><button class="btn solid hidden" id="b-next">Next neutron</button></div>
@@ -472,6 +478,22 @@ svg .bang{font-family:'Bangers',sans-serif}
     Object.keys(TP.stripes).forEach(function (k) { TP.stripes[k].classList.remove('on'); });
     document.querySelectorAll('#shelf1 .card').forEach(function (c) { c.classList.remove('will'); c.classList.remove('iffail'); });
   }
+  // the strip under the drop: the five claimed "new elements", and what the cut under the red line would show about each
+  function drawClaims(pv) {
+    var box = $('claims'), eka = S.st.tubes.filter(function (t) { return M.isDashed(t.cellZ); });
+    if (!eka.length) { box.style.display = 'none'; return; }
+    box.style.display = '';
+    var would = {}; if (pv) pv.lights.forEach(function (l) { would[l.id] = l.atZ; });
+    var done = 0, now = 0;
+    $('clchips').innerHTML = eka.map(function (t) {
+      var l = S.st.lit[t.id], cls = 'claim', note = 'new?';
+      if (l) { cls = 'gone'; note = M.nameOf(l.atZ); done++; }
+      else if (would[t.id] !== undefined) { cls = 'will'; note = M.nameOf(would[t.id]); now++; }
+      return '<span class="chip ' + cls + '" data-id="' + t.id + '"><b>' + t.cellZ + '</b><i>' + note + '</i></span>';
+    }).join('');
+    $('clsay').textContent = done === eka.length ? 'All five are shown to be old elements.' :
+      (now ? 'If the drop splits here, ' + (now === 1 ? 'one turns out to be an old element.' : now + ' turn out to be old elements.') : 'If the drop splits here, none of the five is explained.') + (done ? ' Done so far: ' + done + '.' : '');
+  }
   function previewMove() {
     clearPreview();
     var pv = M.preview(S.st, S.Z1);
@@ -489,9 +511,11 @@ svg .bang{font-family:'Bangers',sans-serif}
     });
     if (pv.failLights) { var cf = document.querySelector('#shelf1 .card[data-id="' + pv.failLights + '"]'); if (cf) cf.classList.add('iffail'); }
     $('cap').innerHTML = M.previewWords(S.st, S.Z1);
+    drawClaims(pv);
   }
   function lightTube(id, atZ) {
     var g = TP.tubes[id], p = cellXY(atZ); g.classList.add('lit'); g.setAttribute('transform', 'translate(' + p.x + ' ' + p.y + ')'); sym(TP, atZ, false); lightCard(id, atZ);
+    var ch = document.querySelector('#clchips .chip[data-id="' + id + '"]'); if (ch) { ch.className = 'chip gone'; ch.querySelector('i').textContent = M.nameOf(atZ); }
     if (TP.stripes[id]) { TP.stripes[id].classList.remove('on'); TP.stripes[id].classList.add('lit'); }
   }
 

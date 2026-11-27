@@ -273,3 +273,7 @@ Steffen's note: the verdict was mechanical, a flaw of the memo's four-section ha
 ## 26. Rev. 8 (27 Nov): the question first, the table second
 
 Steffen: still out of his depth with the table; shouldn't it focus on whether the new elements were discovered? On the bench the order is now: drop, first-neutron guide ("Are they really new?", what explains a tube), fire, live preview line, the shelf of eight tubes under "Is it really new? n of 8 explained", then the table with a plain caption (numbers, columns). The guide was cut to three short paragraphs so that the fire button stays on screen at 380x700 (bottom 566 of 700). Open: whether the table should go altogether in favour of look-alike families per tube; not tried.
+
+## 27. Rev. 9 (27 Nov): the claims strip
+
+Steffen: when the line moves, something should say whether new elements can be found; the table is still hard to read. A strip of five chips (93 to 97) now sits under the drop: dashed "new?" by default, red with the real element's name for those the current cut would explain (from `preview().lights`), grey and struck through once explained. Its line says how many the cut would explain. No cut can leave a genuinely new element: pieces land in the middle of the table. Hidden on thorium. The first guide was cut to two lines for the first paragraph so that the fire button stays on screen (bottom 643 of 700). Still open: the table itself, which could be folded away or replaced by look-alike families.

@@ -79,6 +79,11 @@ p{margin:0 0 8px}
 .chip.gone b{text-decoration:line-through;color:#7A766D}
 .chip.stand{border-color:var(--red);background:#FBE3DF}
 .story p{font-size:16px;margin:0 0 10px}
+.claims{margin:0 0 10px}
+.clhead{font-size:15px;margin-bottom:4px}
+.clhead span{color:#4a463f}
+.chip.will{border-style:solid;border-color:var(--red);background:#F9DDD8}
+.chip.will i{font-weight:700;color:var(--ink)}
 .overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background-color:var(--wash);background-image:radial-gradient(var(--tone) 1px,transparent 1.3px);background-size:6px 6px;overflow:auto;z-index:9}.overlay.on{display:block}
 .overlay .wrap{padding-top:8px}
 .overlay h1{font-family:'Bangers',sans-serif;font-weight:400;font-size:34px;margin:4px 0 10px;letter-spacing:.02em}
@@ -151,6 +156,7 @@ svg .bang{font-family:'Bangers',sans-serif}
 <section id="s-bench" class="screen">
   <div class="top"><div><div class="kick" id="kick1"></div><div class="now" id="now1"></div></div><button class="qm" id="b-help-bench" aria-label="How to play">?</button></div>
   <div class="panel"><svg id="dropsvg" viewBox="0 0 340 184"></svg></div>
+  <div class="claims" id="claims"><div class="clhead"><b>The five "new elements":</b> <span id="clsay"></span></div><div class="chips" id="clchips"></div></div>
   <div class="said" id="said1"></div>
   <div class="row3" id="fire"><button class="btn small" id="b-left" aria-label="move the cut left">&#9666;</button><button class="btn red" id="b-split">Fire the neutron</button><button class="btn small" id="b-right" aria-label="move the cut right">&#9656;</button></div>
   <div class="row2"><button class="btn solid hidden" id="b-next">Next neutron</button></div>
@@ -214,6 +220,7 @@ svg .bang{font-family:'Bangers',sans-serif}
   <p>The sixth build (27 November 2026) removed the briefing screen that sat between the title and the first cut. It repeated the table, its goal line did not match what the screen let you do, and it made a hard game harder. Play now goes straight to the first cut, and the one sentence it needed, what makes a tube light, is the guide above the first neutron. Tapping a tube in the table still says what else stands in its column.</p>
   <p>The seventh build (27 November 2026) rewrote the verdict. It used to be four fixed sections. It is now a scoreboard of the chemists' five "new elements" (how many the chemists claimed, how many you took away, how many the paper took away) followed by a short story of your own run. The paper took away all five and left one thing open, element 93 from the 24-minute uranium. Outside the paper: Meitner and Hahn reported the real element protactinium (91) in 1918, which the closing paragraph mentions.</p>
   <p>The eighth build (27 November 2026) followed the author's note that the table was still the hardest part and that the game should be about whether the "new elements" were really discovered. The play screen now opens with that question. The shelf of eight tubes sits above the table under the heading "Is it really new?", with a count of tubes explained, and the table is explained as where the pieces land. The mechanism is unchanged.</p>
+  <p>The ninth build (27 November 2026) added a strip under the drop with the chemists' five "new elements". As the red line moves, it shows which of the five the cut would show to be old elements, and under what name; once a cut is made, they stay marked. The mechanism is unchanged.</p>
   <p><b>A thing the paper could not know.</b> The odds in this game favour an even split, which is the paper's picture of "two nuclei of roughly equal size". Measurements made soon after 1939 showed that uranium most often splits unevenly, into one heavier and one lighter piece, and that barium with krypton is among the common pairs. So barium is the unlikely tube in this game and a common product in the real thing. The game keeps the paper's picture because the paper is the game's authority; the odds curve is ours, and it says nothing about how often an uneven split happens in nature.</p>
   <p>The half-lives of the nine periods are dropped except the 24 minutes; the 10 s and 40 s bodies are folded into the masurium tubes. Mesothorium and the separation itself stay here. The size of the shove (about 200 Mev, million electron-volts, in the paper), the mass the pieces lose for it (about a fifth of a proton between them, by E = mc<sup>2</sup>) and the origin of the word "fission" are in the paper's text above and no longer on the play screens. Nuclear isomerism, Gamow's theory and the lifetime of the compound state are mentioned only in the verdict and here. Cerium, named in the paper's chains, has no tube of its own: in 1939 tables cerium's column was ambiguous (the paper's own parallel, barium-lanthanum-cerium against strontium-yttrium-zirconium, puts it under zirconium), so it is named in the result lines instead. The clock is compressed: a climb that takes seconds to days on the bench takes two seconds on screen. "Masurium" is the 1939 name for element 43; it is called technetium today, and the 1925 claim to have found it was not sound. The imagined drop of 100 charges is marked as imagined on screen; element 100, fermium, was made in 1952 and does not fall apart unprovoked, since the real critical charge lies higher than the paper's rough estimate.</p>
   <h2>Where to read the paper</h2>
@@ -446,7 +453,7 @@ function lessonOf(st, move) {
 function coachWords(st) {
   var left = st.tubes.filter(function (t) { return !st.lit[t.id]; });
   if (st.used === 0) return st.nuc.name === 'uranium' ?
-    'Five of the chemists\' eight tubes (the dashed ones, 93 to 97) are said to hold new elements, heavier than uranium. Are they really new?</p>' +
+    'The chemists say five tubes hold new elements. Are they really new?</p>' +
     '<p>You are the uranium. Cut yourself in two. A tube lights up when a piece of yours turns into an old element that acts just like it: the same column of the table, the same chemistry. Then it is not new.</p>' +
     '<p>Drag the red line, then fire. If the drop splits, watch what the two pieces turn into. If the cut fails, watch what the drop turns into.' :
     cap(st.nuc.name) + ' (' + st.nuc.Z + '): same game, two new tubes, three neutrons. A tube lights when one of your pieces ends up in its column. Drag the red line, then fire.';
@@ -887,6 +894,22 @@ if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
     Object.keys(TP.stripes).forEach(function (k) { TP.stripes[k].classList.remove('on'); });
     document.querySelectorAll('#shelf1 .card').forEach(function (c) { c.classList.remove('will'); c.classList.remove('iffail'); });
   }
+  // the strip under the drop: the five claimed "new elements", and what the cut under the red line would show about each
+  function drawClaims(pv) {
+    var box = $('claims'), eka = S.st.tubes.filter(function (t) { return M.isDashed(t.cellZ); });
+    if (!eka.length) { box.style.display = 'none'; return; }
+    box.style.display = '';
+    var would = {}; if (pv) pv.lights.forEach(function (l) { would[l.id] = l.atZ; });
+    var done = 0, now = 0;
+    $('clchips').innerHTML = eka.map(function (t) {
+      var l = S.st.lit[t.id], cls = 'claim', note = 'new?';
+      if (l) { cls = 'gone'; note = M.nameOf(l.atZ); done++; }
+      else if (would[t.id] !== undefined) { cls = 'will'; note = M.nameOf(would[t.id]); now++; }
+      return '<span class="chip ' + cls + '" data-id="' + t.id + '"><b>' + t.cellZ + '</b><i>' + note + '</i></span>';
+    }).join('');
+    $('clsay').textContent = done === eka.length ? 'All five are shown to be old elements.' :
+      (now ? 'If the drop splits here, ' + (now === 1 ? 'one turns out to be an old element.' : now + ' turn out to be old elements.') : 'If the drop splits here, none of the five is explained.') + (done ? ' Done so far: ' + done + '.' : '');
+  }
   function previewMove() {
     clearPreview();
     var pv = M.preview(S.st, S.Z1);
@@ -904,9 +927,11 @@ if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
     });
     if (pv.failLights) { var cf = document.querySelector('#shelf1 .card[data-id="' + pv.failLights + '"]'); if (cf) cf.classList.add('iffail'); }
     $('cap').innerHTML = M.previewWords(S.st, S.Z1);
+    drawClaims(pv);
   }
   function lightTube(id, atZ) {
     var g = TP.tubes[id], p = cellXY(atZ); g.classList.add('lit'); g.setAttribute('transform', 'translate(' + p.x + ' ' + p.y + ')'); sym(TP, atZ, false); lightCard(id, atZ);
+    var ch = document.querySelector('#clchips .chip[data-id="' + id + '"]'); if (ch) { ch.className = 'chip gone'; ch.querySelector('i').textContent = M.nameOf(atZ); }
     if (TP.stripes[id]) { TP.stripes[id].classList.remove('on'); TP.stripes[id].classList.add('lit'); }
   }
 

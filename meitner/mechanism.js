@@ -221,7 +221,7 @@ function lessonOf(st, move) {
 function coachWords(st) {
   var left = st.tubes.filter(function (t) { return !st.lit[t.id]; });
   if (st.used === 0) return st.nuc.name === 'uranium' ?
-    'Five of the chemists\' eight tubes (the dashed ones, 93 to 97) are said to hold new elements, heavier than uranium. Are they really new?</p>' +
+    'The chemists say five tubes hold new elements. Are they really new?</p>' +
     '<p>You are the uranium. Cut yourself in two. A tube lights up when a piece of yours turns into an old element that acts just like it: the same column of the table, the same chemistry. Then it is not new.</p>' +
     '<p>Drag the red line, then fire. If the drop splits, watch what the two pieces turn into. If the cut fails, watch what the drop turns into.' :
     cap(st.nuc.name) + ' (' + st.nuc.Z + '): same game, two new tubes, three neutrons. A tube lights when one of your pieces ends up in its column. Drag the red line, then fire.';
