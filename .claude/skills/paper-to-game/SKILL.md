@@ -33,7 +33,7 @@ Asked together, in the first reply, before the paper is opened, and skipped wher
 
 ## 1. The player
 
-A smart person from outside the field, on a phone, who did not ask for homework. They tapped a link because someone they like sent it. They will give it thirty seconds before deciding whether to give it five minutes. They read nothing longer than two lines before they are allowed to do something. They do not know the field's words and will not look them up. They can follow a number if told what it measures. They like being surprised, they like being right, and they like being wrong when the game is kind about it.
+A smart person from outside the field, on a phone, who did not ask for homework. They tapped a link because someone they like sent it. They will give it thirty seconds before deciding whether to give it five minutes. They read nothing longer than two lines before they are allowed to do something, and two lines is not the measure: one new idea is. They do not know the field's words and will not look them up. They can follow a number if told what it measures. They like being surprised, they like being right, and they like being wrong when the game is kind about it.
 
 What they want, in order: something to do right away, with an obvious thing to press and an obvious thing that happens; a reason to care that fits in a sentence; feedback they can see; a moment of discovery; a sense of getting better; a verdict in a few lines. Decoration, tutorials, dashboards, tables, the abstract and anything in Greek are what they came to avoid.
 
@@ -191,6 +191,8 @@ Each concept names: position, format, controls, what the player is thinking abou
 ### The first five minutes
 
 For the pick and the runner-up: the stranger's experience in the present tense, minute by minute — what they see, what they are wondering, what they want to press, what they are weighing, what happens, where they grin, where they frown. This is the test that kills a concept on paper rather than after a build. "I press it to see what happens" is fine when the seeing builds understanding the player later uses; "and I don't know what I'm supposed to feel" means a demonstration where a game was needed. If the walkthrough cannot be written, there is no game there.
+
+Write, for each concept, what the player must already understand for the first action to be a decision rather than a press. If the answer is anything not on the screen, the concept starts too deep in the paper: the game needs an earlier first action, one that needs nothing and produces the first idea. The debt is paid by play, not borrowed before it, and the harder the paper, the more this decides the game. Ask the same of every later step: is what the player needs here something they produced earlier in play?
 
 Write, for the first action, the middle one and the last, what the player is thinking before they press. If the middle and the last answers are the same as the first, or "nothing", the concept has hands and no decision, however good the first minute. When one concept holds the decision and another holds the hands, write the hybrid, the decision carried out by the hands, before picking; the game is usually there.
 
