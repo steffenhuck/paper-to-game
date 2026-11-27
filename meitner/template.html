@@ -154,10 +154,13 @@ svg .bang{font-family:'Bangers',sans-serif}
   <div class="said" id="said1"></div>
   <div class="row3" id="fire"><button class="btn small" id="b-left" aria-label="move the cut left">&#9666;</button><button class="btn red" id="b-split">Fire the neutron</button><button class="btn small" id="b-right" aria-label="move the cut right">&#9656;</button></div>
   <div class="row2"><button class="btn solid hidden" id="b-next">Next neutron</button></div>
-  <div class="panel"><svg id="tablesvg" viewBox="0 0 340 166"></svg></div>
   <p class="cap" id="cap"></p>
   <div class="shead" id="shead1"></div>
+  <p class="def" id="shsub">A dashed tube is a claimed new element. It lights up, and is explained, when a piece of yours turns into an old element that acts like it.</p>
   <div class="cards" id="shelf1"></div>
+  <div class="shead">The table</div>
+  <p class="def">Every element has a number, its place in the table: barium is 56, uranium 92. Your pieces land here and change. Elements in one column act alike, so a chemist cannot tell them apart.</p>
+  <div class="panel"><svg id="tablesvg" viewBox="0 0 340 166"></svg></div>
 </section>
 
 <!-- END -->
@@ -387,7 +390,7 @@ svg .bang{font-family:'Bangers',sans-serif}
   function dotsHTML() { var left = S.st.neutrons - S.st.used, s = ''; for (var i = 0; i < S.st.neutrons; i++) s += i < left ? '<b>&#9679;</b>' : '<i>&#9679;</i>'; return s; }
   function setKick(num, done) { $('kick1').innerHTML = 'Neutron ' + num + ' of ' + S.st.neutrons + (done ? ' done' : '') + ' &middot; ' + S.stages[S.i].label + ' <span class="dots">' + dotsHTML() + '</span>'; }
   function setNow(s) { $('now1').textContent = s; }
-  function setShelfCount() { var n = document.querySelectorAll('#shelf1 .card.lit').length; $('shead1').textContent = 'The shelf · ' + n + ' of ' + S.st.tubes.length + ' lit'; }
+  function setShelfCount() { var n = document.querySelectorAll('#shelf1 .card.lit').length; $('shead1').textContent = 'Is it really new? · ' + n + ' of ' + S.st.tubes.length + ' explained'; $('shsub').style.display = S.st.nuc.name === 'uranium' ? '' : 'none'; }
   function lightCard(id, atZ) {
     var c = document.querySelector('#shelf1 .card[data-id="' + id + '"]'); if (!c) return;
     c.classList.add('lit'); c.classList.remove('will'); c.classList.remove('iffail'); c.querySelector('.ct').textContent = M.tubeAnswer(M.tubeById(S.st.tubes, id), atZ); setShelfCount();

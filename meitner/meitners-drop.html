@@ -154,10 +154,13 @@ svg .bang{font-family:'Bangers',sans-serif}
   <div class="said" id="said1"></div>
   <div class="row3" id="fire"><button class="btn small" id="b-left" aria-label="move the cut left">&#9666;</button><button class="btn red" id="b-split">Fire the neutron</button><button class="btn small" id="b-right" aria-label="move the cut right">&#9656;</button></div>
   <div class="row2"><button class="btn solid hidden" id="b-next">Next neutron</button></div>
-  <div class="panel"><svg id="tablesvg" viewBox="0 0 340 166"></svg></div>
   <p class="cap" id="cap"></p>
   <div class="shead" id="shead1"></div>
+  <p class="def" id="shsub">A dashed tube is a claimed new element. It lights up, and is explained, when a piece of yours turns into an old element that acts like it.</p>
   <div class="cards" id="shelf1"></div>
+  <div class="shead">The table</div>
+  <p class="def">Every element has a number, its place in the table: barium is 56, uranium 92. Your pieces land here and change. Elements in one column act alike, so a chemist cannot tell them apart.</p>
+  <div class="panel"><svg id="tablesvg" viewBox="0 0 340 166"></svg></div>
 </section>
 
 <!-- END -->
@@ -210,6 +213,7 @@ svg .bang{font-family:'Bangers',sans-serif}
   <p>The fifth build (27 November 2026) added hand-holding on the author's note that it still needed more. Before the first cut the game says what to watch for whether the drop splits or the cut fails. Under the table, every cut says what it lights and what you will learn if it splits and if it fails. After each result, one line says what you learned, and a "still dark" line says where to look next. These lessons are the paper's three findings in a sentence each (pieces from the middle can pass for new elements; barium comes out with krypton as its partner; a neutron can just get caught, the 24-minute stuff) and thorium's one; they are not new claims.</p>
   <p>The sixth build (27 November 2026) removed the briefing screen that sat between the title and the first cut. It repeated the table, its goal line did not match what the screen let you do, and it made a hard game harder. Play now goes straight to the first cut, and the one sentence it needed, what makes a tube light, is the guide above the first neutron. Tapping a tube in the table still says what else stands in its column.</p>
   <p>The seventh build (27 November 2026) rewrote the verdict. It used to be four fixed sections. It is now a scoreboard of the chemists' five "new elements" (how many the chemists claimed, how many you took away, how many the paper took away) followed by a short story of your own run. The paper took away all five and left one thing open, element 93 from the 24-minute uranium. Outside the paper: Meitner and Hahn reported the real element protactinium (91) in 1918, which the closing paragraph mentions.</p>
+  <p>The eighth build (27 November 2026) followed the author's note that the table was still the hardest part and that the game should be about whether the "new elements" were really discovered. The play screen now opens with that question. The shelf of eight tubes sits above the table under the heading "Is it really new?", with a count of tubes explained, and the table is explained as where the pieces land. The mechanism is unchanged.</p>
   <p><b>A thing the paper could not know.</b> The odds in this game favour an even split, which is the paper's picture of "two nuclei of roughly equal size". Measurements made soon after 1939 showed that uranium most often splits unevenly, into one heavier and one lighter piece, and that barium with krypton is among the common pairs. So barium is the unlikely tube in this game and a common product in the real thing. The game keeps the paper's picture because the paper is the game's authority; the odds curve is ours, and it says nothing about how often an uneven split happens in nature.</p>
   <p>The half-lives of the nine periods are dropped except the 24 minutes; the 10 s and 40 s bodies are folded into the masurium tubes. Mesothorium and the separation itself stay here. The size of the shove (about 200 Mev, million electron-volts, in the paper), the mass the pieces lose for it (about a fifth of a proton between them, by E = mc<sup>2</sup>) and the origin of the word "fission" are in the paper's text above and no longer on the play screens. Nuclear isomerism, Gamow's theory and the lifetime of the compound state are mentioned only in the verdict and here. Cerium, named in the paper's chains, has no tube of its own: in 1939 tables cerium's column was ambiguous (the paper's own parallel, barium-lanthanum-cerium against strontium-yttrium-zirconium, puts it under zirconium), so it is named in the result lines instead. The clock is compressed: a climb that takes seconds to days on the bench takes two seconds on screen. "Masurium" is the 1939 name for element 43; it is called technetium today, and the 1925 claim to have found it was not sound. The imagined drop of 100 charges is marked as imagined on screen; element 100, fermium, was made in 1952 and does not fall apart unprovoked, since the real critical charge lies higher than the paper's rough estimate.</p>
   <h2>Where to read the paper</h2>
@@ -442,8 +446,8 @@ function lessonOf(st, move) {
 function coachWords(st) {
   var left = st.tubes.filter(function (t) { return !st.lit[t.id]; });
   if (st.used === 0) return st.nuc.name === 'uranium' ?
-    'Your pieces land on the chemists\' table. Every element has a number, its place in the table: barium is 56, uranium 92.</p>' +
-    '<p>A tube lights when one of your pieces ends up in its column: same column, same chemistry. The dashed tubes are the chemists\' "new elements", 93 to 97.</p>' +
+    'Five of the chemists\' eight tubes (the dashed ones, 93 to 97) are said to hold new elements, heavier than uranium. Are they really new?</p>' +
+    '<p>You are the uranium. Cut yourself in two. A tube lights up when a piece of yours turns into an old element that acts just like it: the same column of the table, the same chemistry. Then it is not new.</p>' +
     '<p>Drag the red line, then fire. If the drop splits, watch what the two pieces turn into. If the cut fails, watch what the drop turns into.' :
     cap(st.nuc.name) + ' (' + st.nuc.Z + '): same game, two new tubes, three neutrons. A tube lights when one of your pieces ends up in its column. Drag the red line, then fire.';
   if (!left.length) return '';
@@ -801,7 +805,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
   function dotsHTML() { var left = S.st.neutrons - S.st.used, s = ''; for (var i = 0; i < S.st.neutrons; i++) s += i < left ? '<b>&#9679;</b>' : '<i>&#9679;</i>'; return s; }
   function setKick(num, done) { $('kick1').innerHTML = 'Neutron ' + num + ' of ' + S.st.neutrons + (done ? ' done' : '') + ' &middot; ' + S.stages[S.i].label + ' <span class="dots">' + dotsHTML() + '</span>'; }
   function setNow(s) { $('now1').textContent = s; }
-  function setShelfCount() { var n = document.querySelectorAll('#shelf1 .card.lit').length; $('shead1').textContent = 'The shelf · ' + n + ' of ' + S.st.tubes.length + ' lit'; }
+  function setShelfCount() { var n = document.querySelectorAll('#shelf1 .card.lit').length; $('shead1').textContent = 'Is it really new? · ' + n + ' of ' + S.st.tubes.length + ' explained'; $('shsub').style.display = S.st.nuc.name === 'uranium' ? '' : 'none'; }
   function lightCard(id, atZ) {
     var c = document.querySelector('#shelf1 .card[data-id="' + id + '"]'); if (!c) return;
     c.classList.add('lit'); c.classList.remove('will'); c.classList.remove('iffail'); c.querySelector('.ct').textContent = M.tubeAnswer(M.tubeById(S.st.tubes, id), atZ); setShelfCount();
