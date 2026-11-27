@@ -66,6 +66,19 @@ p{margin:0 0 8px}
 .fate{font-family:'Bangers',sans-serif;font-size:36px;line-height:1;margin:4px 0 12px;color:var(--red);letter-spacing:.02em;-webkit-text-stroke:1px var(--ink);paint-order:stroke fill}
 .sec h2,h2{font-family:'Bangers',sans-serif;font-weight:400;font-size:22px;letter-spacing:.03em;margin:12px 0 4px;color:var(--ink)}
 .sec p{font-size:16px}
+.board{border:3px solid var(--ink);background:#fff;padding:10px 10px 4px;margin:4px 0 14px}
+.board h2{margin:0 0 6px;font-size:20px}
+.brow{margin:0 0 12px}
+.bwho{font-weight:700;font-size:15px;margin-bottom:5px}
+.bwho span{font-weight:400;color:#4a463f}
+.chips{display:flex;gap:4px}
+.chip{flex:1;min-width:0;border:2px dashed var(--ink);background:#fff;text-align:center;padding:3px 1px 4px}
+.chip b{display:block;font-family:'Bangers',sans-serif;font-weight:400;font-size:19px;line-height:1.1}
+.chip i{display:block;font-style:normal;font-size:10.5px;line-height:1.15;overflow-wrap:anywhere}
+.chip.gone{border-style:solid;background:#ECE8DE}
+.chip.gone b{text-decoration:line-through;color:#7A766D}
+.chip.stand{border-color:var(--red);background:#FBE3DF}
+.story p{font-size:16px;margin:0 0 10px}
 .overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background-color:var(--wash);background-image:radial-gradient(var(--tone) 1px,transparent 1.3px);background-size:6px 6px;overflow:auto;z-index:9}.overlay.on{display:block}
 .overlay .wrap{padding-top:8px}
 .overlay h1{font-family:'Bangers',sans-serif;font-weight:400;font-size:34px;margin:4px 0 10px;letter-spacing:.02em}
@@ -151,10 +164,8 @@ svg .bang{font-family:'Bangers',sans-serif}
 <section id="s-end" class="screen">
   <div class="kicker">The verdict</div>
   <div class="fate" id="fate"></div>
-  <div class="sec"><h2>What the paper found</h2><div id="v-paper"></div></div>
-  <div class="sec"><h2>What you found</h2><div id="v-found"></div></div>
-  <div class="sec"><h2>Where you and the paper part</h2><div id="v-part"></div></div>
-  <div class="sec"><h2>Had your shelf stood</h2><div id="v-stood"></div></div>
+  <div class="board" id="v-board"></div>
+  <div class="story" id="v-story"></div>
   <div class="row2"><button class="btn solid" id="b-again">Play again</button><button class="btn" id="b-about-end">About</button></div>
   <p class="cred">Built from Lise Meitner and O. R. Frisch, "Disintegration of Uranium by Neutrons: a New Type of Nuclear Reaction", <i>Nature</i> 143, 239–240 (1939). The paper is the authority where the two disagree.</p>
   <p class="cred" id="seedline"></p>
@@ -591,10 +602,13 @@ svg .bang{font-family:'Bangers',sans-serif}
   function endGame() {
     var v = M.verdict(S.done[0], S.done[1]);
     $('fate').textContent = v.fate;
-    $('v-paper').innerHTML = '<p>' + v.paper + '</p>';
-    $('v-found').innerHTML = v.found.map(function (l) { return '<p>' + l + '</p>'; }).join('');
-    $('v-part').innerHTML = v.part.map(function (l) { return '<p>' + l + '</p>'; }).join('');
-    $('v-stood').innerHTML = '<p>' + v.stood + '</p>';
+    var chip = function (c, mode) { return '<span class="chip ' + mode + '"><b>' + c.Z + '</b><i>' + (mode === 'claim' ? 'new?' : (mode === 'stand' ? 'still new?' : (c.real || 'not new'))) + '</i></span>'; };
+    var row = function (who, what, chips) { return '<div class="brow"><div class="bwho">' + who + ' <span>' + what + '</span></div><div class="chips">' + chips + '</div></div>'; };
+    $('v-board').innerHTML = '<h2>New elements beyond uranium</h2>' +
+      row('The chemists, 1938', 'claimed ' + v.claimed + ' new elements.', v.chips.map(function (c) { return chip(c, 'claim'); }).join('')) +
+      row('You', 'took away ' + v.you + ' of the ' + v.claimed + '.', v.chips.map(function (c) { return chip(c, c.real ? 'gone' : 'stand'); }).join('')) +
+      row('Meitner and Frisch, 1939', 'took away ' + v.paperDown + ' of the ' + v.claimed + '.', v.chips.map(function (c) { return chip({ Z: c.Z }, 'gone'); }).join(''));
+    $('v-story').innerHTML = v.story.map(function (l) { return '<p>' + l + '</p>'; }).join('');
     $('seedline').textContent = 'The draws in this game came from seed ' + S.seed + '. Add ?seed=' + S.seed + ' to the address to play the same draws again.';
     show('s-end');
   }

@@ -31,10 +31,8 @@ var stU = stage(U, C.TUBES_U, C.NEUTRONS_U, actsU, 'URANIUM AT THE BENCH (seed '
 var stT = stage(TH, C.TUBES_TH, C.NEUTRONS_TH, actsT, 'THORIUM. The chemists also bombarded thorium: two more tubes, filed as radium and actinium');
 var v = m.verdict(stU, stT);
 say('\n== VERDICT. Large: ' + v.fate);
-say('   What the paper found: ' + v.paper);
-v.found.forEach(function (l) { say('   What you found: ' + l); });
-v.part.forEach(function (l) { say('   Where you part: ' + l); });
-say('   Had yours stood: ' + v.stood);
+say('   Scoreboard: chemists claimed ' + v.claimed + '; you took away ' + v.you + '; the paper ' + v.paperDown);
+v.story.forEach(function (l) { say('   ' + l); });
 
 // ---- the table of obvious strategies (build.md section 3), over 1000 seeds ----
 say('\n== STRATEGIES (uranium, ' + C.NEUTRONS_U + ' neutrons, 1000 seeds): mean tubes lit of 8, mean ghosts down of 5, P(all 8), P(24-min tube), mean cuts failed');

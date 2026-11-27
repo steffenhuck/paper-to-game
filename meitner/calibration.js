@@ -146,7 +146,7 @@ ok(Z1s.every(function (z) { var pv = m.split(U, z); var st9 = m.newStage(U, C.TU
 // the verdict is fair about luck (rev. 3): a clear shelf in four neutrons with pinches the skin took does not say that three would have done
 var vs = m.newStage(U, C.TUBES_U, 4, 2); [56, 56, 43, 52].forEach(function (z) { m.play(vs, { kind: 'split', Z1: z }); });
 var vv = m.verdict(vs, null);
-ok(vv.allU && vs.moves.some(function (x) { return x.kind === 'rang'; }) && vv.found.join(' ').indexOf('used up your spare') > 0 && vv.found.join(' ').indexOf('Three would have done') < 0, 'rev. 3: a shelf cleared in four neutrons after the skin took some says so, and does not say that three would have done (seed 2)');
+ok(vv.allU && vs.moves.some(function (x) { return x.kind === 'rang'; }) && vv.story.join(' ').indexOf('used up your spare') > 0 && vv.story.join(' ').indexOf('Three would have done') < 0, 'rev. 3: a shelf cleared in four neutrons after the skin took some says so, and does not say that three would have done (seed 2)');
 ok(Z1s.every(function (z) { var s2 = m.newStage(U, C.TUBES_U, 5); s2.rng = function () { return 0.9999; }; var mv2 = m.play(s2, { kind: 'split', Z1: z }); return mv2.kind === 'split' ? m.splitOdds(U, z) === 1 : m.moveWords(s2, mv2).length >= 2; }), 'every pinch the skin can pull back has words for that too');
 var sH = m.newStage(U, C.TUBES_U, 5); ok(m.moveWords(sH, m.play(sH, { kind: 'hold' })).length >= 2, 'the hold has words');
 var paths = [[{ kind: 'split', Z1: 56 }, { kind: 'split', Z1: 43 }, { kind: 'hold' }], [{ kind: 'split', Z1: 46 }, { kind: 'split', Z1: 46 }, { kind: 'split', Z1: 46 }, { kind: 'split', Z1: 46 }], [{ kind: 'hold' }, { kind: 'hold' }, { kind: 'hold' }, { kind: 'hold' }], [{ kind: 'split', Z1: 28 }, { kind: 'split', Z1: 64 }, { kind: 'split', Z1: 30 }, { kind: 'split', Z1: 33 }], [{ kind: 'split', Z1: 56 }, { kind: 'split', Z1: 44 }, { kind: 'split', Z1: 38 }, { kind: 'hold' }], [{ kind: 'split', Z1: 60 }, { kind: 'split', Z1: 60 }, { kind: 'split', Z1: 60 }, { kind: 'split', Z1: 60 }]];
@@ -154,7 +154,8 @@ paths.forEach(function (p, i) {
   var a = m.newStage(U, C.TUBES_U, C.NEUTRONS_U, 11 + i); p.forEach(function (x) { m.play(a, x); });
   var b = m.newStage(TH, C.TUBES_TH, 2); m.play(b, { kind: 'split', Z1: i % 2 ? 45 : 56 });
   var v = m.verdict(a, b);
-  ok(v.fate && v.paper && v.found.length >= 4 && v.part.length >= 1 && v.stood && v.seed !== undefined, 'verdict path ' + (i + 1) + ': "' + v.fate + '" with ' + v.found.length + ' findings and ' + v.part.length + ' partings');
+  var txt = v.story.join(' ');
+  ok(v.fate && v.chips.length === 5 && v.claimed === 5 && v.paperDown === 5 && v.you >= 0 && v.you <= 5 && v.chips.filter(function (c) { return c.real; }).length === v.you && v.story.length >= 5 && /What Meitner and Frisch saw/.test(txt) && /protactinium/.test(txt) && v.seed !== undefined && (v.you === 5 ? /All five/.test(txt) : (v.you === 0 ? /None of the five/.test(txt) : /still stands? in the dashed row/.test(txt))), 'rev. 6 verdict path ' + (i + 1) + ': "' + v.fate + '", you took away ' + v.you + ' of 5, the story has ' + v.story.length + ' paragraphs');
 });
 
 // ---------- rev. 4: the whole range, the chance in percent, the preview that tells the truth ----------

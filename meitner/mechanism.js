@@ -337,46 +337,51 @@ function uniq(a) { return a.filter(function (x, i) { return a.indexOf(x) === i; 
 
 // ---------- the verdict ----------
 function countWord(n) { return ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'][n] || String(n); }
+function listAnd(a) { return a.length <= 1 ? (a[0] || '') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; }
+// rev. 6: the verdict is a scoreboard (how many of the chemists' five "new elements" were taken away: by the player, by the paper)
+// followed by a short story of the run, in plain sentences. No more four fixed sections.
 function verdict(stU, stTh) {
   var TU = stU.tubes, eka = TU.filter(function (t) { return isDashed(t.cellZ); });
   var ekaDown = eka.filter(function (t) { return stU.lit[t.id]; }).length;
   var ekaLeft = eka.length - ekaDown;
+  var chips = eka.map(function (t) { var l = stU.lit[t.id]; return { Z: t.cellZ, real: l ? nameOf(l.atZ) : null }; });
   var baLa = ['ba', 'la'].filter(function (id) { return stU.lit[id]; }).length;
   var holdFound = !!stU.lit.u24;
   var allU = TU.every(function (t) { return stU.lit[t.id]; });
   var thLit = stTh ? stTh.tubes.filter(function (t) { return stTh.lit[t.id]; }).length : 0;
   var thAll = stTh ? thLit === stTh.tubes.length : false;
   var splits = stU.moves.filter(function (m) { return m.kind === 'split'; });
+  var caught = stU.moves.filter(function (m) { return m.kind === 'rang' || m.kind === 'hold'; });
   var rangs = stU.moves.filter(function (m) { return m.kind === 'rang'; });
   var unevens = splits.concat(rangs).filter(function (m) { return m.uneven; });
   var fate = (ekaLeft === 0 ? (allU ? 'THE "NEW ELEMENTS" WERE NEVER THERE' : 'THE "NEW ELEMENTS" ARE GONE, BUT TUBES STILL WAIT') : (ekaLeft === 1 ? 'ONE "NEW ELEMENT" STILL STANDS' : countWord(ekaLeft).toUpperCase() + ' "NEW ELEMENTS" STILL STAND'));
-  var paper = 'Uranium does not just chip. A neutron can make it split in two, like a drop that barely holds together, and the halves fly apart with a huge shove. If one half is barium, the other is krypton: their numbers add up to 92. So the chemists\' "new elements" were very probably never there. They are middle-weight elements that act like the ones beyond uranium. The 24-minute stuff is uranium that caught a neutron. Thorium splits the same way.';
-  var found = [];
-  if (splits.length) found.push('Your cuts: ' + splits.map(function (m) { return m.Z1 + ' | ' + m.Z2 + ' (' + nameOf(m.Z1) + ' and ' + nameOf(m.Z2) + ')'; }).join('; ') + '.');
-  if (rangs.length) found.push(cap(countWord(rangs.length)) + ' of your cuts failed (' + rangs.map(function (m) { return m.Z1 + ' | ' + m.Z2; }).join(', ') + '). A failed cut keeps its neutron, so ' + (rangs.length === 1 ? 'that neutron was' : 'those neutrons were') + ' spent without a split.');
-  else if (splits.length) found.push('Every cut worked.');
-  if (baLa === 2) found.push('Barium and lanthanum: lit. Their partner was forced: the two halves always add up to 92, so barium (56) goes with krypton (36).');
-  else if (baLa === 1) found.push('One of barium and lanthanum: lit; the other not.');
-  else found.push('Barium and lanthanum: still dark. Barium coming out of uranium is the paper\'s first fact, and your cuts never made it.');
-  if (ekaDown === eka.length) found.push('All five "new elements" came down into the middle of the table: ' + ekaNames(stU) + '.');
-  else if (ekaDown) found.push(cap(countWord(ekaDown)) + ' of the five "new elements" came down (' + ekaNames(stU) + '); ' + countWord(ekaLeft) + ' still stand' + (ekaLeft === 1 ? 's' : '') + ' in the dashed row.');
-  else found.push('None of the five "new elements" came down. They still stand in the dashed row as elements nobody has ever seen.');
-  var holdHow = stU.lit.u24 && stU.moves.some(function (m) { return m.kind === 'hold'; }) ? 'hold' : (stU.lit.u24 ? 'rang' : null);
-  found.push(holdHow === 'hold' ? 'The 24-minute tube: lit. It is a drop that caught its neutron, uranium-239.' : (holdHow === 'rang' ? 'The 24-minute tube: lit by a failed cut. The drop kept its neutron and became uranium-239.' : 'The 24-minute tube: still dark. It needs a drop that keeps its neutron, and none of your cuts failed.'));
-  if (stTh) found.push(thAll ? 'Thorium: both tubes lit. Its "radium" and "actinium" are barium and lanthanum, or their column-mates.' : (thLit ? 'Thorium: one of its two tubes lit.' : 'Thorium: both tubes dark. Its "radium" and "actinium" are still a mystery on your shelf.'));
-  var nTxt = 'Neutrons: ' + countWord(stU.used) + ' on uranium' + (stTh ? ' and ' + countWord(stTh.used) + ' on thorium' : '') + '.';
-  if (allU) nTxt += stU.used <= 3 ? ' Three is the fewest that can work.' : (rangs.length ? ' Failed cuts took ' + countWord(rangs.length) + ' of them, which used up your spare.' : ' Three would have done.');
-  found.push(nTxt);
-  var part = [];
-  if (allU && thAll) part.push('Nowhere that matters: every tube is a middle-weight element or uranium itself.');
-  if (ekaLeft) part.push('The paper brings all five "new elements" down with one idea: a piece near masurium changes five times and passes five columns. On your shelf ' + countWord(ekaLeft) + ' still stand' + (ekaLeft === 1 ? 's' : '') + ' beyond uranium.');
-  if (baLa < 2) part.push('The paper starts from barium, the one fact the chemists were sure of. Your cuts did not make it.');
-  if (!holdFound) part.push('The paper keeps one body as genuine uranium-239, a drop that kept its neutron. You never had one.');
-  if (unevens.length) part.push('You cut far from the middle ' + countWord(unevens.length) + (unevens.length === 1 ? ' time' : ' times') + '. The paper speaks of "two nuclei of roughly equal size"; in this game such a cut fails more often than not.');
-  if (stTh && !thAll) part.push('The paper suggests thorium splits like uranium and gives partly the same products. Your thorium cuts did not show it.');
-  var stood = allU ? 'Nothing beyond uranium, apart from one quiet element 93. The chemists\' "new elements" go back into the middle of the table, and their barium is just barium.' :
-    (countWord(ekaLeft + (holdFound ? 0 : 1) + (2 - baLa)).replace(/^./, function (c) { return c.toUpperCase(); }) + ' of the chemists\' bodies would still be ' + (ekaLeft ? 'elements nobody has ever seen' : 'a mystery') + '. The drop would have split on your shelf, but the chemists\' table would not have been corrected.');
-  return { fate: fate, paper: paper, found: found, part: part, stood: stood, allU: allU, ekaLeft: ekaLeft, holdFound: holdFound, thAll: thAll, seed: stU.seed };
+  var story = [];
+  // 1. what the player did
+  var cuts = splits.map(function (m) { return nameOf(m.Z1) + ' and ' + nameOf(m.Z2); });
+  var p1 = splits.length ? 'You split the uranium into ' + cuts.join(', then into ') + '.' : 'None of your cuts split the drop.';
+  if (caught.length) p1 += ' ' + cap(countWord(caught.length)) + (caught.length === 1 ? ' cut' : ' cuts') + ' failed. When a cut fails the drop keeps its neutron and becomes uranium-239, so ' + (caught.length === 1 ? 'that neutron was' : 'those neutrons were') + ' spent without a split.';
+  else if (splits.length) p1 += ' Every cut worked.';
+  p1 += holdFound ? ' That is what lit the 24-minute tube: a drop that has caught a neutron is still uranium, and the chemists had found that too.' : ' The 24-minute tube stayed dark. It only lights when a drop keeps its neutron, and none of yours did.';
+  story.push(p1);
+  // 2. barium, the one sure fact
+  story.push(baLa === 2 ? 'Barium and lanthanum both came out of your uranium. When barium (56) comes out, its partner has to be krypton (36), because the two pieces always add up to 92. Barium was the one fact the chemists were sure of, and it is where the paper starts.' :
+    baLa === 1 ? 'One of barium and lanthanum came out of your uranium; the other did not. Barium was the one fact the chemists were sure of, and it is where the paper starts. Its partner is always krypton (56 + 36 = 92).' :
+    'Barium and lanthanum never came out of your uranium. Barium was the one fact the chemists were sure of, and it is where the paper starts. Its partner is always krypton (56 + 36 = 92).');
+  // 3. the five "new elements"
+  var idea = 'The paper takes all five away with one idea: a piece that starts near masurium changes five times, and so it passes through five columns.';
+  story.push(ekaDown === eka.length ? 'All five of the chemists\' "new elements" turned out to be old ones: ' + ekaNames(stU) + '. A piece from the middle of the table changes a few times after the split. On the way it stands in the same column as an element the chemists thought was new, and a tube cannot tell two elements of one column apart.' :
+    ekaDown ? cap(countWord(ekaDown)) + ' of the five "new elements" turned out to be old ones: ' + ekaNames(stU) + '. ' + cap(countWord(ekaLeft)) + (ekaLeft === 1 ? ' still stands' : ' still stand') + ' in the dashed row on your shelf, an element nobody has ever seen. ' + idea :
+    'None of the five "new elements" turned out to be old ones. They still stand in the dashed row on your shelf, elements nobody has ever seen. ' + idea);
+  // 4. thorium
+  if (stTh) story.push(thAll ? 'Thorium split the same way. Its "radium" and "actinium" turned out to be barium and lanthanum, or their column-mates.' : (thLit ? 'Thorium: one of its two tubes lit, the other did not. The paper suggests that thorium splits like uranium and gives partly the same products.' : 'Thorium: neither of its two tubes lit. The paper suggests that thorium splits like uranium and gives partly the same products; your thorium cuts did not show it.'));
+  // 5. where the player parted from the paper, and the neutrons
+  if (unevens.length) story.push('You cut far from the middle ' + countWord(unevens.length) + (unevens.length === 1 ? ' time' : ' times') + '. The paper speaks of "two nuclei of roughly equal size"; in this game such a cut fails more often than not.');
+  var nTxt = 'You used ' + countWord(stU.used) + ' neutrons on uranium' + (stTh ? ' and ' + countWord(stTh.used) + ' on thorium' : '') + '.';
+  if (allU) nTxt += stU.used <= 3 ? ' Three is the fewest that can light all eight tubes.' : (rangs.length ? ' Failed cuts took ' + countWord(rangs.length) + ' of them, which used up your spare.' : ' Three would have done.');
+  story.push(nTxt);
+  // 6. what Meitner and Frisch saw
+  story.push('<b>What Meitner and Frisch saw.</b> Uranium does not just chip. A neutron can make it split in two, like a drop that barely holds together, and the halves fly apart with a huge shove. They had no new element to show for it: they took all five away. They left one thing open, the 24-minute uranium, which may turn into a real element 93, the one element beyond uranium their paper allows. Meitner had found a real element before, protactinium (91), together with Otto Hahn in 1918. This time she found that five were not there.');
+  return { fate: fate, chips: chips, claimed: eka.length, you: ekaDown, paperDown: eka.length, story: story, allU: allU, ekaLeft: ekaLeft, holdFound: holdFound, thAll: thAll, seed: stU.seed };
 }
 function ekaNames(stU) {
   var out = [];

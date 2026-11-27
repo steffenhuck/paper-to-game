@@ -55,8 +55,8 @@ var URL = 'file://' + path.resolve('meitners-drop.html');
     }
     await shot('end', true); await nohs('end');
     console.log(tag, 'FATE |', await pg.textContent('#fate'), '|', await pg.textContent('#seedline'));
-    console.log(tag, 'FOUND |', await pg.textContent('#v-found'));
-    console.log(tag, 'PART |', await pg.textContent('#v-part'));
+    console.log(tag, 'BOARD |', await pg.textContent('#v-board'));
+    console.log(tag, 'STORY |', await pg.textContent('#v-story'));
     await pg.click('#b-about-end'); await pg.waitForTimeout(200); await shot('about', true); await pg.click('#b-about-close');
     await pg.click('#b-again'); await pg.waitForTimeout(200); console.log(tag, 'again ->', await pg.evaluate("document.querySelector('.screen.on').id"));
     await ctx.close();
