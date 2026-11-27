@@ -169,7 +169,7 @@ a{color:var(--chalk)}
   <div class="fate" id="fate"></div>
   <div class="vp-head" id="vp-yours"></div>
   <div class="verdictpic"><svg id="pic-yours" viewBox="0 0 340 150"></svg></div>
-  <div class="vp-head">Singer's line</div>
+  <div class="vp-head">Singer's line: whose pain counts</div>
   <div class="verdictpic"><svg id="pic-singer" viewBox="0 0 340 150"></svg></div>
   <p class="find" id="v-singer"></p>
   <div class="sec"><h2>Where you and Singer part</h2><div id="v-part"></div></div>
@@ -446,7 +446,7 @@ function verdict(state) {
   else if (s.id === 'line') { fate = 'You drew a straight line in the wrong place.'; part = 'At the rule. A rule you can check gives your choices, so they are not made by hand; but Singer says it is the wrong rule, as arbitrary as skin colour: the ones you would use are hurt exactly as much as the ones you would spare. ' + team; }
   else if (s.id === 'species') { fate = 'Your hand drew the line, not a rule.'; part = 'At the line. The only difference between the animals you would use and the people you would spare that fits what you did is the team each is on. Singer\'s word for that is speciesism, and he says it is the same pattern as racism and sexism.'; }
   else { fate = 'You drew your own order.'; part = 'At the line. No rule with a ranking gives your choices, and the team\'s rule does not either. Singer would ask what the ones you would use have in common; if you can name it, the board can check it. ' + team; }
-  var singerLine = 'Singer\'s line puts all nine on one side and the stone alone on the other: whoever can suffer counts, and counts the same.';
+  var singerLine = 'Singer\'s line is not about whom to use. It is about whose pain counts: all nine on one side, their pain counting the same, and the stone alone on the other, with nothing to count. Whom you may use for an experiment then follows: either anyone, or no one.';
   return { fate: fate, name: w.name, who: w.who, part: part, singerLine: singerLine, two: two, shape: s, line: line, did: didWords(ticks) };
 }
 
@@ -633,8 +633,8 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, expName: e
     window.scrollTo(0, 0);
   }
   // ---- the verdict: two drawings, then a few lines
-  function drawLinePic(svgId, used, spared, name, stakesOf) {
-    var svg = $(svgId), W = 340, g = '';
+  function drawLinePic(svgId, used, spared, name, stakesOf, labels) {
+    var svg = $(svgId), W = 340, g = ''; labels = labels || ['would use', 'would spare'];
     function row(ids, y, label, withStakes) {
       g += '<text x="4" y="' + (y - 22) + '" font-size="12" fill="#F0D27A">' + esc(label) + '</text>';
       var n = ids.length; if (!n) { g += '<text x="4" y="' + (y + 4) + '" font-size="13" fill="#F3EEDD" opacity=".7">nobody</text>'; return; }
@@ -645,10 +645,10 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, expName: e
         if (withStakes) g += '<text x="' + (x + 14) + '" y="' + (y + 26) + '" text-anchor="middle" font-size="11" fill="#F0D27A">' + stakesOf(id) + '</text>';
       });
     }
-    row(used, 40, 'would use' + (used.length && stakesOf ? ' (for experiment 1, 2 or 3)' : ''), !!stakesOf);
+    row(used, 40, labels[0] + (used.length && stakesOf ? ' (for experiment 1, 2 or 3)' : ''), !!stakesOf);
     g += '<path d="' + wobble(2, 338, 80) + '" fill="none" stroke="#E8664D" stroke-width="3.4" stroke-linecap="round" opacity=".95"/>';
     g += '<text x="336" y="76" text-anchor="end" font-size="13" fill="#E8664D">' + esc(name) + '</text>';
-    row(spared, 122, 'would spare', false);
+    row(spared, 122, labels[1], false);
     svg.innerHTML = g;
   }
   function endGame() {
@@ -656,7 +656,7 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, expName: e
     $('fate').textContent = v.fate;
     $('vp-yours').textContent = 'Your line: ' + v.name;
     drawLinePic('pic-yours', v.line.used, v.line.spared, v.name, v.line.stakes);
-    drawLinePic('pic-singer', SUB.slice(), ['stone'], 'Singer\'s line', null);
+    drawLinePic('pic-singer', SUB.slice(), ['stone'], 'Singer\'s line', null, ['their pain counts, and counts the same', 'nothing to count']);
     $('v-singer').textContent = v.singerLine;
     $('v-part').innerHTML = '<p>' + esc(v.part) + '</p>';
     $('v-stood').innerHTML = '<p>' + esc(v.two) + '</p>' + (v.shape.id === 'refuse' ? '<p><a href="../foot/foots-bad-man.html" style="color:#F0D27A">Play Foot\'s Bad Man →</a></p>' : '');
