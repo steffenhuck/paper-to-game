@@ -109,7 +109,7 @@ A game ends. Where there are rounds, there is a last one, and no retry past it; 
 
 A score needs an objective, and an objective picks a side. Where the paper sets two values against each other and does not rank them (Benjamin's cult value against exhibition value), the game does not rank them either: no number, no best path, no "could have done". The verdict says what became of things on the path the player took, in the paper's own terms, and the player judges. The arithmetic stays underneath, unseen, so that the pictures and the lines agree with each other; nothing is shown as a quantity. Such a game is replayed to see the other fates, not to beat a number, and the aim is phrased as a decision ("decide who sees the face, and how"), not a maximum.
 
-The verdict compares the player with the paper, in words: what the paper found; what the player found; where the two part; and, where the game can say it, what would have followed had the player's result stood. It does not replay the rounds: a table of every round is a record, not a verdict.
+The verdict compares the player with the paper, in words, so that the player can see what they did, what the paper found and where the two differ. Everything else about it is this game's to decide: its form, its length, its order, what it shows and what it leaves to the player. It is written in the game's register from the game's own material, and it looks like no other verdict in the repository. A fixed set of headings is not a verdict; neither is a table of the rounds.
 
 A game ends when its discovery has landed. A paper's second half, a corollary, an epilogue, a moral, is read on the verdict screen, not played, unless it holds a second mystery the player can act on with a real outcome at stake. A last choice with nothing at stake is a reading dressed as a decision, and the verdict is not the place for one.
 
@@ -161,9 +161,9 @@ Then answer, in writing:
 
 ## 5. Precedent
 
-Before any concept is chosen, read the games table in the repository README and the "pick" and "look" sections of the three most recent memos. Write down, in the memo, for each of those three games: the player position, the format, the feedback device, and the chassis (register and its family, palette, type).
+Before any concept is chosen, read the games table in the repository README and the "pick", "shape", "aim and verdict" and "look" sections of the three most recent memos. Write down, in the memo, for each of those three games: the player position, the format, the feedback device, the shape of play (section 6), the form of the verdict, and the chassis (register and its family, palette, type).
 
-The new game shares none of these four with any of the three. Precedent is something to move away from. If the paper plainly wants a position one of the last three used, say so and make the other three dimensions differ instead; the look always differs.
+The new game shares none of these six with any of the three. Precedent is something to move away from. If the paper plainly wants a position one of the last three used, say so and make the other three dimensions differ instead; the look always differs.
 
 ---
 
@@ -178,9 +178,13 @@ The new game shares none of these four with any of the three. Precedent is somet
 - **Dilemma** — for conceptual or normative papers: the player walks through the situations the paper describes, chooses, and sees the point unfold.
 - **Forecaster** — bets on what the system will do; the finding is the reveal. The last resort, used when the positions above were written out and failed, and even then as an opening or a close around something the player does.
 
+### The shape of play
+
+The game has a shape: what the player does from the first action to the last, and how the sequence is built. It comes from the paper's argument, not from what has worked before, and the memo says in a sentence what in the paper asked for it. Three concepts have three shapes.
+
 ### Three concepts, always
 
-Generate three concepts at three different positions. At least one casts something non-obvious as the agent: the cell, the institution, the molecule, the press release. One of the three is the reckless one — the concept the builder half-expects to fail: a strange agent, a play screen with no words on it, real time, the paper's own instrument handed to the player, the mechanism run backwards. Its walkthrough is written whether or not it is picked, and if it loses, the memo says what was given up.
+Generate three concepts at three different positions, with three different shapes of play. At least one casts something non-obvious as the agent: the cell, the institution, the molecule, the press release. One of the three is the reckless one — the concept the builder half-expects to fail: a strange agent, a play screen with no words on it, real time, the paper's own instrument handed to the player, the mechanism run backwards. Its walkthrough is written whether or not it is picked, and if it loses, the memo says what was given up.
 
 Each concept names: position, format, controls, what the player is thinking about before they act, what they see after, the moment of discovery, the sources of fun, and what a second playthrough offers.
 
@@ -235,12 +239,12 @@ Written in full and shown to the user before the build, as a record, not a quest
 3. **The discovery, and its kind.**
 4. **The core narrative** — one paragraph that almost anybody could follow.
 5. **Who lives in the paper** — the candidate players and what each controls.
-6. **Precedent** — the last three games' position, format, device and chassis; what this game does differently on each.
-7. **The aim and the verdict** — the aim as the sentence the player will read; the verdict as the lines the end screen leads with (what the paper found; what you found; where you part; what would have followed had yours stood), in words.
+6. **Precedent** — the last three games' position, format, device, shape, verdict form and chassis; what this game does differently on each.
+7. **The aim and the verdict** — the aim as the sentence the player will read; the verdict as the end screen will carry it, in words.
 8. **Three concepts** — each with position, format, controls, deliberation, discovery moment, sources of fun, replayability; the reckless one marked.
 9. **The first five minutes** for the pick and the runner-up.
 10. **The pick, and why**; runner-up and switch condition; the author test; what the reckless concept would have given if it was not picked.
-11. **The shape** — rounds, screens, presets and their sources, order and reason, score or none.
+11. **The shape** — the shape of play in a sentence and what in the paper asked for it; then rounds, screens, presets and their sources, order and reason, score or none.
 12. **Controls, mechanism, feedback, moment** — named concretely for the pick.
 13. **The look** — register and where it came from; palette, type, buttons, the one visual rule; what the player looks at on the play screen, how big, how many, what question each picture answers.
 14. **What is cut.**
