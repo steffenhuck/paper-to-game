@@ -15,10 +15,11 @@ while (!m.isOver(s)) {
   say('   Preview on the map: ' + s.known.map(function (n) { return n + ' = ' + lineWord(m.catOf(ev[n] || 0)); }).join('; '));
   say('   [Spend the week]');
   var rec = m.playWeek(s, ev);
-  rec.thinned.forEach(function (x) { say('   ' + x.who + ' got no evening: the line thins, ' + x.from + ' to ' + x.to + '.'); });
+  rec.thinned.forEach(function (x) { say('   ' + x.who + ' got no evening: the line thins, ' + x.from + ' to ' + x.to + ' (a coin).'); });
+  if (rec.held.length) say('   No evening, line held for now: ' + rec.held.map(function (x) { return x.who; }).join(', ') + '.');
   rec.closures.forEach(function (c) { say('   The town: ' + c[0] + ' and ' + c[1] + ' come to know each other (you see both often). A new dashed line.'); });
   rec.intros.forEach(function (x) { say('   The town: ' + x.by + ' introduces you to ' + x.who + ' (' + m.circleLabel(x.circle) + '). A new dashed line; a new name on your map.'); });
-  if (rec.chance) say('   By chance you run into ' + rec.chance.who + ', from ' + m.circleLabel(rec.chance.circle).toLowerCase() + '. A new dashed line.');
+  if (rec.chance) say(rec.chance.revive ? '   By chance you run into ' + rec.chance.who + ' at a wedding: the old line is back, thick, for this week.' : '   By chance you run into ' + rec.chance.who + ', from ' + m.circleLabel(rec.chance.circle).toLowerCase() + '. A new dashed line.');
   var oftenOut = s.known.filter(function (n) { return m.catOf(ev[n] || 0) === 'often' && m.circleOf(n) !== 'home'; });
   if (oftenOut.length) say('   ' + oftenOut.join(' and ') + ' spent two evenings with you, so their lines in their own circle go thin this week.');
   rec.pieces.forEach(function (p, i) {
