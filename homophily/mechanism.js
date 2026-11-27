@@ -1,10 +1,11 @@
 // Home Judges — the mechanism. The single source of truth: build.py inlines this file verbatim into home-judges.html,
 // and calibration.js runs against this same file. Plain functions, no DOM. Runs unchanged in Node and in the browser.
 //
-// Paper: Fuchs-Schündeln & Holub, "Homophily in Grant Evaluations" (WZB / Goethe University Frankfurt).
-// Iteration 2. Kind: a toy on real data. The applicant mix is the authors' applicant file (embedded below, verbatim);
+// Paper: Fuchs-Schündeln, N. & Holub, F. (2026). Homophily in grant evaluations. Nature Human Behaviour.
+// https://doi.org/10.1038/s41562-026-02554-w
+// Iteration 3. Kind: a toy on real data. The applicant mix is the authors' applicant file (embedded below, verbatim);
 // the rosters are curated from their panel-member file; the token rule (3 / 1 / 0) and the random assignment of
-// judges within a panel are the game's simplifications. See memo.md §21.
+// judges within a panel are the game's simplifications. See memo.md §21 and, for the gap, §22.
 
 const CONFIG = {
   // --- Scoring input: applicant_country_citizenship.csv, embedded verbatim (country = where the applicant works,
@@ -45,7 +46,7 @@ Spain,Italy,0.006834532374100719`,
     'Israel': 'IL', 'Finland': 'FI', 'Belgium': 'BE', 'Sweden': 'SE', 'Portugal': 'PT', 'Poland': 'PL', 'Denmark': 'DK',
     'Austria': 'AT', 'Ireland': 'IE', 'Norway': 'NO', 'Türkiye': 'TR', 'Greece': 'GR', 'Switzerland': 'CH', 'Czechia': 'CZ',
     'United States': 'US', 'Hungary': 'HU', 'Canada': 'CA', 'Australia': 'AU', 'Slovenia': 'SI' },
-  bigFive: ['DE', 'UK', 'FR', 'IT', 'ES'], // the five largest ERC-application countries (paper, Table 2)
+  bigFive: ['DE', 'UK', 'FR', 'IT', 'ES'], // the five countries with the most ERC applicants (paper, Table 2). The US is not one of them.
 
   // --- The game's token rule (a game scale, not the paper's 1–5 score scale) -----------------------------------
   tokens: { both: 3, one: 1, none: 0 }, // same passport AND same work country / exactly one of the two / neither
@@ -67,7 +68,7 @@ Spain,Italy,0.006834532374100719`,
   tilted: 'DE/DE DE/DE IT/IT IT/IT UK/UK FR/FR ES/ES US/US NL/NL BE/BE DE/CH IT/UK SE/SE CA/CA PL/PL',
   bench: 'IL/IL FI/FI PT/PT PL/PL DK/DK GR/GR CZ/CZ NO/NO DE/AT UK/UK',
   swaps: 4,       // round 2 swap budget (kept from iteration 1)
-  levelTol: 0.3,  // LEVEL zone: |gap| <= 0.3 tokens. Recalibrated for the token rule (calibration.js §4)
+  levelTol: 0.3,  // LEVEL zone: |gap| <= 0.3 tokens, gap = BOTH minus NEITHER (see evaluate; calibration.js §5)
   gapMax: 1.5,    // display: the GAP meter runs from -1.5 to +1.5 tokens
   barMax: 2.5,    // display: a full bar is 2.5 tokens
 
@@ -114,7 +115,10 @@ function cellOf(a) { return (isBig(a.p) ? 'bigP' : 'othP') + '_' + (isBig(a.w) ?
 
 // Expected home-advantage tokens for one applicant: reviewersPerProposal judges drawn at random from the panel,
 // so R × (mean tokens over the panel's judges). A group's value is the share-weighted average over its applicants.
-// big / other: by workplace (the success measure); cells: passport × workplace.
+// cells: passport × workplace, the four bars. The GAP compares two of them by name (iteration 3, Felix Holub's
+// second prompt): BOTH = Big Five passport and works in the Big Five; NEITHER = other passport and works elsewhere.
+// The two mixed groups are shown as bars but are left out of the gap, the ratio and LEVEL.
+// big / other (by workplace only) are kept for the calibration's bookkeeping; the game no longer shows them.
 function evaluate(panel, opts) {
   opts = opts || {};
   const rule = opts.rule || CONFIG.tokens, apps = opts.applicants || APPLICANTS;
@@ -128,8 +132,9 @@ function evaluate(panel, opts) {
   const g = k => acc[k] ? { tokens: acc[k].v / acc[k].w, weight: acc[k].w } : { tokens: 0, weight: 0 };
   const out = { big: g('big'), other: g('other'), cells: {} };
   CELLS.forEach(k => { out.cells[k] = g(k); });
-  out.gap = out.big.tokens - out.other.tokens;
-  out.ratio = out.other.tokens > 0 ? out.big.tokens / out.other.tokens : Infinity;
+  out.both = out.cells.bigP_bigW; out.neither = out.cells.othP_othW;
+  out.gap = out.both.tokens - out.neither.tokens;
+  out.ratio = out.neither.tokens > 0 ? out.both.tokens / out.neither.tokens : Infinity;
   out.level = Math.abs(out.gap) <= CONFIG.levelTol;
   return out;
 }
@@ -169,18 +174,18 @@ function finishRound2(st) { return Object.assign({}, st, { done: true }); }
 // A tiny seeded RNG for the calibration check's simulation (not used by the game)
 function rng(seed) { let s = seed >>> 0; return () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 // Simulate applicants drawn by share, each read by 4 or 5 judges drawn at random from the panel (mean 4.2);
-// returns mean tokens for works-in-Big-Five and works-elsewhere: a check of evaluate()'s expectation.
+// returns mean tokens for the BOTH and NEITHER groups: a check of evaluate()'s expectation.
 function simulate(panel, nProps, seed) {
-  const r = rng(seed), tot = APPLICANTS.reduce((a, b) => a + b.s, 0), acc = { big: [0, 0], other: [0, 0] };
+  const r = rng(seed), tot = APPLICANTS.reduce((a, b) => a + b.s, 0), acc = { both: [0, 0], neither: [0, 0], mixed: [0, 0] };
   for (let k = 0; k < nProps; k++) {
     let u = r() * tot, a = APPLICANTS[0];
     for (const x of APPLICANTS) { u -= x.s; if (u <= 0) { a = x; break; } }
     const m = r() < (CONFIG.reviewersPerProposal - 4) ? 5 : 4, idx = panel.map((_, i) => i);
     for (let i = 0; i < m; i++) { const j = i + Math.floor(r() * (idx.length - i)); [idx[i], idx[j]] = [idx[j], idx[i]]; }
     let t = 0; for (let i = 0; i < m; i++) t += tokensFor(matchType(a, panel[idx[i]]));
-    const G = acc[isBig(a.w) ? 'big' : 'other']; G[0] += t; G[1]++;
+    const cell = cellOf(a), G = acc[cell === 'bigP_bigW' ? 'both' : cell === 'othP_othW' ? 'neither' : 'mixed']; G[0] += t; G[1]++;
   }
-  return { big: acc.big[0] / acc.big[1], other: acc.other[0] / acc.other[1] };
+  return { both: acc.both[0] / acc.both[1], neither: acc.neither[0] / acc.neither[1] };
 }
 
 const MECH = { CONFIG, APPLICANTS, CELLS, cellOf, parseApplicants, parseJudges, isBig, matchType, tokensFor, evaluate,

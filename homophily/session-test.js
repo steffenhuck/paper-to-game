@@ -1,4 +1,4 @@
-// Browser session test (build step 6), iteration 2: drives home-judges.html at 380 × 760 through a full session.
+// Browser session test (build step 6), iteration 3: drives home-judges.html at 380 × 760 through a full session.
 // Checks on every screen: no vertical or horizontal page scrolling, every control inside the viewport, badges at least
 // 44 px tap targets. Run: node session-test.js [outdir] > session-log.txt   (needs playwright)
 const { chromium } = require('playwright');
@@ -28,8 +28,30 @@ const W = 380, H = 760;
   console.log('START: ' + await txt('#s-start .aim')); await shot('start');
   console.log('  badge label: ' + await p.$eval('#ex1 .jc', e => e.getAttribute('aria-label')));
   console.log('  help screen or ? button present:', await p.$$eval('#s-help, .q, [data-help]', x => x.length));
-  await p.click('#b-play'); await p.waitForTimeout(150); await shot('rules');
-  await p.click('#b-r1'); await p.waitForTimeout(150); await shot('r1-empty');
+  // iteration 3: the legend, the colours, the citation and the definition on every screen that says "Big Five"
+  console.log('  legend: ' + await txt('#legend'));
+  const bg = async (pp, ww) => { const c = await p.evaluate(([pp, ww]) => { const b = document.createElement('button'); b.className = 'jc'; const M2 = window.MECH; const grp = c => M2.isBig(c) ? 'big' : 'oth'; return grp(pp) + '/' + grp(ww); }, [pp, ww]); return c; };
+  const colourOf = async (pp, ww) => p.evaluate(([pp, ww]) => { const e = document.querySelector(`.jc[data-p="${pp}"][data-w="${ww}"] .ln.p`); return e && getComputedStyle(e).backgroundColor; }, [pp, ww]);
+  const checkColours = async () => {
+    const us = await colourOf('US', 'US'), ca = await colourOf('CA', 'CA'), nl = await colourOf('NL', 'NL'), de = await colourOf('DE', 'DE');
+    const okc = us && us === nl && (!ca || ca === nl) && de !== nl;
+    console.log(`  badge colours: US ${us} | CA ${ca} | NL ${nl} | DE ${de} -> ${okc ? 'US and CA coloured like other non-Big-Five countries' : 'MISMATCH'}`);
+    if (!okc) errs.push('badge colours: US/CA not coloured like other non-Big-Five countries');
+  };
+  const checkDef = async name => {
+    const r = await p.evaluate(() => { const s = document.querySelector('.screen.on'); const txt = s.innerText; const says = /Big Five/.test(txt);
+      const def = /Big Five: the five countries with the most ERC applicants \(DE, UK, FR, IT, ES\)/.test(txt); return { says, def, star: /Big Five\*/.test(txt), key: !!s.querySelector('.sw') }; });
+    console.log(`  [${name}] says "Big Five": ${r.says} | definition present: ${r.def} | asterisk: ${r.star} | colour key: ${r.key}`);
+    if (r.says && !r.def) errs.push(name + ': mentions the Big Five without the definition');
+    if (name !== 'start' && (r.star || r.key)) errs.push(name + ': asterisk or colour key outside the start screen');
+    if (name === 'start' && !(r.star && r.key)) errs.push('start: asterisk or colour key missing');
+  };
+  await checkDef('start');
+  const h = require('fs').readFileSync(__dirname + '/home-judges.html', 'utf8');
+  console.log('  old citation gone:', !/manuscript|Goethe University/i.test(h), '| new citation present:', /Nature Human Behaviour/.test(h) && /10\.1038\/s41562-026-02554-w/.test(h));
+  if (/manuscript/i.test(h) || !/10\.1038\/s41562-026-02554-w/.test(h)) errs.push('citation not updated in the HTML');
+  await p.click('#b-play'); await p.waitForTimeout(150); await shot('rules'); await checkDef('rules');
+  await p.click('#b-r1'); await p.waitForTimeout(150); await shot('r1-empty'); await checkColours(); await checkDef('r1-empty');
   const mirror = ['DE/DE', 'DE/DE', 'IT/IT', 'IT/IT', 'UK/UK', 'UK/UK', 'FR/FR', 'ES/ES', 'US/US', 'NL/NL', 'BE/BE', 'SE/SE', 'DE/CH', 'IT/UK', 'PL/PL'];
   const seat = async code => { const [pp, ww] = code.split('/'); const id = await p.$eval(`#pool .jc:not(.ghost)[data-p="${pp}"][data-w="${ww}"]`, e => e.dataset.id); await p.click(`#pool .jc[data-id="${id}"]`); await p.waitForTimeout(40); };
   for (let k = 0; k < 14; k++) await seat(mirror[k]);
@@ -38,11 +60,12 @@ const W = 380, H = 760;
   await p.click('#table1 .jc[data-seat="0"]'); await p.waitForTimeout(40); console.log('  unseat one ->', await txt('#cnt1'));
   await seat('DE/DE'); await shot('r1-14');
   await seat(mirror[14]); await p.waitForTimeout(900);
-  console.log('REVEAL: ' + await txt('#r1-reveal')); await shot('r1-reveal');
+  console.log('REVEAL: ' + await txt('#r1-reveal')); await shot('r1-reveal'); await checkDef('r1-reveal');
   await p.click('#b-r2'); await p.waitForTimeout(800);
   console.log('ROUND 2: bars ' + await txt('#bars2') + ' | instr: ' + await txt('#instr'));
   const meterPos = () => p.$eval('#meter .mmark', e => e.style.left);
-  console.log('  meter marker at', await meterPos(), '| level?', await p.$eval('#meter', e => e.classList.contains('won'))); await shot('r2-start');
+  console.log('  meter marker at', await meterPos(), '| level?', await p.$eval('#meter', e => e.classList.contains('won'))); await shot('r2-start'); await checkColours(); await checkDef('r2');
+  console.log('  meter text: ' + await txt('#meter'));
   const seatOf = code => { const [a, w] = code.split('/'); return p.$eval(`#table2 .jc[data-p="${a}"][data-w="${w}"]`, e => e.dataset.seat); };
   const benchOf = code => { const [a, w] = code.split('/'); return p.$eval(`#bench .jc[data-p="${a}"][data-w="${w}"]`, e => e.dataset.bench); };
   const doSwap = async (o, i, snap) => {
@@ -53,10 +76,11 @@ const W = 380, H = 760;
   };
   await doSwap('SE/SE', 'PT/PT', 'r2-selected');
   await p.click('#b-reset'); await p.waitForTimeout(300); console.log('  RESET: marker', await meterPos(), '| swaps used', await p.$$eval('.pip.used', x => x.length));
-  await doSwap('DE/DE', 'IL/IL'); await doSwap('DE/DE', 'FI/FI'); await doSwap('IT/IT', 'PT/PT'); await doSwap('IT/IT', 'PL/PL');
+  await doSwap('DE/DE', 'IL/IL'); await doSwap('DE/DE', 'FI/FI'); await doSwap('IT/IT', 'PT/PT');
+  if (!(await vis('#r2-result'))) await doSwap('IT/IT', 'PL/PL'); else console.log('  levelled after three swaps (the fourth is not needed under the BOTH-NEITHER gap)');
   await p.waitForTimeout(500); console.log('RESULT: ' + await txt('#r2-result')); await shot('r2-level');
-  await p.click('#b-end'); await p.waitForTimeout(200); console.log('VERDICT: ' + await txt('#s-end')); await shot('end');
-  await p.click('#b-about-end'); await p.waitForTimeout(100); await shot('about'); await p.click('#b-about-back'); console.log('  back on verdict', await vis('#s-end'));
+  await p.click('#b-end'); await p.waitForTimeout(200); console.log('VERDICT: ' + await txt('#s-end')); await shot('end'); await checkDef('end');
+  await p.click('#b-about-end'); await p.waitForTimeout(100); await shot('about'); await checkDef('about'); console.log('  about: ' + await txt('#s-about .about')); await p.click('#b-about-back'); console.log('  back on verdict', await vis('#s-end'));
   // replay: a balanced first panel, then DONE without swapping
   await p.click('#b-again'); await p.click('#b-r1'); await p.waitForTimeout(150);
   for (const c of ['DE/DE', 'US/US', 'NL/NL', 'BE/BE', 'SE/SE', 'PL/PL', 'IL/IL', 'DK/DK', 'FI/FI', 'PT/PT', 'CZ/CZ', 'GR/GR', 'AT/AT', 'DE/CH', 'IT/UK']) await seat(c);
