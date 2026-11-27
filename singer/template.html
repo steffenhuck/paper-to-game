@@ -82,7 +82,7 @@ svg text{font-family:'Architects',sans-serif;fill:var(--chalk)}
 .askname{font-size:17px}
 .asksub{font-size:13px;color:var(--dim)}
 .askbtns{flex:none}
-.cast.guessing .rowtap{cursor:pointer}.cast.guessing .rowtap:hover rect{fill:rgba(240,210,122,.12)}
+.btn.on{background:var(--yellow);color:var(--board);border-color:var(--yellow)}
 .legend{font-size:14px;color:var(--dim);margin:0 0 8px}
 .story{font-size:18px;line-height:1.4;margin:0 0 6px}
 .cost{font-size:16px;color:var(--yellow);margin:0 0 8px}
@@ -189,7 +189,7 @@ a{color:var(--chalk)}
   <p>You are a scientist, and three experiments come to your desk, one after the other. The first would spare one child a year of illness. The second would save one life. The third would save a thousand lives. Each experiment needs a subject: someone it is done to. Whoever you use will be in bad pain for a day, and then be fine again, with no lasting harm. Each experiment has its own menu of who is on offer, three creatures; across the three menus you meet nine: a grown-up; a baby a few days old, with no parents; a grown-up whose brain is badly hurt, for good; a grown-up who cannot learn much; a chimpanzee; a dog; a pig; a horse; and a mouse. Every one of them is an example from Singer's paper.</p>
   <p>On each experiment, tap everyone you would be willing to use for it. You may tap one, several, or nobody at all. Tap again to change your mind. Then tap <b>Done</b>. Nothing you tick is done to anyone; the game only wants to know where your line is.</p>
   <h2>Making sense of your choices</h2>
-  <p>Then the board tries to make sense of what you did. A rule is a way of deciding whom to use first. Reason's rule is: the less a being can think, the sooner you may use it. A rule with marks explains your three choices if it could have made them: that is, if there is a cutoff for each experiment, rising as the stakes rise, such that at each experiment you used exactly the creatures with marks below the cutoff. The board first tells you how many of its three rules can explain all three of your choices, without saying which. Then the rules come to the board one at a time: Reason, Talk and Aware. Each one sorts the nine by its marks (the marks follow what Singer's paper says) and shows what you did on each menu. Before it speaks, you guess: tap the creature you think the rule will complain about, or tap the button that says the rule has no complaint. Then the board tells you. If the rule agrees, it draws its three cutoffs as red lines. If it objects, it circles the two creatures its loudest complaint is about: one you would use although it has the higher mark, one you would spare although it has the lower mark, which by that rule is the wrong way round. A rule can have several complaints; if the creature you tapped is in one of the others, the board says so and marks it with a dashed circle. The circles are the rule's complaint, not the board's.</p>
+  <p>Then the board tries to make sense of what you did. A rule is a way of deciding whom to use first. Reason's rule is: the less a being can think, the sooner you may use it. A rule with marks explains an experiment if it could have made that choice: that is, if everyone you would use there has a lower mark than everyone you would spare there. It explains your three choices if it explains all three experiments. The board first tells you how many of its three rules can explain all three of your choices, without saying which. Then the rules come to the board one at a time: Reason, Talk and Aware. Each one sorts the nine by its marks (the marks follow what Singer's paper says) and shows what you did on each menu. In each column, the rule is happy if every ✓ sits below every ✗; it complains about a column where a ✓ sits above a ✗. Before it speaks, you guess: tap the experiments you think it will complain about, then tap Check (or tap Check straight away if you think it has no complaint). Then the board tells you, experiment by experiment. Where the rule is fine, it draws a short red mark in that column: its cutoff, with the ones you would use below it. Where it complains, it circles the two creatures in that column it complains about most: one you would use although it has the higher mark, one you would spare although it has the lower mark. The circles are the rule's complaint, not the board's.</p>
   <p>Then one more question, with no marks: can they suffer? Tap yes or no for each of the nine. The stone, which was on no menu, appears here once: nobody asks whether it can suffer, and that is where Singer's line runs. The Suffer rule is this: if a being can suffer, its pain counts as much as anyone's, so among beings that can suffer none may be used sooner than another; whatever cannot suffer may be used freely. If you say two beings can suffer and you would use one of them and spare the other, Suffer objects, and the circles are drawn from your own two answers.</p>
   <h2>The name, and the verdict</h2>
   <p>The board tells you what your line is called, and what Singer says about it. Then the verdict: what you did, what each rule said, your line and its name, where you and Singer part, and what follows. No score. Play again to draw a different line; the stories change each time.</p>
@@ -291,17 +291,21 @@ a{color:var(--chalk)}
       requestAnimationFrame(function () { requestAnimationFrame(function () { e.style.strokeDashoffset = 0; }); }); delay += 200;
     });
   }
-  // the cutoffs of a rule that explains the choices: one red line per experiment, between the rows above and below its cutoff
-  function drawCutoffs(t, mark) {
-    var L = $('line'); if (!L) return; var byY = {};
+  // per-column drawing: for each experiment the rule is fine with, a short red cutoff mark in that column between the crosses and the ticks;
+  // for each it complains about, red circles round that column's worst pair
+  function drawColumns(t, hollow) {
+    var L = $('line'); if (!L) return; var h = '', circ = [];
     [1, 2, 3].forEach(function (k) {
-      if (t.cut[k] < 0) return;
-      var idx = 0; S.rows.forEach(function (id) { if (mark(id) > t.cut[k]) idx++; });
-      var y = TOP + idx * RH + (idx === 0 ? 3 : 0); byY[y] = (byY[y] || []).concat([k]);
+      var c = t.cols[k], x = COLX[k - 1];
+      if (c.ok) {
+        if (c.used.length === 0 || c.spared.length === 0) return;
+        var idx = -1; S.rows.forEach(function (id, j) { if (idx < 0 && rungOf(id) === k && tickedAt(S.ticks, id)) idx = j; });
+        var y = TOP + idx * RH;
+        h += '<path d="' + wobble(x - 16, x + 16, y) + '" fill="none" stroke="#E8664D" stroke-width="3" stroke-linecap="round" opacity=".95"/>';
+      } else circ = circ.concat(c.clash);
     });
-    var h = '';
-    Object.keys(byY).forEach(function (y) { y = +y; h += '<path d="' + wobble(2, 300, y) + '" fill="none" stroke="#E8664D" stroke-width="3" stroke-linecap="round" opacity=".95"/><text x="336" y="' + (y + 4) + '" text-anchor="end" font-size="12" fill="#E8664D">' + byY[y].join(' ') + '</text>'; });
     L.innerHTML = h;
+    if (circ.length) drawCircles(circ, false);
   }
   function drawTray() {
     var t = $('tray'); t.innerHTML = '';
@@ -323,8 +327,8 @@ a{color:var(--chalk)}
     var sense;
     if (p === 'refuse') sense = 'Let\'s try to make sense of what you did. That is easy: you would use nobody who can feel anything, at any price. There is no order of use for a rule to explain. The three rules will still come to the board, but they will have nothing to say; the question for you comes at the end.';
     else if (p === 'all') sense = 'Let\'s try to make sense of what you did. That is easy: you would use everyone on every menu, the stone, the grown-up, the baby and the mouse, at any stakes. There is no order of use for a rule to explain. The three rules will still come to the board, but they have no complaint.';
-    else if (n === 0) sense = 'Let\'s try to make sense of what you did. The board has three rules with marks, Reason, Talk and Aware, and it has tried each of them against your three choices. The answer: <b>no single rule with marks can explain all three of your choices.</b> Let\'s look closer. The three rules will come to the board one at a time, and each will show you where your choices and the rule part. For each one, you say first whether you think it agrees or objects.';
-    else sense = 'Let\'s try to make sense of what you did. The board has three rules with marks, Reason, Talk and Aware, and it has tried each of them against your three choices. The answer: <b>' + (n === 1 ? 'there is exactly one rule with marks that explains all three of your choices' : (n === 2 ? 'two of the three rules with marks explain all three of your choices' : 'all three rules with marks explain all three of your choices')) + '.</b> ' + (n < 3 ? 'Which? ' : '') + 'The three rules will come to the board one at a time, and each will show its marks beside what you did. For each one, you say first whether you think it agrees or objects.';
+    else if (n === 0) sense = 'Let\'s try to make sense of what you did. The board has three rules with marks, Reason, Talk and Aware, and it has tried each of them against your three choices. A rule explains an experiment if the ones you would use there have lower marks than the ones you would spare. The answer: <b>no single rule with marks can explain all three of your choices.</b> Let\'s look closer. The three rules will come to the board one at a time, and each will show you where your choices and the rule part. For each one, you say first which experiments you think it will complain about.';
+    else sense = 'Let\'s try to make sense of what you did. The board has three rules with marks, Reason, Talk and Aware, and it has tried each of them against your three choices. The answer: <b>' + (n === 1 ? 'there is exactly one rule with marks that explains all three of your choices' : (n === 2 ? 'two of the three rules with marks explain all three of your choices' : 'all three rules with marks explain all three of your choices')) + '.</b> ' + (n < 3 ? 'Which? ' : '') + 'The three rules will come to the board one at a time, and each will show its marks beside what you did. For each one, you say first which experiments, if any, you think it will complain about.';
     $('rule1').innerHTML = esc(didWords(S.ticks)) + ' ' + sense;
     legend(true);
     $('hint1').textContent = ''; $('said1').textContent = ''; $('find1').textContent = '';
@@ -341,31 +345,40 @@ a{color:var(--chalk)}
     $('tray').style.display = '';
     $('now1').textContent = r.label + ' comes to the board.';
     $('aim1').textContent = S.round === 1 ? 'A rule with marks. Could it have made your three choices?' : 'The next rule. Could it have made your three choices?';
-    $('rule1').innerHTML = 'Suppose <b>' + esc(r.label) + '</b> were your rule: ' + esc(r.rule) + '. The nine are sorted by how well each one ' + esc(r.verb) + ', highest at the top, with a yellow mark for each. The three columns are the three experiments, and they show what you did. If ' + esc(r.label) + ' were your rule, there would be a cutoff for each experiment, rising as the stakes rise, and you would have used exactly the creatures below it.';
+    $('rule1').innerHTML = 'Suppose <b>' + esc(r.label) + '</b> were your rule: ' + esc(r.rule) + '. The nine are sorted by how well each one ' + esc(r.verb) + ', highest at the top, with a yellow mark for each. The three columns are the three experiments, and they show what you did. If ' + esc(r.label) + ' were your rule, then in each experiment you would have used the ones with the lowest marks: every ✓ below every ✗.';
     legend(true);
     drawTray(); drawCast();
     $('said1').textContent = ''; $('find1').textContent = '';
     if (p === 'refuse' || p === 'all') { reveal(); return; }
-    $('hint1').innerHTML = 'Look at the marks, and at what you did. <b>Which one will ' + esc(r.label) + ' complain about? Tap it on the board.</b> Or, if you think ' + esc(r.label) + ' could have made all three of your choices, tap the button.';
-    $('cast').classList.add('guessing');
-    Array.prototype.forEach.call($('cast').querySelectorAll('.rowtap'), function (row) { row.addEventListener('click', function () { if (S.phase !== 'rule' || S.guess !== null) return; S.guess = row.getAttribute('data-id'); reveal(); }); });
-    $('btns1').innerHTML = '<button class="btn" id="b-agree">' + esc(r.label) + ' has no complaint</button>';
-    $('b-agree').onclick = function () { S.guess = 'none'; reveal(); };
+    $('hint1').innerHTML = 'In each column, ' + esc(r.label) + ' is happy if every ✓ sits below every ✗: the ones you would use have the lower marks. It complains about a column where a ✓ sits above a ✗. <b>Tap the experiments where ' + esc(r.label) + ' will complain.</b> Then tap Check. If you think it has no complaint anywhere, tap Check straight away.';
+    S.guess = [];
+    var bh = '';
+    [1, 2, 3].forEach(function (k) { bh += '<button class="btn small" data-k="' + k + '">Experiment ' + k + '</button>'; });
+    bh = '<div class="row2" style="width:100%">' + bh + '</div>';
+    bh += '<button class="btn solid" id="b-check">Check</button>';
+    $('btns1').innerHTML = bh;
+    Array.prototype.forEach.call($('btns1').querySelectorAll('button[data-k]'), function (b) { b.onclick = function () { var k = +b.getAttribute('data-k'), i = S.guess.indexOf(k); if (i >= 0) S.guess.splice(i, 1); else S.guess.push(k); b.classList.toggle('on', i < 0); }; });
+    $('b-check').onclick = reveal;
     window.scrollTo(0, 0);
   }
   function reveal() {
     var r = rulerById(S.cur), t = ruleTest(S.ticks, S.cur), p = pattern(S.ticks);
-    $('cast').classList.remove('guessing');
     $('now1').textContent = r.label + (p === 'refuse' ? ' has nothing to check.' : (t.ok ? ' agrees with your choices.' : ' objects to your choices.'));
     $('hint1').textContent = '';
-    if (t.ok && p !== 'refuse' && p !== 'all') drawCutoffs(t, marksOf(S.cur));
-    var g = S.guess, extra = (g && g !== 'none' && !t.ok && t.clash.indexOf(g) < 0 && t.violators.indexOf(g) >= 0) ? g : null;
-    setTimeout(function () { if (!t.ok) { drawCircles(t.clash, false); if (extra) drawCircles([extra], true); } }, 150);
-    $('said1').textContent = ruleWords(S.ticks, S.cur);
+    if (p !== 'refuse' && p !== 'all') setTimeout(function () { drawColumns(t); }, 150);
     var fb = '';
-    if (g === 'none') fb = t.ok ? 'Right: ' + r.label + ' has no complaint.' : 'You thought ' + r.label + ' had no complaint. Look at the two in the red circles: that is where it does.';
-    else if (g) { var gp = castById(g).phrase; fb = t.ok ? 'You thought ' + r.label + ' would complain about ' + gp + '. But look: the three cutoffs fit, with nobody on the wrong side of them.' : (t.clash.indexOf(g) >= 0 ? 'Yes, that one. ' + r.label + '\'s loudest complaint is about the two in the red circles, and ' + gp + ' is one of them.' : (extra ? 'Yes, ' + r.label + ' complains about ' + gp + ' too (the dashed circle). Its loudest complaint is about the two in the red circles.' : 'No: ' + r.label + ' has no complaint about ' + gp + '. Its complaint is about the two in the red circles.')); }
-    $('find1').textContent = fb;
+    if (S.guess) {
+      var g = S.guess, lines = [], found = 0;
+      [1, 2, 3].forEach(function (k) {
+        var tapped = g.indexOf(k) >= 0, bad = !t.cols[k].ok;
+        if (tapped && bad) { found++; lines.push('Experiment ' + k + ': yes, ' + r.label + ' complains there.'); }
+        else if (!tapped && bad) lines.push('Experiment ' + k + ': you missed this one; ' + r.label + ' complains there too.');
+        else if (tapped && !bad) lines.push('Experiment ' + k + ': you tapped it, but ' + r.label + ' is fine there; every ✓ sits below every ✗.');
+      });
+      if (t.bad.length === 0) fb = g.length === 0 ? 'Right: ' + r.label + ' has no complaint anywhere.' : r.label + ' has no complaint anywhere: in every column the ✓s sit below the ✗s. ' + lines.join(' ');
+      else fb = (found === t.bad.length && g.length === t.bad.length ? 'You found ' + (t.bad.length === 1 ? 'the one experiment' : (t.bad.length === 2 ? 'both experiments' : 'all three experiments')) + ' ' + r.label + ' complains about.' : 'You found ' + found + ' of the ' + t.bad.length + ' experiment' + (t.bad.length === 1 ? '' : 's') + ' ' + r.label + ' complains about.') + ' ' + lines.join(' ');
+    }
+    $('said1').textContent = fb; $('find1').textContent = ruleWords(S.ticks, S.cur);
     $('btns1').innerHTML = '<button class="btn solid" id="b-next">' + (S.round < 3 ? 'Next rule: ' + CONFIG.RULES[S.round].label + ' →' : 'One more question →') + '</button>'; $('b-next').onclick = nextRule;
   }
   // ---- can they suffer?
@@ -398,10 +411,10 @@ a{color:var(--chalk)}
     $('ask').style.display = 'none'; $('cast').style.display = '';
     $('now1').textContent = t.objects ? 'Suffer objects to your choices.' : (p === 'refuse' ? 'Suffer has nothing to check.' : 'Suffer agrees with your choices.');
     $('aim1').textContent = 'The Suffer rule checks your choices, using your own answers.';
-    $('rule1').innerHTML = 'The <b>Suffer</b> rule checks your three choices with your own answers: ' + esc(CONFIG.SUFFER.rule) + '. Beside each one is what you said, and the three columns show what you did. If Suffer objects, the red circles are its complaint, built from two things you said yourself.';
+    $('rule1').innerHTML = 'The <b>Suffer</b> rule checks your three choices with your own answers: ' + esc(CONFIG.SUFFER.rule) + '. Beside each one is what you said, and the three columns show what you did. In each column, Suffer is fine if everyone you would use and everyone you would spare cannot both suffer; it complains where you would use one being that can suffer and spare another that can. If Suffer objects, the red circles are its complaint, built from two things you said yourself.';
     legend(true); $('hint1').textContent = '';
     drawCast({ suffer: true, head: 'SUFFER' });
-    setTimeout(function () { if (t.objects) drawCircles(t.clash, false); if (t.no.length) drawCircles(t.no.filter(function (id) { return !t.clash || t.clash.indexOf(id) < 0; }), true); }, 150);
+    setTimeout(function () { if (p !== 'refuse' && p !== 'all') drawColumns(t); var circled = []; [1, 2, 3].forEach(function (k) { if (!t.cols[k].ok) circled = circled.concat(t.cols[k].clash); }); if (t.no.length) drawCircles(t.no.filter(function (id) { return circled.indexOf(id) < 0; }), true); }, 150);
     $('said1').textContent = sufferWords(S.ticks, S.answers); $('find1').textContent = '';
     $('btns1').innerHTML = '<button class="btn solid" id="b-next">So what is my line called? →</button>'; $('b-next').onclick = nameIt;
     window.scrollTo(0, 0);

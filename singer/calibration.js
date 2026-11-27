@@ -1,11 +1,11 @@
-// Calibration check for Draw a Line with Singer (revision 10). Run: node calibration.js. Exit code 1 on any failure.
+// Calibration check for Draw a Line with Singer (revision 11). Run: node calibration.js. Exit code 1 on any failure.
 // The mechanism is a TOY of an argument; the check verifies (1) that every ordering the 1974 paper states holds in the cast, and that the
 // three menus cover the nine creatures that can suffer once each, each menu with a person and an animal; (2) the claims on this cast: the
 // team's choices (every animal used, every person spared, at every experiment) are explained by Species and by no rule with marks, and
 // Suffer objects to them with Singer's facts; (3) that the objection to the team's choices rests on the paper's own orderings, not on our
 // lengths, over 500 random casts; (4) that every one of the 512 tick patterns, with every one of the 512 answer sets to "can they suffer?",
-// gets a pattern, a shape, a name, words for each rule, Suffer words and a verdict, and that the rationalisability test has the properties
-// it claims; (5) the stories; (6) a table of the shapes.
+// gets a pattern, a shape, a name, words for each rule, Suffer words and a verdict, and that the per-experiment test has the properties it
+// claims (each experiment is checked on its own; the cutoffs are not required to rise with the stakes); (5) the stories; (6) a table of the shapes.
 var m = require('./mechanism.js'), C = m.CONFIG, fails = 0, out = [];
 function check(name, ok, detail) { out.push((ok ? 'ok   ' : 'FAIL ') + name + (detail ? ' — ' + detail : '')); if (!ok) fails++; }
 var S = C.SUBJECTS, NINE = S;
@@ -46,18 +46,17 @@ for (var mask = 0; mask < 512; mask++) {
   var L = m.rulesExplaining(t); nRules[L.length] = (nRules[L.length] || 0) + 1;
   C.RULES.forEach(function (r) {
     var w = m.ruleWords(t, r.id); if (!w || w.length < 40) bad++;
-    // property: a rule explains the ticks iff there are rising cutoffs that reproduce them
-    var mk = m.marksOf(r.id), rt = m.ruleTest(t, r.id), ok2 = true, c = -1;
+    // property: a rule explains the ticks iff, in each experiment on its own, some cutoff reproduces the choice
+    var mk = m.marksOf(r.id), rt = m.ruleTest(t, r.id), ok2 = true;
     for (var k = 1; k <= 3 && ok2; k++) {
-      var cands = []; for (var cc = -1; cc <= 10; cc++) if (cc >= c) cands.push(cc);
       var found = false;
-      cands.forEach(function (cut) { if (found) return; if (m.menuOf(k).every(function (id) { return (t[k].indexOf(id) >= 0) === (mk(id) <= cut); })) { found = true; c = cut; } });
+      for (var cut = -1; cut <= 10 && !found; cut++) if (m.menuOf(k).every(function (id) { return (t[k].indexOf(id) >= 0) === (mk(id) <= cut); })) found = true;
       if (!found) ok2 = false;
     }
     if (rt.ok !== ok2) bad++;
-    if (!rt.ok && !(rt.clash && rt.clash.length === 2)) bad++;
-    // every violating pair is (used, spared at the same or higher stakes); the worst pair is among them; violators are exactly the creatures in the pairs
-    if (!rt.ok) { var inv = {}; rt.pairs.forEach(function (pr) { inv[pr[0]] = 1; inv[pr[1]] = 1; if (!m.tickedAt(t, pr[0]) || m.tickedAt(t, pr[1]) || m.rungOf(pr[1]) < m.tickedAt(t, pr[0])) bad++; }); if (!inv[rt.clash[0]] || !inv[rt.clash[1]] || Object.keys(inv).length !== rt.violators.length) bad++; }
+    // every violating pair is (used, spared) on the same menu; each bad column's worst pair is among its pairs; violators are exactly the creatures in the pairs
+    [1, 2, 3].forEach(function (k) { var c = rt.cols[k]; if (c.ok) { if (c.pairs.length) bad++; return; } var inv = {}; c.pairs.forEach(function (pr) { inv[pr[0]] = 1; inv[pr[1]] = 1; if (!m.tickedAt(t, pr[0]) || m.tickedAt(t, pr[1]) || m.rungOf(pr[0]) !== k || m.rungOf(pr[1]) !== k) bad++; }); if (!inv[c.clash[0]] || !inv[c.clash[1]] || Object.keys(inv).length !== c.violators.length) bad++; });
+    if (rt.ok !== (rt.bad.length === 0)) bad++;
   });
   answerSets.forEach(function (ans) {
     var w = m.shapeWords(t, ans); shapes[w.shape.id] = (shapes[w.shape.id] || 0) + 1;
@@ -65,15 +64,15 @@ for (var mask = 0; mask < 512; mask++) {
     if (w.shape.id !== 'species' && (!w.singer || w.singer.length < 40)) bad++;
     var sw = m.sufferWords(t, ans); if (!sw || sw.length < 30) bad++;
     var st = m.sufferTest(t, ans);
-    // Suffer objects iff some being the player says can suffer is used at stakes k while another the player says can suffer is spared at stakes >= k
+    // Suffer objects iff in some experiment a being the player says can suffer is used while another on that menu that the player says can suffer is spared
     var should = false;
-    NINE.forEach(function (a) { if (!ans[a]) return; var ka = m.tickedAt(t, a); if (!ka) return; NINE.forEach(function (b) { if (ans[b] && !m.tickedAt(t, b) && m.rungOf(b) >= ka) should = true; }); });
+    NINE.forEach(function (a) { if (!ans[a]) return; var ka = m.tickedAt(t, a); if (!ka) return; NINE.forEach(function (b) { if (ans[b] && !m.tickedAt(t, b) && m.rungOf(b) === ka) should = true; }); });
 
     if (st.objects !== should) bad++;
   });
   if (mask % 32 === 0) { var v = m.verdict({ ticks: t, answers: allYes }); if (!v.fate || v.did.length !== 5 || v.found.length !== 1 || !v.part.length || !v.stood.length) bad++; }
 }
-check('all 512 tick patterns x 512 answer sets get a pattern, a shape, a name, words for each rule, Suffer words and a verdict; the rationalisability test matches a brute-force search for rising cutoffs; every violating pair is (used, spared at the same or higher stakes); Suffer objects exactly when it should', bad === 0, bad + ' problems');
+check('all 512 tick patterns x 512 answer sets get a pattern, a shape, a name, words for each rule, Suffer words and a verdict; the per-experiment test matches a brute-force search for a cutoff in each experiment; every violating pair is (used, spared) on one menu; Suffer objects exactly when it should', bad === 0, bad + ' problems');
 check('patterns: refuse 1, all 1, the rest mixed', patterns.refuse === 1 && patterns.all === 1, JSON.stringify(patterns));
 check('all six shapes occur', ['refuse', 'singer', 'equal-no', 'line', 'species', 'own'].every(function (k) { return shapes[k] > 0; }), JSON.stringify(shapes));
 

@@ -2,7 +2,8 @@
 // Runs unchanged in Node (calibration.js, loop.js) and in the browser (the game passes actions in and draws what comes back).
 // Mechanism kind: TOY, built to illustrate the argument of Peter Singer, "All Animals Are Equal", Philosophic Exchange 5(1), 1974,
 // pp. 103-116 (the journal's own text, SUNY open repository). Page numbers below are the journal's.
-// Revision 10 (27 Nov 2026): the stone off the menus (it appears once, at the Suffer question, as the boundary); on each rule screen the player
+// Revision 11 (28 Nov 2026): each experiment checked on its own (a rule complains about a column where a tick sits above a cross), and
+// the player taps the experiments he expects the rule to complain about. Revision 10 (27 Nov 2026): the stone off the menus (it appears once, at the Suffer question, as the boundary); on each rule screen the player
 // taps the creature he expects the rule to complain about before the reveal. Revision 9 (same day): three menus and a rationalisability test. The player is the scientist first. Three experiments of rising stakes, each needing one
 // subject who will be hurt; four subjects on offer (the paper's own: the orphaned baby, the brain-damaged grown-up, the chimpanzee,
 // the mouse); the player ticks everyone he would be willing to use. From the ticks the game reads, for each subject, the lowest stakes
@@ -99,41 +100,35 @@ function drawSkins(seed) {
 
 // ---------- Part 1: the experiments, and whether one rule can make sense of them ----------
 // ticks: { 1: [ids], 2: [ids], 3: [ids] } — everyone the player was willing to use at each experiment. Each creature is on one menu only.
-// The stone is free under every rule (it has no interests, p. 107), so no pair with the stone is ever a violation.
-// A rule with marks "explains" the three choices if there is a cutoff for each experiment, rising with the stakes, such that at each
-// experiment the player ticked exactly the creatures with marks at or below that experiment's cutoff. Equivalently: there is no pair
-// (a ticked at stakes k, b left unticked at stakes j >= k) with mark(a) >= mark(b). Such a pair is a violation: a has the higher mark (or
-// the same mark, which the rule cannot tell apart) and yet is used for a smaller good, or the same good, while b is spared.
+// A rule "explains" an experiment if, on that menu, every creature the player used has a mark no higher than every creature he spared: there
+// is a cutoff with the used below it and the spared above it. A rule explains the player's choices if it explains all three experiments.
+// Each experiment is checked on its own; the game does not ask that the cutoffs rise with the stakes (revision 11 dropped that, so that every
+// complaint is about one column, which the player can see and tap).
 function tickedAt(ticks, id) { var n = rungOf(id); return n && (ticks[n] || []).indexOf(id) >= 0 ? n : 0; }
 function marksOf(ruleId, answers) {
   if (ruleId === 'species') return function (id) { return castById(id).human ? 1 : 0; };
   if (ruleId === 'suffer') return function (id) { return id === 'stone' ? 0 : ((answers || {})[id] === false ? 0 : 1); };
   return function (id) { return castById(id)[ruleId]; };
 }
-// mode: 'marks' (a rule with marks: a higher or equal mark used no later than a lower one is a violation); 'team' (Species: people and
+// mode: 'marks' (a rule with marks: a higher or equal mark used while a lower one is spared is a violation); 'team' (Species: people and
 // animals are each unordered among themselves, so only a person used while an animal is spared is a violation); 'suffer' (only beings
 // that can suffer are constrained, and among them any difference is a violation; whatever cannot suffer may be used freely).
+function explainsColumn(ticks, mark, mode, k) {
+  var menu = menuOf(k), used = menu.filter(function (id) { return tickedAt(ticks, id); }), spared = menu.filter(function (id) { return !tickedAt(ticks, id); });
+  var worst = null, pairs = [], inv = {};
+  used.forEach(function (a) { spared.forEach(function (b) {
+    var bad = mode === 'team' ? mark(a) > mark(b) : (mode === 'suffer' ? (mark(a) === 1 && mark(b) === 1) : mark(a) >= mark(b));
+    if (!bad) return;
+    var gap = (mark(a) - mark(b)) * 4 + (mode === 'suffer' && (b === 'infant' || b === 'braindam') ? 0.5 : 0);
+    pairs.push([a, b]); inv[a] = true; inv[b] = true;
+    if (!worst || gap > worst.gap) worst = { sooner: a, later: b, tie: mark(a) === mark(b), gap: gap };
+  }); });
+  return { k: k, ok: !worst, clash: worst ? [worst.sooner, worst.later] : null, tie: worst ? worst.tie : false, pairs: pairs, violators: Object.keys(inv), used: used, spared: spared };
+}
 function explains(ticks, mark, mode) {
-  var worst = null, pairs = [], inv = {}; mode = mode || 'marks';
-  CONFIG.SUBJECTS.forEach(function (a) {
-    var ka = tickedAt(ticks, a); if (!ka) return;
-    if (a === 'stone') return; // the stone is free under every rule: nothing can be done to it that it minds
-    CONFIG.SUBJECTS.forEach(function (b) {
-      if (a === b || b === 'stone') return;
-      var jb = rungOf(b); if (jb < ka || tickedAt(ticks, b)) return;
-      var bad = mode === 'team' ? mark(a) > mark(b) : (mode === 'suffer' ? (mark(a) === 1 && mark(b) === 1) : mark(a) >= mark(b));
-      if (bad) {
-        var gap = (mark(a) - mark(b)) * 4 + (jb - ka) + (jb === ka ? 1 : 0) + (mode === 'suffer' && (b === 'infant' || b === 'braindam') ? 0.5 : 0);
-        pairs.push([a, b]); inv[a] = true; inv[b] = true;
-        if (!worst || gap > worst.gap) worst = { sooner: a, later: b, tie: mark(a) === mark(b), gap: gap };
-      }
-    });
-  });
-  // cutoffs, for drawing: the highest mark ticked at stakes <= k, or -1 if nothing ticked yet
-  var cut = {}, c = -1;
-  for (var k = 1; k <= 3; k++) { (ticks[k] || []).forEach(function (id) { if (id !== 'stone' && mark(id) > c) c = mark(id); }); cut[k] = c; }
-  // violators: every creature that is in some violating pair (the player's tap counts as right if it lands on any of them)
-  return { ok: !worst, clash: worst ? [worst.sooner, worst.later] : null, tie: worst ? worst.tie : false, cut: cut, pairs: pairs, violators: Object.keys(inv) };
+  var cols = {}, bad = [], worst = null; mode = mode || 'marks';
+  [1, 2, 3].forEach(function (k) { var c = explainsColumn(ticks, mark, mode, k); cols[k] = c; if (!c.ok) { bad.push(k); if (!worst || c.pairs.length > worst.pairs.length) worst = c; } });
+  return { ok: bad.length === 0, cols: cols, bad: bad, clash: worst ? worst.clash : null, tie: worst ? worst.tie : false };
 }
 function modeOf(ruleId) { return ruleId === 'species' ? 'team' : (ruleId === 'suffer' ? 'suffer' : 'marks'); }
 function ruleTest(ticks, ruleId, answers) { var t = explains(ticks, marksOf(ruleId, answers), modeOf(ruleId)); t.ruler = ruleId; t.agrees = t.ok; return t; }
@@ -148,29 +143,38 @@ function didWords(ticks) {
     return cap(L.label) + ', you would use ' + listPhrases(t) + ', and spare ' + listPhrases(no) + '.';
   }).join(' ');
 }
-// pattern: refuse (no being that can suffer, by Singer's facts, is ticked anywhere) | all (everyone ticked everywhere) | mixed
+// pattern: refuse (nobody ticked anywhere) | all (everyone ticked everywhere) | mixed
 function pattern(ticks) {
   if (CONFIG.SUBJECTS.every(function (id) { return !tickedAt(ticks, id); })) return 'refuse';
   if (CONFIG.SUBJECTS.every(function (id) { return tickedAt(ticks, id); })) return 'all';
   return 'mixed';
 }
 function usedWords(ticks, id) { var k = tickedAt(ticks, id); return k ? levelById(k).label : 'not even ' + levelById(rungOf(id)).label; }
-// A clash, in words, for a rule with marks or for Suffer.
-function clashWords(ticks, t, r, mark) {
-  var a = castById(t.clash[0]), b = castById(t.clash[1]), ka = tickedAt(ticks, a.id), jb = rungOf(b.id), same = ka === jb;
-  var s = 'You would use ' + a.phrase + ' ' + levelById(ka).label + ', but you would not use ' + b.phrase + (same ? ', who was on offer for the same thing' : ', not even ' + levelById(jb).label) + '. ';
-  if (r.id === 'suffer') s += 'Yet you say both can suffer. The experiment hurts each of them just the same, a day of bad pain. The Suffer rule has no order among beings that can suffer: one day of pain is one day of pain, whoever has it. So by the Suffer rule, if ' + a.phrase + ' may be used ' + levelById(ka).label + ', then ' + b.phrase + ' may be used for that too, and for anything bigger.';
-  else if (t.tie) s += 'On ' + r.label + ', ' + a.phrase + ' and ' + b.phrase + ' have the same mark, ' + mark(a.id) + ' each, so ' + r.label + ' cannot tell them apart. A rule that cannot tell two beings apart cannot use one and spare the other' + (same ? '' : ', and whoever may be used for a small good may be used for a bigger one') + '. So ' + r.label + ' cannot be the rule behind what you did.';
-  else s += 'On ' + r.label + ', ' + a.phrase + ' has a mark of ' + mark(a.id) + ' and ' + b.phrase + ' has a mark of ' + mark(b.id) + ': ' + a.phrase + ' ' + r.verb + ' better. If ' + r.label + ' were your rule, then whoever has the lower mark would be used first, or at least no later, and whoever may be used for a small good may be used for a bigger one. You did it the other way round. So ' + r.label + ' cannot be the rule behind what you did.';
-  return s;
+function expName(k) { return 'Experiment ' + k + ' (' + levelById(k).short + ')'; }
+// One column, in words, for a rule with marks, for Species, or for Suffer.
+function columnWords(ticks, r, mark, c) {
+  var head = expName(c.k) + ': ';
+  if (c.used.length === 0) return head + 'you would use nobody there, so ' + r.label + ' has nothing to complain about.';
+  if (c.spared.length === 0) return head + 'you would use all three, so ' + r.label + ' has nothing to complain about.';
+  if (c.ok) {
+    if (r.id === 'suffer') { var sN = c.spared.filter(function (id) { return mark(id) === 0; }); return head + 'Suffer is fine. You would use ' + listPhrases(c.used) + ' and spare ' + listPhrases(c.spared) + ', and you say ' + listPhrases(sN) + ' cannot suffer, so sparing ' + (sN.length === 1 ? 'it' : 'them') + ' costs no one anything.'; }
+    if (r.id === 'species') return head + 'the team\'s rule is fine. You would use ' + listPhrases(c.used) + ' and spare ' + listPhrases(c.spared) + ': animals used, people spared.';
+    return head + r.label + ' is fine. You would use ' + listPhrases(c.used) + ' and spare ' + listPhrases(c.spared) + ', and on ' + r.label + ' ' + listPhrases(c.spared) + ' ' + (c.spared.length === 1 ? 'has' : 'have') + ' the higher mark' + (c.spared.length === 1 ? '' : 's') + ', so ' + r.label + ' would use ' + listPhrases(c.used) + ' first too. Every tick sits below every cross.';
+  }
+  var a = castById(c.clash[0]), b = castById(c.clash[1]);
+  if (r.id === 'suffer') return head + 'Suffer complains. You would use ' + a.phrase + ' and spare ' + b.phrase + ', and you say both can suffer. So if ' + a.phrase + ' may be used for this, ' + b.phrase + ' may be used for it too.';
+  if (r.id === 'species') return head + 'the team\'s rule complains. You would use ' + a.phrase + ', a person, and spare ' + b.phrase + ', an animal.';
+  if (c.tie) return head + r.label + ' complains. You would use ' + a.phrase + ' and spare ' + b.phrase + ', but on ' + r.label + ' they have the same mark, ' + mark(a.id) + ' each, so ' + r.label + ' cannot tell them apart. A rule that cannot tell two beings apart cannot use one and spare the other.';
+  return head + r.label + ' complains. You would use ' + a.phrase + ' and spare ' + b.phrase + ', but on ' + r.label + ' ' + a.phrase + ' has a mark of ' + mark(a.id) + ' and ' + b.phrase + ' has a mark of ' + mark(b.id) + ': ' + a.phrase + ' ' + r.verb + ' better. A tick above a cross. If ' + r.label + ' were your rule, ' + b.phrase + ' would be used first, or at least together with ' + a.phrase + '.';
 }
-// What the board says for a rule with marks.
+// What the board says for a rule with marks: a headline, then one sentence per experiment.
 function ruleWords(ticks, ruleId) {
-  var r = rulerById(ruleId), t = ruleTest(ticks, ruleId), p = pattern(ticks);
+  var r = rulerById(ruleId), t = ruleTest(ticks, ruleId), p = pattern(ticks), mark = marksOf(ruleId);
   if (p === 'refuse') return r.label + ' has nothing to check. You would use nobody, so there is no order of use for ' + r.label + ' to explain.';
   if (p === 'all') return r.label + ' agrees, but only because you would use everyone on every menu. A rule that uses the low marks first has no complaint about that, and nothing to add.';
-  if (t.ok) return r.label + ' agrees. Everyone you would use has a mark no higher than anyone you would spare at the same stakes or at higher stakes. If ' + r.label + ' were your rule, with a cutoff that rises as the stakes rise, it would have given exactly these three choices. The red lines are the cutoffs: one for each experiment.';
-  return r.label + ' objects. ' + clashWords(ticks, t, r, marksOf(ruleId)) + ' The red circles are ' + r.label + '\'s complaint.';
+  var cols = [1, 2, 3].map(function (k) { return columnWords(ticks, r, mark, t.cols[k]); }).join(' ');
+  if (t.ok) return r.label + ' agrees. In every experiment, everyone you would use has a mark no higher than anyone you would spare: every tick sits below every cross. If ' + r.label + ' were your rule, it would have made all three of your choices. The red marks are its cutoffs. ' + cols;
+  return r.label + ' objects, in ' + (t.bad.length === 1 ? 'one experiment' : t.bad.length + ' experiments') + '. The red circles are its complaint' + (t.bad.length === 1 ? '' : 's') + '. ' + cols;
 }
 
 // ---------- Part 2: can they suffer? ----------
@@ -181,15 +185,16 @@ function sufferTest(ticks, answers) {
   var yes = ids.filter(function (id) { return answers[id] === true; }), no = ids.filter(function (id) { return answers[id] === false; });
   var unanswered = ids.filter(function (id) { return answers[id] === undefined; });
   var t = explains(ticks, marksOf('suffer', answers), 'suffer');
-  return { yes: yes, no: no, unanswered: unanswered, complete: unanswered.length === 0, objects: !t.ok, clash: t.clash, cut: t.cut, disputed: no, singer: explains(ticks, marksOf('suffer', {}), 'suffer').ok };
+  return { yes: yes, no: no, unanswered: unanswered, complete: unanswered.length === 0, objects: !t.ok, clash: t.clash, cols: t.cols, bad: t.bad, disputed: no, singer: explains(ticks, marksOf('suffer', {}), 'suffer').ok };
 }
 function sufferWords(ticks, answers) {
-  var t = sufferTest(ticks, answers), p = pattern(ticks), s = '';
+  var t = sufferTest(ticks, answers), p = pattern(ticks), s = '', mark = marksOf('suffer', answers);
   if (!t.complete) return '';
+  var cols = [1, 2, 3].map(function (k) { return columnWords(ticks, CONFIG.SUFFER, mark, t.cols[k]); }).join(' ');
   if (p === 'refuse') s = 'Suffer has nothing to object to: you would use nobody. ';
-  else if (t.objects) s = 'Suffer objects. ' + clashWords(ticks, t, CONFIG.SUFFER) + ' The red circles are Suffer\'s complaint, and this time it is built from two things you said yourself: it can suffer, and it may be used. ';
+  else if (t.objects) s = 'Suffer objects, in ' + (t.bad.length === 1 ? 'one experiment' : t.bad.length + ' experiments') + '. The experiment hurts everyone just the same, a day of bad pain, and the Suffer rule has no order among beings that can suffer: one day of pain is one day of pain, whoever has it. The red circles are its complaint' + (t.bad.length === 1 ? '' : 's') + ', and this time ' + (t.bad.length === 1 ? 'it is' : 'they are') + ' built from two things you said yourself: it can suffer, and it may be used. ' + cols + ' ';
   else if (p === 'all') s = 'Suffer agrees: you would use everyone on every menu, and that is no order among them. ';
-  else s = 'Suffer agrees with your three choices. Whenever you would use one being that can suffer, by your own answers, you would also use every other being that can suffer, on that menu and on the menus with higher stakes. That is what the Suffer rule asks: one day of pain counts the same, whoever has it. ';
+  else s = 'Suffer agrees with your three choices. In every experiment, whenever you would use one being that can suffer, by your own answers, you would use every other being there that can suffer. That is what the Suffer rule asks: one day of pain counts the same, whoever has it. ' + cols + ' ';
   if (t.no.length) s += (t.objects ? 'And Singer' : 'But Singer') + ' disputes a fact: he says ' + listPhrases(t.no) + ' can suffer, ' + (t.no.length === 1 ? 'and feels' : 'and feel') + ' pain at least as much as a baby a few days old does. The dashed circle' + (t.no.length === 1 ? ' marks' : 's mark') + ' where you and he disagree about the fact.' + (!t.objects && !t.singer ? ' With his facts, Suffer would object to your choices.' : '');
   return s;
 }
@@ -216,20 +221,20 @@ function shapeWords(ticks, answers) {
     w.singer = 'Singer has no quarrel with you about animals: you treat the baby and the mouse exactly alike. Your disagreement with him is somewhere else. He would say that a day of pain for one, against a thousand lives, is a trade worth making, whoever has the pain; you say some things may not be done to anyone, whatever it buys. That is a different question, and a different paper: Philippa Foot\'s, which is also on this shelf.';
   } else if (s.id === 'singer') {
     w.name = 'Singer\'s line'; w.headline = 'You treated everyone who can suffer alike.';
-    w.who = p === 'all' ? 'You would use everyone on every menu, the grown-up and the baby and the mouse, for anything from a child\'s year of illness to a thousand lives. Nobody\'s pain counted for more with you than anybody else\'s, and nobody was spared: only the stakes mattered, and they were always enough.' : 'Whenever you would use one being that can suffer, you would use every other being that can suffer, on that menu and on the menus with higher stakes. So nobody\'s pain counted for more with you than anybody else\'s; only the stakes moved you. ' + (st.no.length ? 'You say ' + listPhrases(st.no) + ' cannot suffer, and Singer says ' + (st.no.length === 1 ? 'it can' : 'they can') + '; but your choices fit his facts as well as yours. ' : '');
+    w.who = p === 'all' ? 'You would use everyone on every menu, the grown-up and the baby and the mouse, for anything from a child\'s year of illness to a thousand lives. Nobody\'s pain counted for more with you than anybody else\'s, and nobody was spared: only the stakes mattered, and they were always enough.' : 'In every experiment, whenever you would use one being that can suffer, you would use every other being on that menu that can suffer. So nobody\'s pain counted for more with you than anybody else\'s; only the stakes moved you. ' + (st.no.length ? 'You say ' + listPhrases(st.no) + ' cannot suffer, and Singer says ' + (st.no.length === 1 ? 'it can' : 'they can') + '; but your choices fit his facts as well as yours. ' : '');
     w.singer = 'That is Singer\'s line. He says it is the only line that is not drawn by hand: a day of pain is a day of pain, whoever has it. So whoever can suffer counts, and their pain counts as much as anyone\'s; and the stone, which cannot suffer, is the only one that does not count. ' + team;
   } else if (s.id === 'equal-no') {
     w.name = 'All alike, by your own answers'; w.headline = 'By your own answers, you treated everyone who can suffer alike.';
-    w.who = didWords(ticks) + ' No rule with marks gives those choices, and the team\'s rule, animals first and people spared, does not give them either. But whenever you would use one being that you say can suffer, you would use every other being that you say can suffer, on that menu and on the menus with higher stakes. So the Suffer rule, with your facts, explains your choices. And your facts are doing the work: you say ' + listPhrases(st.no) + ' cannot suffer, and with Singer\'s facts, that every one of the nine can suffer, the Suffer rule would object.';
+    w.who = didWords(ticks) + ' No rule with marks gives those choices, and the team\'s rule, animals first and people spared, does not give them either. But in every experiment, whenever you would use one being that you say can suffer, you would use every other being on that menu that you say can suffer. So the Suffer rule, with your facts, explains your choices. And your facts are doing the work: you say ' + listPhrases(st.no) + ' cannot suffer, and with Singer\'s facts, that every one of the nine can suffer, the Suffer rule would object.';
     w.singer = 'So you and Singer agree on the rule and disagree about a fact. He says the mouse is at least as sensitive to pain as a baby a few days old, and the same for the rest. If he is right about the facts, your line is not his. ' + team;
   } else if (s.id === 'line') {
     var labs = s.lines.map(function (id) { return rulerById(id).label; });
     w.name = 'A ' + labs[0] + ' line'; w.headline = (labs.length === 1 ? labs[0] + ' explains' : labs.slice(0, -1).join(', ') + ' and ' + labs[labs.length - 1] + ' each explain') + ' all three of your choices.';
-    w.who = didWords(ticks) + ' ' + (labs.length === 1 ? labs[0] + ' gives those choices' : 'Each of ' + labs.join(', ') + ' gives those choices') + ': everyone you would use has a mark no higher than anyone you would spare, at the same stakes or at higher stakes, with a cutoff that rises as the stakes rise. So a rule you can check gives your line; it is not drawn by hand. The question is whether it is the right rule.';
+    w.who = didWords(ticks) + ' ' + (labs.length === 1 ? labs[0] + ' gives those choices' : 'Each of ' + labs.join(', ') + ' gives those choices') + ': in every experiment, everyone you would use has a mark no higher than anyone you would spare; every tick sits below every cross. So a rule you can check gives your line; it is not drawn by hand. The question is whether it is the right rule.';
     w.singer = 'Singer says a line like that is straight, but in the wrong place. The ones you would use first ' + (labs[0] === 'Aware' ? 'know least about what is happening to them' : (labs[0] === 'Talk' ? 'can talk least' : 'think least well')) + ', but a day of bad pain hurts them exactly as much as it hurts the ones you would spare. Picking ' + labs[0] + ' to decide whose pain may be spent first is, he says, like picking skin colour: a mark that has nothing to do with being hurt. ' + (st.objects ? 'And by your own answers, Suffer objects to your choices. ' : '') + team;
   } else if (s.id === 'species') {
     w.name = 'Species'; w.headline = 'No rule with marks explains your choices. One rule does.';
-    w.who = didWords(ticks) + ' Reason, Talk and Aware each objected: on each of them, some animal you would use has a higher mark than some person you would spare. ' + (st.objects ? 'And Suffer objected too, because you said yourself that they can suffer. ' : (st.no.length ? 'Suffer did not object, but only because you said ' + listPhrases(st.no) + ' cannot suffer; Singer says ' + (st.no.length === 1 ? 'it can' : 'they can') + ', and with his facts Suffer would object as well. ' : '')) + 'But there is one rule that explains all three of your choices, and it needs no marks at all: the animals may be used first, and the people are spared. It is the rule of the team you happen to be on. Its name is Species.';
+    w.who = didWords(ticks) + ' Reason, Talk and Aware each objected: on each of them, in some experiment, an animal you would use has a higher mark than a person you would spare. ' + (st.objects ? 'And Suffer objected too, because you said yourself that they can suffer. ' : (st.no.length ? 'Suffer did not object, but only because you said ' + listPhrases(st.no) + ' cannot suffer; Singer says ' + (st.no.length === 1 ? 'it can' : 'they can') + ', and with his facts Suffer would object as well. ' : '')) + 'But there is one rule that explains all three of your choices, and it needs no marks at all: the animals may be used first, and the people are spared. It is the rule of the team you happen to be on. Its name is Species.';
     w.singer = '';
   } else {
     w.name = 'Your own order'; w.headline = 'No rule explains your choices.';
@@ -254,7 +259,7 @@ function verdict(state) {
   var fate, part, stood;
   var two = 'Singer names two things that do not survive his line. Experiments on animals that nobody would do on a baby: he says almost none would be left, because almost no real experiment is the story you were told, with a thousand lives on the other side. And eating animals because they taste good: he says that should stop, since the pleasure of the taste is small and the pain behind it is not.';
   if (s.id === 'refuse') { fate = 'You would spend nobody\'s pain.'; part = ['Not about animals: you treated the baby and the mouse exactly alike, which is all Singer asks. You part from him on whether a day of pain for one may ever be traded for a thousand lives. He says yes; you say no. That is Foot\'s question, not his.']; stood = ['If you want to go on with that question, Philippa Foot\'s paper is on this shelf: the trolley, the surgeon, and what may not be done to one for the sake of many.', two]; }
-  else if (s.id === 'singer') { fate = 'You drew Singer\'s line.'; part = ['Nowhere that matters. Whenever you would use one being that can suffer, you would use any other, and only the stakes moved you. That is equal consideration, which is the whole of his paper.' + (st.no.length ? ' You and he disagree about one fact, whether ' + listPhrases(st.no) + ' can suffer, but your choices fit his facts as well as yours.' : '')]; stood = [two]; }
+  else if (s.id === 'singer') { fate = 'You drew Singer\'s line.'; part = ['Nowhere that matters. In every experiment, whenever you would use one being that can suffer, you would use any other there, and only the stakes moved you. That is equal consideration, which is the whole of his paper.' + (st.no.length ? ' You and he disagree about one fact, whether ' + listPhrases(st.no) + ' can suffer, but your choices fit his facts as well as yours.' : '')]; stood = [two]; }
   else if (s.id === 'equal-no') { fate = 'You treated everyone who can suffer alike, by your own answers.'; part = ['On a fact. You say ' + listPhrases(st.no) + ' cannot suffer; Singer says ' + (st.no.length === 1 ? 'it can' : 'they can') + ', at least as much as a baby a few days old. With his facts, the Suffer rule objects to your choices; with yours, it agrees. On the rule itself, you and he agree.']; stood = [two]; }
   else if (s.id === 'line') { fate = 'You drew a straight line in the wrong place.'; part = ['At the rule. A rule you can check gives your three choices, so they are not made by hand; but Singer says it is the wrong rule, as arbitrary as skin colour: the ones you would use first are hurt exactly as much as the ones you would spare.' + (st.objects ? ' And by your own answers they can all suffer, so Suffer objects to your choices too.' : '')]; stood = [two]; }
   else if (s.id === 'species') { fate = 'Your hand drew the line, not a rule.'; part = ['At the line. You would use the animals and spare the people, and no rule with marks gives those choices; the only difference between the animals you would use and the people you would spare that fits what you did is the team each is on. Singer\'s word for spending pain by team is speciesism, and he says it is the same pattern as racism and sexism.' + (st.objects ? ' And you said yourself that the animals can suffer.' : (st.no.length ? ' You said ' + listPhrases(st.no) + ' cannot suffer; he says ' + (st.no.length === 1 ? 'it can' : 'they can') + '.' : ''))]; stood = ['Singer has one more thing for you to do. Say out loud why the dog may be used to save a thousand lives and the baby may not. Then say it again, with "white" where you said "human" or "person" and "black" where you said "animal". He says what it sounds like the second time is the reason to give the line up.', two]; }
@@ -262,6 +267,6 @@ function verdict(state) {
   return { fate: fate, paper: paper, did: did, found: found, part: part, stood: stood, name: w.name, shape: s };
 }
 
-if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, castById: castById, rulerById: rulerById, levelById: levelById, listPhrases: listPhrases, drawSkins: drawSkins, menuOf: menuOf, rungOf: rungOf,
+if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, expName: expName, columnWords: columnWords, explainsColumn: explainsColumn, castById: castById, rulerById: rulerById, levelById: levelById, listPhrases: listPhrases, drawSkins: drawSkins, menuOf: menuOf, rungOf: rungOf,
   tickedAt: tickedAt, marksOf: marksOf, explains: explains, ruleTest: ruleTest, rulesExplaining: rulesExplaining, countTicked: countTicked, didWords: didWords, pattern: pattern, usedWords: usedWords, ruleWords: ruleWords,
   sufferTest: sufferTest, sufferWords: sufferWords, shapeOf: shapeOf, shapeWords: shapeWords, verdict: verdict };

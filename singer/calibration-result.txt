@@ -16,9 +16,9 @@ ok   nobody at any price is refuse, and its verdict points to Foot
 ok   the mouse first, then the hurt grown-up, then the baby, is explained by Reason (and the others)
 ok   the dog used to save a thousand lives and the baby spared draws an objection from Reason, Talk and Aware
 ok   the chimpanzee used to save a life and the hurt grown-up spared draws an objection from Reason, Talk and Aware
-ok   all 512 tick patterns x 512 answer sets get a pattern, a shape, a name, words for each rule, Suffer words and a verdict; the rationalisability test matches a brute-force search for rising cutoffs; every violating pair is (used, spared at the same or higher stakes); Suffer objects exactly when it should — 0 problems
+ok   all 512 tick patterns x 512 answer sets get a pattern, a shape, a name, words for each rule, Suffer words and a verdict; the per-experiment test matches a brute-force search for a cutoff in each experiment; every violating pair is (used, spared) on one menu; Suffer objects exactly when it should — 0 problems
 ok   patterns: refuse 1, all 1, the rest mixed — {"refuse":1,"mixed":510,"all":1}
-ok   all six shapes occur — {"refuse":512,"equal-no":38818,"own":155230,"line":18432,"species":47616,"singer":1536}
+ok   all six shapes occur — {"refuse":512,"equal-no":55325,"own":114147,"line":36864,"species":51712,"singer":3584}
 ok   robustness: with random marks that keep only the paper's orderings, no rule with marks explains the team's choices — 500 of 500
 ok   cast restored
 ok   three rungs of rising stakes, three stories each, and a fixed cost
@@ -26,15 +26,15 @@ ok   stories draw reproducibly, and seed 0 gives the first of each rung
 
 Shapes over 512 tick patterns x 512 answer sets:
   refuse    512
-  equal-no  38818
-  own       155230
-  line      18432
-  species   47616
-  singer    1536
+  equal-no  55325
+  own       114147
+  line      36864
+  species   51712
+  singer    3584
 Tick patterns by how many rules with marks explain them:
-  0 rules: 472
-  1 rules: 11
-  2 rules: 9
-  3 rules: 20
+  0 rules: 432
+  1 rules: 16
+  2 rules: 16
+  3 rules: 48
 
 all checks passed
