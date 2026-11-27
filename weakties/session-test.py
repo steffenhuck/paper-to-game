@@ -3,10 +3,10 @@ import asyncio, sys, os
 from playwright.async_api import async_playwright
 SEED = sys.argv[1] if len(sys.argv) > 1 else '4821'
 URL = 'file://' + os.path.abspath('granovetters-dashed-line.html') + '?seed=' + SEED
-PLAN = [  # a learning player: the circle first, then spread, then a strong bridge
-    {'Ann': 2, 'Ben': 2, 'Cal': 2, 'Dee': 1},
-    {'Ann': 1, 'Dee': 1, 'Eli': 1, 'Fay': 1, 'Gus': 1, 'Wes': 1, 'Kim': 1},
-    {'Ann': 1, 'Dee': 2, 'Eli': 1, 'Fay': 1, 'Gus': 1, 'Wes': 1},
+PLAN = [  # a learning player: the circle first, then three doors, then two of them again
+    {'Ann': 1, 'Ben': 1, 'Cal': 1},
+    {'Dee': 1, 'Eli': 1, 'Fay': 1},
+    {'Dee': 1, 'Eli': 1, 'Gus': 1},
 ]
 async def main():
     async with async_playwright() as p:
@@ -54,7 +54,7 @@ async def main():
         # retry: replay this town, homebody, watch one full week without skipping
         await pg.click('#b-replay'); await pg.wait_for_timeout(300)
         assert await pg.evaluate("document.getElementById('s-week').classList.contains('on')")
-        for name in ['Ann', 'Ann', 'Ben', 'Ben', 'Cal', 'Cal']: await pg.click(f'.chip:has-text("{name}")'); await pg.wait_for_timeout(40)
+        for name in ['Ann', 'Ben', 'Cal']: await pg.click(f'.chip:has-text("{name}")'); await pg.wait_for_timeout(40)
         await pg.click('#b-spend')
         for _ in range(900):
             if await pg.evaluate("document.getElementById('wk-result').style.display === ''"): break

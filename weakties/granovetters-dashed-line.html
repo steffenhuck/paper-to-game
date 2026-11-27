@@ -82,7 +82,7 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
     <line x1="8" y1="36" x2="150" y2="36" stroke="#14171B" stroke-width="1.25"/><text x="160" y="40" font-size="12" fill="#5B6773" font-family="Archivo,Helvetica,Arial">now and then</text>
     <line x1="8" y1="58" x2="150" y2="58" stroke="#14171B" stroke-width="1.25" stroke-dasharray="4 4"/><text x="160" y="62" font-size="12" fill="#5B6773" font-family="Archivo,Helvetica,Arial">rarely: a dashed line</text>
   </svg>
-  <p class="acts">You are looking for a job in a town of seven circles. Three weeks; each week you give seven evenings to the people you know. The town reacts. Then the week's news travels along the lines, and you watch which of it reaches you, and from whom.</p>
+  <p class="acts">You are looking for a job in a town of seven circles. Three weeks; each week you have three evenings for the people you know, one person an evening. The town reacts. Then the week's news travels along the lines, and you watch which of it reaches you, and from whom.</p>
   <p class="aim">Spend your evenings so that you hear of as many job openings as you can.</p>
   <button class="btn solid" id="b-begin">Start</button>
   <div class="row2"><button class="btn" id="b-help-start">How to play</button><button class="btn" id="b-about-start">About</button></div>
@@ -92,14 +92,14 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
 
 <!-- THE WEEK -->
 <section id="s-week" class="screen">
-  <div class="topbar"><div><div class="kicker" id="wk-kicker">Week 1 of 3</div><div class="now" id="wk-now">Give your seven evenings.</div><div class="sub" id="wk-sub">Tap a name once or twice.</div></div><button class="qbtn" id="b-help-week" aria-label="How to play">?</button></div>
+  <div class="topbar"><div><div class="kicker" id="wk-kicker">Week 1 of 3</div><div class="now" id="wk-now">Give your three evenings.</div><div class="sub" id="wk-sub">Tap a name to spend an evening with them.</div></div><button class="qbtn" id="b-help-week" aria-label="How to play">?</button></div>
   <svg class="map" id="map" viewBox="0 0 340 316" aria-label="The town"></svg>
   <div class="legend"><span><svg viewBox="0 0 30 10"><line x1="0" y1="5" x2="30" y2="5" stroke="#14171B" stroke-width="3"/></svg>often</span><span><svg viewBox="0 0 30 10"><line x1="0" y1="5" x2="30" y2="5" stroke="#14171B" stroke-width="1.25"/></svg>now and then</span><span><svg viewBox="0 0 30 10"><line x1="0" y1="5" x2="30" y2="5" stroke="#14171B" stroke-width="1.25" stroke-dasharray="4 3"/></svg>rarely</span><span><svg viewBox="0 0 30 10"><circle cx="15" cy="5" r="4" fill="#1F6FEB"/></svg>news</span><span><svg viewBox="0 0 30 10"><circle cx="15" cy="5" r="2.6" fill="#14171B"/><circle cx="15" cy="5" r="4.6" fill="none" stroke="#14171B" stroke-width="1"/></svg>evenings</span></div>
   <div id="wk-plan">
-    <div class="left"><span>Evenings left</span><span class="sq" id="wk-sq"></span><span id="wk-leftn">7</span></div>
+    <div class="left"><span>Evenings left</span><span class="sq" id="wk-sq"></span><span id="wk-leftn">3</span></div>
     <div class="chips" id="chips"></div>
     <button class="btn solid" id="b-spend">Spend the week</button>
-    <div class="rulebox" id="wk-rules"><b>Your lines are black:</b> thick, you see them often; thin, now and then; dashed, rarely. Two evenings make a line thick, one makes it thin; a line you give no evening thins by one step about one week in two, and never vanishes. <b>Grey lines</b> are everyone else's. <b>News</b> passes along lines: on a thick line always, on a thin line usually (three times in four), on a dashed line sometimes (one in three), and a little less at every pair of hands. <b>The town reacts:</b> two people you see often come to know each other; a person you see often introduces you to someone from their circle, and sees their own circle less that week.</div>
+    <div class="rulebox" id="wk-rules"><b>Your lines are black:</b> thick, you see them often; thin, now and then; dashed, rarely. An evening raises a line one step, dashed to thin, thin to thick; a line you give no evening thins by one step about one week in two, and never vanishes. <b>Grey lines</b> are everyone else's. <b>News</b> passes along lines: on a thick line always, on a thin line usually (three times in four), on a dashed line sometimes (one in three), and a little less at every pair of hands. <b>The town reacts:</b> two people you see often come to know each other; a person you see often introduces you to someone from their circle, and sees their own circle less that week.</div>
   </div>
   <div id="wk-play" style="display:none">
     <div class="voice" id="voice"></div>
@@ -141,9 +141,9 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
   <h1>How to play</h1>
   <p><b>Spend your evenings so that you hear of as many job openings as you can.</b></p>
   <h2>The town</h2>
-  <p>Seven circles of people, drawn as rings of dots. Inside a circle everyone sees everyone often. A few grey dashed lines join one circle to another. You are the big dot in the middle, in Home, with Ann, Ben and Cal. Your lines are black: the people with names are the people you know. At the start you see your three friends often (thick lines) and hardly see the eight others (dashed lines): someone from the firm you used to work at, from college, from your street, the choir, the club, your cousins. A thick line takes two evenings a week to stay thick.</p>
+  <p>Seven circles of people, drawn as rings of dots. Inside a circle everyone sees everyone often. A few grey dashed lines join one circle to another. You are the big dot in the middle, in Home, with Ann, Ben and Cal. Your lines are black: the people with names are the people you know. At the start you see your three friends often (thick lines) and hardly see the eight others (dashed lines): someone from the firm you used to work at, from college, from your street, the choir, the club, your cousins. A thick line stays thick while you keep seeing the person, and may thin when you do not.</p>
   <h2>A week</h2>
-  <p>You have seven evenings. Tap a name, on the map or in the row of names, to give that person one evening; tap again for two; tap again for none. One evening makes the line thin (you see them now and then). Two make it thick (often). A line you give no evening thins by one step about one week in two, on a coin: thick to thin, thin to dashed; a dashed line stays dashed. The map shows a tapped line as it will be; the others as they are now. Then tap <b>Spend the week</b>, or <b>Stay in all week</b> if you gave no one an evening.</p>
+  <p>You have three evenings, one person each. Tap a name, on the map or in the row of names, to spend an evening with them; tap again to take it back. An evening raises the line one step: a dashed line goes thin (you see them now and then), a thin line goes thick (often). A line you give no evening thins by one step about one week in two, on a coin: thick to thin, thin to dashed; a dashed line stays dashed. The map shows a tapped line as it will be; the others as they are now. Then tap <b>Spend the week</b>, or <b>Stay in all week</b> if you gave no one an evening.</p>
   <h2>What the town does</h2>
   <p>Two people you see often come to know each other: a new grey dashed line between them. A person you see often introduces you to someone from their circle: a new name on your map, with a dashed line to you. A person outside Home whom you see often has given you two of their evenings, so their lines in their own circle go thin that week. And once a week you run into someone by chance: usually someone new, a dashed line; about one time in three someone you already know, and the old line comes back thick for that week. A line, once there, never vanishes.</p>
   <h2>The news</h2>
@@ -161,15 +161,15 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
   <h2>What the paper says</h2>
   <p>The strength of a tie between two people is a combination of the time they spend together, the emotional intensity, the intimacy and the services they do each other (p. 1361). The stronger the tie between you and a friend, the more of your other friends you share: strong ties take time, bring your friends into each other's company, and run between similar people, and once two of your close friends know of each other, anything short of friendship between them is a strain (p. 1362). Pushed to the limit, for exposition, this says that a triangle with two strong sides and no third side never occurs (Fig. 1, p. 1363). It follows that no strong tie can be the only path between two groups, so whatever flows between groups flows along weak ties; and that news passed through weak ties reaches more people over greater social distance, provided the urge to retell it fades a little at every retelling, as it must in any real network (pp. 1364–1366). At the level of one person: the people you see most are inside your circle and know what you know; the person you hardly see is in another circle and is your line into it. Of 54 people in a Boston suburb who had found their job through a contact, 17 per cent saw the contact often, 56 per cent now and then, 28 per cent rarely, and in 84 per cent of 64 cases the news had come straight from the employer or through one intermediary (pp. 1371–1372). At the level of a community: a neighbourhood of close circles with no weak ties between them cannot organise, however warm the circles; the West End of Boston could not resist the renewal that demolished it (pp. 1373–1375).</p>
   <h2>What the game does with it</h2>
-  <p>You are the job changer of the paper's survey, and your one control is the paper's one measured variable: how often you see each person. Seven evenings a week on the people you know; two evenings make a line "often", one "now and then", the survey's own categories; a line you give no evening thins by one step about one week in two and never vanishes, so a close friend costs evenings to keep, which is the paper's premise that strength is time. Once a week you run into someone by chance: usually someone new; sometimes someone you already know, and the old line comes back thick for the week, the paper's reactivated tie. The town reacts as the paper says it does: two people you see often come to know each other; a person you see often introduces you to their circle (the paper quotes Gans, who was drawn into his first contact's circle in the West End); and a chance meeting reactivates a tie once a week, as the paper's respondents reported. Then the week's news travels along the lines. The verdict scores your three weeks as a share of what could have been heard on this town's news (the best three weeks found with the news known in advance, or your own run if it did better), shows the same news five ways (you, the best plan without foreknowledge, your circle, nobody, the news known in advance), and reads who told you first against the paper's Boston table. The paper's second table, how many pairs of hands the news passed through (39 per cent straight from the employer, 45 through one intermediary, 13 through two, 3 through more), is in the calibration and not on the verdict: the toy reproduces its shape (five in six within one pair of hands) but not its middle.</p>
+  <p>You are the job changer of the paper's survey, and your one control is the paper's one measured variable: how often you see each person. Three evenings a week on the people you know, one person an evening; an evening raises a line one step, dashed ("rarely") to thin ("now and then") to thick ("often"), the survey's own categories built up week after week; a line you give no evening thins by one step about one week in two and never vanishes, so a close friend costs evenings to keep, which is the paper's premise that strength is time. Once a week you run into someone by chance: usually someone new; sometimes someone you already know, and the old line comes back thick for the week, the paper's reactivated tie. The town reacts as the paper says it does: two people you see often come to know each other; a person you see often introduces you to their circle (the paper quotes Gans, who was drawn into his first contact's circle in the West End); and a chance meeting reactivates a tie once a week, as the paper's respondents reported. Then the week's news travels along the lines. The verdict scores your three weeks as a share of what could have been heard on this town's news (the best three weeks found with the news known in advance, or your own run if it did better), shows the same news five ways (you, the best plan without foreknowledge, your circle, nobody, the news known in advance), and reads who told you first against the paper's Boston table. The paper's second table, how many pairs of hands the news passed through (39 per cent straight from the employer, 45 through one intermediary, 13 through two, 3 through more), is in the calibration and not on the verdict: the toy reproduces its shape (five in six within one pair of hands) but not its middle.</p>
   <h2>Mechanism kind and claim boundaries</h2>
-  <p><b>Toy.</b> The game runs a model built to illustrate the paper's argument, calibrated so that a mixed week reproduces the paper's two tables. The town (seven circles, one of them yours, every circle a clique, nine dashed lines among the outer circles and none into Home but yours), the probabilities with which a person passes news on (always on a thick line, three times in four on a thin one, one in three on a dashed one, and a fifth less at every pair of hands), the rate of news, the rule that a person who gives you two evenings sees their own circle less, the coin on which an untended line thins, and the rates of introductions, chance meetings and reactivations are ours. The paper says only that strong ties are more motivated and that retelling dampens.</p>
+  <p><b>Toy.</b> The game runs a model built to illustrate the paper's argument, calibrated so that a mixed week reproduces the paper's two tables. The town (seven circles, one of them yours, every circle a clique, nine dashed lines among the outer circles and none into Home but yours), the probabilities with which a person passes news on (always on a thick line, three times in four on a thin one, one in three on a dashed one, and a fifth less at every pair of hands), the rate of news, the rule that a person you see often sees their own circle less, the coin on which an untended line thins, and the rates of introductions, chance meetings and reactivations are ours. The paper says only that strong ties are more motivated and that retelling dampens.</p>
   <p><b>What the game demonstrates:</b> that under this game's assumptions, evenings spread across circles bring more distinct news than evenings kept in the circle, that the circle's news reaches you more than once, and that the pattern of who told you first, for a week like the paper's respondents', looks like the paper's table. <b>What the game assumes:</b> everything in the paragraph above, and that news is heard or not, with nothing about its quality. <b>What the paper establishes:</b> the argument from tie strength to bridges and diffusion, which it states as a hypothesis with the evidence it had; and the two Boston tables, from a small sample the paper itself calls exploratory. A run of this game is no evidence for the paper's claim about the world.</p>
   <p>The discovery survives plausible changes to our own choices: with the pass probabilities, the damping, the rate of news and the finite-time rule varied, spreading across circles still beats the circle and the circle still tells you its news more than once. What the game cannot show is anything the paper leaves out: the content of ties, what a lead is worth, influence exerted on your behalf, negative or one-sided ties.</p>
   <h2>What is left out</h2>
   <p>Emotional intensity, intimacy and services as parts of strength (the survey used time alone, and so does the game). Similarity as a reason for closure. The small-world studies, including the finding that chains from white senders to a Black target were completed twice as often when the first link was an acquaintance rather than a friend (pp. 1368–1369). Rapoport and Horvath's tracing of a school's friendship choices, where more children were reached through seventh and eighth choices than through first and second (p. 1369). The paper's remarks on transitivity models of small groups. The quality of a lead by the path it came along ("earmarked for one person", p. 1373): the verdict reports the hands, but every opening counts one. The community section is read on the end screen, not played.</p>
   <h2>Design memo, in brief</h2>
-  <p>Three concepts were written out: the week (you are the job changer; a town that reacts), the weave (you plan a neighbourhood's workplaces and clubs, and see whether a leaflet can cross it), and the leaflet (you are the news, tapping your way along lines on a screen with no words). The week was built because its control is the paper's own variable and its reaction is the paper's own mechanism; the leaflet's journey is kept as the week's animation. Look: a Swiss grid in winter, white, ink, one cold blue for news and nothing else, lines in the paper's own code, solid for strong and dashed for weak. Revised after the author's plays: chosen people ringed on the map; five weeks cut to three; a score against what could have been heard; lines made states that thin when untended, instead of every week starting from none; a closing bet tried and removed as too much of a quiz. The full memo, the mechanism file with every number tagged to its source, and the calibration check are in the repository folder <code>weakties/</code>.</p>
+  <p>Three concepts were written out: the week (you are the job changer; a town that reacts), the weave (you plan a neighbourhood's workplaces and clubs, and see whether a leaflet can cross it), and the leaflet (you are the news, tapping your way along lines on a screen with no words). The week was built because its control is the paper's own variable and its reaction is the paper's own mechanism; the leaflet's journey is kept as the week's animation. Look: a Swiss grid in winter, white, ink, one cold blue for news and nothing else, lines in the paper's own code, solid for strong and dashed for weak. Revised after the author's plays: chosen people ringed on the map; five weeks cut to three; a score against what could have been heard; lines made states that thin when untended, instead of every week starting from none; a closing bet tried and removed as too much of a quiz; seven evenings cut to three, one person each, so that every week is a choice of which lines to keep alive. The full memo, the mechanism file with every number tagged to its source, and the calibration check are in the repository folder <code>weakties/</code>.</p>
 
   <div class="close"><button class="btn" id="b-about-close2">Back</button></div>
 </div></div>
@@ -181,9 +181,10 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
 //
 // Rules, in the words the screen uses:
 //   The town: five circles of people. Inside a circle everyone sees everyone often. A few dashed lines join circles.
-//   Your week: seven evenings; each person you know gets none, one or two. Two makes the line "often" (thick), one "now and then"
-//   (thin): the paper's own survey categories, p. 1371. A line is a state that lasts: a line you do not tend this week thins by one
-//   step about one week in two, thick to thin, thin to dashed ("rarely"), and never vanishes: someone you once knew is a dashed line for ever.
+//   Your week: three evenings, one person each. An evening turns a dashed line ("rarely") thin ("now and then"), and a thin line
+//   thick ("often"): the paper's own survey categories, p. 1371, built up week after week. A line is a state that lasts: a line you
+//   do not tend this week thins by one step about one week in two, thick to thin, thin to dashed, and never vanishes: someone you once
+//   knew is a dashed line for ever.
 //   At the start your three friends at Home are thick lines and the eight others dashed.
 //   The town reacts: two people you see often come to know each other (the forbidden triad, Fig. 1, p. 1363, exaggerated as the
 //   paper does to "never occurs"); a person you see often introduces you to one of their circle (Gans's experience, p. 1374);
@@ -198,8 +199,8 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
 
 var CONFIG = {
   WEEKS: 3,                        // our choice: three things to find out, one a week (memo, section 11; revision 2)
-  EVENINGS: 7,                     // our choice: a week of evenings; the paper's "often" is at least twice a week (p. 1371)
-  CAP: 2,                          // our choice: two evenings in a week makes a tie "often" (p. 1371: "at least twice a week")
+  EVENINGS: 3,                     // our choice (revision 6): three nights out a week is all the time there is; the paper's premise that strength is time
+  CAP: 1,                          // our choice (revision 6): one evening per person a week; a line is built up across weeks, not within one
   NEWS_PER_WEEK: 7,                // our choice: one opening per circle per week on average; the paper gives no rate
   P_PASS: { often: 1.0, occ: 0.75, rare: 0.3 },  // ours: strong ties are more motivated to pass on (p. 1371, "a natural a priori idea");
                                    //   the three values tuned so that a mixed Boston week reproduces the paper's two tables (calibration 3, 4)
@@ -214,9 +215,7 @@ var CONFIG = {
   P_REVIVE: 0.33,                  // ours: the chance that the week's chance meeting is with someone you already know, whose line comes back thick
                                    //   for the week (p. 1372: "chance meetings or mutual friends operated to reactivate such ties")
   BANDS: [85, 60],                 // our choice: the score's three bands, as a share of what could have been heard (85 and up; 60 to 85; under 60)
-  BEST_PLAN: 'sixAndOne',          // the best plan without foreknowledge: one evening to one person in each of the six other circles, and the
-                                   //   seventh to one of them again, so one line is thick; nothing to Home, which thins only half the time
-                                   //   (memo, revisions 3 to 5; the first-week search and the plan family in calibration 10)
+  BEST_PLAN: 'threeDoors',         // the best plan without foreknowledge, by search over the plan family (memo, revision 6; calibration 10)
   WEEK1_FLOOR: true,               // our choice (build.md §3, a floor): week one's six openings include one in Home and one in every outer circle,
                                    //   so the triple arrival and the dashed-line arrival can both be seen; later weeks are unconstrained draws
   CIRCLES: [                       // ours: the paper gives no town. Ties inside a circle are all "often" (the circle is a clique);
@@ -238,9 +237,9 @@ var CONFIG = {
   // The paper's tables, for the calibration check and the verdict (p. 1371, N = 54; p. 1372, N = 64). Typeset text, not a scan.
   BOSTON_SEEN: { often: 16.7, occ: 55.6, rare: 27.8 },
   BOSTON_HANDS: { h0: 39.1, h1: 45.3, h2: 12.5, h3: 3.1 },
-  // Our reference week for the calibration: a job changer who keeps two close friends close,
-  // and one person in each of three other circles now and then (2 + 2 + 1 + 1 + 1 = 7); the rest are dashed lines. Not a strategy the game recommends; the week the tables are read against.
-  REFERENCE_WEEK: { Ann: 2, Ben: 2, Dee: 1, Eli: 1, Fay: 1 },
+  // Our reference player for the calibration (revision 6): one who spreads three nights over different people each week and never settles,
+  // which is the paper's weak-tie-rich individual (pp. 1370–1372); the tables are read against this player, not a plan the game recommends.
+  REFERENCE: 'rotate',
   TOL_SEEN: 12,                    // percentage points of tolerance on the Boston "how often seen" table
   TOL_HANDS: 12                    // percentage points of tolerance on the Boston "hands passed through" table
 };
@@ -263,10 +262,11 @@ function townTies() { // the ties that are not yours: a map key -> category
   CONFIG.BRIDGES.forEach(function (b) { t[key(b[0], b[1])] = 'rare'; });
   return t;
 }
-function catOf(evenings) { return evenings >= CONFIG.CAP ? 'often' : (evenings >= 1 ? 'occ' : 'rare'); }
+function catOf(evenings) { return evenings >= 2 ? 'often' : (evenings >= 1 ? 'occ' : 'rare'); } // the survey's categories from a count; kept for the record
 function down(cat) { return cat === 'often' ? 'occ' : 'rare'; }
-function weekCat(s, n, ev) { // this week's line: what the evenings make it; untended, the same as last week or one step down, on a coin fixed by seed, week and name
-  var e = (ev && ev[n]) || 0; if (e >= 1) return catOf(e);
+function up(cat) { return cat === 'rare' ? 'occ' : 'often'; }
+function weekCat(s, n, ev) { // this week's line: an evening raises it one step; untended, the same as last week or one step down, on a coin fixed by seed, week and name
+  var e = (ev && ev[n]) || 0; if (e >= 1) return up(s.strength[n] || 'rare');
   if (s.revived && s.revived[n]) return 'often';
   var st = s.strength[n] || 'rare'; if (!CONFIG.DECAY || st === 'rare') return st;
   return unit([s.seed, 'thin', s.week, n]) < CONFIG.P_THIN ? down(st) : st;
@@ -396,43 +396,27 @@ function shares(obj) { var sum = 0, out = {}; for (var k in obj) sum += obj[k]; 
 // ---------- strategies (the ghosts, and the heuristics table) ----------
 // Each takes the state and returns a week's evenings. They see only what the player sees: the known list and the circles.
 var STRATEGIES = {
-  homebody: function (s) { var ev = {}; ['Ann', 'Ben', 'Cal'].forEach(function (n) { ev[n] = CONFIG.CAP; }); return ev; }, // every evening to the circle; the seventh stays home
-  loyal: function (s) { var ev = { Ann: 2, Ben: 2, Cal: 2 }; var first = s.known.filter(function (n) { return circleOf(n) !== 'home'; })[0]; if (first) ev[first] = 1; return ev; },
-  spreader: function (s) { // one evening to one person per circle you can reach, then one more person per circle, biggest circle first
-    var ev = {}, left = CONFIG.EVENINGS, byCircle = {};
-    s.known.forEach(function (n) { (byCircle[circleOf(n)] = byCircle[circleOf(n)] || []).push(n); });
-    var order = Object.keys(byCircle).sort(function (a, b) { return sizeOf(b) - sizeOf(a); });
-    for (var round = 0; left > 0 && round < 6; round++) order.forEach(function (c) { var n = byCircle[c][round]; if (n && left > 0) { ev[n] = 1; left--; } });
-    return ev;
-  },
-  bridgesOften: function (s) { // two evenings to one person in each outer circle, the rest to Ann
-    var ev = {}, left = CONFIG.EVENINGS, done = {};
-    s.known.forEach(function (n) { var c = circleOf(n); if (c !== 'home' && !done[c] && left >= 2) { ev[n] = 2; left -= 2; done[c] = true; } });
-    if (left > 0) ev.Ann = Math.min(left, CONFIG.CAP);
-    return ev;
-  },
-  oneCircle: function (s) { // everything into the firm: as many firm people as you know, two each
-    var ev = {}, left = CONFIG.EVENINGS; s.known.filter(function (n) { return circleOf(n) === 'firm'; }).forEach(function (n) { if (left >= 2) { ev[n] = 2; left -= 2; } }); if (left) ev.Ann = 1; return ev;
-  },
-  stayIn: function (s) { return {}; }, // no evenings on anyone: every line dashed
-  sixAndOne: function (s) { // one evening to one person in each outer circle, the seventh as a second evening to the biggest circle's person
-    var ev = {}, byC = {}; s.known.forEach(function (n) { var c = circleOf(n); if (c !== 'home') (byC[c] = byC[c] || []).push(n); });
-    var order = Object.keys(byC).sort(function (a, b) { return sizeOf(b) - sizeOf(a); }); order.forEach(function (c) { ev[byC[c][0]] = 1; });
-    var left = CONFIG.EVENINGS - Object.keys(ev).length; if (left > 0) { ev[byC[order[0]][0]] = 2; left--; }
-    order.forEach(function (c) { if (left > 0 && byC[c][1]) { ev[byC[c][1]] = 1; left--; } });
-    return ev;
-  },
-  hindsight: function (s) { return hindsightWeek(s).ev; } // the best week we can find knowing the week's news: hill-climbing from the spreader's week
+  homebody: function (s) { return { Ann: 1, Ben: 1, Cal: 1 }; }, // every night with the circle: the three friends stay thick
+  loyal: function (s) { var ev = { Ann: 1, Ben: 1 }; var first = outerByCircle(s).list[0]; if (first) ev[first] = 1; return ev; }, // two friends and one acquaintance
+  threeDoors: function (s) { var ev = {}; outerByCircle(s).list.slice(0, CONFIG.EVENINGS).forEach(function (n) { ev[n] = 1; }); return ev; }, // the same three doors every week: one person in each of three other circles, the circles where you know fewest people first
+  rotate: function (s) { var ev = {}, o = outerByCircle(s), k = (s.week - 1) * CONFIG.EVENINGS; for (var i = 0; i < CONFIG.EVENINGS; i++) { var n = o.list[(k + i) % o.list.length]; if (n) ev[n] = 1; } return ev; }, // three new doors each week
+  oneHomeTwoDoors: function (s) { var ev = { Ann: 1 }; outerByCircle(s).list.slice(0, 2).forEach(function (n) { ev[n] = 1; }); return ev; }, // keep one friend, two doors
+  stayIn: function (s) { return {}; }, // no evenings on anyone
+  hindsight: function (s) { return hindsightWeek(s).ev; } // the best week we can find knowing the week's news: hill-climbing from the best plan's week
 };
+function outerByCircle(s) { // one person per outer circle, the circles where you know fewest people first (a second dashed line into a circle is already a door), then by size, then the second person in each
+  var byC = {}; s.known.forEach(function (n) { var c = circleOf(n); if (c !== 'home') (byC[c] = byC[c] || []).push(n); });
+  var order = Object.keys(byC).sort(function (a, b) { return byC[a].length - byC[b].length || sizeOf(a) - sizeOf(b) || (a < b ? -1 : 1); }), list = [];
+  for (var round = 0; round < 6; round++) order.forEach(function (c) { if (byC[c][round]) list.push(byC[c][round]); });
+  return { list: list, order: order, byC: byC };
+}
 function ceiling(s) { return Math.max(tally(runStrategy(s.seed, STRATEGIES.hindsight)).heard, tally(s).heard); }
 function scoreOf(s) { var c = ceiling(s), h = tally(s).heard, p = c ? 100 * h / c : 0; return { heard: h, ceiling: c, pct: p, band: p >= CONFIG.BANDS[0] ? 2 : (p >= CONFIG.BANDS[1] ? 1 : 0) }; }
 function lightClone(s) { return { seed: s.seed, week: s.week, known: s.known.slice(), extra: Object.assign({}, s.extra), weeks: [], heardAll: {}, strength: Object.assign({}, s.strength), revived: {} }; }
 function heardOf(s, ev) { return playWeek(lightClone(s), ev).heard; }
-function hindsightWeek(s) { // move one evening at a time while it helps; with hindsight on this week's draw and coins
-  var best = Object.assign({}, STRATEGIES.spreader(s)), bestH = heardOf(s, best), improved = true, guard = 0;
-  while (improved && guard++ < 40) { improved = false;
-    s.known.forEach(function (from) { s.known.forEach(function (to) { if (from === to || !(best[from] > 0) || (best[to] || 0) >= CONFIG.CAP) return; var e = Object.assign({}, best); e[from]--; if (!e[from]) delete e[from]; e[to] = (e[to] || 0) + 1; var h = heardOf(s, e); if (h > bestH) { bestH = h; best = e; improved = true; } }); });
-  }
+function hindsightWeek(s) { // the best week with the news known: every legal week (a few hundred with three evenings, one per person) tried on this week's draw and coins
+  var best = {}, bestH = -1;
+  allWeeks(s.known).forEach(function (ev) { var h = heardOf(s, ev); if (h > bestH) { bestH = h; best = ev; } });
   return { ev: best, heard: bestH };
 }
 function sizeOf(cid) { for (var i = 0; i < CONFIG.CIRCLES.length; i++) if (CONFIG.CIRCLES[i].id === cid) return CONFIG.CIRCLES[i].people.length; return 0; }
@@ -449,7 +433,7 @@ function allWeeks(known) {
   return out;
 }
 
-if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: newGame, playWeek: playWeek, isOver: isOver, legalWeek: legalWeek, allTies: allTies, townTies: townTies, circleOf: circleOf, circleLabel: circleLabel, everyone: everyone, catOf: catOf, catWord: catWord, key: key, tally: tally, shares: shares, STRATEGIES: STRATEGIES, runStrategy: runStrategy, weekCat: weekCat, down: down, ceiling: ceiling, scoreOf: scoreOf, hindsightWeek: hindsightWeek, heardOf: heardOf, lightClone: lightClone, allWeeks: allWeeks, drawOrigins: drawOrigins, spread: spread, reachedCircles: reachedCircles, sizeOf: sizeOf, unit: unit, rng: rng };
+if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: newGame, playWeek: playWeek, isOver: isOver, legalWeek: legalWeek, allTies: allTies, townTies: townTies, circleOf: circleOf, circleLabel: circleLabel, everyone: everyone, catOf: catOf, catWord: catWord, key: key, tally: tally, shares: shares, STRATEGIES: STRATEGIES, runStrategy: runStrategy, weekCat: weekCat, down: down, up: up, outerByCircle: outerByCircle, ceiling: ceiling, scoreOf: scoreOf, hindsightWeek: hindsightWeek, heardOf: heardOf, lightClone: lightClone, allWeeks: allWeeks, drawOrigins: drawOrigins, spread: spread, reachedCircles: reachedCircles, sizeOf: sizeOf, unit: unit, rng: rng };
 
 </script>
 <script>
@@ -533,8 +517,8 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: n
   function startWeek() {
     ev = {}; clearNews(); renderTies(displayTies());
     $('wk-kicker').textContent = 'Week ' + G.week + ' of ' + CONFIG.WEEKS;
-    $('wk-now').textContent = G.week === 1 ? 'Give your seven evenings.' : (G.week === CONFIG.WEEKS ? 'The last week. Give your seven evenings.' : 'A new week. Give your seven evenings.');
-    $('wk-sub').textContent = G.week === 1 ? 'Tap a name once or twice.' : 'Tap a name once or twice; an untended line may thin.';
+    $('wk-now').textContent = G.week === 1 ? 'Give your three evenings.' : (G.week === CONFIG.WEEKS ? 'The last week. Give your three evenings.' : 'A new week. Give your three evenings.');
+    $('wk-sub').textContent = G.week === 1 ? 'Tap a name to spend an evening with them.' : 'Tap a name; an untended line may thin.';
     $('wk-plan').style.display = ''; $('wk-play').style.display = 'none'; $('wk-result').style.display = 'none';
     renderPlan(); window.scrollTo(0, 0);
   }
@@ -667,8 +651,8 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: n
       { label: 'no evening on anyone', n: st },
       { label: 'news known in advance', n: ceil, dash: true }
     ], ceil);
-    var planEv = STRATEGIES[CONFIG.BEST_PLAN](newGame(G.seed)), two = Object.keys(planEv).filter(function (n) { return planEv[n] === 2; }), one = Object.keys(planEv).filter(function (n) { return planEv[n] === 1; });
-    $('v-plan').innerHTML = '<b>The best plan without foreknowledge:</b> one evening to one person in each of the other six circles, and the seventh to one of them again (' + (two.length ? list(two) + ' twice; ' : '') + list(one) + ' once), every week, and nothing to Home. It hears ' + sp + ' of ' + ceil + ' here.';
+    var planEv = STRATEGIES[CONFIG.BEST_PLAN](newGame(G.seed)), planPeople = Object.keys(planEv), nightsOut = 0, planNights = 0; G.weeks.forEach(function (w) { for (var n in w.evenings) nightsOut += w.evenings[n]; }); runStrategy(G.seed, STRATEGIES[CONFIG.BEST_PLAN]).weeks.forEach(function (w) { for (var n in w.evenings) planNights += w.evenings[n]; });
+    $('v-plan').innerHTML = '<b>The best plan without foreknowledge:</b> the same three doors every week, one person in each of three other circles, chosen where you know only one person (' + list(planPeople) + '), so that their lines are thick from the second week; nothing to Home. It hears ' + sp + ' of ' + ceil + ' here, in ' + planNights + ' nights out; you went out ' + nightsOut + '.';
     var sh = { often: pct(t.seen.often, heard), occ: pct(t.seen.occ, heard), rare: pct(t.seen.rare, heard) }, B = CONFIG.BOSTON_SEEN;
     bars('v-bars1', [
       { label: 'saw them often', you: sh.often, paper: B.often, note: Math.round(sh.often) + '% · paper ' + Math.round(B.often) + '%' },
