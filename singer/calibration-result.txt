@@ -14,11 +14,17 @@ ok   on Suffer the clash for the four people is a tie
 ok   shape of the four people is species; of everyone who feels, singer; of all ten, everything; of nobody, nothing
 ok   robustness: with random lengths that keep only the paper's orderings, the four people are a line on no ruler and everyone-who-feels is a line on Suffer — 500 of 500
 ok   cast restored after robustness runs
-ok   all 1024 sets get a shape, a name, words, four reveals and a verdict (unmoved); every line is a true threshold — 0 problems
-ok   a player who takes each ruler's line is ruler-led and ends on Singer's line — On every ruler your line was that ruler's line: everyone in above everyone out. Four rulers, 4 different lines. You ended on Suffer's, which is Singer's.
-ok   a player moved only by Suffer is mixed, with three "did not move you" and one move — Reason did not move you. Talk did not move you. Aware did not move you. Suffer moved you: the chimpanzee, the dog, the pig, the horse and the mouse now count as much as you. You ended with the grown-up, the baby, the grown-up whose brain is badly hurt, the grown-up who cannot learn much, the chimpanzee, the dog, the pig, the horse and the mouse counting as much as you: Singer's line.
+ok   all 1024 sets get a shape, a name, words, four reveals, Suffer words and a verdict (unmoved); every line is a true threshold — 0 problems
+ok   Suffer asks about exactly the beings counted for less, minus the stone (species player: five animals)
+ok   Suffer objects to every "yes, it can suffer" still counted for less, and marks the "no"s as disputed by Singer
+ok   an unanswered being leaves the test incomplete and the words empty
+ok   all "no" answers: Suffer agrees, Singer disputes the fact
+ok   Singer's line: nothing to ask
+ok   a player who takes each ruler's line is ruler-led and ends on Singer's line — Every time a rule came to the board, you moved your line to where that rule would draw it. Reason moved you: the baby, the grown-up whose brain is badly hurt and the grown-up who cannot learn much now count for less. Talk moved you: the grown-up who cannot learn much now counts as much as you. Aware moved you: the chimpanzee now counts as much as you, and the grown-up who cannot learn much now counts for less. Suffer moved you: the baby, the grown-up whose brain is badly hurt, the grown-up who cannot learn much, the dog, the pig, the horse and the mouse now count as much as you. Four rules, 4 different lines. You ended on Suffer's, which is Singer's.
+ok   a player moved only by Suffer is mixed, with one move, and the Suffer line says he moved them in — You said the chimpanzee, the dog, the pig, the horse and the mouse can suffer, and when Suffer objected you moved them in.
 ok   Singer's line kept five times is unmoved
-ok   the verdict reads the last line (Singer's) and reports the trajectory — You ended on Singer's line.
+ok   the verdict reads the last line (Singer's), reports the trajectory, and always speaks to the experiment — At the experiment: you spent the mouse's pain, which your own line counts as much as yours, and you would have spent the baby's the same way. Singer does not say you were wrong to, in a story where many lives are saved; he says real experiments are not that story, and that your own test, the baby's, would stop nearly all of them.
+ok   the species player who says the animals can suffer gets his two answers side by side — Suffer: You said the chimpanzee, the dog, the pig, the horse and the mouse can suffer, and by the end you still counted the chimpanzee, the dog, the pig, the horse and the mouse for less. Those are your own two answers, side by side. Suffer did not move you.
 ok   eight shapes occur — {"nothing":1,"line":11,"species-minus":12,"species":1,"own":967,"species-plus":30,"singer":1,"everything":1}
 ok   the grown-up alone is a Reason, Talk and Aware line
 ok   the four people plus the dog is species-with-favourites
@@ -26,7 +32,7 @@ ok   the four people minus the hurt grown-up is species-with-exceptions
 ok   everyone but the baby and the stone is own, nearest Singer, with the baby dropped
 ok   the experiment ends on every path (13 with the baby in, 15 with the baby out)
 ok   "the baby is out on my line too" is offered only when the baby is out
-ok   the question names the animal and knows the line: On your line the chimpanzee's pain counts as much as the baby's. Why the chimpanzee, and not the baby?
+ok   the question names the animal and knows the line: On your last line the chimpanzee's pain counts as much as the baby's, and as much as yours. Why the chimpanzee, and not the baby?
 ok   every status is reachable — {"read":10,"species":12,"potential":4,"refuse":2}
 
 Shapes (how many of the 1024 sets fall in each):

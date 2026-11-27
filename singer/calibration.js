@@ -1,4 +1,4 @@
-// Calibration check for Draw a Line with Singer (revision 4). Run: node calibration.js. Exit code 1 on any failure.
+// Calibration check for Draw a Line with Singer (revision 7). Run: node calibration.js. Exit code 1 on any failure.
 // The mechanism is a TOY of an argument; the check verifies (1) that every ordering the 1974 paper states holds in the cast,
 // (2) the paper's claim on this cast: the four-people set is a line on no ruler, and the everyone-who-feels set is a line on Suffer only,
 // (3) that this rests on the paper's orderings, not our lengths: random casts keeping only the stated orderings behave the same,
@@ -51,20 +51,31 @@ for (var mask = 0; mask < (1 << n); mask++) {
   shapes[s.id] = (shapes[s.id] || 0) + 1;
   if (!w.name || !w.headline || !w.who || w.who.length < 40 || (s.id !== 'species' && (!w.singer || w.singer.length < 40))) bad++;
   C.RULERS.forEach(function (r) { if (!m.revealWords(set, r.id) || m.revealWords(set, r.id).length < 20) bad++; });
-  var v = m.verdict({ lines: [set, set, set, set, set], path: { pick: 'chimp', why: 'human', braindam: null } }); if (!v.fate || v.found.length !== 6 || !v.part.length || v.synthesis.kind !== 'unmoved') bad++;
+  var ans = {}; m.sufferAsked(set).forEach(function (id) { ans[id] = true; });
+  var v = m.verdict({ lines: [set, set, set, set, set], answers: ans, path: { pick: 'chimp', why: 'human', braindam: null } }); if (!v.fate || v.found.length !== 6 || v.part.length !== 2 || v.synthesis.kind !== 'unmoved') bad++;
+  var sw = m.sufferWords(set, ans); if (typeof sw !== 'string' || (m.sufferAsked(set).length && sw.length < 40)) bad++;
   s.lines.forEach(function (rid) { var rows = m.sortBy(rid); for (var i = 1; i < rows.length; i++) { var inA = set.indexOf(rows[i - 1].id) >= 0, inB = set.indexOf(rows[i].id) >= 0; if (!inA && inB) bad++; if (inA !== inB && rows[i - 1].r === rows[i].r) bad++; } });
 }
-check('all 1024 sets get a shape, a name, words, four reveals and a verdict (unmoved); every line is a true threshold', bad === 0, bad + ' problems');
+check('all 1024 sets get a shape, a name, words, four reveals, Suffer words and a verdict (unmoved); every line is a true threshold', bad === 0, bad + ' problems');
+// (4c) the Suffer round
+var stS = m.sufferTest(H, { chimp: true, dog: true, pig: false, horse: false, mouse: true });
+check('Suffer asks about exactly the beings counted for less, minus the stone (species player: five animals)', JSON.stringify(m.sufferAsked(H)) === '["chimp","dog","pig","horse","mouse"]' && m.sufferAsked(F).length === 0 && m.sufferAsked(['adult']).length === 8);
+check('Suffer objects to every "yes, it can suffer" still counted for less, and marks the "no"s as disputed by Singer', JSON.stringify(stS.objections) === '["chimp","dog","mouse"]' && JSON.stringify(stS.disputed) === '["pig","horse"]' && stS.complete && !stS.agrees);
+check('an unanswered being leaves the test incomplete and the words empty', !m.sufferTest(H, { chimp: true }).complete && m.sufferWords(H, { chimp: true }) === '');
+check('all "no" answers: Suffer agrees, Singer disputes the fact', /Suffer agrees/.test(m.sufferWords(H, { chimp: false, dog: false, pig: false, horse: false, mouse: false })) && /Singer disputes a fact/.test(m.sufferWords(H, { chimp: false, dog: false, pig: false, horse: false, mouse: false })));
+check('Singer\'s line: nothing to ask', /nothing to ask/.test(m.sufferWords(F, {})));
 // (4b) trajectories
 var rl = [H, ['adult'], ['adult', 'disab'], ['adult', 'chimp'], F]; // the four people, then each ruler's own line
-var synR = m.synthesis(rl);
-check('a player who takes each ruler\'s line is ruler-led and ends on Singer\'s line', synR.kind === 'ruler-led' && synR.last.shape.id === 'singer', synR.text);
-var synM = m.synthesis([H, H, H, H, F]);
-check('a player moved only by Suffer is mixed, with three "did not move you" and one move', synM.kind === 'mixed' && synM.movedRounds === 1 && /Suffer moved you: .* now count as much as you/.test(synM.text), synM.text);
-var synU = m.synthesis([F, F, F, F, F]);
+var synR = m.synthesis(rl, {});
+check('a player who takes each ruler\'s line is ruler-led and ends on Singer\'s line', synR.kind === 'rule-led' && synR.last.shape.id === 'singer', synR.text);
+var synM = m.synthesis([H, H, H, H, F], { chimp: true, dog: true, pig: true, horse: true, mouse: true });
+check('a player moved only by Suffer is mixed, with one move, and the Suffer line says he moved them in', synM.kind === 'mixed' && synM.movedRounds === 1 && /Suffer moved you: .* now count as much as you/.test(synM.text) && /moved them in/.test(synM.suffer), synM.suffer);
+var synU = m.synthesis([F, F, F, F, F], {});
 check('Singer\'s line kept five times is unmoved', synU.kind === 'unmoved' && /from the start/.test(synU.text));
-var vM = m.verdict({ lines: [H, H, H, H, F], path: { pick: 'mouse', why: 'none', braindam: null } });
-check('the verdict reads the last line (Singer\'s) and reports the trajectory', /Singer/.test(vM.fate) && vM.found.length === 6 && /Suffer moved you/.test(vM.found.join(' ')), vM.fate);
+var vM = m.verdict({ lines: [H, H, H, H, F], answers: { chimp: true, dog: true, pig: true, horse: true, mouse: true }, path: { pick: 'mouse', why: 'none', braindam: null } });
+check('the verdict reads the last line (Singer\'s), reports the trajectory, and always speaks to the experiment', /Singer/.test(vM.fate) && vM.found.length === 6 && /Suffer moved you/.test(vM.found.join(' ')) && /^At the experiment: you spent the mouse/.test(vM.part[1]), vM.part[1]);
+var vS = m.verdict({ lines: [H, H, H, H, H], answers: { chimp: true, dog: true, pig: true, horse: true, mouse: true }, path: { pick: 'chimp', why: 'human', braindam: null } });
+check('the species player who says the animals can suffer gets his two answers side by side', /side by side/.test(vS.found[4]) && /drew the team/.test(vS.part[1]), vS.found[4]);
 check('eight shapes occur', Object.keys(shapes).length === 8, JSON.stringify(shapes));
 check('the grown-up alone is a Reason, Talk and Aware line', JSON.stringify(m.linesOn(['adult'])) === '["reason","talk","aware"]');
 check('the four people plus the dog is species-with-favourites', m.shapeOf(H.concat(['dog'])).id === 'species-plus');
@@ -82,7 +93,7 @@ walk({ pick: null, why: null, braindam: null }, H); var p1 = paths;
 walk({ pick: null, why: null, braindam: null }, ['adult']); var p2 = paths - p1;
 check('the experiment ends on every path (' + p1 + ' with the baby in, ' + p2 + ' with the baby out)', p1 === 13 && p2 === 15);
 check('"the baby is out on my line too" is offered only when the baby is out', m.whyOptions(H, 'chimp').length === 4 && m.whyOptions(['adult'], 'chimp').length === 5 && m.whyOptions(['adult'], 'chimp')[0].id === 'out' && /the chimpanzee is not/.test(m.whyOptions(H, 'chimp')[0].text));
-check('the question names the animal and knows the line: ' + m.whyQuestion({ pick: 'chimp' }, F), /counts as much as the baby/.test(m.whyQuestion({ pick: 'chimp' }, F)) && /^Why the mouse, and not the baby\?$/.test(m.whyQuestion({ pick: 'mouse' }, ['adult'])));
+check('the question names the animal and knows the line: ' + m.whyQuestion({ pick: 'chimp' }, F), /counts as much as the baby/.test(m.whyQuestion({ pick: 'chimp' }, F)) && /^Why the mouse, and not the baby\?$/.test(m.whyQuestion({ pick: 'mouse' }, ['adult'])) && /counts for less\. Why the chimpanzee/.test(m.whyQuestion({ pick: 'chimp' }, H)));
 check('every status is reachable', ['species', 'potential', 'read', 'refuse'].every(function (s) { return statuses[s] > 0; }), JSON.stringify(statuses));
 
 // (6) table
