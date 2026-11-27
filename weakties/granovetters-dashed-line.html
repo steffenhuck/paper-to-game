@@ -117,16 +117,16 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
   <div class="score"><div class="pct" id="v-pct"></div><div class="scoretxt" id="v-big"></div></div>
   <div class="scorebar"><div id="v-fill"></div></div>
   <p id="v-fate"></p>
-  <p class="small" style="margin:0">The same news, five ways, as a share of what could have been heard</p>
+  <p class="small" style="margin:0">The same news, five ways</p>
   <svg class="bars" id="v-bars0" viewBox="0 0 340 128"></svg>
   <p id="v-plan"></p>
   <div class="rule thin"></div>
   <p class="small" style="margin:0">Who told you first, by how often you saw them: <b>you</b> (black) against <b>Granovetter's 54 job changers</b> (outline)</p>
   <svg class="bars" id="v-bars1" viewBox="0 0 340 96"></svg>
   <div class="part" id="v-part"></div>
-  <p id="v-paper"><b>The paper.</b> The people closest to you move in your circle and hear what you hear. The person you hardly see spends their evenings somewhere else and is your only line into it. So the news comes down the dashed lines, and a town whose circles have no dashed lines between them is a town of islands.</p>
+  <p id="v-paper"><b>The paper.</b> Your close friends move in your circle and hear what you hear. The person you hardly see is your only line into another circle, so that is where the news comes from; and a town whose circles have no lines between them is a town of islands.</p>
   <svg id="v-westend" viewBox="0 0 340 112" width="100%" aria-hidden="true" style="display:block;margin:4px 0"></svg>
-  <p class="small">Boston, around 1960. The West End, close family circles and nothing between them, could not form one organisation against the plan that demolished it; Charlestown, with its clubs and local jobs, fought the same city and won.</p>
+  <p class="small">Boston, around 1960: the West End could not organise against the plan that demolished it; Charlestown, with its clubs and local jobs, fought the same city and won.</p>
   <button class="btn solid" id="b-again">Play again, in a new town</button>
   <div class="row2"><button class="btn" id="b-replay">Replay this town</button><button class="btn" id="b-help-end">How to play</button><button class="btn" id="b-about-end">About</button></div>
   <div class="seedline" id="v-seed"></div>
@@ -653,7 +653,7 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: n
     $('v-pct').textContent = Math.round(sc.pct) + '%'; $('v-pct').className = 'pct band' + sc.band;
     $('v-big').textContent = 'You heard of ' + heard + ' of the ' + ceil + ' openings that could have been heard in this town.';
     $('v-fill').className = 'bg' + sc.band; $('v-fill').style.width = '0'; setTimeout(function () { $('v-fill').style.width = Math.round(sc.pct) + '%'; }, 50);
-    $('v-fate').innerHTML = sc.band === 2 ? '<b>Nearly everything that could reach you did.</b> You read the town: one line into every circle, and the circle not tended twice.' : sc.band === 1 ? '<b>Most of what could reach you did.</b> The rest went past you on dashed lines that stayed quiet, or on evenings spent where the news had already been heard.' : '<b>Less than two thirds of what could reach you did.</b> Most of your evenings went where the news was not: into one circle, which told you what it knew, over and over.';
+    $('v-fate').innerHTML = sc.band === 2 ? '<b>Nearly everything that could reach you did.</b>' : sc.band === 1 ? '<b>Most of what could reach you did.</b> The rest went past you on lines you left thin or dashed, or on evenings spent inside one circle.' : '<b>Less than two thirds of what could reach you did.</b> Most of your evenings went to people who hear the same things.';
     fiveBars([
       { label: 'you', n: heard, me: true, colour: BLUES[sc.band] },
       { label: 'the best plan', n: sp },
@@ -662,7 +662,7 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: n
       { label: 'news known in advance', n: ceil, dash: true }
     ], ceil);
     var planEv = STRATEGIES[CONFIG.BEST_PLAN](newGame(G.seed)), two = Object.keys(planEv).filter(function (n) { return planEv[n] === 2; }), one = Object.keys(planEv).filter(function (n) { return planEv[n] === 1; });
-    $('v-plan').innerHTML = '<b>The best plan without foreknowledge:</b> one evening to one person in each of the six other circles, and the seventh to one of them again: ' + (two.length ? list(two) + ' twice, ' : '') + list(one) + ' once, every week. Nothing to Home: a thick line thins only one week in two, and whatever Ann hears, Ben and Cal hear. It hears ' + sp + ' of ' + ceil + ' here. The paper\'s reason: your circle hears one circle\'s news; each dashed line is your only line into another.';
+    $('v-plan').innerHTML = '<b>The best plan without foreknowledge:</b> one evening to one person in each of the other six circles, and the seventh to one of them again (' + (two.length ? list(two) + ' twice; ' : '') + list(one) + ' once), every week, and nothing to Home. It hears ' + sp + ' of ' + ceil + ' here.';
     var sh = { often: pct(t.seen.often, heard), occ: pct(t.seen.occ, heard), rare: pct(t.seen.rare, heard) }, B = CONFIG.BOSTON_SEEN;
     bars('v-bars1', [
       { label: 'saw them often', you: sh.often, paper: B.often, note: Math.round(sh.often) + '% · paper ' + Math.round(B.often) + '%' },
@@ -670,11 +670,11 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: n
       { label: 'rarely', you: sh.rare, paper: B.rare, note: Math.round(sh.rare) + '% · paper ' + Math.round(B.rare) + '%' }
     ], 100, 30);
     var part;
-    if (!heard) part = 'Nothing reached you, which the paper does not describe: even the people you have forgotten mention things sometimes.';
-    else if (sh.often >= 40) part = '<b>Where you part from the paper.</b> You leaned on the people you see most, and they told you the same thing twice and three times, because they are each other\'s friends. In Boston the people seen often brought one job in six.';
-    else if (sh.occ >= 50) part = '<b>Where you stand with the paper.</b> Most of your news came from people you saw now and then, as it did for the paper\'s job changers. Your close friends told you less, not because they cared less, but because they move where you move.';
-    else if (sh.rare >= 50) part = '<b>Where you part from the paper.</b> You left nearly every line dashed and let the dice decide. The dashed lines brought news from everywhere, and stayed quiet more often than not: the motivation the paper weighs against structure.';
-    else part = '<b>Where you stand with the paper.</b> Your news came from everywhere in about the paper\'s proportions: a little from the circle, most from people seen now and then, a good part from people you had nearly forgotten.';
+    if (!heard) part = 'Nothing reached you in three weeks.';
+    else if (sh.often >= 40) part = '<b>Most of your news came from your close friends</b>, and they told you the same things, because they are each other\'s friends too. In Boston, close friends brought one job in six.';
+    else if (sh.occ >= 50) part = '<b>Most of your news came from people you saw now and then</b>, as it did in Boston.';
+    else if (sh.rare >= 50) part = '<b>Most of your news came from people you hardly saw.</b> They had it, and mentioned it one time in three. In Boston they brought more than a quarter of the jobs.';
+    else part = '<b>Your news came from everywhere</b>, in about Boston\'s proportions.';
     $('v-part').innerHTML = part;
     westEnd();
     $('v-seed').textContent = 'Town ' + G.seed;
