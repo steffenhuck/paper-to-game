@@ -1,8 +1,8 @@
-// Headless play loop (build step 2), iteration 2: a stranger's session in tokens, printed after every action.
+// Headless play loop (build step 2), iteration 3: a stranger's session in tokens, printed after every action.
 // Run: node loop.js > loop-log.txt
 const M = require('./mechanism.js'); const C = M.CONFIG;
 const f = x => x.toFixed(1);
-const bars = e => M.CELLS.map(k => `${k} ${f(e.cells[k].tokens)}`).join(' | ') + `  ||  works in Big Five ${f(e.big.tokens)} vs elsewhere ${f(e.other.tokens)}${e.level ? '  LEVEL' : ''}`;
+const bars = e => M.CELLS.map(k => `${k} ${f(e.cells[k].tokens)}`).join(' | ') + `  ||  GAP = BOTH ${f(e.both.tokens)} - NEITHER ${f(e.neither.tokens)} = ${f(e.gap)}${e.level ? '  LEVEL' : ''}`;
 console.log('ROUND 1: seat the 15 judges you think are fair (no bars until the 15th)');
 let s = M.newRound1();
 for (const code of ['DE/DE', 'DE/DE', 'IT/IT', 'IT/IT', 'UK/UK', 'UK/UK', 'FR/FR', 'ES/ES', 'US/US', 'NL/NL', 'BE/BE', 'SE/SE', 'DE/CH', 'IT/UK', 'PL/PL']) {

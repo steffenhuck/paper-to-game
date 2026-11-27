@@ -1,4 +1,4 @@
-// Calibration check (build step 1), iteration 2: runs against mechanism.js, the file build.py inlines into the game.
+// Calibration check (build step 1), iteration 3: runs against mechanism.js, the file build.py inlines into the game.
 // Run: node calibration.js > calibration-result.txt
 const fs = require('fs');
 const M = require('./mechanism.js');
@@ -26,6 +26,7 @@ ok(M.tokensFor(M.matchType({ p: 'DE', w: 'UK' }, { p: 'DE', w: 'UK' })) === 3 &&
   M.tokensFor(M.matchType({ p: 'DE', w: 'UK' }, { p: 'IT', w: 'UK' })) === 1 && M.tokensFor(M.matchType({ p: 'DE', w: 'UK' }, { p: 'UK', w: 'DE' })) === 0,
   'German in the UK: 3 from a German in the UK, 1 from a German in France, 1 from an Italian in the UK, 0 from a Brit in Germany');
 ok(M.matchType({ p: 'DE', w: 'FR' }, { p: 'FR', w: 'DE' }) === null, '"same" means the same named country, not two Big Five countries');
+ok(C.bigFive.join(' ') === 'DE UK FR IT ES' && !M.isBig('US') && !M.isBig('CA'), 'the Big Five are DE, UK, FR, IT, ES; the US and Canada are not Big Five');
 
 console.log('\n== 3. The four applicant-group bars');
 const tilted = P(C.tilted), te = M.evaluate(tilted);
@@ -34,16 +35,20 @@ ok(M.CELLS.every(k => c[k].weight > 0) && Math.abs(M.CELLS.reduce((s, k) => s + 
   'the four groups partition the applicants: ' + M.CELLS.map(k => `${k} ${f(100 * c[k].weight, 1)}%`).join(', '));
 const wavg = (a, b) => (c[a].tokens * c[a].weight + c[b].tokens * c[b].weight) / (c[a].weight + c[b].weight);
 ok(Math.abs(wavg('bigP_bigW', 'othP_bigW') - te.big.tokens) < 1e-9 && Math.abs(wavg('bigP_othW', 'othP_othW') - te.other.tokens) < 1e-9,
-  `share-weighted bars reproduce the success measure (works in Big Five ${f(te.big.tokens)}, elsewhere ${f(te.other.tokens)})`);
+  `share-weighted bars reproduce the by-workplace aggregates (works in Big Five ${f(te.big.tokens)}, elsewhere ${f(te.other.tokens)}; bookkeeping only)`);
+ok(te.both === c.bigP_bigW && te.neither === c.othP_othW && Math.abs(te.gap - (c.bigP_bigW.tokens - c.othP_othW.tokens)) < 1e-12,
+  `the GAP is BOTH (Big Five passport, works in the Big Five: ${f(c.bigP_bigW.tokens)}) minus NEITHER (other passport, works elsewhere: ${f(c.othP_othW.tokens)}) = ${f(te.gap)}`);
+ok(Math.abs(te.ratio - c.bigP_bigW.tokens / c.othP_othW.tokens) < 1e-12 && te.gap !== te.big.tokens - te.other.tokens,
+  'the ratio compares the same two groups; the two mixed groups are left out of gap and ratio');
 // by hand, for one applicant: a German working in Germany facing the tilted panel
 const hand = 4.2 * (3 + 3 + 1 /* DE/CH passport */) / 15;
 const deDe = M.APPLICANTS.find(a => a.p === 'DE' && a.w === 'DE');
-const one = M.evaluate(tilted, { applicants: [deDe] }).big.tokens;
+const one = M.evaluate(tilted, { applicants: [deDe] }).both.tokens;
 ok(Math.abs(one - hand) < 1e-9, `by hand: a German in Germany meets 2 German home judges and 1 German working in Switzerland: 4.2 × 7 / 15 = ${f(hand)} = ${f(one)}`);
 for (const seed of [1, 2]) {
   const s = M.simulate(tilted, 200000, seed);
-  ok(Math.abs(s.big - te.big.tokens) / te.big.tokens < 0.03 && Math.abs(s.other - te.other.tokens) / te.other.tokens < 0.05,
-    `seed ${seed}: simulated random juries ${f(s.big)} / ${f(s.other)} vs expected ${f(te.big.tokens)} / ${f(te.other.tokens)}`);
+  ok(Math.abs(s.both - te.both.tokens) / te.both.tokens < 0.03 && Math.abs(s.neither - te.neither.tokens) / te.neither.tokens < 0.05,
+    `seed ${seed}: simulated random juries BOTH ${f(s.both)} / NEITHER ${f(s.neither)} vs expected ${f(te.both.tokens)} / ${f(te.neither.tokens)}`);
 }
 
 console.log('\n== 4. Rosters, guided by the panel-member file');
@@ -62,10 +67,10 @@ ok(bigHomePool - (24 - 15) <= 1, `a Round 1 player must seat at least ${Math.max
 const mirror = P('DE/DE DE/DE IT/IT IT/IT UK/UK UK/UK FR/FR ES/ES US/US NL/NL BE/BE SE/SE DE/CH IT/UK PL/PL');
 const balanced = P('DE/DE US/US NL/NL BE/BE SE/SE PL/PL IL/IL DK/DK FI/FI PT/PT CZ/CZ GR/GR AT/AT DE/CH IT/UK');
 const em = M.evaluate(mirror), eb = M.evaluate(balanced);
-ok(em.gap > 0.8, `Round 1, a panel that mirrors the panel-member file: works in Big Five ${f(em.big.tokens)}, elsewhere ${f(em.other.tokens)} (tilted)`);
-ok(Math.abs(eb.gap) < Math.abs(em.gap) / 2, `Round 1, a balanced panel from the same pool: ${f(eb.big.tokens)} vs ${f(eb.other.tokens)} (gap ${f(eb.gap)})`);
+ok(em.gap > 0.8, `Round 1, a panel that mirrors the panel-member file: BOTH ${f(em.both.tokens)}, NEITHER ${f(em.neither.tokens)} (gap ${f(em.gap)}, ratio ${f(em.ratio, 1)}: tilted)`);
+ok(Math.abs(eb.gap) < Math.abs(em.gap) / 2, `Round 1, a balanced panel from the same pool: BOTH ${f(eb.both.tokens)} vs NEITHER ${f(eb.neither.tokens)} (gap ${f(eb.gap)})`);
 
-console.log('\n== 5. Round 2: the GAP meter and the four-swap puzzle');
+console.log('\n== 5. Round 2: the GAP meter (BOTH minus NEITHER) and the four-swap puzzle');
 const comb = (a, k) => k === 0 ? [[]] : a.flatMap((x, i) => comb(a.slice(i + 1), k - 1).map(r => [x].concat(r)));
 const apply = (outs, ins, o) => { const t = tilted.slice(); outs.forEach((i, k) => { t[i] = bench[ins[k]]; }); return M.evaluate(t, o); };
 function rate(k, outSet, o, tol) {
@@ -80,11 +85,11 @@ ok(l4 > 0, `${l4} of ${n4} four-swap plans reach LEVEL (${f(100 * l4 / n4, 1)}%;
 const bigHomeIdx = tilted.map((j, i) => i).filter(i => tilted[i].p === tilted[i].w && M.isBig(tilted[i].w));
 const smallIdx = tilted.map((j, i) => i).filter(i => !M.isBig(tilted[i].p) && !M.isBig(tilted[i].w));
 const [lh, nh] = rate(4, bigHomeIdx, {}, C.levelTol), [ls] = rate(4, smallIdx, {}, C.levelTol);
-ok(lh / nh > 0.5, `plans that bench four Big Five home judges: ${lh}/${nh} reach LEVEL (${f(100 * lh / nh, 0)}%)`);
+ok(lh / nh > 0.4, `plans that bench four Big Five home judges: ${lh}/${nh} reach LEVEL (${f(100 * lh / nh, 0)}%; was 59% under the by-workplace gap)`);
 ok(ls === 0, 'plans that only bench judges from smaller countries never reach LEVEL');
 let shown = 0;
 for (const outs of comb(bigHomeIdx, 4)) for (const ins of comb(bench.map((_, i) => i), 4)) {
-  const e = apply(outs, ins, {}); if (e.level && shown < 1) { shown++; console.log(`     e.g. ${outs.map((o, k) => key(tilted[o]) + '->' + key(bench[ins[k]])).join(', ')}: ${f(e.big.tokens)} vs ${f(e.other.tokens)}`); }
+  const e = apply(outs, ins, {}); if (e.level && shown < 1) { shown++; console.log(`     e.g. ${outs.map((o, k) => key(tilted[o]) + '->' + key(bench[ins[k]])).join(', ')}: BOTH ${f(e.both.tokens)} vs NEITHER ${f(e.neither.tokens)}`); }
 }
 ok(Math.abs(te.gap) < C.gapMax, `the meter's range (±${C.gapMax}) holds the starting gap`);
 

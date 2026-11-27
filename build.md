@@ -134,5 +134,7 @@ Commit and publish. The run is not finished until the game is on `main`, and the
 - A distinction the builder can measure and the eye cannot see; a control and its feedback on different screens.
 - An option no sensible player takes, left in a choice; a trade-off whose cost lies past the last round; a score whose best path wins by a loophole.
 - More rounds than there are things to find out; a round-by-round table as the verdict.
+- A shape of play taken from precedent rather than from the paper; a verdict in the last game's form.
+- A first action that needs an idea the player has not yet produced by playing.
 - A numbers table in which no strategy goes wrong, read as robustness; a pick among exchangeable things; a concept with hands and no decision built because its runner-up had the decision and no hands.
 - Work finished and not pushed, or a link reported as live without being checked.

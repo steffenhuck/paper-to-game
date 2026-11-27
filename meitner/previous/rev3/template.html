@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Meitner's Drop</title>
+<script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<meta name="description" content="Meitner and Frisch, Nature 1939: a heavy nucleus splits like a drop whose skin has nearly given up. You are the uranium drop. Pinch yourself where you choose, if the skin lets you, or hold together, and watch where the pieces land on the chemists' 1939 table; account for every tube on their shelf, including the five they filed as elements beyond uranium.">
+<style>
+@font-face{font-family:'Bangers';font-weight:400;font-style:normal;src:url(data:font/woff2;base64,/*__F_BANGERS__*/) format('woff2')}
+@font-face{font-family:'ComicNeue';font-weight:400;font-style:normal;src:url(data:font/woff2;base64,/*__F_COMIC400__*/) format('woff2')}
+@font-face{font-family:'ComicNeue';font-weight:700;font-style:normal;src:url(data:font/woff2;base64,/*__F_COMIC700__*/) format('woff2')}
+:root{--paper:#F6F2E8;--ink:#161414;--tone:#9A958C;--red:#E23A2A;--wash:#DDD7CA;--dim:#5E5A54}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background-color:var(--wash);background-image:radial-gradient(var(--tone) 1px,transparent 1.3px);background-size:6px 6px;color:var(--ink);font-family:'ComicNeue',sans-serif;font-size:17px;line-height:1.35;-webkit-text-size-adjust:100%;min-height:100vh}
+.wrap{max-width:400px;margin:0 auto;padding:8px 8px 22px}
+@media (min-width:600px){.wrap{max-width:560px;padding:16px 12px 30px}body{font-size:18px}}
+.page{background:var(--paper);border:3px solid var(--ink);padding:10px 10px 14px;position:relative}
+@media (min-width:600px){.page{padding:16px 18px 18px}}
+.screen{display:none}.screen.on{display:block}
+.kicker{font-family:'Bangers',sans-serif;font-size:15px;letter-spacing:.06em;color:var(--dim)}
+h1.title{font-family:'Bangers',sans-serif;font-weight:400;font-size:52px;line-height:.95;margin:4px 0 8px;color:var(--ink);letter-spacing:.01em;transform:rotate(-1.5deg);transform-origin:left bottom}
+.panel{border:3px solid var(--ink);background:#fff;position:relative;margin:0 0 8px}
+.panel svg{display:block;width:100%;height:auto}
+#dropsvg{touch-action:none}
+.panel,.panel *,.nudge,.btn{-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.said:empty{display:none}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.kick{font-family:'Bangers',sans-serif;font-size:16px;line-height:1.1;letter-spacing:.05em;color:var(--dim);margin:0 0 1px;text-transform:uppercase}
+.now{font-family:'Bangers',sans-serif;font-size:25px;line-height:1.05;margin:0 0 6px;min-height:26px;letter-spacing:.02em}
+.slot{min-height:62px}
+.aim{font-size:16px;font-weight:700;margin:0 0 6px}
+.rule{font-size:15px;color:var(--dim);margin:0 0 6px}
+.def{font-size:15px;color:var(--dim);margin:2px 0 6px}
+.acts{font-size:17px;margin:8px 0 6px}
+.big{font-size:19px}
+p{margin:0 0 8px}
+.btn{display:inline-block;font-family:'Bangers',sans-serif;font-size:21px;letter-spacing:.05em;color:var(--ink);background:#fff;border:3px solid var(--ink);padding:9px 14px;margin:4px 6px 4px 0;cursor:pointer;min-height:46px;line-height:1.1;vertical-align:middle}
+.btn.solid{background:var(--ink);color:var(--paper)}
+.btn.red{background:var(--red);color:#fff;border-color:var(--ink)}
+.btn:disabled{opacity:.3;cursor:default}
+.btn.small{font-size:17px;padding:6px 10px;min-height:40px}
+.row2{display:flex;flex-wrap:wrap;gap:0 4px;align-items:center}
+.sig{margin-top:16px;font-size:14px;font-style:italic;color:var(--dim)}.sig a{color:var(--dim);text-decoration:none}
+.cred{font-size:13px;color:var(--dim);margin-top:12px}.cred a{color:var(--dim)}
+.qm{flex:none;width:40px;height:40px;border:3px solid var(--ink);background:#fff;font-family:'Bangers',sans-serif;font-size:24px;color:var(--ink);cursor:pointer;line-height:1}
+.said{font-size:16px;margin:4px 0 6px;min-height:22px;border-left:4px solid var(--ink);padding-left:8px}
+.said p{margin:0 0 5px}
+.cap{font-size:14px;color:var(--dim);margin:2px 0 6px;min-height:18px}
+.dots{letter-spacing:.06em;white-space:nowrap}
+.dots b{color:var(--red);font-size:20px;line-height:0;vertical-align:-3px;font-weight:400}
+.dots i{color:var(--tone);font-size:20px;line-height:0;vertical-align:-3px;font-style:normal}
+.shead{font-family:'Bangers',sans-serif;font-size:18px;letter-spacing:.05em;margin:2px 0 4px;text-transform:uppercase}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:0 0 6px}
+.card{display:flex;align-items:center;gap:6px;border:2px solid var(--ink);background:#fff;padding:2px 6px;min-height:29px;font-size:13.5px;line-height:1.1;overflow:hidden;white-space:nowrap}
+.card.dash{border-style:dashed}
+.card .bot{width:11px;height:19px;flex:none}
+.card .bot rect.g{fill:#fff;stroke:#161414;stroke-width:1.6}
+.card.lit .bot rect.g{fill:var(--red)}
+.card.lit .ct{font-weight:700}
+.nudge{display:flex;justify-content:space-between;align-items:center;gap:6px;margin:-4px 0 4px}
+.hidden{display:none !important}
+.nudge .btn{margin:0;min-width:64px;text-align:center}
+.nudge span{font-size:14px;color:var(--dim);text-align:center;flex:1}
+.rule b{color:var(--ink)}
+.fate{font-family:'Bangers',sans-serif;font-size:36px;line-height:1;margin:4px 0 12px;color:var(--red);letter-spacing:.02em;-webkit-text-stroke:1px var(--ink);paint-order:stroke fill}
+.sec h2,h2{font-family:'Bangers',sans-serif;font-weight:400;font-size:22px;letter-spacing:.03em;margin:12px 0 4px;color:var(--ink)}
+.sec p{font-size:16px}
+.overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background-color:var(--wash);background-image:radial-gradient(var(--tone) 1px,transparent 1.3px);background-size:6px 6px;overflow:auto;z-index:9}.overlay.on{display:block}
+.overlay .wrap{padding-top:8px}
+.overlay h1{font-family:'Bangers',sans-serif;font-weight:400;font-size:34px;margin:4px 0 10px;letter-spacing:.02em}
+.overlay p,.overlay li{font-size:16px}
+.overlay ul{padding-left:20px;margin:0 0 10px}
+.close{margin:0 0 8px}
+svg text{font-family:'ComicNeue',sans-serif;fill:var(--ink)}
+svg .bang{font-family:'Bangers',sans-serif}
+.sfx{font-family:'Bangers',sans-serif;fill:var(--red);stroke:#fff;stroke-width:6;paint-order:stroke fill;stroke-linejoin:round}
+.tone{fill:url(#tonepat)}
+.cell{fill:#fff;stroke:var(--ink);stroke-width:.8}
+.cell.dash{stroke-dasharray:2 2;fill:url(#tonepat)}
+.cell.hit{stroke:var(--red);stroke-width:2;stroke-dasharray:3 2}
+.cell.endc{stroke:var(--ink);stroke-width:2.2;fill:none}
+.tube{transition:transform .5s ease}
+.tube .glass{fill:#fff;stroke:var(--ink);stroke-width:1.2}
+.tube.lit .glass{fill:var(--red)}
+.piece{transition:transform .3s ease}
+.piece circle{fill:var(--red);stroke:var(--ink);stroke-width:1.2}
+.piece.done circle{fill:var(--ink)}
+.piece text{fill:#fff;font-size:9.5px;font-weight:700;text-anchor:middle}
+.sym{font-size:9px;font-weight:700;text-anchor:middle;fill:var(--ink)}
+.sym.faint{fill:var(--tone);font-weight:400}
+.brk{font-size:10px;fill:var(--dim);text-anchor:middle}
+.lbl{font-size:13px;text-anchor:middle;fill:var(--ink)}
+.cnt{font-family:'Bangers',sans-serif;font-size:34px;text-anchor:middle}
+.cnt.red{fill:var(--red)}
+.hidden{display:none}
+.tapdrop{cursor:pointer}
+@keyframes shake{0%{transform:translateX(0)}20%{transform:translateX(-3px)}40%{transform:translateX(3px)}60%{transform:translateX(-2px)}80%{transform:translateX(2px)}100%{transform:translateX(0)}}
+.shake{animation:shake .35s linear}
+</style>
+</head>
+<body>
+<div class="wrap"><div class="page">
+
+<!-- START -->
+<section id="s-start" class="screen on">
+  <div class="kicker">Letters to the Editor · Nature, 11 February 1939</div>
+  <h1 class="title">Meitner's Drop</h1>
+  <div class="panel"><svg viewBox="0 0 340 130" aria-hidden="true">
+    <defs><pattern id="tonepat0" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#9A958C"/></pattern></defs>
+    <path d="M60 65 C60 35 100 22 150 22 C200 22 240 35 240 65 C240 95 200 108 150 108 C100 108 60 95 60 65 Z" fill="#fff" stroke="#161414" stroke-width="3"/>
+    <path d="M78 52 C90 40 120 34 150 34" fill="none" stroke="#161414" stroke-width="2" stroke-linecap="round" opacity=".6"/>
+    <path d="M190 100 C215 96 230 84 234 72" fill="url(#tonepat0)" stroke="none"/>
+    <line x1="168" y1="14" x2="168" y2="116" stroke="#E23A2A" stroke-width="3" stroke-dasharray="7 5"/>
+    <circle cx="24" cy="30" r="7" fill="#E23A2A" stroke="#161414" stroke-width="2"/>
+    <g stroke="#161414" stroke-width="2" stroke-linecap="round" opacity=".7"><line x1="2" y1="22" x2="12" y2="25"/><line x1="0" y1="32" x2="12" y2="32"/><line x1="2" y1="42" x2="12" y2="39"/></g>
+    <g class="sfx" style="font-size:30px"><text x="262" y="60" class="sfx bang" transform="rotate(-8 262 60)">SNAP?</text></g>
+    <g transform="translate(252 86)"><rect x="0" y="4" width="12" height="22" rx="3" fill="#fff" stroke="#161414" stroke-width="2"/><rect x="2" y="0" width="8" height="5" fill="#161414"/><rect x="20" y="4" width="12" height="22" rx="3" fill="#E23A2A" stroke="#161414" stroke-width="2"/><rect x="22" y="0" width="8" height="5" fill="#161414"/><rect x="40" y="4" width="12" height="22" rx="3" fill="#fff" stroke="#161414" stroke-width="2" stroke-dasharray="3 2"/><rect x="42" y="0" width="8" height="5" fill="#161414"/><rect x="60" y="4" width="12" height="22" rx="3" fill="#fff" stroke="#161414" stroke-width="2" stroke-dasharray="3 2"/><rect x="62" y="0" width="8" height="5" fill="#161414"/></g>
+  </svg></div>
+  <p class="acts">For four years chemists have fired neutrons at uranium and filled a shelf of test tubes. Five of them hold brand-new elements, heavier than anything on Earth. You are the uranium drop. Pinch yourself in two where you choose, or hold together, then watch where the pieces land on the chemists' table.</p>
+  <p class="aim big">Explain every tube on the chemists' shelf. You have four neutrons.</p>
+  <button class="btn solid" id="b-begin">Drop a neutron</button>
+  <div class="row2"><button class="btn" id="b-help-start">How to play</button><button class="btn" id="b-about-start">About</button></div>
+  <p class="cred">Built from Lise Meitner and O. R. Frisch, "Disintegration of Uranium by Neutrons: a New Type of Nuclear Reaction", <i>Nature</i> 143, 239–240 (1939).</p>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+
+<!-- THREE DROPS -->
+<section id="s-drops" class="screen">
+  <div class="top"><div class="now" id="now0">Three drops · Tap one</div><button class="qm" id="b-help-drops" aria-label="How to play">?</button></div>
+  <p class="aim">A drop's skin holds it together. Its charge pulls it apart. Tap a drop to drop a neutron on it.</p>
+  <div class="panel"><svg id="dropsvg0" viewBox="0 0 340 190"></svg></div>
+  <div class="said" id="said0"><p>The more charge a drop carries, the less skin it has left. Lead has 82 charges, uranium 92. The third drop is imagined: 100 charges, more than any element anyone has seen.</p></div>
+  <div class="row2"><button class="btn solid hidden" id="b-toshelf">To the shelf</button></div>
+</section>
+
+<!-- THE SHELF -->
+<section id="s-shelf" class="screen">
+  <div class="top"><div><div class="kick">The chemists' shelf</div><div class="now">Eight tubes to explain.</div></div><button class="qm" id="b-help-shelf" aria-label="How to play">?</button></div>
+  <div class="panel"><svg id="tablesvg0" viewBox="0 0 340 146"></svg></div>
+  <div class="cards" id="shelf0"></div>
+  <p class="def"><b>The table</b> runs in order of charges: 56 is barium, 92 is uranium. The five dashed tubes were filed as brand-new elements, 93 to 97.</p>
+  <p class="def"><b>Your pieces</b> land in the cell with their own number, then climb: too many neutrons for their size, they change into the next element, one cell to the right, again and again, until they settle.</p>
+  <p class="def"><b>A tube is explained</b> when a piece stands in its column. Elements in one column behave alike in chemistry, so the chemists could not tell them apart.</p>
+  <div class="row2"><button class="btn solid" id="b-tobench">To the bench</button></div>
+</section>
+
+<!-- THE BENCH -->
+<section id="s-bench" class="screen">
+  <div class="top"><div><div class="kick" id="kick1"></div><div class="now" id="now1"></div></div><button class="qm" id="b-help-bench" aria-label="How to play">?</button></div>
+  <div class="panel"><svg id="dropsvg" viewBox="0 0 340 150"></svg></div>
+  <div class="nudge" id="nudge"><button class="btn small" id="b-left" aria-label="move the line left">&#9666; 1</button><span>drag the red line, or nudge it</span><button class="btn small" id="b-right" aria-label="move the line right">1 &#9656;</button></div>
+  <div class="slot"><p class="rule" id="rule1"></p><div class="said" id="said1"></div></div>
+  <div class="row2" id="btns1"><button class="btn red" id="b-split">Split here</button><button class="btn" id="b-hold">Hold together</button><button class="btn solid hidden" id="b-next">Next neutron</button></div>
+  <div class="panel"><svg id="tablesvg" viewBox="0 0 340 146"></svg></div>
+  <p class="cap" id="cap"></p>
+  <div class="shead" id="shead1"></div>
+  <div class="cards" id="shelf1"></div>
+</section>
+
+<!-- END -->
+<section id="s-end" class="screen">
+  <div class="kicker">The verdict</div>
+  <div class="fate" id="fate"></div>
+  <div class="sec"><h2>What the paper found</h2><div id="v-paper"></div></div>
+  <div class="sec"><h2>What you found</h2><div id="v-found"></div></div>
+  <div class="sec"><h2>Where you and the paper part</h2><div id="v-part"></div></div>
+  <div class="sec"><h2>Had your shelf stood</h2><div id="v-stood"></div></div>
+  <div class="row2"><button class="btn solid" id="b-again">Play again</button><button class="btn" id="b-about-end">About</button></div>
+  <p class="cred">Built from Lise Meitner and O. R. Frisch, "Disintegration of Uranium by Neutrons: a New Type of Nuclear Reaction", <i>Nature</i> 143, 239–240 (1939). The paper is the authority where the two disagree.</p>
+  <p class="cred" id="seedline"></p>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+</div></div>
+
+<!-- HELP -->
+<div class="overlay" id="help"><div class="wrap"><div class="page">
+  <div class="close"><button class="btn" id="b-help-close">Back to the drop</button></div>
+  <h1>How to play</h1>
+  <p><b>Explain every tube on the chemists' shelf. You have four neutrons.</b></p>
+  <h2>Three drops</h2>
+  <p>Tap a drop and a neutron lands on it. A drop's skin holds it together and its charge pulls it apart. Lead holds. Uranium wobbles, necks in the middle and just holds. An imagined drop of 100 charges falls apart on its own.</p>
+  <h2>The shelf</h2>
+  <p>Eight test tubes, each a body the chemists found. The table runs in order of charges, so a piece with 56 charges is barium, element 56. Five dashed tubes were filed as brand-new elements, 93 to 97. A tube is explained when a piece lands or climbs into its column: elements in one column behave alike in chemistry.</p>
+  <h2>The bench</h2>
+  <p>You are the uranium drop. Drag the red line across it, or nudge it with the two arrows. The two numbers are the charges each piece gets; together they are always 92. In the table below, the red box shows where each piece lands, the dots show how it climbs (one cell to the right at a time, about four or five times), and the black box shows where it stops. The line under the drop says how often a pinch there goes through.</p>
+  <p><b>Split here</b> pinches the drop at the line. Near the middle the skin has given up, so the pinch always goes through; far out the skin may pull the drop back. A drop pulled back keeps the neutron, so that neutron is spent without a split. The draw is by chance, from a seed shown on the last screen, so a game can be replayed.</p>
+  <p><b>Hold together</b>: the drop swallows the neutron and rings without splitting. That is certain, and it makes uranium-239, which sits in uranium's own cell and then moves one cell on.</p>
+  <p>When a tube is explained it slides down into the piece's cell and turns red, and its card on the shelf says what it really is. <b>Next neutron</b> brings a fresh neutron. The stage ends when every tube is explained or the neutrons are spent.</p>
+  <h2>Thorium</h2>
+  <p>The chemists shot neutrons at thorium too, and found two more tubes, filed as radium and actinium. Same buttons, same rules, three neutrons.</p>
+  <div class="close"><button class="btn" id="b-help-close2">Back to the drop</button></div>
+</div></div></div>
+
+<!-- ABOUT -->
+<div class="overlay" id="about"><div class="wrap"><div class="page">
+  <div class="close"><button class="btn" id="b-about-close">Back</button></div>
+  <h1>About</h1>
+  /*__ABOUT__*/
+  <div class="close"><button class="btn" id="b-about-close2">Back</button></div>
+</div></div></div>
+
+<script>
+/*__MECHANISM__*/
+</script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var NS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs, parent) { var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+  function txt(parent, x, y, s, cls, attrs) { var t = el('text', Object.assign({ x: x, y: y }, attrs || {}), parent); if (cls) t.setAttribute('class', cls); t.textContent = s; return t; }
+  var C = CONFIG, M = MECH;
+  var S = {}, helpFrom = null;
+  var busy = false;
+
+  // ---------- screens ----------
+  function show(id) { document.querySelectorAll('.screen').forEach(function (s) { s.classList.remove('on'); }); $(id).classList.add('on'); window.scrollTo(0, 0); }
+  function openHelp(from) { helpFrom = from; $('help').classList.add('on'); window.scrollTo(0, 0); }
+  function closeHelp() { $('help').classList.remove('on'); }
+  function openAbout() { $('about').classList.add('on'); window.scrollTo(0, 0); }
+  function closeAbout() { $('about').classList.remove('on'); }
+  ['b-help-start', 'b-help-drops', 'b-help-shelf', 'b-help-bench'].forEach(function (id) { $(id).onclick = function () { openHelp(id); }; });
+  $('b-help-close').onclick = closeHelp; $('b-help-close2').onclick = closeHelp;
+  $('b-about-start').onclick = openAbout; $('b-about-end').onclick = openAbout;
+  $('b-about-close').onclick = closeAbout; $('b-about-close2').onclick = closeAbout;
+
+  // ---------- the drop: a blob path, pinched at a neck ----------
+  function blobPath(cx, cy, rx, ry, neck, depth, wob, phase) {
+    var pts = [], n = 64;
+    for (var i = 0; i < n; i++) {
+      var th = i / n * Math.PI * 2, x = Math.cos(th), y = Math.sin(th);
+      var w = 1 + (wob || 0) * Math.sin(3 * th + (phase || 0));
+      var px = cx + rx * x * w, py0 = ry * y * w;
+      var f = 1;
+      if (depth) { var d = (px - neck) / (rx * 0.42); f = 1 - depth * Math.exp(-d * d); }
+      pts.push([px, cy + py0 * f]);
+    }
+    var d2 = 'M' + pts[0][0].toFixed(1) + ' ' + pts[0][1].toFixed(1);
+    for (var j = 1; j < pts.length; j++) d2 += ' L' + pts[j][0].toFixed(1) + ' ' + pts[j][1].toFixed(1);
+    return d2 + ' Z';
+  }
+  function tonePattern(svg, id) {
+    var defs = el('defs', {}, svg), p = el('pattern', { id: id, width: 4, height: 4, patternUnits: 'userSpaceOnUse' }, defs);
+    el('circle', { cx: 2, cy: 2, r: 1, fill: '#9A958C' }, p);
+  }
+
+  // ---------- THREE DROPS ----------
+  var D0 = { nucs: [C.LEAD, C.URANIUM, C.IMAGINED], tapped: {}, anim: null };
+  var DROPS_SAID = 'The more charge a drop carries, the less skin it has left. Lead has 82 charges, uranium 92. The third drop is imagined: 100 charges, more than any element anyone has seen.';
+  function drawDrops() {
+    var svg = $('dropsvg0'); svg.innerHTML = ''; tonePattern(svg, 'tp0');
+    D0.g = [];
+    D0.nucs.forEach(function (n, i) {
+      var cx = 58 + i * 112, cy = 92, g = el('g', { class: 'tapdrop', 'data-i': i }, svg);
+      var p = el('path', { d: blobPath(cx, cy, 42, 36, cx, 0, 0.03, i), fill: n.imagined ? 'url(#tp0)' : '#fff', stroke: '#161414', 'stroke-width': 3 }, g);
+      if (n.imagined) p.setAttribute('stroke-dasharray', '6 4');
+      el('path', { d: 'M' + (cx - 26) + ' ' + (cy - 14) + ' C' + (cx - 18) + ' ' + (cy - 24) + ' ' + (cx - 6) + ' ' + (cy - 28) + ' ' + (cx + 6) + ' ' + (cy - 28), fill: 'none', stroke: '#161414', 'stroke-width': 2, 'stroke-linecap': 'round', opacity: .5 }, g);
+      txt(g, cx, cy + 6, String(n.Z), 'cnt bang', { 'text-anchor': 'middle' });
+      txt(g, cx, 158, n.imagined ? 'imagined' : n.name, 'lbl');
+      txt(g, cx, 174, n.imagined ? 'no such element seen' : (n.Z + ' charges'), 'brk');
+      el('rect', { x: cx - 56, y: 20, width: 112, height: 165, fill: 'transparent' }, g);
+      g.addEventListener('click', function () { tapDrop(i); });
+      D0.g.push({ g: g, p: p, cx: cx, cy: cy, n: n });
+    });
+    D0.neutron = el('circle', { cx: 20, cy: 14, r: 6, fill: '#E23A2A', stroke: '#161414', 'stroke-width': 2 }, svg);
+    txt(svg, 32, 18, 'a neutron', 'brk', { style: 'text-anchor:start' });
+    D0.sfx = txt(svg, 170, 40, '', 'sfx bang', { 'text-anchor': 'middle', 'font-size': 26 });
+  }
+  function tapDrop(i) {
+    if (busy) return; busy = true;
+    var d = D0.g[i], cls = M.skinClass(d.n), svg = $('dropsvg0');
+    D0.sfx.textContent = '';
+    var nt = D0.neutron, t0 = performance.now();
+    function fly(now) {
+      var k = Math.min(1, (now - t0) / 350);
+      nt.setAttribute('cx', 20 + (d.cx - 20) * k); nt.setAttribute('cy', 14 + (d.cy - 36 - 14) * k);
+      if (k < 1) requestAnimationFrame(fly); else { nt.setAttribute('cx', 20); nt.setAttribute('cy', 14); react(); }
+    }
+    requestAnimationFrame(fly);
+    function react() {
+      var t1 = performance.now(), dur = cls === 'holds' ? 1100 : (cls === 'barely' ? 1600 : 1200);
+      D0.sfx.textContent = cls === 'holds' ? 'RINGS' : (cls === 'barely' ? 'NECKS...' : 'FALLS APART');
+      D0.sfx.setAttribute('x', d.cx); D0.sfx.setAttribute('fill', cls === 'barely' ? '#E23A2A' : '#161414');
+      function step(now) {
+        var t = (now - t1) / dur, k = Math.min(1, t);
+        if (cls === 'holds') { var a = 0.12 * Math.exp(-3 * k) * Math.sin(k * 22); d.p.setAttribute('d', blobPath(d.cx, d.cy, 42 * (1 + a), 36 * (1 - a), d.cx, 0, 0.03, i)); }
+        else if (cls === 'barely') { var dep = 0.55 * Math.sin(Math.PI * Math.min(1, k * 1.15)) * (k < 0.87 ? 1 : Math.max(0, (1 - k) / 0.13)); var b = 0.08 * Math.exp(-2 * k) * Math.sin(k * 18); d.p.setAttribute('d', blobPath(d.cx, d.cy, 42 * (1 + b + dep * 0.25), 36 * (1 - b), d.cx, Math.max(0, dep), 0.03, i)); }
+        else { var g = k; d.p.setAttribute('d', blobPath(d.cx, d.cy, 42 * (1 + g * 0.28), 36 * (1 - g * 0.3), d.cx, Math.min(0.98, g * 1.2), 0.08 * g, i)); d.p.setAttribute('opacity', 1 - 0.7 * g); }
+        if (k < 1) requestAnimationFrame(step); else done();
+      }
+      requestAnimationFrame(step);
+    }
+    function done() {
+      D0.tapped[i] = true; busy = false;
+      var words = cls === 'holds' ? 'Lead rings and settles. Its skin is well ahead of its charge: a neutron cannot split it.' :
+        (cls === 'barely' ? 'Uranium wobbles hard, necks in the middle, and just holds. Its charge has nearly cancelled its skin. The paper says such a drop, nudged, may divide in two: where it splits is up to you.' :
+          'The imagined drop of 100 charges has no skin left. It falls apart on its own, unprovoked; that is why no such element is found.');
+      $('said0').innerHTML = '<p>' + words + '</p>';
+      if (D0.tapped[1]) { $('b-toshelf').classList.remove('hidden'); $('now0').textContent = 'Three drops · Tap another, or go on'; }
+    }
+  }
+
+  // ---------- THE TABLE (shared by the shelf screen and the bench) ----------
+  var TB = { x0: 3, y0: 4, cw: 18.55, ch: 28 };
+  function cellXY(Z) { var c = M.cellOf(Z); return c ? { x: TB.x0 + c.col * TB.cw, y: TB.y0 + c.row * TB.ch, c: c } : null; }
+  var ORDER_U = ['eRe', 'eOs', 'eIr', 'ePt', 'eAu', 'u24', 'ba', 'la'];
+  var BOTTLE = '<svg class="bot" viewBox="0 0 12 20" aria-hidden="true"><rect class="g" x="1.5" y="3.5" width="9" height="15" rx="3"/><rect x="3" y="0.5" width="6" height="3.5" fill="#161414"/></svg>';
+  function cardsHTML(tubes) {
+    var order = tubes.length === 8 ? ORDER_U : tubes.map(function (t) { return t.id; });
+    return order.map(function (id) { var t = M.tubeById(tubes, id); return '<div class="card' + (M.isDashed(t.cellZ) ? ' dash' : '') + '" data-id="' + id + '">' + BOTTLE + '<span class="ct">' + t.wait + '</span></div>'; }).join('');
+  }
+  function buildTable(svg, tubes, nucZ, interactive) {
+    svg.innerHTML = ''; tonePattern(svg, 'tp' + svg.id);
+    var T = { svg: svg, cells: {}, syms: {}, tubes: {}, pieces: [], hits: [] };
+    var cellsG = el('g', {}, svg), symG = el('g', {}, svg);
+    for (var Z = 19; Z <= 97; Z++) {
+      var c = M.cellOf(Z); if (!c) continue;
+      var key = c.row + ',' + c.col; if (T.cells[key]) continue;
+      var x = TB.x0 + c.col * TB.cw, y = TB.y0 + c.row * TB.ch;
+      T.cells[key] = el('rect', { x: x, y: y, width: TB.cw, height: TB.ch, class: 'cell' + (M.isDashed(Z) ? ' dash' : '') }, cellsG);
+    }
+    var yb = TB.y0 + 4 * TB.ch + 8, xb0 = TB.x0 + 6 * TB.cw, xb1 = TB.x0 + 11 * TB.cw;
+    el('path', { d: 'M' + xb0 + ' ' + (yb - 4) + ' v4 H' + xb1 + ' v-4', fill: 'none', stroke: '#5E5A54', 'stroke-width': 1 }, svg);
+    txt(svg, (xb0 + xb1) / 2, yb + 11, tubes.length === 8 ? 'filed as "new elements"' : 'thorium\'s two tubes', 'brk');
+    T.hitG = el('g', {}, svg); T.symG = symG; T.tubeG = el('g', {}, svg); T.pieceG = el('g', {}, svg);
+    tubes.forEach(function (t) { drawTube(T, t, interactive); });
+    sym(T, nucZ, false);
+    return T;
+  }
+  function sym(T, Z, faint) {
+    var p = cellXY(Z); if (!p) return;
+    var key = p.c.row + ',' + p.c.col;
+    if (T.syms[key]) { if (!faint) T.syms[key].setAttribute('class', 'sym'); return; }
+    var label = (Z >= 57 && Z <= 71) ? 'La' : M.symbolOf(Z);
+    T.syms[key] = txt(T.symG, p.x + TB.cw / 2, p.y + TB.ch - 2.5, label, 'sym' + (faint ? ' faint' : ''));
+  }
+  function drawTube(T, t, interactive) {
+    var p = cellXY(t.cellZ), g = el('g', { class: 'tube', 'data-id': t.id }, T.tubeG);
+    g.setAttribute('transform', 'translate(' + p.x + ' ' + p.y + ')');
+    el('rect', { x: 5.3, y: 3.5, width: 8, height: 12, rx: 2.5, class: 'glass' }, g);
+    el('rect', { x: 6.8, y: 1, width: 5, height: 3.2, fill: '#161414' }, g);
+    if (interactive) {
+      el('rect', { x: 0, y: 0, width: TB.cw, height: TB.ch, fill: 'transparent' }, g);
+      g.addEventListener('click', function () { var lit = S.st.lit[t.id]; $('cap').textContent = 'Tube: "' + t.label + '", filed as ' + t.filed + (t.byHold ? '. Made only when the drop swallows the neutron.' : '.') + (lit ? ' Explained: it is ' + M.nameOf(lit.atZ) + '.' : ''); });
+    }
+    T.tubes[t.id] = g; sym(T, t.cellZ, false);
+  }
+  function addPiece(T, Z) {
+    var p = cellXY(Z), g = el('g', { class: 'piece' }, T.pieceG);
+    g.setAttribute('transform', 'translate(' + (p.x + TB.cw / 2) + ' ' + (p.y + 11) + ')');
+    el('circle', { cx: 0, cy: 0, r: 8 }, g); txt(g, 0, 3.4, String(Z), '', {});
+    T.pieces.push(g); return g;
+  }
+  function movePiece(g, Z) { var p = cellXY(Z); g.setAttribute('transform', 'translate(' + (p.x + TB.cw / 2) + ' ' + (p.y + 11) + ')'); g.querySelector('text').textContent = String(Z); }
+  function clearPieces() { TP.pieces.forEach(function (g) { g.remove(); }); TP.pieces = []; }
+  function clearPreview() { TP.hits.forEach(function (h) { h.remove(); }); TP.hits = []; }
+  // the preview: a red box where each piece lands, dots along its climb, a black box where it stops. It says what the pinch would do, never what it would light.
+  function previewMove(Z1) {
+    clearPreview();
+    var mv = M.split(S.st.nuc, Z1);
+    mv.pieces.forEach(function (pc) {
+      pc.path.forEach(function (Z, i) {
+        var p = cellXY(Z); if (!p) return;
+        if (i === 0) TP.hits.push(el('rect', { x: p.x + 1, y: p.y + 1, width: TB.cw - 2, height: TB.ch - 2, class: 'cell hit', fill: 'none' }, TP.hitG));
+        else if (i < pc.path.length - 1) TP.hits.push(el('circle', { cx: p.x + TB.cw / 2, cy: p.y + 18, r: 2.3, fill: '#161414' }, TP.hitG));
+        else TP.hits.push(el('rect', { x: p.x + 1, y: p.y + 1, width: TB.cw - 2, height: TB.ch - 2, class: 'cell endc' }, TP.hitG));
+      });
+    });
+  }
+
+  // ---------- THE SHELF (briefing) ----------
+  function showShelf() {
+    buildTable($('tablesvg0'), C.TUBES_U, C.URANIUM.Z, false);
+    $('shelf0').innerHTML = cardsHTML(C.TUBES_U);
+    show('s-shelf');
+  }
+
+  // ---------- THE BENCH ----------
+  var TP = null;
+  var DR = { cx: 170, cy: 72, rx: 100, ry: 44 };
+  var RULE = '<b>Split here</b>: near the middle every pinch goes through; far out the skin may pull the drop back, and a pulled-back drop keeps its neutron. <b>Hold together</b>: the drop swallows the neutron and just rings.';
+  var RULE_TH = 'The chemists shot neutrons at thorium too (90 charges) and found two more tubes. Same buttons, same rules. Three neutrons.';
+  var CAP_PRE = 'Red box: where a piece lands. Dots: its climb. Black box: where it stops.';
+
+  function pickSeed() {
+    var q = /[?&]seed=(\d+)/.exec(location.search);
+    return q ? Number(q[1]) : (Math.floor(Math.random() * 9000) + 1000);
+  }
+  function startGame() {
+    S.seed = pickSeed();
+    S.stages = [
+      { nuc: C.URANIUM, tubes: C.TUBES_U, n: C.NEUTRONS_U, label: 'Uranium' },
+      { nuc: C.THORIUM, tubes: C.TUBES_TH, n: C.NEUTRONS_TH, label: 'Thorium' }
+    ];
+    S.i = 0; S.done = [];
+    beginStage();
+  }
+  function dotsHTML() { var left = S.st.neutrons - S.st.used, s = ''; for (var i = 0; i < S.st.neutrons; i++) s += i < left ? '<b>&#9679;</b>' : '<i>&#9679;</i>'; return s; }
+  function setKick(num, done) {
+    $('kick1').innerHTML = 'Neutron ' + num + ' of ' + S.st.neutrons + (done ? ' done' : '') + ' &middot; ' + S.stages[S.i].label + ' <span class="dots">' + dotsHTML() + '</span>';
+  }
+  function setNow(s) { $('now1').textContent = s; }
+  function setShelfCount() { var n = document.querySelectorAll('#shelf1 .card.lit').length; $('shead1').textContent = 'The shelf · ' + n + ' of ' + S.st.tubes.length + ' explained'; }
+  function lightCard(id, atZ) {
+    var c = document.querySelector('#shelf1 .card[data-id="' + id + '"]'); if (!c) return;
+    c.classList.add('lit'); c.querySelector('.ct').textContent = M.tubeAnswer(M.tubeById(S.st.tubes, id), atZ); setShelfCount();
+  }
+  function controls(mode) {   // 'choose' | 'watch' | 'next'
+    $('nudge').classList.toggle('hidden', mode !== 'choose'); $('rule1').classList.toggle('hidden', mode !== 'choose');
+    $('b-split').classList.toggle('hidden', mode !== 'choose'); $('b-hold').classList.toggle('hidden', mode !== 'choose');
+    $('b-next').classList.toggle('hidden', mode !== 'next');
+    $('b-split').disabled = false; $('b-hold').disabled = false;
+  }
+  function beginStage() {
+    var sg = S.stages[S.i];
+    S.st = M.newStage(sg.nuc, sg.tubes, sg.n, S.seed + S.i * 7919);
+    S.Z1 = Math.round(sg.nuc.Z / 2);
+    TP = buildTable($('tablesvg'), sg.tubes, sg.nuc.Z, true);
+    drawDrop(); setLine(S.Z1, true);
+    $('shelf1').innerHTML = cardsHTML(sg.tubes); setShelfCount();
+    $('rule1').innerHTML = S.i === 0 ? RULE : RULE_TH + ' ' + RULE;
+    $('said1').innerHTML = ''; $('cap').textContent = CAP_PRE;
+    setKick(1, false); setNow('Choose where to pinch, or hold.'); controls('choose');
+    show('s-bench');
+  }
+
+  // the drop panel
+  var DP = {};
+  function drawDrop() {
+    var svg = $('dropsvg'); svg.innerHTML = ''; tonePattern(svg, 'tp1');
+    DP.ghost = el('path', { d: blobPath(DR.cx, DR.cy, DR.rx, DR.ry, DR.cx, 0, 0.02, 1), fill: 'none', stroke: '#9A958C', 'stroke-width': 1.5, 'stroke-dasharray': '4 3' }, svg);
+    DP.g = el('g', {}, svg);
+    DP.body = el('path', { d: blobPath(DR.cx, DR.cy, DR.rx, DR.ry, DR.cx, 0, 0.02, 1), fill: '#fff', stroke: '#161414', 'stroke-width': 3 }, DP.g);
+    DP.shine = el('path', { d: 'M' + (DR.cx - 60) + ' ' + (DR.cy - 18) + ' C' + (DR.cx - 45) + ' ' + (DR.cy - 34) + ' ' + (DR.cx - 20) + ' ' + (DR.cy - 38) + ' ' + (DR.cx) + ' ' + (DR.cy - 38), fill: 'none', stroke: '#161414', 'stroke-width': 2, 'stroke-linecap': 'round', opacity: .5 }, DP.g);
+    DP.left = el('path', { d: '', fill: '#fff', stroke: '#161414', 'stroke-width': 3, class: 'hidden' }, svg);
+    DP.right = el('path', { d: '', fill: '#fff', stroke: '#161414', 'stroke-width': 3, class: 'hidden' }, svg);
+    DP.speed = el('g', { stroke: '#161414', 'stroke-width': 2, 'stroke-linecap': 'round', class: 'hidden' }, svg);
+    for (var i = 0; i < 6; i++) { el('line', { x1: 0, y1: 0, x2: 0, y2: 0 }, DP.speed); }
+    DP.line = el('line', { x1: DR.cx, y1: 12, x2: DR.cx, y2: 128, stroke: '#E23A2A', 'stroke-width': 3, 'stroke-dasharray': '7 5' }, svg);
+    DP.knob = el('circle', { cx: DR.cx, cy: 121, r: 9, fill: '#E23A2A', stroke: '#161414', 'stroke-width': 2 }, svg);
+    DP.n1 = txt(svg, DR.cx - 50, 30, '', 'cnt bang'); DP.n2 = txt(svg, DR.cx + 50, 30, '', 'cnt bang');
+    DP.bar = txt(svg, DR.cx, 30, '|', 'cnt bang', { fill: '#9A958C' });
+    DP.neutron = el('circle', { cx: 18, cy: 16, r: 6, fill: '#E23A2A', stroke: '#161414', 'stroke-width': 2 }, svg);
+    DP.nlab = txt(svg, 30, 20, 'neutron', 'brk', { style: 'text-anchor:start' });
+    DP.sfx = txt(svg, DR.cx, DR.cy + 22, '', 'sfx bang', { 'text-anchor': 'middle', 'font-size': 40 });
+    DP.sfx.setAttribute('transform', 'rotate(-6 ' + DR.cx + ' ' + DR.cy + ')');
+    DP.eline = txt(svg, DR.cx, 145, '', 'lbl');
+    DP.hit = el('rect', { x: 0, y: 0, width: 340, height: 150, fill: 'transparent' }, svg);
+    var drag = false;
+    function toZ(ev) {
+      var r = svg.getBoundingClientRect(), px = (ev.clientX - r.left) / r.width * 340;
+      var p = (px - (DR.cx - DR.rx * 0.9)) / (DR.rx * 1.8);
+      return Math.round(p * S.st.nuc.Z);
+    }
+    svg.addEventListener('pointerdown', function (ev) { if (busy) return; drag = true; svg.setPointerCapture(ev.pointerId); setLine(toZ(ev)); });
+    svg.addEventListener('pointermove', function (ev) { if (!drag || busy) return; setLine(toZ(ev)); });
+    svg.addEventListener('pointerup', function () { drag = false; });
+    svg.addEventListener('pointercancel', function () { drag = false; });
+  }
+  function lineX(Z1) { return DR.cx - DR.rx * 0.9 + (Z1 / S.st.nuc.Z) * DR.rx * 1.8; }
+  function setLine(Z1, silent) {
+    var nuc = S.st.nuc; S.Z1 = M.clampZ1(nuc, Z1); var Z2 = nuc.Z - S.Z1, x = lineX(S.Z1);
+    DP.line.setAttribute('x1', x); DP.line.setAttribute('x2', x); DP.knob.setAttribute('cx', x);
+    var p = M.splitOdds(nuc, S.Z1);
+    DP.body.setAttribute('d', blobPath(DR.cx, DR.cy, DR.rx, DR.ry, x, 0.1 + 0.4 * p, 0.02, 1));
+    DP.n1.textContent = S.Z1; DP.n2.textContent = Z2;
+    DP.n1.setAttribute('x', (DR.cx - DR.rx + x) / 2); DP.n2.setAttribute('x', (DR.cx + DR.rx + x) / 2); DP.bar.setAttribute('x', x);
+    DP.eline.textContent = p >= 0.999 ? 'here the pinch goes through every time' : 'here the pinch goes through ' + M.oddsWords(p);
+    DP.eline.setAttribute('fill', p >= 0.62 ? '#161414' : '#E23A2A');
+    previewMove(S.Z1);
+  }
+  $('b-left').onclick = function () { if (!busy) setLine(S.Z1 - 1); };
+  $('b-right').onclick = function () { if (!busy) setLine(S.Z1 + 1); };
+  function lightTube(id, atZ) { var g = TP.tubes[id], p = cellXY(atZ); g.classList.add('lit'); g.setAttribute('transform', 'translate(' + p.x + ' ' + p.y + ')'); sym(TP, atZ, false); lightCard(id, atZ); }
+
+  // ---------- a move ----------
+  function commit(action) {
+    if (busy || M.stageDone(S.st)) return; busy = true;
+    controls('watch'); clearPreview(); clearPieces();
+    var mv = M.play(S.st, action), nuc = S.st.nuc;
+    setKick(S.st.used, false); setNow('Watch!');
+    $('said1').innerHTML = ''; $('cap').textContent = ''; DP.eline.textContent = ''; DP.eline.setAttribute('fill', '#161414');
+    var steps = [];
+    steps.push([0, function () { animNeutron(mv.kind === 'hold' ? DR.cx : lineX(mv.Z1)); }]);
+    if (mv.kind === 'split') {
+      steps.push([350, function () { animNeck(mv); }]);
+      steps.push([900, function () { animSnap(mv); }]);
+      steps.push([1500, function () { DP.eline.textContent = 'the halves fly apart with a huge shove' + (mv.uneven ? ' (a smaller one than an even pinch)' : ''); }]);
+      steps.push([1800, function () { land(mv); }]);
+    } else if (mv.kind === 'rang') {
+      steps.push([350, function () { animPullBack(mv); }]);
+      steps.push([1900, function () { land(mv); }]);
+    } else {
+      steps.push([350, function () { animRing(mv); }]);
+      steps.push([1500, function () { land(mv); }]);
+    }
+    steps.forEach(function (s) { setTimeout(s[1], s[0]); });
+  }
+  function animNeutron(x) {
+    var nt = DP.neutron, t0 = performance.now();
+    function fly(now) { var k = Math.min(1, (now - t0) / 320); nt.setAttribute('cx', 18 + (x - 18) * k); nt.setAttribute('cy', 16 + (DR.cy - DR.ry - 6 - 16) * k); if (k < 1) requestAnimationFrame(fly); else nt.setAttribute('opacity', 0); }
+    requestAnimationFrame(fly);
+  }
+  function animNeck(mv) {
+    var x = lineX(mv.Z1), t0 = performance.now();
+    function step(now) { var k = Math.min(1, (now - t0) / 520); var w = 0.02 + 0.05 * Math.sin(k * 14); DP.body.setAttribute('d', blobPath(DR.cx, DR.cy, DR.rx * (1 + 0.08 * k), DR.ry, x, 0.42 + 0.56 * k, w, 1 + k * 3)); if (k < 1) requestAnimationFrame(step); }
+    requestAnimationFrame(step);
+  }
+  function animSnap(mv) {
+    var x = lineX(mv.Z1);
+    DP.body.classList.add('hidden'); DP.shine.classList.add('hidden'); DP.line.classList.add('hidden'); DP.knob.classList.add('hidden'); DP.bar.classList.add('hidden');
+    var lw = x - (DR.cx - DR.rx), rw = (DR.cx + DR.rx) - x;
+    var lr = Math.max(14, lw * 0.5), rr = Math.max(14, rw * 0.5), lcx = x - lr - 4, rcx = x + rr + 4;
+    DP.left.setAttribute('d', blobPath(lcx, DR.cy, lr, Math.min(DR.ry, lr * 0.95), lcx, 0, 0.05, 2)); DP.left.classList.remove('hidden');
+    DP.right.setAttribute('d', blobPath(rcx, DR.cy, rr, Math.min(DR.ry, rr * 0.95), rcx, 0, 0.05, 4)); DP.right.classList.remove('hidden');
+    DP.speed.classList.remove('hidden');
+    var lines = DP.speed.querySelectorAll('line');
+    DP.sfx.textContent = 'FISSION!!'; DP.sfx.setAttribute('fill', '#E23A2A'); DP.sfx.setAttribute('font-size', 40);
+    var t0 = performance.now();
+    function step(now) {
+      var k = Math.min(1, (now - t0) / 600), e = k * k;
+      DP.left.setAttribute('transform', 'translate(' + (-e * 260) + ' 0)'); DP.right.setAttribute('transform', 'translate(' + (e * 260) + ' 0)');
+      for (var i = 0; i < 6; i++) { var y = DR.cy - 30 + i * 12, side = i < 3 ? -1 : 1, base = side < 0 ? lcx - e * 260 : rcx + e * 260; lines[i].setAttribute('x1', base - side * (lr + 6)); lines[i].setAttribute('y1', y); lines[i].setAttribute('x2', base - side * (lr + 6 + 30 + 40 * k)); lines[i].setAttribute('y2', y); lines[i].setAttribute('opacity', 1 - k * 0.6); }
+      var sc = 1 + 0.25 * Math.sin(Math.min(1, k * 2) * Math.PI / 2);
+      DP.sfx.setAttribute('transform', 'rotate(-6 ' + DR.cx + ' ' + DR.cy + ') translate(' + DR.cx + ' ' + (DR.cy + 22) + ') scale(' + sc + ') translate(' + (-DR.cx) + ' ' + (-(DR.cy + 22)) + ')');
+      if (k < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  function animPullBack(mv) {
+    var x = lineX(mv.Z1), t0 = performance.now();
+    DP.sfx.textContent = 'RINGS...'; DP.sfx.setAttribute('fill', '#161414'); DP.sfx.setAttribute('font-size', 30);
+    function step(now) {
+      var k = Math.min(1, (now - t0) / 1400);
+      var dep = k < 0.4 ? 0.1 + 0.6 * (k / 0.4) : 0.7 * Math.max(0, 1 - (k - 0.4) / 0.35);
+      var w = 0.02 + 0.06 * Math.exp(-2 * k) * Math.sin(k * 20);
+      DP.body.setAttribute('d', blobPath(DR.cx, DR.cy, DR.rx * (1 + 0.05 * dep), DR.ry, x, dep, w, 1 + k * 2));
+      if (k > 0.75) { DP.line.classList.add('hidden'); DP.knob.classList.add('hidden'); DP.bar.classList.add('hidden'); }
+      if (k < 1) requestAnimationFrame(step); else { DP.eline.textContent = 'no split: the skin won, and the drop kept the neutron'; DP.eline.setAttribute('fill', '#E23A2A'); }
+    }
+    requestAnimationFrame(step);
+  }
+  function animRing(mv) {
+    var t0 = performance.now();
+    DP.line.classList.add('hidden'); DP.knob.classList.add('hidden'); DP.bar.classList.add('hidden'); DP.n1.classList.add('hidden'); DP.n2.classList.add('hidden');
+    DP.sfx.textContent = 'RINGS'; DP.sfx.setAttribute('fill', '#161414'); DP.sfx.setAttribute('font-size', 40);
+    function step(now) { var k = Math.min(1, (now - t0) / 1100); var a = 0.1 * Math.exp(-2.5 * k) * Math.sin(k * 24); DP.body.setAttribute('d', blobPath(DR.cx, DR.cy, DR.rx * (1 + a), DR.ry * (1 - a), DR.cx, 0, 0.02, 1)); if (k < 1) requestAnimationFrame(step); else DP.eline.textContent = S.st.nuc.name + '-' + (S.st.nuc.Z + S.st.nuc.N) + ' now; no split, no blast'; }
+    requestAnimationFrame(step);
+  }
+  function land(mv) {
+    var pcs = mv.pieces.map(function (p) { return { g: addPiece(TP, p.path[0]), path: p.path, i: 0 }; });
+    mv.pieces.forEach(function (p) { sym(TP, p.path[0], false); });
+    var litAt = {}; mv.lit.forEach(function (l) { litAt[l.piece + ':' + (l.step || 0)] = l; });
+    function narrate() { $('cap').textContent = pcs.map(function (pc, i) { return (pcs.length > 1 ? (i === 0 ? 'left: ' : 'right: ') : '') + M.nameOf(pc.path[pc.i]) + (pc.i < pc.path.length - 1 ? ' (climbing)' : ' (settled)'); }).join(' · '); }
+    function fire(p, i) { var l = litAt[p + ':' + i]; if (l) lightTube(l.id, l.atZ); mv.relit.forEach(function (r) { if (r.piece === p && (r.step || 0) === i) { TP.tubes[r.id].classList.add('shake'); setTimeout(function () { TP.tubes[r.id].classList.remove('shake'); }, 400); } }); }
+    pcs.forEach(function (pc, p) { fire(p, 0); });
+    narrate();
+    var maxSteps = Math.max.apply(null, pcs.map(function (pc) { return pc.path.length - 1; }));
+    var step = 1;
+    function tick() {
+      if (step > maxSteps) { pcs.forEach(function (pc) { pc.g.classList.add('done'); }); setTimeout(finish, 450); return; }
+      pcs.forEach(function (pc, p) { if (step < pc.path.length) { pc.i = step; movePiece(pc.g, pc.path[step]); sym(TP, pc.path[step], false); fire(p, step); } else pc.g.classList.add('done'); });
+      narrate(); step++;
+      setTimeout(tick, 380);
+    }
+    setTimeout(tick, 500);
+    function finish() {
+      var lines = M.moveWords(S.st, mv);
+      $('said1').innerHTML = lines.map(function (l) { return '<p>' + l + '</p>'; }).join('');
+      $('cap').textContent = 'Red pieces were still changing; black ones settled.';
+      var litN = S.st.tubes.filter(function (t) { return S.st.lit[t.id]; }).length;
+      busy = false; controls('next');
+      if (M.stageDone(S.st)) {
+        setKick(S.st.used, true); setNow(litN === S.st.tubes.length ? 'Every tube explained!' : 'No neutrons left.');
+        $('b-next').textContent = S.i < S.stages.length - 1 ? 'To thorium' : 'The verdict';
+      } else { setKick(S.st.used, true); setNow('Read it, then go on.'); $('b-next').textContent = 'Next neutron'; }
+      try { $('said1').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (e) {}
+    }
+  }
+  function nextNeutron() {
+    if (busy) return;
+    if (M.stageDone(S.st)) {
+      S.done.push(S.st);
+      if (S.i < S.stages.length - 1) { S.i++; beginStage(); } else endGame();
+      return;
+    }
+    drawDrop(); clearPieces(); setLine(Math.round(S.st.nuc.Z / 2));
+    $('said1').innerHTML = ''; $('cap').textContent = CAP_PRE;
+    setKick(S.st.used + 1, false); setNow('Choose where to pinch, or hold.'); controls('choose');
+  }
+  function endGame() {
+    var v = M.verdict(S.done[0], S.done[1]);
+    $('fate').textContent = v.fate;
+    $('v-paper').innerHTML = '<p>' + v.paper + '</p>';
+    $('v-found').innerHTML = v.found.map(function (l) { return '<p>' + l + '</p>'; }).join('');
+    $('v-part').innerHTML = v.part.map(function (l) { return '<p>' + l + '</p>'; }).join('');
+    $('v-stood').innerHTML = '<p>' + v.stood + '</p>';
+    $('seedline').textContent = 'The draws in this game came from seed ' + S.seed + '. Add ?seed=' + S.seed + ' to the address to play the same draws again.';
+    show('s-end');
+  }
+  $('b-split').onclick = function () { commit({ kind: 'split', Z1: S.Z1 }); };
+  $('b-hold').onclick = function () { commit({ kind: 'hold' }); };
+  $('b-next').onclick = nextNeutron;
+  $('b-begin').onclick = function () { D0.tapped = {}; busy = false; drawDrops(); $('b-toshelf').classList.add('hidden'); $('now0').textContent = 'Three drops · Tap one'; $('said0').innerHTML = '<p>' + DROPS_SAID + '</p>'; show('s-drops'); };
+  $('b-toshelf').onclick = showShelf;
+  $('b-tobench').onclick = startGame;
+  $('b-again').onclick = function () { show('s-start'); };
+  window.__game = { S: S, startGame: startGame, setLine: setLine };
+})();
+</script>
+</body>
+</html>

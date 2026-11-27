@@ -9,13 +9,16 @@ PASS all 30 panel-member rows map to codes
 PASS tokens: both match 3, one match 1, no match 0
 PASS German in the UK: 3 from a German in the UK, 1 from a German in France, 1 from an Italian in the UK, 0 from a Brit in Germany
 PASS "same" means the same named country, not two Big Five countries
+PASS the Big Five are DE, UK, FR, IT, ES; the US and Canada are not Big Five
 
 == 3. The four applicant-group bars
 PASS the four groups partition the applicants: bigP_bigW 58.0%, bigP_othW 2.7%, othP_bigW 1.0%, othP_othW 38.3%
-PASS share-weighted bars reproduce the success measure (works in Big Five 1.41, elsewhere 0.38)
+PASS share-weighted bars reproduce the by-workplace aggregates (works in Big Five 1.41, elsewhere 0.38; bookkeeping only)
+PASS the GAP is BOTH (Big Five passport, works in the Big Five: 1.42) minus NEITHER (other passport, works elsewhere: 0.32) = 1.09
+PASS the ratio compares the same two groups; the two mixed groups are left out of gap and ratio
 PASS by hand: a German in Germany meets 2 German home judges and 1 German working in Switzerland: 4.2 × 7 / 15 = 1.96 = 1.96
-PASS seed 1: simulated random juries 1.41 / 0.37 vs expected 1.41 / 0.38
-PASS seed 2: simulated random juries 1.41 / 0.38 vs expected 1.41 / 0.38
+PASS seed 1: simulated random juries BOTH 1.42 / NEITHER 0.32 vs expected 1.42 / 0.32
+PASS seed 2: simulated random juries BOTH 1.42 / NEITHER 0.33 vs expected 1.42 / 0.32
 
 == 4. Rosters, guided by the panel-member file
 PASS every roster judge is a passport/work combination that occurs in the panel-member file
@@ -24,20 +27,20 @@ PASS pool: each Big Five home combination appears twice
 PASS pool: 12 judges from smaller countries, one each
 PASS pool 24, panel 15, bench 10
 PASS a Round 1 player must seat at least 1 Big Five home judge(s), so a balanced panel is possible
-PASS Round 1, a panel that mirrors the panel-member file: works in Big Five 1.54, elsewhere 0.38 (tilted)
-PASS Round 1, a balanced panel from the same pool: 0.41 vs 0.72 (gap -0.31)
+PASS Round 1, a panel that mirrors the panel-member file: BOTH 1.55, NEITHER 0.32 (gap 1.22, ratio 4.8: tilted)
+PASS Round 1, a balanced panel from the same pool: BOTH 0.41 vs NEITHER 0.70 (gap -0.30)
 
-== 5. Round 2: the GAP meter and the four-swap puzzle
-PASS the starting panel is tilted: gap 1.03 tokens, LEVEL zone ±0.3
+== 5. Round 2: the GAP meter (BOTH minus NEITHER) and the four-swap puzzle
+PASS the starting panel is tilted: gap 1.09 tokens, LEVEL zone ±0.3
 PASS no plan of 1 or 2 swaps reaches LEVEL
-PASS 12203 of 286650 four-swap plans reach LEVEL (4.3%; at least one solution exists)
-PASS plans that bench four Big Five home judges: 4362/7350 reach LEVEL (59%)
+PASS 9294 of 286650 four-swap plans reach LEVEL (3.2%; at least one solution exists)
+PASS plans that bench four Big Five home judges: 3574/7350 reach LEVEL (49%; was 59% under the by-workplace gap)
 PASS plans that only bench judges from smaller countries never reach LEVEL
-     e.g. DE/DE->IL/IL, DE/DE->FI/FI, IT/IT->PT/PT, IT/IT->PL/PL: 0.63 vs 0.62
+     e.g. DE/DE->IL/IL, DE/DE->FI/FI, IT/IT->PT/PT, IT/IT->PL/PL: BOTH 0.63 vs NEITHER 0.62
 PASS the meter's range (±1.5) holds the starting gap
 
 == 6. Robustness: the paper's own relative sizes instead of 3 / 1 / 0, and exactly 4 judges
-PASS paper relative sizes (3 / 1.37 / 1.02): mirror gap 1.22, balanced -0.26, start 1.09, 1-swap levels 0, big-home four-swap plans level 45%
-PASS exactly 4 judges per applicant: mirror gap 1.11, balanced -0.29, start 0.98, 1-swap levels 0, big-home four-swap plans level 59%
+PASS paper relative sizes (3 / 1.37 / 1.02): mirror gap 1.30, balanced -0.24, start 1.17, 1-swap levels 0, big-home four-swap plans level 33%
+PASS exactly 4 judges per applicant: mirror gap 1.16, balanced -0.28, start 1.04, 1-swap levels 0, big-home four-swap plans level 49%
 
 ALL PASS

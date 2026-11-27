@@ -2,32 +2,44 @@ START: You choose a panel of 15 judges for ERC-style grant reviews.
   [start] fits 380×760: yes
   badge label: German passport, works in the UK.
   help screen or ? button present: 0
+  [start] says "Big Five": true | both country colours on screen: false | colour key: false | definition: false | intro: true | asterisk: false
+  old citation gone: true | new citation present: true
   [rules] fits 380×760: yes
+  [rules] says "Big Five": false | both country colours on screen: false | colour key: false | definition: false | intro: false | asterisk: false
   [r1-empty] fits 380×760: yes
+  badge colours: US rgb(33, 199, 176) | CA null | NL rgb(33, 199, 176) | DE rgb(255, 190, 46) -> US and CA coloured like other non-Big-Five countries
+  [r1-empty] says "Big Five": true | both country colours on screen: true | colour key: true | definition: false | intro: false | asterisk: false
   after 14 judges: bars visible false | reveal visible false | any text feedback element: 0
   unseat one -> 13/15
   [r1-14] fits 380×760: yes
-REVEAL: AVERAGE HOME-ADVANTAGE TOKENS / Big Five passport, works in the Big Five / 1.5 / Big Five passport, works elsewhere / 1.1 / Other passport, works in the Big Five / 1.1 / Other passport, works elsewhere / 0.3 / Each bar shows the average home advantage across one applicant group: passport from the Big Five or elsewhere, crossed with workplace in the Big Five or elsewhere. Higher means more home advantage. / Your panel gives applicants who work in the Big Five about 4 times the home advantage of applicants who work elsewhere. / ROUND 2
+REVEAL: AVERAGE HOME-ADVANTAGE TOKENS / BOTH · Big Five passport, works in the Big Five / 1.5 / Big Five passport, works elsewhere / 1.1 / Other passport, works in the Big Five / 1.1 / NEITHER · Other passport, works elsewhere / 0.3 / Each bar is one applicant group: passport from the Big Five or elsewhere, crossed with workplace in the Big Five or elsewhere. Higher means more home advantage. / Your panel gives applicants with both a Big Five passport and a Big Five workplace about 5 times the home advantage of applicants with neither. / ROUND 2
   [r1-reveal] fits 380×760: yes
-ROUND 2: bars Big Five passport, works in the Big Five / 1.4 / Big Five passport, works elsewhere / 1.1 / Other passport, works in the Big Five / 0.8 / Other passport, works elsewhere / 0.3 | instr: Tap a judge in the panel, then a judge on the bench, to swap them.
-  meter marker at 84.3363% | level? false
+  [r1-reveal] says "Big Five": true | both country colours on screen: true | colour key: true | definition: false | intro: false | asterisk: false | bar fills: rgb(201, 184, 245)
+ROUND 2: bars BOTH · Big Five passport, works in the Big Five / 1.4 / Big Five passport, works elsewhere / 1.1 / Other passport, works in the Big Five / 0.8 / NEITHER · Other passport, works elsewhere / 0.3 | instr: Tap a judge in the panel, then one on the bench, to swap them.
+  meter marker at 86.387% | level? false
   [r2-start] fits 380×760: yes
+  badge colours: US rgb(33, 199, 176) | CA rgb(33, 199, 176) | NL rgb(33, 199, 176) | DE rgb(255, 190, 46) -> US and CA coloured like other non-Big-Five countries
+  [r2] says "Big Five": true | both country colours on screen: true | colour key: true | definition: false | intro: false | asterisk: false | bar fills: rgb(201, 184, 245)
+  meter text: GAP / LEVEL / ← NEITHER ahead / BOTH ahead →
   after selecting a panel judge: bench pulses true | instruction visible false
   [r2-selected] fits 380×760: yes
-  swap SE/SE -> PT/PT: marker 84.8189% | bars Big Five passport, works in the Big Five / 1.4 / Big Five passport, works elsewhere / 1.1 / Other passport, works in the Big Five / 0.8 / Other passport, works elsewhere / 0.3
-  RESET: marker 84.3363% | swaps used 0
-  swap DE/DE -> IL/IL: marker 74.6979% | bars Big Five passport, works in the Big Five / 1.2 / Big Five passport, works elsewhere / 0.8 / Other passport, works in the Big Five / 0.8 / Other passport, works elsewhere / 0.4
-  swap DE/DE -> FI/FI: marker 66.4364% | bars Big Five passport, works in the Big Five / 1.0 / Big Five passport, works elsewhere / 0.5 / Other passport, works in the Big Five / 0.8 / Other passport, works elsewhere / 0.5
-  swap IT/IT -> PT/PT: marker 58.3132% | bars Big Five passport, works in the Big Five / 0.8 / Big Five passport, works elsewhere / 0.5 / Other passport, works in the Big Five / 0.8 / Other passport, works elsewhere / 0.6
-  swap IT/IT -> PL/PL: marker 58.3132% | bars Big Five passport, works in the Big Five / 0.8 / Big Five passport, works elsewhere / 0.5 / Other passport, works in the Big Five / 0.8 / Other passport, works elsewhere / 0.6
+  swap SE/SE -> PT/PT: marker 86.9041% | bars BOTH · Big Five passport, works in the Big Five / 1.4 / Big Five passport, works elsewhere / 1.1 / Other passport, works in the Big Five / 0.8 / NEITHER · Other passport, works elsewhere / 0.3
+  RESET: marker 86.387% | swaps used 0
+  swap DE/DE -> IL/IL: marker 75.7507% | bars BOTH · Big Five passport, works in the Big Five / 1.2 / Big Five passport, works elsewhere / 0.8 / Other passport, works in the Big Five / 0.8 / NEITHER · Other passport, works elsewhere / 0.4
+  swap DE/DE -> FI/FI: marker 66.5895% | bars BOTH · Big Five passport, works in the Big Five / 1.0 / Big Five passport, works elsewhere / 0.5 / Other passport, works in the Big Five / 0.8 / NEITHER · Other passport, works elsewhere / 0.5
+  swap IT/IT -> PT/PT: marker 58.24% | bars BOTH · Big Five passport, works in the Big Five / 0.8 / Big Five passport, works elsewhere / 0.5 / Other passport, works in the Big Five / 0.8 / NEITHER · Other passport, works elsewhere / 0.6
+  levelled after three swaps (the fourth is not needed under the BOTH-NEITHER gap)
 RESULT: LEVEL! / Levelled in 3 swaps. / THE VERDICT
   [r2-level] fits 380×760: yes
-VERDICT: THE VERDICT / WHAT YOU DID / Your own panel gave applicants who work in the Big Five about 4 times the home advantage of those who work elsewhere. Then you levelled the tilted panel in 3 swaps. / WHAT THE PAPER FOUND / Reviewers give higher scores to applicants who share their passport or work country. The bonus is strongest when both match. / WHAT THE DATA SHOWS / Applicants who work in Big Five countries meet matching reviewers more often, so they receive more home advantage overall. / PLAY AGAIN / ABOUT
+VERDICT: THE VERDICT / WHAT YOU DID / Your own panel gave applicants with both a Big Five passport and a Big Five workplace about 5 times the home advantage of applicants with neither. Then you levelled the tilted panel in 3 swaps. / WHAT THE PAPER FOUND / Reviewers give higher scores to applicants who share their passport or work country. The bonus is strongest when both match. / WHAT THE DATA SHOWS / Applicants whose passport and workplace are both in the Big Five meet matching reviewers most often, so they receive the most home advantage. Applicants with neither receive the least. / Big Five: the five countries with the most ERC applicants (DE, UK, FR, IT, ES). / PLAY AGAIN / ABOUT
   [end] fits 380×760: yes
+  [end] says "Big Five": true | both country colours on screen: false | colour key: false | definition: true | intro: false | asterisk: false
   [about] fits 380×760: yes
+  [about] says "Big Five": true | both country colours on screen: false | colour key: false | definition: true | intro: false | asterisk: false
+  about: THE PAPER / Nicola Fuchs-Schündeln and Felix Holub (2026), Homophily in grant evaluations, Nature Human Behaviour, doi:10.1038/s41562-026-02554-w. Using 37,073 ERC applications, they compare the same proposal across its reviewers: reviewers who share the applicant's citizenship or country of work give higher scores, most of all when both match. / THE GAME / The applicant mix is the authors' applicant file (30 passport and work-country combinations with their shares), built into the page. The judges are curated from their panel-member file. Two simplifications are the game's own: the token rule (both match 3, one match 1, none 0) is a game scale, not the paper's 1–5 scores; and each applicant's judges are drawn at random from the 15 on the panel (about four each), while the ERC assigns by expertise. / Big Five: the five countries with the most ERC applicants (DE, UK, FR, IT, ES). The GAP compares two applicant groups by name: passport and workplace both in the Big Five, and neither; the two mixed groups are shown as bars but are left out of the gap. / So the game demonstrates how panel composition spreads home advantage across applicant groups under these simplifications. It assumes the token rule and random assignment. The paper establishes that matched reviewers score the same proposal higher; it does not test other panels. The LEVEL target and the four swaps are game choices, not recommendations. / Built from the paper. The paper is the authority where the two disagree. Fonts: Bungee, Rubik (SIL OFL).
   back on verdict true
-REPLAY REVEAL: Your panel gives applicants who work elsewhere more home advantage than those who work in the Big Five.
+REPLAY REVEAL: Your panel gives applicants with neither a Big Five passport nor a Big Five workplace more home advantage than applicants with both.
 REPLAY RESULT: NOT YET / Still tilted. RESET to try again, or see the verdict. / RESET / THE VERDICT
   [r2-notyet] fits 380×760: yes
-REPLAY VERDICT: Your own panel favoured applicants who work elsewhere. The tilted panel stayed tilted.
+REPLAY VERDICT: Your own panel gave applicants with neither a Big Five passport nor a Big Five workplace more home advantage than applicants with both. The tilted panel stayed tilted.
 errors []

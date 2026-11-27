@@ -5,11 +5,12 @@ mech = open('mechanism.js', encoding='utf-8').read()
 font = lambda f: base64.b64encode(open('fonts/' + f, 'rb').read()).decode()
 about = """
 <h3>THE PAPER</h3>
-<p>Nicola Fuchs-Schündeln and Felix Holub, <i>Homophily in Grant Evaluations</i> (WZB Berlin / Goethe University Frankfurt, manuscript). Using 37,073 ERC applications, they compare the same proposal across its reviewers: reviewers who share the applicant's citizenship or country of work give higher scores, most of all when both match.</p>
+<p>Nicola Fuchs-Schündeln and Felix Holub (2026), <i>Homophily in grant evaluations</i>, <i>Nature Human Behaviour</i>, <a href="https://doi.org/10.1038/s41562-026-02554-w" style="color:inherit">doi:10.1038/s41562-026-02554-w</a>. Using 37,073 ERC applications, they compare the same proposal across its reviewers: reviewers who share the applicant's citizenship or country of work give higher scores, most of all when both match.</p>
 <h3>THE GAME</h3>
 <p>The applicant mix is the authors' applicant file (30 passport and work-country combinations with their shares), built into the page. The judges are curated from their panel-member file. Two simplifications are the game's own: the token rule (both match 3, one match 1, none 0) is a game scale, not the paper's 1–5 scores; and each applicant's judges are drawn at random from the 15 on the panel (about four each), while the ERC assigns by expertise.</p>
+<p>Big Five: the five countries with the most ERC applicants (DE, UK, FR, IT, ES). The GAP compares two applicant groups by name: passport and workplace both in the Big Five, and neither; the two mixed groups are shown as bars but are left out of the gap.</p>
 <p>So the game <b>demonstrates</b> how panel composition spreads home advantage across applicant groups under these simplifications. It <b>assumes</b> the token rule and random assignment. The paper <b>establishes</b> that matched reviewers score the same proposal higher; it does not test other panels. The LEVEL target and the four swaps are game choices, not recommendations.</p>
-<p class="dim">Game built from this paper; the paper is the authority where the two disagree. Beta, builder-reviewed only. Fonts: Bungee, Rubik (SIL OFL).</p>
+<p class="dim">Built from the paper. The paper is the authority where the two disagree. Fonts: Bungee, Rubik (SIL OFL).</p>
 """
 t = open('template.html', encoding='utf-8').read()
 for k in ['/*__MECHANISM__*/', '/*__ABOUT__*/', '/*__FONT_BUNGEE__*/', '/*__FONT_RUBIK__*/']:

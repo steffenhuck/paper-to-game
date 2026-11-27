@@ -5,41 +5,37 @@ ok   ordering on aware: chimp/mouse > infant — p. 110: adult apes, cats, mice 
 ok   ordering on aware: chimp/dog/pig > braindam/infant/disab — p. 113: brain-damaged humans, infants and permanently retarded humans are below many non-humans in awareness, self-consciousness, intelligence and sentience
 ok   ordering on reason: chimp/pig/dog > braindam/infant — p. 113: the same passage, intelligence
 ok   ordering on reason: adult > infant/braindam/disab — p. 113, Benn: the rational man and the imbecile; p. 106: the infant
-ok   Suffer reads the same for every being that can feel, and 0 for the stone
-ok   four humans, five animals, one thing
-ok   the four people are a line on no ruler — [["braindam","chimp"],["infant","chimp"],["braindam","chimp"],["adult","chimp"]]
-ok   everyone who feels is a line on Suffer and, in this cast, on no other ruler (the hurt grown-up reads none, like the stone: our length, not the paper's)
-ok   on each reading ruler the clash for the four people is a person in and an animal out
-ok   on Suffer the clash for the four people is a tie
-ok   shape of the four people is species; of everyone who feels, singer; of all ten, everything; of nobody, nothing
-ok   robustness: with random lengths that keep only the paper's orderings, the four people are a line on no ruler and everyone-who-feels is a line on Suffer — 500 of 500
-ok   cast restored after robustness runs
-ok   all 1024 sets get a shape, a name, words, four reveals and a verdict; every line is a true threshold — 0 problems
-ok   eight shapes occur — {"nothing":1,"line":11,"species-minus":12,"species":1,"own":967,"species-plus":30,"singer":1,"everything":1}
-ok   the grown-up alone is a Reason, Talk and Aware line
-ok   the four people plus the dog is species-with-favourites
-ok   the four people minus the hurt grown-up is species-with-exceptions
-ok   everyone but the baby and the stone is own, nearest Singer, with the baby dropped
-ok   the experiment ends on every path (13 with the baby in, 15 with the baby out)
-ok   "the baby is out on my line too" is offered only when the baby is out
-ok   every status is reachable — {"read":10,"species":12,"potential":4,"refuse":2}
+ok   the three menus hold all ten creatures, each once
+ok   each menu has a person and an animal
+ok   the third menu is the paper's own test: the baby, to save many lives, with Bentham's dog beside it
+ok   every being but the stone can suffer in the paper's reading
+ok   the team's choices are explained by Species and by no rule with marks
+ok   Suffer objects to the team's choices with Singer's facts
+ok   all who can suffer from one life on, the stone for free, is Singer's line
+ok   nobody who can suffer, at any price, is refuse, and its verdict points to Foot
+ok   the hurt grown-up, the mouse and the stone first, then the baby, is explained by Reason (and the others)
+ok   the dog used to save a thousand lives and the baby spared draws an objection from Reason, Talk and Aware
+ok   the chimpanzee used to save a life and the hurt grown-up spared draws an objection from Reason, Talk and Aware
+ok   all 1024 tick patterns x 512 answer sets get a pattern, a shape, a name, words for each rule, Suffer words and a verdict; the rationalisability test matches a brute-force search for rising cutoffs; Suffer objects exactly when it should — 0 problems
+ok   patterns: refuse 2 (nothing, or the stone alone), all 1, the rest mixed — {"refuse":2,"mixed":1021,"all":1}
+ok   the stone is free: ticking it alone is refuse, and with the baby to save a thousand lives, every rule still agrees
+ok   all six shapes occur — {"refuse":1024,"equal-no":77636,"own":310460,"line":36864,"species":95232,"singer":3072}
+ok   robustness: with random marks that keep only the paper's orderings, no rule with marks explains the team's choices — 500 of 500
+ok   cast restored
+ok   three rungs of rising stakes, three stories each, and a fixed cost
+ok   stories draw reproducibly, and seed 0 gives the first of each rung
 
-Shapes (how many of the 1024 sets fall in each):
-  nothing       1
-  line          11
-  species-minus 12
-  species       1
-  own           967
-  species-plus  30
-  singer        1
-  everything    1
-Named sets:
-  the four people                    -> Species                    lines: none
-  everyone who feels                 -> Singer's line              lines: suffer
-  the grown-up alone                 -> A Reason line              lines: reason,talk,aware
-  the four people + dog              -> Species, with favourites   lines: none
-  the four people - hurt grown-up    -> Species, with exceptions   lines: none
-  grown-up + chimpanzee              -> A Reason line              lines: reason,aware
-  animals only                       -> Your own line              lines: none
+Shapes over 1024 tick patterns x 512 answer sets:
+  refuse    1024
+  equal-no  77636
+  own       310460
+  line      36864
+  species   95232
+  singer    3072
+Tick patterns by how many rules with marks explain them:
+  0 rules: 944
+  1 rules: 22
+  2 rules: 18
+  3 rules: 40
 
 all checks passed

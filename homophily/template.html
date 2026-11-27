@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Home Judges</title>
-<meta name="description" content="Choose a panel of 15 judges for ERC-style grant reviews. A game built from Fuchs-Schündeln & Holub, Homophily in Grant Evaluations.">
+<meta name="description" content="Choose a panel of 15 judges for ERC-style grant reviews. A game built from Fuchs-Schündeln & Holub (2026), Homophily in grant evaluations, Nature Human Behaviour.">
 <style>
 @font-face { font-family: 'Bungee'; src: url(data:font/woff2;base64,/*__FONT_BUNGEE__*/) format('woff2'); font-display: block; }
 @font-face { font-family: 'Rubik'; src: url(data:font/woff2;base64,/*__FONT_RUBIK__*/) format('woff2'); font-weight: 300 900; font-display: block; }
 :root {
   --board: #1e2a5e; --board2: #16204b; --felt: #2b3a7a; --line: #3d4d92;
-  --big: #ffbe2e; --oth: #21c7b0; --star: #ff5d5d; --chalk: #fff6e3; --none: #b9b4d6; --ok: #3ddc84;
+  --big: #ffbe2e; --oth: #21c7b0; --star: #ff5d5d; --chalk: #fff6e3; --ok: #3ddc84; --bar: #c9b8f5; /* --bar: the four applicant bars; yellow and teal are country colours only */
   --ink: #12183a; --dim: #b9c0e6;
   --emoji: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
 }
@@ -70,13 +70,14 @@ b { font-weight: 700; }
 .grow2 { display: flex; align-items: center; gap: 6px; margin-top: 3px; }
 .gtrack { position: relative; flex: 1; height: 13px; border-radius: 7px; background: rgba(255,255,255,.08); overflow: hidden; }
 .gfill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 7px; transition: width .6s cubic-bezier(.3,1.3,.5,1); }
-.gcell.bigW .gfill { background: var(--big); } .gcell.othW .gfill { background: var(--oth); }
+.gcell .gfill { background: var(--bar); }
+.gcell .gk { font-family: 'Bungee', sans-serif; font-size: 10px; color: var(--chalk); }
 .gnum { font-family: 'Bungee', sans-serif; font-size: 14px; min-width: 30px; text-align: right; }
 /* the GAP meter */
 .meter { background: var(--board2); border: 2px solid var(--line); border-radius: 10px; padding: 4px 8px 4px; }
 .mrow { display: flex; align-items: center; gap: 8px; }
 .mlab { font-family: 'Bungee', sans-serif; font-size: 13px; }
-.mtrack { position: relative; flex: 1; height: 24px; border-radius: 12px; background: linear-gradient(90deg, var(--oth) 0%, rgba(255,255,255,.08) 30%, rgba(255,255,255,.08) 70%, var(--big) 100%); }
+.mtrack { position: relative; flex: 1; height: 24px; border-radius: 12px; background: linear-gradient(90deg, var(--bar) 0%, rgba(255,255,255,.08) 30%, rgba(255,255,255,.08) 70%, var(--bar) 100%); } /* the ends are the bar colour, not the country colours */
 .mzone { position: absolute; top: -3px; bottom: -3px; background: var(--ok); border: 2px solid var(--ink); border-radius: 7px; display: flex; align-items: center; justify-content: center;
   font-family: 'Bungee', sans-serif; font-size: 10px; color: var(--ink); }
 .mmark { position: absolute; top: -7px; width: 6px; height: 38px; margin-left: -3px; background: var(--chalk); border: 2px solid var(--ink); border-radius: 3px; transition: left .6s cubic-bezier(.3,1.3,.5,1); z-index: 2; }
@@ -98,6 +99,14 @@ b { font-weight: 700; }
 .block { border-left: 4px solid var(--big); padding: 2px 0 2px 10px; }
 .block p { font-size: 15px; }
 .hide { display: none !important; }
+/* Round 2 carries the most: tighter spacing so the board stays one viewport at 380 × 760 */
+#s-r2 { gap: 5px; } #s-r2 .aim { padding: 5px 10px; line-height: 1.15; } #s-r2 .jc { min-height: 44px; } #s-r2 .box { padding: 6px; }
+#s-r2 .boxhead { margin-bottom: 3px; } #s-r2 .gcell .gl { min-height: 0; } #s-r2 .gcell { padding: 3px 7px 4px; } #s-r2 .meter { padding: 3px 8px; }
+/* .key: the colour key, on every screen that shows both country colours and nowhere else; .def: the Big Five sentence, on screens that say Big Five but show no key */
+.def { font-size: 12px; color: var(--dim); line-height: 1.25; }
+.key { font-size: 12px; color: var(--dim); line-height: 1.25; }
+.sw { display: inline-block; width: 13px; height: 13px; border-radius: 3px; border: 2px solid var(--ink); vertical-align: -2px; margin: 0 3px 0 0; }
+.sw.big { background: var(--big); } .sw.oth { background: var(--oth); }
 .about p { font-size: 12.5px; line-height: 1.3; margin: 0 0 6px; }
 .about h3 { margin-top: 2px; }
 </style>
@@ -109,10 +118,10 @@ b { font-weight: 700; }
   <h1>HOME JUDGES</h1>
   <div class="aim">You choose a panel of 15 judges for ERC-style grant reviews.</div>
   <p><b>Round 1:</b> Seat 15 judges. See which applicants receive more home advantage.</p>
-  <p><b>Round 2:</b> Fix a tilted panel. Level the home advantage for applicants who work in the Big Five and elsewhere. Four swaps.</p>
+  <p><b>Round 2:</b> Fix a tilted panel. Level the home advantage between applicants whose passport and workplace are both in Germany, the UK, France, Italy or Spain (the "Big Five", the five countries with the most ERC applicants) and applicants with neither. Four swaps.</p>
   <div class="example" id="ex1"></div>
   <div class="example" id="ex2"></div>
-  <p class="small dim">🛂 = passport, 📍 = where they work.<br>Big Five countries: DE, UK, FR, IT, ES.</p>
+  <p class="small dim">🛂 = passport, 📍 = where they work.</p>
   <div class="grow"></div>
   <button class="btn wide" id="b-play">PLAY</button>
   <button class="btn chalk sm wide" id="b-about0">ABOUT</button>
@@ -135,7 +144,8 @@ b { font-weight: 700; }
 <!-- ROUND 1 -->
 <section class="screen" id="s-r1">
   <div class="tag">ROUND 1 · YOUR PANEL</div>
-  <div class="aim" id="aim-r1">Seat the 15 judges you think are fair.</div>
+  <div class="aim" id="aim-r1">Seat the 15 judges.</div>
+  <p class="key"><span class="sw big"></span>Big Five country (DE, UK, FR, IT, ES) &nbsp; <span class="sw oth"></span>other country</p>
   <div class="box"><div class="boxhead"><span>THE PANEL</span><span class="cnt" id="cnt1"></span></div><div class="grid g5" id="table1"></div></div>
   <div id="r1-pick">
     <div class="boxhead" style="margin-top:2px"><span>CANDIDATES · TAP TO SEAT</span></div>
@@ -144,7 +154,7 @@ b { font-weight: 700; }
   <div id="r1-reveal" class="hide">
     <div class="ghead">AVERAGE HOME-ADVANTAGE TOKENS</div>
     <div id="bars1"></div>
-    <p class="small dim" style="margin:5px 0">Each bar shows the average home advantage across one applicant group: passport from the Big Five or elsewhere, crossed with workplace in the Big Five or elsewhere. Higher means more home advantage.</p>
+    <p class="small dim" style="margin:5px 0">Each bar is one applicant group: passport from the Big Five or elsewhere, crossed with workplace in the Big Five or elsewhere. Higher means more home advantage.</p>
     <p id="r1-result" style="margin-bottom:8px"></p>
     <button class="btn wide" id="b-r2">ROUND 2</button>
   </div>
@@ -153,10 +163,11 @@ b { font-weight: 700; }
 <!-- ROUND 2 -->
 <section class="screen" id="s-r2">
   <div class="tag">ROUND 2 · FIX THE TILT</div>
-  <div class="aim">Level the home advantage for applicants who work in the Big Five and elsewhere. Four swaps.</div>
+  <div class="aim">Level the home advantage between applicants whose passport and workplace are both Big Five and applicants with neither. Four swaps.</div>
   <div><div class="ghead">AVERAGE HOME-ADVANTAGE TOKENS</div><div id="bars2"></div></div>
   <div class="meter" id="meter"></div>
-  <div class="instr" id="instr">Tap a judge in the panel, then a judge on the bench, to swap them.</div>
+  <p class="key"><span class="sw big"></span>Big Five country (DE, UK, FR, IT, ES) &nbsp; <span class="sw oth"></span>other country</p>
+  <div class="instr" id="instr">Tap a judge in the panel, then one on the bench, to swap them.</div>
   <div class="box" id="tablebox2"><div class="boxhead"><span>THE PANEL</span><span class="row" style="gap:6px"><span>SWAPS</span><span class="pips" id="pips"></span></span></div><div class="grid g5" id="table2"></div></div>
   <div class="box bench" id="benchbox"><div class="boxhead"><span>THE BENCH</span></div><div class="grid g5" id="bench"></div></div>
   <div class="row"><button class="btn chalk sm" id="b-reset" style="flex:1">RESET</button><button class="btn teal sm" id="b-done" style="flex:1">DONE</button></div>
@@ -168,7 +179,8 @@ b { font-weight: 700; }
   <div class="tag">THE VERDICT</div>
   <div class="block"><h3>WHAT YOU DID</h3><p id="v-did"></p></div>
   <div class="block"><h3>WHAT THE PAPER FOUND</h3><p>Reviewers give higher scores to applicants who share their passport or work country. The bonus is strongest when both match.</p></div>
-  <div class="block"><h3>WHAT THE DATA SHOWS</h3><p>Applicants who work in Big Five countries meet matching reviewers more often, so they receive more home advantage overall.</p></div>
+  <div class="block"><h3>WHAT THE DATA SHOWS</h3><p>Applicants whose passport and workplace are both in the Big Five meet matching reviewers most often, so they receive the most home advantage. Applicants with neither receive the least.</p></div>
+  <p class="def">Big Five: the five countries with the most ERC applicants (DE, UK, FR, IT, ES).</p>
   <div class="grow"></div>
   <button class="btn wide" id="b-again">PLAY AGAIN</button>
   <button class="btn chalk sm wide" id="b-about-end">ABOUT</button>
@@ -189,7 +201,7 @@ b { font-weight: 700; }
 (function () {
   const M = MECH, C = M.CONFIG;
   const $ = s => document.querySelector(s), $$ = s => Array.from(document.querySelectorAll(s));
-  const grp = c => M.isBig(c) ? 'var(--big)' : (c === 'US' || c === 'CA' ? 'var(--none)' : 'var(--oth)');
+  const grp = c => M.isBig(c) ? 'var(--big)' : 'var(--oth)'; // every non-Big-Five country, the US and Canada included, is teal
   const one = x => (Math.round(x * 10) / 10).toFixed(1);
   const ratioWords = r => r >= 10 ? 'many times' : (Math.round(r * 2) / 2).toString().replace('.5', '½') + ' times';
 
@@ -214,10 +226,12 @@ b { font-weight: 700; }
   }
 
   // ---------- the four bars ----------
+  // BOTH and NEITHER are the two groups the GAP compares; the two mixed groups are shown but left out of the gap
   const LAB = { bigP_bigW: 'Big Five passport, works in the Big Five', bigP_othW: 'Big Five passport, works elsewhere',
     othP_bigW: 'Other passport, works in the Big Five', othP_othW: 'Other passport, works elsewhere' };
+  const KEY = { bigP_bigW: 'BOTH', bigP_othW: '', othP_bigW: '', othP_othW: 'NEITHER' };
   function buildBars(el) {
-    el.innerHTML = '<div class="ggrid">' + M.CELLS.map(k => `<div class="gcell ${k.split('_')[1]}" data-cell="${k}"><div class="gl">${LAB[k]}</div>` +
+    el.innerHTML = '<div class="ggrid">' + M.CELLS.map(k => `<div class="gcell" data-cell="${k}"><div class="gl">${KEY[k] ? `<span class="gk">${KEY[k]}</span> · ` : ''}${LAB[k]}</div>` +
       `<div class="grow2"><div class="gtrack"><div class="gfill"></div></div><div class="gnum"></div></div></div>`).join('') + '</div>';
   }
   function setBars(el, e) {
@@ -227,12 +241,12 @@ b { font-weight: 700; }
       c.querySelector('.gnum').textContent = one(v);
     });
   }
-  // ---------- the GAP meter: marker at (Big Five − elsewhere), LEVEL zone around zero; no numbers shown ----------
+  // ---------- the GAP meter: marker at (BOTH − NEITHER), LEVEL zone around zero; no numbers shown ----------
   const pos = g => 50 + 50 * Math.max(-1, Math.min(1, g / C.gapMax));
   function buildMeter(el) {
     const L = pos(-C.levelTol), R = pos(C.levelTol);
-    el.innerHTML = `<div class="mrow"><span class="mlab">GAP</span><div class="mtrack"><div class="mzone" style="left:${L}%;width:${R - L}%">LEVEL</div><div class="mmark"></div></div></div>` +
-      '<div class="mends"><span>← elsewhere ahead</span><span>Big Five ahead →</span></div>';
+    el.innerHTML = `<div class="mrow"><span class="mlab" title="BOTH minus NEITHER">GAP</span><div class="mtrack"><div class="mzone" style="left:${L}%;width:${R - L}%">LEVEL</div><div class="mmark"></div></div></div>` +
+      '<div class="mends"><span>← NEITHER ahead</span><span>BOTH ahead →</span></div>';
   }
   function setMeter(el, e) { el.querySelector('.mmark').style.left = pos(e.gap) + '%'; el.classList.toggle('won', e.level); }
 
@@ -271,10 +285,11 @@ b { font-weight: 700; }
     renderR1();
     if (s1.revealed) revealR1();
   }
+  // The comparison is always between the two named groups: BOTH (Big Five passport, works in the Big Five) and NEITHER
   function resultWords(e) {
-    if (e.ratio >= 1.4) return `Your panel gives applicants who work in the Big Five about <b>${ratioWords(e.ratio)}</b> the home advantage of applicants who work elsewhere.`;
-    if (e.ratio > 0.75) return 'Your panel gives applicants who work in the Big Five and elsewhere <b>about the same</b> home advantage.';
-    return 'Your panel gives applicants who work <b>elsewhere</b> more home advantage than those who work in the Big Five.';
+    if (e.ratio >= 1.4) return `Your panel gives applicants with <b>both</b> a Big Five passport and a Big Five workplace about <b>${ratioWords(e.ratio)}</b> the home advantage of applicants with <b>neither</b>.`;
+    if (e.ratio > 0.75) return 'Your panel gives applicants with <b>both</b> a Big Five passport and a Big Five workplace <b>about the same</b> home advantage as applicants with <b>neither</b>.';
+    return 'Your panel gives applicants with <b>neither</b> a Big Five passport nor a Big Five workplace <b>more</b> home advantage than applicants with both.';
   }
   function revealR1() {
     r1 = M.evaluate(M.panelOf(s1));
@@ -332,8 +347,9 @@ b { font-weight: 700; }
   // ---------- verdict ----------
   function toEnd() {
     const e2 = M.evaluate(s2.table);
-    const mine = r1.ratio >= 1.4 ? `Your own panel gave applicants who work in the Big Five about ${ratioWords(r1.ratio)} the home advantage of those who work elsewhere.`
-      : r1.ratio > 0.75 ? 'Your own panel gave both groups about the same home advantage.' : 'Your own panel favoured applicants who work elsewhere.';
+    const mine = r1.ratio >= 1.4 ? `Your own panel gave applicants with both a Big Five passport and a Big Five workplace about ${ratioWords(r1.ratio)} the home advantage of applicants with neither.`
+      : r1.ratio > 0.75 ? 'Your own panel gave applicants with both a Big Five passport and a Big Five workplace about the same home advantage as applicants with neither.'
+      : 'Your own panel gave applicants with neither a Big Five passport nor a Big Five workplace more home advantage than applicants with both.';
     $('#v-did').textContent = mine + (e2.level ? ` Then you levelled the tilted panel in ${s2.swapsUsed} swap${s2.swapsUsed === 1 ? '' : 's'}.` : ' The tilted panel stayed tilted.');
     show('s-end');
   }

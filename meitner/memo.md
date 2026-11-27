@@ -154,3 +154,126 @@ The spread is real and the wrong ways are ones the paper names: the exactly equa
 - Skin: manga; Bangers and Comic Neue embedded (OFL). Three scripted sessions in headless Chromium at 380 × 700 and one at 1100 × 800 (`session-test.js`): the full path, the equal-splitter path, help opened mid-play and returned, play again; no page errors, no horizontal scroll. From the screenshots: text selection during the drag (fixed with user-select), two captions overlapping under the table (one removed), the neutron label under its dot (anchor fixed), the headline wrapping (shortened), the empty result bar (hidden when empty), the rule and the Hold definition merged so the split button and the table share the screen at 700 px (table bottom 584), one lowercase verdict line.
 - Self-review from the screenshots with the help page closed: the aim is on the start screen in one line; the discovery is the first line of the verdict; each play screen says what the things are, what the two buttons do and what to expect; after a move the game states what happened before anything else. It looks like no game in the table.
 - Session length: about five minutes, estimated from the scripted sessions' timings, not measured by a person.
+
+## 20. Revision 2 (26 November 2026): the skin fights back
+
+**The author's note.** "The looks are spectacular; the game play is less so. The main thing is whether I get fission or not, and I can get it easily. There should be a more obvious trade-off."
+
+**Diagnosis.** In the first build every pinch split, every split lit something, and five neutrons were never scarce. The opener promised a drop that was barely holding and the bench never cashed the promise: the skin never won. The hold was a free second button.
+
+**The change.** The paper's "two nuclei of roughly equal size … perhaps partly on chance" becomes the trade-off. A pinch within three protons of the middle always goes through; beyond that the odds fall, p = 1 / (1 + ((a − 3) / 4.5)^2.5) with a the distance from the middle, so the climb-aware pinch at 52 | 40 goes through about three times in four, 54 | 38 about one time in two, the barium cell at 56 | 36 about one time in four, and the ends hardly ever. The screen states the odds in words as the line moves and the drop's neck shows them: deep in the middle, shallow at the ends. A pinch the skin pulls back is not nothing: the drop kept its neutron, so it is uranium-239 and lights the 24-minute tube, once. The draw is seeded; the seed is shown on the verdict screen and `?seed=` replays it. The budget is four neutrons for uranium (the author's choice among the options offered) and three for thorium, whose two tubes sit only where an uneven pinch reaches. The pieces that go through are unchanged: the ghosts still come down from the safe middle, barium still forces krypton.
+
+**What the trade-off is now.** Safe pinches near the middle bring the ghosts down; barium and lanthanum, the paper's starting fact, lie out where the skin may refuse. With four neutrons and two of them needed for the ghosts and the hold, the player decides whether to gamble on barium's own cell (one in four, twice), or to find that a pinch at 52 lands tellurium, which climbs to barium at three in four. Holding is certain but gives one tube; a refused pinch gives the same tube by accident, so the order matters: hold first and the gambles are fewer, gamble first and a failure pays the hold for you.
+
+**Strategies over a thousand seeds** (uranium, four neutrons; mean tubes lit of 8, chance of all 8, chance of the hold tube, mean pinches pulled back):
+
+| Strategy | Lit | All 8 | Hold | Pulled back |
+|---|---|---|---|---|
+| The equal splitter (46 \| 46 four times) | 2.0 | 0 % | 0 % | 0 |
+| The holder (hold four times) | 1.0 | 0 % | 100 % | 0 |
+| Barium first, then ghosts and hold (56, 56, 43, hold) | 6.8 | 42 % | 100 % | 1.5 |
+| Safe first (43, hold, 56, 56) | 6.8 | 39 % | 100 % | 1.4 |
+| Safe first, no hold (43, 56, 56, 56) | 7.0 | 51 % | 99 % | 2.1 |
+| The climb-aware reader (52, 43, hold, 52) | 7.9 | 93 % | 100 % | 0.3 |
+| The very bold (54 four times) | 3.7 | 0 % | 97 % | 2.3 |
+| The extreme pincher (28 \| 64 four times) | 1.5 | 0 % | 100 % | 3.8 |
+| The sweeper (40, 44, 48, 52) | 7.3 | 41 % | 47 % | 0.5 |
+| The three-neutron reader (56, 43, hold) | 6.5 | 25 % | 100 % | 0.8 |
+
+The wrong ways are the paper's: the exactly equal pinch never finds barium; the player who aims at barium's own cell is refused three times in four; the player who learns the climb clears the shelf nine times in ten. Knowing the climb is worth about fifty points of clearing chance, which is the mastery the second playthrough offers. The hold is weakly dominated when barium is still wanted (a refused pinch pays it) and strictly best once barium is lit, so it stays a live choice about order, not a dead button.
+
+**Checks added** (`calibration.js`, now 66, all passing): the odds are symmetric and fall away from the middle; 43–49 always go through; the stated odds at 52, 54, 56 and 28 are as above; over 2000 seeds the draw at 54 | 38 matches its stated odds within four points; a refused pinch lights the 24-minute tube and climbs to 93 like a hold, and has words that say the odds and the draw; safe-first with two tries at barium's cell clears the shelf between 30 and 60 % of the time, the climb-aware path between 80 and 97 %, the equal pinch never; every thorium pinch that lights both tubes is one the skin refuses at least two times in five, and three tries at 38 | 52 light both more than three times in four.
+
+**Claim boundary.** The odds curve is ours entirely: the paper says "roughly equal" and "perhaps partly on chance" and nothing about how often an uneven division happens. The About screen says so, and that the first build let every pinch through.
+
+**Screens.** The odds line sits under the drop in the panel and turns red below three in four; the neck depth follows the odds; a refused pinch necks, springs back, rings, and the panel says "no split: the skin won, and the drop kept the neutron"; the headline says "pulled back". The climb sentence moved from the rule to the table's caption, so the split button and the table still share the screen at 380 × 700 (table bottom at 600). Three scripted sessions (seeds 7 and 2 at phone width, seed 7 at laptop width): the safe path, a path where barium's cell is refused twice and 52 | 40 rescues it, and the climb-aware path; no errors, no horizontal scroll.
+
+## 21. Revision 3 (26 November 2026): a full sweep for a smart eleven-year-old
+
+**The brief.** "Go inwards, do a full sweep and create the best version you can, playable for a smart kid." The mechanism, the numbers and the odds are unchanged (the strategies table in section 20 still holds); what changed is everything the player reads and sees. The rev. 2 screens are kept in `previous/rev2/`.
+
+**Diagnosis from the inspection of rev. 2.**
+- The shelf was unreadable: tube labels at 8 px, "La…" truncated, the five ghost tubes labelled only 93 to 97, names only on a tap. The goal was on the screen and could not be read.
+- A text wall: about 213 words before a move and about 127 after, with the same static rule repeated on every neutron.
+- The result sat below the fold, away from the control that caused it.
+- The climb was hidden. The real decision, between the odds (aim at barium) and the reach (aim where the climb carries a piece to barium), was found only by failing.
+- After a pinch the skin had pulled back, the verdict still said that three neutrons would have done: unfair about luck.
+- "FISSION!!" clipped the proton counts, and the imagined drop clipped on the right during its fall.
+- Mev, the word "fission" and the lost weight were explained on play screens where a ten-year-old does not need them.
+
+**The changes.**
+- A shelf screen between the three drops and the bench: the table, eight cards in plain words ("93 · like rhenium"), and three short lines (what the table is, what a piece does, when a tube is explained). The play screen stands on its own.
+- The bench holds the drop, the odds line, the buttons and the table at 380 x 700 without scrolling. Before a move there is a nudge row and a two-sentence rule; after a move they give way to the result under the drop panel, so the control and its effect stay together.
+- A trail preview on the table: a red box where each piece lands, dots along its climb, a black box where it stops. It calls the mechanism's own `split`, and a calibration check confirms the previewed path is the path taken. It never says which tubes would light.
+- A live shelf under the table: eight cards, a count ("5 of 8 explained"), and an explained card says what the body really is ("93 = masurium", "= strontium", "= barium itself").
+- Results cut to a few plain sentences (longest 74 words, was about 127). "Account for" became "Explain"; "ghosts" became "new elements".
+- The verdict says when the skin took neutrons, "which used up your spare", and says "three would have done" only when no pinch was pulled back.
+- Mev, the origin of "fission" and the lost weight moved to About. About also says that real fission mostly goes uneven, which was found after 1939, so barium is a common product in nature and the unlikely tube here; the paper is the game's authority.
+
+**Checks added** (`calibration.js`, now 72, all passing): result length, card text at most 21 characters (waiting and explained, for every pinch), the explained-card wording, the preview path equal to the played path, and the fair verdict at seed 2. `session-test.js` plays the new flow at 380 x 700 and 1100 x 800: no errors, no horizontal scroll, split button and table on screen together.
+
+**Not done.** No stranger has played this. The Pantheon page and its line are untouched until the author has played it.
+
+## 22. Revision 4 (26 November 2026): one idea per screen
+
+**The author's note** (after playing rev. 3). "The looks are good, perhaps with the one exception that the slider where I can try to split is limited. Why not further out? But more fundamentally, it's all so hard to understand. Do another full sweep to come up with something more intelligible for the smart 11-year-old, or perhaps the harder quest: something that I can understand."
+
+**Diagnosis.** Rev. 3 asked the player to hold about a dozen ideas at once (charge, skin, pinch, hold, odds, climb, column, tube, explained, new elements, neutron budget, thorium) and hid what a move would do, so the game could only be learned by failing. The words were the physicist's. The three-drops screen put charge and skin in front of every player. The slider stopped at 28 and 64 for no reason the player could see. A fair reading: the game was explained in words and played in the dark.
+
+**The changes.**
+- The cut may go anywhere, 1 to 91 (thorium 1 to 89). Pieces lighter than potassium stand on a thin strip above the table and light nothing. Far out the chance is under 1%, and the hill says so.
+- The chance is a hill under the drop, with the knob riding on it and the percent beside it. "Sure in the middle, rare far out" is the whole odds lesson.
+- The game shows the cut before it is made: the hill, the pieces' path (red box, a dot for each change, black box), the columns that would light (shaded), the cards that would light (tinted) and one line in words ("This cut always works. It lights: 93, 94, 95, 96, 97." / "If it works, it lights: barium, lanthanum. If it fails, the drop keeps its neutron and lights the 24-min tube."). `preview()` in the mechanism computes it, and a calibration check confirms it equals what the cut then does.
+- One button, Fire the neutron. The Hold button is gone: a failed cut is the drop catching the neutron, so the 24-minute tube is reached by a failure, and aiming at barium gives barium or the 24-minute tube. The trade-off the author asked for in rev. 2 survives and is now readable.
+- The shelf screen is a map you tap: tap a tube or its card and its column shades and one sentence says what else stands in it ("Acts like rhenium ... Its column holds manganese, masurium, rhenium"). The three drops are an optional side trip, "Why can a drop split?".
+- Plain words everywhere: number for charge, cut for pinch, change for climb, lit for explained, "new elements" for ghosts. The start screen is a short story and one goal sentence. Results are three or four short lines. The verdict keeps its four parts and is shorter. Mev and the lost weight stay in About.
+
+**Strategies over a thousand seeds** (`node loop.js`, uranium, four neutrons, no Hold):
+
+| Strategy | Lit | All 8 | 24-min tube | Cuts failed |
+|---|---|---|---|---|
+| The equal splitter (46 four times) | 2.0 | 0 % | 0 % | 0 |
+| The edge hugger (1 four times) | 1.0 | 0 % | 100 % | 4.0 |
+| The barium gambler (56 four times) | 2.3 | 0 % | 100 % | 3.1 |
+| Safe first, then 56 three times | 7.0 | 51 % | 99 % | 2.1 |
+| Safe first, then 52 three times | 7.6 | 61 % | 62 % | 0.7 |
+| Safe first, then 53 three times | 7.7 | 74 % | 81 % | 1.1 |
+| Safe first, then 54 three times | 7.5 | 74 % | 92 % | 1.5 |
+| Safe first, then 55 three times | 7.3 | 64 % | 97 % | 1.8 |
+| The sweeper (40, 44, 48, 52) | 7.3 | 41 % | 47 % | 0.5 |
+
+A fixed plan clears the shelf about three times in four at best; a player who reads the lights and changes aim after a failure does better. The trade-off is visible and has no trap: safe cuts light the five "new elements", chancy cuts light barium and lanthanum, and a failed cut still lights something.
+
+**Checks added** (`calibration.js`, now 79, all passing): the range is 1 to 91; every cut in it has named pieces on the table or strip; the chance reads 100%, 25% and under 1% where it should; the preview lights exactly the tubes the cut then lights, and promises the 24-minute tube only while it is dark and only on uranium; result lines contain no pinch, skin, charge or climb. Claims about where tubes light are made for cuts with a real chance (5% or more), since the full range admits cuts like 4 | 88 (radium stands in barium's column) that never work.
+
+**Claim boundary.** Unchanged: the odds curve is ours. New: a cut far out of the middle lights tubes by column rules that were never in the paper (a piece of rhenium would light the rhenium tube); this can happen only at chances under a few percent.
+
+**Not done.** No stranger has played this. The Pantheon page and its line are untouched until the author has played it. Rev. 3 is kept in `previous/rev3/`.
+
+## 23. Revision 5 (27 November 2026): hand-holding
+
+**The author's note** (after playing rev. 4). "It looks very good but I think it needs more handholding, like saying what you will learn when there is fission or when there is not."
+
+**The changes.** Three short lines of guidance, all computed in the mechanism (`previewWords`, `lessonOf`, `coachWords`) so calibration can check them. (1) Before the first cut: "If the drop splits, watch what the two pieces turn into. If the cut fails, watch what the drop turns into." (2) Under the table, live for every cut: "It splits for sure. Lights: 93, 94, 95, 96, 97. You will learn: pieces from the middle can pass for new elements." or "It splits 25% of the time ... Otherwise the cut fails: lights the 24-min tube. You will learn: a neutron can just get caught: uranium-239." (3) After each result, "You learned: ..." and, before the next cut, "Still dark: barium and lanthanum (try a little off the middle)". The lessons are the paper's findings in one sentence each: pieces from the middle can pass for new elements; barium comes out of uranium with krypton as its partner (56 + 36 = 92); a neutron can just get caught (the 24-minute stuff); thorium splits too.
+
+**Checks added** (`calibration.js`, now 85, all passing): every cut on both drops has a preview of 60 words or fewer that says what you will learn; the preview says sure or the chance, and what a failure lights; every outcome ends with a plain lesson; the coach names what is still dark and stops mentioning the 24-minute tube once it is lit. At 380 x 700 the preview line still ends on screen (651 px).
+
+**Not done.** Still unplayed by a stranger.
+
+## 24. Rev. 6 (27 Nov): the shelf screen goes
+
+Steffen's note: the first decision screen said "Light them all" but you could only shade one column; do we need the stage? No. The shelf screen is deleted: Play goes to the bench. Its one needed sentence (a tube lights when a piece ends up in its column) is the first-neutron guide, replacing the longer watch-for-both-outcomes line, since the live preview already says it every cut. Tapping a tube in the bench table shows the column facts (`infoFor`). Start-screen aim now: "see which tubes light. Can you light all eight? You have four neutrons." Still unplayed by a stranger.
+
+**Correction, same day.** Deleting the shelf screen also deleted the hand-holding it carried, which was not what Steffen wanted ("where did the handholding go?"). The first-neutron guide on the bench is now three short lines: what the table numbers are, what lights a tube and what the dashed tubes are, and what to watch if the drop splits or the cut fails. It shows before the first neutron only; the live preview and lessons are unchanged. Thorium gets the short version.
+
+## 25. Rev. 7 (27 Nov): the verdict as a scoreboard and a story
+
+Steffen's note: the verdict was mechanical, a flaw of the memo's four-section harness; the game is about new elements, so count them. Answer: the paper is about *un*-discovering. The chemists claimed five new elements beyond uranium; Meitner and Frisch took all five away (and left element 93 from the 24-minute uranium open). The end screen now shows three rows of five chips (chemists: claimed; you: struck through with the real element's name, or still standing; Meitner and Frisch: all five struck) and then a plain story of the run (cuts, barium, the five, thorium, neutrons, what Meitner and Frisch saw, with protactinium as outside context). `verdict()` returns `chips, claimed, you, paperDown, story`; `found/part/stood/paper` are gone. Calibration checks the tally against the lit chips on six paths.
+
+## 26. Rev. 8 (27 Nov): the question first, the table second
+
+Steffen: still out of his depth with the table; shouldn't it focus on whether the new elements were discovered? On the bench the order is now: drop, first-neutron guide ("Are they really new?", what explains a tube), fire, live preview line, the shelf of eight tubes under "Is it really new? n of 8 explained", then the table with a plain caption (numbers, columns). The guide was cut to three short paragraphs so that the fire button stays on screen at 380x700 (bottom 566 of 700). Open: whether the table should go altogether in favour of look-alike families per tube; not tried.
+
+## 27. Rev. 9 (27 Nov): the claims strip
+
+Steffen: when the line moves, something should say whether new elements can be found; the table is still hard to read. A strip of five chips (93 to 97) now sits under the drop: dashed "new?" by default, red with the real element's name for those the current cut would explain (from `preview().lights`), grey and struck through once explained. Its line says how many the cut would explain. No cut can leave a genuinely new element: pieces land in the middle of the table. Hidden on thorium. The first guide was cut to two lines for the first paragraph so that the fire button stays on screen (bottom 643 of 700). Still open: the table itself, which could be folded away or replaced by look-alike families.
