@@ -40,7 +40,7 @@ for (var t = 0; t < 300; t++) {
   var s = m.newGame('t' + t);
   while (!m.isOver(s)) {
     var ev = {}, left = C.EVENINGS; s.known.slice().sort(function () { return R() - .5; }).forEach(function (n) { var e = Math.min(left, Math.floor(R() * (C.CAP + 1))); if (e) { ev[n] = e; left -= e; } });
-    var often = s.known.filter(function (n) { return m.catOf(ev[n] || 0) === 'often'; });
+    var probe = Object.assign({}, s, { revived: {} }), often = s.known.filter(function (n) { return m.weekCat(probe, n, ev) === 'often'; });
     var rec = m.playWeek(s, ev), ties = rec.ties;
     for (var i = 0; i < often.length; i++) for (var j = i + 1; j < often.length; j++) if (!ties[m.key(often[i], often[j])]) triadOk = false;
     rec.closures.forEach(function (c) { if (often.indexOf(c[0]) < 0 || often.indexOf(c[1]) < 0) closureOk = false; });
@@ -79,7 +79,7 @@ check('everything into one circle loses to spreading', table.oneCircle.heard < t
 check('no evenings at all is the floor', table.stayIn.heard <= table.homebody.heard && table.stayIn.heard <= table.spreader.heard);
 check('strong bridges (two evenings on one person per circle) do not beat spreading by more than 1: a strong bridge costs its evenings', table.bridgesOften.heard - table.spreader.heard <= 1, r1(table.bridgesOften.heard) + ' vs ' + r1(table.spreader.heard));
 check('the circle tells you its news more than twice on average; a dashed line tells you once or so (homebody)', table.homebody.tellHome > 2 && table.homebody.tellOut < 1.5, r1(table.homebody.tellHome) + ' / ' + r1(table.homebody.tellOut));
-check('the spreader\'s news comes mostly from people seen now and then, and none from people seen often', table.spreader.seen.occ > 70 && table.spreader.seen.often === 0);
+check('the spreader\'s news comes mostly from people seen now and then, and little from people seen often (Home thick lines that held)', table.spreader.seen.occ > 70 && table.spreader.seen.often < 15, Math.round(table.spreader.seen.occ) + ' / ' + Math.round(table.spreader.seen.often));
 check('every strategy takes a live option: no strategy hears fewer than a third, none hears all', Object.keys(table).every(function (k) { return table[k].heard > C.WEEKS * C.NEWS_PER_WEEK / 3 && table[k].heard < C.WEEKS * C.NEWS_PER_WEEK; }));
 check('hindsight (the best week found knowing the news) beats the spreader and hears fewer than all', table.hindsight.heard > table.spreader.heard && table.hindsight.heard < C.WEEKS * C.NEWS_PER_WEEK, r1(table.hindsight.heard));
 // the lines as states (revision 4): a tended line is what the evenings make it; an untended line thins by one step and never vanishes
@@ -90,11 +90,17 @@ for (var q3 = 0; q3 < 200; q3++) {
   while (!m.isOver(g3)) {
     var ev3 = {}, left3 = C.EVENINGS; g3.known.slice().sort(function () { return R3() - .5; }).forEach(function (n) { var e = Math.min(left3, Math.floor(R3() * (C.CAP + 1))); if (e) { ev3[n] = e; left3 -= e; } });
     var before3 = Object.assign({}, g3.strength), rec3 = m.playWeek(g3, ev3);
-    Object.keys(before3).forEach(function (n) { var now = g3.strength[n], e = ev3[n] || 0, want = e ? m.catOf(e) : m.down(before3[n]); if (now !== want) stateOk = false; });
+    Object.keys(before3).forEach(function (n) { var now = g3.strength[n], e = ev3[n] || 0, rev = rec3.chance && rec3.chance.revive && rec3.chance.who === n; if (e) { if (now !== m.catOf(e)) stateOk = false; } else if (rev) { if (now !== 'often') stateOk = false; } else if (now !== before3[n] && now !== m.down(before3[n])) stateOk = false; });
     g3.known.forEach(function (n) { if (!g3.strength[n]) stateOk = false; });
   }
 }
-check('at the start Home is thick and the eight others dashed; a tended line is what its evenings make it; an untended line thins by one step; no line vanishes', stateOk, '200 random games');
+check('at the start Home is thick and the eight others dashed; a tended line is what its evenings make it; an untended line holds or thins by one step; no line vanishes', stateOk, '200 random games');
+var thinTries = 0, thinned = 0, revWeeks = 0, revived = 0, reviveOk = true, R4 = m.rng('coins');
+for (var q4 = 0; q4 < 300; q4++) { var g4 = m.newGame('cn' + q4); while (!m.isOver(g4)) { var ev4 = {}, left4 = C.EVENINGS; g4.known.slice().sort(function () { return R4() - .5; }).forEach(function (n) { var e = Math.min(left4, Math.floor(R4() * (C.CAP + 1))); if (e) { ev4[n] = e; left4 -= e; } });
+  var rec4 = m.playWeek(g4, ev4); thinTries += rec4.thinned.length + rec4.held.length; thinned += rec4.thinned.length;
+  if (rec4.week >= C.CHANCE_FROM_WEEK) { revWeeks++; if (rec4.chance && rec4.chance.revive) { revived++; if (rec4.ties[m.key(C.YOU, rec4.chance.who)] !== 'often' || g4.strength[rec4.chance.who] !== 'often') reviveOk = false; } } } }
+check('an untended thick or thin line thins about one week in two (P_THIN ' + C.P_THIN + ')', Math.abs(thinned / thinTries - C.P_THIN) < 0.06, r1(100 * thinned / thinTries) + '% of ' + thinTries);
+check('about one chance meeting in three is with someone you know (P_REVIVE ' + C.P_REVIVE + '), and the old line is thick that week', Math.abs(revived / revWeeks - C.P_REVIVE) < 0.08 && reviveOk, r1(100 * revived / revWeeks) + '% of ' + revWeeks + ' weeks');
 
 // (6) robustness of the discovery to our own choices
 var saved = JSON.stringify({ P: C.P_PASS, D: C.DAMP, T: C.TIME_IS_FINITE, NW: C.NEWS_PER_WEEK, F: C.WEEK1_FLOOR, MH: C.MAX_HOPS });
@@ -121,11 +127,11 @@ for (var d = 0; d < 300; d++) {
   if (Object.keys(circles).length !== C.CIRCLES.length) floorOk = false;
   for (var w = 1; w <= C.WEEKS; w++) { var o = m.drawOrigins('d' + d, w); if (new Set(o).size !== C.NEWS_PER_WEEK || o.indexOf(C.YOU) >= 0) distinctOk = false; }
   var g = m.newGame('d' + d), before;
-  while (!m.isOver(g)) { before = g.known.slice(); var rec = m.playWeek(g, m.STRATEGIES.spreader(g)); if (rec.chance) { chanceCount++; if (before.indexOf(rec.chance.who) >= 0) chanceOk = false; if (rec.chance.far) chanceFar++; } else if (rec.week >= C.CHANCE_FROM_WEEK && m.everyone().length > before.length) chanceOk = false; }
+  while (!m.isOver(g)) { before = g.known.slice(); var rec = m.playWeek(g, m.STRATEGIES.spreader(g)); if (rec.chance) { chanceCount++; if (rec.chance.revive ? before.indexOf(rec.chance.who) < 0 : before.indexOf(rec.chance.who) >= 0) chanceOk = false; if (rec.chance.far) chanceFar++; } else if (rec.week >= C.CHANCE_FROM_WEEK && m.everyone().length > before.length) chanceOk = false; }
 }
 check('week one\'s openings include one in every circle (the floor), over 300 seeds', floorOk);
 check('every week: ' + C.NEWS_PER_WEEK + ' distinct origins, never you', distinctOk);
-check('a chance meeting every week from week ' + C.CHANCE_FROM_WEEK + ', always someone new', chanceOk, chanceCount + ' meetings');
+check('a chance meeting every week from week ' + C.CHANCE_FROM_WEEK + ': someone new, or an old line revived', chanceOk, chanceCount + ' meetings');
 
 // (8) determinism and the same coins for every strategy
 var a1 = m.tally(m.runStrategy('same', m.STRATEGIES.spreader)), a2 = m.tally(m.runStrategy('same', m.STRATEGIES.spreader));
@@ -157,13 +163,13 @@ check('the clairvoyant best beats the spreader (there is luck to read), and hear
 //      Over three weeks, the named plan (one evening to one person in each circle, no one twice) is checked against that family of plans.
 function outerOne(s) { var ev = {}, byC = {}; s.known.forEach(function (n) { var c = m.circleOf(n); if (c !== 'home') (byC[c] = byC[c] || []).push(n); }); var order = Object.keys(byC).sort(function (a, b) { return m.sizeOf(b) - m.sizeOf(a); }); order.forEach(function (c) { ev[byC[c][0]] = 1; }); return { ev: ev, order: order, byC: byC }; }
 var PLANS = {
-  outerThick: function (s) { var o = outerOne(s), ev = o.ev, left = C.EVENINGS - Object.keys(ev).length; if (left > 0) { ev[o.byC[o.order[0]][0]] = 2; left--; } return ev; },
+  spreader: m.STRATEGIES.spreader,
   outerSecond: function (s) { var o = outerOne(s), ev = o.ev, left = C.EVENINGS - Object.keys(ev).length; o.order.forEach(function (c) { if (left > 0 && o.byC[c][1] && !ev[o.byC[c][1]]) { ev[o.byC[c][1]] = 1; left--; } }); return ev; },
   outerThenAnn: function (s) { var o = outerOne(s), ev = o.ev; if (s.week === 1) ev[o.byC[o.order[0]][0]] = 2; else ev.Ann = 1; return ev; }
 };
 function plan3(f) { var sum = 0; for (var i = 0; i < 300; i++) sum += m.tally(m.runStrategy('p' + i, f)).heard; return sum / 300; }
 var named3 = plan3(m.STRATEGIES[C.BEST_PLAN]), others3 = Object.keys(PLANS).map(function (k) { return plan3(PLANS[k]); });
-check('the named best plan (' + C.BEST_PLAN + ') is within 0.5 of ' + (C.WEEKS * C.NEWS_PER_WEEK) + ' of every plan that spends the Home evening on an outer line instead', others3.every(function (w) { return named3 >= w - 0.5; }), r1(named3 * 10) / 10 + ' vs ' + others3.map(function (w) { return Math.round(w * 100) / 100; }).join(', '));
+check('the named best plan (' + C.BEST_PLAN + ') is within 0.3 of ' + (C.WEEKS * C.NEWS_PER_WEEK) + ' of every other plan in the family (one per circle with Ann; a second outer person; Ann from week two)', others3.every(function (w) { return named3 >= w - 0.3; }), r1(named3 * 10) / 10 + ' vs ' + others3.map(function (w) { return Math.round(w * 100) / 100; }).join(', '));
 check('the score: the ceiling is never below the player\'s own count, over 200 towns and three strategies', (function () { for (var i = 0; i < 200; i++) { var g = m.runStrategy('sc' + i, [m.STRATEGIES.spreader, m.STRATEGIES.bridgesOften, m.STRATEGIES.homebody][i % 3]); var sc = m.scoreOf(g); if (sc.ceiling < sc.heard || sc.pct > 100 || sc.pct < 0) return false; } return true; })());
 check('the score bands: the best plan lands in the top two bands most of the time, the circle in the bottom two most of the time', (function () { var a = 0, b = 0; for (var i = 0; i < 200; i++) { if (m.scoreOf(m.runStrategy('bd' + i, m.STRATEGIES.spreader)).band >= 1) a++; if (m.scoreOf(m.runStrategy('bd' + i, m.STRATEGIES.homebody)).band <= 1) b++; } return a >= 150 && b >= 150; })());
 

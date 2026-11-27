@@ -10,57 +10,60 @@ ok   after any week, two people you see often are tied: the forbidden triad neve
 ok   closures are only between people you see often
 ok   introductions come only from people you see often, and only from their own circle (Gans, p. 1374)
 ok   a person you see often sees their own circle less that week (strength is time, p. 1361)
-ok   reference week: share of news first told by someone seen often within 12 points of the paper — 14.7 vs 16.7
-ok   reference week: share of news first told by someone seen now and then within 12 points of the paper — 51.7 vs 55.6
-ok   reference week: share of news first told by someone seen rarely within 12 points of the paper — 33.6 vs 27.8
-ok   reference week: the order of the three is the paper's (now and then > rarely > often) — often 14.7 occ 51.7 rare 33.6
-ok   reference week: news that reached you straight from the source or through one pair of hands, within 8 points of the paper's 84.4 — 85.2 (h0 34.7 h1 50.5 h2 5.5 h3 9.4)
-ok   reference week: news through more than two pairs of hands is rare (at most 10%) — 9.4
+ok   reference week: share of news first told by someone seen often within 12 points of the paper — 20.6 vs 16.7
+ok   reference week: share of news first told by someone seen now and then within 12 points of the paper — 50.5 vs 55.6
+ok   reference week: share of news first told by someone seen rarely within 12 points of the paper — 28.9 vs 27.8
+ok   reference week: the order of the three is the paper's (now and then > rarely > often) — often 20.6 occ 50.5 rare 28.9
+ok   reference week: news that reached you straight from the source or through one pair of hands, within 8 points of the paper's 84.4 — 85.3 (h0 36.2 h1 49.1 h2 6 h3 8.7)
+ok   reference week: news through more than two pairs of hands is rare (at most 10%) — 8.7
 ok   reference week: straight from the source is the largest or second largest share (p. 1372)
 
      heuristics (mean over 400 seeds; heard of 21; told = times a piece reached you; seen = share by how often you saw the first teller; hands = intermediaries)
      strategy       heard  told(home/out)  seen often/now and then/rarely  hands 0/1/2/3+
-     homebody        11.0  2.6/1.3         22/0/78                         39/42/7/11
-     loyal           12.0  2.6/1.3         20/21/58                        38/44/7/11
-     spreader        16.5  1.7/1.5         0/88/12                         31/59/4/6
-     bridgesOften    15.9  1.7/2.2         45/11/44                        37/47/9/7
-     oneCircle       13.3  1.7/2           33/13/54                        38/43/10/9
-     stayIn          10.4  1.7/1.3         0/9/91                          29/51/8/12
-     hindsight       20.1  1.6/1.6         15/67/18                        31/57/5/7
-     reference       13.9  2.2/1.4         15/52/34                        35/50/5/9
+     homebody        11.4  2.6/1.3         29/1/70                         39/43/8/11
+     loyal           12.3  2.6/1.4         26/21/52                        38/44/7/10
+     spreader        16.8  2/1.5           7/84/8                          33/57/4/6
+     bridgesOften    16.2  3.1/2.6         51/10/39                        40/44/9/7
+     oneCircle       13.7  2.8/2.2         42/12/46                        40/40/10/9
+     stayIn          11.1  2/1.3           15/11/74                        34/48/8/11
+     sixAndOne       17.3  2.5/1.8         22/66/12                        35/55/5/5
+     hindsight       20.3  2.4/1.7         22/64/14                        33/54/6/7
+     reference       14.2  2.4/1.4         21/50/29                        36/49/6/9
      Boston (paper)                        16.7/55.6/27.8                  39.1/45.3/12.5/3.1
 
-ok   the discovery: spreading evenings across circles beats every evening in the circle, by at least 3 of 21 — 16.5 vs 11
+ok   the discovery: spreading evenings across circles beats every evening in the circle, by at least 3 of 21 — 16.8 vs 11.4
 ok   the loyal week (circle often, one acquaintance) is between the two
 ok   everything into one circle loses to spreading
 ok   no evenings at all is the floor
-ok   strong bridges (two evenings on one person per circle) do not beat spreading by more than 1: a strong bridge costs its evenings — 15.9 vs 16.5
+ok   strong bridges (two evenings on one person per circle) do not beat spreading by more than 1: a strong bridge costs its evenings — 16.2 vs 16.8
 ok   the circle tells you its news more than twice on average; a dashed line tells you once or so (homebody) — 2.6 / 1.3
-ok   the spreader's news comes mostly from people seen now and then, and none from people seen often
+ok   the spreader's news comes mostly from people seen now and then, and little from people seen often (Home thick lines that held) — 84 / 7
 ok   every strategy takes a live option: no strategy hears fewer than a third, none hears all
-ok   hindsight (the best week found knowing the news) beats the spreader and hears fewer than all — 20.1
-ok   at the start Home is thick and the eight others dashed; a tended line is what its evenings make it; an untended line thins by one step; no line vanishes — 200 random games
-ok   robust (now and then 0.6): spreading beats the circle and the loyal week; the circle tells you its news more than once — spread 14.8, loyal 11.8, home 11.2, strong bridges 15.5, told 2.6
-ok   robust (now and then 0.9): spreading beats the circle and the loyal week; the circle tells you its news more than once — spread 18.5, loyal 12.5, home 11.2, strong bridges 16.2, told 2.6
-ok   robust (rarely 0.2): spreading beats the circle and the loyal week; the circle tells you its news more than once — spread 15.8, loyal 9.4, home 8.1, strong bridges 13.9, told 2.6
-ok   robust (rarely 0.45): spreading beats the circle and the loyal week; the circle tells you its news more than once — spread 17.8, loyal 15.4, home 15, strong bridges 18, told 2.6
-ok   robust (damping 0.6): spreading beats the circle and the loyal week; the circle tells you its news more than once — spread 13.7, loyal 9.4, home 8.7, strong bridges 13.2, told 2.2
-ok   robust (damping 0.95): spreading beats the circle and the loyal week; the circle tells you its news more than once — spread 18.9, loyal 14.7, home 13.7, strong bridges 17.7, told 2.9
-ok   robust (time not finite): spreading beats the circle and the loyal week; the circle tells you its news more than once — spread 16.7, loyal 12.1, home 11.2, strong bridges 16.1, told 2.6
-ok   robust (four openings a week): spreading beats the circle and the loyal week; the circle tells you its news more than once — spread 11.8, loyal 8.5, home 7.8, strong bridges 11.2, told 2.6
-ok   robust (nine openings a week): spreading beats the circle and the loyal week; the circle tells you its news more than once — spread 21.3, loyal 15.7, home 14.3, strong bridges 20.5, told 2.7
-ok   robust (no week-one floor): spreading beats the circle and the loyal week; the circle tells you its news more than once — spread 16.7, loyal 12.2, home 11.1, strong bridges 15.9, told 2.7
-ok   robust (news dies after three hands): spreading beats the circle and the loyal week; the circle tells you its news more than once — spread 15.8, loyal 10.8, home 9.9, strong bridges 14.8, told 2.6
+ok   hindsight (the best week found knowing the news) beats the spreader and hears fewer than all — 20.3
+ok   at the start Home is thick and the eight others dashed; a tended line is what its evenings make it; an untended line holds or thins by one step; no line vanishes — 200 random games
+ok   an untended thick or thin line thins about one week in two (P_THIN 0.5) — 50.3% of 3204
+ok   about one chance meeting in three is with someone you know (P_REVIVE 0.33), and the old line is thick that week — 34.8% of 600 weeks
+ok   robust (now and then 0.6): spreading beats the circle and the loyal week; the circle tells you its news more than once — spread 15.1, loyal 12.1, home 11.5, strong bridges 15.9, told 2.7
+ok   robust (now and then 0.9): spreading beats the circle and the loyal week; the circle tells you its news more than once — spread 18.7, loyal 12.8, home 11.6, strong bridges 16.4, told 2.7
+ok   robust (rarely 0.2): spreading beats the circle and the loyal week; the circle tells you its news more than once — spread 16.1, loyal 9.9, home 8.5, strong bridges 14.4, told 2.7
+ok   robust (rarely 0.45): spreading beats the circle and the loyal week; the circle tells you its news more than once — spread 17.9, loyal 15.6, home 15.1, strong bridges 18.2, told 2.7
+ok   robust (damping 0.6): spreading beats the circle and the loyal week; the circle tells you its news more than once — spread 14, loyal 9.7, home 9, strong bridges 13.6, told 2.2
+ok   robust (damping 0.95): spreading beats the circle and the loyal week; the circle tells you its news more than once — spread 19.1, loyal 15.1, home 14.2, strong bridges 17.9, told 3
+ok   robust (time not finite): spreading beats the circle and the loyal week; the circle tells you its news more than once — spread 17, loyal 12.5, home 11.6, strong bridges 16.4, told 2.7
+ok   robust (four openings a week): spreading beats the circle and the loyal week; the circle tells you its news more than once — spread 12, loyal 8.6, home 8, strong bridges 11.4, told 2.7
+ok   robust (nine openings a week): spreading beats the circle and the loyal week; the circle tells you its news more than once — spread 21.7, loyal 16, home 14.7, strong bridges 21, told 2.7
+ok   robust (no week-one floor): spreading beats the circle and the loyal week; the circle tells you its news more than once — spread 16.9, loyal 12.5, home 11.5, strong bridges 16.1, told 2.7
+ok   robust (news dies after three hands): spreading beats the circle and the loyal week; the circle tells you its news more than once — spread 16.1, loyal 11.2, home 10.3, strong bridges 15.1, told 2.7
 ok   config restored after the robustness runs
 ok   week one's openings include one in every circle (the floor), over 300 seeds
 ok   every week: 7 distinct origins, never you
-ok   a chance meeting every week from week 2, always someone new — 600 meetings
+ok   a chance meeting every week from week 2: someone new, or an old line revived — 600 meetings
 ok   the same seed and the same weeks give the same game
 ok   the same coin for the same tie, piece and week whatever the week's evenings
 ok   the ghosts meet the same news as the player on the same seed
-     clairvoyant (best week with hindsight; 17469 legal weeks searched in week one; 6 seeds): 20.2 of 21; week-one picks: {"Gus:1 Kim:2":1,"Dee:1 Gus:1 Kim:2":1,"Gus:1 Kim:1":1,"Oli:2 Kim:2":2,"Eli:2":1}
-ok   the clairvoyant best beats the spreader (there is luck to read), and hears fewer than all — 20.2
-ok   the named best plan (spreader) is within 0.5 of 21 of every plan that spends the Home evening on an outer line instead — 16.66 vs 16.96, 16.78, 16.97
+     clairvoyant (best week with hindsight; 17469 legal weeks searched in week one; 6 seeds): 20.3 of 21; week-one picks: {"Gus:1 Kim:2":1,"Gus:1 Wes:2 Kim:2":1,"Gus:1 Kim:1":1,"Oli:2":2,"Eli:2":1}
+ok   the clairvoyant best beats the spreader (there is luck to read), and hears fewer than all — 20.3
+ok   the named best plan (sixAndOne) is within 0.3 of 21 of every other plan in the family (one per circle with Ann; a second outer person; Ann from week two) — 17.47 vs 16.87, 17.21, 17.33
 ok   the score: the ceiling is never below the player's own count, over 200 towns and three strategies
 ok   the score bands: the best plan lands in the top two bands most of the time, the circle in the bottom two most of the time
 
