@@ -1,8 +1,8 @@
 // Headless play of the loop (build.md section 4.2): prints, after each action, what changed and where the player stands.
-// Usage: node loop.js [seed] [strategy: homebody|loyal|spreader|bridgesOften|oneCircle|stayIn|learns]
+// Usage: node loop.js [seed] [strategy: homebody|loyal|threeDoors|rotate|oneHomeTwoDoors|stayIn|learns]
 var m = require('./mechanism.js'), C = m.CONFIG;
 var seed = process.argv[2] || 'demo', stratName = process.argv[3] || 'learns';
-var learns = [function () { return { Ann: 2, Ben: 2, Cal: 2, Dee: 1 }; }, function () { return { Ann: 1, Dee: 1, Eli: 1, Fay: 1, Gus: 1, Wes: 1, Kim: 1 }; }, function () { return { Ann: 1, Dee: 2, Eli: 1, Fay: 1, Gus: 1, Wes: 1 }; }];
+var learns = [function () { return { Ann: 1, Ben: 1, Cal: 1 }; }, function () { return { Dee: 1, Eli: 1, Fay: 1 }; }, function () { return { Dee: 1, Eli: 1, Gus: 1 }; }];
 var strat = stratName === 'learns' ? function (s) { return learns[s.week - 1](s); } : m.STRATEGIES[stratName];
 function say(x) { console.log(x); }
 function lineWord(cat) { return cat === 'often' ? 'thick line' : (cat === 'occ' ? 'thin line' : 'dashed line'); }
@@ -11,7 +11,7 @@ say('== START. Granovetter\'s Dashed Line. Aim: Spend your evenings so that you 
 say('   The town: seven circles. You are in Home with Ann, Ben and Cal (thick lines: you see them often). Eight dashed lines run out to people you once knew: ' + C.KNOWN_AT_START.slice(3).map(function (n) { return n + ' (' + m.circleLabel(m.circleOf(n)) + ')'; }).join(', ') + '.');
 while (!m.isOver(s)) {
   var ev = strat(s), w = s.week;
-  say('\n-- WEEK ' + w + ' OF ' + C.WEEKS + '. Give your seven evenings; tap a name for one, again for two. Evenings left: ' + (C.EVENINGS - Object.keys(ev).reduce(function (a, k) { return a + ev[k]; }, 0)) + ' after: ' + Object.keys(ev).map(function (k) { return k + ' ' + (ev[k] === 2 ? '●●' : '●'); }).join(', '));
+  say('\n-- WEEK ' + w + ' OF ' + C.WEEKS + '. Give your three evenings; tap a name for one. Evenings left: ' + (C.EVENINGS - Object.keys(ev).reduce(function (a, k) { return a + ev[k]; }, 0)) + ' after: ' + Object.keys(ev).map(function (k) { return k + ' ' + (ev[k] === 2 ? '●●' : '●'); }).join(', '));
   say('   Preview on the map: ' + s.known.map(function (n) { return n + ' = ' + lineWord(m.catOf(ev[n] || 0)); }).join('; '));
   say('   [Spend the week]');
   var rec = m.playWeek(s, ev);
@@ -36,6 +36,6 @@ var t = m.tally(s);
 say('\n== VERDICT. You heard of ' + t.heard + ' of the ' + t.total + ' openings the town heard of in three weeks.');
 say('   From people you saw often: ' + t.seen.often + '; now and then: ' + t.seen.occ + '; rarely: ' + t.seen.rare + '.   Granovetter\'s 54 job changers: ' + C.BOSTON_SEEN.often + ' / ' + C.BOSTON_SEEN.occ + ' / ' + C.BOSTON_SEEN.rare + ' per cent.');
 say('   Straight from the source: ' + t.hands.h0 + '; one pair of hands: ' + t.hands.h1 + '; two: ' + t.hands.h2 + '; more: ' + t.hands.h3 + '.');
-var hb = m.tally(m.runStrategy(seed, m.STRATEGIES.homebody)).heard, sp = m.tally(m.runStrategy(seed, m.STRATEGIES.spreader)).heard, st = m.tally(m.runStrategy(seed, m.STRATEGIES.stayIn)).heard, hs = m.tally(m.runStrategy(seed, m.STRATEGIES.hindsight)).heard;
+var hb = m.tally(m.runStrategy(seed, m.STRATEGIES.homebody)).heard, sp = m.tally(m.runStrategy(seed, m.STRATEGIES.threeDoors)).heard, st = m.tally(m.runStrategy(seed, m.STRATEGIES.stayIn)).heard, hs = m.tally(m.runStrategy(seed, m.STRATEGIES.hindsight)).heard;
 say('   Same news, every evening in your circle: ' + hb + '. One evening to one person in each circle: ' + sp + '. No evening on anyone: ' + st + '. Best three weeks knowing the news: ' + hs + '.');
 say('   Then the West End, read: a town with no dashed lines cannot get a leaflet past one circle.');

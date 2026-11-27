@@ -4,9 +4,10 @@
 //
 // Rules, in the words the screen uses:
 //   The town: five circles of people. Inside a circle everyone sees everyone often. A few dashed lines join circles.
-//   Your week: seven evenings; each person you know gets none, one or two. Two makes the line "often" (thick), one "now and then"
-//   (thin): the paper's own survey categories, p. 1371. A line is a state that lasts: a line you do not tend this week thins by one
-//   step about one week in two, thick to thin, thin to dashed ("rarely"), and never vanishes: someone you once knew is a dashed line for ever.
+//   Your week: three evenings, one person each. An evening turns a dashed line ("rarely") thin ("now and then"), and a thin line
+//   thick ("often"): the paper's own survey categories, p. 1371, built up week after week. A line is a state that lasts: a line you
+//   do not tend this week thins by one step about one week in two, thick to thin, thin to dashed, and never vanishes: someone you once
+//   knew is a dashed line for ever.
 //   At the start your three friends at Home are thick lines and the eight others dashed.
 //   The town reacts: two people you see often come to know each other (the forbidden triad, Fig. 1, p. 1363, exaggerated as the
 //   paper does to "never occurs"); a person you see often introduces you to one of their circle (Gans's experience, p. 1374);
@@ -21,8 +22,8 @@
 
 var CONFIG = {
   WEEKS: 3,                        // our choice: three things to find out, one a week (memo, section 11; revision 2)
-  EVENINGS: 7,                     // our choice: a week of evenings; the paper's "often" is at least twice a week (p. 1371)
-  CAP: 2,                          // our choice: two evenings in a week makes a tie "often" (p. 1371: "at least twice a week")
+  EVENINGS: 3,                     // our choice (revision 6): three nights out a week is all the time there is; the paper's premise that strength is time
+  CAP: 1,                          // our choice (revision 6): one evening per person a week; a line is built up across weeks, not within one
   NEWS_PER_WEEK: 7,                // our choice: one opening per circle per week on average; the paper gives no rate
   P_PASS: { often: 1.0, occ: 0.75, rare: 0.3 },  // ours: strong ties are more motivated to pass on (p. 1371, "a natural a priori idea");
                                    //   the three values tuned so that a mixed Boston week reproduces the paper's two tables (calibration 3, 4)
@@ -37,9 +38,7 @@ var CONFIG = {
   P_REVIVE: 0.33,                  // ours: the chance that the week's chance meeting is with someone you already know, whose line comes back thick
                                    //   for the week (p. 1372: "chance meetings or mutual friends operated to reactivate such ties")
   BANDS: [85, 60],                 // our choice: the score's three bands, as a share of what could have been heard (85 and up; 60 to 85; under 60)
-  BEST_PLAN: 'sixAndOne',          // the best plan without foreknowledge: one evening to one person in each of the six other circles, and the
-                                   //   seventh to one of them again, so one line is thick; nothing to Home, which thins only half the time
-                                   //   (memo, revisions 3 to 5; the first-week search and the plan family in calibration 10)
+  BEST_PLAN: 'threeDoors',         // the best plan without foreknowledge, by search over the plan family (memo, revision 6; calibration 10)
   WEEK1_FLOOR: true,               // our choice (build.md §3, a floor): week one's six openings include one in Home and one in every outer circle,
                                    //   so the triple arrival and the dashed-line arrival can both be seen; later weeks are unconstrained draws
   CIRCLES: [                       // ours: the paper gives no town. Ties inside a circle are all "often" (the circle is a clique);
@@ -61,9 +60,9 @@ var CONFIG = {
   // The paper's tables, for the calibration check and the verdict (p. 1371, N = 54; p. 1372, N = 64). Typeset text, not a scan.
   BOSTON_SEEN: { often: 16.7, occ: 55.6, rare: 27.8 },
   BOSTON_HANDS: { h0: 39.1, h1: 45.3, h2: 12.5, h3: 3.1 },
-  // Our reference week for the calibration: a job changer who keeps two close friends close,
-  // and one person in each of three other circles now and then (2 + 2 + 1 + 1 + 1 = 7); the rest are dashed lines. Not a strategy the game recommends; the week the tables are read against.
-  REFERENCE_WEEK: { Ann: 2, Ben: 2, Dee: 1, Eli: 1, Fay: 1 },
+  // Our reference player for the calibration (revision 6): one who spreads three nights over different people each week and never settles,
+  // which is the paper's weak-tie-rich individual (pp. 1370–1372); the tables are read against this player, not a plan the game recommends.
+  REFERENCE: 'rotate',
   TOL_SEEN: 12,                    // percentage points of tolerance on the Boston "how often seen" table
   TOL_HANDS: 12                    // percentage points of tolerance on the Boston "hands passed through" table
 };
@@ -86,10 +85,11 @@ function townTies() { // the ties that are not yours: a map key -> category
   CONFIG.BRIDGES.forEach(function (b) { t[key(b[0], b[1])] = 'rare'; });
   return t;
 }
-function catOf(evenings) { return evenings >= CONFIG.CAP ? 'often' : (evenings >= 1 ? 'occ' : 'rare'); }
+function catOf(evenings) { return evenings >= 2 ? 'often' : (evenings >= 1 ? 'occ' : 'rare'); } // the survey's categories from a count; kept for the record
 function down(cat) { return cat === 'often' ? 'occ' : 'rare'; }
-function weekCat(s, n, ev) { // this week's line: what the evenings make it; untended, the same as last week or one step down, on a coin fixed by seed, week and name
-  var e = (ev && ev[n]) || 0; if (e >= 1) return catOf(e);
+function up(cat) { return cat === 'rare' ? 'occ' : 'often'; }
+function weekCat(s, n, ev) { // this week's line: an evening raises it one step; untended, the same as last week or one step down, on a coin fixed by seed, week and name
+  var e = (ev && ev[n]) || 0; if (e >= 1) return up(s.strength[n] || 'rare');
   if (s.revived && s.revived[n]) return 'often';
   var st = s.strength[n] || 'rare'; if (!CONFIG.DECAY || st === 'rare') return st;
   return unit([s.seed, 'thin', s.week, n]) < CONFIG.P_THIN ? down(st) : st;
@@ -219,42 +219,29 @@ function shares(obj) { var sum = 0, out = {}; for (var k in obj) sum += obj[k]; 
 // ---------- strategies (the ghosts, and the heuristics table) ----------
 // Each takes the state and returns a week's evenings. They see only what the player sees: the known list and the circles.
 var STRATEGIES = {
-  homebody: function (s) { var ev = {}; ['Ann', 'Ben', 'Cal'].forEach(function (n) { ev[n] = CONFIG.CAP; }); return ev; }, // every evening to the circle; the seventh stays home
-  loyal: function (s) { var ev = { Ann: 2, Ben: 2, Cal: 2 }; var first = s.known.filter(function (n) { return circleOf(n) !== 'home'; })[0]; if (first) ev[first] = 1; return ev; },
-  spreader: function (s) { // one evening to one person per circle you can reach, then one more person per circle, biggest circle first
-    var ev = {}, left = CONFIG.EVENINGS, byCircle = {};
-    s.known.forEach(function (n) { (byCircle[circleOf(n)] = byCircle[circleOf(n)] || []).push(n); });
-    var order = Object.keys(byCircle).sort(function (a, b) { return sizeOf(b) - sizeOf(a); });
-    for (var round = 0; left > 0 && round < 6; round++) order.forEach(function (c) { var n = byCircle[c][round]; if (n && left > 0) { ev[n] = 1; left--; } });
-    return ev;
-  },
-  bridgesOften: function (s) { // two evenings to one person in each outer circle, the rest to Ann
-    var ev = {}, left = CONFIG.EVENINGS, done = {};
-    s.known.forEach(function (n) { var c = circleOf(n); if (c !== 'home' && !done[c] && left >= 2) { ev[n] = 2; left -= 2; done[c] = true; } });
-    if (left > 0) ev.Ann = Math.min(left, CONFIG.CAP);
-    return ev;
-  },
-  oneCircle: function (s) { // everything into the firm: as many firm people as you know, two each
-    var ev = {}, left = CONFIG.EVENINGS; s.known.filter(function (n) { return circleOf(n) === 'firm'; }).forEach(function (n) { if (left >= 2) { ev[n] = 2; left -= 2; } }); if (left) ev.Ann = 1; return ev;
-  },
-  stayIn: function (s) { return {}; }, // no evenings on anyone: every line dashed
-  sixAndOne: function (s) { // one evening to one person in each outer circle, the seventh as a second evening to the biggest circle's person
-    var ev = {}, byC = {}; s.known.forEach(function (n) { var c = circleOf(n); if (c !== 'home') (byC[c] = byC[c] || []).push(n); });
-    var order = Object.keys(byC).sort(function (a, b) { return sizeOf(b) - sizeOf(a); }); order.forEach(function (c) { ev[byC[c][0]] = 1; });
-    var left = CONFIG.EVENINGS - Object.keys(ev).length; if (left > 0) { ev[byC[order[0]][0]] = 2; left--; }
-    order.forEach(function (c) { if (left > 0 && byC[c][1]) { ev[byC[c][1]] = 1; left--; } });
-    return ev;
-  },
-  hindsight: function (s) { return hindsightWeek(s).ev; } // the best week we can find knowing the week's news: hill-climbing from the spreader's week
+  homebody: function (s) { return { Ann: 1, Ben: 1, Cal: 1 }; }, // every night with the circle: the three friends stay thick
+  loyal: function (s) { var ev = { Ann: 1, Ben: 1 }; var first = outerByCircle(s).list[0]; if (first) ev[first] = 1; return ev; }, // two friends and one acquaintance
+  threeDoors: function (s) { var ev = {}; outerByCircle(s).list.slice(0, CONFIG.EVENINGS).forEach(function (n) { ev[n] = 1; }); return ev; }, // the same three doors every week: one person in each of three other circles, the circles where you know fewest people first
+  rotate: function (s) { var ev = {}, o = outerByCircle(s), k = (s.week - 1) * CONFIG.EVENINGS; for (var i = 0; i < CONFIG.EVENINGS; i++) { var n = o.list[(k + i) % o.list.length]; if (n) ev[n] = 1; } return ev; }, // three new doors each week
+  oneHomeTwoDoors: function (s) { var ev = { Ann: 1 }; outerByCircle(s).list.slice(0, 2).forEach(function (n) { ev[n] = 1; }); return ev; }, // keep one friend, two doors
+  stayIn: function (s) { return {}; }, // no evenings on anyone
+  hindsight: function (s) { return hindsightWeek(s).ev; } // the best week we can find knowing the week's news: hill-climbing from the best plan's week
 };
+function outerByCircle(s) { // one person per outer circle, the circles where you know fewest people first (a second dashed line into a circle is already a door), then by size, then the second person in each
+  var byC = {}; s.known.forEach(function (n) { var c = circleOf(n); if (c !== 'home') (byC[c] = byC[c] || []).push(n); });
+  var order = Object.keys(byC).sort(function (a, b) { return byC[a].length - byC[b].length || sizeOf(a) - sizeOf(b) || (a < b ? -1 : 1); }), list = [];
+  for (var round = 0; round < 6; round++) order.forEach(function (c) { if (byC[c][round]) list.push(byC[c][round]); });
+  return { list: list, order: order, byC: byC };
+}
 function ceiling(s) { return Math.max(tally(runStrategy(s.seed, STRATEGIES.hindsight)).heard, tally(s).heard); }
 function scoreOf(s) { var c = ceiling(s), h = tally(s).heard, p = c ? 100 * h / c : 0; return { heard: h, ceiling: c, pct: p, band: p >= CONFIG.BANDS[0] ? 2 : (p >= CONFIG.BANDS[1] ? 1 : 0) }; }
 function lightClone(s) { return { seed: s.seed, week: s.week, known: s.known.slice(), extra: Object.assign({}, s.extra), weeks: [], heardAll: {}, strength: Object.assign({}, s.strength), revived: {} }; }
 function heardOf(s, ev) { return playWeek(lightClone(s), ev).heard; }
 function hindsightWeek(s) { // move one evening at a time while it helps; with hindsight on this week's draw and coins
-  var best = Object.assign({}, STRATEGIES.spreader(s)), bestH = heardOf(s, best), improved = true, guard = 0;
+  var best = Object.assign({}, STRATEGIES[CONFIG.BEST_PLAN](s)), bestH = heardOf(s, best), improved = true, guard = 0;
   while (improved && guard++ < 40) { improved = false;
     s.known.forEach(function (from) { s.known.forEach(function (to) { if (from === to || !(best[from] > 0) || (best[to] || 0) >= CONFIG.CAP) return; var e = Object.assign({}, best); e[from]--; if (!e[from]) delete e[from]; e[to] = (e[to] || 0) + 1; var h = heardOf(s, e); if (h > bestH) { bestH = h; best = e; improved = true; } }); });
+    if (!improved) s.known.forEach(function (to) { if ((best[to] || 0) >= CONFIG.CAP) return; var sum = 0; for (var k in best) sum += best[k]; if (sum >= CONFIG.EVENINGS) return; var e = Object.assign({}, best); e[to] = 1; var h = heardOf(s, e); if (h > bestH) { bestH = h; best = e; improved = true; } });
   }
   return { ev: best, heard: bestH };
 }
@@ -272,4 +259,4 @@ function allWeeks(known) {
   return out;
 }
 
-if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: newGame, playWeek: playWeek, isOver: isOver, legalWeek: legalWeek, allTies: allTies, townTies: townTies, circleOf: circleOf, circleLabel: circleLabel, everyone: everyone, catOf: catOf, catWord: catWord, key: key, tally: tally, shares: shares, STRATEGIES: STRATEGIES, runStrategy: runStrategy, weekCat: weekCat, down: down, ceiling: ceiling, scoreOf: scoreOf, hindsightWeek: hindsightWeek, heardOf: heardOf, lightClone: lightClone, allWeeks: allWeeks, drawOrigins: drawOrigins, spread: spread, reachedCircles: reachedCircles, sizeOf: sizeOf, unit: unit, rng: rng };
+if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: newGame, playWeek: playWeek, isOver: isOver, legalWeek: legalWeek, allTies: allTies, townTies: townTies, circleOf: circleOf, circleLabel: circleLabel, everyone: everyone, catOf: catOf, catWord: catWord, key: key, tally: tally, shares: shares, STRATEGIES: STRATEGIES, runStrategy: runStrategy, weekCat: weekCat, down: down, up: up, outerByCircle: outerByCircle, ceiling: ceiling, scoreOf: scoreOf, hindsightWeek: hindsightWeek, heardOf: heardOf, lightClone: lightClone, allWeeks: allWeeks, drawOrigins: drawOrigins, spread: spread, reachedCircles: reachedCircles, sizeOf: sizeOf, unit: unit, rng: rng };
