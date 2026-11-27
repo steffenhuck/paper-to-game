@@ -2,7 +2,7 @@
 import asyncio, sys, os
 from playwright.async_api import async_playwright
 SEED = sys.argv[1] if len(sys.argv) > 1 else '4821'
-URL = 'file://' + os.path.abspath('granovetters-dashed-line.html') + '?seed=' + SEED
+URL = 'file://' + os.path.abspath('find-a-job-with-granovetter.html') + '?seed=' + SEED
 PLAN = [  # a learning player: the circle first, then three doors, then two of them again
     {'Ann': 1, 'Ben': 1, 'Cal': 1},
     {'Dee': 1, 'Eli': 1, 'Fay': 1},
