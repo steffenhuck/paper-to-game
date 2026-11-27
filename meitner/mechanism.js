@@ -220,8 +220,11 @@ function lessonOf(st, move) {
 // before each cut: what to watch for on the first one, then what is still dark and where to look
 function coachWords(st) {
   var left = st.tubes.filter(function (t) { return !st.lit[t.id]; });
-  if (st.used === 0) return (st.nuc.name === 'uranium' ? '' : cap(st.nuc.name) + ' (' + st.nuc.Z + '): same game, two new tubes, three neutrons. ') +
-    'A tube lights when one of your pieces ends up in its column. Drag the red line, then fire.';
+  if (st.used === 0) return st.nuc.name === 'uranium' ?
+    'Your pieces land on the chemists\' table. Every element has a number, its place in the table: barium is 56, uranium 92.</p>' +
+    '<p>A tube lights when one of your pieces ends up in its column: same column, same chemistry. The dashed tubes are the chemists\' "new elements", 93 to 97.</p>' +
+    '<p>Drag the red line, then fire. If the drop splits, watch what the two pieces turn into. If the cut fails, watch what the drop turns into.' :
+    cap(st.nuc.name) + ' (' + st.nuc.Z + '): same game, two new tubes, three neutrons. A tube lights when one of your pieces ends up in its column. Drag the red line, then fire.';
   if (!left.length) return '';
   var eka = left.filter(function (t) { return isDashed(t.cellZ); }), mid = left.filter(function (t) { return !isDashed(t.cellZ) && !t.byHold; }), u24 = left.filter(function (t) { return t.byHold; });
   var parts = [];
