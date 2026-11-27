@@ -83,6 +83,10 @@ p{margin:0 0 8px}
 .clhead{font-size:15px;margin-bottom:4px}
 .clhead span{color:#4a463f}
 .chip.will{border-style:solid;border-color:var(--red);background:#F9DDD8}
+.chip.bar{border-style:solid;margin-left:6px}
+.chip.bar.will{border-color:var(--red);background:#F9DDD8}
+.chip.got{border-style:solid;background:#E4EFD8;margin-left:6px}
+.bnote{font-size:15px;margin:2px 0 8px}
 .chip.will i{font-weight:700;color:var(--ink)}
 .overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background-color:var(--wash);background-image:radial-gradient(var(--tone) 1px,transparent 1.3px);background-size:6px 6px;overflow:auto;z-index:9}.overlay.on{display:block}
 .overlay .wrap{padding-top:8px}
@@ -136,7 +140,7 @@ svg .bang{font-family:'Bangers',sans-serif}
     <g transform="translate(252 86)"><rect x="0" y="4" width="12" height="22" rx="3" fill="#fff" stroke="#161414" stroke-width="2"/><rect x="2" y="0" width="8" height="5" fill="#161414"/><rect x="20" y="4" width="12" height="22" rx="3" fill="#E23A2A" stroke="#161414" stroke-width="2"/><rect x="22" y="0" width="8" height="5" fill="#161414"/><rect x="40" y="4" width="12" height="22" rx="3" fill="#fff" stroke="#161414" stroke-width="2" stroke-dasharray="3 2"/><rect x="42" y="0" width="8" height="5" fill="#161414"/><rect x="60" y="4" width="12" height="22" rx="3" fill="#fff" stroke="#161414" stroke-width="2" stroke-dasharray="3 2"/><rect x="62" y="0" width="8" height="5" fill="#161414"/></g>
   </svg></div>
   <p class="acts">1938. Chemists fire neutrons at uranium and find strange new stuff. Five of the substances seem to be brand-new elements, heavier than uranium, numbers 93 to 97. Lise Meitner and Otto Frisch think something else happened: the uranium split in two.</p>
-  <p class="aim big">You are Meitner and Frisch. Choose where the uranium might split, and see how many of the five "new elements" your pieces can explain. You have four tries.</p>
+  <p class="aim big">You are Meitner and Frisch. Choose where the uranium might split. Can you explain the five "new elements" and the barium? You have three tries.</p>
   <button class="btn solid" id="b-begin">Play</button>
   <div class="row2"><button class="btn" id="b-why">Why can a drop split?</button><button class="btn" id="b-about-start">About</button></div>
   <p class="cred">Built from Lise Meitner and O. R. Frisch, "Disintegration of Uranium by Neutrons: a New Type of Nuclear Reaction", <i>Nature</i> 143, 239–240 (1939).</p>
@@ -156,7 +160,7 @@ svg .bang{font-family:'Bangers',sans-serif}
 <section id="s-bench" class="screen">
   <div class="top"><div><div class="kick" id="kick1"></div><div class="now" id="now1"></div></div><button class="qm" id="b-help-bench" aria-label="How to play">?</button></div>
   <div class="panel"><svg id="dropsvg" viewBox="0 0 340 184"></svg></div>
-  <div class="claims" id="claims"><div class="clhead"><b>The five "new elements":</b> <span id="clsay"></span></div><div class="chips" id="clchips"></div></div>
+  <div class="claims" id="claims"><div class="clhead"><b>To explain:</b> <span id="clsay"></span></div><div class="chips" id="clchips"></div></div>
   <div class="said" id="said1"></div>
   <div class="row3" id="fire"><button class="btn small" id="b-left" aria-label="move the cut left">&#9666;</button><button class="btn red" id="b-split">Test this cut</button><button class="btn small" id="b-right" aria-label="move the cut right">&#9656;</button></div>
   <div class="row2"><button class="btn solid hidden" id="b-next">Next try</button></div>
@@ -183,11 +187,13 @@ svg .bang{font-family:'Bangers',sans-serif}
 <div class="overlay" id="help"><div class="wrap"><div class="page">
   <div class="close"><button class="btn" id="b-help-close">Back</button></div>
   <h1>How to play</h1>
-  <p><b>You are Meitner and Frisch. The chemists say they found five new elements, 93 to 97. You think the uranium split in two and the pieces only look like new elements. You have four tries.</b></p>
+  <p><b>You are Meitner and Frisch. The chemists found five "new elements", 93 to 97, and also barium in the uranium. You think the uranium split in two. Explain all six in three tries.</b></p>
   <h2>The five "new elements"</h2>
   <p>Each one is a substance that the chemists could not tell from an old element: "like rhenium", "like osmium" and so on. Elements in one column of the table act alike in chemistry. So when one of your pieces turns into an old element that stands in the same column, the "new element" is explained: it was never new.</p>
+  <h2>The barium</h2>
+  <p>Barium is an old element, number 56. It is not new, but nobody expected it in uranium. Barium is explained when one of your pieces is barium, or acts like barium. That needs a cut away from the middle, and those cuts can fail.</p>
   <h2>The cut</h2>
-  <p>Drag the red line, or use the arrows. The two numbers are your two pieces; together they are always 92. The hill shows how likely it is that uranium splits there: sure in the middle, rare far out. The row of five boxes under the drop shows which "new elements" this cut would explain. Then press Test this cut.</p>
+  <p>Drag the red line, or use the arrows. The two numbers are your two pieces; together they are always 92. The hill shows how likely it is that uranium splits there: sure in the middle, rare far out. The row of boxes under the drop shows which "new elements", and whether the barium, this cut would explain. Then press Test this cut.</p>
   <p>The table shows the cut before you make it: a red box where each piece starts, a dot for each time it changes into the next element, a black box where it stops. If a cut fails, the drop just catches the neutron and nothing is explained.</p>
   <div class="close"><button class="btn" id="b-help-close2">Back</button></div>
 </div></div></div>
@@ -375,7 +381,7 @@ svg .bang{font-family:'Bangers',sans-serif}
   function startGame() {
     S.seed = pickSeed();
     S.stages = [
-      { nuc: C.URANIUM, tubes: M.claimTubes(), n: C.NEUTRONS_U, label: 'Uranium' }
+      { nuc: C.URANIUM, tubes: M.gameTubes(), n: C.TRIES_GAME, label: 'Uranium' }
     ];
     S.i = 0; S.done = [];
     beginStage();
@@ -461,19 +467,22 @@ svg .bang{font-family:'Bangers',sans-serif}
   }
   // the strip under the drop: the five claimed "new elements", and what the cut under the red line would show about each
   function drawClaims(pv) {
-    var box = $('claims'), eka = S.st.tubes.filter(function (t) { return M.isDashed(t.cellZ); });
+    var box = $('claims'), all = S.st.tubes.filter(function (t) { return M.isDashed(t.cellZ) || t.id === 'ba'; });
+    var eka = all.filter(function (t) { return M.isDashed(t.cellZ); }), bt = all.filter(function (t) { return t.id === 'ba'; })[0];
     if (!eka.length) { box.style.display = 'none'; return; }
     box.style.display = '';
     var would = {}; if (pv) pv.lights.forEach(function (l) { would[l.id] = l.atZ; });
-    var done = 0, now = 0;
-    $('clchips').innerHTML = eka.map(function (t) {
-      var l = S.st.lit[t.id], cls = 'claim', note = 'new?';
-      if (l) { cls = 'gone'; note = M.nameOf(l.atZ); done++; }
-      else if (would[t.id] !== undefined) { cls = 'will'; note = M.nameOf(would[t.id]); now++; }
-      return '<span class="chip ' + cls + '" data-id="' + t.id + '"><b>' + t.cellZ + '</b><i>' + note + '</i></span>';
+    var done = 0, now = 0, blit = !!(bt && S.st.lit.ba), bwill = !!(bt && !blit && would.ba !== undefined);
+    $('clchips').innerHTML = all.map(function (t) {
+      var l = S.st.lit[t.id], cls, note, lab = t.cellZ;
+      if (t.id === 'ba') { lab = 'Ba'; if (l) { cls = 'got'; note = '&#10003; ' + M.nameOf(l.atZ); } else if (would.ba !== undefined) { cls = 'bar will'; note = M.nameOf(would.ba); } else { cls = 'bar'; note = 'to explain'; } }
+      else { cls = 'claim'; note = 'new?'; if (l) { cls = 'gone'; note = M.nameOf(l.atZ); done++; } else if (would[t.id] !== undefined) { cls = 'will'; note = M.nameOf(would[t.id]); now++; } }
+      return '<span class="chip ' + cls + '" data-id="' + t.id + '"><b>' + lab + '</b><i>' + note + '</i></span>';
     }).join('');
-    $('clsay').textContent = done === eka.length ? 'All five are explained: shown to be old elements.' :
-      (now ? 'If the drop splits here, ' + (now === 1 ? 'one is explained: it turns out to be an old element.' : now + ' are explained: they turn out to be old elements.') : 'If the drop splits here, none of the five is explained.') + (done ? ' Done so far: ' + done + '.' : '');
+    var A = now === 0 ? 'none of the five is explained' : (now === eka.length - done ? (done ? 'all the rest of the five are explained' : 'all five are explained') : now + ' of the five are explained');
+    var B = !bt || blit ? '' : (bwill ? (now === 0 ? ', but the barium is' : ', and so is the barium') : (now === 0 ? ', and not the barium' : ', but not the barium'));
+    var all6 = done === eka.length && (!bt || blit);
+    $('clsay').textContent = all6 ? 'Everything is explained.' : 'If the drop splits here: ' + A + B + '.' + ((done || blit) ? ' Done so far: ' + done + ' of the five' + (blit ? ' and the barium' : '') + '.' : '');
   }
   function previewMove() {
     clearPreview();
@@ -494,7 +503,7 @@ svg .bang{font-family:'Bangers',sans-serif}
   }
   function lightTube(id, atZ) {
     var g = TP.tubes[id], p = cellXY(atZ); g.classList.add('lit'); g.setAttribute('transform', 'translate(' + p.x + ' ' + p.y + ')'); sym(TP, atZ, false);
-    var ch = document.querySelector('#clchips .chip[data-id="' + id + '"]'); if (ch) { ch.className = 'chip gone'; ch.querySelector('i').textContent = M.nameOf(atZ); }
+    var ch = document.querySelector('#clchips .chip[data-id="' + id + '"]'); if (ch) { var isBa = id === 'ba'; ch.className = 'chip ' + (isBa ? 'got' : 'gone'); ch.querySelector('i').innerHTML = (isBa ? '&#10003; ' : '') + M.nameOf(atZ); }
     if (TP.stripes[id]) { TP.stripes[id].classList.remove('on'); TP.stripes[id].classList.add('lit'); }
   }
 
@@ -614,6 +623,7 @@ svg .bang{font-family:'Bangers',sans-serif}
       row('The chemists, 1938', 'claimed ' + v.claimed + ' new elements.', v.chips.map(function (c) { return chip(c, 'claim'); }).join('')) +
       row('You', 'took away ' + v.you + ' of the ' + v.claimed + '.', v.chips.map(function (c) { return chip(c, c.real ? 'gone' : 'stand'); }).join('')) +
       row('Meitner and Frisch, 1939', 'took away ' + v.paperDown + ' of the ' + v.claimed + '.', v.chips.map(function (c) { return chip({ Z: c.Z }, 'gone'); }).join(''));
+    if (v.barium.present) $('v-board').innerHTML += '<p class="bnote"><b>The barium, the chemists\' firm finding.</b> You: ' + (v.barium.lit ? 'explained (a piece of ' + v.barium.name + ' acts like it).' : 'not explained.') + ' Meitner and Frisch: explained, as one half of a split uranium, with krypton as the other (56 + 36 = 92).</p>';
     $('v-story').innerHTML = v.story.map(function (l) { return '<p>' + l + '</p>'; }).join('');
     $('seedline').textContent = 'The draws in this game came from seed ' + S.seed + '. Add ?seed=' + S.seed + ' to the address to play the same draws again.';
     show('s-end');

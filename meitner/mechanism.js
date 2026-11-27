@@ -29,6 +29,7 @@ var CONFIG = {
   UNEVEN: 24,               // OURS: a pinch whose pieces differ by this many protons or more is called uneven in the verdict
 
   // --- play ---
+  TRIES_GAME: 3,            // OURS (rev. 11): tries in the game as played: the five claims and the barium; a sure cut for the five, a riskier one for the barium
   NEUTRONS_U: 4,            // OURS: three suffice when every pinch goes through (a pinch near 56, a pinch near 43, a hold); one spare for a pinch the skin pulls back (rev. 2)
   ODDS_HALF: 7.5,           // OURS (rev. 2): how far from the middle (in protons) a pinch must sit for the drop to split one time in two; the paper: "two nuclei of roughly equal size ... perhaps partly on chance" (p. 239)
   ODDS_FLAT: 3,             // OURS (rev. 2): a pinch within this many protons of the middle always goes through ("roughly equal size")
@@ -180,13 +181,20 @@ function lightTubes(move, tubes, nucZ) {
       return;
     }
     if (move.kind !== 'split') return;
+    var first = null, exact = null;       // rev. 11: if a piece is the very element the tube is filed under (barium for the barium tube), that is what lights it
     for (var p = 0; p < move.pieces.length; p++) {
       var path = move.pieces[p].path;
       for (var i = 0; i < path.length; i++) {
         var c = cellOf(path[i]);
-        if (c && !c.strip && c.col === t.col && !isDashed(path[i])) { lit.push({ id: t.id, atZ: path[i], piece: p, step: i }); return; }
+        if (c && !c.strip && c.col === t.col && !isDashed(path[i])) {
+          var hit = { id: t.id, atZ: path[i], piece: p, step: i };
+          if (!first) first = hit;
+          if (path[i] === t.cellZ && !exact) exact = hit;
+          break;
+        }
       }
     }
+    if (exact || first) lit.push(exact || first);
   });
   return lit;
 }
@@ -205,10 +213,13 @@ function pctWords(label) { return label === '<1%' ? 'under 1%' : label; }
 // the line under the table before you fire: what the cut lights and what you will learn, if it splits and if it fails
 function previewWords(st, Z1) {
   var pv = preview(st, Z1), T = st.tubes, sure = pv.p >= 0.995;
-  var names = pv.lights.map(function (l) { return tubeById(T, l.id).short; });
+  var claims = T.filter(function (t) { return isDashed(t.cellZ); }), hasBa = T.some(function (t) { return t.id === 'ba'; });
+  var cl = pv.lights.filter(function (l) { return isDashed(tubeById(T, l.id).cellZ); }).map(function (l) { return tubeById(T, l.id).short; });
+  var ba = pv.lights.some(function (l) { return l.id === 'ba'; });
   var ids = pv.lights.map(function (l) { return l.id; });
-  var what = !names.length ? 'explain none of the five' : (names.length === T.length ? 'explain all five "new elements": ' : 'explain ' + (names.length === 1 ? 'one "new element": ' : countWord(names.length) + ' "new elements": ')) + (names.length ? listAnd(names) : '');
-  var learn = names.length ? ' <b>You will learn:</b> ' + lessonText(ids, '') + '.' : ' You would learn nothing new from it.';
+  var what = !cl.length ? 'explain none of the ' + countWord(claims.length) + ' "new elements"' : (cl.length === claims.length ? 'explain all ' + countWord(claims.length) + ' "new elements": ' : 'explain ' + (cl.length === 1 ? 'one "new element": ' : countWord(cl.length) + ' "new elements": ')) + (cl.length ? listAnd(cl) : '');
+  if (hasBa) what += ba ? (cl.length ? ', and the barium' : ', but it would explain the barium') : (cl.length ? ', but not the barium' : ', and not the barium');
+  var learn = ids.length ? ' <b>You will learn:</b> ' + lessonText(ids, '') + '.' : ' You would learn nothing new from it.';
   if (sure) return '<b>The uranium splits here for sure.</b> It would ' + what + '.' + learn;
   return '<b>The uranium splits here ' + pctWords(pv.label) + ' of the time.</b> If it does, it would ' + what + '.' + learn + (pv.failLights ? ' <b>Otherwise the cut fails</b> and lights the 24-min tube. <b>You will learn:</b> ' + TEACH.u24 + '.' : ' <b>Otherwise the cut fails</b> and nothing is explained.');
 }
@@ -222,9 +233,8 @@ function lessonOf(st, move) {
 function coachWords(st) {
   var left = st.tubes.filter(function (t) { return !st.lit[t.id]; });
   if (st.used === 0) return st.nuc.name === 'uranium' ?
-    'You are Meitner and Frisch. The chemists say they found five new elements, 93 to 97. Your idea: the uranium split in two, and the pieces only look like new elements.</p>' +
-    '<p>Try cuts. A cut explains a "new element" when one of your pieces turns into an old element that acts just like it: the same column of the table, the same chemistry. How many of the five can you explain?</p>' +
-    '<p>Drag the red line, then press Test this cut.' :
+    'You are Meitner and Frisch. The chemists found five "new elements", 93 to 97, and also barium, an ordinary element that nobody expected in uranium. Your idea: the uranium split in two.</p>' +
+    '<p>A "new element" is explained when one of your pieces turns into an old element that acts just like it: the same column of the table, the same chemistry. Barium is explained when one of your pieces acts like barium.' :
     cap(st.nuc.name) + ' (' + st.nuc.Z + '): same game, two new tubes, three neutrons. A tube lights when one of your pieces ends up in its column. Drag the red line, then press Test this cut.';
   if (!left.length) return '';
   var eka = left.filter(function (t) { return isDashed(t.cellZ); }), mid = left.filter(function (t) { return !isDashed(t.cellZ) && !t.byHold; }), u24 = left.filter(function (t) { return t.byHold; });
@@ -339,7 +349,8 @@ function uniq(a) { return a.filter(function (x, i) { return a.indexOf(x) === i; 
 
 // ---------- the verdict ----------
 function countWord(n) { return ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'][n] || String(n); }
-function claimTubes() { return CONFIG.TUBES_U.filter(function (t) { return isDashed(t.cellZ); }); }   // rev. 10: the game is the five claims only
+function claimTubes() { return CONFIG.TUBES_U.filter(function (t) { return isDashed(t.cellZ); }); }   // the five "new elements"
+function gameTubes() { return claimTubes().concat(CONFIG.TUBES_U.filter(function (t) { return t.id === 'ba'; })); }   // rev. 11: the game as played: the five claims, and barium, the chemists' firm finding
 function listAnd(a) { return a.length <= 1 ? (a[0] || '') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; }
 // rev. 6: the verdict is a scoreboard (how many of the chemists' five "new elements" were taken away: by the player, by the paper)
 // followed by a short story of the run, in plain sentences. No more four fixed sections.
@@ -357,7 +368,8 @@ function verdict(stU, stTh) {
   var caught = stU.moves.filter(function (m) { return m.kind === 'rang' || m.kind === 'hold'; });
   var rangs = stU.moves.filter(function (m) { return m.kind === 'rang'; });
   var unevens = splits.concat(rangs).filter(function (m) { return m.uneven; });
-  var fate = (ekaLeft === 0 ? (allU ? 'THE "NEW ELEMENTS" WERE NEVER THERE' : 'THE "NEW ELEMENTS" ARE GONE, BUT TUBES STILL WAIT') : (ekaLeft === 1 ? 'ONE "NEW ELEMENT" STILL STANDS' : countWord(ekaLeft).toUpperCase() + ' "NEW ELEMENTS" STILL STAND'));
+  var hasBaT = TU.some(function (t) { return t.id === 'ba'; }), baLit = !!stU.lit.ba;
+  var fate = (ekaLeft === 0 ? (allU ? 'THE "NEW ELEMENTS" WERE NEVER THERE' : (hasBaT && !baLit ? 'THE "NEW ELEMENTS" ARE GONE, BUT THE BARIUM IS NOT EXPLAINED' : 'THE "NEW ELEMENTS" ARE GONE, BUT TUBES STILL WAIT')) : (ekaLeft === 1 ? 'ONE "NEW ELEMENT" STILL STANDS' : countWord(ekaLeft).toUpperCase() + ' "NEW ELEMENTS" STILL STAND'));
   var story = [];
   // 1. what the player did
   var cuts = splits.map(function (m) { return nameOf(m.Z1) + ' and ' + nameOf(m.Z2); });
@@ -369,7 +381,12 @@ function verdict(stU, stTh) {
   story.push(p1);
   // 2. barium, the one sure fact
   var hasBa = TU.some(function (t) { return t.id === 'ba' || t.id === 'la'; });
-  if (!hasBa) story.push('The clue was barium. Hahn and Strassmann had found it in the bombarded uranium. Barium is 56, and 56 + 36 = 92, so its partner would be krypton (36): a split in two.');
+  if (hasBaT && !TU.some(function (t) { return t.id === 'la'; })) {
+    var bz = baLit ? stU.lit.ba.atZ : null;
+    story.push(baLit ? (bz === 56 ? 'Barium came out of your uranium, as it did for Hahn and Strassmann. Barium is an old element, but nobody had expected it there. If barium itself is one piece, the other has to be krypton (36), because the two pieces always add up to 92 (56 + 36).' :
+      'A piece of ' + nameOf(bz) + ' came out of your uranium, and it acts just like barium, so the chemists would have taken it for barium. (The paper notes that some of the supposed barium may really be strontium.) Real barium would come with krypton as its partner, because 56 + 36 = 92.') :
+      'Your cuts never made barium. Barium was the one fact the chemists were sure of, and it is where the paper starts: barium is an old element that nobody expected in uranium. Its partner would be krypton (36), because 56 + 36 = 92. Only cuts away from the middle make it, and those cuts can fail.');
+  } else if (!hasBa) story.push('The clue was barium. Hahn and Strassmann had found it in the bombarded uranium. Barium is 56, and 56 + 36 = 92, so its partner would be krypton (36): a split in two.');
   else story.push(baLa === 2 ? 'Barium and lanthanum both came out of your uranium. When barium (56) comes out, its partner has to be krypton (36), because the two pieces always add up to 92. Barium was the one fact the chemists were sure of, and it is where the paper starts.' :
     baLa === 1 ? 'One of barium and lanthanum came out of your uranium; the other did not. Barium was the one fact the chemists were sure of, and it is where the paper starts. Its partner is always krypton (56 + 36 = 92).' :
     'Barium and lanthanum never came out of your uranium. Barium was the one fact the chemists were sure of, and it is where the paper starts. Its partner is always krypton (56 + 36 = 92).');
@@ -385,7 +402,7 @@ function verdict(stU, stTh) {
   var nTxt;
   if (!hasU24 && !stTh) {
     nTxt = 'You used ' + countWord(stU.used) + (stU.used === 1 ? ' try' : ' tries') + ' of ' + countWord(stU.neutrons) + '.';
-    if (allU) nTxt += stU.used === 1 ? ' One cut was enough. That is the point: one split explains all five.' : ' One well-chosen cut near the middle is enough to explain all five. That is the point.';
+    if (allU) nTxt += hasBaT ? (stU.used === 1 ? ' One cut was enough.' : ' The sure cuts near the middle explain the five. The barium needs a riskier cut away from the middle: that is the trade-off.') : (stU.used === 1 ? ' One cut was enough. That is the point: one split explains all five.' : ' One well-chosen cut near the middle is enough to explain all five. That is the point.');
   } else {
     nTxt = 'You used ' + countWord(stU.used) + ' neutrons on uranium' + (stTh ? ' and ' + countWord(stTh.used) + ' on thorium' : '') + '.';
     if (allU) nTxt += stU.used <= 3 ? ' Three is the fewest that can light all eight tubes.' : (rangs.length ? ' Failed cuts took ' + countWord(rangs.length) + ' of them, which used up your spare.' : ' Three would have done.');
@@ -393,7 +410,7 @@ function verdict(stU, stTh) {
   story.push(nTxt);
   // 6. what Meitner and Frisch saw
   story.push('<b>What Meitner and Frisch saw.</b> Uranium does not just chip. A neutron can make it split in two, like a drop that barely holds together, and the halves fly apart with a huge shove. They had no new element to show for it: they took all five away. They left one thing open: a uranium nucleus that simply catches a neutron may turn into a real element 93, the one element beyond uranium their paper allows. Meitner had found a real element before, protactinium (91), together with Otto Hahn in 1918. This time she found that five were not there.');
-  return { fate: fate, chips: chips, claimed: eka.length, you: ekaDown, paperDown: eka.length, story: story, allU: allU, ekaLeft: ekaLeft, holdFound: holdFound, thAll: thAll, seed: stU.seed };
+  return { barium: { present: hasBaT, lit: baLit, name: baLit ? nameOf(stU.lit.ba.atZ) : null }, fate: fate, chips: chips, claimed: eka.length, you: ekaDown, paperDown: eka.length, story: story, allU: allU, ekaLeft: ekaLeft, holdFound: holdFound, thAll: thAll, seed: stU.seed };
 }
 function ekaNames(stU) {
   var out = [];
@@ -401,5 +418,5 @@ function ekaNames(stU) {
   return out.join(', ');
 }
 
-var MECH = { CONFIG: CONFIG, claimTubes: claimTubes, splitOdds: splitOdds, oddsWords: oddsWords, oddsLabel: oddsLabel, preview: preview, previewWords: previewWords, lessonOf: lessonOf, coachWords: coachWords, TEACH: TEACH, asym: asym, makeRng: makeRng, rang: rang, cellOf: cellOf, isDashed: isDashed, nameOf: nameOf, symbolOf: symbolOf, skin: skin, skinClass: skinClass, clampZ1: clampZ1, shareNeutrons: shareNeutrons, stableZ: stableZ, climb: climb, blastMeV: blastMeV, split: split, hold: hold, lightTubes: lightTubes, tubeById: tubeById, tubeAnswer: tubeAnswer, newStage: newStage, stageDone: stageDone, play: play, moveWords: moveWords, verdict: verdict, lookalikes: lookalikes };
+var MECH = { CONFIG: CONFIG, claimTubes: claimTubes, gameTubes: gameTubes, splitOdds: splitOdds, oddsWords: oddsWords, oddsLabel: oddsLabel, preview: preview, previewWords: previewWords, lessonOf: lessonOf, coachWords: coachWords, TEACH: TEACH, asym: asym, makeRng: makeRng, rang: rang, cellOf: cellOf, isDashed: isDashed, nameOf: nameOf, symbolOf: symbolOf, skin: skin, skinClass: skinClass, clampZ1: clampZ1, shareNeutrons: shareNeutrons, stableZ: stableZ, climb: climb, blastMeV: blastMeV, split: split, hold: hold, lightTubes: lightTubes, tubeById: tubeById, tubeAnswer: tubeAnswer, newStage: newStage, stageDone: stageDone, play: play, moveWords: moveWords, verdict: verdict, lookalikes: lookalikes };
 if (typeof module !== 'undefined' && module.exports) module.exports = MECH;

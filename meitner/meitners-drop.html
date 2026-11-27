@@ -83,6 +83,10 @@ p{margin:0 0 8px}
 .clhead{font-size:15px;margin-bottom:4px}
 .clhead span{color:#4a463f}
 .chip.will{border-style:solid;border-color:var(--red);background:#F9DDD8}
+.chip.bar{border-style:solid;margin-left:6px}
+.chip.bar.will{border-color:var(--red);background:#F9DDD8}
+.chip.got{border-style:solid;background:#E4EFD8;margin-left:6px}
+.bnote{font-size:15px;margin:2px 0 8px}
 .chip.will i{font-weight:700;color:var(--ink)}
 .overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background-color:var(--wash);background-image:radial-gradient(var(--tone) 1px,transparent 1.3px);background-size:6px 6px;overflow:auto;z-index:9}.overlay.on{display:block}
 .overlay .wrap{padding-top:8px}
@@ -136,7 +140,7 @@ svg .bang{font-family:'Bangers',sans-serif}
     <g transform="translate(252 86)"><rect x="0" y="4" width="12" height="22" rx="3" fill="#fff" stroke="#161414" stroke-width="2"/><rect x="2" y="0" width="8" height="5" fill="#161414"/><rect x="20" y="4" width="12" height="22" rx="3" fill="#E23A2A" stroke="#161414" stroke-width="2"/><rect x="22" y="0" width="8" height="5" fill="#161414"/><rect x="40" y="4" width="12" height="22" rx="3" fill="#fff" stroke="#161414" stroke-width="2" stroke-dasharray="3 2"/><rect x="42" y="0" width="8" height="5" fill="#161414"/><rect x="60" y="4" width="12" height="22" rx="3" fill="#fff" stroke="#161414" stroke-width="2" stroke-dasharray="3 2"/><rect x="62" y="0" width="8" height="5" fill="#161414"/></g>
   </svg></div>
   <p class="acts">1938. Chemists fire neutrons at uranium and find strange new stuff. Five of the substances seem to be brand-new elements, heavier than uranium, numbers 93 to 97. Lise Meitner and Otto Frisch think something else happened: the uranium split in two.</p>
-  <p class="aim big">You are Meitner and Frisch. Choose where the uranium might split, and see how many of the five "new elements" your pieces can explain. You have four tries.</p>
+  <p class="aim big">You are Meitner and Frisch. Choose where the uranium might split. Can you explain the five "new elements" and the barium? You have three tries.</p>
   <button class="btn solid" id="b-begin">Play</button>
   <div class="row2"><button class="btn" id="b-why">Why can a drop split?</button><button class="btn" id="b-about-start">About</button></div>
   <p class="cred">Built from Lise Meitner and O. R. Frisch, "Disintegration of Uranium by Neutrons: a New Type of Nuclear Reaction", <i>Nature</i> 143, 239–240 (1939).</p>
@@ -156,7 +160,7 @@ svg .bang{font-family:'Bangers',sans-serif}
 <section id="s-bench" class="screen">
   <div class="top"><div><div class="kick" id="kick1"></div><div class="now" id="now1"></div></div><button class="qm" id="b-help-bench" aria-label="How to play">?</button></div>
   <div class="panel"><svg id="dropsvg" viewBox="0 0 340 184"></svg></div>
-  <div class="claims" id="claims"><div class="clhead"><b>The five "new elements":</b> <span id="clsay"></span></div><div class="chips" id="clchips"></div></div>
+  <div class="claims" id="claims"><div class="clhead"><b>To explain:</b> <span id="clsay"></span></div><div class="chips" id="clchips"></div></div>
   <div class="said" id="said1"></div>
   <div class="row3" id="fire"><button class="btn small" id="b-left" aria-label="move the cut left">&#9666;</button><button class="btn red" id="b-split">Test this cut</button><button class="btn small" id="b-right" aria-label="move the cut right">&#9656;</button></div>
   <div class="row2"><button class="btn solid hidden" id="b-next">Next try</button></div>
@@ -183,11 +187,13 @@ svg .bang{font-family:'Bangers',sans-serif}
 <div class="overlay" id="help"><div class="wrap"><div class="page">
   <div class="close"><button class="btn" id="b-help-close">Back</button></div>
   <h1>How to play</h1>
-  <p><b>You are Meitner and Frisch. The chemists say they found five new elements, 93 to 97. You think the uranium split in two and the pieces only look like new elements. You have four tries.</b></p>
+  <p><b>You are Meitner and Frisch. The chemists found five "new elements", 93 to 97, and also barium in the uranium. You think the uranium split in two. Explain all six in three tries.</b></p>
   <h2>The five "new elements"</h2>
   <p>Each one is a substance that the chemists could not tell from an old element: "like rhenium", "like osmium" and so on. Elements in one column of the table act alike in chemistry. So when one of your pieces turns into an old element that stands in the same column, the "new element" is explained: it was never new.</p>
+  <h2>The barium</h2>
+  <p>Barium is an old element, number 56. It is not new, but nobody expected it in uranium. Barium is explained when one of your pieces is barium, or acts like barium. That needs a cut away from the middle, and those cuts can fail.</p>
   <h2>The cut</h2>
-  <p>Drag the red line, or use the arrows. The two numbers are your two pieces; together they are always 92. The hill shows how likely it is that uranium splits there: sure in the middle, rare far out. The row of five boxes under the drop shows which "new elements" this cut would explain. Then press Test this cut.</p>
+  <p>Drag the red line, or use the arrows. The two numbers are your two pieces; together they are always 92. The hill shows how likely it is that uranium splits there: sure in the middle, rare far out. The row of boxes under the drop shows which "new elements", and whether the barium, this cut would explain. Then press Test this cut.</p>
   <p>The table shows the cut before you make it: a red box where each piece starts, a dot for each time it changes into the next element, a black box where it stops. If a cut fails, the drop just catches the neutron and nothing is explained.</p>
   <div class="close"><button class="btn" id="b-help-close2">Back</button></div>
 </div></div></div>
@@ -201,9 +207,9 @@ svg .bang{font-family:'Bangers',sans-serif}
   <p>Fermi's group, and then Hahn, Meitner and Strassmann, bombarded uranium with neutrons and found a growing list of radioactive bodies, nine periods by 1937, six of them assigned to elements beyond uranium. The assignment rested on one assumption: a nucleus can only chip, since only particles of one or two charges were known to leave one, and Gamow's theory of the Coulomb barrier ruled out a shower of them. So a body that behaved like osmium was filed as eka-osmium, element 94, rather than osmium (76) or ruthenium (44). Then Hahn and Strassmann found that three of the new bodies could not be separated from barium, while mesothorium, an isotope of radium, separated readily in the same experiment: isotopes of barium (56) were coming out of uranium (92).</p>
   <p>Meitner and Frisch explain it with Bohr's picture of a heavy nucleus as a drop of liquid. A charged drop's surface tension is lowered by its charge, and a rough estimate puts it at zero near charge 100; uranium therefore has only a small stability of form and, after capturing a neutron, may divide into two drops of roughly equal size. The two repel each other with about 200 Mev, calculated from nuclear radius and charge, and that energy is available from the difference in packing fraction between uranium and the middle of the periodic table: the pieces weigh less than the whole. The process is classical, no tunnelling needed. The pieces carry uranium's surplus of neutrons and shed it by beta decay, each giving a chain. If one piece is barium the other is krypton, which would decay through rubidium, strontium and yttrium to zirconium; some supposed barium-lanthanum-cerium chains may be strontium-yttrium-zirconium chains. The periods ascribed to elements beyond uranium are probably light elements too: the 10 s and 40 s bodies may be masurium (43) decaying through ruthenium, rhodium, palladium and silver into cadmium. Nuclear isomerism need no longer be assumed. Thorium's "radium" and "actinium" are probably the same fission. The 24-minute body chemically identified with uranium is probably real uranium-239, formed by resonance capture, going over into an eka-rhenium that appears inactive; its compound state lives a million times longer than the drop takes to divide, perhaps a symmetrical motion that does not favour fission. Frisch's word for the division, "fission", in quotation marks in the letter, is borrowed from biology.</p>
   <h2>What the game does</h2>
-  <p>You are Meitner and Frisch, with one question: can the chemists' five "new elements", 93 to 97, be pieces of split uranium? The five are the paper's borrowed record: the substances Hahn, Meitner and Strassmann had filed as eka-rhenium to eka-gold, standing in the dashed cells beyond uranium. You choose where the drop is cut, anywhere from 1 to 91, as a hypothesis (the paper leaves the ratio of the division to "finer structural features and perhaps partly on chance"; the game gives the choice to your hand and keeps the chance: a cut in the middle always works, a cut further out fails at the stated odds, and a failed cut explains nothing). The pieces land on the table and change by beta decay, one cell to the right each time; a "new element" is explained when a piece stands in its column, because two elements in one column act alike at the bench. Before you test a cut, the game shows what it would explain: a row of five boxes under the drop, the chance as a hill, the pieces' path on the table (a red box where each starts, a dot for each change, a black box where it stops), and one line in words. This is the mechanism's own result, computed in advance and checked by calibration against the cut when it is made. The verdict is a scoreboard of the five claims (claimed, taken away by you, taken away by the paper) and a short story of your run. An optional side trip from the start screen, three drops, shows why a drop can split at all.</p>
+  <p>You are Meitner and Frisch. The chemists have two things for you to explain: five "new elements", 93 to 97, and barium, an ordinary element that nobody expected in uranium. Your idea is that the uranium split in two. The five are the paper's borrowed record: the substances Hahn, Meitner and Strassmann had filed as eka-rhenium to eka-gold, standing in the dashed cells beyond uranium. You choose where the drop is cut, anywhere from 1 to 91, as a hypothesis (the paper leaves the ratio of the division to "finer structural features and perhaps partly on chance"; the game gives the choice to your hand and keeps the chance: a cut in the middle always works, a cut further out fails at the stated odds, and a failed cut explains nothing). The pieces land on the table and change by beta decay, one cell to the right each time. A "new element" is explained when a piece stands in its column, because two elements in one column act alike at the bench; the barium is explained when a piece is barium or acts like it (strontium shares its column). The trade-off is the paper's own: the cuts that explain the five are in the safe middle (43 | 49 explains all five), but barium needs a cut away from the middle that may fail (40 | 52 works three times in four and explains barium and three of the five; 36 | 56 one time in four). No single cut explains all six, and you have three tries. Before you test a cut, the game shows what it would explain: a row of boxes under the drop, the chance as a hill, the pieces' path on the table (a red box where each starts, a dot for each change, a black box where it stops), and one line in words. This is the mechanism's own result, computed in advance and checked by calibration against the cut when it is made. The verdict is a scoreboard of the five claims (claimed, taken away by you, taken away by the paper), a line on the barium, and a short story of your run. An optional side trip from the start screen, three drops, shows why a drop can split at all.</p>
     <h2>Mechanism kind: toy</h2>
-  <p>The game runs a model built to illustrate the paper's argument, not the paper's own equations, which it does not have. Under this game's assumptions: the pieces share the drop's neutrons in proportion to their charges; each then climbs to the valley of stability given by a standard formula, Z* = A / (1.98 + 0.0155 A<sup>2/3</sup>), one cell per beta decay; the blast is the Coulomb energy of two touching spheres with a radius constant of 1.55 fm, fitted so that the equal split gives the paper's 200 Mev; the skin of a drop is 1 − (Z²/A)/39.4, fitted so that it vanishes at charge 100; the cut may go anywhere from 1 to 91 (pieces lighter than potassium, 19, stand on a thin strip above the table and light nothing, since the 1939 table has no tube there); a cut within three protons of the middle always goes through and beyond that its odds fall as 1 / (1 + ((a − 3) / 4.5)<sup>2.5</sup>) with a the distance from the middle, so the barium cell is a one-in-four shot, a cut at 52 | 40 three in four, and a cut at the very edge under one in a hundred; the draws come from a seed shown on the verdict screen; four tries; and a "new element" is explained by any element in its column. All of these are ours and sit in the config block of the mechanism. The thorium stage, the 24-minute tube and the barium and lanthanum tubes are still in the mechanism's config but the game no longer uses them (tenth build).</p>
+  <p>The game runs a model built to illustrate the paper's argument, not the paper's own equations, which it does not have. Under this game's assumptions: the pieces share the drop's neutrons in proportion to their charges; each then climbs to the valley of stability given by a standard formula, Z* = A / (1.98 + 0.0155 A<sup>2/3</sup>), one cell per beta decay; the blast is the Coulomb energy of two touching spheres with a radius constant of 1.55 fm, fitted so that the equal split gives the paper's 200 Mev; the skin of a drop is 1 − (Z²/A)/39.4, fitted so that it vanishes at charge 100; the cut may go anywhere from 1 to 91 (pieces lighter than potassium, 19, stand on a thin strip above the table and light nothing, since the 1939 table has no tube there); a cut within three protons of the middle always goes through and beyond that its odds fall as 1 / (1 + ((a − 3) / 4.5)<sup>2.5</sup>) with a the distance from the middle, so the barium cell is a one-in-four shot, a cut at 52 | 40 three in four, and a cut at the very edge under one in a hundred; the draws come from a seed shown on the verdict screen; three tries; and a "new element" is explained by any element in its column. All of these are ours and sit in the config block of the mechanism. The thorium stage, the 24-minute tube and the barium and lanthanum tubes are still in the mechanism's config but the game no longer uses them (tenth build).</p>
   <p><b>What the game demonstrates:</b> that a drop picture with these rules reproduces the paper's story, and makes "roughly equal size" a thing to weigh: the five "new elements" come down from safe cuts near the middle, while a cut that makes barium works only one time in four. Barium's partner is krypton; a piece near masurium climbs through the five columns the chemists had filed beyond uranium; and the climb reproduces the shape of the three chains the paper names (krypton to zirconium, barium to cerium, masurium to cadmium), though not every endpoint (our barium climbs on to neodymium).</p>
   <p><b>What the game assumes:</b> the toy above; the odds curve, which is ours entirely (the paper says only "roughly equal" and "perhaps partly on chance", and nothing about how often an uneven division happens); a deterministic neutron share where the paper says "varying proportions"; a 1939 table that places thorium, protactinium and uranium under hafnium, tantalum and tungsten, with the transuranics in the next five columns, which is how the chemists' "eka-" names got their chemistry; that the five transuranic tubes are eka-rhenium to eka-gold (the paper names eka-rhenium and eka-osmium; the others follow the 1937 scheme of its reference 2); that the rare earths share lanthanum's cell and its chemistry. The one-cut sweep of all five "new elements" depends on the climb being four or five steps long, which the paper's own chains state; under rules with shorter chains they still come down, in two cuts.</p>
   <p><b>What the paper establishes:</b> the argument that a heavy charged drop can divide classically, with about 200 Mev released and paid for by the packing fraction; the identification of barium's partner as krypton; the conjecture, stated as "possible, and seems to us rather probable", that the transuranic periods are light elements; the suggestion that thorium fissions too; and the reading of the 24-minute body as genuine uranium-239. It establishes nothing about which cut is likelier, nothing about the exact chains, and nothing about neutron emission or chain reactions, which are not in this paper at all; they came in the weeks after it.</p>
@@ -216,6 +222,7 @@ svg .bang{font-family:'Bangers',sans-serif}
   <p>The eighth build (27 November 2026) followed the author's note that the table was still the hardest part and that the game should be about whether the "new elements" were really discovered. The play screen now opens with that question. The shelf of eight tubes sits above the table under the heading "Is it really new?", with a count of tubes explained, and the table is explained as where the pieces land. The mechanism is unchanged.</p>
   <p>The ninth build (27 November 2026) added a strip under the drop with the chemists' five "new elements". As the red line moves, it shows which of the five the cut would show to be old elements, and under what name; once a cut is made, they stay marked. The mechanism is unchanged.</p>
   <p>The tenth build (27 November 2026) followed two notes from the author: that the aim was unclear, and that "you are the uranium" does not square with an experimenter who fires the neutron. You are now Meitner and Frisch testing hypotheses about where the nucleus splits, and the game is the five "new elements" only. The thorium stage, the 24-minute tube, the barium and lanthanum tubes and the shelf of cards are gone from the play; barium stays in the story as the clue. The button is "Test this cut". A single cut near masurium explains all five, which the preview shows, so the game is short; the discovery is seeing that one split does it.</p>
+  <p>The eleventh build (27 November 2026) followed the author's note that with only the five claims the game was too easy: the one safe cut at 43 | 49 explained everything and the preview showed it. Barium is back, as a sixth thing to explain, and the tries are down to three. The author also asked whether barium was a new element; it is not, and the game now says so: the five should turn out not to be new, and the barium is a real fact that has to come out of the split. The thorium stage, the 24-minute tube and lanthanum stay out of the play.</p>
   <p><b>A thing the paper could not know.</b> The odds in this game favour an even split, which is the paper's picture of "two nuclei of roughly equal size". Measurements made soon after 1939 showed that uranium most often splits unevenly, into one heavier and one lighter piece, and that barium with krypton is among the common pairs. So barium is the unlikely tube in this game and a common product in the real thing. The game keeps the paper's picture because the paper is the game's authority; the odds curve is ours, and it says nothing about how often an uneven split happens in nature.</p>
   <p>The half-lives of the nine periods are dropped except the 24 minutes; the 10 s and 40 s bodies are folded into the masurium tubes. Mesothorium and the separation itself stay here. The size of the shove (about 200 Mev, million electron-volts, in the paper), the mass the pieces lose for it (about a fifth of a proton between them, by E = mc<sup>2</sup>) and the origin of the word "fission" are in the paper's text above and no longer on the play screens. Nuclear isomerism, Gamow's theory and the lifetime of the compound state are mentioned only in the verdict and here. Cerium, named in the paper's chains, has no tube of its own: in 1939 tables cerium's column was ambiguous (the paper's own parallel, barium-lanthanum-cerium against strontium-yttrium-zirconium, puts it under zirconium), so it is named in the result lines instead. The clock is compressed: a climb that takes seconds to days on the bench takes two seconds on screen. "Masurium" is the 1939 name for element 43; it is called technetium today, and the 1925 claim to have found it was not sound. The imagined drop of 100 charges is marked as imagined on screen; element 100, fermium, was made in 1952 and does not fall apart unprovoked, since the real critical charge lies higher than the paper's rough estimate.</p>
   <h2>Where to read the paper</h2>
@@ -256,6 +263,7 @@ var CONFIG = {
   UNEVEN: 24,               // OURS: a pinch whose pieces differ by this many protons or more is called uneven in the verdict
 
   // --- play ---
+  TRIES_GAME: 3,            // OURS (rev. 11): tries in the game as played: the five claims and the barium; a sure cut for the five, a riskier one for the barium
   NEUTRONS_U: 4,            // OURS: three suffice when every pinch goes through (a pinch near 56, a pinch near 43, a hold); one spare for a pinch the skin pulls back (rev. 2)
   ODDS_HALF: 7.5,           // OURS (rev. 2): how far from the middle (in protons) a pinch must sit for the drop to split one time in two; the paper: "two nuclei of roughly equal size ... perhaps partly on chance" (p. 239)
   ODDS_FLAT: 3,             // OURS (rev. 2): a pinch within this many protons of the middle always goes through ("roughly equal size")
@@ -407,13 +415,20 @@ function lightTubes(move, tubes, nucZ) {
       return;
     }
     if (move.kind !== 'split') return;
+    var first = null, exact = null;       // rev. 11: if a piece is the very element the tube is filed under (barium for the barium tube), that is what lights it
     for (var p = 0; p < move.pieces.length; p++) {
       var path = move.pieces[p].path;
       for (var i = 0; i < path.length; i++) {
         var c = cellOf(path[i]);
-        if (c && !c.strip && c.col === t.col && !isDashed(path[i])) { lit.push({ id: t.id, atZ: path[i], piece: p, step: i }); return; }
+        if (c && !c.strip && c.col === t.col && !isDashed(path[i])) {
+          var hit = { id: t.id, atZ: path[i], piece: p, step: i };
+          if (!first) first = hit;
+          if (path[i] === t.cellZ && !exact) exact = hit;
+          break;
+        }
       }
     }
+    if (exact || first) lit.push(exact || first);
   });
   return lit;
 }
@@ -432,10 +447,13 @@ function pctWords(label) { return label === '<1%' ? 'under 1%' : label; }
 // the line under the table before you fire: what the cut lights and what you will learn, if it splits and if it fails
 function previewWords(st, Z1) {
   var pv = preview(st, Z1), T = st.tubes, sure = pv.p >= 0.995;
-  var names = pv.lights.map(function (l) { return tubeById(T, l.id).short; });
+  var claims = T.filter(function (t) { return isDashed(t.cellZ); }), hasBa = T.some(function (t) { return t.id === 'ba'; });
+  var cl = pv.lights.filter(function (l) { return isDashed(tubeById(T, l.id).cellZ); }).map(function (l) { return tubeById(T, l.id).short; });
+  var ba = pv.lights.some(function (l) { return l.id === 'ba'; });
   var ids = pv.lights.map(function (l) { return l.id; });
-  var what = !names.length ? 'explain none of the five' : (names.length === T.length ? 'explain all five "new elements": ' : 'explain ' + (names.length === 1 ? 'one "new element": ' : countWord(names.length) + ' "new elements": ')) + (names.length ? listAnd(names) : '');
-  var learn = names.length ? ' <b>You will learn:</b> ' + lessonText(ids, '') + '.' : ' You would learn nothing new from it.';
+  var what = !cl.length ? 'explain none of the ' + countWord(claims.length) + ' "new elements"' : (cl.length === claims.length ? 'explain all ' + countWord(claims.length) + ' "new elements": ' : 'explain ' + (cl.length === 1 ? 'one "new element": ' : countWord(cl.length) + ' "new elements": ')) + (cl.length ? listAnd(cl) : '');
+  if (hasBa) what += ba ? (cl.length ? ', and the barium' : ', but it would explain the barium') : (cl.length ? ', but not the barium' : ', and not the barium');
+  var learn = ids.length ? ' <b>You will learn:</b> ' + lessonText(ids, '') + '.' : ' You would learn nothing new from it.';
   if (sure) return '<b>The uranium splits here for sure.</b> It would ' + what + '.' + learn;
   return '<b>The uranium splits here ' + pctWords(pv.label) + ' of the time.</b> If it does, it would ' + what + '.' + learn + (pv.failLights ? ' <b>Otherwise the cut fails</b> and lights the 24-min tube. <b>You will learn:</b> ' + TEACH.u24 + '.' : ' <b>Otherwise the cut fails</b> and nothing is explained.');
 }
@@ -449,9 +467,8 @@ function lessonOf(st, move) {
 function coachWords(st) {
   var left = st.tubes.filter(function (t) { return !st.lit[t.id]; });
   if (st.used === 0) return st.nuc.name === 'uranium' ?
-    'You are Meitner and Frisch. The chemists say they found five new elements, 93 to 97. Your idea: the uranium split in two, and the pieces only look like new elements.</p>' +
-    '<p>Try cuts. A cut explains a "new element" when one of your pieces turns into an old element that acts just like it: the same column of the table, the same chemistry. How many of the five can you explain?</p>' +
-    '<p>Drag the red line, then press Test this cut.' :
+    'You are Meitner and Frisch. The chemists found five "new elements", 93 to 97, and also barium, an ordinary element that nobody expected in uranium. Your idea: the uranium split in two.</p>' +
+    '<p>A "new element" is explained when one of your pieces turns into an old element that acts just like it: the same column of the table, the same chemistry. Barium is explained when one of your pieces acts like barium.' :
     cap(st.nuc.name) + ' (' + st.nuc.Z + '): same game, two new tubes, three neutrons. A tube lights when one of your pieces ends up in its column. Drag the red line, then press Test this cut.';
   if (!left.length) return '';
   var eka = left.filter(function (t) { return isDashed(t.cellZ); }), mid = left.filter(function (t) { return !isDashed(t.cellZ) && !t.byHold; }), u24 = left.filter(function (t) { return t.byHold; });
@@ -566,7 +583,8 @@ function uniq(a) { return a.filter(function (x, i) { return a.indexOf(x) === i; 
 
 // ---------- the verdict ----------
 function countWord(n) { return ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'][n] || String(n); }
-function claimTubes() { return CONFIG.TUBES_U.filter(function (t) { return isDashed(t.cellZ); }); }   // rev. 10: the game is the five claims only
+function claimTubes() { return CONFIG.TUBES_U.filter(function (t) { return isDashed(t.cellZ); }); }   // the five "new elements"
+function gameTubes() { return claimTubes().concat(CONFIG.TUBES_U.filter(function (t) { return t.id === 'ba'; })); }   // rev. 11: the game as played: the five claims, and barium, the chemists' firm finding
 function listAnd(a) { return a.length <= 1 ? (a[0] || '') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; }
 // rev. 6: the verdict is a scoreboard (how many of the chemists' five "new elements" were taken away: by the player, by the paper)
 // followed by a short story of the run, in plain sentences. No more four fixed sections.
@@ -584,7 +602,8 @@ function verdict(stU, stTh) {
   var caught = stU.moves.filter(function (m) { return m.kind === 'rang' || m.kind === 'hold'; });
   var rangs = stU.moves.filter(function (m) { return m.kind === 'rang'; });
   var unevens = splits.concat(rangs).filter(function (m) { return m.uneven; });
-  var fate = (ekaLeft === 0 ? (allU ? 'THE "NEW ELEMENTS" WERE NEVER THERE' : 'THE "NEW ELEMENTS" ARE GONE, BUT TUBES STILL WAIT') : (ekaLeft === 1 ? 'ONE "NEW ELEMENT" STILL STANDS' : countWord(ekaLeft).toUpperCase() + ' "NEW ELEMENTS" STILL STAND'));
+  var hasBaT = TU.some(function (t) { return t.id === 'ba'; }), baLit = !!stU.lit.ba;
+  var fate = (ekaLeft === 0 ? (allU ? 'THE "NEW ELEMENTS" WERE NEVER THERE' : (hasBaT && !baLit ? 'THE "NEW ELEMENTS" ARE GONE, BUT THE BARIUM IS NOT EXPLAINED' : 'THE "NEW ELEMENTS" ARE GONE, BUT TUBES STILL WAIT')) : (ekaLeft === 1 ? 'ONE "NEW ELEMENT" STILL STANDS' : countWord(ekaLeft).toUpperCase() + ' "NEW ELEMENTS" STILL STAND'));
   var story = [];
   // 1. what the player did
   var cuts = splits.map(function (m) { return nameOf(m.Z1) + ' and ' + nameOf(m.Z2); });
@@ -596,7 +615,12 @@ function verdict(stU, stTh) {
   story.push(p1);
   // 2. barium, the one sure fact
   var hasBa = TU.some(function (t) { return t.id === 'ba' || t.id === 'la'; });
-  if (!hasBa) story.push('The clue was barium. Hahn and Strassmann had found it in the bombarded uranium. Barium is 56, and 56 + 36 = 92, so its partner would be krypton (36): a split in two.');
+  if (hasBaT && !TU.some(function (t) { return t.id === 'la'; })) {
+    var bz = baLit ? stU.lit.ba.atZ : null;
+    story.push(baLit ? (bz === 56 ? 'Barium came out of your uranium, as it did for Hahn and Strassmann. Barium is an old element, but nobody had expected it there. If barium itself is one piece, the other has to be krypton (36), because the two pieces always add up to 92 (56 + 36).' :
+      'A piece of ' + nameOf(bz) + ' came out of your uranium, and it acts just like barium, so the chemists would have taken it for barium. (The paper notes that some of the supposed barium may really be strontium.) Real barium would come with krypton as its partner, because 56 + 36 = 92.') :
+      'Your cuts never made barium. Barium was the one fact the chemists were sure of, and it is where the paper starts: barium is an old element that nobody expected in uranium. Its partner would be krypton (36), because 56 + 36 = 92. Only cuts away from the middle make it, and those cuts can fail.');
+  } else if (!hasBa) story.push('The clue was barium. Hahn and Strassmann had found it in the bombarded uranium. Barium is 56, and 56 + 36 = 92, so its partner would be krypton (36): a split in two.');
   else story.push(baLa === 2 ? 'Barium and lanthanum both came out of your uranium. When barium (56) comes out, its partner has to be krypton (36), because the two pieces always add up to 92. Barium was the one fact the chemists were sure of, and it is where the paper starts.' :
     baLa === 1 ? 'One of barium and lanthanum came out of your uranium; the other did not. Barium was the one fact the chemists were sure of, and it is where the paper starts. Its partner is always krypton (56 + 36 = 92).' :
     'Barium and lanthanum never came out of your uranium. Barium was the one fact the chemists were sure of, and it is where the paper starts. Its partner is always krypton (56 + 36 = 92).');
@@ -612,7 +636,7 @@ function verdict(stU, stTh) {
   var nTxt;
   if (!hasU24 && !stTh) {
     nTxt = 'You used ' + countWord(stU.used) + (stU.used === 1 ? ' try' : ' tries') + ' of ' + countWord(stU.neutrons) + '.';
-    if (allU) nTxt += stU.used === 1 ? ' One cut was enough. That is the point: one split explains all five.' : ' One well-chosen cut near the middle is enough to explain all five. That is the point.';
+    if (allU) nTxt += hasBaT ? (stU.used === 1 ? ' One cut was enough.' : ' The sure cuts near the middle explain the five. The barium needs a riskier cut away from the middle: that is the trade-off.') : (stU.used === 1 ? ' One cut was enough. That is the point: one split explains all five.' : ' One well-chosen cut near the middle is enough to explain all five. That is the point.');
   } else {
     nTxt = 'You used ' + countWord(stU.used) + ' neutrons on uranium' + (stTh ? ' and ' + countWord(stTh.used) + ' on thorium' : '') + '.';
     if (allU) nTxt += stU.used <= 3 ? ' Three is the fewest that can light all eight tubes.' : (rangs.length ? ' Failed cuts took ' + countWord(rangs.length) + ' of them, which used up your spare.' : ' Three would have done.');
@@ -620,7 +644,7 @@ function verdict(stU, stTh) {
   story.push(nTxt);
   // 6. what Meitner and Frisch saw
   story.push('<b>What Meitner and Frisch saw.</b> Uranium does not just chip. A neutron can make it split in two, like a drop that barely holds together, and the halves fly apart with a huge shove. They had no new element to show for it: they took all five away. They left one thing open: a uranium nucleus that simply catches a neutron may turn into a real element 93, the one element beyond uranium their paper allows. Meitner had found a real element before, protactinium (91), together with Otto Hahn in 1918. This time she found that five were not there.');
-  return { fate: fate, chips: chips, claimed: eka.length, you: ekaDown, paperDown: eka.length, story: story, allU: allU, ekaLeft: ekaLeft, holdFound: holdFound, thAll: thAll, seed: stU.seed };
+  return { barium: { present: hasBaT, lit: baLit, name: baLit ? nameOf(stU.lit.ba.atZ) : null }, fate: fate, chips: chips, claimed: eka.length, you: ekaDown, paperDown: eka.length, story: story, allU: allU, ekaLeft: ekaLeft, holdFound: holdFound, thAll: thAll, seed: stU.seed };
 }
 function ekaNames(stU) {
   var out = [];
@@ -628,7 +652,7 @@ function ekaNames(stU) {
   return out.join(', ');
 }
 
-var MECH = { CONFIG: CONFIG, claimTubes: claimTubes, splitOdds: splitOdds, oddsWords: oddsWords, oddsLabel: oddsLabel, preview: preview, previewWords: previewWords, lessonOf: lessonOf, coachWords: coachWords, TEACH: TEACH, asym: asym, makeRng: makeRng, rang: rang, cellOf: cellOf, isDashed: isDashed, nameOf: nameOf, symbolOf: symbolOf, skin: skin, skinClass: skinClass, clampZ1: clampZ1, shareNeutrons: shareNeutrons, stableZ: stableZ, climb: climb, blastMeV: blastMeV, split: split, hold: hold, lightTubes: lightTubes, tubeById: tubeById, tubeAnswer: tubeAnswer, newStage: newStage, stageDone: stageDone, play: play, moveWords: moveWords, verdict: verdict, lookalikes: lookalikes };
+var MECH = { CONFIG: CONFIG, claimTubes: claimTubes, gameTubes: gameTubes, splitOdds: splitOdds, oddsWords: oddsWords, oddsLabel: oddsLabel, preview: preview, previewWords: previewWords, lessonOf: lessonOf, coachWords: coachWords, TEACH: TEACH, asym: asym, makeRng: makeRng, rang: rang, cellOf: cellOf, isDashed: isDashed, nameOf: nameOf, symbolOf: symbolOf, skin: skin, skinClass: skinClass, clampZ1: clampZ1, shareNeutrons: shareNeutrons, stableZ: stableZ, climb: climb, blastMeV: blastMeV, split: split, hold: hold, lightTubes: lightTubes, tubeById: tubeById, tubeAnswer: tubeAnswer, newStage: newStage, stageDone: stageDone, play: play, moveWords: moveWords, verdict: verdict, lookalikes: lookalikes };
 if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
 
 </script>
@@ -804,7 +828,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
   function startGame() {
     S.seed = pickSeed();
     S.stages = [
-      { nuc: C.URANIUM, tubes: M.claimTubes(), n: C.NEUTRONS_U, label: 'Uranium' }
+      { nuc: C.URANIUM, tubes: M.gameTubes(), n: C.TRIES_GAME, label: 'Uranium' }
     ];
     S.i = 0; S.done = [];
     beginStage();
@@ -890,19 +914,22 @@ if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
   }
   // the strip under the drop: the five claimed "new elements", and what the cut under the red line would show about each
   function drawClaims(pv) {
-    var box = $('claims'), eka = S.st.tubes.filter(function (t) { return M.isDashed(t.cellZ); });
+    var box = $('claims'), all = S.st.tubes.filter(function (t) { return M.isDashed(t.cellZ) || t.id === 'ba'; });
+    var eka = all.filter(function (t) { return M.isDashed(t.cellZ); }), bt = all.filter(function (t) { return t.id === 'ba'; })[0];
     if (!eka.length) { box.style.display = 'none'; return; }
     box.style.display = '';
     var would = {}; if (pv) pv.lights.forEach(function (l) { would[l.id] = l.atZ; });
-    var done = 0, now = 0;
-    $('clchips').innerHTML = eka.map(function (t) {
-      var l = S.st.lit[t.id], cls = 'claim', note = 'new?';
-      if (l) { cls = 'gone'; note = M.nameOf(l.atZ); done++; }
-      else if (would[t.id] !== undefined) { cls = 'will'; note = M.nameOf(would[t.id]); now++; }
-      return '<span class="chip ' + cls + '" data-id="' + t.id + '"><b>' + t.cellZ + '</b><i>' + note + '</i></span>';
+    var done = 0, now = 0, blit = !!(bt && S.st.lit.ba), bwill = !!(bt && !blit && would.ba !== undefined);
+    $('clchips').innerHTML = all.map(function (t) {
+      var l = S.st.lit[t.id], cls, note, lab = t.cellZ;
+      if (t.id === 'ba') { lab = 'Ba'; if (l) { cls = 'got'; note = '&#10003; ' + M.nameOf(l.atZ); } else if (would.ba !== undefined) { cls = 'bar will'; note = M.nameOf(would.ba); } else { cls = 'bar'; note = 'to explain'; } }
+      else { cls = 'claim'; note = 'new?'; if (l) { cls = 'gone'; note = M.nameOf(l.atZ); done++; } else if (would[t.id] !== undefined) { cls = 'will'; note = M.nameOf(would[t.id]); now++; } }
+      return '<span class="chip ' + cls + '" data-id="' + t.id + '"><b>' + lab + '</b><i>' + note + '</i></span>';
     }).join('');
-    $('clsay').textContent = done === eka.length ? 'All five are explained: shown to be old elements.' :
-      (now ? 'If the drop splits here, ' + (now === 1 ? 'one is explained: it turns out to be an old element.' : now + ' are explained: they turn out to be old elements.') : 'If the drop splits here, none of the five is explained.') + (done ? ' Done so far: ' + done + '.' : '');
+    var A = now === 0 ? 'none of the five is explained' : (now === eka.length - done ? (done ? 'all the rest of the five are explained' : 'all five are explained') : now + ' of the five are explained');
+    var B = !bt || blit ? '' : (bwill ? (now === 0 ? ', but the barium is' : ', and so is the barium') : (now === 0 ? ', and not the barium' : ', but not the barium'));
+    var all6 = done === eka.length && (!bt || blit);
+    $('clsay').textContent = all6 ? 'Everything is explained.' : 'If the drop splits here: ' + A + B + '.' + ((done || blit) ? ' Done so far: ' + done + ' of the five' + (blit ? ' and the barium' : '') + '.' : '');
   }
   function previewMove() {
     clearPreview();
@@ -923,7 +950,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
   }
   function lightTube(id, atZ) {
     var g = TP.tubes[id], p = cellXY(atZ); g.classList.add('lit'); g.setAttribute('transform', 'translate(' + p.x + ' ' + p.y + ')'); sym(TP, atZ, false);
-    var ch = document.querySelector('#clchips .chip[data-id="' + id + '"]'); if (ch) { ch.className = 'chip gone'; ch.querySelector('i').textContent = M.nameOf(atZ); }
+    var ch = document.querySelector('#clchips .chip[data-id="' + id + '"]'); if (ch) { var isBa = id === 'ba'; ch.className = 'chip ' + (isBa ? 'got' : 'gone'); ch.querySelector('i').innerHTML = (isBa ? '&#10003; ' : '') + M.nameOf(atZ); }
     if (TP.stripes[id]) { TP.stripes[id].classList.remove('on'); TP.stripes[id].classList.add('lit'); }
   }
 
@@ -1043,6 +1070,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
       row('The chemists, 1938', 'claimed ' + v.claimed + ' new elements.', v.chips.map(function (c) { return chip(c, 'claim'); }).join('')) +
       row('You', 'took away ' + v.you + ' of the ' + v.claimed + '.', v.chips.map(function (c) { return chip(c, c.real ? 'gone' : 'stand'); }).join('')) +
       row('Meitner and Frisch, 1939', 'took away ' + v.paperDown + ' of the ' + v.claimed + '.', v.chips.map(function (c) { return chip({ Z: c.Z }, 'gone'); }).join(''));
+    if (v.barium.present) $('v-board').innerHTML += '<p class="bnote"><b>The barium, the chemists\' firm finding.</b> You: ' + (v.barium.lit ? 'explained (a piece of ' + v.barium.name + ' acts like it).' : 'not explained.') + ' Meitner and Frisch: explained, as one half of a split uranium, with krypton as the other (56 + 36 = 92).</p>';
     $('v-story').innerHTML = v.story.map(function (l) { return '<p>' + l + '</p>'; }).join('');
     $('seedline').textContent = 'The draws in this game came from seed ' + S.seed + '. Add ?seed=' + S.seed + ' to the address to play the same draws again.';
     show('s-end');

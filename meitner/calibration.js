@@ -174,7 +174,7 @@ function nt(h) { return h.replace(/<[^>]+>/g, ''); }
 ok(Z1s.every(function (z) { var w = nt(m.previewWords(m.newStage(U, m.claimTubes(), 4, 1), z)); return /You will learn|learn nothing new/.test(w) && plain(w) && w.split(/\s+/).length <= 50; }), 'rev. 5: every cut from 1 to 91 has a preview that says what you will learn and is 50 words or fewer');
 ok(/splits here for sure/.test(nt(m.previewWords(m.newStage(U, C.TUBES_U, 4, 1), 46))) && /splits here 25% of the time/.test(nt(m.previewWords(m.newStage(U, C.TUBES_U, 4, 1), 56))) && /Otherwise the cut fails and lights the 24-min tube\. You will learn: a neutron can just get caught/.test(nt(m.previewWords(m.newStage(U, C.TUBES_U, 4, 1), 56))) && /Otherwise the cut fails and nothing is explained/.test(nt(m.previewWords(m.newStage(TH, C.TUBES_TH, 3, 1), 56))) && !/24-min/.test(nt(m.previewWords(m.newStage(TH, C.TUBES_TH, 3, 1), 56))), 'rev. 5: the preview says whether the cut splits for sure or at what chance, and what a failure lights (the 24-minute tube on uranium, nothing on thorium)');
 ok((function () { var bad = 0; Z1s.forEach(function (z) { [0, 0.9999].forEach(function (r) { var s9 = m.newStage(U, C.TUBES_U, 4, 3); s9.rng = function () { return r; }; var mv9 = m.play(s9, { kind: 'split', Z1: z }); var l = m.lessonOf(s9, mv9); if (!l || !plain(l) || l.split(/\s+/).length > 40) bad++; }); }); return bad === 0; })(), 'rev. 5: every outcome, split or failed, ends with a short lesson in plain words');
-ok(/You are Meitner and Frisch/.test(m.coachWords(m.newStage(U, m.claimTubes(), 4, 1))) && /acts just like it/.test(m.coachWords(m.newStage(U, m.claimTubes(), 4, 1))) && /How many of the five can you explain/.test(m.coachWords(m.newStage(U, m.claimTubes(), 4, 1))) && /Test this cut/.test(m.coachWords(m.newStage(U, m.claimTubes(), 4, 1))) && !/same game/.test(m.coachWords(m.newStage(U, m.claimTubes(), 4, 1))) && /Thorium \(90\): same game/.test(m.coachWords(m.newStage(TH, C.TUBES_TH, 3, 1))), 'rev. 10: the first try says who you are, what explains a "new element", and what to press');
+ok(/You are Meitner and Frisch/.test(m.coachWords(m.newStage(U, m.claimTubes(), 4, 1))) && /acts just like it/.test(m.coachWords(m.newStage(U, m.claimTubes(), 4, 1))) && /Barium is explained when one of your pieces acts like barium/.test(m.coachWords(m.newStage(U, m.claimTubes(), 4, 1))) && !/same game/.test(m.coachWords(m.newStage(U, m.claimTubes(), 4, 1))) && /Thorium \(90\): same game/.test(m.coachWords(m.newStage(TH, C.TUBES_TH, 3, 1))), 'rev. 10: the first try says who you are, what explains a "new element", and what to press');
 // ---------- rev. 10: the minimal game, the five claims only, as Meitner and Frisch ----------
 (function () {
   var ct = m.claimTubes(), st = m.newStage(U, ct, C.NEUTRONS_U, 1);
@@ -190,6 +190,27 @@ ok(/You are Meitner and Frisch/.test(m.coachWords(m.newStage(U, m.claimTubes(), 
   ok(v.you === 5 && /One cut was enough/.test(tx) && /The clue was barium/.test(tx) && !/24-minute tube|thorium|Thorium/.test(tx.replace(/<b>What Meitner and Frisch saw[\s\S]*$/, '')), 'rev. 10: the verdict for the one-cut win names barium as the clue and mentions no tube that is not in the game');
 })();
 (function () { var st = m.newStage(U, C.TUBES_U, 4, 1); st.rng = function () { return 0; }; m.play(st, { kind: 'split', Z1: 43 }); var c1 = m.coachWords(st); ok(/barium and lanthanum \(try a little off the middle\)/.test(c1) && /24-min tube/.test(c1) && !/dashed/.test(c1), 'rev. 5: after the middle cut the coach names what is still dark and where to look, and no longer the dashed tubes'); st.rng = function () { return 0.9999; }; m.play(st, { kind: 'split', Z1: 56 }); ok(!/24-min/.test(m.coachWords(st)), 'rev. 5: once the 24-minute tube is lit the coach stops mentioning it'); })();
+
+// ---------- rev. 11: the game as played, five claims and the barium, three tries ----------
+(function () {
+  var gt = m.gameTubes(), st = m.newStage(U, gt, C.TRIES_GAME, 1);
+  ok(gt.length === 6 && gt.filter(function (t) { return t.id === 'ba'; }).length === 1 && C.TRIES_GAME === 3, 'rev. 11: the game has the five claims and one barium tube, and three tries');
+  var p43 = m.preview(st, 43), p40 = m.preview(st, 40), p36 = m.preview(st, 36);
+  var ids = function (pv) { return pv.lights.map(function (l) { return l.id; }).sort().join(','); };
+  ok(p43.p >= 0.995 && ids(p43) === 'eAu,eIr,eOs,ePt,eRe' && !/ba/.test(ids(p43).replace(/eRe|ePt/g, '')), 'rev. 11: the sure cut at 43 | 49 explains the five and not the barium');
+  ok(Math.abs(p40.p - 0.73) < 0.02 && /ba/.test(ids(p40)) && /eRe/.test(ids(p40)) && !/eAu/.test(ids(p40)), 'rev. 11: the cut at 40 | 52 explains the barium and three claims, but only about three times in four');
+  ok(Math.abs(p36.p - 0.25) < 0.02 && ids(p36) === 'ba', 'rev. 11: the cut at 36 | 56 explains only the barium, one time in four');
+  var none = true; for (var z = 1; z <= 91; z++) { if (m.preview(st, z).lights.length === 6) none = false; }
+  ok(none, 'rev. 11: no single cut explains all six, so you must choose: the sure cut, the riskier cut, or both');
+  var w = nt(m.previewWords(st, 40));
+  ok(/explain three "new elements": 93, 94 and 95, and the barium/.test(w) && /73% of the time/.test(w) && /nt|learn/.test(w), 'rev. 11: the preview at 40 | 52 says three claims and the barium, with the chance');
+  ok(/but not the barium/.test(nt(m.previewWords(st, 43))) && /but it would explain the barium/.test(nt(m.previewWords(st, 36))), 'rev. 11: the preview says plainly when the barium is left out or covered');
+  var s4 = m.newStage(U, gt, 3, 5); s4.rng = function () { return 0; }; m.play(s4, { kind: 'split', Z1: 40 }); m.play(s4, { kind: 'split', Z1: 43 });
+  var v = m.verdict(s4, null), tx = v.story.join(' ');
+  ok(v.you === 5 && v.barium.lit && /trade-off/.test(tx) && /If barium itself is one piece/.test(tx) && /Barium came out/.test(tx), 'rev. 11: the verdict for two cuts says the barium came out and names the trade-off');
+  var s5 = m.newStage(U, gt, 3, 6); m.play(s5, { kind: 'split', Z1: 43 }); var v5 = m.verdict(s5, null);
+  ok(v5.you === 5 && !v5.barium.lit && /GONE, BUT THE BARIUM IS NOT EXPLAINED/.test(v5.fate) && /Your cuts never made barium/.test(v5.story.join(' ')), 'rev. 11: the sure cut alone gives "gone, but the barium is not explained"');
+})();
 
 console.log(fails ? '\n' + fails + ' FAILED' : '\nall checks passed');
 process.exit(fails ? 1 : 0);
