@@ -1,17 +1,18 @@
-# Scripted sessions for Draw a Line with Singer (revision 9), phone and laptop. Run: python3 session-test.py
+# Scripted sessions for Draw a Line with Singer (revision 10), phone and laptop. Run: python3 session-test.py
 import asyncio, sys, os
 from playwright.async_api import async_playwright
 HERE = os.path.dirname(os.path.abspath(__file__))
 URL = 'file://' + os.path.join(HERE, 'draw-a-line-with-singer.html')
 NINE = ['adult', 'infant', 'braindam', 'disab', 'chimp', 'dog', 'pig', 'horse', 'mouse']
 def yes(*no): return {id: ('no' if id in no else 'yes') for id in NINE}
+# guess: a creature id to tap on the board, or 'none' for the no-complaint button
 SESSIONS = {
-  'species': {1: ['horse', 'mouse', 'stone'], 2: ['chimp', 'pig'], 3: ['dog'], 'ans': yes(), 'guess': ['agree', 'object', 'object']},
-  'singer':  {1: ['stone'], 2: ['braindam', 'chimp', 'pig'], 3: ['adult', 'infant', 'dog'], 'ans': yes(), 'guess': ['agree', 'agree', 'agree']},
+  'species': {1: ['horse', 'mouse'], 2: ['chimp', 'pig'], 3: ['dog'], 'ans': yes(), 'guess': ['none', 'chimp', 'horse']},
+  'singer':  {1: [], 2: ['braindam', 'chimp', 'pig'], 3: ['adult', 'infant', 'dog'], 'ans': yes(), 'guess': ['none', 'mouse', 'none']},
   'refuse':  {1: [], 2: [], 3: [], 'ans': yes(), 'guess': []},
-  'reason':  {1: ['mouse', 'stone'], 2: ['braindam'], 3: ['infant'], 'ans': yes(), 'guess': ['agree', 'object', 'agree']},
-  'mixed':   {1: ['disab', 'stone'], 2: ['chimp'], 3: ['infant', 'dog'], 'ans': yes('mouse', 'pig'), 'guess': ['object', 'object', 'agree']},
-  'species-no': {1: ['horse', 'mouse', 'stone'], 2: ['chimp', 'pig'], 3: ['dog'], 'ans': yes('chimp', 'dog', 'pig', 'horse', 'mouse'), 'guess': ['object', 'object', 'object']},
+  'reason':  {1: ['mouse'], 2: ['braindam'], 3: ['infant'], 'ans': yes(), 'guess': ['none', 'infant', 'none']},
+  'mixed':   {1: ['disab'], 2: ['chimp'], 3: ['infant', 'dog'], 'ans': yes('mouse', 'pig'), 'guess': ['adult', 'disab', 'none']},
+  'species-no': {1: ['horse', 'mouse'], 2: ['chimp', 'pig'], 3: ['dog'], 'ans': yes('chimp', 'dog', 'pig', 'horse', 'mouse'), 'guess': ['dog', 'braindam', 'none']},
 }
 async def play(page, name, plan, shots, tag):
     log = []
@@ -33,7 +34,9 @@ async def play(page, name, plan, shots, tag):
         await page.wait_for_timeout(300)
         if plan['guess']:
             log.append(r.upper() + ' asks: ' + (await page.inner_text('#hint1')))
-            await page.click('#b-agree' if plan['guess'][i] == 'agree' else '#b-object')
+            g = plan['guess'][i]
+            if g == 'none': await page.click('#b-agree')
+            else: await page.click(f'#cast .rowtap[data-id={g}]')
             await page.wait_for_timeout(500)
         log.append(r.upper() + ': ' + (await page.inner_text('#now1')) + ' | ' + (await page.inner_text('#said1')) + ' | ' + (await page.inner_text('#find1')))
         if shots and r == 'reason': await page.screenshot(path=f'screenshot-{tag}-{name}-reason.png', full_page=True)

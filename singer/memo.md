@@ -279,3 +279,13 @@ The author's two observations on revision 8: with the same four on offer every t
 **Why the guess.** It gives the player one real tap per rule screen and asks for the skill the paper wants: reading whether a rule could have produced your behaviour. Stating the count first does not spoil it; it sets the puzzle.
 
 **What we were least sure about.** Whether an eleven-year-old can read a ten-row, three-column board; the tie objections (Talk cannot tell the baby from the hurt grown-up), which are correct and may read as pedantic; and the stone, which is a joke the first time and the point the second.
+
+## 29. Revision 10, 27 November 2026: the stone off the menus; tap the one the rule will complain about
+
+Two points from the author's play of revision 9. The stone on a menu breaks the fiction: no experiment on a stone helps anyone. And agrees/objects is a coin flip that the previous screen half-answers.
+
+**The stone** is now on no menu. Nine creatures, three menus of three. The stone appears once, at the Suffer question, unasked and already answered ("cannot"), with the line: this is where Singer's line runs, between the mouse and the stone, not between the baby and the mouse. That is the paper's use of it (p. 107, the boundary of sentience), and it costs nothing in the fiction.
+
+**The guess** on each rule screen is now: tap the creature you expect the rule to complain about, or tap "Reason has no complaint". A set of choices usually breaks a rule in several pairs, so the mechanism now returns every violating pair and the set of creatures in any of them; the tap counts as right if it lands on any of those. The reveal still circles the worst pair in red and writes its sentence about that pair; if the tapped creature is a violator outside the worst pair, the board says "Reason complains about the dog too" and marks it with a dashed circle. The six feedback cases: right on the worst pair; right on another complaint; wrong (no complaint about that one); "no complaint" when there is one; a tap when the rule agrees; "no complaint" when it does. On the refuse and all patterns the guess is skipped.
+
+**Checked.** 512 x 512; every violating pair is (used, spared at the same or higher stakes); the worst pair is among the pairs; the violator set is exactly the creatures in the pairs. Six scripted sessions covering all six feedback cases at two widths.

@@ -1,14 +1,14 @@
-// Calibration check for Draw a Line with Singer (revision 9). Run: node calibration.js. Exit code 1 on any failure.
+// Calibration check for Draw a Line with Singer (revision 10). Run: node calibration.js. Exit code 1 on any failure.
 // The mechanism is a TOY of an argument; the check verifies (1) that every ordering the 1974 paper states holds in the cast, and that the
-// three menus cover all ten creatures once, each with a person and an animal; (2) the claims on this cast: the team's choices (every animal
-// and the stone used, every person spared, at every experiment) are explained by Species and by no rule with marks, and Suffer objects to
-// them with Singer's facts; (3) that the objection to the team's choices rests on the paper's own orderings, not on our lengths, over 500
-// random casts; (4) that every one of the 1024 tick patterns, with every one of the 512 answer sets to "can they suffer?", gets a pattern, a
-// shape, a name, words for each rule, Suffer words and a verdict, and that the rationalisability test has the properties it claims;
-// (5) the stories; (6) a table of the shapes.
+// three menus cover the nine creatures that can suffer once each, each menu with a person and an animal; (2) the claims on this cast: the
+// team's choices (every animal used, every person spared, at every experiment) are explained by Species and by no rule with marks, and
+// Suffer objects to them with Singer's facts; (3) that the objection to the team's choices rests on the paper's own orderings, not on our
+// lengths, over 500 random casts; (4) that every one of the 512 tick patterns, with every one of the 512 answer sets to "can they suffer?",
+// gets a pattern, a shape, a name, words for each rule, Suffer words and a verdict, and that the rationalisability test has the properties
+// it claims; (5) the stories; (6) a table of the shapes.
 var m = require('./mechanism.js'), C = m.CONFIG, fails = 0, out = [];
 function check(name, ok, detail) { out.push((ok ? 'ok   ' : 'FAIL ') + name + (detail ? ' — ' + detail : '')); if (!ok) fails++; }
-var S = C.SUBJECTS, NINE = S.filter(function (id) { return id !== 'stone'; });
+var S = C.SUBJECTS, NINE = S;
 
 // (1)
 C.PAPER_ORDERINGS.forEach(function (o) {
@@ -17,8 +17,8 @@ C.PAPER_ORDERINGS.forEach(function (o) {
   check('ordering on ' + o.ruler + ': ' + o.above.join('/') + (o.strict ? ' > ' : ' >= ') + o.below.join('/'), ok, o.src);
 });
 var all = [].concat(C.MENUS[1], C.MENUS[2], C.MENUS[3]);
-check('the three menus hold all ten creatures, each once', all.length === 10 && S.every(function (id) { return all.indexOf(id) >= 0; }));
-check('each menu has a person and an animal', [1, 2, 3].every(function (k) { return C.MENUS[k].some(function (id) { return m.castById(id).human; }) && C.MENUS[k].some(function (id) { return !m.castById(id).human && id !== 'stone'; }); }));
+check('the three menus hold the nine creatures that can suffer, each once, and not the stone', all.length === 9 && S.every(function (id) { return all.indexOf(id) >= 0; }) && all.indexOf('stone') < 0);
+check('each menu has a person and an animal', [1, 2, 3].every(function (k) { return C.MENUS[k].some(function (id) { return m.castById(id).human; }) && C.MENUS[k].some(function (id) { return !m.castById(id).human; }); }));
 check('the third menu is the paper\'s own test: the baby, to save many lives, with Bentham\'s dog beside it', C.MENUS[3].indexOf('infant') >= 0 && C.MENUS[3].indexOf('dog') >= 0);
 check('every being but the stone can suffer in the paper\'s reading', NINE.every(function (id) { return m.castById(id).suffer === 10; }) && m.castById('stone').suffer === 0);
 
@@ -27,10 +27,10 @@ function ticksFrom(mask) { var t = { 1: [], 2: [], 3: [] }; S.forEach(function (
 var team = { 1: [], 2: [], 3: [] }; S.forEach(function (id) { if (!m.castById(id).human) team[m.rungOf(id)].push(id); });
 check('the team\'s choices are explained by Species and by no rule with marks', m.ruleTest(team, 'species').ok && m.rulesExplaining(team).length === 0 && m.shapeOf(team, {}).id === 'species');
 check('Suffer objects to the team\'s choices with Singer\'s facts', !m.sufferTest(team, {}).singer);
-var singerT = { 1: ['stone'], 2: ['braindam', 'chimp', 'pig'], 3: ['adult', 'infant', 'dog'] };
-check('all who can suffer from one life on, the stone for free, is Singer\'s line', m.shapeOf(singerT, {}).id === 'singer');
-check('nobody who can suffer, at any price, is refuse, and its verdict points to Foot', m.shapeOf({ 1: ['stone'], 2: [], 3: [] }, {}).id === 'refuse' && /Foot/.test(m.verdict({ ticks: { 1: [], 2: [], 3: [] }, answers: {} }).stood[0]));
-check('the hurt grown-up, the mouse and the stone first, then the baby, is explained by Reason (and the others)', m.shapeOf({ 1: ['mouse', 'stone'], 2: ['braindam'], 3: ['infant'] }, {}).id === 'line');
+var singerT = { 1: [], 2: ['braindam', 'chimp', 'pig'], 3: ['adult', 'infant', 'dog'] };
+check('everyone from one life on, nobody for a child\'s year, is Singer\'s line', m.shapeOf(singerT, {}).id === 'singer');
+check('nobody at any price is refuse, and its verdict points to Foot', m.shapeOf({ 1: [], 2: [], 3: [] }, {}).id === 'refuse' && /Foot/.test(m.verdict({ ticks: { 1: [], 2: [], 3: [] }, answers: {} }).stood[0]));
+check('the mouse first, then the hurt grown-up, then the baby, is explained by Reason (and the others)', m.shapeOf({ 1: ['mouse'], 2: ['braindam'], 3: ['infant'] }, {}).id === 'line');
 check('the dog used to save a thousand lives and the baby spared draws an objection from Reason, Talk and Aware', (function () { var t = { 1: [], 2: [], 3: ['dog'] }; return C.RULES.every(function (r) { return !m.ruleTest(t, r.id).ok; }); })());
 check('the chimpanzee used to save a life and the hurt grown-up spared draws an objection from Reason, Talk and Aware', (function () { var t = { 1: [], 2: ['chimp'], 3: [] }; return C.RULES.every(function (r) { return !m.ruleTest(t, r.id).ok; }); })());
 
@@ -39,7 +39,7 @@ var shapes = {}, patterns = {}, bad = 0, nRules = {};
 var answerSets = [];
 for (var am = 0; am < 512; am++) { var ans = {}; NINE.forEach(function (id, i) { ans[id] = !!(am & (1 << i)); }); answerSets.push(ans); }
 var allYes = answerSets[511];
-for (var mask = 0; mask < 1024; mask++) {
+for (var mask = 0; mask < 512; mask++) {
   var t = ticksFrom(mask), p = m.pattern(t);
   patterns[p] = (patterns[p] || 0) + 1;
   if (!m.didWords(t)) bad++;
@@ -51,11 +51,13 @@ for (var mask = 0; mask < 1024; mask++) {
     for (var k = 1; k <= 3 && ok2; k++) {
       var cands = []; for (var cc = -1; cc <= 10; cc++) if (cc >= c) cands.push(cc);
       var found = false;
-      cands.forEach(function (cut) { if (found) return; if (m.menuOf(k).every(function (id) { return id === 'stone' || (t[k].indexOf(id) >= 0) === (mk(id) <= cut); })) { found = true; c = cut; } });
+      cands.forEach(function (cut) { if (found) return; if (m.menuOf(k).every(function (id) { return (t[k].indexOf(id) >= 0) === (mk(id) <= cut); })) { found = true; c = cut; } });
       if (!found) ok2 = false;
     }
     if (rt.ok !== ok2) bad++;
     if (!rt.ok && !(rt.clash && rt.clash.length === 2)) bad++;
+    // every violating pair is (used, spared at the same or higher stakes); the worst pair is among them; violators are exactly the creatures in the pairs
+    if (!rt.ok) { var inv = {}; rt.pairs.forEach(function (pr) { inv[pr[0]] = 1; inv[pr[1]] = 1; if (!m.tickedAt(t, pr[0]) || m.tickedAt(t, pr[1]) || m.rungOf(pr[1]) < m.tickedAt(t, pr[0])) bad++; }); if (!inv[rt.clash[0]] || !inv[rt.clash[1]] || Object.keys(inv).length !== rt.violators.length) bad++; }
   });
   answerSets.forEach(function (ans) {
     var w = m.shapeWords(t, ans); shapes[w.shape.id] = (shapes[w.shape.id] || 0) + 1;
@@ -66,16 +68,13 @@ for (var mask = 0; mask < 1024; mask++) {
     // Suffer objects iff some being the player says can suffer is used at stakes k while another the player says can suffer is spared at stakes >= k
     var should = false;
     NINE.forEach(function (a) { if (!ans[a]) return; var ka = m.tickedAt(t, a); if (!ka) return; NINE.forEach(function (b) { if (ans[b] && !m.tickedAt(t, b) && m.rungOf(b) >= ka) should = true; }); });
-    // the stone is free: ticking it or not never changes any rule's verdict
-    var t2 = { 1: t[1].filter(function (id) { return id !== 'stone'; }).concat(t[1].indexOf('stone') >= 0 ? [] : ['stone']), 2: t[2], 3: t[3] };
-    if (m.shapeOf(t, ans).id !== m.shapeOf(t2, ans).id && m.pattern(t) !== 'all' && m.pattern(t2) !== 'all') bad++;
+
     if (st.objects !== should) bad++;
   });
-  if (mask % 64 === 0) { var v = m.verdict({ ticks: t, answers: allYes }); if (!v.fate || v.did.length !== 5 || v.found.length !== 1 || !v.part.length || !v.stood.length) bad++; }
+  if (mask % 32 === 0) { var v = m.verdict({ ticks: t, answers: allYes }); if (!v.fate || v.did.length !== 5 || v.found.length !== 1 || !v.part.length || !v.stood.length) bad++; }
 }
-check('all 1024 tick patterns x 512 answer sets get a pattern, a shape, a name, words for each rule, Suffer words and a verdict; the rationalisability test matches a brute-force search for rising cutoffs; Suffer objects exactly when it should', bad === 0, bad + ' problems');
-check('patterns: refuse 2 (nothing, or the stone alone), all 1, the rest mixed', patterns.refuse === 2 && patterns.all === 1, JSON.stringify(patterns));
-check('the stone is free: ticking it alone is refuse, and with the baby to save a thousand lives, every rule still agrees', m.pattern({ 1: ['stone'], 2: [], 3: [] }) === 'refuse' && m.rulesExplaining({ 1: ['stone'], 2: [], 3: ['infant'] }).length === 3 && m.rulesExplaining({ 1: [], 2: [], 3: ['infant'] }).length === 3);
+check('all 512 tick patterns x 512 answer sets get a pattern, a shape, a name, words for each rule, Suffer words and a verdict; the rationalisability test matches a brute-force search for rising cutoffs; every violating pair is (used, spared at the same or higher stakes); Suffer objects exactly when it should', bad === 0, bad + ' problems');
+check('patterns: refuse 1, all 1, the rest mixed', patterns.refuse === 1 && patterns.all === 1, JSON.stringify(patterns));
 check('all six shapes occur', ['refuse', 'singer', 'equal-no', 'line', 'species', 'own'].every(function (k) { return shapes[k] > 0; }), JSON.stringify(shapes));
 
 // (3) robustness: with random marks that keep only the paper's orderings, no rule with marks explains the team's choices
@@ -102,7 +101,7 @@ check('three rungs of rising stakes, three stories each, and a fixed cost', C.LE
 check('stories draw reproducibly, and seed 0 gives the first of each rung', JSON.stringify(m.drawSkins(7)) === JSON.stringify(m.drawSkins(7)) && m.drawSkins(0).every(function (s, i) { return s === C.LEVELS[i].skins[0]; }) && (function () { var seen = {}; for (var k = 1; k < 60; k++) seen[m.drawSkins(k).join('|')] = 1; return Object.keys(seen).length > 5; })());
 
 // (6)
-out.push('\nShapes over 1024 tick patterns x 512 answer sets:'); Object.keys(shapes).forEach(function (k) { out.push('  ' + k.padEnd(10) + shapes[k]); });
+out.push('\nShapes over 512 tick patterns x 512 answer sets:'); Object.keys(shapes).forEach(function (k) { out.push('  ' + k.padEnd(10) + shapes[k]); });
 out.push('Tick patterns by how many rules with marks explain them:'); Object.keys(nRules).forEach(function (k) { out.push('  ' + k + ' rules: ' + nRules[k]); });
 console.log(out.join('\n'));
 console.log(fails ? '\n' + fails + ' CHECK(S) FAILED' : '\nall checks passed');

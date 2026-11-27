@@ -2,7 +2,8 @@
 // Runs unchanged in Node (calibration.js, loop.js) and in the browser (the game passes actions in and draws what comes back).
 // Mechanism kind: TOY, built to illustrate the argument of Peter Singer, "All Animals Are Equal", Philosophic Exchange 5(1), 1974,
 // pp. 103-116 (the journal's own text, SUNY open repository). Page numbers below are the journal's.
-// Revision 9 (27 Nov 2026): three menus, all ten creatures, and a rationalisability test. Revision 8 (same day) had been a new shape. The player is the scientist first. Three experiments of rising stakes, each needing one
+// Revision 10 (27 Nov 2026): the stone off the menus (it appears once, at the Suffer question, as the boundary); on each rule screen the player
+// taps the creature he expects the rule to complain about before the reveal. Revision 9 (same day): three menus and a rationalisability test. The player is the scientist first. Three experiments of rising stakes, each needing one
 // subject who will be hurt; four subjects on offer (the paper's own: the orphaned baby, the brain-damaged grown-up, the chimpanzee,
 // the mouse); the player ticks everyone he would be willing to use. From the ticks the game reads, for each subject, the lowest stakes
 // at which the player would use it: that is the player's line, revealed by what he did. Then three rules with marks (Reason, Talk,
@@ -24,12 +25,13 @@ var CONFIG = {
     { id: 'mouse',    label: 'mouse',      sub: '',                                  phrase: 'the mouse',                                    human: false, reason: 1,  talk: 0,  aware: 3,  suffer: 10 }, // p. 110: "apes, cats, mice"
     { id: 'stone',    label: 'stone',      sub: '',                                  phrase: 'the stone',                                    human: false, reason: 0,  talk: 0,  aware: 0,  suffer: 0  }
   ],
-  // The three menus: who is on offer at each experiment. All ten creatures appear once. Each menu has a person and an animal, and each is
-  // built around one of the paper's clashes: the third is the paper's own test (the orphaned infant, to save many lives; p. 109), with
-  // Bentham's dog beside it (p. 106); the second is the paper's follow-up (severe and irreversible brain damage, p. 110) beside the apes;
-  // the first puts Benn's "imbecile" (p. 113) beside the horse and the mouse, with the stone, which has no interests (p. 107), for free.
-  MENUS: { 1: ['disab', 'horse', 'mouse', 'stone'], 2: ['braindam', 'chimp', 'pig'], 3: ['adult', 'infant', 'dog'] },
-  SUBJECTS: ['adult', 'infant', 'braindam', 'disab', 'chimp', 'dog', 'pig', 'horse', 'mouse', 'stone'],
+  // The three menus: who is on offer at each experiment. The nine creatures that can suffer appear once each. Each menu has a person and an
+  // animal, and each is built around one of the paper's clashes: the third is the paper's own test (the orphaned infant, to save many lives;
+  // p. 109), with Bentham's dog beside it (p. 106); the second is the paper's follow-up (severe and irreversible brain damage, p. 110) beside
+  // the apes; the first puts Benn's "imbecile" (p. 113) beside the horse and the mouse.
+  // The stone is not on a menu (no experiment on a stone helps anyone); it appears once, at the Suffer question, as the boundary (p. 107).
+  MENUS: { 1: ['disab', 'horse', 'mouse'], 2: ['braindam', 'chimp', 'pig'], 3: ['adult', 'infant', 'dog'] },
+  SUBJECTS: ['adult', 'infant', 'braindam', 'disab', 'chimp', 'dog', 'pig', 'horse', 'mouse'],
   // The three rules with marks, in the order they come to the board. The verb is how the rule orders beings; the "first" phrase says whom the rule would use first.
   RULES: [
     { id: 'reason', label: 'Reason', what: 'how well it can think things out',              rule: 'the less a being can think, the sooner you may use it; whoever can think well is used last, or not at all', verb: 'thinks' },
@@ -112,7 +114,7 @@ function marksOf(ruleId, answers) {
 // animals are each unordered among themselves, so only a person used while an animal is spared is a violation); 'suffer' (only beings
 // that can suffer are constrained, and among them any difference is a violation; whatever cannot suffer may be used freely).
 function explains(ticks, mark, mode) {
-  var worst = null; mode = mode || 'marks';
+  var worst = null, pairs = [], inv = {}; mode = mode || 'marks';
   CONFIG.SUBJECTS.forEach(function (a) {
     var ka = tickedAt(ticks, a); if (!ka) return;
     if (a === 'stone') return; // the stone is free under every rule: nothing can be done to it that it minds
@@ -122,6 +124,7 @@ function explains(ticks, mark, mode) {
       var bad = mode === 'team' ? mark(a) > mark(b) : (mode === 'suffer' ? (mark(a) === 1 && mark(b) === 1) : mark(a) >= mark(b));
       if (bad) {
         var gap = (mark(a) - mark(b)) * 4 + (jb - ka) + (jb === ka ? 1 : 0) + (mode === 'suffer' && (b === 'infant' || b === 'braindam') ? 0.5 : 0);
+        pairs.push([a, b]); inv[a] = true; inv[b] = true;
         if (!worst || gap > worst.gap) worst = { sooner: a, later: b, tie: mark(a) === mark(b), gap: gap };
       }
     });
@@ -129,7 +132,8 @@ function explains(ticks, mark, mode) {
   // cutoffs, for drawing: the highest mark ticked at stakes <= k, or -1 if nothing ticked yet
   var cut = {}, c = -1;
   for (var k = 1; k <= 3; k++) { (ticks[k] || []).forEach(function (id) { if (id !== 'stone' && mark(id) > c) c = mark(id); }); cut[k] = c; }
-  return { ok: !worst, clash: worst ? [worst.sooner, worst.later] : null, tie: worst ? worst.tie : false, cut: cut };
+  // violators: every creature that is in some violating pair (the player's tap counts as right if it lands on any of them)
+  return { ok: !worst, clash: worst ? [worst.sooner, worst.later] : null, tie: worst ? worst.tie : false, cut: cut, pairs: pairs, violators: Object.keys(inv) };
 }
 function modeOf(ruleId) { return ruleId === 'species' ? 'team' : (ruleId === 'suffer' ? 'suffer' : 'marks'); }
 function ruleTest(ticks, ruleId, answers) { var t = explains(ticks, marksOf(ruleId, answers), modeOf(ruleId)); t.ruler = ruleId; t.agrees = t.ok; return t; }
@@ -146,8 +150,7 @@ function didWords(ticks) {
 }
 // pattern: refuse (no being that can suffer, by Singer's facts, is ticked anywhere) | all (everyone ticked everywhere) | mixed
 function pattern(ticks) {
-  var sufferers = CONFIG.SUBJECTS.filter(function (id) { return id !== 'stone'; });
-  if (sufferers.every(function (id) { return !tickedAt(ticks, id); })) return 'refuse';
+  if (CONFIG.SUBJECTS.every(function (id) { return !tickedAt(ticks, id); })) return 'refuse';
   if (CONFIG.SUBJECTS.every(function (id) { return tickedAt(ticks, id); })) return 'all';
   return 'mixed';
 }
@@ -164,17 +167,17 @@ function clashWords(ticks, t, r, mark) {
 // What the board says for a rule with marks.
 function ruleWords(ticks, ruleId) {
   var r = rulerById(ruleId), t = ruleTest(ticks, ruleId), p = pattern(ticks);
-  if (p === 'refuse') return r.label + ' has nothing to check. You would use nobody who can feel anything' + (tickedAt(ticks, 'stone') ? ', only the stone' : '') + ', so there is no order of use for ' + r.label + ' to explain.';
+  if (p === 'refuse') return r.label + ' has nothing to check. You would use nobody, so there is no order of use for ' + r.label + ' to explain.';
   if (p === 'all') return r.label + ' agrees, but only because you would use everyone on every menu. A rule that uses the low marks first has no complaint about that, and nothing to add.';
   if (t.ok) return r.label + ' agrees. Everyone you would use has a mark no higher than anyone you would spare at the same stakes or at higher stakes. If ' + r.label + ' were your rule, with a cutoff that rises as the stakes rise, it would have given exactly these three choices. The red lines are the cutoffs: one for each experiment.';
   return r.label + ' objects. ' + clashWords(ticks, t, r, marksOf(ruleId)) + ' The red circles are ' + r.label + '\'s complaint.';
 }
 
 // ---------- Part 2: can they suffer? ----------
-// answers: { id: true | false } for the nine beings (the stone is not asked; it cannot suffer, and the game says so).
+// answers: { id: true | false } for the nine (the stone is not asked; it cannot suffer, and the game says so).
 function sufferTest(ticks, answers) {
   answers = answers || {};
-  var ids = CONFIG.SUBJECTS.filter(function (id) { return id !== 'stone'; });
+  var ids = CONFIG.SUBJECTS;
   var yes = ids.filter(function (id) { return answers[id] === true; }), no = ids.filter(function (id) { return answers[id] === false; });
   var unanswered = ids.filter(function (id) { return answers[id] === undefined; });
   var t = explains(ticks, marksOf('suffer', answers), 'suffer');
@@ -183,7 +186,7 @@ function sufferTest(ticks, answers) {
 function sufferWords(ticks, answers) {
   var t = sufferTest(ticks, answers), p = pattern(ticks), s = '';
   if (!t.complete) return '';
-  if (p === 'refuse') s = 'Suffer has nothing to object to: you would use nobody who can feel anything. ';
+  if (p === 'refuse') s = 'Suffer has nothing to object to: you would use nobody. ';
   else if (t.objects) s = 'Suffer objects. ' + clashWords(ticks, t, CONFIG.SUFFER) + ' The red circles are Suffer\'s complaint, and this time it is built from two things you said yourself: it can suffer, and it may be used. ';
   else if (p === 'all') s = 'Suffer agrees: you would use everyone on every menu, and that is no order among them. ';
   else s = 'Suffer agrees with your three choices. Whenever you would use one being that can suffer, by your own answers, you would also use every other being that can suffer, on that menu and on the menus with higher stakes. That is what the Suffer rule asks: one day of pain counts the same, whoever has it. ';
@@ -208,12 +211,12 @@ function shapeWords(ticks, answers) {
   var s = shapeOf(ticks, answers), w = { shape: s }, st = sufferTest(ticks, answers || {}), p = pattern(ticks);
   var team = 'Most people make a different set of choices: the animals used first, the people spared until the stakes are very high, or for good. That set of choices has a name, and the sponge is about to show it to you.';
   if (s.id === 'refuse') {
-    w.name = 'No one, at any price'; w.headline = 'You would use nobody who can feel anything.';
-    w.who = 'Not to spare a child a year of illness, not to save a life, not to save a thousand lives: you would not put any being that can suffer through a day of pain' + (tickedAt(ticks, 'stone') ? ' (the stone, yes; but nothing can be done to a stone that it minds)' : '') + '. There is no order of use here for a rule to explain, and no line between the nine at all.';
+    w.name = 'No one, at any price'; w.headline = 'You would use nobody.';
+    w.who = 'Not to spare a child a year of illness, not to save a life, not to save a thousand lives: you would not put any of the nine through a day of pain. There is no order of use here for a rule to explain, and no line between the nine at all.';
     w.singer = 'Singer has no quarrel with you about animals: you treat the baby and the mouse exactly alike. Your disagreement with him is somewhere else. He would say that a day of pain for one, against a thousand lives, is a trade worth making, whoever has the pain; you say some things may not be done to anyone, whatever it buys. That is a different question, and a different paper: Philippa Foot\'s, which is also on this shelf.';
   } else if (s.id === 'singer') {
     w.name = 'Singer\'s line'; w.headline = 'You treated everyone who can suffer alike.';
-    w.who = p === 'all' ? 'You would use everyone on every menu, the stone and the grown-up and the baby and the mouse, for anything from a child\'s year of illness to a thousand lives. Nobody\'s pain counted for more with you than anybody else\'s, and nobody was spared: only the stakes mattered, and they were always enough.' : 'Whenever you would use one being that can suffer, you would use every other being that can suffer, on that menu and on the menus with higher stakes. So nobody\'s pain counted for more with you than anybody else\'s; only the stakes moved you. ' + (st.no.length ? 'You say ' + listPhrases(st.no) + ' cannot suffer, and Singer says ' + (st.no.length === 1 ? 'it can' : 'they can') + '; but your choices fit his facts as well as yours. ' : '');
+    w.who = p === 'all' ? 'You would use everyone on every menu, the grown-up and the baby and the mouse, for anything from a child\'s year of illness to a thousand lives. Nobody\'s pain counted for more with you than anybody else\'s, and nobody was spared: only the stakes mattered, and they were always enough.' : 'Whenever you would use one being that can suffer, you would use every other being that can suffer, on that menu and on the menus with higher stakes. So nobody\'s pain counted for more with you than anybody else\'s; only the stakes moved you. ' + (st.no.length ? 'You say ' + listPhrases(st.no) + ' cannot suffer, and Singer says ' + (st.no.length === 1 ? 'it can' : 'they can') + '; but your choices fit his facts as well as yours. ' : '');
     w.singer = 'That is Singer\'s line. He says it is the only line that is not drawn by hand: a day of pain is a day of pain, whoever has it. So whoever can suffer counts, and their pain counts as much as anyone\'s; and the stone, which cannot suffer, is the only one that does not count. ' + team;
   } else if (s.id === 'equal-no') {
     w.name = 'All alike, by your own answers'; w.headline = 'By your own answers, you treated everyone who can suffer alike.';
