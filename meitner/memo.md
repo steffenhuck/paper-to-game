@@ -260,3 +260,6 @@ A fixed plan clears the shelf about three times in four at best; a player who re
 
 **Not done.** Still unplayed by a stranger.
 
+## 24. Rev. 6 (27 Nov): the shelf screen goes
+
+Steffen's note: the first decision screen said "Light them all" but you could only shade one column; do we need the stage? No. The shelf screen is deleted: Play goes to the bench. Its one needed sentence (a tube lights when a piece ends up in its column) is the first-neutron guide, replacing the longer watch-for-both-outcomes line, since the live preview already says it every cut. Tapping a tube in the bench table shows the column facts (`infoFor`). Start-screen aim now: "see which tubes light. Can you light all eight? You have four neutrons." Still unplayed by a stranger.

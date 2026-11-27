@@ -18,13 +18,10 @@ var URL = 'file://' + path.resolve('meitners-drop.html');
     await pg.click('g.tapdrop[data-i="1"]'); await pg.waitForTimeout(2300); await shot('drops-uranium');
     console.log(tag, 'drops |', await pg.textContent('#said0'));
     await pg.click('#b-back0'); await pg.waitForTimeout(200);
-    // Play -> the shelf; tap a tube card, see its column
-    await pg.click('#b-begin'); await pg.waitForTimeout(300); await shot('shelf-empty', true); await nohs('shelf');
-    await pg.click('#shelf0 .card[data-id="eRe"]'); await pg.waitForTimeout(150); await shot('shelf', true);
-    console.log(tag, 'shelf info |', await pg.textContent('#info0'));
-    await pg.click('#shelf0 .card[data-id="u24"]'); console.log(tag, 'shelf info |', await pg.textContent('#info0'));
-    await pg.click('#b-help-shelf'); await pg.waitForTimeout(150); await shot('help', true); await pg.click('#b-help-close');
-    await pg.click('#b-tobench'); await pg.waitForTimeout(300); await shot('bench-start'); await nohs('bench');
+    // Play -> straight to the bench (no shelf stage)
+    await pg.click('#b-begin'); await pg.waitForTimeout(300); await shot('bench-start'); await nohs('bench');
+    console.log(tag, 'first guide |', await pg.textContent('#said1'));
+    await pg.click('#b-help-bench'); await pg.waitForTimeout(150); await shot('help', true); await pg.click('#b-help-close');
     console.log(tag, 'bench: fire button bottom', await bottom('#b-split'), 'table bottom', await bottom('#tablesvg'), 'caption bottom', await bottom('#cap'), 'shelf cards bottom', await bottom('#shelf1'), 'viewport', vh);
     console.log(tag, 'preview |', await pg.textContent('#cap'));
     // the far end of the range

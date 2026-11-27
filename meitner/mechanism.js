@@ -221,7 +221,7 @@ function lessonOf(st, move) {
 function coachWords(st) {
   var left = st.tubes.filter(function (t) { return !st.lit[t.id]; });
   if (st.used === 0) return (st.nuc.name === 'uranium' ? '' : cap(st.nuc.name) + ' (' + st.nuc.Z + '): same game, two new tubes, three neutrons. ') +
-    'Drag the red line, then fire. If the drop splits, watch what the two pieces turn into. If the cut fails, watch what the drop turns into. Either way, see which tubes light.';
+    'A tube lights when one of your pieces ends up in its column. Drag the red line, then fire.';
   if (!left.length) return '';
   var eka = left.filter(function (t) { return isDashed(t.cellZ); }), mid = left.filter(function (t) { return !isDashed(t.cellZ) && !t.byHold; }), u24 = left.filter(function (t) { return t.byHold; });
   var parts = [];

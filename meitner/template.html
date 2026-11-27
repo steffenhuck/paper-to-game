@@ -118,7 +118,7 @@ svg .bang{font-family:'Bangers',sans-serif}
     <g transform="translate(252 86)"><rect x="0" y="4" width="12" height="22" rx="3" fill="#fff" stroke="#161414" stroke-width="2"/><rect x="2" y="0" width="8" height="5" fill="#161414"/><rect x="20" y="4" width="12" height="22" rx="3" fill="#E23A2A" stroke="#161414" stroke-width="2"/><rect x="22" y="0" width="8" height="5" fill="#161414"/><rect x="40" y="4" width="12" height="22" rx="3" fill="#fff" stroke="#161414" stroke-width="2" stroke-dasharray="3 2"/><rect x="42" y="0" width="8" height="5" fill="#161414"/><rect x="60" y="4" width="12" height="22" rx="3" fill="#fff" stroke="#161414" stroke-width="2" stroke-dasharray="3 2"/><rect x="62" y="0" width="8" height="5" fill="#161414"/></g>
   </svg></div>
   <p class="acts">1938. Chemists fire neutrons at uranium and find strange new stuff in eight test tubes. Five of the tubes seem to hold brand-new elements, heavier than uranium. Lise Meitner thinks something else happened: the uranium split in two.</p>
-  <p class="aim big">You are the uranium. Choose where to cut yourself, and light up all eight tubes. You have four neutrons.</p>
+  <p class="aim big">You are the uranium. Choose where to cut yourself and see which tubes light. Can you light all eight? You have four neutrons.</p>
   <button class="btn solid" id="b-begin">Play</button>
   <div class="row2"><button class="btn" id="b-why">Why can a drop split?</button><button class="btn" id="b-about-start">About</button></div>
   <p class="cred">Built from Lise Meitner and O. R. Frisch, "Disintegration of Uranium by Neutrons: a New Type of Nuclear Reaction", <i>Nature</i> 143, 239–240 (1939).</p>
@@ -132,18 +132,6 @@ svg .bang{font-family:'Bangers',sans-serif}
   <div class="panel"><svg id="dropsvg0" viewBox="0 0 340 190"></svg></div>
   <div class="said" id="said0"><p>Tap a drop to hit it with a neutron.</p></div>
   <div class="row2"><button class="btn solid" id="b-back0">Back</button></div>
-</section>
-
-<!-- THE SHELF -->
-<section id="s-shelf" class="screen">
-  <div class="top"><div><div class="kick">The chemists' test tubes</div><div class="now">Eight tubes. Light them all.</div></div><button class="qm" id="b-help-shelf" aria-label="How to play">?</button></div>
-  <div class="panel"><svg id="tablesvg0" viewBox="0 0 340 166"></svg></div>
-  <p class="info" id="info0">Tap a tube to see its column.</p>
-  <div class="cards" id="shelf0"></div>
-  <p class="def"><b>The table.</b> Every element has a number, its place in the table. Barium is 56. Uranium is 92.</p>
-  <p class="def"><b>Same column, same chemistry.</b> A tube lights when one of your pieces stands in its column.</p>
-  <p class="def"><b>The dashed tubes</b> are the chemists' "new elements", 93 to 97.</p>
-  <div class="row2"><button class="btn solid" id="b-tobench">To the bench</button></div>
 </section>
 
 <!-- THE BENCH -->
@@ -178,7 +166,7 @@ svg .bang{font-family:'Bangers',sans-serif}
 <div class="overlay" id="help"><div class="wrap"><div class="page">
   <div class="close"><button class="btn" id="b-help-close">Back</button></div>
   <h1>How to play</h1>
-  <p><b>Light all eight tubes. You have four neutrons.</b></p>
+  <p><b>Try to light all eight tubes. You have four neutrons.</b></p>
   <h2>The tubes</h2>
   <p>Eight test tubes hold what the chemists found. Every element has a number, its place in the table: barium is 56, uranium 92. A tube lights when one of your pieces stands in its column, because elements in one column act alike in chemistry. The five dashed tubes were filed as brand-new elements, 93 to 97.</p>
   <h2>The cut</h2>
@@ -217,7 +205,7 @@ svg .bang{font-family:'Bangers',sans-serif}
   function closeHelp() { $('help').classList.remove('on'); }
   function openAbout() { $('about').classList.add('on'); window.scrollTo(0, 0); }
   function closeAbout() { $('about').classList.remove('on'); }
-  ['b-help-drops', 'b-help-shelf', 'b-help-bench'].forEach(function (id) { $(id).onclick = function () { openHelp(id); }; });
+  ['b-help-drops', 'b-help-bench'].forEach(function (id) { $(id).onclick = function () { openHelp(id); }; });
   $('b-help-close').onclick = closeHelp; $('b-help-close2').onclick = closeHelp;
   $('b-about-start').onclick = openAbout; $('b-about-end').onclick = openAbout;
   $('b-about-close').onclick = closeAbout; $('b-about-close2').onclick = closeAbout;
@@ -361,25 +349,11 @@ svg .bang{font-family:'Bangers',sans-serif}
   function movePiece(g, Z) { var p = cellXY(Z); g.setAttribute('transform', 'translate(' + (p.x + TB.cw / 2) + ' ' + (p.c.strip ? 11 : p.y + 11) + ')'); g.querySelector('text').textContent = String(Z); }
   function colNames(col) { return [19 + col, 37 + col, col === 0 ? 55 : col === 1 ? 56 : col === 2 ? 57 : 69 + col].map(M.nameOf); }
 
-  // ---------- THE SHELF (briefing: tap a tube, see its column) ----------
-  var T0 = null;
+  // ---------- tube facts (tap a tube in the table) ----------
   function infoFor(t) {
     if (t.byHold) return '<b>Uranium, 24 min</b> is uranium itself. It lights only when a cut fails: then the drop keeps its neutron and becomes uranium-239.';
     var like = t.label.replace('like ', '');
     return '<b>Acts like ' + like + '</b>' + (M.isDashed(t.cellZ) ? ', so the chemists filed it as element ' + t.cellZ : '') + '. Its column holds ' + colNames(t.col).join(', ') + '. A piece of any of them would act the same.';
-  }
-  function pickTube(id) {
-    var t = M.tubeById(C.TUBES_U, id);
-    Object.keys(T0.stripes).forEach(function (k) { T0.stripes[k].classList.toggle('pick', k === id); });
-    document.querySelectorAll('#shelf0 .card').forEach(function (c) { c.classList.toggle('pick', c.getAttribute('data-id') === id); });
-    $('info0').innerHTML = infoFor(t);
-  }
-  function showShelf() {
-    T0 = buildTable($('tablesvg0'), C.TUBES_U, C.URANIUM.Z, true, function (t) { pickTube(t.id); });
-    $('shelf0').innerHTML = cardsHTML(C.TUBES_U);
-    document.querySelectorAll('#shelf0 .card').forEach(function (c) { c.style.cursor = 'pointer'; c.addEventListener('click', function () { pickTube(c.getAttribute('data-id')); }); });
-    $('info0').innerHTML = 'Tap a tube to see its column.';
-    show('s-shelf');
   }
 
   // ---------- THE BENCH ----------
@@ -414,7 +388,7 @@ svg .bang{font-family:'Bangers',sans-serif}
   function beginStage() {
     var sg = S.stages[S.i];
     S.st = M.newStage(sg.nuc, sg.tubes, sg.n, S.seed + S.i * 7919);
-    TP = buildTable($('tablesvg'), sg.tubes, sg.nuc.Z, true, function (t) { $('cap').textContent = 'Tube "' + t.label + '", filed as ' + t.filed + '.' + (S.st.lit[t.id] ? ' Lit: it is ' + M.nameOf(S.st.lit[t.id].atZ) + '.' : ''); });
+    TP = buildTable($('tablesvg'), sg.tubes, sg.nuc.Z, true, function (t) { $('cap').innerHTML = infoFor(t) + (S.st.lit[t.id] ? ' <b>Lit:</b> it is ' + M.nameOf(S.st.lit[t.id].atZ) + '.' : ''); });
     drawDrop(); $('shelf1').innerHTML = cardsHTML(sg.tubes); setShelfCount();
     setLine(Math.round(sg.nuc.Z / 2));
     $('said1').innerHTML = '<p>' + M.coachWords(S.st) + '</p>';
@@ -626,10 +600,9 @@ svg .bang{font-family:'Bangers',sans-serif}
   }
   $('b-split').onclick = commit;
   $('b-next').onclick = nextNeutron;
-  $('b-begin').onclick = showShelf;
+  $('b-begin').onclick = startGame;
   $('b-why').onclick = openWhy;
   $('b-back0').onclick = function () { show('s-start'); };
-  $('b-tobench').onclick = startGame;
   $('b-again').onclick = function () { show('s-start'); };
   window.__game = { S: S, startGame: startGame, setLine: setLine };
 })();
