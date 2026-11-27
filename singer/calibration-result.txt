@@ -5,34 +5,37 @@ ok   ordering on aware: chimp/mouse > infant — p. 110: adult apes, cats, mice 
 ok   ordering on aware: chimp/dog/pig > braindam/infant/disab — p. 113: brain-damaged humans, infants and permanently retarded humans are below many non-humans in awareness, self-consciousness, intelligence and sentience
 ok   ordering on reason: chimp/pig/dog > braindam/infant — p. 113: the same passage, intelligence
 ok   ordering on reason: adult > infant/braindam/disab — p. 113, Benn: the rational man and the imbecile; p. 106: the infant
-ok   the four subjects are the paper's: the baby, the hurt grown-up, the chimpanzee, the mouse
-ok   every subject can suffer in the paper's reading (suffer mark 10)
-ok   all 256 lines x 16 answer sets get a pattern, a shape, a name, words for each rule, Suffer words and a verdict; thresholds round-trip; Suffer objects exactly when it should — 0 problems
-ok   patterns: refuse 1, equal 3, and the rest species / reverse / mixed — {"equal":3,"mixed":144,"reverse":54,"species":54,"refuse":1}
-ok   every species-pattern line draws an objection from all three rules with marks (54 such lines) — 54 of 54
-ok   all six shapes occur — {"equal-no":45,"singer":3,"own":2672,"line":496,"species":864,"refuse":16}
-ok   the paper's own case, the chimpanzee to save a life and the baby only for a thousand, is species and no rule agrees
-ok   the mouse alone, to save a life, is species: Aware and Reason object on marks, Talk on a tie
-ok   people before animals, hurt grown-up first, is a Reason line
-ok   all four at the same rung, all can suffer, is Singer's line; with one "no" it is equal-no
-ok   nobody at any price is refuse, and its verdict points to Foot
-ok   robustness: with random marks that keep only the paper's orderings, Aware objects to every species-pattern line — 500 of 500
+ok   the three menus hold all ten creatures, each once
+ok   each menu has a person and an animal
+ok   the third menu is the paper's own test: the baby, to save many lives, with Bentham's dog beside it
+ok   every being but the stone can suffer in the paper's reading
+ok   the team's choices are explained by Species and by no rule with marks
+ok   Suffer objects to the team's choices with Singer's facts
+ok   all who can suffer from one life on, the stone for free, is Singer's line
+ok   nobody who can suffer, at any price, is refuse, and its verdict points to Foot
+ok   the hurt grown-up, the mouse and the stone first, then the baby, is explained by Reason (and the others)
+ok   the dog used to save a thousand lives and the baby spared draws an objection from Reason, Talk and Aware
+ok   the chimpanzee used to save a life and the hurt grown-up spared draws an objection from Reason, Talk and Aware
+ok   all 1024 tick patterns x 512 answer sets get a pattern, a shape, a name, words for each rule, Suffer words and a verdict; the rationalisability test matches a brute-force search for rising cutoffs; Suffer objects exactly when it should — 0 problems
+ok   patterns: refuse 2 (nothing, or the stone alone), all 1, the rest mixed — {"refuse":2,"mixed":1021,"all":1}
+ok   the stone is free: ticking it alone is refuse, and with the baby to save a thousand lives, every rule still agrees
+ok   all six shapes occur — {"refuse":1024,"equal-no":77636,"own":310460,"line":36864,"species":95232,"singer":3072}
+ok   robustness: with random marks that keep only the paper's orderings, no rule with marks explains the team's choices — 500 of 500
 ok   cast restored
 ok   three rungs of rising stakes, three stories each, and a fixed cost
 ok   stories draw reproducibly, and seed 0 gives the first of each rung
 
-Shapes over 256 lines x 16 answer sets:
-  equal-no  45
-  singer    3
-  own       2672
-  line      496
-  species   864
-  refuse    16
-Patterns over 256 lines:
-  equal     3
-  mixed     144
-  reverse   54
-  species   54
-  refuse    1
+Shapes over 1024 tick patterns x 512 answer sets:
+  refuse    1024
+  equal-no  77636
+  own       310460
+  line      36864
+  species   95232
+  singer    3072
+Tick patterns by how many rules with marks explain them:
+  0 rules: 944
+  1 rules: 22
+  2 rules: 18
+  3 rules: 40
 
 all checks passed

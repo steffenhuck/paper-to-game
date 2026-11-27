@@ -265,3 +265,17 @@ The questionnaire engine (tick whose pain counts, then rules inspect the ticks) 
 **Checked.** 256 lines x 16 answer sets, all named and worded; every species-pattern line draws an objection from all three rules; Aware's objection survives 500 random casts that keep only the paper's orderings. Five scripted sessions at phone and laptop width.
 
 **What we were least sure about.** The top rung (a thousand lives) as high enough to move most players to tick a person; the verdict's length, which repeats each rule's full sentence; the Talk rule's tie objection (baby and hurt grown-up both at 0), which is correct but may read as pedantic.
+
+## 28. Revision 9, 27 November 2026: three menus, all ten creatures, and a rationalisability test
+
+The author's two observations on revision 8: with the same four on offer every time, the first experiment has one obvious answer, the mouse; and the rule screens had nothing to tap. His proposal: three experiments with different casts, composed so that all ten creatures appear, the stone included; then an intermediate verdict, can the player's choices be rationalised, and if one criterion does so, say which; then the three aspects.
+
+**The engine.** Each creature is on one menu. A rule with marks explains the three choices if there are rising cutoffs, one per experiment, that reproduce them; equivalently, no creature is used at some stakes while a creature with a lower or equal mark is spared at the same or higher stakes. That is a revealed-preference test across three menus, and it uses all 45 pairs though the menus do not overlap. Species is tested as the team's rule (person 1, animal 0; only a person used while an animal is spared is a violation, since the rule orders neither team internally). Suffer is tested with the player's answers as marks (only beings that can suffer are constrained, and among them any difference is a violation; whatever cannot suffer is free). The stone is free under every rule.
+
+**The menus.** Fixed: {grown-up who cannot learn much, horse, mouse, stone} for a child's year of illness; {hurt grown-up, chimpanzee, pig} for one life; {grown-up, baby, dog} for a thousand lives. The third is the paper's own test with Bentham's dog beside the baby; the second is the paper's follow-up beside the apes; the first is Benn's imbecile beside the horse and the mouse. Fixed menus keep the calibration exhaustive (1024 x 512) and the wording checkable; the stories still rotate.
+
+**The screens.** What you did (three choices side by side, ten rows, three columns), then "Let's try to make sense of what you did" with the count of rules that explain all three, not their names; then each rule asks the player to guess, agrees or objects, before revealing, with cutoffs as three red lines or the worst pair circled; then "can they suffer?" for the nine; then the name (same six shapes, with Species and Suffer now tested as rules rather than by pattern), the sponge, Singer's answer, and the verdict.
+
+**Why the guess.** It gives the player one real tap per rule screen and asks for the skill the paper wants: reading whether a rule could have produced your behaviour. Stating the count first does not spoil it; it sets the puzzle.
+
+**What we were least sure about.** Whether an eleven-year-old can read a ten-row, three-column board; the tie objections (Talk cannot tell the baby from the hurt grown-up), which are correct and may read as pedantic; and the stone, which is a joke the first time and the point the second.
