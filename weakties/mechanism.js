@@ -4,17 +4,16 @@
 //
 // Rules, in the words the screen uses:
 //   The town: five circles of people. Inside a circle everyone sees everyone often. A few dashed lines join circles.
-//   Your week: seven evenings; each person you know gets none, one or two. Two is "often", one is "now and then", none is "rarely"
-//   (the paper's own survey categories, p. 1371). A tie never lapses: someone you once knew is a dashed line for ever.
+//   Your week: seven evenings; each person you know gets none, one or two. Two makes the line "often" (thick), one "now and then"
+//   (thin): the paper's own survey categories, p. 1371. A line is a state that lasts: a line you do not tend this week thins by one
+//   step, thick to thin, thin to dashed ("rarely"), and never vanishes: someone you once knew is a dashed line for ever.
+//   At the start your three friends at Home are thick lines and the eight others dashed.
 //   The town reacts: two people you see often come to know each other (the forbidden triad, Fig. 1, p. 1363, exaggerated as the
 //   paper does to "never occurs"); a person you see often introduces you to one of their circle (Gans's experience, p. 1374);
 //   once a week you run into someone by chance (p. 1372, "chance meetings ... reactivate such ties").
 //   News: each week six openings arise, each at one person. Whoever hears passes it on to each neighbour: on a thick line always,
 //   on a thin line usually, on a dashed line sometimes (the motivation of close ties, p. 1371, weighed against structure), and a
 //   little less at every hand it has passed through (n. 11, p. 1366). You keep what you hear and do not pass it on.
-//   The close: after the last week, a bet. One more week of news with every line dashed (no evening on anyone): how many of the
-//   seven reach you? Then it is watched. Not counted in the score. The paper's line (p. 1372): people receive crucial information from
-//   individuals whose very existence they have forgotten; the Boston table's "rarely" row.
 //   Score: distinct openings you heard of, as a share of what could have been heard on this town's news: the better of the best
 //   three weeks found with the news known in advance (hindsight) and your own run, so the share never exceeds 100. The verdict counts, for each, how often you saw the person who told you first
 //   (Boston table, p. 1371) and how many hands it passed through before you (p. 1372).
@@ -31,8 +30,8 @@ var CONFIG = {
                                    //   the other party too: a person you see often gives you two of their evenings and sees their own circle less:
                                    //   their lines there go from thick to thin for that week. Ours in form; without it a strong bridge costs nothing (memo, section 18)
   CHANCE_FROM_WEEK: 2,             // our choice: week one is the circle as it is; chance meetings begin in week two
-  BET_OPTIONS: [[0, 0], [1, 2], [3, 4], [5, 7]],  // our choice: the four answers to the closing question (how many of seven reach you with every line dashed)
-  BET_LABELS: ['none', 'one or two', 'three or four', 'five or more'],
+  DECAY: true,                     // the paper's premise in form (p. 1361: strength is time): a line you do not tend this week thins by one step.
+                                   //   Ours in form; without it a thick line would be free to keep (revision 4)
   BANDS: [85, 60],                 // our choice: the score's three bands, as a share of what could have been heard (85 and up; 60 to 85; under 60)
   BEST_PLAN: 'spreader',           // the best plan without foreknowledge: one evening to one person in each circle, no one twice; confirmed by
                                    //   searching every legal first week over 300 towns (memo, revision 3; calibration 10)
@@ -83,11 +82,14 @@ function townTies() { // the ties that are not yours: a map key -> category
   return t;
 }
 function catOf(evenings) { return evenings >= CONFIG.CAP ? 'often' : (evenings >= 1 ? 'occ' : 'rare'); }
+function down(cat) { return cat === 'often' ? 'occ' : 'rare'; }
+function weekCat(s, n, ev) { var e = (ev && ev[n]) || 0; if (e >= 1) return catOf(e); return CONFIG.DECAY ? down(s.strength[n] || 'rare') : 'rare'; } // this week's line
 function catWord(cat) { return cat === 'often' ? 'often' : (cat === 'occ' ? 'now and then' : 'rarely'); }
 
 // ---------- a game ----------
 function newGame(seed) {
-  var s = { seed: String(seed), week: 1, known: CONFIG.KNOWN_AT_START.slice(), extra: {}, weeks: [], heardAll: {} };
+  var s = { seed: String(seed), week: 1, known: CONFIG.KNOWN_AT_START.slice(), extra: {}, weeks: [], heardAll: {}, strength: {} };
+  s.known.forEach(function (n) { s.strength[n] = circleOf(n) === 'home' ? 'often' : 'rare'; });
   // extra: ties the town added among people (closures), key -> 'rare'
   return s;
 }
@@ -99,9 +101,9 @@ function legalWeek(s, ev) { // ev: {name: evenings}
 function allTies(s, ev) { // every tie in the town this week, key -> category, including yours
   var t = townTies();
   for (var k in s.extra) t[k] = s.extra[k];
-  s.known.forEach(function (n) { t[key(CONFIG.YOU, n)] = catOf(ev[n] || 0); });
+  s.known.forEach(function (n) { t[key(CONFIG.YOU, n)] = weekCat(s, n, ev); });
   if (CONFIG.TIME_IS_FINITE) s.known.forEach(function (n) {
-    if (catOf(ev[n] || 0) !== 'often') return;
+    if (weekCat(s, n, ev) !== 'often') return;
     var c = circleOf(n); if (c === 'home') return; // your evenings with Ann are the Home circle's own evenings
     CONFIG.CIRCLES.filter(function (x) { return x.id === c; })[0].people.forEach(function (mate) { if (mate !== n && t[key(n, mate)] === 'often') t[key(n, mate)] = 'occ'; });
   });
@@ -149,20 +151,12 @@ function spread(seed, week, pieceIndex, origin, ties) {
   return { origin: origin, originCircle: circleOf(origin), rounds: rounds, heard: heardHop !== null, hands: heardHop === null ? null : heardHop - 1, tellers: tellers, first: firstTeller, reached: Object.keys(hopOf).length };
 }
 
-// The closing bet: a fresh week of news, every line dashed, nothing changed in the town, not counted. Does not mutate s.
-function betWeek(s) {
-  var ties = allTies(s, {}), rec = { week: CONFIG.WEEKS + 1, bet: true, evenings: {}, closures: [], intros: [], chance: null, pieces: [], heard: 0, total: CONFIG.NEWS_PER_WEEK, ties: ties };
-  drawOrigins(s.seed, CONFIG.WEEKS + 1).forEach(function (o, idx) { var p = spread(s.seed, CONFIG.WEEKS + 1, idx, o, ties); p.index = idx; rec.pieces.push(p); if (p.heard) rec.heard++; });
-  return rec;
-}
-function betBand(n) { for (var i = 0; i < CONFIG.BET_OPTIONS.length; i++) if (n >= CONFIG.BET_OPTIONS[i][0] && n <= CONFIG.BET_OPTIONS[i][1]) return i; return CONFIG.BET_OPTIONS.length - 1; }
-
 // The town reacts to your week, then the news comes. Mutates s and returns the week's record.
 function playWeek(s, ev) {
   if (!legalWeek(s, ev)) throw new Error('illegal week');
-  var week = s.week, rec = { week: week, evenings: {}, closures: [], intros: [], chance: null, pieces: [], heard: 0, total: CONFIG.NEWS_PER_WEEK };
-  s.known.forEach(function (n) { rec.evenings[n] = ev[n] || 0; });
-  var often = s.known.filter(function (n) { return catOf(ev[n] || 0) === 'often'; });
+  var week = s.week, rec = { week: week, evenings: {}, closures: [], intros: [], chance: null, pieces: [], heard: 0, total: CONFIG.NEWS_PER_WEEK, thinned: [], before: Object.assign({}, s.strength) };
+  s.known.forEach(function (n) { rec.evenings[n] = ev[n] || 0; var c = weekCat(s, n, ev); if (!(ev[n] > 0) && c !== s.strength[n]) rec.thinned.push({ who: n, from: s.strength[n], to: c }); });
+  var often = s.known.filter(function (n) { return weekCat(s, n, ev) === 'often'; });
   // 1. closure: two people you see often come to know each other (the forbidden triad never occurs)
   var ties0 = allTies(s, ev);
   for (var i = 0; i < often.length; i++) for (var j = i + 1; j < often.length; j++) {
@@ -176,16 +170,18 @@ function playWeek(s, ev) {
     if (cands.length) { var who = cands[Math.floor(R() * cands.length)]; s.known.push(who); rec.intros.push({ by: n, who: who, circle: c }); }
   });
   // 3. a chance meeting: someone from a circle you have no line into, if any; otherwise anyone you do not know
+  s.known.forEach(function (n) { if (!s.strength[n]) s.strength[n] = 'rare'; }); // the introduced: a dashed line
   if (week >= CONFIG.CHANCE_FROM_WEEK) {
     var R2 = rng(s.seed + '|chance|' + week), reached = reachedCircles(s);
     var far = CONFIG.CIRCLES.filter(function (c) { return reached.indexOf(c.id) < 0; });
     var pool = far.length ? far[Math.floor(R2() * far.length)].people : everyone().filter(function (p) { return s.known.indexOf(p) < 0; });
     pool = pool.filter(function (p) { return s.known.indexOf(p) < 0; });
-    if (pool.length) { var met = pool[Math.floor(R2() * pool.length)]; s.known.push(met); rec.chance = { who: met, circle: circleOf(met), far: far.length > 0 }; }
+    if (pool.length) { var met = pool[Math.floor(R2() * pool.length)]; s.known.push(met); s.strength[met] = 'rare'; rec.chance = { who: met, circle: circleOf(met), far: far.length > 0 }; }
   }
   // 4. the news: ties as they stand after the town reacted; new acquaintances are dashed lines from now (no evenings yet)
   var ties = allTies(s, ev);
   rec.ties = ties;
+  s.known.forEach(function (n) { s.strength[n] = ties[key(CONFIG.YOU, n)]; }); // the line you have after this week
   var origins = drawOrigins(s.seed, week);
   origins.forEach(function (o, idx) {
     var p = spread(s.seed, week, idx, o, ties); p.index = idx; rec.pieces.push(p);
@@ -230,7 +226,7 @@ var STRATEGIES = {
 };
 function ceiling(s) { return Math.max(tally(runStrategy(s.seed, STRATEGIES.hindsight)).heard, tally(s).heard); }
 function scoreOf(s) { var c = ceiling(s), h = tally(s).heard, p = c ? 100 * h / c : 0; return { heard: h, ceiling: c, pct: p, band: p >= CONFIG.BANDS[0] ? 2 : (p >= CONFIG.BANDS[1] ? 1 : 0) }; }
-function lightClone(s) { return { seed: s.seed, week: s.week, known: s.known.slice(), extra: Object.assign({}, s.extra), weeks: [], heardAll: {} }; }
+function lightClone(s) { return { seed: s.seed, week: s.week, known: s.known.slice(), extra: Object.assign({}, s.extra), weeks: [], heardAll: {}, strength: Object.assign({}, s.strength) }; }
 function heardOf(s, ev) { return playWeek(lightClone(s), ev).heard; }
 function hindsightWeek(s) { // move one evening at a time while it helps; with hindsight on this week's draw and coins
   var best = Object.assign({}, STRATEGIES.spreader(s)), bestH = heardOf(s, best), improved = true, guard = 0;
@@ -253,4 +249,4 @@ function allWeeks(known) {
   return out;
 }
 
-if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: newGame, playWeek: playWeek, isOver: isOver, legalWeek: legalWeek, allTies: allTies, townTies: townTies, circleOf: circleOf, circleLabel: circleLabel, everyone: everyone, catOf: catOf, catWord: catWord, key: key, tally: tally, shares: shares, STRATEGIES: STRATEGIES, runStrategy: runStrategy, betWeek: betWeek, betBand: betBand, ceiling: ceiling, scoreOf: scoreOf, hindsightWeek: hindsightWeek, heardOf: heardOf, lightClone: lightClone, allWeeks: allWeeks, drawOrigins: drawOrigins, spread: spread, reachedCircles: reachedCircles, sizeOf: sizeOf, unit: unit, rng: rng };
+if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: newGame, playWeek: playWeek, isOver: isOver, legalWeek: legalWeek, allTies: allTies, townTies: townTies, circleOf: circleOf, circleLabel: circleLabel, everyone: everyone, catOf: catOf, catWord: catWord, key: key, tally: tally, shares: shares, STRATEGIES: STRATEGIES, runStrategy: runStrategy, weekCat: weekCat, down: down, ceiling: ceiling, scoreOf: scoreOf, hindsightWeek: hindsightWeek, heardOf: heardOf, lightClone: lightClone, allWeeks: allWeeks, drawOrigins: drawOrigins, spread: spread, reachedCircles: reachedCircles, sizeOf: sizeOf, unit: unit, rng: rng };

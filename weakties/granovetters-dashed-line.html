@@ -82,7 +82,7 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
     <line x1="8" y1="36" x2="150" y2="36" stroke="#14171B" stroke-width="1.25"/><text x="160" y="40" font-size="12" fill="#5B6773" font-family="Archivo,Helvetica,Arial">now and then</text>
     <line x1="8" y1="58" x2="150" y2="58" stroke="#14171B" stroke-width="1.25" stroke-dasharray="4 4"/><text x="160" y="62" font-size="12" fill="#5B6773" font-family="Archivo,Helvetica,Arial">rarely: a dashed line</text>
   </svg>
-  <p class="acts">You are looking for a job in a town of seven circles. Three weeks; each week you give seven evenings to the people you know. The town reacts. Then the week's news travels along the lines, and you watch which of it reaches you, and from whom. At the end, one bet.</p>
+  <p class="acts">You are looking for a job in a town of seven circles. Three weeks; each week you give seven evenings to the people you know. The town reacts. Then the week's news travels along the lines, and you watch which of it reaches you, and from whom.</p>
   <p class="aim">Spend your evenings so that you hear of as many job openings as you can.</p>
   <button class="btn solid" id="b-begin">Start</button>
   <div class="row2"><button class="btn" id="b-help-start">How to play</button><button class="btn" id="b-about-start">About</button></div>
@@ -99,7 +99,7 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
     <div class="left"><span>Evenings left</span><span class="sq" id="wk-sq"></span><span id="wk-leftn">7</span></div>
     <div class="chips" id="chips"></div>
     <button class="btn solid" id="b-spend">Spend the week</button>
-    <div class="rulebox" id="wk-rules"><b>Your lines are black:</b> thick, you see them often; thin, now and then; dashed, rarely. A line never vanishes. <b>Grey lines</b> are everyone else's. <b>News</b> passes along lines: on a thick line always, on a thin line usually (three times in four), on a dashed line sometimes (one in three), and a little less at every pair of hands. <b>The town reacts:</b> two people you see often come to know each other; a person you see often introduces you to someone from their circle, and sees their own circle less that week.</div>
+    <div class="rulebox" id="wk-rules"><b>Your lines are black:</b> thick, you see them often; thin, now and then; dashed, rarely. Two evenings make a line thick, one makes it thin; a line you give no evening thins by one step, and never vanishes. <b>Grey lines</b> are everyone else's. <b>News</b> passes along lines: on a thick line always, on a thin line usually (three times in four), on a dashed line sometimes (one in three), and a little less at every pair of hands. <b>The town reacts:</b> two people you see often come to know each other; a person you see often introduces you to someone from their circle, and sees their own circle less that week.</div>
   </div>
   <div id="wk-play" style="display:none">
     <div class="voice" id="voice"></div>
@@ -109,15 +109,11 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
     <div class="result"><div class="big" id="res-big"></div><div id="res-text"></div><div class="weeks" id="res-weeks"></div></div>
     <button class="btn solid" id="b-next">Next week</button>
   </div>
-  <div id="wk-bet" style="display:none">
-    <div class="result"><div class="big">One more week of news is coming. Suppose you spend no evening on anyone: every line dashed, as the map shows. How many of the seven will reach you?</div><div class="small" style="margin-top:4px">Tap your answer, then watch. This week is not counted.</div></div>
-    <div class="chips" id="bet-chips"></div>
-  </div>
 </section>
 
 <!-- VERDICT -->
 <section id="s-end" class="screen verdict">
-  <div class="kicker">After three weeks and a bet</div>
+  <div class="kicker">After three weeks</div>
   <div class="score"><div class="pct" id="v-pct"></div><div class="scoretxt" id="v-big"></div></div>
   <div class="scorebar"><div id="v-fill"></div></div>
   <p id="v-fate"></p>
@@ -145,15 +141,13 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
   <h1>How to play</h1>
   <p><b>Spend your evenings so that you hear of as many job openings as you can.</b></p>
   <h2>The town</h2>
-  <p>Seven circles of people, drawn as rings of dots. Inside a circle everyone sees everyone often. A few grey dashed lines join one circle to another. You are the big dot in the middle, in Home, with Ann, Ben and Cal. Your lines are black: the people with names are the people you know. At the start you see your three friends often (thick lines) and hardly see the eight others (dashed lines): someone from the firm you used to work at, from college, from your street, the choir, the club, your cousins.</p>
+  <p>Seven circles of people, drawn as rings of dots. Inside a circle everyone sees everyone often. A few grey dashed lines join one circle to another. You are the big dot in the middle, in Home, with Ann, Ben and Cal. Your lines are black: the people with names are the people you know. At the start you see your three friends often (thick lines) and hardly see the eight others (dashed lines): someone from the firm you used to work at, from college, from your street, the choir, the club, your cousins. A thick line takes two evenings a week to stay thick.</p>
   <h2>A week</h2>
-  <p>You have seven evenings. Tap a name, on the map or in the row of names, to give that person one evening; tap again for two; tap again for none. One evening makes the line thin (you see them now and then). Two make it thick (often). None leaves it dashed (rarely). The map shows the lines as they will be before you commit. Every week starts from none. Then tap <b>Spend the week</b>.</p>
+  <p>You have seven evenings. Tap a name, on the map or in the row of names, to give that person one evening; tap again for two; tap again for none. One evening makes the line thin (you see them now and then). Two make it thick (often). A line you give no evening thins by one step that week: thick to thin, thin to dashed; a dashed line stays dashed. The map shows a tapped line as it will be; the others as they are now. Then tap <b>Spend the week</b>, or <b>Stay in all week</b> if you gave no one an evening.</p>
   <h2>What the town does</h2>
   <p>Two people you see often come to know each other: a new grey dashed line between them. A person you see often introduces you to someone from their circle: a new name on your map, with a dashed line to you. A person outside Home whom you see often has given you two of their evenings, so their lines in their own circle go thin that week. And once a week you run into someone by chance: another new name. A line, once there, never vanishes.</p>
   <h2>The news</h2>
   <p>Seven openings a week, each first heard by one person, who turns blue. Whoever hears passes it on to each person they are tied to: on a thick line always, on a thin line usually (three times in four), on a dashed line sometimes (one in three), and a little less at every pair of hands it has passed through. The blue mark travels along the lines; where it stops short, that person did not mention it. You keep what you hear. The week's line tells you who told you, who told you the same thing again, and what never reached you.</p>
-  <h2>The bet</h2>
-  <p>After the third week, one bet: one more week of news with no evening spent on anyone, every line dashed. Say how many of the seven will reach you, then watch. It is not counted.</p>
   <h2>The verdict</h2>
   <p>Your score: the openings you heard of in three weeks as a share of what could have been heard on this town's news (the best three weeks we could find knowing the news in advance, or your own run if it did better), in three bands of blue. Then the same news five ways: you, the best plan without foreknowledge, your circle, nobody, and the news known in advance; who told you first, against the paper's own table; and the paper's two towns, the West End and Charlestown.</p>
   <div class="close"><button class="btn" id="b-help-close2">Back</button></div>
@@ -167,7 +161,7 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
   <h2>What the paper says</h2>
   <p>The strength of a tie between two people is a combination of the time they spend together, the emotional intensity, the intimacy and the services they do each other (p. 1361). The stronger the tie between you and a friend, the more of your other friends you share: strong ties take time, bring your friends into each other's company, and run between similar people, and once two of your close friends know of each other, anything short of friendship between them is a strain (p. 1362). Pushed to the limit, for exposition, this says that a triangle with two strong sides and no third side never occurs (Fig. 1, p. 1363). It follows that no strong tie can be the only path between two groups, so whatever flows between groups flows along weak ties; and that news passed through weak ties reaches more people over greater social distance, provided the urge to retell it fades a little at every retelling, as it must in any real network (pp. 1364–1366). At the level of one person: the people you see most are inside your circle and know what you know; the person you hardly see is in another circle and is your line into it. Of 54 people in a Boston suburb who had found their job through a contact, 17 per cent saw the contact often, 56 per cent now and then, 28 per cent rarely, and in 84 per cent of 64 cases the news had come straight from the employer or through one intermediary (pp. 1371–1372). At the level of a community: a neighbourhood of close circles with no weak ties between them cannot organise, however warm the circles; the West End of Boston could not resist the renewal that demolished it (pp. 1373–1375).</p>
   <h2>What the game does with it</h2>
-  <p>You are the job changer of the paper's survey, and your one control is the paper's one measured variable: how often you see each person. Seven evenings a week on the people you know; two evenings is "often", one is "now and then", none is "rarely", the survey's own categories. The town reacts as the paper says it does: two people you see often come to know each other; a person you see often introduces you to their circle (the paper quotes Gans, who was drawn into his first contact's circle in the West End); and a chance meeting reactivates a tie once a week, as the paper's respondents reported. Then the week's news travels along the lines. After the third week, one bet: a week of news with no evening spent on anyone, every line dashed; how much still gets through. The verdict scores your three weeks as a share of what could have been heard on this town's news (the best three weeks found with the news known in advance, or your own run if it did better), shows the same news five ways (you, the best plan without foreknowledge, your circle, nobody, the news known in advance), and reads who told you first against the paper's Boston table. The paper's second table, how many pairs of hands the news passed through (39 per cent straight from the employer, 45 through one intermediary, 13 through two, 3 through more), is in the calibration and not on the verdict: the toy reproduces its shape (five in six within one pair of hands) but not its middle.</p>
+  <p>You are the job changer of the paper's survey, and your one control is the paper's one measured variable: how often you see each person. Seven evenings a week on the people you know; two evenings make a line "often", one "now and then", the survey's own categories; a line you give no evening thins by one step that week and never vanishes, so a close friend costs two evenings a week to keep, which is the paper's premise that strength is time. The town reacts as the paper says it does: two people you see often come to know each other; a person you see often introduces you to their circle (the paper quotes Gans, who was drawn into his first contact's circle in the West End); and a chance meeting reactivates a tie once a week, as the paper's respondents reported. Then the week's news travels along the lines. The verdict scores your three weeks as a share of what could have been heard on this town's news (the best three weeks found with the news known in advance, or your own run if it did better), shows the same news five ways (you, the best plan without foreknowledge, your circle, nobody, the news known in advance), and reads who told you first against the paper's Boston table. The paper's second table, how many pairs of hands the news passed through (39 per cent straight from the employer, 45 through one intermediary, 13 through two, 3 through more), is in the calibration and not on the verdict: the toy reproduces its shape (five in six within one pair of hands) but not its middle.</p>
   <h2>Mechanism kind and claim boundaries</h2>
   <p><b>Toy.</b> The game runs a model built to illustrate the paper's argument, calibrated so that a mixed week reproduces the paper's two tables. The town (seven circles, one of them yours, every circle a clique, nine dashed lines among the outer circles and none into Home but yours), the probabilities with which a person passes news on (always on a thick line, three times in four on a thin one, one in three on a dashed one, and a fifth less at every pair of hands), the rate of news, the rule that a person who gives you two evenings sees their own circle less, and the rates of introductions and chance meetings are ours. The paper says only that strong ties are more motivated and that retelling dampens.</p>
   <p><b>What the game demonstrates:</b> that under this game's assumptions, evenings spread across circles bring more distinct news than evenings kept in the circle, that the circle's news reaches you more than once, and that the pattern of who told you first, for a week like the paper's respondents', looks like the paper's table. <b>What the game assumes:</b> everything in the paragraph above, and that news is heard or not, with nothing about its quality. <b>What the paper establishes:</b> the argument from tie strength to bridges and diffusion, which it states as a hypothesis with the evidence it had; and the two Boston tables, from a small sample the paper itself calls exploratory. A run of this game is no evidence for the paper's claim about the world.</p>
@@ -175,7 +169,7 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
   <h2>What is left out</h2>
   <p>Emotional intensity, intimacy and services as parts of strength (the survey used time alone, and so does the game). Similarity as a reason for closure. The small-world studies, including the finding that chains from white senders to a Black target were completed twice as often when the first link was an acquaintance rather than a friend (pp. 1368–1369). Rapoport and Horvath's tracing of a school's friendship choices, where more children were reached through seventh and eighth choices than through first and second (p. 1369). The paper's remarks on transitivity models of small groups. The quality of a lead by the path it came along ("earmarked for one person", p. 1373): the verdict reports the hands, but every opening counts one. The community section is read on the end screen, not played.</p>
   <h2>Design memo, in brief</h2>
-  <p>Three concepts were written out: the week (you are the job changer; a town that reacts), the weave (you plan a neighbourhood's workplaces and clubs, and see whether a leaflet can cross it), and the leaflet (you are the news, tapping your way along lines on a screen with no words). The week was built because its control is the paper's own variable and its reaction is the paper's own mechanism; the leaflet's journey is kept as the week's animation. Look: a Swiss grid in winter, white, ink, one cold blue for news and nothing else, lines in the paper's own code, solid for strong and dashed for weak. Revised the same day after the author's first plays: chosen people ringed on the map; five weeks cut to three; the bet on the untended lines added as the close. The full memo, the mechanism file with every number tagged to its source, and the calibration check are in the repository folder <code>weakties/</code>.</p>
+  <p>Three concepts were written out: the week (you are the job changer; a town that reacts), the weave (you plan a neighbourhood's workplaces and clubs, and see whether a leaflet can cross it), and the leaflet (you are the news, tapping your way along lines on a screen with no words). The week was built because its control is the paper's own variable and its reaction is the paper's own mechanism; the leaflet's journey is kept as the week's animation. Look: a Swiss grid in winter, white, ink, one cold blue for news and nothing else, lines in the paper's own code, solid for strong and dashed for weak. Revised after the author's plays: chosen people ringed on the map; five weeks cut to three; a score against what could have been heard; lines made states that thin when untended, instead of every week starting from none; a closing bet tried and removed as too much of a quiz. The full memo, the mechanism file with every number tagged to its source, and the calibration check are in the repository folder <code>weakties/</code>.</p>
 
   <div class="close"><button class="btn" id="b-about-close2">Back</button></div>
 </div></div>
@@ -187,17 +181,16 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
 //
 // Rules, in the words the screen uses:
 //   The town: five circles of people. Inside a circle everyone sees everyone often. A few dashed lines join circles.
-//   Your week: seven evenings; each person you know gets none, one or two. Two is "often", one is "now and then", none is "rarely"
-//   (the paper's own survey categories, p. 1371). A tie never lapses: someone you once knew is a dashed line for ever.
+//   Your week: seven evenings; each person you know gets none, one or two. Two makes the line "often" (thick), one "now and then"
+//   (thin): the paper's own survey categories, p. 1371. A line is a state that lasts: a line you do not tend this week thins by one
+//   step, thick to thin, thin to dashed ("rarely"), and never vanishes: someone you once knew is a dashed line for ever.
+//   At the start your three friends at Home are thick lines and the eight others dashed.
 //   The town reacts: two people you see often come to know each other (the forbidden triad, Fig. 1, p. 1363, exaggerated as the
 //   paper does to "never occurs"); a person you see often introduces you to one of their circle (Gans's experience, p. 1374);
 //   once a week you run into someone by chance (p. 1372, "chance meetings ... reactivate such ties").
 //   News: each week six openings arise, each at one person. Whoever hears passes it on to each neighbour: on a thick line always,
 //   on a thin line usually, on a dashed line sometimes (the motivation of close ties, p. 1371, weighed against structure), and a
 //   little less at every hand it has passed through (n. 11, p. 1366). You keep what you hear and do not pass it on.
-//   The close: after the last week, a bet. One more week of news with every line dashed (no evening on anyone): how many of the
-//   seven reach you? Then it is watched. Not counted in the score. The paper's line (p. 1372): people receive crucial information from
-//   individuals whose very existence they have forgotten; the Boston table's "rarely" row.
 //   Score: distinct openings you heard of, as a share of what could have been heard on this town's news: the better of the best
 //   three weeks found with the news known in advance (hindsight) and your own run, so the share never exceeds 100. The verdict counts, for each, how often you saw the person who told you first
 //   (Boston table, p. 1371) and how many hands it passed through before you (p. 1372).
@@ -214,8 +207,8 @@ var CONFIG = {
                                    //   the other party too: a person you see often gives you two of their evenings and sees their own circle less:
                                    //   their lines there go from thick to thin for that week. Ours in form; without it a strong bridge costs nothing (memo, section 18)
   CHANCE_FROM_WEEK: 2,             // our choice: week one is the circle as it is; chance meetings begin in week two
-  BET_OPTIONS: [[0, 0], [1, 2], [3, 4], [5, 7]],  // our choice: the four answers to the closing question (how many of seven reach you with every line dashed)
-  BET_LABELS: ['none', 'one or two', 'three or four', 'five or more'],
+  DECAY: true,                     // the paper's premise in form (p. 1361: strength is time): a line you do not tend this week thins by one step.
+                                   //   Ours in form; without it a thick line would be free to keep (revision 4)
   BANDS: [85, 60],                 // our choice: the score's three bands, as a share of what could have been heard (85 and up; 60 to 85; under 60)
   BEST_PLAN: 'spreader',           // the best plan without foreknowledge: one evening to one person in each circle, no one twice; confirmed by
                                    //   searching every legal first week over 300 towns (memo, revision 3; calibration 10)
@@ -266,11 +259,14 @@ function townTies() { // the ties that are not yours: a map key -> category
   return t;
 }
 function catOf(evenings) { return evenings >= CONFIG.CAP ? 'often' : (evenings >= 1 ? 'occ' : 'rare'); }
+function down(cat) { return cat === 'often' ? 'occ' : 'rare'; }
+function weekCat(s, n, ev) { var e = (ev && ev[n]) || 0; if (e >= 1) return catOf(e); return CONFIG.DECAY ? down(s.strength[n] || 'rare') : 'rare'; } // this week's line
 function catWord(cat) { return cat === 'often' ? 'often' : (cat === 'occ' ? 'now and then' : 'rarely'); }
 
 // ---------- a game ----------
 function newGame(seed) {
-  var s = { seed: String(seed), week: 1, known: CONFIG.KNOWN_AT_START.slice(), extra: {}, weeks: [], heardAll: {} };
+  var s = { seed: String(seed), week: 1, known: CONFIG.KNOWN_AT_START.slice(), extra: {}, weeks: [], heardAll: {}, strength: {} };
+  s.known.forEach(function (n) { s.strength[n] = circleOf(n) === 'home' ? 'often' : 'rare'; });
   // extra: ties the town added among people (closures), key -> 'rare'
   return s;
 }
@@ -282,9 +278,9 @@ function legalWeek(s, ev) { // ev: {name: evenings}
 function allTies(s, ev) { // every tie in the town this week, key -> category, including yours
   var t = townTies();
   for (var k in s.extra) t[k] = s.extra[k];
-  s.known.forEach(function (n) { t[key(CONFIG.YOU, n)] = catOf(ev[n] || 0); });
+  s.known.forEach(function (n) { t[key(CONFIG.YOU, n)] = weekCat(s, n, ev); });
   if (CONFIG.TIME_IS_FINITE) s.known.forEach(function (n) {
-    if (catOf(ev[n] || 0) !== 'often') return;
+    if (weekCat(s, n, ev) !== 'often') return;
     var c = circleOf(n); if (c === 'home') return; // your evenings with Ann are the Home circle's own evenings
     CONFIG.CIRCLES.filter(function (x) { return x.id === c; })[0].people.forEach(function (mate) { if (mate !== n && t[key(n, mate)] === 'often') t[key(n, mate)] = 'occ'; });
   });
@@ -332,20 +328,12 @@ function spread(seed, week, pieceIndex, origin, ties) {
   return { origin: origin, originCircle: circleOf(origin), rounds: rounds, heard: heardHop !== null, hands: heardHop === null ? null : heardHop - 1, tellers: tellers, first: firstTeller, reached: Object.keys(hopOf).length };
 }
 
-// The closing bet: a fresh week of news, every line dashed, nothing changed in the town, not counted. Does not mutate s.
-function betWeek(s) {
-  var ties = allTies(s, {}), rec = { week: CONFIG.WEEKS + 1, bet: true, evenings: {}, closures: [], intros: [], chance: null, pieces: [], heard: 0, total: CONFIG.NEWS_PER_WEEK, ties: ties };
-  drawOrigins(s.seed, CONFIG.WEEKS + 1).forEach(function (o, idx) { var p = spread(s.seed, CONFIG.WEEKS + 1, idx, o, ties); p.index = idx; rec.pieces.push(p); if (p.heard) rec.heard++; });
-  return rec;
-}
-function betBand(n) { for (var i = 0; i < CONFIG.BET_OPTIONS.length; i++) if (n >= CONFIG.BET_OPTIONS[i][0] && n <= CONFIG.BET_OPTIONS[i][1]) return i; return CONFIG.BET_OPTIONS.length - 1; }
-
 // The town reacts to your week, then the news comes. Mutates s and returns the week's record.
 function playWeek(s, ev) {
   if (!legalWeek(s, ev)) throw new Error('illegal week');
-  var week = s.week, rec = { week: week, evenings: {}, closures: [], intros: [], chance: null, pieces: [], heard: 0, total: CONFIG.NEWS_PER_WEEK };
-  s.known.forEach(function (n) { rec.evenings[n] = ev[n] || 0; });
-  var often = s.known.filter(function (n) { return catOf(ev[n] || 0) === 'often'; });
+  var week = s.week, rec = { week: week, evenings: {}, closures: [], intros: [], chance: null, pieces: [], heard: 0, total: CONFIG.NEWS_PER_WEEK, thinned: [], before: Object.assign({}, s.strength) };
+  s.known.forEach(function (n) { rec.evenings[n] = ev[n] || 0; var c = weekCat(s, n, ev); if (!(ev[n] > 0) && c !== s.strength[n]) rec.thinned.push({ who: n, from: s.strength[n], to: c }); });
+  var often = s.known.filter(function (n) { return weekCat(s, n, ev) === 'often'; });
   // 1. closure: two people you see often come to know each other (the forbidden triad never occurs)
   var ties0 = allTies(s, ev);
   for (var i = 0; i < often.length; i++) for (var j = i + 1; j < often.length; j++) {
@@ -359,16 +347,18 @@ function playWeek(s, ev) {
     if (cands.length) { var who = cands[Math.floor(R() * cands.length)]; s.known.push(who); rec.intros.push({ by: n, who: who, circle: c }); }
   });
   // 3. a chance meeting: someone from a circle you have no line into, if any; otherwise anyone you do not know
+  s.known.forEach(function (n) { if (!s.strength[n]) s.strength[n] = 'rare'; }); // the introduced: a dashed line
   if (week >= CONFIG.CHANCE_FROM_WEEK) {
     var R2 = rng(s.seed + '|chance|' + week), reached = reachedCircles(s);
     var far = CONFIG.CIRCLES.filter(function (c) { return reached.indexOf(c.id) < 0; });
     var pool = far.length ? far[Math.floor(R2() * far.length)].people : everyone().filter(function (p) { return s.known.indexOf(p) < 0; });
     pool = pool.filter(function (p) { return s.known.indexOf(p) < 0; });
-    if (pool.length) { var met = pool[Math.floor(R2() * pool.length)]; s.known.push(met); rec.chance = { who: met, circle: circleOf(met), far: far.length > 0 }; }
+    if (pool.length) { var met = pool[Math.floor(R2() * pool.length)]; s.known.push(met); s.strength[met] = 'rare'; rec.chance = { who: met, circle: circleOf(met), far: far.length > 0 }; }
   }
   // 4. the news: ties as they stand after the town reacted; new acquaintances are dashed lines from now (no evenings yet)
   var ties = allTies(s, ev);
   rec.ties = ties;
+  s.known.forEach(function (n) { s.strength[n] = ties[key(CONFIG.YOU, n)]; }); // the line you have after this week
   var origins = drawOrigins(s.seed, week);
   origins.forEach(function (o, idx) {
     var p = spread(s.seed, week, idx, o, ties); p.index = idx; rec.pieces.push(p);
@@ -413,7 +403,7 @@ var STRATEGIES = {
 };
 function ceiling(s) { return Math.max(tally(runStrategy(s.seed, STRATEGIES.hindsight)).heard, tally(s).heard); }
 function scoreOf(s) { var c = ceiling(s), h = tally(s).heard, p = c ? 100 * h / c : 0; return { heard: h, ceiling: c, pct: p, band: p >= CONFIG.BANDS[0] ? 2 : (p >= CONFIG.BANDS[1] ? 1 : 0) }; }
-function lightClone(s) { return { seed: s.seed, week: s.week, known: s.known.slice(), extra: Object.assign({}, s.extra), weeks: [], heardAll: {} }; }
+function lightClone(s) { return { seed: s.seed, week: s.week, known: s.known.slice(), extra: Object.assign({}, s.extra), weeks: [], heardAll: {}, strength: Object.assign({}, s.strength) }; }
 function heardOf(s, ev) { return playWeek(lightClone(s), ev).heard; }
 function hindsightWeek(s) { // move one evening at a time while it helps; with hindsight on this week's draw and coins
   var best = Object.assign({}, STRATEGIES.spreader(s)), bestH = heardOf(s, best), improved = true, guard = 0;
@@ -436,7 +426,7 @@ function allWeeks(known) {
   return out;
 }
 
-if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: newGame, playWeek: playWeek, isOver: isOver, legalWeek: legalWeek, allTies: allTies, townTies: townTies, circleOf: circleOf, circleLabel: circleLabel, everyone: everyone, catOf: catOf, catWord: catWord, key: key, tally: tally, shares: shares, STRATEGIES: STRATEGIES, runStrategy: runStrategy, betWeek: betWeek, betBand: betBand, ceiling: ceiling, scoreOf: scoreOf, hindsightWeek: hindsightWeek, heardOf: heardOf, lightClone: lightClone, allWeeks: allWeeks, drawOrigins: drawOrigins, spread: spread, reachedCircles: reachedCircles, sizeOf: sizeOf, unit: unit, rng: rng };
+if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: newGame, playWeek: playWeek, isOver: isOver, legalWeek: legalWeek, allTies: allTies, townTies: townTies, circleOf: circleOf, circleLabel: circleLabel, everyone: everyone, catOf: catOf, catWord: catWord, key: key, tally: tally, shares: shares, STRATEGIES: STRATEGIES, runStrategy: runStrategy, weekCat: weekCat, down: down, ceiling: ceiling, scoreOf: scoreOf, hindsightWeek: hindsightWeek, heardOf: heardOf, lightClone: lightClone, allWeeks: allWeeks, drawOrigins: drawOrigins, spread: spread, reachedCircles: reachedCircles, sizeOf: sizeOf, unit: unit, rng: rng };
 
 </script>
 <script>
@@ -506,22 +496,23 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: n
 
   // ---------- the week screen ----------
   function show(id) { ['s-start', 's-week', 's-end'].forEach(function (s) { $(s).classList.toggle('on', s === id); }); window.scrollTo(0, 0); }
+  function displayTies() { var t = allTies(G, ev); G.known.forEach(function (n) { if (!(ev[n] > 0)) t[key(CONFIG.YOU, n)] = G.strength[n]; }); return t; } // what you have now; a tapped line shows what it becomes
   function evSum() { var t = 0; for (var k in ev) t += ev[k]; return t; }
   function tap(p) { if (playing || G.known.indexOf(p) < 0) return; var cur = ev[p] || 0, nxt = (cur + 1) % (CONFIG.CAP + 1); if (nxt > cur && evSum() + (nxt - cur) > CONFIG.EVENINGS) nxt = 0; if (nxt) ev[p] = nxt; else delete ev[p]; renderPlan(); }
   function renderPlan() {
     var left = CONFIG.EVENINGS - evSum(), sq = $('wk-sq'); sq.innerHTML = ''; for (var i = 0; i < CONFIG.EVENINGS; i++) { var s = document.createElement('i'); if (i < CONFIG.EVENINGS - left) s.className = 'f'; sq.appendChild(s); } $('wk-leftn').textContent = left;
     var ch = $('chips'); ch.innerHTML = '';
     G.known.forEach(function (p) { var b = document.createElement('button'); var e = ev[p] || 0; b.className = 'chip' + (e === 1 ? ' one' : (e === 2 ? ' two' : '')) + (isNew(p) ? ' new' : ''); b.innerHTML = '<span>' + p + '</span><span class="c">' + circleLabel(circleOf(p)).replace(/^the /i, '') + '</span><span class="d">' + (e === 2 ? '●●' : (e === 1 ? '●' : '○')) + '</span>'; b.addEventListener('click', function () { tap(p); }); ch.appendChild(b); });
-    renderTies(allTies(G, ev));
-    $('b-spend').textContent = left ? 'Spend the week (' + left + ' evening' + (left === 1 ? '' : 's') + ' unspent)' : 'Spend the week';
+    renderTies(displayTies());
+    $('b-spend').textContent = left === CONFIG.EVENINGS ? 'Stay in all week' : (left ? 'Spend the week (' + left + ' evening' + (left === 1 ? '' : 's') + ' unspent)' : 'Spend the week');
   }
   function isNew(p) { return lastRec && (lastRec.intros.some(function (x) { return x.who === p; }) || (lastRec.chance && lastRec.chance.who === p)); }
   function startWeek() {
-    ev = {}; clearNews(); renderTies(allTies(G, ev));
+    ev = {}; clearNews(); renderTies(displayTies());
     $('wk-kicker').textContent = 'Week ' + G.week + ' of ' + CONFIG.WEEKS;
     $('wk-now').textContent = G.week === 1 ? 'Give your seven evenings.' : (G.week === CONFIG.WEEKS ? 'The last week. Give your seven evenings.' : 'A new week. Give your seven evenings.');
-    $('wk-sub').textContent = G.week === 1 ? 'Tap a name once or twice.' : 'Every week starts from none. Tap a name once or twice.';
-    $('wk-plan').style.display = ''; $('wk-play').style.display = 'none'; $('wk-result').style.display = 'none'; $('wk-bet').style.display = 'none';
+    $('wk-sub').textContent = G.week === 1 ? 'Tap a name once or twice.' : 'Tap a name once or twice; a line you give nothing thins.';
+    $('wk-plan').style.display = ''; $('wk-play').style.display = 'none'; $('wk-result').style.display = 'none';
     renderPlan(); window.scrollTo(0, 0);
   }
   function voice(html) { $('voice').innerHTML = html; }
@@ -564,6 +555,7 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: n
     var often = Object.keys(rec.evenings).filter(function (n) { return catOf(rec.evenings[n]) === 'often'; });
     voice('You gave ' + (often.length ? 'two evenings to ' + list(often) : 'no one two evenings') + (Object.keys(rec.evenings).some(function (n) { return rec.evenings[n] === 1; }) ? ', one to ' + list(Object.keys(rec.evenings).filter(function (n) { return rec.evenings[n] === 1; })) : '') + (evSum() === 0 ? '. You stayed in all week' : '') + '.');
     await wait(700);
+    if (rec.thinned.length) { renderTies(rec.ties); voice('<b>' + list(rec.thinned.map(function (x) { return x.who; })) + (rec.thinned.length > 1 ? ' get' : ' gets') + ' no evening</b>, so ' + (rec.thinned.length > 1 ? 'their lines thin' : 'the line thins') + ' by one step: ' + list(rec.thinned.map(function (x) { return x.from === 'often' ? 'thick to thin' : 'thin to dashed'; }).filter(function (v, i, a) { return a.indexOf(v) === i; })) + '.'); await wait(1100); }
     // the town reacts
     for (var i = 0; i < rec.closures.length; i++) { var c = rec.closures[i]; renderTies(rec.ties); flashLine(key(c[0], c[1])); voice('<b>' + c[0] + ' and ' + c[1] + ' come to know each other.</b> You see both often, so they meet: a new dashed line between them.'); await wait(1000); }
     for (var j = 0; j < rec.intros.length; j++) { var x = rec.intros[j]; renderTies(rec.ties); flashLine(key(CONFIG.YOU, x.who)); voice('<b>' + x.by + ' introduces you to ' + x.who + '</b>, from ' + circleLabel(x.circle).toLowerCase() + '. A new name on your map, on a dashed line.'); await wait(1000); }
@@ -581,8 +573,8 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: n
     var missed = rec.total - rec.heard; if (missed) parts.push((missed === 1 ? 'One opening' : missed + ' openings') + ' never reached you.');
     $('res-text').textContent = parts.join(' ');
     $('res-weeks').textContent = 'Heard of, week by week: ' + G.weeks.map(function (w) { return w.heard; }).join(' · ') + ' of ' + rec.total + ' each.';
-    $('wk-now').textContent = isOver(G) ? 'The three weeks are over.' : 'The week is over.'; $('wk-sub').textContent = isOver(G) ? 'One bet, then the verdict.' : 'Read the week, then give next week\'s evenings.';
-    $('b-next').textContent = isOver(G) ? 'One more thing' : 'Next week';
+    $('wk-now').textContent = isOver(G) ? 'The three weeks are over.' : 'The week is over.'; $('wk-sub').textContent = isOver(G) ? 'See the verdict.' : 'Read the week, then give next week\'s evenings.';
+    $('b-next').textContent = isOver(G) ? 'See the verdict' : 'Next week';
     $('wk-play').style.display = 'none'; $('wk-result').style.display = '';
     playing = false;
   }
@@ -601,33 +593,6 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: n
       await wait(p.heard ? 950 : 700);
     }
     clearNews();
-  }
-  // the closing bet
-  var bet = null, betRec = null;
-  function offerBet() {
-    ev = {}; renderTies(allTies(G, ev)); clearNews();
-    $('wk-kicker').textContent = 'After week ' + CONFIG.WEEKS + ' · the bet'; $('wk-now').textContent = 'Every line dashed. How much still gets through?'; $('wk-sub').textContent = 'One more week of news, with no evening spent on anyone.';
-    $('wk-plan').style.display = 'none'; $('wk-play').style.display = 'none'; $('wk-result').style.display = 'none'; $('wk-bet').style.display = '';
-    var ch = $('bet-chips'); ch.innerHTML = '';
-    CONFIG.BET_LABELS.forEach(function (lab, i) { var b = document.createElement('button'); b.className = 'chip one'; b.textContent = lab; b.addEventListener('click', function () { bet = i; playBet(); }); ch.appendChild(b); });
-    window.scrollTo(0, 0);
-  }
-  async function playBet() {
-    if (playing) return; playing = true; skip = false;
-    $('wk-bet').style.display = 'none'; $('wk-play').style.display = '';
-    $('wk-now').textContent = 'The week goes by, with every line dashed.'; $('wk-sub').textContent = 'You said ' + CONFIG.BET_LABELS[bet] + '. Watch the lines.';
-    betRec = betWeek(G);
-    voice('You spent no evening on anyone. Every line is dashed: whoever hears something mentions it to you one time in three.');
-    await wait(900);
-    await playNews(betRec);
-    var tellers = []; betRec.pieces.forEach(function (p) { if (p.heard) p.tellers.forEach(function (t) { if (tellers.indexOf(t.who) < 0) tellers.push(t.who); }); });
-    var right = betBand(betRec.heard) === bet;
-    $('res-big').textContent = (right ? 'As you said: ' : 'You said ' + CONFIG.BET_LABELS[bet] + '. ') + (betRec.heard === 0 ? 'none of the 7 reached you.' : betRec.heard + ' of the 7 reached you anyway.');
-    $('res-text').textContent = (betRec.heard ? 'From ' + list(tellers) + ': people you gave no evening, who mentioned it. ' : 'Every dashed line stayed quiet this week, which happens. ') + 'The paper: more than a quarter of the Boston job changers heard of their job from someone they saw once a year or less, often someone they had nearly forgotten. That an untended line carries news is the paper\'s finding. How much it carries, one time in three, is this game\'s number.';
-    $('res-weeks').textContent = 'Not counted. Your three weeks: ' + G.weeks.map(function (w) { return w.heard; }).join(' · ') + ' of ' + CONFIG.NEWS_PER_WEEK + ' each.';
-    $('b-next').textContent = 'See the verdict';
-    $('wk-play').style.display = 'none'; $('wk-result').style.display = '';
-    playing = false;
   }
   function flashLine(k) { var L = lineEls[k]; if (!L) return; L.setAttribute('stroke', BLUE); L.setAttribute('data-blue', '1'); }
 
@@ -674,7 +639,7 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: n
       { label: 'news known in advance', n: ceil, dash: true }
     ], ceil);
     var planPeople = Object.keys(STRATEGIES[CONFIG.BEST_PLAN](newGame(G.seed)));
-    $('v-plan').innerHTML = '<b>The best plan without foreknowledge:</b> one evening to one person in each circle, no one twice: ' + list(planPeople) + ', every week, and the new names as they come. It hears ' + sp + ' of ' + ceil + ' here. The paper\'s reason: your circle hears one circle\'s news; each dashed line is your only line into another.' + (betRec ? ' <span class="small">The bet week, every line dashed: ' + betRec.heard + ' of 7 reached you; you said ' + CONFIG.BET_LABELS[bet] + '.</span>' : '');
+    $('v-plan').innerHTML = '<b>The best plan without foreknowledge:</b> one evening to one person in each circle, no one twice: ' + list(planPeople) + ', every week, and the new names as they come. It hears ' + sp + ' of ' + ceil + ' here. The paper\'s reason: your circle hears one circle\'s news; each dashed line is your only line into another.';
     var sh = { often: pct(t.seen.often, heard), occ: pct(t.seen.occ, heard), rare: pct(t.seen.rare, heard) }, B = CONFIG.BOSTON_SEEN;
     bars('v-bars1', [
       { label: 'saw them often', you: sh.often, paper: B.often, note: Math.round(sh.often) + '% · paper ' + Math.round(B.often) + '%' },
@@ -712,13 +677,13 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: n
 
   // ---------- wiring ----------
   function newSeed() { return String(Math.floor(1000 + Math.random() * 9000)); }
-  function begin(sd) { seed = sd; G = newGame(seed); lastRec = null; bet = null; betRec = null; layout(); buildMap(); show('s-week'); startWeek(); }
+  function begin(sd) { seed = sd; G = newGame(seed); lastRec = null; layout(); buildMap(); show('s-week'); startWeek(); }
   var q = /[?&]seed=([^&]+)/.exec(location.search);
   $('b-begin').addEventListener('click', function () { begin(q ? decodeURIComponent(q[1]) : newSeed()); });
   $('b-spend').addEventListener('click', spendWeek);
   $('b-skip').addEventListener('click', function () { skip = true; });
   $('map').addEventListener('click', function () { if (playing) skip = true; });
-  $('b-next').addEventListener('click', function () { if (betRec) verdict(); else if (isOver(G)) offerBet(); else startWeek(); });
+  $('b-next').addEventListener('click', function () { if (isOver(G)) verdict(); else startWeek(); });
   $('b-again').addEventListener('click', function () { begin(newSeed()); });
   $('b-replay').addEventListener('click', function () { begin(seed); });
   function openOverlay(id) { helpFrom = window.scrollY; $(id).classList.add('on'); $(id).scrollTop = 0; }

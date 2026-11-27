@@ -8,7 +8,7 @@
 //  (5) the heuristics table of build.md section 3, and the discovery: spreading evenings across circles beats keeping them in the circle,
 //      and the circle's news reaches you more than once while a dashed line's news reaches you once;
 //  (6) the discovery survives plausible changes to our own choices (pass probabilities, damping, the finite-time rule, the news rate, the floor);
-//  (7) the draw: week one's floor, distinct origins, chance meetings and introductions as declared; (8) determinism and the same coins for every strategy;
+//  (7) the draw: week one's floor, distinct origins, chance meetings and introductions as declared; the lines as states; (8) determinism and the same coins for every strategy;
 //  (9) a clairvoyant best week (with hindsight) found by search, read for loopholes.
 var m = require('./mechanism.js'), C = m.CONFIG, fails = 0, out = [];
 function check(name, ok, detail) { out.push((ok ? 'ok   ' : 'FAIL ') + name + (detail ? ' — ' + detail : '')); if (!ok) fails++; }
@@ -82,13 +82,19 @@ check('the circle tells you its news more than twice on average; a dashed line t
 check('the spreader\'s news comes mostly from people seen now and then, and none from people seen often', table.spreader.seen.occ > 70 && table.spreader.seen.often === 0);
 check('every strategy takes a live option: no strategy hears fewer than a third, none hears all', Object.keys(table).every(function (k) { return table[k].heard > C.WEEKS * C.NEWS_PER_WEEK / 3 && table[k].heard < C.WEEKS * C.NEWS_PER_WEEK; }));
 check('hindsight (the best week found knowing the news) beats the spreader and hears fewer than all', table.hindsight.heard > table.spreader.heard && table.hindsight.heard < C.WEEKS * C.NEWS_PER_WEEK, r1(table.hindsight.heard));
-// the closing bet: a week with every line dashed, after three weeks of the spreader and of the homebody
-var betH = [], betBands = {};
-for (var bq = 0; bq < 400; bq++) { var gs = m.runStrategy('b' + bq, bq % 2 ? m.STRATEGIES.spreader : m.STRATEGIES.homebody), br = m.betWeek(gs); betH.push(br.heard); betBands[m.betBand(br.heard)] = (betBands[m.betBand(br.heard)] || 0) + 1; if (gs.weeks.length !== C.WEEKS) fails++; }
-var betMean = betH.reduce(function (a, b) { return a + b; }, 0) / betH.length;
-check('the bet week (every line dashed) still brings news: between 2 and 5 of 7 on average', betMean >= 2 && betMean <= 5, r1(betMean) + ' of ' + C.NEWS_PER_WEEK);
-check('every answer to the bet comes true sometimes (all four bands reached) and the bet week leaves the score alone', Object.keys(betBands).length === C.BET_OPTIONS.length, JSON.stringify(betBands));
-check('the bet week on a seed is the same whatever the three weeks were', JSON.stringify(m.betWeek(m.runStrategy('bb', m.STRATEGIES.spreader)).pieces.map(function (p) { return p.origin; })) === JSON.stringify(m.betWeek(m.runStrategy('bb', m.STRATEGIES.homebody)).pieces.map(function (p) { return p.origin; })));
+// the lines as states (revision 4): a tended line is what the evenings make it; an untended line thins by one step and never vanishes
+var stateOk = true, R3 = m.rng('states');
+for (var q3 = 0; q3 < 200; q3++) {
+  var g3 = m.newGame('st' + q3);
+  if (!['Ann', 'Ben', 'Cal'].every(function (n) { return g3.strength[n] === 'often'; }) || !g3.known.slice(3).every(function (n) { return g3.strength[n] === 'rare'; })) stateOk = false;
+  while (!m.isOver(g3)) {
+    var ev3 = {}, left3 = C.EVENINGS; g3.known.slice().sort(function () { return R3() - .5; }).forEach(function (n) { var e = Math.min(left3, Math.floor(R3() * (C.CAP + 1))); if (e) { ev3[n] = e; left3 -= e; } });
+    var before3 = Object.assign({}, g3.strength), rec3 = m.playWeek(g3, ev3);
+    Object.keys(before3).forEach(function (n) { var now = g3.strength[n], e = ev3[n] || 0, want = e ? m.catOf(e) : m.down(before3[n]); if (now !== want) stateOk = false; });
+    g3.known.forEach(function (n) { if (!g3.strength[n]) stateOk = false; });
+  }
+}
+check('at the start Home is thick and the eight others dashed; a tended line is what its evenings make it; an untended line thins by one step; no line vanishes', stateOk, '200 random games');
 
 // (6) robustness of the discovery to our own choices
 var saved = JSON.stringify({ P: C.P_PASS, D: C.DAMP, T: C.TIME_IS_FINITE, NW: C.NEWS_PER_WEEK, F: C.WEEK1_FLOOR, MH: C.MAX_HOPS });
@@ -145,12 +151,19 @@ for (var c = 0; c < clairN; c++) {
 out.push('     clairvoyant (best week with hindsight; ' + week1Cands.length + ' legal weeks searched in week one; ' + clairN + ' seeds): ' + r1(clair / clairN) + ' of ' + (C.WEEKS * C.NEWS_PER_WEEK) + '; week-one picks: ' + JSON.stringify(firstWeeks));
 check('the clairvoyant best beats the spreader (there is luck to read), and hears fewer than all', clair / clairN > table.spreader.heard && clair / clairN < C.WEEKS * C.NEWS_PER_WEEK, r1(clair / clairN));
 
-// (10) the best plan without foreknowledge: the spreader's first week against the top first weeks of an exhaustive search
-//      (every one of the 17,469 legal first weeks scored on 40 towns, the top 60 rescored on 300; memo, revision 3), over 300 towns
-var TOP = [{ Cal: 1, Dee: 1, Eli: 1, Oli: 1, Gus: 1, Wes: 1, Kim: 1 }, { Ann: 1, Dee: 1, Eli: 1, Oli: 1, Gus: 1, Wes: 1, Kim: 1 }, { Cal: 1, Hal: 1, Eli: 1, Oli: 1, Gus: 1, Wes: 1, Kim: 1 }, { Cal: 1, Eli: 2, Oli: 1, Wes: 2, Kim: 1 }];
-function week1(ev) { var sum = 0; for (var i = 0; i < 300; i++) sum += m.heardOf(m.newGame('x' + i), ev); return sum / 300; }
-var spW = week1(m.STRATEGIES[C.BEST_PLAN](m.newGame('z'))), topW = TOP.map(week1);
-check('the best plan (' + C.BEST_PLAN + ') is within 0.15 of the best first weeks found by exhaustive search, all of them one evening per circle', topW.every(function (w) { return spW >= w - 0.15; }), r1(spW * 10) / 10 + ' vs ' + topW.map(function (w) { return Math.round(w * 100) / 100; }).join(', ') + ' of 7');
+// (10) the best plan without foreknowledge. Week one, by exhaustive search (every one of the 17,469 legal first weeks scored on 40 towns,
+//      the top 60 rescored on 300; memo, revisions 3 and 4): the best first weeks give one evening to one person in each outer circle and
+//      the seventh as a second evening to one of them (5.80 of 7), since Home thins anyway in week one; the named plan's first week scores 5.56.
+//      Over three weeks, the named plan (one evening to one person in each circle, no one twice) is checked against that family of plans.
+function outerOne(s) { var ev = {}, byC = {}; s.known.forEach(function (n) { var c = m.circleOf(n); if (c !== 'home') (byC[c] = byC[c] || []).push(n); }); var order = Object.keys(byC).sort(function (a, b) { return m.sizeOf(b) - m.sizeOf(a); }); order.forEach(function (c) { ev[byC[c][0]] = 1; }); return { ev: ev, order: order, byC: byC }; }
+var PLANS = {
+  outerThick: function (s) { var o = outerOne(s), ev = o.ev, left = C.EVENINGS - Object.keys(ev).length; if (left > 0) { ev[o.byC[o.order[0]][0]] = 2; left--; } return ev; },
+  outerSecond: function (s) { var o = outerOne(s), ev = o.ev, left = C.EVENINGS - Object.keys(ev).length; o.order.forEach(function (c) { if (left > 0 && o.byC[c][1] && !ev[o.byC[c][1]]) { ev[o.byC[c][1]] = 1; left--; } }); return ev; },
+  outerThenAnn: function (s) { var o = outerOne(s), ev = o.ev; if (s.week === 1) ev[o.byC[o.order[0]][0]] = 2; else ev.Ann = 1; return ev; }
+};
+function plan3(f) { var sum = 0; for (var i = 0; i < 300; i++) sum += m.tally(m.runStrategy('p' + i, f)).heard; return sum / 300; }
+var named3 = plan3(m.STRATEGIES[C.BEST_PLAN]), others3 = Object.keys(PLANS).map(function (k) { return plan3(PLANS[k]); });
+check('the named best plan (' + C.BEST_PLAN + ') is within 0.5 of ' + (C.WEEKS * C.NEWS_PER_WEEK) + ' of every plan that spends the Home evening on an outer line instead', others3.every(function (w) { return named3 >= w - 0.5; }), r1(named3 * 10) / 10 + ' vs ' + others3.map(function (w) { return Math.round(w * 100) / 100; }).join(', '));
 check('the score: the ceiling is never below the player\'s own count, over 200 towns and three strategies', (function () { for (var i = 0; i < 200; i++) { var g = m.runStrategy('sc' + i, [m.STRATEGIES.spreader, m.STRATEGIES.bridgesOften, m.STRATEGIES.homebody][i % 3]); var sc = m.scoreOf(g); if (sc.ceiling < sc.heard || sc.pct > 100 || sc.pct < 0) return false; } return true; })());
 check('the score bands: the best plan lands in the top two bands most of the time, the circle in the bottom two most of the time', (function () { var a = 0, b = 0; for (var i = 0; i < 200; i++) { if (m.scoreOf(m.runStrategy('bd' + i, m.STRATEGIES.spreader)).band >= 1) a++; if (m.scoreOf(m.runStrategy('bd' + i, m.STRATEGIES.homebody)).band <= 1) b++; } return a >= 150 && b >= 150; })());
 
