@@ -44,15 +44,6 @@ var URL = 'file://' + path.resolve('meitners-drop.html');
       await pg.click('#b-next'); await pg.waitForTimeout(300);
       if (nb.indexOf('thorium') >= 0 || nb.indexOf('verdict') >= 0) break;
     }
-    await shot('th-start');
-    for (var j = 0; j < actsT.length; j++) {
-      var a2 = actsT[j];
-      await pg.evaluate(function (z) { window.__game.setLine(z); }, a2); await pg.click('#b-split');
-      await pg.waitForTimeout(6400); await shot('th' + (j + 1) + '-result', true);
-      console.log(tag, 'Th' + (j + 1), '|', await pg.textContent('#now1'), '|', (await pg.textContent('#said1')).slice(0, 160));
-      var nb2 = await pg.textContent('#b-next'); await pg.click('#b-next'); await pg.waitForTimeout(300);
-      if (nb2.indexOf('verdict') >= 0) break;
-    }
     await shot('end', true); await nohs('end');
     console.log(tag, 'FATE |', await pg.textContent('#fate'), '|', await pg.textContent('#seedline'));
     console.log(tag, 'BOARD |', await pg.textContent('#v-board'));
@@ -61,9 +52,9 @@ var URL = 'file://' + path.resolve('meitners-drop.html');
     await pg.click('#b-again'); await pg.waitForTimeout(200); console.log(tag, 'again ->', await pg.evaluate("document.querySelector('.screen.on').id"));
     await ctx.close();
   }
-  await session(380, 700, 'a-', [43, 52, 52, 52], [38, 38, 38], true, 7);
-  await session(380, 700, 'b-', [56, 56, 43, 52], [45, 38, 38], true, 2);
-  await session(1100, 800, 'laptop-', [43, 53, 53, 53], [56, 38, 38], true, 7);
+  await session(380, 700, 'a-', [46, 56, 43, 43], [], true, 7);
+  await session(380, 700, 'b-', [56, 56, 56, 56], [], true, 2);
+  await session(1100, 800, 'laptop-', [43], [], true, 7);
   await b.close();
   if (errs.length) { console.log('ERRORS:\n' + errs.join('\n')); process.exit(1); }
   console.log('sessions ok, no errors, no horizontal scroll');
