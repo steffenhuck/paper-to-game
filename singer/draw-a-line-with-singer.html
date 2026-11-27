@@ -386,9 +386,9 @@ function ruleWords(ticks, ruleId) {
   if (p === 'refuse') return r.label + ' has nothing to check: you would use nobody.';
   if (p === 'all') return r.label + ' has no complaint, but only because you would use everyone on every menu.';
   var cols = [1, 2, 3].map(function (k) { return columnWords(ticks, r, mark, t.cols[k]); }).join(' ');
-  if (t.ok && ruleId === 'suffer') return 'Suffer agrees with all three of your choices. Its marks are all the same, because every one of the nine can suffer; and in every experiment you would use all three, or nobody. Nobody\'s pain counted for more with you than anybody else\'s.';
+  if (t.ok && ruleId === 'suffer') return 'Suffer agrees with all three of your choices. Its marks are all the same, because every one of the nine can suffer; and in every experiment you would use all three, or nobody. Nobody\'s pain counted for more with you than anybody else\'s. You saw through the trick: the experiments asked you to pick, and the only way to keep Suffer happy was not to pick at all. Either anyone, or no one. That is Singer\'s test for the scientist, and you passed it.';
   if (t.ok) return r.label + ' agrees with all three of your choices: in every experiment, the ones you would use have the lower marks. The red marks are its cutoffs. ' + cols;
-  if (ruleId === 'suffer') return 'Suffer objects, in ' + (t.bad.length === 1 ? 'one experiment' : t.bad.length + ' experiments') + '. Its marks are all the same, because every one of the nine can suffer; so it has no complaint only where you would use all three, or nobody. ' + cols;
+  if (ruleId === 'suffer') return 'Suffer objects, in ' + (t.bad.length === 1 ? 'one experiment' : t.bad.length + ' experiments') + '. Its marks are all the same, because every one of the nine can suffer; so it has no complaint only where you would use all three, or nobody. ' + cols + ' Did you see the trick? The experiments asked you to pick, and Suffer complains about every pick. There was only ever one way to keep Suffer happy: use all three, or use nobody. That is Singer\'s test for the scientist. If you would not do it to the baby, you may not do it to the dog; and if you would do it to the dog, you must be willing to do it to the baby. Either anyone, or no one.';
   return r.label + ' objects, in ' + (t.bad.length === 1 ? 'one experiment' : t.bad.length + ' experiments') + ': you would use someone with a higher mark and spare someone with a lower one. The red circles show where. ' + cols;
 }
 
@@ -440,7 +440,7 @@ function shapeWords(ticks) {
 function verdict(state) {
   var ticks = state.ticks || {}, w = shapeWords(ticks), s = w.shape, line = lineOf(ticks);
   var fate, part, team = 'The line most people draw, animals used and people spared, is given by no rule you can check; its name is Species, and Singer says it is the same pattern as racism and sexism.';
-  var two = 'Singer names two things that do not survive his line: experiments on animals that nobody would do on a baby, and eating animals because they taste good.';
+  var two = 'Singer\'s test for the scientist, from the game you just played: either anyone, or no one. If you would not do the experiment to the baby, you may not do it to the dog; if you would do it to the dog, you must be willing to do it to the baby. He names two things that do not survive that test: experiments on animals that nobody would do on a baby, and eating animals because they taste good.';
   if (s.id === 'refuse') { fate = 'You would spend nobody\'s pain.'; part = 'Not about animals: you treat the baby and the mouse alike, which is all Singer asks. You part from him on whether a day of pain for one may ever be traded for a thousand lives. He says yes; you say no. That is Foot\'s question, not his; her paper is on this shelf.'; }
   else if (s.id === 'singer') { fate = 'You drew Singer\'s line.'; part = 'Nowhere that matters. Whoever can suffer counted the same with you, and only the stakes moved you. That is equal consideration, which is the whole of his paper. ' + team; }
   else if (s.id === 'line') { fate = 'You drew a straight line in the wrong place.'; part = 'At the rule. A rule you can check gives your choices, so they are not made by hand; but Singer says it is the wrong rule, as arbitrary as skin colour: the ones you would use are hurt exactly as much as the ones you would spare. ' + team; }
@@ -581,7 +581,7 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, expName: e
     var r = rulerById(S.cur), p = pattern(S.ticks), suffer = S.cur === 'suffer';
     $('tray').style.display = '';
     $('now1').textContent = r.label + ' comes to the board.';
-    $('aim1').textContent = suffer ? 'The fourth rule. Look at its marks.' : (S.round === 1 ? 'A rule with a ranking. Could it have made your three choices?' : 'The next rule. Could it have made your three choices?');
+    $('aim1').textContent = suffer ? 'The fourth rule. Look at its marks before you answer.' : (S.round === 1 ? 'A rule with a ranking. Could it have made your three choices?' : 'The next rule. Could it have made your three choices?');
     $('rule1').innerHTML = suffer
       ? 'The fourth rule is the one Bentham asked about: not can they reason, not can they talk, but <b>can they suffer?</b> Its marks are all the same, a full bar for every one of the nine, because every one of them can suffer; Singer says the mouse feels pain at least as much as a baby a few days old does. (The stone, which was on no menu, would be the only empty bar: nothing can be done to a stone that it minds.) Suffer\'s rule: ' + esc(r.rule) + '. The three columns show what you did, as before.'
       : 'Suppose <b>' + esc(r.label) + '</b> were your rule: ' + esc(r.rule) + '. The nine are sorted by how well each one ' + esc(r.verb) + ', highest at the top, with a yellow mark for each. The three columns are the three experiments, and they show what you did: ✓ for everyone you would use, ✗ for everyone you would spare.';
@@ -601,7 +601,7 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, expName: e
   }
   function reveal() {
     var r = rulerById(S.cur), t = ruleTest(S.ticks, S.cur), p = pattern(S.ticks);
-    $('now1').textContent = r.label + (p === 'refuse' ? ' has nothing to check.' : (t.ok ? ' agrees with your choices.' : ' objects to your choices.'));
+    $('now1').textContent = r.label + (p === 'refuse' ? ' has nothing to check.' : (t.ok ? ' agrees with your choices.' : (S.cur === 'suffer' ? ' objects. It was a trick question.' : ' objects to your choices.')));
     $('hint1').textContent = '';
     if (p !== 'refuse' && p !== 'all') setTimeout(function () { drawColumns(t); }, 150);
     var fb = '';

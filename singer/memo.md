@@ -313,3 +313,7 @@ Five points from the author's play of revision 11, and what was done.
 **Checked.** 512 sets of choices; Suffer explains a choice iff all three or nobody are used; the drawn line matches the ticks; five scripted sessions at two widths.
 
 **What we were least sure about.** Whether the Suffer screen's full bars land as the point without a word of the player's own; whether the verdict's icons are large enough on a phone; whether the Species sentence with "white" and "black" needs more room than one line.
+
+## 32. Revision 12a, 28 November 2026: the trick, named
+
+The author: the Suffer stage is a trick question, and that should be said. The experiments force a pick, and with equal marks every pick is a complaint; the only way to keep Suffer happy was all three or nobody. That is the paper's own test for the scientist (p. 109): if he would not use the orphaned infant, his readiness to use animals is discrimination; if he would use the animal, he must be willing to use the infant. Now said in three places: the Suffer reveal's headline ("Suffer objects. It was a trick question."), the end of Suffer's words ("Did you see the trick? ... Either anyone, or no one."), and "What follows" in the verdict. A player whose line is Singer's is told he saw through it.

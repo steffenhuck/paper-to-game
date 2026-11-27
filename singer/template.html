@@ -332,7 +332,7 @@ a{color:var(--chalk)}
     var r = rulerById(S.cur), p = pattern(S.ticks), suffer = S.cur === 'suffer';
     $('tray').style.display = '';
     $('now1').textContent = r.label + ' comes to the board.';
-    $('aim1').textContent = suffer ? 'The fourth rule. Look at its marks.' : (S.round === 1 ? 'A rule with a ranking. Could it have made your three choices?' : 'The next rule. Could it have made your three choices?');
+    $('aim1').textContent = suffer ? 'The fourth rule. Look at its marks before you answer.' : (S.round === 1 ? 'A rule with a ranking. Could it have made your three choices?' : 'The next rule. Could it have made your three choices?');
     $('rule1').innerHTML = suffer
       ? 'The fourth rule is the one Bentham asked about: not can they reason, not can they talk, but <b>can they suffer?</b> Its marks are all the same, a full bar for every one of the nine, because every one of them can suffer; Singer says the mouse feels pain at least as much as a baby a few days old does. (The stone, which was on no menu, would be the only empty bar: nothing can be done to a stone that it minds.) Suffer\'s rule: ' + esc(r.rule) + '. The three columns show what you did, as before.'
       : 'Suppose <b>' + esc(r.label) + '</b> were your rule: ' + esc(r.rule) + '. The nine are sorted by how well each one ' + esc(r.verb) + ', highest at the top, with a yellow mark for each. The three columns are the three experiments, and they show what you did: ✓ for everyone you would use, ✗ for everyone you would spare.';
@@ -352,7 +352,7 @@ a{color:var(--chalk)}
   }
   function reveal() {
     var r = rulerById(S.cur), t = ruleTest(S.ticks, S.cur), p = pattern(S.ticks);
-    $('now1').textContent = r.label + (p === 'refuse' ? ' has nothing to check.' : (t.ok ? ' agrees with your choices.' : ' objects to your choices.'));
+    $('now1').textContent = r.label + (p === 'refuse' ? ' has nothing to check.' : (t.ok ? ' agrees with your choices.' : (S.cur === 'suffer' ? ' objects. It was a trick question.' : ' objects to your choices.')));
     $('hint1').textContent = '';
     if (p !== 'refuse' && p !== 'all') setTimeout(function () { drawColumns(t); }, 150);
     var fb = '';
