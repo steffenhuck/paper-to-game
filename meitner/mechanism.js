@@ -192,6 +192,45 @@ function lightTubes(move, tubes, nucZ) {
 }
 function tubeById(tubes, id) { for (var i = 0; i < tubes.length; i++) if (tubes[i].id === id) return tubes[i]; return null; }
 
+// ---------- what each outcome teaches (rev. 5: said before the cut, in the preview, and after it) ----------
+var TEACH_GHOST = 'pieces from the middle can pass for new elements';
+var TEACH = { u24: 'a neutron can just get caught: uranium-239', eRe: TEACH_GHOST, eOs: TEACH_GHOST, eIr: TEACH_GHOST, ePt: TEACH_GHOST, eAu: TEACH_GHOST,
+  ba: 'barium comes out of uranium, with krypton as its partner (56 + 36 = 92)', la: 'barium comes out of uranium, with krypton as its partner (56 + 36 = 92)',
+  ra: 'thorium splits too, into the same kind of pieces', ac: 'thorium splits too, into the same kind of pieces' };
+function lessonText(ids, none) {
+  var out = []; ids.forEach(function (id) { var t = TEACH[id]; if (t && out.indexOf(t) < 0) out.push(t); });
+  return out.length ? out.join(', and ') : none;
+}
+function pctWords(label) { return label === '<1%' ? 'under 1%' : label; }
+// the line under the table before you fire: what the cut lights and what you will learn, if it splits and if it fails
+function previewWords(st, Z1) {
+  var pv = preview(st, Z1), T = st.tubes;
+  var names = pv.lights.map(function (l) { return tubeById(T, l.id).short; });
+  var ids = pv.lights.map(function (l) { return l.id; });
+  var split = names.length ? 'Lights: ' + names.join(', ') + '. <b>You will learn:</b> ' + lessonText(ids, '') + '.' : 'Lights nothing new, so you learn nothing new from it.';
+  if (pv.p >= 0.995) return '<b>It splits for sure.</b> ' + split;
+  return '<b>It splits ' + pctWords(pv.label) + ' of the time.</b> ' + split + ' <b>Otherwise the cut fails:</b> ' + (pv.failLights ? 'lights the 24-min tube. <b>You will learn:</b> ' + TEACH.u24 + '.' : 'nothing lights.');
+}
+// after the cut: the one thing it showed
+function lessonOf(st, move) {
+  var ids = move.lit.map(function (l) { return l.id; });
+  if (move.kind === 'split') return ids.length ? lessonText(ids, '') + '.' : 'nothing new this time. Try a different cut.';
+  return ids.length ? lessonText(ids, '') + '.' : 'nothing new this time. The neutron is spent, but you now know a cut can fail.';
+}
+// before each cut: what to watch for on the first one, then what is still dark and where to look
+function coachWords(st) {
+  var left = st.tubes.filter(function (t) { return !st.lit[t.id]; });
+  if (st.used === 0) return (st.nuc.name === 'uranium' ? '' : cap(st.nuc.name) + ' (' + st.nuc.Z + '): same game, two new tubes, three neutrons. ') +
+    'Drag the red line, then fire. If the drop splits, watch what the two pieces turn into. If the cut fails, watch what the drop turns into. Either way, see which tubes light.';
+  if (!left.length) return '';
+  var eka = left.filter(function (t) { return isDashed(t.cellZ); }), mid = left.filter(function (t) { return !isDashed(t.cellZ) && !t.byHold; }), u24 = left.filter(function (t) { return t.byHold; });
+  var parts = [];
+  if (eka.length) parts.push('the dashed tubes (try the middle, where a cut always works)');
+  if (mid.length) parts.push(mid.map(function (t) { return t.short; }).join(' and ') + ' (try a little off the middle)');
+  if (u24.length) parts.push('the 24-min tube (it lights when a cut fails, so risk a cut far from the middle)');
+  return 'Still dark: ' + parts.join('; ') + '.';
+}
+
 // What a cut at Z1 would do, before it is made (rev. 4: the bench shows this live): the chance, the pieces and their walks,
 // the tubes it would light if it works, and the tube a failed cut would light (the drop keeps its neutron).
 function preview(st, Z1) {
@@ -342,5 +381,5 @@ function ekaNames(stU) {
   return out.join(', ');
 }
 
-var MECH = { CONFIG: CONFIG, splitOdds: splitOdds, oddsWords: oddsWords, oddsLabel: oddsLabel, preview: preview, asym: asym, makeRng: makeRng, rang: rang, cellOf: cellOf, isDashed: isDashed, nameOf: nameOf, symbolOf: symbolOf, skin: skin, skinClass: skinClass, clampZ1: clampZ1, shareNeutrons: shareNeutrons, stableZ: stableZ, climb: climb, blastMeV: blastMeV, split: split, hold: hold, lightTubes: lightTubes, tubeById: tubeById, tubeAnswer: tubeAnswer, newStage: newStage, stageDone: stageDone, play: play, moveWords: moveWords, verdict: verdict, lookalikes: lookalikes };
+var MECH = { CONFIG: CONFIG, splitOdds: splitOdds, oddsWords: oddsWords, oddsLabel: oddsLabel, preview: preview, previewWords: previewWords, lessonOf: lessonOf, coachWords: coachWords, TEACH: TEACH, asym: asym, makeRng: makeRng, rang: rang, cellOf: cellOf, isDashed: isDashed, nameOf: nameOf, symbolOf: symbolOf, skin: skin, skinClass: skinClass, clampZ1: clampZ1, shareNeutrons: shareNeutrons, stableZ: stableZ, climb: climb, blastMeV: blastMeV, split: split, hold: hold, lightTubes: lightTubes, tubeById: tubeById, tubeAnswer: tubeAnswer, newStage: newStage, stageDone: stageDone, play: play, moveWords: moveWords, verdict: verdict, lookalikes: lookalikes };
 if (typeof module !== 'undefined' && module.exports) module.exports = MECH;

@@ -45,7 +45,8 @@ p{margin:0 0 8px}
 .qm{flex:none;width:40px;height:40px;border:3px solid var(--ink);background:#fff;font-family:'Bangers',sans-serif;font-size:24px;color:var(--ink);cursor:pointer;line-height:1}
 .said{font-size:16px;margin:4px 0 6px;min-height:22px;border-left:4px solid var(--ink);padding-left:8px}
 .said p{margin:0 0 5px}
-.cap{font-size:14px;color:var(--dim);margin:2px 0 6px;min-height:38px}
+.cap{font-size:14px;color:var(--dim);margin:2px 0 6px;min-height:64px}.cap b{color:var(--ink)}
+.said p.learn{border-top:2px dashed var(--ink);padding-top:6px;margin-top:8px}
 .info{font-size:15px;border-left:4px solid var(--red);padding-left:8px;min-height:66px;margin:0 0 8px}
 .row3{display:flex;gap:6px;align-items:center;margin:4px 0 6px}.row3 .btn{margin:0}.row3 .red{flex:1}.row3 .small{min-width:50px;text-align:center}
 .stripe{fill:var(--tone);opacity:.16;pointer-events:none}.stripe.on{fill:var(--red);opacity:.26}.stripe.lit{fill:var(--red);opacity:.1}.stripe.pick{fill:var(--red);opacity:.3}
@@ -207,6 +208,7 @@ svg .bang{font-family:'Bangers',sans-serif}
   <h2>What is simplified or changed</h2>
   <p>The first build let every cut go through, and the author found that fission came too easily; the second build (26 November 2026) added the odds and cut the budget from five neutrons to four. The third build (26 November 2026) was rebuilt for a smart eleven-year-old: the shelf became a readable checklist of eight cards, the climb of each piece was drawn before the cut, the explanations were cut to a few plain sentences, and a short briefing screen now explains the table once. The mechanism, the numbers and the calibration were unchanged.</p>
   <p>The fourth build (26 November 2026) followed the author's note that the third was too hard to understand. The cut may now go anywhere from 1 to 91, with the chance drawn as a hill under the drop. The game shows what a cut will do before it is made. The Hold button is gone: a failed cut is the drop catching the neutron, which is how the 24-minute tube is reached, so aiming at barium either lights barium or lights the 24-minute tube. The words are plainer (number for charge, cut for cut, tube lit for explained) and the physics of the skin moved to an optional side trip. The mechanism's numbers are unchanged.</p>
+  <p>The fifth build (27 November 2026) added hand-holding on the author's note that it still needed more. Before the first cut the game says what to watch for whether the drop splits or the cut fails. Under the table, every cut says what it lights and what you will learn if it splits and if it fails. After each result, one line says what you learned, and a "still dark" line says where to look next. These lessons are the paper's three findings in a sentence each (pieces from the middle can pass for new elements; barium comes out with krypton as its partner; a neutron can just get caught, the 24-minute stuff) and thorium's one; they are not new claims.</p>
   <p><b>A thing the paper could not know.</b> The odds in this game favour an even split, which is the paper's picture of "two nuclei of roughly equal size". Measurements made soon after 1939 showed that uranium most often splits unevenly, into one heavier and one lighter piece, and that barium with krypton is among the common pairs. So barium is the unlikely tube in this game and a common product in the real thing. The game keeps the paper's picture because the paper is the game's authority; the odds curve is ours, and it says nothing about how often an uneven split happens in nature.</p>
   <p>The half-lives of the nine periods are dropped except the 24 minutes; the 10 s and 40 s bodies are folded into the masurium tubes. Mesothorium and the separation itself stay here. The size of the shove (about 200 Mev, million electron-volts, in the paper), the mass the pieces lose for it (about a fifth of a proton between them, by E = mc<sup>2</sup>) and the origin of the word "fission" are in the paper's text above and no longer on the play screens. Nuclear isomerism, Gamow's theory and the lifetime of the compound state are mentioned only in the verdict and here. Cerium, named in the paper's chains, has no tube of its own: in 1939 tables cerium's column was ambiguous (the paper's own parallel, barium-lanthanum-cerium against strontium-yttrium-zirconium, puts it under zirconium), so it is named in the result lines instead. The clock is compressed: a climb that takes seconds to days on the bench takes two seconds on screen. "Masurium" is the 1939 name for element 43; it is called technetium today, and the 1925 claim to have found it was not sound. The imagined drop of 100 charges is marked as imagined on screen; element 100, fermium, was made in 1952 and does not fall apart unprovoked, since the real critical charge lies higher than the paper's rough estimate.</p>
   <h2>Where to read the paper</h2>
@@ -410,6 +412,45 @@ function lightTubes(move, tubes, nucZ) {
 }
 function tubeById(tubes, id) { for (var i = 0; i < tubes.length; i++) if (tubes[i].id === id) return tubes[i]; return null; }
 
+// ---------- what each outcome teaches (rev. 5: said before the cut, in the preview, and after it) ----------
+var TEACH_GHOST = 'pieces from the middle can pass for new elements';
+var TEACH = { u24: 'a neutron can just get caught: uranium-239', eRe: TEACH_GHOST, eOs: TEACH_GHOST, eIr: TEACH_GHOST, ePt: TEACH_GHOST, eAu: TEACH_GHOST,
+  ba: 'barium comes out of uranium, with krypton as its partner (56 + 36 = 92)', la: 'barium comes out of uranium, with krypton as its partner (56 + 36 = 92)',
+  ra: 'thorium splits too, into the same kind of pieces', ac: 'thorium splits too, into the same kind of pieces' };
+function lessonText(ids, none) {
+  var out = []; ids.forEach(function (id) { var t = TEACH[id]; if (t && out.indexOf(t) < 0) out.push(t); });
+  return out.length ? out.join(', and ') : none;
+}
+function pctWords(label) { return label === '<1%' ? 'under 1%' : label; }
+// the line under the table before you fire: what the cut lights and what you will learn, if it splits and if it fails
+function previewWords(st, Z1) {
+  var pv = preview(st, Z1), T = st.tubes;
+  var names = pv.lights.map(function (l) { return tubeById(T, l.id).short; });
+  var ids = pv.lights.map(function (l) { return l.id; });
+  var split = names.length ? 'Lights: ' + names.join(', ') + '. <b>You will learn:</b> ' + lessonText(ids, '') + '.' : 'Lights nothing new, so you learn nothing new from it.';
+  if (pv.p >= 0.995) return '<b>It splits for sure.</b> ' + split;
+  return '<b>It splits ' + pctWords(pv.label) + ' of the time.</b> ' + split + ' <b>Otherwise the cut fails:</b> ' + (pv.failLights ? 'lights the 24-min tube. <b>You will learn:</b> ' + TEACH.u24 + '.' : 'nothing lights.');
+}
+// after the cut: the one thing it showed
+function lessonOf(st, move) {
+  var ids = move.lit.map(function (l) { return l.id; });
+  if (move.kind === 'split') return ids.length ? lessonText(ids, '') + '.' : 'nothing new this time. Try a different cut.';
+  return ids.length ? lessonText(ids, '') + '.' : 'nothing new this time. The neutron is spent, but you now know a cut can fail.';
+}
+// before each cut: what to watch for on the first one, then what is still dark and where to look
+function coachWords(st) {
+  var left = st.tubes.filter(function (t) { return !st.lit[t.id]; });
+  if (st.used === 0) return (st.nuc.name === 'uranium' ? '' : cap(st.nuc.name) + ' (' + st.nuc.Z + '): same game, two new tubes, three neutrons. ') +
+    'Drag the red line, then fire. If the drop splits, watch what the two pieces turn into. If the cut fails, watch what the drop turns into. Either way, see which tubes light.';
+  if (!left.length) return '';
+  var eka = left.filter(function (t) { return isDashed(t.cellZ); }), mid = left.filter(function (t) { return !isDashed(t.cellZ) && !t.byHold; }), u24 = left.filter(function (t) { return t.byHold; });
+  var parts = [];
+  if (eka.length) parts.push('the dashed tubes (try the middle, where a cut always works)');
+  if (mid.length) parts.push(mid.map(function (t) { return t.short; }).join(' and ') + ' (try a little off the middle)');
+  if (u24.length) parts.push('the 24-min tube (it lights when a cut fails, so risk a cut far from the middle)');
+  return 'Still dark: ' + parts.join('; ') + '.';
+}
+
 // What a cut at Z1 would do, before it is made (rev. 4: the bench shows this live): the chance, the pieces and their walks,
 // the tubes it would light if it works, and the tube a failed cut would light (the drop keeps its neutron).
 function preview(st, Z1) {
@@ -560,7 +601,7 @@ function ekaNames(stU) {
   return out.join(', ');
 }
 
-var MECH = { CONFIG: CONFIG, splitOdds: splitOdds, oddsWords: oddsWords, oddsLabel: oddsLabel, preview: preview, asym: asym, makeRng: makeRng, rang: rang, cellOf: cellOf, isDashed: isDashed, nameOf: nameOf, symbolOf: symbolOf, skin: skin, skinClass: skinClass, clampZ1: clampZ1, shareNeutrons: shareNeutrons, stableZ: stableZ, climb: climb, blastMeV: blastMeV, split: split, hold: hold, lightTubes: lightTubes, tubeById: tubeById, tubeAnswer: tubeAnswer, newStage: newStage, stageDone: stageDone, play: play, moveWords: moveWords, verdict: verdict, lookalikes: lookalikes };
+var MECH = { CONFIG: CONFIG, splitOdds: splitOdds, oddsWords: oddsWords, oddsLabel: oddsLabel, preview: preview, previewWords: previewWords, lessonOf: lessonOf, coachWords: coachWords, TEACH: TEACH, asym: asym, makeRng: makeRng, rang: rang, cellOf: cellOf, isDashed: isDashed, nameOf: nameOf, symbolOf: symbolOf, skin: skin, skinClass: skinClass, clampZ1: clampZ1, shareNeutrons: shareNeutrons, stableZ: stableZ, climb: climb, blastMeV: blastMeV, split: split, hold: hold, lightTubes: lightTubes, tubeById: tubeById, tubeAnswer: tubeAnswer, newStage: newStage, stageDone: stageDone, play: play, moveWords: moveWords, verdict: verdict, lookalikes: lookalikes };
 if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
 
 </script>
@@ -780,7 +821,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
     TP = buildTable($('tablesvg'), sg.tubes, sg.nuc.Z, true, function (t) { $('cap').textContent = 'Tube "' + t.label + '", filed as ' + t.filed + '.' + (S.st.lit[t.id] ? ' Lit: it is ' + M.nameOf(S.st.lit[t.id].atZ) + '.' : ''); });
     drawDrop(); $('shelf1').innerHTML = cardsHTML(sg.tubes); setShelfCount();
     setLine(Math.round(sg.nuc.Z / 2));
-    $('said1').innerHTML = '<p>' + sg.hint + '</p>';
+    $('said1').innerHTML = '<p>' + M.coachWords(S.st) + '</p>';
     setKick(1, false); setNow('Slide the cut, then fire.'); controls('choose');
     show('s-bench');
   }
@@ -849,7 +890,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
   }
   function previewMove() {
     clearPreview();
-    var pv = M.preview(S.st, S.Z1), T = S.st.tubes;
+    var pv = M.preview(S.st, S.Z1);
     pv.pieces.forEach(function (pc) {
       pc.path.forEach(function (Z, i) {
         var p = cellXY(Z); if (!p) return;
@@ -863,10 +904,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
       var c = document.querySelector('#shelf1 .card[data-id="' + l.id + '"]'); if (c) c.classList.add('will');
     });
     if (pv.failLights) { var cf = document.querySelector('#shelf1 .card[data-id="' + pv.failLights + '"]'); if (cf) cf.classList.add('iffail'); }
-    var names = pv.lights.map(function (l) { return M.tubeById(T, l.id).short; });
-    var s = (pv.p >= 0.995 ? 'This cut always works. It lights: ' : 'If it works, it lights: ') + (names.length ? names.join(', ') : 'nothing new') + '.';
-    if (pv.p < 0.995) s += pv.failLights ? ' If it fails, the drop keeps its neutron and lights the 24-min tube.' : ' If it fails, nothing lights.';
-    $('cap').textContent = s;
+    $('cap').innerHTML = M.previewWords(S.st, S.Z1);
   }
   function lightTube(id, atZ) {
     var g = TP.tubes[id], p = cellXY(atZ); g.classList.add('lit'); g.setAttribute('transform', 'translate(' + p.x + ' ' + p.y + ')'); sym(TP, atZ, false); lightCard(id, atZ);
@@ -957,7 +995,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
     setTimeout(tick, 500);
     function finish() {
       var lines = M.moveWords(S.st, mv);
-      $('said1').innerHTML = lines.map(function (l) { return '<p>' + l + '</p>'; }).join('');
+      $('said1').innerHTML = lines.map(function (l) { return '<p>' + l + '</p>'; }).join('') + '<p class="learn"><b>You learned:</b> ' + M.lessonOf(S.st, mv) + '</p>';
       $('cap').textContent = CAP_AFTER;
       var litN = S.st.tubes.filter(function (t) { return S.st.lit[t.id]; }).length;
       busy = false; controls('next');
@@ -977,7 +1015,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = MECH;
     }
     TP.pieces.forEach(function (g) { g.remove(); }); TP.pieces = [];
     drawDrop(); setLine(Math.round(S.st.nuc.Z / 2));
-    $('said1').innerHTML = '';
+    var cw = M.coachWords(S.st); $('said1').innerHTML = cw ? '<p>' + cw + '</p>' : '';
     setKick(S.st.used + 1, false); setNow('Slide the cut, then fire.'); controls('choose');
   }
   function endGame() {

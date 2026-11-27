@@ -45,7 +45,8 @@ p{margin:0 0 8px}
 .qm{flex:none;width:40px;height:40px;border:3px solid var(--ink);background:#fff;font-family:'Bangers',sans-serif;font-size:24px;color:var(--ink);cursor:pointer;line-height:1}
 .said{font-size:16px;margin:4px 0 6px;min-height:22px;border-left:4px solid var(--ink);padding-left:8px}
 .said p{margin:0 0 5px}
-.cap{font-size:14px;color:var(--dim);margin:2px 0 6px;min-height:38px}
+.cap{font-size:14px;color:var(--dim);margin:2px 0 6px;min-height:64px}.cap b{color:var(--ink)}
+.said p.learn{border-top:2px dashed var(--ink);padding-top:6px;margin-top:8px}
 .info{font-size:15px;border-left:4px solid var(--red);padding-left:8px;min-height:66px;margin:0 0 8px}
 .row3{display:flex;gap:6px;align-items:center;margin:4px 0 6px}.row3 .btn{margin:0}.row3 .red{flex:1}.row3 .small{min-width:50px;text-align:center}
 .stripe{fill:var(--tone);opacity:.16;pointer-events:none}.stripe.on{fill:var(--red);opacity:.26}.stripe.lit{fill:var(--red);opacity:.1}.stripe.pick{fill:var(--red);opacity:.3}
@@ -416,7 +417,7 @@ svg .bang{font-family:'Bangers',sans-serif}
     TP = buildTable($('tablesvg'), sg.tubes, sg.nuc.Z, true, function (t) { $('cap').textContent = 'Tube "' + t.label + '", filed as ' + t.filed + '.' + (S.st.lit[t.id] ? ' Lit: it is ' + M.nameOf(S.st.lit[t.id].atZ) + '.' : ''); });
     drawDrop(); $('shelf1').innerHTML = cardsHTML(sg.tubes); setShelfCount();
     setLine(Math.round(sg.nuc.Z / 2));
-    $('said1').innerHTML = '<p>' + sg.hint + '</p>';
+    $('said1').innerHTML = '<p>' + M.coachWords(S.st) + '</p>';
     setKick(1, false); setNow('Slide the cut, then fire.'); controls('choose');
     show('s-bench');
   }
@@ -485,7 +486,7 @@ svg .bang{font-family:'Bangers',sans-serif}
   }
   function previewMove() {
     clearPreview();
-    var pv = M.preview(S.st, S.Z1), T = S.st.tubes;
+    var pv = M.preview(S.st, S.Z1);
     pv.pieces.forEach(function (pc) {
       pc.path.forEach(function (Z, i) {
         var p = cellXY(Z); if (!p) return;
@@ -499,10 +500,7 @@ svg .bang{font-family:'Bangers',sans-serif}
       var c = document.querySelector('#shelf1 .card[data-id="' + l.id + '"]'); if (c) c.classList.add('will');
     });
     if (pv.failLights) { var cf = document.querySelector('#shelf1 .card[data-id="' + pv.failLights + '"]'); if (cf) cf.classList.add('iffail'); }
-    var names = pv.lights.map(function (l) { return M.tubeById(T, l.id).short; });
-    var s = (pv.p >= 0.995 ? 'This cut always works. It lights: ' : 'If it works, it lights: ') + (names.length ? names.join(', ') : 'nothing new') + '.';
-    if (pv.p < 0.995) s += pv.failLights ? ' If it fails, the drop keeps its neutron and lights the 24-min tube.' : ' If it fails, nothing lights.';
-    $('cap').textContent = s;
+    $('cap').innerHTML = M.previewWords(S.st, S.Z1);
   }
   function lightTube(id, atZ) {
     var g = TP.tubes[id], p = cellXY(atZ); g.classList.add('lit'); g.setAttribute('transform', 'translate(' + p.x + ' ' + p.y + ')'); sym(TP, atZ, false); lightCard(id, atZ);
@@ -593,7 +591,7 @@ svg .bang{font-family:'Bangers',sans-serif}
     setTimeout(tick, 500);
     function finish() {
       var lines = M.moveWords(S.st, mv);
-      $('said1').innerHTML = lines.map(function (l) { return '<p>' + l + '</p>'; }).join('');
+      $('said1').innerHTML = lines.map(function (l) { return '<p>' + l + '</p>'; }).join('') + '<p class="learn"><b>You learned:</b> ' + M.lessonOf(S.st, mv) + '</p>';
       $('cap').textContent = CAP_AFTER;
       var litN = S.st.tubes.filter(function (t) { return S.st.lit[t.id]; }).length;
       busy = false; controls('next');
@@ -613,7 +611,7 @@ svg .bang{font-family:'Bangers',sans-serif}
     }
     TP.pieces.forEach(function (g) { g.remove(); }); TP.pieces = [];
     drawDrop(); setLine(Math.round(S.st.nuc.Z / 2));
-    $('said1').innerHTML = '';
+    var cw = M.coachWords(S.st); $('said1').innerHTML = cw ? '<p>' + cw + '</p>' : '';
     setKick(S.st.used + 1, false); setNow('Slide the cut, then fire.'); controls('choose');
   }
   function endGame() {

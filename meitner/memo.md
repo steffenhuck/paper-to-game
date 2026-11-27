@@ -250,3 +250,13 @@ A fixed plan clears the shelf about three times in four at best; a player who re
 
 **Not done.** No stranger has played this. The Pantheon page and its line are untouched until the author has played it. Rev. 3 is kept in `previous/rev3/`.
 
+## 23. Revision 5 (27 November 2026): hand-holding
+
+**The author's note** (after playing rev. 4). "It looks very good but I think it needs more handholding, like saying what you will learn when there is fission or when there is not."
+
+**The changes.** Three short lines of guidance, all computed in the mechanism (`previewWords`, `lessonOf`, `coachWords`) so calibration can check them. (1) Before the first cut: "If the drop splits, watch what the two pieces turn into. If the cut fails, watch what the drop turns into." (2) Under the table, live for every cut: "It splits for sure. Lights: 93, 94, 95, 96, 97. You will learn: pieces from the middle can pass for new elements." or "It splits 25% of the time ... Otherwise the cut fails: lights the 24-min tube. You will learn: a neutron can just get caught: uranium-239." (3) After each result, "You learned: ..." and, before the next cut, "Still dark: barium and lanthanum (try a little off the middle)". The lessons are the paper's findings in one sentence each: pieces from the middle can pass for new elements; barium comes out of uranium with krypton as its partner (56 + 36 = 92); a neutron can just get caught (the 24-minute stuff); thorium splits too.
+
+**Checks added** (`calibration.js`, now 85, all passing): every cut on both drops has a preview of 60 words or fewer that says what you will learn; the preview says sure or the chance, and what a failure lights; every outcome ends with a plain lesson; the coach names what is still dark and stops mentioning the 24-minute tube once it is lit. At 380 x 700 the preview line still ends on screen (651 px).
+
+**Not done.** Still unplayed by a stranger.
+
