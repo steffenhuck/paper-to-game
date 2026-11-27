@@ -15,6 +15,7 @@ while (!m.isOver(s)) {
   say('   Preview on the map: ' + s.known.map(function (n) { return n + ' = ' + lineWord(m.catOf(ev[n] || 0)); }).join('; '));
   say('   [Spend the week]');
   var rec = m.playWeek(s, ev);
+  rec.thinned.forEach(function (x) { say('   ' + x.who + ' got no evening: the line thins, ' + x.from + ' to ' + x.to + '.'); });
   rec.closures.forEach(function (c) { say('   The town: ' + c[0] + ' and ' + c[1] + ' come to know each other (you see both often). A new dashed line.'); });
   rec.intros.forEach(function (x) { say('   The town: ' + x.by + ' introduces you to ' + x.who + ' (' + m.circleLabel(x.circle) + '). A new dashed line; a new name on your map.'); });
   if (rec.chance) say('   By chance you run into ' + rec.chance.who + ', from ' + m.circleLabel(rec.chance.circle).toLowerCase() + '. A new dashed line.');
@@ -30,9 +31,6 @@ while (!m.isOver(s)) {
   });
   say('   WEEK ' + w + ': you heard of ' + rec.heard + ' of ' + rec.total + ' openings. Weeks so far: ' + s.weeks.map(function (x) { return x.heard; }).join(' · ') + '. [Next week]');
 }
-say('\n-- THE BET. One more week of news, every line dashed. How many of the seven reach you? [none | one or two | three or four | five or more]');
-var br = m.betWeek(s), tell = []; br.pieces.forEach(function (p) { if (p.heard) p.tellers.forEach(function (t) { if (tell.indexOf(t.who) < 0) tell.push(t.who); }); });
-say('   You said: one or two. ' + br.heard + ' of 7 reached you anyway, from ' + tell.join(', ') + '. Not counted. The paper: more than a quarter of the Boston job changers heard from someone seen once a year or less. [See the verdict]');
 var t = m.tally(s);
 say('\n== VERDICT. You heard of ' + t.heard + ' of the ' + t.total + ' openings the town heard of in three weeks.');
 say('   From people you saw often: ' + t.seen.often + '; now and then: ' + t.seen.occ + '; rarely: ' + t.seen.rare + '.   Granovetter\'s 54 job changers: ' + C.BOSTON_SEEN.often + ' / ' + C.BOSTON_SEEN.occ + ' / ' + C.BOSTON_SEEN.rare + ' per cent.');

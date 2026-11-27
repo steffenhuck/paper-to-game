@@ -47,17 +47,7 @@ async def main():
             if w == 3: await shot('week3-planned-strong-bridge') if False else None
             await pg.click('#b-next'); await pg.wait_for_timeout(300)
             if w == 2: await shot('week3-new-names')
-        # the bet
-        assert await pg.evaluate("document.getElementById('wk-bet').style.display === ''"), 'bet panel not shown'
-        await shot('bet-offer'); await nohs('bet')
-        await pg.click('.chip:has-text("one or two")'); await pg.wait_for_timeout(1500); await shot('bet-playing')
-        await pg.click('#b-skip')
-        for _ in range(200):
-            if await pg.evaluate("document.getElementById('wk-result').style.display === ''"): break
-            await pg.wait_for_timeout(100)
-        bt = await pg.text_content('#res-text'); print('BET |', await pg.text_content('#res-big'), '|', bt[:80])
-        await shot('bet-result', True)
-        await pg.click('#b-next'); await pg.wait_for_timeout(400)
+        assert await pg.evaluate("document.getElementById('s-end').classList.contains('on')"), 'verdict not shown'
         await shot('end', True); await nohs('end')
         print('VERDICT |', await pg.text_content('#v-pct'), '|', await pg.text_content('#v-big'), '|', await pg.text_content('#v-fate'), '|', await pg.text_content('#v-plan'), '|', await pg.text_content('#v-part'))
         await pg.click('#b-about-end'); await pg.wait_for_timeout(200); await shot('about', True); await pg.click('#b-about-close')
