@@ -169,7 +169,7 @@ a{color:var(--chalk)}
   <div class="fate" id="fate"></div>
   <div class="vp-head" id="vp-yours"></div>
   <div class="verdictpic"><svg id="pic-yours" viewBox="0 0 340 150"></svg></div>
-  <div class="vp-head">Singer's line: whose pain counts</div>
+  <div class="vp-head">Singer's line</div>
   <div class="verdictpic"><svg id="pic-singer" viewBox="0 0 340 150"></svg></div>
   <p class="find" id="v-singer"></p>
   <div class="sec"><h2>Where you and Singer part</h2><div id="v-part"></div></div>
@@ -407,7 +407,7 @@ a{color:var(--chalk)}
     $('fate').textContent = v.fate;
     $('vp-yours').textContent = 'Your line: ' + v.name;
     drawLinePic('pic-yours', v.line.used, v.line.spared, v.name, v.line.stakes);
-    drawLinePic('pic-singer', SUB.slice(), ['stone'], 'Singer\'s line', null, ['their pain counts, and counts the same', 'nothing to count']);
+    drawLinePic('pic-singer', [], SUB.slice(), 'Singer\'s line', null);
     $('v-singer').textContent = v.singerLine;
     $('v-part').innerHTML = '<p>' + esc(v.part) + '</p>';
     $('v-stood').innerHTML = '<p>' + esc(v.two) + '</p>' + (v.shape.id === 'refuse' ? '<p><a href="../foot/foots-bad-man.html" style="color:#F0D27A">Play Foot\'s Bad Man →</a></p>' : '');
