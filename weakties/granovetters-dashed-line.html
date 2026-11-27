@@ -119,14 +119,14 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
   <p id="v-fate"></p>
   <p class="small" style="margin:0">The same news, five ways</p>
   <svg class="bars" id="v-bars0" viewBox="0 0 340 128"></svg>
-  <p class="small" style="margin:10px 0 0">How the best plan plays this town, in its last week</p>
-  <svg class="map" id="v-planmap" viewBox="0 0 340 316" aria-label="The best plan"></svg>
   <p id="v-plan"></p>
   <div class="rule thin"></div>
   <p class="small" style="margin:0">Who told you first, by how often you saw them: <b>you</b> (black) against <b>Granovetter's 54 job changers</b> (outline)</p>
   <svg class="bars" id="v-bars1" viewBox="0 0 340 96"></svg>
   <div class="part" id="v-part"></div>
-  <p id="v-paper"><b>The paper.</b> Your close friends move in your circle and hear what you hear. The person you hardly see is your only line into another circle, so that is where the news comes from.</p>
+  <p id="v-paper"><b>The paper.</b> Your close friends move in your circle and hear what you hear. The person you hardly see is your only line into another circle, so that is where the news comes from; and a town whose circles have no lines between them is a town of islands.</p>
+  <svg id="v-westend" viewBox="0 0 340 112" width="100%" aria-hidden="true" style="display:block;margin:4px 0"></svg>
+  <p class="small">Boston, around 1960: the West End could not organise against the plan that demolished it; Charlestown, with its clubs and local jobs, fought the same city and won.</p>
   <button class="btn solid" id="b-again">Play again, in a new town</button>
   <div class="row2"><button class="btn" id="b-replay">Replay this town</button><button class="btn" id="b-help-end">How to play</button><button class="btn" id="b-about-end">About</button></div>
   <div class="seedline" id="v-seed"></div>
@@ -149,7 +149,7 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
   <h2>The news</h2>
   <p>Seven openings a week, each first heard by one person, who turns blue. Whoever hears passes it on to each person they are tied to: on a thick line always, on a thin line usually (three times in four), on a dashed line sometimes (one in three), and a little less at every pair of hands it has passed through. The blue mark travels along the lines; where it stops short, that person did not mention it. You keep what you hear. The week's line tells you who told you, who told you the same thing again, and what never reached you.</p>
   <h2>The verdict</h2>
-  <p>Your score: the openings you heard of in three weeks as a share of what could have been heard on this town's news (the best three weeks we could find knowing the news in advance, or your own run if it did better), in three bands of blue. Then the same news five ways: you, the best plan without foreknowledge, your circle, nobody, and the news known in advance; the best plan drawn on this town's map, with the lines its news came along; and who told you first, against the paper's own table.</p>
+  <p>Your score: the openings you heard of in three weeks as a share of what could have been heard on this town's news (the best three weeks we could find knowing the news in advance, or your own run if it did better), in three bands of blue. Then the same news five ways: you, the best plan without foreknowledge, your circle, nobody, and the news known in advance; who told you first, against the paper's own table; and the paper's two towns, the West End and Charlestown.</p>
   <div class="close"><button class="btn" id="b-help-close2">Back</button></div>
 </div></div>
 
@@ -159,7 +159,7 @@ svg.map{display:block;width:100%;height:auto;background:var(--paper)}
   <h1>About</h1>
     <p><b>The paper.</b> Mark S. Granovetter, "The Strength of Weak Ties", <i>American Journal of Sociology</i> 78(6), May 1973, pages 1360–1380. DOI 10.1086/225469; on JSTOR at <a href="https://www.jstor.org/stable/2776392">jstor.org/stable/2776392</a>. Game built from this paper; the paper is the authority where the two disagree. Page numbers below are the journal's.</p>
   <h2>What the paper says</h2>
-  <p>The strength of a tie between two people is a combination of the time they spend together, the emotional intensity, the intimacy and the services they do each other (p. 1361). The stronger the tie between you and a friend, the more of your other friends you share: strong ties take time, bring your friends into each other's company, and run between similar people, and once two of your close friends know of each other, anything short of friendship between them is a strain (p. 1362). Pushed to the limit, for exposition, this says that a triangle with two strong sides and no third side never occurs (Fig. 1, p. 1363). It follows that no strong tie can be the only path between two groups, so whatever flows between groups flows along weak ties; and that news passed through weak ties reaches more people over greater social distance, provided the urge to retell it fades a little at every retelling, as it must in any real network (pp. 1364–1366). At the level of one person: the people you see most are inside your circle and know what you know; the person you hardly see is in another circle and is your line into it. Of 54 people in a Boston suburb who had found their job through a contact, 17 per cent saw the contact often, 56 per cent now and then, 28 per cent rarely, and in 84 per cent of 64 cases the news had come straight from the employer or through one intermediary (pp. 1371–1372). At the level of a community: a neighbourhood of close circles with no weak ties between them cannot organise, however warm the circles; the West End of Boston could not resist the renewal that demolished it, while Charlestown, its circles joined by clubs and local jobs, fought the same city and won (pp. 1373–1375).</p>
+  <p>The strength of a tie between two people is a combination of the time they spend together, the emotional intensity, the intimacy and the services they do each other (p. 1361). The stronger the tie between you and a friend, the more of your other friends you share: strong ties take time, bring your friends into each other's company, and run between similar people, and once two of your close friends know of each other, anything short of friendship between them is a strain (p. 1362). Pushed to the limit, for exposition, this says that a triangle with two strong sides and no third side never occurs (Fig. 1, p. 1363). It follows that no strong tie can be the only path between two groups, so whatever flows between groups flows along weak ties; and that news passed through weak ties reaches more people over greater social distance, provided the urge to retell it fades a little at every retelling, as it must in any real network (pp. 1364–1366). At the level of one person: the people you see most are inside your circle and know what you know; the person you hardly see is in another circle and is your line into it. Of 54 people in a Boston suburb who had found their job through a contact, 17 per cent saw the contact often, 56 per cent now and then, 28 per cent rarely, and in 84 per cent of 64 cases the news had come straight from the employer or through one intermediary (pp. 1371–1372). At the level of a community: a neighbourhood of close circles with no weak ties between them cannot organise, however warm the circles; the West End of Boston could not resist the renewal that demolished it (pp. 1373–1375).</p>
   <h2>What the game does with it</h2>
   <p>You are the job changer of the paper's survey, and your one control is the paper's one measured variable: how often you see each person. Seven evenings a week on the people you know; two evenings make a line "often", one "now and then", the survey's own categories; a line you give no evening thins by one step about one week in two and never vanishes, so a close friend costs evenings to keep, which is the paper's premise that strength is time. Once a week you run into someone by chance: usually someone new; sometimes someone you already know, and the old line comes back thick for the week, the paper's reactivated tie. The town reacts as the paper says it does: two people you see often come to know each other; a person you see often introduces you to their circle (the paper quotes Gans, who was drawn into his first contact's circle in the West End); and a chance meeting reactivates a tie once a week, as the paper's respondents reported. Then the week's news travels along the lines. The verdict scores your three weeks as a share of what could have been heard on this town's news (the best three weeks found with the news known in advance, or your own run if it did better), shows the same news five ways (you, the best plan without foreknowledge, your circle, nobody, the news known in advance), and reads who told you first against the paper's Boston table. The paper's second table, how many pairs of hands the news passed through (39 per cent straight from the employer, 45 through one intermediary, 13 through two, 3 through more), is in the calibration and not on the verdict: the toy reproduces its shape (five in six within one pair of hands) but not its middle.</p>
   <h2>Mechanism kind and claim boundaries</h2>
@@ -667,8 +667,8 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: n
       { label: 'no evening on anyone', n: st },
       { label: 'news known in advance', n: ceil, dash: true }
     ], ceil);
-    var planRun = runStrategy(G.seed, STRATEGIES[CONFIG.BEST_PLAN]), across = planMap(planRun), mine = acrossCount(G);
-    $('v-plan').innerHTML = '<b>Every dashed line you started with was a door into another circle.</b> The best plan keeps each door open with one evening a week and gives Home nothing: your friends hear what you hear. Blue: who told it first, and how often. <b>' + across + ' of its ' + sp + '</b> openings came through those doors; <b>' + mine + ' of your ' + heard + '</b> did.';
+    var planEv = STRATEGIES[CONFIG.BEST_PLAN](newGame(G.seed)), two = Object.keys(planEv).filter(function (n) { return planEv[n] === 2; }), one = Object.keys(planEv).filter(function (n) { return planEv[n] === 1; });
+    $('v-plan').innerHTML = '<b>The best plan without foreknowledge:</b> one evening to one person in each of the other six circles, and the seventh to one of them again (' + (two.length ? list(two) + ' twice; ' : '') + list(one) + ' once), every week, and nothing to Home. It hears ' + sp + ' of ' + ceil + ' here.';
     var sh = { often: pct(t.seen.often, heard), occ: pct(t.seen.occ, heard), rare: pct(t.seen.rare, heard) }, B = CONFIG.BOSTON_SEEN;
     bars('v-bars1', [
       { label: 'saw them often', you: sh.often, paper: B.often, note: Math.round(sh.often) + '% · paper ' + Math.round(B.often) + '%' },
@@ -682,31 +682,26 @@ if (typeof module !== 'undefined') module.exports = { CONFIG: CONFIG, newGame: n
     else if (sh.rare >= 50) part = '<b>Most of your news came from people you hardly saw.</b> They had it, and mentioned it one time in three. In Boston they brought more than a quarter of the jobs.';
     else part = '<b>Your news came from everywhere</b>, in about Boston\'s proportions.';
     $('v-part').innerHTML = part;
+    westEnd();
     $('v-seed').textContent = 'Town ' + G.seed;
     show('s-end');
   }
-  function acrossCount(run) { var n = 0; run.weeks.forEach(function (w) { w.pieces.forEach(function (p) { if (p.heard && circleOf(p.first.who) !== 'home') n++; }); }); return n; }
-  function planMap(run) { // the best plan's last week on this town's map: the town in grey, your lines in ink, blue where news first reached you
-    var svg = $('v-planmap'); while (svg.firstChild) svg.removeChild(svg.firstChild);
-    var last = run.weeks[run.weeks.length - 1], ties = last.ties, firsts = {};
-    run.weeks.forEach(function (w) { w.pieces.forEach(function (p) { if (p.heard) firsts[p.first.who] = (firsts[p.first.who] || 0) + 1; }); });
-    var g = { halo: el('g', {}, svg), town: el('g', {}, svg), ego: el('g', {}, svg), dots: el('g', {}, svg), labels: el('g', {}, svg) };
-    CONFIG.CIRCLES.forEach(function (c) {
-      var cc = circleCentre[c.id]; el('circle', { cx: cc[0], cy: cc[1], r: c.id === 'home' ? HOMEHALO : HALO, fill: FROST2 }, g.halo);
-      var up = cc[1] <= CY, ly = c.id === 'home' ? cc[1] - HOMEHALO - 5 : (up ? cc[1] - HALO - 5 : cc[1] + HALO + 11);
-      cased(el('text', { x: cc[0], y: ly, 'text-anchor': 'middle', 'font-size': 8.5, fill: SLATE, 'letter-spacing': '0.1em', 'font-family': 'Archivo,Helvetica,Arial' }, g.labels)).textContent = c.label.toUpperCase();
+  function westEnd() {
+    var svg = $('v-westend'); while (svg.firstChild) svg.removeChild(svg.firstChild);
+    [{ x0: 4, name: 'THE WEST END', joined: false }, { x0: 176, name: 'CHARLESTOWN', joined: true }].forEach(function (town) {
+      var cs = [town.x0 + 28, town.x0 + 80, town.x0 + 132], pts = [];
+      cs.forEach(function (cx, ci) {
+        el('circle', { cx: cx, cy: 44, r: 25, fill: FROST2 }, svg);
+        var ring = []; for (var i = 0; i < 5; i++) { var a = -Math.PI / 2 + i * 2 * Math.PI / 5; ring.push([cx + 15 * Math.cos(a), 44 + 15 * Math.sin(a)]); }
+        for (var i2 = 0; i2 < 5; i2++) for (var j = i2 + 1; j < 5; j++) el('line', { x1: ring[i2][0], y1: ring[i2][1], x2: ring[j][0], y2: ring[j][1], stroke: FROST, 'stroke-width': 1.2 }, svg);
+        var lit = town.joined || ci === 0;
+        ring.forEach(function (p) { el('circle', { cx: p[0], cy: p[1], r: 3.6, fill: lit ? BLUE : INK }, svg); });
+        pts.push(ring);
+      });
+      if (town.joined) { el('line', { x1: pts[0][1][0], y1: pts[0][1][1], x2: pts[1][4][0], y2: pts[1][4][1], stroke: SLATE, 'stroke-width': 1.2, 'stroke-dasharray': '3 3' }, svg); el('line', { x1: pts[1][1][0], y1: pts[1][1][1], x2: pts[2][4][0], y2: pts[2][4][1], stroke: SLATE, 'stroke-width': 1.2, 'stroke-dasharray': '3 3' }, svg); }
+      el('text', { x: town.x0 + 80, y: 88, 'text-anchor': 'middle', 'font-size': 9, fill: SLATE, 'letter-spacing': '0.1em', 'font-family': 'Archivo,Helvetica,Arial' }, svg).textContent = town.name;
+      el('text', { x: town.x0 + 80, y: 104, 'text-anchor': 'middle', 'font-size': 10.5, fill: INK, 'font-family': 'Archivo,Helvetica,Arial' }, svg).textContent = town.joined ? 'dashed lines: the leaflet crosses' : 'no lines between: it stops';
     });
-    for (var k in ties) {
-      var ab = k.split('~'), mineK = ab[0] === CONFIG.YOU || ab[1] === CONFIG.YOU, other = ab[0] === CONFIG.YOU ? ab[1] : ab[1] === CONFIG.YOU ? ab[0] : null, cat = ties[k], a = pos[ab[0]], b = pos[ab[1]];
-      if (!a || !b) continue;
-      var blue = mineK && firsts[other], w = mineK ? (cat === 'often' ? 3.6 : 1.4) : (cat === 'often' ? 1.6 : 0.9);
-      el('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], 'stroke-linecap': 'round', stroke: blue ? BLUE : (mineK ? (cat === 'rare' ? SLATE : INK) : FROST), 'stroke-width': blue ? Math.max(w, 2.2) : w, 'stroke-dasharray': cat === 'rare' ? (mineK ? '4 3.5' : '3 3') : 'none' }, mineK ? g.ego : g.town);
-    }
-    everyone().forEach(function (p) { var known = run.known.indexOf(p) >= 0; el('circle', { cx: pos[p][0], cy: pos[p][1], r: firsts[p] ? 6 : (known ? 4.6 : 3.2), fill: firsts[p] ? BLUE : (known ? INK : FROST) }, g.dots);
-      if (firsts[p]) { var o = labelOffset(p); cased(el('text', { x: o[0], y: o[1], 'text-anchor': 'middle', 'font-size': 10.5, 'font-weight': 700, fill: BLUE, 'font-family': 'Archivo,Helvetica,Arial' }, g.labels)).textContent = p + ' ' + firsts[p]; } });
-    el('circle', { cx: CX, cy: CY, r: 8, fill: INK, stroke: PAPER, 'stroke-width': 2 }, g.dots);
-    cased(el('text', { x: CX - 11, y: CY + 4, 'text-anchor': 'end', 'font-size': 10, 'font-weight': 700, fill: INK, 'font-family': 'Archivo,Helvetica,Arial' }, g.labels)).textContent = 'YOU';
-    return acrossCount(run);
   }
 
   // ---------- wiring ----------
