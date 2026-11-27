@@ -1,4 +1,4 @@
-// Granovetter's Dashed Line — the mechanism. The single source of truth: every rule that moves anything on screen lives here.
+// Find a job with Granovetter — the mechanism. The single source of truth: every rule that moves anything on screen lives here.
 // Runs unchanged in Node (node calibration.js) and in the browser (inlined verbatim by build.py).
 // Mechanism kind: TOY of the paper's argument (Granovetter 1973, AJS 78:1360–1380), calibrated on two of its tables.
 //
