@@ -1,4 +1,4 @@
-// Meitner's Drop: the mechanism. The single source of truth; inlined verbatim into the HTML by build.py.
+// Meitner and the Phantoms: the mechanism. The single source of truth; inlined verbatim into the HTML by build.py.
 // Runs unchanged in Node (module.exports) and in the browser (globals). No DOM in here.
 // Mechanism kind: TOY, built to illustrate the argument of Meitner & Frisch, Nature 143, 239-240 (1939).
 // Every number below is tagged with its source in the paper (page/sentence), or marked as ours.
@@ -377,7 +377,7 @@ function verdict(stU, stTh) {
   var rangs = stU.moves.filter(function (m) { return m.kind === 'rang'; });
   var unevens = splits.concat(rangs).filter(function (m) { return m.uneven; });
   var hasBaT = TU.some(function (t) { return t.id === 'ba'; }), baLit = !!stU.lit.ba;
-  var fate = (ekaLeft === 0 ? (allU ? 'THE "NEW ELEMENTS" WERE NEVER THERE' : (hasBaT && !baLit ? 'THE "NEW ELEMENTS" ARE GONE, BUT THE BARIUM IS NOT EXPLAINED' : 'THE "NEW ELEMENTS" ARE GONE, BUT TUBES STILL WAIT')) : (ekaLeft === 1 ? 'ONE "NEW ELEMENT" STILL STANDS' : countWord(ekaLeft).toUpperCase() + ' "NEW ELEMENTS" STILL STAND'));
+  var fate = (ekaLeft === 0 ? (allU ? 'ALL FIVE WERE PHANTOMS' : (hasBaT && !baLit ? 'THE PHANTOMS ARE GONE, BUT THE BARIUM IS NOT EXPLAINED' : 'THE PHANTOMS ARE GONE, BUT TUBES STILL WAIT')) : (ekaLeft === 1 ? 'ONE "NEW ELEMENT" STILL STANDS' : countWord(ekaLeft).toUpperCase() + ' "NEW ELEMENTS" STILL STAND'));
   var story = [];
   // 1. what the player did
   var cuts = splits.map(function (m) { return nameOf(m.Z1) + ' and ' + nameOf(m.Z2); });
@@ -400,7 +400,7 @@ function verdict(stU, stTh) {
     'Barium and lanthanum never came out of your uranium. Barium was the one fact the chemists were sure of, and it is where the paper starts. Its partner is always krypton (56 + 36 = 92).');
   // 3. the five "new elements"
   var idea = 'The paper takes all five away with one idea: a piece that starts near masurium changes five times, and so it passes through five columns.';
-  story.push(ekaDown === eka.length ? 'All five of the chemists\' "new elements" turned out to be old ones: ' + ekaNames(stU) + '. A piece from the middle of the table changes a few times after the split. On the way it stands in the same column as an element the chemists thought was new, and a tube cannot tell two elements of one column apart.' :
+  story.push(ekaDown === eka.length ? 'All five of the chemists\' "new elements" were phantoms, old elements in disguise: ' + ekaNames(stU) + '. A piece from the middle of the table changes a few times after the split. On the way it stands in the same column as an element the chemists thought was new, and a tube cannot tell two elements of one column apart.' :
     ekaDown ? cap(countWord(ekaDown)) + ' of the five "new elements" turned out to be old ones: ' + ekaNames(stU) + '. ' + cap(countWord(ekaLeft)) + (ekaLeft === 1 ? ' still stands' : ' still stand') + ' in the dashed row on your shelf, an element nobody has ever seen. ' + idea :
     'None of the five "new elements" turned out to be old ones. They still stand in the dashed row on your shelf, elements nobody has ever seen. ' + idea);
   // 4. thorium
@@ -417,7 +417,7 @@ function verdict(stU, stTh) {
   }
   story.push(nTxt);
   // 6. what Meitner and Frisch saw
-  story.push('<b>What Meitner and Frisch saw.</b> Uranium does not just chip. A neutron can make it split in two, like a drop that barely holds together, and the halves fly apart with a huge shove. They had no new element to show for it: they took all five away. They left one thing open: a uranium nucleus that simply catches a neutron may turn into a real element 93, the one element beyond uranium their paper allows. Meitner had found a real element before, protactinium (91), together with Otto Hahn in 1918. This time she found that five were not there.');
+  story.push('<b>What Meitner and Frisch saw.</b> Uranium does not just chip. A neutron can make it split in two, like a drop that barely holds together, and the halves fly apart with a huge shove. They had no new element to show for it: they showed that all five were phantoms. They left one thing open: a uranium nucleus that simply catches a neutron may turn into a real element 93, the one element beyond uranium their paper allows. Meitner had found a real element before, protactinium (91), together with Otto Hahn in 1918. This time she found five phantoms.');
   return { barium: { present: hasBaT, lit: baLit, name: baLit ? nameOf(stU.lit.ba.atZ) : null }, fate: fate, chips: chips, claimed: eka.length, you: ekaDown, paperDown: eka.length, story: story, allU: allU, ekaLeft: ekaLeft, holdFound: holdFound, thAll: thAll, seed: stU.seed };
 }
 function ekaNames(stU) {

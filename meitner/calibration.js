@@ -1,4 +1,4 @@
-// Calibration check for Meitner's Drop (build.md section 2). Run: node calibration.js. Exits 1 on any failure.
+// Calibration check for Meitner and the Phantoms (build.md section 2). Run: node calibration.js. Exits 1 on any failure.
 var m = require('./mechanism.js'), C = m.CONFIG, U = C.URANIUM, TH = C.THORIUM;
 var fails = 0;
 function ok(cond, what) { console.log((cond ? 'ok   ' : 'FAIL ') + what); if (!cond) fails++; }

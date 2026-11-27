@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Meitner's Drop</title>
+<title>Meitner and the Phantoms</title>
 <script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <meta name="description" content="Meitner and Frisch, Nature 1939: a heavy nucleus splits like a drop whose skin has nearly given up. You are the uranium drop. Pinch yourself where you choose, if the skin lets you, or hold together, and watch where the pieces land on the chemists' 1939 table; account for every tube on their shelf, including the five they filed as elements beyond uranium.">
 <style>
@@ -127,7 +127,7 @@ svg .bang{font-family:'Bangers',sans-serif}
 <!-- START -->
 <section id="s-start" class="screen on">
   <div class="kicker">Letters to the Editor · Nature, 11 February 1939</div>
-  <h1 class="title">Meitner's Drop</h1>
+  <h1 class="title">Meitner and the Phantoms</h1>
   <div class="panel"><svg viewBox="0 0 340 130" aria-hidden="true">
     <defs><pattern id="tonepat0" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#9A958C"/></pattern></defs>
     <path d="M60 65 C60 35 100 22 150 22 C200 22 240 35 240 65 C240 95 200 108 150 108 C100 108 60 95 60 65 Z" fill="#fff" stroke="#161414" stroke-width="3"/>
@@ -140,7 +140,7 @@ svg .bang{font-family:'Bangers',sans-serif}
     <g transform="translate(252 86)"><rect x="0" y="4" width="12" height="22" rx="3" fill="#fff" stroke="#161414" stroke-width="2"/><rect x="2" y="0" width="8" height="5" fill="#161414"/><rect x="20" y="4" width="12" height="22" rx="3" fill="#E23A2A" stroke="#161414" stroke-width="2"/><rect x="22" y="0" width="8" height="5" fill="#161414"/><rect x="40" y="4" width="12" height="22" rx="3" fill="#fff" stroke="#161414" stroke-width="2" stroke-dasharray="3 2"/><rect x="42" y="0" width="8" height="5" fill="#161414"/><rect x="60" y="4" width="12" height="22" rx="3" fill="#fff" stroke="#161414" stroke-width="2" stroke-dasharray="3 2"/><rect x="62" y="0" width="8" height="5" fill="#161414"/></g>
   </svg></div>
   <p class="acts">1938. Chemists fire neutrons at uranium and find strange new stuff. Five of the substances seem to be brand-new elements, heavier than uranium, numbers 93 to 97. Lise Meitner and Otto Frisch think something else happened: the uranium split in two.</p>
-  <p class="aim big">You are Meitner and Frisch. Choose where the uranium might split. Can you explain the five "new elements" and the barium? You have four tries.</p>
+  <p class="aim big">You are Meitner and Frisch. The chemists claim five "new elements", 93 to 97. Are they real, or phantoms, old elements in disguise? Choose where the uranium might split, and see whether your pieces can explain them, and the barium too. You have four tries.</p>
   <button class="btn solid" id="b-begin">Play</button>
   <div class="row2"><button class="btn" id="b-why">Why can a drop split?</button><button class="btn" id="b-about-start">About</button></div>
   <p class="cred">Built from Lise Meitner and O. R. Frisch, "Disintegration of Uranium by Neutrons: a New Type of Nuclear Reaction", <i>Nature</i> 143, 239–240 (1939).</p>
@@ -189,7 +189,7 @@ svg .bang{font-family:'Bangers',sans-serif}
   <h1>How to play</h1>
   <p><b>You are Meitner and Frisch. The chemists found five "new elements", 93 to 97, and also barium in the uranium. You think the uranium split in two. Explain all six in four tries. A cut does not tell you in advance what it explains: you find out by testing.</b></p>
   <h2>The five "new elements"</h2>
-  <p>Each one is a substance that the chemists could not tell from an old element: "like rhenium", "like osmium" and so on. Elements in one column of the table act alike in chemistry. So when one of your pieces turns into an old element that stands in the same column, the "new element" is explained: it was never new.</p>
+  <p>Each one is a substance that the chemists could not tell from an old element: "like rhenium", "like osmium" and so on. Elements in one column of the table act alike in chemistry. So when one of your pieces turns into an old element that stands in the same column, the "new element" is explained: it was never new. It was a phantom, an old element in disguise.</p>
   <h2>The barium</h2>
   <p>Barium is an old element, number 56. It is not new, but nobody expected it in uranium. Barium is explained when one of your pieces is barium, or acts like barium. That needs a cut away from the middle, and those cuts can fail.</p>
   <h2>The cut</h2>
@@ -627,10 +627,10 @@ svg .bang{font-family:'Bangers',sans-serif}
     $('fate').textContent = v.fate;
     var chip = function (c, mode) { return '<span class="chip ' + mode + '"><b>' + c.Z + '</b><i>' + (mode === 'claim' ? 'new?' : (mode === 'stand' ? 'still new?' : (c.real || 'not new'))) + '</i></span>'; };
     var row = function (who, what, chips) { return '<div class="brow"><div class="bwho">' + who + ' <span>' + what + '</span></div><div class="chips">' + chips + '</div></div>'; };
-    $('v-board').innerHTML = '<h2>New elements beyond uranium</h2>' +
+    $('v-board').innerHTML = '<h2>Phantoms beyond uranium?</h2>' +
       row('The chemists, 1938', 'claimed ' + v.claimed + ' new elements.', v.chips.map(function (c) { return chip(c, 'claim'); }).join('')) +
-      row('You', 'took away ' + v.you + ' of the ' + v.claimed + '.', v.chips.map(function (c) { return chip(c, c.real ? 'gone' : 'stand'); }).join('')) +
-      row('Meitner and Frisch, 1939', 'took away ' + v.paperDown + ' of the ' + v.claimed + '.', v.chips.map(function (c) { return chip({ Z: c.Z }, 'gone'); }).join(''));
+      row('You', 'showed ' + v.you + ' of the ' + v.claimed + ' to be phantoms.', v.chips.map(function (c) { return chip(c, c.real ? 'gone' : 'stand'); }).join('')) +
+      row('Meitner and Frisch, 1939', 'showed ' + v.paperDown + ' of the ' + v.claimed + ' to be phantoms.', v.chips.map(function (c) { return chip({ Z: c.Z }, 'gone'); }).join(''));
     if (v.barium.present) $('v-board').innerHTML += '<p class="bnote"><b>The barium, the chemists\' firm finding.</b> You: ' + (v.barium.lit ? 'explained (a piece of ' + v.barium.name + ' acts like it).' : 'not explained.') + ' Meitner and Frisch: explained, as one half of a split uranium, with krypton as the other (56 + 36 = 92).</p>';
     $('v-story').innerHTML = v.story.map(function (l) { return '<p>' + l + '</p>'; }).join('');
     $('seedline').textContent = 'The draws in this game came from seed ' + S.seed + '. Add ?seed=' + S.seed + ' to the address to play the same draws again.';

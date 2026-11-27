@@ -1,6 +1,6 @@
 // Scripted sessions in headless Chromium (Playwright). Run: node session-test.js. Writes screenshot-*.png; prints what the game said; exits 1 on a page error or horizontal scroll.
 var { chromium } = require('playwright'), path = require('path');
-var URL = 'file://' + path.resolve('meitners-drop.html');
+var URL = 'file://' + path.resolve('meitner-and-the-phantoms.html');
 (async function () {
   var b = await chromium.launch(process.env.CHROME ? { executablePath: process.env.CHROME, args: ['--no-sandbox'] } : {}), errs = [];
   async function session(vw, vh, tag, actsU, actsT, shots, seed) {

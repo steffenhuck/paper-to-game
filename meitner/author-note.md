@@ -1,4 +1,4 @@
-# Meitner's Drop — note for the author
+# Meitner and the Phantoms — note for the author
 
 Revision 5 of 27 November 2026 added hand-holding (memo, section 23): the game now says what you will learn if the drop splits and if the cut fails, before you fire and after. Revision 4 of 26 November 2026, on your note that rev. 3 was too hard to understand and the slider too short (memo, section 22). The cut now goes anywhere from 1 to 91, the chance is a hill under the drop, the game shows what a cut will do before you fire, the Hold button is gone (a failed cut lights the 24-minute tube), and the words are plain. The numbers and the odds are rev. 2's.
 
