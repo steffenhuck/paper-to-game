@@ -1,0 +1,71 @@
+== 1. The paper's figure ==
+PASS  the first square holds four (p. 14, "Four, Socrates")  [4]
+PASS  the double line gives sixteen (p. 15–16, "four times four are sixteen")  [16]
+PASS  sixteen is four times, not twice (p. 15, "Four times as much")
+PASS  the line of three gives nine (p. 17, "Nine")
+PASS  the corner-to-corner line gives eight (p. 19, "Of eight feet… From this")  [8]
+PASS  the boy's guesses are the paper's: double, then three
+PASS  the tilted square covers half of each of the four squares of four (p. 18–19, "each interior line cut off half")  [0.502 0.501 0.502 0.502]
+PASS  the original square is one of the four quarters of the paper's figure
+PASS  eight is four whole tiles and eight halves
+PASS  no line along the floor gives eight (8 is not a square number): the boy's straight search cannot succeed
+PASS  of the lines the player can lay, exactly one gives eight, and it is the paper's
+PASS  every allowed line's count equals its area (tiles and halves add up)  [one tile along=1; two tiles along=4; three tiles along=9; four tiles along=16; one tile corner to corner=2; two tiles corner to corner=8]
+PASS  every allowed square fits on the floor  [6 lines]
+PASS  the player has six lines: four along, two corner to corner
+PASS  no line the player can lay on the first day is the next morning's answer (so no told line is right next morning by luck)
+PASS  next morning: the square of three holds nine, and its corner-to-corner square eighteen, twice nine
+PASS  next morning: yesterday's line gives eight, not eighteen
+PASS  next morning: double the side gives thirty-six
+PASS  the record: 15 of the boy's 52 replies are his own words
+
+== 2. The boy's rules ==
+PASS  asked which line, he lays double and counts sixteen; no longer sure  [He laid his own line, four tiles along, and counted the square on it: sixteen, four times the first square, not twice. He is no longer sure.]
+PASS  asked again, he lays three and counts nine; stuck  [Nine. Still more than eight. I do not know, Socrates.]
+PASS  stuck and asked which line: "I do not know", a question used, still stuck
+PASS  while sure, shown the right line, he ignores it and counts his own (p. 17: no enquiry while he fancies he knows)
+PASS  stuck, asked about a line: he counts the square on it
+PASS  stuck, asked about the corner-to-corner line: eight; found, by his count
+PASS  told: he agrees, whatever his state
+PASS  asking only "which line?" empties the purse: Meno goes, the boy stuck
+
+== 3. The next morning ==
+PASS  found -> lays the new square's corner-to-corner line and counts eighteen
+PASS  told the right line while stuck -> repeats yesterday's line, eight, wrong (the statue runs off)
+PASS  told while sure -> back to double the side, thirty-six
+PASS  told while guessing -> also back to double (he had not yet said "I do not know")
+PASS  told a wrong line while stuck -> wrong
+PASS  out -> "I do not know", no line laid
+PASS  only the boy who counted it himself succeeds next morning
+PASS  the ladder: sure < stuck < told-right < found
+
+== 4. Every sequence of moves (exhaustive) ==
+PASS  in every one of 25381 complete lessons: found next morning iff he counted eight himself; the purse never goes below zero  [{"found":2107,"opinion":2107,"sure":48,"wrong":10535,"stuck":10584}]
+
+== 5. Playing it in numbers (build.md §3) ==
+  Socratic: ask, ask, then the corner line       questions used 3  fate: found    next morning 18 (right)
+  Knower who tells at once                       questions used 1  fate: sure     next morning 36
+  Corrector: one count, then tells               questions used 2  fate: sure     next morning 36
+  Late teller: two counts, then tells            questions used 3  fate: opinion  next morning 8
+  Shower: lays the corner line from the start    questions used 3  fate: found    next morning 18 (right)
+  Straight-line searcher (1, 2 along, then which) questions used 5  fate: stuck    next morning —
+  Slant searcher, small first                    questions used 4  fate: found    next morning 18 (right)
+  Purist: only ever asks which line              questions used 5  fate: stuck    next morning —
+  Checker: the first square, then slants         questions used 5  fate: found    next morning 18 (right)
+  Panicker: tells the first slant he sees        questions used 3  fate: wrong    next morning 2
+  Waster: one more which, then straight lines    questions used 5  fate: stuck    next morning —
+  random searcher, 4 questions: finds it with probability 50% (4 untried lines, 2 tries)
+  random searcher, 5 questions: finds it with probability 75% (4 untried lines, 3 tries)
+  random searcher, 6 questions: finds it with probability 100% (4 untried lines, 4 tries)
+  random searcher, 7 questions: finds it with probability 100% (4 untried lines, 5 tries)
+  random searcher, 8 questions: finds it with probability 100% (4 untried lines, 6 tries)
+PASS  with the chosen purse a random searcher usually finds it, and not always  [3/4]
+PASS  the obvious ways of playing reach all five fates  [found, sure, opinion, stuck, wrong]
+PASS  some sensible ways get it wrong for a reason the paper names (telling: p. 17, p. 31; straight lines only: p. 17)
+
+== 6. Robustness: the discovery against the designer's choices ==
+PASS  purse of 4, 6, 8 or 10: the asked boy finds it again, the told boy does not  [Q=4: asked 18, told 8; Q=6: asked 18, told 8; Q=8: asked 18, told 8; Q=10: asked 18, told 8]
+PASS  next-morning square of three is the only one that fits the floor with its double (four would need a larger floor)
+  note: the fates follow from the toy's rules (memo §16), not from the purse or the square chosen; the rules are ours, built on pp. 17, 19, 30–31.
+
+41 passed, 0 failed

@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Double the Square with Plato</title>
+<script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<meta name="description" content="Plato's Meno: you are Socrates at a square laid in the floor, with a boy who has never had a lesson and five questions before Meno has to go. Bring him to a square twice the size by asking, not telling, and see what he does the next morning.">
+<style>
+@font-face{font-family:'Cinzel';font-weight:400 900;font-style:normal;src:url(data:font/woff2;base64,/*__F_CINZEL__*/) format('woff2')}
+@font-face{font-family:'Gentium';font-weight:400;font-style:normal;src:url(data:font/woff2;base64,/*__F_GENT400__*/) format('woff2')}
+@font-face{font-family:'Gentium';font-weight:700;font-style:normal;src:url(data:font/woff2;base64,/*__F_GENT700__*/) format('woff2')}
+@font-face{font-family:'Gentium';font-weight:400;font-style:italic;src:url(data:font/woff2;base64,/*__F_GENT400I__*/) format('woff2')}
+:root{--ground:#16171A;--ground2:#202126;--white:#EEE8DA;--ochre:#D29A3B;--ochre2:#9A6E26;--cinn:#B8432F;--green:#71877A;--green2:#A3B3A8;--line:#2C2E33}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--ground);color:var(--white);font-family:'Gentium',Georgia,serif;font-size:16px;line-height:1.38;-webkit-text-size-adjust:100%;min-height:100vh}
+.wrap{max-width:440px;margin:0 auto;padding:10px 12px 26px}
+.screen{display:none}.screen.on{display:block}
+.cz{font-family:'Cinzel',serif}
+.kicker{font-family:'Cinzel',serif;font-weight:600;font-size:11.5px;letter-spacing:.16em;color:var(--green2);margin:8px 0 4px}
+h1.title{font-family:'Cinzel',serif;font-weight:700;font-size:31px;line-height:1.08;letter-spacing:.01em;margin:2px 0 12px;color:var(--white)}
+h2{font-family:'Cinzel',serif;font-weight:700;font-size:18px;letter-spacing:.04em;margin:16px 0 8px;color:var(--white)}
+p{margin:0 0 10px}
+.acts{font-size:16px;color:var(--white)}
+.aim{font-family:'Cinzel',serif;font-weight:700;font-size:17px;line-height:1.3;color:var(--ochre);border-top:3px dashed var(--green);border-bottom:3px dashed var(--green);padding:10px 2px;margin:12px 0 14px}
+.btn{display:inline-block;font-family:'Cinzel',serif;font-weight:700;font-size:13px;letter-spacing:.08em;color:var(--white);background:var(--ground);border:4px dashed var(--green);border-radius:0;padding:10px 12px;margin:4px 6px 4px 0;cursor:pointer;min-height:48px;line-height:1.15;text-align:center;-webkit-tap-highlight-color:transparent}
+.btn.go{background:var(--ochre);color:var(--ground);border-color:var(--ochre2)}
+.btn:disabled{opacity:.3;cursor:default}
+.btn.wide{width:100%;margin-right:0}
+.btns2{display:flex;gap:8px;margin-top:8px}.btns2 .btn{flex:1;margin:0;font-size:12.5px;padding:8px 8px}
+footer.sig{margin-top:24px;font-style:italic;font-size:14px;color:var(--green)}footer.sig a{color:var(--green);text-decoration:none}
+.topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.aimsm{font-family:'Cinzel',serif;font-weight:600;font-size:11.5px;line-height:1.3;color:var(--ochre);letter-spacing:.02em;padding-top:3px}
+.qbtn{flex:none;width:40px;height:40px;border:3px dashed var(--green);background:var(--ground);color:var(--white);font-family:'Cinzel',serif;font-size:18px;font-weight:700;cursor:pointer;padding:0}
+.now{font-family:'Gentium',serif;font-weight:700;font-size:19px;line-height:1.22;margin:6px 0 3px;color:var(--white)}
+.sub{font-size:14.5px;color:var(--green2);margin:0 0 6px;line-height:1.32}
+.purse{display:flex;align-items:center;justify-content:space-between;gap:6px;margin:6px 0 4px;font-family:'Cinzel',serif;font-size:10.5px;letter-spacing:.1em;color:var(--green2)}
+.stones{display:inline-flex;gap:4px;vertical-align:middle;margin-left:6px}
+.stone{width:15px;height:15px;background:var(--ochre);display:inline-block}
+.stone.used{background:transparent;outline:2px solid var(--line);outline-offset:-2px}
+.legend{display:inline-flex;gap:8px;align-items:center}
+.sw{display:inline-block;width:11px;height:11px;margin-right:3px;vertical-align:-1px}
+svg.floor{display:block;width:100%;height:auto;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.result{font-size:15.5px;line-height:1.32;color:var(--white);min-height:42px;margin:6px 0 4px}
+.result b{color:var(--white)}
+.boy{display:flex;gap:8px;align-items:center;border-top:3px dashed var(--line);padding-top:6px;margin-top:4px}
+.boy .head{flex:none;width:52px}
+.boy .says{flex:1;min-width:0}
+.chip{display:inline-block;font-family:'Cinzel',serif;font-weight:700;font-size:10.5px;letter-spacing:.12em;padding:2px 6px;border:2px solid var(--green);color:var(--green2);margin-bottom:3px}
+.chip.white{border-color:var(--white);color:var(--white)}.chip.ochre{border-color:var(--ochre);color:var(--ochre)}.chip.cinn{border-color:var(--cinn);color:#E07A66}
+.words{font-style:italic;font-size:16px;line-height:1.28;color:var(--white)}
+.belief{font-size:12.5px;color:var(--green2);margin-top:2px}
+.boy .statue{flex:none;width:66px}
+.rules{margin-top:10px;border:3px dashed var(--line);padding:8px 10px;font-size:13.5px;line-height:1.32;color:var(--green2)}
+.rules .t{font-family:'Cinzel',serif;font-weight:700;font-size:11px;letter-spacing:.12em;color:var(--white);margin-bottom:3px}
+.rules ol{margin:0;padding-left:18px}.rules li{margin:1px 0}
+.overlay{display:none;position:fixed;inset:0;background:var(--ground);overflow:auto;z-index:10}
+.overlay.on{display:block}
+.overlay .wrap{padding-bottom:40px}
+.overlay a{color:var(--ochre)}
+.overlay ul{padding-left:18px}.overlay li{margin-bottom:6px}
+.end-head{font-family:'Cinzel',serif;font-weight:700;font-size:25px;line-height:1.18;color:var(--white);margin:6px 0 6px}
+.end-plinth{font-size:15.5px;color:var(--green2);margin-bottom:6px}
+.sect{font-family:'Cinzel',serif;font-weight:700;font-size:12px;letter-spacing:.14em;color:var(--ochre);margin:16px 0 4px}
+.did{margin:0;padding-left:18px}.did li{margin:3px 0;font-size:15px}
+.small{font-size:13px;color:var(--green2)}
+.rungtxt{font-size:14.5px;margin:4px 0 0}
+@keyframes topple{0%{transform:rotate(0);opacity:1}20%{transform:rotate(-6deg)}100%{transform:rotate(84deg) translate(6px,0);opacity:0}}
+@keyframes rise{0%{transform:translateY(30px);opacity:0}100%{transform:translateY(0);opacity:1}}
+@keyframes walk{0%{transform:translateX(0);opacity:1}25%{transform:translate(10px,-3px)}50%{transform:translate(22px,0)}75%{transform:translate(34px,-3px);opacity:.7}100%{transform:translate(52px,0);opacity:0}}
+@keyframes flash{0%{opacity:0}30%{opacity:.9}100%{opacity:0}}
+.st-topple{transform-box:fill-box;transform-origin:85% 100%;animation:topple .9s ease-in forwards}
+.st-rise{transform-box:fill-box;transform-origin:50% 100%;animation:rise .7s ease-out both}
+.st-walk{animation:walk 1.6s steps(8,end) forwards}
+.st-flash{animation:flash .7s ease-out forwards}
+@media (prefers-reduced-motion:reduce){.st-topple,.st-rise,.st-walk,.st-flash{animation-duration:.01s}}
+</style>
+</head>
+<body>
+
+<!-- ============================== START ============================== -->
+<div class="screen on" id="s-start"><div class="wrap">
+  <svg class="floor" id="band-top" viewBox="0 0 400 22" aria-hidden="true"></svg>
+  <svg class="floor" id="faces" viewBox="0 0 400 128" aria-hidden="true"></svg>
+  <div class="kicker">Plato · Meno · about 385 BCE</div>
+  <h1 class="title">Double the Square with Plato</h1>
+  <p class="acts">In Meno's house in Athens, you are Socrates. A slave boy of the household, who has never had a lesson, stands at a square laid in the floor. You lay lines in the floor, ask him questions, and decide whether to tell him the answer. He counts the tiles himself.</p>
+  <div class="aim" id="aim-start">Bring the boy to a square twice this size, by asking, not telling, before Meno has to go.</div>
+  <button class="btn go wide" id="b-begin">Begin</button>
+  <div style="display:flex;gap:8px;margin-top:6px"><button class="btn" style="flex:1;margin:0" id="b-help-start">How to play</button><button class="btn" style="flex:1;margin:0" id="b-about-start">About</button></div>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</div></div>
+
+<!-- ============================== YOUR ANSWER ============================== -->
+<div class="screen" id="s-guess"><div class="wrap">
+  <div class="topbar"><div class="aimsm">Bring the boy to a square twice this size, by asking, not telling, before Meno has to go.</div><button class="qbtn" id="b-help-guess" aria-label="How to play">?</button></div>
+  <div class="now">Before he is asked: what would you say?</div>
+  <div class="sub">The grey-green square in the floor is two tiles each way: four tiles. A square twice its size holds eight. Tap a glowing peg: a line runs to it from the corner, and the square on that line shows faintly. Your answer stays with you.</div>
+  <svg class="floor" id="floor-guess"></svg>
+  <div class="result" id="guess-result">No line yet.</div>
+  <button class="btn go wide" id="b-guess" disabled>That is my answer</button>
+</div></div>
+
+<!-- ============================== THE LESSON ============================== -->
+<div class="screen" id="s-play"><div class="wrap">
+  <div class="topbar"><div class="aimsm">Bring the boy to a square twice this size, by asking, not telling, before Meno has to go.</div><button class="qbtn" id="b-help-play" aria-label="How to play">?</button></div>
+  <div class="now" id="p-now"></div>
+  <div class="sub" id="p-sub"></div>
+  <div class="purse"><span>Meno's questions<span class="stones" id="p-stones"></span></span><span class="legend"><span><span class="sw" style="background:var(--white)"></span>his</span><span><span class="sw" style="background:var(--ochre)"></span>yours</span></span></div>
+  <svg class="floor" id="floor-play"></svg>
+  <div class="result" id="p-result"></div>
+  <div class="boy">
+    <svg class="head" id="p-head" viewBox="0 0 56 64" aria-hidden="true"></svg>
+    <div class="says"><span class="chip" id="p-chip"></span><div class="words" id="p-words"></div><div class="belief" id="p-belief"></div></div>
+    <svg class="statue" id="p-statue" viewBox="0 0 66 100" aria-hidden="true"></svg>
+  </div>
+  <div class="btns2" id="p-btns"><button class="btn go" id="b-ask"></button><button class="btn" id="b-tell"></button></div>
+  <div class="btns2" id="p-btns-next" style="display:none"><button class="btn go" id="b-morning">Next morning</button></div>
+  <div class="rules"><div class="t">How the boy thinks</div><ol>
+    <li>He counts truly: whole tiles, and two halves make one.</li>
+    <li>While he thinks he knows, he tests only his own line.</li>
+    <li>Once he says "I do not know", he counts the square on any line you lay.</li>
+    <li>He agrees with whatever you tell him.</li></ol>
+    <div style="margin-top:5px">Each question, and telling him, uses one of Meno's five. Tomorrow Meno will give him a bigger square and ask him again, without you.</div></div>
+</div></div>
+
+<!-- ============================== NEXT MORNING ============================== -->
+<div class="screen" id="s-morning"><div class="wrap">
+  <div class="topbar"><div class="aimsm">Next morning. Meno asks the boy again, in a different form.</div><button class="qbtn" id="b-help-morning" aria-label="How to play">?</button></div>
+  <div class="now" id="m-now">Meno lays a square of three tiles each way: nine tiles. He asks the boy for a square twice its size: eighteen.</div>
+  <div class="sub" id="m-sub">You are not there to help. Whatever he does now comes from yesterday.</div>
+  <svg class="floor" id="floor-morning"></svg>
+  <div class="result" id="m-result"></div>
+  <div class="boy">
+    <svg class="head" id="m-head" viewBox="0 0 56 64" aria-hidden="true"></svg>
+    <div class="says"><span class="chip" id="m-chip"></span><div class="words" id="m-words"></div><div class="belief" id="m-belief"></div></div>
+    <svg class="statue" id="m-statue" viewBox="0 0 66 100" aria-hidden="true"></svg>
+  </div>
+  <div class="btns2"><button class="btn go" id="b-meno">Meno asks him</button></div>
+  <div class="btns2" style="display:none" id="m-next"><button class="btn go" id="b-end">Where does he stand?</button></div>
+</div></div>
+
+<!-- ============================== VERDICT ============================== -->
+<div class="screen" id="s-end"><div class="wrap">
+  <svg class="floor" id="band-end" viewBox="0 0 400 22" aria-hidden="true"></svg>
+  <div class="kicker">Where the boy stands</div>
+  <div class="end-head" id="v-head"></div>
+  <div class="end-plinth" id="v-plinth"></div>
+  <svg class="floor" id="v-ladder"></svg>
+  <div class="rungtxt" id="v-rungtxt"></div>
+  <div class="sect">What you did</div>
+  <ul class="did" id="v-did"></ul>
+  <div class="sect">In the dialogue</div>
+  <p id="v-dialogue"></p>
+  <div class="sect">What came next</div>
+  <p id="v-follows"></p>
+  <div style="display:flex;gap:8px;margin-top:10px"><button class="btn go" style="flex:1;margin:0" id="b-again">Play again</button><button class="btn" style="flex:1;margin:0" id="b-about-end">About</button></div>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</div></div>
+
+<!-- ============================== HOW TO PLAY ============================== -->
+<div class="overlay" id="help"><div class="wrap">
+  <h2>How to play</h2>
+  <p class="aim" style="font-size:15px">Bring the boy to a square twice this size, by asking, not telling, before Meno has to go.</p>
+  <p><b>The floor.</b> A grey-green square is laid in it, two tiles each way: four tiles. A square twice its size holds eight tiles. Glowing pegs mark where a line from the square's corner can end: along the floor, or from corner to corner across the tiles. Tap a peg to lay a line to it; the square on that line shows faintly. Tap it again to lift it.</p>
+  <p><b>Your answer.</b> Before the lesson you tap the line you would choose yourself. Nobody acts on it.</p>
+  <p><b>The lesson.</b> You have Meno's five questions. Each button uses one.</p>
+  <ul>
+    <li><b>Ask him: which line?</b> (no line laid): he lays the line he believes in, in white, and counts the square on it.</li>
+    <li><b>Ask him: how big is the square on this line?</b> (a line laid): if he still thinks he knows, he ignores your line and tests his own; once he has said "I do not know", he counts the square on yours.</li>
+    <li><b>Tell him: it's this line.</b> He says yes. He does not count it.</li>
+  </ul>
+  <p><b>The count.</b> He lays a white tile on every tile of the square, then the halves, two halves to a tile. The column at the right of the floor stacks what he counted against two marks: four (the first square) and eight (twice). Tiles past eight are red.</p>
+  <p><b>Colours.</b> White is his own: what he lays, counts and says. Ochre is yours. Grey-green was given.</p>
+  <p><b>His statue.</b> Beside him stands a small statue of what he believes. A count that proves him wrong knocks it over. A line he counts himself raises a white statue, tied down. A line you tell him raises an ochre one, not tied.</p>
+  <p><b>The end of the lesson.</b> When he has a line for eight, by his count or by your word, or when Meno has to go.</p>
+  <p><b>Next morning.</b> Meno gives him a square of three tiles each way, nine, and asks for its double. You only watch. Then the end screen says where he stands, on four steps: sure and wrong; stuck; right, but told; right, and found.</p>
+  <button class="btn go wide" id="b-help-close">Back</button>
+</div></div>
+
+<!-- ============================== ABOUT ============================== -->
+<div class="overlay" id="about"><div class="wrap">
+  /*__ABOUT__*/
+  <button class="btn go wide" id="b-about-close">Back</button>
+</div></div>
+
+<script>
+/*__MECHANISM__*/
+</script>
+<script>
+(function () {
+'use strict';
+const M = MECH, C = M.CONFIG;
+const COL = { ground: '#16171A', ground2: '#202126', white: '#EEE8DA', ochre: '#D29A3B', ochre2: '#9A6E26', cinn: '#B8432F', green: '#71877A', green2: '#A3B3A8', line: '#2C2E33', dark: '#0E0F11' };
+const $ = id => document.getElementById(id);
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+function show(id) { document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id)); window.scrollTo(0, 0); }
+
+// ---------------------------------------------------------------- mosaic art --------------------------------
+// deterministic jitter so a re-render does not shimmer
+function rnd(seed) { let x = Math.sin(seed * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
+function mosaic(rows, pal, t, x0, y0, gap, seed) {
+  let s = '';
+  rows.forEach((row, j) => { for (let i = 0; i < row.length; i++) {
+    const ch = row[i]; if (ch === '.' || !pal[ch]) continue;
+    const k = seed + i * 31 + j * 17;
+    const jx = (rnd(k) - .5) * gap * .8, jy = (rnd(k + 7) - .5) * gap * .8;
+    s += '<rect x="' + (x0 + i * t + gap / 2 + jx).toFixed(2) + '" y="' + (y0 + j * t + gap / 2 + jy).toFixed(2) + '" width="' + (t - gap).toFixed(2) + '" height="' + (t - gap).toFixed(2) + '" fill="' + pal[ch] + '"/>';
+  } });
+  return s;
+}
+const ART = {
+  boy: ['....HHHHHH....', '..HHHHHHHHH...', '.HHHHHHHHHHH..', '.HHHHHSSSSHH..', '.HHHSSSSSSSS..', '.HHSSSSSS.SS..', '.HSSSSSSSSSSS.', '.HSSSSSSSSSSSS', '..SSSSSSSSSSS.', '..SSSSSSSSSS..', '...SSSSSS.SS..', '...SSSSSSSS...', '....SSSSSS....', '.....SSSS.....', '....SSSSSS....', '..TTTTTTTTTT..'],
+  soc: ['.....SSSS.....', '...SSSSSSSS...', '..SSSSSSSSSS..', '.HSSSSSSSSSSS.', '.HSSSSSSSSSSS.', '.HHSSSSSS.SSS.', '.HHSSSSSSSSSSS', '.HSSSSSSSSSSSS', '.HSSSSSSSSSSS.', '..HSSSSSHHHHH.', '..HHSSHHHHHHH.', '..HHHHHHHHHHH.', '...HHHHHHHHHH.', '....HHHHHHHH..', '.....HHHHHH...', '..TTTTTTTTTT..'],
+  meno: ['..H.HH.HH.H...', '.HHHHHHHHHHH..', 'HHHHHHHHHHHHH.', 'HHHHHSSSSSHHH.', 'HHHHSSSSSSSS..', 'HHHSSSSSS.SS..', '.HHSSSSSSSSSS.', 'HHHSSSSSSSSSSS', '.HHSSSSSSSSSS.', '..HSSSSSSSSS..', '...SSSSSS.SS..', '...SSSSSSSS...', '....SSSSSS....', '.....SSSS.....', '....SSSSSS....', '..TTTTTTTTTT..'],
+  kouros: ['...XXX...', '..XXXXX..', '..XXXXX..', '...XXX...', '....X....', '.XXXXXXX.', 'XXXXXXXXX', 'X.XXXXX.X', 'X.XXXXX.X', 'X.XXXXX.X', 'X..XXX..X', '...XXX...', '...X.X...', '..XX.XX..', '..XX.XX..', '..XX.XX..', '..XX.XX..', '..XX.XX..', '.XXX.XXX.'],
+};
+const PAL = {
+  boy: { S: COL.white, H: COL.green, T: COL.green },
+  soc: { S: COL.ochre, H: COL.ochre2, T: COL.green },
+  meno: { S: COL.green2, H: COL.green, T: '#4B5A51' },
+};
+function meander(w, h, color) { // a running key, laid as a row of tesserae
+  const u = h / 6; let d = '';
+  for (let x = 0; x < w + 6 * u; x += 6 * u) {
+    d += 'M' + x + ',' + (5 * u) + ' V' + u + ' H' + (x + 4 * u) + ' V' + (4 * u) + ' H' + (x + 2 * u) + ' V' + (3 * u);
+  }
+  const t = Math.max(2, u * .7);
+  return '<rect x="0" y="0" width="' + w + '" height="' + h + '" fill="' + COL.ground + '"/>'
+    + '<path d="' + d + '" fill="none" stroke="' + color + '" stroke-width="' + t + '" stroke-dasharray="' + t + ' ' + (t * .45) + '"/>'
+    + '<path d="M0,' + (5.6 * u) + ' H' + w + '" stroke="' + color + '" stroke-width="' + t + '" stroke-dasharray="' + t + ' ' + (t * .45) + '"/>';
+}
+function headSVG(kind, size) {
+  const t = size / 14;
+  return mosaic(ART[kind], PAL[kind], t, 0, 0, t * .16, kind.length * 101);
+}
+
+// ---------------------------------------------------------------- the floor ---------------------------------
+// floor units: 1 = one foot = one tile. S px per foot in the viewBox. Field 7 wide; rows shown depends on the screen.
+const S = 40, PAD = 16, COLW = 2.5;
+function floorBox(rows) { return { w: PAD * 2 + (C.FIELD_W + 0.4 + COLW) * S, h: PAD * 2 + rows * S + 14 }; }
+function fx(x) { return PAD + x * S; }
+function fy(y, rows) { return PAD + (rows - y) * S; }
+function pts(poly, rows) { return poly.map(p => fx(p[0]).toFixed(1) + ',' + fy(p[1], rows).toFixed(1)).join(' '); }
+function tessLine(l, rows, color, w, op) {
+  const t = w || 6;
+  return '<line x1="' + fx(l.ax) + '" y1="' + fy(l.ay, rows) + '" x2="' + fx(l.ex) + '" y2="' + fy(l.ey, rows) + '" stroke="' + color + '" stroke-width="' + t + '" stroke-dasharray="' + t + ' ' + (t * .5) + '" opacity="' + (op == null ? 1 : op) + '"/>';
+}
+function outline(l, rows, color, op, w) {
+  const t = w || 3;
+  return '<polygon points="' + pts(M.squareOn(l), rows) + '" fill="none" stroke="' + color + '" stroke-width="' + t + '" stroke-dasharray="' + t + ' ' + (t * .7) + '" opacity="' + op + '"/>';
+}
+function tileRect(i, j, rows, color, k) {
+  const g = 3.2, jx = (rnd(k) - .5) * 1.6, jy = (rnd(k + 3) - .5) * 1.6;
+  return '<rect x="' + (fx(i) + g + jx).toFixed(1) + '" y="' + (fy(j + 1, rows) + g + jy).toFixed(1) + '" width="' + (S - 2 * g) + '" height="' + (S - 2 * g) + '" rx="2" fill="' + color + '"/>';
+}
+function halfTri(h, rows, color) {
+  const cx = h.tri.reduce((a, p) => a + p[0], 0) / 3, cy = h.tri.reduce((a, p) => a + p[1], 0) / 3;
+  const shrink = p => [cx + (p[0] - cx) * .8, cy + (p[1] - cy) * .8];
+  return '<polygon points="' + pts(h.tri.map(shrink), rows) + '" fill="' + color + '"/>';
+}
+// view: { rows, given:[line], olds:[{line,by}], cur:{line,by,tiles,nWhole,nHalf}, lines:[{line,by,op}], sel, pegs, col:{base,target,whole,half,max} }
+function drawFloor(svgId, v) {
+  const svg = $(svgId), B = floorBox(v.rows);
+  svg.setAttribute('viewBox', '0 0 ' + B.w + ' ' + B.h);
+  let s = '<defs><pattern id="tx-' + svgId + '" width="10" height="10" patternUnits="userSpaceOnUse">'
+    + '<rect width="10" height="10" fill="' + COL.ground + '"/><rect x="0.6" y="0.6" width="4" height="4" fill="#1B1C20"/><rect x="5.4" y="5.4" width="4" height="4" fill="#1A1B1F"/><rect x="5.4" y="0.6" width="4" height="4" fill="#18191C"/></pattern></defs>';
+  // the field
+  s += '<rect x="' + (fx(0) - 13) + '" y="' + (fy(v.rows, v.rows) - 13) + '" width="' + (C.FIELD_W * S + 26) + '" height="' + (v.rows * S + 26) + '" fill="none" stroke="' + COL.green + '" stroke-width="3.5" stroke-dasharray="3.5 2.2" opacity=".8"/>';
+  s += '<rect x="' + fx(0) + '" y="' + fy(v.rows, v.rows) + '" width="' + (C.FIELD_W * S) + '" height="' + (v.rows * S) + '" fill="url(#tx-' + svgId + ')"/>';
+  for (let i = 1; i < C.FIELD_W; i++) s += '<line x1="' + fx(i) + '" y1="' + fy(0, v.rows) + '" x2="' + fx(i) + '" y2="' + fy(v.rows, v.rows) + '" stroke="' + COL.line + '" stroke-width="1"/>';
+  for (let j = 1; j < v.rows; j++) s += '<line x1="' + fx(0) + '" y1="' + fy(j, v.rows) + '" x2="' + fx(C.FIELD_W) + '" y2="' + fy(j, v.rows) + '" stroke="' + COL.line + '" stroke-width="1"/>';
+  // everything laid stays inside the floor
+  s += '<clipPath id="cl-' + svgId + '"><rect x="' + fx(0) + '" y="' + fy(v.rows, v.rows) + '" width="' + (C.FIELD_W * S) + '" height="' + (v.rows * S) + '"/></clipPath><g clip-path="url(#cl-' + svgId + ')">';
+  // given squares, laid in grey-green
+  (v.given || []).forEach((g, gi) => {
+    const ct = M.countTiles(g);
+    ct.whole.forEach((t, k) => s += tileRect(t.i, t.j, v.rows, gi === 0 && v.givenDim ? '#3B4741' : COL.green, 900 + k + gi * 50));
+  });
+  // old squares: faint outlines in their owner's colour
+  (v.olds || []).forEach(o => s += outline(o.line, v.rows, o.by === 'him' ? COL.white : COL.ochre, .28, 2));
+  // the current square, tiles laid so far
+  if (v.cur) {
+    const c = v.cur, ct = c.tiles;
+    s += outline(c.line, v.rows, c.by === 'him' ? COL.white : COL.ochre, .7, 3);
+    s += '<g opacity="' + (v.sel ? .3 : 1) + '">';
+    ct.whole.slice(0, c.nWhole).forEach((t, k) => s += tileRect(t.i, t.j, v.rows, COL.white, 300 + k));
+    ct.half.slice(0, c.nHalf).forEach(h => s += halfTri(h, v.rows, COL.white));
+    s += '</g>';
+  }
+  // lines
+  (v.lines || []).forEach(o => s += tessLine(o.line, v.rows, o.by === 'him' ? COL.white : o.by === 'given' ? COL.green : COL.ochre, 6, o.op));
+  // the selection (preview): the line and the square on it, faint, no count
+  if (v.sel) { s += outline(v.sel, v.rows, COL.ochre, .75, 3); s += tessLine(v.sel, v.rows, COL.ochre, 7, 1); }
+  s += '</g>';
+  // pegs: every corner faint; the ends you can choose glowing
+  for (let i = 0; i <= C.FIELD_W; i++) for (let j = 0; j <= v.rows; j++) s += '<rect x="' + (fx(i) - 1.6) + '" y="' + (fy(j, v.rows) - 1.6) + '" width="3.2" height="3.2" fill="' + COL.green + '" opacity=".55"/>';
+  if (v.anchor) s += '<circle cx="' + fx(C.ANCHOR.x) + '" cy="' + fy(C.ANCHOR.y, v.rows) + '" r="7" fill="' + COL.ochre + '"/>';
+  (v.pegs || []).forEach((l, k) => {
+    const on = v.sel && M.sameLine(v.sel, l);
+    s += '<g class="peg" data-k="' + k + '" style="cursor:pointer"><circle cx="' + fx(l.ex) + '" cy="' + fy(l.ey, v.rows) + '" r="' + (S * .48) + '" fill="#000" fill-opacity="0"/>'
+      + '<rect x="' + (fx(l.ex) - 8) + '" y="' + (fy(l.ey, v.rows) - 8) + '" width="16" height="16" fill="' + (on ? COL.ochre : COL.ground) + '" stroke="' + COL.ochre + '" stroke-width="3.2"/>'
+      + (on ? '' : '<rect x="' + (fx(l.ex) - 2.5) + '" y="' + (fy(l.ey, v.rows) - 2.5) + '" width="5" height="5" fill="' + COL.ochre + '"/>') + '</g>';
+  });
+  // the count column
+  if (v.col) s += column(v.col, v.rows);
+  // a caption line under the floor
+  if (v.caption) s += '<text x="' + fx(0) + '" y="' + (B.h - 2) + '" font-family="Gentium" font-size="13" fill="' + COL.green2 + '">' + v.caption + '</text>';
+  svg.innerHTML = s;
+  if (v.onPeg) svg.querySelectorAll('.peg').forEach(g => g.addEventListener('click', () => v.onPeg(+g.dataset.k)));
+}
+// The column: two tiles to a row, a tile per foot counted, from the bottom; marks at the first square and at twice.
+function column(c, rows) {
+  const x0 = fx(C.FIELD_W) + 0.55 * S, cw = 1.25 * S, u = Math.min(S * .5, (rows * S) / Math.max(c.max / 2, 1));
+  const y0 = fy(0, rows), ytop = fy(rows, rows);
+  let s = '<rect x="' + x0 + '" y="' + ytop + '" width="' + cw + '" height="' + (rows * S) + '" fill="#111214" stroke="' + COL.line + '" stroke-width="2"/>';
+  const n = c.whole + Math.floor(c.half / 2), half = c.half % 2;
+  const cap = Math.floor((rows * S) / u) * 2; // tiles that fit
+  const tw = (cw - 8) / 2;
+  for (let f = 0; f < Math.min(n + half, cap); f++) {
+    const r = Math.floor(f / 2), k = f % 2;
+    const x = x0 + 3 + k * (tw + 2), y = y0 - (r + 1) * u + 1.5;
+    const color = f >= c.target ? COL.cinn : COL.white;
+    if (f === n && half) s += '<polygon points="' + x + ',' + (y + u - 3) + ' ' + (x + tw) + ',' + (y + u - 3) + ' ' + x + ',' + y + '" fill="' + color + '"/>';
+    else s += '<rect x="' + x + '" y="' + y + '" width="' + tw + '" height="' + (u - 3) + '" fill="' + color + '"/>';
+  }
+  const lx = x0 + cw + 5;
+  const mark = (f, num, word, color) => {
+    const y = y0 - (f / 2) * u;
+    return '<line x1="' + (x0 - 3) + '" y1="' + y + '" x2="' + (x0 + cw + 3) + '" y2="' + y + '" stroke="' + color + '" stroke-width="2.5" stroke-dasharray="5 3"/>'
+      + '<text x="' + lx + '" y="' + (y + 1) + '" font-family="Cinzel" font-weight="900" font-size="17" fill="' + color + '">' + num + '</text>'
+      + '<text x="' + lx + '" y="' + (y + 12) + '" font-family="Cinzel" font-weight="700" font-size="8.5" letter-spacing=".5" fill="' + color + '">' + word + '</text>';
+  };
+  s += mark(c.base, String(c.base), 'FIRST', COL.green2);
+  s += mark(c.target, String(c.target), 'TWICE', COL.white);
+  if (n + half > cap) s += '<text x="' + (x0 + cw / 2) + '" y="' + (ytop - 3) + '" text-anchor="middle" font-family="Cinzel" font-weight="900" font-size="12" fill="' + COL.cinn + '">▲ ▲</text>';
+  // the running count, large, at the top of the column; named before it moves
+  if (c.whole + c.half === 0) s += '<text x="' + (x0 + cw / 2) + '" y="' + (ytop + 18) + '" text-anchor="middle" font-family="Cinzel" font-weight="700" font-size="9.5" fill="' + COL.white + '">HIS</text><text x="' + (x0 + cw / 2) + '" y="' + (ytop + 30) + '" text-anchor="middle" font-family="Cinzel" font-weight="700" font-size="9.5" fill="' + COL.white + '">COUNT</text>';
+  if (c.whole + c.half > 0) {
+    const shown = c.whole + Math.floor(c.half / 2);
+    s += '<text x="' + (x0 + cw / 2) + '" y="' + (ytop + 26) + '" text-anchor="middle" font-family="Cinzel" font-weight="900" font-size="25" fill="' + (shown > c.target ? COL.cinn : COL.white) + '" stroke="#111214" stroke-width="6" paint-order="stroke">' + shown + (half ? '½' : '') + '</text>';
+  }
+  return s;
+}
+
+// ---------------------------------------------------------------- the statue --------------------------------
+// st: { who:'him'|'you'|null, label, cord, anim, behind:{who,label} }
+function drawStatue(svgId, st) {
+  const svg = $(svgId); let s = '';
+  // plinth
+  s += '<rect x="6" y="80" width="54" height="16" fill="' + COL.green + '"/><rect x="2" y="94" width="62" height="5" fill="#4B5A51"/>';
+  // one statue: full size, centred; two (his old one, and the one you gave him): smaller, side by side
+  const two = !!(st.behind && st.who), tt = two ? 3.3 : 4.6;
+  const fig = (who, cls, x) => '<g class="' + (cls || '') + '">' + mosaic(ART.kouros, { X: who === 'him' ? COL.white : COL.ochre }, tt, x, 80 - 19 * tt, 0.8, who === 'him' ? 7 : 13) + '</g>';
+  if (st.behind) s += fig(st.behind.who, '', two ? 1 : 12.3);
+  if (st.who) s += fig(st.who, st.anim === 'topple' ? 'st-topple' : st.anim === 'rise' ? 'st-rise' : st.anim === 'walk' ? 'st-walk' : '', two ? 35 : 12.3);
+  if (st.cord && st.who) { const cd = 'M14,62 L52,70 M14,70 L52,62 M10,80 C20,72 46,72 56,80'; s += '<g class="' + (st.anim === 'rise' ? 'st-rise' : '') + '"><path d="' + cd + '" stroke="' + COL.ground + '" stroke-width="6" fill="none"/><path d="' + cd + '" stroke="' + COL.white + '" stroke-width="2.8" fill="none" stroke-dasharray="4 1.5"/></g>'; }
+  if (!st.who && !st.behind) s += '<text x="33" y="70" text-anchor="middle" font-family="Cinzel" font-weight="900" font-size="30" fill="' + COL.green + '">?</text>';
+  if (st.prints) s += '<g fill="' + COL.green + '"><rect x="44" y="76" width="4" height="3"/><rect x="52" y="73" width="4" height="3"/><rect x="60" y="76" width="4" height="3"/></g>';
+  if (st.anim === 'topple') s += '<rect x="0" y="0" width="66" height="100" fill="' + COL.cinn + '" class="st-flash" opacity="0"/>';
+  svg.innerHTML = s;
+}
+
+// ---------------------------------------------------------------- game state ---------------------------------
+const G = { guess: null, s: null, sel: null, busy: false, view: null, statue: null, morning: null };
+const PEGS = M.allowedLines();
+const ORIG = M.originalSquare();
+
+function guessScreen() {
+  G.guess = null; G.sel = null;
+  renderGuess();
+  show('s-guess');
+}
+function renderGuess() {
+  drawFloor('floor-guess', { rows: 4, given: [ORIG], pegs: PEGS, sel: G.sel, anchor: true, onPeg: k => {
+    G.sel = G.sel && M.sameLine(G.sel, PEGS[k]) ? null : PEGS[k]; renderGuess();
+  }, col: null, caption: 'Every line starts at the bottom-left corner of the grey-green square.' });
+  $('b-guess').disabled = !G.sel;
+  $('guess-result').textContent = G.sel ? 'Your line: ' + M.lineName(G.sel) + '. The faint square is the square on it.' : 'No line yet.';
+}
+
+function startLesson() {
+  G.guess = G.sel; G.sel = null;
+  G.s = M.newLesson(G.guess);
+  G.view = { rows: 4, given: [ORIG], olds: [], cur: null, lines: [], anchor: true };
+  G.statue = { who: 'him', label: 'double the line' };
+  $('p-result').innerHTML = 'A boy who has never had a lesson. Meno is watching.';
+  setWords('He has not said anything yet.', 'He believes: a square twice the size has a side twice as long.');
+  renderPlay();
+  show('s-play');
+}
+function setWords(w, belief) { $('p-words').textContent = w; $('p-belief').textContent = belief || ''; }
+const PHASE = {
+  sure: ['Sure', 'white'], guessing: ['Not sure', 'white'], stuck: ['Stuck', 'cinn'], found: ['Found it', 'white'], told: ['Told', 'ochre'], out: ['Stuck', 'cinn'],
+};
+function renderPlay() {
+  const s = G.s, n = C.QUESTIONS - s.purse + 1, over = M.isOver(s);
+  // stones
+  let st = ''; for (let k = 0; k < C.QUESTIONS; k++) st += '<span class="stone' + (k < C.QUESTIONS - s.purse ? ' used' : '') + '"></span>';
+  $('p-stones').innerHTML = st;
+  const ph = PHASE[s.phase]; $('p-chip').textContent = ph[0]; $('p-chip').className = 'chip ' + ph[1];
+  // the one thing to do now
+  let now, sub;
+  if (over) {
+    now = s.phase === 'found' ? 'He has a line for eight, counted by himself.' : s.phase === 'told' ? 'He has a line for eight, because you told him.' : 'Meno has to go. The boy has no line for eight.';
+    sub = 'The lesson is over. Tomorrow Meno will ask him again, with a bigger square, and you will not be there.';
+  } else if (s.phase === 'sure') {
+    now = 'Question ' + n + ' of ' + C.QUESTIONS + '. He has never had a lesson. Ask him, or tell him.';
+    sub = G.sel ? 'Your line is laid, in ochre. Ask him how big the square on it is, or tell him it is the line.' : 'Ask him which line makes a square twice this size, or tap a peg to lay a line of your own first.';
+  } else if (s.phase === 'guessing') {
+    now = 'Question ' + n + ' of ' + C.QUESTIONS + '. He is no longer sure. Ask again, or tell him?';
+    sub = G.sel ? 'Your line is laid. Ask him how big the square on it is, or tell him it is the line.' : 'He has another guess. Ask him which line, or lay a line and ask about it, or tell him.';
+  } else {
+    now = 'Question ' + n + ' of ' + C.QUESTIONS + '. He is stuck. He will count the square on any line you lay.';
+    sub = G.sel ? 'Ask him how big the square on your line is, or tell him it is the line.' : 'Tap a glowing peg to lay a line, then ask him about it, or tell him. Asking which line gets "I do not know".';
+  }
+  $('p-now').textContent = now; $('p-sub').textContent = sub;
+  // floor
+  const v = Object.assign({}, G.view, { pegs: over ? [] : PEGS, sel: over ? null : G.sel, onPeg: over || G.busy ? null : k => {
+    G.sel = G.sel && M.sameLine(G.sel, PEGS[k]) ? null : PEGS[k]; renderPlay(); } });
+  v.col = G.view.colv || { base: C.AREA0, target: C.TARGET, whole: 0, half: 0, max: 16 };
+  drawFloor('floor-play', v);
+  // buttons
+  $('b-ask').textContent = G.sel ? 'Ask him: how big is the square on this line?' : 'Ask him: which line?';
+  $('b-tell').textContent = G.sel ? 'Tell him: it\'s this line' : 'Tell him (lay a line first)';
+  $('b-ask').disabled = G.busy || over; $('b-tell').disabled = G.busy || over || !G.sel;
+  $('p-btns').style.display = over ? 'none' : 'flex';
+  $('p-btns-next').style.display = over && !G.busy ? 'flex' : 'none';
+  drawStatue('p-statue', G.statue);
+  $('p-head').innerHTML = headSVG('boy', 56);
+}
+async function animateCount(svgId, view, line, by, base, target, max, rows) {
+  const ct = M.countTiles(line);
+  view.cur = { line, by, tiles: ct, nWhole: 0, nHalf: 0 };
+  view.colv = { base, target, whole: 0, half: 0, max };
+  const redraw = () => drawFloor(svgId, Object.assign({}, view, { rows, pegs: [], sel: null, col: view.colv }));
+  redraw(); await sleep(260);
+  const dw = ct.whole.length > 10 ? 70 : 120;
+  for (let k = 1; k <= ct.whole.length; k++) { view.cur.nWhole = k; view.colv.whole = k; redraw(); await sleep(dw); }
+  for (let k = 1; k <= ct.half.length; k++) { view.cur.nHalf = k; view.colv.half = k; redraw(); await sleep(k % 2 ? 110 : 190); }
+  await sleep(300);
+  return ct;
+}
+async function doMove(type) {
+  if (G.busy || M.isOver(G.s)) return;
+  const action = type === 'which' ? (G.sel ? { type: 'how', line: G.sel } : { type: 'which' }) : { type: 'tell', line: G.sel };
+  const before = G.s;
+  const r = M.act(before, action); const e = r.event;
+  G.busy = true; G.sel = null;
+  // retire the previous square to a faint outline
+  if (G.view.cur) { G.view.olds.push({ line: G.view.cur.line, by: G.view.cur.by }); G.view.cur = null; }
+  G.s = Object.assign({}, before, { purse: r.state.purse }); // stones go down at once
+  renderPlay();
+  if (e.kind === 'told') {
+    G.view.lines.push({ line: e.line, by: 'you' });
+    $('p-result').textContent = e.result;
+    setWords(e.words, '');
+    G.s = r.state; G.busy = false;
+    G.statue = { who: 'you', label: M.lineName(e.line), anim: 'rise', behind: e.before === 'stuck' ? null : { who: 'him' } };
+    $('p-belief').textContent = e.before === 'stuck' ? 'He believes it because you said so. He has not counted it.' : 'He said yes. He has not counted it, and he has not yet said "I do not know".';
+    renderPlay(); return;
+  }
+  if (e.kind === 'idk') {
+    $('p-result').textContent = e.result; setWords(e.words, 'He believes no line now.');
+    G.s = r.state; G.busy = false; renderPlay(); return;
+  }
+  // a count: his own line, or yours
+  if (e.kind === 'ignored') G.view.lines.push({ line: action.line, by: 'you', op: .35 });
+  if (e.say1) { setWords(e.say1, ''); $('p-result').textContent = e.kind === 'ignored' ? 'He would not look at your line: he still thinks he knows.' : 'He lays his own line, in white.'; }
+  else { setWords('Let me count, Socrates.', ''); $('p-result').textContent = 'He counts the square on your line.'; }
+  G.view.lines.push({ line: e.laid, by: e.laidBy });
+  await sleep(e.say1 ? 900 : 300);
+  await animateCount('floor-play', G.view, e.laid, e.laidBy, C.AREA0, C.TARGET, 16, 4);
+  // the result, in the game's voice first
+  let res = e.result;
+  if (before.history.length === 0 && G.guess && e.kind !== 'count') {
+    if (M.sameLine(G.guess, e.laid)) res += ' Your own answer was the same.';
+    else res += ' Your own answer was ' + M.lineName(G.guess) + '.';
+  }
+  if (e.after === 'found') res += ' Meno asks: were these answers his own? On the floor, white is his and ochre is yours.';
+  if (r.state.phase === 'out') res += ' That was Meno\'s last question: he has to go to the mysteries.';
+  $('p-result').textContent = res;
+  setWords(e.words, '');
+  G.s = r.state;
+  if (e.after === 'guessing') { G.statue = { who: 'him', anim: 'topple' }; $('p-belief').textContent = 'His statue falls. His next guess: three, between two and four.'; }
+  else if (e.after === 'stuck' && e.before === 'guessing') { G.statue = { who: 'him', anim: 'topple' }; $('p-belief').textContent = 'His statue falls. He believes no line now.'; }
+  else if (e.after === 'found') { G.statue = { who: 'him', anim: 'rise', cord: true }; $('p-belief').textContent = 'A new statue, his own: the line from corner to corner. He counted it, so it is tied down.'; }
+  else if (e.after === 'out') { G.statue = { who: null }; $('p-belief').textContent = 'He believes no line now.'; }
+  else $('p-belief').textContent = 'He believes no line now.';
+  G.busy = false;
+  renderPlay();
+  if (G.statue.anim === 'topple') {
+    await sleep(950);
+    G.statue = G.s.phase === 'guessing' ? { who: 'him', anim: 'rise' } : { who: null };
+    drawStatue('p-statue', G.statue);
+    if (G.statue.anim === 'rise') { await sleep(750); G.statue.anim = null; }
+  }
+  if (G.statue.anim === 'rise') { await sleep(800); G.statue.anim = null; }
+}
+
+// ---------------------------------------------------------------- next morning -------------------------------
+function morningScreen() {
+  const s = G.s; const m = M.nextMorning(s); G.morning = m;
+  const sq = M.makeLine('flat', C.NEXT_SIDE);
+  G.mview = { rows: 6, given: [sq], olds: [], cur: null, lines: [], anchor: false, colv: { base: m.base, target: m.target, whole: 0, half: 0, max: 18 } };
+  drawFloor('floor-morning', Object.assign({}, G.mview, { col: G.mview.colv }));
+  $('m-result').textContent = 'The square in grey-green is Meno\'s: three tiles each way.';
+  const ph = PHASE[s.phase]; $('m-chip').textContent = ph[0]; $('m-chip').className = 'chip ' + ph[1];
+  $('m-head').innerHTML = headSVG('boy', 56);
+  $('m-words').textContent = '';
+  const st = s.phase === 'found' ? { who: 'him', cord: true } : s.phase === 'told' ? { who: 'you', behind: s.toldWhen === 'stuck' ? null : { who: 'him' } } : { who: null };
+  $('m-belief').textContent = s.phase === 'found' ? 'Yesterday he counted the line from corner to corner himself.' : s.phase === 'told' ? 'Yesterday you told him: ' + M.lineName(s.answer) + '.' : 'Yesterday he ended with "I do not know".';
+  G.mstatue = st; drawStatue('m-statue', st);
+  $('b-meno').parentNode.style.display = 'flex'; $('m-next').style.display = 'none'; $('b-meno').disabled = false;
+  show('s-morning');
+}
+async function runMorning() {
+  const m = G.morning, s = G.s; $('b-meno').disabled = true;
+  $('m-words').textContent = 'Meno: "Twice this one, boy?"';
+  await sleep(900);
+  if (m.line) {
+    $('m-words').textContent = m.say1;
+    G.mview.lines.push({ line: m.line, by: 'him' });
+    await sleep(800);
+    $('m-result').textContent = 'He lays a line in white and counts the square on it.';
+    await animateCount('floor-morning', G.mview, m.line, 'him', m.base, m.target, 18, 6);
+  }
+  $('m-result').textContent = m.result + (m.tiles && !m.tiles.inField ? ' It runs off the edge of the floor.' : '');
+  $('m-words').textContent = m.words;
+  // the statue's fate
+  if (m.fate === 'found') { G.mstatue = { who: 'him', cord: true }; $('m-belief').textContent = 'His statue stays. It was tied down.'; }
+  else if (m.fate === 'opinion' || m.fate === 'wrong') { G.mstatue = { who: 'you', anim: 'walk' }; $('m-belief').textContent = 'The statue you gave him walks off the plinth, like the statues of Daedalus.'; }
+  else if (m.fate === 'sure') { G.mstatue = { who: 'you', anim: 'walk', behind: { who: 'him' } }; $('m-belief').textContent = 'The statue you gave him walks off. Behind it, his old one was standing all along: double the line.'; }
+  else { G.mstatue = { who: null }; $('m-belief').textContent = 'His plinth is still empty, and he knows it.'; }
+  drawStatue('m-statue', G.mstatue);
+  if (G.mstatue.anim === 'walk') { await sleep(1700); G.mstatue = { who: null, behind: G.mstatue.behind, prints: true }; drawStatue('m-statue', G.mstatue); }
+  $('b-meno').parentNode.style.display = 'none'; $('m-next').style.display = 'flex';
+}
+
+// ---------------------------------------------------------------- verdict -------------------------------------
+function endScreen() {
+  const v = M.verdict(G.s, G.morning);
+  $('band-end').innerHTML = meander(400, 22, COL.green);
+  $('v-head').textContent = '"' + v.headline + '"';
+  $('v-plinth').textContent = v.plinth;
+  // the ladder: four steps laid in tiles, the boy's statue on his step, the dialogue's boy marked
+  const W = 400, H = 262, stepW = 92, stepH = 40, x0 = 8, yb = H - 8;
+  let s = '';
+  v.rungs.forEach((r, k) => {
+    const x = x0 + k * stepW, top = yb - (k + 1) * stepH;
+    const mine = k === v.rung;
+    for (let i = 0; i < 4; i++) for (let j = 0; j <= k; j++) {
+      s += '<rect x="' + (x + 2 + i * (stepW / 4)) + '" y="' + (yb - (j + 1) * stepH + 2) + '" width="' + (stepW / 4 - 4) + '" height="' + (stepH - 4) + '" fill="' + (mine && j === k ? '#3B4741' : '#24262B') + '"/>';
+    }
+    s += '<text x="' + (x + stepW / 2) + '" y="' + (top + 24) + '" text-anchor="middle" font-family="Cinzel" font-weight="700" font-size="10.5" fill="' + (mine ? COL.white : COL.green2) + '">' + r.name.toUpperCase().replace(', ', ',</tspan><tspan x="' + (x + stepW / 2) + '" dy="12">').replace(/^/, '<tspan>') + '</tspan></text>';
+  });
+  // the statue on the boy's step
+  const kx = x0 + v.rung * stepW + stepW / 2 - 15, ky = yb - (v.rung + 1) * stepH - 68;
+  const who = v.fate === 'found' ? 'him' : v.fate === 'stuck' ? null : v.fate === 'sure' ? 'him' : 'you';
+  if (who) s += mosaic(ART.kouros, { X: who === 'him' ? COL.white : COL.ochre }, 3.4, kx, ky, 0.7, 5);
+  else s += '<text x="' + (kx + 15) + '" y="' + (ky + 58) + '" text-anchor="middle" font-family="Cinzel" font-weight="900" font-size="30" fill="' + COL.cinn + '">?</text>';
+  s += '<text x="' + (kx + 15) + '" y="' + (ky - 6) + '" text-anchor="middle" font-family="Cinzel" font-weight="700" font-size="11" fill="' + COL.ochre + '">YOUR BOY</text>';
+  if (v.rung !== 3) s += '<text x="' + (x0 + 3 * stepW + stepW / 2) + '" y="' + (yb - 4 * stepH - 8) + '" text-anchor="middle" font-family="Gentium" font-style="italic" font-size="12.5" fill="' + COL.green2 + '">the dialogue\'s boy</text>';
+  else s += '<text x="' + (kx - 8) + '" y="' + (ky + 30) + '" text-anchor="end" font-family="Gentium" font-style="italic" font-size="12.5" fill="' + COL.green2 + '">the dialogue\'s boy</text><text x="' + (kx - 8) + '" y="' + (ky + 45) + '" text-anchor="end" font-family="Gentium" font-style="italic" font-size="12.5" fill="' + COL.green2 + '">stands here too</text>';
+  const L = $('v-ladder'); L.setAttribute('viewBox', '0 0 ' + W + ' ' + H); L.innerHTML = s;
+  $('v-rungtxt').innerHTML = '<b>' + v.rungs[v.rung].name + '.</b> ' + v.rungs[v.rung].text;
+  $('v-did').innerHTML = v.did.map(d => '<li>' + d + '</li>').join('');
+  $('v-dialogue').textContent = v.dialogue;
+  $('v-follows').textContent = v.follows;
+  show('s-end');
+}
+
+// ---------------------------------------------------------------- wiring --------------------------------------
+let helpFrom = null;
+function openOv(id) { $(id).classList.add('on'); $(id).scrollTop = 0; }
+function closeOv(id) { $(id).classList.remove('on'); }
+$('band-top').innerHTML = meander(400, 22, COL.green);
+(function faces() {
+  let s = '';
+  const ppl = [['soc', 'SOCRATES', 'you', COL.ochre], ['boy', 'THE BOY', '', COL.white], ['meno', 'MENO', '', COL.green2]];
+  ppl.forEach((p, k) => {
+    const x = 28 + k * 130;
+    s += '<g transform="translate(' + x + ',4)">' + headSVG(p[0], 84) + '</g>';
+    s += '<text x="' + (x + 42) + '" y="118" text-anchor="middle" font-family="Cinzel" font-weight="700" font-size="12.5" letter-spacing="1.5" fill="' + p[3] + '">' + p[1] + (p[2] ? ' · ' + p[2].toUpperCase() : '') + '</text>';
+  });
+  $('faces').innerHTML = s;
+})();
+$('b-begin').addEventListener('click', guessScreen);
+$('b-guess').addEventListener('click', () => { if (G.sel) startLesson(); });
+$('b-ask').addEventListener('click', () => doMove('which'));
+$('b-tell').addEventListener('click', () => { if (G.sel) doMove('tell'); });
+$('b-morning').addEventListener('click', morningScreen);
+$('b-meno').addEventListener('click', runMorning);
+$('b-end').addEventListener('click', endScreen);
+$('b-again').addEventListener('click', () => show('s-start'));
+['b-help-start', 'b-help-guess', 'b-help-play', 'b-help-morning'].forEach(id => $(id).addEventListener('click', () => openOv('help')));
+$('b-help-close').addEventListener('click', () => closeOv('help'));
+['b-about-start', 'b-about-end'].forEach(id => $(id).addEventListener('click', () => openOv('about')));
+$('b-about-close').addEventListener('click', () => closeOv('about'));
+window.__G = G; // for the session test
+})();
+</script>
+</body>
+</html>
