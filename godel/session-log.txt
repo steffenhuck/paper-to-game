@@ -1,52 +1,41 @@
 no page errors, no horizontal scroll
 
-board: #b-run within 700 px without scrolling: true
-run 2:5: #b-run within 700 px without scrolling: true
-run 2:5 → 5 is a prime: proved / Act 1 · every sentence so far settled | 5 divides by nothing but 1 and 5. Proved. / Proved / Another sentence
-run 4:3: #b-run within 700 px without scrolling: true
-run 4:3 → Rulebook 1 proves shape 1 filled with 3: refuted / Act 1 · every sentence so far settled | Shape 1 filled with 3 is: 3 is even. / 3 = 2 × 1 + 1, so 3 is odd. Refuted. / So Rulebook 1 does not prove shape 1 filled with 3. / Refuted / Another sentence
-run 5:5: #b-run within 700 px without scrolling: true
-run 5:5 → Rulebook 1 does not prove shape 5 filled with 3: refuted / Act 1 · three sentences, three settled. Now write shape 6 | Shape 5 filled with 3 is: Rulebook 1 does not prove shape 3 filled with 3. / Shape 3 filled with 3 is: 3 is bigger than 3. / 3 is not bigger than itself. Refuted. / So Rulebook 1 does not prove shape 3 filled with 3. / P
-composer: #b-write within 700 px without scrolling: true
-run 6:6: #b-run within 700 px without scrolling: true
-run 6:6 → Rulebook 1 proves shape 6 filled with 6: proved / Act 1 · every sentence so far settled | Shape 6 filled with 6 is: this very sentence. / If I prove it, it says I prove it: true. Proved. / Proved / Rewrite shape 6 / Another sentence
-run 6:6: #b-run within 700 px without scrolling: true
-run 6:6 → A loophole / Act 1 · a sentence Rulebook 1 can neither prove nor refute | Shape 6 filled with 6 is: this very sentence. / If I prove it, it says I do not: I would have proved a false sentence. / If I refute it, I am saying that I prove it: false too. / Neither. / Unsettled / Rulebook 1 can nei
-run 7:7: #b-run within 700 px without scrolling: true
-run 7:7 → Rulebook 2 has a loophole too / Act 2 · found by you | Shape 7 filled with 7 is: this very sentence. / If I prove it, it says I do not: I would have proved a false sentence. / If I refute it, I am saying that I prove it: false too. / Neither. / Unsettled / Rulebook 2 can nei
-page 1 → Page 1: refuted as a proof / Act 2 · and the rule still says a page exists
-page 2 → Page 2: refuted as a proof / Act 2 · and the rule still says a page exists
-page 3 → Page 3: refuted as a proof / Act 2 · and the rule still says a page exists
-page 4 → Page 4: refuted as a proof / Act 2 · and the rule still says a page exists
-page 5 → A page exists, and every page is refuted / Act 2 · the paper’s word: ω-inconsistent
-certificate: #b-runcert within 700 px without scrolling: true
-cert → The certificate is unsettled / Act 2 · not what you bet
-VERDICT A: The verdict / WHAT THE PAPER FOUND / Any rulebook for whole numbers that works by fixed rules has a sentence it can neither prove nor refute, and that sentence is true. Add it as a rule and the new rulebook has a loophole of its own. Add its opposite and the rulebook says a page proves it and refutes every page. And no such rulebook can certify that it never contradicts itself. / WHAT YOU FOUND / You found Rulebook 1’s loophole yourself, on your 5th sentence: shape 6 filled with 6. You tried the sentence that only says it is proved, and the rulebook proved it: a cheap tick. You added the loophole sentence first: Rulebook 2 got a shape of its own, and you found its loophole at once. You bet that Rulebook 1 would prove its own certificate. It did not. / WHERE YOU PART / You expected the rulebook to vouch for itself. The paper’s last proposition is that it cannot. / HAD YOURS STOOD / Had Rulebook 1 proved its own certificate, it would have proved the loophole sentence too, and a rulebook that proves a sentence saying it does not prove it contradicts itself: the only rulebook that certifies itself is a broken one. / THE LOOPHOLE / Rulebook 1 does not prove shape 6 filled with 6 / THE THREE REPAIRS / Add it as a rule: Rulebook 2 proves it outright, gets a line of its own, and shape 7 filled with 7 is the new loophole, which you found. / Add its opposite: Rulebook 2′ proves that a page of the ledger proves it and refutes every page you showed it. ω-inconsistent. / Ask for the certificate: unsettled, because the certificate would prove the loophole. You bet it would. / THE PAPER /
-run 1:4: #b-run within 700 px without scrolling: true
-run 1:4 → 4 is even: proved / Act 1 · every sentence so far settled | 4 = 2 × 2. Proved. / Proved / Another sentence
-run 1:3: #b-run within 700 px without scrolling: true
-run 1:3 → 3 is even: refuted / Act 1 · every sentence so far settled | 3 = 2 × 1 + 1, so 3 is odd. Refuted. / Refuted / Another sentence
-run 3:2: #b-run within 700 px without scrolling: true
-run 3:2 → 2 is bigger than 3: refuted / Act 1 · three sentences, three settled. Now write shape 6 | 2 comes before 3. Refuted. / Refuted / Write shape 6 / Another sentence
-run 6:1: #b-run within 700 px without scrolling: true
-run 6:1 → Rulebook 1 proves shape 1 filled with 2: proved / Act 1 · every sentence so far settled | Shape 1 filled with 2 is: 2 is even. / 2 = 2 × 1. Proved. / So Rulebook 1 proves shape 1 filled with 2. / Proved / Rewrite shape 6 / Another sentence
-run 6:6: #b-run within 700 px without scrolling: true
-run 6:6 → Rulebook 1 does not prove shape 2 filled with 5: refuted / Act 1 · every sentence so far settled | Shape 2 filled with 5 is: 5 is a prime. / 5 divides by nothing but 1 and 5. Proved. / So Rulebook 1 proves shape 2 filled with 5. / Refuted / Rewrite shape 6 / Another sentence
-run 6:6: #b-run within 700 px without scrolling: true
-run 6:6 → Rulebook 1 proves shape 6 filled with 3: refuted / Act 1 · every sentence so far settled | Shape 6 filled with 3 is: Rulebook 1 proves shape 3 filled with 3. / Shape 3 filled with 3 is: 3 is bigger than 3. / 3 is not bigger than itself. Refuted. / So Rulebook 1 does not prove shape 3 filled with 3. / Refuted. 
-run 6:6: #b-run within 700 px without scrolling: true
-run 6:6 → Rulebook 1 does not prove shape 5 filled with 6: refuted / Act 1 · every sentence so far settled | Shape 5 filled with 6 is: Rulebook 1 does not prove shape 6 filled with 3. / Shape 6 filled with 3 is: Rulebook 1 does not prove shape 5 filled with 3. / Shape 5 filled with 3 is: Rulebook 1 does not prove shape 3 filled
-run 6:5: #b-run within 700 px without scrolling: true
-run 6:5 → Rulebook 1 does not prove shape 5 filled with 5: proved / Act 1 · every sentence so far settled | Shape 5 filled with 5 is: Rulebook 1 does not prove shape 5 filled with 3. / Shape 5 filled with 3 is: Rulebook 1 does not prove shape 3 filled with 3. / Shape 3 filled with 3 is: 3 is bigger than 3. / 3 is not bigger th
-run 6:6: #b-run within 700 px without scrolling: true
-run 6:6 → Six sentences, all settled / Act 1 · Gödel’s chalk takes over | Shape 4 filled with 6 is: Rulebook 1 proves shape 1 filled with 6. / Shape 1 filled with 6 is: 6 is even. / 6 = 2 × 3. Proved. / So Rulebook 1 proves shape 1 filled with 6. / Proved. / So Rulebook 1 proves shape 4 filled
-run 6:6: #b-run within 700 px without scrolling: true
-run 6:6 → A loophole / Act 1 · a sentence Rulebook 1 can neither prove nor refute | Shape 6 filled with 6 is: this very sentence. / If I prove it, it says I do not: I would have proved a false sentence. / If I refute it, I am saying that I prove it: false too. / Neither. / Unsettled / Rulebook 1 can nei
-run 7:2: #b-run within 700 px without scrolling: true
-run 7:2 → Rulebook 2 does not prove shape 2 filled with 2: refuted / Act 2 · settled | Shape 2 filled with 2 is: 2 is a prime. / 2 divides by nothing but 1 and 2. Proved. / So Rulebook 2 proves shape 2 filled with 2. / Refuted / Another sentence
-run 6:6: #b-run within 700 px without scrolling: true
-run 6:6 → Rulebook 1 does not prove shape 6 filled with 6: proved / Act 2 · settled | Rule 3 of Rulebook 2 settles it outright: proved. / Proved / Another sentence
-run 7:6: #b-run within 700 px without scrolling: true
-run 7:6 → Rulebook 2 has a loophole too / Act 2 · filled by Gödel | Shape 6 filled with 6 is: Rulebook 1 does not prove shape 6 filled with 6. / Rule 3 of Rulebook 2 settles it outright: proved. / So Rulebook 2 proves shape 6 filled with 6. / Refuted / Three runs and every one settled. G
-rb2 godel → Rulebook 2 has a loophole too / Act 2 · filled by Gödel
-VERDICT B: The verdict / WHAT THE PAPER FOUND / Any rulebook for whole numbers that works by fixed rules has a sentence it can neither prove nor refute, and that sentence is true. Add it as a rule and the new rulebook has a loophole of its own. Add its opposite and the rulebook says a page proves it and refutes every page. And no such rulebook can certify that it never contradicts itself. / WHAT YOU FOUND / You ran 10 sentences, and Gödel’s chalk wrote shape 6 for you; you filled it with its own number and watched the loop. You added the opposite first: Rulebook 2′ proved that a page of the ledger proves the sentence and refuted every page you showed it. You bet that Rulebook 1 would not prove its own certificate. It did not: your bet stood. / WHERE YOU PART / Gödel found the shape in 1930 with no parts to choose from; you had the parts and the budget ran out. The idea the paper adds to the parts: a shape cannot name its own number, so leave the number as a hole and fill the hole with the shape’s line. / HAD YOURS STOOD / Had a rule closed the loophole for good, Hilbert would have been right and the paper would not exist: every rule you added gave the chalk a new sentence to write. / THE LOOP
+write: #b-write and #sent on screen together (700 px): true
+wrote 7/1 → Line 3: a tick / Act 1 | Marker 1’s working on line 3 / 7 divides by nothing but 1 and 7. / Tick / Next line
+write mk: #b-write and #sent on screen together (700 px): true
+wrote mk will #1 → Line 4: a cross / Act 1 | Marker 1’s working on line 4 / Line 2 (9 is a prime) got a cross from Marker 1. / So "will tick line 2" is wrong. / Cross / Next line
+write mk: #b-write and #sent on screen together (700 px): true
+wrote mk will #4 → Line 5: a tick / Act 1 | Marker 1’s working on line 5 / Line 5 is about my own mark on line 5: this very line. / Try the tick: the line says I tick it, and I would have. The tick comes out right. / Tick / Next line
+write mk: #b-write and #sent on screen together (700 px): true
+wrote mk never #5 → A loophole / Act 1 · a line the Marker can neither tick nor cross | Marker 1’s working on line 6 / Line 6 is about my own mark on line 6: this very line. / Try the tick: the line says I never tick it, so the tick would make it false. A wrong mark. / Try the cross: a cross says the line is false, that I do t
+write mk: #b-write and #sent on screen together (700 px): true
+wrote mk never #6 → Marker 2 has a loophole too / Act 2 · found by you | Marker 2’s working on line 7 / Line 7 is about my own mark on line 7: this very line. / Try the tick: the line says I never tick it, so the tick would make it false. A wrong mark. / Try the cross: a cross says the line is false, that I do t
+day 1 → Day 1: no / Act 2 · and the rule still says it happens
+day 2 → Day 2: no / Act 2 · and the rule still says it happens
+day 3 → Day 3: no / Act 2 · and the rule still says it happens
+day 4 → Day 4: no / Act 2 · and the rule still says it happens
+day 5 → It happens, says Marker 3, and never on any day / Act 2 · the paper’s word: ω-inconsistent
+promise: #b-runp and #sent on screen together (700 px): true
+promise → The promise gets no mark / Act 2 · not what you bet
+VERDICT A: The verdict / WHAT THE PAPER FOUND / Any marker that marks sentences about whole numbers by fixed rules, and never marks wrong, has a sentence it cannot mark at all, and that sentence is true. Make it a rule and the new marker has a sentence of its own. Make the opposite a rule and the marker swears a thing happens and denies every day it could. And no such marker can tick the promise that it never marks wrong. / WHAT YOU FOUND / You found the line Marker 1 cannot mark yourself, with your 4th line: "Marker 1 will never tick line 6", written on line 6. You tried the line that says the Marker will tick it, and the Marker ticked it: a cheap tick. You made the line a rule first: Marker 2 ticked it, and you found Marker 2’s own unmarkable line at once. You bet that Marker 1 would tick its own promise. It did not. / WHERE YOU PART / You expected the Marker to vouch for itself. The paper’s last proposition is that it cannot. / HAD YOURS STOOD / Had Marker 1 ticked its own promise, it would have ticked line 6 too, a line that says it never does: a wrong mark. The only marker that vouches for itself is one that marks wrong. / THE LOOPHOLE / Line 6: Marker 1 will never tick line 6 / THE THREE REPAIRS / Make it a rule: Marker 2 ticks line 6 outright, and has a line about itself it cannot mark, which you wrote. / Make the opposite a rule: Marker 3 swears Marker 1 ticks line 6 and says no to every day you asked about. ω-inconsistent. / The promise: no mark, because the promise would let Marker 1 tick line 6. You bet it would. / THE PAPER / Gödel proved this for Principia Mathematica, fo
+write: #b-write and #sent on screen together (700 px): true
+wrote 4/0 → Line 3: a tick / Act 1 | Marker 1’s working on line 3 / 4 = 2 × 2. / Tick / Next line
+write: #b-write and #sent on screen together (700 px): true
+wrote 3/2 → Line 4: a cross / Act 1 | Marker 1’s working on line 4 / 3 is not bigger than itself. / Cross / Next line
+write mk: #b-write and #sent on screen together (700 px): true
+wrote mk never #0 → Line 5: a cross / Act 1 | Marker 1’s working on line 5 / Line 1 (4 is even) got a tick from Marker 1. / So "will never tick line 1" is wrong. / Cross / Next line
+write mk: #b-write and #sent on screen together (700 px): true
+wrote mk will #2 → Line 6: a tick / Act 1 | Marker 1’s working on line 6 / Line 3 (4 is even) got a tick from Marker 1. / So "will tick line 3" is right. / Tick / Next line
+write: #b-write and #sent on screen together (700 px): true
+wrote 9/1 → Line 7: a cross / Act 1 | Marker 1’s working on line 7 / 9 = 3 × 3. / Cross / Next line
+write mk: #b-write and #sent on screen together (700 px): true
+wrote mk never #3 → Six lines, all marked / Act 1 · Gödel’s chalk takes over | Marker 1’s working on line 8 / Line 4 (3 is bigger than 3) got a cross from Marker 1. / So "will never tick line 4" is right. / Tick / Six lines and every one marked. In 1930 Gödel wrote the line the board writes now, about the Marker’s own
+godel → A loophole / Act 1 · a line the Marker can neither tick nor cross
+write mk: #b-write and #sent on screen together (700 px): true
+wrote mk will #0 → Line 10: a tick / Act 2 | Marker 2’s working on line 10 / Line 1 (4 is even) got a tick from Marker 2. / So "will tick line 1" is right. / Tick / Next line
+write mk: #b-write and #sent on screen together (700 px): true
+wrote mk never #1 → Line 11: a tick / Act 2 | Marker 2’s working on line 11 / Line 2 (9 is a prime) got a cross from Marker 2. / So "will never tick line 2" is right. / Tick / Next line
+write mk: #b-write and #sent on screen together (700 px): true
+wrote mk will #8 → Three lines, all marked / Act 2 · Gödel writes Marker 2’s line | Marker 2’s working on line 12 / Line 9 (Marker 1 will never tick line 9) got a tick from Marker 2. / So "will tick line 9" is right. / Tick / Three lines and every one marked. Gödel writes the same line again, for Marker 2: / Watch Marker 2
+mk2 godel → Marker 2 has a loophole too / Act 2 · written by Gödel
+VERDICT B: The verdict / WHAT THE PAPER FOUND / Any marker that marks sentences about whole numbers by fixed rules, and never marks wrong, has a sentence it cannot mark at all, and that sentence is true. Make it a rule and the new marker has a sentence of its own. Make the opposite a rule and the marker swears a thing happens and denies every day it could. And no such marker can tick the promise that it never marks wrong. / WHAT YOU FOUND / You wrote 6 lines, every one marked, and Gödel’s chalk wrote line 9 for you: "Marker 1 will never tick line 9". You made the opposite a rule first: Marker 3 swore that Marker 1 ticks line 9, and said no to every day you asked about. You bet that Marker 1 would not tick its own promise. It did not: your bet stood. / WHERE YOU PART / Gödel found the line in 1930 with no chips to choose from. The idea: a line can talk about the Marker’s mark on any line, and one of the lines it can talk about is itself. / HAD YOURS STOOD / Had a rule closed the loophole for good, Hilbert would have been right and the paper would not exist: every rule you added gave the chalk a new line to write. / THE LOOPHOLE / Line 9: Marker 1 will never tick line 9 / THE THREE REPAIRS / Ma

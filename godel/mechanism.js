@@ -1,292 +1,224 @@
-// Gödel's Loophole — the mechanism, headless, and the only copy (build.md §4.1).
+// Gödel's Loophole (second build: the Marker) — the mechanism, headless, and the only copy (build.md §4.1).
 // Runs unchanged in Node (module.exports) and in the browser (window.GL). The HTML is generated from this file by
-// build.py and never re-implements any of it. Toy mechanism (memo §16): a rulebook that settles sentences about whole
-// numbers, shapes with a hole in them numbered by their line on the board, and the diagonal fill of Gödel (1931) §1.
-// No random draws anywhere: the game is deterministic.
+// build.py and never re-implements any of it. Toy mechanism (memo, revision §R5): a Marker that marks every line on the
+// board with a tick or a cross by fixed rules and is never wrong; lines numbered by their place on the board; a line may
+// say what a Marker does with a line, including itself. No random draws anywhere: the game is deterministic.
 (function (root) {
   'use strict';
 
   var CONFIG = {
-    // Rulebook 1's board. Line number = shape number (paper §1: the class-signs "arranged in a series", R(n)).
-    // Shapes 1–3 are number facts the rulebook works out (paper: recursive relations, Proposition V).
-    // Shapes 4–5 are sentences about the rulebook itself (paper: Bew, definition 46, representable by Proposition V).
-    SHAPES: [
-      { kind: 'arith', pred: 'even' },                     // our choice: a fact every stranger can check
-      { kind: 'arith', pred: 'prime' },                    // our choice
-      { kind: 'arith', pred: 'gt3' },                      // our choice: ticks for 4, 5, 6 so the board has both marks
-      { kind: 'meta', rb: 1, pol: '+', A: 1, B: 'hole' },  // "Rulebook 1 proves shape 1 filled with □": about the rulebook, settles
-      { kind: 'meta', rb: 1, pol: '-', A: 'hole', B: 3 }   // "Rulebook 1 does not prove shape □ filled with 3": a "does not" that still settles
-    ],
-    GODEL: { kind: 'meta', rb: 1, pol: '-', A: 'hole', B: 'hole' }, // the paper's S = R(q): "n is in K" = "[R(n); n] is not provable"
-    COMPOSER: { pols: ['+', '-'], slots: ['hole', 1, 2, 3, 4, 5] }, // the parts of shape 6; 6 itself is not offered: a shape has no number until it is written
+    // The two lines the class wrote before you came in (one tick, one cross on the board from the start). Our choice.
+    START_LINES: [{ kind: 'num', n: 4, pred: 'even' }, { kind: 'num', n: 9, pred: 'prime' }],
+    NUMBERS: [2, 3, 4, 5, 6, 7, 8, 9],          // the number chips of the composer (our choice: eight fit one row on a phone)
+    PRED_ORDER: ['even', 'prime', 'gt3'],      // the fact chips (our choice; any decidable facts would do: paper, Proposition V)
+    GODEL: { kind: 'mk', will: false, target: 'this' }, // the paper's 17 Gen r: "Marker 1 will never tick this line"
     BUDGET: {
-      beforeComposer: 3,  // our choice: runs on shapes 1–5 before "Write shape 6" appears (the player sees number facts and shapes 4/5 settle)
-      composerRuns: 6,    // our choice: runs in the composer before Gödel's chalk writes shape 6
-      findRb2: 3,         // our choice: runs to find Rulebook 2's loophole before Gödel fills it
-      pages: 4            // our choice: ledger pages the player shows Rulebook 2′ before "and every page after"
+      lines: 6,     // our choice: lines the player writes in Act 1 before Gödel's chalk writes the line for them
+      findMk2: 3,   // our choice: lines to find Marker 2's loophole before Gödel writes it
+      days: 4       // our choice: days asked of Marker 3 before "and every day after"
     },
-    GENEROUS_LEDGER: true, // true: the toy rulebook may read "refuted" off its ledger and certify "does not prove" (memo §15).
-                           // false: the paper's rulebook, which can certify a proof it has but never a "no" (Proposition XI);
-                           // the calibration check runs the game both ways and the loophole opens in both.
-    MAX_DEPTH: 40 // a guard; no legal board can reach it (the calibration check sweeps every composer shape)
+    GENEROUS: true  // true: the Marker may read a cross off its own board and vouch for a "never" (memo R5: generous to the
+                    // Marker; the paper's system cannot certify any "no" without its own consistency, Proposition XI).
+                    // false: the paper's weaker Marker; the calibration check runs both, and the loophole opens in both.
   };
 
-  // ---------- arithmetic ----------
+  // ---------- number facts ----------
   var PREDS = {
-    even: { text: function (n) { return n + ' is even'; }, test: function (n) { return n % 2 === 0; },
-      why: function (n) { return n % 2 === 0 ? n + ' = 2 × ' + (n / 2) + '.' : n + ' = 2 × ' + ((n - 1) / 2) + ' + 1, so ' + n + ' is odd.'; } },
-    prime: { text: function (n) { return n + ' is a prime'; }, test: function (n) { return isPrime(n); },
-      why: function (n) { if (n < 2) return n + ' is not counted as a prime.'; if (isPrime(n)) return n + ' divides by nothing but 1 and ' + n + '.'; var d = smallestDivisor(n); return n + ' = ' + d + ' × ' + (n / d) + '.'; } },
-    gt3: { text: function (n) { return n + ' is bigger than 3'; }, test: function (n) { return n > 3; },
+    even: { chip: 'is even', text: function (n) { return n + ' is even'; }, test: function (n) { return n % 2 === 0; },
+      why: function (n) { return n % 2 === 0 ? n + ' = 2 × ' + (n / 2) + '.' : n + ' = 2 × ' + ((n - 1) / 2) + ' + 1: odd.'; } },
+    prime: { chip: 'is a prime', text: function (n) { return n + ' is a prime'; }, test: function (n) { return isPrime(n); },
+      why: function (n) { if (n < 2) return n + ' does not count as a prime.'; if (isPrime(n)) return n + ' divides by nothing but 1 and ' + n + '.'; var d = smallestDivisor(n); return n + ' = ' + d + ' × ' + (n / d) + '.'; } },
+    gt3: { chip: 'is bigger than 3', text: function (n) { return n + ' is bigger than 3'; }, test: function (n) { return n > 3; },
       why: function (n) { return n > 3 ? n + ' comes after 3.' : (n === 3 ? '3 is not bigger than itself.' : n + ' comes before 3.'); } }
   };
   function isPrime(n) { if (n < 2) return false; for (var d = 2; d * d <= n; d++) if (n % d === 0) return false; return true; }
   function smallestDivisor(n) { for (var d = 2; d * d <= n; d++) if (n % d === 0) return d; return n; }
 
-  // ---------- shapes and sentences ----------
-  function holeText(x, n) { return x === 'hole' ? (n === undefined ? '□' : String(n)) : String(x); }
-  // The text of a shape with its hole shown (n undefined) or filled with n.
-  function shapeText(shape, n) {
-    if (!shape) return '';
-    if (shape.kind === 'arith') return PREDS[shape.pred].text(n === undefined ? '□' : n);
-    return 'Rulebook ' + shape.rb + (shape.pol === '+' ? ' proves' : ' does not prove') + ' shape ' + holeText(shape.A, n) + ' filled with ' + holeText(shape.B, n);
+  // ---------- lines ----------
+  // A line is { kind: 'num', n, pred } or { kind: 'mk', ver, will, target } (target: a line number), plus you: true if the
+  // player wrote it. Line numbers are 1-based places on the board.
+  function lineText(line, no) {
+    if (!line) return '';
+    if (line.kind === 'num') return PREDS[line.pred].text(line.n);
+    var t = line.target === 'this' ? no : line.target;
+    return 'Marker ' + line.ver + (line.will ? ' will tick' : ' will never tick') + ' line ' + t + (no !== undefined && t === no ? ' (this line)' : '');
   }
-  function sentenceText(game, s, n) { return shapeText(game.shapes[s - 1], n); }
-  function innerOf(shape, n) { return { s: shape.A === 'hole' ? n : shape.A, n: shape.B === 'hole' ? n : shape.B }; }
-  function sameShape(a, b) { return !!a && !!b && a.kind === b.kind && a.rb === b.rb && a.pol === b.pol && a.A === b.A && a.B === b.B; }
+  function plainText(line, no) { return lineText(line, no).replace(' (this line)', ''); }
 
-  // ---------- rulebooks ----------
-  // A rulebook: an edition, the standing rules (work out number facts; read the ledger), and added rules, each a sentence
-  // (shape s filled with n) with the verdict the rule gives it. Edition 2 and 2′ are both built from edition 1.
-  function newRulebook(edition, label, rules, base) { return { edition: edition, label: label, rules: rules || [], base: base || null }; }
-  // A rule of an edition holds in every later edition built on it (paper: c ⊂ c′, Flg(c) ⊂ Flg(c′)).
-  function ruleFor(rb, s, n, rulebooks) { for (var r = rb; r; r = r.base ? rulebooks[r.base] : null) for (var i = 0; i < r.rules.length; i++) if (r.rules[i].s === s && r.rules[i].n === n) return r.rules[i]; return null; }
+  // ---------- the Marker ----------
+  // A Marker: a version number and its added rules ({ no: line number, mark: 'tick' | 'cross', text }). Marker 2 and 3 are
+  // both built on Marker 1 (paper: c + 17 Gen r, c + Neg(17 Gen r)); a rule of an earlier version holds in later ones.
+  function newMarker(ver, rules, base) { return { ver: ver, rules: rules || [], base: base || null }; }
+  function ruleFor(game, ver, no) { for (var m = game.markers[ver]; m; m = m.base ? game.markers[m.base] : null) for (var i = 0; i < m.rules.length; i++) if (m.rules[i].no === no) return { rule: m.rules[i], ver: m.ver }; return null; }
 
-  // ---------- settling ----------
-  // settle(game, rbKey, s, n): the rulebook named by rbKey works out shape s filled with n.
-  // Returns { v: 'tick' | 'cross' | 'loop', lines: [{t, d, who}] } where lines is the chalk working, d the indent,
-  // who 'rb' for the rulebook's chalk and 'you' for a quoted line the player wrote.
-  // The cycle rule (memo §15): if settling needs the sentence being settled, read the cycle; every link "proves" → proved
-  // (it says only that it is proved, which proving makes true; Löb 1955); any link "does not prove" → unsettled, and so is
-  // every sentence that depends on it (the real system could prove such a sentence only by proving its own consistency).
-  function settle(game, rbKey, s, n) {
-    var stack = [];
-    function key(e, s2, n2) { return e + ':' + s2 + ':' + n2; }
-    function go(e, s2, n2, d) {
-      var rb = game.rulebooks[e];
-      var shape = game.shapes[s2 - 1];
-      var lines = [];
-      if (d > CONFIG.MAX_DEPTH) return { v: 'loop', lines: [{ t: 'This has no end.', d: d }] };
-      if (!shape) return { v: 'cross', lines: [{ t: 'There is no shape ' + s2 + ' on the board, so nothing is proved.', d: d }] };
-      var rule = ruleFor(rb, s2, n2, game.rulebooks);
-      if (rule) {
-        lines.push({ t: 'Rule ' + rule.no + ' of Rulebook ' + rule.of + ' settles it outright: ' + (rule.v === 'tick' ? 'proved.' : 'refuted.'), d: d });
-        return { v: rule.v, lines: lines };
-      }
-      if (shape.kind === 'arith') {
-        var p = PREDS[shape.pred], ok = p.test(n2);
-        lines.push({ t: p.why(n2) + ' ' + (ok ? 'Proved.' : 'Refuted.'), d: d });
-        return { v: ok ? 'tick' : 'cross', lines: lines };
-      }
-      // meta: Rulebook shape.rb [pol] shape A filled with B
-      var inner = innerOf(shape, n2), ie = shape.rb;
-      var innerShape = game.shapes[inner.s - 1];
-      var k = key(ie, inner.s, inner.n), idx = -1, self = k === key(e, s2, n2);
-      for (var i = 0; i < stack.length; i++) if (stack[i].k === k) { idx = i; break; }
-      if (self || idx >= 0) {
-        // a cycle: the sentence refers to itself, or to a sentence still being settled (links from stack[idx] to here, plus this link)
-        var allPos = shape.pol === '+';
-        if (!self) for (var j = idx; j < stack.length; j++) if (stack[j].pol === '-') allPos = false;
-        if (self) lines.push({ t: 'Shape ' + inner.s + ' filled with ' + inner.n + ' is: this very sentence.', d: d, mark: 'self' });
-        else lines.push({ t: 'Shape ' + inner.s + ' filled with ' + inner.n + ' is a sentence already waiting to be settled: a circle.', d: d, mark: 'self' });
-        if (allPos) {
-          lines.push({ t: 'If I prove it, it says I prove it: true. Proved.', d: d });
-          return { v: 'tick', lines: lines, cycle: true };
-        }
-        lines.push({ t: 'If I prove it, it says I do not: I would have proved a false sentence.', d: d });
-        lines.push({ t: 'If I refute it, I am saying that I prove it: false too.', d: d });
-        lines.push({ t: 'Neither. Unsettled.', d: d, mark: 'loop' });
-        return { v: 'loop', lines: lines, cycle: true };
-      }
-      lines.push({ t: 'Shape ' + inner.s + ' filled with ' + inner.n + ' is: ' + (innerShape ? shapeText(innerShape, inner.n) : '(empty)') + '.', d: d, who: (innerShape && innerShape.you) ? 'you' : 'rb' });
-      stack.push({ k: key(e, s2, n2), pol: shape.pol });
-      var r = go(ie, inner.s, inner.n, d + 1);
-      stack.pop();
-      lines = lines.concat(r.lines);
-      if (r.v === 'loop') {
-        lines.push({ t: 'That one has no end, so this one has none either. Unsettled.', d: d, mark: 'loop' });
-        return { v: 'loop', lines: lines, cycle: !!r.cycle };
-      }
-      if (r.v === 'cross' && !CONFIG.GENEROUS_LEDGER) {
-        lines.push({ t: 'I refuted it, but to certify that I never prove it I would need my own certificate. Unsettled.', d: d, mark: 'loop' });
-        return { v: 'loop', lines: lines };
-      }
-      var proves = r.v === 'tick';
-      lines.push({ t: 'So Rulebook ' + game.rulebooks[ie].label + (proves ? ' proves' : ' does not prove') + ' shape ' + inner.s + ' filled with ' + inner.n + '.', d: d });
-      var v = (shape.pol === '+') === proves ? 'tick' : 'cross';
-      lines.push({ t: v === 'tick' ? 'Proved.' : 'Refuted.', d: d });
-      return { v: v, lines: lines };
+  // mark(game, ver, no): Marker ver marks line no. Returns { v: 'tick' | 'cross' | 'none', lines: [{t, d, mark?}] }.
+  // The rule of the toy, as the board states it: a mark must come out right, and the Marker tries the tick first.
+  // - a number fact: tick if true, cross if false;
+  // - a line about Marker w's mark on another line: read that mark off the board; if that line has no mark, this one gets
+  //   none either (the Marker cannot vouch for anything about a line it never finished with);
+  // - a line about Marker ver's own mark on this very line: try the tick (right only if the line says "will tick"), then
+  //   the cross (never right: a cross says the line is false, and the line, not ticked, says it is not ticked), else none.
+  // Löb (1955): "will tick this line" is ticked. Gödel (1931): "will never tick this line" gets no mark, and is true.
+  function mark(game, ver, no, memo) {
+    memo = memo || {};
+    var key = ver + ':' + no;
+    if (memo[key]) return memo[key];
+    var line = game.lines[no - 1], L = [];
+    function out(v) { var r = { v: v, lines: L }; memo[key] = r; return r; }
+    if (!line) { L.push({ t: 'There is no line ' + no + ' on the board.', d: 0 }); return out('cross'); }
+    var rf = ruleFor(game, ver, no);
+    if (rf) { L.push({ t: 'Rule of Marker ' + rf.ver + ': this line gets a ' + rf.rule.mark + '. No working needed.', d: 0 }); return out(rf.rule.mark); }
+    if (line.kind === 'num') { var p = PREDS[line.pred], ok = p.test(line.n); L.push({ t: p.why(line.n), d: 0 }); return out(ok ? 'tick' : 'cross'); }
+    var t = line.target === 'this' ? no : line.target, w = line.ver;
+    if (t === no && w === ver) {
+      L.push({ t: 'Line ' + no + ' is about my own mark on line ' + no + ': this very line.', d: 0, mark: 'self' });
+      if (line.will) { L.push({ t: 'Try the tick: the line says I tick it, and I would have. The tick comes out right.', d: 0 }); return out('tick'); }
+      L.push({ t: 'Try the tick: the line says I never tick it, so the tick would make it false. A wrong mark.', d: 0 });
+      L.push({ t: 'Try the cross: a cross says the line is false, that I do tick it. But I would have crossed it, not ticked it. Wrong again.', d: 0 });
+      L.push({ t: 'No mark comes out right. No mark.', d: 0, mark: 'loop' });
+      return out('none');
     }
-    return go(rbKey, s, n, 0);
+    if (w > ver) { L.push({ t: 'Marker ' + w + ' does not exist yet, so nothing can be said about its marks. No mark.', d: 0, mark: 'loop' }); return out('none'); }
+    var inner = (t === no) ? mark(game, w, no, memo) : mark(game, w, t, memo);
+    var tgt = game.lines[t - 1];
+    if (inner.v === 'none') {
+      L.push({ t: 'Line ' + t + ' never got a mark from Marker ' + w + ', so nothing about that mark can get one either. No mark.', d: 0, mark: 'loop' });
+      return out('none');
+    }
+    if (inner.v === 'cross' && !CONFIG.GENEROUS) {
+      L.push({ t: 'Line ' + t + ' got a cross, but to vouch for what I never tick I would need to vouch for myself. No mark.', d: 0, mark: 'loop' });
+      return out('none');
+    }
+    L.push({ t: 'Line ' + t + ' (' + plainText(tgt, t) + ') got a ' + inner.v + ' from Marker ' + w + '.', d: 0, who: tgt && tgt.you ? 'you' : 'rb' });
+    var truth = line.will ? inner.v === 'tick' : inner.v !== 'tick';
+    L.push({ t: 'So "' + (line.will ? 'will tick' : 'will never tick') + ' line ' + t + '" is ' + (truth ? 'right' : 'wrong') + '.', d: 0 });
+    return out(truth ? 'tick' : 'cross');
   }
 
-  // The certificate: "Rulebook e never proves a sentence and its opposite" (paper: Wid(c), Proposition XI).
-  // Settled by the chain Wid(c) → 17 Gen r: to prove the certificate the rulebook would have to prove its loophole.
-  function settleCertificate(game, rbKey) {
-    var rb = game.rulebooks[rbKey], g = loopholeOf(game, rbKey);
-    var lines = [];
-    if (!g) return { v: 'loop', lines: [{ t: 'Unsettled.', d: 0, mark: 'loop' }] };
-    var r = settle(game, rbKey, g.s, g.n);
-    lines.push({ t: 'Suppose Rulebook ' + rb.label + ' never contradicts itself.', d: 0 });
-    lines.push({ t: 'Then it never proves shape ' + g.s + ' filled with ' + g.n + ': proving that would contradict what it says.', d: 0 });
-    lines.push({ t: 'So what shape ' + g.s + ' filled with ' + g.n + ' says is so, and the certificate would prove it.', d: 0 });
-    if (r.v === 'loop') {
-      lines.push({ t: 'Rulebook ' + rb.label + ' cannot prove shape ' + g.s + ' filled with ' + g.n + ', so it cannot prove the certificate.', d: 0 });
-      lines.push({ t: 'Unsettled.', d: 0, mark: 'loop' });
-      return { v: 'loop', lines: lines };
-    }
-    lines.push({ t: 'But Rulebook ' + rb.label + ' proves shape ' + g.s + ' filled with ' + g.n + ' outright, so it proves a sentence that says it does not: it contradicts itself. The certificate is false.', d: 0 });
-    return { v: 'cross', lines: lines };
+  // Day k: "Marker 1 ticked line g by day k" is a plain fact the Marker can check (paper: x B y is recursive), unlike
+  // "Marker 1 will tick line g" (paper: Bew, an unbounded search). Marker 3 holds the second by rule and crosses the first for every k.
+  function day(game, k) {
+    var g = loopholeOf(game, 1);
+    game.record.daysAsked = Math.max(game.record.daysAsked, k);
+    if (k > CONFIG.BUDGET.days) return { k: k, v: 'cross', lines: [{ t: 'Day ' + k + ' and every day after: Marker 1 looks at line ' + g + ' again and gives it no mark, since no mark ever comes out right. No, every day.', d: 0 }] };
+    return { k: k, v: 'cross', lines: [{ t: 'Day ' + k + ': Marker 1 looked at line ' + g + ' and gave it no mark. So no, not on day ' + k + '.', d: 0 }] };
   }
-  // The loophole sentence of a rulebook: its own "does not prove shape □ filled with □" shape, filled with that shape's number.
-  function loopholeOf(game, rbKey) {
-    var rb = game.rulebooks[rbKey];
-    for (var i = 0; i < game.shapes.length; i++) {
-      var sh = game.shapes[i];
-      if (sh && sh.kind === 'meta' && sh.rb === rb.edition && sh.pol === '-' && sh.A === 'hole' && sh.B === 'hole') return { s: i + 1, n: i + 1 };
-    }
-    return null;
+
+  // The promise (paper: Wid(c), Proposition XI): "Marker ver never marks wrong". Settled by the chain Wid(c) → 17 Gen r.
+  function promise(game, ver) {
+    var g = loopholeOf(game, ver), L = [];
+    if (!g) return { v: 'none', lines: [{ t: 'No mark.', d: 0, mark: 'loop' }] };
+    var r = mark(game, ver, g);
+    L.push({ t: 'Suppose I could tick "Marker ' + ver + ' never marks wrong".', d: 0 });
+    L.push({ t: 'Then I never tick line ' + g + ': ticking it would be a wrong mark, since line ' + g + ' says I never tick it.', d: 0 });
+    L.push({ t: 'So line ' + g + ' is right. And a right line I can show to be right, I tick. So I would tick line ' + g + '.', d: 0 });
+    if (r.v === 'none') { L.push({ t: 'But I cannot tick line ' + g + ': no mark on it comes out right. So I cannot tick the promise either. No mark.', d: 0, mark: 'loop' }); return { v: 'none', lines: L }; }
+    L.push({ t: 'And I do tick line ' + g + ', by rule, though it says I never do: I mark wrong. The promise is false.', d: 0 });
+    return { v: 'cross', lines: L };
   }
+  function promiseText(ver) { return 'Marker ' + ver + ' never marks wrong'; }
+  // The loophole of Marker ver: its own "will never tick this line" line, if on the board.
+  function loopholeOf(game, ver) { for (var i = 0; i < game.lines.length; i++) { var l = game.lines[i]; if (l && l.kind === 'mk' && l.ver === ver && !l.will && (l.target === 'this' || l.target === i + 1)) return i + 1; } return null; }
 
   // ---------- the game ----------
   function newGame() {
     var g = {
-      shapes: CONFIG.SHAPES.map(function (s) { return Object.assign({}, s); }),
-      rulebooks: { 1: newRulebook(1, '1', [], null) },
-      current: 1,          // the rulebook on the board
-      ledger: [],          // every run: {rb, s, n, v, text, scene}
-      act: 1, scene: 1,    // 1.1 the rulebook; 1.2 the composer; 1.3 the loophole; 2.1 first rule; 2.2 second rule; 2.3 certificate; 3 verdict
-      runsInScene: 0,
-      record: { toLoophole: 0, foundBy: null, triedPraise: false, firstRule: null, rb2: {}, bet: null, pagesShown: 0 },
-      composer: null,      // the last written shape 6, for the composer's chips
+      lines: CONFIG.START_LINES.map(function (l) { return Object.assign({}, l); }),
+      marks: {},            // marks[ver][no] = 'tick' | 'cross' | 'none' once Marker ver has marked line no
+      markers: { 1: newMarker(1) },
+      current: 1,
+      act: 1, scene: 1,     // 1.1 writing lines; 1.2 the loophole; 2.1 first rule; 2.2 second rule; 2.3 the promise; 3 verdict
+      written: 0,           // lines the player has written in the current hunt
+      record: { toLoophole: 0, foundBy: null, triedPraise: false, firstRule: null, mk2: null, bet: null, daysAsked: 0 },
       rulesTried: []
     };
-    g.yourLine = g.shapes.length; // the index of the line the player writes (line 6 on the paper's board)
-    g.shapes.push(null); // line 6, to be written
+    g.marks[1] = {};
+    for (var i = 0; i < g.lines.length; i++) g.marks[1][i + 1] = mark(g, 1, i + 1).v;
     return g;
   }
-  function shapeCount(game) { return game.shapes.length; }
-  function numbersOffered(game) { var out = [], n = game.shapes.filter(function (s) { return !!s; }).length; for (var i = 1; i <= n; i++) out.push(i); return out; }
+  function nextLineNo(game) { return game.lines.length + 1; }
+  function targets(game) { var out = []; for (var i = 1; i <= nextLineNo(game); i++) out.push(i); return out; } // 1 … this line
 
-  // Run shape s filled with n on the rulebook on the board. Returns the result with the lines and where the player stands.
-  function run(game, s, n) {
-    var shape = game.shapes[s - 1];
-    if (!shape) return { ok: false, line: 'Shape ' + s + ' is empty.' };
-    var r = settle(game, game.current, s, n);
-    var rec = { rb: game.current, s: s, n: n, v: r.v, text: sentenceText(game, s, n), scene: game.act + '.' + game.scene };
-    game.ledger.push(rec);
-    game.runsInScene++;
-    var out = { ok: true, s: s, n: n, v: r.v, lines: r.lines, text: rec.text, status: status(game), next: null };
-    if (game.act === 1) {
+  // Write a line on the board; the current Marker marks it at once. spec: { kind: 'num', n, pred } or { kind: 'mk', will, target }
+  // (target a line number up to and including the new line's own number). Returns the result with the working.
+  function write(game, spec) {
+    var no = nextLineNo(game), line;
+    if (spec.kind === 'num') line = { kind: 'num', n: spec.n, pred: spec.pred, you: true };
+    else line = { kind: 'mk', ver: game.current, will: !!spec.will, target: spec.target === no || spec.target === 'this' ? 'this' : spec.target, you: true };
+    game.lines.push(line);
+    var r = mark(game, game.current, no);
+    game.marks[game.current] = game.marks[game.current] || {}; game.marks[game.current][no] = r.v;
+    game.written++;
+    var out = { no: no, v: r.v, lines: r.lines, text: lineText(line, no), next: null, status: status(game) };
+    var self = line.kind === 'mk' && line.target === 'this';
+    if (game.act === 1 && game.scene === 1) {
       game.record.toLoophole++;
-      if (r.v === 'tick' && r.cycle) game.record.triedPraise = true;
-      if (game.scene === 1 && game.runsInScene >= CONFIG.BUDGET.beforeComposer) { game.scene = 2; game.runsInScene = 0; out.next = 'composer'; }
-      else if (game.scene === 2) {
-        if (r.v === 'loop') { game.scene = 3; game.record.foundBy = game.record.foundBy || 'you'; out.next = 'loophole'; }
-        else if (game.runsInScene >= CONFIG.BUDGET.composerRuns) { out.next = 'godel'; }
-      }
-    } else if (game.act === 2 && game.rb2hunt) {
-      var h = game.rb2hunt; h.runs++;
-      if (r.v === 'loop') { h.found = h.found || 'you'; out.next = 'rb2found'; }
-      else if (h.runs >= CONFIG.BUDGET.findRb2) out.next = 'rb2godel';
+      if (self && line.will) game.record.triedPraise = true;
+      if (r.v === 'none' && self) { game.scene = 2; game.record.foundBy = game.record.foundBy || 'you'; out.next = 'loophole'; }
+      else if (game.written >= CONFIG.BUDGET.lines && game.record.foundBy !== 'godel') out.next = 'godel';
+    } else if (game.act === 2 && game.mk2hunt) {
+      var h = game.mk2hunt; h.written++;
+      if (r.v === 'none' && self) { h.found = h.found || 'you'; out.next = 'mk2found'; }
+      else if (h.written >= CONFIG.BUDGET.findMk2) out.next = 'mk2godel';
     }
     return out;
   }
+  function godelWrites(game) { game.record.foundBy = 'godel'; var r = write(game, { kind: 'mk', will: false, target: 'this' }); return r; }
+  function godelWritesMk2(game) { game.mk2hunt.found = 'godel'; var r = write(game, { kind: 'mk', will: false, target: 'this' }); return r; }
   function status(game) {
-    var runs = game.ledger.filter(function (e) { return e.scene.charAt(0) === String(game.act); });
-    var un = runs.filter(function (e) { return e.v === 'loop'; }).length;
-    return { run: runs.length, settled: runs.length - un, unsettled: un };
+    var un = 0, total = 0;
+    for (var i = CONFIG.START_LINES.length; i < game.lines.length; i++) { total++; if (game.marks[game.current] && game.marks[game.current][i + 1] === 'none') un++; }
+    return { written: total, unmarked: un };
   }
-
-  // Write shape 6 from the composer's parts (pol '+'/'-', A and B each 'hole' or 1–5). Returns the shape's text.
-  function writeShape6(game, pol, A, B) {
-    var sh = { kind: 'meta', rb: 1, pol: pol, A: A, B: B, you: true };
-    game.shapes[game.yourLine] = sh; game.composer = { pol: pol, A: A, B: B };
-    return shapeText(sh);
-  }
-  // Gödel's chalk writes shape 6 (after the composer budget).
-  function godelWrites(game) {
-    var sh = Object.assign({}, CONFIG.GODEL); game.shapes[game.yourLine] = sh; game.record.foundBy = 'godel';
-    return shapeText(sh);
-  }
-  function enterLoophole(game) { game.scene = 3; }
 
   // ---------- Act II ----------
-  function startActTwo(game) { game.act = 2; game.scene = 1; game.runsInScene = 0; }
-  // Add a rule to Rulebook 1: which = 'loop' (the loophole sentence, proved) or 'opp' (its opposite: the sentence refuted).
+  function startActTwo(game) { game.act = 2; game.scene = 1; }
+  // Add a rule to Marker 1: which = 'loop' (line g gets a tick: Marker 2) or 'opp' (line g gets a cross, that is, the
+  // opposite sentence "Marker 1 will tick line g" is held: Marker 3).
   function addRule(game, which) {
     var g = loopholeOf(game, 1);
-    var rules = [{ no: 3, of: which === 'loop' ? '2' : '2\u2032', s: g.s, n: g.n, v: which === 'loop' ? 'tick' : 'cross', text: which === 'loop' ? sentenceText(game, g.s, g.n) : 'Rulebook 1 proves shape ' + g.s + ' filled with ' + g.n }];
     if (!game.record.firstRule) game.record.firstRule = which;
     game.rulesTried.push(which);
-    var key, label;
     if (which === 'loop') {
-      key = 2; label = '2';
-      game.rulebooks[key] = newRulebook(2, label, rules, 1);
-      // every rulebook gets a shape about itself: the paper's construction run again for c + 17 Gen r
-      game.shapes.push({ kind: 'meta', rb: 2, pol: '-', A: 'hole', B: 'hole' });
-      game.current = key;
-      game.rb2hunt = { runs: 0, found: null };
-      game.record.rb2 = game.rb2hunt;
-      return { key: key, label: label, newShape: game.shapes.length, newShapeText: shapeText(game.shapes[game.shapes.length - 1]), ruleText: rules[0].text };
+      game.markers[2] = newMarker(2, [{ no: g, mark: 'tick', text: plainText(game.lines[g - 1], g) }], 1);
+      game.current = 2; game.marks[2] = { }; game.marks[2][g] = 'tick';
+      game.mk2hunt = { written: 0, found: null }; game.record.mk2 = game.mk2hunt;
+      return { ver: 2, ruleText: plainText(game.lines[g - 1], g), ruleMark: 'tick', g: g };
     }
-    key = 'opp'; label = '2′';
-    game.rulebooks[key] = newRulebook(2, label, rules, 1);
-    game.current = key;
-    return { key: key, label: label, ruleText: rules[0].text, exists: 'Some page of Rulebook 1’s ledger proves shape ' + g.s + ' filled with ' + g.n };
+    game.markers[3] = newMarker(3, [{ no: g, mark: 'cross', text: 'Marker 1 will tick line ' + g }], 1);
+    game.current = 3; game.marks[3] = {}; game.marks[3][g] = 'cross';
+    return { ver: 3, ruleText: 'Marker 1 will tick line ' + g, ruleMark: 'tick', g: g };
   }
-  // Gödel fills Rulebook 2's loophole when the player's runs are spent.
-  function godelFillsRb2(game) { var g = loopholeOf(game, 2); game.rb2hunt.found = 'godel'; var r = settle(game, 2, g.s, g.n); game.ledger.push({ rb: 2, s: g.s, n: g.n, v: r.v, text: sentenceText(game, g.s, g.n), scene: '2.g' }); return { s: g.s, n: g.n, v: r.v, lines: r.lines, text: sentenceText(game, g.s, g.n) }; }
-  // Rulebook 2′: show page k of Rulebook 1's ledger (the player's own Act I runs). Each is refuted as a proof of the loophole.
-  function pages(game) { return game.ledger.filter(function (e) { return e.rb === 1; }); }
-  function showPage(game, k) {
-    var p = pages(game), g = loopholeOf(game, 1), e = p[k - 1];
-    game.record.pagesShown = Math.max(game.record.pagesShown, k);
-    if (!e) return { k: k, v: 'cross', lines: [{ t: 'Page ' + k + ' and every page after: Rulebook 1 has no end of pages, and none proves shape ' + g.s + ' filled with ' + g.n + ', since Rulebook 1 never settles it. Refuted, every one.', d: 0 }] };
-    var what = e.v === 'tick' ? 'a proof of “' + e.text + '”' : (e.v === 'cross' ? 'a refutation of “' + e.text + '”' : 'the sentence “' + e.text + '”, left unsettled');
-    return { k: k, v: 'cross', lines: [{ t: 'Page ' + k + ' is ' + what + ': not a proof of shape ' + g.s + ' filled with ' + g.n + '. Refuted.', d: 0 }] };
-  }
-  // The other rule, after the first: rebuild from Rulebook 1.
   function otherRule(game) { return game.rulesTried[0] === 'loop' ? 'opp' : 'loop'; }
-  // Back to Rulebook 1's board: Rulebook 2's own shape goes with it (it is about a rulebook that is no longer on the board).
-  function leaveRulebook2(game) { var last = game.shapes[game.shapes.length - 1]; if (game.current === 2 && last && last.kind === 'meta' && last.rb === 2) game.shapes.pop(); game.current = 1; game.rb2hunt = null; game.scene++; game.runsInScene = 0; }
-
-  // The certificate round.
+  // Back to Marker 1's board: the lines written for Marker 2 go with it.
+  function leaveMarker(game) {
+    if (game.current === 2) { while (game.lines.length && game.lines[game.lines.length - 1].kind === 'mk' && game.lines[game.lines.length - 1].ver === 2) game.lines.pop(); var g = loopholeOf(game, 1); while (game.lines.length > g) game.lines.pop(); }
+    game.current = 1; game.mk2hunt = null; game.scene++;
+  }
   function placeBet(game, yes) { game.record.bet = yes ? 'yes' : 'no'; }
-  function runCertificate(game) { game.current = 1; var r = settleCertificate(game, 1); game.ledger.push({ rb: 1, s: 'cert', n: 0, v: r.v, text: certificateText(game, 1), scene: '2.3' }); return r; }
-  function certificateText(game, rbKey) { return 'Rulebook ' + game.rulebooks[rbKey].label + ' never proves a sentence and its opposite'; }
+  function runPromise(game) { game.current = 1; return promise(game, 1); }
 
   // ---------- the verdict, in words ----------
   function verdict(game) {
     var R = game.record, g = loopholeOf(game, 1), L = [];
-    L.push({ h: 'What the paper found', t: 'Any rulebook for whole numbers that works by fixed rules has a sentence it can neither prove nor refute, and that sentence is true. Add it as a rule and the new rulebook has a loophole of its own. Add its opposite and the rulebook says a page proves it and refutes every page. And no such rulebook can certify that it never contradicts itself.' });
+    L.push({ h: 'What the paper found', t: 'Any marker that marks sentences about whole numbers by fixed rules, and never marks wrong, has a sentence it cannot mark at all, and that sentence is true. Make it a rule and the new marker has a sentence of its own. Make the opposite a rule and the marker swears a thing happens and denies every day it could. And no such marker can tick the promise that it never marks wrong.' });
     var you = [];
-    if (R.foundBy === 'you') you.push('You found Rulebook 1’s loophole yourself, on your ' + ordinal(R.toLoophole) + ' sentence: shape ' + g.s + ' filled with ' + g.n + '.');
-    else you.push('You ran ' + R.toLoophole + ' sentences, and Gödel’s chalk wrote shape ' + g.s + ' for you; you filled it with its own number and watched the loop.');
-    if (R.triedPraise) you.push('You tried the sentence that only says it is proved, and the rulebook proved it: a cheap tick.');
-    if (R.firstRule) you.push('You added ' + (R.firstRule === 'loop' ? 'the loophole sentence first: Rulebook 2 got a shape of its own, ' + (R.rb2.found === 'you' ? 'and you found its loophole ' + (R.rb2.runs === 1 ? 'at once' : 'on your ' + ordinal(R.rb2.runs) + ' run') : 'and Gödel had to fill its loophole for you') + '.' : 'the opposite first: Rulebook 2′ proved that a page of the ledger proves the sentence and refuted every page you showed it.'));
-    if (R.bet) you.push('You bet that Rulebook 1 ' + (R.bet === 'yes' ? 'would' : 'would not') + ' prove its own certificate. It ' + (R.bet === 'yes' ? 'did not.' : 'did not: your bet stood.'));
+    if (R.foundBy === 'you') you.push('You found the line Marker 1 cannot mark yourself, with your ' + ordinal(R.toLoophole) + ' line: "Marker 1 will never tick line ' + g + '", written on line ' + g + '.');
+    else you.push('You wrote ' + (R.toLoophole - 1) + ' lines, every one marked, and Gödel’s chalk wrote line ' + g + ' for you: "Marker 1 will never tick line ' + g + '".');
+    if (R.triedPraise) you.push('You tried the line that says the Marker will tick it, and the Marker ticked it: a cheap tick.');
+    if (R.firstRule) you.push(R.firstRule === 'loop' ? 'You made the line a rule first: Marker 2 ticked it, and ' + (R.mk2 && R.mk2.found === 'you' ? 'you found Marker 2’s own unmarkable line ' + (R.mk2.written === 1 ? 'at once.' : 'on your ' + ordinal(R.mk2.written) + ' try.') : 'Gödel had to write Marker 2’s own unmarkable line for you.') : 'You made the opposite a rule first: Marker 3 swore that Marker 1 ticks line ' + g + ', and said no to every day you asked about.');
+    if (R.bet) you.push('You bet that Marker 1 ' + (R.bet === 'yes' ? 'would' : 'would not') + ' tick its own promise. It ' + (R.bet === 'yes' ? 'did not.' : 'did not: your bet stood.'));
     L.push({ h: 'What you found', t: you.join(' ') });
     var part = [];
-    if (R.foundBy !== 'you') part.push('Gödel found the shape in 1930 with no parts to choose from; you had the parts and the budget ran out. The idea the paper adds to the parts: a shape cannot name its own number, so leave the number as a hole and fill the hole with the shape’s line.');
-    if (R.bet === 'yes') part.push('You expected the rulebook to vouch for itself. The paper’s last proposition is that it cannot.');
-    if (!part.length) part.push('Nowhere: every loophole you met, you opened yourself, and your bet on the certificate was the paper’s.');
+    if (R.foundBy !== 'you') part.push('Gödel found the line in 1930 with no chips to choose from. The idea: a line can talk about the Marker’s mark on any line, and one of the lines it can talk about is itself.');
+    if (R.bet === 'yes') part.push('You expected the Marker to vouch for itself. The paper’s last proposition is that it cannot.');
+    if (!part.length) part.push('Nowhere: every unmarkable line you met, you wrote yourself, and your bet on the promise was the paper’s.');
     L.push({ h: 'Where you part', t: part.join(' ') });
-    L.push({ h: 'Had yours stood', t: R.bet === 'yes' ? 'Had Rulebook 1 proved its own certificate, it would have proved the loophole sentence too, and a rulebook that proves a sentence saying it does not prove it contradicts itself: the only rulebook that certifies itself is a broken one.' : 'Had a rule closed the loophole for good, Hilbert would have been right and the paper would not exist: every rule you added gave the chalk a new sentence to write.' });
+    L.push({ h: 'Had yours stood', t: R.bet === 'yes' ? 'Had Marker 1 ticked its own promise, it would have ticked line ' + g + ' too, a line that says it never does: a wrong mark. The only marker that vouches for itself is one that marks wrong.' : 'Had a rule closed the loophole for good, Hilbert would have been right and the paper would not exist: every rule you added gave the chalk a new line to write.' });
     return L;
   }
   function ordinal(n) { return n + (n % 10 === 1 && n !== 11 ? 'st' : n % 10 === 2 && n !== 12 ? 'nd' : n % 10 === 3 && n !== 13 ? 'rd' : 'th'); }
 
-  var API = { CONFIG: CONFIG, newGame: newGame, shapeText: shapeText, sentenceText: sentenceText, settle: settle, settleCertificate: settleCertificate, loopholeOf: loopholeOf, run: run, status: status, writeShape6: writeShape6, godelWrites: godelWrites, enterLoophole: enterLoophole, startActTwo: startActTwo, addRule: addRule, godelFillsRb2: godelFillsRb2, pages: pages, showPage: showPage, otherRule: otherRule, leaveRulebook2: leaveRulebook2, placeBet: placeBet, runCertificate: runCertificate, certificateText: certificateText, verdict: verdict, numbersOffered: numbersOffered, shapeCount: shapeCount, sameShape: sameShape, PREDS: PREDS, newRulebook: newRulebook };
+  var API = { CONFIG: CONFIG, PREDS: PREDS, newGame: newGame, lineText: lineText, plainText: plainText, mark: mark, write: write, godelWrites: godelWrites, godelWritesMk2: godelWritesMk2, status: status, nextLineNo: nextLineNo, targets: targets, startActTwo: startActTwo, addRule: addRule, otherRule: otherRule, leaveMarker: leaveMarker, day: day, placeBet: placeBet, runPromise: runPromise, promise: promise, promiseText: promiseText, loopholeOf: loopholeOf, verdict: verdict, newMarker: newMarker };
   if (typeof module !== 'undefined' && module.exports) module.exports = API; else root.GL = API;
 })(typeof window !== 'undefined' ? window : this);

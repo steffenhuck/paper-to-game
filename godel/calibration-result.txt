@@ -1,44 +1,37 @@
-PASS shapes 1–3 settle every number 1–13 as arithmetic says  — 
-PASS shapes 4 and 5 (about the rulebook) settle for every fill 1–5 and agree with the ledger  — 
-PASS composer sweep: 432 sentences, every one terminates
-PASS exactly one sentence is unsettled: Gödel’s (does not prove, □, □) filled with 6  — -,hole,hole,6
-PASS exactly one sentence is proved by referring to itself: the self-praising one (proves, □, □) filled with 6  — +,hole,hole,6
-PASS with any shape 6 on the board, shapes 1–5 still settle (except shape 5 filled with 6, which quotes the loophole)
-PASS longest working is 13 lines (fits a phone board)  — 13
-PASS Proposition VI: 17 Gen r is not provable (unsettled, not proved)
-PASS Proposition VI: Neg(17 Gen r) is not provable (unsettled, not refuted)
-PASS the loophole is true: the rulebook does not prove it, which is what it says
-PASS the working names the self-reference and ends with the loop mark
-PASS c + G: the loophole sentence is now proved by rule
-PASS c + G: a new shape about Rulebook 2 appears as shape 7
-PASS c + G: shape 7 filled with 7 is Rulebook 2’s loophole
-PASS c + G: shape 7 filled with 6 is refuted (Rulebook 2 proves shape 6 filled with 6)
-PASS c + G: shape 7 filled with 1–5 settles
-PASS editions 3, 4, 5: each proves every earlier loophole and has a new one of its own
-PASS c + ¬G: the loophole sentence is refuted by rule, and the rule says a page proves it
-PASS c + ¬G: every page of the ledger (4 pages, and all after) is refuted as a proof: ω-inconsistent
-PASS c + ¬G: consistent in the toy: every other sentence keeps Rulebook 1’s verdict, and the new rule settles only the one Rulebook 1 left open
-PASS Proposition XI: Wid(c) is unsettled, and the chain passes through 17 Gen r
-PASS Proposition XI for c + G: Rulebook 2 cannot certify itself either (the chain passes through shape 7)
-PASS robustness (a1): board of 5 other shapes: the loopholes in the composer are -,hole,hole,6, the diagonal fill only  — -,hole,hole,6
-PASS robustness (a2): board of 3 other shapes: the loopholes in the composer are -,hole,hole,4, the diagonal fill only  — -,hole,hole,4
-PASS robustness (a3): board of 7 other shapes: the loopholes in the composer are -,7,hole,8 and -,hole,hole,8 (the second through the board’s own self-praising shape)  — -,7,hole,8 | -,hole,hole,8
-PASS robustness (b): under the paper’s weaker rulebook the loophole is still unsettled and the self-praising sentence still proved
-PASS robustness (b): the weaker rulebook leaves more fixed sentences unsettled (7 of 10), so the toy is generous to the rulebook, as the memo says
+PASS number facts: every chip pair marked as arithmetic says  — 
+PASS the class’s two lines: one tick, one cross on the board from the start
+PASS a line about Marker 1’s mark on an earlier line is marked, and as the board says
+PASS composer sweep: 210 lines at 6 positions, every one marked except the self-referring "will never tick"  — 0:{"kind":"mk","will":false,"target":3} | 1:{"kind":"mk","will":false,"target":4} | 2:{"kind":"mk","will":false,"target":5} | 3:{"kind":"mk","will":false,"target":6} | 4:{"kind":"mk","will":false,"target":7} | 5:{"kind":"mk","will":false,"target":8}
+PASS "will tick this line" is ticked at every position (Löb), and no other self line is  — 0:will | 1:will | 2:will | 3:will | 4:will | 5:will
+PASS Proposition VI: the line "Marker 1 will never tick this line" gets no mark (neither tick nor cross)
+PASS the loophole is true: not ticked, which is what it says
+PASS the working names the self-reference and ends with the no-mark line
+PASS lines about the loophole’s mark are unmarked too (a sentence equivalent to G is not ticked)
+PASS c + G: Marker 2 ticks the loophole by rule
+PASS c + G: Marker 2’s own "will never tick this line" is unmarked: a new loophole
+PASS c + G: "Marker 2 will never tick line G" is crossed (Marker 2 ticks G)
+PASS versions 3, 4, 5: each ticks every earlier loophole by rule and has an unmarkable line of its own
+PASS c + ¬G: Marker 3 crosses the loophole by rule (holds "Marker 1 will tick line G")
+PASS c + ¬G: every other line keeps Marker 1’s mark
+PASS c + ¬G: every day asked about is a no, while the rule says it happens: ω-inconsistent
+PASS Proposition XI: the promise "Marker 1 never marks wrong" is unmarked, and the chain passes through line G
+PASS Proposition XI for Marker 2: unmarked, through its own line
+PASS robustness (a1): with 0 start lines, the start lines are marked, self-praise is ticked and Gödel’s line is unmarked
+PASS robustness (a2): with 1 start lines, the start lines are marked, self-praise is ticked and Gödel’s line is unmarked
+PASS robustness (a3): with 4 start lines, the start lines are marked, self-praise is ticked and Gödel’s line is unmarked
+PASS robustness (b): the paper’s weaker Marker cannot vouch for a "never" about a crossed line (unmarked), still ticks a true "will tick", and the loophole and the cheap tick are unchanged
 
-Heuristics (build.md §3): ways of playing the composer
-  number facts only (never writes shape 6)            no loophole in 0 runs       
-  shape 6 points at fixed shapes                      no loophole in 6 runs       
-  self-praise first, then flips                       loophole on run 2           
-  Gödel’s shape, filled with 1 to 5 before 6          loophole on run 6           
-  Gödel’s shape, filled with 6                        loophole on run 1           
-  random composer (500 players, 6 runs each)          1% find the loophole        
+Heuristics (build.md §3): ways of writing lines in Act 1
+  number facts only                             no loophole in 6 lines              
+  about the Marker, earlier lines only          no loophole in 6 lines              
+  self-praise first, then flips                 loophole on line 4 (their 2nd)      met the cheap tick
+  Gödel’s line straight away                    loophole on line 3 (their 1st)      
+  random writing (500 players, 6 lines each)    25% find the loophole               
 
-PASS heuristics: the number-only and fixed-target players never find it; the player who makes the shape look at itself does; the wrong-number player finds it on the 6th run
-PASS heuristics: random composing finds it rarely (1%), so the budget is not a lottery
-PASS shape texts show the hole as □
-PASS a filled sentence reads in words
-PASS verdict has the four parts in words, no digits beyond the shape numbers
-PASS after six composer runs Gödel writes shape 6 and the player’s fill of 6 still loops
+PASS heuristics: number-only and earlier-lines-only players never find it; the self-referrer does, on the first or second try
+PASS heuristics: random writing finds it sometimes but not usually (25%): the chips make self-reference reachable without making it a lottery win
+PASS line texts read in words, with "(this line)" on a self line
+PASS verdict has the four parts in words
+PASS after the budget Gödel writes the line and it is unmarked; the verdict says so
 
 all checks passed

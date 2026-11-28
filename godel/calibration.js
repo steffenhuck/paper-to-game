@@ -1,153 +1,122 @@
-// Calibration check for Gödel's Loophole (memo §17). The mechanism is a toy built from the paper's argument, so there are
-// no reported numbers to hit; what is checked is (1) the number facts; (2) that every shape about the rulebook with a
-// fixed target settles; (3) an exhaustive sweep of the composer: every shape 6 the player can write, filled with every
-// number, terminates, and the only unsettled sentence is Gödel's (does not prove, □, □, filled with 6), with the
-// self-praising one proved; (4) the paper's structure: the loophole is unprovable, its opposite unprovable, and it is
-// true; c + G has a new loophole (and so on for four editions); c + ¬G is consistent and ω-inconsistent; Wid(c) is
-// unprovable and would prove G; (5) robustness: other number facts, more and fewer fixed shapes, and the paper's own
-// weaker rulebook that cannot certify a "no"; (6) the heuristics table of build.md §3; (7) the words.
-// Run: node calibration.js  (exit code 1 on any failure)
+// Calibration check for Gödel's Loophole, second build (memo R6). The mechanism is a toy built from the paper's argument,
+// so there are no reported numbers to hit; what is checked is (1) the number facts; (2) every line about an earlier line is
+// marked, and marked as the board says; (3) an exhaustive sweep of the composer at every line position: every line the
+// player can write is marked except "Marker 1 will never tick this line", and "will tick this line" is ticked;
+// (4) the paper's structure: G unmarked and true, lines about G unmarked; Marker 2 ticks G by rule and has an unmarkable
+// line of its own (and so on for versions 3–5 built by hand); Marker 3 crosses G by rule, keeps every other mark, and says
+// no to every day; the promise is unmarked, through G; (5) robustness: other start lines, the paper's weaker Marker, and
+// the budget; (6) the heuristics table of build.md §3; (7) the words. Run: node calibration.js (exit 1 on any failure).
 var M = require('./mechanism.js'), C = M.CONFIG;
 var fails = 0, out = [];
 function check(name, ok, detail) { out.push((ok ? 'PASS ' : 'FAIL ') + name + (detail !== undefined ? '  — ' + detail : '')); if (!ok) fails++; }
-function game6(pol, A, B) { var g = M.newGame(); M.writeShape6(g, pol, A, B); return g; }
 
-// 1. number facts against a reference
+// 1. number facts
 (function () {
-  var ref = { even: function (n) { return n % 2 === 0; }, prime: function (n) { return [2, 3, 5, 7, 11, 13].indexOf(n) >= 0; }, gt3: function (n) { return n > 3; } };
+  var ref = { even: function (n) { return n % 2 === 0; }, prime: function (n) { return [2, 3, 5, 7].indexOf(n) >= 0; }, gt3: function (n) { return n > 3; } };
   var ok = true, bad = [];
-  for (var s = 1; s <= 3; s++) for (var n = 1; n <= 13; n++) { var g = M.newGame(); var r = M.settle(g, 1, s, n); var want = ref[C.SHAPES[s - 1].pred](n) ? 'tick' : 'cross'; if (r.v !== want) { ok = false; bad.push(s + ':' + n); } }
-  check('shapes 1–3 settle every number 1–13 as arithmetic says', ok, bad.join(','));
+  C.PRED_ORDER.forEach(function (p) { C.NUMBERS.forEach(function (n) { var g = M.newGame(); var r = M.write(g, { kind: 'num', n: n, pred: p }); if (r.v !== (ref[p](n) ? 'tick' : 'cross')) { ok = false; bad.push(p + n); } }); });
+  check('number facts: every chip pair marked as arithmetic says', ok, bad.join(','));
+  var g = M.newGame();
+  check('the class’s two lines: one tick, one cross on the board from the start', g.marks[1][1] === 'tick' && g.marks[1][2] === 'cross');
 })();
 
-// 2. shapes 4 and 5 settle for every fill 1–5, and say what a direct computation says
+// 2. lines about earlier lines
 (function () {
-  var g = M.newGame(), ok = true, bad = [];
-  for (var n = 1; n <= 5; n++) {
-    var r4 = M.settle(g, 1, 4, n), want4 = (n % 2 === 0) ? 'tick' : 'cross';
-    var r5 = M.settle(g, 1, 5, n), inner = M.settle(g, 1, n, 3), want5 = inner.v === 'tick' ? 'cross' : 'tick';
-    if (r4.v !== want4 || r5.v !== want5 || inner.v === 'loop') { ok = false; bad.push(n); }
+  var g = M.newGame(); M.write(g, { kind: 'num', n: 5, pred: 'prime' }); M.write(g, { kind: 'num', n: 2, pred: 'gt3' });
+  var ok = true;
+  for (var t = 1; t <= 4; t++) [true, false].forEach(function (will) { var gg = JSON.parse(JSON.stringify(g)); var r = M.write(gg, { kind: 'mk', will: will, target: t }); var want = (will ? gg.marks[1][t] === 'tick' : gg.marks[1][t] !== 'tick') ? 'tick' : 'cross'; if (r.v !== want) ok = false; });
+  check('a line about Marker 1’s mark on an earlier line is marked, and as the board says', ok);
+})();
+
+// 3. the composer sweep, at every line position the player can reach
+(function () {
+  var unmarked = [], selfTicks = [], total = 0;
+  for (var pos = 0; pos < C.BUDGET.lines; pos++) {
+    var base = M.newGame(); for (var i = 0; i < pos; i++) M.write(base, { kind: 'num', n: 3 + i, pred: C.PRED_ORDER[i % 3] });
+    var specs = [];
+    C.NUMBERS.forEach(function (n) { C.PRED_ORDER.forEach(function (p) { specs.push({ kind: 'num', n: n, pred: p }); }); });
+    M.targets(base).forEach(function (t) { [true, false].forEach(function (w) { specs.push({ kind: 'mk', will: w, target: t }); }); });
+    specs.forEach(function (s) { var g = JSON.parse(JSON.stringify(base)); var r = M.write(g, s); total++; var self = s.kind === 'mk' && s.target === r.no; if (r.v === 'none') unmarked.push(pos + ':' + JSON.stringify(s)); if (self && r.v === 'tick') selfTicks.push(pos + ':' + (s.will ? 'will' : 'never')); });
   }
-  check('shapes 4 and 5 (about the rulebook) settle for every fill 1–5 and agree with the ledger', ok, bad.join(','));
-})();
-
-// 3. the composer sweep
-(function () {
-  var loops = [], ticksBySelf = [], maxLines = 0, total = 0, allSettle = true;
-  C.COMPOSER.pols.forEach(function (pol) { C.COMPOSER.slots.forEach(function (A) { C.COMPOSER.slots.forEach(function (B) {
-    for (var n = 1; n <= 6; n++) {
-      var g = game6(pol, A, B); var r = M.settle(g, 1, 6, n); total++;
-      maxLines = Math.max(maxLines, r.lines.length);
-      if (r.v === 'loop') loops.push(pol + ',' + A + ',' + B + ',' + n);
-      if (r.v === 'tick' && r.cycle) ticksBySelf.push(pol + ',' + A + ',' + B + ',' + n);
-      // every other shape on the board still settles with this shape 6 present
-      for (var s = 1; s <= 5; s++) for (var m = 1; m <= 6; m++) { var q = M.settle(g, 1, s, m); if (q.v === 'loop' && !(s === 5 && m === 6 && r.v === 'loop' && n === 6)) allSettle = false; }
-    }
-  }); }); });
-  check('composer sweep: ' + total + ' sentences, every one terminates', total === 2 * 6 * 6 * 6);
-  check('exactly one sentence is unsettled: Gödel’s (does not prove, □, □) filled with 6', loops.length === 1 && loops[0] === '-,hole,hole,6', loops.join(' | '));
-  check('exactly one sentence is proved by referring to itself: the self-praising one (proves, □, □) filled with 6', ticksBySelf.length === 1 && ticksBySelf[0] === '+,hole,hole,6', ticksBySelf.join(' | '));
-  check('with any shape 6 on the board, shapes 1–5 still settle (except shape 5 filled with 6, which quotes the loophole)', allSettle);
-  check('longest working is ' + maxLines + ' lines (fits a phone board)', maxLines <= 14, maxLines);
+  check('composer sweep: ' + total + ' lines at ' + C.BUDGET.lines + ' positions, every one marked except the self-referring "will never tick"', unmarked.length === C.BUDGET.lines && unmarked.every(function (u) { return /"will":false,"target":(\d+)/.test(u); }), unmarked.join(' | '));
+  check('"will tick this line" is ticked at every position (Löb), and no other self line is', selfTicks.length === C.BUDGET.lines && selfTicks.every(function (s) { return /will$/.test(s); }), selfTicks.join(' | '));
 })();
 
 // 4. the paper's structure
 (function () {
-  var g = game6('-', 'hole', 'hole');
-  var r = M.settle(g, 1, 6, 6);
-  check('Proposition VI: 17 Gen r is not provable (unsettled, not proved)', r.v === 'loop');
-  check('Proposition VI: Neg(17 Gen r) is not provable (unsettled, not refuted)', r.v !== 'cross');
-  check('the loophole is true: the rulebook does not prove it, which is what it says', r.v !== 'tick');
-  check('the working names the self-reference and ends with the loop mark', r.lines[0].mark === 'self' && r.lines[r.lines.length - 1].mark === 'loop');
-  // c + G: a new loophole, four editions deep
-  var gg = game6('-', 'hole', 'hole'); M.run(gg, 2, 5); M.run(gg, 4, 3); M.run(gg, 5, 5); M.run(gg, 6, 6); M.startActTwo(gg);
-  var a = M.addRule(gg, 'loop');
-  check('c + G: the loophole sentence is now proved by rule', M.settle(gg, 2, 6, 6).v === 'tick');
-  check('c + G: a new shape about Rulebook 2 appears as shape 7', a.newShape === 7 && /Rulebook 2 does not prove shape □ filled with □/.test(a.newShapeText));
-  check('c + G: shape 7 filled with 7 is Rulebook 2’s loophole', M.settle(gg, 2, 7, 7).v === 'loop');
-  check('c + G: shape 7 filled with 6 is refuted (Rulebook 2 proves shape 6 filled with 6)', M.settle(gg, 2, 7, 6).v === 'cross');
-  var ok = true; for (var n = 1; n <= 5; n++) if (M.settle(gg, 2, 7, n).v === 'loop') ok = false; check('c + G: shape 7 filled with 1–5 settles', ok);
-  // further editions by hand
-  for (var k = 3; k <= 5; k++) { gg.rulebooks[k] = M.newRulebook(k, String(k), [{ no: 3, of: String(k), s: k + 4, n: k + 4, v: 'tick' }], k - 1); gg.shapes.push({ kind: 'meta', rb: k, pol: '-', A: 'hole', B: 'hole' }); }
-  check('editions 3, 4, 5: each proves every earlier loophole and has a new one of its own', M.settle(gg, 3, 7, 7).v === 'tick' && M.settle(gg, 3, 8, 8).v === 'loop' && M.settle(gg, 5, 8, 8).v === 'tick' && M.settle(gg, 5, 9, 9).v === 'tick' && M.settle(gg, 5, 10, 10).v === 'loop' && M.settle(gg, 5, 6, 6).v === 'tick');
-  // c + ¬G: consistent, ω-inconsistent
-  var go = game6('-', 'hole', 'hole'); M.run(go, 1, 2); M.run(go, 2, 4); M.run(go, 5, 4); M.run(go, 6, 6); M.startActTwo(go);
-  var b = M.addRule(go, 'opp');
-  check('c + ¬G: the loophole sentence is refuted by rule, and the rule says a page proves it', M.settle(go, 'opp', 6, 6).v === 'cross' && /Some page/.test(b.exists));
-  var pg = M.pages(go), allCross = true; for (var i = 1; i <= pg.length + 2; i++) if (M.showPage(go, i).v !== 'cross') allCross = false;
-  check('c + ¬G: every page of the ledger (' + pg.length + ' pages, and all after) is refuted as a proof: ω-inconsistent', allCross && pg.length === 4);
-  var cons = true; for (var s = 1; s <= 6; s++) for (var n2 = 1; n2 <= 6; n2++) { if (s === 6 && n2 === 6) continue; if (M.settle(go, 'opp', s, n2).v !== M.settle(go, 1, s, n2).v) cons = false; }
-  check('c + ¬G: consistent in the toy: every other sentence keeps Rulebook 1\u2019s verdict, and the new rule settles only the one Rulebook 1 left open', cons && M.settle(go, 'opp', 6, 6).v === 'cross' && M.settle(go, 1, 6, 6).v === 'loop');
+  var g = M.newGame(); M.write(g, { kind: 'num', n: 7, pred: 'prime' }); M.write(g, { kind: 'mk', will: true, target: 1 });
+  var r = M.write(g, { kind: 'mk', will: false, target: 'this' }); var G = r.no;
+  check('Proposition VI: the line "Marker 1 will never tick this line" gets no mark (neither tick nor cross)', r.v === 'none' && r.next === 'loophole');
+  check('the loophole is true: not ticked, which is what it says', g.marks[1][G] !== 'tick');
+  check('the working names the self-reference and ends with the no-mark line', r.lines[0].mark === 'self' && r.lines[r.lines.length - 1].mark === 'loop');
+  var g2 = JSON.parse(JSON.stringify(g)); var a = M.write(g2, { kind: 'mk', will: true, target: G }), b = M.write(g2, { kind: 'mk', will: false, target: G });
+  check('lines about the loophole’s mark are unmarked too (a sentence equivalent to G is not ticked)', a.v === 'none' && b.v === 'none');
+  // Marker 2
+  var h = JSON.parse(JSON.stringify(g)); M.startActTwo(h); var ar = M.addRule(h, 'loop');
+  check('c + G: Marker 2 ticks the loophole by rule', ar.ver === 2 && M.mark(h, 2, G).v === 'tick');
+  var r2 = M.write(h, { kind: 'mk', will: false, target: 'this' });
+  check('c + G: Marker 2’s own "will never tick this line" is unmarked: a new loophole', r2.v === 'none' && r2.next === 'mk2found');
+  var r3 = M.write(JSON.parse(JSON.stringify(h)), { kind: 'mk', will: false, target: G });
+  check('c + G: "Marker 2 will never tick line G" is crossed (Marker 2 ticks G)', r3.v === 'cross');
+  // versions 3–5 by hand
+  var v = JSON.parse(JSON.stringify(h)); var last = r2.no;
+  for (var k = 3; k <= 5; k++) { v.markers[k] = M.newMarker(k, [{ no: last, mark: 'tick', text: 'x' }], k - 1); v.current = k; v.marks[k] = {}; v.lines.push({ kind: 'mk', ver: k, will: false, target: 'this' }); var rr = M.mark(v, k, v.lines.length); v.marks[k][v.lines.length] = rr.v; if (rr.v !== 'none' || M.mark(v, k, last).v !== 'tick' || M.mark(v, k, G).v !== 'tick') fails++, out.push('FAIL version ' + k); last = v.lines.length; }
+  check('versions 3, 4, 5: each ticks every earlier loophole by rule and has an unmarkable line of its own', true);
+  // Marker 3
+  var o = JSON.parse(JSON.stringify(g)); M.startActTwo(o); var br = M.addRule(o, 'opp');
+  check('c + ¬G: Marker 3 crosses the loophole by rule (holds "Marker 1 will tick line G")', br.ver === 3 && M.mark(o, 3, G).v === 'cross' && /will tick line/.test(br.ruleText));
+  var keep = true; for (var i = 1; i < G; i++) if (M.mark(o, 3, i).v !== M.mark(o, 1, i).v) keep = false;
+  check('c + ¬G: every other line keeps Marker 1’s mark', keep);
+  var days = true; for (var d = 1; d <= C.BUDGET.days + 2; d++) if (M.day(o, d).v !== 'cross') days = false;
+  check('c + ¬G: every day asked about is a no, while the rule says it happens: ω-inconsistent', days);
   // Proposition XI
-  var c1 = M.settleCertificate(g, 1);
-  check('Proposition XI: Wid(c) is unsettled, and the chain passes through 17 Gen r', c1.v === 'loop' && /shape 6 filled with 6/.test(c1.lines[1].t));
-  var c2 = M.settleCertificate(gg, 2);
-  check('Proposition XI for c + G: Rulebook 2 cannot certify itself either (the chain passes through shape 7)', c2.v === 'loop' && /shape 7 filled with 7/.test(c2.lines[1].t));
+  var p = M.promise(g, 1);
+  check('Proposition XI: the promise "Marker 1 never marks wrong" is unmarked, and the chain passes through line G', p.v === 'none' && new RegExp('line ' + G).test(p.lines[1].t));
+  var p2 = M.promise(h, 2);
+  check('Proposition XI for Marker 2: unmarked, through its own line', p2.v === 'none' && new RegExp('line ' + r2.no).test(p2.lines[1].t));
 })();
 
 // 5. robustness
 (function () {
-  // (a) other number facts and other fixed shapes
-  var saved = C.SHAPES;
-  M.PREDS.square = { text: function (n) { return n + ' is a square'; }, test: function (n) { return [1, 4, 9].indexOf(n) >= 0; }, why: function (n) { return 'x'; } };
-  M.PREDS.lt5 = { text: function (n) { return n + ' is less than 5'; }, test: function (n) { return n < 5; }, why: function (n) { return 'x'; } };
-  var alts = [
-    [{ kind: 'arith', pred: 'square' }, { kind: 'arith', pred: 'lt5' }, { kind: 'arith', pred: 'prime' }, { kind: 'meta', rb: 1, pol: '-', A: 2, B: 'hole' }, { kind: 'meta', rb: 1, pol: '+', A: 'hole', B: 1 }],
-    [{ kind: 'arith', pred: 'even' }, { kind: 'arith', pred: 'lt5' }, { kind: 'meta', rb: 1, pol: '+', A: 'hole', B: 2 }],
-    [{ kind: 'arith', pred: 'prime' }, { kind: 'arith', pred: 'even' }, { kind: 'arith', pred: 'square' }, { kind: 'arith', pred: 'lt5' }, { kind: 'meta', rb: 1, pol: '-', A: 1, B: 'hole' }, { kind: 'meta', rb: 1, pol: '-', A: 'hole', B: 4 }, { kind: 'meta', rb: 1, pol: '+', A: 'hole', B: 'hole' }]
-  ];
-  alts.forEach(function (shapes, ai) {
-    C.SHAPES = shapes; var N = shapes.length + 1, loops = [], okAll = true;
-    var slots = ['hole']; for (var i = 1; i < N; i++) slots.push(i);
-    ['+', '-'].forEach(function (pol) { slots.forEach(function (A) { slots.forEach(function (B) { for (var n = 1; n <= N; n++) {
-      var g = M.newGame(); M.writeShape6(g, pol, A, B); var r = M.settle(g, 1, N, n);
-      if (r.v === 'loop') loops.push(pol + ',' + A + ',' + B + ',' + n);
-    } }); }); });
-    // a board that already holds a self-praising shape (a3's shape 7, "proves □ □") has a second loophole: the player's
-    // "does not prove shape 7 filled with □" filled with 8 and shape 7 filled with 8 refer to each other through a "does not",
-    // and the paper's logic agrees that neither is decidable (proving either would prove consistency).
-    var expect = ai === 2 ? ['-,hole,hole,' + N, '-,7,hole,' + N] : ['-,hole,hole,' + N];
-    var only = loops.sort().join('|') === expect.sort().join('|');
-    check('robustness (a' + (ai + 1) + '): board of ' + shapes.length + ' other shapes: the loopholes in the composer are ' + expect.join(' and ') + (ai === 2 ? ' (the second through the board\u2019s own self-praising shape)' : ', the diagonal fill only'), only, loops.join(' | '));
+  var saved = C.START_LINES;
+  [[], [{ kind: 'num', n: 3, pred: 'gt3' }], [{ kind: 'num', n: 2, pred: 'even' }, { kind: 'num', n: 8, pred: 'prime' }, { kind: 'mk', ver: 1, will: true, target: 1 }, { kind: 'mk', ver: 1, will: false, target: 2 }]].forEach(function (start, i) {
+    C.START_LINES = start; var g = M.newGame(); var marked = Object.keys(g.marks[1]).every(function (k) { return g.marks[1][k] !== 'none'; });
+    var r1 = M.write(g, { kind: 'mk', will: true, target: 'this' }), r2 = M.write(g, { kind: 'mk', will: false, target: 'this' });
+    check('robustness (a' + (i + 1) + '): with ' + start.length + ' start lines, the start lines are marked, self-praise is ticked and Gödel’s line is unmarked', marked && r1.v === 'tick' && r2.v === 'none');
   });
-  C.SHAPES = saved;
-  // (b) the paper's weaker rulebook: cannot certify a "no" (Proposition XI); the toy is generous
-  C.GENEROUS_LEDGER = false;
-  var g = game6('-', 'hole', 'hole'), r = M.settle(g, 1, 6, 6), gp = game6('+', 'hole', 'hole'), rp = M.settle(gp, 1, 6, 6);
-  var unsettledFixed = 0; for (var s = 4; s <= 5; s++) for (var n = 1; n <= 5; n++) if (M.settle(g, 1, s, n).v === 'loop') unsettledFixed++;
-  check('robustness (b): under the paper’s weaker rulebook the loophole is still unsettled and the self-praising sentence still proved', r.v === 'loop' && rp.v === 'tick');
-  check('robustness (b): the weaker rulebook leaves more fixed sentences unsettled (' + unsettledFixed + ' of 10), so the toy is generous to the rulebook, as the memo says', unsettledFixed > 0);
-  C.GENEROUS_LEDGER = true;
+  C.START_LINES = saved;
+  C.GENEROUS = false;
+  var g = M.newGame(); var w1 = M.write(g, { kind: 'mk', will: false, target: 2 }), w2 = M.write(g, { kind: 'mk', will: true, target: 1 }), w3 = M.write(g, { kind: 'mk', will: false, target: 'this' }), w4 = M.write(g, { kind: 'mk', will: true, target: 'this' });
+  check('robustness (b): the paper’s weaker Marker cannot vouch for a "never" about a crossed line (unmarked), still ticks a true "will tick", and the loophole and the cheap tick are unchanged', w1.v === 'none' && w2.v === 'tick' && w3.v === 'none' && w4.v === 'tick');
+  C.GENEROUS = true;
 })();
 
-// 6. the heuristics table (build.md §3): the obvious ways of playing the composer, within the budget of 6 runs
+// 6. heuristics (build.md §3): ways of playing Act 1 within the budget
 (function () {
   var rows = [];
-  function play(name, seq) { var g = M.newGame(); M.run(g, 2, 5); M.run(g, 4, 3); M.run(g, 5, 5); var found = null, praise = false; for (var i = 0; i < seq.length && i < C.BUDGET.composerRuns; i++) { var q = seq[i]; M.writeShape6(g, q[0], q[1], q[2]); var r = M.run(g, 6, q[3]); if (r.v === 'tick' && r.cycle) praise = true; if (r.v === 'loop') { found = i + 1; break; } } rows.push([name, found ? 'loophole on run ' + found : 'no loophole in ' + Math.min(seq.length, C.BUDGET.composerRuns) + ' runs', praise ? 'met the cheap tick' : '']); return found; }
-  var numbersOnly = play('number facts only (never writes shape 6)', []);
-  var fixedMeta = play('shape 6 points at fixed shapes', [['+', 1, 2, 6], ['-', 2, 5, 6], ['+', 4, 'hole', 6], ['-', 5, 'hole', 6], ['-', 'hole', 3, 6], ['+', 'hole', 5, 6]]);
-  var praiseFirst = play('self-praise first, then flips', [['+', 'hole', 'hole', 6], ['-', 'hole', 'hole', 6]]);
-  var wrongNumber = play('Gödel’s shape, filled with 1 to 5 before 6', [['-', 'hole', 'hole', 1], ['-', 'hole', 'hole', 2], ['-', 'hole', 'hole', 3], ['-', 'hole', 'hole', 4], ['-', 'hole', 'hole', 5], ['-', 'hole', 'hole', 6]]);
-  var godel = play('Gödel’s shape, filled with 6', [['-', 'hole', 'hole', 6]]);
-  // random composer, 500 players
-  var seed = 7, hits = 0, N = 500; function rnd(k) { seed = (seed * 1664525 + 1013904223) >>> 0; return Math.floor(seed / 4294967296 * k); }
-  for (var p = 0; p < N; p++) { var seq = []; for (var i = 0; i < C.BUDGET.composerRuns; i++) seq.push([C.COMPOSER.pols[rnd(2)], C.COMPOSER.slots[rnd(6)], C.COMPOSER.slots[rnd(6)], 1 + rnd(6)]); var g = M.newGame(); M.run(g, 2, 5); M.run(g, 4, 3); M.run(g, 5, 5); for (var j = 0; j < seq.length; j++) { M.writeShape6(g, seq[j][0], seq[j][1], seq[j][2]); if (M.run(g, 6, seq[j][3]).v === 'loop') { hits++; break; } } }
-  rows.push(['random composer (' + N + ' players, 6 runs each)', Math.round(100 * hits / N) + '% find the loophole', '']);
-  out.push(''); out.push('Heuristics (build.md §3): ways of playing the composer'); rows.forEach(function (r) { out.push('  ' + r[0].padEnd(52) + r[1].padEnd(28) + r[2]); }); out.push('');
-  check('heuristics: the number-only and fixed-target players never find it; the player who makes the shape look at itself does; the wrong-number player finds it on the 6th run', numbersOnly === null && fixedMeta === null && praiseFirst === 2 && wrongNumber === 6 && godel === 1);
-  check('heuristics: random composing finds it rarely (' + Math.round(100 * hits / N) + '%), so the budget is not a lottery', hits / N < 0.1);
+  function play(name, seq) { var g = M.newGame(); var found = null, praise = false; for (var i = 0; i < seq.length && i < C.BUDGET.lines; i++) { var r = M.write(g, seq[i]); if (seq[i].kind === 'mk' && seq[i].target === 'this' && r.v === 'tick') praise = true; if (r.next === 'loophole') { found = i + 1; break; } } rows.push([name, found ? 'loophole on line ' + (found + 2) + ' (their ' + found + ordinalSuffix(found) + ')' : 'no loophole in ' + Math.min(seq.length, C.BUDGET.lines) + ' lines', praise ? 'met the cheap tick' : '']); return found; }
+  function ordinalSuffix(n) { return n === 1 ? 'st' : n === 2 ? 'nd' : n === 3 ? 'rd' : 'th'; }
+  var numbers = play('number facts only', [1, 2, 3, 4, 5, 6].map(function (n) { return { kind: 'num', n: n, pred: 'prime' }; }));
+  var others = play('about the Marker, earlier lines only', [{ kind: 'mk', will: true, target: 1 }, { kind: 'mk', will: false, target: 2 }, { kind: 'mk', will: true, target: 3 }, { kind: 'mk', will: false, target: 4 }, { kind: 'mk', will: true, target: 5 }, { kind: 'mk', will: false, target: 6 }]);
+  var praise = play('self-praise first, then flips', [{ kind: 'mk', will: true, target: 'this' }, { kind: 'mk', will: false, target: 'this' }]);
+  var godel = play('Gödel’s line straight away', [{ kind: 'mk', will: false, target: 'this' }]);
+  var seed = 11, hits = 0, N = 500; function rnd(k) { seed = (seed * 1664525 + 1013904223) >>> 0; return Math.floor(seed / 4294967296 * k); }
+  for (var p = 0; p < N; p++) { var g = M.newGame(); for (var i = 0; i < C.BUDGET.lines; i++) { var s = rnd(2) ? { kind: 'num', n: C.NUMBERS[rnd(C.NUMBERS.length)], pred: C.PRED_ORDER[rnd(3)] } : { kind: 'mk', will: !!rnd(2), target: M.targets(g)[rnd(M.targets(g).length)] }; if (M.write(g, s).next === 'loophole') { hits++; break; } } }
+  rows.push(['random writing (' + N + ' players, ' + C.BUDGET.lines + ' lines each)', Math.round(100 * hits / N) + '% find the loophole', '']);
+  out.push(''); out.push('Heuristics (build.md §3): ways of writing lines in Act 1'); rows.forEach(function (r) { out.push('  ' + r[0].padEnd(46) + r[1].padEnd(36) + r[2]); }); out.push('');
+  check('heuristics: number-only and earlier-lines-only players never find it; the self-referrer does, on the first or second try', numbers === null && others === null && praise === 2 && godel === 1);
+  check('heuristics: random writing finds it sometimes but not usually (' + Math.round(100 * hits / N) + '%): the chips make self-reference reachable without making it a lottery win', hits / N > 0.1 && hits / N < 0.6);
 })();
 
 // 7. the words
 (function () {
   var g = M.newGame();
-  check('shape texts show the hole as □', M.shapeText(g.shapes[0]) === '□ is even' && M.shapeText(g.shapes[3]) === 'Rulebook 1 proves shape 1 filled with □' && M.shapeText(g.shapes[4]) === 'Rulebook 1 does not prove shape □ filled with 3');
-  check('a filled sentence reads in words', M.sentenceText(g, 2, 5) === '5 is a prime' && M.sentenceText(g, 5, 2) === 'Rulebook 1 does not prove shape 2 filled with 3');
-  var g2 = game6('-', 'hole', 'hole'); M.run(g2, 1, 1); M.run(g2, 2, 2); M.run(g2, 3, 3); M.run(g2, 6, 6); M.startActTwo(g2); M.addRule(g2, 'loop'); M.run(g2, 7, 7); M.leaveRulebook2(g2); M.addRule(g2, 'opp'); M.showPage(g2, 1); M.placeBet(g2, false); M.runCertificate(g2);
-  var v = M.verdict(g2);
-  check('verdict has the four parts in words, no digits beyond the shape numbers', v.length === 4 && v.every(function (p) { return p.t.length > 40; }) && /4th sentence/.test(v[1].t) && /your bet stood/.test(v[1].t));
-  var g3 = M.newGame(); M.run(g3, 1, 1); M.run(g3, 1, 2); M.run(g3, 1, 3); for (var i = 0; i < 6; i++) { M.writeShape6(g3, '+', 1, 2); M.run(g3, 6, 1); } M.godelWrites(g3); var r = M.run(g3, 6, 6);
-  check('after six composer runs Gödel writes shape 6 and the player’s fill of 6 still loops', r.v === 'loop' && g3.record.foundBy === 'godel' && /Gödel/.test(M.verdict(g3)[1].t));
+  check('line texts read in words, with "(this line)" on a self line', M.lineText(g.lines[0], 1) === '4 is even' && M.lineText({ kind: 'mk', ver: 1, will: false, target: 'this' }, 6) === 'Marker 1 will never tick line 6 (this line)' && M.plainText({ kind: 'mk', ver: 1, will: true, target: 2 }, 5) === 'Marker 1 will tick line 2');
+  M.write(g, { kind: 'num', n: 7, pred: 'prime' }); M.write(g, { kind: 'mk', will: true, target: 'this' }); M.write(g, { kind: 'mk', will: false, target: 'this' }); M.startActTwo(g); M.addRule(g, 'opp'); M.day(g, 1); M.day(g, 2); M.leaveMarker(g); M.addRule(g, 'loop'); M.write(g, { kind: 'mk', will: false, target: 'this' }); M.leaveMarker(g); M.placeBet(g, false); M.runPromise(g);
+  var v = M.verdict(g);
+  check('verdict has the four parts in words', v.length === 4 && v.every(function (p) { return p.t.length > 40; }) && /3rd line/.test(v[1].t) && /cheap tick/.test(v[1].t) && /your bet stood/.test(v[1].t));
+  var g3 = M.newGame(); for (var i = 0; i < C.BUDGET.lines; i++) M.write(g3, { kind: 'num', n: 2, pred: 'even' }); var r = M.godelWrites(g3);
+  check('after the budget Gödel writes the line and it is unmarked; the verdict says so', r.v === 'none' && g3.record.foundBy === 'godel' && /Gödel/.test(M.verdict(g3)[1].t));
 })();
 
 console.log(out.join('\n'));
