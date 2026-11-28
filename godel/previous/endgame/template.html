@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gödel's Endgame</title>
+<script data-goatcounter="https://steffenhuck.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<meta name="description" content="Gödel, 1931. Hilbert promises that his machine settles every sentence about whole numbers: it prints the sentence or its NOT. Play the machine, learn how a sentence becomes a number, and write the one sentence it cannot settle.">
+<style>
+@font-face{font-family:'Josefin';font-weight:400;font-style:normal;src:url(data:font/woff2;base64,/*__F_J400__*/) format('woff2')}
+@font-face{font-family:'Josefin';font-weight:700;font-style:normal;src:url(data:font/woff2;base64,/*__F_J700__*/) format('woff2')}
+@font-face{font-family:'Courier Prime';font-weight:400;font-style:normal;src:url(data:font/woff2;base64,/*__F_C400__*/) format('woff2')}
+@font-face{font-family:'Courier Prime';font-weight:700;font-style:normal;src:url(data:font/woff2;base64,/*__F_C700__*/) format('woff2')}
+:root{--paper:#F2EDE1;--slip:#FBF8F0;--ink:#17161A;--mute:#6E675C;--gold:#B38A2E;--violet:#5B3E8E;--violetlt:#E6DDF2;--red:#A3262B;color-scheme:light}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--paper);color:var(--ink)}
+body{font-family:'Josefin',system-ui,sans-serif;font-size:17px;line-height:1.38;overflow-x:hidden}
+.wrap{max-width:440px;margin:0 auto;min-height:100vh;padding:10px 14px 30px}
+.screen{display:none}.screen.on{display:block}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+a{color:var(--violet)}
+p{margin:.45em 0}
+.ty{font-family:'Courier Prime',ui-monospace,monospace;font-weight:700}
+.hide{display:none!important}
+.cheq{height:12px;background:repeating-conic-gradient(var(--ink) 0 25%,var(--paper) 0 50%) 0 0/12px 12px}
+.top{display:flex;align-items:flex-start;gap:10px;padding:2px 0 6px}
+.top .aim{flex:1;font-size:13.5px;color:var(--mute);line-height:1.3}
+.qbtn{width:34px;height:34px;border:2px solid var(--ink);border-radius:50%;font-weight:700;font-size:18px;flex:none;line-height:30px;text-align:center}
+.kick{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-top:4px}
+h2.now{font-size:22px;line-height:1.2;margin:.15em 0 .3em;font-weight:700}
+.expl{font-size:15.5px;margin:.2em 0 .6em}
+/* the machine */
+.machine{padding:9px;background:repeating-conic-gradient(var(--ink) 0 25%,var(--paper) 0 50%) 0 0/12px 12px;margin:8px 0 8px}
+.machine .inner{background:var(--paper);border:2px solid var(--ink);padding:10px 12px 12px}
+.plate{display:inline-block;background:var(--gold);color:var(--ink);font-weight:700;font-size:11.5px;letter-spacing:.16em;padding:4px 9px 2px;text-transform:uppercase}
+.tape{font-family:'Courier Prime',monospace;font-weight:700;font-size:24px;line-height:1.35;margin:10px 0 2px;min-height:1.4em;word-break:break-word}
+.tape .cur{display:inline-block;width:12px;border-bottom:3px solid var(--ink);margin-left:3px;animation:blink 1s steps(1) infinite;height:1em;vertical-align:-3px}
+@keyframes blink{50%{opacity:0}}
+.words{font-family:'Courier Prime',monospace;font-weight:700;font-size:16.5px;line-height:1.45;margin:10px 0 2px}
+.words .gap{color:var(--violet)}
+.slot{height:7px;background:var(--ink);margin:12px 14px 0;border-radius:2px}
+.slipout{margin:0 22px;background:var(--slip);border:1px solid #cfc5ae;border-top:0;font-family:'Courier Prime',monospace;font-weight:700;font-size:16px;padding:8px 10px;animation:feed .9s ease-out both}
+@keyframes feed{0%{opacity:0}100%{opacity:1}}
+.slipout.empty{font-family:'Josefin';font-weight:400;color:var(--mute)}
+/* stamps */
+.stampw{margin:8px 0 2px}
+.stamp{display:inline-block;border:3.5px solid var(--violet);color:var(--violet);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:15px;padding:5px 9px 2px;transform:rotate(-4deg);line-height:1.15;animation:thump .35s cubic-bezier(.3,1.6,.6,1)}
+.stamp.red{border-color:var(--red);color:var(--red)}
+@keyframes thump{0%{transform:rotate(-4deg) scale(2);opacity:0}100%{transform:rotate(-4deg) scale(1);opacity:1}}
+/* buttons */
+.btn{display:block;width:100%;margin:10px 0 0;padding:13px 10px 11px;font-weight:700;font-size:17.5px;text-align:center;border:2.5px solid var(--ink)}
+.btn.go{background:var(--ink);color:var(--slip)}
+.btn.sec{background:transparent}
+.btn.small{font-size:15px;padding:9px 8px 7px}
+.btn[disabled]{opacity:.35;cursor:default}
+.two{display:flex;gap:10px}.two .btn{flex:1}
+.pick{display:flex;gap:10px;margin-top:10px}
+.pick .btn{flex:1;margin:0;background:var(--ink);color:var(--slip);box-shadow:0 0 0 3px var(--gold);border-color:var(--ink);font-family:'Courier Prime',monospace;font-size:17px}
+.pick .btn.third{background:var(--violet);border-color:var(--violet);box-shadow:none;font-family:'Josefin'}
+.pick .btn.tried{opacity:.35}
+/* keypad */
+.pad{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:8px 0 4px}
+.k{height:50px;background:var(--ink);color:var(--slip);font-family:'Courier Prime',monospace;font-weight:700;font-size:21px;border-radius:9px;box-shadow:0 0 0 2px var(--gold)}
+.k.wide{grid-column:span 2;font-size:17px}
+.k.light{background:var(--paper);color:var(--ink);box-shadow:0 0 0 2px var(--ink);font-family:'Josefin';font-size:15px}
+.k:active{transform:translateY(2px)}
+.k[disabled]{opacity:.3;cursor:default}
+/* notes */
+.note{font-size:15.5px;margin:8px 0;padding:7px 10px;border-left:4px solid var(--gold);background:#ece5d3}
+.note.v{border-left-color:var(--violet);background:var(--violetlt)}
+.note.r{border-left-color:var(--red);background:#f3dfdc}
+.hilbert{font-style:italic}
+.count{font-size:14px;color:var(--mute);margin-top:6px}
+/* act 2 */
+.codes{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.code{border:2px solid var(--ink);background:var(--slip);text-align:center;min-width:46px;padding:3px 4px 1px}
+.code .s{font-family:'Courier Prime',monospace;font-weight:700;font-size:15px;display:block}
+.code .n{font-weight:700;font-size:17px;color:var(--violet);display:block}
+.tiles{display:flex;gap:8px;margin:8px 0}
+.tile{min-width:48px;height:50px;padding:0 8px;background:var(--ink);color:var(--slip);font-family:'Courier Prime',monospace;font-weight:700;font-size:22px;border-radius:9px;box-shadow:0 0 0 2px var(--gold)}
+.tile.done{background:var(--paper);color:var(--mute);box-shadow:0 0 0 2px #cfc5ae}
+.tile[disabled]:not(.done){opacity:.35}
+.bignum{font-family:'Courier Prime',monospace;font-weight:700;font-size:26px;color:var(--violet);margin:6px 0 2px;word-break:break-all}
+.formula{font-size:17px;font-weight:700;line-height:1.8}
+.formula sup{color:var(--violet);font-size:.7em}
+.cols{display:flex;gap:8px;margin:8px 0}
+.col{flex:1;border:2px solid var(--ink);background:var(--slip);text-align:center;padding:6px 4px}
+.col .p{font-size:13px;color:var(--mute)}
+.col .c{font-size:24px;font-weight:700;color:var(--violet)}
+.col .btn{margin-top:6px;padding:9px 4px 7px;font-size:16px}
+/* act 3 */
+.line{font-family:'Courier Prime',monospace;font-weight:700;font-size:15.5px;line-height:1.45;padding:3px 0 3px 10px;border-left:3px solid #d6cdb9;margin:2px 0 6px}
+.line.eq{border-left-color:var(--violet);background:var(--violetlt)}
+.lbl{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin:10px 0 2px;font-weight:700}
+.choices .btn{text-align:left;font-family:'Courier Prime',monospace;font-size:15px;line-height:1.35;padding:10px 12px 8px}
+.choices .btn.picked{border-color:var(--violet);box-shadow:inset 0 0 0 2px var(--violet)}
+/* start, end, pages */
+.title{font-size:44px;line-height:1;margin:.15em 0 .1em;font-weight:700}
+.sub{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.aimbox{font-weight:700;font-size:19px;margin:12px 0 4px;padding:10px 12px 8px;border:2.5px solid var(--violet);color:var(--violet)}
+.cite{font-size:13px;color:var(--mute);margin-top:16px;text-align:center}
+.sig{text-align:center;margin-top:18px;font-style:italic;font-size:14px}
+.sig a{color:var(--mute);text-decoration:none}
+.vd h4{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:16px 0 3px}
+.vd .lead{font-size:20px;font-weight:700;line-height:1.28}
+details{border-top:1.5px solid var(--ink);margin-top:14px;padding-top:8px}
+summary{font-weight:700;cursor:pointer;font-size:16px}
+details ol{padding-left:20px;font-size:15px}
+details li{margin:.45em 0}
+.page{font-size:15.5px}
+.page h3{margin:16px 0 4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- START -->
+<section class="screen on" id="s-start">
+  <div class="cheq"></div>
+  <div class="sub" style="margin-top:12px">Kurt Gödel · Vienna · 1931</div>
+  <h1 class="title">Gödel's Endgame</h1>
+  <p>David Hilbert has a machine for sentences about whole numbers, like <span class="ty">2 × 3 = 6</span>. It is honest: it never prints a false sentence. And Hilbert makes a promise:</p>
+  <p class="hilbert"><b>“Give my machine any sentence. It will print it, or print its NOT. Always.”</b></p>
+  <p>You will play the machine, learn how a sentence becomes a number, and then write one sentence of your own.</p>
+  <div class="aimbox">Find a sentence the machine can neither print nor print the NOT of.</div>
+  <button class="btn go" id="b-begin">Begin</button>
+  <button class="btn sec" data-help>How to play</button>
+  <div class="cite">Gödel (1931), <i>Monatshefte für Mathematik und Physik</i> 38: 173–198. A game built from the paper.</div>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+
+<!-- ACT 1 -->
+<section class="screen" id="s-act1">
+  <div class="top"><div class="aim">Find a sentence the machine can neither print nor print the NOT of.</div><button class="qbtn" data-help aria-label="How to play">?</button></div>
+  <div class="kick">Act 1 of 3 · Hilbert's promise</div>
+  <h2 class="now" id="a1-now"></h2>
+  <div class="expl" id="a1-expl"></div>
+  <div class="machine"><div class="inner">
+    <span class="plate">Hilbert's machine</span>
+    <div class="tape" id="a1-tape"></div>
+    <div id="a1-stamp"></div>
+    <div class="slot"></div>
+    <div id="a1-out"></div>
+  </div></div>
+  <div id="a1-write">
+    <div class="pad">
+      <button class="k" data-t="1">1</button><button class="k" data-t="2">2</button><button class="k" data-t="3">3</button><button class="k" data-t="4">4</button><button class="k" data-t="5">5</button>
+      <button class="k" data-t="6">6</button><button class="k" data-t="7">7</button><button class="k" data-t="8">8</button><button class="k" data-t="9">9</button><button class="k" data-t="0">0</button>
+      <button class="k" data-t="+">+</button><button class="k" data-t="×">×</button><button class="k" data-t="=">=</button><button class="k wide" data-t="NOT">NOT</button>
+      <button class="k light wide" id="k-back">Take back</button><button class="k light wide" id="k-deal">Give me one</button><button class="k light" id="k-clear">Clear</button>
+    </div>
+    <button class="btn go" id="a1-hand">Hand it to the machine</button>
+  </div>
+  <div id="a1-judge" class="hide">
+    <div class="note" id="a1-q">You are the machine now. Which do you print?</div>
+    <div class="pick"><button class="btn" id="a1-print">Print it</button><button class="btn" id="a1-not">Print its NOT</button></div>
+  </div>
+  <div id="a1-msg"></div>
+  <div class="count" id="a1-count"></div>
+  <button class="btn go hide" id="a1-next"></button>
+</section>
+
+<!-- ACT 2 -->
+<section class="screen" id="s-act2">
+  <div class="top"><div class="aim">Find a sentence the machine can neither print nor print the NOT of.</div><button class="qbtn" data-help aria-label="How to play">?</button></div>
+  <div class="kick">Act 2 of 3 · Every sentence gets a number</div>
+  <!-- 2a: pack -->
+  <div id="a2-pack">
+    <h2 class="now">Pack the sentence <span class="ty">1 + 1 = 2</span> into one number.</h2>
+    <p class="expl">Every symbol has a code. Tap the symbols in order. Each tap multiplies the number by the next prime (2, 3, 5, 7, 11) raised to the symbol's code.</p>
+    <div class="codes" id="a2-codes"></div>
+    <div class="tiles" id="a2-tiles"></div>
+    <div class="formula" id="a2-formula"></div>
+    <div class="bignum" id="a2-num">1</div>
+    <div id="a2-pack-msg"></div>
+    <button class="btn go hide" id="a2-to-unpack">Now take one apart</button>
+  </div>
+  <!-- 2b: unpack -->
+  <div id="a2-unpack" class="hide">
+    <h2 class="now">Unpack this number back into a sentence.</h2>
+    <p class="expl">Divide by 2 as often as it goes, then by 3, then by 5. How many times each prime goes in is the code of a symbol.</p>
+    <div class="bignum" id="a2-unum"></div>
+    <div class="cols" id="a2-cols"></div>
+    <div id="a2-unpack-msg"></div>
+    <button class="btn go hide" id="a2-to-punch">One more sentence for the machine</button>
+  </div>
+  <!-- 2c: a sentence about the machine -->
+  <div id="a2-punch" class="hide">
+    <h2 class="now">A new kind of sentence. You are the machine: which do you print?</h2>
+    <div class="machine"><div class="inner">
+      <span class="plate">Hilbert's machine</span>
+      <div class="words" id="a2-sent">The machine has printed sentence number 11,530,778,490.</div>
+      <div id="a2-stamp"></div>
+    </div></div>
+    <p class="expl">Hint: you packed that number a minute ago.</p>
+    <div class="pick"><button class="btn" id="a2-print">Print it</button><button class="btn" id="a2-not">Print its NOT</button></div>
+    <div id="a2-punch-msg"></div>
+    <button class="btn go hide" id="a2-next">Act 3: write your own</button>
+  </div>
+</section>
+
+<!-- ACT 3 -->
+<section class="screen" id="s-act3">
+  <div class="top"><div class="aim">Find a sentence the machine can neither print nor print the NOT of.</div><button class="qbtn" data-help aria-label="How to play">?</button></div>
+  <div class="kick">Act 3 of 3 · The sentence</div>
+  <div id="a3-build">
+    <h2 class="now" id="a3-now">Fill the gap so the sentence talks about itself.</h2>
+    <p class="expl">Hilbert: <span class="hilbert">“Write one my machine can't settle.”</span> Here is a sentence with a gap. Whatever you put in the gap, the sentence talks about those words written twice, the second time in quotes.</p>
+    <div class="machine"><div class="inner">
+      <span class="plate">Hilbert's machine</span>
+      <div class="words" id="a3-sent"></div>
+      <div id="a3-stamp"></div>
+    </div></div>
+    <div class="choices" id="a3-choices"></div>
+    <div id="a3-compare" class="hide">
+      <div class="lbl">Your sentence</div><div class="line" id="a3-mine"></div>
+      <div class="lbl">It talks about</div><div class="line" id="a3-about"></div>
+    </div>
+    <div id="a3-msg"></div>
+    <button class="btn go hide" id="a3-feed">Feed it to the machine</button>
+  </div>
+  <div id="a3-dilemma" class="hide">
+    <h2 class="now" id="a3d-now">You are the machine. Which do you print?</h2>
+    <div class="machine"><div class="inner">
+      <span class="plate">Hilbert's machine</span>
+      <div class="words" id="a3d-sent"></div>
+      <div class="slot"></div>
+      <div id="a3d-out"></div>
+    </div></div>
+    <p class="expl" id="a3d-says">In plain words it says: <b>the machine never prints this sentence.</b></p>
+    <div class="pick"><button class="btn" id="a3-print">Print it</button><button class="btn" id="a3-not">Print its NOT</button></div>
+    <div class="pick"><button class="btn third hide" id="a3-neither">Print neither</button></div>
+    <div id="a3d-msg"></div>
+    <button class="btn go hide" id="a3-repair">Hilbert has an answer</button>
+  </div>
+</section>
+
+<!-- REPAIR -->
+<section class="screen" id="s-repair">
+  <div class="top"><div class="aim">Find a sentence the machine can neither print nor print the NOT of.</div><button class="qbtn" data-help aria-label="How to play">?</button></div>
+  <div class="kick">Hilbert's repair</div>
+  <h2 class="now">“Then I'll teach my machine your sentence.”</h2>
+  <p class="expl">Machine II prints everything Machine I prints, and your sentence too. But the recipe works for any machine. Change one word:</p>
+  <div class="machine"><div class="inner">
+    <span class="plate">Hilbert's machine · II</span>
+    <div class="words" id="r-sent"></div>
+  </div></div>
+  <div class="note v">Machine II can neither print this one nor its NOT, for the same reason as before. Teach it this one, and Machine III has its own. <b>Every repair gets a new sentence.</b></div>
+  <button class="btn go" id="r-next">The verdict</button>
+</section>
+
+<!-- END -->
+<section class="screen" id="s-end">
+  <div class="cheq"></div>
+  <div class="vd" id="e-vd"></div>
+  <details>
+    <summary>Read further</summary>
+    <ol>
+      <li><b>Why multiplication.</b> With addition alone a machine can settle every sentence about whole numbers (Presburger, 1929). Multiplication is what lets one number hold a whole list, and so a whole sentence or a whole proof. That is the step that lets arithmetic talk about its own machine.</li>
+      <li><b>The filing trick is Gödel's.</b> He gave each sign a number and packed strings of signs as products of prime powers, just as you did. His codes are different (odd numbers for the basic signs), and he then built “is a proof of” out of forty-six definitions, all of them arithmetic.</li>
+      <li><b>The gap is Gödel's trick too.</b> In the paper, a formula with a free spot is filled with its own number. “Written twice, the second time in quotes” is the same move in words (the philosopher W. V. Quine's way of saying it).</li>
+      <li><b>Honest is more than Gödel needed.</b> He assumed only that the machine never prints a sentence and its NOT together (in a slightly stronger form). Rosser (1936) got by with exactly that.</li>
+      <li><b>The last request.</b> The machine can't print “I never print a false sentence” either: if it could, it could follow the argument you just made and print your sentence. That is the paper's last proposition, now called the second incompleteness theorem.</li>
+      <li><b>What it does not say.</b> Not that mathematics is broken or that some truths are unknowable. You know your sentence is true. No single fixed machine catches every truth about whole numbers.</li>
+    </ol>
+  </details>
+  <button class="btn go" id="b-again">Play again</button>
+  <div class="two"><button class="btn sec" data-help>How to play</button><button class="btn sec" id="b-about">About</button></div>
+  <footer class="sig"><a href="https://steffenhuck.github.io/">steffen huck</a></footer>
+</section>
+
+<!-- HELP -->
+<section class="screen page" id="s-help">
+  <div class="cheq"></div>
+  <h2 class="now" style="margin-top:12px">How to play</h2>
+  <p><b>The aim.</b> Hilbert promises his machine prints every sentence about whole numbers or its NOT. Find a sentence where it can do neither.</p>
+  <h3>Act 1: play the machine</h3>
+  <p>Write a sentence with the keypad (or tap <b>Give me one</b>) and hand it to the machine. First it checks it is a sentence at all: <span class="ty">xyz</span> or <span class="ty">2 + = 4</span> are not. Then you decide, as the machine: <b>Print it</b> if it is true, <b>Print its NOT</b> if it is false. The machine never prints a false sentence.</p>
+  <h3>Act 2: sentences become numbers</h3>
+  <p>Pack a sentence into one number by multiplying primes, then unpack a number by dividing. Then judge a sentence about the machine itself.</p>
+  <h3>Act 3: the sentence</h3>
+  <p>Choose what goes in the gap. The two lines under the machine show your sentence and what it talks about; when they are the same, it talks about itself. Then try to print it.</p>
+  <button class="btn go" id="b-help-back">Back</button>
+</section>
+
+<!-- ABOUT -->
+<section class="screen page" id="s-about">
+  <div class="cheq"></div>
+  /*__ABOUT__*/
+  <button class="btn go" id="b-about-back">Back</button>
+</section>
+
+</div>
+<script>
+window.onerror = function (m, u, l) { var w = document.querySelector('.wrap'); if (w && !document.getElementById('err')) { var d = document.createElement('div'); d.id = 'err'; d.style.cssText = 'background:#a3262b;color:#fff;padding:8px 12px;font-size:14px'; d.textContent = 'Something went wrong in the game: ' + m + ' (line ' + l + ').'; w.insertBefore(d, w.firstChild); } };
+</script>
+<script>
+/*__MECHANISM__*/
+</script>
+<script>
+(function () {
+  var C = GODEL_CONFIG;
+  var $ = function (id) { return document.getElementById(id); };
+  var S;
+  function fresh() {
+    return { tokens: [], round: 0, settled: 0, printed: [], wrong1: 0, nonsense: 0, dealt: 0, current: null,
+             packed: 0, cols: {}, unum: null, punch: null, gapTries: 0, gapPicks: [], gapHit: false, dilemma: [] };
+  }
+  function show(id) { document.querySelectorAll('.screen').forEach(function (s) { s.classList.toggle('on', s.id === id); }); window.scrollTo(0, 0); }
+  function stamp(text, red) { return '<div class="stampw"><div class="stamp' + (red ? ' red' : '') + '">' + text + '</div></div>'; }
+  function fmt(numStr) { return numStr.replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+  function txt(t) { return gTokensToText(t); }
+  function notOf(t) { return t[0] === 'NOT' ? t.slice(1) : ['NOT'].concat(t); }
+
+  // ---------- Act 1 ----------
+  function startRound() {
+    S.round++;
+    S.current = null;
+    S.tokens = S.round === 1 ? C.firstSentence.slice() : [];
+    $('a1-stamp').innerHTML = ''; $('a1-out').innerHTML = ''; $('a1-msg').innerHTML = '';
+    $('a1-write').classList.remove('hide'); $('a1-judge').classList.add('hide'); $('a1-next').classList.add('hide');
+    $('a1-print').disabled = false; $('a1-not').disabled = false;
+    if (S.round === 1) {
+      $('a1-now').textContent = 'Hilbert hands you the first sentence. Hand it to the machine.';
+      $('a1-expl').textContent = 'Later you will write your own with the keypad.';
+    } else {
+      $('a1-now').textContent = 'Write a sentence with the keypad, or tap Give me one. Then hand it to the machine.';
+      $('a1-expl').innerHTML = 'Try anything. Even nonsense: the machine first checks whether it is a sentence at all.';
+    }
+    lockPad(S.round === 1);
+    drawTape();
+    count();
+    show('s-act1');
+  }
+  function lockPad(locked) { document.querySelectorAll('#a1-write .k').forEach(function (b) { b.disabled = locked; }); }
+  function drawTape() { $('a1-tape').innerHTML = (S.tokens.length ? txt(S.tokens) : '') + '<span class="cur"></span>'; }
+  function count() { $('a1-count').textContent = 'Sentences settled: ' + S.settled + ' of ' + C.roundsToSettle; }
+  function keyTap(t) {
+    if (S.tokens.length >= C.maxTokens) { $('a1-msg').innerHTML = '<div class="note">That is long enough. Hand it in, or take something back.</div>'; return; }
+    S.tokens.push(t); $('a1-msg').innerHTML = ''; drawTape();
+  }
+  function handIn() {
+    if (!S.tokens.length) { $('a1-msg').innerHTML = '<div class="note">Write something first: tap the keys.</div>'; return; }
+    var p = gParse(S.tokens);
+    if (!p.ok) {
+      S.nonsense++;
+      $('a1-stamp').innerHTML = stamp('Not a sentence', true);
+      $('a1-msg').innerHTML = '<div class="note r">' + p.why + '</div><div class="note hilbert">Hilbert: “My promise is about sentences. A scribble doesn\'t count.”</div>';
+      return;
+    }
+    S.current = S.tokens.slice();
+    $('a1-stamp').innerHTML = stamp('Sentence');
+    $('a1-write').classList.add('hide'); $('a1-judge').classList.remove('hide');
+    $('a1-msg').innerHTML = '';
+    $('a1-now').textContent = 'It is a sentence. You are the machine: print it, or print its NOT?';
+    $('a1-expl').innerHTML = 'Print it if it is true. Print its NOT if it is false. The machine never prints a false sentence.';
+  }
+  function judge1(choice) {
+    var right = gRightButton(S.current);
+    if (choice !== right) {
+      S.wrong1++;
+      var bad = choice === 'print' ? S.current : notOf(S.current);
+      $('a1-msg').innerHTML = '<div class="note r">That slip would say <span class="ty">' + txt(bad) + '</span>, which is false. The machine is honest: it never prints that. Try the other button.</div>';
+      $(choice === 'print' ? 'a1-print' : 'a1-not').disabled = true;
+      return;
+    }
+    var slip = choice === 'print' ? S.current : notOf(S.current);
+    S.printed.push(txt(S.current) + (choice === 'print' ? '' : ' (its NOT)'));
+    if (choice === 'print') { S.printed1 = S.printed1 || []; S.printed1.push(S.current.join(' ')); }
+    S.settled++; count();
+    $('a1-judge').classList.add('hide');
+    $('a1-out').innerHTML = '<div class="slipout">' + txt(slip) + '</div>';
+    $('a1-now').textContent = 'Printed. Settled.';
+    var said = choice === 'print' ? 'It is true, so the machine prints it.' : 'It is false, so the machine prints its NOT, which is true.';
+    $('a1-msg').innerHTML = '<div class="note v">' + said + '</div>';
+    var b = $('a1-next');
+    if (S.settled >= C.roundsToSettle) {
+      $('a1-msg').innerHTML += '<div class="note hilbert">Hilbert: “You see? Every sentence: printed, or its NOT printed. Always.”</div>';
+      b.textContent = 'Act 2: every sentence gets a number';
+      b.onclick = startAct2;
+    } else { b.textContent = 'Next sentence'; b.onclick = startRound; }
+    b.classList.remove('hide');
+  }
+
+  // ---------- Act 2 ----------
+  function startAct2() {
+    show('s-act2');
+    $('a2-pack').classList.remove('hide'); $('a2-unpack').classList.add('hide'); $('a2-punch').classList.add('hide');
+    $('a2-codes').innerHTML = Object.keys(C.codes).map(function (s) { return '<div class="code"><span class="s">' + s + '</span><span class="n">' + C.codes[s] + '</span></div>'; }).join('');
+    S.packSteps = gPackSteps(C.packSentence); S.packed = 0;
+    $('a2-tiles').innerHTML = C.packSentence.map(function (s, i) { return '<button class="tile" data-i="' + i + '">' + s + '</button>'; }).join('');
+    $('a2-tiles').querySelectorAll('.tile').forEach(function (b) { b.onclick = function () { packTap(+b.getAttribute('data-i')); }; });
+    $('a2-formula').innerHTML = 'Start with 1.'; $('a2-num').textContent = '1';
+    $('a2-pack-msg').innerHTML = ''; $('a2-to-unpack').classList.add('hide');
+    drawTiles();
+  }
+  function drawTiles() {
+    $('a2-tiles').querySelectorAll('.tile').forEach(function (b, i) {
+      b.classList.toggle('done', i < S.packed); b.disabled = i !== S.packed;
+    });
+  }
+  function packTap(i) {
+    if (i !== S.packed) return;
+    var st = S.packSteps[i];
+    S.packed++;
+    $('a2-formula').innerHTML = S.packSteps.slice(0, S.packed).map(function (x) { return x.prime + '<sup>' + x.code + '</sup>'; }).join(' × ') +
+      '<br><span style="font-weight:400;font-size:15px">Just now: <span class="ty">' + st.symbol + '</span> has code ' + st.code + ', so × ' + st.prime + '<sup>' + st.code + '</sup></span>';
+    $('a2-num').textContent = fmt(st.value);
+    drawTiles();
+    if (S.packed === S.packSteps.length) {
+      $('a2-pack-msg').innerHTML = '<div class="note v">One number now holds the whole sentence <span class="ty">1 + 1 = 2</span>: the first one the machine printed.</div>';
+      $('a2-to-unpack').classList.remove('hide');
+    }
+  }
+  function startUnpack() {
+    $('a2-pack').classList.add('hide'); $('a2-unpack').classList.remove('hide');
+    S.unum = gPack(C.unpackSentence); S.cols = { 2: 0, 3: 0, 5: 0 }; S.uStage = 0;
+    drawUnpack('');
+    window.scrollTo(0, 0);
+  }
+  function drawUnpack(msg) {
+    $('a2-unum').textContent = fmt(S.unum);
+    var primes = [2, 3, 5], byCode = {};
+    Object.keys(C.codes).forEach(function (s) { byCode[C.codes[s]] = s; });
+    $('a2-cols').innerHTML = primes.map(function (p, i) {
+      var done = i < S.uStage, active = i === S.uStage && S.unum !== '1';
+      var sym = done ? '<div class="ty" style="font-size:22px">' + (byCode[S.cols[p]] || '?') + '</div>' : '<div style="height:30px"></div>';
+      return '<div class="col"><div class="p">÷ ' + p + '</div><div class="c">' + S.cols[p] + '</div><div class="p">times</div>' + sym +
+        '<button class="btn ' + (active ? 'go' : 'sec') + '" data-p="' + p + '"' + (active ? '' : ' disabled') + '>÷ ' + p + '</button></div>';
+    }).join('');
+    $('a2-cols').querySelectorAll('button').forEach(function (b) { b.onclick = function () { divide(+b.getAttribute('data-p')); }; });
+    $('a2-unpack-msg').innerHTML = msg || '';
+  }
+  function divide(p) {
+    var r = gDivide(S.unum, p);
+    if (r === null) {
+      S.uStage++;
+      drawUnpack('<div class="note">' + p + ' does not go into ' + fmt(S.unum) + ' any more. It went in ' + S.cols[p] + ' times: that is a code. ' + (S.uStage < 3 ? 'Now divide by ' + [2, 3, 5][S.uStage] + '.' : '') + '</div>');
+      return;
+    }
+    S.unum = r; S.cols[p]++;
+    if (S.unum === '1') {
+      S.uStage = 3;
+      var back = gUnpack(gPack(C.unpackSentence));
+      drawUnpack('<div class="note v">Down to 1. The codes ' + S.cols[2] + ', ' + S.cols[3] + ', ' + S.cols[5] + ' spell <span class="ty">' + txt(back) + '</span>. Every number splits into primes in only one way, so it always comes back exactly. (With only + you could not do this: there is no way to file a list inside one number.)</div>');
+      $('a2-to-punch').classList.remove('hide');
+      return;
+    }
+    drawUnpack('');
+  }
+  function startPunch() {
+    $('a2-unpack').classList.add('hide'); $('a2-punch').classList.remove('hide'); $('a2-stamp').innerHTML = '';
+    $('a2-print').disabled = false; $('a2-not').disabled = false; $('a2-punch-msg').innerHTML = ''; $('a2-next').classList.add('hide');
+    window.scrollTo(0, 0);
+  }
+  function judge2(choice) {
+    var truth = (S.printed1 || []).indexOf(C.packSentence.join(' ')) >= 0; // it printed 1 + 1 = 2 in Act 1
+    var right = truth ? 'print' : 'not';
+    if (choice !== right) {
+      S.punchWrong = true;
+      $('a2-punch-msg').innerHTML = '<div class="note r">Unpack 11,530,778,490 and you get <span class="ty">1 + 1 = 2</span>, which the machine printed in Act 1. So the sentence is ' + (truth ? 'true' : 'false') + '. Try the other button.</div>';
+      $(choice === 'print' ? 'a2-print' : 'a2-not').disabled = true;
+      return;
+    }
+    $('a2-stamp').innerHTML = stamp('Printed');
+    $('a2-print').disabled = true; $('a2-not').disabled = true;
+    $('a2-punch-msg').innerHTML = '<div class="note v">Settled like any other sentence. It is about the machine itself, yet it is only a sentence about a number: “11,530,778,490 is the number of a printed sentence”.</div>' +
+      '<div class="note hilbert">Hilbert: “You see, my machine can even talk about itself. Nobody gave it a word for that. Multiplication did.”</div>';
+    $('a2-next').classList.remove('hide');
+  }
+
+  // ---------- Act 3 ----------
+  function startAct3() {
+    show('s-act3');
+    $('a3-build').classList.remove('hide'); $('a3-dilemma').classList.add('hide');
+    $('a3-stamp').innerHTML = ''; $('a3-msg').innerHTML = ''; $('a3-feed').classList.add('hide'); $('a3-compare').classList.add('hide'); $('a3-choices').classList.remove('hide'); S.gapHit = false;
+    $('a3-sent').innerHTML = C.frame + ' “<span class="gap">________</span>”';
+    $('a3-choices').innerHTML = C.gapChoices.map(function (x, i) { return '<button class="btn sec" data-i="' + i + '">“' + x + '”</button>'; }).join('');
+    $('a3-choices').querySelectorAll('.btn').forEach(function (b) { b.onclick = function () { pickGap(+b.getAttribute('data-i')); }; });
+  }
+  function pickGap(i) {
+    if (S.gapHit) return;
+    var x = C.gapChoices[i], mine = gSentence(C.frame, x), about = gTalksAbout(C.frame, x), self = gSelf(C.frame, x);
+    S.gapPicks.push(i);
+    $('a3-choices').querySelectorAll('.btn').forEach(function (b, j) { b.classList.toggle('picked', j === i); });
+    $('a3-sent').innerHTML = C.frame + ' “<span class="gap">' + x + '</span>”';
+    $('a3-compare').classList.remove('hide');
+    $('a3-mine').textContent = mine; $('a3-about').textContent = about;
+    $('a3-mine').classList.toggle('eq', self); $('a3-about').classList.toggle('eq', self);
+    if (!self) {
+      S.gapTries++;
+      var m = '<div class="note">Not the same: this sentence talks about something else, not about itself. Try another.</div>';
+      if (S.gapTries >= C.hintAfter) m += '<div class="note">Hint: compare how the two lines <b>start</b>. The second line starts with whatever is in the gap.</div>';
+      $('a3-msg').innerHTML = m;
+      setTimeout(function () { $('a3-compare').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 120);
+      return;
+    }
+    S.gapHit = true;
+    $('a3-choices').classList.add('hide');
+    $('a3-stamp').innerHTML = stamp('This very sentence');
+    $('a3-now').textContent = 'The two lines are the same.';
+    $('a3-msg').innerHTML = '<div class="note v">Write the words in the gap twice, the second time in quotes, and you get exactly your sentence back. So it talks about itself, and what it says is: <b>the machine never prints this sentence.</b> It is short, it has no “this” in it, and nothing goes on for ever.</div>' +
+      '<div class="note">By Act 2, this is also just a sentence about a number: Gödel wrote it in the language of whole numbers, with + and ×.</div>';
+    $('a3-feed').classList.remove('hide');
+    setTimeout(function () { $('a3-feed').scrollIntoView({ behavior: 'smooth', block: 'end' }); }, 150);
+  }
+  function startDilemma() {
+    $('a3-build').classList.add('hide'); $('a3-dilemma').classList.remove('hide');
+    $('a3d-sent').textContent = gSentence(C.frame, C.frame);
+    $('a3d-out').innerHTML = ''; $('a3d-msg').innerHTML = '';
+    $('a3-print').disabled = false; $('a3-not').disabled = false; $('a3-print').classList.remove('tried'); $('a3-not').classList.remove('tried');
+    $('a3-neither').classList.add('hide'); $('a3-repair').classList.add('hide');
+    $('a3d-now').textContent = 'You are the machine. Which do you print?';
+    window.scrollTo(0, 0);
+  }
+  function dilemma(choice) {
+    S.dilemma.push(choice);
+    var d = gDilemma(choice);
+    if (choice === 'print') {
+      $('a3d-out').innerHTML = '<div class="slipout">' + gSentence(C.frame, C.frame) + stamp('False', true) + '</div>';
+      $('a3d-msg').innerHTML = '<div class="note r">The slip says the machine never prints this sentence. But it just did. <b>You printed a false sentence.</b> The machine is honest: it can\'t do this.</div>';
+      $('a3-print').disabled = true; $('a3-print').classList.add('tried');
+    } else if (choice === 'not') {
+      $('a3d-out').innerHTML = '<div class="slipout">NOT: ' + gSentence(C.frame, C.frame) + stamp('False', true) + '</div>';
+      $('a3d-msg').innerHTML = '<div class="note r">The NOT says: the machine <i>does</i> print the sentence. But you didn\'t: you printed the NOT instead. <b>You printed a false sentence.</b> The machine can\'t do this either.</div>';
+      $('a3-not').disabled = true; $('a3-not').classList.add('tried');
+    } else {
+      $('a3-print').disabled = true; $('a3-not').disabled = true; $('a3-neither').disabled = true;
+      $('a3d-out').innerHTML = '<div class="slipout empty">The slot stays empty, for ever.' + stamp('True: never printed') + '</div>';
+      $('a3d-now').textContent = 'Neither. And that breaks the promise.';
+      $('a3d-msg').innerHTML = '<div class="note v">The machine never prints it. That is exactly what the sentence says, so <b>the sentence is true</b>. And the machine prints neither it nor its NOT: <b>Hilbert\'s promise is broken</b>, by a true sentence in his machine\'s own language.</div>' +
+        '<p class="expl">This is not the old riddle “this sentence is false”, which goes round in circles. Your sentence is simply true. It is about printing, and the machine cannot reach it.</p>';
+      $('a3-repair').classList.remove('hide');
+      return;
+    }
+    $('a3-neither').classList.remove('hide');
+    $('a3d-now').textContent = S.dilemma.length === 1 ? 'That button fails. Try the other, or the new one.' : 'Both buttons fail.';
+  }
+
+  // ---------- repair and verdict ----------
+  function startRepair() { $('r-sent').textContent = gSentence(C.frame2, C.frame2); show('s-repair'); }
+  function verdict() {
+    var found = [];
+    found.push('In Act 1 you settled ' + S.settled + ' sentences' + (S.wrong1 ? ', with ' + S.wrong1 + ' wrong button' + (S.wrong1 > 1 ? 's' : '') + ' on the way' : '') + (S.nonsense ? ', and the machine turned away ' + S.nonsense + (S.nonsense > 1 ? ' tries that were not sentences' : ' try that was not a sentence') : '') + '.');
+    found.push('In Act 2 you packed 1 + 1 = 2 into 11,530,778,490, unpacked 72,900 into 2 = 2, and judged a sentence about the machine itself' + (S.punchWrong ? ' after one wrong button' : '') + '.');
+    found.push('In Act 3 you found the filling ' + (S.gapTries ? 'after ' + S.gapTries + ' other tr' + (S.gapTries > 1 ? 'ies' : 'y') : 'at the first go') + '.');
+    var firstTry = S.dilemma[0];
+    found.push(firstTry === 'neither' ? 'At the machine you went straight for “Print neither”.' : 'At the machine you first tried “' + (firstTry === 'print' ? 'Print it' : 'Print its NOT') + '”' + (S.dilemma.length > 2 ? ', then the other' : '') + ', before “Print neither”.');
+    var part, stood;
+    if (firstTry === 'print') {
+      part = 'At the machine. You expected it could print the sentence, as it printed everything before. It would have printed a false one.';
+      stood = 'Had the machine printed your sentence, it would have printed a lie, and an honest machine that keeps Hilbert\'s promise could not exist.';
+    } else if (firstTry === 'not') {
+      part = 'At the machine. You expected it could print the NOT, as it does for every false sentence. But your sentence is not false.';
+      stood = 'Had the NOT been the right slip, your sentence would have been false, and the machine would have printed it after all. It never does.';
+    } else {
+      part = 'Nowhere. You saw the trap before you pressed anything.';
+      stood = 'Had any honest machine printed every sentence about whole numbers or its NOT, Hilbert would have won, and every question about numbers could be settled by turning a handle. After 1931 nobody could hope for that.';
+    }
+    $('e-vd').innerHTML =
+      '<h2 class="now" style="margin-top:12px;font-size:30px">The verdict</h2>' +
+      '<h4>What the paper found</h4><div class="lead">Once arithmetic has + and ×, a sentence can be packed into a number, and arithmetic can talk about its own machine. Then there is a sentence that says “the machine never prints me”. An honest machine can print neither it nor its NOT, and it is true. Teach it to the machine, and the new machine has one of its own.</div>' +
+      '<h4>What you found</h4><p>' + found.join(' ') + '</p>' +
+      '<h4>Where you part</h4><p>' + part + '</p>' +
+      '<h4>Had yours stood</h4><p>' + stood + '</p>' +
+      '<h4>Your sentence</h4><div class="line">' + gSentence(C.frame, C.frame) + '</div>' +
+      '<h4>The paper</h4><p>Kurt Gödel, “On formally undecidable propositions of <i>Principia Mathematica</i> and related systems I”, <i>Monatshefte für Mathematik und Physik</i> 38 (1931): 173–198. <a href="https://doi.org/10.1007/BF01700692">doi.org/10.1007/BF01700692</a>. Game built from this paper; the paper is the authority where the two disagree.</p>';
+    show('s-end');
+  }
+
+  // ---------- wiring ----------
+  $('b-begin').onclick = function () { S = fresh(); startRound(); };
+  document.querySelectorAll('#a1-write .k[data-t]').forEach(function (b) { b.onclick = function () { keyTap(b.getAttribute('data-t')); }; });
+  $('k-back').onclick = function () { S.tokens.pop(); $('a1-stamp').innerHTML = ''; $('a1-msg').innerHTML = ''; drawTape(); };
+  $('k-clear').onclick = function () { S.tokens = []; $('a1-stamp').innerHTML = ''; $('a1-msg').innerHTML = ''; drawTape(); };
+  $('k-deal').onclick = function () { S.tokens = C.dealt[S.dealt % C.dealt.length].slice(); S.dealt++; $('a1-stamp').innerHTML = ''; $('a1-msg').innerHTML = ''; drawTape(); };
+  $('a1-hand').onclick = handIn;
+  $('a1-print').onclick = function () { judge1('print'); };
+  $('a1-not').onclick = function () { judge1('not'); };
+  $('a2-to-unpack').onclick = startUnpack;
+  $('a2-to-punch').onclick = startPunch;
+  $('a2-print').onclick = function () { judge2('print'); };
+  $('a2-not').onclick = function () { judge2('not'); };
+  $('a2-next').onclick = startAct3;
+  $('a3-feed').onclick = startDilemma;
+  $('a3-print').onclick = function () { dilemma('print'); };
+  $('a3-not').onclick = function () { dilemma('not'); };
+  $('a3-neither').onclick = function () { dilemma('neither'); };
+  $('a3-repair').onclick = startRepair;
+  $('r-next').onclick = verdict;
+  $('b-again').onclick = function () { S = fresh(); show('s-start'); };
+  var back = 's-start';
+  document.querySelectorAll('[data-help]').forEach(function (b) { b.addEventListener('click', function () { back = document.querySelector('.screen.on').id; show('s-help'); }); });
+  $('b-help-back').onclick = function () { show(back); };
+  $('b-about').onclick = function () { back = 's-end'; show('s-about'); };
+  $('b-about-back').onclick = function () { show(back); };
+  S = fresh();
+  window.__G = { state: function () { return S; } };
+})();
+</script>
+</body>
+</html>
