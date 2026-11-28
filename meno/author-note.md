@@ -1,0 +1,4 @@
+Look first at what happens the next morning after you tell the boy the answer, once while he still thinks he knows and once after he has said "I do not know"; then play it without telling him.
+Every number and choice is in the `CONFIG` block at the top of `meno/mechanism.js`: the paper's figure, the floor, Meno's five questions and the next morning's square of three, each tagged with its page or marked as ours.
+Least sure of: whether the rules of the next morning (a told boy repeats yesterday's line; a boy told before he was stuck goes back to doubling) read as Plato's claim or as the game's invention, and whether five questions is the right squeeze on a stranger who does not know the answer.
+This game has had the builder's review only (screenshots and scripted browser sessions), not stranger testing.

@@ -1,0 +1,179 @@
+
+######## stranger who does not know
+Your answer (private): four tiles along -> would hold 16
+
+> ASK: which line, boy?
+  boy (first): Twice the square? Then twice the line, Socrates: four.
+  floor: white line four tiles along; he lays 16 whole + 0 halves = 16  (column vs the 8 mark: over)
+  game: He laid his own line, four tiles along, and counted the square on it: sixteen, four times the first square, not twice. He is no longer sure.
+  boy:  Sixteen… that is four times, Socrates. Not twice.
+  state: sure -> guessing; questions left 4
+
+> ASK: which line, boy?
+  boy (first): Then three, Socrates. Between two and four.
+  floor: white line three tiles along; he lays 9 whole + 0 halves = 9  (column vs the 8 mark: over)
+  game: He laid his own line, three tiles along, and counted the square on it: nine, more than eight. He has run out of answers.
+  boy:  Nine. Still more than eight. I do not know, Socrates.
+  state: guessing -> stuck; questions left 3
+
+> ASK: which line, boy?
+  game: You asked him which line. He has no line left that he believes in. That used a question.
+  boy:  I do not know, Socrates.
+  state: stuck -> stuck; questions left 2
+
+> LAY one tile corner to corner, ASK: how big?
+  floor: ochre line one tile corner to corner; he lays 0 whole + 4 halves = 2  (column vs the 8 mark: under)
+  game: He counted the square on your line: two, less than eight.
+  boy:  That one holds two, Socrates. Not eight.
+  state: stuck -> stuck; questions left 1
+
+> LAY two tiles corner to corner, ASK: how big?
+  floor: ochre line two tiles corner to corner; he lays 4 whole + 8 halves = 8  (column vs the 8 mark: exactly)
+  game: He counted the square on your line: four whole tiles and eight halves, which make eight. Twice the first square. He takes the line as his answer.
+  boy:  Eight! Twice four. It is this line, Socrates, from corner to corner.
+  state: stuck -> found; questions left 0
+
+NEXT MORNING: Meno lays a square of three (nine) and asks for its double (eighteen).
+  boy: Corner to corner, Meno.
+  floor: white line three tiles corner to corner -> 18 RIGHT
+  game: He laid the corner-to-corner line of the new square himself and counted it: eighteen, twice nine. He found it again.
+  boy: Eighteen. Twice nine.
+
+VERDICT: "I found it, and I found it again."  His statue stands, tied down.  rung 4 of 4: Right, and found
+  - Your own first answer was his: four tiles along, a square of sixteen.
+  - You let him count both of his mistakes, sixteen and nine, until he said "I do not know".
+  - You laid two lines for him to count: one tile corner to corner (two), two tiles corner to corner (eight).
+  - The line was yours; every count was his.
+  - You used five of Meno's five questions.
+
+######## knower who tells
+Your answer (private): two tiles corner to corner -> would hold 8
+
+> LAY two tiles corner to corner, TELL him
+  game: You told him: two tiles corner to corner. He agreed. He has not counted it.
+  boy:  Yes, Socrates.
+  state: sure -> told; questions left 4
+
+NEXT MORNING: Meno lays a square of three (nine) and asks for its double (eighteen).
+  boy: Twice the line, Meno: six.
+  floor: white line six tiles along -> 36 wrong
+  game: He went back to what he thought before you told him: double the side. His square holds thirty-six, four times nine.
+  boy: Thirty-six? That is four times nine…
+
+VERDICT: "Twice the line, Meno!"  His old statue, double the line, is still standing.  rung 1 of 4: Sure, and wrong
+  - You knew the answer before he said a word: two tiles corner to corner.
+  - You told him before he had counted anything. He said yes, and kept what he believed.
+  - You used one of Meno's five questions.
+
+######## late teller
+Your answer (private): two tiles corner to corner -> would hold 8
+
+> ASK: which line, boy?
+  boy (first): Twice the square? Then twice the line, Socrates: four.
+  floor: white line four tiles along; he lays 16 whole + 0 halves = 16  (column vs the 8 mark: over)
+  game: He laid his own line, four tiles along, and counted the square on it: sixteen, four times the first square, not twice. He is no longer sure.
+  boy:  Sixteen… that is four times, Socrates. Not twice.
+  state: sure -> guessing; questions left 4
+
+> ASK: which line, boy?
+  boy (first): Then three, Socrates. Between two and four.
+  floor: white line three tiles along; he lays 9 whole + 0 halves = 9  (column vs the 8 mark: over)
+  game: He laid his own line, three tiles along, and counted the square on it: nine, more than eight. He has run out of answers.
+  boy:  Nine. Still more than eight. I do not know, Socrates.
+  state: guessing -> stuck; questions left 3
+
+> LAY two tiles corner to corner, TELL him
+  game: You told him: two tiles corner to corner. He agreed. He has not counted it.
+  boy:  Yes, Socrates. That line.
+  state: stuck -> told; questions left 2
+
+NEXT MORNING: Meno lays a square of three (nine) and asks for its double (eighteen).
+  boy: The line Socrates told me. This one.
+  floor: white line two tiles corner to corner -> 8 wrong
+  game: He laid the line you told him, where it was yesterday. Its square holds eight: twice yesterday's square, not twice this one. What he was told did not fit a new square.
+  boy: Eight… that was yesterday's. I do not know, Meno.
+
+VERDICT: "I had it yesterday."  His statue walked off in the night.  rung 3 of 4: Right, but told
+  - You knew the answer before he said a word: two tiles corner to corner.
+  - You let him count both of his mistakes, sixteen and nine, until he said "I do not know".
+  - Then you told him two tiles corner to corner, and he agreed without counting it.
+  - You used three of Meno's five questions.
+
+######## shower
+Your answer (private): two tiles corner to corner -> would hold 8
+
+> LAY two tiles corner to corner, ASK: how big?
+  boy (first): But the double square comes from the double line, Socrates. Look.
+  floor: white line four tiles along; he lays 16 whole + 0 halves = 16  (column vs the 8 mark: over)
+  game: He would not look at your line: he still thinks he knows. He laid his own line, four tiles along, and counted the square on it: sixteen, four times the first square, not twice. He is no longer sure.
+  boy:  Sixteen… that is four times, Socrates. Not twice.
+  state: sure -> guessing; questions left 4
+
+> LAY two tiles corner to corner, ASK: how big?
+  boy (first): But the double square comes from my line, Socrates. Look.
+  floor: white line three tiles along; he lays 9 whole + 0 halves = 9  (column vs the 8 mark: over)
+  game: He would not look at your line: he still thinks he knows. He laid his own line, three tiles along, and counted the square on it: nine, more than eight. He has run out of answers.
+  boy:  Nine. Still more than eight. I do not know, Socrates.
+  state: guessing -> stuck; questions left 3
+
+> LAY two tiles corner to corner, ASK: how big?
+  floor: ochre line two tiles corner to corner; he lays 4 whole + 8 halves = 8  (column vs the 8 mark: exactly)
+  game: He counted the square on your line: four whole tiles and eight halves, which make eight. Twice the first square. He takes the line as his answer.
+  boy:  Eight! Twice four. It is this line, Socrates, from corner to corner.
+  state: stuck -> found; questions left 2
+
+NEXT MORNING: Meno lays a square of three (nine) and asks for its double (eighteen).
+  boy: Corner to corner, Meno.
+  floor: white line three tiles corner to corner -> 18 RIGHT
+  game: He laid the corner-to-corner line of the new square himself and counted it: eighteen, twice nine. He found it again.
+  boy: Eighteen. Twice nine.
+
+VERDICT: "I found it, and I found it again."  His statue stands, tied down.  rung 4 of 4: Right, and found
+  - You knew the answer before he said a word: two tiles corner to corner.
+  - You let him count both of his mistakes, sixteen and nine, until he said "I do not know".
+  - Twice you showed him a line while he still thought he knew; he did not look.
+  - You laid one line for him to count: two tiles corner to corner (eight).
+  - The line was yours; every count was his.
+  - You used three of Meno's five questions.
+
+######## purist
+Your answer (private): three tiles along -> would hold 9
+
+> ASK: which line, boy?
+  boy (first): Twice the square? Then twice the line, Socrates: four.
+  floor: white line four tiles along; he lays 16 whole + 0 halves = 16  (column vs the 8 mark: over)
+  game: He laid his own line, four tiles along, and counted the square on it: sixteen, four times the first square, not twice. He is no longer sure.
+  boy:  Sixteen… that is four times, Socrates. Not twice.
+  state: sure -> guessing; questions left 4
+
+> ASK: which line, boy?
+  boy (first): Then three, Socrates. Between two and four.
+  floor: white line three tiles along; he lays 9 whole + 0 halves = 9  (column vs the 8 mark: over)
+  game: He laid his own line, three tiles along, and counted the square on it: nine, more than eight. He has run out of answers.
+  boy:  Nine. Still more than eight. I do not know, Socrates.
+  state: guessing -> stuck; questions left 3
+
+> ASK: which line, boy?
+  game: You asked him which line. He has no line left that he believes in. That used a question.
+  boy:  I do not know, Socrates.
+  state: stuck -> stuck; questions left 2
+
+> ASK: which line, boy?
+  game: You asked him which line. He has no line left that he believes in. That used a question.
+  boy:  I do not know, Socrates.
+  state: stuck -> stuck; questions left 1
+
+> ASK: which line, boy?
+  game: You asked him which line. He has no line left that he believes in. That used a question.
+  boy:  I do not know, Socrates.
+  state: stuck -> out; questions left 0  (Meno has to go)
+
+NEXT MORNING: Meno lays a square of three (nine) and asks for its double (eighteen).
+  game: He did not guess. He knows he does not know, and says so.
+  boy: I do not know, Meno.
+
+VERDICT: "I do not know, Meno."  His plinth is empty, and he knows it.  rung 2 of 4: Stuck
+  - Your own first answer was three tiles along, a square of nine.
+  - You let him count both of his mistakes, sixteen and nine, until he said "I do not know".
+  - Meno had to go before he found it.
+  - You used five of Meno's five questions.
