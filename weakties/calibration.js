@@ -1,4 +1,4 @@
-// Calibration check for Find a job with Granovetter. Run: node calibration.js. Exit code 1 on any failure.
+// Calibration check for Find a Job with Granovetter. Run: node calibration.js. Exit code 1 on any failure.
 // The mechanism is a TOY of the paper's argument. The check verifies:
 //  (1) the rules the paper states hold in the town: strong ties pass on more readily than weak ones; retelling dampens; inside a circle
 //      everyone is tied often; every tie between circles is weak (no strong tie is a bridge, p. 1364); Home has no line out except yours;
