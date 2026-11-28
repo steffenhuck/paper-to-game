@@ -1,0 +1,39 @@
+PASS grammar: "1 + 1 = 2" is a sentence
+PASS grammar: "NOT 5 = 6" is a sentence
+PASS grammar: "NOT NOT 2 = 2" is a sentence
+PASS grammar: "1 2 = 3 × 4" is a sentence
+PASS grammar: "0 = 0" is a sentence
+PASS grammar: "1 + 1" is not a sentence — A sentence needs an = sign: it has to claim that two things are equal.
+PASS grammar: "= 2" is not a sentence — Each side of = has to end with a number.
+PASS grammar: "2 = 2 = 2" is not a sentence — Only one = sign: a sentence makes one claim.
+PASS grammar: "2 + = 4" is not a sentence — Each side of = has to end with a number.
+PASS grammar: "2 = NOT 2" is not a sentence — NOT can only go at the front.
+PASS grammar: "0 1 = 1" is not a sentence — A number cannot start with 0.
+PASS grammar: "+ 2 = 2" is not a sentence — Two signs in a row, or a sign with no number before it.
+PASS grammar: "2 × = 2" is not a sentence — Each side of = has to end with a number.
+PASS truth: 1 + 1 = 2
+PASS truth: 2 + 2 × 3 = 8
+PASS truth: 2 + 2 × 3 = 1 2
+PASS truth: NOT 5 = 6
+PASS truth: NOT NOT 3 = 3
+PASS truth: 1 2 = 3 × 4
+PASS truth: 7 + 7 = 1 5
+PASS first sentence is a true sentence
+PASS every dealt sentence is a sentence
+PASS dealt sentences need both buttons
+PASS Act 1: every keypad sentence up to 5 symbols is settled by exactly one button — 579194 strings, 34000 sentences
+PASS pack 1+1=2 — 2^1=2, 3^4=162, 5^1=810, 7^6=95295690, 11^2=11530778490
+PASS unpack returns 1+1=2
+PASS the unpack puzzle number — 72900
+PASS unpack 72900 = 2 = 2
+PASS every string up to 4 symbols packs and unpacks to itself — 2800 strings
+PASS a number with a gap in its primes is not a packed sentence
+PASS division steps: 72900 / 2 = 36450
+PASS Act 3: exactly one gap choice talks about itself — The machine never prints the following words, written twice, the second time in quotes:
+PASS Act 3: it is the frame itself
+PASS Act 3: the recipe of the frame gives the whole sentence back
+PASS Act 4: same for Machine II
+PASS dilemma: "print" prints a false slip
+PASS dilemma: "not" prints a false slip
+PASS dilemma: "neither" leaves the sentence true and breaks the promise
+all checks passed

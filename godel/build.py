@@ -11,10 +11,8 @@ about = open('about.html', encoding='utf-8').read()
 def font(f): return base64.b64encode(open('fonts/' + f, 'rb').read()).decode()
 t = open('template.html', encoding='utf-8').read()
 subs = {
-    '/*__F_J400__*/': font('josefin-sans-latin-400-normal.woff2'),
-    '/*__F_J700__*/': font('josefin-sans-latin-700-normal.woff2'),
-    '/*__F_C400__*/': font('courier-prime-latin-400-normal.woff2'),
-    '/*__F_C700__*/': font('courier-prime-latin-700-normal.woff2'),
+    '/*__F_K400__*/': font('kalam-400.woff2'),
+    '/*__F_K700__*/': font('kalam-700.woff2'),
     '/*__ABOUT__*/': about,
     '/*__MECHANISM__*/': mech,
 }
